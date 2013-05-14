@@ -24682,16 +24682,25 @@ End Sub
     End Sub
 
 
-    'Private Sub ResetCbActorFilter( sender As Control,  e As EventArgs) Handles lblFilterActor.Click
-    '    ActorFilter=""
-    '    cbFilterActor.SelectedIndex = 0
-    'End Sub
+    Private Sub cbFilterGeneral_DropDown( sender As Object,  e As EventArgs) Handles cbFilterGeneral.DropDown
 
+        Dim maxWidth           As Integer  = cbFilterGeneral.DropDownWidth
+        Dim g                  As Graphics = cbFilterGeneral.CreateGraphics
+        Dim vertScrollBarWidth As Integer  = If(cbFilterGeneral.Items.Count>cbFilterGeneral.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
+        Dim renderedWidth      As Integer
+        Dim cb                 As CheckBox = New CheckBox()
 
-    'Private Sub ResetCbFilterSource( sender As Control,  e As EventArgs) Handles lblFilterSource.Click
-    '    cbFilterSource.SelectedIndex = 0
-    'End Sub
+        cb.AutoSize = True
+        cb.Font     = cbFilterGeneral.Font
 
+        For Each item As String In cbFilterGeneral.Items
+            cb.Text       = item
+            renderedWidth = cb.PreferredSize.Width + vertScrollBarWidth
+            maxWidth      = Math.Max(maxWidth,renderedWidth)
+        Next
+
+        cbFilterGeneral.DropDownWidth = maxWidth 
+    End Sub
 
 
 End Class
