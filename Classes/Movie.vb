@@ -67,7 +67,9 @@ Public Class Movie
     Private _videotsrootpath          As String =""
     Private _rescrape                 As Boolean = False
     Private _previousCache            As ComboList = Nothing
-
+    Private _triedUrls               As New List(Of String)
+    Private _trailerUrl               As String =""
+     
     Shared Private _availableHeightResolutions As List(Of Integer)
 
     #Region "Read-write properties"
@@ -76,12 +78,29 @@ Public Class Movie
     Property TimingsLog           As String = ""
     Property ScrapeTimingsLogThreshold As Integer = Preferences.ScrapeTimingsLogThreshold
     Property LogScrapeTimes            As Boolean = Preferences.LogScrapeTimes
-    Property TrailerUrl           As String = ""
+'   Property TrailerUrl           As String = ""
     Property PosterUrl            As String = ""
     Property Actions As New ScrapeActions
 '    Property nfopathandfilename As String = ""
     Property RenamedBaseName As String = ""
 
+    Property TrailerUrl As String
+        Get
+            Return _trailerUrl
+        End Get
+        Set
+            _trailerUrl = ""
+
+            If Value="" Then Return
+
+            If _triedUrls.Contains(Value) Then Return
+
+            _triedUrls.Add(Value)   
+            _trailerUrl = Value
+        End Set
+    End Property
+
+    Property GetTrailerUrlAlreadyRun As Boolean = False
 
     Property Rescrape As Boolean
         Get
@@ -1126,10 +1145,13 @@ Public Class Movie
     Function GetTrailerUrl( title As String, imdb As String ) As String
         ReportProgress("Trailer URL")
 
+        TrailerUrl = ""
         _youTubeTrailer = Nothing
         
-        If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
+
+        If Preferences.moviePreferredTrailerResolution.ToUpper()<>"SD" And Not GetTrailerUrlAlreadyRun Then
             Try
+                GetTrailerUrlAlreadyRun = True
                 TrailerUrl = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, title)
             Catch ex As Exception
                 Dim paramInfo As String = ""
@@ -1148,23 +1170,51 @@ Public Class Movie
         'Try YouTube for HD and SD...
         '
         If TrailerUrl = "" and tmdb.Trailers.youtube.Count > 0 then
-            Dim ytVideoPage = tmdb.GetTrailerUrl(Preferences.moviePreferredTrailerResolution)
-            If ytVideoPage <> "" then
 
-                Try
-                    Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+ytVideoPage)
+            Dim tryAgain = True
 
-                    If yts.AvailableVideoFormat.Length>0 Then
+            While tryAgain
+                TrailerUrl = tmdb.GetTrailerUrl(_triedUrls, Preferences.moviePreferredTrailerResolution)
+                If TrailerUrl <> "" then
+                    Try
+                        Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl)
 
-                        _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+                        If yts.AvailableVideoFormat.Length>0 Then
 
-                        If Not IsNothing(_youTubeTrailer) Then
-                            TrailerUrl = _youTubeTrailer.VideoUrl
+                            _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+
+                            If Not IsNothing(_youTubeTrailer) Then
+                                TrailerUrl = _youTubeTrailer.VideoUrl
+                                tryAgain = False
+                            End If
+                        Else
+                            TrailerUrl = ""
                         End If
+                    Catch       'Timed out...
+                    End Try
+                Else
+                    tryAgain = False
+                End If
+            End While
+        End If
+
+
+        If TrailerUrl = "" Then
+            Dim Ids As List(Of String) = GetYouTubeIds()
+
+            For Each Id In Ids
+
+                Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+Id)
+
+                If yts.AvailableVideoFormat.Length>0 Then
+                    _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+
+                    If Not IsNothing(_youTubeTrailer) Then
+                        TrailerUrl = _youTubeTrailer.VideoUrl
+                        Exit For
                     End If
-                Catch       'Timed out...
-                End Try
-            End If
+                End If
+            Next
         End If
 
 
@@ -1368,19 +1418,30 @@ Public Class Movie
         End if
 
         If Not Utilities.UrlIsValid(TrailerUrl) Then
-            ReportProgress("Invalid Trailer Url detected ","Invalid Trailer Url detected")
+            ReportProgress("Invalid Url","Invalid Trailer Url detected")
             Exit Sub
         End if
 
         ReportProgress("DL Trailer","Downloading trailer...")
-        _WebFileDownloader.DownloadFileWithProgress(TrailerUrl, TrailerPath,_parent.Bw)
+        TrailerDownloaded = _WebFileDownloader.DownloadFileWithProgress(TrailerUrl, TrailerPath,_parent.Bw)
 
         DeleteZeroLengthFile(ActualTrailerPath)
 
         If Cancelled then Exit Sub
 
-        ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
+        If TrailerDownloaded Then
+            ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
+        Else
+            ReportProgress(MSG_OK,"Trailer download failed - Searching for an alternative one" & vbCrLf)
+            If Actions.Items.Count>0 Then
+                Actions.Items.Insert(1, New ScrapeAction(AddressOf AssignTrailerUrl , "Get trailer URL" ) )
+                Actions.Items.Insert(2, New ScrapeAction(AddressOf SaveNFO          , "Save Nfo"        ) )
+                Actions.Items.Insert(3, New ScrapeAction(AddressOf DownloadTrailer  , "Trailer download") )
+            End If
+        End If
     End Sub
+
+    Property TrailerDownloaded As Boolean = False
 
     Private Sub DeleteZeroLengthFile( fileName As String )
         If File.Exists(fileName) then
@@ -2123,9 +2184,18 @@ Public Class Movie
             If TrailerExists Then
                 ReportProgress("Trailer already exists ","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
             Else
-                _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
-                UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
-                DownloadTrailer(TrailerUrl,rl.Download_Trailer)
+                _triedUrls.Clear
+                GetTrailerUrlAlreadyRun = False
+
+                Dim more As Boolean = True
+
+                While more 
+                    _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
+                    UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
+                    DownloadTrailer(TrailerUrl,rl.Download_Trailer)
+
+                    more = (TrailerUrl<>"") and Not TrailerDownloaded
+                End While
             End If
         End If
        
@@ -2587,6 +2657,29 @@ Public Class Movie
 
         Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
 
+    End Function
+
+
+    Function GetYouTubeIds As List(Of String)
+
+        Dim Results As List(Of String) = New List(Of String)
+
+        Dim url = "http://www.youtube.com/results?search_query=" + _scrapedMovie.fullmoviebody.title + "+" + _scrapedMovie.fullmoviebody.year + "+trailer"
+        
+        Dim RegExPattern = "href=""/watch[?]v=(?<id>.*?)"""
+
+        Dim s As New Classimdb
+
+        Dim html As String = s.loadwebpage(url,True,10).ToString
+
+        For Each m As Match In Regex.Matches(html, RegExPattern, RegexOptions.Singleline) 
+
+            Dim id As String = Net.WebUtility.HtmlDecode(m.Groups("id").Value)
+
+            Results.Add(id)
+        Next 
+
+        Return Results  
     End Function
 
 

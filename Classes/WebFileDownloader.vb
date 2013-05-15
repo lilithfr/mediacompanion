@@ -105,6 +105,7 @@ Public Class WebFileDownloader
                 
                 Dim ex As Exception = New Exception( "Download failed" )
                 RaiseEvent FileDownloadFailed(ex)
+                Return False
             End If
 
             RaiseEvent FileDownloadComplete()

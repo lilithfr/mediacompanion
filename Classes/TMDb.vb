@@ -888,13 +888,13 @@ Public Class TMDb
     End Function
 
 
-    Function GetTrailerUrl(Optional resolution As String="1080") As String
+    Function GetTrailerUrl(FailedUrls As List(Of String), Optional resolution As String="1080" ) As String
         Fetch
             
-        Dim q = From t In _trailers.youtube Where t.size=resolution+"p" 
+        Dim q = From t In _trailers.youtube Where t.size=resolution+"p" And Not FailedUrls.Contains(t.source)
 
         If q.Count = 0 then
-            q = From t In _trailers.youtube Order By t.size Descending
+            q = From t In _trailers.youtube Where Not FailedUrls.Contains(t.source) Order By t.size Descending
         End If
 
         If q.Count = 0 then
