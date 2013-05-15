@@ -24641,7 +24641,8 @@ End Sub
     Private Sub ResetFilter( sender As Object,  e As EventArgs) Handles lblFilterSet          .Click,  lblFilterVotes         .Click,  lblFilterRating       .Click, 
                                                                         lblFilterCertificate  .Click,  lblFilterGenre         .Click,  lblFilterYear         .Click,
                                                                         lblFilterResolution   .Click,  lblFilterAudioCodecs   .Click,  lblFilterAudioChannels.Click, 
-                                                                        lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, lblFilterActor.Click, lblFilterSource.Click
+                                                                        lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, 
+                                                                        lblFilterActor        .Click,  lblFilterSource        .Click
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -24655,7 +24656,8 @@ End Sub
 
     Private Sub ChangeFilterMode( sender As Object,  e As EventArgs) Handles lblFilterGenreMode        .Click,  lblFilterSetMode           .Click,  lblFilterResolutionMode   .Click, 
                                                                              lblFilterAudioCodecsMode  .Click,  lblFilterCertificateMode   .Click,  lblFilterAudioChannelsMode.Click,
-                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click, lblFilterActorMode.Click, lblFilterSourceMode.Click
+                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click, 
+                                                                             lblFilterActorMode        .Click,  lblFilterSourceMode        .Click
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)

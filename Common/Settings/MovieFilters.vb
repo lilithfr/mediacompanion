@@ -94,7 +94,8 @@ Public Class MovieFilters
             lbl.Visible = item.Visible
 
             If Not IsNothing(lblMode) Then
-                lblMode.Visible = item.Visible
+                lblMode.TextAlign = ContentAlignment.MiddleCenter
+                lblMode.Visible   = item.Visible
 
                 Dim filter As MC_UserControls.TriStateCheckedComboBox = c
                 filter.QuickSelect = item.QuickSelect
