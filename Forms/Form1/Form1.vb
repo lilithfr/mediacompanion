@@ -4158,7 +4158,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click, Button3.Click
+    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click, bnt_movRefreshAll.Click
         mov_RebuildMovieCaches
     End Sub
 
@@ -23234,7 +23234,7 @@ Public Class Form1
         DisplayMovie(True)
     End Sub
 
-    Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
+    Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bnt_movSearchNew.Click
         SearchForNew
     End Sub
 

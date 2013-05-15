@@ -816,6 +816,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.foldername = Utilities.GetLastFolder(path)
                     newmovie.fullpathandfilename = path
                     newmovie.genre = "problem / xml error"
+                    newmovie.tag = ""
                     newmovie.id = ""
                     newmovie.missingdata1 = 0
                     newmovie.MovieSet = ""
@@ -993,6 +994,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source = Nothing Then newmovie.source = ""
                 If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
+                If newmovie.tag = Nothing Then newmovie.tag = ""
                 'if there is no entry for originaltitle, then use the current title. this should only come into use
                 'for old movies since new ones will have the originaltitle created when scraped
                 If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
