@@ -2664,7 +2664,7 @@ Public Class Movie
 
         Dim Results As List(Of String) = New List(Of String)
 
-        Dim url = "http://www.youtube.com/results?search_query=" + _scrapedMovie.fullmoviebody.title + "+" + _scrapedMovie.fullmoviebody.year + "+trailer"
+        Dim url = "http://www.youtube.com/results?search_query=" + _scrapedMovie.fullmoviebody.title + "+" + _scrapedMovie.fullmoviebody.year + "+trailer&filters=short&lclk=short"
         
         Dim RegExPattern = "href=""/watch[?]v=(?<id>.*?)"""
 
@@ -2676,7 +2676,9 @@ Public Class Movie
 
             Dim id As String = Net.WebUtility.HtmlDecode(m.Groups("id").Value)
 
-            Results.Add(id)
+            If Not Results.Contains(id) Then
+                Results.Add(id)
+            End If
         Next 
 
         Return Results  
