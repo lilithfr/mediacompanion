@@ -14107,6 +14107,7 @@ Public Class Form1
         chkbx_disablecache.Checked          = Not Preferences.startupCache
 
         cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.UnChecked, CheckState.checked)
+        cbDisplayLocalActor.CheckState      = If(Preferences.LocalActorImage, Checkstate.Checked, CheckState.Unchecked)
 
         CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
         CheckBox41.CheckState               = If(Preferences.ignorearticle, CheckState.Checked, CheckState.Unchecked)
@@ -19554,6 +19555,22 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
+        Try
+            If cbDisplayLocalActor.Checked = True Then
+                Preferences.LocalActorImage = True
+            Else
+                Preferences.LocalActorImage = False
+            End If
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Private Sub Button107_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button107.Click
         Try
             'listbox15
@@ -24756,4 +24773,5 @@ End Sub
     End Sub
 
 
+    
 End Class
