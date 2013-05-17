@@ -816,7 +816,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.foldername = Utilities.GetLastFolder(path)
                     newmovie.fullpathandfilename = path
                     newmovie.genre = "problem / xml error"
-                    newmovie.tag = ""
+                    newmovie.tag.Clear
                     newmovie.id = ""
                     newmovie.missingdata1 = 0
                     newmovie.MovieSet = ""
@@ -878,11 +878,12 @@ Public Class WorkingWithNfoFiles
                                     newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
                                 End If
                             Case "tag"
-                                If newmovie.tag = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "
-                                    newmovie.tag = thisresult.InnerText
-                                Else
-                                    newmovie.genre = newmovie.tag & " / " & thisresult.InnerText
-                                End If
+                                newmovie.tag.Add(thisresult.InnerText)
+                                'If newmovie.tag.add = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                '    newmovie.tag = thisresult.InnerText
+                                'Else
+                                '    newmovie.genre = newmovie.tag & " / " & thisresult.InnerText
+                                'End If
                             Case "id"
                                 If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
                             Case "playcount"
@@ -994,7 +995,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source = Nothing Then newmovie.source = ""
                 If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
-                If newmovie.tag = Nothing Then newmovie.tag = ""
+                'If newmovie.tag = Nothing Then newmovie.tag = ""
                 'if there is no entry for originaltitle, then use the current title. this should only come into use
                 'for old movies since new ones will have the originaltitle created when scraped
                 If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
@@ -1051,7 +1052,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.stars = ""
                     newmovie.fullmoviebody.filename = ""
                     newmovie.fullmoviebody.genre = ""
-                    newmovie.fullmoviebody.tag = ""
+                    newmovie.fullmoviebody.tag.clear    ' = ""
                     newmovie.fullmoviebody.imdbid = ""
                     newmovie.fullmoviebody.mpaa = ""
                     newmovie.fullmoviebody.outline = "This nfo file could not be loaded"
@@ -1156,11 +1157,12 @@ Public Class WorkingWithNfoFiles
                                 newmovie.fullmoviebody.genre = newmovie.fullmoviebody.genre & " / " & thisresult.InnerText
                             End If
                         Case "tag"
-                            If newmovie.fullmoviebody.tag = "" Then
-                                newmovie.fullmoviebody.tag = thisresult.InnerText
-                            Else
-                                newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & " / " & thisresult.InnerText
-                            End If
+                            newmovie.fullmoviebody.tag.Add(thisresult.InnerText)
+                            'If newmovie.fullmoviebody.tag = "" Then
+                            '    newmovie.fullmoviebody.tag = thisresult.InnerText
+                            'Else
+                            '    newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & " / " & thisresult.InnerText
+                            'End If
                         Case "id"
                             newmovie.fullmoviebody.imdbid = thisresult.InnerText
                         Case "playcount"
@@ -1799,15 +1801,22 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 27
                 Try
-                    If movietosave.fullmoviebody.tag <> "" Then
-                        Dim strArr() As String
-                        strArr = movietosave.fullmoviebody.tag.Split("/")
-                        For count = 0 To strArr.Length - 1
+                    If movietosave.fullmoviebody.tag.Count <> 0 Then
+                        For Each tags In movietosave.fullmoviebody.tag
                             child = doc.CreateElement("tag")
-                            strArr(count) = strArr(count).Trim
-                            child.InnerText = strArr(count)
+                            child.InnerText = tags
                             root.AppendChild(child)
                         Next
+                    'If movietosave.fullmoviebody.tag <> "" Then
+                    '    Dim strArr() As String
+                    '    strArr = movietosave.fullmoviebody.tag.Split("/")
+                    '    For count = 0 To strArr.Length - 1
+                    '        child = doc.CreateElement("tag")
+                    '        strArr(count) = strArr(count).Trim
+                    '        child.InnerText = strArr(count)
+                    '        root.AppendChild(child)
+                    '    Next
+                    'End If
                     End If
                 Catch
                 End Try

@@ -893,6 +893,7 @@ Public Class Movie
         _movieCache.genre       = _scrapedMovie.fullmoviebody.genre
         _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
+        _movieCache.tag         = _scrapedMovie.fullmoviebody.tag
         AssignMovieToAddMissingData
     End Sub
 

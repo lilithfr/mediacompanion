@@ -1511,7 +1511,7 @@ Public Class Form1
                 If workingMovieDetails.fullmoviebody.stars = Nothing Then workingMovieDetails.fullmoviebody.stars = ""
                 If workingMovieDetails.fullmoviebody.filename = Nothing Then workingMovieDetails.fullmoviebody.filename = ""
                 If workingMovieDetails.fullmoviebody.genre = Nothing Then workingMovieDetails.fullmoviebody.genre = ""
-                If workingMovieDetails.fullmoviebody.tag = Nothing Then workingMovieDetails.fullmoviebody.tag = ""
+                'If workingMovieDetails.fullmoviebody.tag = Nothing Then workingMovieDetails.fullmoviebody.tag.Clear ' = ""
                 If workingMovieDetails.fullmoviebody.imdbid = Nothing Then workingMovieDetails.fullmoviebody.imdbid = ""
                 If workingMovieDetails.fullmoviebody.mpaa = Nothing Then workingMovieDetails.fullmoviebody.mpaa = ""
                 If workingMovieDetails.fullmoviebody.outline = Nothing Then workingMovieDetails.fullmoviebody.outline = ""
@@ -3546,8 +3546,9 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
             movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
-            movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-            movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
+            movie.ScrapedMovie.fullmoviebody.movieset  = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+            movie.ScrapedMovie.fullmoviebody.source   = If(cbMovieDisplay_Source.SelectedIndex=0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
+            movie.ScrapedMovie.fullmoviebody.tag       = workingMovieDetails.fullmoviebody.tag
 
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
@@ -4928,6 +4929,10 @@ Public Class Form1
             TagListBox.Items.Clear()
             For Each mtag In Preferences.movietags
                 If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
+            Next
+            CurrentMovieTags.Items.Clear()
+            For Each ctag In workingMovieDetails.fullmoviebody.tag
+                If Not IsNothing(ctag) Then CurrentMovieTags.Items.Add(ctag)
             Next
 
         ElseIf tab.ToLower = "movie preferences" Then
@@ -24612,15 +24617,54 @@ End Sub
     End Sub
 
     Private Sub btnMovTagAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagAdd.Click
+        Try
+            If TagListBox.SelectedIndex <> -1 Then
+                For Each item In TagListBox.SelectedItems
+                    If item = "" Then Exit For
+                    If Not CurrentMovieTags.Items.Contains(item) Then
+                        CurrentMovieTags.Items.Add(item)
+                    End If
+                Next
+            End If
+        Catch ex As Exception
 
+        End Try
     End Sub
 
     Private Sub btnMovTagRemove_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagRemove.Click
+        Try
+            If CurrentMovieTags.SelectedIndex <> -1 Then
+                'Dim remtag As New List(Of String)
+                'remtag = workingMovieDetails.fullmoviebody.tag
+                For Each item In CurrentMovieTags.SelectedItems
+                    'CurrentMovieTags.Items.Remove(item)
+                    If workingMovieDetails.fullmoviebody.tag.Contains(item) Then workingMovieDetails.fullmoviebody.tag.Remove(item)
+                Next
+                CurrentMovieTags.Items.Clear()
+                For Each mtag In workingMovieDetails.fullmoviebody.tag
+                    CurrentMovieTags.Items.Add(mtag)
+                Next
 
+                Call mov_SaveQuick
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub btnMovTagSavetoNfo_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagSavetoNfo.Click
+        Try
+            If CurrentMovieTags.Items.Count <> -1 Then 
+                For Each tags In CurrentMovieTags.items
+                    If IsNothing(workingMovieDetails.fullmoviebody.tag) orelse Not workingMovieDetails.fullmoviebody.tag.Contains(tags) Then
+                        workingMovieDetails.fullmoviebody.tag.Add(tags)
+                    End If
+                Next
+                Call mov_SaveQuick 
+            End If
+        Catch ex As Exception
 
+        End Try
 End Sub
 
     Private Sub txtbxMovTagEntry_KeyPress( sender As System.Object,  e As System.Windows.Forms.KeyPressEventArgs) Handles txtbxMovTagEntry.KeyPress

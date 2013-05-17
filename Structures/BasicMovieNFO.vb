@@ -13,8 +13,8 @@ Public Structure str_BasicMovieNFO
     Dim tagline As String
     Dim runtime As String
     Dim mpaa As String
-    Dim genre As String
-    Dim tag As String
+    Dim genre As String 
+    Dim tag As List(Of String)  ' = New List(Of String)
     Dim credits As String
     Dim director As String
     Dim stars As String
@@ -43,7 +43,7 @@ Public Structure str_BasicMovieNFO
         runtime = ""
         mpaa = ""
         genre = ""
-        tag = ""
+        tag = New List(Of String)  ' = ""
         credits = ""
         director = ""
         stars = ""
