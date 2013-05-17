@@ -2187,7 +2187,7 @@ Public Class Movie
                 _triedUrls.Clear
                 GetTrailerUrlAlreadyRun = False
 
-                Dim more As Boolean = True
+                Dim more As Boolean = Not File.Exists(ActualTrailerPath)
 
                 While more 
                     _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
