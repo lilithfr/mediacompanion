@@ -1203,7 +1203,7 @@ Public Class Classimdb
                     webpage = loadwebpage(tempstring, False)
                     For f = 0 To webpage.Count - 1
                         'mpaa
-                        If webpage(f).IndexOf("<a href=""/mpaa"">MPAA") <> -1 Then
+                        If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
                             tempstring = webpage(f + 2)
                             If tempstring.IndexOf("<") = -1 Then
                                 For g = 0 To 33
