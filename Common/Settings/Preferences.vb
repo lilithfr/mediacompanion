@@ -107,6 +107,7 @@ Public Class Preferences
     Public Shared renamenfofiles As Boolean
     Public Shared actorseasy As Boolean
     Public Shared overwritethumbs As Boolean
+    Public Shared LocalActorImage As Boolean = True
     Public Shared videomode As Integer
     Public Shared selectedvideoplayer As String
     Public Shared externalbrowser As Boolean
@@ -372,6 +373,7 @@ Public Class Preferences
         savefanart = True
         fanartjpg = False
         overwritethumbs = False
+        LocalActorImage = True
         maxactors = 9999
         createfolderjpg = False
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
@@ -542,6 +544,7 @@ Public Class Preferences
         root.AppendChild(doc, "actorseasy",             actorseasy)             'CheckBox33
         root.AppendChild(doc, "rarsize",                rarsize)                'txtbx_minrarsize
         root.AppendChild(doc, "overwritethumbs",        overwritethumbs)        'cbOverwriteArtwork - does not appear to be used?
+        root.AppendChild(doc, "LocalActorImage",        LocalActorImage)        'cbDisplayLocalActor
         root.AppendChild(doc, "videomode",              videomode)              'RadioButton36-38
         root.AppendChild(doc, "selectedvideoplayer",    selectedvideoplayer)    'btn_custommediaplayer
         root.AppendChild(doc, "externalbrowser",        externalbrowser)        'CheckBox12
@@ -853,6 +856,7 @@ Public Class Preferences
                     Case "actorsavepath"                        : actorsavepath = decxmlchars(thisresult.InnerText)
                     Case "actornetworkpath"                     : actornetworkpath = decxmlchars(thisresult.InnerText)
                     Case "overwritethumbs"                      : overwritethumbs = thisresult.InnerXml
+                    Case "LocalActorImage"                      : LocalActorImage = thisresult.InnerText 
                     Case "imdbmirror"                           : imdbmirror = thisresult.InnerXml
                     Case "cleantags"                            : moviecleanTags = thisresult.InnerXml
                     Case "ignoreparts"                          : movieignorepart = thisresult.InnerXml
