@@ -23,7 +23,7 @@
 
         Dim fanartWidth As Integer = picbxFanart.ClientRectangle.Width
         Dim fanartHeight As Integer = picbxFanart.ClientRectangle.Height
-        Dim fanartRatio As Double = bmFanart.Width / fanartWidth
+        Dim fanartRatio As Double = bmFanart.Height / fanartHeight
 
         Dim rectFanart As New Rectangle(0, 0, StarsWidth * fanartRatio, bmStars.Height * fanartRatio)
 
@@ -34,7 +34,7 @@
         'OVERLAY VIDEO FLAGS
         Dim padding As Integer = 2
         Dim xPos As Integer = padding * fanartRatio
-        Dim yPos As Integer = (fanartHeight - (36 + padding)) * fanartRatio
+        Dim yPos As Integer = (fanartHeight - (32 + padding)) * fanartRatio
 
         Dim keyFlags As New List(Of String)(flags.Keys)
         For Each str As String In keyFlags
@@ -47,7 +47,7 @@
                 grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
                 xPos += (bmFlag.Width + padding) * fanartRatio
             Catch ex As Exception
-
+                'If the derived filname doesn't exist, we'll just ignore it (this will happen if aspect comes back as empty string).
             End Try
         Next
 
