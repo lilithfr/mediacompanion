@@ -4924,7 +4924,7 @@ Public Class Form1
         ElseIf tab.ToLower = "wall" Then
             Call mov_WallSetup()
 
-        ElseIf tab.ToLower = "movie sets" Then
+        ElseIf tab.ToLower = "movie & tag sets" Then
             ListofMovieSets.Items.Clear()
             For Each mset In Preferences.moviesets
                 If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
