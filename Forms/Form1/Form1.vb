@@ -94,6 +94,7 @@ Public Class Form1
     Public cleanfilenameprefchanged As Boolean = False
     Public videosourceprefchanged As Boolean = False
     Public scraperLog As String = ""
+    Public NewTagList As New List(Of String)
 
 
     Public noFanart As Boolean
@@ -3548,7 +3549,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
             movie.ScrapedMovie.fullmoviebody.movieset  = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
             movie.ScrapedMovie.fullmoviebody.source   = If(cbMovieDisplay_Source.SelectedIndex=0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-            movie.ScrapedMovie.fullmoviebody.tag       = workingMovieDetails.fullmoviebody.tag
+            movie.ScrapedMovie.fullmoviebody.tag       = NewTagList 
 
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
@@ -3623,6 +3624,7 @@ Public Class Form1
                     'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
                     'End If
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
+                    movie.ScrapedMovie.fullmoviebody.tag = NewTagList
 
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
@@ -4932,9 +4934,16 @@ Public Class Form1
                 If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
             Next
             CurrentMovieTags.Items.Clear()
-            For Each ctag In workingMovieDetails.fullmoviebody.tag
-                If Not IsNothing(ctag) Then CurrentMovieTags.Items.Add(ctag)
+            For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+                Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+                Dim movie As Movie = oMovies.LoadMovie(filepath)
+                For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
+                    If Not IsNothing(ctag) Then 
+                        If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
+                    End If
+                Next
             Next
+            
 
         ElseIf tab.ToLower = "movie preferences" Then
             Call mov_PreferencesSetup()
@@ -24679,10 +24688,9 @@ End Sub
     Private Sub btnMovTagSavetoNfo_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagSavetoNfo.Click
         Try
             If CurrentMovieTags.Items.Count <> -1 Then 
+                NewTagList.Clear()
                 For Each tags In CurrentMovieTags.items
-                    If IsNothing(workingMovieDetails.fullmoviebody.tag) orelse Not workingMovieDetails.fullmoviebody.tag.Contains(tags) Then
-                        workingMovieDetails.fullmoviebody.tag.Add(tags)
-                    End If
+                    NewTagList.Add(tags)
                 Next
                 Call mov_SaveQuick 
                 
