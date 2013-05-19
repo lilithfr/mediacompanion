@@ -5,6 +5,7 @@ Imports System.Xml
 Imports Media_Companion
 Imports MC_UserControls
 
+
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
     Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String)
@@ -152,6 +153,7 @@ Public Class Movies
             lst.Add( MissingCertificate       )
             lst.Add( MissingFanart            )
             lst.Add( MissingGenre             )
+            lst.Add( MissingLocalActors       )
             lst.Add( MissingOutline           )
             lst.Add( MissingPlot              )
             lst.Add( MissingPoster            )
@@ -189,6 +191,12 @@ Public Class Movies
     Public ReadOnly Property MissingTrailer As String
         Get
             Return "Missing Trailer (" & (From x In MovieCache Where x.MissingTrailer).Count & ")" 
+        End Get
+    End Property  
+
+    Public ReadOnly Property MissingLocalActors As String
+        Get
+            Return "Missing Local Actors (" & (From x In MovieCache Where x.MissingLocalActors).Count & ")" 
         End Get
     End Property    
 
@@ -1438,29 +1446,53 @@ Public Class Movies
 
 
 
+'    Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
+
+'        Dim nfoFunction  As New WorkingWithNfoFiles
+'        Dim workingMovie As ComboList
+
+'        For Each oFileInfo In dirInfo.GetFiles(pattern)
+''            Application.DoEvents()
+
+'            If Cancelled Then Exit Sub
+
+'            If Not File.Exists(oFileInfo.FullName) Then Continue For
+
+
+'            workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
+
+'            If workingMovie.title = "Error"                    Then Continue For
+'            If workingMovie.genre.IndexOf("skipthisfile") > -1 Then Continue For
+
+'            workingMovie.foldername   = Utilities  .GetLastFolder (workingMovie.fullpathandfilename)
+'            workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
+
+'            Cache.Add(workingMovie)
+'        Next
+'    End Sub
+
     Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
 
-        Dim nfoFunction  As New WorkingWithNfoFiles
-        Dim workingMovie As ComboList
-
         For Each oFileInfo In dirInfo.GetFiles(pattern)
-'            Application.DoEvents()
+
+            Application.DoEvents
 
             If Cancelled Then Exit Sub
 
             If Not File.Exists(oFileInfo.FullName) Then Continue For
 
-            workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
+            Dim movie = New Movie(Me,oFileInfo.FullName)
+        
+            If movie.mediapathandfilename = "none" Then Continue For
+       
+            movie.LoadNFO(False)
 
-            If workingMovie.title = "Error"                    Then Continue For
-            If workingMovie.genre.IndexOf("skipthisfile") > -1 Then Continue For
+            If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
 
-            workingMovie.foldername   = Utilities  .GetLastFolder (workingMovie.fullpathandfilename)
-            workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
-
-            Cache.Add(workingMovie)
+            Cache.Add(movie.Cache)
         Next
     End Sub
+
 
 
 
@@ -1502,33 +1534,58 @@ Public Class Movies
     End Sub
 
 
+    'Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+
+    '    Dim nfoFunction As New WorkingWithNfoFiles
+
+    '    Dim workingMovie As ComboList
+
+    '    For Each oFileInfo In dirInfo.GetFiles(pattern)
+    '        Application.DoEvents()
+
+    '        If Cancelled Then Exit Sub
+
+    '        If Not File.Exists(oFileInfo.FullName) Then Continue For
+
+    '        workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
+
+    '        If workingMovie.title = "Error" Then Continue For
+
+    '        workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+
+    '        If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
+
+    '            workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
+
+    '            TmpMovieCache.Add(workingMovie)
+    '        End If
+    '    Next
+    'End Sub
+
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
 
-        Dim nfoFunction As New WorkingWithNfoFiles
-
-        Dim workingMovie As ComboList
-
         For Each oFileInfo In dirInfo.GetFiles(pattern)
-            Application.DoEvents()
+
+            Application.DoEvents
 
             If Cancelled Then Exit Sub
 
             If Not File.Exists(oFileInfo.FullName) Then Continue For
 
-            workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
+            Dim movie = New Movie(Me,oFileInfo.FullName)
+        
+            If movie.mediapathandfilename = "none" Then Continue For
 
-            If workingMovie.title = "Error" Then Continue For
+            movie.LoadNFO(False)
 
-            workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+            If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
 
-            If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
-
-                workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
-
-                TmpMovieCache.Add(workingMovie)
-            End If
+            TmpMovieCache.Add(movie.Cache)
         Next
+
     End Sub
+
+
 
 
     Sub LoadActorCache()

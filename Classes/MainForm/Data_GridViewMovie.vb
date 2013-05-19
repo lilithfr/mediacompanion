@@ -397,6 +397,11 @@ Public Class Data_GridViewMovie
         End Get
     End Property
 
+    Public ReadOnly Property MissingLocalActors As Boolean
+        Get
+            Return _missingdata1 And 8
+        End Get
+    End Property
 
     ReadOnly Property DisplaySortOrder As String
         Get

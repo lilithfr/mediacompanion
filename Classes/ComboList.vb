@@ -65,6 +65,12 @@ Public Class ComboList
         End Get
     End Property
 
+    Public ReadOnly Property MissingLocalActors As Boolean
+        Get
+            Return _missingdata1 And 8
+        End Get
+    End Property
+
 
     Public ReadOnly Property MissingRating As Boolean
         Get

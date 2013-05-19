@@ -1016,7 +1016,6 @@ Public Class Preferences
     End Function
 
 
-
     Public Shared Function ActualTrailerPath(NfoPathPrefName As String) As String
 
             Dim s = NfoPathPrefName

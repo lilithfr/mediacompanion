@@ -6,6 +6,8 @@ Imports System.Xml
 Imports Media_Companion
 Imports System.Text
 Imports YouTubeFisher
+Imports Media_Companion.Preferences
+
 
 Public Class Movie
 
@@ -373,6 +375,18 @@ Public Class Movie
             Dim q = From actor In _scrapedMovie.listactors Select New ActorDatabase(actor.actorname,_scrapedMovie.fullmoviebody.imdbid)
 
             Return q.ToList
+        End Get
+    End Property
+
+    ReadOnly Property MissingLocalActors As Boolean
+        Get
+            For Each Actor In _scrapedMovie.listactors
+                Dim ActorPath = GetActorPath(_movieCache.fullpathandfilename, actor.actorname)
+
+                If Not File.Exists(ActorPath) Then Return True
+            Next
+
+            Return False
         End Get
     End Property
 
@@ -1786,21 +1800,34 @@ Public Class Movie
 
     Public Sub AssignMovieToAddMissingData
 
-        _movieCache.missingdata1 = 0
+        _movieCache.missingdata1 = GetMissingData
+
+    End Sub
+
+
+    Public Function GetMissingData
+
+        Dim missingdata As Byte = 0
 
         If Not File.Exists(FanartPath) Then
-            _movieCache.missingdata1 += 1
+            missingdata += 1
         End If
 
         If Not File.Exists(PosterPath) Then
-            _movieCache.missingdata1 += 2
+            missingdata += 2
         End If
 
         'Not used yet
         If Not TrailerExists Then
-            _movieCache.missingdata1 += 4
+            missingdata += 4
         End If
-    End Sub
+
+        If MissingLocalActors Then
+            missingdata += 8
+        End If
+
+        Return missingdata
+    End Function
 
     Private Sub mov_OfflineDvdProcess(ByVal nfopath As String, ByVal title As String, ByVal mediapath As String)
  
