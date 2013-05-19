@@ -23,9 +23,9 @@ Public Class Movies
     Public Event FileDownloadComplete    ()
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
-    Private _CertificateMappings As CertificateMappings
-    Private _actorDb As New List(Of ActorDatabase)
-    Public _tmpActorDb As New List(Of ActorDatabase)
+    Private _certificateMappings  As CertificateMappings
+    Private _actorDb              As New List(Of ActorDatabase)
+    Public _tmpActorDb            As New List(Of ActorDatabase)
 
     Public Property Bw            As BackgroundWorker = Nothing
     Public Property MovieCache    As New List(Of ComboList)
@@ -39,11 +39,11 @@ Public Class Movies
 
     Public ReadOnly Property CertificateMappings As CertificateMappings
         Get
-            If IsNothing(_CertificateMappings) Then
-                _CertificateMappings = New CertificateMappings 
+            If IsNothing(_certificateMappings) Then
+                _certificateMappings = New CertificateMappings 
             End If
 
-            Return _CertificateMappings
+            Return _certificateMappings
         End Get
     End Property
 
@@ -678,6 +678,9 @@ Public Class Movies
     End Sub
 
     Public Sub AddNewMovies(DirPath As String)   'Search for valid video file
+
+        If Preferences.ExcludeFolders.Match(DirPath) Then Return
+
         Dim dirInfo As New DirectoryInfo(DirPath)
         Dim found   As Integer = 0
 

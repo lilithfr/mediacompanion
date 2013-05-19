@@ -75,11 +75,12 @@ Public Class Preferences
     End Property
 
     'Saved Folder Prefs
-    Public Shared tvFolders As New List(Of String)
-    Public Shared tvRootFolders As New List(Of String)
-    Public Shared movieFolders As New List(Of String)
-    Public Shared offlinefolders As New List(Of String)
+    Public Shared tvFolders        As New List(Of String)
+    Public Shared tvRootFolders    As New List(Of String)
+    Public Shared movieFolders     As New List(Of String)
+    Public Shared offlinefolders   As New List(Of String)
     Public Shared homemoviefolders As New List(Of String)
+    Public Shared ExcludeFolders   As New Excludes("Folders")
 
     'Saved Form Prefs
     Public Shared backgroundcolour As String
@@ -475,6 +476,8 @@ Public Class Preferences
             list.Add(Path)
         Next
 
+        root.AppendChild(ExcludeFolders.GetChild(doc)) 
+
 
         'Form Settings ------------------------------------------------------------
         root.AppendChild(doc, "backgroundcolour",           backgroundcolour)
@@ -770,9 +773,12 @@ Public Class Preferences
                     Case "tvrootfolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         tvRootFolders.Add(decodestring)
+
                     Case "homemoviefolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         homemoviefolders.Add(decodestring)
+
+                    Case "ExcludeFolders" : ExcludeFolders.Load(thisresult)
 
                     Case "moviethumbpriority"
                         ReDim moviethumbpriority(3)
@@ -959,7 +965,7 @@ Public Class Preferences
     End Sub
 
 
-    Public Shared Function decxmlchars(ByVal line As String)
+    Public Shared Function decxmlchars(ByVal line As String) As String
         line = line.Replace("&amp;", "&")
         line = line.Replace("&lt;", "<")
         line = line.Replace("&gt;", ">")
