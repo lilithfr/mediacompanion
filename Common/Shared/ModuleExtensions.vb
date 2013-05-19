@@ -1,5 +1,6 @@
 ﻿Imports System.Globalization
 Imports System.Runtime.CompilerServices
+Imports System.Windows.Forms
 
 Public Module ModuleExtensions
 
@@ -73,6 +74,14 @@ Public Module ModuleExtensions
         Return s.Trim
     End Function
 
-    
+    <Extension()> _
+    Public Sub AppendLine(tb As TextBox, value As String)
+        If tb.Text.Length=0 Then
+            tb.Text = value
+        Else
+            tb.AppendText( Environment.NewLine + value )
+        End If
+    End Sub
+
 End Module
 

@@ -679,7 +679,10 @@ Public Class Movies
 
     Public Sub AddNewMovies(DirPath As String)   'Search for valid video file
 
-        If Preferences.ExcludeFolders.Match(DirPath) Then Return
+        If Preferences.ExcludeFolders.Match(DirPath) Then 
+            ReportProgress(,"Skipping excluded folder [" & DirPath & "] from scrape." & vbCrLf)
+            Return
+        End If
 
         Dim dirInfo As New DirectoryInfo(DirPath)
         Dim found   As Integer = 0

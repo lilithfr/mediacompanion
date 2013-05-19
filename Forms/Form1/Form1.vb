@@ -14173,6 +14173,8 @@ Public Class Form1
         cbUseMultipleThreads  .Checked = Preferences.UseMultipleThreads
    '    tbMkvMergeGuiPath     .Text    = Preferences.MkvMergeGuiPath
 
+        Preferences.ExcludeFolders.PopTextBox(tbExcludeFolders)
+
         prefsload = False
         generalprefschanged = False
         btnGeneralPrefsSaveChanges.Enabled = False
@@ -14363,6 +14365,8 @@ Public Class Form1
     End Sub
     Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
         Try
+            Preferences.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
+
             Preferences.SaveConfig()
 
             If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
@@ -24782,4 +24786,14 @@ End Sub
 
 
     
+    Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
+        
+        If Preferences.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
+
+    End Sub
+
+
 End Class

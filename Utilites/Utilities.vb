@@ -2660,4 +2660,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return FullPath
     End Function
 
+    Public Shared Function GetLastFolderInPath(ByVal path As String) As String
+
+        Return New IO.DirectoryInfo(path.TrimEnd("\")).Name
+        
+    End Function
+
+
 End Class

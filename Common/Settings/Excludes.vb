@@ -11,6 +11,10 @@ Public Class ExcludeTag
     Public Sub New
     End Sub
 
+    Public Sub New(name As String)
+        Me.Name = name
+    End Sub
+
     Public Sub New(node As XmlNode)
         Load(node)
     End Sub
@@ -59,17 +63,75 @@ Public Class Excludes
     End Function
 
 
-    Function Match(name As String) As String
+    Function ExtactMatch(name As String) As Boolean
         
         Dim q = From x In Items Select x Where x.Name.ToUpper = name.ToUpper
 
-        If q.Count=1 Then Return True
+        Return (q.Count=1)
+    End Function
 
-        q = From x In Items Select x Where x.Name.GetLastChar="*" and name.ToUpper.IndexOf(x.Name.ToUpper.RemoveLastChar)=0
 
-        If q.Count=1 Then Return True
+    Function Match(name As String) As Boolean
+        
+        Dim LastFolder As String = Utilities.GetLastFolderInPath(name)
 
-        Return False
+        If ExtactMatch(LastFolder) Then Return True
+
+        Dim q = From x In Items Select x Where x.Name.GetLastChar="*" and LastFolder.ToUpper.IndexOf(x.Name.ToUpper.RemoveLastChar)=0
+
+        Return (q.Count=1) 
+    End Function
+
+    Sub PopTextBox(tb As TextBox)
+        tb.Clear
+
+        For Each item In Items
+            tb.AppendLine(item.Name)
+        Next
+    End Sub
+
+    Sub PopFromTextBox(tb As TextBox)
+
+        TidyTextBoxItems(tb)
+
+        Items.Clear
+
+        For Each item In tb.Lines
+            Items.Add(New ExcludeTag(item))
+        Next
+    End Sub
+
+
+    Sub TidyTextBoxItems(tb As TextBox)
+        
+        Dim Lines As New List(Of String)
+
+        For Each item In tb.Lines
+            item = item.Trim.ToUpper
+            If item<>"" Then
+                If Not Lines.Contains(item) Then
+                    Lines.Add(item)
+                End If
+            End If
+        Next
+
+        tb.Lines = Lines.ToArray
+    End Sub
+
+
+    Function Changed(tb As TextBox) As Boolean
+
+        TidyTextBoxItems(tb)
+
+        For Each item In tb.Lines
+            If Not ExtactMatch(item) Then Return True
+        Next    
+
+        For Each item In Items
+            If Not tb.Lines.Contains(item.Name) Then Return True
+        Next    
+
+        Return False    
     End Function
 
 End Class

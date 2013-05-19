@@ -1546,10 +1546,19 @@ Partial Public Class Form1
                     newtvfolders.Add(TvFolder)
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim ExtraFolder As List(Of String) = Utilities.EnumerateFolders(TvFolder, 3)
-                    newtvfolders.AddRange(ExtraFolder)
+
+                    'newtvfolders.AddRange(ExtraFolder)
                     'newtvfolders.Add(TvFolder)
-                    For Each Item In ExtraFolder
-                        Preferences.tvScraperLog &= "Subfolder added :- " & Item.ToString & vbCrLf
+
+                    For Each Item As String In ExtraFolder
+
+                        If Preferences.ExcludeFolders.Match(Item) Then 
+                            Preferences.tvScraperLog &="Skipping excluded folder [" & Item & "] from scrape." & vbCrLf
+                            Continue For
+                        End If
+
+                        newtvfolders.Add(Item)
+                        Preferences.tvScraperLog &= "Subfolder added :- " & Item & vbCrLf
                     Next
                 End If
             Else
