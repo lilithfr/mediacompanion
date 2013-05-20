@@ -674,14 +674,16 @@ Module General
         Next
         Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
         Dim SlashPosition As Integer = Filename.LastIndexOf("\")
-        Dim ImageFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-        ImageFilename &= ".tbn"
-        Dim ImageFilename2 As String = Filename.Remove(SlashPosition, (Filename.Length - SlashPosition))
-        ImageFilename2 &= "\folder.jpg"
-        Dim ImageFilename3 As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-        ImageFilename3 &= "-fanart.jpg"
-        Dim myWebClient As New System.Net.WebClient()
-        On Error Resume Next
+        Dim NfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
+        NfoFilename &= ".nfo"
+        'Dim ImageFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
+        'ImageFilename &= ".tbn"
+        'Dim ImageFilename2 As String = Filename.Remove(SlashPosition, (Filename.Length - SlashPosition))
+        'ImageFilename2 &= "\folder.jpg"
+        'Dim ImageFilename3 As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
+        'ImageFilename3 &= "-fanart.jpg"
+        'Dim myWebClient As New System.Net.WebClient()
+        'On Error Resume Next
 
         'myWebClient.DownloadFile(MoviePosterURL, ImageFilename)
         
@@ -711,10 +713,21 @@ Module General
         'End If
 
         ''-----------------End Resize Fanart
+        Dim videotsrootpath As String = ""
+        If IO.Path.GetFileName(NfoFilename).ToLower="video_ts.nfo" Then
+            videotsrootpath = Utilities.RootVideoTsFolder(NfoFilename)
+        End If
+        Dim paths As List(Of String) = Preferences.GetfanartPaths(NfoFilename,videotsrootpath)
 
-        Movie.SavePosterImageToCacheAndPath(MoviePosterURL, ImageFilename)
-        File.Copy(ImageFilename, ImageFilename2, True)
-        Movie.SaveFanartImageToCacheAndPath(MovieFanartURL, ImageFilename3)
+        Movie.SaveFanartImageToCacheAndPaths(MovieFanartURL, paths)
+
+        Dim Posterpaths As List(Of String) = Preferences.GetPosterPaths(NfoFilename,videotsrootpath)
+
+        Movie.SavePosterImageToCacheAndPaths(MoviePosterURL,Posterpaths)
+
+        'Movie.SavePosterImageToCacheAndPath(MoviePosterURL, ImageFilename)
+        'File.Copy(ImageFilename, ImageFilename2, True)
+        'Movie.SaveFanartImageToCacheAndPath(MovieFanartURL, ImageFilename3)
 
         Return True
 
