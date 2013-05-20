@@ -2811,7 +2811,7 @@ Public Class Form1
                         util_ImageLoad(PictureBoxActor, temppath, Utilities.DefaultActorPath)
                         Exit Sub
                     End If
-                    If actor.actorthumb <> Nothing Then
+                    If actor.actorthumb <> Nothing And Not Preferences.LocalActorImage Then
                         Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
                             If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
