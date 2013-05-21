@@ -186,7 +186,8 @@ Public Class Classimdb
             title = title.Replace("&", "%26")
             title = title.Replace(",", "")
             title = title.Replace("++", "+")
-            title = imdbmirror & "find?s=tt&q=" & title
+            title = imdbmirror & "search/title?title=" & title & "&title_type=feature"
+            'title = imdbmirror & "find?s=tt&q=" & title
             Dim urllinecount As Integer
             Dim GOT_IMDBID As String
             Dim allok As Boolean = False
@@ -1565,11 +1566,15 @@ Public Class Classimdb
 
         Catch ex As WebException
             'MsgBox("Unable to load webpage " & url & vbCrLf & vbCrLf & ex.ToString)
-            If webpage.Count > 0 Then
-                Return webpage
+            If IntoSingleString = False Then
+                If webpage.Count > 0 Then
+                    Return webpage
+                Else
+                    webpage.Add("error")
+                    Return "error"   'webpage
+                End If
             Else
-                webpage.Add("error")
-                Return webpage
+                Return "error"
             End If
         Finally
             Monitor.Exit(Me)
