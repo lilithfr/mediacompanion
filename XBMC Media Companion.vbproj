@@ -943,10 +943,10 @@
     <None Include="Assets\wfcl_MC.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Classes\DefaultCertificateMappings.xml">
+    <Content Include="Classes\DefaultCertificateMappings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
     <Content Include="Classes\tmdb_languages.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
