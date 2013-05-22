@@ -1605,7 +1605,7 @@ Module General
             ' 2st stage
             ParametersForScraper(0) = FinalScrapResult
             FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
-            If FinalScrapResult.ToLower = "error" Then Return FinalScrapResult
+            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return FinalScrapResult
             Dim m_xmld As XmlDocument
             Dim m_nodelist As XmlNodeList
             Dim m_node As XmlNode

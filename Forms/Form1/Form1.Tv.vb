@@ -1591,11 +1591,15 @@ Partial Public Class Form1
             Next f
             tempint = newEpisodeList.Count - mediacounter
 
-            Preferences.tvScraperLog &= tempint.ToString & " New episodes found in directory " & dirpath & vbCrLf
+            If tempint > 0 Then
+                Preferences.tvScraperLog &= "!!! " & tempint.ToString & " New episodes found in directory " & dirpath & vbCrLf
+            Else
+                Preferences.tvScraperLog &= tempint.ToString & " New episodes found in directory " & dirpath & vbCrLf
+            End If
             mediacounter = newEpisodeList.Count
         Next g
 
-        Preferences.tvScraperLog &= vbCrLf
+        Preferences.tvScraperLog &= "!!! " & vbCrLf
         If newEpisodeList.Count <= 0 Then
             Preferences.tvScraperLog &= "!!! No new episodes found, exiting scraper." & vbCrLf
             Exit Sub

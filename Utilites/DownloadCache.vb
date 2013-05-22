@@ -128,6 +128,7 @@ Public Class DownloadCache
 
         Utilities.EnsureFolderExists(CacheFolder)
         Dim returnCode As Boolean = True
+        If URL = "" Then Return False
         Dim CacheFileName As String = GetCacheFileName(URL)
         Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
 

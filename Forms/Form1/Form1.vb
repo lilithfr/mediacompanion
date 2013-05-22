@@ -2269,7 +2269,7 @@ Public Class Form1
                 End Try
                 newMovieFoundTitle = oMovies.NewMovies(f).title.ToString
                 newMovieFoundFilename = oMovies.NewMovies(f).mediapathandfilename.ToString
-                scraperLog &= newMovieFoundTitle
+                scraperLog &= oMovies.NewMovies(f).titlefull 'newMovieFoundTitle  
                 novaThread = New Thread(New ThreadStart(AddressOf mov_ScrapingStartTemp))
                 novaThread.SetApartmentState(ApartmentState.STA)
                 novaThread.Start()
@@ -2306,7 +2306,7 @@ Public Class Form1
         Dim FullFileContent As String = ""
         Dim Scraper As String = Preferences.XBMC_Scraper
         FullFileContent = Start_XBMC_MoviesScraping(Scraper, newMovieFoundTitle, newMovieFoundFilename)
-        If FullFileContent.ToLower <> "error" Then
+        If FullFileContent.ToLower <> "error" and FullFileContent.ToLower <> "<results></results>" Then
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
@@ -2315,7 +2315,12 @@ Public Class Form1
             If messbox.Visible = True Then messbox.Close()
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
         Else
-            scraperLog &= " - Scrape ERROR!" & vbCrLf
+            ScraperErrorDetected = True
+            If FullFileContent.ToLower = "<results></results>" Then
+                scraperLog &= " - Could not find on TMDB - Check Grammer"
+            Else
+                scraperLog &= " - Scrape ERROR!" & vbCrLf
+            End If
         End If
     End Sub
     Private Sub mov_DBScrapedAdd(ByVal Filename As String)
@@ -8452,7 +8457,7 @@ Public Class Form1
 
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
 
-        tvScraperLog = tvScraperLog & "Saving episode" & vbCrLf
+        tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
         'For Each Episode As Nfo.TvEpisode In alleps
         '    Episode.Save()
         'Next
@@ -23905,7 +23910,7 @@ Public Class Form1
     Private Sub Post_Run_XBMC_Scraper()
         UpdateFilteredList()
 
-        scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
+        scraperLog &= vbCrLf & vbCrLf &  "!!! Search for New Movies Complete." & vbCrLf
 
         DisplayLogFile()
     End Sub
