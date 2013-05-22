@@ -4959,7 +4959,8 @@ Public Class Form1
 
     Private Sub mov_ChangeMovieSetup()
         Dim tempstring As String = ""
-        If Preferences.usefoldernames = False Then
+        Dim isroot As Boolean = Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename)
+        If Preferences.usefoldernames = False OrElse isroot Then
             tempstring = Utilities.RemoveFilenameExtension(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename))
         Else
             tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename)
