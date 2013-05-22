@@ -781,7 +781,7 @@ Public Class Movie
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
         If Not IsNothing(Title) then
-            ReportProgress(, String.Format("{0}Scraping Title: {1}{0}", vbCrLf, Title))
+            ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
         End If
 
         If PossibleImdb <> "" then
@@ -809,7 +809,7 @@ Public Class Movie
             ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Preferences.imdbmirror & """" & vbCrLf & "IMDB may not be available" & vbCrLf )
             AppendScrapeFailedActions
         Else
-            ReportProgress(MSG_OK,"Movie Body Scraped OK" & vbCrLf)
+            ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
             AppendScrapeSuccessActions
         End If
     End Sub
@@ -1554,7 +1554,7 @@ Public Class Movie
                 'SavePosterImageToCacheAndPath(PosterUrl, newPosterPath)
                 'SavePosterToPosterWallCache
 
-                'ReportProgress(MSG_OK, "Poster(s) scraped OK" & vbCrLf)
+                ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
                 'If frodo And Not IO.File.Exists(frodoart) And Not Preferences.basicsavemode Then
                 '    IO.File.Copy(edenart, frodoart)
                 'End If
@@ -1783,7 +1783,7 @@ Public Class Movie
                 '    End If
                 'End If
    '             GC.Collect()
-                ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
+                ReportProgress(MSG_OK,"!!! Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
@@ -2166,7 +2166,7 @@ Public Class Movie
             If _imdbBody = "MIC" Then                        
                 ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Preferences.imdbmirror & """" & vbCrLf)
             Else
-                ReportProgress(MSG_OK,"Movie Body Scraped OK" & vbCrLf)
+                ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
                 AssignScrapedMovie(_rescrapedMovie)
             End If
         

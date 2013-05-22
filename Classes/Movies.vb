@@ -740,7 +740,7 @@ Public Class Movies
 
             i += 1
             PercentDone = CalcPercentDone(i,files.Count)
-            msg="Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
+            msg="!!! Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
             ReportProgress(msg,msg & vbCrLf)
 
             If not ValidateFile(fileInFo) then
@@ -757,9 +757,9 @@ Public Class Movies
 
     Sub ScrapeNewMovies
         If NewMovies.Count>0 then
-            ReportProgress(,vbCrLf & vbCrLf & "A total of " & NewMovies.Count & " new movie" & If(NewMovies.Count=1,"","s") & " found -> Starting Main Scraper Process..." & vbCrLf & vbCrLf )
+            ReportProgress(,vbCrLf & vbCrLf & "!!! A total of " & NewMovies.Count & " new movie" & If(NewMovies.Count=1,"","s") & " found -> Starting Main Scraper Process..." & vbCrLf & vbCrLf )
         Else
-            ReportProgress(,vbCrLf & vbCrLf & "No new movies found" & vbCrLf & vbCrLf)
+            ReportProgress(vbCrLf & vbCrLf & "No new movies found" & vbCrLf & vbCrLf,vbCrLf & vbCrLf & "!!! No new movies found" & vbCrLf & vbCrLf)
         End If
  
 
@@ -778,7 +778,7 @@ Public Class Movies
             If Cancelled then Exit Sub
         Next
 
-        ReportProgress( ,"Finished" )
+        ReportProgress( ,"!!! " & vbCrLf & "!!! Finished" )
     End Sub
 
     Sub ScrapeMovie(movie As Movie)
@@ -851,6 +851,7 @@ Public Class Movies
 
     Sub RescrapeAll( NfoFilenames As List(Of String) )
         Dim i=0
+        ReportProgress(,"!!! Rescraping all data for:" & vbCrLf & vbCrLf )
         For Each NfoFilename In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
@@ -861,6 +862,7 @@ Public Class Movies
             If Cancelled then Exit For
         Next
         SaveCaches
+        ReportProgress(,"!!! " & vbCrLf & "!!! Finished")
     End Sub
 
 
