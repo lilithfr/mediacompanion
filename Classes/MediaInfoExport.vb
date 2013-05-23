@@ -72,8 +72,8 @@ Public Class MediaInfoExport
         Dim templateBody As String = workingTemplate.body
         Dim isMovies As Boolean = [Enum].Equals(workingTemplate.type, mediaType.Movie)
         Dim getTags As getTagsDelegate
-        Dim Extn As String = Utilities.GetExtension(savePath)
-        Dim Basiccsvxml As Boolean = If(workingTemplate.title = "basic movie list" and Extn = "csv",True,False)
+       ' Dim Extn As String = Utilities.GetExtension(savePath)
+        'Dim Basiccsvxml As Boolean = If(workingTemplate.title = "basic movie list" and Extn = "csv",True,False)
         Dim mediaCollection
         If isMovies Then
             getTags = AddressOf getTagsMovies
@@ -109,7 +109,7 @@ Public Class MediaInfoExport
             frmMediaInfoExport.Show()
         End If
 
-        If Not Basiccsvxml Then
+        'If Not Basiccsvxml Then
             Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
             If M.Success Then
                 headerTagPresent = True
@@ -142,9 +142,9 @@ Public Class MediaInfoExport
                 tempstring = M.Groups("mediaitem").Value
                 Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
             End If
-        Else
-            tempDoc = String.Format("XBMC Media Companion" & vbCrLf & "CSV Output" & vbCrLf & vbCrLf)
-        End If
+        'Else
+        '    tempDoc = String.Format("XBMC Media Companion" & vbCrLf & "CSV Output" & vbCrLf & vbCrLf)
+        'End If
 
         For Each mediaItem In mediaCollection
             If frmMediaInfoExport.IsDisposed OrElse (limit <> 0 And counter >= limit) Then Exit For
@@ -161,12 +161,12 @@ Public Class MediaInfoExport
                 frmMediaInfoExport.Label4.Refresh()
                 Application.DoEvents()
             End If
-            If Basiccsvxml Then
-                Dim basicstring As String = "<<movietitleandyear>>"
-                tempDoc &= getTags(basicstring, mediaItem, counter, pathstring, mediaCollection.Count) & vbCrLf 
-            Else
+            'If Basiccsvxml Then
+            '    Dim basicstring As String = "<<movietitleandyear>>"
+            '    tempDoc &= getTags(basicstring, mediaItem, counter, pathstring, mediaCollection.Count) & vbCrLf 
+            'Else
                 tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count)
-            End If
+            'End If
             counter += 1
         Next
 
@@ -182,15 +182,15 @@ Public Class MediaInfoExport
                     cssWriter.Write(workingTemplate.css)
                     cssWriter.Dispose()
                 End If
-                If Not Basiccsvxml Then
+                'If Not Basiccsvxml Then
                     Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
                     docWriter.Write(tempDoc)
                     docWriter.Close()
-                Else
-                    Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
-                    docWriter.Write(tempDoc)
-                    docWriter.Close()
-                End If
+                'Else
+                '    Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
+                '    docWriter.Write(tempDoc)
+                '    docWriter.Close()
+                'End If
             Catch ex As Exception
                 MsgBox(ex.ToString)
             Finally
