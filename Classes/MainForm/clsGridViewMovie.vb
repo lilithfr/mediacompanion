@@ -175,8 +175,8 @@ Public Class clsGridViewMovie
         Try
             Dim firstColWidth As Integer = dgvMovies.Width - 17
 
-            If dgvMovies.Columns("ImgPlot").Visible then firstColWidth -= dgvMovies.Columns("ImgPlot").Width
-            If dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
+            If Not IsNothing(dgvMovies.Columns("ImgPlot")) AndAlso dgvMovies.Columns("ImgPlot").Visible then firstColWidth -= dgvMovies.Columns("ImgPlot").Width
+            If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
 
 
             If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
@@ -187,10 +187,10 @@ Public Class clsGridViewMovie
             If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
 
             If firstColWidth>0 Then
-                dgvMovies.Columns("filename"           ).Width = firstColWidth
-                dgvMovies.Columns("foldername"         ).Width = firstColWidth
-                dgvMovies.Columns("DisplayTitle"       ).Width = firstColWidth
-                dgvMovies.Columns("DisplayTitleAndYear").Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"           ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("foldername"         )) Then dgvMovies.Columns("foldername"         ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("DisplayTitle"       )) Then dgvMovies.Columns("DisplayTitle"       ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("DisplayTitleAndYear")) Then dgvMovies.Columns("DisplayTitleAndYear").Width = firstColWidth
             End If
         Catch
         End Try
