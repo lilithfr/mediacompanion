@@ -634,6 +634,9 @@
     <Content Include="Resources\video_flags\media_codec_hdmv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\video_flags\media_codec_mpeg-4 visual.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\video_flags\media_codec_mpeg1codec.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
