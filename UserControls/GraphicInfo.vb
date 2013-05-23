@@ -41,8 +41,7 @@ Public Class GraphicInfo
         Dim keyFlags As New List(Of String)(flags.Keys)
         For Each str As String In keyFlags
             Try
-                If flags.Item(str) = Nothing OrElse flags.Item(str) = "" OrElse flags.Item(str) = "-1" Then
-                Else
+                If Not String.IsNullOrEmpty(flags.Item(str)) Then    'Catch any empty values for selected flags
                 Dim flagName As String = String.Format("media_{0}_{1}.png", str, flags.Item(str))
                 Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
                 Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))

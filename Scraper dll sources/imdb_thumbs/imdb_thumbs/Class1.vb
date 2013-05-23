@@ -119,7 +119,7 @@ Public Class Class1
         'Next
         Dim finalposters(postercount, 1) As String
         Dim counter As String = 0
-        For f = postercount To 0 Step -1
+        For f = postercount-1 To 0 Step -1
             Try
                 If posters(f, 0).ToLower.IndexOf("http") <> -1 Then
                     finalposters(counter, 0) = posters(f, 0) & "_V1._SX1000_SY1000_.jpg"
