@@ -72,6 +72,8 @@ Public Class MediaInfoExport
         Dim templateBody As String = workingTemplate.body
         Dim isMovies As Boolean = [Enum].Equals(workingTemplate.type, mediaType.Movie)
         Dim getTags As getTagsDelegate
+        Dim Extn As String = Utilities.GetExtension(savePath)
+        Dim Basiccsvxml As Boolean = If(workingTemplate.title = "basic movie list" and (Extn = "csv" or Extn = "xml"),True,False)
         Dim mediaCollection
         If isMovies Then
             getTags = AddressOf getTagsMovies
@@ -107,37 +109,41 @@ Public Class MediaInfoExport
             frmMediaInfoExport.Show()
         End If
 
-        Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
-        If M.Success Then
-            headerTagPresent = True
-            tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count)
-            tempDoc = String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
-        End If
-
-        If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
-            pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
-            Dim fso As New IO.DirectoryInfo(pathstring)
-            If fso.Exists = False Then
-                IO.Directory.CreateDirectory(pathstring)
+        If Not Basiccsvxml Then
+            Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
+            If M.Success Then
+                headerTagPresent = True
+                tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count)
+                tempDoc = String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
             End If
-        End If
 
-        M = Regex.Match(workingTemplate.body, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
-        If M.Success Then
-            bodyTagPresent = True
-            tempDoc &= "<body>"
-            tempstring = M.Groups("body").Value
+            If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
+                pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
+                Dim fso As New IO.DirectoryInfo(pathstring)
+                If fso.Exists = False Then
+                    IO.Directory.CreateDirectory(pathstring)
+                End If
+            End If
+
+            M = Regex.Match(workingTemplate.body, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
+            If M.Success Then
+                bodyTagPresent = True
+                tempDoc &= "<body>"
+                tempstring = M.Groups("body").Value
+            Else
+                tempstring = workingTemplate.body
+            End If
+
+            M = Regex.Match(tempstring, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
+            If M.Success Then
+                mediaTagpresent = True
+                tempDoc &= tempstring.Substring(0, M.Index).Trim
+                tempBody = tempstring.Substring(M.Index + M.Length)
+                tempstring = M.Groups("mediaitem").Value
+                Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
+            End If
         Else
-            tempstring = workingTemplate.body
-        End If
-
-        M = Regex.Match(tempstring, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
-        If M.Success Then
-            mediaTagpresent = True
-            tempDoc &= tempstring.Substring(0, M.Index).Trim
-            tempBody = tempstring.Substring(M.Index + M.Length)
-            tempstring = M.Groups("mediaitem").Value
-            Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
+            tempDoc = String.Format("XBMC Media Companion" & vbCrLf & "CSV Output" & vbCrLf & vbCrLf)
         End If
 
         For Each mediaItem In mediaCollection
@@ -155,7 +161,12 @@ Public Class MediaInfoExport
                 frmMediaInfoExport.Label4.Refresh()
                 Application.DoEvents()
             End If
-            tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count)
+            If Basiccsvxml Then
+                Dim basicstring As String = "<<movietitleandyear>>"
+                tempDoc &= getTags(basicstring, mediaItem, counter, pathstring, mediaCollection.Count) & vbCrLf 
+            Else
+                tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count)
+            End If
             counter += 1
         Next
 
@@ -171,9 +182,15 @@ Public Class MediaInfoExport
                     cssWriter.Write(workingTemplate.css)
                     cssWriter.Dispose()
                 End If
-                Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
-                docWriter.Write(tempDoc)
-                docWriter.Close()
+                If Not Basiccsvxml Then
+                    Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
+                    docWriter.Write(tempDoc)
+                    docWriter.Close()
+                Else
+                    Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
+                    docWriter.Write(tempDoc)
+                    docWriter.Close()
+                End If
             Catch ex As Exception
                 MsgBox(ex.ToString)
             Finally

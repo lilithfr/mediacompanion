@@ -2666,5 +2666,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         
     End Function
 
+    Public Shared Function GetExtension(path As String) As String
+        Dim Extn As String
+        'Dim Dotpos As Integer
+        Dim NoDot() As String
+        NoDot = Split(path, “.”)
+        Extn = NoDot(UBound(NoDot))
+
+        'MsgBox (Extension)
+        Return Extn
+    End Function
 
 End Class
