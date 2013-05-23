@@ -11475,12 +11475,14 @@ Public Class Form1
 
                             'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
                             If rbTVbanner.Checked Then
-                                tv_PictureBoxBottom.ImageLocation = path
-                                tv_PictureBoxBottom.Load()
+                                util_ImageLoad(tv_PictureBoxBottom, path, Utilities.DefaultBannerPath)
+                                'tv_PictureBoxBottom.ImageLocation = path
+                                'tv_PictureBoxBottom.Load()
                             End If
                             If rbTVposter.Checked Then
-                                tv_PictureBoxRight.ImageLocation = path
-                                tv_PictureBoxRight.Load()
+                                util_ImageLoad(tv_PictureBoxRight, path, Utilities.DefaultPosterPath)
+                                'tv_PictureBoxRight.ImageLocation = path
+                                'tv_PictureBoxRight.Load()
                             End If
                             'End If
 
