@@ -556,7 +556,7 @@ Public Class Form1
                         cbMovieDisplay_MovieSet.Items.Add(mset)
                     Next
                 End If
-                If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
+                If Not IsNothing(workingMovieDetails) andAlso workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
                     For Each mset In Preferences.moviesets
                         cbMovieDisplay_MovieSet.Items.Add(mset)
                     Next
@@ -852,14 +852,19 @@ Public Class Form1
         Dim pic1ratio As Decimal
         Dim pic2ratio As Decimal
         Try
-            Dim pic1ImSzW = PictureBoxFanArt.Image.Size.Width        'original picture sizes
-            Dim pic1ImszH = PictureBoxFanArt.Image.Size.Height
-            Dim pic2ImSzW = moviethumb.Image.Size.Width
-            Dim pic2ImszH = moviethumb.Image.Size.Height
-            pic1ratio = pic1ImSzW / pic1ImszH
-            pic2ratio = pic2ImSzW / pic2ImszH
-            Dim width As Integer = SplitContainer2.Size.Width
-            ' MsgBox(from & " = " & width & ":" & Int(SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio))) - 5 & " - " & pic1ImSzW & "x" & pic1ImszH & " " & pic2ImszH & "x" & pic2ImSzW)
+            If Not IsNothing(PictureBoxFanart.Image) Then
+                Dim pic1ImSzW = PictureBoxFanArt.Image.Size.Width        'original picture sizes
+                Dim pic1ImszH = PictureBoxFanArt.Image.Size.Height
+                Dim pic2ImSzW = moviethumb.Image.Size.Width
+                Dim pic2ImszH = moviethumb.Image.Size.Height
+                pic1ratio = pic1ImSzW / pic1ImszH
+                pic2ratio = pic2ImSzW / pic2ImszH
+                Dim width As Integer = SplitContainer2.Size.Width
+                ' MsgBox(from & " = " & width & ":" & Int(SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio))) - 5 & " - " & pic1ImSzW & "x" & pic1ImszH & " " & pic2ImszH & "x" & pic2ImSzW)
+            Else 
+                pic1ratio = 2
+                pic2ratio = 1
+            End If
         Catch ex As Exception
             pic1ratio = 2
             pic2ratio = 1
@@ -4520,7 +4525,7 @@ Public Class Form1
             Else
                 LastMovieDisplayed = ""
             End If
-            LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString
+            
         Catch
             Return
         End Try
