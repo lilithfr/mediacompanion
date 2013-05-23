@@ -622,6 +622,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     movieyear = M.Value
                 Else
                     movieyear = Nothing
+                    Return movieyear
                 End If
             End If
             Try
@@ -2334,6 +2335,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function SaveImage(ByRef image As Bitmap, ByVal path As String) As Boolean
 
         Try
+            GC.Collect()
             If (File.Exists(path)) Then
                 File.Delete(path)
             Else
@@ -2379,11 +2381,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function GetImage(src As String) As Bitmap
 
-        Dim bm  As New Bitmap(src)
+        Dim bm  As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(src))  'As New Bitmap(src)
         Dim bm2 As New Bitmap(bm )
 
         bm.Dispose()
-
+        
         Return bm2
     End Function
 

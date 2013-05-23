@@ -1033,6 +1033,10 @@ Public Class WorkingWithNfoFiles
         Try
             Dim newmovie As New FullMovieDetails
             newmovie.fullmoviebody.genre = ""
+            Dim newfilenfo As New FullFileDetails
+            Dim audio1 As New AudioDetails
+            newfilenfo.filedetails_audio.Add(audio1)
+            newmovie.filedetails = newfilenfo
             Dim thumbstring As String = String.Empty
             If Not IO.File.Exists(path) Then
             Else
@@ -1194,7 +1198,7 @@ Public Class WorkingWithNfoFiles
                             For Each res In thisresult.ChildNodes
                                 Select Case res.name
                                     Case "streamdetails"
-                                        Dim newfilenfo As New FullFileDetails
+                                        'Dim newfilenfo As New FullFileDetails
                                         Dim detail As XmlNode = Nothing
                                         For Each detail In res.ChildNodes
                                             Select Case detail.Name

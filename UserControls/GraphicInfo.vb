@@ -1,4 +1,6 @@
-﻿Public Class GraphicInfo
+﻿Imports System.IO
+
+Public Class GraphicInfo
 
     Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As Dictionary(Of String, String))
         'OVERLAY RATING STARS
@@ -41,7 +43,8 @@
             Try
                 Dim flagName As String = String.Format("media_{0}_{1}.png", str, flags.Item(str))
                 Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
-                Dim bmFlag As New Bitmap(flagPath)
+                Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
+                Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
                 Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
                 Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
                 grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)

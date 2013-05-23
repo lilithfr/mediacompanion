@@ -1010,7 +1010,7 @@ Public Class Classimdb
 
                     If webpage(f).IndexOf("<div class=""infobar"">") <> -1 Then
                         Try
-                            If webpage(f + 1).IndexOf("<img width=") <> 0 Then
+                            If webpage(f + 1) <> "" and webpage(f + 1).IndexOf("<img width=") <> 0 Then
                                 movienfoarray = webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("min") + 3)
                                 movienfoarray = movienfoarray.Replace("min", "")
                                 movienfoarray = movienfoarray.Trim(" ")

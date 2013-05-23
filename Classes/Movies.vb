@@ -563,10 +563,10 @@ Public Class Movies
     End Function
 
     Public Function FindData_GridViewCachedMovie(fullpathandfilename As String) As Data_GridViewMovie
-
+        
         Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename=fullpathandfilename
-
-        Return q.Single
+        
+        Return q.Single        
     End Function
 
 
