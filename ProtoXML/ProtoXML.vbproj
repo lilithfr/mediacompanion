@@ -94,6 +94,7 @@
     <Compile Include="ProtoInlineList.vb" />
     <Compile Include="ProtoProperty.vb" />
     <Compile Include="ProtoPropertyGroup.vb" />
+    <Compile Include="ProtoPropertyPref.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
