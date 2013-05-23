@@ -73,7 +73,7 @@ Public Class MediaInfoExport
         Dim isMovies As Boolean = [Enum].Equals(workingTemplate.type, mediaType.Movie)
         Dim getTags As getTagsDelegate
         Dim Extn As String = Utilities.GetExtension(savePath)
-        Dim Basiccsvxml As Boolean = If(workingTemplate.title = "basic movie list" and (Extn = "csv" or Extn = "xml"),True,False)
+        Dim Basiccsvxml As Boolean = If(workingTemplate.title = "basic movie list" and Extn = "csv",True,False)
         Dim mediaCollection
         If isMovies Then
             getTags = AddressOf getTagsMovies
