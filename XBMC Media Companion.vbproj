@@ -634,13 +634,16 @@
     <Content Include="Resources\video_flags\media_codec_hdmv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\video_flags\media_codec_mpeg-4 visual.png">
+    <Content Include="Resources\video_flags\media_codec_mpeg-4visual.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_mpeg1codec.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_mpeg2codec.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\video_flags\media_codec_mpegvideo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_tv.png">

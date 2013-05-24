@@ -83,5 +83,10 @@ Public Module ModuleExtensions
         End If
     End Sub
 
+    <Extension()> _
+    Public Function RemoveWhitespace(input As String) As String
+        Return New String(input.ToCharArray().Where(Function(c) Not [Char].IsWhiteSpace(c)).ToArray())
+    End Function
+
 End Module
 
