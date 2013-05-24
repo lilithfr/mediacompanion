@@ -671,26 +671,39 @@ Public Class Form1
 
 
     Private Sub util_BatchUpdate()
-        messbox = New frmMessageBox("Please wait,", "", "refreshing Movie nfo files")
-        Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        messbox.Show()
-        Me.Refresh()
-        messbox.Refresh()
-        Dim tempint As Integer = oMovies.MovieCache.Count - 1
-        For i = 0 To tempint
-            Try
-                Dim updatedmovie As New FullMovieDetails
-                updatedmovie = nfoFunction.mov_NfoLoadFull(oMovies.MovieCache(i).fullpathandfilename)
-                If Not IsNothing(updatedmovie) Then
-                    nfoFunction.mov_NfoSave(oMovies.MovieCache(i).fullpathandfilename, updatedmovie, True)
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
+        '        messbox = New frmMessageBox("Please wait,", "", "refreshing Movie nfo files")
+        '        Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        '        messbox.Show()
+        '        Me.Refresh()
+        '        messbox.Refresh()
+        '        Dim tempint As Integer = oMovies.MovieCache.Count - 1
+        '        For i = 0 To tempint
+        '            Try
+        '                Dim updatedmovie As New FullMovieDetails
+        '                updatedmovie = nfoFunction.mov_NfoLoadFull(oMovies.MovieCache(i).fullpathandfilename)
+        '                If Not IsNothing(updatedmovie) Then
+        '                    nfoFunction.mov_NfoSave(oMovies.MovieCache(i).fullpathandfilename, updatedmovie, True)
+        '                End If
+        '            Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                Throw ex
+        '#End If
+        '            End Try
+        '        Next
+        '        messbox.Close()
+
+        rescrapeList.ResetFields()
+        rescrapeList.mediatags = True
+        rescrapeList.Rename_Files = True
+        rescrapeList.runtime_file = True
+
+        _rescrapeList.FullPathAndFilenames.Clear()
+        For Each movie As ComboList In oMovies.MovieCache
+            _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
         Next
-        messbox.Close()
+
+        oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
+
     End Sub
 
 #If Not Refocus Then
@@ -1751,7 +1764,7 @@ Public Class Form1
                 video_flags.Add("audio", workingMovieDetails.filedetails.filedetails_audio(0).Codec.Value)
                 video_flags.Add("aspect", Utilities.GetStdAspectRatio(workingMovieDetails.filedetails.filedetails_video.Aspect.Value))
                 video_flags.Add("codec", workingMovieDetails.filedetails.filedetails_video.Codec.Value)
-                video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0,"",workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
+                video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0, "", workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
                 movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
             End If
@@ -2311,7 +2324,7 @@ Public Class Form1
         Dim FullFileContent As String = ""
         Dim Scraper As String = Preferences.XBMC_Scraper
         FullFileContent = Start_XBMC_MoviesScraping(Scraper, newMovieFoundTitle, newMovieFoundFilename)
-        If FullFileContent.ToLower <> "error" and FullFileContent.ToLower <> "<results></results>" Then
+        If FullFileContent.ToLower <> "error" And FullFileContent.ToLower <> "<results></results>" Then
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
@@ -3557,9 +3570,9 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
             movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
-            movie.ScrapedMovie.fullmoviebody.movieset  = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-            movie.ScrapedMovie.fullmoviebody.source   = If(cbMovieDisplay_Source.SelectedIndex=0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-            movie.ScrapedMovie.fullmoviebody.tag       = NewTagList 
+            movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+            movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
+            movie.ScrapedMovie.fullmoviebody.tag = NewTagList
 
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
@@ -4525,7 +4538,7 @@ Public Class Form1
             Else
                 LastMovieDisplayed = ""
             End If
-            
+
         Catch
             Return
         End Try
@@ -4948,12 +4961,12 @@ Public Class Form1
                 Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
                 Dim movie As Movie = oMovies.LoadMovie(filepath)
                 For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
-                    If Not IsNothing(ctag) Then 
+                    If Not IsNothing(ctag) Then
                         If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
                     End If
                 Next
             Next
-            
+
 
         ElseIf tab.ToLower = "movie preferences" Then
             Call mov_PreferencesSetup()
@@ -5418,7 +5431,7 @@ Public Class Form1
                         video_flags.Add("audio", workingMovieDetails.filedetails.filedetails_audio(0).Codec.Value)
                         video_flags.Add("aspect", Utilities.GetStdAspectRatio(workingMovieDetails.filedetails.filedetails_video.Aspect.Value))
                         video_flags.Add("codec", workingMovieDetails.filedetails.filedetails_video.Codec.Value)
-                        video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0,"",workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
+                        video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0, "", workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
                         movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
                         For Each paths In Preferences.offlinefolders

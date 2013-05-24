@@ -2138,6 +2138,10 @@ Public Class Movie
         Return log
     End Function
 
+    Function NeedTMDb(rl As RescrapeList)
+        Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or
+               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs
+    End Function
 
     Function RescrapeBody(rl As RescrapeList)
         Return rl.credits or rl.director or rl.stars   or rl.genre   or rl.mpaa   or rl.plot  or rl.premiered or rl.rating or 
@@ -2153,9 +2157,7 @@ Public Class Movie
         'Loads previously scraped details from NFO into _scrapedMovie
         LoadNFO
 
-        IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
-
-        If Cancelled then Exit Sub
+        If Cancelled() Then Exit Sub
 
         If RescrapeBody(rl) then  
             
@@ -2190,103 +2192,111 @@ Public Class Movie
         
         If Cancelled then Exit Sub
              
-        If rl.trailer or rl.Download_Trailer Then
-            If TrailerExists Then
-                ReportProgress("Trailer already exists ","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
-            Else
-                _triedUrls.Clear
-                GetTrailerUrlAlreadyRun = False
+        If NeedTMDb(rl) Then
 
-                Dim more As Boolean = Not File.Exists(ActualTrailerPath)
+            IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
 
-                While more 
-                    _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
-                    UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
-                    DownloadTrailer(TrailerUrl,rl.Download_Trailer)
+            If rl.trailer Or rl.Download_Trailer Then
+                If TrailerExists Then
+                    ReportProgress("Trailer already exists ", "Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
+                Else
+                    _triedUrls.Clear()
+                    GetTrailerUrlAlreadyRun = False
 
-                    more = (TrailerUrl<>"") and Not TrailerDownloaded
-                End While
+                    Dim more As Boolean = Not File.Exists(ActualTrailerPath)
+
+                    While more
+                        _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)
+                        DownloadTrailer(TrailerUrl, rl.Download_Trailer)
+
+                        more = (TrailerUrl <> "") And Not TrailerDownloaded
+                    End While
+                End If
             End If
+
+            If Cancelled() Then Exit Sub
+
+
+            If rl.Frodo_Poster_Thumbs Then
+                GetFrodoPosterThumbs()
+            End If
+
+
+            If rl.Frodo_Fanart_Thumbs Then
+                GetFrodoFanartThumbs()
+            End If
+
+
+            'Clears the existing poster urls and adds the rescraped ones directly into _scrapedMovie
+            If rl.posterurls Then
+                _scrapedMovie.listthumbs.Clear()
+                GetPosterUrls()
+            End If
+
+            If Cancelled() Then Exit Sub
+
+            If rl.missingposters Then
+                DoDownloadPoster()
+            End If
+
+            If Cancelled() Then Exit Sub
+
+            If rl.missingfanart Then
+                DownloadFanart()
+            End If
+
+            If rl.tmdb_set_name Then
+                Try
+                    _rescrapedMovie.fullmoviebody.movieset = "-None-"
+
+                    If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                        _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+                    End If
+
+                    UpdateProperty(_rescrapedMovie.fullmoviebody.movieset, _scrapedMovie.fullmoviebody.movieset)
+                Catch
+                End Try
+            End If
+
         End If
-       
-        If Cancelled then Exit Sub
 
+        If Cancelled() Then Exit Sub
 
-        If rl.Frodo_Poster_Thumbs Then
-            GetFrodoPosterThumbs
-        End If
-        
-
-        If rl.Frodo_Fanart_Thumbs Then
-            GetFrodoFanartThumbs
-        End If
-        
- 
-        'Clears the existing poster urls and adds the rescraped ones directly into _scrapedMovie
-        If rl.posterurls Then 
-            _scrapedMovie.listthumbs.Clear
-            GetPosterUrls
-        End If
-
-        If Cancelled then Exit Sub
-
-        If rl.actors Then 
-            _rescrapedMovie.listactors.Clear
+        If rl.actors Then
+            _rescrapedMovie.listactors.Clear()
             ImdbScrapeActors(_rescrapedMovie.listactors)
 
-            If _rescrapedMovie.listactors.Count>0 then
-                _scrapedMovie.listactors.Clear
+            If _rescrapedMovie.listactors.Count > 0 Then
+                _scrapedMovie.listactors.Clear()
                 _scrapedMovie.listactors.AddRange(_rescrapedMovie.listactors)
             End If
         End If
 
-        If Cancelled then Exit Sub
+        If Cancelled() Then Exit Sub
 
-        If rl.missingposters Then 
-            DoDownloadPoster
-        End If
+        If rl.runtime_file Or rl.mediatags Or (rl.runtime And ((Preferences.movieRuntimeDisplay = "file") Or (Preferences.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
+            If GetHdTags(_rescrapedMovie) Then
+                UpdateProperty(_rescrapedMovie.filedetails, _scrapedMovie.filedetails)
 
-        If Cancelled then Exit Sub
-
-        If rl.missingfanart Then 
-            DownloadFanart
-        End If
-
-        If rl.tmdb_set_name Then 
-            Try
-                _rescrapedMovie.fullmoviebody.movieset = "-None-"
-
-                If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                    _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
-                End If
-
-                UpdateProperty(_rescrapedMovie.fullmoviebody.movieset,_scrapedMovie.fullmoviebody.movieset)  
-            Catch
-            End Try
-        End If
-
-        If rl.runtime_file or rl.mediatags or (rl.runtime And ((Preferences.movieRuntimeDisplay="file") or (Preferences.movieRuntimeFallbackToFile and _rescrapedMovie.fullmoviebody.runtime=""))) Then 
-            If GetHdTags(_rescrapedMovie) then 
-                UpdateProperty(_rescrapedMovie.FileDetails, _scrapedMovie.FileDetails) 
-
-                If rl.runtime_file or (rl.runtime And ((Preferences.movieRuntimeDisplay="file") or (Preferences.movieRuntimeFallbackToFile and _rescrapedMovie.fullmoviebody.runtime=""))) Then
-                    AssignRuntime(_rescrapedMovie,rl.runtime_file)
-                    UpdateProperty(_rescrapedMovie.fullmoviebody.runtime, _scrapedMovie.fullmoviebody.runtime) 
+                If rl.runtime_file Or (rl.runtime And ((Preferences.movieRuntimeDisplay = "file") Or (Preferences.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
+                    AssignRuntime(_rescrapedMovie, rl.runtime_file)
+                    UpdateProperty(_rescrapedMovie.fullmoviebody.runtime, _scrapedMovie.fullmoviebody.runtime)
                 End If
             End If
         End If
 
-        AssignMovieToCache
-'		AssignMovieToAddMissingData
-        HandleOfflineFile             ' Do we need this?
-        SaveNFO
+        AssignMovieToCache()
+        '		AssignMovieToAddMissingData
+        HandleOfflineFile()             ' Do we need this?
+        SaveNFO()
 
-        If rl.Rename_Files And Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
-            ReportProgress(,RenameExistingMetaFiles)
+        If rl.Rename_Files And Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+            ReportProgress(, RenameExistingMetaFiles)
             'SaveNFO
         End If
 
-        UpdateCaches
+        UpdateCaches()
     End Sub
 
     Sub UpdateProperty(Of T) (ByVal fromField As T, ByRef toField As T,  Optional rescrape As Boolean=True )  
