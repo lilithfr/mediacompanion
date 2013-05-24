@@ -31,6 +31,7 @@ Public Class Form1
     Public workingMovieDetails As     FullMovieDetails
     Public _rescrapeList       As New RescrapeSpecificParams
     Public ChangeMovieImdb     = ""
+    Public ChangeMovieTmdb     = ""
     Public droppedItems        As New List(Of String)
     Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
 
@@ -3431,8 +3432,12 @@ Public Class Form1
 
         Dim Scraper As String = Preferences.XBMC_Scraper
 
+        If Scraper = "imdb" Then
         'FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, Utilities.GetFileName(DataGridViewMovies.Item(0, i).Value.ToString))
-        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, movie.ScrapedMovie.fullmoviebody.imdbid, movie.mediapathandfilename)
+            FullFileContent = Start_XBMC_MoviesReScraping(Scraper, movie.ScrapedMovie.fullmoviebody.imdbid, movie.mediapathandfilename)
+        Else 
+            FullFileContent = Start_XBMC_MoviesReScraping(Scraper, ChangeMovieTmdb, movie.mediapathandfilename)
+        End If
 
         If FullFileContent.ToLower <> "error" Then
 
@@ -6900,8 +6905,17 @@ Public Class Form1
             mat = mat.Replace("http://www.themoviedb.org/movie/","")
             Dim urlsplit As String()
             urlsplit = Split(mat,"-")
-            'If urlsplit(0)  
-            'End If
+            If Integer.TryParse(urlsplit(0),nothing) Then
+                ChangeMovieTmdb = urlsplit(0)
+            Else
+                MsgBox("Please Browse to a Movie page")
+                Exit Sub
+            End If
+            If MessageBox.Show("Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
+                Exit Sub
+            End If
+            mov_ReScrapingStartTemp()
+            UpdateFilteredList()
         End If
 
         'messbox.Close()
