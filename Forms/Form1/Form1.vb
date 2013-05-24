@@ -95,6 +95,7 @@ Public Class Form1
     Public videosourceprefchanged As Boolean = False
     Public scraperLog As String = ""
     Public NewTagList As New List(Of String)
+    Public MovieSearchEngine As String = "imdb"
 
 
     Public noFanart As Boolean
@@ -4927,7 +4928,7 @@ Public Class Form1
             Me.TabControl2.SelectedIndex = currentTabIndex
             Call mov_Rescrape()
         ElseIf tab.ToLower = "change movie" Then
-            Call mov_ChangeMovieSetup()
+            Call mov_ChangeMovieSetup(MovieSearchEngine)
             currentTabIndex = TabControl2.SelectedIndex
         ElseIf tab.ToLower = "search for new movies" Then
             Me.TabControl2.SelectedIndex = currentTabIndex
@@ -4980,7 +4981,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub mov_ChangeMovieSetup()
+    Private Sub mov_ChangeMovieSetup(ByVal engine As String)
         Dim tempstring As String = ""
         Dim isroot As Boolean = Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename)
         If Preferences.usefoldernames = False OrElse isroot Then
@@ -4992,12 +4993,36 @@ Public Class Form1
             tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename)
         End If
         Dim url As String
-        url = Preferences.imdbmirror & "find?s=tt&q=" & Utilities.CleanFileName(tempstring)
+        If engine = "imdb" Then
+            url = Preferences.imdbmirror & "find?s=tt&q=" & Utilities.CleanFileName(tempstring)
+        Else
+            url = "http://www.themoviedb.org/search?query=" & Utilities.CleanFileName(tempstring)
+        End If
         WebBrowser1.Stop()
         WebBrowser1.ScriptErrorsSuppressed = True
         WebBrowser1.Navigate(url)
         WebBrowser1.Refresh()
         Panel2.Visible = True
+    End Sub
+
+    Private Sub btn_IMDBSearch_Click( sender As System.Object,  e As System.EventArgs) Handles btn_IMDBSearch.Click
+        Try
+            MovieSearchEngine = "imdb"
+            mov_ChangeMovieSetup(MovieSearchEngine)
+        Catch 
+
+        End Try
+
+    End Sub
+
+    Private Sub btn_TMDBSearch_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TMDBSearch.Click
+        Try
+            MovieSearchEngine = "tmdb"
+            mov_ChangeMovieSetup(MovieSearchEngine)
+        Catch 
+
+        End Try
+
     End Sub
 
     Private Sub util_OpenFolder(ByVal path As String)
@@ -6848,19 +6873,19 @@ Public Class Form1
 
     Private Sub btnChangeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChangeMovie.Click
 
-        
-        Dim mat = Regex.Match(WebBrowser1.Url.ToString, "(tt\d{7})")
+        If MovieSearchEngine = "imdb" Then
+            Dim mat = Regex.Match(WebBrowser1.Url.ToString, "(tt\d{7})")
 
-        If mat.Success Then
-            ChangeMovieImdb = mat.Value
-        Else
-            MsgBox("Please Browse to a Movie page")
-            Exit Sub
-        End If
+            If mat.Success Then
+                ChangeMovieImdb = mat.Value
+            Else
+                MsgBox("Please Browse to a Movie page")
+                Exit Sub
+            End If
 
-        If MessageBox.Show("Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
-            Exit Sub
-        End If
+            If MessageBox.Show("Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
+                Exit Sub
+            End If
 
         'Dim messbox As frmMessageBox = New frmMessageBox("The Selected Movie is being scraped", "", "Please Wait")
 
@@ -6869,7 +6894,15 @@ Public Class Form1
         'messbox.Refresh()
         'Application.DoEvents()
 
-        RunBackgroundMovieScrape("ChangeMovie")
+            RunBackgroundMovieScrape("ChangeMovie")
+        ElseIf MovieSearchEngine = "tmdb" Then
+            Dim mat as String = WebBrowser1.Url.ToString
+            mat = mat.Replace("http://www.themoviedb.org/movie/","")
+            Dim urlsplit As String()
+            urlsplit = Split(mat,"-")
+            'If urlsplit(0)  
+            'End If
+        End If
 
         'messbox.Close()
         'Me.Cursor = Cursors.Default
@@ -24820,6 +24853,7 @@ End Sub
         End If
 
     End Sub
+
 
 
 End Class

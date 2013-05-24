@@ -481,6 +481,7 @@
     <Content Include="html_templates\BasicMovieCSVoutput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\TMDB_Icon.png" />
     <Content Include="Resources\video_flags\media_aspect_1.33.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
