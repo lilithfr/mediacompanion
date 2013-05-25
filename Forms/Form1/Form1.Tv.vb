@@ -792,7 +792,7 @@ Partial Public Class Form1
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
         End If
-
+        
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then
@@ -830,6 +830,15 @@ Partial Public Class Form1
                 util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
             End If
         End If
+
+        Dim video_flags As New Dictionary(Of String, String)
+            video_flags.Add("channels", If((Episode.Details.StreamDetails.Audio.Count = 0), "", Episode.Details.StreamDetails.Audio(0).Channels.Value))
+            video_flags.Add("audio", If((Episode.Details.StreamDetails.Audio.Count = 0), "",Episode.Details.StreamDetails.Audio(0).Codec.Value))
+            video_flags.Add("aspect", Utilities.GetStdAspectRatio(Episode.Details.StreamDetails.Video.Aspect.Value))
+            video_flags.Add("codec", If(IsNothing(Episode.Details.StreamDetails.Video.Codec.Value), "", Episode.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            video_flags.Add("resolution", If(Episode.Details.StreamDetails.Video.VideoResolution < 0, "", Episode.Details.StreamDetails.Video.VideoResolution.ToString))
+        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, TextBox_Rating.Text, video_flags)
+
         Panel9.Visible = True
 
     End Sub
