@@ -2161,6 +2161,8 @@ Public Class Movie
         'Loads previously scraped details from NFO into _scrapedMovie
         LoadNFO
 
+        IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
+
         If Cancelled() Then Exit Sub
 
         If RescrapeBody(rl) then  
