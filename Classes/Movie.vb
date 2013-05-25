@@ -1435,7 +1435,11 @@ Public Class Movie
         If Cancelled then Exit Sub
 
         If TrailerDownloaded Then
-            ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
+            If IO.File.Exists(ActualTrailerPath) Then
+                ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
+            Else
+                ReportProgress("Aborted by User" & vbCrLf, vbCrLf & "!!! Aborted By User - Trailer not saved" & vbCrLf)
+            End If
         Else
             ReportProgress(MSG_OK,"Trailer download failed - Searching for an alternative one" & vbCrLf)
             If Actions.Items.Count>0 Then
