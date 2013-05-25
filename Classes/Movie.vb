@@ -2208,9 +2208,13 @@ Public Class Movie
                     While more
                         _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
                         UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)
-                        DownloadTrailer(TrailerUrl, rl.Download_Trailer)
 
-                        more = (TrailerUrl <> "") And Not TrailerDownloaded
+                        If Preferences.DownloadTrailerDuringScrape Or rl.Download_Trailer Then
+                            DownloadTrailer(TrailerUrl, rl.Download_Trailer)
+                            more = (TrailerUrl <> "") And Not TrailerDownloaded
+                        Else
+                            more = False
+                        End If
                     End While
                 End If
             End If
