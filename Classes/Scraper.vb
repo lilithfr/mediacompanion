@@ -683,7 +683,9 @@ Public Class Classimdb
             If Preferences.Original_Title Then
                 s=Original_Title
             End If
-                
+            
+            s = s.Replace("""", "")
+
             If s="" Then  
                 s=Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
             End If
