@@ -3246,11 +3246,23 @@ Partial Public Class Form1
                     End If
 
                     If System.IO.File.Exists(thumbpathandfilename) Then
-                        Dim bitmap2 As New Bitmap(thumbpathandfilename)
-                        Dim bitmap3 As New Bitmap(bitmap2)
-                        bitmap2.Dispose()
-                        PictureBox14.Image = bitmap3
-                        tv_PictureBoxLeft.Image = bitmap3
+                        'Dim bitmap2 As New Bitmap(thumbpathandfilename)
+                        'Dim bitmap3 As New Bitmap(bitmap2)
+                        'bitmap2.Dispose()
+                        'PictureBox14.Image = bitmap3
+                        'tv_PictureBoxLeft.Image = bitmap3
+
+                        util_ImageLoad(tv_PictureBoxLeft, thumbpathandfilename, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
+                        Dim Rating As String = WorkingEpisode.Rating.Value
+                        Dim video_flags As New Dictionary(Of String, String)
+                        video_flags.Add("channels", WorkingEpisode.Details.StreamDetails.Audio(0).Channels.Value)
+                        video_flags.Add("audio", WorkingEpisode.Details.StreamDetails.Audio(0).Codec.Value)
+                        video_flags.Add("aspect", Utilities.GetStdAspectRatio(WorkingEpisode.Details.StreamDetails.Video.Aspect.Value))
+                        video_flags.Add("codec", If(IsNothing(WorkingEpisode.Details.StreamDetails.Video.Codec.Value), "", WorkingEpisode.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+                        video_flags.Add("resolution", If(WorkingEpisode.Details.StreamDetails.Video.VideoResolution < 0, "", WorkingEpisode.Details.StreamDetails.Video.VideoResolution.ToString))
+                        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+
+                        
                     End If
                     Exit For
                     End If
@@ -3355,7 +3367,18 @@ Partial Public Class Form1
                                 Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
                             End If
                             PictureBox14.Image = bitmap3
-                            tv_PictureBoxLeft.Image = bitmap3
+                            'tv_PictureBoxLeft.Image = bitmap3
+
+                            util_ImageLoad(tv_PictureBoxLeft, tempstring, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
+                            Dim Rating As String = WorkingEpisode.Rating.Value
+                            Dim video_flags As New Dictionary(Of String, String)
+                            video_flags.Add("channels", WorkingEpisode.Details.StreamDetails.Audio(0).Channels.Value)
+                            video_flags.Add("audio", WorkingEpisode.Details.StreamDetails.Audio(0).Codec.Value)
+                            video_flags.Add("aspect", Utilities.GetStdAspectRatio(WorkingEpisode.Details.StreamDetails.Video.Aspect.Value))
+                            video_flags.Add("codec", If(IsNothing(WorkingEpisode.Details.StreamDetails.Video.Codec.Value), "", WorkingEpisode.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+                            video_flags.Add("resolution", If(WorkingEpisode.Details.StreamDetails.Video.VideoResolution < 0, "", WorkingEpisode.Details.StreamDetails.Video.VideoResolution.ToString))
+                            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+
                             messbox.Close()
                         Catch ex As Exception
                             MsgBox("Unable To Download Image")
