@@ -3392,7 +3392,7 @@ Partial Public Class Form1
             flags.Add("channels", If(thisep.Details.StreamDetails.Audio.Count = 0, "", thisep.Details.StreamDetails.Audio(0).Channels.Value))
             flags.Add("audio", If(thisep.Details.StreamDetails.Audio.Count = 0, "", thisep.Details.StreamDetails.Audio(0).Codec.Value))
             flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
-            flags.Add("codec", If(IsNothing(thisep.Details.StreamDetails.Video.Codec.Value), "", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace)
             flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))
 
         Catch

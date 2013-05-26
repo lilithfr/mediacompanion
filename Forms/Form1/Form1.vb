@@ -24866,7 +24866,7 @@ End Sub
             flags.Add("channels", Vidfiledetails.filedetails_audio(0).Channels.Value)
             flags.Add("audio", Vidfiledetails.filedetails_audio(0).Codec.Value)
             flags.Add("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value))
-            flags.Add("codec", If(IsNothing(Vidfiledetails.filedetails_video.Codec.Value), "", Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace))
+            flags.Add("codec", Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)
             flags.Add("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString))
         Catch
         End Try
