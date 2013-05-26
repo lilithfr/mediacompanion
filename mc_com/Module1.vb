@@ -186,6 +186,7 @@ Module Module1
 
         If domovies Or domediaexport Then
             If File.Exists(Preferences.workingProfile.moviecache) Then
+                Console.WriteLine("Loading Movie cache")
                 oMovies.LoadMovieCache
             End If
         End If
@@ -210,6 +211,7 @@ Module Module1
         End If
         If dotvepisodes = True Then
             If IO.File.Exists(Preferences.workingProfile.tvcache) Then
+                Console.WriteLine("Loading Tv cache")
                 Call loadtvcache()
             End If
             If IO.File.Exists(Preferences.workingProfile.regexlist) Then
@@ -486,6 +488,7 @@ Module Module1
                 eps.playcount = "0"
                 eps.genre = "Unknown Episode Season and/or Episode Number"
                 eps.filedetails = get_hdtags(eps.mediaextension)
+                'eps.filedetails = Preferences.Get_HdTags(eps.mediaextension)
                 episodearray.Add(eps)
                 savepath = episodearray(0).episodepath
             Else
@@ -838,22 +841,26 @@ Module Module1
                                         'Dim hours As Integer
                                         Dim minutes As Integer
                                         tempstring = singleepisode.filedetails.filedetails_video.duration
-                                        'tempint = tempstring.IndexOf("h")
-                                        'If tempint <> -1 Then
-                                            'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                            'tempstring = Trim(tempstring)
-                                        'End If
-                                        'tempint = tempstring.IndexOf("mn")
-                                        'If tempint <> -1 Then
-                                            'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        'End If
-                                        'If hours <> 0 Then
-                                            'hours = hours * 60
-                                        'End If
-                                        'minutes = minutes + hours
-                                        minutes =Math.Round(Convert.ToInt32(tempstring)/60)
-                                        singleepisode.runtime = minutes.ToString & " min"
+                                        If Not String.IsNullOrEmpty(tempstring) Then
+                                            'tempint = tempstring.IndexOf("h")
+                                            'If tempint <> -1 Then
+                                                'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                                'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                                'tempstring = Trim(tempstring)
+                                            'End If
+                                            'tempint = tempstring.IndexOf("mn")
+                                            'If tempint <> -1 Then
+                                                'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            'End If
+                                            'If hours <> 0 Then
+                                                'hours = hours * 60
+                                            'End If
+                                            'minutes = minutes + hours
+                                            minutes =Math.Round(Convert.ToInt32(tempstring)/60)
+                                            singleepisode.runtime = minutes.ToString & " min"
+                                        Else
+                                            singleepisode.runtime = ""
+                                        End If
                                     End If
                                 Catch
                                 End Try
@@ -1961,27 +1968,29 @@ Module Module1
                         End If
                     End If
                 End If
+            Else
+                workingfiledetails.filedetails_video.aspect = ""
             End If
             'workingfiledetails.filedetails_video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
 
-            tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
-            If tempmediainfo.ToLower = "avc" Then
-                tempmediainfo2 = "h264"
-            Else
-                tempmediainfo2 = tempmediainfo
-            End If
+            'tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+            tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            If tempmediainfo.ToLower = "avc" Then tempmediainfo2 = "h264"
+            If tempmediainfo = "DX50" Then tempmediainfo = "DIVX"
+            If tempmediainfo.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then tempmediainfo = "h264"
+            tempmediainfo2 = tempmediainfo.Replace(" ","")
 
-            'workingfiledetails.filedetails_video.codec = tempmediainfo2
+            workingfiledetails.filedetails_video.codec = tempmediainfo2
             'workingfiledetails.filedetails_video.formatinfo = tempmediainfo
-            workingfiledetails.filedetails_video.codec = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            If workingfiledetails.filedetails_video.codec = "DX50" Then
-                workingfiledetails.filedetails_video.codec = "DIVX"
-            End If
-            '_MPEG4/ISO/AVC
-            If workingfiledetails.filedetails_video.codec.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
-                workingfiledetails.filedetails_video.codec = "h264"
-            End If
-            workingfiledetails.filedetails_video.formatinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            'workingfiledetails.filedetails_video.codec = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            'If workingfiledetails.filedetails_video.codec = "DX50" Then
+            '    workingfiledetails.filedetails_video.codec = "DIVX"
+            'End If
+            ''_MPEG4/ISO/AVC
+            'If workingfiledetails.filedetails_video.codec.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
+            '    workingfiledetails.filedetails_video.codec = "h264"
+            'End If
+            workingfiledetails.filedetails_video.formatinfo = MI.Get_(StreamKind.Visual, curVS, "Format")
             Dim fs(100) As String
             For f = 1 To 100
                 fs(f) = MI.Get_(StreamKind.Visual, 0, f)
@@ -1990,8 +1999,12 @@ Module Module1
             Try
                 If playlist.Count = 1 Then
                     Dim temptime As String = MI.Get_(StreamKind.Visual, 0, "Duration")
-                    Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
-                    workingfiledetails.filedetails_video.duration = Convert.ToString(seconds)
+                    If String.IsNullOrEmpty(temptime) Then
+                        workingfiledetails.filedetails_video.duration = ""
+                    Else
+                        Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
+                        workingfiledetails.filedetails_video.duration = Convert.ToString(seconds)
+                    End If
                 ElseIf playlist.Count > 1 Then
                     Dim totalmins As Integer = 0
                     For f = 0 To playlist.Count - 1
@@ -2028,7 +2041,11 @@ Module Module1
                             End Try
                         End If
                     Next
-                    workingfiledetails.filedetails_video.duration = totalmins & " min"
+                    If String.IsNullOrEmpty(totalmins) Then
+                        workingfiledetails.filedetails_video.duration = ""
+                    Else
+                        workingfiledetails.filedetails_video.duration = totalmins & " min"
+                    End If
                 End If
             Catch
                 workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 57)

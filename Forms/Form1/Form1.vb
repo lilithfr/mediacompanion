@@ -1765,7 +1765,7 @@ Public Class Form1
                 video_flags.Add("channels", workingMovieDetails.filedetails.filedetails_audio(0).Channels.Value)
                 video_flags.Add("audio", workingMovieDetails.filedetails.filedetails_audio(0).Codec.Value)
                 video_flags.Add("aspect", Utilities.GetStdAspectRatio(workingMovieDetails.filedetails.filedetails_video.Aspect.Value))
-                video_flags.Add("codec", workingMovieDetails.filedetails.filedetails_video.Codec.Value.RemoveWhitespace)
+                video_flags.Add("codec", If(IsNothing(workingMovieDetails.filedetails.filedetails_video.Codec.Value), "", workingMovieDetails.filedetails.filedetails_video.Codec.Value.RemoveWhitespace))
                 video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0, "", workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
                 movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
