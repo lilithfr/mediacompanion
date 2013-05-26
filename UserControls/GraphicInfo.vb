@@ -5,10 +5,14 @@ Public Class GraphicInfo
     Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As Dictionary(Of String, String))
         'OVERLAY RATING STARS
         Dim iRating As Single
-        If sRating = "" Or Not Single.TryParse(sRating, iRating) Then
-            Return
-        End If
 
+        Dim bmFanart As New Bitmap(picbxFanart.Image)
+        Dim grFanart As Graphics = Graphics.FromImage(bmFanart)
+        Dim fanartWidth As Integer = picbxFanart.ClientRectangle.Width
+        Dim fanartHeight As Integer = picbxFanart.ClientRectangle.Height
+        Dim fanartRatio As Double = bmFanart.Height / fanartHeight
+
+        If Not sRating = "" Or Single.TryParse(sRating, iRating) Then
         iRating = Math.Min(iRating, 10)
         sRating = sRating.FormatRating
 
@@ -19,19 +23,12 @@ Public Class GraphicInfo
 
         Dim StarsWidth As Integer = 39 + (Convert.ToInt16((iRating * 10) * ((bmStars.Width - 39) / 100)))
         Dim rectStars As New Rectangle(0, 0, StarsWidth, bmStars.Height)
-
-        Dim bmFanart As New Bitmap(picbxFanart.Image)
-        Dim grFanart As Graphics = Graphics.FromImage(bmFanart)
-
-        Dim fanartWidth As Integer = picbxFanart.ClientRectangle.Width
-        Dim fanartHeight As Integer = picbxFanart.ClientRectangle.Height
-        Dim fanartRatio As Double = bmFanart.Height / fanartHeight
-
         Dim rectFanart As New Rectangle(0, 0, StarsWidth * fanartRatio, bmStars.Height * fanartRatio)
 
         Dim grStars As Graphics = Graphics.FromImage(bmStars)
         grStars.DrawString(sRating, drawFont, Brush, If(sRating.Length > 2, 0, 8), 2)
         grFanart.DrawImage(bmStars, rectFanart, rectStars, GraphicsUnit.Pixel)
+        End If
 
         'OVERLAY VIDEO FLAGS
         Dim padding As Integer = 2

@@ -1761,12 +1761,7 @@ Public Class Form1
                 btnPlayMovie.Enabled = True
                 mov_SplitContainerAutoPosition
 
-                Dim video_flags As New Dictionary(Of String, String)
-                video_flags.Add("channels", workingMovieDetails.filedetails.filedetails_audio(0).Channels.Value)
-                video_flags.Add("audio", workingMovieDetails.filedetails.filedetails_audio(0).Codec.Value)
-                video_flags.Add("aspect", Utilities.GetStdAspectRatio(workingMovieDetails.filedetails.filedetails_video.Aspect.Value))
-                video_flags.Add("codec", If(IsNothing(workingMovieDetails.filedetails.filedetails_video.Codec.Value), "", workingMovieDetails.filedetails.filedetails_video.Codec.Value.RemoveWhitespace))
-                video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0, "", workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
+                Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                 movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
             End If
@@ -5456,12 +5451,7 @@ Public Class Form1
                         mov_DisplayFanart()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
-                        Dim video_flags As New Dictionary(Of String, String)
-                        video_flags.Add("channels", workingMovieDetails.filedetails.filedetails_audio(0).Channels.Value)
-                        video_flags.Add("audio", workingMovieDetails.filedetails.filedetails_audio(0).Codec.Value)
-                        video_flags.Add("aspect", Utilities.GetStdAspectRatio(workingMovieDetails.filedetails.filedetails_video.Aspect.Value))
-                        video_flags.Add("codec", If(IsNothing(workingMovieDetails.filedetails.filedetails_video.Codec.Value), "", workingMovieDetails.filedetails.filedetails_video.Codec.Value.RemoveWhitespace))
-                        video_flags.Add("resolution", If(workingMovieDetails.filedetails.filedetails_video.VideoResolution < 0, "", workingMovieDetails.filedetails.filedetails_video.VideoResolution.ToString))
+                        Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                         movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
                         For Each paths In Preferences.offlinefolders
@@ -22821,6 +22811,8 @@ Public Class Form1
         PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
         If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
             util_ImageLoad(PictureBox4, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            Dim video_flags = VidMediaFlags(WorkingHomeMovie.filedetails)
+            movieGraphicInfo.OverlayInfo(PictureBox4, "", video_flags)
         End If
     End Sub
 
@@ -24868,6 +24860,18 @@ End Sub
 
     End Sub
 
+    Public Function VidMediaFlags (ByVal Vidfiledetails As FullFileDetails) As Dictionary(Of String, String)
+        Dim flags As New Dictionary(Of String, String)
+        Try
+            flags.Add("channels", Vidfiledetails.filedetails_audio(0).Channels.Value)
+            flags.Add("audio", Vidfiledetails.filedetails_audio(0).Codec.Value)
+            flags.Add("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value))
+            flags.Add("codec", If(IsNothing(Vidfiledetails.filedetails_video.Codec.Value), "", Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace))
+            flags.Add("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString))
+        Catch
+        End Try
+        Return flags
 
+    End Function
 
 End Class

@@ -831,12 +831,7 @@ Partial Public Class Form1
             End If
         End If
 
-        Dim video_flags As New Dictionary(Of String, String)
-            video_flags.Add("channels", If((Episode.Details.StreamDetails.Audio.Count = 0), "", Episode.Details.StreamDetails.Audio(0).Channels.Value))
-            video_flags.Add("audio", If((Episode.Details.StreamDetails.Audio.Count = 0), "",Episode.Details.StreamDetails.Audio(0).Codec.Value))
-            video_flags.Add("aspect", Utilities.GetStdAspectRatio(Episode.Details.StreamDetails.Video.Aspect.Value))
-            video_flags.Add("codec", If(IsNothing(Episode.Details.StreamDetails.Video.Codec.Value), "", Episode.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
-            video_flags.Add("resolution", If(Episode.Details.StreamDetails.Video.VideoResolution < 0, "", Episode.Details.StreamDetails.Video.VideoResolution.ToString))
+        Dim video_flags = GetEpMediaFlags()
         movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, TextBox_Rating.Text, video_flags)
 
         Panel9.Visible = True
@@ -3251,17 +3246,11 @@ Partial Public Class Form1
                         'bitmap2.Dispose()
                         'PictureBox14.Image = bitmap3
                         'tv_PictureBoxLeft.Image = bitmap3
-
+                        util_ImageLoad(PictureBox14, thumbpathandfilename, Utilities.DefaultFanartPath)
                         util_ImageLoad(tv_PictureBoxLeft, thumbpathandfilename, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
                         Dim Rating As String = WorkingEpisode.Rating.Value
-                        Dim video_flags As New Dictionary(Of String, String)
-                        video_flags.Add("channels", WorkingEpisode.Details.StreamDetails.Audio(0).Channels.Value)
-                        video_flags.Add("audio", WorkingEpisode.Details.StreamDetails.Audio(0).Codec.Value)
-                        video_flags.Add("aspect", Utilities.GetStdAspectRatio(WorkingEpisode.Details.StreamDetails.Video.Aspect.Value))
-                        video_flags.Add("codec", If(IsNothing(WorkingEpisode.Details.StreamDetails.Video.Codec.Value), "", WorkingEpisode.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
-                        video_flags.Add("resolution", If(WorkingEpisode.Details.StreamDetails.Video.VideoResolution < 0, "", WorkingEpisode.Details.StreamDetails.Video.VideoResolution.ToString))
+                        Dim video_flags = GetEpMediaFlags()
                         movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-
                         
                     End If
                     Exit For
@@ -3371,12 +3360,7 @@ Partial Public Class Form1
 
                             util_ImageLoad(tv_PictureBoxLeft, tempstring, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
                             Dim Rating As String = WorkingEpisode.Rating.Value
-                            Dim video_flags As New Dictionary(Of String, String)
-                            video_flags.Add("channels", WorkingEpisode.Details.StreamDetails.Audio(0).Channels.Value)
-                            video_flags.Add("audio", WorkingEpisode.Details.StreamDetails.Audio(0).Codec.Value)
-                            video_flags.Add("aspect", Utilities.GetStdAspectRatio(WorkingEpisode.Details.StreamDetails.Video.Aspect.Value))
-                            video_flags.Add("codec", If(IsNothing(WorkingEpisode.Details.StreamDetails.Video.Codec.Value), "", WorkingEpisode.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
-                            video_flags.Add("resolution", If(WorkingEpisode.Details.StreamDetails.Video.VideoResolution < 0, "", WorkingEpisode.Details.StreamDetails.Video.VideoResolution.ToString))
+                            Dim video_flags = GetEpMediaFlags()
                             movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
 
                             messbox.Close()
@@ -3400,6 +3384,21 @@ Partial Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+    Private Function GetEpMediaFlags() As Dictionary(Of String, String)
+        Dim thisep As TvEpisode = ep_SelectedCurrently()
+        Dim flags As New Dictionary(Of String, String)
+        Try
+            flags.Add("channels", If(thisep.Details.StreamDetails.Audio.Count = 0, "", thisep.Details.StreamDetails.Audio(0).Channels.Value))
+            flags.Add("audio", If(thisep.Details.StreamDetails.Audio.Count = 0, "", thisep.Details.StreamDetails.Audio(0).Codec.Value))
+            flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
+            flags.Add("codec", If(IsNothing(thisep.Details.StreamDetails.Video.Codec.Value), "", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))
+
+        Catch
+        End Try
+        Return flags
+    End Function
 
 
 
