@@ -7224,6 +7224,7 @@ Public Class Form1
     Private Sub cbTvActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.SelectedIndexChanged
         Try
             Call tv_ActorDisplay()
+            cbTvActor.Focus()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
