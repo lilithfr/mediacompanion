@@ -7212,13 +7212,23 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ComboBox4_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox4.SelectedIndexChanged
+        Private Sub cbTvActor_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseEnter
+        Try
+            cbTvActor.Focus()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub cbTvActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.SelectedIndexChanged
         Try
             Call tv_ActorDisplay()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 
     Private Sub ExpandAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandAllToolStripMenuItem.Click
         Try
@@ -17231,8 +17241,8 @@ Public Class Form1
                     TextBox17.Font = newFont
                     TextBox29.Font = newFont
                     TextBox19.Font = newFont
-                    ComboBox4.Font = newFont
-                    TextBox18.Font = newFont
+                    cbTvActor.Font = newFont
+                    tbTvActorRole.Font = newFont
                     TextBox15.Font = newFont
                     TextBox16.Font = newFont
                     TextBox10.Font = newFont

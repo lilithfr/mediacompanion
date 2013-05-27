@@ -63,10 +63,10 @@ Partial Public Class Form1
         TextBox14.Text = ""
         TextBox15.Text = ""
         TextBox16.Text = ""
-        TextBox18.Text = ""
+        tbTvActorRole.Text = ""
 
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = ""
+        cbTvActor.Items.Clear()
+        cbTvActor.Text = ""
         PictureBox6.Image = Nothing
 
         tvdbposterlist.Clear()
@@ -82,10 +82,10 @@ Partial Public Class Form1
         TextBox14.Text = ""
         TextBox15.Text = ""
         TextBox16.Text = ""
-        TextBox18.Text = ""
+        tbTvActorRole.Text = ""
         TextBox19.Text = ""
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = ""
+        cbTvActor.Items.Clear()
+        cbTvActor.Text = ""
 
 
 
@@ -98,15 +98,15 @@ Partial Public Class Form1
         TextBox14.Text = ""
         TextBox15.Text = ""
         TextBox16.Text = ""
-        TextBox18.Text = ""
+        tbTvActorRole.Text = ""
         TextBox19.Text = ""
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = ""
+        cbTvActor.Items.Clear()
+        cbTvActor.Text = ""
 
 
 
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = ""
+        cbTvActor.Items.Clear()
+        cbTvActor.Text = ""
         For i = Panel13.Controls.Count - 1 To 0 Step -1
             Panel13.Controls.RemoveAt(i)
         Next
@@ -532,17 +532,17 @@ Partial Public Class Form1
             ElseIf Show.TvShowActorSource.Value = "tvdb" Then
                 Button45.Text = "TVDB"
             End If
-            ComboBox4.Items.Clear()
+            cbTvActor.Items.Clear()
             For Each actor In Show.ListActors
-                If actor.actorname <> Nothing AndAlso Not ComboBox4.Items.Contains(actor.actorname) Then
-                    ComboBox4.Items.Add(actor.actorname)
+                If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
+                    cbTvActor.Items.Add(actor.actorname)
                 End If
             Next
 
-            If ComboBox4.Items.Count = 0 Then
+            If cbTvActor.Items.Count = 0 Then
                 Call tv_ActorDisplay(True)
             Else
-                ComboBox4.SelectedIndex = 0
+                cbTvActor.SelectedIndex = 0
             End If
         End If
         Panel9.Visible = False
@@ -554,14 +554,14 @@ Partial Public Class Form1
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        TextBox18.Clear()
+        tbTvActorRole.Clear()
         PictureBox6.Image = Nothing
         If useDefault Then
             imgLocation = Utilities.DefaultActorPath
         Else
             For Each actor In WorkingTvShow.ListActors
-                If actor.actorname = ComboBox4.Text Then
-                    TextBox18.Text = actor.actorrole
+                If actor.actorname = cbTvActor.Text Then
+                    tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
                     If eden And Not frodo Then
@@ -688,16 +688,16 @@ Partial Public Class Form1
             util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
         End If
 
-        ComboBox4.Items.Clear()
+        cbTvActor.Items.Clear()
         For Each actor In Show.ListActors
-            If actor.actorname <> Nothing AndAlso Not ComboBox4.Items.Contains(actor.actorname) Then
-                ComboBox4.Items.Add(actor.actorname)
+            If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
+                cbTvActor.Items.Add(actor.actorname)
             End If
         Next
-        If ComboBox4.Items.Count = 0 Then
+        If cbTvActor.Items.Count = 0 Then
             Call tv_ActorDisplay(True)
         Else
-            ComboBox4.SelectedIndex = 0
+            cbTvActor.SelectedIndex = 0
         End If
 
     End Sub
@@ -732,16 +732,16 @@ Partial Public Class Form1
         Tv_TreeViewContext_ReloadFromCache.Enabled = True
         Tv_TreeViewContext_OpenFolder.Enabled = True
 
-        ComboBox4.Items.Clear()
+        cbTvActor.Items.Clear()
         For Each actor In Show.ListActors
-            If actor.actorname <> Nothing AndAlso Not ComboBox4.Items.Contains(actor.actorname) Then
-                ComboBox4.Items.Add(actor.actorname)
+            If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
+                cbTvActor.Items.Add(actor.actorname)
             End If
         Next
-        If ComboBox4.Items.Count = 0 Then
+        If cbTvActor.Items.Count = 0 Then
             Call tv_ActorDisplay(True)
         Else
-            ComboBox4.SelectedIndex = 0
+            cbTvActor.SelectedIndex = 0
         End If
 
     End Sub
