@@ -10497,8 +10497,8 @@ Public Class Form1
                 WorkingTvShow.SortOrder.Value = "dvd"
                 Button47.Text = "DVD"
             Else
-                WorkingTvShow.SortOrder.Value = "default"
-                Button47.Text = "default"
+                WorkingTvShow.SortOrder.Value = "Default"
+                Button47.Text = "Default"
             End If
             'Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
             'If DiditWork = True Then
