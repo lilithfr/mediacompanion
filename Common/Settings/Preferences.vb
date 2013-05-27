@@ -205,6 +205,7 @@ Public Class Preferences
 
     Public Shared DateFormat As String = "YYYY-MM-DD"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
     Public Shared MovieList_ShowColPlot As Boolean = False
+    Public Shared DisableNotMatchingRenamePattern As Boolean = True
     Public Shared MovieList_ShowColWatched As Boolean = False
     Public Shared MovieScraper_MaxStudios As Integer = 9     ' 9 = Max
     Public Shared moviesortorder As Integer
@@ -636,6 +637,7 @@ Public Class Preferences
         root.AppendChild(doc, "BackDropResolution",                 BackDropResolutionSI)               'comboBackDropResolutions
         root.AppendChild(doc, "DateFormat",                         DateFormat)                         'tbDateFormat
         root.AppendChild(doc, "MovieList_ShowColPlot",              MovieList_ShowColPlot)              'cbMovieList_ShowColPlot
+        root.AppendChild(doc, "DisableNotMatchingRenamePattern",    DisableNotMatchingRenamePattern)    'cDisableNotMatchingRenamePattern
         root.AppendChild(doc, "MovieList_ShowColWatched",           MovieList_ShowColWatched)           'cbMovieList_ShowColWatched
         root.AppendChild(doc, "MovieScraper_MaxStudios",            MovieScraper_MaxStudios)            'nudMovieScraper_MaxStudios
         root.AppendChild(doc, "ActorsFilterMinFilms",               ActorsFilterMinFilms)               'nudActorsFilterMinFilms
@@ -650,6 +652,7 @@ Public Class Preferences
         root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority    )             'Button61,Button73
         root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
+
 
         root.AppendChild(movie_filters.GetChild(doc))
 
@@ -937,6 +940,7 @@ Public Class Preferences
                     Case "ShowLogOnError"                       : ShowLogOnError = thisresult.InnerXml
                     Case "DateFormat"                           : DateFormat = thisresult.InnerXml
                     Case "MovieList_ShowColPlot"                : MovieList_ShowColPlot = thisresult.InnerXml
+                    Case "DisableNotMatchingRenamePattern"      : DisableNotMatchingRenamePattern = thisresult.InnerXml
                     Case "MovieList_ShowColWatched"             : MovieList_ShowColWatched = thisresult.InnerXml
                     Case "moviesortorder"                       : moviesortorder = thisresult.InnerXml
                     Case "movieinvertorder"                     : movieinvertorder = thisresult.InnerXml

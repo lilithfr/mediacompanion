@@ -14473,6 +14473,7 @@ Public Class Form1
         cbMovieRuntimeFallbackToFile.Checked        = Preferences.movieRuntimeFallbackToFile
         tbDateFormat                .Text           = Preferences.DateFormat
         cbMovieList_ShowColPlot     .Checked        = Preferences.MovieList_ShowColPlot
+        cbDisableNotMatchingRenamePattern.Checked   = Preferences.DisableNotMatchingRenamePattern
         cbMovieList_ShowColWatched  .Checked        = Preferences.MovieList_ShowColWatched
         nudMovieScraper_MaxStudios  .Text           = Preferences.MovieScraper_MaxStudios
         nudActorsFilterMinFilms     .Text           = Preferences.ActorsFilterMinFilms
@@ -24873,5 +24874,17 @@ End Sub
         Return flags
 
     End Function
+
+    Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) Handles cbDisableNotMatchingRenamePattern.CheckedChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
 
 End Class

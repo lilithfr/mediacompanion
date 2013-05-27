@@ -149,7 +149,9 @@ Public Class Movies
             lst.Add( Watched                  )
             lst.Add( Unwatched                )
             lst.Add( Duplicates               )
-            lst.Add( NotMatchingRenamePattern )
+            If Not Preferences.DisableNotMatchingRenamePattern Then
+                lst.Add( NotMatchingRenamePattern )
+            End If
             lst.Add( MissingCertificate       )
             lst.Add( MissingFanart            )
             lst.Add( MissingGenre             )
