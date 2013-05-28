@@ -1307,36 +1307,23 @@ Public Class Preferences
 
             Dim tempmediainfo As String
 
-            'Try
-            '    tempmediainfo = aviFile.Video(0).Width
-            'Catch
-            '    tempmediainfo = ""
-            'End Try
             workingfiledetails.filedetails_video.Width.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Width)  'tempmediainfo
-            'Try
-            '    tempmediainfo = aviFile.Video(0).Height
-            'Catch
-            '    tempmediainfo = ""
-            'End Try
             workingfiledetails.filedetails_video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)  'tempmediainfo
 
             Try
                 Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
-                If DisplayAspectRatio = "" Then
-                    
-                Else
+                If Not DisplayAspectRatio = "" Then
                     workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio).ToString("F2")
                 End If
-                
             Catch ex As Exception
                 workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
             End Try
 
-            Try
+            'Try
                 tempmediainfo = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Format)
-            Catch
-                tempmediainfo = ""
-            End Try
+            'Catch
+            '    tempmediainfo = ""
+            'End Try
             If tempmediainfo.EndsWith("avc", StringComparison.CurrentCultureIgnoreCase) Then
                 tempmediainfo = "h264"
             ElseIf tempmediainfo = "DX50" Then
@@ -1345,11 +1332,6 @@ Public Class Preferences
 
             workingfiledetails.filedetails_video.Codec.Value = tempmediainfo
 
-            'Try
-            '    tempmediainfo = aviFile.Video(0).CodecID
-            'Catch
-            '    tempmediainfo = ""
-            'End Try
             workingfiledetails.filedetails_video.FormatInfo.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).CodecID)  'tempmediainfo 
             Dim fs(100) As String
             For f = 1 To 100
@@ -1360,12 +1342,7 @@ Public Class Preferences
                 If playlist.Count = 1 Then
                     Dim duration As String = MI.Get_(StreamKind.Visual, 0, "Duration")
                     If Not String.IsNullOrEmpty(duration) Then
-                    'Try
                         workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)
-                        'workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration")) / 1000)
-                    'Catch
-                    '    workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Audio, 0, "Duration")) / 1000)
-                    'End Try
                     Else
                         workingfiledetails.filedetails_video.DurationInSeconds.Value = -1
                     End If
@@ -1378,11 +1355,7 @@ Public Class Preferences
                         M2.Open(playlist(f))
                         Dim duration As String = M2.Get_(StreamKind.Visual, 0, "Duration")
                         If Not String.IsNullOrEmpty(duration) Then
-                        'Try
                             total += Math.Round(Convert.ToInt32(duration)/1000)
-                        'Catch
-                        '    total += Math.Round(Convert.ToInt32(M2.Get_(StreamKind.Audio , 0, "Duration"))/1000)
-                        'End Try
                         End If
                     Next
 
@@ -1400,7 +1373,7 @@ Public Class Preferences
             tempmediainfo = IO.Path.GetExtension(filename) '"This is the extension of the file"
             workingfiledetails.filedetails_video.Container.Value = tempmediainfo
 
-            workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, 102)
+            workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")    'MI.Get_(StreamKind.Visual, curVS, 102) 
             'Video()
             'Format                     : MPEG-4 Visual
             'Format profile             : Streaming Video@L1

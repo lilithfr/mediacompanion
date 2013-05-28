@@ -27,6 +27,7 @@ Public Class Movies
     Private _certificateMappings  As CertificateMappings
     Private _actorDb              As New List(Of ActorDatabase)
     Public _tmpActorDb            As New List(Of ActorDatabase)
+    Public Shared movRebuildCaches         As Boolean = False
 
     Public Property Bw            As BackgroundWorker = Nothing
     Public Property MovieCache    As New List(Of ComboList)
@@ -1247,6 +1248,7 @@ Public Class Movies
     Public Sub LoadMovieCacheFromNfos
 '        MovieCache.Clear
         TmpMovieCache.Clear
+        If movRebuildCaches Then _actorDb.Clear : _tmpActorDb.Clear
 
         Dim t As New List(Of String)
 
@@ -1265,6 +1267,15 @@ Public Class Movies
             Next
         End If
 
+        If movRebuildCaches Then
+            Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
+
+        For Each item In q.Distinct()
+            _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+        Next
+
+        SaveActorCache()
+        End If
         'No duplicates found...
         'Dim q = From item In TmpMovieCache Group by item.fullpathandfilename Into Group Select Group
 
@@ -1661,9 +1672,11 @@ Public Class Movies
 
 
     Public Sub RebuildCaches
+        movRebuildCaches = True
         RebuildMovieCache
         If Cancelled Then Exit Sub
-        RebuildActorCache
+        'RebuildActorCache
+        movRebuildCaches = False
     End Sub
 
 

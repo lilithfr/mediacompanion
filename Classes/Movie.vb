@@ -17,7 +17,8 @@ Public Class Movie
     Const MSG_OK    = "-OK "
     Const MSG_DONT_RESIZE = "Don't resize"
     Const YOU_TUBE_URL_PREFIX = "http://www.youtube.com/watch?v="
-
+    Public movRebuildCaches As Boolean = Movies.movRebuildCaches
+    
     Public Delegate Sub ActionDelegate()
 
     Class ScrapeActions
@@ -868,7 +869,9 @@ Public Class Movie
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
-
+        
+        If movRebuildCaches Then ME.UpdateActorCacheFromEmpty()
+        
         If Not Preferences.usefoldernames Then
             If _movieCache.filename <> Nothing Then _movieCache.filename = _movieCache.filename.Replace(".nfo", "")
         End If    
