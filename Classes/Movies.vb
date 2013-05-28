@@ -1270,11 +1270,10 @@ Public Class Movies
         If movRebuildCaches Then
             Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
 
-        For Each item In q.Distinct()
-            _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
-        Next
-
-        SaveActorCache()
+            For Each item In q.Distinct()
+                _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+            Next
+            SaveActorCache()
         End If
         'No duplicates found...
         'Dim q = From item In TmpMovieCache Group by item.fullpathandfilename Into Group Select Group
@@ -1299,7 +1298,7 @@ Public Class Movies
         TmpMovieCache.Clear
         TotalNumberOfFolders=0
         NumberOfFoldersDone =0
-        If movRebuildCaches Then _actorDb.Clear : _tmpActorDb.Clear
+        'If movRebuildCaches Then _actorDb.Clear : _tmpActorDb.Clear
 
         BWs.Clear
 
@@ -1358,14 +1357,14 @@ Public Class Movies
       
         If Cancelled Then Exit Sub
 
-        If movRebuildCaches Then
-            Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
+        'If movRebuildCaches Then
+        '    Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
 
-            For Each item In q.Distinct()
-                _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
-            Next
-	        SaveActorCache()
-        End If
+        '    For Each item In q.Distinct()
+        '        _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+        '    Next
+	    '    SaveActorCache()
+        'End If
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
@@ -1684,11 +1683,18 @@ Public Class Movies
 
 
     Public Sub RebuildCaches
-        movRebuildCaches = True
+        If Preferences.UseMultipleThreads Then
+            movRebuildCaches = False
+        Else
+            movRebuildCaches = True
+        End If
         RebuildMovieCache
         If Cancelled Then Exit Sub
-        'RebuildActorCache
-        movRebuildCaches = False
+        If Not movRebuildCaches Then
+            RebuildActorCache
+        Else
+            movRebuildCaches = False
+        End If
     End Sub
 
 
