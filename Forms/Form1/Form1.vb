@@ -529,13 +529,13 @@ Public Class Form1
                 TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
-            ElseIf Preferences.startuptab = 2 Then
+            ElseIf Preferences.startuptab > 1 Then
                 SplitContainer1.SplitterDistance = Preferences.splt1
                 SplitContainer2.SplitterDistance = Preferences.splt2
                 SplitContainer5.SplitterDistance = Preferences.splt5
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
-                TabLevel1.SelectedIndex = 2
+                TabLevel1.SelectedIndex = Preferences.StartupTab
             End If
 
 
