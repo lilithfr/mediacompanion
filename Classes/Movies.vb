@@ -1299,6 +1299,7 @@ Public Class Movies
         TmpMovieCache.Clear
         TotalNumberOfFolders=0
         NumberOfFoldersDone =0
+        If movRebuildCaches Then _actorDb.Clear : _tmpActorDb.Clear
 
         BWs.Clear
 
@@ -1356,6 +1357,15 @@ Public Class Movies
         End While
       
         If Cancelled Then Exit Sub
+
+        If movRebuildCaches Then
+            Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
+
+            For Each item In q.Distinct()
+                _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+            Next
+	        SaveActorCache()
+        End If
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
@@ -1578,6 +1588,8 @@ Public Class Movies
     'End Sub
 
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+
+        If IsNothing(dirInfo) Then Exit Sub
 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
 
