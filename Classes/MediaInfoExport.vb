@@ -705,7 +705,7 @@ Public Class MediaInfoExport
                         Dim imageType As String = "poster"
                         If tokenInstr.Length > 2 AndAlso tokenInstr(2) = "banner" Then
                             imageType = "banner"
-                            origImage = tvShow.ImageBanner.Path
+                            origImage = If(Preferences.FrodoEnabled, tvShow.ImageBanner.Path, tvShow.ImageAllSeasons.Path)
                         End If
 
                         If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
