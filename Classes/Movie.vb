@@ -1113,15 +1113,14 @@ Public Class Movie
                                                     End If
                                                 End If
                                             End If
-
-                                            actors.Add(newactor)
+    
                                         Catch ex As Exception
                                             ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
                                         End Try
                                     End If
                             End Select
                         Next
-                        
+                        actors.Add(newactor)
 
                         If actors.Count >= Preferences.maxactors then
                             Exit For
