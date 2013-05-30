@@ -25,6 +25,7 @@ Public Class Movies
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
     Private _certificateMappings  As CertificateMappings
+    Private _xbmcJson             As XbmcJson
     Private _actorDb              As New List(Of ActorDatabase)
     Public _tmpActorDb            As New List(Of ActorDatabase)
     Public Shared movRebuildCaches         As Boolean = False
@@ -37,6 +38,17 @@ Public Class Movies
     Public Property PercentDone   As Integer = 0
 
     Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
+
+
+    Public ReadOnly Property XbmcJson As XbmcJson
+        Get
+            If IsNothing(_xbmcJson) Then
+                _xbmcJson = New XbmcJson 
+            End If
+
+            Return _xbmcJson
+        End Get
+    End Property
 
 
     Public ReadOnly Property CertificateMappings As CertificateMappings

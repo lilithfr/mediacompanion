@@ -104,6 +104,10 @@
     <Reference Include="MediaInfoNET">
       <HintPath>MediaInfoNET\bin\Debug\MediaInfoNET.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Net20, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\xbmcjsonsharp-code\lib\Newtonsoft.Json.Net20.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -116,6 +120,10 @@
     </Reference>
     <Reference Include="wfcl_MC">
       <HintPath>Assets\wfcl_MC.dll</HintPath>
+    </Reference>
+    <Reference Include="XBMCJsonRpcSharp, Version=0.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\XBMCJsonRpcSharp.dll</HintPath>
     </Reference>
     <Reference Include="YouTubeUrlGrabber, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -138,6 +146,7 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\XbmcJson.vb" />
     <Compile Include="Classes\FilteredItems.vb" />
     <Compile Include="Classes\NewVersionCheckResult.vb" />
     <Compile Include="Classes\MovieProgress.vb" />
@@ -478,6 +487,7 @@
     <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\XBMCJsonRpcSharp.dll" />
     <Content Include="html_templates\BasicMovieCSVoutput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

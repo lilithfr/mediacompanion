@@ -7,7 +7,7 @@ Imports Media_Companion
 Imports System.Text
 Imports YouTubeFisher
 Imports Media_Companion.Preferences
-
+Imports XBMC.JsonRpc
 
 Public Class Movie
 
@@ -354,9 +354,17 @@ Public Class Movie
 
     ReadOnly Property NfoPath As String
         Get
-            Return Path.GetDirectoryName(mediapathandfilename) & IO.Path.DirectorySeparatorChar
+            Return NfoPath_NoDirectorySeparatorChar & IO.Path.DirectorySeparatorChar
         End Get
     End Property
+
+
+    ReadOnly Property NfoPath_NoDirectorySeparatorChar As String
+        Get
+            Return Path.GetDirectoryName(mediapathandfilename)
+        End Get
+    End Property
+
 
     ReadOnly Property ActorPath As String
         Get
@@ -858,6 +866,12 @@ Public Class Movie
         'RemoveMovieFromCaches
         'If Not Rescrape Then DeleteNFO
         _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
+
+        If Preferences.XBMC_Sync Then
+            _parent.XbmcJson.UpdateXbmcMovies
+            _parent.XbmcJson.xbmc.Library.Video.RemoveMovie( _parent.XbmcJson.GetMovieId(mediapathandfilename) )
+            _parent.XbmcJson.xbmc.Library.Video.AddMovies  ( NfoPath_NoDirectorySeparatorChar                  )
+        End If
     End Sub
 
     Sub AssignUnknownMovieToCache

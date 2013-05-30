@@ -280,6 +280,14 @@ Public Class Preferences
     Public Shared alwaysuseimdbid As Boolean
 
 
+    'XBMC Sync
+    Public Shared XBMC_Sync     As Boolean = False
+    Public Shared XBMC_Address  As String = "127.0.0.1"
+    Public Shared XBMC_Port     As String = "8080"
+    Public Shared XBMC_Username As String = "xbmc"
+    Public Shared XBMC_Password As String = "xbmc"
+
+
     Public Shared Sub SetUpPreferences()
         'General
         ignorearticle = False
@@ -508,6 +516,7 @@ Public Class Preferences
         root.AppendChild(doc, "movieinvertorder",           movieinvertorder)           'btnreverse
         root.AppendChild(doc, "displayMissingEpisodes",     displayMissingEpisodes)     'SearchForMissingEpisodesToolStripMenuItem
 
+
         'Still to do
         child = doc.CreateElement("moviesets")
         Dim childchild As XmlElement
@@ -683,7 +692,11 @@ Public Class Preferences
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
-
+        root.AppendChild( doc, "XBMC_Sync"     , XBMC_Sync     )
+        root.AppendChild( doc, "XBMC_Address"  , XBMC_Address  )
+        root.AppendChild( doc, "XBMC_Port"     , XBMC_Port     )
+        root.AppendChild( doc, "XBMC_Username" , XBMC_Username )
+        root.AppendChild( doc, "XBMC_Password" , XBMC_Password )
 
         doc.AppendChild(root)
 
@@ -963,6 +976,12 @@ Public Class Preferences
                     Case "movie_filters"                        : movie_filters.Load(thisresult)
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml 
+
+                    Case "XBMC_Sync"                            : XBMC_Sync                 = thisresult.InnerXml 
+                    Case "XBMC_Address"                         : XBMC_Address              = thisresult.InnerXml 
+                    Case "XBMC_Port"                            : XBMC_Port                 = thisresult.InnerXml 
+                    Case "XBMC_Username"                        : XBMC_Username             = thisresult.InnerXml 
+                    Case "XBMC_Password"                        : XBMC_Password             = thisresult.InnerXml 
 
                     Case Else : Dim x = thisresult
                 End Select
