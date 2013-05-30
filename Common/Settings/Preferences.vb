@@ -160,6 +160,7 @@ Public Class Preferences
     Public Shared usefoldernames As Boolean
     Public Shared movxtrathumb As Boolean
     Public Shared movxtrafanart As Boolean
+    Public Shared dlxtrafanart As Boolean
     Public Shared allfolders As Boolean
     Public Shared actorsave As Boolean
     Public Shared actorsavepath As String
@@ -318,6 +319,7 @@ Public Class Preferences
         usefoldernames = False
         movxtrafanart = True
         movxtrathumb = False
+        dlxtrafanart = False
         allfolders = False
         ReDim moviethumbpriority(3)
         maxmoviegenre = 99
@@ -602,7 +604,8 @@ Public Class Preferences
         root.AppendChild(doc, "dontdisplayposter",                  dontdisplayposter)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "usefoldernames",                     usefoldernames)                     'chkbx_usefoldernames
         root.AppendChild(doc, "movxtrathumb",                       movxtrathumb)                       'cbMovXtraThumb
-        root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraThumb
+        root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
+        root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
         root.AppendChild(doc, "actorsavepath",                      actorsavepath)                      'localactorpath
@@ -877,6 +880,7 @@ Public Class Preferences
                     Case "usefoldernames"                       : usefoldernames = thisresult.InnerXml
                     Case "movxtrathumb"                         : movxtrathumb = thisresult.InnerXml
                     Case "movxtrafanart"                        : movxtrafanart = thisresult.InnerXml
+                    Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
                     Case "allfolders"                           : allfolders = thisresult.InnerXml
                     Case "createfolderjpg"                      : createfolderjpg = thisresult.InnerXml
                     Case "basicsavemode"                        : basicsavemode = thisresult.InnerXml

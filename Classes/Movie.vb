@@ -694,6 +694,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
 '		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToAddMissingData , "Assign missing data"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
@@ -1529,72 +1530,13 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
-                'Dim i1 As New PictureBox
-                'Dim backup As String = ""
-
-                'With i1
-                '    .WaitOnLoad = True
-                '    Try
-                '        .ImageLocation = PosterUrl
-                '    Catch
-                '        .ImageLocation = backup
-                '    End Try
-                'End With
-
-                'If Not i1.Image Is Nothing Then
-                '    If i1.Image.Width < 20 Then
-                '        i1.ImageLocation = backup
-                '    End If
-                'End If
                 Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
                 SavePosterToPosterWallCache 
 
-                'For Each pth As String In Paths
-                '    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                'Next
-
-                'Dim newPosterPath = edenart 
-                '''DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
-                'SavePosterImageToCacheAndPath(PosterUrl, newPosterPath)
-                'SavePosterToPosterWallCache
-
                 ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
-                'If frodo And Not IO.File.Exists(frodoart) And Not Preferences.basicsavemode Then
-                '    IO.File.Copy(edenart, frodoart)
-                'End If
-                
-                'If Preferences.createfolderjpg Then         'Save folder.jpg
 
-                '    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "folder.jpg")
-
-                '    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
-
-                '        File.Copy(PosterPath, temppath, True)
-                '        ReportProgress(, "Poster also saved as ""folder.jpg"" OK" & vbCrLf)
-                '    Else
-                '        ReportProgress(, "! ""folder.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
-                '    End If
-                'End If
-
-                'If Preferences.posterjpg Then               'Save poster.jpg
-
-                '    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "poster.jpg")
-
-                '    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
-
-                '        File.Copy(PosterPath, temppath, True)
-                '        ReportProgress(, "Poster also saved as ""poster.jpg"" OK" & vbCrLf)
-                '    Else
-                '        ReportProgress(, "! ""poster.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
-                '    End If
-                'End If
-
-                'If Not eden Then
-                '    GC.Collect
-                '    Utilities.SafeDeleteFile(edenart)
-                'End If
 
             Catch ex As Exception
                 ReportProgress(MSG_ERROR, "!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf)
@@ -1716,18 +1658,7 @@ Public Class Movie
             ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
             Exit Sub
         End If
-        'Dim newFanartPath As String = FanartPath
-        'If Not Rescrape Then DeleteFanart
-        'If Preferences.basicsavemode Then
-        '    newFanartPath = FanartPath.Replace("movie-","")
-        'End If
-        ''If Not Preferences.basicsavemode Then
-        '    'newFanartPath = isMovieFanart
-        ''End If
-        'If Preferences.fanartjpg and Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then
-        '    Dim thisnfopath As String = Utilities.GetFileNameFromPath(NfoPathAndFilename)
-        '    newFanartPath = Preferences.GetFanartPath(NfoPathPrefName,thisnfopath) 'If(_videotsrootpath<>"",_videotsrootpath,thisnfopath)
-        'End If
+
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
         If IsNothing(FanartUrl) then
@@ -1735,66 +1666,57 @@ Public Class Movie
         Else
             ReportProgress("Fanart",)
             Try
-                'Dim i1 As New PictureBox
-                'Dim backup As String = ""
-
-                'With i1
-                '    .WaitOnLoad = True
-                '    Try
-                '        .ImageLocation = FanartUrl 
-                '    Catch
-                '        .ImageLocation = backup
-                '    End Try
-                'End With
-
-                'If Not i1.Image Is Nothing Then
-                '    If i1.Image.Width < 20 Then
-                '        i1.ImageLocation = backup
-                '    End If
-                'End If
-
                 Dim paths As List(Of String) = Preferences.GetfanartPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
-
-                'For Each pth As String In Paths
-                '    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                'Next
 
                 SaveFanartImageToCacheAndPaths(FanartUrl, paths)
 
-
-   '            Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
-                'SaveFanartImageToCacheAndPath(FanartUrl, newFanartPath)
-                'If _videotsrootpath<>"" Then
-                '    If Preferences.FrodoEnabled Then
-                '        If Not IO.File.Exists(frodoart) Then
-                '            IO.File.Copy(newFanartPath,frodoart)
-                '        End If
-                '    End If
-                '    If Not Preferences.EdenEnabled Then
-                '        GC.Collect
-                '        Utilities.SafeDeleteFile(newFanartPath)
-                '    Else
-                '        If newFanartPath <> isMovieFanart  AndAlso Not IO.File.Exists(isMovieFanart) Then
-                '            IO.File.Copy(newFanartPath,isMovieFanart)
-                '            GC.Collect
-                '            Utilities.SafeDeleteFile(newFanartPath)
-                '        End If
-                '    End If
-                'Else
-                '    If Preferences.EdenEnabled Then
-                '        If Not IO.File.Exists(isMovieFanart) Then
-                '            IO.File.Copy(newFanartPath,isMovieFanart)
-                '            GC.Collect
-                '        End If
-                '    End If
-                'End If
-   '             GC.Collect()
                 ReportProgress(MSG_OK,"!!! Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
                     
         End If
+    End Sub
+
+    Sub DownloadExtraFanart
+        If Not Preferences.dlxtrafanart  then
+            ReportProgress(,"Scraping Extra Fanart-Thumbs not selected" & vbCrLf)
+            Exit Sub
+        End If
+
+        DoDownloadExtraFanart
+
+    End Sub
+    Sub DoDownloadExtraFanart
+        Try
+            'Dim tmdb2 As New TMDb(_scrapedMovie.fullmoviebody.imdbid)
+            If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
+                Dim fanartarray As New List(Of str_ListOfPosters)
+                Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\fanart" 'Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb
+                Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumb\thumb"
+                Dim xf As Boolean = Preferences.movxtrafanart 
+                Dim xt As Boolean = Preferences.movxtrathumb 
+                Dim tmpUrl As String = ""
+                fanartArray.Clear()
+                fanartArray.AddRange(tmdb.Fanart)
+                If fanartarray.Count > 0 Then
+                    For i = 1 to 4
+                        tmpUrl = fanartarray(i-1).hdUrl
+                        If Utilities.UrlIsValid(tmpUrl) Then
+                            If xf Then SaveFanartImageToCacheAndPath(tmpUrl, (xfanart & i.ToString & ".jpg"))
+                            If xt Then SaveFanartImageToCacheAndPath(tmpUrl, (xthumb & i.ToString & ".jpg"))
+                        End If
+                        If i-1 = fanartarray.Count-1 Then Exit For
+                    Next
+                End If
+            Else
+                ReportProgress(MSG_OK,"!!! Extra Fanart not downloaded as movie is in Root Folder." & vbCrLf)
+                Exit Sub
+            End If
+            ReportProgress(MSG_OK,"!!! Extra Fanart Downloaded OK" & vbCrLf)
+        Catch ex As Exception
+            ReportProgress(MSG_ERROR,"!!! Problem Saving Extra Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+        End Try
     End Sub
 
     Sub HandleOfflineFile

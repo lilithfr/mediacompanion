@@ -14505,6 +14505,7 @@ Public Class Form1
         cbMovieUseFolderNames.CheckState        = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
         cbMovXtraThumbs.CheckState              = If(Preferences.movxtrathumb, CheckState.Checked, CheckState.Unchecked)
         cbMovXtraFanart.CheckState              = If(Preferences.movxtrafanart, CheckState.Checked, CheckState.Unchecked)
+        cbDlXtraFanart.CheckState               = If(Preferences.dlxtrafanart, CheckState.Checked, CheckState.Unchecked)
         cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         cbMovCreateFolderjpg.CheckState         = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
         cbMovRootFolderCheck.CheckState         = If(Preferences.movrootfoldercheck, CheckState.Checked, CheckState.Unchecked)
@@ -15131,6 +15132,21 @@ Public Class Form1
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlXtraFanart.CheckedChanged
+        Try
+            If cbDlXtraFanart.CheckState = CheckState.Checked Then
+                Preferences.dlxtrafanart = True
+            Else
+                Preferences.dlxtrafanart = False
+            End If
+
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+
         End Try
     End Sub
 
@@ -24917,5 +24933,6 @@ End Sub
             End Try
         End If
     End Sub
+
 
 End Class
