@@ -351,11 +351,14 @@
             cbFrodo_Fanart_Thumbs.Checked = False
         End If
     End Sub
-
+    Private Sub cbXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXtraFanart.CheckedChanged
+        Form1.rescrapeList.dlxtraart = cbXtraFanart.Checked 
+    End Sub
 
     Private Sub cbTitle_CheckedChanged( sender As Object,  e As EventArgs) Handles cbTitle.CheckedChanged
         Form1.rescrapeList.title = cbTitle.Checked
     End Sub
+
 
 
 End Class

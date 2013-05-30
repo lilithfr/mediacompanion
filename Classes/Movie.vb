@@ -1710,6 +1710,7 @@ Public Class Movie
                 Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumb\thumb"
                 Dim xf As Boolean = Preferences.movxtrafanart 
                 Dim xt As Boolean = Preferences.movxtrathumb 
+                Dim owrite As Boolean = Preferences.overwritethumbs 
                 Dim tmpUrl As String = ""
                 fanartArray.Clear()
                 fanartArray.AddRange(tmdb.Fanart)
@@ -1717,8 +1718,12 @@ Public Class Movie
                     For i = 1 to 4
                         tmpUrl = fanartarray(i-1).hdUrl
                         If Utilities.UrlIsValid(tmpUrl) Then
-                            If xf Then SaveFanartImageToCacheAndPath(tmpUrl, (xfanart & i.ToString & ".jpg"))
-                            If xt Then SaveFanartImageToCacheAndPath(tmpUrl, (xthumb & i.ToString & ".jpg"))
+                            If xf and (IO.File.Exists((xfanart & i.ToString & ".jpg")) AndAlso owrite) Then 
+                                SaveFanartImageToCacheAndPath(tmpUrl, (xfanart & i.ToString & ".jpg"))
+                            End If
+                            If xt and (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso owrite)Then 
+                                SaveFanartImageToCacheAndPath(tmpUrl, (xthumb & i.ToString & ".jpg"))
+                            End If
                         End If
                         If i-1 = fanartarray.Count-1 Then Exit For
                     Next
@@ -2082,7 +2087,7 @@ Public Class Movie
 
     Function NeedTMDb(rl As RescrapeList)
         Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or
-               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs
+               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart 
     End Function
 
     Function RescrapeBody(rl As RescrapeList)
@@ -2184,14 +2189,18 @@ Public Class Movie
 
             If Cancelled() Then Exit Sub
 
-            If rl.missingposters Then
+            If rl.missingposters Then           'Download Missing Posters
                 DoDownloadPoster()
             End If
 
             If Cancelled() Then Exit Sub
 
-            If rl.missingfanart Then
+            If rl.missingfanart Then            'Download Missing Fanart
                 DownloadFanart()
+            End If
+
+            If rl.dlxtraart Then                'Download Missing Extra Thumbs or Extra Fanart
+                DownloadExtraFanart()
             End If
 
             If rl.tmdb_set_name Then
