@@ -25,6 +25,7 @@ Partial Class frmBatchScraper
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmBatchScraper))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cbTitle = New System.Windows.Forms.CheckBox()
         Me.cbTmdbSetName = New System.Windows.Forms.CheckBox()
         Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
@@ -57,7 +58,7 @@ Partial Class frmBatchScraper
         Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
-        Me.cbTitle = New System.Windows.Forms.CheckBox()
+        Me.cbXtraFanart = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -90,6 +91,16 @@ Partial Class frmBatchScraper
         Me.GroupBox1.TabIndex = 28
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Main Tags to Rescrape"
+        '
+        'cbTitle
+        '
+        Me.cbTitle.AutoSize = true
+        Me.cbTitle.Location = New System.Drawing.Point(226, 110)
+        Me.cbTitle.Name = "cbTitle"
+        Me.cbTitle.Size = New System.Drawing.Size(46, 17)
+        Me.cbTitle.TabIndex = 20
+        Me.cbTitle.Text = "Title"
+        Me.cbTitle.UseVisualStyleBackColor = true
         '
         'cbTmdbSetName
         '
@@ -273,7 +284,7 @@ Partial Class frmBatchScraper
         '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(15, 326)
+        Me.btnCancel.Location = New System.Drawing.Point(15, 347)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 32
@@ -282,11 +293,12 @@ Partial Class frmBatchScraper
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.cbXtraFanart)
         Me.GroupBox3.Controls.Add(Me.CheckBox18)
         Me.GroupBox3.Controls.Add(Me.CheckBox17)
         Me.GroupBox3.Location = New System.Drawing.Point(15, 253)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(455, 67)
+        Me.GroupBox3.Size = New System.Drawing.Size(455, 88)
         Me.GroupBox3.TabIndex = 31
         Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Fanart && Posters"
@@ -313,7 +325,7 @@ Partial Class frmBatchScraper
         '
         'btnStart
         '
-        Me.btnStart.Location = New System.Drawing.Point(395, 326)
+        Me.btnStart.Location = New System.Drawing.Point(395, 347)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(75, 23)
         Me.btnStart.TabIndex = 33
@@ -415,21 +427,21 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard.ReshowDelay = 100
         Me.ttBatchUpdateWizard.ShowAlways = true
         '
-        'cbTitle
+        'cbXtraFanart
         '
-        Me.cbTitle.AutoSize = true
-        Me.cbTitle.Location = New System.Drawing.Point(226, 110)
-        Me.cbTitle.Name = "cbTitle"
-        Me.cbTitle.Size = New System.Drawing.Size(46, 17)
-        Me.cbTitle.TabIndex = 20
-        Me.cbTitle.Text = "Title"
-        Me.cbTitle.UseVisualStyleBackColor = true
+        Me.cbXtraFanart.AutoSize = true
+        Me.cbXtraFanart.Location = New System.Drawing.Point(6, 65)
+        Me.cbXtraFanart.Name = "cbXtraFanart"
+        Me.cbXtraFanart.Size = New System.Drawing.Size(342, 17)
+        Me.cbXtraFanart.TabIndex = 2
+        Me.cbXtraFanart.Text = "Attempt to Download Extra Thumbs/Fanart if Movies are in Folders."
+        Me.cbXtraFanart.UseVisualStyleBackColor = true
         '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(477, 361)
+        Me.ClientSize = New System.Drawing.Size(485, 388)
         Me.ControlBox = false
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.btnCancel)
@@ -438,8 +450,8 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.gbOther)
         Me.Controls.Add(Me.Label1)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(493, 400)
-        Me.MinimumSize = New System.Drawing.Size(493, 400)
+        Me.MaximumSize = New System.Drawing.Size(493, 415)
+        Me.MinimumSize = New System.Drawing.Size(493, 415)
         Me.Name = "frmBatchScraper"
         Me.Text = "Batch Update Wizard"
         Me.GroupBox1.ResumeLayout(false)
@@ -486,4 +498,5 @@ End Sub
     Friend WithEvents cbFrodo_Fanart_Thumbs As System.Windows.Forms.CheckBox
     Friend WithEvents cbFrodo_Poster_Thumbs As System.Windows.Forms.CheckBox
     Friend WithEvents cbTitle As System.Windows.Forms.CheckBox
+    Friend WithEvents cbXtraFanart As System.Windows.Forms.CheckBox
 End Class
