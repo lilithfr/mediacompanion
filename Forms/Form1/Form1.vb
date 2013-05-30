@@ -19398,22 +19398,36 @@ Public Class Form1
     End Sub
 
 
-    Private Sub Button105_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button105.Click
+    Private Sub btn_ToolsCommandAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ToolsCommandAdd.Click
         Try
             If TextBox41.Text <> "" And TextBox43.Text <> "" Then
+                Dim allgood As Boolean = True
+                For Each item In ListBox16.Items
+                    If TextBox41.Text = item Then
+                        allgood = False
+                    End If
+                Next
+                If allgood Then
                 Dim newcom As New str_ListOfCommands(SetDefaults)
                 newcom.command = TextBox43.Text
                 newcom.title = TextBox41.Text
                 Preferences.commandlist.Add(newcom)
                 ListBox16.Items.Add(newcom.title)
                 ListBox17.Items.Add(newcom.command)
-                ToolsToolStripMenuItem.DropDownItems.Clear()
+                'ToolsToolStripMenuItem.DropDownItems.Clear()
+                Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
+                For i = x-1 To 1 Step -1
+                    ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+                Next
                 For Each com In Preferences.commandlist
                     ToolsToolStripMenuItem.DropDownItems.Add(com.title)
                 Next
                 If prefsload = False Then
                     generalprefschanged = True
                     btnGeneralPrefsSaveChanges.Enabled = True
+                End If
+                Else
+                    MsgBox("Title already exists in list")
                 End If
             Else
                 MsgBox("This feature needs both a title & command")
@@ -19439,7 +19453,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button106_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button106.Click
+    Private Sub btn_ToolsCommandRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ToolsCommandRemove.Click
         Try
             If ListBox16.SelectedItem <> "" And ListBox17.SelectedItem <> "" Then
                 For Each com In Preferences.commandlist
@@ -19448,15 +19462,21 @@ Public Class Form1
                         Exit For
                     End If
                 Next
+                ListBox16.Items.Clear()
+                ListBox17.Items.Clear()
+                'ToolsToolStripMenuItem.DropDownItems.Clear()
+                Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
+                For i = x-1 To 1 Step -1
+                    ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+                Next
+                For Each com In Preferences.commandlist
+                    ListBox16.Items.Add(com.title)
+                    ListBox17.Items.Add(com.command)
+                    ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+                Next
+            Else
+                MsgBox("Nothing selected to remove")
             End If
-            ListBox16.Items.Clear()
-            ListBox17.Items.Clear()
-            ToolsToolStripMenuItem.DropDownItems.Clear()
-            For Each com In Preferences.commandlist
-                ListBox16.Items.Add(com.title)
-                ListBox17.Items.Add(com.command)
-                ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-            Next
             If prefsload = False Then
                 generalprefschanged = True
                 btnGeneralPrefsSaveChanges.Enabled = True
