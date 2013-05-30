@@ -695,9 +695,9 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
 '		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToAddMissingData , "Assign missing data"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
     End Sub
