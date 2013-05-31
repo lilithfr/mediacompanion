@@ -868,12 +868,18 @@ Public Class Movie
         _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
 
         If Preferences.XBMC_Sync Then
+            Threading.Thread.Sleep(100)             'Delays needed! Probably some async operations going on in XMBC, i.e. returns ok before actually completing
             _parent.XbmcJson.UpdateXbmcMovies
+            
             Try
+                Threading.Thread.Sleep(100)
                 _parent.XbmcJson.xbmc.Library.Video.RemoveMovie( _parent.XbmcJson.GetMovieId(mediapathandfilename) )
-            Catch
+            Catch ex As Exception
+                ReportProgress(MSG_ERROR,"!!! [SaveNFO-xbmc.Library.Video.RemoveMovie] threw [" & ex.Message & "]" & vbCrLf)       
             End Try
-            _parent.XbmcJson.xbmc.Library.Video.AddMovies  ( NfoPath_NoDirectorySeparatorChar                  )
+
+            Threading.Thread.Sleep(100)
+            _parent.XbmcJson.xbmc.Library.Video.AddMovies( NfoPath_NoDirectorySeparatorChar )
         End If
     End Sub
 
