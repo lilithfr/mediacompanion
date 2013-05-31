@@ -1721,11 +1721,15 @@ Public Class Movie
                     For i = 1 to 4
                         tmpUrl = fanartarray(i-1).hdUrl
                         If Utilities.UrlIsValid(tmpUrl) Then
-                            If xf and (IO.File.Exists((xfanart & i.ToString & ".jpg")) AndAlso owrite) Then 
-                                SaveFanartImageToCacheAndPath(tmpUrl, (xfanart & i.ToString & ".jpg"))
+                            If xf Then 
+                                If Not (IO.File.Exists((xfanart & i.ToString & ".jpg")) AndAlso Not owrite) Then
+                                    SaveFanartImageToCacheAndPath(tmpUrl, (xfanart & i.ToString & ".jpg"))
+                                End If
                             End If
-                            If xt and (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso owrite)Then 
-                                SaveFanartImageToCacheAndPath(tmpUrl, (xthumb & i.ToString & ".jpg"))
+                            If xt Then 
+                                If Not (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then
+                                    SaveFanartImageToCacheAndPath(tmpUrl, (xthumb & i.ToString & ".jpg"))
+                                End If
                             End If
                         End If
                         If i-1 = fanartarray.Count-1 Then Exit For
