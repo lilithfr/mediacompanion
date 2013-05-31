@@ -189,7 +189,7 @@ Partial Class frmMovieFanart
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.Performlayout()
 
     End Sub
     Friend WithEvents Panel1 As System.Windows.Forms.Panel

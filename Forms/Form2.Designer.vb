@@ -107,11 +107,11 @@ Partial Class Form2
         Me.starstxt = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        CType(Me.moviethumb, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel2.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
+        CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.Panel2.SuspendLayout
+        CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SuspendLayout
         '
         'runtimetxt
         '
@@ -146,7 +146,7 @@ Partial Class Form2
         Me.idtxt.Location = New System.Drawing.Point(127, 170)
         Me.idtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.idtxt.Name = "idtxt"
-        Me.idtxt.ReadOnly = True
+        Me.idtxt.ReadOnly = true
         Me.idtxt.Size = New System.Drawing.Size(263, 20)
         Me.idtxt.TabIndex = 56
         '
@@ -218,7 +218,7 @@ Partial Class Form2
         Me.taglinetxt.BackColor = System.Drawing.Color.White
         Me.taglinetxt.Location = New System.Drawing.Point(127, 444)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
-        Me.taglinetxt.Multiline = True
+        Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
         Me.taglinetxt.Size = New System.Drawing.Size(624, 45)
         Me.taglinetxt.TabIndex = 48
@@ -228,7 +228,7 @@ Partial Class Form2
         Me.plottxt.BackColor = System.Drawing.Color.White
         Me.plottxt.Location = New System.Drawing.Point(127, 300)
         Me.plottxt.Margin = New System.Windows.Forms.Padding(4)
-        Me.plottxt.Multiline = True
+        Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
         Me.plottxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.plottxt.Size = New System.Drawing.Size(624, 136)
@@ -239,15 +239,15 @@ Partial Class Form2
         Me.outlinetxt.BackColor = System.Drawing.Color.White
         Me.outlinetxt.Location = New System.Drawing.Point(127, 235)
         Me.outlinetxt.Margin = New System.Windows.Forms.Padding(4)
-        Me.outlinetxt.Multiline = True
+        Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
         Me.outlinetxt.Size = New System.Drawing.Size(624, 57)
         Me.outlinetxt.TabIndex = 46
         '
         'runtime
         '
-        Me.runtime.AutoSize = True
-        Me.runtime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.runtime.AutoSize = true
+        Me.runtime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.runtime.Location = New System.Drawing.Point(399, 46)
         Me.runtime.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.runtime.Name = "runtime"
@@ -257,8 +257,8 @@ Partial Class Form2
         '
         'studio
         '
-        Me.studio.AutoSize = True
-        Me.studio.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.studio.AutoSize = true
+        Me.studio.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.studio.Location = New System.Drawing.Point(21, 107)
         Me.studio.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.studio.Name = "studio"
@@ -268,8 +268,8 @@ Partial Class Form2
         '
         'imdb
         '
-        Me.imdb.AutoSize = True
-        Me.imdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.imdb.AutoSize = true
+        Me.imdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.imdb.Location = New System.Drawing.Point(21, 171)
         Me.imdb.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.imdb.Name = "imdb"
@@ -279,8 +279,8 @@ Partial Class Form2
         '
         'tagline
         '
-        Me.tagline.AutoSize = True
-        Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tagline.AutoSize = true
+        Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.tagline.Location = New System.Drawing.Point(21, 444)
         Me.tagline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.tagline.Name = "tagline"
@@ -290,8 +290,8 @@ Partial Class Form2
         '
         'plot
         '
-        Me.plot.AutoSize = True
-        Me.plot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.plot.AutoSize = true
+        Me.plot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.plot.Location = New System.Drawing.Point(21, 300)
         Me.plot.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.plot.Name = "plot"
@@ -301,8 +301,8 @@ Partial Class Form2
         '
         'outline
         '
-        Me.outline.AutoSize = True
-        Me.outline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.outline.AutoSize = true
+        Me.outline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.outline.Location = New System.Drawing.Point(21, 235)
         Me.outline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.outline.Name = "outline"
@@ -312,19 +312,19 @@ Partial Class Form2
         '
         'moviethumb
         '
-        Me.moviethumb.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.moviethumb.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.moviethumb.Location = New System.Drawing.Point(760, 15)
         Me.moviethumb.Margin = New System.Windows.Forms.Padding(4)
         Me.moviethumb.Name = "moviethumb"
         Me.moviethumb.Size = New System.Drawing.Size(216, 262)
         Me.moviethumb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.moviethumb.TabIndex = 39
-        Me.moviethumb.TabStop = False
+        Me.moviethumb.TabStop = false
         '
         'votes
         '
-        Me.votes.AutoSize = True
-        Me.votes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.votes.AutoSize = true
+        Me.votes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.votes.Location = New System.Drawing.Point(399, 172)
         Me.votes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.votes.Name = "votes"
@@ -334,8 +334,8 @@ Partial Class Form2
         '
         'year
         '
-        Me.year.AutoSize = True
-        Me.year.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.year.AutoSize = true
+        Me.year.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.year.Location = New System.Drawing.Point(21, 140)
         Me.year.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.year.Name = "year"
@@ -345,8 +345,8 @@ Partial Class Form2
         '
         'mpaa
         '
-        Me.mpaa.AutoSize = True
-        Me.mpaa.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.mpaa.AutoSize = true
+        Me.mpaa.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.mpaa.Location = New System.Drawing.Point(399, 78)
         Me.mpaa.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.mpaa.Name = "mpaa"
@@ -356,8 +356,8 @@ Partial Class Form2
         '
         'rating
         '
-        Me.rating.AutoSize = True
-        Me.rating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rating.AutoSize = true
+        Me.rating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.rating.Location = New System.Drawing.Point(399, 142)
         Me.rating.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.rating.Name = "rating"
@@ -367,8 +367,8 @@ Partial Class Form2
         '
         'credits
         '
-        Me.credits.AutoSize = True
-        Me.credits.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.credits.AutoSize = true
+        Me.credits.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.credits.Location = New System.Drawing.Point(21, 76)
         Me.credits.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.credits.Name = "credits"
@@ -378,8 +378,8 @@ Partial Class Form2
         '
         'genre
         '
-        Me.genre.AutoSize = True
-        Me.genre.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.genre.AutoSize = true
+        Me.genre.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.genre.Location = New System.Drawing.Point(399, 108)
         Me.genre.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.genre.Name = "genre"
@@ -389,8 +389,8 @@ Partial Class Form2
         '
         'director
         '
-        Me.director.AutoSize = True
-        Me.director.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.director.AutoSize = true
+        Me.director.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.director.Location = New System.Drawing.Point(21, 46)
         Me.director.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.director.Name = "director"
@@ -400,8 +400,8 @@ Partial Class Form2
         '
         'title
         '
-        Me.title.AutoSize = True
-        Me.title.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.title.AutoSize = true
+        Me.title.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.title.Location = New System.Drawing.Point(21, 15)
         Me.title.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.title.Name = "title"
@@ -415,14 +415,14 @@ Partial Class Form2
         Me.roletxt.Location = New System.Drawing.Point(441, 518)
         Me.roletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.roletxt.Name = "roletxt"
-        Me.roletxt.ReadOnly = True
+        Me.roletxt.ReadOnly = true
         Me.roletxt.Size = New System.Drawing.Size(309, 20)
         Me.roletxt.TabIndex = 64
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.AutoSize = true
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label5.Location = New System.Drawing.Point(437, 493)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
@@ -432,8 +432,8 @@ Partial Class Form2
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.AutoSize = true
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label4.Location = New System.Drawing.Point(123, 493)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
@@ -444,7 +444,7 @@ Partial Class Form2
         'actorcb
         '
         Me.actorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.actorcb.FormattingEnabled = True
+        Me.actorcb.FormattingEnabled = true
         Me.actorcb.Location = New System.Drawing.Point(127, 517)
         Me.actorcb.Margin = New System.Windows.Forms.Padding(4)
         Me.actorcb.Name = "actorcb"
@@ -459,19 +459,19 @@ Partial Class Form2
         Me.PictureBox1.Size = New System.Drawing.Size(216, 174)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 66
-        Me.PictureBox1.TabStop = False
+        Me.PictureBox1.TabStop = false
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.AutoSize = true
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label3.Location = New System.Drawing.Point(815, 462)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(84, 16)
         Me.Label3.TabIndex = 65
         Me.Label3.Text = "Actor Thumb"
-        Me.Label3.Visible = False
+        Me.Label3.Visible = false
         '
         'filenametxt
         '
@@ -479,14 +479,14 @@ Partial Class Form2
         Me.filenametxt.Location = New System.Drawing.Point(127, 634)
         Me.filenametxt.Margin = New System.Windows.Forms.Padding(4)
         Me.filenametxt.Name = "filenametxt"
-        Me.filenametxt.ReadOnly = True
+        Me.filenametxt.ReadOnly = true
         Me.filenametxt.Size = New System.Drawing.Size(624, 20)
         Me.filenametxt.TabIndex = 69
         '
         'filename
         '
-        Me.filename.AutoSize = True
-        Me.filename.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.filename.AutoSize = true
+        Me.filename.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.filename.Location = New System.Drawing.Point(21, 602)
         Me.filename.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.filename.Name = "filename"
@@ -496,15 +496,14 @@ Partial Class Form2
         '
         'btnaddactor
         '
-        Me.btnaddactor.Enabled = False
         Me.btnaddactor.Location = New System.Drawing.Point(19, 587)
         Me.btnaddactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btnaddactor.Name = "btnaddactor"
         Me.btnaddactor.Size = New System.Drawing.Size(100, 28)
         Me.btnaddactor.TabIndex = 71
         Me.btnaddactor.Text = "Add Actor"
-        Me.ToolTip1.SetToolTip(Me.btnaddactor, "Enter Name of Actor and Role" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "you wish to add then click")
-        Me.btnaddactor.UseVisualStyleBackColor = True
+        Me.ToolTip1.SetToolTip(Me.btnaddactor, "Enter Name of Actor and Role"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"you wish to add then click")
+        Me.btnaddactor.UseVisualStyleBackColor = true
         '
         'btndeleteactor
         '
@@ -515,7 +514,7 @@ Partial Class Form2
         Me.btndeleteactor.TabIndex = 72
         Me.btndeleteactor.Text = "Delete Actor"
         Me.ToolTip1.SetToolTip(Me.btndeleteactor, "Delete the selected Actor and Role")
-        Me.btndeleteactor.UseVisualStyleBackColor = True
+        Me.btndeleteactor.UseVisualStyleBackColor = true
         '
         'btnsavechanges
         '
@@ -525,7 +524,7 @@ Partial Class Form2
         Me.btnsavechanges.Size = New System.Drawing.Size(140, 28)
         Me.btnsavechanges.TabIndex = 73
         Me.btnsavechanges.Text = "Save Changes"
-        Me.btnsavechanges.UseVisualStyleBackColor = True
+        Me.btnsavechanges.UseVisualStyleBackColor = true
         '
         'btnexit
         '
@@ -535,22 +534,23 @@ Partial Class Form2
         Me.btnexit.Size = New System.Drawing.Size(75, 28)
         Me.btnexit.TabIndex = 74
         Me.btnexit.Text = "Exit"
-        Me.btnexit.UseVisualStyleBackColor = True
+        Me.btnexit.UseVisualStyleBackColor = true
         '
         'btneditactor
         '
-        Me.btneditactor.Enabled = False
+        Me.btneditactor.Enabled = false
         Me.btneditactor.Location = New System.Drawing.Point(19, 549)
         Me.btneditactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btneditactor.Name = "btneditactor"
         Me.btneditactor.Size = New System.Drawing.Size(100, 28)
         Me.btneditactor.TabIndex = 75
         Me.btneditactor.Text = "Edit Actor"
-        Me.ToolTip1.SetToolTip(Me.btneditactor, "Input new details and click to edit" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "selected actor and role.")
-        Me.btneditactor.UseVisualStyleBackColor = True
+        Me.ToolTip1.SetToolTip(Me.btneditactor, "Input new details and click to edit"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"selected actor and role.")
+        Me.btneditactor.UseVisualStyleBackColor = true
         '
         'TextBox1
         '
+        Me.TextBox1.Enabled = false
         Me.TextBox1.Location = New System.Drawing.Point(127, 554)
         Me.TextBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox1.Name = "TextBox1"
@@ -559,6 +559,7 @@ Partial Class Form2
         '
         'TextBox2
         '
+        Me.TextBox2.Enabled = false
         Me.TextBox2.Location = New System.Drawing.Point(441, 555)
         Me.TextBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox2.Name = "TextBox2"
@@ -583,7 +584,7 @@ Partial Class Form2
         '
         'btnrescrape
         '
-        Me.btnrescrape.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnrescrape.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnrescrape.Location = New System.Drawing.Point(819, 330)
         Me.btnrescrape.Margin = New System.Windows.Forms.Padding(4)
         Me.btnrescrape.Name = "btnrescrape"
@@ -591,8 +592,8 @@ Partial Class Form2
         Me.btnrescrape.TabIndex = 82
         Me.btnrescrape.Text = "Re-Scrape Details"
         Me.ToolTip1.SetToolTip(Me.btnrescrape, "Re-Scrape Movie If IMDB ID Is Correct")
-        Me.btnrescrape.UseVisualStyleBackColor = True
-        Me.btnrescrape.Visible = False
+        Me.btnrescrape.UseVisualStyleBackColor = true
+        Me.btnrescrape.Visible = false
         '
         'btnchangemovie
         '
@@ -603,7 +604,7 @@ Partial Class Form2
         Me.btnchangemovie.TabIndex = 91
         Me.btnchangemovie.Text = "Change Movie"
         Me.ToolTip1.SetToolTip(Me.btnchangemovie, "You Will Need This If the Wrong IMDB ID is shown")
-        Me.btnchangemovie.UseVisualStyleBackColor = True
+        Me.btnchangemovie.UseVisualStyleBackColor = true
         '
         'Panel2
         '
@@ -620,20 +621,20 @@ Partial Class Form2
         Me.Panel2.Size = New System.Drawing.Size(1139, 674)
         Me.Panel2.TabIndex = 92
         Me.ToolTip1.SetToolTip(Me.Panel2, "Navigate to previous webpage")
-        Me.Panel2.Visible = False
+        Me.Panel2.Visible = false
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Checked = True
+        Me.CheckBox1.AutoSize = true
+        Me.CheckBox1.Checked = true
         Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox1.Location = New System.Drawing.Point(856, 629)
         Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(202, 30)
         Me.CheckBox1.TabIndex = 5
-        Me.CheckBox1.Text = "Un-check if you do not wish to delete" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "and attempt to rescrape movie art."
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox1.Text = "Un-check if you do not wish to delete"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"and attempt to rescrape movie art."
+        Me.CheckBox1.UseVisualStyleBackColor = true
         '
         'Button15
         '
@@ -644,26 +645,26 @@ Partial Class Form2
         Me.Button15.Size = New System.Drawing.Size(141, 28)
         Me.Button15.TabIndex = 4
         Me.Button15.Text = "Cancel Search"
-        Me.Button15.UseVisualStyleBackColor = True
+        Me.Button15.UseVisualStyleBackColor = true
         '
         'Button14
         '
         Me.Button14.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Button14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Button14.Location = New System.Drawing.Point(773, 638)
         Me.Button14.Margin = New System.Windows.Forms.Padding(4)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(75, 28)
         Me.Button14.TabIndex = 3
         Me.Button14.Text = "Go"
-        Me.Button14.UseVisualStyleBackColor = True
+        Me.Button14.UseVisualStyleBackColor = true
         '
         'Label10
         '
         Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Label10.AutoSize = True
+        Me.Label10.AutoSize = true
         Me.Label10.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label10.Location = New System.Drawing.Point(492, 641)
         Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
@@ -680,7 +681,7 @@ Partial Class Form2
         Me.Button13.Size = New System.Drawing.Size(100, 28)
         Me.Button13.TabIndex = 1
         Me.Button13.Text = "Page Back"
-        Me.Button13.UseVisualStyleBackColor = True
+        Me.Button13.UseVisualStyleBackColor = true
         '
         'WebBrowser2
         '
@@ -700,8 +701,8 @@ Partial Class Form2
         Me.btnrescrapethumbs.TabIndex = 100
         Me.btnrescrapethumbs.Text = "Poster Browser"
         Me.ToolTip1.SetToolTip(Me.btnrescrapethumbs, "Re-Scrape Thumbnails from MoviePosterDB")
-        Me.btnrescrapethumbs.UseVisualStyleBackColor = True
-        Me.btnrescrapethumbs.Visible = False
+        Me.btnrescrapethumbs.UseVisualStyleBackColor = true
+        Me.btnrescrapethumbs.Visible = false
         '
         'Button1
         '
@@ -712,80 +713,80 @@ Partial Class Form2
         Me.Button1.TabIndex = 114
         Me.Button1.Text = "Blank Nfo"
         Me.ToolTip1.SetToolTip(Me.Button1, "Blank All Fields, including actors")
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.UseVisualStyleBackColor = true
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label1.Location = New System.Drawing.Point(756, 486)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(165, 16)
         Me.Label1.TabIndex = 80
         Me.Label1.Text = "No Actor Thumb Available"
-        Me.Label1.Visible = False
+        Me.Label1.Visible = false
         '
         'Label8
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.AutoSize = true
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label8.Location = New System.Drawing.Point(168, 363)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(535, 42)
         Me.Label8.TabIndex = 87
         Me.Label8.Text = "Scraping Movie - Please Wait"
-        Me.Label8.Visible = False
+        Me.Label8.Visible = false
         '
         'btncropleft
         '
-        Me.btncropleft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btncropleft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btncropleft.Location = New System.Drawing.Point(997, 74)
         Me.btncropleft.Margin = New System.Windows.Forms.Padding(4)
         Me.btncropleft.Name = "btncropleft"
         Me.btncropleft.Size = New System.Drawing.Size(32, 28)
         Me.btncropleft.TabIndex = 93
         Me.btncropleft.Text = ">"
-        Me.btncropleft.UseVisualStyleBackColor = True
+        Me.btncropleft.UseVisualStyleBackColor = true
         '
         'btncropright
         '
-        Me.btncropright.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btncropright.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btncropright.Location = New System.Drawing.Point(1089, 74)
         Me.btncropright.Margin = New System.Windows.Forms.Padding(4)
         Me.btncropright.Name = "btncropright"
         Me.btncropright.Size = New System.Drawing.Size(32, 28)
         Me.btncropright.TabIndex = 94
         Me.btncropright.Text = "<"
-        Me.btncropright.UseVisualStyleBackColor = True
+        Me.btncropright.UseVisualStyleBackColor = true
         '
         'btncropbottom
         '
-        Me.btncropbottom.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btncropbottom.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btncropbottom.Location = New System.Drawing.Point(1044, 106)
         Me.btncropbottom.Margin = New System.Windows.Forms.Padding(4)
         Me.btncropbottom.Name = "btncropbottom"
         Me.btncropbottom.Size = New System.Drawing.Size(32, 28)
         Me.btncropbottom.TabIndex = 95
         Me.btncropbottom.Text = "^"
-        Me.btncropbottom.UseVisualStyleBackColor = True
+        Me.btncropbottom.UseVisualStyleBackColor = true
         '
         'btncroptop
         '
-        Me.btncroptop.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btncroptop.Font = New System.Drawing.Font("Microsoft Sans Serif", 6!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btncroptop.Location = New System.Drawing.Point(1044, 42)
         Me.btncroptop.Margin = New System.Windows.Forms.Padding(4)
         Me.btncroptop.Name = "btncroptop"
         Me.btncroptop.Size = New System.Drawing.Size(32, 28)
         Me.btncroptop.TabIndex = 96
         Me.btncroptop.Text = "V"
-        Me.btncroptop.UseVisualStyleBackColor = True
+        Me.btncroptop.UseVisualStyleBackColor = true
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.AutoSize = true
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label2.Location = New System.Drawing.Point(1033, 78)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
@@ -800,8 +801,8 @@ Partial Class Form2
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(76, 28)
         Me.PictureBox2.TabIndex = 98
-        Me.PictureBox2.TabStop = False
-        Me.PictureBox2.Visible = False
+        Me.PictureBox2.TabStop = false
+        Me.PictureBox2.Visible = false
         '
         'Timer1
         '
@@ -813,8 +814,8 @@ Partial Class Form2
         '
         'Label12
         '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.AutoSize = true
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label12.Location = New System.Drawing.Point(999, 244)
         Me.Label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label12.Name = "Label12"
@@ -824,7 +825,7 @@ Partial Class Form2
         '
         'Label13
         '
-        Me.Label13.AutoSize = True
+        Me.Label13.AutoSize = true
         Me.Label13.Location = New System.Drawing.Point(997, 261)
         Me.Label13.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label13.Name = "Label13"
@@ -834,7 +835,7 @@ Partial Class Form2
         '
         'Label14
         '
-        Me.Label14.AutoSize = True
+        Me.Label14.AutoSize = true
         Me.Label14.Location = New System.Drawing.Point(993, 279)
         Me.Label14.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label14.Name = "Label14"
@@ -850,11 +851,11 @@ Partial Class Form2
         Me.zoom.Size = New System.Drawing.Size(128, 28)
         Me.zoom.TabIndex = 106
         Me.zoom.Text = "Zoom In"
-        Me.zoom.UseVisualStyleBackColor = True
+        Me.zoom.UseVisualStyleBackColor = true
         '
         'Label15
         '
-        Me.Label15.AutoSize = True
+        Me.Label15.AutoSize = true
         Me.Label15.Location = New System.Drawing.Point(989, 298)
         Me.Label15.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label15.Name = "Label15"
@@ -864,7 +865,7 @@ Partial Class Form2
         '
         'Label16
         '
-        Me.Label16.AutoSize = True
+        Me.Label16.AutoSize = true
         Me.Label16.Location = New System.Drawing.Point(1051, 261)
         Me.Label16.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label16.Name = "Label16"
@@ -874,7 +875,7 @@ Partial Class Form2
         '
         'Label17
         '
-        Me.Label17.AutoSize = True
+        Me.Label17.AutoSize = true
         Me.Label17.Location = New System.Drawing.Point(1051, 279)
         Me.Label17.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label17.Name = "Label17"
@@ -894,25 +895,25 @@ Partial Class Form2
         Me.btnfanart.Name = "btnfanart"
         Me.btnfanart.Size = New System.Drawing.Size(75, 23)
         Me.btnfanart.TabIndex = 0
-        Me.btnfanart.Visible = False
+        Me.btnfanart.Text = "Alt Fanart"
         '
         'btnresetimage
         '
+        Me.btnresetimage.Enabled = false
         Me.btnresetimage.Location = New System.Drawing.Point(995, 142)
         Me.btnresetimage.Name = "btnresetimage"
         Me.btnresetimage.Size = New System.Drawing.Size(75, 23)
         Me.btnresetimage.TabIndex = 0
         Me.btnresetimage.Text = "Reset Crop"
-        Me.btnresetimage.Enabled = False
         '
         'btnsavecropped
         '
+        Me.btnsavecropped.Enabled = false
         Me.btnsavecropped.Location = New System.Drawing.Point(995, 172)
         Me.btnsavecropped.Name = "btnsavecropped"
         Me.btnsavecropped.Size = New System.Drawing.Size(75, 23)
         Me.btnsavecropped.TabIndex = 0
         Me.btnsavecropped.Text = "Saved Cropped"
-        Me.btnSaveCropped.Enabled = False
         '
         'Button2
         '
@@ -920,7 +921,7 @@ Partial Class Form2
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 0
-        Me.Button2.Visible = False
+        Me.Button2.Visible = false
         '
         'starstxt
         '
@@ -931,8 +932,8 @@ Partial Class Form2
         '
         'Label6
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.AutoSize = true
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label6.Location = New System.Drawing.Point(21, 202)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(45, 16)
@@ -941,8 +942,8 @@ Partial Class Form2
         '
         'Label7
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.AutoSize = true
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label7.Location = New System.Drawing.Point(21, 638)
         Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
@@ -1025,20 +1026,20 @@ Partial Class Form2
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.btnsavecropped)
         Me.Controls.Add(Me.btnresetimage)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "XBMC Media Companion - Movie Nfo Editor"
-        CType(Me.moviethumb, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.Panel2.ResumeLayout(false)
+        Me.Panel2.PerformLayout
+        CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).EndInit
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents runtimetxt As System.Windows.Forms.TextBox
     Friend WithEvents votestxt As System.Windows.Forms.TextBox
     Friend WithEvents ratingtxt As System.Windows.Forms.TextBox

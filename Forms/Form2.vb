@@ -46,6 +46,8 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.outline <> Nothing Then outlinetxt.Text = workingmovieedit.fullmoviebody.outline
         If workingmovieedit.fullmoviebody.plot <> Nothing Then plottxt.Text = workingmovieedit.fullmoviebody.plot
         If workingmovieedit.fullmoviebody.tagline <> Nothing Then taglinetxt.Text = workingmovieedit.fullmoviebody.tagline
+        If workingmovieedit.fileinfo.fullpathandfilename <> Nothing Then filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
+
         For Each actor In workingmovieedit.listactors
             actorcb.Items.Add(actor.actorname)
         Next
@@ -161,7 +163,19 @@ Public Class Form2
     End Sub ' Delete Actor Button
     Private Sub btnaddactor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnaddactor.Click
         Try
-
+            Dim newactor As New Actor
+            For Each currentactor In actorcb.items
+                If TextBox4.Text = currentactor Then
+                    MsgBox("Actor exists in this movie")
+                    Exit sub
+                End If
+            Next
+            newactor.ActorId.value = ""
+            newactor.actorname = TextBox3.Text
+            newactor.actorrole = TextBox4.Text
+            newactor.actorthumb = ""
+            workingmovieedit.listactors.Add(newactor)
+            actorcb.Items.Add(newactor)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
