@@ -2283,10 +2283,12 @@ Partial Public Class Form1
 
 
         'If startup = True Then, issue #275
+        If startup = True Then butt = "all"
         If butt = "missingeps" Then
-            If Not startup Then
-                MessageBox.Show("Ensure that you have previously selected Display Missing Episodes from the TV Shows menu", "Missing Episodes", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
+            'If Not startup Then
+            '    MessageBox.Show("Ensure that you have previously selected Display Missing Episodes from the TV Shows menu", "Missing Episodes", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            'End If
+            If Preferences.displayMissingEpisodes Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
@@ -2328,6 +2330,9 @@ Partial Public Class Form1
                     item.Visible = True
                 End If
             Next
+            Else
+                MsgBox("Enable Display Missing Episodes")
+            End If
         ElseIf butt = "airedmissingeps" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values

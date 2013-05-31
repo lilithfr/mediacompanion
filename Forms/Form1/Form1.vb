@@ -19524,8 +19524,9 @@ Public Class Form1
                 Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
                 Preferences.SaveConfig()
                 If Preferences.displayMissingEpisodes = False OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                    RadioButton29.Checked = True
                     tv_CacheRefresh 
-                    tv_Filter()
+                    'tv_Filter()
                     Return
                 End If
                 Dim ShowList As New List(Of TvShow)
@@ -19533,7 +19534,8 @@ Public Class Form1
                     shows.MissingEpisodes.Clear()
                     ShowList.Add(shows)
                 Next
-                If MsgBox("This function will download & populate the treeview with all of the episode details missing from your collection." & vbCrLf & "The download will be completed in the background. You can watch the status in the status bar below." & vbCrLf & vbCrLf & "Do you want to proceed with the download for " & ShowList.Count & " shows?", MsgBoxStyle.YesNo, "Download Missing Episode Details") = Windows.Forms.DialogResult.No Then Exit Sub
+                
+                'If MsgBox("This function will download & populate the treeview with all of the episode details missing from your collection." & vbCrLf & "The download will be completed in the background. You can watch the status in the status bar below." & vbCrLf & vbCrLf & "Do you want to proceed with the download for " & ShowList.Count & " shows?", MsgBoxStyle.YesNo, "Download Missing Episode Details") = Windows.Forms.DialogResult.No Then Exit Sub
                 'Dim nod As TreeNode
                 'For Each nod In TvTreeview.Nodes
                 '    Dim nod2 As TreeNode
