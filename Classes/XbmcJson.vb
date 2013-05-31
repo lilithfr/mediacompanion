@@ -38,11 +38,16 @@ Public Class XbmcJson
     Sub New
         xbmc = new XbmcJsonRpcConnection(Address, Port, Username, Password)
 
-        _opened = xbmc.Open
+        'Open
 
-        If Not Opened Then Return
+        'If Not Opened Then Return
         
-        UpdateXbmcMovies
+        'UpdateXbmcMovies
+    End Sub
+
+
+    Sub Open
+        _opened = xbmc.Open
     End Sub
 
 
@@ -51,6 +56,7 @@ Public Class XbmcJson
 
         _xbmcMovies = xbmc.Library.Video.GetMinXbmcMovies(  new JProperty("properties", content )  )
     End Sub
+
 
     Function GetMovieId(MediaName As String)  As Integer
 

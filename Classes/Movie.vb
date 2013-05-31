@@ -868,18 +868,27 @@ Public Class Movie
         _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
 
         If Preferences.XBMC_Sync Then
-            Threading.Thread.Sleep(100)             'Delays needed! Probably some async operations going on in XMBC, i.e. returns ok before actually completing
-            _parent.XbmcJson.UpdateXbmcMovies
-            
-            Try
-                Threading.Thread.Sleep(100)
-                _parent.XbmcJson.xbmc.Library.Video.RemoveMovie( _parent.XbmcJson.GetMovieId(mediapathandfilename) )
-            Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! [SaveNFO-xbmc.Library.Video.RemoveMovie] threw [" & ex.Message & "]" & vbCrLf)       
-            End Try
 
-            Threading.Thread.Sleep(100)
-            _parent.XbmcJson.xbmc.Library.Video.AddMovies( NfoPath_NoDirectorySeparatorChar )
+            If Not _parent.XbmcJson.Opened Then
+                Threading.Thread.Sleep(200) 
+                _parent.XbmcJson.Open
+            End If   
+
+            If _parent.XbmcJson.Opened Then
+                Try
+                    'Delays needed! Probably some async operations going on in XMBC, i.e. returns ok before actually completing
+                    Threading.Thread.Sleep(200)             
+                    _parent.XbmcJson.UpdateXbmcMovies
+            
+                    Threading.Thread.Sleep(200)
+                    _parent.XbmcJson.xbmc.Library.Video.RemoveMovie( _parent.XbmcJson.GetMovieId(mediapathandfilename) )
+
+                    Threading.Thread.Sleep(200)
+                    _parent.XbmcJson.xbmc.Library.Video.AddMovies( NfoPath_NoDirectorySeparatorChar )
+                Catch ex As Exception
+                    ReportProgress(MSG_ERROR,"!!! [SaveNFO-XBMC_Sync] threw [" & ex.Message & "]" & vbCrLf)       
+                End Try
+            End If
         End If
     End Sub
 

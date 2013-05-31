@@ -3636,11 +3636,11 @@ Public Class Form1
                     End If
 
                     If cbMovieDisplay_MovieSet.SelectedItem = Nothing Then cbMovieDisplay_MovieSet.SelectedItem = "-None-"
-                    If cbMovieDisplay_MovieSet.SelectedItem <> "-None-" Then
+                    'If cbMovieDisplay_MovieSet.SelectedItem <> "-None-" Then
                         movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-                    Else
-                        movie.ScrapedMovie.fullmoviebody.movieset = Nothing
-                    End If
+                    'Else
+                    '    movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+                    'End If
                     'If setsTxt.Text = "" Then setsTxt.Text = "-None-"
                     'If setsTxt.Text <> "-None-" Then
                     'movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
