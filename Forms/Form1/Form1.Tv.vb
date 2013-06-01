@@ -1454,7 +1454,7 @@ Partial Public Class Form1
 
                     End If
 
-                    TvGetArtwork(NewShow)
+                    TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart)
                     
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                         NewShow.EpisodeActorSource.Value = "tvdb"
@@ -2149,7 +2149,7 @@ Partial Public Class Form1
                         If episodearray(0).Episode.Value=1 Then
                             Dim Seasonxx As String = Shows.folderpath+"Season"+(If(episodearray(0).Season.Value <10,"0"+episodearray(0).Season.Value,episodearray(0).Season.Value))+(If(Preferences.FrodoEnabled,"-poster.jpg",".tbn"))
                             If Not IO.File.Exists(Seasonxx) Then
-                                TvGetArtwork(Shows, False,False,True)
+                                TvGetArtwork(Shows, False, False, True, False)
                             End If
                         End If
                         For Each ept In episodearray
@@ -2258,7 +2258,7 @@ Partial Public Class Form1
         messbox.Refresh()
         Application.DoEvents()
         Try
-            TvGetArtwork(BrokenShow)
+            TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
@@ -2764,7 +2764,8 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart as Boolean)
+        '(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
         Try
 
             Dim tvdbstuff As New TVDBScraper
@@ -3040,35 +3041,52 @@ Partial Public Class Form1
                 If tvfanart Then
                     If fanartposter <> "" Then
                         Dim fanartposterpath As String = String.Empty
-                        'If frodo Then
                         fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                        'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
-                        'ElseIf eden Then
-                        'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                        'End If
                         If Not IO.File.Exists(fanartposterpath) Then
                             Utilities.DownloadFile(fanartposter, fanartposterpath)
                         End If
                         If frodo And isseasonall <> "none" Then
                             Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("fanart.jpg", "season-all-fanart.jpg"), overwriteimage)
                         End If
-                        'If IO.File.Exists(fanartposterpath) And frodo And eden Then
-                        'Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("season-all-", ""), overwriteimage)
-                        'End If
-                        '*** Haven't used Movie.SaveFanartImageToCacheAndPath because this code needs to be common for ***
-                        '*** Movie and TV, I can see this use of movie class for TV shows as potential future issue.   *** - HueyHQ
-
-                        'Dim fanartpath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                        'If frodo Then
-                        '    Dim seasonfrodopath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
-                        '    If Not IO.File.Exists(fanartpath) Then
-                        '        Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonfrodopath)
-                        '    End If
-                        'End If
-                        'If Not IO.File.Exists(fanartpath) Then
-                        '    Movie.SaveFanartImageToCacheAndPath(fanartposter, fanartpath)
-                        'End If
                     End If
+                End If
+            End If
+            
+            'ExtraFanart
+            If shXtraFanart Then
+                Dim i As Integer = 0
+                Dim xfanart As String = currentshow.FolderPath & "extrafanart\fanart"
+                Dim fanartposter as New List(Of String)
+                For Each Image In artlist
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
+                        fanartposter.Add(Image.Url)
+                        i += 1
+                        If i = 5 Then Exit For
+                    End If
+                Next
+                If i <> 5 Then
+                    For Each Image In artlist
+                        If Image.Language = "en" And Image.BannerType = "fanart" Then
+                            fanartposter.Add(Image.Url)
+                            i += 1
+                            If i = 5 Then Exit For
+                        End If
+                    Next
+                End If
+                If i <> 5 Then
+                    For Each Image In artlist
+                        If Image.BannerType = "fanart" Then
+                            fanartposter.Add(Image.Url)
+                            i += 1
+                            If i = 5 Then Exit For
+                        End If
+                    Next
+                End If
+                If i <> 0 Then 
+                    For x = 1 to 4
+                        Utilities.DownloadFile(fanartposter(x), (xfanart & x & ".jpg"))
+                        If x = i Then Exit For
+                    Next
                 End If
             End If
         Catch

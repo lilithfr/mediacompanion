@@ -12,6 +12,7 @@ Public Structure str_TvShowBatchWizard
     Dim shPosters As Boolean
     Dim shFanart As Boolean
     Dim shSeason As Boolean
+    Dim shXtraFanart As Boolean
     Dim epStreamDetails As Boolean
     Dim epAired As Boolean
     Dim epPlot As Boolean

@@ -15390,6 +15390,20 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbDlTvXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTvXtraFanart.CheckedChanged
+        Try
+            If cbDlTvXtraFanart.CheckState = CheckState.Checked Then
+                Preferences.dlTVxtrafanart = True
+            Else
+                Preferences.dlTVxtrafanart = False
+            End If
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub CheckBox15_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox15.CheckedChanged
         Try
             If CheckBox15.CheckState = CheckState.Checked Then
@@ -20148,7 +20162,7 @@ Public Class Form1
                         Dim showlist2 As New XmlDocument
                         Dim artdone As Boolean = False
                         If tvBatchList.doShowArt = True Then
-                            TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason)
+                            TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart)
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
@@ -24531,7 +24545,7 @@ Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As S
         Try
             Dim Showname As TvShow = tv_ShowSelectedCurrently()
             'Me.tvBatchList.shFanart = True
-            TvGetArtwork(Showname,True, False, False)
+            TvGetArtwork(Showname,True, False, False, False)
             tv_ShowLoad(Showname)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -24935,6 +24949,7 @@ End Sub
             End Try
         End If
     End Sub
+
 
 
 End Class
