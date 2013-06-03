@@ -20948,6 +20948,7 @@ Public Class Form1
     Private Sub ComboBox_TMDB_Title_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_TMDB_Title_Language.SelectedIndexChanged
         Try
             Save_XBMC_TMDB_Scraper_Config("language", ComboBox_TMDB_Title_Language.Text)
+            mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
