@@ -24927,6 +24927,12 @@ End Sub
 
     End Sub
 
+    Private Sub tbExcludeFolders_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbExcludeFolders.TextChanged
+        'Preferences.ExcludeFolders = ExcludeFolders.Text
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
+    End Sub
+
     Public Function VidMediaFlags (ByVal Vidfiledetails As FullFileDetails) As Dictionary(Of String, String)
         Dim flags As New Dictionary(Of String, String)
         Try
