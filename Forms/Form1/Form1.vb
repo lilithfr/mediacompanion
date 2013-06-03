@@ -9229,11 +9229,13 @@ Public Class Form1
                     If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) Then
                         Try
                             util_ImageLoad(PictureBox10, savepath, Utilities.DefaultFanartPath)
-                            PictureBox11.Image = PictureBox10.Image
+                            util_ImageLoad(PictureBox11, savepath, Utilities.DefaultFanartPath)
+                            'PictureBox11.Image = PictureBox10.Image
                             If Not xtra Then
                                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                                    tv_PictureBoxLeft.ImageLocation = savepath
-                                    tv_PictureBoxLeft.Load()
+                                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultFanartPath)
+                                    'tv_PictureBoxLeft.ImageLocation = savepath
+                                    'tv_PictureBoxLeft.Load()
                                 End If
                             End If
                         Catch ex As Exception
