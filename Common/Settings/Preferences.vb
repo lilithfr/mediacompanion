@@ -1083,6 +1083,8 @@ Public Class Preferences
             If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Preferences.basicsavemode) Then
                 If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
                     posterpath = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                ElseIf IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg") Then
+                    posterpath = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
                 Else
                     posterpath = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
                 End If
@@ -1230,7 +1232,7 @@ Public Class Preferences
         'If Not IsNothing(MovFilePath) Then
             'Dim MovPath As String = FullPath.Replace(MovFilePath,"")
         'End If
-        If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Preferences.basicsavemode,Preferences.fanartjpg) Then
+        If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Preferences.basicsavemode,Preferences.fanartjpg, False) Then
             If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso MovFilePath<>"" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
                 Return MovPath

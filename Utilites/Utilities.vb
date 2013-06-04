@@ -370,7 +370,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     '    Return TrailerPath
     'End Function
 
-    Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String, Optional ByVal basicsave As Boolean = False, Optional ByVal fanartjpg as Boolean = False) As Boolean
+    Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String, Optional ByVal basicsave As Boolean = False, Optional ByVal fanartjpg as Boolean = False, Optional ByVal posterjpg As Boolean = False) As Boolean
         Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"
         Dim returnCode As Boolean = False
         Dim typeOfFile As New List(Of String)
@@ -381,6 +381,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
         If fanartjpg Then
             typeOfFile.Add(pathOnly & "fanart.jpg")
+        End If
+        If posterjpg Then
+            typeOfFile.Add(pathOnly & "poster.jpg")
         End If
         For Each file As String In typeOfFile
             If IO.File.Exists(file) Then
