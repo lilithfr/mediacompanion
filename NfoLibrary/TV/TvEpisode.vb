@@ -385,7 +385,7 @@ Public Class TvEpisode
         If numOfAudioStreams > 0 Then
             While curAS < numOfAudioStreams
                 Dim audio As New AudioDetails
-                audio.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
+                audio.Language.Value = MI.Get_(StreamKind.Audio, curAS, "Language")
                 If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                     audio.Codec.Value = "MP3"
                 Else
@@ -393,7 +393,7 @@ Public Class TvEpisode
                     Try
                         tempmediainfo = aviFile.Audio(curAS).Format
                     Catch
-                        tempmediainfo=""
+                        tempmediainfo = ""
                     End Try
                     audio.Codec.Value = tempmediainfo
                 End If
@@ -402,10 +402,10 @@ Public Class TvEpisode
                 End If
                 tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                 If audio.Codec.Value = "DTS" Then
-                    If tmpaud = "dts ma / core" Then 
+                    If tmpaud = "dts ma / core" Then
                         audio.Codec.Value = "dtshd_ma"
-                    ElseIf tmpaud="dts hra / core" Then
-                        audio.Codec.Value="dtshd_hra"
+                    ElseIf tmpaud = "dts hra / core" Then
+                        audio.Codec.Value = "dtshd_hra"
                     Else
                         audio.Codec.Value = "DTS"
                     End If
@@ -423,7 +423,7 @@ Public Class TvEpisode
         If numOfSubtitleStreams > 0 Then
             While curSS < numOfSubtitleStreams
                 Dim sublanguage As New SubtitleDetails
-                sublanguage.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
+                sublanguage.Language.Value = MI.Get_(StreamKind.Text, curSS, "Language")
                 Me.Details.StreamDetails.Subtitles.Add(sublanguage)
                 curSS += 1
             End While

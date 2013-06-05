@@ -249,6 +249,7 @@ Public Class MediaInfoExport
                             If tokenInstr(1).StartsWith("article") Then strNFOprop = M.Groups("article").Value.Trim
                         End If
                     End If
+                    strNFOprop = Security.SecurityElement.Escape(strNFOprop)
 
                 Case "movieyear"
                     strNFOprop = If(movie.year <> Nothing, movie.year, "0000")
