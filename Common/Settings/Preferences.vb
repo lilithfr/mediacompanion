@@ -1467,9 +1467,9 @@ Public Class Preferences
                 End While
             Else
                 Dim audio As New AudioDetails
-                audio.Codec.Value = ""
-                audio.Channels.Value = ""
-                audio.Bitrate.Value = ""
+                'audio.Codec.Value = ""
+                'audio.Channels.Value = ""
+                'audio.Bitrate.Value = ""
                 workingfiledetails.filedetails_audio.Add(audio)
             End If
 

@@ -5,10 +5,10 @@ Public Class AudioDetails
     Inherits ProtoPropertyGroup
 
 
-    Public Property Codec    As New ProtoProperty(Me, "codec"   )
-    Public Property Language As New ProtoProperty(Me, "language")
-    Public Property Channels As New ProtoProperty(Me, "channels")
-    Public Property Bitrate  As New ProtoProperty(Me, "bitrate" )
+    Public Property Codec    As New ProtoProperty(Me, "codec", "")
+    Public Property Language As New ProtoProperty(Me, "language", "")
+    Public Property Channels As New ProtoProperty(Me, "channels", "")
+    Public Property Bitrate  As New ProtoProperty(Me, "bitrate", "")
 
     Public Sub New()
         MyBase.New(Nothing, Nothing)

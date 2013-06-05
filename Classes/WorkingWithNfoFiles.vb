@@ -1034,8 +1034,8 @@ Public Class WorkingWithNfoFiles
             Dim newmovie As New FullMovieDetails
             newmovie.fullmoviebody.genre = ""
             Dim newfilenfo As New FullFileDetails
-            Dim audio As New AudioDetails
-            newfilenfo.filedetails_audio.Add(audio)
+            'Dim audio As New AudioDetails
+            'newfilenfo.filedetails_audio.Add(audio)
             newmovie.filedetails = newfilenfo
             Dim thumbstring As String = String.Empty
             If Not IO.File.Exists(path) Then
@@ -1236,7 +1236,7 @@ Public Class WorkingWithNfoFiles
                                                     Next
                                                 Case "audio"
                                                     Dim audiodetails As XmlNode = Nothing
-                                                    'Dim audio As New AudioDetails
+                                                    Dim audio As New AudioDetails
                                                     For Each audiodetails In detail.ChildNodes
 
                                                         Select Case audiodetails.Name
@@ -1263,6 +1263,10 @@ Public Class WorkingWithNfoFiles
                                                     Next
                                             End Select
                                         Next
+                                        If newfilenfo.filedetails_audio.Count = 0 Then
+                                            Dim audio As New AudioDetails
+                                            newfilenfo.filedetails_audio.Add(audio)
+                                        End If
                                         newmovie.filedetails = newfilenfo
                                 End Select
                             Next
