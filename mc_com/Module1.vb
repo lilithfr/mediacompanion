@@ -1929,138 +1929,181 @@ Module Module1
                     filename = temppath
                 End If
             End If
-
-            Dim playlist As New List(Of String)
-            Dim tempstring As String
-            tempstring = getfilename(filename)
-            playlist = getmedialist(tempstring)
-
-            If Not IO.File.Exists(filename) Then
-                Return Nothing
-            End If
+            Dim newfiledetails As new FullFileDetails 
+            newfiledetails = Preferences.Get_HdTags(filename)
             Dim workingfiledetails As New fullfiledetails2
-            Dim MI As New mediainfo
-            'MI = New mediainfo
-            MI.Open(filename)
-            Dim curVS As Integer = 0
-            Dim addVS As Boolean = False
-            Dim numOfVideoStreams As Integer = MI.Count_Get(StreamKind.Visual)
-
-            Dim tempmediainfo As String
-            Dim tempmediainfo2 As String
-
-            workingfiledetails.filedetails_video.width = MI.Get_(StreamKind.Visual, curVS, "Width")
-            workingfiledetails.filedetails_video.height = MI.Get_(StreamKind.Visual, curVS, "Height")
-            If workingfiledetails.filedetails_video.width <> Nothing Then
-                If IsNumeric(workingfiledetails.filedetails_video.width) Then
-                    If workingfiledetails.filedetails_video.height <> Nothing Then
-                        If IsNumeric(workingfiledetails.filedetails_video.height) Then
-                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
-                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
-                            Dim aspect As Decimal
-                            Try
-                                aspect = tempwidth / tempheight
-                                aspect = FormatNumber(aspect, 3)
-                                If aspect > 0 Then workingfiledetails.filedetails_video.aspect = aspect.ToString
-                            Catch ex As Exception
-
-                            End Try
-                        End If
-                    End If
-                End If
-            Else
-                workingfiledetails.filedetails_video.aspect = ""
+            workingfiledetails.filedetails_video.width = newfiledetails.filedetails_video.Width.Value 
+            workingfiledetails.filedetails_video.height = newfiledetails.filedetails_video.Height.Value
+            workingfiledetails.filedetails_video.aspect = newfiledetails.filedetails_video.Aspect.Value
+            workingfiledetails.filedetails_video.codec = newfiledetails.filedetails_video.Codec.Value
+            workingfiledetails.filedetails_video.formatinfo = newfiledetails.filedetails_video.FormatInfo.Value
+            workingfiledetails.filedetails_video.duration = newfiledetails.filedetails_video.DurationInSeconds.Value
+            workingfiledetails.filedetails_video.bitrate = newfiledetails.filedetails_video.Bitrate.Value
+            workingfiledetails.filedetails_video.bitratemode = newfiledetails.filedetails_video.BitrateMode.Value
+            workingfiledetails.filedetails_video.bitratemax = newfiledetails.filedetails_video.BitrateMax.Value
+            workingfiledetails.filedetails_video.container = newfiledetails.filedetails_video.Container.Value
+            workingfiledetails.filedetails_video.codecinfo = newfiledetails.filedetails_video.CodecInfo.Value
+            workingfiledetails.filedetails_video.scantype = newfiledetails.filedetails_video.ScanType.Value
+            
+            Dim NumAudStream As Integer = newfiledetails.filedetails_audio.Count
+            Dim CurAuStr As Integer = 0
+            If NumAudStream > 0 Then
+                While CurAuStr < NumAudStream 
+                    Dim audio As New medianfo_audio
+                    audio.language = newfiledetails.filedetails_audio(CurAuStr).Language.value
+                    audio.codec = newfiledetails.filedetails_audio(CurAuStr).Codec.value
+                    audio.bitrate = newfiledetails.filedetails_audio(CurAuStr).Bitrate.value
+                    audio.channels = newfiledetails.filedetails_audio(CurAuStr).Channels.value
+                    workingfiledetails.filedetails_audio.Add(audio)
+                    CurAuStr += 1
+                End While
             End If
-            'workingfiledetails.filedetails_video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
+            
+            Dim NumSubStream As Integer = newfiledetails.filedetails_subtitles.Count
+            Dim CurSbStr As Integer = 0
+            If NumSubStream > 0 Then
+                While CurSbStr < NumSubStream 
+                    Dim sublang As New medianfo_subtitles
+                    sublang.language = newfiledetails.filedetails_subtitles(CurSbStr).Language.value
+                    workingfiledetails.filedetails_subtitles.Add(sublang)
+                    CurSbStr += 1
+                End While
+            End If
 
-            'tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
-            tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            If tempmediainfo.ToLower = "avc" Then tempmediainfo2 = "h264"
-            If tempmediainfo = "DX50" Then tempmediainfo = "DIVX"
-            If tempmediainfo.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then tempmediainfo = "h264"
-            tempmediainfo2 = tempmediainfo.Replace(" ","")
+            'workingfiledetails.filedetails_subtitles
 
-            workingfiledetails.filedetails_video.codec = tempmediainfo2
-            'workingfiledetails.filedetails_video.formatinfo = tempmediainfo
-            'workingfiledetails.filedetails_video.codec = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            'If workingfiledetails.filedetails_video.codec = "DX50" Then
-            '    workingfiledetails.filedetails_video.codec = "DIVX"
+            'Dim playlist As New List(Of String)
+            'Dim tempstring As String
+            'tempstring = getfilename(filename)
+            'playlist = getmedialist(tempstring)
+
+            'If Not IO.File.Exists(filename) Then
+            '    Return Nothing
             'End If
-            ''_MPEG4/ISO/AVC
-            'If workingfiledetails.filedetails_video.codec.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
-            '    workingfiledetails.filedetails_video.codec = "h264"
+            'Dim workingfiledetails As New fullfiledetails2
+            'Dim MI As New mediainfo
+            ''MI = New mediainfo
+            'MI.Open(filename)
+            'Dim curVS As Integer = 0
+            'Dim addVS As Boolean = False
+            'Dim numOfVideoStreams As Integer = MI.Count_Get(StreamKind.Visual)
+
+            'Dim tempmediainfo As String
+            'Dim tempmediainfo2 As String
+
+            'workingfiledetails.filedetails_video.width = MI.Get_(StreamKind.Visual, curVS, "Width")
+            'workingfiledetails.filedetails_video.height = MI.Get_(StreamKind.Visual, curVS, "Height")
+            'If workingfiledetails.filedetails_video.width <> Nothing Then
+            '    If IsNumeric(workingfiledetails.filedetails_video.width) Then
+            '        If workingfiledetails.filedetails_video.height <> Nothing Then
+            '            If IsNumeric(workingfiledetails.filedetails_video.height) Then
+            '                Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
+            '                Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
+            '                Dim aspect As Decimal
+            '                Try
+            '                    aspect = tempwidth / tempheight
+            '                    aspect = FormatNumber(aspect, 3)
+            '                    If aspect > 0 Then workingfiledetails.filedetails_video.aspect = aspect.ToString
+            '                Catch ex As Exception
+
+            '                End Try
+            '            End If
+            '        End If
+            '    End If
+            'Else
+            '    workingfiledetails.filedetails_video.aspect = ""
             'End If
-            workingfiledetails.filedetails_video.formatinfo = MI.Get_(StreamKind.Visual, curVS, "Format")
-            Dim fs(100) As String
-            For f = 1 To 100
-                fs(f) = MI.Get_(StreamKind.Visual, 0, f)
-            Next
+            ''workingfiledetails.filedetails_video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
 
-            Try
-                If playlist.Count = 1 Then
-                    Dim temptime As String = MI.Get_(StreamKind.Visual, 0, "Duration")
-                    If String.IsNullOrEmpty(temptime) Then
-                        workingfiledetails.filedetails_video.duration = ""
-                    Else
-                        Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
-                        workingfiledetails.filedetails_video.duration = Convert.ToString(seconds)
-                    End If
-                ElseIf playlist.Count > 1 Then
-                    Dim totalmins As Integer = 0
-                    For f = 0 To playlist.Count - 1
-                        Dim M2 As mediainfo
-                        M2 = New mediainfo
-                        M2.Open(playlist(f))
-                        Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
-                        'Dim tempint As Integer
-                        If temptime <> Nothing Then
-                            Try
-                                '1h 24mn 48s 546ms
-                                'Dim hours As Integer = 0
-                                'Dim minutes As Integer = 0
-                                'Dim tempstring2 As String = temptime
-                                'tempint = tempstring2.IndexOf("h")
-                                'If tempint <> -1 Then
-                                    'hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                    'tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                                    'tempstring2 = Trim(tempstring2)
-                                'End If
-                                'tempint = tempstring2.IndexOf("mn")
-                                'If tempint <> -1 Then
-                                    'minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                'End If
-                                'If hours <> 0 Then
-                                    'hours = hours * 60
-                                'End If
-                                'minutes = minutes + hours
-                                'totalmins = totalmins + minutes
-                                Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
-                                'Dim totalmins As String 
-                                totalmins = Convert.ToString(Math.Round(seconds/60))
-                            Catch
-                            End Try
-                        End If
-                    Next
-                    If String.IsNullOrEmpty(totalmins) Then
-                        workingfiledetails.filedetails_video.duration = ""
-                    Else
-                        workingfiledetails.filedetails_video.duration = totalmins & " min"
-                    End If
-                End If
-            Catch
-                workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 57)
-            End Try
-            workingfiledetails.filedetails_video.bitrate = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
-            workingfiledetails.filedetails_video.bitratemode = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
+            ''tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+            'tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            'If tempmediainfo.ToLower = "avc" Then tempmediainfo2 = "h264"
+            'If tempmediainfo = "DX50" Then tempmediainfo = "DIVX"
+            'If tempmediainfo.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then tempmediainfo = "h264"
+            'tempmediainfo2 = tempmediainfo.Replace(" ","")
 
-            workingfiledetails.filedetails_video.bitratemax = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
+            'workingfiledetails.filedetails_video.codec = tempmediainfo2
+            ''workingfiledetails.filedetails_video.formatinfo = tempmediainfo
+            ''workingfiledetails.filedetails_video.codec = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            ''If workingfiledetails.filedetails_video.codec = "DX50" Then
+            ''    workingfiledetails.filedetails_video.codec = "DIVX"
+            ''End If
+            ' ''_MPEG4/ISO/AVC
+            ''If workingfiledetails.filedetails_video.codec.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
+            ''    workingfiledetails.filedetails_video.codec = "h264"
+            ''End If
+            'workingfiledetails.filedetails_video.formatinfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+            'Dim fs(100) As String
+            'For f = 1 To 100
+            '    fs(f) = MI.Get_(StreamKind.Visual, 0, f)
+            'Next
 
-            tempmediainfo = IO.Path.GetExtension(filename) '"This is the extension of the file"
-            workingfiledetails.filedetails_video.container = tempmediainfo
-            'workingfiledetails.filedetails_video.codecid = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            'Try
+            '    If playlist.Count = 1 Then
+            '        Dim temptime As String = MI.Get_(StreamKind.Visual, 0, "Duration")
+            '        If String.IsNullOrEmpty(temptime) Then
+            '            workingfiledetails.filedetails_video.duration = ""
+            '        Else
+            '            Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
+            '            workingfiledetails.filedetails_video.duration = Convert.ToString(seconds)
+            '        End If
+            '    ElseIf playlist.Count > 1 Then
+            '        Dim totalmins As Integer = 0
+            '        For f = 0 To playlist.Count - 1
+            '            Dim M2 As mediainfo
+            '            M2 = New mediainfo
+            '            M2.Open(playlist(f))
+            '            Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
+            '            'Dim tempint As Integer
+            '            If temptime <> Nothing Then
+            '                Try
+            '                    '1h 24mn 48s 546ms
+            '                    'Dim hours As Integer = 0
+            '                    'Dim minutes As Integer = 0
+            '                    'Dim tempstring2 As String = temptime
+            '                    'tempint = tempstring2.IndexOf("h")
+            '                    'If tempint <> -1 Then
+            '                        'hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
+            '                        'tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
+            '                        'tempstring2 = Trim(tempstring2)
+            '                    'End If
+            '                    'tempint = tempstring2.IndexOf("mn")
+            '                    'If tempint <> -1 Then
+            '                        'minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
+            '                    'End If
+            '                    'If hours <> 0 Then
+            '                        'hours = hours * 60
+            '                    'End If
+            '                    'minutes = minutes + hours
+            '                    'totalmins = totalmins + minutes
+            '                    Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
+            '                    'Dim totalmins As String 
+            '                    totalmins = Convert.ToString(Math.Round(seconds/60))
+            '                Catch
+            '                End Try
+            '            End If
+            '        Next
+            '        If String.IsNullOrEmpty(totalmins) Then
+            '            workingfiledetails.filedetails_video.duration = ""
+            '        Else
+            '            workingfiledetails.filedetails_video.duration = totalmins & " min"
+            '        End If
+            '    End If
+            'Catch
+            '    workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 57)
+            'End Try
+            'workingfiledetails.filedetails_video.bitrate = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
+            'workingfiledetails.filedetails_video.bitratemode = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
 
-            workingfiledetails.filedetails_video.codecinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
-            workingfiledetails.filedetails_video.scantype = MI.Get_(StreamKind.Visual, curVS, 102)
+            'workingfiledetails.filedetails_video.bitratemax = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
+
+            'tempmediainfo = IO.Path.GetExtension(filename) '"This is the extension of the file"
+            'workingfiledetails.filedetails_video.container = tempmediainfo
+            ''workingfiledetails.filedetails_video.codecid = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+
+            'workingfiledetails.filedetails_video.codecinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
+            'workingfiledetails.filedetails_video.scantype = MI.Get_(StreamKind.Visual, curVS, 102)
+
             'Video()
             'Format                     : MPEG-4 Visual
             'Format profile             : Streaming Video@L1
@@ -2083,41 +2126,41 @@ Module Module1
             'Stream size                : 604 MiB (86%)
             'Writing library            : XviD 1.0.3 (UTC 2004-12-20)
 
-            Dim numOfAudioStreams As Integer = MI.Count_Get(StreamKind.Audio)
-            Dim curAS As Integer = 0
-            Dim addAS As Boolean = False
+            'Dim numOfAudioStreams As Integer = MI.Count_Get(StreamKind.Audio)
+            'Dim curAS As Integer = 0
+            'Dim addAS As Boolean = False
 
-            'get audio data
-            If numOfAudioStreams > 0 Then
-                While curAS < numOfAudioStreams
-                    Dim audio As New medianfo_audio
-                    audio.language = getlangcode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
-                    If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
-                        audio.codec = "MP3"
-                    Else
-                        audio.codec = MI.Get_(StreamKind.Audio, curAS, "Format")
-                    End If
-                    If audio.codec = "AC-3" Then
-                        audio.codec = "AC3"
-                    End If
-                    audio.channels = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
-                    audio.bitrate = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
-                    workingfiledetails.filedetails_audio.Add(audio)
-                    curAS += 1
-                End While
-            End If
+            ''get audio data
+            'If numOfAudioStreams > 0 Then
+            '    While curAS < numOfAudioStreams
+            '        Dim audio As New medianfo_audio
+            '        audio.language = getlangcode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
+            '        If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
+            '            audio.codec = "MP3"
+            '        Else
+            '            audio.codec = MI.Get_(StreamKind.Audio, curAS, "Format")
+            '        End If
+            '        If audio.codec = "AC-3" Then
+            '            audio.codec = "AC3"
+            '        End If
+            '        audio.channels = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
+            '        audio.bitrate = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
+            '        workingfiledetails.filedetails_audio.Add(audio)
+            '        curAS += 1
+            '    End While
+            'End If
 
 
-            Dim numOfSubtitleStreams As Integer = MI.Count_Get(StreamKind.Text)
-            Dim curSS As Integer = 0
-            If numOfSubtitleStreams > 0 Then
-                While curSS < numOfSubtitleStreams
-                    Dim sublanguage As New medianfo_subtitles
-                    sublanguage.language = getlangcode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
-                    workingfiledetails.filedetails_subtitles.Add(sublanguage)
-                    curSS += 1
-                End While
-            End If
+            'Dim numOfSubtitleStreams As Integer = MI.Count_Get(StreamKind.Text)
+            'Dim curSS As Integer = 0
+            'If numOfSubtitleStreams > 0 Then
+            '    While curSS < numOfSubtitleStreams
+            '        Dim sublanguage As New medianfo_subtitles
+            '        sublanguage.language = getlangcode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
+            '        workingfiledetails.filedetails_subtitles.Add(sublanguage)
+            '        curSS += 1
+            '    End While
+            'End If
 
             Return workingfiledetails
         Catch ex As Exception
