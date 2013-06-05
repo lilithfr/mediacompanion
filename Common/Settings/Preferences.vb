@@ -1429,12 +1429,12 @@ Public Class Preferences
             Dim curAS As Integer = 0
             Dim addAS As Boolean = False
             Dim tmpaud As String = ""
-            Dim audio As New AudioDetails
+            
 
             'get audio data
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
-
+                    Dim audio As New AudioDetails
                     audio.Language.Value = MI.Get_(StreamKind.Audio, curAS, "Language")
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.Codec.Value = "MP3"
@@ -1466,6 +1466,7 @@ Public Class Preferences
                     curAS += 1
                 End While
             Else
+                Dim audio As New AudioDetails
                 audio.Codec.Value = ""
                 audio.Channels.Value = ""
                 audio.Bitrate.Value = ""
