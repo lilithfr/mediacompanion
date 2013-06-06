@@ -1055,6 +1055,7 @@ Public Class Movie
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
             _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
         Else
+            tmdb.Imdb = _possibleImdb
             _scrapedMovie.fullmoviebody.movieset = "-None-"
             If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                 _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name

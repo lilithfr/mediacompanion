@@ -1452,10 +1452,12 @@ Public Class Preferences
                     End If
                     tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                     If audio.Codec.Value = "DTS" Then
-                        If tmpaud = "dts ma / core" Then
+                        If tmpaud.ToLower = "dts ma / core" Then
                             audio.Codec.Value = "dtshd_ma"
-                        ElseIf tmpaud = "dts hra / core" Then
+                        ElseIf tmpaud.ToLower = "dts hra / core" Then
                             audio.Codec.Value = "dtshd_hra"
+                        ElseIf tmpaud.ToLower = "dts es" Then
+                            audio.Codec.Value = "dts_es"
                         Else
                             audio.Codec.Value = "DTS"
                         End If
