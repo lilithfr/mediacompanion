@@ -36,7 +36,7 @@ Public Class MediaInfoExport
     'RegexOptions.IgnoreCase to make the regex case insensitive, and RegexOptions.Singleline causes the dot to match newlines
     Dim regexBlockOption As RegexOptions = RegexOptions.IgnoreCase Or RegexOptions.Singleline
 
-    Private Delegate Function getTagsDelegate(ByVal text As String, ByVal mediaCollection As Object, ByVal showCounter As Integer, ByVal imagepath As String, ByVal moviecount As Integer) As String
+    Private Delegate Function getTagsDelegate(ByVal text As String, ByVal mediaCollection As Object, ByVal showCounter As Integer, ByVal imagepath As String, ByVal moviecount As Integer, ByVal filetype As String) As String
 
     Public Sub addTemplates(Optional ByRef mediaDropdown As SortedList(Of String, String) = Nothing)
         Dim dir_info As New DirectoryInfo(templateFolder)
@@ -72,8 +72,6 @@ Public Class MediaInfoExport
         Dim templateBody As String = workingTemplate.body
         Dim isMovies As Boolean = [Enum].Equals(workingTemplate.type, mediaType.Movie)
         Dim getTags As getTagsDelegate
-       ' Dim Extn As String = Utilities.GetExtension(savePath)
-        'Dim Basiccsvxml As Boolean = If(workingTemplate.title = "basic movie list" and Extn = "csv",True,False)
         Dim mediaCollection
         If isMovies Then
             getTags = AddressOf getTagsMovies
@@ -92,6 +90,7 @@ Public Class MediaInfoExport
         Dim bodyTagPresent As Boolean = False
         Dim mediaTagpresent As Boolean = False
         Dim pathstring As String = ""
+        Dim filetype As String = Path.GetExtension(savePath).TrimStart("."c)
         Dim displayLineTitle As String = "Exporting Media Info"
         Dim displayLineRemaining As String = ""
         Dim callingApp As String = My.Application.Info.AssemblyName
@@ -109,42 +108,38 @@ Public Class MediaInfoExport
             frmMediaInfoExport.Show()
         End If
 
-        'If Not Basiccsvxml Then
-            Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
-            If M.Success Then
-                headerTagPresent = True
-                tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count)
-                tempDoc = String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
-            End If
+        Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
+        If M.Success Then
+            headerTagPresent = True
+            tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count, filetype)
+            tempDoc = String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
+        End If
 
-            If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
-                pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
-                Dim fso As New IO.DirectoryInfo(pathstring)
-                If fso.Exists = False Then
-                    IO.Directory.CreateDirectory(pathstring)
-                End If
+        If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
+            pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
+            Dim fso As New IO.DirectoryInfo(pathstring)
+            If fso.Exists = False Then
+                IO.Directory.CreateDirectory(pathstring)
             End If
+        End If
 
-            M = Regex.Match(workingTemplate.body, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
-            If M.Success Then
-                bodyTagPresent = True
-                tempDoc &= "<body>"
-                tempstring = M.Groups("body").Value
-            Else
-                tempstring = workingTemplate.body
-            End If
+        M = Regex.Match(workingTemplate.body, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
+        If M.Success Then
+            bodyTagPresent = True
+            tempDoc &= "<body>"
+            tempstring = M.Groups("body").Value
+        Else
+            tempstring = workingTemplate.body
+        End If
 
-            M = Regex.Match(tempstring, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
-            If M.Success Then
-                mediaTagpresent = True
-                tempDoc &= tempstring.Substring(0, M.Index).Trim
-                tempBody = tempstring.Substring(M.Index + M.Length)
-                tempstring = M.Groups("mediaitem").Value
-                Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
-            End If
-        'Else
-        '    tempDoc = String.Format("XBMC Media Companion" & vbCrLf & "CSV Output" & vbCrLf & vbCrLf)
-        'End If
+        M = Regex.Match(tempstring, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
+        If M.Success Then
+            mediaTagpresent = True
+            tempDoc &= tempstring.Substring(0, M.Index).Trim
+            tempBody = tempstring.Substring(M.Index + M.Length)
+            tempstring = M.Groups("mediaitem").Value
+            Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
+        End If
 
         For Each mediaItem In mediaCollection
             If frmMediaInfoExport.IsDisposed OrElse (limit <> 0 And counter >= limit) Then Exit For
@@ -161,12 +156,7 @@ Public Class MediaInfoExport
                 frmMediaInfoExport.Label4.Refresh()
                 Application.DoEvents()
             End If
-            'If Basiccsvxml Then
-            '    Dim basicstring As String = "<<movietitleandyear>>"
-            '    tempDoc &= getTags(basicstring, mediaItem, counter, pathstring, mediaCollection.Count) & vbCrLf 
-            'Else
-                tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count)
-            'End If
+            tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count, filetype)
             counter += 1
         Next
 
@@ -205,7 +195,7 @@ Public Class MediaInfoExport
         End If
     End Sub
 
-    Private Function getTagsMovies(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer)
+    Private Function getTagsMovies(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer, ByVal filetype As String)
         Dim tokenCollection As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCollection = tokenRegExp.Matches(text)
@@ -249,7 +239,6 @@ Public Class MediaInfoExport
                             If tokenInstr(1).StartsWith("article") Then strNFOprop = M.Groups("article").Value.Trim
                         End If
                     End If
-                    strNFOprop = Security.SecurityElement.Escape(strNFOprop)
 
                 Case "movieyear"
                     strNFOprop = If(movie.year <> Nothing, movie.year, "0000")
@@ -264,7 +253,7 @@ Public Class MediaInfoExport
                     strNFOprop = If(movie.runtime <> Nothing, movie.runtime, "")
 
                 Case "outline"
-                    strNFOprop = If(movie.outline <> Nothing, Security.SecurityElement.Escape(movie.outline), "")
+                    strNFOprop = If(movie.outline <> Nothing, movie.outline, "")
 
                 Case "fullpathandfilename"
                     strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
@@ -275,7 +264,7 @@ Public Class MediaInfoExport
                     newplotdetails = mediaExportNfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
                         If tokenInstr(0) = "fullplot" Then
-                            strNFOprop = Security.SecurityElement.Escape(newplotdetails.fullmoviebody.plot)
+                            strNFOprop = newplotdetails.fullmoviebody.plot
                         End If
                         If tokenInstr(0) = "director" Then
                             strNFOprop = newplotdetails.fullmoviebody.director
@@ -471,9 +460,9 @@ Public Class MediaInfoExport
                                     Case "top250"
                                         strNFOprop = newplotdetails.fullmoviebody.top250
                                     Case "outline"
-                                        strNFOprop = Security.SecurityElement.Escape(newplotdetails.fullmoviebody.outline)
+                                        strNFOprop = newplotdetails.fullmoviebody.outline
                                     Case "plot"
-                                        strNFOprop = Security.SecurityElement.Escape(newplotdetails.fullmoviebody.plot)
+                                        strNFOprop = newplotdetails.fullmoviebody.plot
                                     Case "tagline"
                                         strNFOprop = newplotdetails.fullmoviebody.tagline
                                     Case "country"
@@ -525,7 +514,15 @@ Public Class MediaInfoExport
 
             End Select
             Try
-                strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                Select Case filetype
+                    Case "xml"
+                        strNFOprop = Security.SecurityElement.Escape(strNFOprop)    'this may be applicable to HTML too? - Huey
+                    Case "csv"
+                        strNFOprop = strNFOprop.Replace(",", "")
+                        strNFOprop = strNFOprop.Replace(Chr(34), "'")
+                    Case Else
+                        strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                End Select
                 text = text.Replace(token.Value, strNFOprop)
             Catch
                 text = text.Replace(token.Value, "")
@@ -535,7 +532,7 @@ Public Class MediaInfoExport
         Return text
     End Function
 
-    Private Function getTagsTV(ByVal text As String, ByVal tvShow As Media_Companion.TvShow, ByVal showCounter As Integer, ByVal imagepath As String, ByVal showcount As Integer)
+    Private Function getTagsTV(ByVal text As String, ByVal tvShow As Media_Companion.TvShow, ByVal showCounter As Integer, ByVal imagepath As String, ByVal showcount As Integer, ByVal filetype As String)
         Dim inclShow As Boolean = False
         If imagepath.Equals("!HEADER!") Then    'A hack to process the header
             inclShow = True
