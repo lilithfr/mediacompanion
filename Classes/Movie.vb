@@ -1023,7 +1023,6 @@ Public Class Movie
 
                     If String.IsNullOrEmpty(_possibleImdb) Then
                         _possibleImdb = _scrapedMovie.fullmoviebody.imdbid
-                        tmdb.Imdb = PossibleImdb
                     End If
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
@@ -1035,12 +1034,6 @@ Public Class Movie
         If _scrapedMovie.fullmoviebody.plot      = ""      Then _scrapedMovie.fullmoviebody.plot      = _scrapedMovie.fullmoviebody.outline     ' If plot is empty, use outline
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
         If _scrapedMovie.fullmoviebody.top250    = Nothing Then _scrapedMovie.fullmoviebody.top250    = "0"
-
-        _scrapedMovie.fullmoviebody.movieset = "-None-"
-
-        If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-            _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
-        End If
 
         ' Assign certificate
         Dim done As Boolean = False
@@ -1060,6 +1053,12 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.source    = _previousCache.source
             _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
+            _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
+        Else
+            _scrapedMovie.fullmoviebody.movieset = "-None-"
+            If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+            End If
         End If
 
     End Sub
@@ -2120,13 +2119,11 @@ Public Class Movie
     
     Public Sub RescrapeSpecific(rl As RescrapeList)
 
-        Rescrape=True
+        Rescrape = True
         _rescrapedMovie = New FullMovieDetails
         
         'Loads previously scraped details from NFO into _scrapedMovie
         LoadNFO
-
-        IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
 
         If Cancelled() Then Exit Sub
 
@@ -2228,11 +2225,9 @@ Public Class Movie
             If rl.tmdb_set_name Then
                 Try
                     _rescrapedMovie.fullmoviebody.movieset = "-None-"
-
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                         _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
                     End If
-
                     UpdateProperty(_rescrapedMovie.fullmoviebody.movieset, _scrapedMovie.fullmoviebody.movieset)
                 Catch
                 End Try
