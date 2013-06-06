@@ -567,7 +567,7 @@ Public Class Movie
 
         Dim titleDir As String = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
 
-        If fileInfo.Extension.ToLower = ".vob" Then   'Check if DVD Structure
+        If fileInfo.Extension.ToLower = ".vob" Then  'Check if DVD Structure
             If IO.File.Exists(titleDir & "video_ts.ifo") Then
                 Return False
             End If
@@ -588,6 +588,27 @@ Public Class Movie
                     Return Not Utilities.findFileOfType(fileInfo.FullName, ".nfo")
                 End If
                 log &= "Part number not found - Assuming just the one part!"
+                'Test if matching nfo is present
+                Dim movieNfoFilevob As String = fileInfo.FullName
+                If Utilities.findFileOfType(movieNfoFilevob, ".nfo",Preferences.basicsavemode) Then
+                    Try
+                        Dim filechck As StreamReader = File.OpenText(movieNfoFilevob)
+                        Dim tempstring As String
+                        Do
+                            tempstring = filechck.ReadLine
+                            If tempstring = Nothing Then Exit Do
+                            If tempstring.IndexOf("<movie>") <> -1 Then
+                                log &= " - valid MC .nfo found - scrape skipped!"
+                                Return False
+                            End If
+                        Loop Until filechck.EndOfStream
+                        filechck.Close()
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+                    End Try
+                End If
                 Return True
             End If
             log &= "??? File extension missing!"
