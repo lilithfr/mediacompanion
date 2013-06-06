@@ -1447,9 +1447,8 @@ Public Class Preferences
                         End Try
                         audio.Codec.Value = tempmediainfo
                     End If
-                    If audio.Codec.Value = "AC-3" Then
-                        audio.Codec.Value = "AC3"
-                    End If
+                    If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "ac3"
+                    If audio.Codec.Value = "TrueHD / AC-3" Then audio.Codec.Value = "truehd"
                     tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                     If audio.Codec.Value = "DTS" Then
                         If tmpaud.ToLower = "dts ma / core" Then
