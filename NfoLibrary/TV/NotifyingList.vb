@@ -82,9 +82,57 @@ Public Class NotifyingList(Of T)
         Return List.GetEnumerator()
     End Function
 
+    Public Function GetSortedShow() As List(Of T)
+        List.Sort(New TvShowComparer)
+        Return List
+    End Function
+
+    Public Function GetSortedEpisodes() As List(Of T)
+        List.Sort(New TVSeasonEpisodeComparer)
+        Return List
+    End Function
+
     Public Event PropertyChanged(sender As Object, e As System.ComponentModel.PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
     Private Sub NotifyPropertyChanged(ByVal info As String)
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(info))
     End Sub
 
+End Class
+
+Public Class TvShowComparer
+    Implements IComparer(Of TvShow)
+
+    Public Function Compare1(show1 As TvShow, show2 As TvShow) _
+                        As Integer Implements System.Collections.Generic.IComparer(Of TvShow).Compare
+        Return show1.TitleAndYear.CompareTo(show2.TitleAndYear)
+    End Function
+End Class
+
+Public Class TVSeasonEpisodeComparer
+    Implements IComparer(Of String)
+    Private Shared Function ParseSeasonEpisode(ByVal item As String, ByVal type As Boolean) As Integer
+        Dim hyphenIndex As Integer = item.IndexOf("-")
+        ' Normally do some error checking in case hyphenIndex==-1
+        Dim firstPart As String
+        If type = True Then
+            firstPart = item.Substring(0, hyphenIndex)
+        Else
+            firstPart = item.Substring(hyphenIndex + 1)
+        End If
+        Return Integer.Parse(firstPart)
+    End Function
+
+    Public Function Compare(ByVal first As String, ByVal second As String) _
+                As Integer Implements IComparer(Of String).Compare
+        ' In real code you would probably add nullity checks
+        Dim firstSeason As Integer = ParseSeasonEpisode(first, True)
+        Dim secondSeason As Integer = ParseSeasonEpisode(second, True)
+        Dim sameSeason As Integer = firstSeason.CompareTo(secondSeason)
+        If sameSeason = 0 Then
+            Dim firstEpisode As Integer = ParseSeasonEpisode(first, False)
+            Dim secondEpisode As Integer = ParseSeasonEpisode(second, False)
+            sameSeason = firstEpisode.CompareTo(secondEpisode)
+        End If
+        Return sameSeason
+    End Function
 End Class

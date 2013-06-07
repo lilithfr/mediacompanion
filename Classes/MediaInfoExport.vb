@@ -78,7 +78,7 @@ Public Class MediaInfoExport
             mediaCollection = TryCast(CObj(media), List(Of ComboList))
         Else
             getTags = AddressOf getTagsTV
-            mediaCollection = TryCast(CObj(media), NotifyingList(Of TvShow))
+            mediaCollection = TryCast(CObj(media), NotifyingList(Of TvShow)).GetSortedShow()
         End If
 
         Dim tempstring As String = ""
@@ -172,15 +172,9 @@ Public Class MediaInfoExport
                     cssWriter.Write(workingTemplate.css)
                     cssWriter.Dispose()
                 End If
-                'If Not Basiccsvxml Then
-                    Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
-                    docWriter.Write(tempDoc)
-                    docWriter.Close()
-                'Else
-                '    Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
-                '    docWriter.Write(tempDoc)
-                '    docWriter.Close()
-                'End If
+                Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
+                docWriter.Write(tempDoc)
+                docWriter.Close()
             Catch ex As Exception
                 MsgBox(ex.ToString)
             Finally
