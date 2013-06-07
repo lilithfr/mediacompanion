@@ -47,6 +47,8 @@ Public Class MediaInfo_Stream_Video
                         Return "RV"
 
                     Case "mpeg video", "mpeg2video"
+                        Dim ver As String = GetProperty("Format version")
+                        If ver.Contains("2") Then Return "MPEG2VIDEO"
                         Return "MPEG"
 
                     Case "wmv2"

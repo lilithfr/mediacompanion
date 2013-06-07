@@ -554,7 +554,9 @@
     <Content Include="Resources\video_flags\media_audio_dtshd_ma.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\video_flags\media_audio_dts_es.png" />
+    <Content Include="Resources\video_flags\media_audio_dts_es.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\video_flags\media_audio_eac3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -657,7 +659,13 @@
     <Content Include="Resources\video_flags\media_codec_mpeg1codec.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\video_flags\media_codec_mpeg1video.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\video_flags\media_codec_mpeg2codec.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\video_flags\media_codec_mpeg2video.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_mpegvideo.png">
@@ -679,6 +687,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_xvid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\video_flags\media_mpaa_general.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_mpaa_nc17.png">

@@ -1350,6 +1350,10 @@ Public Class Preferences
 
             'Try
             tempmediainfo = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Format)
+            If tempmediainfo.ToLower = "mpeg video" Then
+                Dim Temp1 As String = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).FormatID)
+                If Temp1 <> "" Then tempmediainfo = Temp1.ToLower
+            End If
             'Catch
             '    tempmediainfo = ""
             'End Try
@@ -1362,10 +1366,10 @@ Public Class Preferences
             workingfiledetails.filedetails_video.Codec.Value = tempmediainfo
 
             workingfiledetails.filedetails_video.FormatInfo.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).CodecID)  'tempmediainfo 
-            Dim fs(100) As String
-            For f = 1 To 100
-                fs(f) = MI.Get_(StreamKind.Visual, 0, f)
-            Next
+            'Dim fs(100) As String
+            'For f = 1 To 100
+            '    fs(f) = MI.Get_(StreamKind.Visual, 0, f)
+            'Next
 
             Try
                 If playlist.Count = 1 Then
@@ -1463,6 +1467,11 @@ Public Class Preferences
                     End If
                     audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
                     audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
+                    If audio.Bitrate.Value = "" Then
+                        Dim tmpaud1 As String = ""
+                        tmpaud1 = MI.Get_ (StreamKind.Audio, curAS, "BitRate_Maximum/String")
+                        If tmpaud1 <> "" Then audio.Bitrate.Value = tmpaud1
+                    End If
                     workingfiledetails.filedetails_audio.Add(audio)
                     curAS += 1
                 End While
