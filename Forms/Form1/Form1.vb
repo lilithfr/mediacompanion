@@ -2324,7 +2324,10 @@ Public Class Form1
         If FullFileContent.ToLower <> "error" And FullFileContent.ToLower <> "<results></results>" Then
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
-            If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
+            If Teste = True Then
+                Dim newFilename As String = doRename(newMovieFoundFilename)
+                mov_DBScrapedAdd(newFilename)
+            End If
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             'UpdateFilteredList
             If messbox.Visible = True Then messbox.Close()
@@ -2338,6 +2341,108 @@ Public Class Form1
             End If
         End If
     End Sub
+
+    Private Function doRename(filename As String) As String
+        Dim newname As String = filename
+        If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not newname.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
+        '    'ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
+            Dim thismovie As New Movie
+            Dim ExtensionPosition As Integer = newname.LastIndexOf(".")
+            Dim nfoFilename As String = newname.Remove(ExtensionPosition, (newname.Length - ExtensionPosition))
+            nfoFilename &= ".nfo"
+            thismovie = oMovies.LoadMovie(nfoFilename, False)
+            newname = fileRename(thismovie.ScrapedMovie.fullmoviebody, thismovie)
+        End If
+        Return newname
+    End Function
+
+    Public Function fileRename(ByVal movieDetails As str_BasicMovieNFO, ByRef movieFileInfo As Movie) As String
+        Dim log As String = ""
+        Dim newpath As String = movieFileInfo.NfoPath
+        Dim mediaFile As String = movieFileInfo.mediapathandfilename
+        Dim movieStackList As New List(Of String)(New String() {mediaFile})
+        Dim stackName As String = mediaFile
+        Dim isStack As Boolean = False
+        Dim isFirstPart As Boolean = True
+        Dim nextStackPart As String = ""
+        Dim stackdesignator As String = ""
+        Dim newextension As String = IO.Path.GetExtension(mediaFile)
+        Dim newfilename As String = Preferences.MovieRenameTemplate
+        Dim targetMovieFile As String = ""
+        Dim targetNfoFile As String = ""
+        Dim aFileExists As Boolean = False
+        Dim RenamedBaseName As String = ""
+        Try
+            'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
+            newfilename = newfilename.Replace("%T", movieDetails.title.SafeTrim)  'replaces %T with movie title
+            newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
+            newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
+            newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
+            newfilename = newfilename.Replace("%R", movieDetails.rating)        'replaces %R with rating 
+            newfilename = newfilename.Replace("%L", movieDetails.runtime)       'replaces %L with runtime (length)
+            newfilename = newfilename.Replace("%S", movieDetails.source)        'replaces %S with movie source
+            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)      'removes chars that can't be in a filename
+
+            'designate the new main movie file (without extension) and test the new filenames do not already exist
+            targetMovieFile = newpath & newfilename
+            targetNfoFile = targetMovieFile
+            If Utilities.testForFileByName(targetMovieFile, newextension) Then
+                aFileExists = True
+            Else
+                'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
+                Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
+                    If isFirstPart Then
+                        isStack = True                    'this media file has already been added to the list, but check for existing file with new name
+                        Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                        targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                        If Utilities.testForFileByName(targetMovieFile, newextension) Then
+                            aFileExists = True
+                            Exit Do
+                        End If
+                        If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                    Else
+                        movieStackList.Add(mediaFile)
+                    End If
+                    stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
+                    mediaFile = stackName
+                Loop
+            End If
+
+            If aFileExists = False Then         'if none of the possible renamed files already exist then we rename found media files
+                Dim logRename As String = ""    'used to build up a string of the renamed files for the log
+                movieStackList.Sort()           'we're sure hoping the originals were labelled correctly, ie only incremental numbers changing!
+                For i = 0 To movieStackList.Count - 1
+                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
+                    File.Move(movieStackList(i), newpath & changename)
+                    logRename &= If(i, " and ", "") & changename
+                Next
+                scraperLog &= "Renamed Movie File to " & logRename & vbCrLf
+
+                For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
+                    If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile)) Then
+                        File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile), targetMovieFile & anciliaryFile)
+                        scraperLog &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
+                    End If
+                Next
+
+                'update the new movie structure with the new data
+                Return targetMovieFile & newextension 'this is the new full path & filname to the rename media file
+
+                RenamedBaseName = targetNfoFile
+
+        '        movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
+       '         movieFileInfo.Title = newfilename                                   'new title
+            Else
+                scraperLog &= String.Format("A file exists with the target filename of '{0}' - RENAME SKIPPED{1}", newfilename, vbCrLf)
+                Return targetMovieFile & newextension
+            End If
+        Catch ex As Exception
+            scraperLog &= "!!!Rename Movie File FAILED !!!" & vbCrLf
+        End Try
+        Return movieFileInfo.mediapathandfilename
+    End Function
+
+
     Private Sub mov_DBScrapedAdd(ByVal Filename As String)
         Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
         Dim nfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))

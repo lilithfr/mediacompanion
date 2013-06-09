@@ -585,14 +585,14 @@ Public Class Movies
     End Function
 
 
-    Public Function LoadMovie(fullpathandfilename As String) As Movie
+    Public Function LoadMovie(fullpathandfilename As String, Optional ByVal Cacheupdate As Boolean = True) As Movie
 
 '       Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename,True),Me)
         Dim movie = New Movie(Me,fullpathandfilename)
 
         If IsNothing(movie) Then Return Nothing
         
-        movie.LoadNFO
+        movie.LoadNFO(Cacheupdate)
 
         Return movie
     End Function
