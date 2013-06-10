@@ -1859,6 +1859,9 @@ Partial Public Class Form1
                             If tempepisode = Nothing Or tempepisode = "Error" Then
                                 scrapedok = False
                                 Preferences.tvScraperLog &= "!!! WARNING: This episode could not be found on TVDB" & vbCrLf
+                            ElseIf tempepisode.Contains("Could not connect") Then     'If TVDB unavailable, advise user to try again later
+                                scrapedok = False
+                                Preferences.tvScraperLog &= "!!! Issue at TheTVDb, Episode could not be retrieve. Try again later" & vbCrLf
                             End If
                             If scrapedok = True Then
                                 progresstext &= "OK."

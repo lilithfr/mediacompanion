@@ -13122,6 +13122,7 @@ Public Class Form1
         episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
 
         xmlfile = Utilities.DownloadTextFiles(episodeurl)
+        If xmlfile.Contains("Could not connect") Then Return xmlfile               ' Added check if TVDB is unavailable.
         Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
         If xmlOK Then
             episodestring = "<episodedetails>"
