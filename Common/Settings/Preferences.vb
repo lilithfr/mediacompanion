@@ -181,6 +181,8 @@ Public Class Preferences
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
+    Public Shared XbmcTmdbRenameMovie As Boolean
+    Public Shared XbmcTmdbActorDL As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared OfflineDVDTitle As String
     Public Shared MovieManualRename As Boolean
@@ -321,6 +323,8 @@ Public Class Preferences
         'Movies
         movies_useXBMC_Scraper = False
         XBMC_Scraper = "tmdb"
+        XbmcTmdbRenameMovie = False
+        XbmcTmdbActorDL = False
         moviedefaultlist = 0
         moviesortorder = 0
         '      movieinvertorder = 0
@@ -627,15 +631,17 @@ Public Class Preferences
         root.AppendChild(doc, "basicsavemode", basicsavemode)                      'chkbx_basicsave
         root.AppendChild(doc, "namemode", namemode)                           'cbxNameMode
         root.AppendChild(doc, "usetransparency", usetransparency)                    'set from frmOptions - obsolete
-        root.AppendChild(doc, "transparencyvalue", transparencyvalue)                  'set from frmOptions - obsolete
-        root.AppendChild(doc, "disablelogs", disablelogfiles)                    'CheckBox16
+        root.AppendChild(doc, "transparencyvalue", transparencyvalue)           'set from frmOptions - obsolete
+        root.AppendChild(doc, "disablelogs", disablelogfiles)                   'CheckBox16
         root.AppendChild(doc, "savefanart", savefanart)                         'CheckBox13
-        root.AppendChild(doc, "fanartjpg", fanartjpg)                          'fanartjpg
-        root.AppendChild(doc, "roundminutes", roundminutes)                       'set from frmOptions - obsolete
-        root.AppendChild(doc, "ignoreparts", movieignorepart)                    'cbxCleanFilenameIgnorePart
-        root.AppendChild(doc, "cleantags", moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
-        root.AppendChild(doc, "moviesUseXBMCScraper", movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
-        root.AppendChild(doc, "xbmcscraper", XBMC_Scraper)                       'RadioButton52
+        root.AppendChild(doc, "fanartjpg", fanartjpg)                           'fanartjpg
+        root.AppendChild(doc, "roundminutes", roundminutes)                     'set from frmOptions - obsolete
+        root.AppendChild(doc, "ignoreparts", movieignorepart)                   'cbxCleanFilenameIgnorePart
+        root.AppendChild(doc, "cleantags", moviecleanTags)                      'btnCleanFilenameAdd,btnCleanFilenameRemove
+        root.AppendChild(doc, "moviesUseXBMCScraper", movies_useXBMC_Scraper)   'CheckBox_Use_XBMC_Scraper
+        root.AppendChild(doc, "xbmcscraper", XBMC_Scraper)                      'RadioButton52
+        root.AppendChild(doc, "XbmcTmdbRenameMovie", XbmcTmdbRenameMovie)       'cbXbmcTmdbRename
+        root.AppendChild(doc, "XbmcTmdbActorDL", XbmcTmdbActorDL)               'cbXbmcTmdbActorDL
         root.AppendChild(doc, "scrapefullcert", scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext", OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
         root.AppendChild(doc, "moviemanualrename", MovieManualRename)                  'MovieManualRename
@@ -843,6 +849,8 @@ Public Class Preferences
                         End If
 
                     Case "xbmcscraper" : XBMC_Scraper = thisresult.InnerText
+                    Case "XbmcTmdbRenameMovie" : XbmcTmdbRenameMovie = thisresult.InnerText 
+                    Case "XbmcTmdbActorDL" : XbmcTmdbActorDL = thisresult.InnerText
                     Case "seasonall" : seasonall = thisresult.InnerText
                     Case "splitcontainer1" : splt1 = Convert.ToInt32(thisresult.InnerText)
                     Case "splitcontainer2" : splt2 = Convert.ToInt32(thisresult.InnerText)

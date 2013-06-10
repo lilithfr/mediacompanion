@@ -2325,7 +2325,10 @@ Public Class Form1
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then
-                Dim newFilename As String = doRename(newMovieFoundFilename)
+                Dim newFilename As String = newMovieFoundFilename 
+                If Preferences.XbmcTmdbRenameMovie Then
+                    newFilename = doRename(newMovieFoundFilename)
+                End If
                 mov_DBScrapedAdd(newFilename)
             End If
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
@@ -14617,12 +14620,14 @@ Public Class Form1
         cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         cbMovCreateFolderjpg.CheckState         = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
         cbMovRootFolderCheck.CheckState         = If(Preferences.movrootfoldercheck, CheckState.Checked, CheckState.Unchecked)
-        cbMovieBasicSave.CheckState              = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
+        cbMovieBasicSave.CheckState             = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
         cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
         cbxCleanFilenameIgnorePart.CheckState   = If(Preferences.movieignorepart, CheckState.Checked, CheckState.Unchecked)
         ScrapeFullCertCheckBox.CheckState       = If(Preferences.scrapefullcert, CheckState.Checked, CheckState.Unchecked)
         MovieRenameCheckBox.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
+        cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
+        cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
  
         'saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
         saveactorchkbx.CheckState = CheckState.Unchecked
@@ -21012,9 +21017,9 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_TMDB_Fanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TMDB_Fanart.CheckedChanged
+    Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbFanart.CheckedChanged
         Try
-            If CheckBox_XBMC_Scraper_TMDB_Fanart.Checked = True Then
+            If cbXbmcTmdbFanart.Checked = True Then
                 Save_XBMC_TMDB_Scraper_Config("fanart", "true")
             Else
                 Save_XBMC_TMDB_Scraper_Config("fanart", "false")
@@ -21024,6 +21029,43 @@ Public Class Form1
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    Private Sub cbXbmcTmdbRename_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbRename.CheckedChanged
+        Try
+            If cbXbmcTmdbRename.CheckState = CheckState.Checked Then
+                If Preferences.MovieRenameEnable Then
+                    Preferences.XbmcTmdbRenameMovie = True
+                Else
+                    MsgBox("Please also enable 'Rename Movie'")
+                    cbXbmcTmdbRename.CheckState = CheckState.Unchecked 
+                End If
+            Else
+                Preferences.XbmcTmdbRenameMovie = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch
+            
+        End Try
+    End Sub
+
+    Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
+        Try
+            If cbXbmcTmdbActorDL.CheckState = CheckState.Checked Then
+                If Preferences.actorseasy Then
+                    Preferences.XbmcTmdbActorDL = True
+                Else
+                    MsgBox("Downloading of actors must also be enabled")
+                    cbXbmcTmdbActorDL.CheckState = CheckState.Unchecked 
+                End If
+            Else
+                Preferences.XbmcTmdbActorDL = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch
+
         End Try
     End Sub
 
@@ -21899,7 +21941,12 @@ Public Class Form1
 
     Private Sub MovieRenameCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameCheckBox.CheckedChanged
         Try
-            Preferences.MovieRenameEnable = MovieRenameCheckBox.Checked
+            If MovieRenameCheckBox.CheckState = CheckState.Checked Then
+                Preferences.MovieRenameEnable = True
+            Else
+                Preferences.MovieRenameEnable = False
+                'Preferences.XbmcTmdbRenameMovie = False
+            End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -25064,6 +25111,7 @@ End Sub
             End Try
         End If
     End Sub
+
 
 
 

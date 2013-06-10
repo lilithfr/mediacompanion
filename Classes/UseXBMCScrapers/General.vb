@@ -917,7 +917,7 @@ Module General
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "fanart"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_TMDB_Fanart.Checked = Test
+                                        Form1.cbXbmcTmdbFanart.Checked = Test
                                     Case "trailerq"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
