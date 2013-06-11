@@ -2329,6 +2329,9 @@ Public Class Form1
                 If Preferences.XbmcTmdbRenameMovie Then
                     newFilename = doRename(newMovieFoundFilename)
                 End If
+                If Preferences.XbmcTmdbActorDL Then
+                    Dim aok As Boolean = XbmcTmdbActorImageSave(newFilename)
+                End If
                 mov_DBScrapedAdd(newFilename)
             End If
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
@@ -2360,6 +2363,39 @@ Public Class Form1
         Return newname
     End Function
 
+    Private Function XbmcTmdbActorImageSave(filename As String) As Boolean
+        Try
+            Dim thismovie As New Movie
+            Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
+            Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
+            nfoFilename &= ".nfo"
+            thismovie = oMovies.LoadMovie(nfoFilename, False)
+            Dim ActorPath As String = nfoFilename.Replace(IO.Path.GetFileName(nfoFilename), "") & ".actors\"
+                Dim hg As New IO.DirectoryInfo(ActorPath)
+                If Not hg.Exists Then
+                    IO.Directory.CreateDirectory(ActorPath)
+                End If
+            Dim tmdbactors As New List (Of str_MovieActors)  
+            For Each Actor In thismovie.ScrapedMovie.listactors
+                If Not String.IsNullOrEmpty(Actor.actorthumb) Then
+                    Dim actorfilename = IO.Path.Combine(ActorPath, Actor.actorName.Replace(" ", "_") & ".tbn")
+                    'SaveActorImageToCacheAndPath(Actor.actorthumb, actorfilename)
+                    'If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                    '    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                    '    Utilities.SafeDeleteFile(filename)
+                    'ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                    '    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                    'End If
+                End If
+            Next
+
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+
+    End Function
 
     Private Sub mov_DBScrapedAdd(ByVal Filename As String)
         Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
