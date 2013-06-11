@@ -2328,9 +2328,11 @@ Public Class Form1
                 Dim newFilename As String = newMovieFoundFilename 
                 If Preferences.XbmcTmdbRenameMovie Then
                     newFilename = doRename(newMovieFoundFilename)
+                    If newFilename <> newMovieFoundFilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
                 End If
                 If Preferences.XbmcTmdbActorDL Then
                     Dim aok As Boolean = XbmcTmdbActorImageSave(newFilename)
+                    If aok Then scraperLog &= "Actor images saved" & vbCrLf
                 End If
                 mov_DBScrapedAdd(newFilename)
             End If
@@ -2379,13 +2381,13 @@ Public Class Form1
             For Each Actor In thismovie.ScrapedMovie.listactors
                 If Not String.IsNullOrEmpty(Actor.actorthumb) Then
                     Dim actorfilename = IO.Path.Combine(ActorPath, Actor.actorName.Replace(" ", "_") & ".tbn")
-                    'SaveActorImageToCacheAndPath(Actor.actorthumb, actorfilename)
-                    'If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                    '    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                    '    Utilities.SafeDeleteFile(filename)
-                    'ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                    '    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                    'End If
+                    Movie.SaveActorImageToCacheAndPath(Actor.actorthumb, actorfilename)
+                    If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                        Utilities.SafeCopyFile(actorfilename, actorfilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                        Utilities.SafeDeleteFile(actorfilename)
+                    ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                        Utilities.SafeCopyFile(actorfilename, actorfilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                    End If
                 End If
             Next
 
