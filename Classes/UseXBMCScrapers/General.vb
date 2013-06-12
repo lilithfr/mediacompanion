@@ -1418,7 +1418,7 @@ Module General
 
 #Region "nfoFileFunctions"
 
-    Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String) As Boolean
+    Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String, Optional ByVal scraper As String = "") As Boolean
         Try
             Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
             Dim nfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
@@ -1442,6 +1442,12 @@ Module General
 
             If movie.fullmoviebody.movieset="" Then movie.fullmoviebody.movieset="-None-"
             If movie.fullmoviebody.top250  ="" Then movie.fullmoviebody.top250  ="0"
+
+            'if scraped by XBMC TMDB, one poster is allocated.  Move this to Frodoposter.
+            If scraper <> "" Then
+                If movie.listthumbs.Count = 1 Then movie.frodoPosterThumbs.Add(New FrodoPosterThumb("poster",movie.listthumbs(0)))
+                movie.listthumbs.Clear()
+            End If
 
             ' save to make sure additional features like saving actor thumbnails takes place
             nfoGenerator.mov_NfoSave(nfoFilename, movie, True)

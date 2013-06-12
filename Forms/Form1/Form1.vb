@@ -2323,7 +2323,7 @@ Public Class Form1
         FullFileContent = Start_XBMC_MoviesScraping(Scraper, newMovieFoundTitle, newMovieFoundFilename)
         If FullFileContent.ToLower <> "error" And FullFileContent.ToLower <> "<results></results>" Then
             scraperLog &= " - OK!" & vbCrLf
-            Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
+            Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent, Scraper)
             If Teste = True Then
                 
                 Dim newFilename As String = newMovieFoundFilename 
