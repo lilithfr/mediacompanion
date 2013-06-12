@@ -2325,11 +2325,14 @@ Public Class Form1
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then
+                
                 Dim newFilename As String = newMovieFoundFilename 
                 If Preferences.XbmcTmdbRenameMovie Then
                     newFilename = doRename(newMovieFoundFilename)
                     If newFilename <> newMovieFoundFilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
                 End If
+                Dim posters As Boolean = MoviePosterandFanartDownload(FullFileContent, newFilename)
+                If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
                 If Preferences.XbmcTmdbActorDL Then
                     Dim aok As Boolean = XbmcTmdbActorImageSave(newFilename)
                     If aok Then scraperLog &= "Actor images saved" & vbCrLf

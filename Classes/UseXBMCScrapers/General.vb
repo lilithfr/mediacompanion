@@ -676,43 +676,6 @@ Module General
         Dim SlashPosition As Integer = Filename.LastIndexOf("\")
         Dim NfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
         NfoFilename &= ".nfo"
-        'Dim ImageFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-        'ImageFilename &= ".tbn"
-        'Dim ImageFilename2 As String = Filename.Remove(SlashPosition, (Filename.Length - SlashPosition))
-        'ImageFilename2 &= "\folder.jpg"
-        'Dim ImageFilename3 As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-        'ImageFilename3 &= "-fanart.jpg"
-        'Dim myWebClient As New System.Net.WebClient()
-        'On Error Resume Next
-
-        'myWebClient.DownloadFile(MoviePosterURL, ImageFilename)
-        
-        'myWebClient.DownloadFile(MovieFanartURL, ImageFilename3)
-
-        'On Error GoTo 0
-       
-
-        ''-----------------Start Resize Fanart
-        'If Preferences.resizefanart = 2 Then
-        '    Dim FanartToBeResized As New Bitmap(ImageFilename3)
-        '    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-        '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
-        '        ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
-        '    Else
-        '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-        '    End If
-        'ElseIf Preferences.resizefanart = 3 Then
-        '    Dim FanartToBeResized As New Bitmap(ImageFilename3)
-        '    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-        '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
-        '        ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
-        '    Else
-        '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-        '    End If
-
-        'End If
-
-        ''-----------------End Resize Fanart
         Dim videotsrootpath As String = ""
         If IO.Path.GetFileName(NfoFilename).ToLower="video_ts.nfo" Then
             videotsrootpath = Utilities.RootVideoTsFolder(NfoFilename)
@@ -1645,7 +1608,7 @@ Module General
             FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
             FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
-
+            'Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
         End If
         Return FinalScrapResult
     End Function
