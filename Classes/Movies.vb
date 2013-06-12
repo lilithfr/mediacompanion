@@ -1623,20 +1623,20 @@ Public Class Movies
 
     End Sub
 
-    Function xbmcTmdbRenameMovie(ByVal filename As String) As String
+    Function xbmcTmdbRenameMovie(ByVal aMovie As Movie, ByVal filename As String) As String
         Dim NewFilenameandPath As String = filename
         Try
-            Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
-            Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
-            nfoFilename &= ".nfo"
-            Dim thismovie = New Movie(Me, nfoFilename)
-            thismovie = LoadMovie(nfoFilename, False)
+            'Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
+            'Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
+            'nfoFilename &= ".nfo"
+            'Dim thismovie = New Movie(Me, nfoFilename)
+            'thismovie = LoadMovie(nfoFilename, False)
             'thismovie.Scraped=False
 
-            AddMovieEventHandlers   ( thismovie )
-            thismovie.fileRename(thismovie.ScrapedMovie.fullmoviebody, thismovie)
-            RemoveMovieEventHandlers( thismovie )
-            NewFilenameandPath = thismovie.mediapathandfilename
+            AddMovieEventHandlers   ( aMovie )
+            aMovie.fileRename(aMovie.ScrapedMovie.fullmoviebody, aMovie)
+            RemoveMovieEventHandlers( aMovie )
+            NewFilenameandPath = aMovie.mediapathandfilename
 
         Catch ex As Exception
             Return NewFilenameandPath

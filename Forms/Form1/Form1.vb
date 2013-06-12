@@ -2325,10 +2325,15 @@ Public Class Form1
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent, Scraper)
             If Teste = True Then
-                
+
+                Dim ExtensionPosition As Integer = newMovieFoundFilename.LastIndexOf(".")
+                Dim nfoFilename As String = newMovieFoundFilename.Remove(ExtensionPosition, (newMovieFoundFilename.Length - ExtensionPosition))
+                nfoFilename &= ".nfo"
                 Dim newFilename As String = newMovieFoundFilename 
+                Dim aMovie As Movie = oMovies.LoadMovie(nfoFilename, False)
+
                 If Preferences.XbmcTmdbRenameMovie Then
-                    newFilename = doRename(newMovieFoundFilename)
+                    newFilename = doRename(aMovie, newMovieFoundFilename)
                     If newFilename <> newMovieFoundFilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
                 End If
                 Dim posters As Boolean = MoviePosterandFanartDownload(FullFileContent, newFilename)
@@ -2353,7 +2358,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Function doRename(filename As String) As String
+    Private Function doRename(ByVal aMovie As Movie, ByVal filename As String) As String
         Dim newname As String = filename
         If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not newname.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
         '    'ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
@@ -2363,7 +2368,7 @@ Public Class Form1
             'nfoFilename &= ".nfo"
             'thismovie = oMovies.LoadMovie(nfoFilename, False)
             'newname = fileRename(thismovie.ScrapedMovie.fullmoviebody, thismovie)
-            newname = oMovies.xbmcTmdbRenameMovie(filename)
+            newname = oMovies.xbmcTmdbRenameMovie(aMovie, filename)
         End If
         Return newname
     End Function
@@ -3132,12 +3137,19 @@ Public Class Form1
         End If
 
         If FullFileContent.ToLower <> "error" Then
-
-            Dim Teste As Boolean = CreateMovieNfo(movie.mediapathandfilename, FullFileContent)
+            Dim RescrapeMovieName As String = movie.mediapathandfilename 
+            Dim Teste As Boolean = CreateMovieNfo(RescrapeMovieName, FullFileContent)
             If Teste Then
-                Dim newFilename As String = movie.mediapathandfilename 
+
+                Dim ExtensionPosition As Integer = RescrapeMovieName.LastIndexOf(".")
+                Dim nfoFilename As String = RescrapeMovieName.Remove(ExtensionPosition, (RescrapeMovieName.Length - ExtensionPosition))
+                nfoFilename &= ".nfo"
+                Dim newFilename As String = RescrapeMovieName 
+                Dim aMovie As Movie = oMovies.LoadMovie(nfoFilename, False)
+
+                'Dim newFilename As String = movie.mediapathandfilename 
                 If Preferences.XbmcTmdbRenameMovie Then
-                    newFilename = doRename(movie.mediapathandfilename)
+                    newFilename = doRename(aMovie, movie.mediapathandfilename)
                     If newFilename <> movie.mediapathandfilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
                 End If
                 If Preferences.XbmcTmdbActorDL Then
