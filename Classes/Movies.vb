@@ -1626,6 +1626,7 @@ Public Class Movies
     Function xbmcTmdbRenameMovie(ByVal aMovie As Movie, ByVal filename As String) As String
         Dim NewFilenameandPath As String = filename
         Try
+            If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not filename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
             'Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
             'Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
             'nfoFilename &= ".nfo"
@@ -1638,12 +1639,31 @@ Public Class Movies
             RemoveMovieEventHandlers( aMovie )
             NewFilenameandPath = aMovie.mediapathandfilename
 
+            End If
         Catch ex As Exception
             Return NewFilenameandPath
         End Try
 
         Return NewFilenameandPath
     End Function
+
+    Function XbmcTmdbDlPosterFanart(ByVal aMovie as Movie) as Boolean
+        Try
+            If Not Preferences.scrapemovieposters then
+            Return False
+        End If
+            AddMovieEventHandlers ( aMovie )
+            aMovie.IniTmdb 
+            aMovie.DoDownloadPoster
+            aMovie.DoDownloadFanart 
+            RemoveMovieEventHandlers ( aMovie )
+
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+    End Function
+
 
     Function XbmcTmdbChangeMovieCleanup(NfoPathAndFilename As String) As Boolean
         Try

@@ -1525,7 +1525,7 @@ Public Class Movie
         DoDownloadPoster
     End Sub
  
-    Private Sub DoDownloadPoster
+    Sub DoDownloadPoster
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
         If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then

@@ -1418,18 +1418,18 @@ Module General
 
 #Region "nfoFileFunctions"
 
-    Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String, Optional ByVal scraper As String = "") As Boolean
+    Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String, Optional ByVal scraper As String = "", Optional ByRef nfoFileandPath As String = "") As Boolean
         Try
             Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
-            Dim nfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-            nfoFilename &= ".nfo"
+            nfoFileandPath = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition)) & ".nfo"
+            'nfoFilename &= ".nfo"
             Dim doc As New XmlDocument
             doc.LoadXml(FileContent)
             Dim xmlproc As XmlDeclaration
             xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
             Dim root As XmlElement = doc.DocumentElement
             doc.InsertBefore(xmlproc, root)
-            Dim output As New XmlTextWriter(nfoFilename, System.Text.Encoding.UTF8)
+            Dim output As New XmlTextWriter(nfoFileandPath, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
             doc.WriteTo(output)
             output.Close()
@@ -1438,7 +1438,7 @@ Module General
             nfoGenerator = New WorkingWithNfoFiles
 
             ' load nfo file to clean
-            Dim movie As FullMovieDetails = nfoGenerator.mov_NfoLoadFull(nfoFilename)
+            Dim movie As FullMovieDetails = nfoGenerator.mov_NfoLoadFull(nfoFileandPath)
 
             If movie.fullmoviebody.movieset="" Then movie.fullmoviebody.movieset="-None-"
             If movie.fullmoviebody.top250  ="" Then movie.fullmoviebody.top250  ="0"
@@ -1450,7 +1450,7 @@ Module General
             End If
 
             ' save to make sure additional features like saving actor thumbnails takes place
-            nfoGenerator.mov_NfoSave(nfoFilename, movie, True)
+            nfoGenerator.mov_NfoSave(nfoFileandPath, movie, True)
 
             Return True
         Catch
@@ -1610,7 +1610,7 @@ Module General
         ' 3st stage
         FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
         If FinalScrapResult.ToLower <> "error" Then
-            Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
+            'Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
             FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
             FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)

@@ -2323,26 +2323,28 @@ Public Class Form1
         FullFileContent = Start_XBMC_MoviesScraping(Scraper, newMovieFoundTitle, newMovieFoundFilename)
         If FullFileContent.ToLower <> "error" And FullFileContent.ToLower <> "<results></results>" Then
             scraperLog &= " - OK!" & vbCrLf
-            Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent, Scraper)
+            Dim nfoFileandPath As String = ""
+            Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent, Scraper, nfoFileandPath)
             If Teste = True Then
-
-                Dim ExtensionPosition As Integer = newMovieFoundFilename.LastIndexOf(".")
-                Dim nfoFilename As String = newMovieFoundFilename.Remove(ExtensionPosition, (newMovieFoundFilename.Length - ExtensionPosition))
-                nfoFilename &= ".nfo"
+                
+                'Dim ExtensionPosition As Integer = newMovieFoundFilename.LastIndexOf(".")
+                'Dim nfoFilename As String = newMovieFoundFilename.Remove(ExtensionPosition, (newMovieFoundFilename.Length - ExtensionPosition))
+                'nfoFilename &= ".nfo"
                 Dim newFilename As String = newMovieFoundFilename 
-                Dim aMovie As Movie = oMovies.LoadMovie(nfoFilename, False)
+                Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
 
                 If Preferences.XbmcTmdbRenameMovie Then
-                    newFilename = doRename(aMovie, newMovieFoundFilename)
+                    newFilename = oMovies.xbmcTmdbRenameMovie(aMovie, newMovieFoundFilename)
                     If newFilename <> newMovieFoundFilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
                 End If
-                Dim posters As Boolean = MoviePosterandFanartDownload(FullFileContent, newFilename)
+                Dim posters As Boolean = oMovies.XbmcTmdbDlPosterFanart(aMovie)
                 If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
                 If Preferences.XbmcTmdbActorDL Then
-                    Dim aok As Boolean = XbmcTmdbActorImageSave(newFilename)
+                    Dim aok As Boolean = XbmcTmdbActorImageSave(aMovie, nfoFileandPath)
                     If aok Then scraperLog &= "Actor images saved" & vbCrLf
                 End If
-                mov_DBScrapedAdd(newFilename)
+                'mov_DBScrapedAdd(newFilename)
+                aMovie.UpdateCaches()
             End If
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             'UpdateFilteredList
@@ -2358,28 +2360,28 @@ Public Class Form1
         End If
     End Sub
 
-    Private Function doRename(ByVal aMovie As Movie, ByVal filename As String) As String
-        Dim newname As String = filename
-        If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not newname.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
-        '    'ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
+    'Private Function doRename(ByVal aMovie As Movie, ByVal filename As String) As String
+    '    Dim newname As String = filename
+    '    If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not newname.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
+    '    '    'ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
+    '        'Dim thismovie As New Movie
+    '        'Dim ExtensionPosition As Integer = newname.LastIndexOf(".")
+    '        'Dim nfoFilename As String = newname.Remove(ExtensionPosition, (newname.Length - ExtensionPosition))
+    '        'nfoFilename &= ".nfo"
+    '        'thismovie = oMovies.LoadMovie(nfoFilename, False)
+    '        'newname = fileRename(thismovie.ScrapedMovie.fullmoviebody, thismovie)
+    '        newname = oMovies.xbmcTmdbRenameMovie(aMovie, filename)
+    '    End If
+    '    Return newname
+    'End Function
+
+    Private Function XbmcTmdbActorImageSave(thismovie As Movie, nfoFilename As String) As Boolean
+        Try
             'Dim thismovie As New Movie
-            'Dim ExtensionPosition As Integer = newname.LastIndexOf(".")
-            'Dim nfoFilename As String = newname.Remove(ExtensionPosition, (newname.Length - ExtensionPosition))
+            'Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
+            'Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
             'nfoFilename &= ".nfo"
             'thismovie = oMovies.LoadMovie(nfoFilename, False)
-            'newname = fileRename(thismovie.ScrapedMovie.fullmoviebody, thismovie)
-            newname = oMovies.xbmcTmdbRenameMovie(aMovie, filename)
-        End If
-        Return newname
-    End Function
-
-    Private Function XbmcTmdbActorImageSave(filename As String) As Boolean
-        Try
-            Dim thismovie As New Movie
-            Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
-            Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
-            nfoFilename &= ".nfo"
-            thismovie = oMovies.LoadMovie(nfoFilename, False)
             Dim ActorPath As String = nfoFilename.Replace(IO.Path.GetFileName(nfoFilename), "") & ".actors\"
                 Dim hg As New IO.DirectoryInfo(ActorPath)
                 If Not hg.Exists Then
@@ -2407,10 +2409,10 @@ Public Class Form1
 
     End Function
 
-    Private Sub mov_DBScrapedAdd(ByVal Filename As String)
-        Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
-        Dim nfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-        nfoFilename &= ".nfo"
+    Private Sub mov_DBScrapedAdd(ByVal nfoFileandPath As String)
+        'Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
+        'Dim nfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
+        'nfoFilename &= ".nfo"
         '        Dim TempMovieToAdd As New FullMovieDetails
         '        TempMovieToAdd = nfoFunction.mov_NfoLoadFull(nfoFilename)
         '        If Not IsNothing(TempMovieToAdd) Then
@@ -2452,7 +2454,7 @@ Public Class Form1
         '            oMovies.MovieCache.Add(movietoadd)
         '        End If
 
-        Dim movie = oMovies.LoadMovie(nfoFilename)
+        Dim movie = oMovies.LoadMovie(nfoFileandPath)
 
         movie.UpdateCaches()
     End Sub
@@ -3124,7 +3126,7 @@ Public Class Form1
         Dim FullFileContent As String = ""
 
         'Dim i As Integer = DataGridViewMovies.CurrentRow.Index
-
+        'DataGridViewMovies.Rows.RemoveAt(i)
         Dim movie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
         Dim Scraper As String = Preferences.XBMC_Scraper
@@ -3138,27 +3140,37 @@ Public Class Form1
 
         If FullFileContent.ToLower <> "error" Then
             Dim RescrapeMovieName As String = movie.mediapathandfilename 
-            Dim Teste As Boolean = CreateMovieNfo(RescrapeMovieName, FullFileContent)
+            Dim nfoFileandPath As String = ""
+            Dim Teste As Boolean = CreateMovieNfo(RescrapeMovieName, FullFileContent, Scraper, nfoFileandPath)
             If Teste Then
 
-                Dim ExtensionPosition As Integer = RescrapeMovieName.LastIndexOf(".")
-                Dim nfoFilename As String = RescrapeMovieName.Remove(ExtensionPosition, (RescrapeMovieName.Length - ExtensionPosition))
-                nfoFilename &= ".nfo"
+                'Dim ExtensionPosition As Integer = RescrapeMovieName.LastIndexOf(".")
+                'Dim nfoFilename As String = RescrapeMovieName.Remove(ExtensionPosition, (RescrapeMovieName.Length - ExtensionPosition))
+                'nfoFilename &= ".nfo"
                 Dim newFilename As String = RescrapeMovieName 
-                Dim aMovie As Movie = oMovies.LoadMovie(nfoFilename, False)
+                Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
 
                 'Dim newFilename As String = movie.mediapathandfilename 
                 If Preferences.XbmcTmdbRenameMovie Then
-                    newFilename = doRename(aMovie, movie.mediapathandfilename)
-                    If newFilename <> movie.mediapathandfilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
+                    newFilename = oMovies.xbmcTmdbRenameMovie(aMovie, RescrapeMovieName)
+                    If newFilename <> RescrapeMovieName Then
+                        Utilities.SafeDeleteFile(aMovie.NfoPathAndFilename)
+                        Call SearchForNew
+
+                        'mov_XBMCScrapingInitialization()
+                        Exit Sub 
+                    End If
+                    'scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
                 End If
+                Dim posters As Boolean = oMovies.XbmcTmdbDlPosterFanart(aMovie)
+                If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
                 If Preferences.XbmcTmdbActorDL Then
-                    Dim aok As Boolean = XbmcTmdbActorImageSave(newFilename)
+                    Dim aok As Boolean = XbmcTmdbActorImageSave(aMovie, nfoFileandPath)
                     If aok Then scraperLog &= "Actor images saved" & vbCrLf
                 End If
+                aMovie.UpdateCaches()
             End If
-
-
+            
             'mov_ListRefresh()
         End If
         If messbox.Visible = True Then messbox.Close()
@@ -3250,7 +3262,7 @@ Public Class Form1
             RunBackgroundMovieScrape("RescrapeDisplayedMovie")
             Exit Sub
         End If
-
+        Dim i As Integer = DataGridViewMovies.CurrentRow.Index 
         messbox = New frmMessageBox("", "", "The Selected Movie is being Rescraped....")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
@@ -6590,7 +6602,7 @@ Public Class Form1
     'End Sub
 
     Private Sub btnChangeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChangeMovie.Click
-
+        
         If MovieSearchEngine = "imdb" Then
             Dim mat = Regex.Match(WebBrowser1.Url.ToString, "(tt\d{7})")
 
