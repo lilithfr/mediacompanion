@@ -13,7 +13,7 @@ Module General
     Dim TempXMLEpisode As New TvEpisode
     Dim episodeXMLinformation As New List(Of TvEpisode)
 
-
+    Public Dim WithEvents oMovies As New Movies
 
 
 #Region "Fields"
@@ -1652,6 +1652,7 @@ Module General
 
     Public Function Start_XBMC_MoviesReScraping(ByVal Scraper As String, ByVal MovieID As String, ByVal Filename As String) As String
         ' 1st stage
+        
         If Scraper.ToLower = "imdb" Then
             Scraper = "metadata.imdb.com"
             If MovieID.Substring(0, 2) = "tt" Then
@@ -1684,6 +1685,11 @@ Module General
                 Exit Function
             End If
         End If
+        ' 2nd stage - remove old files
+        Dim ExtPos As Integer = filename.LastIndexOf(".")
+        Dim oldnfopathandfilename As String = Filename.Remove(ExtPos, (Filename.Length - ExtPos)) & ".nfo"
+        Dim Renamed As Boolean = oMovies.XbmcTmdbChangeMovieCleanup(oldnfopathandfilename)
+
         ' 3st stage
         FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
         FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)

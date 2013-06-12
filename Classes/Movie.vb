@@ -1601,10 +1601,12 @@ Public Class Movie
     Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
         Try
             LoadNFO
+            DeleteActors     'remove actor images if present
+
             RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
             RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
 
-            DeleteActors
+            
             DeletePoster
             DeleteFanart
 
@@ -1616,19 +1618,29 @@ Public Class Movie
         End Try
     End Sub
 
-    Sub DeleteActors
+   Sub DeleteActors
         Try
             'Only delete actors if movies are in separate folders
-            If Preferences.allfolders Then
-                For Each f In Directory.GetFiles(ActorPath, "*.tbn")
-                    File.Delete(f)
-                Next
+            Dim ap As String = ActorPath
+            For Each act In Actors
+                Dim actorfilename As String = GetActorFileName(act.ActorName)
+                If File.Exists(actorfilename) Then
+                    Utilities.SafeDeleteFile(actorfilename)
+                End If
+                If File.Exists(actorfilename.Replace(".tbn",".jpg"))
+                    Utilities.SafeDeleteFile(actorfilename.Replace(".tbn",".jpg"))
+                End If
+            Next
+            'If Preferences.allfolders Then
+            '    For Each f In Directory.GetFiles(ActorPath, "*.tbn")
+            '        File.Delete(f)
+            '    Next
 
-                For Each f In Directory.GetFiles(ActorPath, "*.jpg")
-                    File.Delete(f)
-                Next
-                Directory.Delete(ActorPath)
-            End If
+            '    For Each f In Directory.GetFiles(ActorPath, "*.jpg")
+            '        File.Delete(f)
+            '    Next
+            '    Directory.Delete(ActorPath)
+            'End If
         Catch
         End Try
              

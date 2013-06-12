@@ -2495,56 +2495,6 @@ Public Class Form1
         mov_CacheLoad()
     End Sub
 
-
-
-    '    'OBSOLETE...
-    '    Private Sub mov_CacheRefresh
-    '        Me.Enabled = False
-
-    '        frmSplash2.Text = "Refresh Movies..."
-    '        frmSplash2.Label1.Text = "Searching for Movie Folders....."
-    '        frmSplash2.Label2.Visible = False
-    '        frmSplash2.Show
-    '        Application.DoEvents
-
-    '        oMovies.RebuildMovieCache
-
-    '        frmSplash2.Label1.Text = "Processing...."
-
-    '        filteredList.Clear
-    '        filteredList.AddRange(oMovies.MovieCache)
-
-    '        Try
-    '            For Each movie In oMovies.MovieCache
-    '                Try
-    '                    If Preferences.usefoldernames = False Then
-    '                        If movie.filename <> Nothing Then
-    '                            movie.filename = movie.filename.Replace(".nfo", "")
-    '                        End If
-    '                    End If
-    '                Catch
-    '                    Exit For
-    '                End Try
-    '            Next
-    '        Catch ex As Exception
-    '#If SilentErrorScream Then
-    '            Throw ex
-    '#End If
-    '        End Try
-    '        frmSplash2.Label2.Visible = True
-    '        frmSplash2.Label2.Text = "Apply Filters..."
-    '  '      Call mov_FiltersAndSortApply()
-    '        frmSplash2.Label2.Text = "Reload Main Page..."
-    '        Call mov_FormPopulate()
-
-
-
-    '        Me.Activate()
-    '        Me.Enabled = True
-    '        frmSplash2.Hide()
-    '    End Sub
-
-
     Private Sub util_VideoMode1(ByVal tempstring As String)
         Dim action As String
         Dim errors As String
@@ -2777,47 +2727,6 @@ Public Class Form1
         'End If
     End Sub
 
-    'Private Sub btnmoviescrapercancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '    BckWrkScnMovies.CancelAsync()
-    'End Sub
-
-    'Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '    If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
-    '        MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
-    '        Exit Sub
-    '    End If
-    '    Dim t As New frmCoverArt
-    '    t.ShowDialog()
-    'End Sub
-
-    '    Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '        If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
-    '            MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
-    '            Exit Sub
-    '        End If
-    '        Dim t As New frmMovieFanart
-    '        t.ShowDialog()
-    '        Try
-    '            If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-    '                PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-    '                PictureBox7.Load()
-    '            Else
-    '                PictureBox7.Image = Nothing
-    '            End If
-
-    '        Catch ex As Exception
-    '#If SilentErrorScream Then
-    '            Throw ex
-    '#End If
-    '        End Try
-    '    End Sub
-
-    'paypal
-    'Private Sub ToolStripButton11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '    Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
-    '    Process.Start(webAddress)
-    'End Sub
-
     Private Sub util_ThreadsAllExit()
         Dim busy As Boolean = False
         Try
@@ -2913,282 +2822,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-
-    'View Title, Filename, or Foldername
-    'Private Sub mov_MovieComboListSort()
-    '    Monitor.Enter(Me)
-    '    'Try
-    '    Dim comboarray2 As New List(Of str_ComboList)
-    '    If RadioButton3.Checked = True Then
-    '        ListBox2.Items.Clear()
-    '        For Each movie In filteredList
-    '            If RadioButton1.Checked = True Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
-    '            ElseIf RadioButton2.Checked = True Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filename))
-    '            ElseIf RadioButton6.Checked = True Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.foldername))
-    '            End If
-    '        Next
-    '        ListBox2.Sorted = True
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-    '    End If
-
-    '    If RadioButton4.Checked = True Then
-    '        MovieListComboBox.Sorted = False
-    '        ListBox2.Items.Clear()
-    '        For Each movie In filteredList
-    '            ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.year))
-    '        Next
-    '        ListBox2.Sorted = True
-
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-    '    End If
-
-    '    If RadioButton21.Checked = True Then
-    '        MovieListComboBox.Sorted = False
-    '        ListBox2.Items.Clear()
-    '        For Each movie In filteredList
-    '            Dim tempstring As String = movie.runtime
-    '            If tempstring = "" Then tempstring = "00 mins"
-    '            If IsNumeric(tempstring) Then tempstring &= " mins"
-    '            Try
-    '                tempstring = tempstring.Substring(0, tempstring.IndexOf("min"))
-    '                tempstring = tempstring.Replace(" ", "")
-    '                Do Until IsNumeric(tempstring.Substring(0, 1))
-    '                    If Not IsNumeric(tempstring.Substring(0, 1)) Then
-    '                        tempstring = tempstring.Substring(1, tempstring.Length - 1)
-    '                    End If
-    '                Loop
-    '                tempstring = tempstring.Replace(" min", "")
-    '                If IsNumeric(tempstring) Then
-    '                    If tempstring.Length = 1 Then
-    '                        tempstring = "00" & tempstring
-    '                    End If
-    '                    If tempstring.Length = 2 Then
-    '                        tempstring = "0" & tempstring
-    '                    End If
-    '                Else
-    '                    tempstring = "000"
-    '                End If
-    '            Catch
-    '                tempstring = "- mins"
-    '            End Try
-    '            ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring))
-    '        Next
-    '        ListBox2.Sorted = True
-
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-    '    End If
-
-
-
-
-    '    If RadioButtonSortCreate.Checked = True Then        'Date Added button
-    '        MovieListComboBox.Sorted = False
-    '        ListBox2.Items.Clear()
-    '        For Each movie In filteredList
-    '            If IsNumeric(movie.createdate) Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.createdate))
-    '            Else
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filedate))
-    '            End If
-    '        Next
-    '        ListBox2.Sorted = True
-
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-
-    '        Next
-    '    End If
-
-
-
-    '    If RadioButton19.Checked = True Then
-    '        MovieListComboBox.Sorted = False
-    '        ListBox2.Items.Clear()
-    '        For Each movie In filteredList
-    '            If movie.sortorder <> Nothing Then
-    '                If movie.sortorder <> "" Then
-    '                    ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.sortorder))
-    '                Else
-    '                    ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.title))
-    '                End If
-    '            Else
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.title))
-    '            End If
-    '        Next
-    '        ListBox2.Sorted = True
-
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-    '    End If
-
-
-
-
-    '    If RadioButtonSortModified.Checked = True Then   'in nfo as createdate'
-    '        MovieListComboBox.Sorted = False
-    '        ListBox2.Items.Clear()
-    '        For Each movie In filteredList
-    '            ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.createdate)) '.ToString))
-    '        Next
-    '        ListBox2.Sorted = True
-
-
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-
-    '    End If
-    '    If RadioButton7.Checked = True Then
-    '        MovieListComboBox.Sorted = False
-    '        ListBox2.Items.Clear()
-    '        ListBox2.Sorted = False
-    '        For Each movie In filteredList
-    '            If RadioButton1.Checked = True Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.rating & " - " & movie.title))
-    '            ElseIf RadioButton2.Checked = True Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.rating & " - " & movie.filename))
-    '            ElseIf RadioButton6.Checked = True Then
-    '                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.rating & " - " & movie.foldername))
-    '            End If
-    '        Next
-    '        ListBox2.Sorted = True
-    '        MovieListComboBox.Sorted = False
-
-    '        For Each movie In ListBox2.Items
-    '            For Each film In filteredList
-    '                If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
-    '                    comboarray2.Add(film)
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-
-    '    End If
-    '    'filteredlist.Clear()
-
-    '    If RadioButtonSortModified.Checked = False And RadioButton4.Checked = False And RadioButton7.Checked = False And RadioButtonSortCreate.Checked = False Then
-    '        If btnreverse.CheckState = CheckState.Unchecked Then
-    '            filteredList = comboarray2
-    '        Else
-    '            filteredList.Clear()
-    '            For f = comboarray2.Count - 1 To 0 Step -1
-    '                Dim movietoadd As New str_ComboList
-    '                movietoadd.plot = comboarray2(f).plot
-    '                movietoadd.fullpathandfilename = comboarray2(f).fullpathandfilename
-    '                movietoadd.titleandyear = comboarray2(f).titleandyear
-    '                movietoadd.filename = comboarray2(f).filename
-    '                movietoadd.year = comboarray2(f).year
-    '                movietoadd.filedate = comboarray2(f).filedate
-    '                movietoadd.foldername = comboarray2(f).foldername
-    '                movietoadd.runtime = comboarray2(f).runtime
-    '                movietoadd.outline = comboarray2(f).outline
-    '                movietoadd.rating = comboarray2(f).rating
-    '                If comboarray2(f).sortorder = Nothing Then
-    '                    movietoadd.sortorder = comboarray2(f).sortorder
-    '                ElseIf comboarray2(f).sortorder = "" Then
-    '                    movietoadd.sortorder = comboarray2(f).sortorder
-    '                Else
-    '                    movietoadd.sortorder = comboarray2(f).sortorder
-    '                End If
-    '                movietoadd.createdate = comboarray2(f).createdate
-    '                movietoadd.id = comboarray2(f).id
-    '                movietoadd.genre = comboarray2(f).genre
-    '                movietoadd.sortorder = comboarray2(f).sortorder
-    '                movietoadd.title = comboarray2(f).title
-    '                movietoadd.originaltitle = comboarray2(f).originaltitle
-    '                movietoadd.movieset = comboarray2(f).movieset
-    '                movietoadd.source = comboarray2(f).source
-    '                movietoadd.filedate = comboarray2(f).filedate
-
-    '                filteredList.Add(movietoadd)
-    '            Next
-    '        End If
-    '    Else
-    '        If btnreverse.CheckState = CheckState.Checked Then
-    '            filteredList = comboarray2
-    '        Else
-    '            filteredList.Clear()
-    '            For f = comboarray2.Count - 1 To 0 Step -1
-    '                Dim movietoadd As New str_ComboList
-    '                movietoadd.plot = comboarray2(f).plot
-    '                movietoadd.fullpathandfilename = comboarray2(f).fullpathandfilename
-    '                movietoadd.titleandyear = comboarray2(f).titleandyear
-    '                movietoadd.filename = comboarray2(f).filename
-    '                movietoadd.year = comboarray2(f).year
-    '                movietoadd.filedate = comboarray2(f).filedate
-    '                movietoadd.foldername = comboarray2(f).foldername
-    '                movietoadd.rating = comboarray2(f).rating
-    '                movietoadd.top250 = comboarray2(f).top250
-    '                movietoadd.createdate = comboarray2(f).createdate
-    '                movietoadd.id = comboarray2(f).id
-    '                movietoadd.outline = comboarray2(f).outline
-    '                movietoadd.rating = comboarray2(f).rating
-    '                movietoadd.genre = comboarray2(f).genre
-    '                movietoadd.runtime = comboarray2(f).runtime
-    '                movietoadd.title = comboarray2(f).title
-    '                movietoadd.originaltitle = comboarray2(f).originaltitle
-    '                If comboarray2(f).sortorder = Nothing Then
-    '                    movietoadd.sortorder = comboarray2(f).sortorder
-    '                ElseIf comboarray2(f).sortorder = "" Then
-    '                    movietoadd.sortorder = comboarray2(f).sortorder
-    '                Else
-    '                    movietoadd.sortorder = comboarray2(f).sortorder
-    '                End If
-    '                movietoadd.source = comboarray2(f).source
-    '                movietoadd.movieset = comboarray2(f).movieset
-    '                movietoadd.filedate = comboarray2(f).filedate
-    '                filteredList.Add(movietoadd)
-    '            Next
-    '        End If
-    '    End If
-    '    mov_MovieComboLoad()
-    '    'Catch
-    '    'Finally
-    '    Monitor.Exit(Me)
-    '    'End Try
-
-    'End Sub
 
     'zoom images
     Private Sub moviethumb_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moviethumb.DoubleClick
@@ -3498,6 +3131,19 @@ Public Class Form1
         If FullFileContent.ToLower <> "error" Then
 
             Dim Teste As Boolean = CreateMovieNfo(movie.mediapathandfilename, FullFileContent)
+            If Teste Then
+                Dim newFilename As String = movie.mediapathandfilename 
+                If Preferences.XbmcTmdbRenameMovie Then
+                    newFilename = doRename(movie.mediapathandfilename)
+                    If newFilename <> movie.mediapathandfilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
+                End If
+                If Preferences.XbmcTmdbActorDL Then
+                    Dim aok As Boolean = XbmcTmdbActorImageSave(newFilename)
+                    If aok Then scraperLog &= "Actor images saved" & vbCrLf
+                End If
+            End If
+
+
             'mov_ListRefresh()
         End If
         If messbox.Visible = True Then messbox.Close()

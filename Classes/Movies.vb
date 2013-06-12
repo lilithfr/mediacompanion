@@ -1645,6 +1645,16 @@ Public Class Movies
         Return NewFilenameandPath
     End Function
 
+    Function XbmcTmdbChangeMovieCleanup(NfoPathAndFilename As String) As Boolean
+        Try
+            Dim movie = New Movie(Me,NfoPathAndFilename)
+
+            movie.DeleteScrapedFiles(True)
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
 
     Sub LoadActorCache()
         _actorDb.Clear()
