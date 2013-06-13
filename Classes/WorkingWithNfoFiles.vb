@@ -1419,7 +1419,7 @@ Public Class WorkingWithNfoFiles
                                         'filedetailschild.AppendChild(filedetailschildchild)
                                     'End If
                                 'Else
-                                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
+                                    filedetailschildchild.InnerText = If(movietosave.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "", movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 'End If
 
