@@ -729,6 +729,7 @@ Public Class Form1
         Try
             Me.Dispose()
             Me.Finalize()
+            If cbClearCache.Checked = True Then ClearCacheFolder      ' Upon closing of MC, delete cache folder if option selected.
             End
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -847,6 +848,18 @@ Public Class Form1
             End Try
 
             ExceptionHandler.LogError(ex, paramInfo)
+        End Try
+    End Sub
+
+    Sub ClearCacheFolder            
+        Try
+            Dim cacheFolder As String = applicationPath & "\cache"
+            If IO.Directory.Exists(cacheFolder)
+                IO.Directory.Delete(cacheFolder, True)                 ' Delete Cache folder as it is re-created when required.
+            End If
+            
+        Catch ex As Exception
+
         End Try
     End Sub
 
@@ -24738,8 +24751,6 @@ End Sub
             End Try
         End If
     End Sub
-
-
 
 
 End Class
