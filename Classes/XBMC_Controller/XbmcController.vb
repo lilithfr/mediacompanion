@@ -73,7 +73,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 '    Private GetNewMovieIds_IdleTimer As Timers.Timer = New Timers.Timer()
     'Private FolderScan_IdleTimer     As Timers.Timer = New Timers.Timer()
 
-    Private _Timer As Timers.Timer = New Timers.Timer()
+    Private TO_Timer      As Timers.Timer = New Timers.Timer()
+    Private WatchDogTimer As Timers.Timer = New Timers.Timer()
 
 
     Public Enum S
@@ -103,6 +104,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         TimeOut
         Success
         Failure
+
+        WatchDogTimeOut
 
   '      GetNewMovieIds
         ScanFolder
@@ -134,8 +137,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
   '      AddHandler FolderScan_IdleTimer    .Elapsed         , AddressOf FolderScan_IdleTimer_Elapsed
 
 
-        Ini_Timer(_Timer)
-        AddHandler _Timer.Elapsed, AddressOf Timer1sec_Elapsed
+        Ini_Timer(TO_Timer)
+        AddHandler TO_Timer.Elapsed, AddressOf Timer1sec_Elapsed
+
+        Ini_Timer(WatchDogTimer,10000)
+        AddHandler WatchDogTimer.Elapsed, AddressOf WatchDogTimer_Elapsed
 
 
 '       AddHandler XbmcJson.xbmc.Library.Video.Updated, AddressOf XBMC_Video_Updated
@@ -146,7 +152,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddHandler XbmcJson.xbmc.LogError                   , AddressOf XBMC_System_LogError
 
         AddHandler TransitionDeclined                       , AddressOf UnexpectedEvent
+        AddHandler TransitionCompleted                      , AddressOf WatchDogTimer_Stop
         AddHandler BeginDispatch                            , AddressOf BegnDispatch 
+
 
         '  Me. (StateId.Connected).EntryHandler += EnterOff
         ' this[StateID.Off].ExitHandler += ExitOff
@@ -165,6 +173,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
         AddTransition( S.Any                        , E.MC_ShutDownReq          , S.Any                        , AddressOf ShutDown             )
+        AddTransition( S.Any                        , E.WatchDogTimeOut         , E.MC_ConnectReq              , AddressOf Connect              )
         AddTransition( S.Any                        , E.MC_ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
 
@@ -191,7 +200,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      )
                                                                                                                                                
         AddTransition( S.Ready                      , E.ScanFolder              , S.Wf_XBMC_Video_ScanFinished , AddressOf ScanFolder           )
-        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Wf_XBMC_Video_ScanFinished , AddressOf ScanFolder           )
+        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Wf_XBMC_Video_ScanFinished , AddressOf AddFetchVideoInfo    ) '...ScanFolder...    )
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf AddFetchVideoInfo    )
                                                                                                                                               
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
@@ -212,8 +221,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Initialize(S.NotConnected)                                                                                                           
     End Sub                                                                                                                                  
    
+    Sub WatchDogTimer_Stop(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
+        WatchDogTimer.Stop
+        log.Debug("WatchDogTimer_Stop - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
+    End Sub
                                                                                                                                    
     Sub UnexpectedEvent(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
+
+        WatchDogTimer.Stop
 
         Dim ea As BaseEventArgs = e.EventArgs
 
@@ -225,12 +240,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         End If
 
         AppendLog("UnexpectedEvent - State : [" + e.SourceStateID.ToString + "] Missing event handler for : [" + e.EventID.ToString + "]")
-
     End Sub
 
 
     Sub BegnDispatch(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
+        log.Debug("BegnDispatch - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
         LastArgs = e
+        WatchDogTimer.Start
     End Sub 
 
     Sub Start1SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
@@ -242,8 +258,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub 
 
     Sub StartTimer(Interval As Integer)
-        _Timer.Interval = Interval
-        _Timer.Start()
+        TO_Timer.Interval = Interval
+        TO_Timer.Start()
     End Sub 
 
 
@@ -376,7 +392,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub Ready(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         ReportProgress("Ready & waiting...",args)
-        _Timer.Stop
+        TO_Timer.Stop
+        WatchDogTimer.Stop
     End Sub
 
 
@@ -662,6 +679,15 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AppendLog("Timer Elapsed")
 
         Q.Write(E.TimeOut,PriorityQueue.Priorities.low)
+    End Sub
+
+
+    Private Sub WatchDogTimer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
+
+        sender.Stop()
+        AppendLog("WatchDog Timer Elapsed!")
+
+        Q.Write(E.WatchDogTimeOut,PriorityQueue.Priorities.high)
     End Sub
 
 

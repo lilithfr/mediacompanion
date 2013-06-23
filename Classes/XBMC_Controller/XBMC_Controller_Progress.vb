@@ -22,6 +22,7 @@ Public Class XBMC_Controller_Progress
     ReadOnly Property Idle As Boolean
         Get
             Return  Me.Action="Ready & waiting..." and (TotalQcount=0)
+      '      Return  Me.CurrentState=XbmcController.S.Ready and (TotalQcount=0)
         End Get
     End Property
 
