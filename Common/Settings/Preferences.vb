@@ -1447,7 +1447,7 @@ Public Class Preferences
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
                     Dim audio As New AudioDetails
-                    audio.Language.Value = MI.Get_(StreamKind.Audio, curAS, "Language")
+                    audio.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.Codec.Value = "MP3"
                     Else
@@ -1497,7 +1497,7 @@ Public Class Preferences
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
                     Dim sublanguage As New SubtitleDetails
-                    sublanguage.Language.Value = MI.Get_(StreamKind.Text, curSS, "Language")
+                    sublanguage.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
                 End While

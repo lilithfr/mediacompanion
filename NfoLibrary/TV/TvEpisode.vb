@@ -385,7 +385,7 @@ Public Class TvEpisode
         If numOfAudioStreams > 0 Then
             While curAS < numOfAudioStreams
                 Dim audio As New AudioDetails
-                audio.Language.Value = MI.Get_(StreamKind.Audio, curAS, "Language")
+                audio.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                 If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                     audio.Codec.Value = "MP3"
                 Else
