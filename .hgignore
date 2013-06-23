@@ -34,3 +34,4 @@ bin/Release/Settings/*.*
 bin/Debug/Media Companion.exe
 bin/Release/Media Companion.exe
 *.orig
+Assets/Media Companion icon5.ico

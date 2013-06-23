@@ -10,6 +10,7 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
 Imports System.Linq
+Imports XBMC.JsonRpc
 
 #Const SilentErrorScream = False
 #Const NoRefocus = True
@@ -18,10 +19,16 @@ Imports System.Linq
 Public Class Form1
 
     Const NFO_INDEX As Integer = 2
+    Public Const XBMC_Controller_log_file As String = "XBMC-Controller-log-file.txt" 
 
     Public Dim WithEvents BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
+    Shared Public         XbmcControllerQ       As PriorityQueue    = New PriorityQueue
+    Shared Public         XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
+    Public Property       XbmcMovies            As List(Of MaxXbmcMovie)
 
+    Property frmXBMC_Progress As frmXBMC_Progress = New frmXBMC_Progress
 
     #Region "Movie scraping related objects"
     Public Dim WithEvents oMovies As New Movies
@@ -239,7 +246,9 @@ Public Class Form1
         'TasksList.DataSource = Common.Tasks
 
         ForegroundWorkTimer.Interval = 500
-        AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
+#If Not DEBUG
+       AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
+#End If
 
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -669,7 +678,70 @@ Public Class Form1
         'End Try
 
         If Preferences.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
+
+
+
+        BckWrkXbmcController.WorkerReportsProgress      = true
+      ' BckWrkXbmcController.WorkerSupportsCancellation = true
+
+        oMovies.Bw = BckWrkScnMovies
+
+
+        AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
+        AddHandler BckWrkXbmcController.DoWork         , AddressOf BckWrkXbmcController_DoWork
+
+        BckWrkXbmcController.RunWorkerAsync(Me)
+        XbmcControllerQ.Write( XbmcController.E.MC_ConnectReq, PriorityQueue.Priorities.low )
     End Sub
+
+
+    Private Sub BckWrkXbmcController_DoWork(ByVal sender As Object, ByVal e As DoWorkEventArgs)
+
+        Dim bw As BackgroundWorker = CType(sender, BackgroundWorker)
+
+        Dim sm As New XbmcController(e.Argument,bw)
+
+        sm.Go()
+    End Sub
+
+    Private Sub BckWrkXbmcController_ReportProgress(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
+
+        Dim oProgress As XBMC_Controller_Progress = CType(e.UserState, XBMC_Controller_Progress)
+
+        Dim pg = frmXBMC_Progress.ProgressBar1
+
+        If oProgress.Evt = XbmcController.E.MC_AllMovieDetails Then
+            XbmcMovies = CType(oProgress.Args, XBMC_Movies_EventArgs).XbmcMovies
+            Return
+        End If
+
+        If frmXBMC_Progress.Visible = oProgress.Idle Then
+
+            If oProgress.ErrorCount>0 Then
+                If Preferences.ShowLogOnError Then
+                    System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
+                End If
+
+                frmXBMC_Progress.Visible = Not oProgress.Idle
+                pg.Maximum = 1
+
+                Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
+
+                XbmcControllerQ.Write(ce)       
+            End If
+        End If
+
+        frmXBMC_Progress.Visible = Not oProgress.Idle
+        pg.Maximum = Math.Max(pg.Maximum, oProgress.TotalQcount)
+
+        pg.Value = pg.Maximum - oProgress.TotalQcount
+
+        frmXBMC_Progress.lblProgress  .Text = oProgress.Action
+        frmXBMC_Progress.lblQueueCount.Text = oProgress.TotalQcount
+        frmXBMC_Progress.lblErrorCount.Text = oProgress.ErrorCount
+
+    End Sub
+
 
 
     Private Sub util_BatchUpdate()

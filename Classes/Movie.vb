@@ -890,26 +890,16 @@ Public Class Movie
 
         If Preferences.XBMC_Sync Then
 
-            If Not _parent.XbmcJson.Opened Then
-                Threading.Thread.Sleep(200) 
-                _parent.XbmcJson.Open
-            End If   
+            Dim evt As New BaseEvent
 
-            If _parent.XbmcJson.Opened Then
-                Try
-                    'Delays needed! Probably some async operations going on in XMBC, i.e. returns ok before actually completing
-                    Threading.Thread.Sleep(200)             
-                    _parent.XbmcJson.UpdateXbmcMovies
-            
-                    Threading.Thread.Sleep(200)
-                    _parent.XbmcJson.xbmc.Library.Video.RemoveMovie( _parent.XbmcJson.GetMovieId(mediapathandfilename) )
+            Try
+                evt.E    = IIf(File.Exists(NfoPathPrefName), XbmcController.E.MC_Movie_Updated, XbmcController.E.MC_Movie_New)
+                evt.Args = New VideoPathEventArgs(mediapathandfilename, PriorityQueue.Priorities.medium)
 
-                    Threading.Thread.Sleep(200)
-                    _parent.XbmcJson.xbmc.Library.Video.AddMovies( NfoPath_NoDirectorySeparatorChar )
-                Catch ex As Exception
-                    ReportProgress(MSG_ERROR,"!!! [SaveNFO-XBMC_Sync] threw [" & ex.Message & "]" & vbCrLf)       
-                End Try
-            End If
+                Form1.XbmcControllerQ.Write(evt)
+            Catch ex As Exception
+                ReportProgress(MSG_ERROR,"!!! [SaveNFO-XBMC_Sync] threw [" & ex.Message & "]" & vbCrLf)       
+            End Try
         End If
     End Sub
 

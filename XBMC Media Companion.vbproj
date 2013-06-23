@@ -101,12 +101,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\IMPA\IMPA\bin\Release\IMPA.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\log4net.2.0.0\lib\net40-client\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MediaInfoNET">
       <HintPath>MediaInfoNET\bin\Debug\MediaInfoNET.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Net20, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Assets\Newtonsoft.Json.Net20.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Sanford.StateMachineToolkit">
+      <HintPath>packages\StateMachineToolkit.6.5.0.0\lib\net40\Sanford.StateMachineToolkit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -146,7 +152,7 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
-    <Compile Include="Classes\XbmcJson.vb" />
+    <Compile Include="Classes\PriorityQueue.vb" />
     <Compile Include="Classes\FilteredItems.vb" />
     <Compile Include="Classes\NewVersionCheckResult.vb" />
     <Compile Include="Classes\MovieProgress.vb" />
@@ -172,6 +178,16 @@
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\TVShows.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
+    <Compile Include="Classes\XBMC_Controller\BaseEvent.vb" />
+    <Compile Include="Classes\XBMC_Controller\BaseEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Controller\FolderEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Controller\smAction.vb" />
+    <Compile Include="Classes\XBMC_Controller\UnknownEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Controller\VideoPathEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Controller\XbmcController.vb" />
+    <Compile Include="Classes\XBMC_Controller\XbmcJson.vb" />
+    <Compile Include="Classes\XBMC_Controller\XBMC_Controller_Progress.vb" />
+    <Compile Include="Classes\XBMC_Controller\XBMC_Movies_EventArgs.vb" />
     <Compile Include="Forms\frmBigTvEpisodeText.designer.vb">
       <DependentUpon>frmBigTvEpisodeText.vb</DependentUpon>
     </Compile>
@@ -206,6 +222,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\MediaCompanion.vb" />
+    <Compile Include="Forms\frmXBMC_Progress.Designer.vb">
+      <DependentUpon>frmXBMC_Progress.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmXBMC_Progress.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Structures\BasicHomeMovie.vb" />
     <Compile Include="Structures\FanartList.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
@@ -421,6 +443,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmProgressScreen.resx">
       <DependentUpon>frmProgressScreen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmXBMC_Progress.resx">
+      <DependentUpon>frmXBMC_Progress.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

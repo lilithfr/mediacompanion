@@ -25,7 +25,6 @@ Public Class Movies
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
     Private _certificateMappings  As CertificateMappings
-    Private _xbmcJson             As XbmcJson
     Private _actorDb              As New List(Of ActorDatabase)
     Public _tmpActorDb            As New List(Of ActorDatabase)
     Public Shared movRebuildCaches         As Boolean = False
@@ -38,17 +37,6 @@ Public Class Movies
     Public Property PercentDone   As Integer = 0
 
     Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
-
-
-    Public ReadOnly Property XbmcJson As XbmcJson
-        Get
-            If IsNothing(_xbmcJson) Then
-                _xbmcJson = New XbmcJson 
-            End If
-
-            Return _xbmcJson
-        End Get
-    End Property
 
 
     Public ReadOnly Property CertificateMappings As CertificateMappings
@@ -75,6 +63,39 @@ Public Class Movies
                         Group By field Into Num=Count
                         Order By field
                         Select If(field="","Missing",field) & " (" & Num.ToString & ")" 
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property    
+
+
+
+    Public ReadOnly Property MoviesWithUniqueMovieTitles As List(Of ComboList)
+        Get
+            Dim q = From x In MovieCache 
+                    Join
+                       u In UniqueMovieTitles On u Equals x.Title
+                    Select
+                        x
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property    
+
+
+    Public ReadOnly Property UniqueMovieTitles As List(Of String)
+        Get
+            Dim q = From x In MovieCache 
+                    Select 
+                        x.Title
+                    Group By 
+                        Title Into Num=Count
+                    Select 
+                        Title,Num
+                    Where
+                        Num = 1
+                    Select
+                        Title
 
             Return q.AsEnumerable.ToList
         End Get
