@@ -736,7 +736,7 @@ Public Class Form1
 
         pg.Value = pg.Maximum - oProgress.TotalQcount
 
-        frmXBMC_Progress.lblProgress  .Text = oProgress.Action
+        frmXBMC_Progress.lblProgress  .Text = Replace(oProgress.Action,"&","&&")
         frmXBMC_Progress.lblQueueCount.Text = oProgress.TotalQcount
         frmXBMC_Progress.lblErrorCount.Text = oProgress.ErrorCount
 
