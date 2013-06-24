@@ -835,13 +835,16 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MovieFolderMappings.Clear
 
         For Each folder In Preferences.movieFolders
-            Dim moviePaths = (From 
-                            m In Parent.oMovies.MoviesWithUniqueMovieTitles 
-                        Where 
-                            m.fullpathandfilename.ToUpper.Contains(folder.ToUpper)
+
+            Dim wotEver = folder
+
+            Dim moviePaths = (From
+                            m In Parent.oMovies.MoviesWithUniqueMovieTitles
+                        Where
+                            m.fullpathandfilename.ToUpper.Contains(wotEver.ToUpper)
                         Join
-                            x In XbmcJson.MoviesWithUniqueMovieTitles 
-                        On 
+                            x In XbmcJson.MoviesWithUniqueMovieTitles
+                        On
                             x.title Equals m.title And Path.GetFileName(x.file).ToUpper Equals Path.GetFileName(m.MoviePathAndFileName).ToUpper
                         Select
                             m.MoviePathAndFileName, x.file).First
@@ -854,16 +857,16 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
             If mc = xb Then
-                MovieFolderMappings_Add(folder,folder)
+                MovieFolderMappings_Add(folder, folder)
             Else
-                While mc.Length>folder.Length And mc.Chars(mc.Length-1) = xb.Chars(xb.Length-1)
+                While mc.Length > folder.Length And mc.Chars(mc.Length - 1) = xb.Chars(xb.Length - 1)
 
                     mc = mc.Remove(mc.Length - 1)
                     xb = xb.Remove(xb.Length - 1)
-                    
+
                 End While
 
-                MovieFolderMappings_Add(folder,xb)
+                MovieFolderMappings_Add(folder, xb)
             End If
         Next
     End Sub

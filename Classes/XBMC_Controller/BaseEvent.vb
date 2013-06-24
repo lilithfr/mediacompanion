@@ -29,11 +29,8 @@
             Me.Retries = 0
         End Sub
 
-        Sub New(ByVal e As XbmcController.E, Optional ByVal priority As PriorityQueue.Priorities = PriorityQueue.Priorities.low)
-            Me.E    = e
-            Me.Args = New BaseEventArgs(priority)
-            Me.Ts   = DateTime.Now
-            Me.Retries = 0
+        Sub New(ByVal e As XbmcController.E, ByVal priority As PriorityQueue.Priorities) 
+            Me.New( e,New BaseEventArgs(priority) )
         End Sub
 
         Overrides Function ToString As String
