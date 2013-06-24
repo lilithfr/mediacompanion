@@ -886,6 +886,9 @@ Public Class Movie
     Sub SaveNFO
         'RemoveMovieFromCaches
         'If Not Rescrape Then DeleteNFO
+
+        Dim MovieUpdated As Boolean = File.Exists(NfoPathPrefName)
+
         _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
 
         If Preferences.XBMC_Sync Then
@@ -893,12 +896,12 @@ Public Class Movie
             Dim evt As New BaseEvent
 
             Try
-                evt.E    = IIf(File.Exists(NfoPathPrefName), XbmcController.E.MC_Movie_Updated, XbmcController.E.MC_Movie_New)
+                evt.E = IIf(MovieUpdated, XbmcController.E.MC_Movie_Updated, XbmcController.E.MC_Movie_New)
                 evt.Args = New VideoPathEventArgs(mediapathandfilename, PriorityQueue.Priorities.medium)
 
                 Form1.XbmcControllerQ.Write(evt)
             Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! [SaveNFO-XBMC_Sync] threw [" & ex.Message & "]" & vbCrLf)       
+                ReportProgress(MSG_ERROR, "!!! [SaveNFO-XBMC_Sync] threw [" & ex.Message & "]" & vbCrLf)
             End Try
         End If
     End Sub
