@@ -691,7 +691,10 @@ Public Class Form1
         AddHandler BckWrkXbmcController.DoWork         , AddressOf BckWrkXbmcController_DoWork
 
         BckWrkXbmcController.RunWorkerAsync(Me)
-        XbmcControllerQ.Write( XbmcController.E.MC_ConnectReq, PriorityQueue.Priorities.low )
+
+        If Preferences.XBMC_Sync Then
+            XbmcControllerQ.Write(XbmcController.E.MC_ConnectReq, PriorityQueue.Priorities.low)
+        End If
     End Sub
 
 
