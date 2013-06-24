@@ -869,12 +869,15 @@ Public Class Movies
         For Each item In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " ")
 
 '           Dim movie = New Movie(Utilities.GetFileName(item,True),Me)
             Dim movie = New Movie(Me,item)
 
             AddMovieEventHandlers   ( movie )
+
+            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " [" & movie.Title & "] ")
+
+
             movie.Scraped=False
             movie.RescrapeSpecific  ( rl    )
             RemoveMovieEventHandlers( movie )
