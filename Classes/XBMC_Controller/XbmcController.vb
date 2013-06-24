@@ -11,9 +11,20 @@ Imports System.Linq
 
 Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
+    #Const GenPseudoErrors = False
+
     Const Error_Unknown = "**UNKNOWN**"
  
     Public Property MovieFolderMappings As New Dictionary(Of String, String)
+
+#If GenPseudoErrors Then
+    Dim ScanRemoved_Count     As Integer =  0
+    Dim ScanFinished_Count    As Integer =  0
+    Dim ScanRemoved_MissRate  As Integer =  7
+    Dim ScanFinished_MissRate As Integer = 13
+#End If
+
+    Property LastEvent As BaseEvent = New BaseEvent()
 
     Property Parent As Form1
     Public Shared log As ILog = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType)
@@ -74,7 +85,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     'Private FolderScan_IdleTimer     As Timers.Timer = New Timers.Timer()
 
     Private TO_Timer      As Timers.Timer = New Timers.Timer()
-    Private WatchDogTimer As Timers.Timer = New Timers.Timer()
+ '   Private WatchDogTimer As Timers.Timer = New Timers.Timer()
 
 
     Public Enum S
@@ -118,6 +129,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         XBMC_System_Quit
         XBMC_Unknown_Event
 
+        JSON_Abort
     End Enum
 
 
@@ -140,8 +152,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Ini_Timer(TO_Timer)
         AddHandler TO_Timer.Elapsed, AddressOf Timer1sec_Elapsed
 
-        Ini_Timer(WatchDogTimer,10000)
-        AddHandler WatchDogTimer.Elapsed, AddressOf WatchDogTimer_Elapsed
+        'Ini_Timer(WatchDogTimer,10000)
+        'AddHandler WatchDogTimer.Elapsed, AddressOf WatchDogTimer_Elapsed
 
 
 '       AddHandler XbmcJson.xbmc.Library.Video.Updated, AddressOf XBMC_Video_Updated
@@ -150,6 +162,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddHandler XbmcJson.xbmc.System.Quit                , AddressOf XBMC_System_Quit
         AddHandler XbmcJson.xbmc.Log                        , AddressOf XBMC_System_Log
         AddHandler XbmcJson.xbmc.LogError                   , AddressOf XBMC_System_LogError
+        AddHandler XbmcJson.xbmc.Aborted                    , AddressOf XBMC_System_Aborted
+
 
         AddHandler TransitionDeclined                       , AddressOf UnexpectedEvent
         AddHandler TransitionCompleted                      , AddressOf WatchDogTimer_Stop
@@ -173,9 +187,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
         AddTransition( S.Any                        , E.MC_ShutDownReq          , S.Any                        , AddressOf ShutDown             )
-        AddTransition( S.Any                        , E.WatchDogTimeOut         , E.MC_ConnectReq              , AddressOf Connect              )
+        AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.Any                        , E.MC_ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
+        AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
 
         AddTransition( S.NotConnected               , E.MC_ConnectReq           , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.NotConnected               , E.TimeOut                 , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
@@ -194,13 +209,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Wf_XBMC_Movies             , E.Success                 , S.Ready                      , AddressOf Ready                )
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideo          )
-        AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideo          )
+        AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Ready                      , AddressOf Retry                )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf Ready                )
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      )
                                                                                                                                                
         AddTransition( S.Ready                      , E.ScanFolder              , S.Wf_XBMC_Video_ScanFinished , AddressOf ScanFolder           )
-        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Wf_XBMC_Video_ScanFinished , AddressOf AddFetchVideoInfo    ) '...ScanFolder...    )
+'       AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Wf_XBMC_Video_ScanFinished , AddressOf AddFetchVideoInfo    ) '...ScanFolder...    )
+        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Ready                      , AddressOf Retry                ) 
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf AddFetchVideoInfo    )
                                                                                                                                               
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
@@ -222,13 +238,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub                                                                                                                                  
    
     Sub WatchDogTimer_Stop(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
-        WatchDogTimer.Stop
+ '       WatchDogTimer.Stop
         log.Debug("WatchDogTimer_Stop - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
     End Sub
                                                                                                                                    
     Sub UnexpectedEvent(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
 
-        WatchDogTimer.Stop
+ '       WatchDogTimer.Stop
 
         Dim ea As BaseEventArgs = e.EventArgs
 
@@ -246,16 +262,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub BegnDispatch(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
         log.Debug("BegnDispatch - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
         LastArgs = e
-        WatchDogTimer.Start
+  '     WatchDogTimer.Start
     End Sub 
 
     Sub Start1SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
         StartTimer(1000)
     End Sub 
 
-    Sub Start5SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
-        StartTimer(5000)
-    End Sub 
 
     Sub StartTimer(Interval As Integer)
         TO_Timer.Interval = Interval
@@ -303,6 +316,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         LastState = Me.CurrentStateID
     '    ReportProgress("Dispatching Event")
         AppendLog("Dispatching Event : [" & Evt.E.ToString & "]")
+
+        If Evt.E = E.ScanFolder or Evt.E=E.MC_Movie_Updated Then
+            LastEvent.Assign(Evt)
+        End If
+
         Dispatch(Evt.E, Evt.Args)
     End Sub
 
@@ -350,7 +368,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub FetchMoviesInfo(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
         ReportProgress("Fetching movies info...",args)
-        Start5SecTimer(sender,args)
+        StartTimer(5000)
         Q.Write(IIf(XbmcJson.GetXbmcMovies, E.Success, E.Failure), PriorityQueue.Priorities.medium )
     End Sub
 
@@ -393,7 +411,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub Ready(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         ReportProgress("Ready & waiting...",args)
         TO_Timer.Stop
-        WatchDogTimer.Stop
+  '      WatchDogTimer.Stop
     End Sub
 
 
@@ -449,7 +467,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         If xbmcMovieId > -1 Then
             XbmcJson.xbmc.Library.Video.RemoveMovie(xbmcMovieId)
-            Start5SecTimer(sender,args)
+
+            StartTimer(5000)
+
             XbmcJson.RemoveXbmcMovie(XbMoviePath)
         Else
             'ErrorCount = ErrorCount + 1
@@ -476,6 +496,25 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(MovieFolder,PriorityQueue.Priorities.low)))
         End If
     End Sub
+
+
+    Sub Retry(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        
+        If LastEvent.Retries > 0 Then 
+            ReportProgress("Event failed",args)
+            Return
+        End If
+
+        ReportProgress("Resubmitting event",args)
+
+        Dim le As BaseEvent = New BaseEvent
+
+        le.Assign(LastEvent)
+        le.Retries = le.Retries + 1
+
+        Q.Write(le)
+    End Sub
+
 
 
     Sub ScanFolder(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -678,7 +717,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         sender.Stop()
         AppendLog("Timer Elapsed")
 
-        Q.Write(E.TimeOut,PriorityQueue.Priorities.low)
+        Q.Write(E.TimeOut,PriorityQueue.Priorities.high)
     End Sub
 
 
@@ -705,27 +744,59 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
 
-    Sub XBMC_System_Log(sender As Object, e As XbmcJsonRpcLogEventArgs)
-        AppendLog("XbmcJsonRpc : " & e.Message)
+    Sub XBMC_System_Log(sender As Object, evt As XbmcJsonRpcLogEventArgs)
+        AppendLog("XbmcJsonRpc : " & evt.Message)
     End Sub
 
-    Private Sub XBMC_System_LogError(sender As Object, e As XbmcJsonRpcLogErrorEventArgs)
+    Private Sub XBMC_System_LogError(sender As Object, evt As XbmcJsonRpcLogErrorEventArgs)
         'ErrorCount = ErrorCount + 1
 '        ReportProgress("XbmcJsonRpc - ERROR : " & e.Message & " Exception : " & e.Exception.Message,LastArgs)
-        ReportProgress(e.Message,LastArgs)
+        ReportProgress(evt.Message,LastArgs)
     End Sub
+
+    Private Sub XBMC_System_Aborted(sender As Object, evt As XbmcJsonRpcLogErrorEventArgs)
+        'ErrorCount = ErrorCount + 1
+'        ReportProgress("XbmcJsonRpc - ERROR : " & e.Message & " Exception : " & e.Exception.Message,LastArgs)
+        ReportProgress("XbmcJsonRpc - Abort received",LastArgs)
+        
+        Q.Write(e.JSON_Abort,PriorityQueue.Priorities.critical)
+    End Sub
+
+    
+
 
     Sub XBMC_Video_Updated(sender As Object, ea As EventArgs)
         Q.Write(E.XBMC_Video_Updated,PriorityQueue.Priorities.high)
     End Sub
 
     Sub XBMC_Video_Removed(sender As Object, ea As EventArgs)
+
+#If GenPseudoErrors Then
+        ScanRemoved_Count += 1
+        If ScanRemoved_Count mod ScanRemoved_MissRate = 0 Then
+            log.Debug("Faking missed Video_Removed event")
+            Return
+        End If
+#End If
+
         Q.Write(E.XBMC_Video_Removed,PriorityQueue.Priorities.high)
     End Sub
 
     Sub XBMC_Video_ScanFinished(sender As Object, ea As EventArgs)
+
+#If GenPseudoErrors Then
+        ScanFinished_Count += 1
+        If ScanFinished_Count mod ScanFinished_MissRate = 0 Then
+            log.Debug("Faking missed ScanFinished event")
+            Return
+        End If
+#End If
+
         Q.Write(E.XBMC_Video_ScanFinished,PriorityQueue.Priorities.high)
     End Sub
+
+
+
 
     Sub XBMC_System_Quit(sender As Object, ea As EventArgs)
         Q.Write(E.XBMC_System_Quit,PriorityQueue.Priorities.high)
