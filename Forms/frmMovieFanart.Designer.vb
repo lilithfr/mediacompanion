@@ -33,20 +33,21 @@ Partial Class frmMovieFanart
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.btn_SaveSelected = New System.Windows.Forms.Button()
+        Me.btn_UrlOrBrowse = New System.Windows.Forms.Button()
         Me.openFD = New System.Windows.Forms.OpenFileDialog()
-        Me.Panel1.SuspendLayout()
-        Me.Panel3.SuspendLayout()
-        Me.SuspendLayout()
+        Me.Panel1.SuspendLayout
+        Me.Panel3.SuspendLayout
+        Me.SuspendLayout
         '
         'Panel1
         '
-        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.AutoScroll = True
+        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Panel1.AutoScroll = true
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel1.Controls.Add(Me.Panel3)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Location = New System.Drawing.Point(2, 243)
         Me.Panel1.Name = "Panel1"
@@ -55,14 +56,14 @@ Partial Class frmMovieFanart
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.AutoSize = true
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label2.Location = New System.Drawing.Point(3, 96)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(281, 25)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "No Local Fanart is Available"
-        Me.Label2.Visible = False
+        Me.Label2.Visible = false
         '
         'Panel3
         '
@@ -72,11 +73,11 @@ Partial Class frmMovieFanart
         Me.Panel3.Controls.Add(Me.btngetthumb)
         Me.Panel3.Controls.Add(Me.TextBox5)
         Me.Panel3.Controls.Add(Me.Label9)
-        Me.Panel3.Location = New System.Drawing.Point(294, 364)
+        Me.Panel3.Location = New System.Drawing.Point(290, 119)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(481, 98)
         Me.Panel3.TabIndex = 92
-        Me.Panel3.Visible = False
+        Me.Panel3.Visible = false
         '
         'btnthumbbrowse
         '
@@ -85,7 +86,7 @@ Partial Class frmMovieFanart
         Me.btnthumbbrowse.Size = New System.Drawing.Size(89, 23)
         Me.btnthumbbrowse.TabIndex = 4
         Me.btnthumbbrowse.Text = "Browse"
-        Me.btnthumbbrowse.UseVisualStyleBackColor = True
+        Me.btnthumbbrowse.UseVisualStyleBackColor = true
         '
         'btncancelgetthumburl
         '
@@ -94,7 +95,7 @@ Partial Class frmMovieFanart
         Me.btncancelgetthumburl.Size = New System.Drawing.Size(89, 23)
         Me.btncancelgetthumburl.TabIndex = 3
         Me.btncancelgetthumburl.Text = "Cancel"
-        Me.btncancelgetthumburl.UseVisualStyleBackColor = True
+        Me.btncancelgetthumburl.UseVisualStyleBackColor = true
         '
         'btngetthumb
         '
@@ -103,7 +104,7 @@ Partial Class frmMovieFanart
         Me.btngetthumb.Size = New System.Drawing.Size(89, 23)
         Me.btngetthumb.TabIndex = 2
         Me.btngetthumb.Text = "Set Thumb"
-        Me.btngetthumb.UseVisualStyleBackColor = True
+        Me.btngetthumb.UseVisualStyleBackColor = true
         '
         'TextBox5
         '
@@ -114,8 +115,8 @@ Partial Class frmMovieFanart
         '
         'Label9
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.AutoSize = true
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label9.Location = New System.Drawing.Point(16, 15)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(242, 16)
@@ -124,9 +125,9 @@ Partial Class frmMovieFanart
         '
         'Panel2
         '
-        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.AutoScroll = True
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Panel2.AutoScroll = true
         Me.Panel2.AutoScrollMargin = New System.Drawing.Size(0, 5)
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel2.Location = New System.Drawing.Point(2, 6)
@@ -136,9 +137,9 @@ Partial Class frmMovieFanart
         '
         'Label1
         '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label1.Location = New System.Drawing.Point(437, 243)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(336, 144)
@@ -146,24 +147,24 @@ Partial Class frmMovieFanart
         Me.Label1.Text = resources.GetString("Label1.Text")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Button1
+        'btn_SaveSelected
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(686, 455)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(89, 23)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Save Selected"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btn_SaveSelected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btn_SaveSelected.Location = New System.Drawing.Point(686, 455)
+        Me.btn_SaveSelected.Name = "btn_SaveSelected"
+        Me.btn_SaveSelected.Size = New System.Drawing.Size(89, 23)
+        Me.btn_SaveSelected.TabIndex = 4
+        Me.btn_SaveSelected.Text = "Save Selected"
+        Me.btn_SaveSelected.UseVisualStyleBackColor = true
         '
-        'Button2
+        'btn_UrlOrBrowse
         '
-        Me.Button2.Location = New System.Drawing.Point(686, 406)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(89, 23)
-        Me.Button2.TabIndex = 93
-        Me.Button2.Text = "URL or Browse"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.btn_UrlOrBrowse.Location = New System.Drawing.Point(686, 406)
+        Me.btn_UrlOrBrowse.Name = "btn_UrlOrBrowse"
+        Me.btn_UrlOrBrowse.Size = New System.Drawing.Size(89, 23)
+        Me.btn_UrlOrBrowse.TabIndex = 93
+        Me.btn_UrlOrBrowse.Text = "URL or Browse"
+        Me.btn_UrlOrBrowse.UseVisualStyleBackColor = true
         '
         'openFD
         '
@@ -171,31 +172,30 @@ Partial Class frmMovieFanart
         '
         'frmMovieFanart
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(787, 490)
-        Me.Controls.Add(Me.Panel3)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btn_UrlOrBrowse)
+        Me.Controls.Add(Me.btn_SaveSelected)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.Name = "frmMovieFanart"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "moviefanart"
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.Performlayout()
+        Me.Panel1.ResumeLayout(false)
+        Me.Panel1.PerformLayout
+        Me.Panel3.ResumeLayout(false)
+        Me.Panel3.PerformLayout
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btn_SaveSelected As System.Windows.Forms.Button
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents btnthumbbrowse As System.Windows.Forms.Button
@@ -203,6 +203,6 @@ Partial Class frmMovieFanart
     Friend WithEvents btngetthumb As System.Windows.Forms.Button
     Friend WithEvents TextBox5 As System.Windows.Forms.TextBox
     Friend WithEvents Label9 As System.Windows.Forms.Label
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents btn_UrlOrBrowse As System.Windows.Forms.Button
     Friend WithEvents openFD As System.Windows.Forms.OpenFileDialog
 End Class

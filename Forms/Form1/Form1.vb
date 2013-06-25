@@ -772,7 +772,7 @@ Public Class Form1
         rescrapeList.ResetFields()
         rescrapeList.mediatags = True
         rescrapeList.Rename_Files = True
-        rescrapeList.runtime_file = True
+        'rescrapeList.runtime_file = True     'not required as this Zero's the runtime using the batchrescrapespecific routine.
 
         _rescrapeList.FullPathAndFilenames.Clear()
         For Each movie As ComboList In oMovies.MovieCache
@@ -3855,7 +3855,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub BrowseFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripFanartBrowserAlt.Click
+    Private Sub mov_ToolStripFanartBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripFanartBrowserAlt.Click
         Try
             Dim t As New frmMovieFanart
             t.ShowDialog()

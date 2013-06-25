@@ -269,7 +269,7 @@ Public Class frmMovieFanart
 
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btn_SaveSelected_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_SaveSelected.Click
         Try
             Label2.Text = "Please Wait, Trying to Download Fanart"
             Me.Refresh()
@@ -359,7 +359,7 @@ Public Class frmMovieFanart
 
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub btn_UrlOrBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_UrlOrBrowse.Click
         Try
             Panel3.Visible = True
         Catch ex As Exception
