@@ -2415,9 +2415,6 @@ Public Class Form1
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent, Scraper, nfoFileandPath)
             If Teste = True Then
                 
-                'Dim ExtensionPosition As Integer = newMovieFoundFilename.LastIndexOf(".")
-                'Dim nfoFilename As String = newMovieFoundFilename.Remove(ExtensionPosition, (newMovieFoundFilename.Length - ExtensionPosition))
-                'nfoFilename &= ".nfo"
                 Dim newFilename As String = newMovieFoundFilename 
                 Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
 
@@ -2440,12 +2437,38 @@ Public Class Form1
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
         Else
             ScraperErrorDetected = True
+            Dim movie As New FullMovieDetails 
+            mov_TMDbFail(movie, newMovieFoundFilename, newMovieFoundTitle)
+
             If FullFileContent.ToLower = "<results></results>" Then
                 scraperLog &= " - Could not find on TMDB - Check Grammer"
             Else
                 scraperLog &= " - Scrape ERROR!" & vbCrLf
             End If
         End If
+    End Sub
+
+    Private Sub mov_TMDbFail(ByRef movie As FullMovieDetails, ByVal Filename As String, ByVal Title As String)
+        Dim nfopathandfile As String
+        Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
+        nfopathandfile = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition)) & ".nfo"
+        movie.fileinfo.filename = Filename
+        movie.fullmoviebody.title = Title
+        movie.fullmoviebody.plot  = "This movie could not be identified by Media Companion. To add the movie manually, go to the movie edit page and select ""Change Movie"", then select the correct movie."
+        movie.fullmoviebody.genre = "Problem"
+        
+        movie.fullmoviebody.year = "0000"
+        movie.fullmoviebody.rating = "0"
+        movie.fullmoviebody.top250 = "0"
+        movie.fullmoviebody.playcount = "0"
+
+        movie.fileinfo.fullpathandfilename = Filename
+        movie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+        nfoFunction.mov_NfoSave(nfopathandfile, movie, True)
+        
+        Dim aMovie As Movie = oMovies.LoadMovie(nfopathandfile, False)
+        aMovie.UpdateCaches()
+
     End Sub
 
     'Private Function doRename(ByVal aMovie As Movie, ByVal filename As String) As String
