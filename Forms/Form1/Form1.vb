@@ -27,6 +27,8 @@ Public Class Form1
     Shared Public         XbmcControllerQ       As PriorityQueue    = New PriorityQueue
     Shared Public         XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
     Public Property       XbmcMovies            As List(Of MaxXbmcMovie)
+    Public Property       XBMC_Controller_LogLastShownDt  As Date = Now
+    Private               XBMC_Controller_Log_TO_Timer As Timers.Timer = New Timers.Timer()
 
     Property frmXBMC_Progress As frmXBMC_Progress = New frmXBMC_Progress
 
@@ -686,6 +688,8 @@ Public Class Form1
 
         oMovies.Bw = BckWrkScnMovies
 
+        XBMC_Controller_Log_TO_Timer.Interval = 2000
+        AddHandler XBMC_Controller_Log_TO_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
 
         AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
         AddHandler BckWrkXbmcController.DoWork         , AddressOf BckWrkXbmcController_DoWork
@@ -707,6 +711,15 @@ Public Class Form1
         sm.Go()
     End Sub
 
+
+    Private Sub XBMC_Controller_Log_TO_Timer_Elapsed
+        If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
+            System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
+        End If
+        XBMC_Controller_LogLastShownDt = Now
+        XBMC_Controller_Log_TO_Timer.Stop
+    End Sub
+
     Private Sub BckWrkXbmcController_ReportProgress(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
 
         Dim oProgress As XBMC_Controller_Progress = CType(e.UserState, XBMC_Controller_Progress)
@@ -722,9 +735,10 @@ Public Class Form1
 
             If oProgress.ErrorCount>0 Then
                 If Preferences.ShowLogOnError Then
-                    System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
+                    XBMC_Controller_Log_TO_Timer.Start
                 End If
 
+                
                 frmXBMC_Progress.Visible = Not oProgress.Idle
                 pg.Maximum = 1
 
@@ -732,7 +746,9 @@ Public Class Form1
 
                 XbmcControllerQ.Write(ce)       
             End If
+
         End If
+
 
         frmXBMC_Progress.Visible = Not oProgress.Idle
         pg.Maximum = Math.Max(pg.Maximum, oProgress.TotalQcount)
@@ -742,7 +758,6 @@ Public Class Form1
         frmXBMC_Progress.lblProgress  .Text = Replace(oProgress.Action,"&","&&")
         frmXBMC_Progress.lblQueueCount.Text = oProgress.TotalQcount
         frmXBMC_Progress.lblErrorCount.Text = oProgress.ErrorCount
-
     End Sub
 
 

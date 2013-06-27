@@ -853,7 +853,15 @@ Module General
             Next
         Catch
         End Try
-        m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+
+        For i=0 to 10
+            Try
+                m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+                Return
+            Catch
+                Thread.Sleep(200)
+            End Try
+        Next
     End Sub
     Public Sub Read_XBMC_TMDB_Scraper_Config()
         Dim m_xmld As XmlDocument

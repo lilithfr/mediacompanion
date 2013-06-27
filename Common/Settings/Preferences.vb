@@ -284,12 +284,12 @@ Public Class Preferences
 
 
     'XBMC Sync
-    Public Shared XBMC_Sync     As Boolean = False
-    Public Shared XBMC_Address  As String = "127.0.0.1"
-    Public Shared XBMC_Port     As String = "8080"
-    Public Shared XBMC_Username As String = "xbmc"
-    Public Shared XBMC_Password As String = "xbmc"
-
+    Public Shared XBMC_Sync              As Boolean = False
+    Public Shared XBMC_Address           As String = "127.0.0.1"
+    Public Shared XBMC_Port              As String = "8080"
+    Public Shared XBMC_Username          As String = "xbmc"
+    Public Shared XBMC_Password          As String = "xbmc"
+    Public Shared XBMC_MC_FolderMappings As New XBMC_MC_FolderMappings
 
     Public Shared Sub SetUpPreferences()
         'General
@@ -707,6 +707,8 @@ Public Class Preferences
         root.AppendChild( doc, "XBMC_Username" , XBMC_Username )
         root.AppendChild( doc, "XBMC_Password" , XBMC_Password )
 
+        root.AppendChild(XBMC_MC_FolderMappings.GetChild(doc))
+
         doc.AppendChild(root)
 
         If String.IsNullOrEmpty(workingProfile.Config) Then
@@ -994,6 +996,7 @@ Public Class Preferences
                     Case "XBMC_Port"                            : XBMC_Port                 = thisresult.InnerXml 
                     Case "XBMC_Username"                        : XBMC_Username             = thisresult.InnerXml 
                     Case "XBMC_Password"                        : XBMC_Password             = thisresult.InnerXml 
+                    Case "XBMC_MC_FolderMappings"               : XBMC_MC_FolderMappings.Load(thisresult)
 
                     Case Else : Dim x = thisresult
                 End Select

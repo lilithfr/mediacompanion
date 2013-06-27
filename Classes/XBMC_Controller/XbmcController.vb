@@ -11,11 +11,15 @@ Imports System.Linq
 
 Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
+    #Const BatchMode       = False
     #Const GenPseudoErrors = False
 
-    Const Error_Unknown = "**UNKNOWN**"
+    Const Error_Prefix    = "**ERROR** "
+    Const Warning_Prefix  = "**WARNING** "
  
-    Public Property MovieFolderMappings As New Dictionary(Of String, String)
+    Public Property MoviesInFolder As New Dictionary(Of String, Integer)
+
+    Public Property FolderMappings As XBMC_MC_FolderMappings = Preferences.XBMC_MC_FolderMappings
 
 #If GenPseudoErrors Then
     Dim ScanRemoved_Count     As Integer =  0
@@ -34,11 +38,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Public Property ErrorCount As Integer
 
-    Public ReadOnly Property MovieFolder As String
-        Get
-            Return Path.GetDirectoryName(McMoviePath)
-        End Get
-    End Property
 
     Public Q       As PriorityQueue '(Of Integer, Object)
     Public BufferQ As PriorityQueue
@@ -115,8 +114,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         TimeOut
         Success
         Failure
+        NoMoreScanFolderReqs
 
-        WatchDogTimeOut
+  '      WatchDogTimeOut
 
   '      GetNewMovieIds
         ScanFolder
@@ -157,17 +157,18 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
 '       AddHandler XbmcJson.xbmc.Library.Video.Updated, AddressOf XBMC_Video_Updated
-        AddHandler XbmcJson.xbmc.Library.Video.Removed      , AddressOf XBMC_Video_Removed
-        AddHandler XbmcJson.xbmc.Library.Video.ScanFinished , AddressOf XBMC_Video_ScanFinished
-        AddHandler XbmcJson.xbmc.System.Quit                , AddressOf XBMC_System_Quit
-        AddHandler XbmcJson.xbmc.Log                        , AddressOf XBMC_System_Log
-        AddHandler XbmcJson.xbmc.LogError                   , AddressOf XBMC_System_LogError
-        AddHandler XbmcJson.xbmc.Aborted                    , AddressOf XBMC_System_Aborted
+        AddHandler Me.XbmcJson.xbmc.Library.Video.Removed      , AddressOf XBMC_Video_Removed
+        AddHandler Me.XbmcJson.xbmc.Library.Video.ScanFinished , AddressOf XBMC_Video_ScanFinished
+        AddHandler Me.XbmcJson.xbmc.System.Quit                , AddressOf XBMC_System_Quit
+        AddHandler Me.XbmcJson.xbmc.Log                        , AddressOf XBMC_System_Log
+        AddHandler Me.XbmcJson.xbmc.LogError                   , AddressOf XBMC_System_LogError
+        AddHandler Me.XbmcJson.xbmc.Aborted                    , AddressOf XBMC_System_Aborted
 
 
-        AddHandler TransitionDeclined                       , AddressOf UnexpectedEvent
-        AddHandler TransitionCompleted                      , AddressOf WatchDogTimer_Stop
-        AddHandler BeginDispatch                            , AddressOf BegnDispatch 
+        AddHandler Me.TransitionDeclined                      , AddressOf UnexpectedEvent
+        AddHandler Me.TransitionCompleted                     , AddressOf WatchDogTimer_Stop
+        AddHandler Me.BeginDispatch                           , AddressOf BegnDispatch 
+        AddHandler Me.ExceptionThrown                         , AddressOf ExceptionThrownHandler
 
 
         '  Me. (StateId.Connected).EntryHandler += EnterOff
@@ -187,7 +188,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
         AddTransition( S.Any                        , E.MC_ShutDownReq          , S.Any                        , AddressOf ShutDown             )
-        AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
+  '      AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.Any                        , E.MC_ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
         AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
@@ -196,25 +197,35 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.NotConnected               , E.TimeOut                 , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
 
         AddTransition( S.Wf_XBMC_ConnectResult      , E.Failure                 , S.NotConnected               , AddressOf Start1SecTimer       )      
-        AddTransition( S.Wf_XBMC_ConnectResult      , E.Success                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
+        AddTransition( S.Wf_XBMC_ConnectResult      , E.Success                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
 
-        AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Failure                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
-        AddTransition( S.Wf_XBMC_Movies_PreMap      , E.TimeOut                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
-'       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Success                 , S.Ready                      , AddressOf FetchMaxMovies       )
-        AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Success                 , S.Ready                      , AddressOf AutoMapMovieFolders _
-                                                                                                               , AddressOf Ready                )
+'       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Failure                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
+'       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.TimeOut                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
+''      AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Success                 , S.Ready                      , AddressOf FetchMaxMovies       )
+'       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Success                 , S.Ready                      , AddressOf AutoMapMovieFolders _
 
-        AddTransition( S.Wf_XBMC_Movies             , E.Failure                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
-        AddTransition( S.Wf_XBMC_Movies             , E.TimeOut                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
+        AddTransition( S.Wf_XBMC_Movies             , E.Failure                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
+        AddTransition( S.Wf_XBMC_Movies             , E.TimeOut                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
         AddTransition( S.Wf_XBMC_Movies             , E.Success                 , S.Ready                      , AddressOf Ready                )
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideo          )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Ready                      , AddressOf Retry                )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf Ready                )
                                                                                                                                               
-        AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      )
-                                                                                                                                               
+        AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      _
+                                                                                                               , AddressOf Ready                )
+
+
+                                                                                                                                       
+#If BatchMode Then
+        AddTransition( S.Ready                      , E.ScanFolder              , S.Ready                      , AddressOf AddFolderToBatchScan )
+        AddTransition( S.Ready                      , E.NoMoreScanFolderReqs    , S.Wf_XBMC_Video_ScanFinished , AddressOf SendBatchScan        )
+#Else
         AddTransition( S.Ready                      , E.ScanFolder              , S.Wf_XBMC_Video_ScanFinished , AddressOf ScanFolder           )
+#End If
+
+
+
 '       AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Wf_XBMC_Video_ScanFinished , AddressOf AddFetchVideoInfo    ) '...ScanFolder...    )
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Ready                      , AddressOf Retry                ) 
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf AddFetchVideoInfo    )
@@ -237,6 +248,55 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Initialize(S.NotConnected)                                                                                                           
     End Sub                                                                                                                                  
    
+
+    Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
+
+        LogError(evt.Error.Message, evt.Error.Message, evt)
+
+        'AppendLog(evt.Error.Message)
+
+        'Dim p As New XBMC_Controller_Progress
+
+        'ErrorCount+=1
+
+        'p.Action       = evt.Error.Message
+        'p.BufferQcount = BufferQ.Count
+        'p.ErrorMsg     = evt.Error.Message
+        'p.Evt          = evt.EventID
+        'p.Args         = evt.EventArgs
+        'p.LastState    = LastState
+        'p.CurrentState = evt.SourceStateID
+        'p.Qcount       = Q.Count
+        'p.Severity     = "E"
+        'p.ErrorCount   = ErrorCount
+
+        'ReportProgress(p)        
+    End Sub
+
+
+    Sub LogError(Action As String, ErrorMessage As String, evt As TransitionEventArgs(Of S, E, EventArgs) )
+
+        AppendLog(ErrorMessage)
+
+        Dim p As New XBMC_Controller_Progress
+
+        ErrorCount+=1
+
+        p.Action       = Action
+        p.BufferQcount = BufferQ.Count
+        p.ErrorMsg     = ErrorMessage
+        p.Evt          = evt.EventID
+        p.Args         = evt.EventArgs
+        p.LastState    = LastState
+        p.CurrentState = evt.SourceStateID
+        p.Qcount       = Q.Count
+        p.Severity     = "E"
+        p.ErrorCount   = ErrorCount
+
+        ReportProgress(p)        
+    End Sub
+
+
     Sub WatchDogTimer_Stop(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
  '       WatchDogTimer.Stop
         log.Debug("WatchDogTimer_Stop - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
@@ -263,6 +323,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         log.Debug("BegnDispatch - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
         LastArgs = e
   '     WatchDogTimer.Start
+        TO_Timer.Stop
     End Sub 
 
     Sub Start1SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
@@ -396,10 +457,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
 
-
-
-
-
     'Sub FetchMovieInfo(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
     '    ReportProgress("Fetching movie info for : " + Title,args)
@@ -413,9 +470,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         TO_Timer.Stop
   '      WatchDogTimer.Stop
     End Sub
-
-
-
+    
 
 
     'Sub RemoveThenAddMovie(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -449,6 +504,12 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Dim Title       As String  = ""
         Dim xbmcMovieId As Integer = -1
+
+        If IsNothing(XbMoviePath) Then
+            AppendLog(Error_Prefix + "Failed to map [" + McMoviePath + "] to XBMC folders. Check your XBMC_MC_FolderMappings in Comnfig.XML" )
+            Q.Write(E.XBMC_Video_Removed,PriorityQueue.Priorities.high)
+            Return
+        End If
 
         Try
             Title = XbmcJson.GetMinXbmcMovie(XbMoviePath).title
@@ -490,10 +551,23 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         DecodeNfoEventArgs(args)
        
-        Dim got = From i In BufferQ.View Where i.E = E.ScanFolder AndAlso DirectCast(i.Args,FolderEventArgs).Folder=MovieFolder
+        If IsNothing(XbMoviePath) Then
+            AppendLog(Warning_Prefix + "Can't add new movie, as XBMC is missing a source movie folder to access this folder : [" + Path.GetDirectoryName(McMoviePath) + "]" )
+            Return
+        End If
+
+        Dim XbFolder As String = Path.GetDirectoryName(XbMoviePath)
+
+        Dim got = From i In BufferQ.View Where i.E = E.ScanFolder AndAlso DirectCast(i.Args,FolderEventArgs).Folder=XbFolder
               
         If got.Count=0 Then
-            BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(MovieFolder,PriorityQueue.Priorities.low)))
+            BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.low)))
+        End If
+
+        If Not MoviesInFolder.ContainsKey(XbFolder) Then
+            MoviesInFolder.Add(XbFolder,1)
+        Else
+            MoviesInFolder(XbFolder) = MoviesInFolder(XbFolder)+1
         End If
     End Sub
 
@@ -515,14 +589,67 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Q.Write(le)
     End Sub
 
+    Property BatchScanFolders As List(Of String) = New List(Of String)
 
+
+    Sub AddFolderToBatchScan(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        ReportProgress("Adding folder to batch scan...",args)
+
+        Dim ea As FolderEventArgs = args.EventArgs
+
+        BatchScanFolders.Add( XbmcJson.xbmc.Library.Video.GetCall_AddMovies(ea.Folder).ToString )
+
+        If (From i In BufferQ.View Where i.E = E.ScanFolder).Count=0 Then
+            Q.Write(E.NoMoreScanFolderReqs)
+        End If
+    End Sub
+
+
+    Sub SendBatchScan(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        ReportProgress("Sending batch scan for "+ BatchScanFolders.Count.ToString + " folders...",args)
+
+        Dim request As String=""
+        Dim timeout = 4000
+
+        For Each job In BatchScanFolders
+            request += job+","
+            timeout += 1000
+        Next
+
+        request = Left(request,Len(request)-1)
+
+        StartTimer(timeout)
+
+        If BatchScanFolders.Count>1 Then
+            request = "[" + request + "]"
+        End If
+
+        log.Debug(request)
+
+        Try
+            XbmcJson.xbmc.Library.client.SendBatchCall(request)
+        Catch ex As Exception
+            log.Debug(ex.Message)
+        End Try
+        BatchScanFolders.Clear
+    End Sub
 
     Sub ScanFolder(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
         Dim ea As FolderEventArgs = args.EventArgs
 
         Dim scanFolder = ea.Folder
-        Dim Interval = 5000
+        Dim Interval = 5000 + (MoviesInFolder(scanFolder)*1000)
+
+        MoviesInFolder(scanFolder)=0
+
+        Dim Total = Aggregate c In MoviesInFolder Into Sum(c.Value)
+
+        If Total = 0 Then 
+            MoviesInFolder.Clear
+        End If
 
         '
         ' Scanning named source folders doesn't work because it doesn't scan the sub-folders [XBMC bug]
@@ -597,29 +724,29 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     '            Folder.Contains(x)).Count
     'End Function
 
+    'Property Mapped
+    '            Dim moviePaths = (From
+    '                            m In Parent.oMovies.MoviesWithUniqueMovieTitles
+    '                        Where
+    '                            m.fullpathandfilename.ToUpper.Contains(wotEver.ToUpper)
+    '                        Join
+    '                            x In XbmcJson.MoviesWithUniqueMovieTitles
+    '                        On
+    '                            x.title Equals m.title And Path.GetFileName(x.file).ToUpper Equals Path.GetFileName(m.MoviePathAndFileName).ToUpper
+    '                        Select
+    '                            m.MoviePathAndFileName, x.file).First
+
 
     Sub DecodeNfoEventArgs(args As TransitionEventArgs(Of S, E, EventArgs))
         Dim ea As VideoPathEventArgs = args.EventArgs
 
         McMoviePath = ea.McMoviePath
 
-        XbMoviePath = Error_Unknown
+        XbMoviePath = FolderMappings.GetXBMC_MoviePath(McMoviePath)
 
-        For Each Folder In Preferences.movieFolders
-            If McMoviePath.ToUpper.StartsWith(Folder.ToUpper) Then
-
-                Dim file As String = Right(McMoviePath,McMoviePath.Length-Folder.Length)
-
-                If file.StartsWith(Path.DirectorySeparatorChar) Then
-                    file = file.Remove(0,1)
-                End If
-
-                XbMoviePath = Path.Combine(MovieFolderMappings(Folder),file )
-                Return
-            End If
-        Next
-
-   '     ReportProgress ... ERROR - Missing XBMC movie path
+        If IsNothing(XbMoviePath) Then
+            AppendLog(Error_Prefix + "Failed to map [" + McMoviePath + "] to XBMC folders. Check your XBMC_MC_FolderMappings in Comnfig.XML" )
+        End If
     End Sub
 
     'Sub GetNewMovieIds(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -721,13 +848,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
 
-    Private Sub WatchDogTimer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
+    'Private Sub WatchDogTimer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
 
-        sender.Stop()
-        AppendLog("WatchDog Timer Elapsed!")
+    '    sender.Stop()
+    '    AppendLog("WatchDog Timer Elapsed!")
 
-        Q.Write(E.WatchDogTimeOut,PriorityQueue.Priorities.high)
-    End Sub
+    '    Q.Write(E.WatchDogTimeOut,PriorityQueue.Priorities.high)
+    'End Sub
 
 
     Sub AppendLog(msg As String)
@@ -828,54 +955,57 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     'End Sub
 
 
-    Sub AutoMapMovieFolders(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+    'Sub AutoMapMovieFolders(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        ReportProgress("Mapping movie folders : ",args)
+    '    ReportProgress("Mapping movie folders : ",args)
 
-        MovieFolderMappings.Clear
+    '    MovieFolderMappings.Clear
 
-        For Each folder In Preferences.movieFolders
+    '    For Each folder In Preferences.movieFolders
+    '        Try
+    '            Dim wotEver = folder
 
-            Dim wotEver = folder
-
-            Dim moviePaths = (From
-                            m In Parent.oMovies.MoviesWithUniqueMovieTitles
-                        Where
-                            m.fullpathandfilename.ToUpper.Contains(wotEver.ToUpper)
-                        Join
-                            x In XbmcJson.MoviesWithUniqueMovieTitles
-                        On
-                            x.title Equals m.title And Path.GetFileName(x.file).ToUpper Equals Path.GetFileName(m.MoviePathAndFileName).ToUpper
-                        Select
-                            m.MoviePathAndFileName, x.file).First
-
-
-            Dim mc = moviePaths.MoviePathAndFileName.ToUpper
-            Dim xb = moviePaths.file.ToUpper
-
-            'xb = xb.Replace(folder.ToUpper,"X:")       'Test to simulate a drive mapping
+    '            Dim moviePaths = (From
+    '                            m In Parent.oMovies.MoviesWithUniqueMovieTitles
+    '                        Where
+    '                            m.fullpathandfilename.ToUpper.Contains(wotEver.ToUpper)
+    '                        Join
+    '                            x In XbmcJson.MoviesWithUniqueMovieTitles
+    '                        On
+    '                            x.title Equals m.title And Path.GetFileName(x.file).ToUpper Equals Path.GetFileName(m.MoviePathAndFileName).ToUpper
+    '                        Select
+    '                            m.MoviePathAndFileName, x.file).First
 
 
-            If mc = xb Then
-                MovieFolderMappings_Add(folder, folder)
-            Else
-                While mc.Length > folder.Length And mc.Chars(mc.Length - 1) = xb.Chars(xb.Length - 1)
+    '            Dim mc = moviePaths.MoviePathAndFileName.ToUpper
+    '            Dim xb = moviePaths.file.ToUpper
 
-                    mc = mc.Remove(mc.Length - 1)
-                    xb = xb.Remove(xb.Length - 1)
+    '            'xb = xb.Replace(folder.ToUpper,"X:")       'Test to simulate a drive mapping
 
-                End While
 
-                MovieFolderMappings_Add(folder, xb)
-            End If
-        Next
-    End Sub
+    '            If mc = xb Then
+    '                MovieFolderMappings_Add(folder, folder)
+    '            Else
+    '                While mc.Length > folder.Length And mc.Chars(mc.Length - 1) = xb.Chars(xb.Length - 1)
 
-    Sub MovieFolderMappings_Add( dirMc As String, dirXb As String )
+    '                    mc = mc.Remove(mc.Length - 1)
+    '                    xb = xb.Remove(xb.Length - 1)
 
-        log.Debug("Mapping MC movie folder : [" + dirMc + "] to XBMC movie folder : [" + dirXb + "]")
-        MovieFolderMappings.Add(dirMc,dirXb)
-    End Sub
+    '                End While
+
+    '                MovieFolderMappings_Add(folder, xb)
+    '            End If
+    '        Catch ex As Exception
+    '           AppendLog(Warning_Prefix + "Check XBMC has a movie mapping equivilant to MC's : [" + folder + "] folder")
+    '        End Try
+    '    Next
+    'End Sub
+
+    'Sub MovieFolderMappings_Add( dirMc As String, dirXb As String )
+
+    '    log.Debug("Mapping MC movie folder : [" + dirMc + "] to XBMC movie folder : [" + dirXb + "]")
+    '    MovieFolderMappings.Add(dirMc,dirXb)
+    'End Sub
 
 End Class
 

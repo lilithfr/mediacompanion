@@ -353,7 +353,7 @@ Public Class Movies
                 Group By 
                     x.ActorName Into NumFilms=Count 
                 Where 
-                    ActorsFilter_AlsoInclude.Contains(ActorName)
+                    ActorsFilter_AlsoInclude.Contains(IIf(IsNothing(ActorName),"N/A",ActorName))
             
             Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")"
         End Get
