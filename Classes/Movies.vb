@@ -1325,6 +1325,12 @@ Public Class Movies
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
         Rebuild_Data_GridViewMovieCache()
+
+        If Preferences.XBMC_Sync Then
+            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
+
+            Form1.XbmcControllerQ.Write(evt)
+        End If
     End Sub
 
 
@@ -1410,6 +1416,12 @@ Public Class Movies
         MovieCache.AddRange(TmpMovieCache)
 
         Rebuild_Data_GridViewMovieCache
+
+        If Preferences.XBMC_Sync Then
+            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
+
+            Form1.XbmcControllerQ.Write(evt)
+        End If
     End Sub
 
 

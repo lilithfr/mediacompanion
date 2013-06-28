@@ -181,6 +181,7 @@
     <Compile Include="Classes\XBMC_Controller\BaseEvent.vb" />
     <Compile Include="Classes\XBMC_Controller\BaseEventArgs.vb" />
     <Compile Include="Classes\XBMC_Controller\FolderEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Controller\ScanNewMoviesEventArgs.vb" />
     <Compile Include="Classes\XBMC_Controller\smAction.vb" />
     <Compile Include="Classes\XBMC_Controller\UnknownEventArgs.vb" />
     <Compile Include="Classes\XBMC_Controller\VideoPathEventArgs.vb" />

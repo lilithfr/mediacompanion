@@ -106,6 +106,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MC_Movie_Updated
         MC_Movie_New
         MC_Movie_Removed
+        MC_ScanForNewMovies
         MC_ShutDownReq
         MC_ResetErrorCount
 
@@ -236,17 +237,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_FetchAllMovieDetails , S.Ready                      , AddressOf FetchMaxMovies       )
+        AddTransition( S.Ready                      , E.MC_ScanForNewMovies     , S.Wf_XBMC_Video_ScanFinished , AddressOf ScanNewMovies        )            
+                                                                                                                                              
                                                                                                                                               
         '                                                                                                                                     
 '       AddTransition( S.Ready                      , E.MC_Movie_New            , S.Wf_XBMC_Video_ScanFinished , AddressOf AddMovie             )
     '   AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Wf_XBMC_Video_ScanFinished , AddressOf AddMovie             )
-                                                                                                                                              
  '      AddTransition( S.Wf_XBMC_Video_Removed      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf AddMovie             )
-                                                                                                                                              
-                                                                                                                                              
   '      AddTransition( S.Ready                 , E.GetNewMovieIds          , S.Ready                 , AddressOf GetNewMovieIds )
-  '      AddTransition( S.Ready                 , E.ScanForContentReq       , S.Ready                 , AddressOf ScanForContent )            
-                                                                                                                                              
                                                                                                                                               
         Initialize(S.NotConnected)                                                                                                           
     End Sub                                                                                                                                  
@@ -809,19 +807,18 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     '  End Sub
 
 
+    Sub ScanNewMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
+        Dim ea As ScanNewMoviesEventArgs = args.EventArgs
 
+        Dim Interval As Integer = 5000 + ((ea.NumMovies)*1000)
 
-    'Sub ScanForContent(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        ReportProgress("Scanning for new movies in ALL movie folders...",args)
 
-    '    AppendLog("ScanForContent")
+        XbmcJson.xbmc.Library.Video.AddMovies()
 
-    '    XbmcJson.xbmc.Library.Video.AddMovies()
-
-    '    '.ScanForContent()
-
-    '    Restart_Timer(GetNewMovieIds_IdleTimer)
-    'End Sub
+        StartTimer(Interval)
+    End Sub
 
 
     'Private Sub GetNewMovieIds_IdleTimer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
