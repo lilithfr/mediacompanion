@@ -105,6 +105,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MC_ConnectReq
         MC_Movie_Updated
         MC_Movie_New
+        MC_Movie_Removed
         MC_ShutDownReq
         MC_ResetErrorCount
 
@@ -208,12 +209,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Wf_XBMC_Movies             , E.TimeOut                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
         AddTransition( S.Wf_XBMC_Movies             , E.Success                 , S.Ready                      , AddressOf Ready                )
                                                                                                                                               
-        AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideo          )
+        AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideoThenAdd   )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Ready                      , AddressOf Retry                )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf Ready                )
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      _
                                                                                                                , AddressOf Ready                )
+
+        AddTransition( S.Ready                      , E.MC_Movie_Removed        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideo          )
 
 
                                                                                                                                        
@@ -300,7 +303,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub HandleTransitionCompleted(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
  '       WatchDogTimer.Stop
         log.Debug("Transition Completed - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
-        TO_Timer.Stop
     End Sub
                                                                                                                                    
     Sub UnexpectedEvent(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
@@ -500,7 +502,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub RemoveVideo(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
-
         DecodeNfoEventArgs(args)
 
         Dim Title       As String  = ""
@@ -538,7 +539,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             ReportProgress("Failed to find movieid for [" & McMoviePath & "] - Probably new to XBMC",args) 'This can happen if not already in XBMC
             Q.Write(E.XBMC_Video_Removed,PriorityQueue.Priorities.high)
         End If
+    End Sub
 
+    Sub RemoveVideoThenAdd(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        RemoveVideo    (sender,args)
         AddFolderToScan(sender,args)
     End Sub
 

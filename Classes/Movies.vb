@@ -1843,6 +1843,18 @@ Public Class Movies
 
         MovieCache             .RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
         Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
+
+
+        If Preferences.XBMC_Sync Then
+            Dim media As String = Utilities.GetFileName(fullpathandfilename,True)
+
+            Dim evt As New BaseEvent
+
+            evt.E    = XbmcController.E.MC_Movie_Removed
+            evt.Args = New VideoPathEventArgs(media, PriorityQueue.Priorities.medium)
+
+            Form1.XbmcControllerQ.Write(evt)
+        End If
     End Sub
 
         
