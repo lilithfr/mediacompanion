@@ -1028,8 +1028,8 @@ Public Class WorkingWithNfoFiles
     End Function
 
 
-    Public Function mov_NfoLoadFull(ByVal path As String) As FullMovieDetails
-        Monitor.Enter(Me)
+    Public Shared Function mov_NfoLoadFull(ByVal path As String) As FullMovieDetails
+        'Monitor.Enter(Me)
         Try
             Dim newmovie As New FullMovieDetails
             newmovie.fullmoviebody.genre = ""
@@ -1306,14 +1306,14 @@ Public Class WorkingWithNfoFiles
         Catch ex As Exception
             MsgBox(ex.Message.ToString)
         Finally
-            Monitor.Exit(Me)
+            'Monitor.Exit(Me)
         End Try
         Return Nothing
     End Function
 
 
-    Public Sub mov_NfoSave(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
-        Monitor.Enter(Me)
+    Public Shared Sub mov_NfoSave(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
+        'Monitor.Enter(Me)
         Dim stage As Integer = 1
         Try
             If movietosave Is Nothing Then Exit Sub
@@ -1969,7 +1969,7 @@ Public Class WorkingWithNfoFiles
         Catch ex As Exception
             MsgBox("Error Encountered at stage " & stage.ToString & vbCrLf & vbCrLf & ex.ToString)
         Finally
-            Monitor.Exit(Me)
+            'Monitor.Exit(Me)
         End Try
     End Sub
 

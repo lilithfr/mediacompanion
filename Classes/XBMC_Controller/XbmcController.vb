@@ -166,7 +166,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
         AddHandler Me.TransitionDeclined                      , AddressOf UnexpectedEvent
-        AddHandler Me.TransitionCompleted                     , AddressOf WatchDogTimer_Stop
+        AddHandler Me.TransitionCompleted                     , AddressOf HandleTransitionCompleted
         AddHandler Me.BeginDispatch                           , AddressOf BegnDispatch 
         AddHandler Me.ExceptionThrown                         , AddressOf ExceptionThrownHandler
 
@@ -297,9 +297,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
 
-    Sub WatchDogTimer_Stop(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
+    Sub HandleTransitionCompleted(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
  '       WatchDogTimer.Stop
-        log.Debug("WatchDogTimer_Stop - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
+        log.Debug("Transition Completed - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
+        TO_Timer.Stop
     End Sub
                                                                                                                                    
     Sub UnexpectedEvent(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
@@ -320,7 +321,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub BegnDispatch(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
-        log.Debug("BegnDispatch - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
+        log.Debug("Begin Dispatch - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
         LastArgs = e
   '     WatchDogTimer.Start
         TO_Timer.Stop
@@ -534,7 +535,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             XbmcJson.RemoveXbmcMovie(XbMoviePath)
         Else
             'ErrorCount = ErrorCount + 1
-            ReportProgress("Failed to find movieid for [" & McMoviePath & "]",args) 'This can happen if not already in XBMC
+            ReportProgress("Failed to find movieid for [" & McMoviePath & "] - Probably new to XBMC",args) 'This can happen if not already in XBMC
             Q.Write(E.XBMC_Video_Removed,PriorityQueue.Priorities.high)
         End If
 

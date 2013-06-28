@@ -1442,24 +1442,24 @@ Module General
             doc.WriteTo(output)
             output.Close()
 
-            Dim nfoGenerator As WorkingWithNfoFiles
-            nfoGenerator = New WorkingWithNfoFiles
+            'Dim nfoGenerator As WorkingWithNfoFiles
+            'nfoGenerator = New WorkingWithNfoFiles
 
             ' load nfo file to clean
-            Dim movie As FullMovieDetails = nfoGenerator.mov_NfoLoadFull(nfoFileandPath)
+            Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfoFileandPath)
 
-            If movie.fullmoviebody.movieset="" Then movie.fullmoviebody.movieset="-None-"
-            If movie.fullmoviebody.top250  ="" Then movie.fullmoviebody.top250  ="0"
+            If fmd.fullmoviebody.movieset="" Then fmd.fullmoviebody.movieset="-None-"
+            If fmd.fullmoviebody.top250  ="" Then fmd.fullmoviebody.top250  ="0"
 
             'if scraped by XBMC TMDB, one poster is allocated.  Move this to Frodoposter.
             If scraper <> "" Then
-                If movie.listthumbs.Count = 1 Then movie.frodoPosterThumbs.Add(New FrodoPosterThumb("poster",movie.listthumbs(0)))
-                movie.listthumbs.Clear()
+                If fmd.listthumbs.Count = 1 Then fmd.frodoPosterThumbs.Add(New FrodoPosterThumb("poster",fmd.listthumbs(0)))
+                fmd.listthumbs.Clear()
             End If
 
             ' save to make sure additional features like saving actor thumbnails takes place
-            nfoGenerator.mov_NfoSave(nfoFileandPath, movie, True)
-
+            'WorkingWithNfoFiles.mov_NfoSave(nfoFileandPath, fmd, True)
+            Movie.SaveNFO(nfoFileandPath, fmd)
             Return True
         Catch
             Return False

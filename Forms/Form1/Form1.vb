@@ -1624,7 +1624,7 @@ Public Class Form1
         If Yield(yieldIng) Then Return
 
         If workingMovie.fullpathandfilename <> Nothing And DataGridViewMovies.Rows.Count > 0 Then
-            workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
+            workingMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(workingMovie.fullpathandfilename)
 
             If Yield(yieldIng) Then Return
 
@@ -1953,7 +1953,8 @@ Public Class Form1
 
                 If fmd.fullmoviebody.trailer <> "" Then
                     fmd.fullmoviebody.trailer = ""
-                    nfoFunction.mov_NfoSave(fmd.fileinfo.fullpathandfilename, fmd, True)
+                    'WorkingWithNfoFiles.mov_NfoSave(fmd.fileinfo.fullpathandfilename, fmd, True)
+                    Movie.SaveNFO(fmd.fileinfo.fullpathandfilename, fmd)
                 End If
 
                 ButtonTrailer.Text = "No trailer found"
@@ -2463,26 +2464,30 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub mov_TMDbFail(ByRef movie As FullMovieDetails, ByVal Filename As String, ByVal Title As String)
+    Private Sub mov_TMDbFail(ByRef fmd As FullMovieDetails, ByVal Filename As String, ByVal Title As String)
         Dim nfopathandfile As String
         Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
         nfopathandfile = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition)) & ".nfo"
-        movie.fileinfo.filename = Filename
-        movie.fullmoviebody.title = Title
-        movie.fullmoviebody.plot  = "This movie could not be identified by Media Companion. To add the movie manually, go to the movie edit page and select ""Change Movie"", then select the correct movie."
-        movie.fullmoviebody.genre = "Problem"
+        fmd.fileinfo.filename = Filename
+        fmd.fullmoviebody.title = Title
+        fmd.fullmoviebody.plot  = "This movie could not be identified by Media Companion. To add the movie manually, go to the movie edit page and select ""Change Movie"", then select the correct movie."
+        fmd.fullmoviebody.genre = "Problem"
         
-        movie.fullmoviebody.year = "0000"
-        movie.fullmoviebody.rating = "0"
-        movie.fullmoviebody.top250 = "0"
-        movie.fullmoviebody.playcount = "0"
+        fmd.fullmoviebody.year = "0000"
+        fmd.fullmoviebody.rating = "0"
+        fmd.fullmoviebody.top250 = "0"
+        fmd.fullmoviebody.playcount = "0"
 
-        movie.fileinfo.fullpathandfilename = Filename
-        movie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
-        nfoFunction.mov_NfoSave(nfopathandfile, movie, True)
+        fmd.fileinfo.fullpathandfilename = Filename
+        fmd.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+
+        'WorkingWithNfoFiles.mov_NfoSave(nfopathandfile, fmd, True)
+
+        ' ***** LoadMovies second parameter controls whether UpdateCaches is called or not ******
+        'Dim aMovie As Movie = oMovies.LoadMovie(nfopathandfile, False)
+        'aMovie.UpdateCaches()
         
-        Dim aMovie As Movie = oMovies.LoadMovie(nfopathandfile, False)
-        aMovie.UpdateCaches()
+        oMovies.SaveAndLoadMovie(nfopathandfile,fmd)
 
     End Sub
 
@@ -3833,11 +3838,12 @@ Public Class Form1
                 For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
                     Dim filepath As String = sRow.Cells("fullpathandfilename").Value.ToString
                     If (IO.File.Exists(filepath)) Then
-                        Dim movie As New FullMovieDetails
-                        movie = nfoFunction.mov_NfoLoadFull(filepath)
-                        If IsNothing(movie) Then Continue For
-                        movie.fullmoviebody.playcount = watched
-                        nfoFunction.mov_NfoSave(filepath, movie, True)
+                        Dim fmd As New FullMovieDetails
+                        fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
+                        If IsNothing(fmd) Then Continue For
+                        fmd.fullmoviebody.playcount = watched
+                        'WorkingWithNfoFiles.mov_NfoSave(filepath, fmd, True)
+                        Movie.SaveNFO(filepath, fmd)
                         For f = 0 To oMovies.MovieCache.Count - 1
                             If oMovies.MovieCache(f).fullpathandfilename = filepath Then
                                 Dim newfullmovie As New ComboList

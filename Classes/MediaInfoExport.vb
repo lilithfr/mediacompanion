@@ -255,7 +255,7 @@ Public Class MediaInfoExport
                     ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
                 Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "format", "filename", "nfo"
                     Dim newplotdetails As New FullMovieDetails
-                    newplotdetails = mediaExportNfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
+                    newplotdetails = WorkingWithNfoFiles.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
                         If tokenInstr(0) = "fullplot" Then
                             strNFOprop = newplotdetails.fullmoviebody.plot

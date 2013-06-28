@@ -962,7 +962,8 @@ Public Class Form2
             Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
             Form1.workingMovieDetails.listactors = workingmovieedit.listactors
             Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
-            Call Form1.nfoFunction.mov_NfoSave(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
+            'Call WorkingWithNfoFiles.mov_NfoSave(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
+            Movie.SaveNFO(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             Me.Close()
             'Dim oldactors(9999, 2)
             'Dim actorcount As Integer = 0

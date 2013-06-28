@@ -873,7 +873,7 @@ Public Class Movie
     End Sub
 
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
-        _scrapedMovie = _nfoFunction.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
+        _scrapedMovie = WorkingWithNfoFiles.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
         _nfoPathAndFilename=ActualNfoPathAndFilename
         Scraped=True
         Try
@@ -884,27 +884,39 @@ Public Class Movie
     End Sub
 
     Sub SaveNFO
-        'RemoveMovieFromCaches
-        'If Not Rescrape Then DeleteNFO
+        Try
+            SaveNFO(NfoPathPrefName, _scrapedMovie, mediapathandfilename)
+        Catch ex As Exception
+            ReportProgress(MSG_ERROR, "!!! [SaveNFO - Writing to XBMC Controller Queue] threw [" & ex.Message & "]" & vbCrLf)
+        End Try
+    End Sub
 
-        Dim MovieUpdated As Boolean = File.Exists(NfoPathPrefName)
 
-        _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
+    Shared Sub SaveNFO(Nfo As String, fmd As FullMovieDetails,Optional media As String=Nothing)
+
+        'Dim MovieUpdated As Boolean = File.Exists(Nfo)
+
+        WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)
 
         If Preferences.XBMC_Sync Then
 
+            If IsNothing(media) Then
+                media = Utilities.GetFileName(Nfo,True)
+            End If
+
             Dim evt As New BaseEvent
 
-            Try
-                evt.E = IIf(MovieUpdated, XbmcController.E.MC_Movie_Updated, XbmcController.E.MC_Movie_New)
-                evt.Args = New VideoPathEventArgs(mediapathandfilename, PriorityQueue.Priorities.medium)
+            'evt.E = IIf(MovieUpdated, XbmcController.E.MC_Movie_Updated, XbmcController.E.MC_Movie_New)
 
-                Form1.XbmcControllerQ.Write(evt)
-            Catch ex As Exception
-                ReportProgress(MSG_ERROR, "!!! [SaveNFO-XBMC_Sync] threw [" & ex.Message & "]" & vbCrLf)
-            End Try
+            evt.E    = XbmcController.E.MC_Movie_Updated
+            evt.Args = New VideoPathEventArgs(media, PriorityQueue.Priorities.medium)
+
+            Form1.XbmcControllerQ.Write(evt)
+
         End If
     End Sub
+
+
 
     Sub AssignUnknownMovieToCache
         AssignMovieToCache
