@@ -70,7 +70,7 @@ Public Class XBMC_MC_FolderMappings
         Return Nothing
     End Function
 
-    Public Function GetXBMC_MoviePath(McMoviePath As String)
+    Public Function GetXBMC_MoviePath(McMoviePath As String) As String
 
         For Each FolderMapping In Items
             If McMoviePath.ToUpper.StartsWith(FolderMapping.MC.ToUpper) Then
@@ -82,6 +82,35 @@ Public Class XBMC_MC_FolderMappings
                 End If
 
                 Return Path.Combine(FolderMapping.XBMC,file )
+            End If
+        Next
+
+        Return Nothing
+      End Function
+
+    Public Function GetMC_MoviePath(XbMoviePath As String) As String
+
+        For Each FolderMapping In Items
+            If XbMoviePath.ToUpper.StartsWith(FolderMapping.XBMC.ToUpper) Then
+
+                Dim file As String = Right(XbMoviePath,XbMoviePath.Length-FolderMapping.XBMC.Length)
+
+                If file.StartsWith(Path.DirectorySeparatorChar) Then
+                    file = file.Remove(0,1)
+                End If
+
+                Return Path.Combine(FolderMapping.MC,file )
+            End If
+        Next
+
+        Return Nothing
+      End Function
+
+    Public Function GetMC_MovieFolder(McMoviePath As String) As String
+
+        For Each FolderMapping In Items
+            If McMoviePath.ToUpper.StartsWith(FolderMapping.MC.ToUpper) Then
+                Return FolderMapping.MC.ToUpper
             End If
         Next
 

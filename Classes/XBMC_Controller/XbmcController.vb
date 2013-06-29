@@ -19,6 +19,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
  
     Public Property MoviesInFolder As New Dictionary(Of String, Integer)
 
+    Property BatchScanFolders As List(Of String) = New List(Of String)
+
     Public Property FolderMappings As XBMC_MC_FolderMappings = Preferences.XBMC_MC_FolderMappings
 
 #If GenPseudoErrors Then
@@ -82,6 +84,46 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 '    Private GetNewMovieIds_IdleTimer As Timers.Timer = New Timers.Timer()
     'Private FolderScan_IdleTimer     As Timers.Timer = New Timers.Timer()
+
+    ReadOnly Property MC_Only_Movies As List(Of ComboList)
+        Get
+            Dim q = From
+                        M In Parent.oMovies.MovieCache
+                    Where
+                        Not XBMC_to_MC_MoviePaths.Contains(M.MoviePathAndFileName.ToUpper)
+
+            Return q.ToList
+        End Get
+    End Property
+
+
+    ' Translates XBMC movie paths to there MC equivilant
+    Public ReadOnly Property XBMC_to_MC_MoviePaths As List(Of String)
+        Get
+            Dim q = From 
+                        X In XbmcJson.XbmcMovies
+                    Select
+                        FolderMappings.GetMC_MoviePath(X.file).ToUpper
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property    
+
+
+    ReadOnly Property MC_Only_MovieFolders As List(Of String)
+        Get
+            Dim q = From
+                        M In MC_Only_Movies
+                    Select
+                        FolderMappings.GetMC_MovieFolder(M.MoviePathAndFileName)
+                    Distinct
+
+            Return q.ToList
+        End Get
+    End Property
+
+
+
 
     Private TO_Timer      As Timers.Timer = New Timers.Timer()
  '   Private WatchDogTimer As Timers.Timer = New Timers.Timer()
@@ -167,10 +209,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddHandler Me.XbmcJson.xbmc.Aborted                    , AddressOf XBMC_System_Aborted
 
 
-        AddHandler Me.TransitionDeclined                      , AddressOf UnexpectedEvent
-        AddHandler Me.TransitionCompleted                     , AddressOf HandleTransitionCompleted
-        AddHandler Me.BeginDispatch                           , AddressOf BegnDispatch 
-        AddHandler Me.ExceptionThrown                         , AddressOf ExceptionThrownHandler
+        AddHandler Me.TransitionDeclined                       , AddressOf UnexpectedEvent
+        AddHandler Me.TransitionCompleted                      , AddressOf HandleTransitionCompleted
+        AddHandler Me.BeginDispatch                            , AddressOf BegnDispatch 
+        AddHandler Me.ExceptionThrown                          , AddressOf ExceptionThrownHandler
 
 
         '  Me. (StateId.Connected).EntryHandler += EnterOff
@@ -237,7 +279,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_FetchAllMovieDetails , S.Ready                      , AddressOf FetchMaxMovies       )
-        AddTransition( S.Ready                      , E.MC_ScanForNewMovies     , S.Wf_XBMC_Video_ScanFinished , AddressOf ScanNewMovies        )            
+        AddTransition( S.Ready                      , E.MC_ScanForNewMovies     , S.Ready                      , AddressOf ScanNewMovies        )            
                                                                                                                                               
                                                                                                                                               
         '                                                                                                                                     
@@ -253,25 +295,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
 
         LogError(evt.Error.Message, evt.Error.Message, evt)
-
-        'AppendLog(evt.Error.Message)
-
-        'Dim p As New XBMC_Controller_Progress
-
-        'ErrorCount+=1
-
-        'p.Action       = evt.Error.Message
-        'p.BufferQcount = BufferQ.Count
-        'p.ErrorMsg     = evt.Error.Message
-        'p.Evt          = evt.EventID
-        'p.Args         = evt.EventArgs
-        'p.LastState    = LastState
-        'p.CurrentState = evt.SourceStateID
-        'p.Qcount       = Q.Count
-        'p.Severity     = "E"
-        'p.ErrorCount   = ErrorCount
-
-        'ReportProgress(p)        
     End Sub
 
 
@@ -592,8 +615,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Q.Write(le)
     End Sub
 
-    Property BatchScanFolders As List(Of String) = New List(Of String)
-
 
     Sub AddFolderToBatchScan(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
@@ -807,17 +828,30 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     '  End Sub
 
 
+    'Sub ScanNewMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+    '    Dim ea As ScanNewMoviesEventArgs = args.EventArgs
+
+    '    Dim Interval As Integer = 5000 + ((ea.NumMovies)*1000)
+
+    '    ReportProgress("Scanning for new movies in ALL movie folders...",args)
+
+    '    XbmcJson.xbmc.Library.Video.AddMovies()
+
+    '    StartTimer(Interval)
+    'End Sub
+
     Sub ScanNewMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        Dim ea As ScanNewMoviesEventArgs = args.EventArgs
+        For Each movie In MC_Only_Movies
 
-        Dim Interval As Integer = 5000 + ((ea.NumMovies)*1000)
+            Dim evt As New BaseEvent
 
-        ReportProgress("Scanning for new movies in ALL movie folders...",args)
+            evt.E    = XbmcController.E.MC_Movie_Updated
+            evt.Args = New VideoPathEventArgs(movie.MoviePathAndFileName, PriorityQueue.Priorities.medium)
 
-        XbmcJson.xbmc.Library.Video.AddMovies()
-
-        StartTimer(Interval)
+            Q.Write(evt)
+        Next
     End Sub
 
 
@@ -839,8 +873,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     '    Q.Write(E.ScanForContentReq,PriorityQueue.Priorities.low)
     'End Sub
 
-
-
     Private Sub Timer1sec_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
 
         sender.Stop()
@@ -857,7 +889,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     '    Q.Write(E.WatchDogTimeOut,PriorityQueue.Priorities.high)
     'End Sub
-
 
     Sub AppendLog(msg As String)
         log.Debug(" Q: " + Q.Count.ToString + " " + " Buffer Q: " + BufferQ.Count.ToString + " - " + msg)
@@ -891,9 +922,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Q.Write(e.JSON_Abort,PriorityQueue.Priorities.critical)
     End Sub
 
-    
-
-
     Sub XBMC_Video_Updated(sender As Object, ea As EventArgs)
         Q.Write(E.XBMC_Video_Updated,PriorityQueue.Priorities.high)
     End Sub
@@ -924,9 +952,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Q.Write(E.XBMC_Video_ScanFinished,PriorityQueue.Priorities.high)
     End Sub
 
-
-
-
     Sub XBMC_System_Quit(sender As Object, ea As EventArgs)
         Q.Write(E.XBMC_System_Quit,PriorityQueue.Priorities.high)
     End Sub
@@ -943,7 +968,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     '    AddHandler GetNewMovieIds_IdleTimer.Elapsed, New System.Timers.ElapsedEventHandler(AddressOf Me.GetNewMovieIds_IdleTimer_Elapsed)
     'End Sub
-
 
     Sub Ini_Timer(t As Timers.Timer,Optional Interval As Integer=1000)
         t.Stop()
