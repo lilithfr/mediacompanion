@@ -29,7 +29,9 @@ Module Module1
     Dim newEpisodeList As New List(Of episodeinfo)
     Dim defaultPoster As String = ""
     Dim visible As Boolean = True
-
+    Dim sw As StreamWriter
+    Dim logfile As String = "mc_com.log"
+    Dim logstr As New List(Of String)
     Dim WithEvents scraper As New BackgroundWorker
     Dim oMovies As New Movies(scraper)
     Private Declare Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
@@ -43,7 +45,7 @@ Module Module1
         Dim domovies      As Boolean = False
         Dim dotvepisodes  As Boolean = False
         Dim domediaexport As Boolean = False
-
+        
 
         For Each arg As String In Environment.GetCommandLineArgs()
             arguments.Add(arg)
@@ -113,33 +115,38 @@ Module Module1
 
         
         If listofargs(0).switch = "help" Then
-            Console.WriteLine("****************************************************")
-            Console.WriteLine("Media Companion Command Line Tool")
-            Console.WriteLine()
-            Console.WriteLine("Useage")
-            Console.WriteLine("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath] [-v]")
-            Console.WriteLine("-m to scrape movies")
-            Console.WriteLine("-e to scrape episodes")
-            Console.WriteLine("-x [templatename] [outputpath] to export media info list ")
-            Console.WriteLine("-v to run with no Console window. All information will be written")
-            Console.WriteLine("    to a log file in Media Companion's folder.")
-            Console.WriteLine()
-            Console.WriteLine("Example")
-            Console.WriteLine("mc_com.exe -m -e -p billy -x basiclist C:\Movielist\testfile.html")
-            Console.WriteLine("will search for and scrape any new movies and episodes")
-            Console.WriteLine("using the folders and settings of the 'billy' profile,")
-            Console.WriteLine("then create a new media list using the named template")
-            Console.WriteLine("Without the profile arg the default profile will be used")
-            Console.WriteLine()
-            Console.WriteLine("Tip: When using profile, template or filenames that contain")
-            Console.WriteLine("spaces, enclose with quotes, eg.")
-            Console.WriteLine("mc_com.exe -m -p ""my profile"" -x ""new list"" ""C:\Movie list\test.html""")
-            Console.WriteLine()
-            Console.WriteLine("****************************************************")
+            ConsoleOrLog("****************************************************")
+            ConsoleOrLog("Media Companion Command Line Tool")
+            ConsoleOrLog("")
+            ConsoleOrLog("Useage")
+            ConsoleOrLog("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath] [-v]")
+            ConsoleOrLog("-m to scrape movies")
+            ConsoleOrLog("-e to scrape episodes")
+            ConsoleOrLog("-x [templatename] [outputpath] to export media info list ")
+            ConsoleOrLog("-v to run with no Console window. All information will be written")
+            ConsoleOrLog("    to a log file in Media Companion's folder.  Log is overwritten")
+            ConsoleOrLog("    each run of mc_com.exe")
+            ConsoleOrLog("")
+            ConsoleOrLog("Example")
+            ConsoleOrLog("mc_com.exe -m -e -p billy -x basiclist C:\Movielist\testfile.html")
+            ConsoleOrLog("will search for and scrape any new movies and episodes")
+            ConsoleOrLog("using the folders and settings of the 'billy' profile,")
+            ConsoleOrLog("then create a new media list using the named template")
+            ConsoleOrLog("Without the profile arg the default profile will be used")
+            ConsoleOrLog("")
+            ConsoleOrLog("Tip: When using profile, template or filenames that contain")
+            ConsoleOrLog("spaces, enclose with quotes, eg.")
+            ConsoleOrLog("mc_com.exe -m -p ""my profile"" -x ""new list"" ""C:\Movie list\test.html""")
+            ConsoleOrLog("")
+            ConsoleOrLog("****************************************************")
             Environment.Exit(0)
         End If
-
-        If Not visible Then ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
+        Preferences.applicationPath = AppDomain.CurrentDomain.BaseDirectory
+        If Not visible Then 
+            ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
+            LogStart
+        End If
+        
 
         For Each arg In listofargs
             If arg.switch = "-m" Then
@@ -157,10 +164,10 @@ Module Module1
         Next
 
         Dim done As Boolean = False
-        Preferences.applicationPath = AppDomain.CurrentDomain.BaseDirectory
+        
         defaultPoster = Path.Combine(Preferences.applicationPath, "Resources\default_poster.jpg")
 
-        Console.WriteLine("Loading Config")
+        ConsoleOrLog("Loading Config")
         Preferences.SetUpPreferences()
         Call InitMediaFileExtensions()
 
@@ -181,13 +188,13 @@ Module Module1
                 End If
             Next
             If Not done Then
-                Console.WriteLine("Unable to find profile name: " & profile)
-                Console.WriteLine("****************************************************")
+                ConsoleOrLog("Unable to find profile name: " & profile)
+                ConsoleOrLog("****************************************************")
                 Environment.Exit(1)
             End If
         Else
-            Console.WriteLine("Unable to find profile file: " & Preferences.applicationPath & "\settings\profile.xml")
-            Console.WriteLine("****************************************************")
+            ConsoleOrLog("Unable to find profile file: " & Preferences.applicationPath & "\settings\profile.xml")
+            ConsoleOrLog("****************************************************")
             Environment.Exit(1)
         End If
         defaultOfflineArt = Path.Combine(Preferences.applicationPath, "Resources\default_offline.jpg")
@@ -195,14 +202,14 @@ Module Module1
 
         If domovies Or domediaexport Then
             If File.Exists(Preferences.workingProfile.moviecache) Then
-                Console.WriteLine("Loading Movie cache")
+                ConsoleOrLog("Loading Movie cache")
                 oMovies.LoadMovieCache
             End If
         End If
 
 
         Try
-            Console.WriteLine("Loading Actor Database cache")
+            ConsoleOrLog("Loading Actor Database cache")
             oMovies.LoadActorCache
         Catch
             oMovies.RebuildActorCache
@@ -216,11 +223,11 @@ Module Module1
             oMovies.SaveMovieCache
             oMovies.SaveActorCache
 
-            Console.WriteLine()
+            ConsoleOrLog("")
         End If
         If dotvepisodes = True Then
             If IO.File.Exists(Preferences.workingProfile.tvcache) Then
-                Console.WriteLine("Loading Tv cache")
+                ConsoleOrLog("Loading Tv cache")
                 Call loadtvcache()
             End If
             If IO.File.Exists(Preferences.workingProfile.regexlist) Then
@@ -253,8 +260,8 @@ Module Module1
         If domediaexport = True Then
             For Each arg In listofargs
                 If arg.switch = "-x" Then
-                    Console.WriteLine("Starting Media Info Export")
-                    Console.WriteLine()
+                    ConsoleOrLog("Starting Media Info Export")
+                    ConsoleOrLog("")
                     Dim mediaInfoExp As New MediaInfoExport
                     Dim mediaCollection As Object = oMovies.MovieCache  'fullMovieList
                     Call mediaInfoExp.addTemplates()
@@ -262,20 +269,52 @@ Module Module1
                     If mediaInfoExp.setTemplate(arg.argu, templateType) AndAlso templateType = MediaInfoExport.mediaType.Movie Then
                         Call mediaInfoExp.createDocument(mediaexportfile, mediaCollection)
                     Else
-                        Console.WriteLine("  Export aborted - template name provided is invalid")
-                        Console.WriteLine("  (and only Movies are supported currently)")
-                        Console.WriteLine()
+                        ConsoleOrLog("  Export aborted - template name provided is invalid")
+                        ConsoleOrLog("  (and only Movies are supported currently)")
+                        ConsoleOrLog("")
                     End If
-                    Console.WriteLine("Media Info Export complete")
-                    Console.WriteLine()
+                    ConsoleOrLog("Media Info Export complete")
+                    ConsoleOrLog("")
                 End If
             Next
 
         End If
-        Console.WriteLine()
-        Console.WriteLine("Tasks Completed")
-        Console.WriteLine("****************************************************")
+        ConsoleOrLog("")
+        ConsoleOrLog("Tasks Completed")
+        ConsoleOrLog("****************************************************")
+        If Not visible Then exitsound
         System.Environment.Exit(0)
+    End Sub
+
+    Public Sub LogStart
+        logfile = Preferences.applicationPath & logfile
+        If File.Exists(logfile) Then
+            File.Delete(logfile)
+        End If
+
+        Dim logstr As String = ""
+        
+        logstr &= "****************************************************"
+        ConsoleOrLog(logstr)
+        ConsoleOrLog("New Log Started :  " & DateTime.Now)
+        ConsoleOrLog("")
+    End Sub
+
+    Public Sub ConsoleOrLog(ByVal str As String)
+        If visible Then
+            Console.WriteLine(str)
+        Else
+            Using sw As New StreamWriter(logfile, true)
+                sw.WriteLine(str.TrimEnd) ' & vbCrlf)
+                'sw.WriteLine(vbCrLf)
+                sw.Close()
+            End Using
+        End If
+
+    End Sub
+
+    Public Sub exitsound
+        'To Be completed to notify user mc_com has finished if not visible.
     End Sub
 
     Public Sub screenshot(ByVal fullnfopath As String, Optional ByVal overwrite As Boolean = False)
@@ -336,9 +375,9 @@ Module Module1
 
         Dim dirpath As String = String.Empty
 
-        Console.WriteLine("")
-        Console.WriteLine("")
-        Console.WriteLine("Starting TV Folder Scan")
+        ConsoleOrLog("")
+        ConsoleOrLog("")
+        ConsoleOrLog("Starting TV Folder Scan")
 
 
         For Each tvshow In basictvlist
@@ -370,7 +409,7 @@ Module Module1
                 tempstring = "" 'tvfolder
                 Dim hg As New IO.DirectoryInfo(tvfolder)
                 If hg.Exists Then
-'                    Console.WriteLine("found " & hg.FullName.ToString)
+'                    ConsoleOrLog("found " & hg.FullName.ToString)
                     newtvfolders.Add(tvfolder)
 
                     Try
@@ -399,7 +438,7 @@ Module Module1
                     End Try
                 End If
             Else
-                Console.WriteLine(vbCrLf & "Show Locked, Ignoring: " & tvfolder)
+                ConsoleOrLog(vbCrLf & "Show Locked, Ignoring: " & tvfolder)
             End If
         Next
         Dim mediacounter As Integer = newEpisodeList.Count
@@ -413,13 +452,13 @@ Module Module1
             'Next f
             tempint = newEpisodeList.Count - mediacounter
             If tempint > 0 Then
-                Console.WriteLine(tempint.ToString & " New episodes found in directory:- " & dirpath)
+                ConsoleOrLog(tempint.ToString & " New episodes found in directory:- " & dirpath)
             End If
             mediacounter = newEpisodeList.Count
         Next g
 
         If newEpisodeList.Count <= 0 Then
-            Console.WriteLine("No new episodes found, exiting scraper")
+            ConsoleOrLog("No new episodes found, exiting scraper")
             Exit Sub
         End If
 
@@ -458,9 +497,9 @@ Module Module1
                         If newepisode.seasonno <> "-1" And newepisode.episodeno <> "-1" Then
                             Dim file As String = newepisode.episodepath
                             Dim fileName As String = System.IO.Path.GetFileNameWithoutExtension(file)
-                            Console.WriteLine("Season and Episode information found for : " & fileName)
+                            ConsoleOrLog("Season and Episode information found for : " & fileName)
                         Else
-                            Console.WriteLine("Cant extract Season and Episode deatails from filename: " & newepisode.seasonno & "x" & newepisode.episodeno)
+                            ConsoleOrLog("Cant extract Season and Episode deatails from filename: " & newepisode.seasonno & "x" & newepisode.episodeno)
                         End If
                         Try
                             newepisode.fanartpath = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
@@ -488,7 +527,7 @@ Module Module1
             multieps2.episodepath = eps.episodepath
             multieps2.mediaextension = eps.mediaextension
             episodearray.Add(multieps2)
-            Console.WriteLine(vbCrLf & "Working on episode: " & eps.episodepath)
+            ConsoleOrLog(vbCrLf & "Working on episode: " & eps.episodepath)
 
             Dim removal As String = ""
             If eps.seasonno = "-1" Or eps.episodeno = "-1" Then
@@ -553,13 +592,13 @@ Module Module1
                     End If
                 Next
                 If episodearray.Count > 1 Then
-                    Console.WriteLine("Multipart episode found: ")
-                    Console.WriteLine("Season: " & episodearray(0).seasonno & " Episodes, ")
+                    ConsoleOrLog("Multipart episode found: ")
+                    ConsoleOrLog("Season: " & episodearray(0).seasonno & " Episodes, ")
                     For Each ep In episodearray
                         Console.Write(ep.episodeno & ", ")
                     Next
                 End If
-                Console.WriteLine("Looking up scraper options from tvshow.nfo")
+                ConsoleOrLog("Looking up scraper options from tvshow.nfo")
 
                 For Each singleepisode In episodearray
                     If singleepisode.seasonno.Length > 0 Or singleepisode.seasonno.IndexOf("0") = 0 Then
@@ -586,8 +625,8 @@ Module Module1
                         If Not Utilities.UrlIsValid(episodeurl) Then
                             If sortorder.ToLower = "dvd" Then
                                 tempsortorder = "default"
-                                Console.WriteLine("This episode could not be found on TVDB using DVD sort order")
-                                Console.WriteLine("Attempting to find using default sort order")
+                                ConsoleOrLog("This episode could not be found on TVDB using DVD sort order")
+                                ConsoleOrLog("Attempting to find using default sort order")
                                 episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/default/" & singleepisode.seasonno & "/" & singleepisode.episodeno & "/" & language & ".xml"
                             End If
                         End If
@@ -599,12 +638,12 @@ Module Module1
                             scrapedok = True
                             If tempepisode = Nothing Then
                                 scrapedok = False
-                                Console.WriteLine("This episode could not be found on TVDB")
+                                ConsoleOrLog("This episode could not be found on TVDB")
                             End If
                             If scrapedok = True Then
                                 Dim scrapedepisode As New XmlDocument
                                 Try
-                                    Console.WriteLine("Scraping body of episode: " & singleepisode.episodeno)
+                                    ConsoleOrLog("Scraping body of episode: " & singleepisode.episodeno)
                                     scrapedepisode.LoadXml(tempepisode)
                                     Dim thisresult As XmlNode = Nothing
                                     For Each thisresult In scrapedepisode("episodedetails")
@@ -647,11 +686,11 @@ Module Module1
                                     Next
                                     singleepisode.playcount = "0"
                                 Catch ex As Exception
-                                    Console.WriteLine("Error scraping episode body, " & ex.Message.ToString)
+                                    ConsoleOrLog("Error scraping episode body, " & ex.Message.ToString)
                                 End Try
 
                                 If actorsource = "imdb" Then
-                                    Console.WriteLine("Scraping actors from IMDB")
+                                    ConsoleOrLog("Scraping actors from IMDB")
                                     Dim url As String
                                     url = "http://www.imdb.com/title/" & imdbid & "/episodes"
                                     Dim tvfblinecount As Integer = 0
@@ -817,11 +856,11 @@ Module Module1
                                                             End Select
                                                         Next
                                                     Catch ex As Exception
-                                                        Console.WriteLine("Error scraping episode actors from IMDB, " & ex.Message.ToString)
+                                                        ConsoleOrLog("Error scraping episode actors from IMDB, " & ex.Message.ToString)
                                                     End Try
 
                                                     If tempactorlist.Count > 0 Then
-                                                        Console.WriteLine("Actors scraped from IMDB OK")
+                                                        ConsoleOrLog("Actors scraped from IMDB OK")
                                                         While tempactorlist.Count > Preferences.maxactors
                                                             tempactorlist.RemoveAt(tempactorlist.Count - 1)
                                                         End While
@@ -831,7 +870,7 @@ Module Module1
                                                         Next
                                                         tempactorlist.Clear()
                                                     Else
-                                                        Console.WriteLine("Actors not scraped from IMDB, reverting to TVDB actorlist")
+                                                        ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
                                                     End If
 
                                                     Exit For
@@ -875,10 +914,10 @@ Module Module1
                                 End Try
                             End If
                         Else
-                            Console.WriteLine("Could not locate this episode on TVDB, or TVDB may be unavailable")
+                            ConsoleOrLog("Could not locate this episode on TVDB, or TVDB may be unavailable")
                         End If
                     Else
-                        Console.WriteLine("No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB")
+                        ConsoleOrLog("No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB")
                     End If
 
                 Next
@@ -1403,7 +1442,7 @@ Module Module1
     End Sub
 
     Private Sub addepisode(ByVal alleps As List(Of episodeinfo), ByVal path As String)
-        Console.WriteLine("Saving episode")
+        ConsoleOrLog("Saving episode")
 
         If Preferences.autorenameepisodes = True Then
             For Each show In basictvlist
@@ -1469,22 +1508,22 @@ Module Module1
                     If Not eden And frodo Then
                         IO.File.Copy(ext, ext2)
                         IO.File.Delete(ext)
-                        Console.WriteLine("Frodo Episode Thumb downloaded")
+                        ConsoleOrLog("Frodo Episode Thumb downloaded")
                     ElseIf eden And frodo Then
                         IO.File.Copy(ext, ext2)
-                        Console.WriteLine("Eden & Frodo Episode Thumb downloaded")
+                        ConsoleOrLog("Eden & Frodo Episode Thumb downloaded")
                     End If
                 End If
         ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-            Console.WriteLine("No Episode Thumb, AutoCreating ScreenShot from Movie")
+            ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Movie")
             Call screenshot(ext)
             If Not eden And frodo Then
                 IO.File.Copy(ext, ext2)
                 IO.File.Delete(ext)
-                Console.WriteLine("Frodo Screenshot Saved")
+                ConsoleOrLog("Frodo Screenshot Saved")
             ElseIf eden And frodo Then
                 IO.File.Copy(ext, ext2)
-                Console.WriteLine("Eden & Frodo Screenshot Saved")
+                ConsoleOrLog("Eden & Frodo Screenshot Saved")
             End If
         ElseIf edenart Or frodoart Then
             If edenart And Not eden And Not frodoart Then
@@ -1510,9 +1549,9 @@ Module Module1
         'If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
         'Try
         'Utilities.DownloadFile(url, ext)
-        'Console.WriteLine("save image with Rob's code")
+        'ConsoleOrLog("save image with Rob's code")
         'Catch ex As Exception
-        'Console.WriteLine("Unable to Save Thumb, Error: " & ex.Message.ToString)
+        'ConsoleOrLog("Unable to Save Thumb, Error: " & ex.Message.ToString)
         'End Try
         'End If
         'End If
@@ -3639,10 +3678,10 @@ Module Module1
 
     Private Sub StartNewMovies()
 
-        Console.WriteLine("")
-        Console.WriteLine("**** Searching for new movies...        ****")
-        Console.WriteLine("**** Press the Escape (Esc) key to quit ****")
-        Console.WriteLine("")
+        ConsoleOrLog("")
+        ConsoleOrLog("**** Searching for new movies...        ****")
+        ConsoleOrLog("**** Press the Escape (Esc) key to quit ****")
+        ConsoleOrLog("")
 
         scraper.WorkerReportsProgress      = True 
         scraper.WorkerSupportsCancellation = True
@@ -3650,12 +3689,15 @@ Module Module1
         
         While( scraper.IsBusy )
             If (Console.KeyAvailable) AndAlso Console.ReadKey.Key = ConsoleKey.Escape AndAlso Not scraper.CancellationPending then
-                Console.WriteLine("Stopping thread...")
+                ConsoleOrLog("Stopping thread...")
                 scraper.CancelAsync()
             End If
 
             Thread.Sleep(200)
         End While
+        For Each lgstr In logstr
+            ConsoleOrLog(lgstr)
+        Next
     End Sub
 
 Private Sub scraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs)  Handles scraper.DoWork
@@ -3665,7 +3707,11 @@ End Sub
 Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles scraper.ProgressChanged
     Dim oProgress As Progress = CType(e.UserState, Progress) 
 
-    Console.Write(oProgress.Log)
+    If Not IsNothing(oProgress.Log) Then
+        If oProgress.Log.Contains("!!! ") Then
+            logstr.Add(oProgress.Log.Replace("!!! ", ""))
+        End If
+    End If
     Thread.Sleep(1)
 End Sub
 

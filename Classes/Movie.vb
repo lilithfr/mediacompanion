@@ -1189,6 +1189,7 @@ Public Class Movie
 
 
             ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)
+            If Not Preferences.actorsave Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
         Catch ex As Exception
             ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to scrape Actors" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
             actors.Clear()
