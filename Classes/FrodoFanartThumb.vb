@@ -29,6 +29,13 @@ Public Class FrodoFanartThumbs
     Public Sub Load(node As XmlNode)
         For Each child As XmlNode In node.ChildNodes
             Try                 'catch put in place for nfo's not created by MC, where <fanart> node is invalid.
+                If ((child.NodeType.ToString() <> "Element") And (child.Name <> "thumb")) Then
+                    Continue For
+                End If
+                If IsNothing(child.Attributes.GetNamedItem("preview")) Then
+                    child.Attributes.Append(child.OwnerDocument.CreateAttribute("preview"))
+                    child.Attributes("preview").Value = ""
+                End If
                 Thumbs.Add(New FrodoFanartThumb(child.Attributes("preview").Value,child.InnerText))
             Catch               'this allows these nfo's to be loaded by MC.  Would be good to rebuild nfo if this occurs.  To Do...
             End Try
