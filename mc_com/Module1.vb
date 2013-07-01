@@ -28,9 +28,12 @@ Module Module1
     Dim showstoscrapelist As New List(Of String)
     Dim newEpisodeList As New List(Of episodeinfo)
     Dim defaultPoster As String = ""
+    Dim visible As Boolean = True
 
     Dim WithEvents scraper As New BackgroundWorker
     Dim oMovies As New Movies(scraper)
+    Private Declare Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
+    Private Declare Function ShowWindow Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal nCmdShow As Int32) As Int32
     
 
     Dim newepisodetoadd As New episodeinfo
@@ -41,7 +44,6 @@ Module Module1
         Dim dotvepisodes  As Boolean = False
         Dim domediaexport As Boolean = False
 
-        Console.WriteLine("****************************************************")
 
         For Each arg As String In Environment.GetCommandLineArgs()
             arguments.Add(arg)
@@ -61,6 +63,8 @@ Module Module1
                     Dim arg As New arguments
                     arg.switch = arguments(f)
                     listofargs.Add(arg)
+                    ElseIf arguments(f) = "-v" Then
+                    visible = False
                 ElseIf arguments(f) = "-p" Then
                     Dim arg As New arguments
                     arg.switch = arguments(f)
@@ -107,15 +111,18 @@ Module Module1
             listofargs.Add(arg)
         End If
 
-
+        
         If listofargs(0).switch = "help" Then
+            Console.WriteLine("****************************************************")
             Console.WriteLine("Media Companion Command Line Tool")
             Console.WriteLine()
             Console.WriteLine("Useage")
-            Console.WriteLine("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath]")
+            Console.WriteLine("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath] [-v]")
             Console.WriteLine("-m to scrape movies")
             Console.WriteLine("-e to scrape episodes")
             Console.WriteLine("-x [templatename] [outputpath] to export media info list ")
+            Console.WriteLine("-v to run with no Console window. All information will be written")
+            Console.WriteLine("    to a log file in Media Companion's folder.")
             Console.WriteLine()
             Console.WriteLine("Example")
             Console.WriteLine("mc_com.exe -m -e -p billy -x basiclist C:\Movielist\testfile.html")
@@ -131,6 +138,8 @@ Module Module1
             Console.WriteLine("****************************************************")
             Environment.Exit(0)
         End If
+
+        If Not visible Then ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
 
         For Each arg In listofargs
             If arg.switch = "-m" Then
