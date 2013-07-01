@@ -1681,6 +1681,7 @@ Public Class Form1
                 'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
+                top250txt.Text = workingMovieDetails.fullmoviebody.top250
                 If Preferences.movieRuntimeDisplay = "file" Then
                     displayRuntimeScraper = False
                 Else
@@ -1901,6 +1902,7 @@ Public Class Form1
             ratingtxt.Text = ""
             runtimetxt.Text = ""
             votestxt.Text = ""
+            top250txt.Text = ""
             certtxt.Text = ""
             PictureBoxFanArt.Image = Nothing
             PictureBox2.Image = Nothing
@@ -3428,6 +3430,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
             movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
             movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
+            movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
             movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
             movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
             movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
@@ -3498,6 +3501,9 @@ Public Class Form1
                     End If
                     If votestxt.Text <> "" Then
                         movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
+                    End If
+                    If top250txt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
                     End If
 
                     If cbMovieDisplay_MovieSet.SelectedItem = Nothing Then cbMovieDisplay_MovieSet.SelectedItem = "-None-"
@@ -4381,6 +4387,7 @@ Public Class Form1
         ratingtxt.Text = ""
         runtimetxt.Text = ""
         votestxt.Text = ""
+        top250txt.Text = ""
         certtxt.Text = ""
         PictureBoxFanArt.Image = Nothing
         moviethumb.Image = Nothing
@@ -17157,6 +17164,7 @@ Public Class Form1
 
                     ratingtxt.Font = newFont
                     votestxt.Font = newFont
+                    top250txt.Font = newFont
                     imdbtxt.Font = newFont
                     cbFilterGeneral.Font = newFont
                     cbFilterGenre.Font = newFont
