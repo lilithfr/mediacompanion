@@ -933,10 +933,19 @@ Public Class Movies
 '       Dim movie = New Movie(Utilities.GetFileName(NfoFilename,True),Me)
         Dim movie = New Movie(Me,NfoFilename)
 
+        movie.DeleteScrapedFiles(True)
+        Dim imdbid As String = movie.PossibleImdb 
         'movie.DeleteScrapedFiles
-        movie.Rescrape=True
+        'movie.Rescrape=True
 
-        ScrapeMovie(movie)
+        'ScrapeMovie(movie)
+
+        movie.ScrapedMovie.Init
+
+        AddMovieEventHandlers   ( movie )
+        movie.Scraped=False
+        movie.Scrape(imdbid)
+        RemoveMovieEventHandlers( movie )
     End Sub
 
 
