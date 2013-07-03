@@ -90,10 +90,20 @@ Public Class XBMC_MC_FolderMappings
 
     Public Function GetMC_MoviePath(XbMoviePath As String) As String
 
-        For Each FolderMapping In Items
-            If XbMoviePath.ToUpper.StartsWith(FolderMapping.XBMC.ToUpper) Then
+        Dim match As String = ""
+        
+        Dim MoviePath As String = XbMoviePath
+        
+        If MoviePath.IndexOf("stack://")=0 Then
+            Dim LenStackPlusOne As Integer = Len("stack://")+1
+            MoviePath = Mid(MoviePath,LenStackPlusOne,MoviePath.IndexOf(",")-LenStackPlusOne)
+        End If
 
-                Dim file As String = Right(XbMoviePath,XbMoviePath.Length-FolderMapping.XBMC.Length)
+
+        For Each FolderMapping In Items
+            If MoviePath.ToUpper.StartsWith(FolderMapping.XBMC.ToUpper) Then
+
+                Dim file As String = Right(MoviePath,MoviePath.Length-FolderMapping.XBMC.Length)
 
                 If file.StartsWith(Path.DirectorySeparatorChar) Then
                     file = file.Remove(0,1)
@@ -103,7 +113,8 @@ Public Class XBMC_MC_FolderMappings
             End If
         Next
 
-        Return Nothing
+        'Missing folder mapping -> Assume same
+        Return XbMoviePath
       End Function
 
     Public Function GetMC_MovieFolder(McMoviePath As String) As String

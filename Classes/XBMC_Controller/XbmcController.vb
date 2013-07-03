@@ -8,6 +8,7 @@ Imports XBMC.JsonRpc
 Imports log4net
 Imports System.Reflection
 Imports System.Linq
+Imports System.Data.SQLite
 
 Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
@@ -17,6 +18,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Const Error_Prefix    = "**ERROR** "
     Const Warning_Prefix  = "**WARNING** "
  
+    Public Property XbmcTexturesDb      As SQLiteConnection = new SQLiteConnection("Data Source=" + Path.Combine(Preferences.XBMC_UserdataFolder,Preferences.XBMC_TexturesDb) + ";Version=3;New=False;Compress=True;")
+    Public Property XbmcThumbnailFolder As String = Path.Combine(Preferences.XBMC_UserdataFolder,Preferences.XBMC_ThumbnailFolder)
+
+    Dim dtCachedUrls As DataTable
+
     Public Property MoviesInFolder As New Dictionary(Of String, Integer)
 
     Property BatchScanFolders As List(Of String) = New List(Of String)
@@ -85,44 +91,68 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 '    Private GetNewMovieIds_IdleTimer As Timers.Timer = New Timers.Timer()
     'Private FolderScan_IdleTimer     As Timers.Timer = New Timers.Timer()
 
-    ReadOnly Property MC_Only_Movies As List(Of ComboList)
+    ReadOnly Property MC_Only_Movies As List(Of String)
         Get
-            Dim q = From
+            Dim c As List(Of String)= (From
                         M In Parent.oMovies.MovieCache
-                    Where
-                        Not XBMC_to_MC_MoviePaths.Contains(M.MoviePathAndFileName.ToUpper)
+                    Select
+                        M.MoviePathAndFileName).ToList
 
-            Return q.ToList
+            Dim q2 As List(Of String) = (From
+                        t In c
+                    Select
+                        t
+                    Where
+                        Not XBMC_to_MC_MoviePaths.Contains(t.ToUpper)).ToList
+
+
+            Return q2
         End Get
     End Property
 
 
     ' Translates XBMC movie paths to there MC equivilant
+    Private _XBMC_to_MC_MoviePaths As List(Of String)
+
     Public ReadOnly Property XBMC_to_MC_MoviePaths As List(Of String)
         Get
-            Dim q = From 
-                        X In XbmcJson.XbmcMovies
-                    Select
-                        FolderMappings.GetMC_MoviePath(X.file).ToUpper
-
-            Return q.AsEnumerable.ToList
+            Return _XBMC_to_MC_MoviePaths
         End Get
     End Property    
 
 
+   Sub UpdateXBMC_to_MC_MoviePaths(XbmcMovies As List(Of MinXbmcMovie))
+
+         Dim q2 = From 
+                    X In XbmcJson.XbmcMovies
+                Select
+                    FolderMappings.GetMC_MoviePath(X.file).ToUpper
+
+        _XBMC_to_MC_MoviePaths = q2.AsEnumerable.ToList
+    End Sub    
+
+
     ReadOnly Property MC_Only_MovieFolders As List(Of String)
         Get
-            Dim q = From
+            Dim q2 = From
                         M In MC_Only_Movies
                     Select
-                        FolderMappings.GetMC_MovieFolder(M.MoviePathAndFileName)
+                        FolderMappings.GetMC_MovieFolder(M)
                     Distinct
 
-            Return q.ToList
+            Return q2.ToList
         End Get
     End Property
 
 
+    Private _GotDbAccess     As Boolean = CanConnect
+    Private _GotFolderAccess As Boolean = Directory.Exists(XbmcThumbnailFolder)
+
+    Public ReadOnly Property CanDeleteCachedImages As Boolean
+        Get
+            Return _GotDbAccess And _GotFolderAccess
+        End Get
+    End Property
 
 
     Private TO_Timer      As Timers.Timer = New Timers.Timer()
@@ -214,6 +244,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddHandler Me.BeginDispatch                            , AddressOf BegnDispatch 
         AddHandler Me.ExceptionThrown                          , AddressOf ExceptionThrownHandler
 
+        AddHandler Me.XbmcJson.XbmcMovies_OnChange             , AddressOf UpdateXBMC_to_MC_MoviePaths
+
+
 
         '  Me. (StateId.Connected).EntryHandler += EnterOff
         ' this[StateID.Off].ExitHandler += ExitOff
@@ -254,8 +287,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideoThenAdd   )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Ready                      , AddressOf Retry                )
-        AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf Ready                )
-                                                                                                                                              
+        AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf DeleteCachedImages   _
+                                                                                                               , AddressOf Ready                )
+
         AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      _
                                                                                                                , AddressOf Ready                )
 
@@ -293,8 +327,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
    
 
     Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
-
-        LogError(evt.Error.Message, evt.Error.Message, evt)
+        LogError(evt.Error.Message, evt.Error.InnerException.Message, evt)
     End Sub
 
 
@@ -523,7 +556,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub RemoveVideo(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
         DecodeNfoEventArgs(args)
+
+        GetCachedUrls
 
         Dim Title       As String  = ""
         Dim xbmcMovieId As Integer = -1
@@ -843,15 +879,100 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub ScanNewMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        For Each movie In MC_Only_Movies
+        Try
+            For Each movie In MC_Only_Movies
 
-            Dim evt As New BaseEvent
+                Dim evt As New BaseEvent
 
-            evt.E    = XbmcController.E.MC_Movie_Updated
-            evt.Args = New VideoPathEventArgs(movie.MoviePathAndFileName, PriorityQueue.Priorities.medium)
+                evt.E    = XbmcController.E.MC_Movie_Updated
+                evt.Args = New VideoPathEventArgs(movie, PriorityQueue.Priorities.medium)
 
-            Q.Write(evt)
+                Q.Write(evt)
+            Next
+        Catch ex As Exception
+            LogError("ScanNewMovies",ex.Message,args)
+        End Try
+        
+    End Sub
+
+    Function CanConnect As Boolean
+        Try
+            XbmcTexturesDb.Open
+            XbmcTexturesDb.Close
+            Return True
+        Catch ex As Exception
+            LogError("Failed to connect to XBMC Textures database. If this movie is re-added, Fanart & Poster changes will not appear in XBMC as the existing cached versions cannot be deleted",ex.Message,Nothing)
+            Return False
+        End Try
+    End Function
+
+
+    Sub GetCachedUrls
+
+        If Not CanDeleteCachedImages Then Return
+
+        XbmcTexturesDb.Open
+
+        Dim oMovie As Movie = New Movie(McMoviePath,Me.Parent.oMovies)
+
+        dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
+                                                    "Select id, cachedurl from texture" +
+                                                    " where url='" + FolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath) + "'" +
+                                                       " or url='" + FolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath) + "'"
+                                                    )
+
+        XbmcTexturesDb.Close
+    End Sub
+
+
+    'Sub DeleteCachedFiles
+
+    '    If Not CanDeleteCachedImages Then Return
+
+    '    XbmcTexturesDb.Open
+
+    '    Dim oMovie As Movie = New Movie(McMoviePath,Me.Parent.oMovies)
+
+    '    dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
+    '                                                "Select cachedurl from texture" +
+    '                                                " where url='" + FolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath) + "'" +
+    '                                                   " or url='" + FolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath) + "'"
+    '                                                )
+
+    '    DeleteCachedImages
+
+    '    XbmcTexturesDb.Close
+    'End Sub
+
+
+    Sub DeleteCachedImages(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        ReportProgress("Deleting orphaned movie images from thumbnail folder",args)
+
+        If IsNothing(dtCachedUrls) OrElse dtCachedUrls.Rows.Count=0 or dtCachedUrls.Rows.Count>2 Then 
+            AppendLog("Skipping cached file delete as expected 1-2 rows to be matched, but actually matched : [" + dtCachedUrls.Rows.Count.ToString + "]")
+            dtCachedUrls = Nothing
+            Return
+        End If
+
+        XbmcTexturesDb.Open
+
+        For Each row In dtCachedUrls.Rows
+            Dim filePath As String = Path.Combine(XbmcThumbnailFolder,row("cachedurl").ToString.Replace("/","\"))
+
+            If File.Exists(filePath) Then
+                AppendLog("Deleting : [" + filePath + "] from XBMC Thumbnail folder")
+                Utilities.SafeDeleteFile(filePath)
+            Else
+                AppendLog("[" + filePath + "] not found in XBMC Thumbnail folder")
+            End If
+
+            DbUtils.ExecuteNonQuery(XbmcTexturesDb, "Delete from texture where id=" + row("id").ToString)
         Next
+
+        XbmcTexturesDb.Close
+
+        dtCachedUrls = Nothing
     End Sub
 
 

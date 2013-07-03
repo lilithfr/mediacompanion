@@ -290,6 +290,9 @@ Public Class Preferences
     Public Shared XBMC_Username          As String = "xbmc"
     Public Shared XBMC_Password          As String = "xbmc"
     Public Shared XBMC_MC_FolderMappings As New XBMC_MC_FolderMappings
+    Public Shared XBMC_UserdataFolder    As String = "C:\Users\Phil\AppData\Roaming\XBMC\userdata"
+    Public Shared XBMC_TexturesDb        As String = "Database\Textures13.db"
+    Public Shared XBMC_ThumbnailFolder   As String = "Thumbnails"
 
     Public Shared Sub SetUpPreferences()
         'General
@@ -701,11 +704,14 @@ Public Class Preferences
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
-        root.AppendChild( doc, "XBMC_Sync"     , XBMC_Sync     )
-        root.AppendChild( doc, "XBMC_Address"  , XBMC_Address  )
-        root.AppendChild( doc, "XBMC_Port"     , XBMC_Port     )
-        root.AppendChild( doc, "XBMC_Username" , XBMC_Username )
-        root.AppendChild( doc, "XBMC_Password" , XBMC_Password )
+        root.AppendChild( doc, "XBMC_Sync"            , XBMC_Sync            )
+        root.AppendChild( doc, "XBMC_Address"         , XBMC_Address         )
+        root.AppendChild( doc, "XBMC_Port"            , XBMC_Port            )
+        root.AppendChild( doc, "XBMC_Username"        , XBMC_Username        )
+        root.AppendChild( doc, "XBMC_Password"        , XBMC_Password        )
+        root.AppendChild( doc, "XBMC_UserdataFolder"  , XBMC_UserdataFolder	 )
+        root.AppendChild( doc, "XBMC_TexturesDb"      , XBMC_TexturesDb      )
+        root.AppendChild( doc, "XBMC_ThumbnailFolder" , XBMC_ThumbnailFolder )
 
         root.AppendChild(XBMC_MC_FolderMappings.GetChild(doc))
 
@@ -996,6 +1002,9 @@ Public Class Preferences
                     Case "XBMC_Port"                            : XBMC_Port                 = thisresult.InnerXml 
                     Case "XBMC_Username"                        : XBMC_Username             = thisresult.InnerXml 
                     Case "XBMC_Password"                        : XBMC_Password             = thisresult.InnerXml 
+                    Case "XBMC_UserdataFolder"                  : XBMC_UserdataFolder	    = thisresult.InnerXml 
+                    Case "XBMC_TexturesDb"                      : XBMC_TexturesDb           = thisresult.InnerXml 
+                    Case "XBMC_ThumbnailFolder"                 : XBMC_ThumbnailFolder      = thisresult.InnerXml 
                     Case "XBMC_MC_FolderMappings"               : XBMC_MC_FolderMappings.Load(thisresult)
 
                     Case Else : Dim x = thisresult

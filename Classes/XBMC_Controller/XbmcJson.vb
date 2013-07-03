@@ -20,6 +20,7 @@ Public Class XbmcJson
 
     Public Property xbmc     As XbmcJsonRpcConnection
 
+    Public Event XbmcMovies_OnChange(XbmcMovies As List(Of MinXbmcMovie))
 
     Public ReadOnly Property Opened As Boolean
         Get
@@ -31,7 +32,7 @@ Public Class XbmcJson
     Public ReadOnly Property XbmcMovies As List(Of MinXbmcMovie)
         Get
             If IsNothing(_xbmcMovies) Then
-                UpdateXbmcMovies
+                GetXbmcMovies
             End If
             Return _xbmcMovies
         End Get
@@ -48,26 +49,27 @@ Public Class XbmcJson
     End Function
 
 
-    Function UpdateXbmcMovies(Optional title As String=Nothing) As Boolean
-        Try
-            If IsNothing(_xbmcMovies) Then
-                _xbmcMovies = New List(Of MinXbmcMovie)
-            End If
-            Dim movies As List(Of MinXbmcMovie) = xbmc.Library.Video.GetMinXbmcMovies(title)
+    'Function UpdateXbmcMovies(Optional title As String=Nothing) As Boolean
+    '    Try
+    '        If IsNothing(_xbmcMovies) Then
+    '            _xbmcMovies = New List(Of MinXbmcMovie)
+    '        End If
+    '        Dim movies As List(Of MinXbmcMovie) = xbmc.Library.Video.GetMinXbmcMovies(title)
 
-            XbmcMovies.RemoveAll( Function(x) Exists(movies,x.file) ) 
+    '        XbmcMovies.RemoveAll( Function(x) Exists(movies,x.file) ) 
                                      
-            _xbmcMovies.AddRange(movies)
-            Return True
-        Catch
-            Return False
-        End Try
-    End Function
+    '        _xbmcMovies.AddRange(movies)
+    '        Return True
+    '    Catch
+    '        Return False
+    '    End Try
+    'End Function
 
 
     Function GetXbmcMovies As Boolean
         Try
             _xbmcMovies = xbmc.Library.Video.GetMinXbmcMovies()
+            RaiseEvent XbmcMovies_OnChange(_xbmcMovies)
             Return True
         Catch
             Return False
@@ -89,8 +91,6 @@ Public Class XbmcJson
         Return q.Count>0
     End Function
 
-
-
     Function NumMoviesInFolder(Folder As String)  As Integer
 
         Dim q = From m In XbmcMovies Where m.file.ToUpper.Trim.Contains(Folder.ToUpper)
@@ -108,8 +108,6 @@ Public Class XbmcJson
         Return q.First
     End Function
 
-
-
     Public ReadOnly Property MoviesWithUniqueMovieTitles As List(Of MinXbmcMovie)
         Get
             Dim q = From x In XbmcMovies 
@@ -121,7 +119,6 @@ Public Class XbmcJson
             Return q.AsEnumerable.ToList
         End Get
     End Property    
-
 
     Public ReadOnly Property UniqueMovieTitles As List(Of String)
         Get
