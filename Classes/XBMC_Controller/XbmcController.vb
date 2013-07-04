@@ -930,8 +930,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
                                                     "Select id, cachedurl from texture" +
-                                                    " where url='" + FolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath) + "'" +
-                                                       " or url='" + FolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath) + "'"
+                                                    " where url='" + DbUtils.Stuff(FolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)) + "'" +
+                                                       " or url='" + DbUtils.Stuff(FolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)) + "'"
                                                     )
 
         XbmcTexturesDb.Close

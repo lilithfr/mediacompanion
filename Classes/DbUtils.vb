@@ -27,4 +27,14 @@ Public Class DbUtils
         End Using
     End Sub
 
+
+	Public Shared Function Stuff(s As string) As string
+			
+		s = s.Replace( "'"  , "''"   )
+	'	s = s.Replace( "["  , "[[]"  )
+	'	s = s.Replace( "^"  , "[^]"  )
+
+		return s
+	End Function
+
 End Class
