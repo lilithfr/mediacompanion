@@ -16,4 +16,8 @@
         Return "A possible " + Me.NumMovies.ToString + " Movies"
     End Function
 
+    Overrides Function CompareAs As String
+        Return  ""
+    End Function
+
 End Class

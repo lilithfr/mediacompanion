@@ -10,4 +10,8 @@
         Return ""
     End Function
 
+    Overridable Function CompareAs As String
+        Return ToString
+    End Function
+
 End Class

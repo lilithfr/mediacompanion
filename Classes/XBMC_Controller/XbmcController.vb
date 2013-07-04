@@ -174,28 +174,28 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Enum
 
     Public Enum E
-        MC_ConnectReq
+
+        ConnectReq
+        TimeOut
+        Success
+        Failure
+        NoMoreScanFolderReqs
+  '      WatchDogTimeOut
+  '      GetNewMovieIds
+        ScanFolder
+        TurnOff
+        FetchVideoInfo
+
+
         MC_Movie_Updated
         MC_Movie_New
         MC_Movie_Removed
         MC_ScanForNewMovies
         MC_ShutDownReq
         MC_ResetErrorCount
-
         MC_FetchAllMovieDetails
         MC_AllMovieDetails
 
-        TimeOut
-        Success
-        Failure
-        NoMoreScanFolderReqs
-
-  '      WatchDogTimeOut
-
-  '      GetNewMovieIds
-        ScanFolder
-        TurnOff
-        FetchVideoInfo
 
         XBMC_Video_Removed
         XBMC_Video_Updated
@@ -270,7 +270,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
         AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
 
-        AddTransition( S.NotConnected               , E.MC_ConnectReq           , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
+        AddTransition( S.NotConnected               , E.ConnectReq           , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.NotConnected               , E.TimeOut                 , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
 
         AddTransition( S.Wf_XBMC_ConnectResult      , E.Failure                 , S.NotConnected               , AddressOf Start1SecTimer       )      
@@ -380,7 +380,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         log.Debug("Begin Dispatch - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
         LastArgs = e
   '     WatchDogTimer.Start
-        TO_Timer.Stop
+  '     TO_Timer.Stop
     End Sub 
 
     Sub Start1SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
@@ -431,6 +431,19 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub ProcessEvent(Evt As BaseEvent)
+
+        If Evt.E.ToString.IndexOf("MC_") = 0 And CurrentStateID <> S.Ready Then
+
+            If BufferQ.Exists(Evt) Then
+                AppendLog("Discarding duplicate MC request : [" + Evt.CompareAs + "]")
+            Else
+                'ReportProgress("Buffering MC request",e)
+                AppendLog("Buffering MC request : [" + Evt.E.ToString + "] while in State : [" + CurrentStateID.ToString + "]")
+                BufferQ.Write( New BaseEvent(Evt.E, Evt.Args) )
+            End If
+            Return
+        End If
+
         LastState = Me.CurrentStateID
     '    ReportProgress("Dispatching Event")
         AppendLog("Dispatching Event : [" & Evt.E.ToString & "]")

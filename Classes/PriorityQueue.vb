@@ -51,6 +51,13 @@ Public Class PriorityQueue
         End Select
     End Sub
 
+    Public Function Exists(evt As BaseEvent) As Boolean
+
+        Dim q = From x In View Where x.CompareAs = evt.CompareAs
+
+        Return q.Count>0
+    End Function
+
 
     Public Function Read As BaseEvent
         Dim evt As BaseEvent = Nothing

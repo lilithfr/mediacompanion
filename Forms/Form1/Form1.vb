@@ -697,7 +697,7 @@ Public Class Form1
         BckWrkXbmcController.RunWorkerAsync(Me)
 
         If Preferences.XBMC_Sync Then
-            XbmcControllerQ.Write(XbmcController.E.MC_ConnectReq, PriorityQueue.Priorities.low)
+            XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
         End If
     End Sub
 
@@ -5347,6 +5347,8 @@ Public Class Form1
 
                     UpdateMissingFanart()
 
+                    Xbmc_UpdateWorkingMovie
+                    
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
@@ -5359,6 +5361,13 @@ Public Class Form1
         End Try
     End Sub
 
+
+    Sub Xbmc_UpdateWorkingMovie
+        If Preferences.XBMC_Sync Then
+            Dim m As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+            m.SaveNFO
+        End If
+    End Sub
 
     Sub UpdateMissingFanart
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -6613,6 +6622,9 @@ Public Class Form1
 
                 lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                 lblCurrentLoadedPoster.Refresh()
+
+                Xbmc_UpdateWorkingMovie
+
             Catch ex As Exception
                 ExceptionHandler.LogError(ex)
 #If SilentErrorScream Then
@@ -6890,6 +6902,9 @@ Public Class Form1
                         Exit For
                     End If
                 Next
+
+                Xbmc_UpdateWorkingMovie
+
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex

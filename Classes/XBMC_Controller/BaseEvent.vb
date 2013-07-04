@@ -37,6 +37,10 @@
             Return  GetTimeStamp + " " + Args.Priority.ToString + " Retries " + Retries.ToString + " " + E.ToString + " " + Args.ToString
         End Function
 
+        Function CompareAs As String
+            Return  (E.ToString + " " + Args.CompareAs).Trim
+        End Function
+
         Function GetTimeStamp As String
             Return Format(Ts, "HH:mm:ss.fff").ToString
         End Function
