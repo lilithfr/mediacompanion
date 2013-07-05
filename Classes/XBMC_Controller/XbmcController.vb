@@ -203,6 +203,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         XBMC_System_Quit
         XBMC_Unknown_Event
 
+        JSON_Exception
+        JSON_Error
         JSON_Abort
     End Enum
 
@@ -270,11 +272,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
         AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
 
-        AddTransition( S.NotConnected               , E.ConnectReq           , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
+        AddTransition( S.NotConnected               , E.ConnectReq              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.NotConnected               , E.TimeOut                 , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
 
         AddTransition( S.Wf_XBMC_ConnectResult      , E.Failure                 , S.NotConnected               , AddressOf Start1SecTimer       )      
         AddTransition( S.Wf_XBMC_ConnectResult      , E.Success                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
+        AddTransition( S.Wf_XBMC_ConnectResult      , E.JSON_Error              , S.Wf_XBMC_ConnectResult      , AddressOf Ignore               )
+
 
 '       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Failure                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
 '       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.TimeOut                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
@@ -287,6 +291,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideoThenAdd   )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Ready                      , AddressOf Retry                )
+        AddTransition( S.Wf_XBMC_Video_Removed      , E.JSON_Exception          , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      )  
+
         AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf DeleteCachedImages   _
                                                                                                                , AddressOf Ready                )
 
@@ -309,6 +315,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 '       AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Wf_XBMC_Video_ScanFinished , AddressOf AddFetchVideoInfo    ) '...ScanFolder...    )
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Ready                      , AddressOf Retry                ) 
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf AddFetchVideoInfo    )
+        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.JSON_Exception          , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      ) 
                                                                                                                                               
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
                                                                                                                                               
@@ -328,6 +335,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
         LogError(evt.Error.Message, evt.Error.InnerException.Message, evt)
+        Q.Write(e.JSON_Exception,PriorityQueue.Priorities.critical)
     End Sub
 
 
@@ -384,13 +392,15 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub 
 
     Sub Start1SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
+        ReportProgress("Starting 1 second timer",e)
         StartTimer(1000)
     End Sub 
 
 
     Sub StartTimer(Interval As Integer)
+        TO_Timer.Stop
         TO_Timer.Interval = Interval
-        TO_Timer.Start()
+        TO_Timer.Start
     End Sub 
 
 
@@ -419,7 +429,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
             If Q.Count = 0 And Me.CurrentStateID = S.Ready And BufferQ.Count > 0 Then
                 Dim Evt As BaseEvent = BufferQ.Read() 
-                AppendLog("Unbuffering Event : [" & Evt.E.ToString & "]")
+                AppendLog("Unbuffering Event : [" & Evt.Info & "]")
                 ProcessEvent(Evt)
             Else
                 'ProcessEvent(Q.Dequeue)
@@ -438,7 +448,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
                 AppendLog("Discarding duplicate MC request : [" + Evt.CompareAs + "]")
             Else
                 'ReportProgress("Buffering MC request",e)
-                AppendLog("Buffering MC request : [" + Evt.E.ToString + "] while in State : [" + CurrentStateID.ToString + "]")
+                AppendLog("Buffering MC request : [" + Evt.Info + "] while in State : [" + CurrentStateID.ToString + "]")
                 BufferQ.Write( New BaseEvent(Evt.E, Evt.Args) )
             End If
             Return
@@ -446,9 +456,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         LastState = Me.CurrentStateID
     '    ReportProgress("Dispatching Event")
-        AppendLog("Dispatching Event : [" & Evt.E.ToString & "]")
+        AppendLog("Dispatching Event : [" & Evt.Info & "]")
 
-        If Evt.E = E.ScanFolder or Evt.E=E.MC_Movie_Updated Then
+        If Evt.E = E.ScanFolder or Evt.E=E.MC_Movie_Updated or Evt.E=E.MC_Movie_Removed Then
             LastEvent.Assign(Evt)
         End If
 
@@ -469,6 +479,19 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         '       Q.Enqueue(1, New CompleteEvent(IIf(XbmcJson.Open,E.Success,E.Failure)) )
         Q.Write(IIf(XbmcJson.Open, E.Success, E.Failure), PriorityQueue.Priorities.high )
     End Sub
+
+
+    Sub ConnectAndRetry(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        ReportProgress("Connect & retry...",args)
+        Retry  (sender,args)
+
+        XbmcJson.xbmc.Close
+
+        Connect(sender,args)
+    End Sub
+
+    
 
 
     ' 
@@ -534,6 +557,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     '    Q.Write(IIf(XbmcJson.UpdateXbmcMovies(Title), E.Success, E.Failure), PriorityQueue.Priorities.medium )
     'End Sub
 
+    Sub Ignore(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        ReportProgress("Ignoring error as already handled elsewhere",args)
+    End Sub
 
     Sub Ready(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         ReportProgress("Ready & waiting...",args)
@@ -592,9 +618,18 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             ReportProgress("Removing : " + Title,args)
             
             Try
-                xbmcMovieId = XbmcJson.GetMinXbmcMovie(XbMoviePath).movieid
+                'xbmcMovieId = XbmcJson.GetMinXbmcMovie(XbMoviePath).movieid
+
+                Dim movies As List(Of MinXbmcMovie) = XbmcJson.xbmc.Library.Video.GetMinXbmcMovies(title)
+
+                If movies.Count=1 Then
+                    xbmcMovieId = movies(0).movieid
+                Else
+                    If movies.Count>1 Then
+                        xbmcMovieId = (From x In movies Where FolderMappings.GetMC_MoviePath(x.file).ToUpper=McMoviePath.ToUpper Select x.movieid).First
+                    End If
+                End If
             Catch
-                xbmcMovieId = -1 
             End Try
         End If
 
@@ -654,14 +689,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             Return
         End If
 
-        ReportProgress("Resubmitting event",args)
 
         Dim le As BaseEvent = New BaseEvent
 
         le.Assign(LastEvent)
         le.Retries = le.Retries + 1
 
-        Q.Write(le)
+        ReportProgress("Resubmitting last MC event : [" + le.E.ToString +"] Retry number : [" + le.Retries.ToString + "]",args)
+        BufferQ.Write(le)
     End Sub
 
 
@@ -1045,13 +1080,18 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Private Sub XBMC_System_LogError(sender As Object, evt As XbmcJsonRpcLogErrorEventArgs)
         'ErrorCount = ErrorCount + 1
 '        ReportProgress("XbmcJsonRpc - ERROR : " & e.Message & " Exception : " & e.Exception.Message,LastArgs)
-        ReportProgress(evt.Message,LastArgs)
+        ReportProgress("XbmcJsonRpc - Error received : [" + evt.Message + "]",LastArgs)
+        Q.Write(e.JSON_Error,PriorityQueue.Priorities.critical)
     End Sub
 
     Private Sub XBMC_System_Aborted(sender As Object, evt As XbmcJsonRpcLogErrorEventArgs)
         'ErrorCount = ErrorCount + 1
 '        ReportProgress("XbmcJsonRpc - ERROR : " & e.Message & " Exception : " & e.Exception.Message,LastArgs)
-        ReportProgress("XbmcJsonRpc - Abort received",LastArgs)
+        If IsNothing(evt) Then
+            ReportProgress("XbmcJsonRpc - Abort received",LastArgs)
+        Else
+            ReportProgress("XbmcJsonRpc - Abort received : [" + evt.Message + "]",LastArgs)
+        End If
         
         Q.Write(e.JSON_Abort,PriorityQueue.Priorities.critical)
     End Sub

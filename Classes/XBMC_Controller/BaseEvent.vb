@@ -34,7 +34,11 @@
         End Sub
 
         Overrides Function ToString As String
-            Return  GetTimeStamp + " " + Args.Priority.ToString + " Retries " + Retries.ToString + " " + E.ToString + " " + Args.ToString
+            Return  GetTimeStamp + " " + Args.Priority.ToString + " Retry " + Retries.ToString + " " + E.ToString + " " + Args.ToString
+        End Function
+
+        Function Info As String
+            Return  " Retry " + Retries.ToString + " " + E.ToString + " " + Args.ToString
         End Function
 
         Function CompareAs As String

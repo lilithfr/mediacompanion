@@ -5633,6 +5633,7 @@ Public Class Form1
             End If
 
             UpdateMissingFanart
+            Xbmc_UpdateWorkingMovie
         Catch ex As Exception
             MsgBox("Unable To Download Image")
         End Try
@@ -6719,8 +6720,10 @@ Public Class Form1
             End Try
     
             UpdateMissingPoster
-
             Panel6.Visible = False
+
+            Xbmc_UpdateWorkingMovie
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

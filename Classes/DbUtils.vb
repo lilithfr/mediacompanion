@@ -30,11 +30,11 @@ Public Class DbUtils
 
 	Public Shared Function Stuff(s As string) As string
 			
-		s = s.Replace( "'"  , "''"   )
+	'	s = s.Replace( "'"  , "''"   )
 	'	s = s.Replace( "["  , "[[]"  )
 	'	s = s.Replace( "^"  , "[^]"  )
 
-		return s
+		return s.Replace("'","''")
 	End Function
 
 End Class
