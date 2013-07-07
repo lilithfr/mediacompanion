@@ -4486,6 +4486,10 @@ Public Class Form1
             Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
             If Yield(yielding) Then Return
+            'Dim MovpathandFilename As String = queryList(0).MoviePathAndFileName
+            If Not File.Exists(queryList(0).MoviePathAndFileName) Then   'Detect if video file is missing
+                If Mov_MissingMovie(queryList) Then Exit Sub
+            End If
 
             If queryList.Count > 0 Then
                 workingMovie.filedate = queryList(0).filedate
@@ -4571,6 +4575,17 @@ Public Class Form1
         DisplayMovie()
     End Sub
 
+    Private Function Mov_MissingMovie(ByVal qrylst As List(Of Data_GridViewMovie)) As Boolean
+        Dim missingstr As String
+        Dim Filepathandname As String
+        Filepathandname = qrylst(0).fullpathandfilename.Replace(".nfo","")
+        missingstr = "Video file Missing" & vbCrLf & Filepathandname & vbCrLf & "Do you wish to remove from database?"
+        If MsgBox(missingstr,MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            Mov_RemoveMovie()
+            Return True
+        End If
+    Return False
+    End Function
 
 
     Private Sub TextBox1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
@@ -22947,7 +22962,10 @@ Public Class Form1
     End Sub
 
     Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
+        Mov_RemoveMovie ()
+    End Sub
 
+    Private Sub Mov_RemoveMovie()
         For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
 
             oMovies.RemoveMovieFromCache(row.Cells("fullpathandfilename").Value.ToString)
