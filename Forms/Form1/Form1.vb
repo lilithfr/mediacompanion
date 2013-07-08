@@ -145,6 +145,7 @@ Public Class Form1
     Dim progressmode As Boolean
     Dim overItem As String
     Dim scrapeAndQuit As Boolean = False
+    Dim sandq As Integer = 0
     Dim mouseDelta As Integer = 0
     Dim resLabels As Label
     Dim fanartUrls(1000, 1) As String
@@ -278,6 +279,15 @@ Public Class Form1
             If arg = "sq" Then
                 Me.WindowState = FormWindowState.Minimized
                 scrapeAndQuit = True
+                sandq = 3
+            Else If arg = "st" Then
+                Me.WindowState = FormWindowState.Minimized
+                scrapeAndQuit = True
+                sandq = 1
+            Else If arg = "sm" Then
+                Me.WindowState = FormWindowState.Minimized
+                scrapeAndQuit = True
+                sandq = 2
             End If
         Next
 
@@ -560,7 +570,8 @@ Public Class Form1
         'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
         If scrapeAndQuit Then
-            SearchForNew
+            Do_ScrapeAndQuit()
+            Me.Close()
         Else
             Try
                 If cbMovieDisplay_MovieSet.Items.Count <> Preferences.moviesets.Count Then
@@ -8702,7 +8713,9 @@ Public Class Form1
         Try
 
             If scrapeAndQuit = True Then
-                Me.Close()
+                'Me.Close()
+                sandq = sandq -1
+                Exit Sub 
             End If
 
 
@@ -23565,7 +23578,7 @@ Public Class Form1
     End Function
 
 
-    Private Sub mov_BckWrkScnMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkScnMovies.DoWork
+    Private Sub BckWrkScnMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkScnMovies.DoWork
         Try
             CallSubByName(DirectCast(e.Argument, String))
 
@@ -23775,7 +23788,12 @@ Public Class Form1
     End Sub
 
 
-    Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
+    Private Sub BckWrkScnMovies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
+
+        If scrapeAndQuit = True Then
+            sandq = sandq -2
+            Exit Sub
+        End If
 
         LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
         UpdateFilteredList()
@@ -23962,6 +23980,22 @@ Public Class Form1
         RunBackgroundMovieScrape("SearchForNewMovies")
     End Sub
 
+    Sub Do_ScrapeAndQuit
+        Do While sandq <> 0
+            If sandq >= 2 Then
+                SearchForNew
+                Do Until sandq < 2
+                    Application.DoEvents()
+                Loop
+            End If
+            If sandq = 1 Then
+                ep_Search()
+                Do Until sandq < 1
+                    Application.DoEvents()
+                Loop
+            End If
+        Loop
+    End Sub
 
     Sub DoScrapeDroppedFiles()
         If Preferences.movies_useXBMC_Scraper Then
