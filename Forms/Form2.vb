@@ -17,6 +17,7 @@ Public Class Form2
     Dim workingmovieedit As New FullMovieDetails
     Dim posterpath As String = ""
     Dim cropstring As String
+    Dim datechanged As Boolean = False
 
 
 
@@ -46,6 +47,11 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.outline <> Nothing Then outlinetxt.Text = workingmovieedit.fullmoviebody.outline
         If workingmovieedit.fullmoviebody.plot <> Nothing Then plottxt.Text = workingmovieedit.fullmoviebody.plot
         If workingmovieedit.fullmoviebody.tagline <> Nothing Then taglinetxt.Text = workingmovieedit.fullmoviebody.tagline
+        If workingmovieedit.fullmoviebody.top250 <> Nothing Then top250txt.Text = workingmovieedit.fullmoviebody.top250 
+        Try
+            If workingmovieedit.fileinfo.createdate <> Nothing Then Createdatepicker.Value = workingmovieedit.fileinfo.createdate
+        Catch
+        End Try
         If workingmovieedit.fileinfo.fullpathandfilename <> Nothing Then filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
 
         For Each actor In workingmovieedit.listactors
@@ -92,6 +98,9 @@ Public Class Form2
                     End If
                 End If
             Next
+            Createdatepicker.CustomFormat = "yyyyMMddhhmmss"   'Preferences.DateFormat
+            Createdatepicker.Format = DateTimePickerFormat.Custom 
+             
             Panel2.Dock = DockStyle.Fill
             Call setupdisplay()
         Catch ex As Exception
@@ -182,36 +191,28 @@ Public Class Form2
     End Sub ' Add Actor Button
 
 
-    Private Sub btnrescrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnrescrape.Click
-        Try
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
 
     Private Sub btnchangemovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnchangemovie.Click
         Try
-            Dim tempstring As String
-            Dim url As String
-            If Preferences.usefoldernames = True Then
-                tempstring = Form1.workingMovie.foldername
-            Else
-                tempstring = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)))
-            End If
+            MsgBox("Use 'Change Movie' on main Media Companion",vbExclamation)
+            'Dim tempstring As String
+            'Dim url As String
+            'If Preferences.usefoldernames = True Then
+            '    tempstring = Form1.workingMovie.foldername
+            'Else
+            '    tempstring = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)))
+            'End If
 
-            tempstring = tempstring.Replace(" ", "+")
-            tempstring = tempstring.Replace("&", "%26")
+            'tempstring = tempstring.Replace(" ", "+")
+            'tempstring = tempstring.Replace("&", "%26")
 
 
-            url = Preferences.imdbmirror & "find?s=tt&q=" & tempstring
-            WebBrowser2.Stop()
-            WebBrowser2.ScriptErrorsSuppressed = True
-            WebBrowser2.Navigate(url)
-            WebBrowser2.Refresh()
-            Panel2.Visible = True
+            'url = Preferences.imdbmirror & "find?s=tt&q=" & tempstring
+            'WebBrowser2.Stop()
+            'WebBrowser2.ScriptErrorsSuppressed = True
+            'WebBrowser2.Navigate(url)
+            'WebBrowser2.Refresh()
+            'Panel2.Visible = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -679,101 +680,14 @@ Public Class Form2
 
 
 
-    Private Sub btnrescrapethumbs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnrescrapethumbs.Click
+    Private Sub btnAltPosterBrowser_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAltPosterBrowser.Click
         Try
-            'Form1.fullimdbid = idtxt.Text
-            'tempstring = Form1.filefunction.getstackname(filenametxt.Text, pathtxt.Text)
-            'If tempstring = "na" Then
-            '    tempstring = pathtxt.Text & filenametxt.Text
-            '    tempstring = tempstring.Replace(IO.Path.GetExtension(tempstring), ".tbn")
-            'Else
-            '    tempstring = pathtxt.Text & tempstring & ".tbn"
-            'End If
-            'Form1.fullposterpath = tempstring
-
-
-
-            'Dim t As New coverart
-            't.ShowDialog()
-            'moviethumb.Image = Form1.moviethumb.Image
-            'If Not moviethumb.Image Is Nothing Then
-            '    Dim exists As Boolean = False
-            '    Label16.Text = moviethumb.Image.Width
-            '    Label17.Text = moviethumb.Image.Height
-            '    Dim lngSizeOfFile As Decimal
-            '    tempstring = Form1.moviethumbpath
-            '    Try
-            '        lngSizeOfFile = FileLen(Form1.fullposterpath)
-            '        lngSizeOfFile = lngSizeOfFile / 1024
-            '        lngSizeOfFile = lngSizeOfFile.Round(lngSizeOfFile, 2)
-            '        Label18.Text = lngSizeOfFile & "kB"
-            '    Catch
-            '        Label18.Text = ""
-            '    End Try
-            'Else
-            '    Label16.Text = "na"
-            '    Label17.Text = "na"
-            '    Label18.Text = "na"
-            'End If
+            Dim t As New frmCoverArt()
+            t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-
-
-    '______________________________________
-    '_____Navigate Availabe Thumbnails_____
-    '______________________________________
-
-    'Private Sub btnthumbnavigateright_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '    If thumbcount > thumbnumber Then
-    '        thumbnumber = thumbnumber + 1
-    '        If thumbs(thumbnumber).IndexOf("http") <> -1 And thumbs(thumbnumber).IndexOf("jpg") <> -1 Then
-    '            Dim MyWebClient As New System.Net.WebClient
-    '            Try
-    '                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(thumbs(thumbnumber))
-    '                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-    '                moviethumb.Image = New System.Drawing.Bitmap(ImageStream)
-    '                Label7.Text = thumbnumber & " of " & thumbcount
-    '                Label16.Text = moviethumb.Image.Width
-    '                Label17.Text = moviethumb.Image.Height
-    '                tempint = UBound(ImageInBytes)
-    '                Dim newtemp As Decimal
-    '                newtemp = tempint
-    '                newtemp = newtemp / 1024
-    '                newtemp = newtemp.Round(newtemp, 2)
-    '                Label18.Text = newtemp & "kB"
-    '            Catch ex As Exception
-    '            End Try
-    '        End If
-    '    End If
-    'End Sub
-    'Private Sub btnthumbnavigateleft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '    If thumbnumber > 1 Then
-    '        thumbnumber = thumbnumber - 1
-    '        If thumbs(thumbnumber).IndexOf("http") <> -1 And thumbs(thumbnumber).IndexOf("jpg") <> -1 Then
-    '            Dim MyWebClient As New System.Net.WebClient
-    '            Try
-    '                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(thumbs(thumbnumber))
-    '                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-    '                moviethumb.Image = New System.Drawing.Bitmap(ImageStream)
-
-    '                Label7.Text = thumbnumber & " of " & thumbcount
-    '                Label16.Text = moviethumb.Image.Width
-    '                Label17.Text = moviethumb.Image.Height
-    '                tempint = UBound(ImageInBytes)
-    '                Dim newtemp As Decimal
-    '                newtemp = tempint
-    '                newtemp = newtemp / 1024
-    '                newtemp = newtemp.Round(newtemp, 2)
-    '                Label18.Text = newtemp & "kB"
-    '            Catch ex As Exception
-    '            End Try
-    '        End If
-    '    End If
-    'End Sub
-
 
     '_______________________________________________________
     '_________________Crop Thumbnail Code___________________
@@ -962,6 +876,10 @@ Public Class Form2
             Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
             Form1.workingMovieDetails.listactors = workingmovieedit.listactors
             Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
+            Dim credate As date = Createdatepicker.Value
+            If datechanged Then
+                workingmovieedit.fileinfo.createdate = Format(credate, Preferences.datePattern).ToString
+            End If
             'Call WorkingWithNfoFiles.mov_NfoSave(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             Movie.SaveNFO(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             Me.Close()
@@ -1109,7 +1027,7 @@ Public Class Form2
     End Sub
 
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
         Try
             workingmovieedit = Nothing
             actorcb.Text = ""
@@ -1156,4 +1074,16 @@ Public Class Form2
 
     End Sub
 
+    Private Sub Createdatepicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles Createdatepicker.ValueChanged
+            datechanged = True
+    End Sub
+
+    Private Sub Createdatepicker_DropDown(ByVal sender As Object, ByVal e As EventArgs) Handles Createdatepicker.DropDown
+      RemoveHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
+    End Sub
+
+    Private Sub Createdatepicker_CloseUp(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Createdatepicker.CloseUp
+      AddHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
+      Call Createdatepicker_ValueChanged(sender, EventArgs.Empty)
+    End Sub
 End Class

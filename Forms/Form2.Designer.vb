@@ -71,7 +71,6 @@ Partial Class Form2
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.btnrescrape = New System.Windows.Forms.Button()
         Me.btnchangemovie = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
@@ -80,7 +79,7 @@ Partial Class Form2
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Button13 = New System.Windows.Forms.Button()
         Me.WebBrowser2 = New System.Windows.Forms.WebBrowser()
-        Me.btnrescrapethumbs = New System.Windows.Forms.Button()
+        Me.btnAltPosterBrowser = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -103,10 +102,13 @@ Partial Class Form2
         Me.btnfanart = New System.Windows.Forms.Button()
         Me.btnresetimage = New System.Windows.Forms.Button()
         Me.btnsavecropped = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.starstxt = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.top250txt = New System.Windows.Forms.TextBox()
+        Me.Createdatepicker = New System.Windows.Forms.DateTimePicker()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.Panel2.SuspendLayout
@@ -125,29 +127,29 @@ Partial Class Form2
         'votestxt
         '
         Me.votestxt.BackColor = System.Drawing.Color.White
-        Me.votestxt.Location = New System.Drawing.Point(488, 171)
+        Me.votestxt.Location = New System.Drawing.Point(293, 170)
         Me.votestxt.Margin = New System.Windows.Forms.Padding(4)
         Me.votestxt.Name = "votestxt"
-        Me.votestxt.Size = New System.Drawing.Size(263, 20)
+        Me.votestxt.Size = New System.Drawing.Size(97, 20)
         Me.votestxt.TabIndex = 58
         '
         'ratingtxt
         '
         Me.ratingtxt.BackColor = System.Drawing.Color.White
-        Me.ratingtxt.Location = New System.Drawing.Point(488, 140)
+        Me.ratingtxt.Location = New System.Drawing.Point(293, 138)
         Me.ratingtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.ratingtxt.Name = "ratingtxt"
-        Me.ratingtxt.Size = New System.Drawing.Size(263, 20)
+        Me.ratingtxt.Size = New System.Drawing.Size(97, 20)
         Me.ratingtxt.TabIndex = 57
         '
         'idtxt
         '
         Me.idtxt.BackColor = System.Drawing.Color.White
-        Me.idtxt.Location = New System.Drawing.Point(127, 170)
+        Me.idtxt.Location = New System.Drawing.Point(488, 138)
         Me.idtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.idtxt.Name = "idtxt"
         Me.idtxt.ReadOnly = true
-        Me.idtxt.Size = New System.Drawing.Size(263, 20)
+        Me.idtxt.Size = New System.Drawing.Size(262, 20)
         Me.idtxt.TabIndex = 56
         '
         'yeartxt
@@ -156,7 +158,7 @@ Partial Class Form2
         Me.yeartxt.Location = New System.Drawing.Point(127, 139)
         Me.yeartxt.Margin = New System.Windows.Forms.Padding(4)
         Me.yeartxt.Name = "yeartxt"
-        Me.yeartxt.Size = New System.Drawing.Size(263, 20)
+        Me.yeartxt.Size = New System.Drawing.Size(104, 20)
         Me.yeartxt.TabIndex = 55
         '
         'genretxt
@@ -216,17 +218,17 @@ Partial Class Form2
         'taglinetxt
         '
         Me.taglinetxt.BackColor = System.Drawing.Color.White
-        Me.taglinetxt.Location = New System.Drawing.Point(127, 444)
+        Me.taglinetxt.Location = New System.Drawing.Point(127, 453)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
-        Me.taglinetxt.Size = New System.Drawing.Size(624, 45)
+        Me.taglinetxt.Size = New System.Drawing.Size(624, 36)
         Me.taglinetxt.TabIndex = 48
         '
         'plottxt
         '
         Me.plottxt.BackColor = System.Drawing.Color.White
-        Me.plottxt.Location = New System.Drawing.Point(127, 300)
+        Me.plottxt.Location = New System.Drawing.Point(127, 309)
         Me.plottxt.Margin = New System.Windows.Forms.Padding(4)
         Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
@@ -237,11 +239,11 @@ Partial Class Form2
         'outlinetxt
         '
         Me.outlinetxt.BackColor = System.Drawing.Color.White
-        Me.outlinetxt.Location = New System.Drawing.Point(127, 235)
+        Me.outlinetxt.Location = New System.Drawing.Point(127, 253)
         Me.outlinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
-        Me.outlinetxt.Size = New System.Drawing.Size(624, 57)
+        Me.outlinetxt.Size = New System.Drawing.Size(624, 48)
         Me.outlinetxt.TabIndex = 46
         '
         'runtime
@@ -270,7 +272,7 @@ Partial Class Form2
         '
         Me.imdb.AutoSize = true
         Me.imdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.imdb.Location = New System.Drawing.Point(21, 171)
+        Me.imdb.Location = New System.Drawing.Point(399, 139)
         Me.imdb.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.imdb.Name = "imdb"
         Me.imdb.Size = New System.Drawing.Size(66, 16)
@@ -281,7 +283,7 @@ Partial Class Form2
         '
         Me.tagline.AutoSize = true
         Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tagline.Location = New System.Drawing.Point(21, 444)
+        Me.tagline.Location = New System.Drawing.Point(21, 454)
         Me.tagline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.tagline.Name = "tagline"
         Me.tagline.Size = New System.Drawing.Size(63, 16)
@@ -292,7 +294,7 @@ Partial Class Form2
         '
         Me.plot.AutoSize = true
         Me.plot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.plot.Location = New System.Drawing.Point(21, 300)
+        Me.plot.Location = New System.Drawing.Point(21, 309)
         Me.plot.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.plot.Name = "plot"
         Me.plot.Size = New System.Drawing.Size(40, 16)
@@ -303,7 +305,7 @@ Partial Class Form2
         '
         Me.outline.AutoSize = true
         Me.outline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.outline.Location = New System.Drawing.Point(21, 235)
+        Me.outline.Location = New System.Drawing.Point(21, 254)
         Me.outline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.outline.Name = "outline"
         Me.outline.Size = New System.Drawing.Size(58, 16)
@@ -312,7 +314,6 @@ Partial Class Form2
         '
         'moviethumb
         '
-        Me.moviethumb.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.moviethumb.Location = New System.Drawing.Point(760, 15)
         Me.moviethumb.Margin = New System.Windows.Forms.Padding(4)
         Me.moviethumb.Name = "moviethumb"
@@ -325,7 +326,7 @@ Partial Class Form2
         '
         Me.votes.AutoSize = true
         Me.votes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.votes.Location = New System.Drawing.Point(399, 172)
+        Me.votes.Location = New System.Drawing.Point(239, 171)
         Me.votes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.votes.Name = "votes"
         Me.votes.Size = New System.Drawing.Size(52, 16)
@@ -358,7 +359,7 @@ Partial Class Form2
         '
         Me.rating.AutoSize = true
         Me.rating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rating.Location = New System.Drawing.Point(399, 142)
+        Me.rating.Location = New System.Drawing.Point(239, 140)
         Me.rating.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.rating.Name = "rating"
         Me.rating.Size = New System.Drawing.Size(56, 16)
@@ -582,19 +583,6 @@ Partial Class Form2
         Me.TextBox4.Size = New System.Drawing.Size(309, 20)
         Me.TextBox4.TabIndex = 79
         '
-        'btnrescrape
-        '
-        Me.btnrescrape.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnrescrape.Location = New System.Drawing.Point(819, 330)
-        Me.btnrescrape.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnrescrape.Name = "btnrescrape"
-        Me.btnrescrape.Size = New System.Drawing.Size(140, 28)
-        Me.btnrescrape.TabIndex = 82
-        Me.btnrescrape.Text = "Re-Scrape Details"
-        Me.ToolTip1.SetToolTip(Me.btnrescrape, "Re-Scrape Movie If IMDB ID Is Correct")
-        Me.btnrescrape.UseVisualStyleBackColor = true
-        Me.btnrescrape.Visible = false
-        '
         'btnchangemovie
         '
         Me.btnchangemovie.Location = New System.Drawing.Point(988, 593)
@@ -603,7 +591,7 @@ Partial Class Form2
         Me.btnchangemovie.Size = New System.Drawing.Size(140, 28)
         Me.btnchangemovie.TabIndex = 91
         Me.btnchangemovie.Text = "Change Movie"
-        Me.ToolTip1.SetToolTip(Me.btnchangemovie, "You Will Need This If the Wrong IMDB ID is shown")
+        Me.ToolTip1.SetToolTip(Me.btnchangemovie, "Please use Change Movie on Main"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Media Companion page.")
         Me.btnchangemovie.UseVisualStyleBackColor = true
         '
         'Panel2
@@ -692,17 +680,16 @@ Partial Class Form2
         Me.WebBrowser2.Size = New System.Drawing.Size(1135, 622)
         Me.WebBrowser2.TabIndex = 0
         '
-        'btnrescrapethumbs
+        'btnAltPosterBrowser
         '
-        Me.btnrescrapethumbs.Location = New System.Drawing.Point(819, 366)
-        Me.btnrescrapethumbs.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnrescrapethumbs.Name = "btnrescrapethumbs"
-        Me.btnrescrapethumbs.Size = New System.Drawing.Size(140, 28)
-        Me.btnrescrapethumbs.TabIndex = 100
-        Me.btnrescrapethumbs.Text = "Poster Browser"
-        Me.ToolTip1.SetToolTip(Me.btnrescrapethumbs, "Re-Scrape Thumbnails from MoviePosterDB")
-        Me.btnrescrapethumbs.UseVisualStyleBackColor = true
-        Me.btnrescrapethumbs.Visible = false
+        Me.btnAltPosterBrowser.Location = New System.Drawing.Point(988, 393)
+        Me.btnAltPosterBrowser.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnAltPosterBrowser.Name = "btnAltPosterBrowser"
+        Me.btnAltPosterBrowser.Size = New System.Drawing.Size(133, 35)
+        Me.btnAltPosterBrowser.TabIndex = 100
+        Me.btnAltPosterBrowser.Text = "Alt Poster Browser"
+        Me.ToolTip1.SetToolTip(Me.btnAltPosterBrowser, "Re-Scrape Thumbnails from MoviePosterDB")
+        Me.btnAltPosterBrowser.UseVisualStyleBackColor = true
         '
         'Button1
         '
@@ -731,7 +718,7 @@ Partial Class Form2
         '
         Me.Label8.AutoSize = true
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label8.Location = New System.Drawing.Point(168, 363)
+        Me.Label8.Location = New System.Drawing.Point(168, 372)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(535, 42)
@@ -891,11 +878,11 @@ Partial Class Form2
         '
         'btnfanart
         '
-        Me.btnfanart.Location = New System.Drawing.Point(19, 382)
+        Me.btnfanart.Location = New System.Drawing.Point(988, 351)
         Me.btnfanart.Name = "btnfanart"
-        Me.btnfanart.Size = New System.Drawing.Size(75, 23)
+        Me.btnfanart.Size = New System.Drawing.Size(133, 35)
         Me.btnfanart.TabIndex = 0
-        Me.btnfanart.Text = "Alt Fanart"
+        Me.btnfanart.Text = "Alt Fanart Browser"
         '
         'btnresetimage
         '
@@ -915,17 +902,9 @@ Partial Class Form2
         Me.btnsavecropped.TabIndex = 0
         Me.btnsavecropped.Text = "Saved Cropped"
         '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(19, 353)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 0
-        Me.Button2.Visible = false
-        '
         'starstxt
         '
-        Me.starstxt.Location = New System.Drawing.Point(127, 198)
+        Me.starstxt.Location = New System.Drawing.Point(127, 212)
         Me.starstxt.Name = "starstxt"
         Me.starstxt.Size = New System.Drawing.Size(623, 20)
         Me.starstxt.TabIndex = 115
@@ -934,7 +913,7 @@ Partial Class Form2
         '
         Me.Label6.AutoSize = true
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label6.Location = New System.Drawing.Point(21, 202)
+        Me.Label6.Location = New System.Drawing.Point(21, 213)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(45, 16)
         Me.Label6.TabIndex = 116
@@ -951,9 +930,51 @@ Partial Class Form2
         Me.Label7.TabIndex = 117
         Me.Label7.Text = "Path : "
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = true
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label9.Location = New System.Drawing.Point(21, 168)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(66, 16)
+        Me.Label9.TabIndex = 118
+        Me.Label9.Text = "Top 250 : "
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = true
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label11.Location = New System.Drawing.Point(398, 171)
+        Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(97, 16)
+        Me.Label11.TabIndex = 119
+        Me.Label11.Text = "Created Date : "
+        '
+        'top250txt
+        '
+        Me.top250txt.BackColor = System.Drawing.Color.White
+        Me.top250txt.Location = New System.Drawing.Point(127, 167)
+        Me.top250txt.Margin = New System.Windows.Forms.Padding(4)
+        Me.top250txt.Name = "top250txt"
+        Me.top250txt.Size = New System.Drawing.Size(104, 20)
+        Me.top250txt.TabIndex = 120
+        '
+        'Createdatepicker
+        '
+        Me.Createdatepicker.Location = New System.Drawing.Point(488, 166)
+        Me.Createdatepicker.Name = "Createdatepicker"
+        Me.Createdatepicker.Size = New System.Drawing.Size(200, 20)
+        Me.Createdatepicker.TabIndex = 123
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.Createdatepicker)
+        Me.Controls.Add(Me.top250txt)
+        Me.Controls.Add(Me.Label11)
+        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.starstxt)
@@ -984,12 +1005,11 @@ Partial Class Form2
         Me.Controls.Add(Me.btncropright)
         Me.Controls.Add(Me.btncropleft)
         Me.Controls.Add(Me.PictureBox2)
-        Me.Controls.Add(Me.btnrescrapethumbs)
+        Me.Controls.Add(Me.btnAltPosterBrowser)
         Me.Controls.Add(Me.zoom)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.btnrescrape)
         Me.Controls.Add(Me.btnchangemovie)
         Me.Controls.Add(Me.btnsavechanges)
         Me.Controls.Add(Me.btnaddactor)
@@ -1023,7 +1043,6 @@ Partial Class Form2
         Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.btnfanart)
         Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.btnsavecropped)
         Me.Controls.Add(Me.btnresetimage)
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
@@ -1088,7 +1107,6 @@ End Sub
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents btnrescrape As System.Windows.Forms.Button
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents btnchangemovie As System.Windows.Forms.Button
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
@@ -1105,7 +1123,7 @@ End Sub
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents openFD As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents btnrescrapethumbs As System.Windows.Forms.Button
+    Friend WithEvents btnAltPosterBrowser As System.Windows.Forms.Button
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents Label14 As System.Windows.Forms.Label
@@ -1118,9 +1136,12 @@ End Sub
     Friend WithEvents btnresetimage As System.Windows.Forms.Button
     Friend WithEvents btnsavecropped As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents starstxt As System.Windows.Forms.TextBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents top250txt As System.Windows.Forms.TextBox
+    Friend WithEvents Createdatepicker As System.Windows.Forms.DateTimePicker
 End Class
