@@ -103,12 +103,14 @@ Public Class clsGridViewMovie
         End If
 
         'Highlight titles in datagridview with missing video files.
-        For Each row As DataGridViewRow In dgv.Rows
-            If row.Cells("MoviePathAndFileName").Value = "none" Then
-                row.DefaultCellStyle.BackColor = Color.Red 
+        If Preferences.incmissingmovies Then
+            For Each row As DataGridViewRow In dgv.Rows
+                If row.Cells("MoviePathAndFileName").Value = "none" Then
+                    row.DefaultCellStyle.BackColor = Color.Red 
                 
-            End If
-        Next
+                End If
+            Next
+        End If
 
         dgv.RowHeadersVisible = False
 
@@ -244,8 +246,9 @@ Public Class clsGridViewMovie
             Case "Missing Votes"               : b = From f In b Where f.MissingVotes
             Case "Missing Year"                : b = From f In b Where f.MissingYear
             Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
-
+            Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
             Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
+            Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )
   
         End Select
 

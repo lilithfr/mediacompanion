@@ -22,7 +22,7 @@ Partial Class frmConfigureMovieFilters
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.btnApply = New System.Windows.Forms.Button()
+        Me.btnDone = New System.Windows.Forms.Button()
         Me.clbMovieFilters = New System.Windows.Forms.CheckedListBox()
         Me.lblInfo = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -31,13 +31,13 @@ Partial Class frmConfigureMovieFilters
         '
         'btnApply
         '
-        Me.btnApply.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnApply.Location = New System.Drawing.Point(153, 297)
-        Me.btnApply.Name = "btnApply"
-        Me.btnApply.Size = New System.Drawing.Size(49, 23)
-        Me.btnApply.TabIndex = 6
-        Me.btnApply.Text = "Done"
-        Me.btnApply.UseVisualStyleBackColor = true
+        Me.btnDone.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnDone.Location = New System.Drawing.Point(153, 297)
+        Me.btnDone.Name = "btnApply"
+        Me.btnDone.Size = New System.Drawing.Size(49, 23)
+        Me.btnDone.TabIndex = 6
+        Me.btnDone.Text = "Done"
+        Me.btnDone.UseVisualStyleBackColor = true
         '
         'clbMovieFilters
         '
@@ -78,7 +78,7 @@ Partial Class frmConfigureMovieFilters
         Me.ClientSize = New System.Drawing.Size(213, 329)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.clbMovieFilters)
-        Me.Controls.Add(Me.btnApply)
+        Me.Controls.Add(Me.btnDone)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "frmConfigureMovieFilters"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -88,7 +88,7 @@ Partial Class frmConfigureMovieFilters
         Me.ResumeLayout(false)
 
 End Sub
-    Friend WithEvents btnApply As System.Windows.Forms.Button
+    Friend WithEvents btnDone As System.Windows.Forms.Button
     Friend WithEvents clbMovieFilters As System.Windows.Forms.CheckedListBox
     Friend WithEvents lblInfo As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel

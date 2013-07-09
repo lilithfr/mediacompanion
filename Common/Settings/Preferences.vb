@@ -285,15 +285,35 @@ Public Class Preferences
 
 
     'XBMC Sync
-    Public Shared XBMC_Sync              As Boolean = False
-    Public Shared XBMC_Address           As String = "127.0.0.1"
-    Public Shared XBMC_Port              As String = "8080"
-    Public Shared XBMC_Username          As String = "xbmc"
-    Public Shared XBMC_Password          As String = "xbmc"
-    Public Shared XBMC_MC_FolderMappings As New XBMC_MC_FolderMappings
-    Public Shared XBMC_UserdataFolder    As String = "C:\Users\Phil\AppData\Roaming\XBMC\userdata"
-    Public Shared XBMC_TexturesDb        As String = "Database\Textures13.db"
-    Public Shared XBMC_ThumbnailFolder   As String = "Thumbnails"
+    Public Shared XBMC_Link                   As Boolean = False
+    Public Shared XBMC_Address                As String = "127.0.0.1"
+    Public Shared XBMC_Port                   As String = "8080"
+    Public Shared XBMC_Username               As String = "xbmc"
+    Public Shared XBMC_Password               As String = "xbmc"
+    Public Shared XBMC_UserdataFolder         As String = "C:\Users\Phil\AppData\Roaming\XBMC\userdata"
+    Public Shared XBMC_TexturesDb             As String = "Database\Textures13.db"
+    Public Shared XBMC_ThumbnailsFolder       As String = "Thumbnails"
+    Public Shared XBMC_MC_MovieFolderMappings As New XBMC_MC_FolderMappings("Movie")
+    Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
+    
+    ReadOnly Shared Property XbmcLinkReady As Boolean
+        Get
+            Return Preferences.XBMC_Link And Preferences.XbmcLinkInitialised
+        End Get
+    End Property
+
+    ReadOnly Shared Property XbmcLinkInitialised As Boolean
+        Get
+            Return  Preferences.XBMC_MC_MovieFolderMappings.Initialised And
+                    Preferences.XBMC_Address          <> ""  And
+                    Preferences.XBMC_Port             <> ""  And
+                    Preferences.XBMC_UserdataFolder   <> ""  And
+                    Preferences.XBMC_TexturesDb       <> ""  And
+                    Preferences.XBMC_ThumbnailsFolder <> ""
+                
+        End Get
+    End Property
+
 
     Public Shared Sub SetUpPreferences()
         'General
@@ -707,17 +727,18 @@ Public Class Preferences
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
-        root.AppendChild( doc, "XBMC_Sync"            , XBMC_Sync            )
-        root.AppendChild( doc, "XBMC_Address"         , XBMC_Address         )
-        root.AppendChild( doc, "XBMC_Port"            , XBMC_Port            )
-        root.AppendChild( doc, "XBMC_Username"        , XBMC_Username        )
-        root.AppendChild( doc, "XBMC_Password"        , XBMC_Password        )
-        root.AppendChild( doc, "XBMC_UserdataFolder"  , XBMC_UserdataFolder	 )
-        root.AppendChild( doc, "XBMC_TexturesDb"      , XBMC_TexturesDb      )
-        root.AppendChild( doc, "XBMC_ThumbnailFolder" , XBMC_ThumbnailFolder )
+        root.AppendChild( doc, "XBMC_Link"             , XBMC_Link             )
+        root.AppendChild( doc, "XBMC_Address"          , XBMC_Address          )
+        root.AppendChild( doc, "XBMC_Port"             , XBMC_Port             )
+        root.AppendChild( doc, "XBMC_Username"         , XBMC_Username         )
+        root.AppendChild( doc, "XBMC_Password"         , XBMC_Password         )
+        root.AppendChild( doc, "XBMC_UserdataFolder"   , XBMC_UserdataFolder   )
+        root.AppendChild( doc, "XBMC_TexturesDb"       , XBMC_TexturesDb       )
+        root.AppendChild( doc, "XBMC_ThumbnailFolders" , XBMC_ThumbnailsFolder )
 
-        root.AppendChild(XBMC_MC_FolderMappings.GetChild(doc))
-
+        root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
+        root.AppendChild(XBMC_MC_CompareFields      .GetChild(doc))
+        
         doc.AppendChild(root)
 
         If String.IsNullOrEmpty(workingProfile.Config) Then
@@ -1001,15 +1022,16 @@ Public Class Preferences
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml 
 
-                    Case "XBMC_Sync"                            : XBMC_Sync                 = thisresult.InnerXml 
+                    Case "XBMC_Link"                            : XBMC_Link                 = thisresult.InnerXml 
                     Case "XBMC_Address"                         : XBMC_Address              = thisresult.InnerXml 
                     Case "XBMC_Port"                            : XBMC_Port                 = thisresult.InnerXml 
                     Case "XBMC_Username"                        : XBMC_Username             = thisresult.InnerXml 
                     Case "XBMC_Password"                        : XBMC_Password             = thisresult.InnerXml 
                     Case "XBMC_UserdataFolder"                  : XBMC_UserdataFolder	    = thisresult.InnerXml 
                     Case "XBMC_TexturesDb"                      : XBMC_TexturesDb           = thisresult.InnerXml 
-                    Case "XBMC_ThumbnailFolder"                 : XBMC_ThumbnailFolder      = thisresult.InnerXml 
-                    Case "XBMC_MC_FolderMappings"               : XBMC_MC_FolderMappings.Load(thisresult)
+                    Case "XBMC_ThumbnailsFolder"                : XBMC_ThumbnailsFolder     = thisresult.InnerXml 
+                    Case "XBMC_MC_MovieFolderMappings"          : XBMC_MC_MovieFolderMappings.Load(thisresult)
+                    Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
 
                     Case Else : Dim x = thisresult
                 End Select
@@ -1017,6 +1039,7 @@ Public Class Preferences
         Next
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
 
+        XBMC_MC_MovieFolderMappings.IniFolders
     End Sub
 
 

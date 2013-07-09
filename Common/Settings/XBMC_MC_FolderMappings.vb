@@ -19,6 +19,11 @@ Public Class XBMC_MC_FolderMapping
         Load(node)
     End Sub
 
+    Public Sub New(ByVal MC_Folder As String, Optional ByVal XBMC_Folder As String="")
+        MC   = MC_Folder
+        XBMC = XBMC_Folder
+    End Sub
+
     Public Sub Load(node As XmlNode)
         MC   = node.Attributes("MC"  ).Value
         XBMC = node.Attributes("XBMC").Value
@@ -37,16 +42,27 @@ End Class
 
 Public Class XBMC_MC_FolderMappings
 
+    Property Type  As String
     Property Items As New List(Of XBMC_MC_FolderMapping)
 
     Public Sub New
     End Sub
 
-    Public Sub New(node As XmlNode)
+    Public Sub New(type As String)
+        Me.Type = type
+    End Sub
+
+    Public Sub New(node As XmlNode,type As String)
+        Me.New(type)
         Load(node)
     End Sub
 
+    Public Sub New(From As XBMC_MC_FolderMappings)
+        Me.Assign(From)
+    End Sub
+
     Public Sub Load(node As XmlNode)
+        Items.Clear
         For Each child As XmlNode In node.ChildNodes
             Items.Add(New XBMC_MC_FolderMapping(child))
         Next
@@ -54,7 +70,7 @@ Public Class XBMC_MC_FolderMappings
 
     Public Function GetChild(doc As XmlDocument) As XmlElement
 
-        Dim child As XmlElement = doc.CreateElement("XBMC_MC_FolderMappings")
+        Dim child As XmlElement = doc.CreateElement("XBMC_MC_" + Me.Type +"FolderMappings")
 
         For Each item In Items
             child.AppendChild(item.GetChild(doc))
@@ -109,12 +125,12 @@ Public Class XBMC_MC_FolderMappings
                     file = file.Remove(0,1)
                 End If
 
-                Return Path.Combine(FolderMapping.MC,file )
+                Return Path.Combine(FolderMapping.MC,file ).ToUpper
             End If
         Next
 
         'Missing folder mapping -> Assume same
-        Return XbMoviePath
+        Return XbMoviePath.ToUpper
       End Function
 
     Public Function GetMC_MovieFolder(McMoviePath As String) As String
@@ -128,4 +144,88 @@ Public Class XBMC_MC_FolderMappings
         Return Nothing
       End Function
 
+    ReadOnly Property MC_Folders As List(Of String)
+        Get
+            Return IIf(Me.Type="Movie",Preferences.movieFolders,Preferences.tvFolders)
+        End Get
+    End Property
+
+    ReadOnly Property MappedMC_Folders As List(Of String)
+        Get
+            Return (From X In Items Select X.MC).ToList
+        End Get
+    End Property
+
+    Public Sub IniFolders
+            RemoveInvalidFolders
+            AddMissingFolders
+    End Sub
+
+    Public Sub RemoveInvalidFolders
+        For Each item In Items
+            If Not MC_Folders.Contains(item.MC) Then
+                Items.Remove(item)
+            End If
+        Next
+    End Sub
+
+    Public Sub AddMissingFolders
+        For Each item In MC_Folders
+            If Not MappedMC_Folders.Contains(item) Then
+                Items.Add(New XBMC_MC_FolderMapping(item))
+            End If
+        Next
+    End Sub
+    
+    Public Sub SetSame
+        For Each item In Items
+            item.XBMC = item.MC
+        Next
+    End Sub
+
+    Public Function Initialised As Boolean
+
+        If Items.Count=0 Then Return False
+
+        For Each item In Items
+            If IsNothing(item.XBMC) Then Return False
+            If item.XBMC.Trim="" Then Return False
+        Next   
+
+        Return True     
+    End Function
+
+
+    Public Sub ClearXBMC
+        For Each item In Items
+            item.XBMC = ""
+        Next
+    End Sub
+
+    Public Sub Assign(From As XBMC_MC_FolderMappings)
+        Me.Items.Clear
+        Me.Type = From.Type
+        
+        For Each Item In From.Items
+            Dim x As XBMC_MC_FolderMapping = New XBMC_MC_FolderMapping(Item.MC,Item.XBMC)
+            Me.Items.Add(x)
+        Next
+    End Sub
+    
+    Public Function Changed(From As XBMC_MC_FolderMappings) As Boolean
+
+        If Me.Type <> From.Type Then Return True
+        
+        If Me.Items.Count <> From.Items.Count Then Return True
+ 
+        Dim i=0
+
+        For Each Item In From.Items
+            If Me.Items(i).MC<>Item.MC OrElse Me.Items(i).XBMC<>Item.XBMC Then Return True
+            i+=1
+        Next
+
+        Return False
+    End Function
+    
 End Class

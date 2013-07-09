@@ -1,4 +1,5 @@
 Imports System.IO
+Imports XBMC.JsonRpc
 
 Public Class ComboList
 
@@ -28,6 +29,7 @@ Public Class ComboList
     Property Audio               As New List(Of AudioDetails)
     Property Premiered           As String = ""
     Property Certificate         As String = ""
+    Property XbmcMovie           As XbmcMovieForCompare
 
     Public Property title As String
         Get
@@ -218,6 +220,7 @@ Public Class ComboList
         Me.Votes               = From.Votes              
         Me.Resolution          = From.Resolution    
         Me.Premiered           = From.Premiered
+        Me.Certificate         = From.Certificate
 
         AssignAudio(From.Audio)
     End Sub

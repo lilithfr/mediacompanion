@@ -898,7 +898,7 @@ Public Class Movie
 
         WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)
 
-        If Preferences.XBMC_Sync Then
+        If Preferences.XbmcLinkReady Then
 
             If IsNothing(media) Then
                 media = Utilities.GetFileName(Nfo,True)

@@ -31,7 +31,7 @@ Public Class frmConfigureMovieFilters
     End Sub
 
 
-    Private Sub btnDone_Click( sender As Object,  e As EventArgs) Handles btnApply.Click
+    Private Sub btnDone_Click( sender As Object,  e As EventArgs) Handles btnDone.Click
         ConfigureFilters
     End Sub
 

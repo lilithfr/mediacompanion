@@ -75,6 +75,7 @@
     <Compile Include="MediaNFOAudio.vb" />
     <Compile Include="MediaNFOSubtitles.vb" />
     <Compile Include="MediaNFOVideo.vb" />
+    <Compile Include="Settings\XBMC_MC_CompareFields.vb" />
     <Compile Include="Settings\XBMC_MC_FolderMappings.vb" />
     <Compile Include="Settings\Excludes.vb" />
     <Compile Include="Settings\ListOfCommands.vb" />

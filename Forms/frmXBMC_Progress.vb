@@ -28,4 +28,13 @@ Public Class frmXBMC_Progress
         End Try
     End Sub
 
+    Private Sub frmXBMC_Progress_FormClosing( sender As Object,  e As FormClosingEventArgs) Handles MyBase.FormClosing
+        WindowState = FormWindowState.Minimized
+        e.Cancel    = True
+    End Sub
+
+    Private Sub frmXBMC_Progress_Shown( sender As Object,  e As EventArgs) Handles MyBase.Shown
+        MaximizeBox = False
+    End Sub
+
 End Class

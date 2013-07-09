@@ -21,14 +21,25 @@ Public Class Form1
     Const NFO_INDEX As Integer = 2
     Public Const XBMC_Controller_log_file As String = "XBMC-Controller-log-file.txt" 
 
-    Public Dim WithEvents BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
-    Public Dim WithEvents BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
-    Public Dim WithEvents BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
-    Shared Public         XbmcControllerQ       As PriorityQueue    = New PriorityQueue
-    Shared Public         XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
-    Public Property       XbmcMovies            As List(Of MaxXbmcMovie)
-    Public Property       XBMC_Controller_LogLastShownDt  As Date = Now
-    Private               XBMC_Controller_Log_TO_Timer As Timers.Timer = New Timers.Timer()
+    Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents  BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
+    Shared Public          XbmcControllerQ       As PriorityQueue    = New PriorityQueue
+    Shared Public          XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
+    Shared Public Property MC_Only_Movies        As List(Of ComboList)
+    Shared Public Property MaxXbmcMovies         As List(Of MaxXbmcMovie)
+    Public Property        XBMC_Controller_LogLastShownDt  As Date = Now
+    Private                XBMC_Controller_Log_TO_Timer As Timers.Timer = New Timers.Timer()
+    Private                XbmcConnectReqSent As Boolean = False
+
+
+    Shared ReadOnly Property MC_Only_Movies_Nfos As List(Of String)
+        Get
+            If IsNothing(MC_Only_Movies) Then Return New List(Of String)
+
+            Return (From M In MC_Only_Movies Select M.fullpathandfilename).ToList
+        End Get
+    End Property
 
     Property frmXBMC_Progress As frmXBMC_Progress = New frmXBMC_Progress
 
@@ -707,11 +718,15 @@ Public Class Form1
 
         BckWrkXbmcController.RunWorkerAsync(Me)
 
-        If Preferences.XBMC_Sync Then
+        SendXbmcConnect
+    End Sub
+
+    Sub SendXbmcConnect
+        If Preferences.XbmcLinkReady And Not XbmcConnectReqSent Then
+            XbmcConnectReqSent = True
             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
         End If
     End Sub
-
 
     Private Sub BckWrkXbmcController_DoWork(ByVal sender As Object, ByVal e As DoWorkEventArgs)
 
@@ -737,10 +752,31 @@ Public Class Form1
 
         Dim pg = frmXBMC_Progress.ProgressBar1
 
-        If oProgress.Evt = XbmcController.E.MC_AllMovieDetails Then
-            XbmcMovies = CType(oProgress.Args, XBMC_Movies_EventArgs).XbmcMovies
+        If oProgress.Evt = XbmcController.E.MC_Only_Movies Then
+            MC_Only_Movies = CType(oProgress.Args, ComboList_EventArgs).XbmcMovies
+            Assign_FilterGeneral
             Return
         End If
+
+        'If oProgress.Evt = XbmcController.E.MC_MaxMovieDetails Then
+        '    MaxXbmcMovies = CType(oProgress.Args, XBMC_MaxMovies_EventArgs).XbmcMovies
+        '    Return
+        'End If
+
+
+        If oProgress.Evt = XbmcController.E.MC_XbmcMcMovies Then
+            oMovies.XbmcMcMovies = CType(oProgress.Args, XBMC_MC_Movies_EventArgs).XbmcMcMovies
+            Assign_FilterGeneral
+            Return
+        End If
+
+
+        If oProgress.Evt = XbmcController.E.MC_XbmcOnlyMovies Then
+            oMovies.XbmcOnlyMovies = CType(oProgress.Args, XBMC_Only_Movies_EventArgs).XbmcOnlyMovies
+            Return
+        End If
+
+
 
         If frmXBMC_Progress.Visible = oProgress.Idle Then
 
@@ -5389,7 +5425,7 @@ Public Class Form1
 
 
     Sub Xbmc_UpdateWorkingMovie
-        If Preferences.XBMC_Sync Then
+        If Preferences.XbmcLinkReady Then
             Dim m As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
             m.SaveNFO
         End If
@@ -14356,6 +14392,8 @@ Public Class Form1
                     Call util_FontSetup()
                 End If
             End If
+
+            cbBtnLink.Enabled = Preferences.XbmcLinkInitialised
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21340,6 +21378,10 @@ Public Class Form1
         '    oMovies.RebuildActorCache
         '    'Call loadactorcache()
         'End If
+        cbBtnLink.Enabled = Preferences.XbmcLinkInitialised
+        cbBtnLink.Checked = Preferences.XBMC_Link
+   '     cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.YellowGreen,Color.Transparent)
+        cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.DarkSeaGreen,Color.Transparent)
 
     End Sub
 
@@ -24965,4 +25007,18 @@ End Sub
     End Sub
 
 
+    Private Sub TabPage18_Enter( sender As Object,  e As EventArgs) Handles TabPage18.Enter
+        UcGenPref_XbmcLink.Pop
+    End Sub
+
+
+    Private Sub cbBtnLink_Click( sender As Object,  e As EventArgs) Handles cbBtnLink.Click
+        Preferences.XBMC_Link = cbBtnLink.Checked 'And Preferences.XbmcLinkInitialised
+
+   '     cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.YellowGreen,Color.Transparent)
+        cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.DarkSeaGreen,Color.Transparent)
+
+        Preferences.SaveConfig 
+        SendXbmcConnect
+    End Sub
 End Class

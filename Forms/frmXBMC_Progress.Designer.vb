@@ -23,6 +23,7 @@ Partial Class frmXBMC_Progress
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmXBMC_Progress))
         Me.panelXBMC = New System.Windows.Forms.Panel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.lblErrorCount = New System.Windows.Forms.Label()
@@ -146,17 +147,12 @@ Partial Class frmXBMC_Progress
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(362, 62)
-        Me.ControlBox = false
         Me.Controls.Add(Me.panelXBMC)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.MaximizeBox = false
         Me.Name = "frmXBMC_Progress"
-        Me.Opacity = 0.7R
-        Me.ShowIcon = false
-        Me.ShowInTaskbar = false
-        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "XBMC  Controller"
+        Me.Text = "XBMC  Link"
         Me.TopMost = true
         Me.panelXBMC.ResumeLayout(false)
         Me.panelXBMC.PerformLayout

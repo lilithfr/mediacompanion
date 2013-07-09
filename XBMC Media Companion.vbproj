@@ -36,8 +36,8 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>3.5.7.1</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>3.5.7.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
@@ -105,9 +105,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\log4net.2.0.0\lib\net40-client\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MediaInfoNET">
-      <HintPath>MediaInfoNET\bin\Debug\MediaInfoNET.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -152,12 +149,25 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
     <Compile Include="Classes\DbUtils.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
+    <Compile Include="Classes\XBMC_Link\BaseEvent.vb" />
+    <Compile Include="Classes\XBMC_Link\BaseEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\DictItem.vb" />
+    <Compile Include="Classes\XBMC_Link\ScanNewMoviesEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\XBMC_Movies_EventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\FolderEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\VideoPathEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\smAction.vb" />
+    <Compile Include="Classes\XBMC_Link\XBMC_Controller_Progress.vb" />
+    <Compile Include="Classes\XBMC_Link\UnknownEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\XbmcController.vb" />
+    <Compile Include="Classes\XBMC_Link\XbmcJson.vb" />
     <Compile Include="Classes\FilteredItems.vb" />
     <Compile Include="Classes\NewVersionCheckResult.vb" />
     <Compile Include="Classes\MovieProgress.vb" />
@@ -183,17 +193,12 @@
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\TVShows.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
-    <Compile Include="Classes\XBMC_Controller\BaseEvent.vb" />
-    <Compile Include="Classes\XBMC_Controller\BaseEventArgs.vb" />
-    <Compile Include="Classes\XBMC_Controller\FolderEventArgs.vb" />
-    <Compile Include="Classes\XBMC_Controller\ScanNewMoviesEventArgs.vb" />
-    <Compile Include="Classes\XBMC_Controller\smAction.vb" />
-    <Compile Include="Classes\XBMC_Controller\UnknownEventArgs.vb" />
-    <Compile Include="Classes\XBMC_Controller\VideoPathEventArgs.vb" />
-    <Compile Include="Classes\XBMC_Controller\XbmcController.vb" />
-    <Compile Include="Classes\XBMC_Controller\XbmcJson.vb" />
-    <Compile Include="Classes\XBMC_Controller\XBMC_Controller_Progress.vb" />
-    <Compile Include="Classes\XBMC_Controller\XBMC_Movies_EventArgs.vb" />
+    <Compile Include="Forms\frmConfigureXBMC_MC_Folders.Designer.vb">
+      <DependentUpon>frmConfigureXBMC_MC_Folders.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConfigureXBMC_MC_Folders.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmBigTvEpisodeText.designer.vb">
       <DependentUpon>frmBigTvEpisodeText.vb</DependentUpon>
     </Compile>
@@ -394,8 +399,17 @@
     <Compile Include="UserControls\TooltipGridViewMovies.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ucGenPref_XbmcLink.Designer.vb">
+      <DependentUpon>ucGenPref_XbmcLink.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucGenPref_XbmcLink.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\frmConfigureXBMC_MC_Folders.resx">
+      <DependentUpon>frmConfigureXBMC_MC_Folders.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBigTvEpisodeText.resx">
       <DependentUpon>frmBigTvEpisodeText.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -492,6 +506,9 @@
     <EmbeddedResource Include="UserControls\TooltipGridViewMovies.resx">
       <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucGenPref_XbmcLink.resx">
+      <DependentUpon>ucGenPref_XbmcLink.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -502,6 +519,7 @@
     <None Include="media_companion.chm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="TvShow.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
@@ -518,10 +536,11 @@
     <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Newtonsoft.Json.Net20.dll">
+    <None Include="Assets\System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\XBMCJsonRpcSharp.dll">
+    <Content Include="Resources\mc-xbmc-link.ico" />
+    <None Include="Assets\Newtonsoft.Json.Net20.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="html_templates\BasicMovieCSVoutput.txt">
@@ -583,9 +602,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_audio_dtshd_ma.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\video_flags\media_audio_dts_es.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_audio_eac3.png">
@@ -690,13 +706,7 @@
     <Content Include="Resources\video_flags\media_codec_mpeg1codec.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\video_flags\media_codec_mpeg1video.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\video_flags\media_codec_mpeg2codec.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\video_flags\media_codec_mpeg2video.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_mpegvideo.png">
@@ -718,9 +728,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_codec_xvid.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\video_flags\media_mpaa_general.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video_flags\media_mpaa_nc17.png">

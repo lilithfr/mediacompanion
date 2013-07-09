@@ -4,6 +4,7 @@ Imports System.Linq
 Imports System.Xml
 Imports Media_Companion
 Imports MC_UserControls
+Imports XBMC.JsonRpc
 
 
 Module Ext
@@ -37,6 +38,34 @@ Public Class Movies
     Public Property PercentDone   As Integer = 0
 
     Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
+
+
+    Public Event XbmcMcMoviesChanged
+    Public Event XbmcOnlyMoviesChanged
+
+
+    Private _xbmcMcMovies   As Dictionary(Of String, XbmcMovieForCompare)
+    Private _xbmcOnlyMovies As List      (Of         XbmcMovieForCompare)
+
+    Property XbmcMcMovies As Dictionary(Of String, XbmcMovieForCompare)
+        Get
+            Return _xbmcMcMovies
+        End Get
+        Set
+            _xbmcMcMovies = Value
+            RaiseEvent XbmcMcMoviesChanged
+        End Set
+    End Property
+
+    Property XbmcOnlyMovies As List(Of XbmcMovieForCompare)
+        Get
+            Return _xbmcOnlyMovies
+        End Get
+        Set
+            _xbmcOnlyMovies = Value
+            RaiseEvent XbmcOnlyMoviesChanged
+        End Set
+    End Property
 
 
     Public ReadOnly Property CertificateMappings As CertificateMappings
@@ -198,6 +227,12 @@ Public Class Movies
             lst.Add( MissingTrailer           )
             lst.Add( MissingVotes             )
             lst.Add( MissingYear              )
+            If Preferences.XbmcLinkReady Then
+                If Not IsNothing(Form1.MC_Only_Movies) Then lst.Add( MC_Only_Movies )
+
+                If Not IsNothing(XbmcMcMovies) Then lst.Add( "Different titles (" & Xbmc_DifferentTitles.Count.ToString & ")"  )
+
+            End If
 
             Return lst
         End Get
@@ -289,6 +324,13 @@ Public Class Movies
     Public ReadOnly Property MissingYear As String
         Get
             Return "Missing Year (" & (From x In MovieCache Where x.MissingYear).Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MC_Only_Movies As String
+        Get
+            Return "Missing from XBMC (" & (From x In Form1.MC_Only_Movies).Count & ")" 
         End Get
     End Property  
 
@@ -559,6 +601,10 @@ Public Class Movies
 
     Sub New(Optional bw As BackgroundWorker=Nothing)
         _bw = bw
+
+        AddHandler Me.XbmcMcMoviesChanged   , AddressOf Handle_XbmcMcMoviesChanged
+        AddHandler Me.XbmcOnlyMoviesChanged , AddressOf Handle_XbmcOnlyMoviesChanged
+       
     End Sub
 
 
@@ -1335,7 +1381,7 @@ Public Class Movies
         MovieCache.AddRange(TmpMovieCache)
         Rebuild_Data_GridViewMovieCache()
 
-        If Preferences.XBMC_Sync Then
+        If Preferences.XbmcLinkReady Then
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
 
             Form1.XbmcControllerQ.Write(evt)
@@ -1426,7 +1472,7 @@ Public Class Movies
 
         Rebuild_Data_GridViewMovieCache
 
-        If Preferences.XBMC_Sync Then
+        If Preferences.XbmcLinkReady Then
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
 
             Form1.XbmcControllerQ.Write(evt)
@@ -1866,15 +1912,17 @@ Public Class Movies
         Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
 
 
-        If Preferences.XBMC_Sync Then
+        If Preferences.XbmcLinkReady Then
             Dim media As String = Utilities.GetFileName(fullpathandfilename,True)
 
-            Dim evt As New BaseEvent
+            If media <> "none" Then
+                Dim evt As New BaseEvent
 
-            evt.E    = XbmcController.E.MC_Movie_Removed
-            evt.Args = New VideoPathEventArgs(media, PriorityQueue.Priorities.medium)
+                evt.E    = XbmcController.E.MC_Movie_Removed
+                evt.Args = New VideoPathEventArgs(media, PriorityQueue.Priorities.medium)
 
-            Form1.XbmcControllerQ.Write(evt)
+                Form1.XbmcControllerQ.Write(evt)
+            End If
         End If
     End Sub
 
@@ -2082,9 +2130,6 @@ Public Class Movies
     End Function
 
 
-
-
-
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
 
         If fi.Include.Count>0 Then
@@ -2121,7 +2166,32 @@ Public Class Movies
 
         Return recs
     End Function
-     
+
+    Property Xbmc_DifferentTitles As List(Of String)
+
+    Sub Handle_XbmcMcMoviesChanged
+
+        For Each m In MovieCache
+            Try
+                m.XbmcMovie = XbmcMcMovies(m.MoviePathAndFileName.ToUpper)
+            Catch
+            End Try
+        Next
+
+        Xbmc_DifferentTitles = (From x In MovieCache Where Not IsNothing(x.XbmcMovie) AndAlso Not x.XbmcMovie.title=x.title Select x.MoviePathAndFileName).ToList
+
+    End Sub
+
+
+
+
+
+    Sub Handle_XbmcOnlyMoviesChanged
+        
+    End Sub
+
+
+    
 
 #End Region
 
