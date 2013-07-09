@@ -848,7 +848,21 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Dim ea As FolderEventArgs = args.EventArgs
 
         Dim scanFolder = ea.Folder
-        Dim Interval = 5000 + (MoviesInFolder(scanFolder)*1000)
+        Dim mif As Integer = 1
+
+
+        If Not MoviesInFolder.ContainsKey(scanFolder) Then
+            MoviesInFolder.Add(scanFolder,1)
+            'LogError("ScanFolder","MoviesInFolder was missing : [" + scanFolder + "]", args)
+        End If
+
+        Try
+            mif = MoviesInFolder(scanFolder)
+        Catch ex As Exception
+            LogError("ScanFolder","[" & ex.Message & "] was thrown looking up : [" + scanFolder + "] in MoviesInFolder", args)
+        End Try
+
+        Dim Interval = 5000 + (mif*1000)
 
         MoviesInFolder(scanFolder)=0
 
