@@ -288,9 +288,9 @@ Public Class Preferences
     Public Shared XBMC_Link                   As Boolean = False
     Public Shared XBMC_Address                As String = "127.0.0.1"
     Public Shared XBMC_Port                   As String = "8080"
-    Public Shared XBMC_Username               As String = "xbmc"
-    Public Shared XBMC_Password               As String = "xbmc"
-    Public Shared XBMC_UserdataFolder         As String = "C:\Users\Phil\AppData\Roaming\XBMC\userdata"
+    Public Shared XBMC_Username               As String = ""
+    Public Shared XBMC_Password               As String = ""
+    Public Shared XBMC_UserdataFolder         As String = ""
     Public Shared XBMC_TexturesDb             As String = "Database\Textures13.db"
     Public Shared XBMC_ThumbnailsFolder       As String = "Thumbnails"
     Public Shared XBMC_MC_MovieFolderMappings As New XBMC_MC_FolderMappings("Movie")
