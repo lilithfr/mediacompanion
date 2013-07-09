@@ -150,6 +150,7 @@ Public Class Preferences
     Public Shared movieRuntimeDisplay As String
     Public Shared movieRuntimeFallbackToFile As Boolean = False
     Public Shared disablelogfiles As Boolean
+    Public Shared incmissingmovies As Boolean
     Public Shared fanartnotstacked As Boolean
     Public Shared posternotstacked As Boolean
     Public Shared scrapemovieposters As Boolean
@@ -304,6 +305,7 @@ Public Class Preferences
         formheight = "600"
         formwidth = "800"
         disablelogfiles = False
+        incmissingmovies = False
         startupCache = True
         rarsize = 8
         renamenfofiles = True
@@ -624,7 +626,7 @@ Public Class Preferences
         root.AppendChild(doc, "movxtrathumb",                       movxtrathumb)                       'cbMovXtraThumb
         root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
         root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
-        root.AppendChild(doc, "dlTVxtrafanart", dlTVxtrafanart)                     'cbDlTVxtrafanart
+        root.AppendChild(doc, "dlTVxtrafanart",                     dlTVxtrafanart)                     'cbDlTVxtrafanart
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
         root.AppendChild(doc, "actorsavepath",                      actorsavepath)                      'localactorpath
@@ -635,7 +637,8 @@ Public Class Preferences
         root.AppendChild(doc, "namemode",                           namemode)                           'cbxNameMode
         root.AppendChild(doc, "usetransparency",                    usetransparency)                    'set from frmOptions - obsolete
         root.AppendChild(doc, "transparencyvalue",                  transparencyvalue)                  'set from frmOptions - obsolete
-        root.AppendChild(doc, "disablelogs", disablelogfiles)                    'CheckBox16
+        root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
+        root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'CheckBox13
         root.AppendChild(doc, "fanartjpg",                          fanartjpg)                          'fanartjpg
         root.AppendChild(doc, "roundminutes",                       roundminutes)                       'set from frmOptions - obsolete
@@ -643,8 +646,8 @@ Public Class Preferences
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       'RadioButton52
-        root.AppendChild(doc, "XbmcTmdbRenameMovie", XbmcTmdbRenameMovie)       'cbXbmcTmdbRename
-        root.AppendChild(doc, "XbmcTmdbActorDL", XbmcTmdbActorDL)               'cbXbmcTmdbActorDL
+        root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
+        root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
         root.AppendChild(doc, "moviemanualrename",                  MovieManualRename)                  'MovieManualRename
@@ -933,6 +936,7 @@ Public Class Preferences
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
                     Case "disablelogs"                          : disablelogfiles = thisresult.InnerXml
+                    Case "incmissingmovies"                     : incmissingmovies = thisresult.InnerText
                     Case "disabletvlogs"                        : disabletvlogs = thisresult.InnerXml
                     Case "folderjpg"                            : createfolderjpg = thisresult.InnerXml
                     Case "savefanart"                           : savefanart = thisresult.InnerXml

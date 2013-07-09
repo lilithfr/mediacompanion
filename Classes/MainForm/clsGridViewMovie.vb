@@ -33,7 +33,7 @@ Public Class clsGridViewMovie
             imgWatched.ToolTipText = "Watched Status"
             imgWatched.HeaderText  = "W"
 
-            dgv.Columns.Add(imgWatched)
+            dgv.Columns.Add(imgWatched) 
             SetColWidth(dgv.Columns("Watched"))
         End If
 
@@ -71,7 +71,6 @@ Public Class clsGridViewMovie
             column.Visible   = False
         Next
 
-
         dgv.Columns("Watched").Visible = Preferences.MovieList_ShowColWatched
         dgv.Columns("ImgPlot").Visible = Preferences.MovieList_ShowColPlot   
 
@@ -103,6 +102,13 @@ Public Class clsGridViewMovie
             End Try
         End If
 
+        'Highlight titles in datagridview with missing video files.
+        For Each row As DataGridViewRow In dgv.Rows
+            If row.Cells("MoviePathAndFileName").Value = "none" Then
+                row.DefaultCellStyle.BackColor = Color.Red 
+                
+            End If
+        Next
 
         dgv.RowHeadersVisible = False
 
@@ -347,8 +353,7 @@ Public Class clsGridViewMovie
 
         Form1.DataGridViewBindingSource.DataSource = lst
         Form1.DataGridViewMovies       .DataSource = Form1.DataGridViewBindingSource
-
-
+        
         If Yield Then Return
 
         GridviewMovieDesign(Form1)

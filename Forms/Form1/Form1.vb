@@ -14413,6 +14413,7 @@ Public Class Form1
         nudActorsFilterMinFilms     .Text           = Preferences.ActorsFilterMinFilms
         nudMaxActorsInFilter        .Text           = Preferences.MaxActorsInFilter
         cbMovieFilters_Actors_Order .SelectedIndex  = Preferences.MovieFilters_Actors_Order
+        cbMissingMovie              .Checked        = Preferences.incmissingmovies 
         nudSetsFilterMinFilms       .Text           = Preferences.SetsFilterMinFilms
         nudMaxSetsInFilter          .Text           = Preferences.MaxSetsInFilter
         cbMovieFilters_Sets_Order   .SelectedIndex  = Preferences.MovieFilters_Sets_Order
@@ -14528,6 +14529,20 @@ Public Class Form1
                 Preferences.disablelogfiles = False
             Else
                 Preferences.disablelogfiles = True
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMissingMovie_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingMovie.CheckedChanged
+        Try
+            If cbMissingMovie.CheckState = CheckState.Checked Then
+                Preferences.incmissingmovies = True 
+            Else
+                Preferences.incmissingmovies = False 
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True

@@ -1557,7 +1557,7 @@ Public Class Movies
 '    End Sub
 
     Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
-
+        Dim incmissing As Boolean = Preferences.incmissingmovies 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
 
             Application.DoEvents
@@ -1568,7 +1568,7 @@ Public Class Movies
 
             Dim movie = New Movie(Me,oFileInfo.FullName)
         
-            If movie.mediapathandfilename = "none" Then Continue For
+            If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
        
             movie.LoadNFO(False)
 
@@ -1648,7 +1648,7 @@ Public Class Movies
     'End Sub
 
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-
+        Dim incmissing As Boolean = Preferences.incmissingmovies 
         If IsNothing(dirInfo) Then Exit Sub
 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
@@ -1660,8 +1660,8 @@ Public Class Movies
             If Not File.Exists(oFileInfo.FullName) Then Continue For
 
             Dim movie = New Movie(Me,oFileInfo.FullName)
-        
-            If movie.mediapathandfilename = "none" Then Continue For
+
+            If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
 
             movie.LoadNFO(False)
 
