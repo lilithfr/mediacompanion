@@ -24,7 +24,7 @@ Partial Class ucGenPref_XbmcLink
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.tlpXbmcLink = New System.Windows.Forms.TableLayoutPanel()
-        Me.btnGeneralPrefsSaveChanges = New System.Windows.Forms.Button()
+        Me.btnUndo = New System.Windows.Forms.Button()
         Me.Label203 = New System.Windows.Forms.Label()
         Me.Label202 = New System.Windows.Forms.Label()
         Me.Label194 = New System.Windows.Forms.Label()
@@ -55,8 +55,8 @@ Partial Class ucGenPref_XbmcLink
         Me.pbResult7 = New System.Windows.Forms.PictureBox()
         Me.pbResult8 = New System.Windows.Forms.PictureBox()
         Me.pbResult10 = New System.Windows.Forms.PictureBox()
+        Me.btnGeneralPrefsSaveChanges = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.btnUndo = New System.Windows.Forms.Button()
         Me.tlpXbmcLink.SuspendLayout
         CType(Me.pbResult1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.pbResult2,System.ComponentModel.ISupportInitialize).BeginInit
@@ -128,19 +128,19 @@ Partial Class ucGenPref_XbmcLink
         Me.tlpXbmcLink.Size = New System.Drawing.Size(533, 434)
         Me.tlpXbmcLink.TabIndex = 20
         '
-        'btnGeneralPrefsSaveChanges
+        'btnUndo
         '
-        Me.btnGeneralPrefsSaveChanges.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.btnGeneralPrefsSaveChanges.Enabled = false
-        Me.btnGeneralPrefsSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnGeneralPrefsSaveChanges.Location = New System.Drawing.Point(239, 400)
-        Me.btnGeneralPrefsSaveChanges.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnGeneralPrefsSaveChanges.MaximumSize = New System.Drawing.Size(195, 30)
-        Me.btnGeneralPrefsSaveChanges.Name = "btnGeneralPrefsSaveChanges"
-        Me.btnGeneralPrefsSaveChanges.Size = New System.Drawing.Size(147, 30)
-        Me.btnGeneralPrefsSaveChanges.TabIndex = 78
-        Me.btnGeneralPrefsSaveChanges.Text = "Apply Changes"
-        Me.btnGeneralPrefsSaveChanges.UseVisualStyleBackColor = true
+        Me.btnUndo.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btnUndo.Enabled = false
+        Me.btnUndo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnUndo.Location = New System.Drawing.Point(4, 400)
+        Me.btnUndo.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnUndo.MaximumSize = New System.Drawing.Size(195, 30)
+        Me.btnUndo.Name = "btnUndo"
+        Me.btnUndo.Size = New System.Drawing.Size(147, 30)
+        Me.btnUndo.TabIndex = 90
+        Me.btnUndo.Text = "Undo Changes"
+        Me.btnUndo.UseVisualStyleBackColor = true
         '
         'Label203
         '
@@ -367,7 +367,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult2
         '
-        Me.pbResult2.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult2.Location = New System.Drawing.Point(506, 58)
         Me.pbResult2.Name = "pbResult2"
         Me.pbResult2.Size = New System.Drawing.Size(24, 24)
@@ -377,7 +376,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult3
         '
-        Me.pbResult3.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult3.Location = New System.Drawing.Point(506, 88)
         Me.pbResult3.Name = "pbResult3"
         Me.pbResult3.Size = New System.Drawing.Size(24, 24)
@@ -387,7 +385,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult4
         '
-        Me.pbResult4.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult4.Location = New System.Drawing.Point(506, 118)
         Me.pbResult4.Name = "pbResult4"
         Me.pbResult4.Size = New System.Drawing.Size(24, 24)
@@ -397,7 +394,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult5
         '
-        Me.pbResult5.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult5.Location = New System.Drawing.Point(506, 148)
         Me.pbResult5.Name = "pbResult5"
         Me.pbResult5.Size = New System.Drawing.Size(24, 24)
@@ -407,7 +403,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult6
         '
-        Me.pbResult6.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult6.Location = New System.Drawing.Point(506, 178)
         Me.pbResult6.Name = "pbResult6"
         Me.pbResult6.Size = New System.Drawing.Size(24, 24)
@@ -417,7 +412,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult7
         '
-        Me.pbResult7.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult7.Location = New System.Drawing.Point(506, 208)
         Me.pbResult7.Name = "pbResult7"
         Me.pbResult7.Size = New System.Drawing.Size(24, 24)
@@ -427,7 +421,6 @@ Partial Class ucGenPref_XbmcLink
         '
         'pbResult8
         '
-        Me.pbResult8.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult8.Location = New System.Drawing.Point(506, 238)
         Me.pbResult8.Name = "pbResult8"
         Me.pbResult8.Size = New System.Drawing.Size(24, 24)
@@ -438,7 +431,6 @@ Partial Class ucGenPref_XbmcLink
         'pbResult10
         '
         Me.pbResult10.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.pbResult10.Image = Global.Media_Companion.My.Resources.Resources.incorrect
         Me.pbResult10.Location = New System.Drawing.Point(506, 333)
         Me.pbResult10.Name = "pbResult10"
         Me.pbResult10.Size = New System.Drawing.Size(24, 24)
@@ -446,19 +438,19 @@ Partial Class ucGenPref_XbmcLink
         Me.pbResult10.TabIndex = 89
         Me.pbResult10.TabStop = false
         '
-        'btnUndo
+        'btnGeneralPrefsSaveChanges
         '
-        Me.btnUndo.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.btnUndo.Enabled = false
-        Me.btnUndo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnUndo.Location = New System.Drawing.Point(4, 400)
-        Me.btnUndo.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnUndo.MaximumSize = New System.Drawing.Size(195, 30)
-        Me.btnUndo.Name = "btnUndo"
-        Me.btnUndo.Size = New System.Drawing.Size(147, 30)
-        Me.btnUndo.TabIndex = 90
-        Me.btnUndo.Text = "Undo Changes"
-        Me.btnUndo.UseVisualStyleBackColor = true
+        Me.btnGeneralPrefsSaveChanges.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btnGeneralPrefsSaveChanges.Enabled = false
+        Me.btnGeneralPrefsSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnGeneralPrefsSaveChanges.Location = New System.Drawing.Point(239, 400)
+        Me.btnGeneralPrefsSaveChanges.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnGeneralPrefsSaveChanges.MaximumSize = New System.Drawing.Size(195, 30)
+        Me.btnGeneralPrefsSaveChanges.Name = "btnGeneralPrefsSaveChanges"
+        Me.btnGeneralPrefsSaveChanges.Size = New System.Drawing.Size(147, 30)
+        Me.btnGeneralPrefsSaveChanges.TabIndex = 78
+        Me.btnGeneralPrefsSaveChanges.Text = "Apply Changes"
+        Me.btnGeneralPrefsSaveChanges.UseVisualStyleBackColor = true
         '
         'ucGenPref_XbmcLink
         '

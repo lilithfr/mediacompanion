@@ -227,7 +227,7 @@ Public Class Movies
             lst.Add( MissingTrailer           )
             lst.Add( MissingVotes             )
             lst.Add( MissingYear              )
-            If Preferences.XbmcLinkReady Then
+            If Preferences.XBMC_Link Then
                 If Not IsNothing(Form1.MC_Only_Movies) Then lst.Add( MC_Only_Movies )
 
                 If Not IsNothing(XbmcMcMovies) Then lst.Add( "Different titles (" & Xbmc_DifferentTitles.Count.ToString & ")"  )

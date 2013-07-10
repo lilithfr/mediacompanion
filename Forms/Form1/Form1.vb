@@ -722,8 +722,8 @@ Public Class Form1
     End Sub
 
     Sub SendXbmcConnect
-        If Preferences.XbmcLinkReady And Not XbmcConnectReqSent Then
-            XbmcConnectReqSent = True
+        If Preferences.XbmcLinkReady Then       'And Not XbmcConnectReqSent Then
+            'XbmcConnectReqSent = True
             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
         End If
     End Sub
@@ -25021,4 +25021,10 @@ End Sub
         Preferences.SaveConfig 
         SendXbmcConnect
     End Sub
+
+    Private Sub TabPage1_Enter( sender As Object,  e As EventArgs) Handles TabPage1.Enter
+        cbBtnLink.Enabled = Preferences.XbmcLinkInitialised
+        SendXbmcConnect 
+    End Sub
+
 End Class

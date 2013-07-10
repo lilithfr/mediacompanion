@@ -174,7 +174,7 @@
       <Name>Utilites</Name>
     </ProjectReference>
     <ProjectReference Include="..\XBMC Media Companion.vbproj">
-      <Project>{4A891BFA-D799-4F3A-AFBA-A53C4824F33C}</Project>
+      <Project>{4a891bfa-d799-4f3a-afba-a53c4824f33c}</Project>
       <Name>XBMC Media Companion</Name>
     </ProjectReference>
   </ItemGroup>

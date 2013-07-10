@@ -224,6 +224,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         NotConnected
         Wf_XBMC_Movies_PreMap
         Wf_XBMC_Movies
+        Wf_ReconnectOrNot
         Wf_XBMC_ConnectResult
         Wf_XBMC_Video_Removed
         Wf_XBMC_Video_Updated
@@ -240,6 +241,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MaxMovies_Idle_TimeOut
         Success
         Failure
+        Yes
+        No
         NoMoreScanFolderReqs
   '      WatchDogTimeOut
   '      GetNewMovieIds
@@ -342,17 +345,20 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
         AddTransition( S.Any                        , E.MC_ShutDownReq          , S.Any                        , AddressOf ShutDown             )
-  '      AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
+  '     AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.Any                        , E.MC_ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
         AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
 
         AddTransition( S.NotConnected               , E.ConnectReq              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
-        AddTransition( S.NotConnected               , E.TimeOut                 , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
+        AddTransition( S.NotConnected               , E.TimeOut                 , S.Wf_ReconnectOrNot          , AddressOf ReconnectOrNot       )
+
+        AddTransition( S.Wf_ReconnectOrNot          , E.Yes                     , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
+        AddTransition( S.Wf_ReconnectOrNot          , E.No                      , S.NotConnected               , AddressOf Ready                )
 
         AddTransition( S.Wf_XBMC_ConnectResult      , E.Failure                 , S.NotConnected               , AddressOf Start1SecTimer       )      
         AddTransition( S.Wf_XBMC_ConnectResult      , E.Success                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
-        AddTransition( S.Wf_XBMC_ConnectResult      , E.JSON_Error              , S.Wf_XBMC_ConnectResult      , AddressOf Ignore               )
+        AddTransition( S.Wf_XBMC_ConnectResult      , E.JSON_Error              , S.Wf_XBMC_ConnectResult      , AddressOf Ready                )
 
 
 '       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Failure                 , S.Wf_XBMC_Movies_PreMap      , AddressOf FetchMoviesInfo      )
@@ -445,20 +451,22 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         log.Debug("Transition Completed - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
     End Sub
                                                                                                                                    
-    Sub UnexpectedEvent(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
+    Sub UnexpectedEvent(sender As Object, evt As TransitionEventArgs(Of S, E, EventArgs))
 
  '       WatchDogTimer.Stop
 
-        Dim ea As BaseEventArgs = e.EventArgs
+        If evt.EventID = E.ConnectReq Then Return
 
-        If e.EventID.ToString.IndexOf("MC_") = 0 Then
+        Dim ea As BaseEventArgs = evt.EventArgs
+
+        If evt.EventID.ToString.IndexOf("MC_") = 0 Then
             'ReportProgress("Buffering MC request",e)
-            AppendLog("Buffering MC request : [" + e.EventID.ToString + "] while in State : [" + e.SourceStateID.ToString + "]")
-            BufferQ.Write( New BaseEvent(e.EventID, e.EventArgs) )
+            AppendLog("Buffering MC request : [" + evt.EventID.ToString + "] while in State : [" + evt.SourceStateID.ToString + "]")
+            BufferQ.Write( New BaseEvent(evt.EventID, evt.EventArgs) )
             Return
         End If
 
-        AppendLog("UnexpectedEvent - State : [" + e.SourceStateID.ToString + "] Missing event handler for : [" + e.EventID.ToString + "]")
+        AppendLog("UnexpectedEvent - State : [" + evt.SourceStateID.ToString + "] Missing event handler for : [" + evt.EventID.ToString + "]")
     End Sub
 
 
@@ -541,6 +549,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
                 AppendLog("Buffering MC request : [" + Evt.Info + "] while in State : [" + CurrentStateID.ToString + "]")
                 BufferQ.Write( New BaseEvent(Evt.E, Evt.Args) )
             End If
+
+         '   If Not XbmcJson.xbmc.IsAlive And S. Then
+                
             Return
         End If
 
@@ -559,6 +570,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub ShutDown(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         ReportProgress("Shutting down...",args)
         ShutDownRequested = True
+    End Sub
+
+
+    Sub ReconnectOrNot(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        ReportProgress("Reconnect or not...",args)
+        Q.Write(IIf(Preferences.XBMC_Link, E.Yes, E.No), PriorityQueue.Priorities.high )
     End Sub
 
     Sub Connect(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -1254,7 +1272,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
     Sub XBMC_System_Quit(sender As Object, ea As EventArgs)
-        Q.Write(E.XBMC_System_Quit,PriorityQueue.Priorities.high)
+
+        If Preferences.XBMC_Link Then
+            Q.Write(E.XBMC_System_Quit,PriorityQueue.Priorities.high)
+        End If
     End Sub
 
     Sub XBMC_UnknownEvent(sender As Object, ea As XbmcJsonRpcUnknownEventArgs)

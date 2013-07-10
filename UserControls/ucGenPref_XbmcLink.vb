@@ -149,13 +149,15 @@ Public Class ucGenPref_XbmcLink
         If Not canConnect Then
             AppendDialogue("")
             AppendDialogue("****************************************")
-            AppendDialogue("Check System - Settings - Servies - Webserver has:")
-            AppendDialogue("    - Allow control of XBMC via HTTP' is checked ")
-            AppendDialogue("    - Port, Username and Password match")
-            AppendDialogue("    - Web interface is set to 'Default'")
-            AppendDialogue("If you are trying to connect to XBMC on a remote PC, make sure:")
-            AppendDialogue("    - The PCs' IP address is static")
-            AppendDialogue("    - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' is checked")
+            AppendDialogue("Things to check:")
+            AppendDialogue("    - XBMC is running")
+            AppendDialogue("    - System - Settings - Servies - Webserver:")
+            AppendDialogue("        - Allow control of XBMC via HTTP' is checked ")
+            AppendDialogue("        - Port, Username and Password match")
+            AppendDialogue("        - Web interface is set to 'Default'")
+            AppendDialogue("    - If you are trying to connect to XBMC on a remote PC, make sure:")
+            AppendDialogue("        - The PCs' IP address is static")
+            AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' is checked")
             AppendDialogue("****************************************")
         End If
 
