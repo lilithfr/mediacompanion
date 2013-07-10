@@ -157,7 +157,7 @@ Public Class ucGenPref_XbmcLink
             AppendDialogue("        - Web interface is set to 'Default'")
             AppendDialogue("    - If you are trying to connect to XBMC on a remote PC, make sure:")
             AppendDialogue("        - The PCs' IP address is static")
-            AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' is checked")
+            AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' checked")
             AppendDialogue("****************************************")
         End If
 
