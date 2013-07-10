@@ -578,8 +578,8 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
   <data name="cbBtnLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOuwAA
-        DrsBx/jUNgAACnRJREFUWEeVVglUk1cWDm3PzOl0HGu1lVotgjtSlbpSTwWrOKJWsAqyKEhRFkUUZAk7
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOugAA
+        DroBFb820gAACnRJREFUWEeVVglUk1cWDm3PzOl0HGu1lVotgjtSlbpSTwWrOKJWsAqyKEhRFkUUZAk7
         AYSwyRoQCAmEJSxhJ5CQhLATlshqAAWt1mpba22d2l2+eX+QSi3WNpzvvP2/37v3vu+isSpEbvbzI0TS
         aLSVvzyaoE2A9Kb/NGg0DfL3rN+LL2jQXiKYAHpfelHD60rIdhm190JWjcYCzX+f0lm0IPjhwx/n0TRA
         mz3rXzTNea890tDQKFGN3XLb8d6auzQtP9mdhb6ys9oBDUaLfGWqVz3E+DtY6CvNoM6uCG6MXuQnG31s
@@ -1747,6 +1747,9 @@ If you do not wish to edit a field then leave it blank, only fields that contain
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1381, 17</value>
+  </metadata>
   <data name="btnMovieDisplay_SetFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -2859,53 +2862,6 @@ Either "Use Foldernames" or "All Movies in Folders" must be enabled.
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>477, 95</value>
   </metadata>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>928, 17</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>These sets can be used to group collections of movies together within XBMC,
-eg. Add the movie set "Star Wars Collection", and make all
-Star Wars movies part of this set. They would be added to the XBMC library
-as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
-  </data>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Refresh" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
   <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -3012,34 +2968,11 @@ added manually.</value>
   <metadata name="btnTVPrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="Label138.Text" xml:space="preserve">
-    <value>If you have enabled the option to 'Save Actor
-Thumbs to the '.Actors' Folder' located in the
-general preferences then this gives you this
-additional option.
-When Scraping episodes from TVDB, the only
-actor thumbnails avaialble are those at IMDB,
-but compared to TVDB, these actor thumbs
-are low quality.
-
-This preference gives you the option to copy an
-actors thumb, if available, to the episodes actor
-folder, allowing the higher quality TVDB actor
-thumb to be used for the episode.</value>
-  </data>
   <data name="Label139.Text" xml:space="preserve">
     <value>Enabling the 'Quick Add' option will speed up the
 scraping of TV Shows by not downloading available
 Art. All show art can be scraped at any time by using
 the TV context menu item to 'Download missing art'</value>
-  </data>
-  <data name="Label140.Text" xml:space="preserve">
-    <value>Media Companion now offers the option to
-automatically rename episodes during
-scraping.
-Only use this option if you are sure that the
-media file is named according to supported
-MC naming conventions.</value>
   </data>
   <data name="btnHomeMovieSave.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -5091,6 +5024,88 @@ i.e. 'C:/Movies/'
 Would allow MC to find any movies located within the
 "Movies" folder, and all of its subfolders.</value>
   </data>
+  <data name="Label149.Text" xml:space="preserve">
+    <value>DB Export Page
+
+You can use this tab to export the entire MC database into an xml file that can be imported by XBMC. There are a number of advantages of this approach, firstly this
+method is much faster than using XBMC scrapers to read the nfo files, and secondly, additional information, such as watched status will be included.</value>
+  </data>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>928, 17</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>These sets can be used to group collections of movies together within XBMC,
+eg. Add the movie set "Star Wars Collection", and make all
+Star Wars movies part of this set. They would be added to the XBMC library
+as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
+  </data>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Refresh" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
+  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label138.Text" xml:space="preserve">
+    <value>If you have enabled the option to 'Save Actor
+Thumbs to the '.Actors' Folder' located in the
+general preferences then this gives you this
+additional option.
+When Scraping episodes from TVDB, the only
+actor thumbnails avaialble are those at IMDB,
+but compared to TVDB, these actor thumbs
+are low quality.
+
+This preference gives you the option to copy an
+actors thumb, if available, to the episodes actor
+folder, allowing the higher quality TVDB actor
+thumb to be used for the episode.</value>
+  </data>
+  <data name="Label140.Text" xml:space="preserve">
+    <value>Media Companion now offers the option to
+automatically rename episodes during
+scraping.
+Only use this option if you are sure that the
+media file is named according to supported
+MC naming conventions.</value>
+  </data>
+  <metadata name="btnGeneralPrefsSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="btnGeneralPrefsSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -5101,12 +5116,6 @@ an XBMC Update, or maybe just to launch an external program.
 The commands will be listed by their title within the 'Tools' drop down menu
 
 Each Command must have a unique 'Title'</value>
-  </data>
-  <data name="Label149.Text" xml:space="preserve">
-    <value>DB Export Page
-
-You can use this tab to export the entire MC database into an xml file that can be imported by XBMC. There are a number of advantages of this approach, firstly this
-method is much faster than using XBMC scrapers to read the nfo files, and secondly, additional information, such as watched status will be included.</value>
   </data>
   <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>629, 95</value>
