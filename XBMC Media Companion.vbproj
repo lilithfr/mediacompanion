@@ -154,7 +154,6 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
-    <Compile Include="Classes\DbUtils.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEvent.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEventArgs.vb" />
@@ -539,6 +538,8 @@
     <None Include="Assets\System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Resources\correct.png" />
+    <Content Include="Resources\incorrect.png" />
     <Content Include="Resources\mc-xbmc-link.ico" />
     <None Include="Assets\Newtonsoft.Json.Net20.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

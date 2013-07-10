@@ -44,17 +44,39 @@ Partial Class ucGenPref_XbmcLink
         Me.Label200 = New System.Windows.Forms.Label()
         Me.tbXBMC_UserdataFolder = New System.Windows.Forms.TextBox()
         Me.btnSelect_XBMC_UserdataFolder = New System.Windows.Forms.Button()
+        Me.btnValidate = New System.Windows.Forms.Button()
+        Me.tbDialogue = New System.Windows.Forms.TextBox()
+        Me.pbResult1 = New System.Windows.Forms.PictureBox()
+        Me.pbResult2 = New System.Windows.Forms.PictureBox()
+        Me.pbResult3 = New System.Windows.Forms.PictureBox()
+        Me.pbResult4 = New System.Windows.Forms.PictureBox()
+        Me.pbResult5 = New System.Windows.Forms.PictureBox()
+        Me.pbResult6 = New System.Windows.Forms.PictureBox()
+        Me.pbResult7 = New System.Windows.Forms.PictureBox()
+        Me.pbResult8 = New System.Windows.Forms.PictureBox()
+        Me.pbResult10 = New System.Windows.Forms.PictureBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.btnUndo = New System.Windows.Forms.Button()
         Me.tlpXbmcLink.SuspendLayout
+        CType(Me.pbResult1,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult2,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult3,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult4,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult5,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult6,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult7,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult8,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbResult10,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
         '
         'tlpXbmcLink
         '
-        Me.tlpXbmcLink.ColumnCount = 3
+        Me.tlpXbmcLink.ColumnCount = 4
         Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.tlpXbmcLink.Controls.Add(Me.btnGeneralPrefsSaveChanges, 0, 10)
+        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.tlpXbmcLink.Controls.Add(Me.btnUndo, 0, 11)
         Me.tlpXbmcLink.Controls.Add(Me.Label203, 1, 9)
         Me.tlpXbmcLink.Controls.Add(Me.Label202, 0, 9)
         Me.tlpXbmcLink.Controls.Add(Me.Label194, 0, 1)
@@ -74,11 +96,23 @@ Partial Class ucGenPref_XbmcLink
         Me.tlpXbmcLink.Controls.Add(Me.Label200, 0, 7)
         Me.tlpXbmcLink.Controls.Add(Me.tbXBMC_UserdataFolder, 1, 5)
         Me.tlpXbmcLink.Controls.Add(Me.btnSelect_XBMC_UserdataFolder, 2, 5)
+        Me.tlpXbmcLink.Controls.Add(Me.btnValidate, 0, 10)
+        Me.tlpXbmcLink.Controls.Add(Me.tbDialogue, 1, 10)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult1, 3, 1)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult2, 3, 2)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult3, 3, 3)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult4, 3, 4)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult5, 3, 5)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult6, 3, 6)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult7, 3, 7)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult8, 3, 8)
+        Me.tlpXbmcLink.Controls.Add(Me.pbResult10, 3, 10)
+        Me.tlpXbmcLink.Controls.Add(Me.btnGeneralPrefsSaveChanges, 1, 11)
         Me.tlpXbmcLink.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tlpXbmcLink.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.tlpXbmcLink.Location = New System.Drawing.Point(0, 0)
         Me.tlpXbmcLink.Name = "tlpXbmcLink"
-        Me.tlpXbmcLink.RowCount = 11
+        Me.tlpXbmcLink.RowCount = 12
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25!))
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
@@ -87,22 +121,23 @@ Partial Class ucGenPref_XbmcLink
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25!))
-        Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25!))
+        Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29!))
         Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.tlpXbmcLink.Size = New System.Drawing.Size(417, 434)
+        Me.tlpXbmcLink.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.tlpXbmcLink.Size = New System.Drawing.Size(533, 434)
         Me.tlpXbmcLink.TabIndex = 20
         '
         'btnGeneralPrefsSaveChanges
         '
-        Me.btnGeneralPrefsSaveChanges.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnGeneralPrefsSaveChanges.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.btnGeneralPrefsSaveChanges.Enabled = false
-        Me.btnGeneralPrefsSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnGeneralPrefsSaveChanges.Location = New System.Drawing.Point(4, 400)
+        Me.btnGeneralPrefsSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnGeneralPrefsSaveChanges.Location = New System.Drawing.Point(239, 400)
         Me.btnGeneralPrefsSaveChanges.Margin = New System.Windows.Forms.Padding(4)
         Me.btnGeneralPrefsSaveChanges.MaximumSize = New System.Drawing.Size(195, 30)
         Me.btnGeneralPrefsSaveChanges.Name = "btnGeneralPrefsSaveChanges"
-        Me.btnGeneralPrefsSaveChanges.Size = New System.Drawing.Size(195, 30)
+        Me.btnGeneralPrefsSaveChanges.Size = New System.Drawing.Size(147, 30)
         Me.btnGeneralPrefsSaveChanges.TabIndex = 78
         Me.btnGeneralPrefsSaveChanges.Text = "Apply Changes"
         Me.btnGeneralPrefsSaveChanges.UseVisualStyleBackColor = true
@@ -112,7 +147,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label203.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label203.AutoSize = true
         Me.Label203.ForeColor = System.Drawing.Color.DarkGray
-        Me.Label203.Location = New System.Drawing.Point(206, 241)
+        Me.Label203.Location = New System.Drawing.Point(158, 273)
         Me.Label203.Name = "Label203"
         Me.Label203.Size = New System.Drawing.Size(89, 13)
         Me.Label203.TabIndex = 20
@@ -122,7 +157,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label202.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label202.AutoSize = true
-        Me.Label202.Location = New System.Drawing.Point(84, 241)
+        Me.Label202.Location = New System.Drawing.Point(36, 273)
         Me.Label202.Name = "Label202"
         Me.Label202.Size = New System.Drawing.Size(116, 13)
         Me.Label202.TabIndex = 19
@@ -132,7 +167,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label194.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label194.AutoSize = true
-        Me.Label194.Location = New System.Drawing.Point(132, 31)
+        Me.Label194.Location = New System.Drawing.Point(84, 33)
         Me.Label194.Name = "Label194"
         Me.Label194.Size = New System.Drawing.Size(68, 13)
         Me.Label194.TabIndex = 0
@@ -142,7 +177,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.llXBMC_MovieFolderMappings.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.llXBMC_MovieFolderMappings.AutoSize = true
-        Me.llXBMC_MovieFolderMappings.Location = New System.Drawing.Point(206, 216)
+        Me.llXBMC_MovieFolderMappings.Location = New System.Drawing.Point(158, 243)
         Me.llXBMC_MovieFolderMappings.Name = "llXBMC_MovieFolderMappings"
         Me.llXBMC_MovieFolderMappings.Size = New System.Drawing.Size(29, 13)
         Me.llXBMC_MovieFolderMappings.TabIndex = 18
@@ -153,7 +188,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label195.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label195.AutoSize = true
-        Me.Label195.Location = New System.Drawing.Point(170, 57)
+        Me.Label195.Location = New System.Drawing.Point(122, 63)
         Me.Label195.Name = "Label195"
         Me.Label195.Size = New System.Drawing.Size(30, 13)
         Me.Label195.TabIndex = 1
@@ -163,9 +198,9 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.tbXBMC_ThumbnailsFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tlpXbmcLink.SetColumnSpan(Me.tbXBMC_ThumbnailsFolder, 2)
-        Me.tbXBMC_ThumbnailsFolder.Location = New System.Drawing.Point(206, 187)
+        Me.tbXBMC_ThumbnailsFolder.Location = New System.Drawing.Point(158, 210)
         Me.tbXBMC_ThumbnailsFolder.Name = "tbXBMC_ThumbnailsFolder"
-        Me.tbXBMC_ThumbnailsFolder.Size = New System.Drawing.Size(208, 20)
+        Me.tbXBMC_ThumbnailsFolder.Size = New System.Drawing.Size(342, 20)
         Me.tbXBMC_ThumbnailsFolder.TabIndex = 16
         Me.tbXBMC_ThumbnailsFolder.Text = "Thumbnails"
         '
@@ -173,7 +208,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label201.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label201.AutoSize = true
-        Me.Label201.Location = New System.Drawing.Point(66, 216)
+        Me.Label201.Location = New System.Drawing.Point(18, 243)
         Me.Label201.Name = "Label201"
         Me.Label201.Size = New System.Drawing.Size(134, 13)
         Me.Label201.TabIndex = 17
@@ -183,9 +218,9 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.tbXBMC_TexturesDb.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tlpXbmcLink.SetColumnSpan(Me.tbXBMC_TexturesDb, 2)
-        Me.tbXBMC_TexturesDb.Location = New System.Drawing.Point(206, 161)
+        Me.tbXBMC_TexturesDb.Location = New System.Drawing.Point(158, 180)
         Me.tbXBMC_TexturesDb.Name = "tbXBMC_TexturesDb"
-        Me.tbXBMC_TexturesDb.Size = New System.Drawing.Size(208, 20)
+        Me.tbXBMC_TexturesDb.Size = New System.Drawing.Size(342, 20)
         Me.tbXBMC_TexturesDb.TabIndex = 15
         Me.tbXBMC_TexturesDb.Text = "Database\Textures13.db"
         '
@@ -193,7 +228,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label196.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label196.AutoSize = true
-        Me.Label196.Location = New System.Drawing.Point(137, 83)
+        Me.Label196.Location = New System.Drawing.Point(89, 93)
         Me.Label196.Name = "Label196"
         Me.Label196.Size = New System.Drawing.Size(63, 13)
         Me.Label196.TabIndex = 2
@@ -203,9 +238,9 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.tbXBMC_Password.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tlpXbmcLink.SetColumnSpan(Me.tbXBMC_Password, 2)
-        Me.tbXBMC_Password.Location = New System.Drawing.Point(206, 106)
+        Me.tbXBMC_Password.Location = New System.Drawing.Point(158, 120)
         Me.tbXBMC_Password.Name = "tbXBMC_Password"
-        Me.tbXBMC_Password.Size = New System.Drawing.Size(208, 20)
+        Me.tbXBMC_Password.Size = New System.Drawing.Size(342, 20)
         Me.tbXBMC_Password.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Password, "Same as XBMC - Settings - Services - Webserver")
         '
@@ -213,9 +248,9 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.tbXBMC_Username.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tlpXbmcLink.SetColumnSpan(Me.tbXBMC_Username, 2)
-        Me.tbXBMC_Username.Location = New System.Drawing.Point(206, 80)
+        Me.tbXBMC_Username.Location = New System.Drawing.Point(158, 90)
         Me.tbXBMC_Username.Name = "tbXBMC_Username"
-        Me.tbXBMC_Username.Size = New System.Drawing.Size(208, 20)
+        Me.tbXBMC_Username.Size = New System.Drawing.Size(342, 20)
         Me.tbXBMC_Username.TabIndex = 12
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Username, "Same as XBMC - Settings - Services - Webserver")
         '
@@ -223,9 +258,9 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.tbXBMC_Port.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tlpXbmcLink.SetColumnSpan(Me.tbXBMC_Port, 2)
-        Me.tbXBMC_Port.Location = New System.Drawing.Point(206, 54)
+        Me.tbXBMC_Port.Location = New System.Drawing.Point(158, 60)
         Me.tbXBMC_Port.Name = "tbXBMC_Port"
-        Me.tbXBMC_Port.Size = New System.Drawing.Size(208, 20)
+        Me.tbXBMC_Port.Size = New System.Drawing.Size(342, 20)
         Me.tbXBMC_Port.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Port, "Same as XBMC - Settings - Services - Webserver")
         '
@@ -233,9 +268,9 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.tbXBMC_Address.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tlpXbmcLink.SetColumnSpan(Me.tbXBMC_Address, 2)
-        Me.tbXBMC_Address.Location = New System.Drawing.Point(206, 28)
+        Me.tbXBMC_Address.Location = New System.Drawing.Point(158, 30)
         Me.tbXBMC_Address.Name = "tbXBMC_Address"
-        Me.tbXBMC_Address.Size = New System.Drawing.Size(208, 20)
+        Me.tbXBMC_Address.Size = New System.Drawing.Size(342, 20)
         Me.tbXBMC_Address.TabIndex = 14
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Address, "localhost \ 192.169.0.1")
         '
@@ -243,7 +278,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label197.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label197.AutoSize = true
-        Me.Label197.Location = New System.Drawing.Point(139, 109)
+        Me.Label197.Location = New System.Drawing.Point(91, 123)
         Me.Label197.Name = "Label197"
         Me.Label197.Size = New System.Drawing.Size(61, 13)
         Me.Label197.TabIndex = 3
@@ -253,7 +288,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label198.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label198.AutoSize = true
-        Me.Label198.Location = New System.Drawing.Point(103, 137)
+        Me.Label198.Location = New System.Drawing.Point(55, 153)
         Me.Label198.Name = "Label198"
         Me.Label198.Size = New System.Drawing.Size(97, 13)
         Me.Label198.TabIndex = 4
@@ -263,7 +298,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label199.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label199.AutoSize = true
-        Me.Label199.Location = New System.Drawing.Point(124, 164)
+        Me.Label199.Location = New System.Drawing.Point(76, 183)
         Me.Label199.Name = "Label199"
         Me.Label199.Size = New System.Drawing.Size(76, 13)
         Me.Label199.TabIndex = 5
@@ -273,7 +308,7 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label200.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label200.AutoSize = true
-        Me.Label200.Location = New System.Drawing.Point(90, 190)
+        Me.Label200.Location = New System.Drawing.Point(42, 213)
         Me.Label200.Name = "Label200"
         Me.Label200.Size = New System.Drawing.Size(110, 13)
         Me.Label200.TabIndex = 6
@@ -282,20 +317,148 @@ Partial Class ucGenPref_XbmcLink
         'tbXBMC_UserdataFolder
         '
         Me.tbXBMC_UserdataFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tbXBMC_UserdataFolder.Location = New System.Drawing.Point(206, 133)
+        Me.tbXBMC_UserdataFolder.Location = New System.Drawing.Point(158, 150)
         Me.tbXBMC_UserdataFolder.Name = "tbXBMC_UserdataFolder"
-        Me.tbXBMC_UserdataFolder.Size = New System.Drawing.Size(175, 20)
+        Me.tbXBMC_UserdataFolder.Size = New System.Drawing.Size(309, 20)
         Me.tbXBMC_UserdataFolder.TabIndex = 9
         '
         'btnSelect_XBMC_UserdataFolder
         '
         Me.btnSelect_XBMC_UserdataFolder.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.btnSelect_XBMC_UserdataFolder.Location = New System.Drawing.Point(387, 132)
+        Me.btnSelect_XBMC_UserdataFolder.Location = New System.Drawing.Point(473, 148)
         Me.btnSelect_XBMC_UserdataFolder.Name = "btnSelect_XBMC_UserdataFolder"
         Me.btnSelect_XBMC_UserdataFolder.Size = New System.Drawing.Size(27, 23)
         Me.btnSelect_XBMC_UserdataFolder.TabIndex = 10
         Me.btnSelect_XBMC_UserdataFolder.Text = "..."
         Me.btnSelect_XBMC_UserdataFolder.UseVisualStyleBackColor = true
+        '
+        'btnValidate
+        '
+        Me.btnValidate.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btnValidate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnValidate.Location = New System.Drawing.Point(4, 330)
+        Me.btnValidate.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnValidate.MaximumSize = New System.Drawing.Size(195, 30)
+        Me.btnValidate.Name = "btnValidate"
+        Me.btnValidate.Size = New System.Drawing.Size(147, 30)
+        Me.btnValidate.TabIndex = 79
+        Me.btnValidate.Text = "Validate"
+        Me.btnValidate.UseVisualStyleBackColor = true
+        '
+        'tbDialogue
+        '
+        Me.tlpXbmcLink.SetColumnSpan(Me.tbDialogue, 2)
+        Me.tbDialogue.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbDialogue.Location = New System.Drawing.Point(158, 297)
+        Me.tbDialogue.Multiline = true
+        Me.tbDialogue.Name = "tbDialogue"
+        Me.tbDialogue.Size = New System.Drawing.Size(342, 96)
+        Me.tbDialogue.TabIndex = 80
+        '
+        'pbResult1
+        '
+        Me.pbResult1.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult1.Location = New System.Drawing.Point(506, 28)
+        Me.pbResult1.Name = "pbResult1"
+        Me.pbResult1.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult1.TabIndex = 81
+        Me.pbResult1.TabStop = false
+        '
+        'pbResult2
+        '
+        Me.pbResult2.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult2.Location = New System.Drawing.Point(506, 58)
+        Me.pbResult2.Name = "pbResult2"
+        Me.pbResult2.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult2.TabIndex = 82
+        Me.pbResult2.TabStop = false
+        '
+        'pbResult3
+        '
+        Me.pbResult3.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult3.Location = New System.Drawing.Point(506, 88)
+        Me.pbResult3.Name = "pbResult3"
+        Me.pbResult3.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult3.TabIndex = 83
+        Me.pbResult3.TabStop = false
+        '
+        'pbResult4
+        '
+        Me.pbResult4.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult4.Location = New System.Drawing.Point(506, 118)
+        Me.pbResult4.Name = "pbResult4"
+        Me.pbResult4.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult4.TabIndex = 84
+        Me.pbResult4.TabStop = false
+        '
+        'pbResult5
+        '
+        Me.pbResult5.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult5.Location = New System.Drawing.Point(506, 148)
+        Me.pbResult5.Name = "pbResult5"
+        Me.pbResult5.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult5.TabIndex = 85
+        Me.pbResult5.TabStop = false
+        '
+        'pbResult6
+        '
+        Me.pbResult6.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult6.Location = New System.Drawing.Point(506, 178)
+        Me.pbResult6.Name = "pbResult6"
+        Me.pbResult6.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult6.TabIndex = 86
+        Me.pbResult6.TabStop = false
+        '
+        'pbResult7
+        '
+        Me.pbResult7.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult7.Location = New System.Drawing.Point(506, 208)
+        Me.pbResult7.Name = "pbResult7"
+        Me.pbResult7.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult7.TabIndex = 87
+        Me.pbResult7.TabStop = false
+        '
+        'pbResult8
+        '
+        Me.pbResult8.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult8.Location = New System.Drawing.Point(506, 238)
+        Me.pbResult8.Name = "pbResult8"
+        Me.pbResult8.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult8.TabIndex = 88
+        Me.pbResult8.TabStop = false
+        '
+        'pbResult10
+        '
+        Me.pbResult10.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.pbResult10.Image = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.pbResult10.Location = New System.Drawing.Point(506, 333)
+        Me.pbResult10.Name = "pbResult10"
+        Me.pbResult10.Size = New System.Drawing.Size(24, 24)
+        Me.pbResult10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pbResult10.TabIndex = 89
+        Me.pbResult10.TabStop = false
+        '
+        'btnUndo
+        '
+        Me.btnUndo.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btnUndo.Enabled = false
+        Me.btnUndo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnUndo.Location = New System.Drawing.Point(4, 400)
+        Me.btnUndo.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnUndo.MaximumSize = New System.Drawing.Size(195, 30)
+        Me.btnUndo.Name = "btnUndo"
+        Me.btnUndo.Size = New System.Drawing.Size(147, 30)
+        Me.btnUndo.TabIndex = 90
+        Me.btnUndo.Text = "Undo Changes"
+        Me.btnUndo.UseVisualStyleBackColor = true
         '
         'ucGenPref_XbmcLink
         '
@@ -303,9 +466,18 @@ Partial Class ucGenPref_XbmcLink
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.tlpXbmcLink)
         Me.Name = "ucGenPref_XbmcLink"
-        Me.Size = New System.Drawing.Size(417, 434)
+        Me.Size = New System.Drawing.Size(533, 434)
         Me.tlpXbmcLink.ResumeLayout(false)
         Me.tlpXbmcLink.PerformLayout
+        CType(Me.pbResult1,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult2,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult3,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult4,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult5,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult6,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult7,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult8,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbResult10,System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(false)
 
 End Sub
@@ -331,5 +503,17 @@ End Sub
     Friend WithEvents btnSelect_XBMC_UserdataFolder As System.Windows.Forms.Button
     Friend WithEvents btnGeneralPrefsSaveChanges As System.Windows.Forms.Button
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
+    Friend WithEvents btnValidate As System.Windows.Forms.Button
+    Friend WithEvents tbDialogue As System.Windows.Forms.TextBox
+    Friend WithEvents pbResult1 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult2 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult3 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult4 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult5 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult6 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult7 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult8 As System.Windows.Forms.PictureBox
+    Friend WithEvents pbResult10 As System.Windows.Forms.PictureBox
+    Friend WithEvents btnUndo As System.Windows.Forms.Button
 
 End Class

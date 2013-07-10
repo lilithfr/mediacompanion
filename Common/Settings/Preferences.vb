@@ -3,6 +3,9 @@ Imports System.Xml
 Imports System.Threading
 Imports System.ComponentModel
 Imports MediaInfoNET
+Imports System.Data.SQLite
+Imports System.Data
+Imports XBMC.JsonRpc
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
@@ -296,21 +299,135 @@ Public Class Preferences
     Public Shared XBMC_MC_MovieFolderMappings As New XBMC_MC_FolderMappings("Movie")
     Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
     
+
+            'Return  MovieFolderMappings.Changed(Preferences.XBMC_MC_MovieFolderMappings) OrElse
+            '        
+            '        XBMC_Port                OrElse
+            '        XBMC_Username            OrElse
+            '        XBMC_Password            OrElse
+
+    ReadOnly Shared Property XBMC_Tests As Boolean
+        Get 
+            ' XBMC_CanConnect ommitted here, as may interfere with controller
+
+            Return XBMC_CanPing                And XBMC_UserdataFolder_Valid      And XBMC_TexturesDbFile_Valid   And 
+                   XBMC_TexturesDb_Conn_Valid  And XBMC_TexturesDb_Version_Valid  And XBMC_ThumbnailsFolder_Valid And 
+                   XBMC_MC_MovieFolderMappings.Initialised
+         End Get
+    End Property  
+
+    ReadOnly Shared Property XBMC_CanConnect As Boolean
+        Get
+            Dim xbmc As XbmcJsonRpcConnection
+            Try
+                xbmc = new XbmcJsonRpcConnection(XBMC_Address, XBMC_Port, XBMC_Username, XBMC_Password)
+                xbmc.Open
+                Return  xbmc.IsAlive
+            Catch
+            End Try
+            Return False
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_CanPing As Boolean
+        Get
+            Dim result As Boolean = False
+            Try
+                result = My.Computer.Network.Ping(XBMC_Address,1000)
+            Catch
+            End Try
+            Return result
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_TexturesDb_Version_Valid As Boolean
+        Get
+            Return TexturesDbVersion = 13
+        End Get
+    End Property
+
+    Public Shared Function TexturesDbVersion As Integer
+        Try
+            Dim conn As SQLiteConnection = new SQLiteConnection(XBMC_TexturesDb_ReadOnly_ConnectionStr)
+            conn.Open
+            Dim dt As DataTable = DbUtils.ExecuteReader(conn, "Select idVersion from version" )
+            conn.Close
+            Return dt.Rows(0)("idVersion").ToString
+        Catch ex As Exception
+            Return -1
+        End Try
+    End Function
+
+    ReadOnly Shared Property XBMC_TexturesDb_Conn_Valid As Boolean
+        Get
+            Try
+                Dim conn As SQLiteConnection = new SQLiteConnection(XBMC_TexturesDb_ReadOnly_ConnectionStr)
+                conn.Open
+                Dim dt As DataTable = DbUtils.ExecuteReader(conn, "Select idVersion from version" )
+                conn.Close
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_ThumbnailsFolder_Valid As Boolean
+        Get
+            Return Directory.Exists(XBMC_Thumbnails_Path)
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_UserdataFolder_Valid As Boolean
+        Get
+            Return Directory.Exists(XBMC_UserdataFolder)
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_TexturesDbFile_Valid As Boolean
+        Get
+            Return IO.File.Exists(XBMC_TexturesDb_Path)
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_TexturesDb_ReadOnly_ConnectionStr As String
+        Get
+            Return XBMC_TexturesDb_ConnectionStr & "Read Only=True;"
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_TexturesDb_ConnectionStr As String
+        Get
+            Return "Data Source=" + Preferences.XBMC_TexturesDb_Path + ";Version=3;New=False;Compress=True;FailIfMissing=True;"
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_Thumbnails_Path As String
+        Get
+            Return Path.Combine(XBMC_UserdataFolder,XBMC_ThumbnailsFolder)
+        End Get
+    End Property
+
+    ReadOnly Shared Property XBMC_TexturesDb_Path As String
+        Get
+            Return Path.Combine(XBMC_UserdataFolder,XBMC_TexturesDb)
+        End Get
+    End Property
+
     ReadOnly Shared Property XbmcLinkReady As Boolean
         Get
-            Return Preferences.XBMC_Link And Preferences.XbmcLinkInitialised
+            Return XBMC_Link And XbmcLinkInitialised And XBMC_Tests
         End Get
     End Property
 
     ReadOnly Shared Property XbmcLinkInitialised As Boolean
         Get
-            Return  Preferences.XBMC_MC_MovieFolderMappings.Initialised And
-                    Preferences.XBMC_Address          <> ""  And
-                    Preferences.XBMC_Port             <> ""  And
-                    Preferences.XBMC_UserdataFolder   <> ""  And
-                    Preferences.XBMC_TexturesDb       <> ""  And
-                    Preferences.XBMC_ThumbnailsFolder <> ""
-                
+            Return  XBMC_MC_MovieFolderMappings.Initialised And
+                    XBMC_Address          <> ""  And
+                    XBMC_Port             <> ""  And
+                    XBMC_UserdataFolder   <> ""  And
+                    XBMC_TexturesDb       <> ""  And
+                    XBMC_ThumbnailsFolder <> ""
         End Get
     End Property
 

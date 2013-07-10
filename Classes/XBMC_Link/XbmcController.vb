@@ -18,7 +18,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Const Error_Prefix    = "**ERROR** "
     Const Warning_Prefix  = "**WARNING** "
  
-    Public Property XbmcTexturesDb       As SQLiteConnection = new SQLiteConnection("Data Source=" + Path.Combine(Preferences.XBMC_UserdataFolder,Preferences.XBMC_TexturesDb) + ";Version=3;New=False;Compress=True;")
+    Public Property XbmcTexturesDb       As SQLiteConnection = new SQLiteConnection(Preferences.XBMC_TexturesDb_ConnectionStr)
     Public Property XbmcThumbnailsFolder As String = Path.Combine(Preferences.XBMC_UserdataFolder,Preferences.XBMC_ThumbnailsFolder)
 
     Dim dtCachedUrls As DataTable
