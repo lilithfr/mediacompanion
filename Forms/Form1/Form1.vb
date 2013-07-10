@@ -14393,7 +14393,7 @@ Public Class Form1
                 End If
             End If
 
-            cbBtnLink.Enabled = Preferences.XbmcLinkInitialised
+            cbBtnLink.Enabled = Preferences.XbmcLinkInitialised 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

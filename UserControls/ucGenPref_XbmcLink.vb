@@ -168,9 +168,6 @@ Public Class ucGenPref_XbmcLink
         Preferences.XBMC_ThumbnailsFolder  = tmp_tbXBMC_ThumbnailsFolder
 
         Preferences.XBMC_MC_MovieFolderMappings.Assign(tmp_MovieFolderMappings)
-
-
-
     End Sub
   
 

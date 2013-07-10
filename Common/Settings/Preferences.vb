@@ -306,13 +306,13 @@ Public Class Preferences
             '        XBMC_Username            OrElse
             '        XBMC_Password            OrElse
 
-    ReadOnly Shared Property XBMC_Tests As Boolean
+    ReadOnly Shared Property XBMC_TestsPassed As Boolean
         Get 
             ' XBMC_CanConnect ommitted here, as may interfere with controller
 
             Return XBMC_CanPing                And XBMC_UserdataFolder_Valid      And XBMC_TexturesDbFile_Valid   And 
                    XBMC_TexturesDb_Conn_Valid  And XBMC_TexturesDb_Version_Valid  And XBMC_ThumbnailsFolder_Valid And 
-                   XBMC_MC_MovieFolderMappings.Initialised
+                   XBMC_MC_MovieFolderMappings.Initialised And XBMC_CanConnect
          End Get
     End Property  
 
@@ -322,7 +322,9 @@ Public Class Preferences
             Try
                 xbmc = new XbmcJsonRpcConnection(XBMC_Address, XBMC_Port, XBMC_Username, XBMC_Password)
                 xbmc.Open
-                Return  xbmc.IsAlive
+                Dim result As Boolean = xbmc.IsAlive
+                xbmc.Close
+                Return result
             Catch
             End Try
             Return False
@@ -416,7 +418,7 @@ Public Class Preferences
 
     ReadOnly Shared Property XbmcLinkReady As Boolean
         Get
-            Return XBMC_Link And XbmcLinkInitialised And XBMC_Tests
+            Return XBMC_Link And XbmcLinkInitialised
         End Get
     End Property
 
@@ -427,7 +429,8 @@ Public Class Preferences
                     XBMC_Port             <> ""  And
                     XBMC_UserdataFolder   <> ""  And
                     XBMC_TexturesDb       <> ""  And
-                    XBMC_ThumbnailsFolder <> ""
+                    XBMC_ThumbnailsFolder <> ""  And 
+                    XBMC_TestsPassed
         End Get
     End Property
 
