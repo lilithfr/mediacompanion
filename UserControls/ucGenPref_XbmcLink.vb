@@ -23,6 +23,7 @@ Public Class ucGenPref_XbmcLink
         ClearImages
         UpdateFields
         SetBtnStates
+        tbDialogue.Clear
     End Sub
 
 
