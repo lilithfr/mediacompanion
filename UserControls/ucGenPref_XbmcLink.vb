@@ -34,7 +34,7 @@ Public Class ucGenPref_XbmcLink
         AppendDialogue("")
         AppendDialogue("Known issues:")
         AppendDialogue("")
-        AppendDialogue(" - Movies are only picked up if they are not in a root (source) folder, i.e. they need to be in one or more sub-directories off your source folder(s). See MilhouseVH's comments here: http://forum.xbmc.org/showthread.php?tid=158772 for problem details. Basically it's an XBMC bug")
+        AppendDialogue(" - Movies are only picked up if they are not in a root (source) folder, i.e. they need to be in one or more sub-directories off your source folder(s). Basically it's an XBMC issue\bug")
         AppendDialogue("   A simple workaround is to move your movies into a sub-folder, then run a clean in XBMC, then, with the link enabled do a 'Refresh'")
         AppendDialogue("")
     End Sub
