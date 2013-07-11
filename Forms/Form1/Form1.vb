@@ -7415,46 +7415,41 @@ Public Class Form1
             ElseIf tab = "Posters" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_PosterSetup()
-            ElseIf tab = "" Then
+            'ElseIf tab = "" Then
+            '    If Not String.IsNullOrEmpty(Show.ImdbId.Value) Then
+            '        If Show.ImdbId.Value.IndexOf("tt") <> 0 Then
+            '            MsgBox("This shows IMDB ID cannot be recognised")
+            '        Else
+            '            If Preferences.externalbrowser = True Then
+            '                Me.TabControl3.SelectedIndex = tvCurrentTabIndex
+            '                tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
+            '                'Process.Start(tempstring)
+            '                OpenUrl(tempstring)
+            '            Else
+            '                tvCurrentTabIndex = TabControl3.SelectedIndex
+            '                Dim url As String
+            '                url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
+            '                Try
+            '                    WebBrowser3.Stop()
+            '                    WebBrowser3.ScriptErrorsSuppressed = True
 
-                If Not String.IsNullOrEmpty(Show.ImdbId.Value) Then
-                    If Show.ImdbId.Value.IndexOf("tt") <> 0 Then
-                        MsgBox("This shows IMDB ID cannot be recognised")
-                    Else
+            '                    WebBrowser3.Navigate(url)
+            '                    'WebBrowser3.Refresh()
+            '                Catch
+            '                    WebBrowser3.Stop()
+            '                    WebBrowser3.ScriptErrorsSuppressed = True
 
-                        If Preferences.externalbrowser = True Then
-                            Me.TabControl3.SelectedIndex = tvCurrentTabIndex
-                            tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
-                            'Process.Start(tempstring)
-                            OpenUrl(tempstring)
-                        Else
-                            tvCurrentTabIndex = TabControl3.SelectedIndex
-                            Dim url As String
-                            url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
-                            Try
+            '                    WebBrowser3.Navigate(url)
+            '                    'WebBrowser3.Refresh()
+            '                End Try
+            '            End If
+            '        End If
+            '    Else
+            '        MsgBox("No IMDB ID is available for this TV Show")
+            '        TabControl3.SelectedIndex = tvCurrentTabIndex
+            '    End If
 
-                                WebBrowser3.Stop()
-                                WebBrowser3.ScriptErrorsSuppressed = True
-
-                                WebBrowser3.Navigate(url)
-                                'WebBrowser3.Refresh()
-
-                            Catch
-                                WebBrowser3.Stop()
-                                WebBrowser3.ScriptErrorsSuppressed = True
-
-                                WebBrowser3.Navigate(url)
-                                'WebBrowser3.Refresh()
-
-                            End Try
-                        End If
-                    End If
-                Else
-                    MsgBox("No IMDB ID is available for this TV Show")
-                    TabControl3.SelectedIndex = tvCurrentTabIndex
-                End If
-
-            ElseIf tab = "TVDB" Then
+            ElseIf tab = "TVDB/IMDB" Then
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
                     If Preferences.externalbrowser = True Then
@@ -7517,6 +7512,14 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+
+    End Sub
+
+    Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
+
+    End Sub
+
+    Private Sub btn_TvIMDB_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvIMDB.Click
 
     End Sub
 
@@ -25076,5 +25079,6 @@ End Sub
     End Sub
 
     
+
 
 End Class
