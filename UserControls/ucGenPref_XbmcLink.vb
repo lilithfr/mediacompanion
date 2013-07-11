@@ -24,6 +24,11 @@ Public Class ucGenPref_XbmcLink
         UpdateFields
         SetBtnStates
         tbDialogue.Clear
+        AppendDialogue("Hints:")
+        AppendDialogue("* XBMC updates are quickest in Weather view *")
+        AppendDialogue("* XBMC updates are slowest in Movies view *")
+        AppendDialogue("* If the movies view is active whilst updating, poster\fanart images don't appear updated. They have been, but XBMC won't show the update until you come out and go back into this view *")
+                   
     End Sub
 
 

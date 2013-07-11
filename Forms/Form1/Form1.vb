@@ -713,10 +713,10 @@ Public Class Form1
         oMovies.Bw = BckWrkScnMovies
 
         AddHandler XBMC_Link_ErrorLog_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
-        Ini_Timer(XBMC_Link_ErrorLog_Timer,2000)
+        Ini_Timer(XBMC_Link_ErrorLog_Timer,4000)
 
         AddHandler XBMC_Link_Idle_Timer.Elapsed, AddressOf XBMC_Link_Idle_Timer_Elapsed
-        Ini_Timer(XBMC_Link_Idle_Timer,2000)
+        Ini_Timer(XBMC_Link_Idle_Timer,4000)
 
         AddHandler XBMC_Link_Check_Timer.Elapsed, AddressOf XBMC_Link_Check_Timer_Elapsed
         Ini_Timer(XBMC_Link_Check_Timer,2000,True)
@@ -766,6 +766,10 @@ Public Class Form1
         XBMC_Link_ErrorLog_Timer.Stop
     End Sub
 
+    Sub Restart( tmr As Timers.Timer )
+        tmr.Stop
+        tmr.Start
+    End Sub
 
     Private Sub BckWrkXbmcController_ReportProgress(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
 
@@ -775,9 +779,10 @@ Public Class Form1
 
 
         If XBMC_Link_ErrorLog_Timer.Enabled Then
-            XBMC_Link_ErrorLog_Timer.Start
+            Restart(XBMC_Link_ErrorLog_Timer)
         End If
-        XBMC_Link_Idle_Timer.Start
+
+        Restart(XBMC_Link_Idle_Timer)
 
         frmXBMC_Progress.Visible = True
 
