@@ -300,11 +300,7 @@ Public Class Preferences
     Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
     
 
-            'Return  MovieFolderMappings.Changed(Preferences.XBMC_MC_MovieFolderMappings) OrElse
-            '        
-            '        XBMC_Port                OrElse
-            '        XBMC_Username            OrElse
-            '        XBMC_Password            OrElse
+
 
     ReadOnly Shared Property XBMC_TestsPassed As Boolean
         Get 
@@ -864,10 +860,21 @@ Public Class Preferences
         If String.IsNullOrEmpty(workingProfile.Config) Then
             workingProfile.Config = IO.Path.Combine(applicationPath, "settings\config.xml")
         End If
-        Dim output As New XmlTextWriter(workingProfile.Config, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+
+
+        Dim output As XmlTextWriter = Nothing
+
+
+        Try
+            output = New XmlTextWriter(workingProfile.Config, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            doc.WriteTo(output)
+        Catch ex As Exception
+            Dim x = ex
+        Finally
+            If Not IsNothing(output) Then output.Close
+        End Try
+
     End Sub
 
 

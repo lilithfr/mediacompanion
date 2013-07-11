@@ -518,7 +518,6 @@
     <None Include="media_companion.chm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
     <None Include="TvShow.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">

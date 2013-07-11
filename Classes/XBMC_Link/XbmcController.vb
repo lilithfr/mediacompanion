@@ -19,7 +19,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Const Warning_Prefix  = "**WARNING** "
  
     Public Property XbmcTexturesDb       As SQLiteConnection = new SQLiteConnection(Preferences.XBMC_TexturesDb_ConnectionStr)
-    Public Property XbmcThumbnailsFolder As String = Path.Combine(Preferences.XBMC_UserdataFolder,Preferences.XBMC_ThumbnailsFolder)
+    Public Property XbmcThumbnailsFolder As String = Preferences.XBMC_Thumbnails_Path
 
     Dim dtCachedUrls As DataTable
 
@@ -264,6 +264,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MC_XbmcMcMovies
         MC_XbmcOnlyMovies
 
+        MC_XbmcQuit
 
         XBMC_Video_Removed
         XBMC_Video_Updated
@@ -347,7 +348,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Any                        , E.MC_ShutDownReq          , S.Any                        , AddressOf ShutDown             )
   '     AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
         AddTransition( S.Any                        , E.MC_ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
-        AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Start1SecTimer       )  
+        AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Raise_XbmcQuit       )  
         AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
 
         AddTransition( S.NotConnected               , E.ConnectReq              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
@@ -366,7 +367,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 ''      AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Success                 , S.Ready                      , AddressOf FetchMaxMovies       )
 '       AddTransition( S.Wf_XBMC_Movies_PreMap      , E.Success                 , S.Ready                      , AddressOf AutoMapMovieFolders _
 
-        AddTransition( S.Wf_XBMC_Movies             , E.Failure                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
+        AddTransition( S.Wf_XBMC_Movies             , E.Failure                 , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      )  
         AddTransition( S.Wf_XBMC_Movies             , E.TimeOut                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
         AddTransition( S.Wf_XBMC_Movies             , E.Success                 , S.Ready                      , AddressOf SendMcOnlyMovies     _
                                                                                                                , AddressOf Ready                )
@@ -418,14 +419,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
-        LogError(evt.Error.Message, evt.Error.InnerException.Message, evt)
+        LogError("ExceptionThrownHandler", evt.Error.InnerException.Message, evt)
         Q.Write(e.JSON_Exception,PriorityQueue.Priorities.critical)
     End Sub
 
 
     Sub LogError(Action As String, ErrorMessage As String, evt As TransitionEventArgs(Of S, E, EventArgs) )
 
-        AppendLog(ErrorMessage)
+        AppendLog(Error_Prefix + ErrorMessage + " reported in " + Action)
 
         Dim p As New XBMC_Controller_Progress
 
@@ -463,6 +464,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             'ReportProgress("Buffering MC request",e)
             AppendLog("Buffering MC request : [" + evt.EventID.ToString + "] while in State : [" + evt.SourceStateID.ToString + "]")
             BufferQ.Write( New BaseEvent(evt.EventID, evt.EventArgs) )
+
+            If evt.SourceStateID = S.NotConnected Then
+                Q.Write(E.ConnectReq, PriorityQueue.Priorities.medium)
+            End If
             Return
         End If
 
@@ -550,7 +555,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
                 BufferQ.Write( New BaseEvent(Evt.E, Evt.Args) )
             End If
 
-         '   If Not XbmcJson.xbmc.IsAlive And S. Then
+            If CurrentStateID = S.NotConnected Then
+                Q.Write(E.ConnectReq, PriorityQueue.Priorities.medium)
+            End If
                 
             Return
         End If
@@ -629,9 +636,15 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub FetchMoviesInfo(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
+        AssignLastEvent(args)
+
         ReportProgress("Fetching movies info...",args)
         StartTimer(5000)
         Q.Write(IIf(XbmcJson.GetXbmcMovies, E.Success, E.Failure), PriorityQueue.Priorities.medium )
+    End Sub
+
+    Sub AssignLastEvent(args As TransitionEventArgs(Of S, E, EventArgs))
+        LastEvent.Assign(New BaseEvent(args.EventID, args.EventArgs))
     End Sub
 
     Sub FetchMaxMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -655,7 +668,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
 
-    Sub ReportProgress(EventId As XbmcController.E,  Args As EventArgs)
+    Sub ReportProgress(EventId As XbmcController.E,  Optional Args As EventArgs=Nothing)
 
         Dim p As New XBMC_Controller_Progress
 
@@ -772,6 +785,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub ResetErrorCount(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         ErrorCount = 0
     End Sub
+
+    Sub Raise_XbmcQuit(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        ReportProgress("XBMC is not longer running",args)
+        ReportProgress(E.MC_XbmcQuit)      
+   End Sub
 
 
     Sub AddFolderToScan(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -1080,7 +1098,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             XbmcTexturesDb.Close
             Return True
         Catch ex As Exception
-            LogError("Failed to connect to XBMC Textures database. If this movie is re-added, Fanart & Poster changes will not appear in XBMC as the existing cached versions cannot be deleted",ex.Message,Nothing)
+            LogError("CanConnect - Failed to connect to XBMC Textures database. If this movie is re-added, Fanart & Poster changes will not appear in XBMC as the existing cached versions cannot be deleted",ex.Message,Nothing)
             Return False
         End Try
     End Function
@@ -1140,10 +1158,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             Dim filePath As String = Path.Combine(XbmcThumbnailsFolder,row("cachedurl").ToString.Replace("/","\"))
 
             If File.Exists(filePath) Then
-                AppendLog("Deleting : [" + filePath + "] from XBMC Thumbnail folder")
+                AppendLog("Deleting : [" + filePath + "]")
                 Utilities.SafeDeleteFile(filePath)
             Else
-                AppendLog("[" + filePath + "] not found in XBMC Thumbnail folder")
+                AppendLog("[" + filePath + "] not found")
             End If
 
             DbUtils.ExecuteNonQuery(XbmcTexturesDb, "Delete from texture where id=" + row("id").ToString)
@@ -1292,9 +1310,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     'End Sub
 
     Sub Ini_Timer(t As Timers.Timer,Optional Interval As Integer=1000)
-        t.Stop()
+        t.Stop
         t.Interval = Interval
-        t.AutoReset = True
+        t.AutoReset = False
     End Sub
 
     'Sub Restart_Timer(t As Timers.Timer)
@@ -1553,12 +1571,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         ReportProgress(E.MC_XbmcOnlyMovies,msg)      
     End Sub
-
-
-
-
-
-
 
 
 End Class

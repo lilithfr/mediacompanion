@@ -175,14 +175,14 @@ Public Class ucGenPref_XbmcLink
 
     Function ShowTest(test As String, result As Boolean, row As Integer)
 
-        AppendTestDialoague(test,result)
-        UpdateImage        (row ,result)
+        AppendTestDialogue(test,result)
+        UpdateImage       (row ,result)
 
         Return result
     End Function
   
 
-    Sub AppendTestDialoague(testing As String, result As Boolean)
+    Sub AppendTestDialogue(testing As String, result As Boolean)
         AppendDialogue( testing & " -> " & IIf(result,"Passed","Failed") )
     End Sub
  

@@ -13,7 +13,7 @@ Imports System.Linq
 Imports XBMC.JsonRpc
 
 #Const SilentErrorScream = False
-#Const NoRefocus = True
+#Const Refocus = False
 
 
 Public Class Form1
@@ -29,8 +29,10 @@ Public Class Form1
     Shared Public Property MC_Only_Movies        As List(Of ComboList)
     Shared Public Property MaxXbmcMovies         As List(Of MaxXbmcMovie)
     Public Property        XBMC_Controller_LogLastShownDt  As Date = Now
-    Private                XBMC_Controller_Log_TO_Timer As Timers.Timer = New Timers.Timer()
-    Private                XbmcConnectReqSent As Boolean = False
+    Private                XBMC_Link_ErrorLog_Timer As Timers.Timer = New Timers.Timer()
+    Private                XBMC_Link_Idle_Timer     As Timers.Timer = New Timers.Timer()
+    Private                XBMC_Link_Check_Timer    As Timers.Timer = New Timers.Timer()
+
 
 
     Shared ReadOnly Property MC_Only_Movies_Nfos As List(Of String)
@@ -710,20 +712,33 @@ Public Class Form1
 
         oMovies.Bw = BckWrkScnMovies
 
-        XBMC_Controller_Log_TO_Timer.Interval = 2000
-        AddHandler XBMC_Controller_Log_TO_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
+        AddHandler XBMC_Link_ErrorLog_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
+        Ini_Timer(XBMC_Link_ErrorLog_Timer,2000)
+
+        AddHandler XBMC_Link_Idle_Timer.Elapsed, AddressOf XBMC_Link_Idle_Timer_Elapsed
+        Ini_Timer(XBMC_Link_Idle_Timer,2000)
+
+        AddHandler XBMC_Link_Check_Timer.Elapsed, AddressOf XBMC_Link_Check_Timer_Elapsed
+        Ini_Timer(XBMC_Link_Check_Timer,2000,True)
+        XBMC_Link_Check_Timer.Start
+
 
         AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
         AddHandler BckWrkXbmcController.DoWork         , AddressOf BckWrkXbmcController_DoWork
 
         BckWrkXbmcController.RunWorkerAsync(Me)
 
-        SendXbmcConnect
+        'SendXbmcConnect
+    End Sub
+
+    Sub Ini_Timer(t As Timers.Timer,Optional Interval As Integer=1000, Optional Repeating As Boolean=False)
+        t.Stop
+        t.Interval  = Interval
+        t.AutoReset = Repeating
     End Sub
 
     Sub SendXbmcConnect
-        If Preferences.XbmcLinkReady Then       'And Not XbmcConnectReqSent Then
-            'XbmcConnectReqSent = True
+        If Preferences.XbmcLinkReady Then 
             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
         End If
     End Sub
@@ -743,14 +758,29 @@ Public Class Form1
             System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
         End If
         XBMC_Controller_LogLastShownDt = Now
-        XBMC_Controller_Log_TO_Timer.Stop
+        XBMC_Link_ErrorLog_Timer.Stop
     End Sub
+
+    Private Sub XBMC_Link_Idle_Timer_Elapsed
+        frmXBMC_Progress.Visible = False
+        XBMC_Link_ErrorLog_Timer.Stop
+    End Sub
+
 
     Private Sub BckWrkXbmcController_ReportProgress(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
 
         Dim oProgress As XBMC_Controller_Progress = CType(e.UserState, XBMC_Controller_Progress)
 
         Dim pg = frmXBMC_Progress.ProgressBar1
+
+
+        If XBMC_Link_ErrorLog_Timer.Enabled Then
+            XBMC_Link_ErrorLog_Timer.Start
+        End If
+        XBMC_Link_Idle_Timer.Start
+
+        frmXBMC_Progress.Visible = True
+
 
         If oProgress.Evt = XbmcController.E.MC_Only_Movies Then
             MC_Only_Movies = CType(oProgress.Args, ComboList_EventArgs).XbmcMovies
@@ -776,28 +806,25 @@ Public Class Form1
             Return
         End If
 
-
-
-        If frmXBMC_Progress.Visible = oProgress.Idle Then
-
-            If oProgress.ErrorCount>0 Then
-                If Preferences.ShowLogOnError Then
-                    XBMC_Controller_Log_TO_Timer.Start
-                End If
-
-                
-                frmXBMC_Progress.Visible = Not oProgress.Idle
-                pg.Maximum = 1
-
-                Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
-
-                XbmcControllerQ.Write(ce)       
-            End If
-
+        If oProgress.Evt = XbmcController.E.MC_XbmcQuit Then
+            SetcbBtnLink(False)
+            Return
         End If
 
 
-        frmXBMC_Progress.Visible = Not oProgress.Idle
+        If oProgress.ErrorCount>0 Then
+            If Preferences.ShowLogOnError Then
+                XBMC_Link_ErrorLog_Timer.Start
+            End If
+                
+            pg.Maximum = 1
+
+            Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
+
+            XbmcControllerQ.Write(ce)       
+        End If
+        
+
         pg.Maximum = Math.Max(pg.Maximum, oProgress.TotalQcount)
 
         pg.Value = pg.Maximum - oProgress.TotalQcount
@@ -805,6 +832,27 @@ Public Class Form1
         frmXBMC_Progress.lblProgress  .Text = Replace(oProgress.Action,"&","&&")
         frmXBMC_Progress.lblQueueCount.Text = oProgress.TotalQcount
         frmXBMC_Progress.lblErrorCount.Text = oProgress.ErrorCount
+    End Sub
+
+    Sub SetcbBtnLink(enabled As Boolean)
+
+        cbBtnLink.Enabled = enabled
+
+        If enabled Then
+            cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.DarkSeaGreen,Color.Transparent)
+            'XBMC_Link_Check_Timer.Stop
+        Else
+            cbBtnLink.Checked   = False
+            cbBtnLink.BackColor = Color.Transparent
+        End If
+
+        If Preferences.XBMC_Link <> cbBtnLink.Checked Then
+            Preferences.XBMC_Link = cbBtnLink.Checked 
+            Preferences.SaveConfig 
+        End If
+
+        'Ini_Timer(XBMC_Link_Check_Timer,2000)
+        'XBMC_Link_Check_Timer.Start
     End Sub
 
 
@@ -845,7 +893,7 @@ Public Class Form1
 
     End Sub
 
-#If Not Refocus Then
+#If Refocus Then
     Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
         Try
             If messbox.Visible = True Then
@@ -14393,7 +14441,7 @@ Public Class Form1
                 End If
             End If
 
-            cbBtnLink.Enabled = Preferences.XbmcLinkInitialised 
+            SetcbBtnLink(Preferences.XbmcLinkInitialised)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21378,10 +21426,9 @@ Public Class Form1
         '    oMovies.RebuildActorCache
         '    'Call loadactorcache()
         'End If
-        cbBtnLink.Enabled = Preferences.XbmcLinkInitialised
+        
         cbBtnLink.Checked = Preferences.XBMC_Link
-   '     cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.YellowGreen,Color.Transparent)
-        cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.DarkSeaGreen,Color.Transparent)
+        SetcbBtnLink(Preferences.XbmcLinkInitialised)
 
     End Sub
 
@@ -25013,18 +25060,14 @@ End Sub
 
 
     Private Sub cbBtnLink_Click( sender As Object,  e As EventArgs) Handles cbBtnLink.Click
-        Preferences.XBMC_Link = cbBtnLink.Checked 'And Preferences.XbmcLinkInitialised
-
-   '     cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.YellowGreen,Color.Transparent)
-        cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.DarkSeaGreen,Color.Transparent)
-
-        Preferences.SaveConfig 
-        SendXbmcConnect
+        SetcbBtnLink(Preferences.XbmcLinkInitialised)
     End Sub
 
-    Private Sub TabPage1_Enter( sender As Object,  e As EventArgs) Handles TabPage1.Enter
-        cbBtnLink.Enabled = Preferences.XbmcLinkInitialised
-        SendXbmcConnect 
+
+    Private Sub XBMC_Link_Check_Timer_Elapsed
+        SetcbBtnLink(Preferences.XbmcLinkInitialised)
     End Sub
+
+    
 
 End Class
