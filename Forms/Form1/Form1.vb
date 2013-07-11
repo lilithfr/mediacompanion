@@ -737,11 +737,11 @@ Public Class Form1
         t.AutoReset = Repeating
     End Sub
 
-    Sub SendXbmcConnect
-        If Preferences.XbmcLinkReady Then 
-            XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
-        End If
-    End Sub
+    'Sub SendXbmcConnect
+    '    If Preferences.XbmcLinkReady Then 
+    '        XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+    '    End If
+    'End Sub
 
     Private Sub BckWrkXbmcController_DoWork(ByVal sender As Object, ByVal e As DoWorkEventArgs)
 
@@ -844,7 +844,7 @@ Public Class Form1
         cbBtnLink.Enabled = enabled
 
         If enabled Then
-            cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.DarkSeaGreen,Color.Transparent)
+            cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
             'XBMC_Link_Check_Timer.Stop
         Else
             cbBtnLink.Checked   = False
@@ -25065,6 +25065,7 @@ End Sub
 
 
     Private Sub cbBtnLink_Click( sender As Object,  e As EventArgs) Handles cbBtnLink.Click
+        LabelCountFilter.Focus
         SetcbBtnLink(Preferences.XbmcLinkInitialised)
     End Sub
 
