@@ -783,6 +783,7 @@ Public Class Form1
         End If
 
         Restart(XBMC_Link_Idle_Timer)
+        Restart(XBMC_Link_Check_Timer)
 
         frmXBMC_Progress.Visible = True
 

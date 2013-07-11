@@ -30,11 +30,12 @@ Public Class ucGenPref_XbmcLink
         AppendDialogue(" - Updates are quickest in Weather view")
         AppendDialogue(" - Updates are slowest in Movies view")
         AppendDialogue(" - If the Movies view is active whilst updating, poster\fanart images don't appear updated. They have been, but XBMC won't show the update until you come out and go back into the view")
+        AppendDialogue(" - Scroll down to the bottom of the General filter for XBMC specific filters - currently only one 'Missing from XBMC', but more coming once we're happy the bugs are out of this first implementation")
         AppendDialogue("")
         AppendDialogue("Known issues:")
         AppendDialogue("")
-        AppendDialogue(" - Movies are only picked up if they are in separate folders. See MilhouseVH's comments here: http://forum.xbmc.org/showthread.php?tid=158772 for problem details. Basically it's an XBMC bug.")
-        AppendDialogue("   The only workaround would be to do a full scan, but that could take ages.")
+        AppendDialogue(" - Movies are only picked up if they are not in a root (source) folder, i.e. they need to be in one or more sub-directories off your source folder(s). See MilhouseVH's comments here: http://forum.xbmc.org/showthread.php?tid=158772 for problem details. Basically it's an XBMC bug")
+        AppendDialogue("   A simple workaround is to move your movies into a sub-folder, then run a clean in XBMC, then, with the link enabled do a 'Refresh'")
         AppendDialogue("")
     End Sub
 
