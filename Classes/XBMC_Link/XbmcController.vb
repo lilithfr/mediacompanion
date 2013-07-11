@@ -201,12 +201,16 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Property
 
 
-    Private _GotDbAccess     As Boolean = CanConnect
-    Private _GotFolderAccess As Boolean = Directory.Exists(XbmcThumbnailsFolder)
+    Private _CanDeleteCachedImages      As Boolean
+    Private _TriedCanDeleteCachedImages As Boolean
 
     Public ReadOnly Property CanDeleteCachedImages As Boolean
         Get
-            Return _GotDbAccess And _GotFolderAccess
+            If Not _TriedCanDeleteCachedImages Then
+                _TriedCanDeleteCachedImages = True
+                _CanDeleteCachedImages = CanConnect And Directory.Exists(XbmcThumbnailsFolder)
+            End If
+            Return _CanDeleteCachedImages
         End Get
     End Property
 
@@ -1113,20 +1117,41 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Dim oMovie As Movie = New Movie(McMoviePath,Me.Parent.oMovies)
 
-        'dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
-        '                                            "Select id, cachedurl from texture" +
-        '                                            " where url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)) + "'" +
-        '                                               " or url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)) + "'"
-        '                                            )
+        'Dim sql As String = "Select id, cachedurl from texture" +
+        '                        " where url='" + DbUtils.Stuff(oMovie.ActualPosterPath) + "'" +
+        '                           " or url='" + DbUtils.Stuff(oMovie.ActualFanartPath) + "'"
 
-        dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
-                                                    "Select id, cachedurl from texture" +
-                                                    " where url='" + DbUtils.Stuff(oMovie.ActualPosterPath) + "'" +
-                                                       " or url='" + DbUtils.Stuff(oMovie.ActualFanartPath) + "'"
-                                                    )
+
+        Dim cmd As SQLiteCommand = new SQLiteCommand(XbmcTexturesDb)
+
+        cmd.CommandText = "Select id, cachedurl from texture where url=@PosterPath or url=@FanartPath"
+
+        cmd.Parameters.Add("@PosterPath",SqlDbType.VarChar,500).Value=oMovie.ActualPosterPath
+        cmd.Parameters.Add("@FanartPath",SqlDbType.VarChar,500).Value=oMovie.ActualFanartPath
+
+        dtCachedUrls = DbUtils.ExecuteReader(cmd)
+
+        If dtCachedUrls.Rows.Count=0 Then
+
+            'sql = "Select id, cachedurl from texture" +
+            '        " where url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)) + "'" +
+            '           " or url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)) + "'"
+
+            cmd.Parameters("@PosterPath").Value=MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)
+            cmd.Parameters("@FanartPath").Value=MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)
+
+            dtCachedUrls = DbUtils.ExecuteReader(cmd)
+        End If
 
         XbmcTexturesDb.Close
     End Sub
+
+
+
+
+
+
+
 
 
     'Sub DeleteCachedFiles
@@ -1166,9 +1191,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
             If File.Exists(filePath) Then
                 AppendLog("Deleting : [" + filePath + "]")
-                Utilities.SafeDeleteFile(filePath)
+                Try
+                    File.Delete(filePath)
+                Catch ex As Exception
+                    LogError("Failed to delete thumbnail : [" + filePath + "] - Delete file access needed!",ex.Message,args)
+                End Try
             Else
-                AppendLog("[" + filePath + "] not found")
+                AppendLog("Thumbnail [" + filePath + "] not found")
             End If
 
             DbUtils.ExecuteNonQuery(XbmcTexturesDb, "Delete from texture where id=" + row("id").ToString)
@@ -1225,7 +1254,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     'End Sub
 
     Sub AppendLog(msg As String)
-        log.Debug(" Q: " + Q.Count.ToString + " " + " Buffer Q: " + BufferQ.Count.ToString + " - " + msg)
+        Try
+            log.Debug(" Q: " + Q.Count.ToString + " " + " Buffer Q: " + BufferQ.Count.ToString + " - " + msg)
+        Catch
+        End Try
     End Sub
 
 
