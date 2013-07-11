@@ -787,6 +787,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
     Sub Raise_XbmcQuit(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        XbmcJson.xbmc.Close
         ReportProgress("XBMC is not longer running",args)
         ReportProgress(E.MC_XbmcQuit)      
    End Sub
@@ -1291,9 +1292,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub XBMC_System_Quit(sender As Object, ea As EventArgs)
 
-        If Preferences.XBMC_Link Then
+        'If Preferences.XBMC_Link Then
             Q.Write(E.XBMC_System_Quit,PriorityQueue.Priorities.high)
-        End If
+        'End If
     End Sub
 
     Sub XBMC_UnknownEvent(sender As Object, ea As XbmcJsonRpcUnknownEventArgs)
