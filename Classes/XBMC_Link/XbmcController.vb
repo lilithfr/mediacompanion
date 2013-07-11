@@ -1113,10 +1113,16 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Dim oMovie As Movie = New Movie(McMoviePath,Me.Parent.oMovies)
 
+        'dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
+        '                                            "Select id, cachedurl from texture" +
+        '                                            " where url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)) + "'" +
+        '                                               " or url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)) + "'"
+        '                                            )
+
         dtCachedUrls = DbUtils.ExecuteReader(XbmcTexturesDb,
                                                     "Select id, cachedurl from texture" +
-                                                    " where url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)) + "'" +
-                                                       " or url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)) + "'"
+                                                    " where url='" + DbUtils.Stuff(oMovie.ActualPosterPath) + "'" +
+                                                       " or url='" + DbUtils.Stuff(oMovie.ActualFanartPath) + "'"
                                                     )
 
         XbmcTexturesDb.Close
