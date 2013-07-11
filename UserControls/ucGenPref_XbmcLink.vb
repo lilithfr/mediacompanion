@@ -23,12 +23,19 @@ Public Class ucGenPref_XbmcLink
         ClearImages
         UpdateFields
         SetBtnStates
+
         tbDialogue.Clear
         AppendDialogue("Hints:")
-        AppendDialogue("* XBMC updates are quickest in Weather view *")
-        AppendDialogue("* XBMC updates are slowest in Movies view *")
-        AppendDialogue("* If the movies view is active whilst updating, poster\fanart images don't appear updated. They have been, but XBMC won't show the update until you come out and go back into this view *")
-                   
+        AppendDialogue("")
+        AppendDialogue(" - XBMC updates are quickest in Weather view")
+        AppendDialogue(" - XBMC updates are slowest in Movies view")
+        AppendDialogue(" - If the movies view is active whilst updating, poster\fanart images don't appear updated. They have been, but XBMC won't show the update until you come out and go back into this view")
+        AppendDialogue("")
+        AppendDialogue("Known issues:")
+        AppendDialogue("")
+        AppendDialogue(" - Movies are only picked up they are in separate folders. See MilhouseVH's comments here: http://forum.xbmc.org/showthread.php?tid=158772 for problem details. Basically it's an XBMC bug.")
+        AppendDialogue("   The only workaround would be to do a full scan, but that could take ages.")
+        AppendDialogue("")
     End Sub
 
 
