@@ -7452,9 +7452,17 @@ Public Class Form1
             ElseIf tab = "TVDB/IMDB" Then
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
+                    
                     If Preferences.externalbrowser = True Then
                         Me.TabControl3.SelectedIndex = tvCurrentTabIndex
-                        tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
+                        Dim t As New frmMessageBox("Please Select","your preferred site","","1","1")
+                        t.ShowDialog()
+                        
+                        If Preferences.TvInfoSite = "tvdb" Then
+                            tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
+                        Else
+                            tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
+                        End If
                         'Process.Start(tempstring)
                         OpenUrl(tempstring)
                     Else
@@ -7515,12 +7523,49 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
+    Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
+        Dim url As String
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        Dim TvdbId As Integer = Show.TvdbId.value
+        url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
+        Try
+            'If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & TvdbId) = -1 Then
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
 
+            WebBrowser4.Navigate(url)
+            'WebBrowser4.Refresh()
+            'End If
+        Catch
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
+
+            WebBrowser4.Navigate(url)
+            'WebBrowser4.Refresh()
+
+        End Try
     End Sub
 
     Private Sub btn_TvIMDB_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvIMDB.Click
+        Dim url As String
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
+        Try
+            'If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & TvdbId) = -1 Then
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
 
+            WebBrowser4.Navigate(url)
+            'WebBrowser4.Refresh()
+            'End If
+        Catch
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
+
+            WebBrowser4.Navigate(url)
+            'WebBrowser4.Refresh()
+
+        End Try
     End Sub
 
     Public Sub util_LanguageListLoad()
@@ -8878,7 +8923,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub WebBrowser3_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles WebBrowser3.NewWindow
+    Private Sub WebBrowser3_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) 
         Try
             e.Cancel = True
         Catch ex As Exception

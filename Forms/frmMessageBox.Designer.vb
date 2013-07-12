@@ -93,7 +93,7 @@ Partial Class frmMessageBox
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(340, 88)
+        Me.ClientSize = New System.Drawing.Size(340, 81)
         Me.ControlBox = false
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)

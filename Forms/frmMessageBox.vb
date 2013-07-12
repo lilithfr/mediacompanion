@@ -100,4 +100,23 @@ Public Class frmMessageBox
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+    Private Sub Button1_Click( sender As System.Object,  e As System.EventArgs) Handles Button1.Click
+        Try
+            Preferences.TvInfoSite = "tvdb"
+            Me.Close()
+        Catch ex As Exception
+
+        End Try
+    
+    End Sub
+
+    Private Sub Button2_Click( sender As System.Object,  e As System.EventArgs) Handles Button2.Click
+        Try
+            Preferences.TvInfoSite = "imdb"
+            Me.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class

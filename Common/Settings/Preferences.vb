@@ -46,6 +46,7 @@ Public Class Preferences
     Public Shared workingProfile As New ListOfProfiles
     Public Shared commandlist As New List(Of str_ListOfCommands)
     Public Shared configpath As String
+    Public Shared TvInfoSite As String = "tvdb"
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
     Public Shared ReadOnly Property EdenEnabled As Boolean
