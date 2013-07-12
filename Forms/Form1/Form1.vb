@@ -3572,23 +3572,17 @@ Public Class Form1
 
                 Dim pos As Integer = 0
 
-                'Dim lst = (From x As datagridviewrow In DataGridViewMovies.SelectedRows 
-                '        From m In oMovies.MovieCache 
-                '        Where x.Cells("fullpathandfilename").Value.ToString=m.fullpathandfilename
-                '        Select m.fullpathandfilename).ToList
+                Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
                   
 
-                Dim lst As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
-                  
+                For Each nfo As String In NfosToSave
 
-                For Each item As String In lst
-
-                    Dim movie As Movie = oMovies.LoadMovie(item)
+                    Dim movie As Movie = oMovies.LoadMovie(nfo)
 
                     If IsNothing(movie) Then Continue For
 
                     pos += 1
-                    mess.TextBox2.Text = pos.ToString + " of " + lst.Count.ToString
+                    mess.TextBox2.Text = pos.ToString + " of " + NfosToSave.Count.ToString
 
                     If directortxt.Text <> "" Then
                         movie.ScrapedMovie.fullmoviebody.director = directortxt.Text

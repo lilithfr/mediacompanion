@@ -256,7 +256,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
         MC_Movie_Updated
-        MC_Movie_New
+     '   MC_Movie_New
         MC_Movie_Removed
         MC_ScanForNewMovies
         MC_ShutDownReq
@@ -269,6 +269,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MC_XbmcOnlyMovies
 
         MC_XbmcQuit
+        MC_PurgeQ_Req
 
         XBMC_Video_Removed
         XBMC_Video_Updated
@@ -383,8 +384,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Wf_XBMC_Video_Removed      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf DeleteCachedImages   _
                                                                                                                , AddressOf Ready                )
 
-        AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      _
-                                                                                                               , AddressOf Ready                )
+  '      AddTransition( S.Ready                      , E.MC_Movie_New            , S.Ready                      , AddressOf AddFolderToScan      _
+  '                                                                                                             , AddressOf Ready                )
 
         AddTransition( S.Ready                      , E.MC_Movie_Removed        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideo          )
         AddTransition( S.Ready                      , E.MaxMovies_Idle_TimeOut  , S.Ready                      , AddressOf FetchMaxMovies       _
@@ -549,6 +550,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub ProcessEvent(Evt As BaseEvent)
+
+        If Evt.E = E.MC_PurgeQ_Req Then
+            BufferQ.Delete(E.MC_Movie_Updated)
+            BufferQ.Delete(E.MC_ScanForNewMovies)
+        End If
 
         If Evt.E.ToString.IndexOf("MC_") = 0 And CurrentStateID <> S.Ready Then
 
