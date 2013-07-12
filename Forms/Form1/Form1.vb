@@ -73,7 +73,6 @@ Public Class Form1
 
     Public State As ProgramState=ProgramState.Other
 
-
     Public DataDirty As Boolean
 
     Public CopyOfPreferencesIgnoreArticle As Boolean
@@ -713,10 +712,10 @@ Public Class Form1
         oMovies.Bw = BckWrkScnMovies
 
         AddHandler XBMC_Link_ErrorLog_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
-        Ini_Timer(XBMC_Link_ErrorLog_Timer,4000)
+        Ini_Timer(XBMC_Link_ErrorLog_Timer,3000)
 
         AddHandler XBMC_Link_Idle_Timer.Elapsed, AddressOf XBMC_Link_Idle_Timer_Elapsed
-        Ini_Timer(XBMC_Link_Idle_Timer,4000)
+        Ini_Timer(XBMC_Link_Idle_Timer,3000)
 
         AddHandler XBMC_Link_Check_Timer.Elapsed, AddressOf XBMC_Link_Check_Timer_Elapsed
         Ini_Timer(XBMC_Link_Check_Timer,2000,True)
@@ -840,6 +839,8 @@ Public Class Form1
         frmXBMC_Progress.lblErrorCount.Text = oProgress.ErrorCount
     End Sub
 
+    Dim ConnectSent As Boolean
+
     Sub SetcbBtnLink(enabled As Boolean)
 
         cbBtnLink.Enabled = enabled
@@ -847,6 +848,10 @@ Public Class Form1
         If enabled Then
             cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
             'XBMC_Link_Check_Timer.Stop
+            If Not ConnectSent And Preferences.XbmcLinkReady Then
+                ConnectSent = True
+                XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+            End If
         Else
             cbBtnLink.Checked   = False
             cbBtnLink.BackColor = Color.Transparent
@@ -3552,6 +3557,9 @@ Public Class Form1
             UpdateFilteredList()
         Else
             Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
+
+            mess.TextBox3.Text = "Press ESC to cancel"
+            mess.TopMost = True
             mess.Show()
             mess.Refresh()
             Application.DoEvents()
@@ -3560,12 +3568,27 @@ Public Class Form1
                 Dim i As Integer = DataGridViewMovies.CurrentRow.Index
                 Startfullpathandfilename = DataGridViewMovies.Item(0, i).Value.ToString
 
-                For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+                mess.Cancelled = False
 
-                    Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-                    Dim movie As Movie = oMovies.LoadMovie(filepath)
+                Dim pos As Integer = 0
+
+                'Dim lst = (From x As datagridviewrow In DataGridViewMovies.SelectedRows 
+                '        From m In oMovies.MovieCache 
+                '        Where x.Cells("fullpathandfilename").Value.ToString=m.fullpathandfilename
+                '        Select m.fullpathandfilename).ToList
+                  
+
+                Dim lst As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
+                  
+
+                For Each item As String In lst
+
+                    Dim movie As Movie = oMovies.LoadMovie(item)
 
                     If IsNothing(movie) Then Continue For
+
+                    pos += 1
+                    mess.TextBox2.Text = pos.ToString + " of " + lst.Count.ToString
 
                     If directortxt.Text <> "" Then
                         movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
@@ -3625,7 +3648,12 @@ Public Class Form1
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
                     movie.SaveNFO()
+                    Application.DoEvents()
+                    If mess.Cancelled Then Exit For
                 Next
+
+                State = ProgramState.Other
+
             Else
                 mess.Close()
                 MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
@@ -3633,6 +3661,8 @@ Public Class Form1
             End If
             '            oMovies.SaveMovieCache
             '            oMovies.LoadMovieCache
+
+  '          DataGridViewMovies.ClearSelection
 
             workingMovie.fullpathandfilename = Startfullpathandfilename
             mov_FormPopulate()
@@ -24034,6 +24064,7 @@ Public Class Form1
 
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
         If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
         If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
     End Sub

@@ -416,7 +416,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
  '      AddTransition( S.Wf_XBMC_Video_Removed      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf AddMovie             )
   '      AddTransition( S.Ready                 , E.GetNewMovieIds          , S.Ready                 , AddressOf GetNewMovieIds )
                                                                                                                                               
-        Initialize(S.NotConnected)   
+        Initialize(S.NotConnected)
+        'If Preferences.XbmcLinkReady Then Q.Write(E.ConnectReq, PriorityQueue.Priorities.medium)   
     End Sub                                                                                                                                  
   
 

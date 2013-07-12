@@ -1,6 +1,8 @@
 ﻿
 Public Class frmMessageBox
 
+    Public Property Cancelled As Boolean
+
     Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "", Optional ByVal Btn1 As String = "", Optional ByVal Btn2 as String = "")
         InitializeComponent()
         If Btn1 = "" Then 
@@ -119,4 +121,13 @@ Public Class frmMessageBox
 
         End Try
     End Sub
+
+
+    Private Sub frmMessageBox_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+        If  e.KeyCode=Keys.Escape Then
+            Cancelled = True
+        End If
+    End Sub
+
 End Class
