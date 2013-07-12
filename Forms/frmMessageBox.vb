@@ -1,8 +1,29 @@
 ﻿
 Public Class frmMessageBox
 
-    Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "")
+    Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "", Optional ByVal Btn1 As String = "", Optional ByVal Btn2 as String = "")
         InitializeComponent()
+        If Btn1 = "" Then 
+            Button1.Visible = False
+        Else 
+            Button1.Visible = True
+        End If
+
+        If Btn2 = "" Then 
+            Button2.Visible = False
+        Else 
+            Button2.Visible = True
+        End If
+
+        If line2 = "" And line3 = "" Then
+            TextBox2.Text = line1
+            TextBox1.Visible = False
+            TextBox3.Visible = False
+            Exit Sub
+        Else 
+            TextBox1.Visible = True
+            TextBox3.Visible = True
+        End If
         TextBox1.Text = line1
         TextBox2.Text = line2
         TextBox3.Text = line3
