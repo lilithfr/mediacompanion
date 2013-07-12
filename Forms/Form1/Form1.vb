@@ -7415,6 +7415,9 @@ Public Class Form1
             ElseIf tab = "Posters" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_PosterSetup()
+            ElseIf tab = "Table View" Then
+                tvCurrentTabIndex = TabControl3.SelectedIndex
+                'Call tv_TableView()           'Temp disabled till can fix loading of show nfo's
             'ElseIf tab = "" Then
             '    If Not String.IsNullOrEmpty(Show.ImdbId.Value) Then
             '        If Show.ImdbId.Value.IndexOf("tt") <> 0 Then
@@ -7523,7 +7526,7 @@ Public Class Form1
 
     End Sub
 
-    Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
+    Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
         Dim url As String
         Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
         Dim TvdbId As Integer = Show.TvdbId.value
@@ -7565,6 +7568,30 @@ Public Class Form1
             WebBrowser4.Navigate(url)
             'WebBrowser4.Refresh()
 
+        End Try
+    End Sub
+    
+    Private Sub tv_TableView()
+        Dim tvdgv As DataGridView = DataGridView2
+        Dim rw As Integer = 0
+        Dim shCount As Integer = Cache.TvCache.Shows.Count 
+        Dim tvdbase(shCount, 8) as String
+        DataGridView2.Rows.Clear()
+        Try
+            For Each sh As TvShow In Cache.TvCache.Shows
+                Dim n As Integer = DataGridView2.Rows.Add()
+                DataGridView2.Rows(n).Cells(0).Value = sh.Title.Value 
+                DataGridView2.Rows(n).Cells(1).Value = sh.Plot.Value
+                DataGridView2.Rows(n).Cells(2).Value = sh.Premiered.Value
+                DataGridView2.Rows(n).Cells(3).Value = sh.Rating.Value
+                DataGridView2.Rows(n).Cells(4).Value = sh.Genre.Value
+                DataGridView2.Rows(n).Cells(5).Value = sh.Studio.Value
+                DataGridView2.Rows(n).Cells(6).Value = sh.TvdbId.Value
+                DataGridView2.Rows(n).Cells(7).Value = sh.ImdbId.Value
+                DataGridView2.Rows(n).Cells(8).Value = sh.Mpaa.Value 
+                rw = rw + 1
+            Next
+        Catch
         End Try
     End Sub
 
