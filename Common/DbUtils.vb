@@ -4,6 +4,19 @@ Imports System.Data.SQLite
 
 Public Class DbUtils
 
+
+    Public Shared Function ExecuteReader(cmd As SQLiteCommand) As DataTable
+
+        Dim dt As DataTable = New DataTable
+
+        Using reader As SQLiteDataReader = cmd.ExecuteReader
+			dt.Load(reader)
+        End Using
+
+        Return dt
+    End Function
+
+
     Public Shared Function ExecuteReader(conn As SQLiteConnection, query As string) As DataTable
 
         Dim dt As DataTable = New DataTable

@@ -27,6 +27,7 @@ Public Class ucGenPref_XbmcLink
         tbDialogue.Clear
         AppendDialogue("Hints:")
         AppendDialogue("")
+        AppendDialogue(" - DELETE FILE ACCESS needed in the Thumbnails folder for fanart & poster updates to work.")
         AppendDialogue(" - Updates are quickest in Weather view")
         AppendDialogue(" - Updates are slowest in Movies view")
         AppendDialogue(" - If the Movies view is active whilst updating, poster\fanart images don't appear updated. They have been, but XBMC won't show the update until you come out and go back into the view")
