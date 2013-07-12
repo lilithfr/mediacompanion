@@ -554,6 +554,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         If Evt.E = E.MC_PurgeQ_Req Then
             BufferQ.Delete(E.MC_Movie_Updated)
             BufferQ.Delete(E.MC_ScanForNewMovies)
+            BufferQ.Delete(E.ScanFolder)
         End If
 
         If Evt.E.ToString.IndexOf("MC_") = 0 And CurrentStateID <> S.Ready Then
@@ -1282,7 +1283,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Function
 
     Sub ReportProgress(ByVal oProgress As XBMC_Controller_Progress)
-        Bw.ReportProgress(0, oProgress)
+        Try
+            Bw.ReportProgress(0, oProgress)
+        Catch
+        End Try
     End Sub
 
 

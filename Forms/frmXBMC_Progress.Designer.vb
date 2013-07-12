@@ -33,12 +33,14 @@ Partial Class frmXBMC_Progress
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lblProgress = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.btnPurgeQ = New System.Windows.Forms.Button()
         Me.panelXBMC.SuspendLayout
         Me.SuspendLayout
         '
         'panelXBMC
         '
         Me.panelXBMC.BackColor = System.Drawing.Color.DimGray
+        Me.panelXBMC.Controls.Add(Me.btnPurgeQ)
         Me.panelXBMC.Controls.Add(Me.LinkLabel1)
         Me.panelXBMC.Controls.Add(Me.lblErrorCount)
         Me.panelXBMC.Controls.Add(Me.Label3)
@@ -49,12 +51,11 @@ Partial Class frmXBMC_Progress
         Me.panelXBMC.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelXBMC.Location = New System.Drawing.Point(0, 0)
         Me.panelXBMC.Name = "panelXBMC"
-        Me.panelXBMC.Size = New System.Drawing.Size(362, 62)
+        Me.panelXBMC.Size = New System.Drawing.Size(362, 70)
         Me.panelXBMC.TabIndex = 1
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.AutoSize = true
         Me.LinkLabel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DeepSkyBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(101, 40)
@@ -142,11 +143,22 @@ Partial Class frmXBMC_Progress
         Me.lblProgress.TabIndex = 0
         Me.lblProgress.Text = "Some Progress Some Progress Some Progress "
         '
+        'btnPurgeQ
+        '
+        Me.btnPurgeQ.AutoSize = true
+        Me.btnPurgeQ.Location = New System.Drawing.Point(292, 39)
+        Me.btnPurgeQ.Name = "btnPurgeQ"
+        Me.btnPurgeQ.Size = New System.Drawing.Size(62, 23)
+        Me.btnPurgeQ.TabIndex = 7
+        Me.btnPurgeQ.Text = "Purge Q"
+        Me.btnPurgeQ.UseVisualStyleBackColor = true
+        Me.btnPurgeQ.Visible = false
+        '
         'frmXBMC_Progress
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(362, 62)
+        Me.ClientSize = New System.Drawing.Size(362, 70)
         Me.Controls.Add(Me.panelXBMC)
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.MaximizeBox = false
@@ -168,4 +180,5 @@ End Sub
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
+    Friend WithEvents btnPurgeQ As System.Windows.Forms.Button
 End Class

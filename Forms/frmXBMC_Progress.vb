@@ -37,4 +37,8 @@ Public Class frmXBMC_Progress
         MaximizeBox = False
     End Sub
 
+    Private Sub btnPurgeQ_Click( sender As Object,  e As EventArgs) Handles btnPurgeQ.Click
+        Form1.XbmcControllerQ.Write(XbmcController.E.MC_PurgeQ_Req)     
+    End Sub
+
 End Class
