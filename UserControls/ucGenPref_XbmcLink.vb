@@ -146,6 +146,7 @@ Public Class ucGenPref_XbmcLink
         Dim canConnect As Boolean = Preferences.XBMC_CanConnect 
 
         Dim overAll As Boolean = _
+            ShowTest("Frodo Enabled"                     , Preferences.FrodoEnabled                 , 10) And
             ShowTest("XBMC PC Ping"                      , Preferences.XBMC_CanPing                  , 1) And
             ShowTest("XBMC Connect"                      , canConnect                                , 2) And
             ShowTest("Userdata Folder"                   , Preferences.XBMC_UserdataFolder_Valid     , 5) And
@@ -160,18 +161,27 @@ Public Class ucGenPref_XbmcLink
 
         ShowTest("Overall", overAll , 10) 
 
-        If Not canConnect Then
-            AppendDialogue("")
+        If Not overAll Then
             AppendDialogue("****************************************")
+            AppendDialogue("")
             AppendDialogue("Things to check:")
-            AppendDialogue("    - XBMC is running")
-            AppendDialogue("    - System - Settings - Servies - Webserver:")
-            AppendDialogue("        - Allow control of XBMC via HTTP' is checked ")
-            AppendDialogue("        - Port, Username and Password match")
-            AppendDialogue("        - Web interface is set to 'Default'")
-            AppendDialogue("    - If you are trying to connect to XBMC on a remote PC, make sure:")
-            AppendDialogue("        - The PCs' IP address is static")
-            AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' checked")
+
+            If Not Preferences.FrodoEnabled Then
+                AppendDialogue("    - MC has General Preferences-General-Artwork Version->Frodo enabled ")
+            End If
+
+            If Not canConnect Then
+                AppendDialogue("    - XBMC is running")
+                AppendDialogue("    - System - Settings - Servies - Webserver:")
+                AppendDialogue("        - Allow control of XBMC via HTTP' is checked ")
+                AppendDialogue("        - Port, Username and Password match")
+                AppendDialogue("        - Web interface is set to 'Default'")
+                AppendDialogue("    - If you are trying to connect to XBMC on a remote PC, make sure:")
+                AppendDialogue("        - The PCs' IP address is static")
+                AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' checked")
+            End If
+
+            AppendDialogue("")
             AppendDialogue("****************************************")
         End If
 

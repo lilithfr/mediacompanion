@@ -307,9 +307,9 @@ Public Class Preferences
         Get 
             ' XBMC_CanConnect ommitted here, as may interfere with controller
 
-            Return XBMC_CanPing                And XBMC_UserdataFolder_Valid      And XBMC_TexturesDbFile_Valid   And 
-                   XBMC_TexturesDb_Conn_Valid  And XBMC_TexturesDb_Version_Valid  And XBMC_ThumbnailsFolder_Valid And 
-                   XBMC_MC_MovieFolderMappings.Initialised And XBMC_CanConnect
+            Return XBMC_CanPing     And XBMC_UserdataFolder_Valid      And XBMC_TexturesDbFile_Valid   And 
+                   FrodoEnabled     And XBMC_TexturesDb_Version_Valid  And XBMC_ThumbnailsFolder_Valid And 
+                   XBMC_CanConnect  And XBMC_TexturesDb_Conn_Valid     And XBMC_MC_MovieFolderMappings.Initialised 
          End Get
     End Property  
 
