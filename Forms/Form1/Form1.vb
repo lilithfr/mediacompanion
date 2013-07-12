@@ -7441,7 +7441,7 @@ Public Class Form1
                 Call tv_PosterSetup()
             ElseIf tab = "Table View" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                'Call tv_TableView()           'Temp disabled till can fix loading of show nfo's
+                Call tv_TableView()           'Temp disabled till can fix loading of show nfo's
             'ElseIf tab = "" Then
             '    If Not String.IsNullOrEmpty(Show.ImdbId.Value) Then
             '        If Show.ImdbId.Value.IndexOf("tt") <> 0 Then
@@ -7596,13 +7596,28 @@ Public Class Form1
     End Sub
     
     Private Sub tv_TableView()
-        Dim tvdgv As DataGridView = DataGridView2
-        Dim rw As Integer = 0
-        Dim shCount As Integer = Cache.TvCache.Shows.Count 
-        Dim tvdbase(shCount, 8) as String
+        Dim availableshows As New List(Of TvShow)
+
+        messbox = New frmMessageBox("Loading all tvshow.nfo")
+        messbox.Show
+
+        For Each sh As TvShow In Cache.TvCache.Shows
+            Dim shload As New TvShow 
+            shload.NfoFilePath = sh.NfoFilePath 
+            shload.Load(False)
+            availableshows.Add(shload)
+        Next
+
+        messbox.Close()
+        
+        'Dim sortshow As New List(Of TvShow) 
+        'sortshow = availableshows.OrderBy(Function(x) x.Title)
+
+        Dim tvdbase(availableshows.Count, 8) as String
         DataGridView2.Rows.Clear()
+
         Try
-            For Each sh As TvShow In Cache.TvCache.Shows
+            For Each sh As TvShow In availableshows 
                 Dim n As Integer = DataGridView2.Rows.Add()
                 DataGridView2.Rows(n).Cells(0).Value = sh.Title.Value 
                 DataGridView2.Rows(n).Cells(1).Value = sh.Plot.Value
@@ -7613,8 +7628,10 @@ Public Class Form1
                 DataGridView2.Rows(n).Cells(6).Value = sh.TvdbId.Value
                 DataGridView2.Rows(n).Cells(7).Value = sh.ImdbId.Value
                 DataGridView2.Rows(n).Cells(8).Value = sh.Mpaa.Value 
-                rw = rw + 1
             Next
+            'DataGridView2.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells
+            'DataGridView2.Columns(1).DefaultCellStyle.WrapMode = DataGridViewTriState.True
+            'DataGridView2.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
         Catch
         End Try
     End Sub
