@@ -334,6 +334,28 @@ Public Class Movie
         End Get 
     End Property
 
+    
+
+
+    Public ReadOnly Property ActualPosterPaths As List(Of String)
+        Get
+            Return Preferences.GetAllPosters(ScrapedMovie.fileinfo.fullpathandfilename)
+
+            'Dim PostPaths As List(Of String) = New List(Of String)
+
+            'Try
+            '    For Each item In Preferences.GetPosterPaths(ScrapedMovie.fileinfo.fullpathandfilename,ScrapedMovie.fileinfo.videotspath)
+            '        If File.Exists(item) Then PostPaths.Add(item)
+            '    Next
+            'Catch ex As Exception
+            '    Dim x = ex
+            'End Try
+
+            'Return PostPaths
+        End Get 
+    End Property
+
+
     Public ReadOnly Property ActualFanartPath As String
         Get
             Dim s = Preferences.GetFanartPath(NfoPathPrefName)

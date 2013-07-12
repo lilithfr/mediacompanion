@@ -1115,32 +1115,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         XbmcTexturesDb.Open
 
-        Dim oMovie As Movie = New Movie(McMoviePath,Me.Parent.oMovies)
-
-        'Dim sql As String = "Select id, cachedurl from texture" +
-        '                        " where url='" + DbUtils.Stuff(oMovie.ActualPosterPath) + "'" +
-        '                           " or url='" + DbUtils.Stuff(oMovie.ActualFanartPath) + "'"
-
-
-        Dim cmd As SQLiteCommand = new SQLiteCommand(XbmcTexturesDb)
-
-        cmd.CommandText = "Select id, cachedurl from texture where url=@PosterPath or url=@FanartPath"
-
-        cmd.Parameters.Add("@PosterPath",SqlDbType.VarChar,500).Value=oMovie.ActualPosterPath
-        cmd.Parameters.Add("@FanartPath",SqlDbType.VarChar,500).Value=oMovie.ActualFanartPath
-
-        dtCachedUrls = DbUtils.ExecuteReader(cmd)
+        dtCachedUrls = GetCachedUrlsMeat(False)
 
         If dtCachedUrls.Rows.Count=0 Then
-
-            'sql = "Select id, cachedurl from texture" +
-            '        " where url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)) + "'" +
-            '           " or url='" + DbUtils.Stuff(MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)) + "'"
-
-            cmd.Parameters("@PosterPath").Value=MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualPosterPath)
-            cmd.Parameters("@FanartPath").Value=MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath)
-
-            dtCachedUrls = DbUtils.ExecuteReader(cmd)
+            dtCachedUrls = GetCachedUrlsMeat(True)
         End If
 
         XbmcTexturesDb.Close
@@ -1148,6 +1126,37 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
 
+    Function GetCachedUrlsMeat(useXbmcPath As Boolean) As DataTable
+
+        Dim oMovie As Movie = New Movie(McMoviePath,Me.Parent.oMovies)
+
+        oMovie.LoadNFO(False)
+
+        Dim cmd As SQLiteCommand = new SQLiteCommand(XbmcTexturesDb)
+
+        Dim PosterPaths As List(Of String) = oMovie.ActualPosterPaths
+
+        Dim sql As String = "Select id, cachedurl from texture where url=@FanartPath"
+        Dim i As Integer=1
+
+        For Each Item As String In PosterPaths
+            sql +=  " or url=@PosterPath" + i.ToString
+            i +=1
+        Next
+
+        cmd.CommandText = sql
+
+        cmd.Parameters.Add("@FanartPath",SqlDbType.VarChar,500).Value=IIf(useXbmcPath,MovieFolderMappings.GetXBMC_MoviePath(oMovie.ActualFanartPath),oMovie.ActualFanartPath)
+
+        i=1
+        For Each Item As String In PosterPaths
+            cmd.Parameters.Add("@PosterPath" + i.ToString,SqlDbType.VarChar,500).Value=IIf(useXbmcPath,MovieFolderMappings.GetXBMC_MoviePath(Item),Item)
+            i +=1
+        Next
+
+        Return DbUtils.ExecuteReader(cmd)
+
+    End Function
 
 
 
@@ -1175,11 +1184,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
 
     Sub DeleteCachedImages(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
-
+        
         ReportProgress("Deleting orphaned movie images from thumbnail folder",args)
 
-        If IsNothing(dtCachedUrls) OrElse dtCachedUrls.Rows.Count=0 or dtCachedUrls.Rows.Count>2 Then 
-            AppendLog("Skipping cached file delete as expected 1-2 rows to be matched, but actually matched : [" + dtCachedUrls.Rows.Count.ToString + "]")
+        If IsNothing(dtCachedUrls) OrElse dtCachedUrls.Rows.Count=0 or dtCachedUrls.Rows.Count>4 Then 
+            AppendLog("Skipping cached file delete as expected 1-4 rows to be matched, but actually matched : [" + dtCachedUrls.Rows.Count.ToString + "]")
             dtCachedUrls = Nothing
             Return
         End If

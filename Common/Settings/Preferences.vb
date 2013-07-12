@@ -1277,6 +1277,29 @@ Public Class Preferences
 
 
 
+    Public Shared Function GetAllPosters(ByVal nfoFile As String) As List(Of String)
+
+        Dim Results As List(Of String) = New List(Of String)
+
+        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+
+        AddIfExistsAndNew( Results, dir & "\folder.jpg")
+        AddIfExistsAndNew( Results, dir & "\poster.jpg")
+        AddIfExistsAndNew( Results, nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg") )
+        AddIfExistsAndNew( Results, nfoFile.Replace(IO.Path.GetExtension(nfoFile), ".tbn"       ) )
+
+        Return Results
+    End Function
+
+    Public Shared Sub AddIfExistsAndNew( lst As List(Of String), fName As String)
+
+        If lst.Contains(fName) Then Return
+
+        If Not IO.File.Exists(fName) Then Return
+
+        lst.Add(fName)
+    End Sub
+
     Public Shared Function GetPosterPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
         Dim lst = New List(Of String)
         Dim path As String = FullPath
