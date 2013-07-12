@@ -547,6 +547,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\TMDB_Icon.png" />
+    <Content Include="Resources\mc-xbmc-link16.ico" />
     <Content Include="Resources\TVDB_sm.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

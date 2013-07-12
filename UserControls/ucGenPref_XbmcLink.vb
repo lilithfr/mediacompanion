@@ -30,7 +30,7 @@ Public Class ucGenPref_XbmcLink
         AppendDialogue(" - Delete file access needed in the Thumbnails folder for fanart & poster updates to work.")
         AppendDialogue(" - Updates are quickest in Weather view")
         AppendDialogue(" - Updates are slowest in Movies view")
-        AppendDialogue(" - The quickest & easiest way to synchronize all movies is to select them all in the movies list and click the Save button")
+        AppendDialogue(" - To synchronize multiple movies, select them in the movies list and rt-click to bring up the context menu, then select 'Sync to XBMC'")
         AppendDialogue(" - If the Movies view is active whilst updating, poster\fanart images don't appear updated. They have been, but XBMC won't show the update until you come out and go back into the view")
         AppendDialogue(" - Scroll down to the bottom of the General filter for XBMC specific filters - currently only one 'Missing from XBMC', but more coming once we're happy the bugs are out of this first implementation")
         AppendDialogue(" - For any movie listed in 'Missing from XBMC' check the following characters are not in the path or title [ü é á ½ Æ ³ · ° , !] as XBMC doesn't like them")

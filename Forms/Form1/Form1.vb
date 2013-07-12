@@ -857,6 +857,8 @@ Public Class Form1
             cbBtnLink.BackColor = Color.Transparent
         End If
 
+        tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked 
+
         If Preferences.XBMC_Link <> cbBtnLink.Checked Then
             Preferences.XBMC_Link = cbBtnLink.Checked 
             Preferences.SaveConfig 
@@ -25191,8 +25193,14 @@ End Sub
     Private Sub XBMC_Link_Check_Timer_Elapsed
         SetcbBtnLink(Preferences.XbmcLinkInitialised)
     End Sub
+   
 
-    
-
+    Private Sub tsmiSyncToXBMC_Click( sender As Object,  e As EventArgs) Handles tsmiSyncToXBMC.Click
+        Try
+            Call mov_ScrapeSpecific("save")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
 End Class

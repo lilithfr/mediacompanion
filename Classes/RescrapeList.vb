@@ -31,6 +31,7 @@ Public Class RescrapeList
     Property Rename_Files        As Boolean
     Property Frodo_Poster_Thumbs As Boolean
     Property Frodo_Fanart_Thumbs As Boolean
+    Property save                As Boolean
 
 
     Sub New
