@@ -7619,7 +7619,9 @@ Public Class Form1
         DataGridView2.Rows.Clear()
 
         Try
-            For Each sh As TvShow In availableshows 
+            Dim lst As List(Of TvShow) = (From x In availableshows Order By x.Title).ToList
+                      
+            For Each sh As TvShow In lst 
                 Dim n As Integer = DataGridView2.Rows.Add()
                 DataGridView2.Rows(n).Cells(0).Value = sh.Title.Value 
                 DataGridView2.Rows(n).Cells(1).Value = sh.Plot.Value
