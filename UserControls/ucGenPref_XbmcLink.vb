@@ -148,8 +148,13 @@ Public Class ucGenPref_XbmcLink
 
         Dim canConnect As Boolean = Preferences.XBMC_CanConnect 
 
+        Dim ParentForm As Form1 = Me.Parent.Parent.Parent.Parent.Parent 
+
+        Dim PreFrodoPosterOnlyCount As Integer = ParentForm.oMovies.PreFrodoPosterOnlyCount
+
         Dim overAll As Boolean = _
             ShowTest("Frodo Enabled"                     , Preferences.FrodoEnabled                 , 10) And
+            ShowTest("Pre-Frodo only movies ('.tbn' posters instead of '-poster.jpg') : " & PreFrodoPosterOnlyCount.ToString, (PreFrodoPosterOnlyCount=0), 10 ) And
             ShowTest("XBMC PC Ping"                      , Preferences.XBMC_CanPing                  , 1) And
             ShowTest("XBMC Connect"                      , canConnect                                , 2) And
             ShowTest("Userdata Folder"                   , Preferences.XBMC_UserdataFolder_Valid     , 5) And
@@ -171,6 +176,12 @@ Public Class ucGenPref_XbmcLink
 
             If Not Preferences.FrodoEnabled Then
                 AppendDialogue("    - MC has General Preferences-General-Artwork Version->Frodo enabled ")
+            End If
+
+            If PreFrodoPosterOnlyCount>0 Then
+                AppendDialogue("    - Warning: Some of your movies only have '.tbn' poster extensions, Frodo expects '-poster.jpg'. You can fix this by:")
+                AppendDialogue("         - 1. Selecting 'Pre-Frodo poster only' from the General Filter" )
+                AppendDialogue("         - 2. Selecting all the movies in the list, then Rt-Click & select 'Convert to Frodo only'" )
             End If
 
             If Not canConnect Then

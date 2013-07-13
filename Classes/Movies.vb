@@ -249,19 +249,37 @@ Public Class Movies
 
     Public ReadOnly Property PreFrodoPosterOnly As String
         Get
-            Return "Pre-Frodo poster only (" & (From x In MovieCache Where x.PreFrodoPosterExists And Not x.FrodoPosterExists).Count & ")" 
+            Return "Pre-Frodo poster only (" & PreFrodoPosterOnlyCount.ToString & ")" 
+        End Get
+    End Property    
+
+    Public ReadOnly Property PreFrodoPosterOnlyCount As Integer
+        Get
+            Return (From x In MovieCache Where x.PreFrodoPosterExists And Not x.FrodoPosterExists).Count
         End Get
     End Property    
 
     Public ReadOnly Property FrodoPosterOnly As String
         Get
-            Return "Frodo poster only (" & (From x In MovieCache Where Not x.PreFrodoPosterExists And x.FrodoPosterExists).Count & ")" 
+            Return "Frodo poster only (" & FrodoPosterOnlyCount.ToString & ")" 
+        End Get
+    End Property    
+
+    Public ReadOnly Property FrodoPosterOnlyCount As Integer
+        Get
+            Return (From x In MovieCache Where Not x.PreFrodoPosterExists And x.FrodoPosterExists).Count
         End Get
     End Property    
 
     Public ReadOnly Property FrodoAndPreFrodoPosters As String
         Get
-            Return "Both poster formats (" & (From x In MovieCache Where x.PreFrodoPosterExists And x.FrodoPosterExists).Count & ")" 
+            Return "Both poster formats (" & FrodoAndPreFrodoPostersCount.ToString & ")" 
+        End Get
+    End Property    
+
+    Public ReadOnly Property FrodoAndPreFrodoPostersCount As Integer
+        Get
+            Return (From x In MovieCache Where x.PreFrodoPosterExists And x.FrodoPosterExists).Count
         End Get
     End Property    
 

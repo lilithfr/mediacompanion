@@ -71,11 +71,13 @@ Partial Class ucGenPref_XbmcLink
         '
         'tlpXbmcLink
         '
-        Me.tlpXbmcLink.ColumnCount = 4
+        Me.tlpXbmcLink.ColumnCount = 6
         Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.tlpXbmcLink.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.tlpXbmcLink.Controls.Add(Me.btnUndo, 0, 11)
         Me.tlpXbmcLink.Controls.Add(Me.Label203, 1, 9)
         Me.tlpXbmcLink.Controls.Add(Me.Label202, 0, 9)
