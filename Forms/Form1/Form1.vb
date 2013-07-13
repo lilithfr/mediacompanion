@@ -5126,7 +5126,7 @@ Public Class Form1
         End If
 
         Me.Refresh()
-        Application.DoEvents()
+  '     Application.DoEvents()
         fanartArray.Clear()
         noFanart = False
 
@@ -5205,7 +5205,7 @@ Public Class Form1
                     Me.Panel2.Controls.Add(fanartCheckBoxes())
                     Me.Panel2.Controls.Add(resLabels)
                     Me.Refresh()
-                    Application.DoEvents()
+          '          Application.DoEvents()
                 Next
 
                 EnableFanartScrolling()
@@ -5561,7 +5561,7 @@ Public Class Form1
 
             If row.MissingFanart Then 
                 btnNextMissingFanart.Enabled = True
-                btnNextMissingFanart.Tag = i
+                btnNextMissingFanart.Tag = i-1          'Filtered list gets updated after save, hence next index gets docked one.
                 Return
             End If
 
@@ -25187,8 +25187,8 @@ End Sub
 
 
     Private Sub cbBtnLink_Click( sender As Object,  e As EventArgs) Handles cbBtnLink.Click
-        LabelCountFilter.Focus
         SetcbBtnLink(Preferences.XbmcLinkInitialised)
+        LabelCountFilter.Focus
     End Sub
 
 

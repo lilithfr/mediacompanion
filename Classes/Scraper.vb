@@ -29,7 +29,7 @@ Public Class MovieRegExs
     Public Const REGEX_STUDIO              = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
     Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
     Public Const REGEX_ORIGINAL_TITLE      = "<span class=""title-extra"" itemprop=""name"">(.*?)<i>\(original title\)</i>"
-    Public Const REGEX_PLOT                = "itemprop=""description"">(?<plot>.*?)</p>"
+    Public Const REGEX_OUTLINE                = "itemprop=""description"">(?<outline>.*?)<"
 End Class
 
 
@@ -669,6 +669,13 @@ Public Class Classimdb
 
 
 
+    ReadOnly Property Outline As String
+        Get
+            Return Regex.Match(Html,MovieRegExs.REGEX_OUTLINE, RegexOptions.Singleline).Groups(1).Value.Trim
+        End Get
+    End Property
+
+
     ReadOnly Property TitleAndYear As String
         Get
             Return Regex.Match(Html,MovieRegExs.REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
@@ -921,7 +928,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "title"     , Me.Title    )
                 totalinfo.AppendTag( "year"      , Me.Year     )
                 totalinfo.AppendTag( "studio"    , Studio      )
-    '           totalinfo.AppendTag( "plot"      , Plot        )
+                totalinfo.AppendTag( "outline"   , Outline     )
 
 
                 For f = 0 To webpage.Count - 1
@@ -1053,43 +1060,40 @@ Public Class Classimdb
 
                     'outline
                     ''If webpage(f).IndexOf("<p>") <> -1 Then
-                    If totalinfo.IndexOf("<outline>") = -1 Then
-                        If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
-                            Try
-                                movienfoarray = ""
-                                Dim endofoutline = f
-                                For endofoutline = (f) To webpage.Count - 2
-                                    movienfoarray = movienfoarray & webpage(endofoutline)
-                                    If webpage(endofoutline).IndexOf("</p>") <> -1 Then
-                                        Exit For
-                                    End If
-                                Next
-                                If movienfoarray.Length > 0 Then
+'                    If totalinfo.IndexOf("<outline>") = -1 Then
+'                        If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
+'                            Try
+'                                movienfoarray = ""
+'                                Dim endofoutline = f
+'                                For endofoutline = (f) To webpage.Count - 2
+'                                    movienfoarray = movienfoarray & webpage(endofoutline)
+'                                    If webpage(endofoutline).IndexOf("</p>") <> -1 Then
+'                                        Exit For
+'                                    End If
+'                                Next
+'                                If movienfoarray.Length > 0 Then
 
-'                                   Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
-                                    Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(</p)")
-                                    If M.Success = True Then
-                                        movienfoarray = M.Groups(1).Value.StripTagsLeaveContent.Replace("See full summary »","").Trim
-                                    Else
-                                        movienfoarray = "scraper error"
-                                    End If
-                           '        movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                    movienfoarray = encodespecialchrs(movienfoarray)
-                                    totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
+''                                   Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+'                                    Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(</p)")
+'                                    If M.Success = True Then
+'                                        movienfoarray = M.Groups(1).Value.StripTagsLeaveContent.Replace("See full summary »","").Trim
+'                                    Else
+'                                        movienfoarray = "scraper error"
+'                                    End If
+'                           '        movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+'                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+'                                    movienfoarray = encodespecialchrs(movienfoarray)
+'                                    totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
+'                                Else
+'                                    totalinfo = totalinfo & "<outline>scaper error: possible format change</outline>" & vbCrLf
+'                                End If
+'                            Catch
+'                                totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+'                            End Try
 
-                                    If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-                                Else
-                                    totalinfo = totalinfo & "<outline>scaper error: possible format change</outline>" & vbCrLf
-
-                                    If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-                                End If
-                            Catch
-                                totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
-                                If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-                            End Try
-                        End If
-                    End If
+'                            If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
+'                        End If
+'                    End If
 
 
 
