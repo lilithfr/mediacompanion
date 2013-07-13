@@ -674,7 +674,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         ReportProgress("Passing back Mc only movies", args)
 
-        Dim msg = New ComboList_EventArgs(MC_Only_Movies)
+        Dim data As List(Of ComboList) = New List(Of ComboList)
+
+        data.AddRange(MC_Only_Movies)
+
+        Dim msg = New ComboList_EventArgs(data)
 
         ReportProgress(E.MC_Only_Movies,msg)
     End Sub
