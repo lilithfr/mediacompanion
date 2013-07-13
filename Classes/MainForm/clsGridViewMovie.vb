@@ -250,7 +250,7 @@ Public Class clsGridViewMovie
             Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
             Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )
             Case "Pre-Frodo poster only"       : b = From f In b Where     f.PreFrodoPosterExists And Not f.FrodoPosterExists
-            Case "Missing Pre-Frodo poster"    : b = From f In b Where Not f.PreFrodoPosterExists And     f.FrodoPosterExists
+            Case "Frodo poster only"           : b = From f In b Where Not f.PreFrodoPosterExists And     f.FrodoPosterExists
             Case "Both poster formats"         : b = From f In b Where     f.PreFrodoPosterExists And     f.FrodoPosterExists
        
         End Select

@@ -23571,6 +23571,9 @@ Public Class Form1
     End Sub
 
     Private Sub ApplyMovieFilters
+
+        tsmiConvertToFrodo.Enabled = (cbFilterGeneral.Text.RemoveAfterMatch="Pre-Frodo poster only") or (cbFilterGeneral.Text.RemoveAfterMatch="Both poster formats")
+
         If State = ProgramState.Other Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             DisplayMovie
@@ -25202,4 +25205,11 @@ End Sub
         End Try
     End Sub
 
+    Private Sub tsmiConvertToFrodo_Click( sender As Object,  e As EventArgs) Handles tsmiConvertToFrodo.Click
+        Try
+            Call mov_ScrapeSpecific("ConvertToFrodo")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 End Class

@@ -32,7 +32,7 @@ Public Class RescrapeList
     Property Frodo_Poster_Thumbs As Boolean
     Property Frodo_Fanart_Thumbs As Boolean
     Property save                As Boolean
-
+    Property ConvertToFrodo      As Boolean
 
     Sub New
     End Sub

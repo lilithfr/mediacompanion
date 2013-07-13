@@ -2337,6 +2337,9 @@ Public Class Movie
             End If
         End If
 
+
+        If rl.ConvertToFrodo Then ConvertToFrodo
+
         AssignMovieToCache()
         '		AssignMovieToAddMissingData
         HandleOfflineFile()             ' Do we need this?
@@ -2754,6 +2757,23 @@ Public Class Movie
 
         Return Results  
     End Function
+
+    Sub ConvertToFrodo
+
+        If Not PreFrodoPosterExists Then Return
+
+        Try
+            If FrodoPosterExists
+                Dim s = ActualPosterPath
+
+                If IO.Path.GetExtension(s).ToUpper=".TBN" Then Utilities.SafeDeleteFile(s)
+            Else 
+                IO.File.Move(ActualPosterPath,NfoPathPrefName.Replace(IO.Path.GetExtension(NfoPathPrefName), "-poster.jpg"))
+            End If 
+        Catch ex As Exception
+            Dim x = ex
+        End Try
+    End Sub
 
 
 End Class

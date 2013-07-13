@@ -269,7 +269,6 @@ Partial Class Form1
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
         Me.cbBtnLink = New System.Windows.Forms.CheckBox()
-        Me.TooltipGridViewMovies1 = New Media_Companion.TooltipGridViewMovies()
         Me.DataGridViewMovies = New System.Windows.Forms.DataGridView()
         Me.cbSort = New System.Windows.Forms.ComboBox()
         Me.btnreverse = New System.Windows.Forms.CheckBox()
@@ -337,7 +336,6 @@ Partial Class Form1
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBoxMutisave = New System.Windows.Forms.TextBox()
-        Me.movieGraphicInfo = New Media_Companion.GraphicInfo()
         Me.plottxt = New System.Windows.Forms.TextBox()
         Me.outlinetxt = New System.Windows.Forms.TextBox()
         Me.taglinetxt = New System.Windows.Forms.TextBox()
@@ -1076,7 +1074,6 @@ Partial Class Form1
         Me.cbExternalbrowser = New System.Windows.Forms.CheckBox()
         Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
         Me.tpXbmcLink = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_XbmcLink = New Media_Companion.ucGenPref_XbmcLink()
         Me.TabPage33 = New System.Windows.Forms.TabPage()
         Me.ListBox17 = New System.Windows.Forms.ListBox()
         Me.btn_ToolsCommandRemove = New System.Windows.Forms.Button()
@@ -1202,7 +1199,11 @@ Partial Class Form1
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.TooltipGridViewMovies1 = New Media_Companion.TooltipGridViewMovies()
+        Me.movieGraphicInfo = New Media_Companion.GraphicInfo()
+        Me.UcGenPref_XbmcLink = New Media_Companion.ucGenPref_XbmcLink()
         Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
+        Me.tsmiConvertToFrodo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox11.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.ContextMenuStrip2.SuspendLayout
@@ -3386,10 +3387,10 @@ Partial Class Form1
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mov_ToolStripMovieName, Me.mov_ToolStripPlayMovie, Me.mov_ToolStripPlayTrailer, Me.ToolStripSeparator17, Me.mov_ToolStripOpenFolder, Me.mov_ToolStripViewNfo, Me.ToolStripSeparator4, Me.mov_ToolStripReloadFromCache, Me.Mov_ToolStripRemoveMovie, Me.Mov_ToolStripRenameMovie, Me.ToolStripSeparator5, Me.mov_ToolStripRescrapeAll, Me.mov_ToolStripRescrapeSpecific, Me.ToolStripSeparator23, Me.mov_ToolStripFanartBrowserAlt, Me.mov_ToolStripPosterBrowserAlt, Me.mov_ToolStripEditMovieAlt, Me.ToolStripSeparator24, Me.mov_ToolStripExportMovies, Me.tsmiOpenInMkvmergeGUI, Me.tsmiSyncToXBMC})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mov_ToolStripMovieName, Me.mov_ToolStripPlayMovie, Me.mov_ToolStripPlayTrailer, Me.ToolStripSeparator17, Me.mov_ToolStripOpenFolder, Me.mov_ToolStripViewNfo, Me.ToolStripSeparator4, Me.mov_ToolStripReloadFromCache, Me.Mov_ToolStripRemoveMovie, Me.Mov_ToolStripRenameMovie, Me.ToolStripSeparator5, Me.mov_ToolStripRescrapeAll, Me.mov_ToolStripRescrapeSpecific, Me.ToolStripSeparator23, Me.mov_ToolStripFanartBrowserAlt, Me.mov_ToolStripPosterBrowserAlt, Me.mov_ToolStripEditMovieAlt, Me.ToolStripSeparator24, Me.mov_ToolStripExportMovies, Me.tsmiOpenInMkvmergeGUI, Me.tsmiSyncToXBMC, Me.tsmiConvertToFrodo})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(260, 386)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(260, 430)
         Me.ContextMenuStrip1.Text = "whatever"
         '
         'mov_ToolStripMovieName
@@ -3858,15 +3859,6 @@ Partial Class Form1
         Me.cbBtnLink.Text = "Link"
         Me.cbBtnLink.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cbBtnLink.UseVisualStyleBackColor = false
-        '
-        'TooltipGridViewMovies1
-        '
-        Me.TooltipGridViewMovies1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TooltipGridViewMovies1.Location = New System.Drawing.Point(114, 132)
-        Me.TooltipGridViewMovies1.Name = "TooltipGridViewMovies1"
-        Me.TooltipGridViewMovies1.Size = New System.Drawing.Size(198, 127)
-        Me.TooltipGridViewMovies1.TabIndex = 177
-        Me.TooltipGridViewMovies1.Visible = false
         '
         'DataGridViewMovies
         '
@@ -4991,15 +4983,6 @@ Partial Class Form1
         Me.TextBoxMutisave.Text = "Multisave Mode Activated"
         Me.TextBoxMutisave.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.TextBoxMutisave.Visible = false
-        '
-        'movieGraphicInfo
-        '
-        Me.movieGraphicInfo.BackColor = System.Drawing.Color.Transparent
-        Me.movieGraphicInfo.Location = New System.Drawing.Point(3, 192)
-        Me.movieGraphicInfo.Name = "movieGraphicInfo"
-        Me.movieGraphicInfo.Size = New System.Drawing.Size(63, 36)
-        Me.movieGraphicInfo.TabIndex = 226
-        Me.movieGraphicInfo.Visible = false
         '
         'plottxt
         '
@@ -8276,7 +8259,7 @@ Partial Class Form1
         '
         Me.Button82.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button82.Location = New System.Drawing.Point(431, -1683)
+        Me.Button82.Location = New System.Drawing.Point(431, -1691)
         Me.Button82.Margin = New System.Windows.Forms.Padding(4)
         Me.Button82.Name = "Button82"
         Me.Button82.Size = New System.Drawing.Size(150, 30)
@@ -13055,7 +13038,7 @@ Partial Class Form1
         'TextBox20
         '
         Me.TextBox20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox20.Location = New System.Drawing.Point(926, -1634)
+        Me.TextBox20.Location = New System.Drawing.Point(926, -1642)
         Me.TextBox20.Name = "TextBox20"
         Me.TextBox20.Size = New System.Drawing.Size(121, 21)
         Me.TextBox20.TabIndex = 30
@@ -13064,7 +13047,7 @@ Partial Class Form1
         '
         Me.Label169.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label169.AutoSize = true
-        Me.Label169.Location = New System.Drawing.Point(885, -1631)
+        Me.Label169.Location = New System.Drawing.Point(885, -1639)
         Me.Label169.Name = "Label169"
         Me.Label169.Size = New System.Drawing.Size(35, 15)
         Me.Label169.TabIndex = 29
@@ -13090,7 +13073,7 @@ Partial Class Form1
         Me.PictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PictureBox4.Location = New System.Drawing.Point(364, 264)
         Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(388, 238)
+        Me.PictureBox4.Size = New System.Drawing.Size(388, 230)
         Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox4.TabIndex = 27
         Me.PictureBox4.TabStop = false
@@ -13099,7 +13082,7 @@ Partial Class Form1
         '
         Me.TextBox23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox23.Location = New System.Drawing.Point(364, -1634)
+        Me.TextBox23.Location = New System.Drawing.Point(364, -1642)
         Me.TextBox23.Name = "TextBox23"
         Me.TextBox23.Size = New System.Drawing.Size(869, 21)
         Me.TextBox23.TabIndex = 26
@@ -13108,7 +13091,7 @@ Partial Class Form1
         '
         Me.Label173.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label173.AutoSize = true
-        Me.Label173.Location = New System.Drawing.Point(305, -1631)
+        Me.Label173.Location = New System.Drawing.Point(305, -1639)
         Me.Label173.Name = "Label173"
         Me.Label173.Size = New System.Drawing.Size(53, 15)
         Me.Label173.TabIndex = 25
@@ -13118,7 +13101,7 @@ Partial Class Form1
         '
         Me.Label172.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label172.AutoSize = true
-        Me.Label172.Location = New System.Drawing.Point(309, -1756)
+        Me.Label172.Location = New System.Drawing.Point(309, -1764)
         Me.Label172.Name = "Label172"
         Me.Label172.Size = New System.Drawing.Size(49, 15)
         Me.Label172.TabIndex = 24
@@ -13128,7 +13111,7 @@ Partial Class Form1
         '
         Me.TextBox22.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox22.Location = New System.Drawing.Point(364, -1756)
+        Me.TextBox22.Location = New System.Drawing.Point(364, -1764)
         Me.TextBox22.Multiline = true
         Me.TextBox22.Name = "TextBox22"
         Me.TextBox22.Size = New System.Drawing.Size(869, 116)
@@ -13878,19 +13861,10 @@ Partial Class Form1
         Me.tpXbmcLink.Location = New System.Drawing.Point(4, 22)
         Me.tpXbmcLink.Name = "tpXbmcLink"
         Me.tpXbmcLink.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpXbmcLink.Size = New System.Drawing.Size(192, 74)
+        Me.tpXbmcLink.Size = New System.Drawing.Size(1049, 638)
         Me.tpXbmcLink.TabIndex = 2
         Me.tpXbmcLink.Text = "XBMC Link"
         Me.tpXbmcLink.UseVisualStyleBackColor = true
-        '
-        'UcGenPref_XbmcLink
-        '
-        Me.UcGenPref_XbmcLink.Dock = System.Windows.Forms.DockStyle.Left
-        Me.UcGenPref_XbmcLink.Location = New System.Drawing.Point(3, 3)
-        Me.UcGenPref_XbmcLink.Margin = New System.Windows.Forms.Padding(0)
-        Me.UcGenPref_XbmcLink.Name = "UcGenPref_XbmcLink"
-        Me.UcGenPref_XbmcLink.Size = New System.Drawing.Size(695, 68)
-        Me.UcGenPref_XbmcLink.TabIndex = 0
         '
         'TabPage33
         '
@@ -13906,7 +13880,7 @@ Partial Class Form1
         Me.TabPage33.Location = New System.Drawing.Point(4, 22)
         Me.TabPage33.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage33.Name = "TabPage33"
-        Me.TabPage33.Size = New System.Drawing.Size(192, 74)
+        Me.TabPage33.Size = New System.Drawing.Size(1049, 638)
         Me.TabPage33.TabIndex = 1
         Me.TabPage33.Text = "Custom Commands - Tools Menu"
         Me.TabPage33.UseVisualStyleBackColor = true
@@ -14900,12 +14874,45 @@ Partial Class Form1
         Me.tsProgressBarFileDownload.Name = "tsProgressBarFileDownload"
         Me.tsProgressBarFileDownload.Size = New System.Drawing.Size(100, 16)
         '
+        'TooltipGridViewMovies1
+        '
+        Me.TooltipGridViewMovies1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TooltipGridViewMovies1.Location = New System.Drawing.Point(114, 132)
+        Me.TooltipGridViewMovies1.Name = "TooltipGridViewMovies1"
+        Me.TooltipGridViewMovies1.Size = New System.Drawing.Size(198, 127)
+        Me.TooltipGridViewMovies1.TabIndex = 177
+        Me.TooltipGridViewMovies1.Visible = false
+        '
+        'movieGraphicInfo
+        '
+        Me.movieGraphicInfo.BackColor = System.Drawing.Color.Transparent
+        Me.movieGraphicInfo.Location = New System.Drawing.Point(3, 192)
+        Me.movieGraphicInfo.Name = "movieGraphicInfo"
+        Me.movieGraphicInfo.Size = New System.Drawing.Size(63, 36)
+        Me.movieGraphicInfo.TabIndex = 226
+        Me.movieGraphicInfo.Visible = false
+        '
+        'UcGenPref_XbmcLink
+        '
+        Me.UcGenPref_XbmcLink.Dock = System.Windows.Forms.DockStyle.Left
+        Me.UcGenPref_XbmcLink.Location = New System.Drawing.Point(3, 3)
+        Me.UcGenPref_XbmcLink.Margin = New System.Windows.Forms.Padding(0)
+        Me.UcGenPref_XbmcLink.Name = "UcGenPref_XbmcLink"
+        Me.UcGenPref_XbmcLink.Size = New System.Drawing.Size(2197, 632)
+        Me.UcGenPref_XbmcLink.TabIndex = 0
+        '
         'UcGenPref_XbmcLink1
         '
         Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
         Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
         Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(404, 434)
         Me.UcGenPref_XbmcLink1.TabIndex = 0
+        '
+        'tsmiConvertToFrodo
+        '
+        Me.tsmiConvertToFrodo.Name = "tsmiConvertToFrodo"
+        Me.tsmiConvertToFrodo.Size = New System.Drawing.Size(259, 22)
+        Me.tsmiConvertToFrodo.Text = "Convert to Frodo only"
         '
         'Form1
         '
@@ -16443,6 +16450,7 @@ End Sub
     Friend WithEvents SIMDBId As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents SCert As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents tsmiSyncToXBMC As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiConvertToFrodo As System.Windows.Forms.ToolStripMenuItem
 
 
 
