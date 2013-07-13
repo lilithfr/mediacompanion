@@ -753,16 +753,20 @@ Public Class Form1
 
 
     Private Sub XBMC_Controller_Log_TO_Timer_Elapsed
-        If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
-            System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
+        If XbmcControllerBufferQ.Count=0 Then
+            If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
+                System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
+            End If
+            XBMC_Controller_LogLastShownDt = Now
+            XBMC_Link_ErrorLog_Timer.Stop
         End If
-        XBMC_Controller_LogLastShownDt = Now
-        XBMC_Link_ErrorLog_Timer.Stop
     End Sub
 
     Private Sub XBMC_Link_Idle_Timer_Elapsed
-        frmXBMC_Progress.Visible = False
-        XBMC_Link_ErrorLog_Timer.Stop
+        If XbmcControllerBufferQ.Count=0 Then
+            frmXBMC_Progress.Visible = False
+            XBMC_Link_ErrorLog_Timer.Stop
+        End If
     End Sub
 
     Sub Restart( tmr As Timers.Timer )
@@ -25193,13 +25197,15 @@ End Sub
 
 
     Private Sub XBMC_Link_Check_Timer_Elapsed
-        SetcbBtnLink(Preferences.XbmcLinkInitialised)
+        If XbmcControllerBufferQ.Count=0 Then
+            SetcbBtnLink(Preferences.XbmcLinkInitialised)
+        End If
     End Sub
    
 
     Private Sub tsmiSyncToXBMC_Click( sender As Object,  e As EventArgs) Handles tsmiSyncToXBMC.Click
         Try
-            Call mov_ScrapeSpecific("save")
+            Call mov_ScrapeSpecific("Xbmc_Sync")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -25207,7 +25213,7 @@ End Sub
 
     Private Sub tsmiConvertToFrodo_Click( sender As Object,  e As EventArgs) Handles tsmiConvertToFrodo.Click
         Try
-            Call mov_ScrapeSpecific("ConvertToFrodo")
+            Call mov_ScrapeSpecific("Convert_To_Frodo")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

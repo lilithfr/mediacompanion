@@ -816,18 +816,49 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Dim XbFolder As String = Path.GetDirectoryName(XbMoviePath)
 
-        Dim got = From i In BufferQ.View Where i.E = E.ScanFolder AndAlso DirectCast(i.Args,FolderEventArgs).Folder=XbFolder
-              
-        If got.Count=0 Then
-            BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.low)))
-        End If
 
         If Not MoviesInFolder.ContainsKey(XbFolder) Then
             MoviesInFolder.Add(XbFolder,1)
         Else
             MoviesInFolder(XbFolder) = MoviesInFolder(XbFolder)+1
         End If
+
+
+        Dim got = From i In BufferQ.View Where i.E = E.ScanFolder AndAlso DirectCast(i.Args,FolderEventArgs).Folder=XbFolder
+              
+        If got.Count=0 Then
+            If NumberOfMcNfosInFolder=1 Then
+                Q      .Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.medium)))
+            Else
+                BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.low   )))
+            End If
+        End If
     End Sub
+
+
+    ReadOnly Property NumberOfMcNfosInFolder As Integer
+        Get
+            Dim count As Integer=0
+
+            For Each fs_info As IO.FileInfo In diMovieFolder.GetFiles("*.NFO")
+
+                If Movie.IsMCNfoFile( fs_info.FullName ) then
+                    count +=1
+                End If
+            Next
+
+            Return count
+        End Get
+    End Property
+
+
+
+    ReadOnly Property diMovieFolder As DirectoryInfo
+        Get
+            Return New DirectoryInfo(Path.GetDirectoryName(McMoviePath))
+        End Get
+    End Property
+
 
 
     Sub Retry(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))

@@ -2338,7 +2338,7 @@ Public Class Movie
         End If
 
 
-        If rl.ConvertToFrodo Then ConvertToFrodo
+        If rl.Convert_To_Frodo Then ConvertToFrodo
 
         AssignMovieToCache()
         '		AssignMovieToAddMissingData
