@@ -7612,14 +7612,11 @@ Public Class Form1
 
         messbox.Close()
         
-        'Dim sortshow As New List(Of TvShow) 
-        'sortshow = availableshows.OrderBy(Function(x) x.Title)
-
         Dim tvdbase(availableshows.Count, 8) as String
         DataGridView2.Rows.Clear()
 
         Try
-            Dim lst As List(Of TvShow) = (From x In availableshows Order By x.Title).ToList
+            Dim lst As List(Of TvShow) = (From x In availableshows Order By x.Title.Value).ToList
                       
             For Each sh As TvShow In lst 
                 Dim n As Integer = DataGridView2.Rows.Add()
