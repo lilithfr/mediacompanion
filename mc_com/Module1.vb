@@ -34,6 +34,7 @@ Module Module1
     Dim logstr As New List(Of String)
     Dim WithEvents scraper As New BackgroundWorker
     Dim oMovies As New Movies(scraper)
+    Dim EnvExit As Integer = 0
     Private Declare Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
     Private Declare Function ShowWindow Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal nCmdShow As Int32) As Int32
     
@@ -139,7 +140,8 @@ Module Module1
             ConsoleOrLog("mc_com.exe -m -p ""my profile"" -x ""new list"" ""C:\Movie list\test.html""")
             ConsoleOrLog("")
             ConsoleOrLog("****************************************************")
-            Environment.Exit(0)
+            EnvExit = 0
+            Environment.Exit(EnvExit)
         End If
         Preferences.applicationPath = AppDomain.CurrentDomain.BaseDirectory
         If Not visible Then 
@@ -172,7 +174,7 @@ Module Module1
         Call InitMediaFileExtensions()
 
         If File.Exists(Preferences.applicationPath & "\settings\profile.xml") = True Then
-
+             
             oProfiles.Load
 
             If profile = "default" Then
@@ -190,12 +192,14 @@ Module Module1
             If Not done Then
                 ConsoleOrLog("Unable to find profile name: " & profile)
                 ConsoleOrLog("****************************************************")
-                Environment.Exit(1)
+                EnvExit = 1
+                Environment.Exit(EnvExit)
             End If
         Else
             ConsoleOrLog("Unable to find profile file: " & Preferences.applicationPath & "\settings\profile.xml")
             ConsoleOrLog("****************************************************")
-            Environment.Exit(1)
+            EnvExit = 1
+            Environment.Exit(EnvExit)
         End If
         defaultOfflineArt = Path.Combine(Preferences.applicationPath, "Resources\default_offline.jpg")
         Preferences.LoadConfig
@@ -219,6 +223,7 @@ Module Module1
         If domovies Then
 
             StartNewMovies
+            If Preferences.DoneAMov Then EnvExit +=2
 
             oMovies.SaveMovieCache
             oMovies.SaveActorCache
@@ -255,6 +260,7 @@ Module Module1
                 Renamer.setRenamePref(Preferences.tv_RegexRename.Item(Preferences.tvrename), Preferences.tv_RegexScraper)
                 Call episodescraper(showstoscrapelist, False)
                 Call savetvcache()
+                EnvExit +=4
             End If
         End If
         If domediaexport = True Then
@@ -283,7 +289,7 @@ Module Module1
         ConsoleOrLog("Tasks Completed")
         ConsoleOrLog("****************************************************")
         If Not visible Then exitsound
-        System.Environment.Exit(0)
+        System.Environment.Exit(EnvExit)
     End Sub
 
     Public Sub LogStart
