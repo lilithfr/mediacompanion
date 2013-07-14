@@ -843,7 +843,8 @@ Public Class Movies
         Next
 
         If found > 0 then
-           ReportProgress(,String.Format("{0} new movie{1} found in [{2}]", found, If(found=1,"","s"), DirPath) & vbCrLf)
+            ReportProgress(,String.Format("{0} new movie{1} found in [{2}]", found, If(found=1,"","s"), DirPath) & vbCrLf)
+            Preferences.DoneAMov = True
         End IF
     End Sub
 
