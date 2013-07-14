@@ -404,7 +404,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Ready                      , AddressOf Retry                ) 
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf AddFetchVideoInfo    )
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.JSON_Exception          , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      ) 
-                                                                                                                                              
+       
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
                                                                                                                                               
  '       AddTransition( S.Ready                      , E.MC_FetchAllMovieDetails , S.Ready                      , AddressOf FetchMaxMovies       )
@@ -466,9 +466,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Dim ea As BaseEventArgs = evt.EventArgs
 
-        If evt.EventID.ToString.IndexOf("MC_") = 0 Then
-            'ReportProgress("Buffering MC request",e)
-            AppendLog("Buffering MC request : [" + evt.EventID.ToString + "] while in State : [" + evt.SourceStateID.ToString + "]")
+        If evt.EventID=e.XBMC_Video_ScanFinished Then
+            AppendLog(Warning_Prefix + "UnexpectedEvent - State : [" + evt.SourceStateID.ToString + "] Missing event handler for : [" + evt.EventID.ToString + "]")
+        End If
+
+        If evt.EventID.ToString.IndexOf("MC_") = 0 Or evt.EventID=E.ScanFolder Then
+
+            AppendLog("Buffering request : [" + evt.EventID.ToString + "] while in State : [" + evt.SourceStateID.ToString + "]")
             BufferQ.Write( New BaseEvent(evt.EventID, evt.EventArgs) )
 
             If evt.SourceStateID = S.NotConnected Then
@@ -477,7 +481,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             Return
         End If
 
-        AppendLog("UnexpectedEvent - State : [" + evt.SourceStateID.ToString + "] Missing event handler for : [" + evt.EventID.ToString + "]")
+        LogError("UnexpectedEvent","State : [" + evt.SourceStateID.ToString + "] Missing event handler for : [" + evt.EventID.ToString + "]",evt)
     End Sub
 
 
@@ -832,9 +836,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
               
         If got.Count=0 Then
             If NumberOfMcNfosInFolder=1 Then
-                Q      .Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.medium)))
+                Q      .Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.high)))
             Else
-                BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.low   )))
+                BufferQ.Write(New BaseEvent(E.ScanFolder, New FolderEventArgs(XbFolder,PriorityQueue.Priorities.low )))
             End If
         End If
     End Sub
