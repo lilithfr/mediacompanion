@@ -1,9 +1,6 @@
 ﻿
 Public Class XBMC_Controller_Progress 
 
-
-    Property Qcount       As Integer
-    Property BufferQcount As Integer
     Property LastState    As XbmcController.S
     Property Evt          As XbmcController.E
     Property Args         As EventArgs
@@ -12,44 +9,32 @@ Public Class XBMC_Controller_Progress
     Property Severity     As String
     Property ErrorMsg     As String
     Property ErrorCount   As Integer=0
-
-    ReadOnly Property TotalQcount As Integer
-        Get
-            Return Qcount+BufferQcount
-        End Get
-    End Property
-
-    ReadOnly Property Idle As Boolean
-        Get
-            Return  Me.Action="Ready & waiting..." and (TotalQcount=0)
-        End Get
-    End Property
+    Property WarningCount As Integer=0
 
     Sub New()
     End Sub
 
     Sub New ( 
-            Qcount       As Integer,
-            BufferQcount As Integer,
             LastState    As XbmcController.S,
             Evt          As XbmcController.E,
             Args         As EventArgs,
             Action       As String,
-            NextState    As XbmcController.S,
+            CurrentState As XbmcController.S,
             Severity     As String,
-            ErrorMsg     As String
+            ErrorMsg     As String,
+            ErrorCount   As Integer,
+            WarningCount As Integer
             )
 
-        Me.Qcount       = Qcount      
-        Me.BufferQcount = BufferQcount
         Me.LastState    = LastState   
         Me.Evt          = Evt   
         Me.Args         = Args   
         Me.Action       = Action      
-        Me.CurrentState    = NextState   
+        Me.CurrentState = CurrentState   
         Me.Severity     = Severity    
         Me.ErrorMsg     = ErrorMsg    
-
+        Me.ErrorCount   = ErrorCount
+        Me.WarningCount = WarningCount
     End Sub
 
 End Class

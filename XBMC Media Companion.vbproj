@@ -159,6 +159,7 @@
     <Compile Include="Classes\XBMC_Link\BaseEventArgs.vb" />
     <Compile Include="Classes\XBMC_Link\DictItem.vb" />
     <Compile Include="Classes\XBMC_Link\ScanNewMoviesEventArgs.vb" />
+    <Compile Include="Classes\XBMC_Link\XbmcController.Functions.vb" />
     <Compile Include="Classes\XBMC_Link\XBMC_Movies_EventArgs.vb" />
     <Compile Include="Classes\XBMC_Link\FolderEventArgs.vb" />
     <Compile Include="Classes\XBMC_Link\VideoPathEventArgs.vb" />

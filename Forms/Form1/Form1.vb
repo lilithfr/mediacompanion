@@ -33,7 +33,11 @@ Public Class Form1
     Private                XBMC_Link_Idle_Timer     As Timers.Timer = New Timers.Timer()
     Private                XBMC_Link_Check_Timer    As Timers.Timer = New Timers.Timer()
 
-
+    Shared ReadOnly Property Link_TotalQCount
+        Get
+            Return XbmcControllerQ.Count + XbmcControllerBufferQ.Count
+        End Get
+    End Property
 
     Shared ReadOnly Property MC_Only_Movies_Nfos As List(Of String)
         Get
@@ -756,6 +760,10 @@ Public Class Form1
         If XbmcControllerBufferQ.Count=0 Then
             If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
                 System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_log_file))
+
+                frmXBMC_Progress.Reset
+                Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
+                XbmcControllerQ.Write(ce)   
             End If
             XBMC_Controller_LogLastShownDt = Now
             XBMC_Link_ErrorLog_Timer.Stop
@@ -778,70 +786,63 @@ Public Class Form1
 
         Dim oProgress As XBMC_Controller_Progress = CType(e.UserState, XBMC_Controller_Progress)
 
-        Dim pg = frmXBMC_Progress.ProgressBar1
-
-
         If XBMC_Link_ErrorLog_Timer.Enabled Then
             Restart(XBMC_Link_ErrorLog_Timer)
         End If
 
-        Restart(XBMC_Link_Idle_Timer)
+        Restart(XBMC_Link_Idle_Timer )
         Restart(XBMC_Link_Check_Timer)
 
         frmXBMC_Progress.Visible = True
 
-
-        If oProgress.Evt = XbmcController.E.MC_Only_Movies Then
-            MC_Only_Movies = CType(oProgress.Args, ComboList_EventArgs).XbmcMovies
-            Assign_FilterGeneral
-            Return
-        End If
-
-        'If oProgress.Evt = XbmcController.E.MC_MaxMovieDetails Then
-        '    MaxXbmcMovies = CType(oProgress.Args, XBMC_MaxMovies_EventArgs).XbmcMovies
-        '    Return
-        'End If
-
-
-        If oProgress.Evt = XbmcController.E.MC_XbmcMcMovies Then
-            oMovies.XbmcMcMovies = CType(oProgress.Args, XBMC_MC_Movies_EventArgs).XbmcMcMovies
-            Assign_FilterGeneral
-            Return
-        End If
-
-
-        If oProgress.Evt = XbmcController.E.MC_XbmcOnlyMovies Then
-            oMovies.XbmcOnlyMovies = CType(oProgress.Args, XBMC_Only_Movies_EventArgs).XbmcOnlyMovies
-            Return
-        End If
-
-        If oProgress.Evt = XbmcController.E.MC_XbmcQuit Then
-            SetcbBtnLink(False)
-            Return
-        End If
-
+        If HandleEvents(oProgress) Then Return
 
         If oProgress.ErrorCount>0 Then
             If Preferences.ShowLogOnError Then
                 XBMC_Link_ErrorLog_Timer.Start
             End If
                 
-            pg.Maximum = 1
-
-            Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
-
-            XbmcControllerQ.Write(ce)       
+            'frmXBMC_Progress.Reset
+            'Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
+            'XbmcControllerQ.Write(ce)       
         End If
-        
 
-        pg.Maximum = Math.Max(pg.Maximum, oProgress.TotalQcount)
-
-        pg.Value = pg.Maximum - oProgress.TotalQcount
-
-        frmXBMC_Progress.lblProgress  .Text = Replace(oProgress.Action,"&","&&")
-        frmXBMC_Progress.lblQueueCount.Text = oProgress.TotalQcount
-        frmXBMC_Progress.lblErrorCount.Text = oProgress.ErrorCount
+        frmXBMC_Progress.UpdateDetails(oProgress)
     End Sub
+
+
+    Function HandleEvents(oProgress As XBMC_Controller_Progress) As Boolean
+
+        Select oProgress.Evt
+
+            Case XbmcController.E.MC_Only_Movies 
+                MC_Only_Movies = CType(oProgress.Args, ComboList_EventArgs).XbmcMovies
+                Assign_FilterGeneral
+                Return True
+
+            Case XbmcController.E.MC_XbmcMcMovies
+                oMovies.XbmcMcMovies = CType(oProgress.Args, XBMC_MC_Movies_EventArgs).XbmcMcMovies
+                Assign_FilterGeneral
+                Return True
+
+            Case XbmcController.E.MC_XbmcOnlyMovies 
+                oMovies.XbmcOnlyMovies = CType(oProgress.Args, XBMC_Only_Movies_EventArgs).XbmcOnlyMovies
+                Return True
+
+            Case XbmcController.E.MC_XbmcQuit 
+                SetcbBtnLink(False)
+                Return True
+
+            'Case XbmcController.E.MC_MaxMovieDetails
+            '    MaxXbmcMovies = CType(oProgress.Args, XBMC_MaxMovies_EventArgs).XbmcMovies
+            '    Return
+
+        End Select
+
+        Return False
+
+    End Function
+
 
     Dim ConnectSent As Boolean
 
@@ -25197,9 +25198,9 @@ End Sub
 
 
     Private Sub XBMC_Link_Check_Timer_Elapsed
-        If XbmcControllerBufferQ.Count=0 Then
+        'If XbmcControllerBufferQ.Count=0 Then
             SetcbBtnLink(Preferences.XbmcLinkInitialised)
-        End If
+        'End If
     End Sub
    
 
