@@ -31,7 +31,7 @@ Public Class ucGenPref_XbmcLink
         AppendDialogue(" - Updates are quickest in Weather view")
         AppendDialogue(" - Updates are slowest in Movies view")
         AppendDialogue(" - To synchronize multiple movies, select them in the movies list and rt-click to bring up the context menu, then select 'Sync to XBMC'")
-        AppendDialogue(" - With Movies the poster image doesn't always appear updated. You may get away with coming out of the movies page and going back in, failing that come out of XBMC altogether and go back in")
+        AppendDialogue(" - With Movies the poster image doesn't always appear updated. To fix this, you may get away with coming out of the movies page and going back in, failing that come out of XBMC altogether and go back in")
         AppendDialogue(" - Scroll down to the bottom of the General filter for XBMC specific filters - currently only one 'Missing from XBMC', but more coming once we're happy the bugs are out of this first implementation")
         AppendDialogue(" - For any movie listed in 'Missing from XBMC' check the following characters are not in the path or title [ü é á ½ Æ ³ · ° , !] as XBMC doesn't like them")
         AppendDialogue(" - The occasional connect error will occur, when this happens the software automatically re-establishes connection and the retries the request.")
