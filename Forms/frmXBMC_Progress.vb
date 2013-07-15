@@ -7,7 +7,8 @@ Public Class frmXBMC_Progress
 
 
     Private Sub panelXBMC_Click( sender As Object,  e As EventArgs) Handles LinkLabel1.Click
-        System.Diagnostics.Process.Start(Path.Combine(My.Application.Info.DirectoryPath,Form1.XBMC_Controller_log_file))
+        System.Diagnostics.Process.Start(Path.Combine(My.Application.Info.DirectoryPath,Form1.XBMC_Controller_full_log_file ))
+        System.Diagnostics.Process.Start(Path.Combine(My.Application.Info.DirectoryPath,Form1.XBMC_Controller_brief_log_file))
     End Sub
 
     Private Sub lblQueueCount_MouseHover( sender As Object,  e As EventArgs) Handles lblQueueCount.MouseHover

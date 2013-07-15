@@ -1427,7 +1427,8 @@ Public Class Movies
         Rebuild_Data_GridViewMovieCache()
 
         If Preferences.XbmcLinkReady Then
-            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
+'            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
+            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
 
             Form1.XbmcControllerQ.Write(evt)
         End If
@@ -1518,7 +1519,8 @@ Public Class Movies
         Rebuild_Data_GridViewMovieCache
 
         If Preferences.XbmcLinkReady Then
-            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
+'           Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
+            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
 
             Form1.XbmcControllerQ.Write(evt)
         End If

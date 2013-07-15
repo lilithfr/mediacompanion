@@ -30,7 +30,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 #End Region               'Events
 
 #Region "Globals"
-    Public Shared log As ILog = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType)
+'    Public Shared log      As ILog = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType)
+    Public Shared fullLog  As ILog = LogManager.GetLogger("LogFileAppenderFull" )
+    Public Shared briefLog As ILog = LogManager.GetLogger("LogFileAppenderBrief")
 #End Region              'Globals
 
 #Region "Private vars"
@@ -46,6 +48,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Private _TriedCanDeleteCachedImages As Boolean
     Private TimeoutTimer                As Timers.Timer = New Timers.Timer()
     Private MaxMovies_Idle_Timer        As Timers.Timer = New Timers.Timer()
+    Public  LongestEnumStateName        As Integer = LongestEnum(GetType(S))
+    Public  LongestEnumEventName        As Integer = LongestEnum(GetType(E))
 
 #If GenPseudoErrors Then
     Private ScanRemoved_Count     As Integer =  0
@@ -62,6 +66,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 #End Region         'Private vars
 
 #Region "RW Properties"
+
+    Enum EnumLogMode
+     Full
+     Brief
+    End Enum
+
+    'Property LogMode              As EnumLogMode = EnumLogMode.Brief
 
     Property XbmcTexturesDb       As SQLiteConnection = new SQLiteConnection(Preferences.XBMC_TexturesDb_ConnectionStr)
     Property XbmcThumbnailsFolder As String = Preferences.XBMC_Thumbnails_Path
@@ -292,7 +303,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Me.BufferQ = Form1.XbmcControllerBufferQ
         Me.Bw = bw
 
-        Utilities.SafeDeleteFile( Path.Combine(My.Application.Info.DirectoryPath,Form1.XBMC_Controller_log_file) )
+        Utilities.SafeDeleteFile( Path.Combine(My.Application.Info.DirectoryPath,Form1.XBMC_Controller_full_log_file ) )
+        Utilities.SafeDeleteFile( Path.Combine(My.Application.Info.DirectoryPath,Form1.XBMC_Controller_brief_log_file) )
         log4net.Config.XmlConfigurator.Configure
 
  '       Ini_Timer(GetNewMovieIds_IdleTimer)
@@ -403,7 +415,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.TimeOut                 , S.Ready                      , AddressOf Retry                ) 
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf AddFetchVideoInfo    )
         AddTransition( S.Wf_XBMC_Video_ScanFinished , E.Exception               , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      ) 
-        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.Success                 , S.Wf_XBMC_ConnectResult      , AddressOf Ignore               ) 
+        AddTransition( S.Wf_XBMC_Video_ScanFinished , E.Success                 , S.Wf_XBMC_ConnectResult      , AddressOf StopTimeoutTimer     ) 
        
         AddTransition( S.Ready                      , E.FetchVideoInfo          , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
         AddTransition( S.Ready                      , E.XBMC_Video_ScanFinished , S.Ready                      , AddressOf Ignore               )
@@ -428,7 +440,12 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
             If Q.Count = 0 And Me.CurrentStateID = S.Ready And BufferQ.Count > 0 Then
                 Dim Evt As BaseEvent = BufferQ.Read() 
-                AppendLog("Unbuffering Event : [" & Evt.Info & "]")
+
+
+                AppendLog(EnumLogMode.Full ,"Unbuffering Event : [" & Evt.Info & "]")
+
+                AppendLog(EnumLogMode.Brief,"State : [" + CurrentStateID.ToString.PadRight(LongestEnumStateName) + "] UnBuffering : [" + Evt.E.ToString.PadRight(LongestEnumEventName) + "] Args   : [" + Evt.Args.ToString + "]")
+
                 ProcessEvent(Evt)
             Else
                 'If Q.Count = 0 And Me.CurrentStateID = S.Ready And BufferQ.Count = 0 And XbmcMaxMoviesDirty And Not MaxMovies_Idle_Timer.Enabled Then
@@ -454,10 +471,12 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         If Evt.E.ToString.IndexOf("MC_") = 0 And CurrentStateID <> S.Ready Then
 
             If BufferQ.Exists(Evt) Then
-                AppendLog("Discarding duplicate MC request : [" + Evt.CompareAs + "]")
+                AppendLog(EnumLogMode.Full,"Discarding duplicate MC request : [" + Evt.CompareAs + "]")
+                AppendLog(EnumLogMode.Brief,"State : [" + CurrentStateID.ToString.PadRight(LongestEnumStateName) + "] Event : [" + Evt.CompareAs.PadRight(LongestEnumEventName) + "] Action : [Discarding duplicate MC request]")
             Else
-                'ReportProgress("Buffering MC request",e)
-                AppendLog("Buffering MC request : [" + Evt.Info + "] while in State : [" + CurrentStateID.ToString + "]")
+                AppendLog(EnumLogMode.Full,"Buffering MC request : [" + Evt.Info + "] while in State : [" + CurrentStateID.ToString + "]")
+                AppendLog(EnumLogMode.Brief,"State : [" + CurrentStateID.ToString.PadRight(LongestEnumStateName) + "] Buffering   : [" + Evt.E.ToString.PadRight(LongestEnumEventName) + "] Args   : [" + Evt.Args.ToString + "]")
+
                 BufferQ.Write( New BaseEvent(Evt.E, Evt.Args) )
             End If
 
@@ -469,8 +488,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         End If
 
         LastState = Me.CurrentStateID
-    '    ReportProgress("Dispatching Event")
-        AppendLog("Dispatching Event : [" & Evt.Info & "]")
+
+        AppendLog(EnumLogMode.Full,"Dispatching Event : [" & Evt.Info & "]")
 
         If Evt.E = E.ScanFolder or Evt.E=E.MC_Movie_Updated or Evt.E=E.MC_Movie_Removed Then
             LastEvent.Assign(Evt)
@@ -508,26 +527,23 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
     Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
-        LogError("ExceptionThrownHandler", evt.Error.InnerException.Message, evt)
+        LogError(EnumLogMode.Full,"ExceptionThrownHandler", evt.Error.InnerException.Message, evt)
         Q.Write(e.Exception,PriorityQueue.Priorities.critical)
     End Sub
 
     Sub HandleTransitionCompleted(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
- '       WatchDogTimer.Stop
-        log.Debug("Transition Completed - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
+        LogInfo(EnumLogMode.Full,"Transition Completed",e)
     End Sub
 
     Sub BegnDispatch(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
-        log.Debug("Transition Started - State [" + e.SourceStateID.ToString + "] Event [" + e.EventID.ToString + "] Args [" + e.EventArgs.ToString + "]")
+        LogInfo(EnumLogMode.Full,"Transition Started",e)
         LastArgs = e
-  '     WatchDogTimer.Start
-  '     TO_Timer.Stop
     End Sub 
 
     Sub Timer1sec_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
 
         sender.Stop()
-        AppendLog("Timer Elapsed")
+        AppendLog(EnumLogMode.Full,"Timer Elapsed")
 
         Q.Write(E.TimeOut,PriorityQueue.Priorities.high)
     End Sub
@@ -535,13 +551,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub MaxMovies_Idle_Timer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
 
         sender.Stop()
-        AppendLog("Idle Timer Elapsed")
+        AppendLog(EnumLogMode.Full,"Idle Timer Elapsed")
 
         Q.Write(E.MaxMovies_Idle_TimeOut,PriorityQueue.Priorities.low)
     End Sub
 
     Sub XBMC_System_Log(sender As Object, evt As XbmcJsonRpcLogEventArgs)
-        AppendLog("XbmcJsonRpc : " & evt.Message)
+        AppendLog(EnumLogMode.Full,"XbmcJsonRpc : " & evt.Message)
     End Sub
 
     Sub XBMC_System_LogError(sender As Object, evt As XbmcJsonRpcLogErrorEventArgs)
@@ -554,13 +570,13 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Catch
         End Try
 
-        LogWarning("XbmcJsonRpc - Error received",evt,LastArgs)
+        LogWarning(EnumLogMode.Full,"XbmcJsonRpc - Error received",evt,LastArgs)
 
         Q.Write(e.JSON_Error,PriorityQueue.Priorities.critical)
     End Sub
 
     Sub XBMC_System_Aborted(sender As Object, jeea As XbmcJsonRpcLogErrorEventArgs)
-        LogWarning("XbmcJsonRpc - Abort received",jeea,LastArgs)
+        LogWarning(EnumLogMode.Full,"XbmcJsonRpc - Abort received",jeea,LastArgs)
         Q.Write(e.JSON_Abort,PriorityQueue.Priorities.critical)
     End Sub
 
@@ -629,7 +645,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
     Sub Handle_XbmcMcMoviesChanged
-        LogInfo("Passing back XBMC-MC movies", LastArgs)
+        LogInfo("Passing back XBMC-MC movies")
 
         Dim msg = New XBMC_MC_Movies_EventArgs(XbmcMcMovies)
 
@@ -637,7 +653,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
     Sub Handle_XbmcOnlyMoviesChanged
-        LogInfo("Passing back XBMC only movies", LastArgs)
+        LogInfo("Passing back XBMC only movies")
 
         Dim msg = New XBMC_Only_Movies_EventArgs(XbmcOnlyMovies)
 
@@ -650,24 +666,24 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 #Region "Actions"
 
     Sub Start1SecTimer(sender As Object, e As TransitionEventArgs(Of S, E, EventArgs))
-        LogInfo("Starting 1 second timer",e)
+        LogInfo("Starting 1 second timer")
         StartTimeoutTimer(1000)
     End Sub 
 
     Sub ShutDown(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
-        LogInfo("Shutting down...",args)
+        LogInfo("Shutting down...")
         ShutDownRequested = True
     End Sub
 
     Sub ReconnectOrNot(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        LogInfo("Reconnect or not...",args)
+        LogInfo("Reconnect or not...")
         Q.Write(IIf(Preferences.XBMC_Link, E.Yes, E.No), PriorityQueue.Priorities.high )
     End Sub
 
     Sub Connect(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        LogInfo("Connecting...",args)
+        LogInfo("Connecting...")
 
         '      Send     (   IIf(XbmcJson.Open,E.Success,E.Failure) )
         '       Q.Enqueue(1, New CompleteEvent(IIf(XbmcJson.Open,E.Success,E.Failure)) )
@@ -676,7 +692,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub ConnectAndRetry(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        LogInfo("Connect & retry...",args)
+        LogInfo("Connect & retry...")
+        StopTimeoutTimer
         Retry  (sender,args)
 
         XbmcJson.xbmc.Close
@@ -686,9 +703,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub AddFetchVideoInfo(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
+        StopTimeoutTimer
         Dim got = From i In BufferQ.View Where i.E = E.FetchVideoInfo 
       
         If got.Count=0 Then
+            LogInfo("AddFetchVideoInfo")
             BufferQ.Write(E.FetchVideoInfo,PriorityQueue.Priorities.lowest)
         End If
     End Sub
@@ -697,14 +716,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         AssignLastEvent(args)
 
-        LogInfo("Fetching movies info...",args)
+        LogInfo("Fetching movies info...")
         StartTimeoutTimer(5000)
         Q.Write(IIf(XbmcJson.GetXbmcMovies, E.Success, E.Failure), PriorityQueue.Priorities.medium )
     End Sub
 
     Sub FetchMaxMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        LogInfo("Fetching full movie details for all movies...", args)
+        LogInfo("Fetching full movie details for all movies...")
 
         MaxXbmcMovies = XbmcJson.xbmc.Library.Video.GetMaxXbmcMovies(Preferences.XBMC_MC_CompareFields.Get_Xbmc_Fields)
 
@@ -714,7 +733,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub SendMcOnlyMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
-        LogInfo("Passing back Mc only movies", args)
+        LogInfo("Passing back Mc only movies")
 
         Dim data As List(Of ComboList) = New List(Of ComboList)
 
@@ -726,12 +745,12 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     End Sub
 
     Sub Ignore(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
-        LogInfo("Ignoring error as already handled elsewhere",args)
+        LogInfo("Ignoring error as already handled elsewhere")
     End Sub
 
     Sub Ready(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
-        LogInfo("Ready & waiting...",args)
-        TimeoutTimer.Stop
+        LogInfo("Ready & waiting...")
+        StopTimeoutTimer
   '      WatchDogTimer.Stop
     End Sub
 
@@ -745,7 +764,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Dim xbmcMovieId As Integer = -1
 
         If IsNothing(XbMoviePath) Then
-            AppendLog(Error_Prefix + "Failed to map [" + McMoviePath + "] to XBMC folders. Check your XBMC_MC_FolderMappings in Comnfig.XML" )
+            AppendLog(Error_Prefix + "Failed to map [" + McMoviePath + "] to XBMC folders. Check your XBMC_MC_FolderMappings in Config.XML" )
             Q.Write(E.XBMC_Video_Removed,PriorityQueue.Priorities.high)
             Return
         End If
@@ -756,7 +775,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         End Try
 
         If Title<>"" Then
-            LogInfo("Removing : " + Title,args)
+            LogInfo("Removing : " + Title)
             
             Try
                 'xbmcMovieId = XbmcJson.GetMinXbmcMovie(XbMoviePath).movieid
@@ -782,7 +801,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             XbmcJson.RemoveXbmcMovie(XbMoviePath)
         Else
             'ErrorCount = ErrorCount + 1
-            LogInfo("Failed to find movieid for [" & McMoviePath & "] - Probably new to XBMC",args) 'This can happen if not already in XBMC
+            LogInfo("Failed to find movieid for [" & McMoviePath & "] - Probably new to XBMC") 'This can happen if not already in XBMC
             Q.Write(E.XBMC_Video_Removed,PriorityQueue.Priorities.high)
         End If
     End Sub
@@ -799,7 +818,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub Raise_XbmcQuit(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         XbmcJson.xbmc.Close
-        LogInfo("XBMC is not longer running. Jobs Queue will be purged",args)
+        LogInfo("XBMC is not longer running. Jobs Queue will be purged")
         Reset
         ReportProgress(E.MC_XbmcQuit)      
    End Sub
@@ -807,7 +826,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub Retry(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         
         If LastEvent.Retries > 0 Then 
-            LogInfo("Event failed",args)
+            LogInfo("Event failed")
             Return
         End If
 
@@ -817,7 +836,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         le.Assign(LastEvent)
         le.Retries = le.Retries + 1
 
-        LogInfo("Resubmitting last event : [" + le.E.ToString +"] Retry number : [" + le.Retries.ToString + "]",args)
+        LogInfo("Resubmitting last event : [" + le.E.ToString +"] Retry number : [" + le.Retries.ToString + "]")
         BufferQ.Write(le)
     End Sub
 
@@ -900,7 +919,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         StartTimeoutTimer(Interval)
 
-        LogInfo("Scanning folder: " + scanFolder,args)
+        LogInfo("Scanning folder: " + scanFolder)
         XbmcJson.xbmc.Library.Video.AddMovies(scanFolder)
 
         '     NewMovieIdsToGet.Add(ea)
@@ -927,7 +946,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     Sub DeleteCachedImages(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         
-        LogInfo("Deleting orphaned movie images from thumbnail folder",args)
+        StopTimeoutTimer
+        LogInfo("Deleting orphaned movie images from thumbnail folder")
 
         If IsNothing(_dtCachedUrls) OrElse _dtCachedUrls.Rows.Count=0 or _dtCachedUrls.Rows.Count>4 Then 
             AppendLog("Skipping cached file delete as expected 1-4 rows to be matched, but actually matched : [" + _dtCachedUrls.Rows.Count.ToString + "]")
@@ -941,14 +961,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             Dim filePath As String = Path.Combine(XbmcThumbnailsFolder,row("cachedurl").ToString.Replace("/","\"))
 
             If File.Exists(filePath) Then
-                AppendLog("Deleting : [" + filePath + "]")
+                LogInfo("Deleting : [" + filePath + "]")
                 Try
                     File.Delete(filePath)
                 Catch ex As Exception
                     LogError("DeleteCachedImages", "Failed to delete thumbnail : [" + filePath + "] - Delete file access needed! Error : [" & ex.Message & "]",args)
                 End Try
             Else
-                AppendLog("Thumbnail [" + filePath + "] not found")
+                LogInfo("Thumbnail [" + filePath + "] not found")
             End If
 
             DbUtils.ExecuteNonQuery(XbmcTexturesDb, "Delete from texture where id=" + row("id").ToString)

@@ -11,22 +11,54 @@ Public Partial Class XbmcController
     Const Error_Prefix    = "**ERROR** "
     Const Warning_Prefix  = "**WARNING** "
 
-    Sub LogInfo(ByVal Action As String, evt As TransitionEventArgs(Of S, E, EventArgs))
-        ReportProgress(Action, evt)
+    Sub LogInfo(ByVal Action As String)
+        ReportProgress(EnumLogMode.Brief, Action, LastArgs)
+        ReportProgress(EnumLogMode.Full , Action, LastArgs)
+    End Sub
+
+    Sub LogInfo(LogMode As EnumLogMode, ByVal Action As String)
+        ReportProgress(LogMode, Action, LastArgs)
+    End Sub
+
+    Sub LogInfo(LogMode As EnumLogMode, ByVal Action As String, evt As TransitionEventArgs(Of S, E, EventArgs))
+        ReportProgress(LogMode, Action, evt)
     End Sub
 
     Sub LogWarning(Action As String, jeea As XbmcJsonRpcLogErrorEventArgs, tea As TransitionEventArgs(Of S, E, EventArgs))
-        LogWarning(Action, BuildJsonErrorMsg(jeea) ,tea)
+        LogWarning(EnumLogMode.Full , Action, BuildJsonErrorMsg(jeea) ,tea)
+        LogWarning(EnumLogMode.Brief, Action, BuildJsonErrorMsg(jeea) ,tea)
     End Sub
+
+    Sub LogWarning(LogMode As EnumLogMode, Action As String, jeea As XbmcJsonRpcLogErrorEventArgs, tea As TransitionEventArgs(Of S, E, EventArgs))
+        LogWarning(LogMode, Action, BuildJsonErrorMsg(jeea) ,tea)
+    End Sub
+
     Sub LogWarning(Action As String, WarningMsg As String, tea As TransitionEventArgs(Of S, E, EventArgs) )
-        ReportProgress(Action, tea, "W", WarningMsg)
+        ReportProgress(EnumLogMode.Full , Action, tea, "W", WarningMsg)
+        ReportProgress(EnumLogMode.Brief, Action, tea, "W", WarningMsg)
+    End Sub
+
+    Sub LogWarning(LogMode As EnumLogMode, Action As String, WarningMsg As String, tea As TransitionEventArgs(Of S, E, EventArgs) )
+        ReportProgress(LogMode, Action, tea, "W", WarningMsg)
     End Sub
 
     Sub LogError(Action As String, jeea As XbmcJsonRpcLogErrorEventArgs, tea As TransitionEventArgs(Of S, E, EventArgs))
-        LogError(Action, BuildJsonErrorMsg(jeea) ,tea)
+        LogError(EnumLogMode.Brief, Action, BuildJsonErrorMsg(jeea) ,tea)
+        LogError(EnumLogMode.Full , Action, BuildJsonErrorMsg(jeea) ,tea)
     End Sub
+
+    Sub LogError(LogMode As EnumLogMode, Action As String, jeea As XbmcJsonRpcLogErrorEventArgs, tea As TransitionEventArgs(Of S, E, EventArgs))
+        LogError(LogMode, Action, BuildJsonErrorMsg(jeea) ,tea)
+    End Sub
+
     Sub LogError(Action As String, ErrorMsg As String, tea As TransitionEventArgs(Of S, E, EventArgs) )
-        ReportProgress(Action, tea, "E", ErrorMsg)
+        LogError(EnumLogMode.Brief, Action, ErrorMsg ,tea)
+        LogError(EnumLogMode.Full , Action, ErrorMsg ,tea)
+    End Sub
+
+
+    Sub LogError(LogMode As EnumLogMode, Action As String, ErrorMsg As String, tea As TransitionEventArgs(Of S, E, EventArgs) )
+        ReportProgress(LogMode, Action, tea, "E", ErrorMsg)
     End Sub
 
     Function BuildJsonErrorMsg(jeea As XbmcJsonRpcLogErrorEventArgs) As String
@@ -54,18 +86,26 @@ Public Partial Class XbmcController
         Return msg + exMsg + innerExMsg
     End Function
 
-    Sub ReportProgress(ByVal Action As String, evt As TransitionEventArgs(Of S, E, EventArgs), Optional Severity As String="I", Optional ErrorMsg As String=Nothing)
+    Sub ReportProgress(LogMode As EnumLogMode, ByVal Action As String, evt As TransitionEventArgs(Of S, E, EventArgs), Optional Severity As String="I", Optional ErrorMsg As String=Nothing)
 
-        Dim logMsg As String = Action
+        'Dim x = From pp In GetType(S).GetEnumNames Group pp By pp.Length Into g = Group _
+        '    Select MaxLen = g.Max(Function(pp) pp.Length)
 
-        If Severity="I" Then logMsg=                                               Action
-        If Severity="W" Then logMsg= Warning_Prefix + ErrorMsg + " reported in " + Action
-        If Severity="E" Then logMsg=   Error_Prefix + ErrorMsg + " reported in " + Action
+        Dim logMsg As String = ""
 
         If Severity="W" Then WarningCount+=1
         If Severity="E" Then ErrorCount  +=1
 
-        AppendLog(logMsg)
+        If LogMode= EnumLogMode.Full Then 
+            If Severity="I" Then logMsg=                                               Action
+            If Severity="W" Then logMsg= Warning_Prefix + ErrorMsg + " reported in " + Action
+            If Severity="E" Then logMsg=   Error_Prefix + ErrorMsg + " reported in " + Action
+        Else
+            'State - Event - Action                                                               UnBuffering :
+            logMsg = "State : [" + evt.SourceStateID.ToString.PadRight(LongestEnumStateName) + "] Event       : [" + evt.EventID.ToString.PadRight(LongestEnumEventName) + "] Action : [" + Action + "]"
+        End If
+
+        AppendLog(LogMode,logMsg)
 
         Dim formattedErrorMsg As String = ErrorMsg
 
@@ -94,8 +134,20 @@ Public Partial Class XbmcController
     End Sub
 
     Sub AppendLog(msg As String)
+        AppendLog(EnumLogMode.Full , msg)
+        AppendLog(EnumLogMode.Brief, msg)
+    End Sub
+
+    Sub AppendLog(LogMode As EnumLogMode, msg As String)
+
+        Dim logMsg As String = " Q: " + Q.Count.ToString.PadLeft(2) + " " + " Buf Q: " + BufferQ.Count.ToString.PadLeft(4) + " - " + msg
+
         Try
-            log.Debug(" Q: " + Q.Count.ToString + " " + " Buffer Q: " + BufferQ.Count.ToString + " - " + msg)
+            If LogMode= EnumLogMode.Full Then
+                fullLog.Debug(logMsg)
+            Else
+                briefLog.Debug(logMsg)
+            End If
         Catch
         End Try
     End Sub
@@ -105,10 +157,19 @@ Public Partial Class XbmcController
 #Region "Timer funcs"
 
     Sub StartTimeoutTimer(Interval As Integer)
+        LogInfo("Timeout Timer started")
         StartTimer(TimeoutTimer,Interval)
     End Sub 
 
+    Sub StopTimeoutTimer
+        If TimeoutTimer.Enabled Then
+            LogInfo("Timeout Timer stopped")
+            TimeoutTimer.Stop
+        End If
+    End Sub 
+
     Sub StartMaxMovies_Idle_Timer
+        LogInfo("MaxMovies Timer started")
         StartTimer(MaxMovies_Idle_Timer,1000)    '30000
     End Sub 
 
@@ -134,6 +195,11 @@ Public Partial Class XbmcController
 
 #Region "General Func"
 
+    Function LongestEnum(ByVal Item as Type) As Integer
+        Return Item.GetEnumNames.OrderByDescending((Function(s) s.Length )).FirstOrDefault.Length
+    End Function
+
+
     Sub Reset
         StopAllTimers
         Q.Clear
@@ -152,7 +218,7 @@ Public Partial Class XbmcController
         XbMoviePath = MovieFolderMappings.GetXBMC_MoviePath(McMoviePath)
 
         If IsNothing(XbMoviePath) Then
-            AppendLog(Error_Prefix + "Failed to map [" + McMoviePath + "] to XBMC folders. Check your XBMC_MC_FolderMappings in Comnfig.XML" )
+            AppendLog(Error_Prefix + "Failed to map [" + McMoviePath + "] to XBMC folders. Check your MC <-> XBMC Movies FolderMappings in Config.XML" )
         End If
     End Sub
 

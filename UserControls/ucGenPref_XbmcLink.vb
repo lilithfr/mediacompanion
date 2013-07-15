@@ -35,13 +35,16 @@ Public Class ucGenPref_XbmcLink
         AppendDialogue(" - Scroll down to the bottom of the General filter for XBMC specific filters - currently only one 'Missing from XBMC', but more coming once we're happy the bugs are out of this first implementation")
         AppendDialogue(" - For any movie listed in 'Missing from XBMC' check the following characters are not in the path or title [ü é á ½ Æ ³ · ° , !] as XBMC doesn't like them")
         AppendDialogue(" - The occasional connect error will occur, when this happens the software automatically re-establishes connection and the retries the request.")
-        AppendDialogue(" - If you encounter other errors & wish to raise an issue, then please include the log file: 'XBMC-Controller-log-file.txt'")
+    '    AppendDialogue(" - If you encounter other errors & wish to raise an issue, then please include the log file: 'XBMC-Controller-log-file.txt'")
+        AppendDialogue(" - If you encounter other errors & wish to raise an issue, then please include the full & brief log files: 'XBMC-Controller-full-log-file.txt' & 'XBMC-Controller-brief-log-file.txt'")
         AppendDialogue("")
         AppendDialogue("Known issues:")
+        AppendDialogue("") 
+        AppendDialogue(" - Movies are only picked up if they are not in a root (source) folder, i.e. they need to be in one or more sub-directories off your source folder(s). Basically it's an XBMC issue\bug. A simple workaround is to move your movies into a sub-folder, then run a clean in XBMC, then, with the link enabled do a 'Refresh'")
         AppendDialogue("")
-        AppendDialogue(" - Movies are only picked up if they are not in a root (source) folder, i.e. they need to be in one or more sub-directories off your source folder(s). Basically it's an XBMC issue\bug")
-        AppendDialogue("   A simple workaround is to move your movies into a sub-folder, then run a clean in XBMC, then, with the link enabled do a 'Refresh'")
+        AppendDialogue("Help us make it better")
         AppendDialogue("")
+        AppendDialogue("Currently only tested on local and remote Windows XBMC installations. We would be interested in hearing your experiences on non-Windows XBMC installations, whether successful or not. So hopefully we can get it working on all platforms")
     End Sub
 
 

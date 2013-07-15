@@ -25,6 +25,7 @@ Partial Class frmXBMC_Progress
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmXBMC_Progress))
         Me.panelXBMC = New System.Windows.Forms.Panel()
+        Me.lblWarningCount = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.btnPurgeQ = New System.Windows.Forms.Button()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
@@ -35,7 +36,6 @@ Partial Class frmXBMC_Progress
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lblProgress = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.lblWarningCount = New System.Windows.Forms.Label()
         Me.panelXBMC.SuspendLayout
         Me.SuspendLayout
         '
@@ -57,6 +57,20 @@ Partial Class frmXBMC_Progress
         Me.panelXBMC.Name = "panelXBMC"
         Me.panelXBMC.Size = New System.Drawing.Size(362, 76)
         Me.panelXBMC.TabIndex = 1
+        '
+        'lblWarningCount
+        '
+        Me.lblWarningCount.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.lblWarningCount.AutoEllipsis = true
+        Me.lblWarningCount.AutoSize = true
+        Me.lblWarningCount.Font = New System.Drawing.Font("MS Reference Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblWarningCount.ForeColor = System.Drawing.Color.White
+        Me.lblWarningCount.Location = New System.Drawing.Point(78, 52)
+        Me.lblWarningCount.Name = "lblWarningCount"
+        Me.lblWarningCount.Size = New System.Drawing.Size(35, 15)
+        Me.lblWarningCount.TabIndex = 9
+        Me.lblWarningCount.Text = "0000"
         '
         'Label2
         '
@@ -85,14 +99,15 @@ Partial Class frmXBMC_Progress
         '
         'LinkLabel1
         '
+        Me.LinkLabel1.AutoSize = true
         Me.LinkLabel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DeepSkyBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(121, 53)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(47, 13)
+        Me.LinkLabel1.Size = New System.Drawing.Size(52, 13)
         Me.LinkLabel1.TabIndex = 6
         Me.LinkLabel1.TabStop = true
-        Me.LinkLabel1.Text = "View log"
+        Me.LinkLabel1.Text = "View logs"
         '
         'lblErrorCount
         '
@@ -171,20 +186,6 @@ Partial Class frmXBMC_Progress
         Me.lblProgress.Size = New System.Drawing.Size(348, 19)
         Me.lblProgress.TabIndex = 0
         Me.lblProgress.Text = "Some Progress Some Progress Some Progress "
-        '
-        'lblWarningCount
-        '
-        Me.lblWarningCount.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.lblWarningCount.AutoEllipsis = true
-        Me.lblWarningCount.AutoSize = true
-        Me.lblWarningCount.Font = New System.Drawing.Font("MS Reference Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lblWarningCount.ForeColor = System.Drawing.Color.White
-        Me.lblWarningCount.Location = New System.Drawing.Point(78, 52)
-        Me.lblWarningCount.Name = "lblWarningCount"
-        Me.lblWarningCount.Size = New System.Drawing.Size(35, 15)
-        Me.lblWarningCount.TabIndex = 9
-        Me.lblWarningCount.Text = "0000"
         '
         'frmXBMC_Progress
         '
