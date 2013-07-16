@@ -77,7 +77,7 @@ Public Class Form1
 	    Other
     End Enum
 
-    Public State       As ProgramState=ProgramState.Other
+    Shared Public ProgState As ProgramState=ProgramState.Other
     Public StateBefore As ProgramState=ProgramState.Other
 
     Public DataDirty As Boolean
@@ -3286,7 +3286,7 @@ Public Class Form1
 
 
     Sub ResetFilters()
-        State = ProgramState.ResettingFilters
+        ProgState = ProgramState.ResettingFilters
 
         filterOverride = False
         TextBox1.Text = ""
@@ -3315,7 +3315,7 @@ Public Class Form1
             c.Reset()
         Next
 
-        State = ProgramState.Other
+        ProgState = ProgramState.Other
     End Sub
 
     Sub UpdateMinMaxMovieFilters()
@@ -3660,7 +3660,7 @@ Public Class Form1
                     If mess.Cancelled Then Exit For
                 Next
 
-                State = ProgramState.Other
+                ProgState = ProgramState.Other
 
             Else
                 mess.Close()
@@ -5526,9 +5526,9 @@ Public Class Form1
     Sub UpdateMissingFanart
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
-        State = ProgramState.ResettingFilters
+        ProgState = ProgramState.ResettingFilters
         Assign_FilterGeneral
-        State = ProgramState.Other
+        ProgState = ProgramState.Other
 
 '       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         UpdateMissingFanartNav
@@ -5605,9 +5605,9 @@ Public Class Form1
     Sub UpdateMissingPoster
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
-        State = ProgramState.ResettingFilters
+        ProgState = ProgramState.ResettingFilters
         Assign_FilterGeneral
-        State = ProgramState.Other
+        ProgState = ProgramState.Other
 
 '       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         UpdateMissingPosterNav             
@@ -12119,11 +12119,11 @@ Public Class Form1
 
     Private Sub btnMovieDisplay_ActorFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_ActorFilter.Click
         Try
-            State=ProgramState.ResettingFilters
+            ProgState=ProgramState.ResettingFilters
             oMovies.ActorsFilter_AddIfMissing(cbMovieDisplay_Actor.Text)
             cbFilterActor.UpdateItems(oMovies.ActorsFilter)
             cbFilterActor.SelectItem(cbMovieDisplay_Actor.Text)
-            State=ProgramState.Other
+            ProgState=ProgramState.Other
             
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 '           LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & cbMovieDisplay_Actor.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
@@ -13321,12 +13321,12 @@ Public Class Form1
 
     Private Sub btnMovieDisplay_SetFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_SetFilter.Click
         Try
-            State=ProgramState.ResettingFilters
+            ProgState=ProgramState.ResettingFilters
             oMovies.SetsFilter_AddIfMissing(cbMovieDisplay_MovieSet.Text)
             cbFilterSet.UpdateItems(oMovies.SetsFilter)
             cbFilterSet.SelectItem(cbMovieDisplay_MovieSet.Text)
 
-            State=ProgramState.Other
+            ProgState=ProgramState.Other
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Catch ex As Exception
@@ -23588,14 +23588,14 @@ Public Class Form1
 
         tsmiConvertToFrodo.Enabled = (cbFilterGeneral.Text.RemoveAfterMatch="Pre-Frodo poster only") or (cbFilterGeneral.Text.RemoveAfterMatch="Both poster formats")
 
-        If State = ProgramState.Other Then
+        If ProgState = ProgramState.Other Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             DisplayMovie
         End If
     End Sub
 
     Sub HandleMovieFilter_SelectedValueChanged(cbFilter As ComboBox, ByRef filterValue As String, Optional replaceUnknown As Boolean = False)
-        If State = ProgramState.Other Then
+        If ProgState = ProgramState.Other Then
 
             If cbFilter.Text = "All" Then
                 filterValue = ""
@@ -23764,12 +23764,12 @@ Public Class Form1
     Sub EnableDisableByTag(tagQualifier As String, _state As Boolean)
 
         If Not _state Then
-            StateBefore = State
+            StateBefore = ProgState
             cbBtnLink_Checked = cbBtnLink.Checked
-            State = ProgramState.MovieControlsDisabled
+            ProgState = ProgramState.MovieControlsDisabled
         Else
             cbBtnLink.Checked = cbBtnLink_Checked
-            State = StateBefore
+            ProgState = StateBefore
         End If
 
         If IsNothing(ControlsToDisableDuringMovieScrape) Then
@@ -23890,7 +23890,7 @@ Public Class Form1
 
     Private Sub UpdateFilteredList
 
-        State = ProgramState.UpdatingFilteredList
+        ProgState = ProgramState.UpdatingFilteredList
 
         Dim lastSelectedMovie = workingMovie.fullpathandfilename
 
@@ -23929,7 +23929,7 @@ Public Class Form1
  '       mov_FormPopulate()
         DisplayMovie()
 
-        State = ProgramState.Other
+        ProgState = ProgramState.Other
     End Sub
 
 
@@ -24752,7 +24752,7 @@ Public Class Form1
 
 
     Private Sub ResizeBottomLHSPanel(height As Integer)
-        State = ProgramState.ResizingSplitterPanel
+        ProgState = ProgramState.ResizingSplitterPanel
 
         SplitContainer5.SplitterDistance = SplitContainer5.Height - height
 
@@ -24761,12 +24761,12 @@ Public Class Form1
         SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, height-10)
 
 
-        State = ProgramState.Other
+        ProgState = ProgramState.Other
     End Sub
 
 
     Private Sub ResizeBottomLHSPanel()
-        If State = ProgramState.ResizingSplitterPanel Then Return
+        If ProgState = ProgramState.ResizingSplitterPanel Then Return
 
         If Not MainFormLoadedStatus Then Return
  
@@ -25103,9 +25103,9 @@ End Sub
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
-        State=ProgramState.ResettingFilters
+        ProgState=ProgramState.ResettingFilters
         filter.Reset
-        State=ProgramState.Other
+        ProgState=ProgramState.Other
 
         UpdateFilteredList
     End Sub
@@ -25217,7 +25217,7 @@ End Sub
 
 
     Private Sub XBMC_Link_Check_Timer_Elapsed
-        If State=ProgramState.MovieControlsDisabled Then Return
+        If ProgState=ProgramState.MovieControlsDisabled Then Return
         'If XbmcControllerBufferQ.Count=0 Then
             SetcbBtnLink
         'End If

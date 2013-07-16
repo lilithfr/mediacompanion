@@ -47,6 +47,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Private _CanDeleteCachedImages      As Boolean
     Private _TriedCanDeleteCachedImages As Boolean
     Private TimeoutTimer                As Timers.Timer = New Timers.Timer()
+    Private McMainBusyTimer             As Timers.Timer = New Timers.Timer()
     Private MaxMovies_Idle_Timer        As Timers.Timer = New Timers.Timer()
     Public  LongestEnumStateName        As Integer = LongestEnum(GetType(S))
     Public  LongestEnumEventName        As Integer = LongestEnum(GetType(E))
@@ -144,12 +145,16 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     ReadOnly Property MC_Only_Movies As List(Of ComboList)
         Get
-            Dim q2 = From
-                        M In Parent.oMovies.MovieCache.ToList
-                     Where
-                        Not XBMC_to_MC_MoviePaths.ContainsValue(M.MoviePathAndFileName.ToUpper)
+            Dim data As List(Of ComboList) = New List(Of ComboList)
 
-            Return q2.ToList
+            data.AddRange(Parent.oMovies.MovieCache)
+
+            Dim q2 = (From
+                        M In data
+                     Where
+                        Not XBMC_to_MC_MoviePaths.ContainsValue(M.MoviePathAndFileName.ToUpper)).ToList
+
+            Return q2
         End Get
     End Property
 
@@ -255,6 +260,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         ConnectReq
         TimeOut
+        McMainBusyTimer_TimeOut
         MaxMovies_Idle_TimeOut
         Success
         Failure
@@ -316,6 +322,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Ini_Timer(TimeoutTimer)
         AddHandler TimeoutTimer.Elapsed, AddressOf Timer1sec_Elapsed
+
+        Ini_Timer(McMainBusyTimer,3000)
+        AddHandler McMainBusyTimer.Elapsed, AddressOf McMainBusyTimer_Elapsed
+
+        
 
   '      Ini_Timer(MaxMovies_Idle_Timer)
   '      AddHandler MaxMovies_Idle_Timer.Elapsed, AddressOf MaxMovies_Idle_Timer_Elapsed
@@ -384,8 +395,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         AddTransition( S.Wf_XBMC_Movies             , E.Failure                 , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      )  
         AddTransition( S.Wf_XBMC_Movies             , E.TimeOut                 , S.Wf_XBMC_Movies             , AddressOf FetchMoviesInfo      )
-        AddTransition( S.Wf_XBMC_Movies             , E.Success                 , S.Ready                      , AddressOf SendMcOnlyMovies     _
-                                                                                                               , AddressOf Ready                )
+        AddTransition( S.Wf_XBMC_Movies             , E.Success                 , S.Ready                      , AddressOf StopToTimer_SendMcOnlyMovies )
+        AddTransition( S.Ready                      , E.McMainBusyTimer_TimeOut , S.Ready                      , AddressOf SendMcOnlyMovies     )
+
+
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideoThenAdd   )
 
@@ -547,6 +560,14 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Q.Write(E.TimeOut,PriorityQueue.Priorities.high)
     End Sub
+
+    Sub McMainBusyTimer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
+
+        AppendLog(EnumLogMode.Full,"Mc Main Busy Timer Elapsed")
+
+        Q.Write(E.McMainBusyTimer_TimeOut,PriorityQueue.Priorities.low)
+    End Sub
+
 
     Sub MaxMovies_Idle_Timer_Elapsed(ByVal sender As Object, ByVal ev As Timers.ElapsedEventArgs)
 
@@ -731,7 +752,24 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
   '      ReportProgress(E.MC_MaxMovieDetails,msg)
     End Sub
 
+    
+  
+
+    Sub StopToTimer_SendMcOnlyMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        StopTimeoutTimer
+
+        SendMcOnlyMovies(sender,args)
+    End Sub
+
+
     Sub SendMcOnlyMovies(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+
+        'Don't bother if main is mid scraping or otherwise busy
+        If Form1.ProgState <> Form1.ProgramState.Other Then 
+            Start_McMainBusyTimer_Timer
+            Return
+        End If
 
         LogInfo("Passing back Mc only movies")
 

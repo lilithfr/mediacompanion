@@ -88,13 +88,7 @@ Public Partial Class XbmcController
 
     Sub ReportProgress(LogMode As EnumLogMode, ByVal Action As String, evt As TransitionEventArgs(Of S, E, EventArgs), Optional Severity As String="I", Optional ErrorMsg As String=Nothing)
 
-        'Dim x = From pp In GetType(S).GetEnumNames Group pp By pp.Length Into g = Group _
-        '    Select MaxLen = g.Max(Function(pp) pp.Length)
-
         Dim logMsg As String = ""
-
-        If Severity="W" Then WarningCount+=1
-        If Severity="E" Then ErrorCount  +=1
 
         If LogMode= EnumLogMode.Full Then 
             If Severity="I" Then logMsg=                                               Action
@@ -106,6 +100,11 @@ Public Partial Class XbmcController
         End If
 
         AppendLog(LogMode,logMsg)
+
+        If LogMode=EnumLogMode.Brief Then Return
+
+        If Severity="W" Then WarningCount+=1
+        If Severity="E" Then ErrorCount  +=1
 
         Dim formattedErrorMsg As String = ErrorMsg
 
@@ -166,6 +165,11 @@ Public Partial Class XbmcController
             LogInfo("Timeout Timer stopped")
             TimeoutTimer.Stop
         End If
+    End Sub 
+
+    Sub Start_McMainBusyTimer_Timer
+        LogInfo("Mc Main Busy Timer started")
+        StartTimer(McMainBusyTimer,3000) 
     End Sub 
 
     Sub StartMaxMovies_Idle_Timer
