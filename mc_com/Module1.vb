@@ -35,6 +35,7 @@ Module Module1
     Dim WithEvents scraper As New BackgroundWorker
     Dim oMovies As New Movies(scraper)
     Dim EnvExit As Integer = 0
+    Dim DoneAEp As Boolean = False
     Private Declare Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
     Private Declare Function ShowWindow Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal nCmdShow As Int32) As Int32
     
@@ -223,11 +224,11 @@ Module Module1
         If domovies Then
 
             StartNewMovies
-            If Preferences.DoneAMov Then EnvExit +=2
-
-            oMovies.SaveMovieCache
-            oMovies.SaveActorCache
-
+            If Preferences.DoneAMov Then
+                EnvExit +=2
+                oMovies.SaveMovieCache
+                oMovies.SaveActorCache
+            End If
             ConsoleOrLog("")
         End If
         If dotvepisodes = True Then
@@ -259,8 +260,10 @@ Module Module1
             If showstoscrapelist.Count > 0 Then
                 Renamer.setRenamePref(Preferences.tv_RegexRename.Item(Preferences.tvrename), Preferences.tv_RegexScraper)
                 Call episodescraper(showstoscrapelist, False)
-                Call savetvcache()
-                EnvExit +=4
+                If DoneAEp Then
+                    Call savetvcache()
+                    EnvExit +=4
+                End If
             End If
         End If
         If domediaexport = True Then
@@ -468,6 +471,7 @@ Module Module1
             Exit Sub
         End If
 
+        DoneAEp = True
         Dim S As String = ""
         For Each newepisode In newEpisodeList
             S = ""
