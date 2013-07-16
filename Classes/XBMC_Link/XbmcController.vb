@@ -520,6 +520,11 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             Return
         End If
 
+        If  evt.EventID=e.McMainBusyTimer_TimeOut Then
+            Start_McMainBusyTimer_Timer
+            Return
+        End If
+
         If evt.EventID=e.XBMC_Video_ScanFinished Then
             LogWarning("UnexpectedEvent", "State : [" + evt.SourceStateID.ToString + "] Ignoring : [" + evt.EventID.ToString + "]",evt)
             Return
