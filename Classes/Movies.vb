@@ -984,8 +984,8 @@ Public Class Movies
         For Each NfoFilename In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
+
             ReportProgress("Rescraping " & i & " of " & NfoFilenames.Count & " ")
-            
             RescrapeMovie(NfoFilename)
 
             If Cancelled then Exit For
@@ -1017,10 +1017,18 @@ Public Class Movies
 
     Sub RescrapeMovie(NfoFilename as String)
 '       Dim movie = New Movie(Utilities.GetFileName(NfoFilename,True),Me)
+
+        If Not File.Exists(NfoFilename) Then 
+            ReportProgress("NFO not found : [" & NfoFilename & "]  ")
+            Return
+        End If
+
         Dim movie = New Movie(Me,NfoFilename)
 
-        movie.DeleteScrapedFiles()
         Dim imdbid As String = movie.PossibleImdb 
+
+        movie.DeleteScrapedFiles()
+
         'movie.DeleteScrapedFiles
         'movie.Rescrape=True
 
