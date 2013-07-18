@@ -847,34 +847,54 @@ Public Class Form1
 
     End Function
 
+    Const MaxConseqFailures As Integer = 3
 
-    Dim ConnectSent As Boolean
+    Dim ConnectSent       As Boolean
+    Dim XbmcLastLinkState As Boolean
+    Dim ConseqFailures    As Integer = 0
 
-    Sub SetcbBtnLink
+    Sub SetcbBtnLink(Optional sender As Object=Nothing)
         XBMC_Link_Check_Timer.Stop
 
-        cbBtnLink.Enabled = XBMC_TestsPassed
+        Dim passed As Boolean = XBMC_TestsPassed
 
-        If cbBtnLink.Enabled Then
-            cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
-
-            If Preferences.XBMC_Link <> cbBtnLink.Checked Then
-
-                Preferences.XBMC_Link = cbBtnLink.Checked
-
-                If Preferences.XbmcLinkReady Then
-                    XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
-                End If
-
-                Preferences.SaveConfig 
+        '
+        ' Sometimes the link test fails. Don't know why yet, maybe XBMC is busy...but anyway this should reduce the number of phamtom 
+        ' link disablings...
+        ' 
+        If Not IsNothing(sender) Then
+            If cbBtnLink.Enabled And Not passed Then
+                ConseqFailures += 1
+            Else
+                ConseqFailures = 0
             End If
         Else
-            cbBtnLink.Checked   = False
-            cbBtnLink.BackColor = Color.Transparent
+            ConseqFailures = 0
         End If
 
-        tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked 
+        If IsNothing(sender) Or ConseqFailures>=MaxConseqFailures Then
+            cbBtnLink.Enabled = passed
 
+            If cbBtnLink.Enabled Then
+                cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
+
+                If Preferences.XBMC_Link <> cbBtnLink.Checked Then
+
+                    Preferences.XBMC_Link = cbBtnLink.Checked
+
+                    If Preferences.XbmcLinkReady Then
+                        XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+                    End If
+
+                    Preferences.SaveConfig 
+                End If
+            Else
+                cbBtnLink.Checked   = False
+                cbBtnLink.BackColor = Color.Transparent
+            End If
+
+            tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked 
+        End If
 
 
         XBMC_Link_Check_Timer.Start
@@ -25219,7 +25239,7 @@ End Sub
     Private Sub XBMC_Link_Check_Timer_Elapsed
         If ProgState=ProgramState.MovieControlsDisabled Then Return
         'If XbmcControllerBufferQ.Count=0 Then
-            SetcbBtnLink
+            SetcbBtnLink(XBMC_Link_Check_Timer)
         'End If
     End Sub
    

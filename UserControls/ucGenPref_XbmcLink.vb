@@ -42,7 +42,12 @@ Public Class ucGenPref_XbmcLink
         AppendDialogue("") 
         AppendDialogue(" - Movies are only picked up if they are not in a root (source) folder, i.e. they need to be in one or more sub-directories off your source folder(s). Basically it's an XBMC issue\bug. A simple workaround is to move your movies into a sub-folder, then run a clean in XBMC, then, with the link enabled do a 'Refresh'")
         AppendDialogue("")
-        AppendDialogue("Help us make it better")
+        AppendDialogue("Future enhancements:")
+        AppendDialogue("")
+        AppendDialogue(" - TV support")
+        AppendDialogue(" - MySQL support")
+        AppendDialogue("")
+        AppendDialogue("Help us make it better:")
         AppendDialogue("")
         AppendDialogue("Currently only tested on local and remote Windows XBMC installations. We would be interested in hearing your experiences on non-Windows XBMC installations, whether successful or not. So hopefully we can get it working on all platforms")
     End Sub
