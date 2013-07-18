@@ -192,6 +192,7 @@ Public Partial Class XbmcController
     Sub StopAllTimers
         TimeoutTimer        .Stop 
         MaxMovies_Idle_Timer.Stop
+        McMainBusyTimer     .Stop
     End Sub
 
 
