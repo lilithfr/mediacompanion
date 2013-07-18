@@ -844,6 +844,9 @@ Public Class Preferences
         root.AppendChild( doc, "XBMC_TexturesDb"       , XBMC_TexturesDb       )
         root.AppendChild( doc, "XBMC_ThumbnailFolders" , XBMC_ThumbnailsFolder )
 
+        root.AppendChild( doc, "ShowExtraMovieFilters" , ShowExtraMovieFilters )
+
+
         root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
         root.AppendChild(XBMC_MC_CompareFields      .GetChild(doc))
         
