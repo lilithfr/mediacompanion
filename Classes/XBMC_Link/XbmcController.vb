@@ -887,7 +887,9 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         Dim ea As FolderEventArgs = args.EventArgs
 
-        Dim scanFolder = ea.Folder
+        Dim scanFolder = ea.Folder.FormatXbmcPath
+
+
         Dim mif As Integer = 1
 
 

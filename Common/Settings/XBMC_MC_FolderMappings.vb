@@ -3,7 +3,25 @@ Imports System.Windows.Forms
 Imports System.Drawing
 Imports System.Linq
 Imports System.IO
+Imports System.Runtime.CompilerServices
 
+Public Module LinkExt
+
+    <Extension()> _
+    Function FormatXbmcPath(ByVal sString As String) As String
+        Dim s As String = sString
+
+        If Preferences.XBMC_Link_Use_Forward_Slash Then
+            s = s.Replace("\","/")
+        End If
+
+        If s.IndexOf("smb:\")=0 And s.IndexOf("smb:\\")=-1 Then
+            s = s.Replace("smb:\","smb:\\")
+        End If
+
+        Return s
+    End Function
+End Module
 
 Public Class XBMC_MC_FolderMapping
 
@@ -97,11 +115,7 @@ Public Class XBMC_MC_FolderMappings
                     file = file.Remove(0,1)
                 End If
 
-                Dim result As String = Path.Combine(FolderMapping.XBMC,file )
-
-                If Preferences.XBMC_Link_Use_Forward_Slash Then
-                    result = result.Replace("\","/")
-                End If
+                Dim result As String = Path.Combine(FolderMapping.XBMC,file).FormatXbmcPath
 
                 Return result
             End If
@@ -109,6 +123,7 @@ Public Class XBMC_MC_FolderMappings
 
         Return Nothing
       End Function
+
 
     Public Function GetMC_MoviePath(XbMoviePath As String) As String
 
