@@ -6,6 +6,7 @@ Imports Media_Companion
 Imports MC_UserControls
 Imports XBMC.JsonRpc
 
+#Const PhilsExtraFilters = False
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
@@ -230,6 +231,11 @@ Public Class Movies
             lst.Add( MissingTrailer           )
             lst.Add( MissingVotes             )
             lst.Add( MissingYear              )
+#If PhilsExtraFilters
+            lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
+            lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
+            lst.Add( "Imdb not in folder name & year mismatch (" & NotImdbInFolderNameAndYearMisMatch & ")")
+#End If
             If Preferences.XBMC_Link Then
                 If Not IsNothing(Form1.MC_Only_Movies) Then lst.Add( MC_Only_Movies )
 
@@ -238,6 +244,24 @@ Public Class Movies
             End If
 
             Return lst
+        End Get
+    End Property    
+
+    Public ReadOnly Property NotImdbInFolderNameAndYearMisMatch As Integer
+        Get
+            Return (From x In MovieCache Where Not x.ImdbInFolderName And x.year<>x.FolderNameYear).Count
+        End Get
+    End Property  
+
+    Public ReadOnly Property NotImdbInFolderName As Integer
+        Get
+            Return (From x In MovieCache Where Not x.ImdbInFolderName).Count
+        End Get
+    End Property  
+  
+    Public ReadOnly Property ImdbInFolderName As Integer
+        Get
+            Return (From x In MovieCache Where x.ImdbInFolderName).Count
         End Get
     End Property    
 

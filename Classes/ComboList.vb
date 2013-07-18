@@ -1,5 +1,6 @@
 Imports System.IO
 Imports XBMC.JsonRpc
+Imports System.Text.RegularExpressions
 
 Public Class ComboList
 
@@ -49,6 +50,28 @@ Public Class ComboList
         Set
             _originaltitle = Value.SafeTrim
         End Set
+    End Property
+
+    Private _FolderNameYear As Integer = -1
+
+    Public ReadOnly Property FolderNameYear As Integer
+        Get
+            If _FolderNameYear=-1 Then
+                Dim m = Regex.Match(foldername,"(\d{4})")
+                If m.Success Then
+                    _FolderNameYear = Convert.ToInt32(m.Value)
+                Else
+                    _FolderNameYear = -2
+                End If
+            End If
+            Return _FolderNameYear
+        End Get
+    End Property
+
+    Public ReadOnly Property ImdbInFolderName As Boolean
+        Get
+            Return Regex.Match(foldername,"(tt\d{7})").Success
+        End Get
     End Property
 
     Public ReadOnly Property MissingFanart As Boolean

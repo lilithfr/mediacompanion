@@ -252,7 +252,11 @@ Public Class clsGridViewMovie
             Case "Pre-Frodo poster only"       : b = From f In b Where     f.PreFrodoPosterExists And Not f.FrodoPosterExists
             Case "Frodo poster only"           : b = From f In b Where Not f.PreFrodoPosterExists And     f.FrodoPosterExists
             Case "Both poster formats"         : b = From f In b Where     f.PreFrodoPosterExists And     f.FrodoPosterExists
+            Case "Imdb in folder name"         : b = From f In b Where     f.ImdbInFolderName
+            Case "Imdb in not folder name"     : b = From f In b Where Not f.ImdbInFolderName
+            Case "Imdb not in folder name & year mismatch" : b = From f In b Where Not f.ImdbInFolderName And f.year<>f.FolderNameYear
        
+
         End Select
 
         If Yield Then Return
