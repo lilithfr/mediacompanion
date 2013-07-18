@@ -97,7 +97,13 @@ Public Class XBMC_MC_FolderMappings
                     file = file.Remove(0,1)
                 End If
 
-                Return Path.Combine(FolderMapping.XBMC,file )
+                Dim result As String = Path.Combine(FolderMapping.XBMC,file )
+
+                If Preferences.XBMC_Link_Use_Forward_Slash Then
+                    result = result.Replace("\","/")
+                End If
+
+                Return result
             End If
         Next
 
