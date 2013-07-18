@@ -302,6 +302,8 @@ Public Class Preferences
     Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
     Public Shared XBMC_Link_Use_Forward_Slash As Boolean = False
 
+    Public Shared ShowExtraMovieFilters       As Boolean = False
+
 
 
     ReadOnly Shared Property XBMC_TestsPassed As Boolean
@@ -1150,6 +1152,7 @@ Public Class Preferences
                     Case "XBMC_MC_MovieFolderMappings"          : XBMC_MC_MovieFolderMappings.Load(thisresult)
                     Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
                     Case "XBMC_Link_Use_Forward_Slash"          : XBMC_Link_Use_Forward_Slash = thisresult.InnerXml 
+                    Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters = thisresult.InnerXml 
 
                     Case Else : Dim x = thisresult
                 End Select

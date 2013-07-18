@@ -6,8 +6,6 @@ Imports Media_Companion
 Imports MC_UserControls
 Imports XBMC.JsonRpc
 
-#Const PhilsExtraFilters = False
-
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
     Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String)
@@ -231,11 +229,12 @@ Public Class Movies
             lst.Add( MissingTrailer           )
             lst.Add( MissingVotes             )
             lst.Add( MissingYear              )
-#If PhilsExtraFilters
+If Preferences.ShowExtraMovieFilters Then
             lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
             lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
             lst.Add( "Imdb not in folder name & year mismatch (" & NotImdbInFolderNameAndYearMisMatch & ")")
-#End If
+            lst.Add( "Plot same as Outline (" &  PlotEqOutline & ")")
+End If
             If Preferences.XBMC_Link Then
                 If Not IsNothing(Form1.MC_Only_Movies) Then lst.Add( MC_Only_Movies )
 
@@ -246,6 +245,12 @@ Public Class Movies
             Return lst
         End Get
     End Property    
+
+    Public ReadOnly Property PlotEqOutline As Integer
+        Get
+            Return (From x In MovieCache Where x.PlotEqOutline).Count
+        End Get
+    End Property  
 
     Public ReadOnly Property NotImdbInFolderNameAndYearMisMatch As Integer
         Get

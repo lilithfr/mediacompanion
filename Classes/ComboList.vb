@@ -210,6 +210,15 @@ Public Class ComboList
     End Property
 
 
+    ReadOnly Property PlotEqOutline As Boolean
+        Get
+            Return (plot=outline)
+        End Get
+    End Property
+
+
+ 
+
     ReadOnly Property UserDefinedFileName As String
         Get
             Dim s As String = Preferences.MovieRenameTemplate

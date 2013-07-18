@@ -255,7 +255,11 @@ Public Class clsGridViewMovie
             Case "Imdb in folder name"         : b = From f In b Where     f.ImdbInFolderName
             Case "Imdb in not folder name"     : b = From f In b Where Not f.ImdbInFolderName
             Case "Imdb not in folder name & year mismatch" : b = From f In b Where Not f.ImdbInFolderName And f.year<>f.FolderNameYear
-       
+            Case "Plot same as Outline"        : b = (From f In b From m In Form1.oMovies.MovieCache _
+                                                      Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
+                                                      Select f
+                                                      )
+     
 
         End Select
 
