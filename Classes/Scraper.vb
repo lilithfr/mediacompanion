@@ -1196,7 +1196,8 @@ Public Class Classimdb
                         movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                         movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                         movienfoarray = encodespecialchrs(movienfoarray)
-                        totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
+'                        totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
+                        totalinfo &= "<plot>" & movienfoarray & "</plot>"
                     End If
                 Catch
                     totalinfo = totalinfo & "<plot>scraper error</plot>"
