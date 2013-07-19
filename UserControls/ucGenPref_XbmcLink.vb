@@ -161,6 +161,8 @@ Public Class ucGenPref_XbmcLink
 
         Dim PreFrodoPosterOnlyCount As Integer = ParentForm.oMovies.PreFrodoPosterOnlyCount
 
+        Dim MovieFoldersConfigured As Boolean = (Preferences.XBMC_MC_MovieFolderMappings.Items.Count>0)
+
         Dim overAll As Boolean = _
             ShowTest("Frodo Enabled"                     , Preferences.FrodoEnabled                 , 10) And
             ShowTest("Pre-Frodo only movies ('.tbn' posters instead of '-poster.jpg') : " & PreFrodoPosterOnlyCount.ToString, (PreFrodoPosterOnlyCount=0), 10 ) And
@@ -171,6 +173,7 @@ Public Class ucGenPref_XbmcLink
             ShowTest("TexturesDb Connection"             , Preferences.XBMC_TexturesDb_Conn_Valid    , 6) And
             ShowTest("TexturesDb Version (Frodo needed)" , Preferences.XBMC_TexturesDb_Version_Valid , 6) And
             ShowTest("Thumbnails Folder"                 , Preferences.XBMC_ThumbnailsFolder_Valid   , 7) And
+            ShowTest("Movie folder(s) configured"        , MovieFoldersConfigured                    , 8) And
             ShowTest("Movie Folder mappings set (NB Actual paths not validated as applicable to XBMC PC)" , Preferences.XBMC_MC_MovieFolderMappings.Initialised, 8) 
         
         UpdateImage(3 ,canConnect)
@@ -189,7 +192,7 @@ Public Class ucGenPref_XbmcLink
 
             If PreFrodoPosterOnlyCount>0 Then
                 AppendDialogue("    - Warning: Some of your movies only have '.tbn' poster extensions, Frodo expects '-poster.jpg'. You can fix this by:")
-                AppendDialogue("         - 1. Selecting 'Pre-Frodo poster only' from the General Filter" )
+                AppendDialogue("         - 1. Selecting 'Pre-Frodo poster only' from the 'General' Movie Filter" )
                 AppendDialogue("         - 2. Selecting all the movies in the list, then Rt-Click & select 'Convert to Frodo only'" )
             End If
 
@@ -202,6 +205,10 @@ Public Class ucGenPref_XbmcLink
                 AppendDialogue("    - If you are trying to connect to XBMC on a remote PC, make sure:")
                 AppendDialogue("        - The PCs' IP address is static")
                 AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' checked")
+            End If
+
+            If Not MovieFoldersConfigured Then
+                AppendDialogue("    - You have no movie folders set up. Go to Movies-Folders and add them")
             End If
 
             AppendDialogue("")

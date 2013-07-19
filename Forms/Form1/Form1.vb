@@ -762,8 +762,9 @@ Public Class Form1
     Private Sub XBMC_Controller_Log_TO_Timer_Elapsed
         If XbmcControllerBufferQ.Count=0 Then
             If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
-                System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_full_log_file ))
-                System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_brief_log_file))
+
+                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file )
+                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
 
                 frmXBMC_Progress.Reset
                 Dim ce As New BaseEvent(XbmcController.E.ResetErrorCount,New BaseEventArgs())

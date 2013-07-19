@@ -303,6 +303,13 @@ Public Class Preferences
     Public Shared XBMC_Link_Use_Forward_Slash As Boolean = False    'This property does not get persisted, it's assigned in XbmcController at runtime
     Public Shared ShowExtraMovieFilters       As Boolean = False
 
+    
+
+    ReadOnly Shared Property AppPath As String
+        Get 
+            Return My.Application.Info.DirectoryPath
+         End Get
+    End Property 
 
 
     ReadOnly Shared Property XBMC_TestsPassed As Boolean
@@ -1714,5 +1721,18 @@ Public Class Preferences
         End Try
         Return Nothing
     End Function
+
+    Shared Sub OpenFileInAppPath(file As String)
+        OpenFile( Path.Combine(AppPath,file) )
+    End Sub
+
+
+    Shared Sub OpenFile(file As String)
+        Try
+            System.Diagnostics.Process.Start(file)
+        Catch ex As Exception
+            MsgBox("Failed to open file [" & file & "] Error message [" & ex.Message & "]")
+        End Try
+    End Sub
 End Class
 
