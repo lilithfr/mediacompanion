@@ -300,8 +300,7 @@ Public Class Preferences
     Public Shared XBMC_ThumbnailsFolder       As String = "Thumbnails"
     Public Shared XBMC_MC_MovieFolderMappings As New XBMC_MC_FolderMappings("Movie")
     Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
-    Public Shared XBMC_Link_Use_Forward_Slash As Boolean = False
-
+    Public Shared XBMC_Link_Use_Forward_Slash As Boolean = False    'This property does not get persisted, it's assigned in XbmcController at runtime
     Public Shared ShowExtraMovieFilters       As Boolean = False
 
 
@@ -844,8 +843,8 @@ Public Class Preferences
         root.AppendChild( doc, "XBMC_TexturesDb"       , XBMC_TexturesDb       )
         root.AppendChild( doc, "XBMC_ThumbnailFolders" , XBMC_ThumbnailsFolder )
 
-        root.AppendChild( doc, "ShowExtraMovieFilters" , ShowExtraMovieFilters )
-
+        root.AppendChild( doc, "ShowExtraMovieFilters"       , ShowExtraMovieFilters       )
+        
 
         root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
         root.AppendChild(XBMC_MC_CompareFields      .GetChild(doc))
@@ -1154,7 +1153,7 @@ Public Class Preferences
                     Case "XBMC_ThumbnailsFolder"                : XBMC_ThumbnailsFolder       = thisresult.InnerXml 
                     Case "XBMC_MC_MovieFolderMappings"          : XBMC_MC_MovieFolderMappings.Load(thisresult)
                     Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
-                    Case "XBMC_Link_Use_Forward_Slash"          : XBMC_Link_Use_Forward_Slash = thisresult.InnerXml 
+
                     Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters = thisresult.InnerXml 
 
                     Case Else : Dim x = thisresult

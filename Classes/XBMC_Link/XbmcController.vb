@@ -272,6 +272,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         ScanFolder
         TurnOff
         FetchVideoInfo
+        ResetErrorCount
 
 
         MC_Movie_Updated
@@ -279,7 +280,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         MC_Movie_Removed
         MC_ScanForNewMovies
         MC_ShutDownReq
-        MC_ResetErrorCount
  '       MC_FetchAllMovieDetails
         MC_Only_Movies
   '      MC_MaxMovieDetails
@@ -349,6 +349,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         AddHandler Me.ExceptionThrown                          , AddressOf ExceptionThrownHandler
 
         AddHandler Me.XbmcJson.XbmcMovies_OnChange             , AddressOf UpdateXBMC_to_MC_MoviePaths
+        AddHandler Me.XbmcJson.XbmcMovies_OnChange             , AddressOf AutoSetDirectorySlash
+
         AddHandler Me.XbmcJson.MovieRemoved                    , AddressOf SetXbmcMaxMoviesDirty
         AddHandler Me.MaxXbmcMoviesChanged                     , AddressOf Handle_MaxXbmcMoviesChanged
         AddHandler Me.XbmcMcMoviesChanged                      , AddressOf Handle_XbmcMcMoviesChanged
@@ -373,7 +375,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         AddTransition( S.Any                        , E.MC_ShutDownReq          , S.Any                        , AddressOf ShutDown             )
   '     AddTransition( S.Any                        , E.WatchDogTimeOut         , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )
-        AddTransition( S.Any                        , E.MC_ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
+        AddTransition( S.Any                        , E.ResetErrorCount      , S.Any                        , AddressOf ResetErrorCount      )
         AddTransition( S.Any                        , E.XBMC_System_Quit        , S.NotConnected               , AddressOf Raise_XbmcQuit       )  
         AddTransition( S.Any                        , E.JSON_Abort              , S.Wf_XBMC_ConnectResult      , AddressOf Connect              )  
 
@@ -650,6 +652,26 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         _XBMC_to_MC_MoviePaths = q2
     End Sub  
+
+
+    Sub AutoSetDirectorySlash(XbmcMovies As List(Of MinXbmcMovie))
+        Dim backSlashes    As Integer = 0
+        Dim forwardSlashes As Integer = 0
+        Dim file           As String  = ""
+
+        Try
+            file = XbmcJson.XbmcMovies.FirstOrDefault.file.Replace("stack://","")
+
+            backSlashes    = file.Split("\").Length -1 
+            forwardSlashes = file.Split("/").Length -1 
+
+            Preferences.XBMC_Link_Use_Forward_Slash =(forwardSlashes>backSlashes)
+        Catch
+        End Try
+
+        RemoveHandler Me.XbmcJson.XbmcMovies_OnChange, AddressOf AutoSetDirectorySlash
+    End Sub  
+
 
     Sub Handle_MaxXbmcMoviesChanged
 

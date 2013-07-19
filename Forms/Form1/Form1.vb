@@ -766,7 +766,7 @@ Public Class Form1
                 System.Diagnostics.Process.Start(IO.Path.Combine(My.Application.Info.DirectoryPath,XBMC_Controller_brief_log_file))
 
                 frmXBMC_Progress.Reset
-                Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
+                Dim ce As New BaseEvent(XbmcController.E.ResetErrorCount,New BaseEventArgs())
                 XbmcControllerQ.Write(ce)   
             End If
             XBMC_Controller_LogLastShownDt = Now
