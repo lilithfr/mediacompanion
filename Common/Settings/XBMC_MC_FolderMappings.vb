@@ -15,7 +15,7 @@ Public Module LinkExt
             s = s.Replace("\","/")
         End If
 
-        If s.IndexOf("smb:/")=0 And s.IndexOf("smb:/")=-1 Then
+        If s.IndexOf("smb:/")=0 And s.IndexOf("smb://")=-1 Then
             s = s.Replace("smb:/","smb://")
         End If
 
