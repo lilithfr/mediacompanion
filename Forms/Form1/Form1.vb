@@ -873,7 +873,7 @@ Public Class Form1
             ConseqFailures = 0
         End If
 
-        If IsNothing(sender) Or ConseqFailures>=MaxConseqFailures Then
+        If IsNothing(sender) Or ConseqFailures<=MaxConseqFailures Then
             cbBtnLink.Enabled = passed
 
             If cbBtnLink.Enabled Then
