@@ -13,14 +13,37 @@ Public Module LinkExt
 
         If Preferences.XBMC_Link_Use_Forward_Slash Then
             s = s.Replace("\","/")
-        End If
 
-        If s.IndexOf("smb:/")=0 And s.IndexOf("smb://")=-1 Then
-            s = s.Replace("smb:/","smb://")
+
+            Dim firstSlash      As Integer = s.IndexOf( "/" )
+            Dim protoSlash      As Integer = s.IndexOf(":/" )
+            Dim protoSlashSlash As Integer = s.IndexOf("://")
+
+            If (firstSlash=protoSlash+1) And protoSlashSlash=-1 Then
+                s = s.ReplaceFirst(":/","://")
+            End If
+
+            'If s.IndexOf("smb:/")=0 And s.IndexOf("smb://")=-1 Then
+            '    s = s.Replace("smb:/","smb://")
+            'End If
+
         End If
 
         Return s
     End Function
+
+
+    <Extension()> _
+    Function ReplaceFirst(text As String, search As String, replace As String) As String
+
+        Dim pos As Integer = text.IndexOf(search)
+
+        If pos<0 Then Return text
+
+        Return text.Substring(0, pos) + replace + text.Substring(pos + search.Length)
+
+    End Function
+
 End Module
 
 Public Class XBMC_MC_FolderMapping
