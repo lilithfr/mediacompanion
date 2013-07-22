@@ -229,14 +229,14 @@ Public Class XBMC_MC_FolderMappings
 
     Public Function Initialised As Boolean
 
-        If Items.Count=0 Then Return False
+         If Items.Count=0 Then Return False
 
         For Each item In Items
             If IsNothing(item.XBMC) Then Return False
             If item.XBMC.Trim="" Then Return False
         Next   
 
-        Return True     
+        Return True    
     End Function
 
 

@@ -59,7 +59,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.lblInfo.Name = "lblInfo"
         Me.lblInfo.Size = New System.Drawing.Size(281, 26)
         Me.lblInfo.TabIndex = 10
-        Me.lblInfo.Text = "Map each MC folder to it's equivalent XBMC folder"
+        Me.lblInfo.Text = "Map each XBMC folder to it's equivalent MC folder"
         '
         'Panel1
         '
@@ -84,7 +84,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.ToolTip1.SetToolTip(Me.btnSame, "Click if XMBC folders mappings are the same as Media Companion's")
         Me.btnSame.UseVisualStyleBackColor = true
         '
-        'dgvFolderMappings
+        'dgv
         '
         Me.dgv.AllowUserToAddRows = false
         Me.dgv.AllowUserToDeleteRows = false
@@ -107,7 +107,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.dgv.GridColor = System.Drawing.Color.SeaShell
         Me.dgv.Location = New System.Drawing.Point(10, 13)
         Me.dgv.MultiSelect = false
-        Me.dgv.Name = "dgvFolderMappings"
+        Me.dgv.Name = "dgv"
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle3.BackColor = System.Drawing.Color.DimGray
         DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))

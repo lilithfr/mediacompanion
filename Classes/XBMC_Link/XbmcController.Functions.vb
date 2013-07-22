@@ -240,6 +240,11 @@ Public Partial Class XbmcController
 
     Sub GetCachedUrls
 
+        If Not Preferences.XBMC_Delete_Cached_Images Then
+            LogInfo("Skipping getting cached image urls from TexturesDb")
+            Return
+        End If
+
         If Not CanDeleteCachedImages Then Return
 
         XbmcTexturesDb.Open
