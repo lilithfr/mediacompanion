@@ -301,6 +301,9 @@ Public Class Preferences
     Public Shared XBMC_MC_MovieFolderMappings As New XBMC_MC_FolderMappings("Movie")
     Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
     Public Shared XBMC_Link_Use_Forward_Slash As Boolean = False    'This property does not get persisted, it's assigned in XbmcController at runtime
+    Public Shared XBMC_Delete_Cached_Images   As Boolean = True
+
+
     Public Shared ShowExtraMovieFilters       As Boolean = False
 
     
@@ -314,13 +317,23 @@ Public Class Preferences
 
     ReadOnly Shared Property XBMC_TestsPassed As Boolean
         Get 
-            ' XBMC_CanConnect ommitted here, as may interfere with controller
+            'Non-db tests...
+            Dim result As Boolean = XBMC_MC_MovieFolderMappings.Initialised AndAlso FrodoEnabled AndAlso XBMC_CanPing AndAlso XBMC_CanConnect 
 
-            Return XBMC_MC_MovieFolderMappings.Initialised  AndAlso FrodoEnabled                 AndAlso XBMC_CanPing     AndAlso 
-                   XBMC_UserdataFolder_Valid                AndAlso XBMC_TexturesDbFile_Valid    AndAlso XBMC_CanConnect  AndAlso 
-                   XBMC_TexturesDb_Version_Valid            AndAlso XBMC_ThumbnailsFolder_Valid  AndAlso XBMC_TexturesDb_Conn_Valid     
+            If Not result Then Return False
+
+            'Db tests...
+            If XBMC_Delete_Cached_Images Then
+
+                result = XBMC_UserdataFolder_Valid     AndAlso XBMC_TexturesDbFile_Valid   AndAlso XBMC_TexturesDb_Conn_Valid  AndAlso 
+                         XBMC_TexturesDb_Version_Valid AndAlso XBMC_ThumbnailsFolder_Valid    
+
+            End If
+
+            Return result 
          End Get
     End Property  
+
 
     ReadOnly Shared Property XBMC_CanConnect As Boolean
         Get
@@ -841,16 +854,17 @@ Public Class Preferences
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
-        root.AppendChild( doc, "XBMC_Link"             , XBMC_Link             )
-        root.AppendChild( doc, "XBMC_Address"          , XBMC_Address          )
-        root.AppendChild( doc, "XBMC_Port"             , XBMC_Port             )
-        root.AppendChild( doc, "XBMC_Username"         , XBMC_Username         )
-        root.AppendChild( doc, "XBMC_Password"         , XBMC_Password         )
-        root.AppendChild( doc, "XBMC_UserdataFolder"   , XBMC_UserdataFolder   )
-        root.AppendChild( doc, "XBMC_TexturesDb"       , XBMC_TexturesDb       )
-        root.AppendChild( doc, "XBMC_ThumbnailFolders" , XBMC_ThumbnailsFolder )
-
-        root.AppendChild( doc, "ShowExtraMovieFilters"       , ShowExtraMovieFilters       )
+        root.AppendChild( doc, "XBMC_Link"                   , XBMC_Link                 )
+        root.AppendChild( doc, "XBMC_Address"                , XBMC_Address              )
+        root.AppendChild( doc, "XBMC_Port"                   , XBMC_Port                 )
+        root.AppendChild( doc, "XBMC_Username"               , XBMC_Username             )
+        root.AppendChild( doc, "XBMC_Password"               , XBMC_Password             )
+        root.AppendChild( doc, "XBMC_UserdataFolder"         , XBMC_UserdataFolder       )
+        root.AppendChild( doc, "XBMC_TexturesDb"             , XBMC_TexturesDb           )
+        root.AppendChild( doc, "XBMC_ThumbnailFolders"       , XBMC_ThumbnailsFolder     )
+        root.AppendChild( doc, "XBMC_Delete_Cached_Images"   , XBMC_Delete_Cached_Images )
+        
+        root.AppendChild( doc, "ShowExtraMovieFilters"       , ShowExtraMovieFilters     )
         
 
         root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
@@ -1150,16 +1164,20 @@ Public Class Preferences
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml 
 
-                    Case "XBMC_Link"                            : XBMC_Link                   = thisresult.InnerXml 
-                    Case "XBMC_Address"                         : XBMC_Address                = thisresult.InnerXml 
-                    Case "XBMC_Port"                            : XBMC_Port                   = thisresult.InnerXml 
-                    Case "XBMC_Username"                        : XBMC_Username               = thisresult.InnerXml 
-                    Case "XBMC_Password"                        : XBMC_Password               = thisresult.InnerXml 
-                    Case "XBMC_UserdataFolder"                  : XBMC_UserdataFolder	      = thisresult.InnerXml 
-                    Case "XBMC_TexturesDb"                      : XBMC_TexturesDb             = thisresult.InnerXml 
-                    Case "XBMC_ThumbnailsFolder"                : XBMC_ThumbnailsFolder       = thisresult.InnerXml 
+                    'Link properties
+                    Case "XBMC_Link"                            : XBMC_Link                 = thisresult.InnerXml 
+                    Case "XBMC_Address"                         : XBMC_Address              = thisresult.InnerXml 
+                    Case "XBMC_Port"                            : XBMC_Port                 = thisresult.InnerXml 
+                    Case "XBMC_Username"                        : XBMC_Username             = thisresult.InnerXml 
+                    Case "XBMC_Password"                        : XBMC_Password             = thisresult.InnerXml 
+                    Case "XBMC_UserdataFolder"                  : XBMC_UserdataFolder	    = thisresult.InnerXml 
+                    Case "XBMC_TexturesDb"                      : XBMC_TexturesDb           = thisresult.InnerXml 
+                    Case "XBMC_ThumbnailsFolder"                : XBMC_ThumbnailsFolder     = thisresult.InnerXml 
+                    Case "XBMC_Delete_Cached_Images"            : XBMC_Delete_Cached_Images = thisresult.InnerXml 
                     Case "XBMC_MC_MovieFolderMappings"          : XBMC_MC_MovieFolderMappings.Load(thisresult)
                     Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
+
+
 
                     Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters = thisresult.InnerXml 
 

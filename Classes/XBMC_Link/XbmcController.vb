@@ -36,6 +36,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 #End Region              'Globals
 
 #Region "Private vars"
+
+    Private _xbmcTexturesDb             As SQLiteConnection
     Private _dtCachedUrls               As DataTable
     Private _maxXbmcMovies              As List(Of XbmcMovieForCompare)
     Private _xbmcMovies                 As Dictionary(Of String, XbmcMovieForCompare)
@@ -75,7 +77,6 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     'Property LogMode              As EnumLogMode = EnumLogMode.Brief
 
-    Property XbmcTexturesDb       As SQLiteConnection = new SQLiteConnection(Preferences.XBMC_TexturesDb_ConnectionStr)
     Property XbmcThumbnailsFolder As String = Preferences.XBMC_Thumbnails_Path
     Property MoviesInFolder       As New Dictionary(Of String, Integer)
     Property BatchScanFolders     As List(Of String) = New List(Of String)
@@ -131,6 +132,16 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 #End Region        'RW Properties
 
 #Region "ReadOnly Properties"
+
+    Public ReadOnly Property XbmcTexturesDb As SQLiteConnection
+        Get
+            If IsNothing(_xbmcTexturesDb) Then
+                _xbmcTexturesDb = New SQLiteConnection(Preferences.XBMC_TexturesDb_ConnectionStr)
+            End If
+
+            Return _xbmcTexturesDb
+        End Get
+    End Property
 
     Public ReadOnly Property XbmcJson As XbmcJson
         Get
@@ -1014,6 +1025,12 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub DeleteCachedImages(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
         
         StopTimeoutTimer
+
+        If Not Preferences.XBMC_Delete_Cached_Images Then
+            LogInfo("Skipping delete orphaned movie images from thumbnail folder")
+            Return
+        End If
+
         LogInfo("Deleting orphaned movie images from thumbnail folder")
 
         If IsNothing(_dtCachedUrls) OrElse _dtCachedUrls.Rows.Count=0 or _dtCachedUrls.Rows.Count>4 Then 
