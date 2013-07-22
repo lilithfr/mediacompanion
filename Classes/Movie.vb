@@ -2245,18 +2245,23 @@ Public Class Movie
                 If TrailerExists Then
                     ReportProgress("Trailer already exists ", "Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
                 Else
+                    
                     _triedUrls.Clear()
                     GetTrailerUrlAlreadyRun = False
 
                     Dim more As Boolean = Not File.Exists(ActualTrailerPath)
 
                     While more
-                        _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)
-
+                        If rl.trailer or _scrapedMovie.fullmoviebody.trailer = "" Then
+                            _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
+                            UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)
+                        Else 
+                            TrailerUrl = _scrapedMovie.fullmoviebody.trailer 
+                        End If
                         If Preferences.DownloadTrailerDuringScrape Or rl.Download_Trailer Then
                             DownloadTrailer(TrailerUrl, rl.Download_Trailer)
                             more = (TrailerUrl <> "") And Not TrailerDownloaded
+                            If more Then _scrapedMovie.fullmoviebody.trailer = ""
                         Else
                             more = False
                         End If

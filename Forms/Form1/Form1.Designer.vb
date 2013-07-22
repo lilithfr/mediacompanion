@@ -15270,7 +15270,7 @@ Partial Class Form1
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(false)
-        Me.PerformLayout
+        Me.PerformLayout 
 
 End Sub
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
