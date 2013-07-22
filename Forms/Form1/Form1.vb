@@ -5522,7 +5522,7 @@ Public Class Form1
 
                     UpdateMissingFanart()
 
-                    Xbmc_UpdateWorkingMovie
+                    XbmcLink_UpdateArtwork
                     
                 Catch ex As WebException
                     MsgBox(ex.Message)
@@ -5537,8 +5537,8 @@ Public Class Form1
     End Sub
 
 
-    Sub Xbmc_UpdateWorkingMovie
-        If Preferences.XbmcLinkReady Then
+    Sub XbmcLink_UpdateArtwork
+        If Preferences.XBMC_Delete_Cached_Images AndAlso Preferences.XbmcLinkReady Then
             Dim m As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
             m.SaveNFO
         End If
@@ -5808,7 +5808,7 @@ Public Class Form1
             End If
 
             UpdateMissingFanart
-            Xbmc_UpdateWorkingMovie
+            XbmcLink_UpdateArtwork
         Catch ex As Exception
             MsgBox("Unable To Download Image")
         End Try
@@ -6799,7 +6799,7 @@ Public Class Form1
                 lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                 lblCurrentLoadedPoster.Refresh()
 
-                Xbmc_UpdateWorkingMovie
+                XbmcLink_UpdateArtwork
 
             Catch ex As Exception
                 ExceptionHandler.LogError(ex)
@@ -6897,7 +6897,7 @@ Public Class Form1
             UpdateMissingPoster
             Panel6.Visible = False
 
-            Xbmc_UpdateWorkingMovie
+            XbmcLink_UpdateArtwork
 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -7081,7 +7081,7 @@ Public Class Form1
                     End If
                 Next
 
-                Xbmc_UpdateWorkingMovie
+                XbmcLink_UpdateArtwork
 
             Catch ex As Exception
 #If SilentErrorScream Then
