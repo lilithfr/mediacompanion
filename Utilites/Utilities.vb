@@ -16,7 +16,7 @@ Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
-                                                 ".dvr-ms", ".img", ".strm", ".ssif", "video_ts.ifo", ".mk3d" }
+                                                 ".dvr-ms", ".img", ".strm", ".ssif", ".mk3d", ".webm", "video_ts.ifo" }  'video_ts.ifo must be last in list
 
     'files that support main movie file, ie. art, subtitles, and trailers
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
