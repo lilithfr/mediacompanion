@@ -1646,6 +1646,9 @@ is still saved, as it should be.</value>
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1381, 17</value>
+  </metadata>
   <data name="btnMovieDisplay_SetFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -2736,8 +2739,8 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
   <data name="tsmiSyncToXBMC.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOuAAA
-        DrgBakH1WwAAA4JJREFUOE9dkXtMk2cUxr9usCWLiaiLVxDGUGOMDpPtD80uyRDFlTKyEa2EKhjagCja
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOtwAA
+        DrcBHI9bQQAAA4JJREFUOE9dkXtMk2cUxr9usCWLiaiLVxDGUGOMDpPtD80uyRDFlTKyEa2EKhjagCja
         q6UdKA5hF5G1tEgLvUCx3ApFKy29fHztuNhKASdjBTN20QXGdFvcH2ZxzGdfcSVjJ/nlOW9O3uec97yM
         Vz7qNwLY8vivp3uJf4MRSWh96YXnHQwGMXcy4XH+xnUryqOioqRR0Yzo+A1r59fErMwmNsvIyQ1SjydG
         6ESM0EUT0XDuAl3riJN5Zho6+qobLa4ndR29J1Rm2w691dU+MhF6SGypGCCTKgbVa2QUwrwcVnkEL7ZV
@@ -2881,54 +2884,7 @@ Either "Use Foldernames" or "All Movies in Folders" must be enabled.
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>477, 95</value>
   </metadata>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>928, 17</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>These sets can be used to group collections of movies together within XBMC,
-eg. Add the movie set "Star Wars Collection", and make all
-Star Wars movies part of this set. They would be added to the XBMC library
-as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
-  </data>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Refresh" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
-  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="TabLevel1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -2990,6 +2946,86 @@ offline movie folder roots.</value>
         3AABwAIAAQMMAAs=
 </value>
   </data>
+  <data name="Label81.Text" xml:space="preserve">
+    <value>
+Root Folders are folders that contain
+multiple TV Shows
+
+For example :-
+D:/Root/TV Show 1
+D:/Root/TV Show 2 
+You would add the path:
+D:/Root
+
+Folders added to this list can be
+checked for new TV Show folders
+and can be added to the Seperate
+Folders List automatically on startup.
+
+To check for new TV Folders when
+the program is running, use the 
+"Check Roots for New TV Shows"
+menu item, located in the
+"TV Shows" drop down menu.</value>
+  </data>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>
+Separate folders are those that contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method means that all shows must be added manually.</value>
+  </data>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>928, 17</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>These sets can be used to group collections of movies together within XBMC,
+eg. Add the movie set "Star Wars Collection", and make all
+Star Wars movies part of this set. They would be added to the XBMC library
+as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
+  </data>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Refresh" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
   <metadata name="TvEpContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>195, 72</value>
   </metadata>
@@ -3024,41 +3060,31 @@ If none of the above are correct, then alter the search term and search again.</
   <metadata name="SCert.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="Label81.Text" xml:space="preserve">
-    <value>Root Folders are folders that contain
-multiple TV Shows
-
-For example :-
-D:/Root/TV Show 1
-D:/Root/TV Show 2 
-You would add the path:
-D:/Root
-
-Folders added to this list can be
-checked for new TV Show folders
-and can be added to the Seperate
-Folders List automatically on startup.
-
-To check for new TV Folders when
-the program is running, use the 
-"Check Roots for New TV Shows"
-menu item, located in the
-"TV Shows" drop down menu.</value>
-  </data>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>Separate folders are those that
-contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method
-means that all shows must be
-added manually.</value>
-  </data>
-  <metadata name="btnTVPrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="STitle.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SPlot.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SPremiered.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SRating.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SGenre.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SStudio.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="STVDBId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SIMDBId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SCert.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Label138.Text" xml:space="preserve">
@@ -5121,12 +5147,6 @@ MC naming conventions.</value>
         5766XqFkuJWaZ1B5Cl9oOSAM0UUAesKc0UUUAf/Z
 </value>
   </data>
-  <metadata name="PictureBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox18.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="HomeMovieContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
@@ -5140,9 +5160,6 @@ i.e. 'C:/Movies/'
 Would allow MC to find any movies located within the
 "Movies" folder, and all of its subfolders.</value>
   </data>
-  <metadata name="btnGeneralPrefsSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start
 an XBMC Update, or maybe just to launch an external program.
