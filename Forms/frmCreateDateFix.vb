@@ -199,23 +199,11 @@ Public Class frmCreateDateFix
 
     Private Sub btnDateFix_Click(sender As Object, e As EventArgs) Handles btnDateFix.Click
         If _totalCheckedCheckBoxes Then
-            statusProgressBarDateFix.Visible = True
-            statusProgressBarDateFix.Value = 0
-            statusProgressBarDateFix.Maximum = _totalCheckedCheckBoxes
+            statuslblDateFix.Text = "Processing..."
+            btnDateFix.Enabled = False
+            Application.DoEvents()
             Dim selectedItems = From theRow In dateFixDataGridView.Rows Where theRow.Cells("chkBxSelect").Value
-            Dim iProgress As Integer = 0
-            statusProgressBarDateFix.Step = 1
             For Each selectedItem As DataGridViewRow In selectedItems
-                statusProgressBarDateFix.PerformStep()
-                statusProgressBarDateFix.ProgressBar.Refresh()
-                'Application.DoEvents()
-                'iProgress += 1
-                'Dim percent As Integer = iProgress / _totalCheckedCheckBoxes * 100
-                'Dim modu As Integer = percent Mod 10
-                'statusProgressBarDateFix.Value = percent
-                'If modu Then
-                '    Application.DoEvents()
-                'End If
                 Dim m As Movie = Form1.oMovies.LoadMovie(selectedItem.Cells("NFOpath").Value)
                 If Not IsNothing(m) Then
                     Dim createDate As Date = selectedItem.Cells("FileDate").Value
@@ -228,8 +216,8 @@ Public Class frmCreateDateFix
 
             'After changes made, reload from cache
             GetDataSource()
-
-            statusProgressBarDateFix.Visible = False
+            statuslblDateFix.Text = "Done."
+            btnDateFix.Enabled = True
         Else
             MessageBox.Show("Please make your selection for dates to sync", "No Titles Selected")
         End If
