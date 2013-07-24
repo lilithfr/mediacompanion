@@ -21,6 +21,7 @@ Public Class Form1
     Const NFO_INDEX As Integer = 4
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
+    Public Const MCToolsCommands As Integer = 2          ' increment when adding MC functions to ToolsToolStripMenuItem
 
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
@@ -19629,7 +19630,7 @@ Public Class Form1
                 ListBox17.Items.Add(newcom.command)
                 'ToolsToolStripMenuItem.DropDownItems.Clear()
                 Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
-                For i = x-1 To 1 Step -1
+                For i = x-1 To MCToolsCommands Step -1
                     ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
                 Next
                 For Each com In Preferences.commandlist
@@ -19679,7 +19680,7 @@ Public Class Form1
                 ListBox17.Items.Clear()
                 'ToolsToolStripMenuItem.DropDownItems.Clear()
                 Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
-                For i = x-1 To 1 Step -1
+                For i = x-1 To MCToolsCommands Step -1
                     ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
                 Next
                 For Each com In Preferences.commandlist
