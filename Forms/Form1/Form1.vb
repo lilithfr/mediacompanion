@@ -726,7 +726,7 @@ Public Class Form1
 
         AddHandler XBMC_Link_Check_Timer.Elapsed, AddressOf XBMC_Link_Check_Timer_Elapsed
         Ini_Timer(XBMC_Link_Check_Timer,2000,True)
-        XBMC_Link_Check_Timer.Start
+        'XBMC_Link_Check_Timer.Start
 
 
         AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
@@ -25259,5 +25259,10 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub FixNFOCreateDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FixNFOCreateDateToolStripMenuItem.Click
+        Dim fixCreateDate As New frmCreateDateFix
+        fixCreateDate.ShowDialog()
     End Sub
 End Class

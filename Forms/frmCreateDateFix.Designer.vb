@@ -32,7 +32,6 @@ Partial Class frmCreateDateFix
         Me.statusDateFix = New System.Windows.Forms.StatusStrip()
         Me.statuslblDateFix = New System.Windows.Forms.ToolStripStatusLabel()
         Me.btnDateFix = New System.Windows.Forms.Button()
-        Me.statusProgressBarDateFix = New System.Windows.Forms.ToolStripProgressBar()
         CType(Me.nudDateFix, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dateFixDataGridView, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.statusDateFix.SuspendLayout()
@@ -92,7 +91,7 @@ Partial Class frmCreateDateFix
         '
         'statusDateFix
         '
-        Me.statusDateFix.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statusProgressBarDateFix, Me.statuslblDateFix})
+        Me.statusDateFix.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statuslblDateFix})
         Me.statusDateFix.Location = New System.Drawing.Point(0, 340)
         Me.statusDateFix.Name = "statusDateFix"
         Me.statusDateFix.Size = New System.Drawing.Size(584, 22)
@@ -113,12 +112,6 @@ Partial Class frmCreateDateFix
         Me.btnDateFix.TabIndex = 6
         Me.btnDateFix.Text = "Update"
         Me.btnDateFix.UseVisualStyleBackColor = True
-        '
-        'statusProgressBarDateFix
-        '
-        Me.statusProgressBarDateFix.Name = "statusProgressBarDateFix"
-        Me.statusProgressBarDateFix.Size = New System.Drawing.Size(100, 16)
-        Me.statusProgressBarDateFix.Visible = False
         '
         'frmCreateDateFix
         '
@@ -151,5 +144,4 @@ Partial Class frmCreateDateFix
     Friend WithEvents chkbxSelect As System.Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents statuslblDateFix As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents btnDateFix As System.Windows.Forms.Button
-    Friend WithEvents statusProgressBarDateFix As System.Windows.Forms.ToolStripProgressBar
 End Class
