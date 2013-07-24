@@ -1819,7 +1819,13 @@ Public Class Form1
                 pathtxt.Text = workingMovie.fullpathandfilename
                 ratingtxt.Text = workingMovieDetails.fullmoviebody.rating.FormatRating
                 imdbtxt.Text = workingMovieDetails.fullmoviebody.imdbid
-
+                If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
+                    For Each t In workingMovieDetails.fullmoviebody.tag
+                        tagtxt.Text &= t & ", "
+                    Next
+                Else
+                    tagtxt.Text = ""
+                End If
                 'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
@@ -2055,6 +2061,7 @@ Public Class Form1
             lblCurrentLoadedPoster.Text = ""
             TextBox34.Text = ""
             titletxt.Text = ""
+            tagtxt.Text = ""
 
             roletxt.Text = ""
             PictureBoxActor.Image = Nothing
