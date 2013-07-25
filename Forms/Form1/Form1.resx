@@ -2736,8 +2736,8 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
   <data name="tsmiSyncToXBMC.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOtQAA
-        DrUBY3GYyAAAA4JJREFUOE9dkXtMk2cUxr9usCWLiaiLVxDGUGOMDpPtD80uyRDFlTKyEa2EKhjagCja
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOswAA
+        DrMB43LcUwAAA4JJREFUOE9dkXtMk2cUxr9usCWLiaiLVxDGUGOMDpPtD80uyRDFlTKyEa2EKhjagCja
         q6UdKA5hF5G1tEgLvUCx3ApFKy29fHztuNhKASdjBTN20QXGdFvcH2ZxzGdfcSVjJ/nlOW9O3uec97yM
         Vz7qNwLY8vivp3uJf4MRSWh96YXnHQwGMXcy4XH+xnUryqOioqRR0Yzo+A1r59fErMwmNsvIyQ1SjydG
         6ESM0EUT0XDuAl3riJN5Zho6+qobLa4ndR29J1Rm2w691dU+MhF6SGypGCCTKgbVa2QUwrwcVnkEL7ZV
@@ -2815,7 +2815,7 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
         AAEAAAD/////AQAAAAAAAAAEAQAAAH5TeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5MaXN0YDFbW1N5
         c3RlbS5JbnQzMiwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJs
         aWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgcAAAgI
-        CAkCAAAAAQAAAAMAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
+        CAkCAAAAAQAAAAYAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
 </value>
   </data>
   <data name="cbFilterVotes.Values" mimetype="application/x-microsoft.net.object.binary.base64">
@@ -2823,7 +2823,7 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
         AAEAAAD/////AQAAAAAAAAAEAQAAAH5TeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5MaXN0YDFbW1N5
         c3RlbS5JbnQzMiwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJs
         aWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgcAAAgI
-        CAkCAAAAAQAAAAMAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
+        CAkCAAAAAQAAAAYAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
 </value>
   </data>
   <data name="cbFilterRating.Values" mimetype="application/x-microsoft.net.object.binary.base64">
@@ -2831,7 +2831,7 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
         AAEAAAD/////AQAAAAAAAAAEAQAAAH5TeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5MaXN0YDFbW1N5
         c3RlbS5JbnQzMiwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJs
         aWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgcAAAgI
-        CAkCAAAAAQAAAAMAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
+        CAkCAAAAAQAAAAYAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
 </value>
   </data>
   <data name="Label128.Text" xml:space="preserve">
