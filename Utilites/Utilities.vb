@@ -450,7 +450,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
                     Dim pattern As String = "*" & VideoExtensions(f)
 
-                    If strict Then pattern = IO.Path.GetFileNameWithoutExtension(path) & "*" & VideoExtensions(f)
+                    If strict and Not path.Contains("movie.nfo") Then pattern = IO.Path.GetFileNameWithoutExtension(path) & "*" & VideoExtensions(f)
 
                     Try
                         Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
