@@ -123,6 +123,9 @@
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1282, 17</value>
   </metadata>
+  <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="Label104.Text" xml:space="preserve">
     <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled. The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).</value>
   </data>
@@ -2736,8 +2739,8 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
   <data name="tsmiSyncToXBMC.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOsAAA
-        DrABTsv9PgAAA4JJREFUOE9dkXtMk2cUxr9usCWLiaiLVxDGUGOMDpPtD80uyRDFlTKyEa2EKhjagCja
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOrAAA
+        DqwB3KhigwAAA4JJREFUOE9dkXtMk2cUxr9usCWLiaiLVxDGUGOMDpPtD80uyRDFlTKyEa2EKhjagCja
         q6UdKA5hF5G1tEgLvUCx3ApFKy29fHztuNhKASdjBTN20QXGdFvcH2ZxzGdfcSVjJ/nlOW9O3uec97yM
         Vz7qNwLY8vivp3uJf4MRSWh96YXnHQwGMXcy4XH+xnUryqOioqRR0Yzo+A1r59fErMwmNsvIyQ1SjydG
         6ESM0EUT0XDuAl3riJN5Zho6+qobLa4ndR29J1Rm2w691dU+MhF6SGypGCCTKgbVa2QUwrwcVnkEL7ZV
@@ -2845,9 +2848,6 @@ This can be any editable field including sets, and clicking the save button will
 If you do not wish to edit a field then leave it blank, only fields that contain
                                              text will be changed.</value>
   </data>
-  <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="cbMovCreateFolderjpg.ToolTip" xml:space="preserve">
     <value>Enabling this option will allow Media Companion to save the Poster as folder.jpg.
 This will allow XBMC to display the poster when browsing movies in file mode.
