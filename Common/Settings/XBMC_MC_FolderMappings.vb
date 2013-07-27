@@ -206,12 +206,12 @@ Public Class XBMC_MC_FolderMappings
     End Sub
 
     Public Sub RemoveInvalidFolders()
-        Dim citems As Integer = Items.Count
-        For Each item In Items
+        'Dim citems As Integer = Items.Count
+        For Each item In Items.ToList
             If Not MC_Folders.Contains(item.MC) Then
                 Items.Remove(item)
-                citems = citems - 1
-                If citems = 0 Then Exit For
+                'citems = citems - 1
+                'If citems = 0 Then Exit For
             End If
         Next
     End Sub
