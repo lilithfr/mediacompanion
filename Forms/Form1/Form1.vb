@@ -25273,4 +25273,12 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
+
+    Private Sub tv_PictureBoxLeft_Click(sender As System.Object, e As System.EventArgs)
+
+    End Sub
+
+    Private Sub PictureBoxFanArt_Click(sender As System.Object, e As System.EventArgs)
+
+    End Sub
 End Class
