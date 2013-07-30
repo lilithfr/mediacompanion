@@ -549,6 +549,7 @@
     <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\new2.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

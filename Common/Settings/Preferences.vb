@@ -290,6 +290,7 @@ Public Class Preferences
 
 
     'XBMC Sync
+    Public Shared XBMC_Active As Boolean = False
     Public Shared XBMC_Link                   As Boolean = False
     Public Shared XBMC_Address                As String = "127.0.0.1"
     Public Shared XBMC_Port                   As String = "8080"
@@ -854,9 +855,10 @@ Public Class Preferences
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
+        root.AppendChild(doc, "XBMC_Active", XBMC_Active)
         root.AppendChild( doc, "XBMC_Link"                   , XBMC_Link                 )
         root.AppendChild( doc, "XBMC_Address"                , XBMC_Address              )
-        root.AppendChild( doc, "XBMC_Port"                   , XBMC_Port                 )
+        root.AppendChild(doc, "XBMC_Port", XBMC_Port) 'cbXBMC_Active
         root.AppendChild( doc, "XBMC_Username"               , XBMC_Username             )
         root.AppendChild( doc, "XBMC_Password"               , XBMC_Password             )
         root.AppendChild( doc, "XBMC_UserdataFolder"         , XBMC_UserdataFolder       )
@@ -1164,7 +1166,8 @@ Public Class Preferences
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml 
 
-                    'Link properties
+                        'Link properties
+                    Case "XBMC_Active" : XBMC_Active = thisresult.InnerXml
                     Case "XBMC_Link"                            : XBMC_Link                 = thisresult.InnerXml 
                     Case "XBMC_Address"                         : XBMC_Address              = thisresult.InnerXml 
                     Case "XBMC_Port"                            : XBMC_Port                 = thisresult.InnerXml 
