@@ -227,86 +227,64 @@ Public Class clsGridViewMovie
 
 
         'General
-        Select Form1.cbFilterGeneral.Text.RemoveAfterMatch
+        If Form1.cbFilterGeneral.Visible Then
+            Select Form1.cbFilterGeneral.Text.RemoveAfterMatch
 
-            Case "Watched"                     : b = From f In b Where     f.Watched
-            Case "Unwatched"                   : b = From f In b Where Not f.Watched
+                Case "Watched"                     : b = From f In b Where     f.Watched
+                Case "Unwatched"                   : b = From f In b Where Not f.Watched
 
-            Case "Duplicates"                  : Dim sort = b.GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
+                Case "Duplicates"                  : Dim sort = b.GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
 
-            Case "Missing Poster"              : b = From f In b Where f.MissingPoster
-            Case "Missing Fanart"              : b = From f In b Where f.MissingFanart
-            Case "Missing Trailer"             : b = From f In b Where f.MissingTrailer
-            Case "Missing Local Actors"        : b = From f In b Where f.MissingLocalActors
-            Case "Missing Plot"                : b = From f In b Where f.MissingPlot
-            Case "Missing Genre"               : b = From f In b Where f.MissingGenre
-            Case "Missing Outline"             : b = From f In b Where f.MissingOutline
-            Case "Missing Rating"              : b = From f In b Where f.MissingRating
-            Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
-            Case "Missing Votes"               : b = From f In b Where f.MissingVotes
-            Case "Missing Year"                : b = From f In b Where f.MissingYear
-            Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
-            Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
-            Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
-            Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )
-            Case "Pre-Frodo poster only"       : b = From f In b Where     f.PreFrodoPosterExists And Not f.FrodoPosterExists
-            Case "Frodo poster only"           : b = From f In b Where Not f.PreFrodoPosterExists And     f.FrodoPosterExists
-            Case "Both poster formats"         : b = From f In b Where     f.PreFrodoPosterExists And     f.FrodoPosterExists
-            Case "Imdb in folder name"         : b = From f In b Where     f.ImdbInFolderName
-            Case "Imdb in not folder name"     : b = From f In b Where Not f.ImdbInFolderName
-            Case "Imdb not in folder name & year mismatch" : b = From f In b Where Not f.ImdbInFolderName And f.year<>f.FolderNameYear
-            Case "Plot same as Outline"        : b = (From f In b From m In Form1.oMovies.MovieCache _
-                                                      Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
-                                                      Select f
-                                                      )
+                Case "Missing Poster"              : b = From f In b Where f.MissingPoster
+                Case "Missing Fanart"              : b = From f In b Where f.MissingFanart
+                Case "Missing Trailer"             : b = From f In b Where f.MissingTrailer
+                Case "Missing Local Actors"        : b = From f In b Where f.MissingLocalActors
+                Case "Missing Plot"                : b = From f In b Where f.MissingPlot
+                Case "Missing Genre"               : b = From f In b Where f.MissingGenre
+                Case "Missing Outline"             : b = From f In b Where f.MissingOutline
+                Case "Missing Rating"              : b = From f In b Where f.MissingRating
+                Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
+                Case "Missing Votes"               : b = From f In b Where f.MissingVotes
+                Case "Missing Year"                : b = From f In b Where f.MissingYear
+                Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
+                Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
+                Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
+                Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )
+                Case "Pre-Frodo poster only"       : b = From f In b Where     f.PreFrodoPosterExists And Not f.FrodoPosterExists
+                Case "Frodo poster only"           : b = From f In b Where Not f.PreFrodoPosterExists And     f.FrodoPosterExists
+                Case "Both poster formats"         : b = From f In b Where     f.PreFrodoPosterExists And     f.FrodoPosterExists
+                Case "Imdb in folder name"         : b = From f In b Where     f.ImdbInFolderName
+                Case "Imdb in not folder name"     : b = From f In b Where Not f.ImdbInFolderName
+                Case "Imdb not in folder name & year mismatch" : b = From f In b Where Not f.ImdbInFolderName And f.year<>f.FolderNameYear
+                Case "Plot same as Outline"        : b = (From f In b From m In Form1.oMovies.MovieCache _
+                                                          Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
+                                                          Select f
+                                                          )
      
 
-        End Select
+            End Select
+        End If
 
         If Yield Then Return
 
         
-        b = From f In b Where f.Rating >= Form1.cbFilterRating.SelectedMin and f.Rating <= Form1.cbFilterRating.SelectedMax     'Rating
-        b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
-        b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
+        If Form1.cbFilterRating.Visible Then b = From f In b Where f.Rating >= Form1.cbFilterRating.SelectedMin and f.Rating <= Form1.cbFilterRating.SelectedMax     'Rating
+        If Form1.cbFilterVotes .Visible Then b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
+        If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
        
-        b = Form1.oMovies.ApplyGenresFilter        ( b , Form1.cbFilterGenre          )
-        b = Form1.oMovies.ApplyCertificatesFilter  ( b , Form1.cbFilterCertificate    )
-        b = Form1.oMovies.ApplySetsFilter          ( b , Form1.cbFilterSet            )
-        b = Form1.oMovies.ApplyResolutionsFilter   ( b , Form1.cbFilterResolution     )
-        b = Form1.oMovies.ApplyAudioCodecsFilter   ( b , Form1.cbFilterAudioCodecs    )
-        b = Form1.oMovies.ApplyAudioChannelsFilter ( b , Form1.cbFilterAudioChannels  )
-        b = Form1.oMovies.ApplyAudioBitratesFilter ( b , Form1.cbFilterAudioBitrates  )
-        b = Form1.oMovies.ApplyNumAudioTracksFilter( b , Form1.cbFilterNumAudioTracks )
-        b = Form1.oMovies.ApplyAudioLanguagesFilter( b , Form1.cbFilterAudioLanguages )
-        b = Form1.oMovies.ApplyActorsFilter        ( b , Form1.cbFilterActor          )
-        b = Form1.oMovies.ApplySourcesFilter       ( b , Form1.cbFilterSource         )
+        If Form1.cbFilterGenre         .Visible Then b = Form1.oMovies.ApplyGenresFilter        ( b , Form1.cbFilterGenre          )
+        If Form1.cbFilterCertificate   .Visible Then b = Form1.oMovies.ApplyCertificatesFilter  ( b , Form1.cbFilterCertificate    )
+        If Form1.cbFilterSet           .Visible Then b = Form1.oMovies.ApplySetsFilter          ( b , Form1.cbFilterSet            )
+        If Form1.cbFilterResolution    .Visible Then b = Form1.oMovies.ApplyResolutionsFilter   ( b , Form1.cbFilterResolution     )
+        If Form1.cbFilterAudioCodecs   .Visible Then b = Form1.oMovies.ApplyAudioCodecsFilter   ( b , Form1.cbFilterAudioCodecs    )
+        If Form1.cbFilterAudioChannels .Visible Then b = Form1.oMovies.ApplyAudioChannelsFilter ( b , Form1.cbFilterAudioChannels  )
+        If Form1.cbFilterAudioBitrates .Visible Then b = Form1.oMovies.ApplyAudioBitratesFilter ( b , Form1.cbFilterAudioBitrates  )
+        If Form1.cbFilterNumAudioTracks.Visible Then b = Form1.oMovies.ApplyNumAudioTracksFilter( b , Form1.cbFilterNumAudioTracks )
+        If Form1.cbFilterAudioLanguages.Visible Then b = Form1.oMovies.ApplyAudioLanguagesFilter( b , Form1.cbFilterAudioLanguages )
+        If Form1.cbFilterActor         .Visible Then b = Form1.oMovies.ApplyActorsFilter        ( b , Form1.cbFilterActor          )
+        If Form1.cbFilterSource        .Visible Then b = Form1.oMovies.ApplySourcesFilter       ( b , Form1.cbFilterSource         )
 
-
-        'Actor
-        'If Form1.ActorFilter<>"" then
-        '    Dim movie_ids As New List(Of String) 
-
-        '    For Each actor In Form1.oMovies.ActorDb
-        '        If actor.actorname = Form1.ActorFilter Then
-        '            movie_ids.Add(actor.movieid)
-        '        End If
-        '    Next
-
-        '    b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
-
-        '    If Yield Then Return
-        'End If
-
-
-        'Source
-        'If Form1.cbFilterSource.Text <> "All" Then
-        '    b = From f In b Where f.source.Contains(Form1.cbFilterSource.Text)
-        '    If Yield Then Return
-        'End If
-        
-
-
+ 
         Select Case Form1.cbSort.Text
             Case "A - Z"
                 If GridSort = "Asc" Then

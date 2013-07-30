@@ -3351,10 +3351,12 @@ Public Class Form1
         '        cbFilterVotes         .Min = oMovies.MinVotes
         '        cbFilterVotes         .Max = oMovies.MaxVotes
 
-        cbFilterVotes.Values = oMovies.ListVotes
+        If cbFilterVotes.Visible Then cbFilterVotes.Values = oMovies.ListVotes
 
-        cbFilterYear.Min = oMovies.MinYear
-        cbFilterYear.Max = oMovies.MaxYear
+        If cbFilterYear.Visible Then 
+            cbFilterYear.Min = oMovies.MinYear
+            cbFilterYear.Max = oMovies.MaxYear
+        End If
     End Sub
 
     'Medianfo.dll to outputlog
@@ -23931,16 +23933,16 @@ Public Class Form1
 
         UpdateMinMaxMovieFilters
 
-        cbFilterGenre         .UpdateItems( oMovies.GenresFilter         )
-        cbFilterCertificate   .UpdateItems( oMovies.CertificatesFilter   )
-        cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
-        cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
-        cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
-        cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
-        cbFilterAudioBitrates .UpdateItems( oMovies.AudioBitratesFilter  )
-        cbFilterNumAudioTracks.UpdateItems( oMovies.NumAudioTracksFilter )
-        cbFilterAudioLanguages.UpdateItems( oMovies.AudioLanguagesFilter )
-        cbFilterActor         .UpdateItems( oMovies.ActorsFilter         )
+        If cbFilterGenre         .Visible Then cbFilterGenre         .UpdateItems( oMovies.GenresFilter         )
+        If cbFilterCertificate   .Visible Then cbFilterCertificate   .UpdateItems( oMovies.CertificatesFilter   )
+        If cbFilterSet           .Visible Then cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
+        If cbFilterResolution    .Visible Then cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
+        If cbFilterAudioCodecs   .Visible Then cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
+        If cbFilterAudioChannels .Visible Then cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
+        If cbFilterAudioBitrates .Visible Then cbFilterAudioBitrates .UpdateItems( oMovies.AudioBitratesFilter  )
+        If cbFilterNumAudioTracks.Visible Then cbFilterNumAudioTracks.UpdateItems( oMovies.NumAudioTracksFilter )
+        If cbFilterAudioLanguages.Visible Then cbFilterAudioLanguages.UpdateItems( oMovies.AudioLanguagesFilter )
+        If cbFilterActor         .Visible Then cbFilterActor         .UpdateItems( oMovies.ActorsFilter         )
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23993,20 +23995,22 @@ Public Class Form1
 
 
     Sub Assign_FilterGeneral
-        Dim selected = cbFilterGeneral.Text
+        If cbFilterGeneral.Visible Then
+            Dim selected = cbFilterGeneral.Text
 
-        cbFilterGeneral.Items.Clear
-        cbFilterGeneral.Items.AddRange( oMovies.GeneralFilters.ToArray )
+            cbFilterGeneral.Items.Clear
+            cbFilterGeneral.Items.AddRange( oMovies.GeneralFilters.ToArray )
 
-        If cbFilterGeneral.Text = "" Then cbFilterGeneral.Text = "All"
+            If cbFilterGeneral.Text = "" Then cbFilterGeneral.Text = "All"
 
-        If selected<>"" Then
-            For Each item As String In cbFilterGeneral.Items
-                If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
-                    cbFilterGeneral.SelectedItem=item    
-                    Exit For
-                End If
-            Next
+            If selected<>"" Then
+                For Each item As String In cbFilterGeneral.Items
+                    If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
+                        cbFilterGeneral.SelectedItem=item    
+                        Exit For
+                    End If
+                Next
+            End If
         End If
     End Sub
 
@@ -24754,6 +24758,7 @@ Public Class Form1
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then 
             UpdateMovieFiltersPanel
             Preferences.SaveConfig
+            UpdateFilteredList
         End If
     End Sub
 
