@@ -1254,27 +1254,31 @@ Public Class Classimdb
                     webpage.Clear()
                     webpage = loadwebpage(tempstring, False)
                     For f = 0 To webpage.Count - 1
-                        If webpage(f).IndexOf("<h5><a name=""akas"">Also Known As") <> -1 Then
+                        If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
                             Dim loc As Integer = f
                             Dim ignore As Boolean = False
                             For g = loc To loc + 500
                                 If webpage(g).IndexOf("</table>") <> -1 Then
                                     Exit For
                                 End If
-                                Dim skip As Boolean = ignore
-                                If webpage(g).IndexOf("<td>") <> -1 And ignore = True Then
-                                    ignore = False
+                                Dim skip As Boolean = Not ignore
+                                If webpage(g).IndexOf("<td>") <> -1 Then    'And ignore = True Then
+                                    ignore = Not ignore
                                 End If
+
                                 If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
-                                    If webpage(g + 2).IndexOf("Greece") = -1 And webpage(g + 2).IndexOf("Russia") = -1 Then
+                                    If webpage(g - 1).IndexOf("Greece") = -1 And webpage(g - 1).IndexOf("Russia") = -1 Then
                                         tempstring = webpage(g)
+                                        tempstring = LTrim(tempstring)
                                         tempstring = tempstring.Replace("<td>", "")
                                         tempstring = tempstring.Replace("</td>", "")
                                         tempstring = Utilities.cleanSpecChars(tempstring)
                                         tempstring = encodespecialchrs(tempstring)
                                         totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                                    Else
+                                        g = g + 1
                                     End If
-                                    ignore = True
+                                    ignore = False
                                 End If
                             Next
                         End If
