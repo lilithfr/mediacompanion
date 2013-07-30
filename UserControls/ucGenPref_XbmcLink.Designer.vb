@@ -59,8 +59,8 @@ Partial Class ucGenPref_XbmcLink
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cbXBMC_Delete_Cached_Images = New System.Windows.Forms.CheckBox()
         Me.cbXBMC_Active = New System.Windows.Forms.CheckBox()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.tlpXbmcLink.SuspendLayout
         CType(Me.pbResult1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.pbResult2,System.ComponentModel.ISupportInitialize).BeginInit
@@ -488,12 +488,12 @@ Partial Class ucGenPref_XbmcLink
         "cached images.")
         Me.cbXBMC_Delete_Cached_Images.UseVisualStyleBackColor = true
         '
-        'cbXBMCActive
+        'cbXBMC_Active
         '
         Me.cbXBMC_Active.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.cbXBMC_Active.AutoSize = true
         Me.cbXBMC_Active.Location = New System.Drawing.Point(201, 5)
-        Me.cbXBMC_Active.Name = "cbXBMCActive"
+        Me.cbXBMC_Active.Name = "cbXBMC_Active"
         Me.cbXBMC_Active.Size = New System.Drawing.Size(369, 14)
         Me.cbXBMC_Active.TabIndex = 93
         Me.cbXBMC_Active.UseVisualStyleBackColor = true
@@ -502,11 +502,11 @@ Partial Class ucGenPref_XbmcLink
         '
         Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label2.AutoSize = true
-        Me.Label2.Location = New System.Drawing.Point(45, 6)
+        Me.Label2.Location = New System.Drawing.Point(121, 6)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(150, 13)
+        Me.Label2.Size = New System.Drawing.Size(74, 13)
         Me.Label2.TabIndex = 94
-        Me.Label2.Text = "Enable Link Functionality"
+        Me.Label2.Text = "Enable Link"
         '
         'ucGenPref_XbmcLink
         '
