@@ -7,7 +7,8 @@ Public Class ucGenPref_XbmcLink
 
     ReadOnly Property Changed As Boolean
         Get
-            Return  MovieFolderMappings.Changed(Preferences.XBMC_MC_MovieFolderMappings)          OrElse
+            Return  cbXBMC_Active               .Checked <> Preferences.XBMC_Active               OrElse
+                    MovieFolderMappings.Changed(Preferences.XBMC_MC_MovieFolderMappings)          OrElse
                     tbXBMC_Address              .Text    <> Preferences.XBMC_Address              OrElse
                     tbXBMC_Port                 .Text    <> Preferences.XBMC_Port                 OrElse
                     tbXBMC_Username             .Text    <> Preferences.XBMC_Username             OrElse
@@ -67,103 +68,15 @@ Public Class ucGenPref_XbmcLink
         SetEnabledStates
     End Sub
 
-    Private Sub AnyFieldChanged(sender As Object,  e As EventArgs) Handles  tbXBMC_Address       .TextChanged, tbXBMC_Port.TextChanged      , tbXBMC_Username        .TextChanged, tbXBMC_Password.TextChanged, _
-                                                                            tbXBMC_UserdataFolder.TextChanged, tbXBMC_TexturesDb.TextChanged, tbXBMC_ThumbnailsFolder.TextChanged, cbXBMC_Delete_Cached_Images.CheckedChanged
+    Private Sub AnyFieldChanged(sender As Object,  e As EventArgs) Handles  cbXBMC_Active    .CheckedChanged, tbXBMC_Address         .TextChanged, tbXBMC_Port                .TextChanged   , _
+                                                                            tbXBMC_Username  .TextChanged   , tbXBMC_Password        .TextChanged, tbXBMC_UserdataFolder      .TextChanged   , _
+                                                                            tbXBMC_TexturesDb.TextChanged   , tbXBMC_ThumbnailsFolder.TextChanged, cbXBMC_Delete_Cached_Images.CheckedChanged
         SetEnabledStates
     End Sub
  
 
     Private Sub btnValidate_Click( sender As Object,  e As EventArgs) Handles btnValidate.Click
-
         ValidateSettings
-
-        'Dim tmp_MovieFolderMappings As XBMC_MC_FolderMappings = New XBMC_MC_FolderMappings
-
-        'Dim tmp_tbXBMC_Address              As String  = Preferences.XBMC_Address
-        'Dim tmp_tbXBMC_Port                 As String  = Preferences.XBMC_Port
-        'Dim tmp_tbXBMC_Username             As String  = Preferences.XBMC_Username
-        'Dim tmp_tbXBMC_Password             As String  = Preferences.XBMC_Password
-        'Dim tmp_cbXBMC_Delete_Cached_Images As Boolean = Preferences.XBMC_Delete_Cached_Images
-        'Dim tmp_tbXBMC_UserdataFolder       As String  = Preferences.XBMC_UserdataFolder
-        'Dim tmp_tbXBMC_TexturesDb           As String  = Preferences.XBMC_TexturesDb
-        'Dim tmp_tbXBMC_ThumbnailsFolder     As String  = Preferences.XBMC_ThumbnailsFolder
-
-        'tmp_MovieFolderMappings.Assign(Preferences.XBMC_MC_MovieFolderMappings)
-
-        'UpdatePreferences
-
-        'tbDialogue.Clear
-
-
-        'Dim canConnect As Boolean = Preferences.XBMC_CanConnect 
-
-        'Dim ParentForm As Form1 = Me.Parent.Parent.Parent.Parent.Parent 
-
-        'Dim PreFrodoPosterOnlyCount As Integer = ParentForm.oMovies.PreFrodoPosterOnlyCount
-
-        'Dim MovieFoldersConfigured As Boolean = (Preferences.XBMC_MC_MovieFolderMappings.Items.Count>0)
-
-        'Dim overAll As Boolean = _
-        '    ShowTest("Frodo Enabled"                     , Preferences.FrodoEnabled                 , 10) And
-        '    ShowTest("Pre-Frodo only movies ('.tbn' posters instead of '-poster.jpg') : " & PreFrodoPosterOnlyCount.ToString, (PreFrodoPosterOnlyCount=0), 10 ) And
-        '    ShowTest("XBMC PC Ping"                      , Preferences.XBMC_CanPing                  , 1) And
-        '    ShowTest("XBMC Connect"                      , canConnect                                , 2) And
-        '    ShowTest("Userdata Folder"                   , Preferences.XBMC_UserdataFolder_Valid     , 5) And
-        '    ShowTest("TexturesDb File"                   , Preferences.XBMC_TexturesDbFile_Valid     , 6) And
-        '    ShowTest("TexturesDb Connection"             , Preferences.XBMC_TexturesDb_Conn_Valid    , 6) And
-        '    ShowTest("TexturesDb Version (Frodo needed)" , Preferences.XBMC_TexturesDb_Version_Valid , 6) And
-        '    ShowTest("Thumbnails Folder"                 , Preferences.XBMC_ThumbnailsFolder_Valid   , 7) And
-        '    ShowTest("Movie folder(s) configured"        , MovieFoldersConfigured                    , 8) And
-        '    ShowTest("Movie Folder mappings set (NB Actual paths not validated as applicable to XBMC PC)" , Preferences.XBMC_MC_MovieFolderMappings.Initialised, 8) 
-        
-        'UpdateImage(3 ,canConnect)
-        'UpdateImage(4 ,canConnect)
-
-        'ShowTest("Overall", overAll , 10) 
-
-        'If Not overAll Then
-        '    AppendDialogue("****************************************")
-        '    AppendDialogue("")
-        '    AppendDialogue("Things to check:")
-
-        '    If Not Preferences.FrodoEnabled Then
-        '        AppendDialogue("    - MC has General Preferences-General-Artwork Version->Frodo enabled ")
-        '    End If
-
-        '    If PreFrodoPosterOnlyCount>0 Then
-        '        AppendDialogue("    - Warning: Some of your movies only have '.tbn' poster extensions, Frodo expects '-poster.jpg'. You can fix this by:")
-        '        AppendDialogue("         - 1. Selecting 'Pre-Frodo poster only' from the 'General' Movie Filter" )
-        '        AppendDialogue("         - 2. Selecting all the movies in the list, then Rt-Click & select 'Convert to Frodo only'" )
-        '    End If
-
-        '    If Not canConnect Then
-        '        AppendDialogue("    - XBMC is running")
-        '        AppendDialogue("    - System - Settings - Servies - Webserver:")
-        '        AppendDialogue("        - Allow control of XBMC via HTTP' is checked ")
-        '        AppendDialogue("        - Port, Username and Password match")
-        '        AppendDialogue("        - Web interface is set to 'Default'")
-        '        AppendDialogue("    - If you are trying to connect to XBMC on a remote PC, make sure:")
-        '        AppendDialogue("        - The PCs' IP address is static")
-        '        AppendDialogue("        - System - Settings - Servies - Remote Control has 'Allow programs on other systems to control XBMC' checked")
-        '    End If
-
-        '    If Not MovieFoldersConfigured Then
-        '        AppendDialogue("    - You have no movie folders set up. Go to Movies-Folders and add them")
-        '    End If
-
-        '    AppendDialogue("")
-        '    AppendDialogue("****************************************")
-        'End If
-
-        'Preferences.XBMC_Address           = tmp_tbXBMC_Address         
-        'Preferences.XBMC_Port              = tmp_tbXBMC_Port            
-        'Preferences.XBMC_Username          = tmp_tbXBMC_Username        
-        'Preferences.XBMC_Password          = tmp_tbXBMC_Password        
-        'Preferences.XBMC_UserdataFolder    = tmp_tbXBMC_UserdataFolder  
-        'Preferences.XBMC_TexturesDb        = tmp_tbXBMC_TexturesDb      
-        'Preferences.XBMC_ThumbnailsFolder  = tmp_tbXBMC_ThumbnailsFolder
-
-        'Preferences.XBMC_MC_MovieFolderMappings.Assign(tmp_MovieFolderMappings)
     End Sub
 
     Private Sub btnUndo_Click( sender As Object,  e As EventArgs) Handles btnUndo.Click
@@ -222,6 +135,7 @@ Public Class ucGenPref_XbmcLink
     End Sub
 
     Sub AssignFormFields
+        cbXBMC_Active               .Checked = Preferences.XBMC_Active
         tbXBMC_Address              .Text    = Preferences.XBMC_Address
         tbXBMC_Port                 .Text    = Preferences.XBMC_Port
         tbXBMC_Username             .Text    = Preferences.XBMC_Username
@@ -234,6 +148,7 @@ Public Class ucGenPref_XbmcLink
     End Sub
 
     Sub UpdatePreferences
+        Preferences.XBMC_Active                = cbXBMC_Active              .Checked
         Preferences.XBMC_Address              = tbXBMC_Address              .Text
         Preferences.XBMC_Port                 = tbXBMC_Port                 .Text
         Preferences.XBMC_Username             = tbXBMC_Username             .Text

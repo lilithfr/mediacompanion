@@ -319,7 +319,7 @@ Public Class Preferences
     ReadOnly Shared Property XBMC_TestsPassed As Boolean
         Get 
             'Non-db tests...
-            Dim result As Boolean = XBMC_MC_MovieFolderMappings.Initialised AndAlso FrodoEnabled AndAlso XBMC_CanPing AndAlso XBMC_CanConnect 
+            Dim result As Boolean = XBMC_Active AndAlso XBMC_MC_MovieFolderMappings.Initialised AndAlso FrodoEnabled AndAlso XBMC_CanPing AndAlso XBMC_CanConnect 
 
             If Not result Then Return False
 
