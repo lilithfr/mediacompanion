@@ -760,8 +760,9 @@ Public Class Form1
     End Sub
 
 
+
     Private Sub XBMC_Controller_Log_TO_Timer_Elapsed
-        If XbmcControllerBufferQ.Count=0 Then
+        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count=0 Then
             If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
 
                 Preferences.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file )
@@ -777,7 +778,7 @@ Public Class Form1
     End Sub
 
     Private Sub XBMC_Link_Idle_Timer_Elapsed
-        If XbmcControllerBufferQ.Count=0 Then
+        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count=0 Then
             frmXBMC_Progress.Visible = False
             XBMC_Link_ErrorLog_Timer.Stop
         End If
@@ -858,44 +859,47 @@ Public Class Form1
     Sub SetcbBtnLink(Optional sender As Object=Nothing)
         XBMC_Link_Check_Timer.Stop
 
-        Dim passed As Boolean = XBMC_TestsPassed
+        'Only check when link is idle
+        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count=0 Then
+            Dim passed As Boolean = XBMC_TestsPassed
 
-        '
-        ' Sometimes the link test fails. Don't know why yet, maybe XBMC is busy...but anyway this should reduce the number of phamtom 
-        ' link disablings...
-        ' 
-        If Not IsNothing(sender) Then
-            If cbBtnLink.Enabled And Not passed Then
-                ConseqFailures += 1
+            '
+            ' Sometimes the link test fails. Don't know why yet, maybe XBMC is busy...but anyway this should reduce the number of phantom 
+            ' link disablings...
+            ' 
+            If Not IsNothing(sender) Then
+                If cbBtnLink.Enabled And Not passed Then
+                    ConseqFailures += 1
+                Else
+                    ConseqFailures = 0
+                End If
             Else
                 ConseqFailures = 0
             End If
-        Else
-            ConseqFailures = 0
-        End If
 
-        If IsNothing(sender) Or ConseqFailures<=MaxConseqFailures Then
-            cbBtnLink.Enabled = passed
+            If IsNothing(sender) Or ConseqFailures<=MaxConseqFailures Then
+                cbBtnLink.Enabled = passed
 
-            If cbBtnLink.Enabled Then
-                cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
+                If cbBtnLink.Enabled Then
+                    cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
 
-                If Preferences.XBMC_Link <> cbBtnLink.Checked Then
+                    If Preferences.XBMC_Link <> cbBtnLink.Checked Then
 
-                    Preferences.XBMC_Link = cbBtnLink.Checked
+                        Preferences.XBMC_Link = cbBtnLink.Checked
 
-                    If Preferences.XbmcLinkReady Then
-                        XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+                        If Preferences.XbmcLinkReady Then
+                            XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+                        End If
+
+                        Preferences.SaveConfig 
                     End If
-
-                    Preferences.SaveConfig 
+                Else
+                    cbBtnLink.Checked   = False
+                    cbBtnLink.BackColor = Color.Transparent
                 End If
-            Else
-                cbBtnLink.Checked   = False
-                cbBtnLink.BackColor = Color.Transparent
-            End If
 
-            tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked 
+                tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked 
+            End If
         End If
 
 

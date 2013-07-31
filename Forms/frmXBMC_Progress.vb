@@ -14,19 +14,16 @@ Public Class frmXBMC_Progress
 
 
     Private Sub lblQueueCount_MouseHover( sender As Object,  e As EventArgs) Handles lblQueueCount.MouseHover
-        Dim qCount As Integer = 0
 
         Try
-            qCount = Convert.ToInt32(lblQueueCount.Text)
-
             Dim s As String = ""
 
-            If qCount = 0 Then 
-                s = "No queued events"
+            If Convert.ToInt32(lblQueueCount.Text)=0 Then 
+                s = "No queued events to show"
+            Else
+                s  = Form1.XbmcControllerQ      .ToString
+                s += Form1.XbmcControllerBufferQ.ToString
             End If
-
-            s  = Form1.XbmcControllerQ      .ToString
-            s += Form1.XbmcControllerBufferQ.ToString
 
             ToolTip1.SetToolTip(lblQueueCount, s) 
         Catch
@@ -47,7 +44,7 @@ Public Class frmXBMC_Progress
     End Sub
 
 
-     Public Sub UpdateDetails(oProgress As XBMC_Controller_Progress)
+    Public Sub UpdateDetails(oProgress As XBMC_Controller_Progress)
 
         Dim total As Integer = Form1.Link_TotalQCount
 
@@ -76,7 +73,6 @@ Public Class frmXBMC_Progress
     Private Sub lblErrorCount_MouseHover( sender As Object,  e As EventArgs) Handles lblErrorCount.MouseHover
         Try
             ToolTip1.SetToolTip(lblErrorCount, IIf(Errors="","No errors to show",Errors) )
-
         Catch
         End Try
     End Sub
