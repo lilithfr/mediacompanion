@@ -18,6 +18,7 @@ Imports XBMC.JsonRpc
 
 Public Class Form1
 
+    Const HOME_PAGE            = "http://mediacompanion.codeplex.com"
     Const NFO_INDEX As Integer = 4
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
@@ -24912,24 +24913,22 @@ End Sub
         End If
         
 
-        Dim answer = MsgBox("Would you like to open the download page?", MsgBoxStyle.YesNo, "New version " & Results.NewVersion & " available")
+        Dim answer = MsgBox("Would you like to download the new version?", MsgBoxStyle.YesNo, "New version " & Results.NewVersion & " available")
 
         If answer=MsgBoxResult.Yes Then
-            Dim downloadPage = "http://mediacompanion.codeplex.com/releases"
-            OpenUrl(downloadPage)
+            OpenUrl(HOME_PAGE)
         End If
     End Sub
 
 
 
     Public Function CheckForNewVersion As String
-        Dim homePage         = "http://mediacompanion.codeplex.com"
-        
+
         Dim MC_Version_RegEx = "<th><span class=""rating_header"">current</span></th>.*?<td>[\s]+.*?([0-9]*\.?[0-9]+).*?[\s]+</td>"
 
         Dim s As New Classimdb
 
-        Dim html As String = s.loadwebpage(homePage,True,10).ToString
+        Dim html As String = s.loadwebpage(HOME_PAGE,True,10).ToString
 
         Dim m = Regex.Match(html,MC_Version_RegEx, RegexOptions.Singleline)
 
