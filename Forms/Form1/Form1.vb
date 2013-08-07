@@ -4971,7 +4971,7 @@ Public Class Form1
                     If moviefolder = movfolder Then isrootfolder = True 'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
                 Next
             End If
-            GroupBoxFanartExtrathumbs.Visible = Not isrootfolder AndAlso usefoldernames Or allfolders 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
+            GroupBoxFanartExtrathumbs.Enabled = Not isrootfolder 'Or usefoldernames Or allfolders ' Visible 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
             If Panel2.Controls.Count = 0 Then
                 Call mov_FanartLoad()
             End If
@@ -4979,69 +4979,69 @@ Public Class Form1
             UpdateMissingFanartNav()
             EnableFanartScrolling()
 
-        ElseIf tab.ToLower = "open folder" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
+            ElseIf tab.ToLower = "open folder" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
 
-        ElseIf tab.ToLower = "posters" Then
-            currentTabIndex = TabControl2.SelectedIndex
-            gbMoviePostersAvailable.Refresh()
-            UpdateMissingPosterNav()
+            ElseIf tab.ToLower = "posters" Then
+                currentTabIndex = TabControl2.SelectedIndex
+                gbMoviePostersAvailable.Refresh()
+                UpdateMissingPosterNav()
 
-        ElseIf tab.ToLower = "rescrape movie" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            Call mov_Rescrape()
-        ElseIf tab.ToLower = "change movie" Then
-            Call mov_ChangeMovieSetup(MovieSearchEngine)
-            currentTabIndex = TabControl2.SelectedIndex
-        ElseIf tab.ToLower = "search for new movies" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            If Not BckWrkScnMovies.IsBusy Then
-                '    TabPage14.Text = "Cancel Movie Search"
-                'TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
-                'BckWrkScnMovies.RunWorkerAsync("SearchForNewMovies")
-                SearchForNew()
-            Else
-                MsgBox("This task is already running")
-            End If
-        ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
-            ' TabPage14.Text = "...Cancelling..."
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            BckWrkScnMovies.CancelAsync()
+            ElseIf tab.ToLower = "rescrape movie" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                Call mov_Rescrape()
+            ElseIf tab.ToLower = "change movie" Then
+                Call mov_ChangeMovieSetup(MovieSearchEngine)
+                currentTabIndex = TabControl2.SelectedIndex
+            ElseIf tab.ToLower = "search for new movies" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                If Not BckWrkScnMovies.IsBusy Then
+                    '    TabPage14.Text = "Cancel Movie Search"
+                    'TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
+                    'BckWrkScnMovies.RunWorkerAsync("SearchForNewMovies")
+                    SearchForNew()
+                Else
+                    MsgBox("This task is already running")
+                End If
+            ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
+                ' TabPage14.Text = "...Cancelling..."
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                BckWrkScnMovies.CancelAsync()
 
-        ElseIf tab.ToLower = "wall" Then
-            Call mov_WallSetup()
+            ElseIf tab.ToLower = "wall" Then
+                Call mov_WallSetup()
 
-        ElseIf tab.ToLower = "movie & tag sets" Then
-            ListofMovieSets.Items.Clear()
-            For Each mset In Preferences.moviesets
-                If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
-            Next
-            TagListBox.Items.Clear()
-            For Each mtag In Preferences.movietags
-                If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
-            Next
-            CurrentMovieTags.Items.Clear()
-            For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
-                Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-                Dim movie As Movie = oMovies.LoadMovie(filepath)
-                For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
-                    If Not IsNothing(ctag) Then
-                        If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
-                    End If
+            ElseIf tab.ToLower = "movie & tag sets" Then
+                ListofMovieSets.Items.Clear()
+                For Each mset In Preferences.moviesets
+                    If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
                 Next
-            Next
+                TagListBox.Items.Clear()
+                For Each mtag In Preferences.movietags
+                    If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
+                Next
+                CurrentMovieTags.Items.Clear()
+                For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+                    Dim movie As Movie = oMovies.LoadMovie(filepath)
+                    For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
+                        If Not IsNothing(ctag) Then
+                            If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
+                        End If
+                    Next
+                Next
 
 
-        ElseIf tab.ToLower = "movie preferences" Then
-            Call mov_PreferencesSetup()
+            ElseIf tab.ToLower = "movie preferences" Then
+                Call mov_PreferencesSetup()
 
-        ElseIf tab.ToLower = "table" Then
-            currentTabIndex = TabControl2.SelectedIndex
-            Call mov_TableSetup()
-        Else
-            currentTabIndex = TabControl2.SelectedIndex
-        End If
+            ElseIf tab.ToLower = "table" Then
+                currentTabIndex = TabControl2.SelectedIndex
+                Call mov_TableSetup()
+            Else
+                currentTabIndex = TabControl2.SelectedIndex
+            End If
 
     End Sub
 
@@ -5514,7 +5514,7 @@ Public Class Form1
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-
+                        util_ImageLoad(PictureBox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                         Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                         movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
