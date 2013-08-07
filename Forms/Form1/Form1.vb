@@ -5514,7 +5514,7 @@ Public Class Form1
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        util_ImageLoad(PictureBox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        'util_ImageLoad(PictureBox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                         Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                         movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
@@ -22072,23 +22072,32 @@ Public Class Form1
 
 
     Private Sub RadioButtonFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonFanart.CheckedChanged
-        mov_DisplayFanart()
+        If RadioButtonFanart.Checked Then
+            mov_DisplayFanart()
+        End If
     End Sub
 
     Private Sub RadioButtonThumb1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb1.CheckedChanged
-        mov_DisplayFanart()
+        If RadioButtonThumb1.Checked Then
+            mov_DisplayFanart()
+        End If
     End Sub
 
     Private Sub RadioButtonThumb2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb2.CheckedChanged
-        mov_DisplayFanart()
+        If RadioButtonThumb2.Checked Then
+            mov_DisplayFanart()
+        End If
     End Sub
 
     Private Sub RadioButtonThumb3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb3.CheckedChanged
-        mov_DisplayFanart()
-
+        If RadioButtonThumb3.Checked Then
+            mov_DisplayFanart()
+        End If
     End Sub
     Private Sub RadioButtonThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb4.CheckedChanged
-        mov_DisplayFanart()
+        If RadioButtonThumb4.Checked Then
+            mov_DisplayFanart()
+        End If
     End Sub
     Private Sub mov_DisplayFanart()
         If workingMovieDetails Is Nothing Then Exit Sub
@@ -22100,15 +22109,16 @@ Public Class Form1
                 If RadioButtonThumb1.Checked or RadioButtonThumb2.Checked or RadioButtonThumb3.Checked or RadioButtonThumb4.Checked Then xtra = True
                 If xtra AndAlso Preferences.movxtrafanart and Not Preferences.movxtrathumb Then fanartpath = fanartpath.Replace("extrathumbs\thumb","extrafanart\fanart")
                 If IO.File.Exists(fanartpath) Then
-                    Dim OriginalImage As New Bitmap(fanartpath)
-                    Dim Image2 As New Bitmap(OriginalImage)
-                    OriginalImage.Dispose()
-                    PictureBox2.Image = Image2 'moviethumb - 3
+                    util_ImageLoad(PictureBox2, fanartpath, Utilities.DefaultFanartPath)
+                    'Dim OriginalImage As New Bitmap(fanartpath)
+                    'Dim Image2 As New Bitmap(OriginalImage)
+                    'OriginalImage.Dispose()
+                    'PictureBox2.Image = Image2 'moviethumb - 3
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
                 Else
-
-                    PictureBox2.ImageLocation = Utilities.DefaultFanartPath 'moviethumb - 3
+                    util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
+                    'PictureBox2.ImageLocation = Utilities.DefaultFanartPath 'moviethumb - 3
                     Label16.Text = ""
                     Label17.Text = ""
                 End If
