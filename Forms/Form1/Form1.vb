@@ -5514,7 +5514,6 @@ Public Class Form1
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        'util_ImageLoad(PictureBox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                         Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                         movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
 
@@ -22101,24 +22100,22 @@ Public Class Form1
     End Sub
     Private Sub mov_DisplayFanart()
         If workingMovieDetails Is Nothing Then Exit Sub
-        If (usefoldernames = False) And (allfolders = False) Then Exit Sub
+
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
             Try
-                Dim fanartpath = mov_FanartORExtrathumbPath()
+                Dim fanartpath = workingMovieDetails.fileinfo.fanartpath
                 Dim xtra As Boolean = False
-                If RadioButtonThumb1.Checked or RadioButtonThumb2.Checked or RadioButtonThumb3.Checked or RadioButtonThumb4.Checked Then xtra = True
-                If xtra AndAlso Preferences.movxtrafanart and Not Preferences.movxtrathumb Then fanartpath = fanartpath.Replace("extrathumbs\thumb","extrafanart\fanart")
+                If RadioButtonThumb1.Checked Or RadioButtonThumb2.Checked Or RadioButtonThumb3.Checked Or RadioButtonThumb4.Checked Then
+                    fanartpath = mov_FanartORExtrathumbPath()
+                    If Preferences.movxtrafanart And Not Preferences.movxtrathumb Then fanartpath = fanartpath.Replace("extrathumbs\thumb", "extrafanart\fanart")
+                End If
+
                 If IO.File.Exists(fanartpath) Then
                     util_ImageLoad(PictureBox2, fanartpath, Utilities.DefaultFanartPath)
-                    'Dim OriginalImage As New Bitmap(fanartpath)
-                    'Dim Image2 As New Bitmap(OriginalImage)
-                    'OriginalImage.Dispose()
-                    'PictureBox2.Image = Image2 'moviethumb - 3
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
                 Else
                     util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
-                    'PictureBox2.ImageLocation = Utilities.DefaultFanartPath 'moviethumb - 3
                     Label16.Text = ""
                     Label17.Text = ""
                 End If
