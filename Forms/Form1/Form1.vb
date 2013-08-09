@@ -7760,10 +7760,10 @@ Public Class Form1
                 Case "wide"
                     RadioButton16.Checked = True
             End Select
-            'everything from TVDB
-            'Everything from IMDB
-            'TV show Nfo From IMDB, Episode nfo from TVDB
-            'TV show Nfo From TVDB, Episode nfo from IMDB
+            '0 - Everything from TVDB
+            '1 - Everything from IMDB
+            '2 - TV show Nfo From IMDB, Episode nfo from TVDB
+            '3 - TV show Nfo From TVDB, Episode nfo from IMDB
             If Preferences.tvdbactorscrape = 0 Then
                 RadioButton13.Checked = True
                 RadioButton11.Checked = True

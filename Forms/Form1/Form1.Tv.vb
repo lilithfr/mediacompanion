@@ -489,13 +489,13 @@ Partial Public Class Form1
             '1	-	all from imdb
             '2	-	tv imdb, eps tvdb
             '3	-	tv TVDB, eps IMDB
-            If Show.EpisodeActorSource.Value Is Nothing Then
-                If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
-                    Show.EpisodeActorSource.Value = "tvdb"
-                Else
-                    Show.EpisodeActorSource.Value = "imdb"
-                End If
-            End If
+            'If Show.EpisodeActorSource.Value Is Nothing Then
+            '    If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
+            '        Show.EpisodeActorSource.Value = "tvdb"
+            '    Else
+            '        Show.EpisodeActorSource.Value = "imdb"
+            '    End If
+            'End If
 
             If String.IsNullOrEmpty(Show.EpisodeActorSource.Value) Then
                 If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
@@ -505,12 +505,12 @@ Partial Public Class Form1
                 End If
             End If
 
-            If Show.EpisodeActorSource.Value = "imdb" Then
-                Button46.Text = "IMDB"
-            ElseIf Show.EpisodeActorSource.Value = "tvdb" Then
-                Button46.Text = "TVDB"
-            End If
-
+            'If Show.EpisodeActorSource.Value = "imdb" Then
+            '    Button46.Text = "IMDB"
+            'ElseIf Show.EpisodeActorSource.Value = "tvdb" Then
+            '    Button46.Text = "TVDB"
+            'End If
+            Button46.Text = Show.EpisodeActorSource.Value.ToUpper
             If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
                 If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
                     Show.TvShowActorSource.Value = "tvdb"
@@ -519,19 +519,20 @@ Partial Public Class Form1
                 End If
             End If
 
-            If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
-                If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
-                    Show.TvShowActorSource.Value = "tvdb"
-                Else
-                    Show.TvShowActorSource.Value = "imdb"
-                End If
-            End If
+            'If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
+            '    If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
+            '        Show.TvShowActorSource.Value = "tvdb"
+            '    Else
+            '        Show.TvShowActorSource.Value = "imdb"
+            '    End If
+            'End If
 
-            If Show.TvShowActorSource.Value = "imdb" Then
-                Button45.Text = "IMDB"
-            ElseIf Show.TvShowActorSource.Value = "tvdb" Then
-                Button45.Text = "TVDB"
-            End If
+            'If Show.TvShowActorSource.Value = "imdb" Then
+            '    Button45.Text = "IMDB"
+            'ElseIf Show.TvShowActorSource.Value = "tvdb" Then
+            '    Button45.Text = "TVDB"
+            'End If
+            Button45.Text = Show.TvShowActorSource.Value.ToUpper
             cbTvActor.Items.Clear()
             For Each actor In Show.ListActors
                 If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
