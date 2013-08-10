@@ -32,6 +32,7 @@ Partial Public Class Form1
 
     Dim tvobjects As New List(Of String)
 
+#Region "Tv Treeview Routines"
     Public Sub tv_ViewReset()
         'RenameTVShowsToolStripMenuItem.Enabled = False
         Button_Save_TvShow_Episode.Enabled = True
@@ -111,9 +112,11 @@ Partial Public Class Form1
             Panel13.Controls.RemoveAt(i)
         Next
     End Sub
+
     Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
         TvTreeview_AfterSelect_Do() 'moved this to seperate sub so we can also call this from other locations.
     End Sub
+
     Private Sub TvTreeview_AfterSelect_Do()
         Try
             'chooses which sub is run to load the relavent tv data to the screen
@@ -229,7 +232,6 @@ Partial Public Class Form1
         CollapseAllToolStripMenuItem.Enabled = True
         CollapseSelectedShowToolStripMenuItem.Enabled = True
     End Sub
-
 
 
     'Private Sub TvTreeview_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
@@ -392,7 +394,7 @@ Partial Public Class Form1
 
     'End Sub
 
-
+#End Region
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
         'If Show.IsCache Then    'disabled this test, iscache=true  would not stick when doing batch wizard......
@@ -793,7 +795,7 @@ Partial Public Class Form1
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
         End If
-        
+
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then
@@ -846,7 +848,7 @@ Partial Public Class Form1
         PicBox.Tag = Nothing
 
         If File.Exists(ImagePath) Then
-           PathToUse = ImagePath             
+            PathToUse = ImagePath
         ElseIf Utilities.UrlIsValid(ImagePath) Then
             PicBox.ImageLocation = ImagePath
             PicBox.Load()
@@ -887,20 +889,34 @@ Partial Public Class Form1
     End Function
 
 
-    Public Shared Sub util_EpisodeSetWatched(ByRef playcount As String, Optional ByVal toggle As Boolean = False)
-        Dim watched As Boolean = False
-        If IsNumeric(playcount) Then
-            watched = Convert.ToInt32(playcount) > 0
-            If toggle Then
-                watched = Not watched
-                playcount = If(watched, "1", "0")
-            End If
-        End If
-        With Form1.Button48
-            .Text = If(watched, "Watched", "Unwatched")
-            .BackColor = If(watched, Color.LawnGreen, Color.Red)
-        End With
+#Region "Tv Cache Routines"
+    Public Sub tv_CacheLoad()
+        Cache.TvCache.TvCachePath = Preferences.workingProfile.TvCache
+        Cache.TvCache.Load()
+        TvTreeview.Nodes.Clear()              'clear the treeview of old data
+        ''Dirty work around until TvShows is repalced with TvCache.Shows universally
+        For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
+            TvShow.UpdateTreenode()
+            TvTreeview.Nodes.Add(TvShow.ShowNode)
+        Next
+        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+        TvTreeview.Sort()
     End Sub
+
+    Private Sub tv_CacheRefreshSelected(ByVal Show As TvShow)
+        tv_CacheRefresh(Show)
+        'MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
+        'we need to utilise the already created code for cache rebuild but be able to send to it a single TV show to clear & rebuild....
+    End Sub
+
+    Public Function Tv_CacheSave() As Boolean
+
+        Cache.TvCache.TvCachePath = Preferences.workingProfile.TvCache
+        Cache.TvCache.Save()
+        Return False
+    End Function
+
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
@@ -991,14 +1007,14 @@ Partial Public Class Form1
             tv_IMDbID_warned = True
         End If
 
-        If nofolder.Count>0 then
+        If nofolder.Count > 0 Then
             Dim mymsg As String
-            mymsg = (nofolder.Count).ToString + " folder/s missing:" + vbcrlf + vbcrlf
-            For each item In nofolder
-                mymsg = mymsg + item + vbcrlf
+            mymsg = (nofolder.Count).ToString + " folder/s missing:" + vbCrLf + vbCrLf
+            For Each item In nofolder
+                mymsg = mymsg + item + vbCrLf
             Next
-            mymsg = mymsg + vbcrlf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbcrlf
-            If MsgBox (mymsg,MsgBoxStyle.YesNo)=MsgBoxResult.Yes THen
+            mymsg = mymsg + vbCrLf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbCrLf
+            If MsgBox(mymsg, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
                 Call tv_Showremovedfromlist(nofolder)
             End If
         End If
@@ -1092,8 +1108,7 @@ Partial Public Class Form1
             MsgBox("Please Enter a Search Term")
         End If
     End Sub
-
-
+#End Region
 
     Private Function tv_TvShowTopGet(ByVal tvshowname As String)
 
@@ -1562,8 +1577,8 @@ Partial Public Class Form1
 
                     For Each Item As String In ExtraFolder
 
-                        If Preferences.ExcludeFolders.Match(Item) Then 
-                            Preferences.tvScraperLog &="Skipping excluded folder [" & Item & "] from scrape." & vbCrLf
+                        If Preferences.ExcludeFolders.Match(Item) Then
+                            Preferences.tvScraperLog &= "Skipping excluded folder [" & Item & "] from scrape." & vbCrLf
                             Continue For
                         End If
 
@@ -2078,51 +2093,51 @@ Partial Public Class Form1
                                 End If
 
 
-                            If Preferences.enablehdtags = True Then
-                                progresstext &= " : HD Tags..."
-                                bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
-                                singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-                                For Each audioStream In fileStreamDetails.filedetails_audio
-                                    singleepisode.Details.StreamDetails.Audio.Add(audioStream)
-                                Next
+                                If Preferences.enablehdtags = True Then
+                                    progresstext &= " : HD Tags..."
+                                    bckgroundscanepisodes.ReportProgress(progress, progresstext)
+                                    Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
+                                    singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                                    For Each audioStream In fileStreamDetails.filedetails_audio
+                                        singleepisode.Details.StreamDetails.Audio.Add(audioStream)
+                                    Next
 
-                                If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
-                                    '1h 24mn 48s 546ms
-                                    'Dim hours As Integer = 0
-                                    'Dim minutes As Integer = 0
-                                    tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
-                                    'tempint = tempstring.IndexOf("h")
-                                    'If tempint <> -1 Then
+                                    If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                                        '1h 24mn 48s 546ms
+                                        'Dim hours As Integer = 0
+                                        'Dim minutes As Integer = 0
+                                        tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                                        'tempint = tempstring.IndexOf("h")
+                                        'If tempint <> -1 Then
                                         'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
                                         'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
                                         'tempstring = Trim(tempstring)
-                                    'End If
-                                    'tempint = tempstring.IndexOf("mn")
-                                    'If tempint <> -1 Then
+                                        'End If
+                                        'tempint = tempstring.IndexOf("mn")
+                                        'If tempint <> -1 Then
                                         'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                    'End If
-                                    'If hours <> 0 Then
+                                        'End If
+                                        'If hours <> 0 Then
                                         'minutes += hours * 60
-                                    'End If
-                                    'minutes = minutes + hours
-                                    If Preferences.intruntime Then
-                                        singleepisode.Runtime.Value = Math.Round(tempstring/60).ToString
-                                    Else
-                                        singleepisode.Runtime.Value = Math.Round(tempstring/60).ToString & " min"
+                                        'End If
+                                        'minutes = minutes + hours
+                                        If Preferences.intruntime Then
+                                            singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
+                                        Else
+                                            singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                                        End If
+                                        progresstext &= "OK."
+                                        bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                     End If
-                                    progresstext &= "OK."
-                                    bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                 End If
                             End If
+                        Else
+                            Preferences.tvScraperLog &= "!!! WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                            scrapedok = False
                         End If
                     Else
-                        Preferences.tvScraperLog &= "!!! WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                        Preferences.tvScraperLog &= "!!! WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
                         scrapedok = False
-                    End If
-                    Else
-                    Preferences.tvScraperLog &= "!!! WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
-                    scrapedok = False
                     End If
 
                 Next
@@ -2155,8 +2170,8 @@ Partial Public Class Form1
                 For Each Shows In Cache.TvCache.Shows
                     If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
                         'workingtvshow = nfoFunction.loadfulltnshownfo(Shows.fullpath)
-                        If episodearray(0).Episode.Value=1 Then
-                            Dim Seasonxx As String = Shows.folderpath+"Season"+(If(episodearray(0).Season.Value <10,"0"+episodearray(0).Season.Value,episodearray(0).Season.Value))+(If(Preferences.FrodoEnabled,"-poster.jpg",".tbn"))
+                        If episodearray(0).Episode.Value = 1 Then
+                            Dim Seasonxx As String = Shows.FolderPath + "Season" + (If(episodearray(0).Season.Value < 10, "0" + episodearray(0).Season.Value, episodearray(0).Season.Value)) + (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
                             If Not IO.File.Exists(Seasonxx) Then
                                 TvGetArtwork(Shows, False, False, True, False)
                             End If
@@ -2259,27 +2274,12 @@ Partial Public Class Form1
         Return Episode
     End Function
 
-
-
-    Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
-        Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
-        messbox.Show()
-        messbox.Refresh()
-        Application.DoEvents()
-        Try
-            TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
-        Catch
-        End Try
-        Call tv_ShowLoad(BrokenShow)
-        messbox.Close()
-
-    End Sub
     Private Sub tv_Filter()
         tv_Filter(Nothing)
     End Sub
     Private Sub tv_Filter(ByVal overrideShowIsMissing As String) 'ByVal butt As String)
         Dim butt As String = ""
-        Dim eden As boolean = Preferences.EdenEnabled
+        Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
 
@@ -2298,47 +2298,47 @@ Partial Public Class Form1
             '    MessageBox.Show("Ensure that you have previously selected Display Missing Episodes from the TV Shows menu", "Missing Episodes", MessageBoxButtons.OK, MessageBoxIcon.Information)
             'End If
             If Preferences.displayMissingEpisodes Then
-            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                        If Not episode.IsMissing Then
-                            episode.Visible = False
-                        Else
-                            ' Phyonics - Fix for issue #208
-                            If String.IsNullOrEmpty(episode.Aired.Value) Then
-                                ' Change the colour to gray
-                                episode.EpisodeNode.ForeColor = Color.Gray
+                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                            If Not episode.IsMissing Then
+                                episode.Visible = False
                             Else
-                                Try
-                                    ' Is the episode in the future?
-                                    If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                        '  Yes, so change its colour to gray
-                                        episode.EpisodeNode.ForeColor = Color.Gray
-                                    Else
+                                ' Phyonics - Fix for issue #208
+                                If String.IsNullOrEmpty(episode.Aired.Value) Then
+                                    ' Change the colour to gray
+                                    episode.EpisodeNode.ForeColor = Color.Gray
+                                Else
+                                    Try
+                                        ' Is the episode in the future?
+                                        If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                            '  Yes, so change its colour to gray
+                                            episode.EpisodeNode.ForeColor = Color.Gray
+                                        Else
+                                            episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                                        End If
+                                    Catch ex As Exception
+                                        ' Set the colour to the missing colour
                                         episode.EpisodeNode.ForeColor = Drawing.Color.Blue
-                                    End If
-                                Catch ex As Exception
-                                    ' Set the colour to the missing colour
-                                    episode.EpisodeNode.ForeColor = Drawing.Color.Blue
-                                End Try
-                            End If
+                                    End Try
+                                End If
 
-                            episode.Visible = True
-                            episode.EpisodeNode.EnsureVisible()
+                                episode.Visible = True
+                                episode.EpisodeNode.EnsureVisible()
+                            End If
+                        Next
+                        If Season.VisibleEpisodeCount = 0 Then
+                            Season.Visible = False
+                        Else
+                            Season.Visible = True
                         End If
                     Next
-                    If Season.VisibleEpisodeCount = 0 Then
-                        Season.Visible = False
+                    If item.VisibleSeasonCount = 0 Then
+                        item.Visible = False
                     Else
-                        Season.Visible = True
+                        item.Visible = True
                     End If
                 Next
-                If item.VisibleSeasonCount = 0 Then
-                    item.Visible = False
-                Else
-                    item.Visible = True
-                End If
-            Next
             Else
                 MsgBox("Enable Display Missing Episodes")
             End If
@@ -2381,15 +2381,15 @@ Partial Public Class Form1
                 End If
             Next
         ElseIf butt = "screenshot" Then
-            Dim edenart As String =""
-            Dim frodoart As String =""
+            Dim edenart As String = ""
+            Dim frodoart As String = ""
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
                         edenart = episode.Thumbnail.Path
-                        frodoart = episode.Thumbnail.Path.Replace(".tbn","-thumb.jpg")
-                        If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) then
-                            If ((eden and not frodo) andalso IO.File.Exists(edenart)) or ((frodo and Not eden) andalso IO.File.Exists(frodoart)) or ((frodo and eden) and (IO.file.Exists(edenart) And IO.File.Exists(frodoart))) Then
+                        frodoart = episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg")
+                        If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) Then
+                            If ((eden And Not frodo) AndAlso IO.File.Exists(edenart)) Or ((frodo And Not eden) AndAlso IO.File.Exists(frodoart)) Or ((frodo And eden) And (IO.File.Exists(edenart) And IO.File.Exists(frodoart))) Then
                                 episode.Visible = False
                             Else
                                 episode.Visible = True
@@ -2444,17 +2444,17 @@ Partial Public Class Form1
                 End If
             Next
         ElseIf butt = "posters" Then
-            Dim edenpost As String =""
-            Dim frodopost As String =""
-            Dim frodobann As String =""
+            Dim edenpost As String = ""
+            Dim frodopost As String = ""
+            Dim frodobann As String = ""
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                item.Visible=False
+                item.Visible = False
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                    edenpost = Season.Poster.path
-                    frodopost = Season.Poster.Path.replace(".tbn","-poster.jpg")
-                    frodobann = Season.Poster.Path.replace(".tbn","-banner.jpg")
+                    edenpost = Season.Poster.Path
+                    frodopost = Season.Poster.Path.Replace(".tbn", "-poster.jpg")
+                    frodobann = Season.Poster.Path.Replace(".tbn", "-banner.jpg")
                     'If Season.Poster.Exists Then
-                    If ((eden and frodo) andalso (IO.File.Exists(edenpost) and (IO.File.Exists(frodopost) andalso IO.File.Exists(frodobann)))) or ((eden and Not frodo) andalso IO.File.Exists(edenpost)) or ((frodo and Not eden) andalso (IO.file.exists(frodopost) or IO.file.exists(frodobann))) Then
+                    If ((eden And frodo) AndAlso (IO.File.Exists(edenpost) And (IO.File.Exists(frodopost) AndAlso IO.File.Exists(frodobann)))) Or ((eden And Not frodo) AndAlso IO.File.Exists(edenpost)) Or ((frodo And Not eden) AndAlso (IO.File.Exists(frodopost) Or IO.File.Exists(frodobann))) Then
                         Season.Visible = False
                     Else
                         Season.Visible = True
@@ -2463,16 +2463,18 @@ Partial Public Class Form1
                         Episode.Visible = False
                     Next
                 Next
-                If frodo and Not IO.File.Exists(item.FolderPath+"poster.jpg") Then
+                If frodo And Not IO.File.Exists(item.FolderPath + "poster.jpg") Then
                     item.Visible = True
-                ElseIf eden and Not frodo Then
+                ElseIf eden And Not frodo Then
                     item.Visible = Not item.ImagePoster.Exists
                 End If
-                
+
             Next
         End If
         ' End If
     End Sub
+
+#Region "Tv MissingEpisode Routines"
 
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
         Try
@@ -2572,47 +2574,28 @@ Partial Public Class Form1
 
     Private Sub Tv_EpisodesMissingLoad(ByVal ShowList As TvShow)
         'For Each item In ShowList
-            Dim showid As String = ShowList.TvdbId.Value
-            If IsNumeric(showid) Then
-                Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
-                Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
-                For Each fs_info As System.IO.FileInfo In fs_infos
-                    Dim MissingEpisode As New TvEpisode
-                    MissingEpisode.NfoFilePath = fs_info.FullName
-                    MissingEpisode.Load()
-                    If MissingEpisode.TvdbId.value = showid Then
-                        Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
-                        If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
-                            MissingEpisode.IsMissing = True
-                            MissingEpisode.IsCache = True
-                            MissingEpisode.ShowObj = ShowList
-                            ShowList.AddEpisode(MissingEpisode)
-                        End If
+        Dim showid As String = ShowList.TvdbId.Value
+        If IsNumeric(showid) Then
+            Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
+            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
+            For Each fs_info As System.IO.FileInfo In fs_infos
+                Dim MissingEpisode As New TvEpisode
+                MissingEpisode.NfoFilePath = fs_info.FullName
+                MissingEpisode.Load()
+                If MissingEpisode.TvdbId.Value = showid Then
+                    Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
+                    If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
+                        MissingEpisode.IsMissing = True
+                        MissingEpisode.IsCache = True
+                        MissingEpisode.ShowObj = ShowList
+                        ShowList.AddEpisode(MissingEpisode)
                     End If
-                Next
-            End If      
+                End If
+            Next
+        End If
     End Sub
 
-    Public Sub tv_CacheLoad()
-        Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
-        Cache.TvCache.Load()
-        TvTreeview.Nodes.Clear()              'clear the treeview of old data
-        ''Dirty work around until TvShows is repalced with TvCache.Shows universally
-        For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
-            TvShow.UpdateTreenode()
-            TvTreeview.Nodes.Add(TvShow.ShowNode)
-        Next
-        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
-        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
-        TvTreeview.Sort()
-    End Sub
-
-    Public Function Tv_CacheSave() As Boolean
-
-        Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
-        Cache.TvCache.Save()
-        Return False
-    End Function
+#End Region
 
     Public Sub New()
 
@@ -2630,7 +2613,7 @@ Partial Public Class Form1
     '        TasksList.Items.Add(Item)
     '    Next
     'End Sub
-
+#Region "Tasks"
     Private Sub lstTasks_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksList.SelectedIndexChanged
         If TasksList.SelectedItem Is Nothing Then Exit Sub
 
@@ -2773,7 +2756,10 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart as Boolean)
+#End Region
+
+#Region "Tv Artwork, TV Actor & EP Thumbnail Routines"
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean)
         '(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
         Try
 
@@ -3060,12 +3046,12 @@ Partial Public Class Form1
                     End If
                 End If
             End If
-            
+
             'ExtraFanart
             If shXtraFanart Then
                 Dim i As Integer = 0
                 Dim xfanart As String = currentshow.FolderPath & "extrafanart\fanart"
-                Dim fanartposter as New List(Of String)
+                Dim fanartposter As New List(Of String)
                 For Each Image In artlist
                     If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
                         fanartposter.Add(Image.Url)
@@ -3091,8 +3077,8 @@ Partial Public Class Form1
                         End If
                     Next
                 End If
-                If i <> 0 Then 
-                    For x = 1 to 4
+                If i <> 0 Then
+                    For x = 1 To 4
                         Utilities.DownloadFile(fanartposter(x), (xfanart & x & ".jpg"))
                         If x = i Then Exit For
                     Next
@@ -3321,130 +3307,24 @@ Partial Public Class Form1
         End Try
     End Sub
 
-
-    'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
-    '    Try
-    '        For Each Task In TaskCache.Tasks
-    '            If Task.State = TaskState.BackgroundWorkComplete Then
-    '                Task.FinishWork()
-    '            End If
-    '            Windows.Forms.Application.DoEvents()
-    '        Next
-    '    Catch
-
-    '    End Try
-    'End Sub
-
-
-    'Private Sub TaskListUpdater_Tick(sender As System.Object, e As System.EventArgs) Handles TaskListUpdater.Tick
-    '    'cmdTasks_Refresh_Click(Nothing, Nothing)
-    '    TaskListUpdater.Enabled = False
-    '    lstTasks.ResetText()
-
-    'End Sub
-
-    Protected Overrides Sub Finalize()
-        MyBase.Finalize()
-    End Sub
-
-    Private Sub Label136_AutoSizeChanged(sender As Object, e As System.EventArgs) Handles Label136.AutoSizeChanged
-
-    End Sub
-
-    Public Sub tv_Showremovedfromlist(Optional ByVal nofolder As List(of String)= Nothing)
-        Dim remfolder As New List(Of String) 
-        If IsNothing(nofolder) then
-            Dim myfolders As List(Of String)= Preferences.tvFolders
-            'remfolder.Clear()
-            For each item In myfolders
-                If Not IO.Directory.Exists(item) then
-                    remfolder.add(item)
-                End If
-            Next
-        End If
-        If IsNothing(nofolder) Andalso (IsNothing(remfolder) or remfolder.Count <=0) Then
-            MsgBox("No Folders Missing or removed")
-            Exit Sub
-        End If
-
-        'Dim folder As String
-        If IsNothing(nofolder) and Not IsNothing(remfolder) Then nofolder=remfolder
-        If nofolder.Count > 0 Then
-            For Each folder In nofolder
-                For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    If Item.FolderPath.Trim("\") = folder Then
-                        'TvTreeview.Nodes.Remove(Item.ShowNode)
-                        'Cache.TvCache.Remove(Item)
-                        Exit For
-                    End If
-                Next
-                ListBox6.Items.Remove(folder)
-                tvFolders.Remove(folder)
-            Next
-            tv_CacheRefresh
-            'tv_ShowScrape()
-            MsgBox((nofolder.Count).toString +" folder/s removed")
-        End If
-    End Sub
-
-    Private Sub Tv_MarkAsWatched()
-        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingTvSeason As TvSeason=tv_SeasonSelectedCurrently()
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        If WorkingTvShow Is Nothing Then Exit Sub
-
-        If Not IsNothing(WorkingEpisode) Then 
-            WorkingEpisode.Load()
-            WorkingEpisode.PlayCount.Value = 1
-            WorkingEpisode.Save()
-        ElseIf Not IsNothing(WorkingTvSeason) Then
-            For Each ep in WorkingTvSeason.Episodes
-                ep.Load()
-                ep.Playcount.Value=1
-                ep.Save()
-            Next
-        ElseIf Not IsNothing(WorkingTvShow) Then
-            For Each ep In WorkingTvShow.Episodes
-                ep.Load()
-                ep.PlayCount.Value=1
-                ep.Save()
-            Next
-        End If
-
-    End Sub
-
-    Private Sub Tv_MarkAsUnWatched()
-        If TvTreeview.SelectedNode Is Nothing Then Return
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingTvSeason As TvSeason=tv_SeasonSelectedCurrently()
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        If WorkingTvShow Is Nothing Then Exit Sub
-
-        If Not IsNothing(WorkingEpisode) Then 
-            WorkingEpisode.Load()
-            WorkingEpisode.PlayCount.Value = 0
-            WorkingEpisode.Save()
-        ElseIf Not IsNothing(WorkingTvSeason) Then
-            For Each ep in WorkingTvSeason.Episodes
-                ep.Load()
-                ep.Playcount.Value=0
-                ep.Save()
-            Next
-        ElseIf Not IsNothing(WorkingTvShow) Then
-            For Each ep In WorkingTvShow.Episodes
-                ep.Load()
-                ep.PlayCount.Value=0
-                ep.Save()
-            Next
-        End If
+    Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
+        Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
+        messbox.Show()
+        messbox.Refresh()
+        Application.DoEvents()
+        Try
+            TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
+        Catch
+        End Try
+        Call tv_ShowLoad(BrokenShow)
+        messbox.Close()
 
     End Sub
 
     Private Sub TvEpThumbScreenShot()
         Try
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-            If Textbox35.Text ="" Then TextBox35.Text = Preferences.ScrShtDelay
+            If TextBox35.Text = "" Then TextBox35.Text = Preferences.ScrShtDelay
             If IsNumeric(TextBox35.Text) Then
                 Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
                 Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")
@@ -3459,51 +3339,51 @@ Partial Public Class Form1
                             seconds = Convert.ToInt32(TextBox35.Text)
                         End If
                         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                    messbox.Show()
-                    messbox.Refresh()
-                    Application.DoEvents()
+                        messbox.Show()
+                        messbox.Refresh()
+                        Application.DoEvents()
 
-                    Dim proc_arguments As String = ""
-                    Dim myProcess As Process = New Process
-                    myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                    myProcess.StartInfo.CreateNoWindow = False
-                    myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
-                    If Preferences.EdenEnabled = True Then
-                        If IO.File.Exists(thumbpathandfilename) Then
-                            PictureBox14.Image = Nothing
-                            IO.File.Delete(thumbpathandfilename)
+                        Dim proc_arguments As String = ""
+                        Dim myProcess As Process = New Process
+                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                        myProcess.StartInfo.CreateNoWindow = False
+                        myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
+                        If Preferences.EdenEnabled = True Then
+                            If IO.File.Exists(thumbpathandfilename) Then
+                                PictureBox14.Image = Nothing
+                                IO.File.Delete(thumbpathandfilename)
+                            End If
+                            proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                            myProcess.StartInfo.Arguments = proc_arguments
+                            myProcess.Start()
+                            myProcess.WaitForExit()
                         End If
-                        proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                        myProcess.StartInfo.Arguments = proc_arguments
-                        myProcess.Start()
-                        myProcess.WaitForExit()
-                    End If
-                    If Preferences.FrodoEnabled = True Then
-                        thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
-                        If IO.File.Exists(thumbpathandfilename) Then
-                            PictureBox14.Image = Nothing
-                            IO.File.Delete(thumbpathandfilename)
+                        If Preferences.FrodoEnabled = True Then
+                            thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
+                            If IO.File.Exists(thumbpathandfilename) Then
+                                PictureBox14.Image = Nothing
+                                IO.File.Delete(thumbpathandfilename)
+                            End If
+                            proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                            myProcess.StartInfo.Arguments = proc_arguments
+                            myProcess.Start()
+                            myProcess.WaitForExit()
                         End If
-                        proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                        myProcess.StartInfo.Arguments = proc_arguments
-                        myProcess.Start()
-                        myProcess.WaitForExit()
-                    End If
 
-                    If System.IO.File.Exists(thumbpathandfilename) Then
-                        'Dim bitmap2 As New Bitmap(thumbpathandfilename)
-                        'Dim bitmap3 As New Bitmap(bitmap2)
-                        'bitmap2.Dispose()
-                        'PictureBox14.Image = bitmap3
-                        'tv_PictureBoxLeft.Image = bitmap3
-                        util_ImageLoad(PictureBox14, thumbpathandfilename, Utilities.DefaultFanartPath)
-                        util_ImageLoad(tv_PictureBoxLeft, thumbpathandfilename, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
-                        Dim Rating As String = WorkingEpisode.Rating.Value
-                        Dim video_flags = GetEpMediaFlags()
-                        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-                        
-                    End If
-                    Exit For
+                        If System.IO.File.Exists(thumbpathandfilename) Then
+                            'Dim bitmap2 As New Bitmap(thumbpathandfilename)
+                            'Dim bitmap3 As New Bitmap(bitmap2)
+                            'bitmap2.Dispose()
+                            'PictureBox14.Image = bitmap3
+                            'tv_PictureBoxLeft.Image = bitmap3
+                            util_ImageLoad(PictureBox14, thumbpathandfilename, Utilities.DefaultFanartPath)
+                            util_ImageLoad(tv_PictureBoxLeft, thumbpathandfilename, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
+                            Dim Rating As String = WorkingEpisode.Rating.Value
+                            Dim video_flags = GetEpMediaFlags()
+                            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+
+                        End If
+                        Exit For
                     End If
                 Next
                 messbox.Close()
@@ -3531,7 +3411,7 @@ Partial Public Class Form1
             Dim episodeno As String = WorkingEpisode.Episode.Value
             Dim language As String = WorkingTvShow.Language.Value
             Dim eden As Boolean = Preferences.EdenEnabled
-            Dim frodo As Boolean = Preferences.FrodoEnabled 
+            Dim frodo As Boolean = Preferences.FrodoEnabled
             If language = Nothing Then language = "en"
             If language = "" Then language = "en"
             If sortorder = Nothing Then sortorder = "default"
@@ -3599,11 +3479,11 @@ Partial Public Class Form1
                             Dim bitmap2 As New Bitmap(tempstring)
                             Dim bitmap3 As New Bitmap(bitmap2)
                             bitmap2.Dispose()
-                            If frodo and Not eden then
-                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
+                            If frodo And Not eden Then
+                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn", "-thumb.jpg"), True)
                                 IO.File.Delete(tempstring)
-                            Else If frodo and eden then
-                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
+                            ElseIf frodo And eden Then
+                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn", "-thumb.jpg"), True)
                             End If
                             PictureBox14.Image = bitmap3
                             'tv_PictureBoxLeft.Image = bitmap3
@@ -3634,6 +3514,145 @@ Partial Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+#End Region
+
+    'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
+    '    Try
+    '        For Each Task In TaskCache.Tasks
+    '            If Task.State = TaskState.BackgroundWorkComplete Then
+    '                Task.FinishWork()
+    '            End If
+    '            Windows.Forms.Application.DoEvents()
+    '        Next
+    '    Catch
+
+    '    End Try
+    'End Sub
+
+
+    'Private Sub TaskListUpdater_Tick(sender As System.Object, e As System.EventArgs) Handles TaskListUpdater.Tick
+    '    'cmdTasks_Refresh_Click(Nothing, Nothing)
+    '    TaskListUpdater.Enabled = False
+    '    lstTasks.ResetText()
+
+    'End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
+
+    Private Sub Label136_AutoSizeChanged(sender As Object, e As System.EventArgs) Handles Label136.AutoSizeChanged
+
+    End Sub
+
+    Public Sub tv_Showremovedfromlist(Optional ByVal nofolder As List(Of String) = Nothing)
+        Dim remfolder As New List(Of String)
+        If IsNothing(nofolder) Then
+            Dim myfolders As List(Of String) = Preferences.tvFolders
+            'remfolder.Clear()
+            For Each item In myfolders
+                If Not IO.Directory.Exists(item) Then
+                    remfolder.Add(item)
+                End If
+            Next
+        End If
+        If IsNothing(nofolder) AndAlso (IsNothing(remfolder) Or remfolder.Count <= 0) Then
+            MsgBox("No Folders Missing or removed")
+            Exit Sub
+        End If
+
+        'Dim folder As String
+        If IsNothing(nofolder) And Not IsNothing(remfolder) Then nofolder = remfolder
+        If nofolder.Count > 0 Then
+            For Each folder In nofolder
+                For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
+                    If Item.FolderPath.Trim("\") = folder Then
+                        'TvTreeview.Nodes.Remove(Item.ShowNode)
+                        'Cache.TvCache.Remove(Item)
+                        Exit For
+                    End If
+                Next
+                ListBox6.Items.Remove(folder)
+                tvFolders.Remove(folder)
+            Next
+            tv_CacheRefresh()
+            'tv_ShowScrape()
+            MsgBox((nofolder.Count).ToString + " folder/s removed")
+        End If
+    End Sub
+
+#Region "Tv Watched/Unwatched Routines"
+    Private Sub Tv_MarkAsWatched()
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        If WorkingTvShow Is Nothing Then Exit Sub
+
+        If Not IsNothing(WorkingEpisode) Then
+            WorkingEpisode.Load()
+            WorkingEpisode.PlayCount.Value = 1
+            WorkingEpisode.Save()
+        ElseIf Not IsNothing(WorkingTvSeason) Then
+            For Each ep In WorkingTvSeason.Episodes
+                ep.Load()
+                ep.PlayCount.Value = 1
+                ep.Save()
+            Next
+        ElseIf Not IsNothing(WorkingTvShow) Then
+            For Each ep In WorkingTvShow.Episodes
+                ep.Load()
+                ep.PlayCount.Value = 1
+                ep.Save()
+            Next
+        End If
+
+    End Sub
+
+    Private Sub Tv_MarkAsUnWatched()
+        If TvTreeview.SelectedNode Is Nothing Then Return
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        If WorkingTvShow Is Nothing Then Exit Sub
+
+        If Not IsNothing(WorkingEpisode) Then
+            WorkingEpisode.Load()
+            WorkingEpisode.PlayCount.Value = 0
+            WorkingEpisode.Save()
+        ElseIf Not IsNothing(WorkingTvSeason) Then
+            For Each ep In WorkingTvSeason.Episodes
+                ep.Load()
+                ep.PlayCount.Value = 0
+                ep.Save()
+            Next
+        ElseIf Not IsNothing(WorkingTvShow) Then
+            For Each ep In WorkingTvShow.Episodes
+                ep.Load()
+                ep.PlayCount.Value = 0
+                ep.Save()
+            Next
+        End If
+
+    End Sub
+
+    Public Shared Sub util_EpisodeSetWatched(ByRef playcount As String, Optional ByVal toggle As Boolean = False)
+        Dim watched As Boolean = False
+        If IsNumeric(playcount) Then
+            watched = Convert.ToInt32(playcount) > 0
+            If toggle Then
+                watched = Not watched
+                playcount = If(watched, "1", "0")
+            End If
+        End If
+        With Form1.Button48
+            .Text = If(watched, "Watched", "Unwatched")
+            .BackColor = If(watched, Color.LawnGreen, Color.Red)
+        End With
+    End Sub
+
+#End Region
 
     Private Function GetEpMediaFlags() As Dictionary(Of String, String)
         Dim thisep As TvEpisode = ep_SelectedCurrently()

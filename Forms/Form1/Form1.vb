@@ -19726,11 +19726,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub tv_CacheRefreshSelected(ByVal Show As TvShow)
-        tv_CacheRefresh(Show)
-        'MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
-        'we need to utilise the already created code for cache rebuild but be able to send to it a single TV show to clear & rebuild....
-    End Sub
+
 
     Private Sub RefreshThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RefreshShow.Click
         Try
