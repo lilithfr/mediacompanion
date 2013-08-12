@@ -20,8 +20,8 @@ Public Class Utilities
 
     'files that support main movie file, ie. art, subtitles, and trailers
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
-                                                                "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm", 
-                                                                ".sub", ".srt", ".smi", ".idx"}
+                                                                "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm",
+                                                                ".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}
 
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
