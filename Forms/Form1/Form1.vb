@@ -8175,7 +8175,7 @@ Public Class Form1
                 End If
                 Dim artdone As Boolean = False
                 If cbTvChgShowOverwriteImgs.Checked Then
-                    TvGetArtwork(WorkingTvShow, cbTvChgShowDLFanart.CheckState, cbTvChgShowDLPoster.CheckState, cbTvChgShowDLSeason.CheckState, Preferences.dlTVxtrafanart)
+                    artdone = TvGetArtwork(WorkingTvShow, cbTvChgShowDLFanart.CheckState, cbTvChgShowDLPoster.CheckState, cbTvChgShowDLSeason.CheckState, Preferences.dlTVxtrafanart)
                     'artdone = True
                 End If
                 'Dim artdone As Boolean = True
