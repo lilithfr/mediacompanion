@@ -70,12 +70,23 @@ Public Class Excludes
         Return (q.Count=1)
     End Function
 
+    Function ContainsMatch(name As String) As Boolean
+        
+        For Each curitem In Items 
+            Dim newItem As String = "\" & curitem.Name & "\"
+            If name.ToUpper.Contains(newItem.ToUpper) Then Return True
+        Next
+        
+        Return False
+    End Function
 
     Function Match(name As String) As Boolean
         
         Dim LastFolder As String = Utilities.GetLastFolderInPath(name)
 
         If ExtactMatch(LastFolder) Then Return True
+        
+        If ContainsMatch(name) Then Return True
 
         Dim q = From x In Items Select x Where x.Name.GetLastChar="*" and LastFolder.ToUpper.IndexOf(x.Name.ToUpper.RemoveLastChar)=0
 
