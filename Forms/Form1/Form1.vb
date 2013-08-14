@@ -8821,7 +8821,7 @@ Public Class Form1
             End If
             If Not IO.File.Exists(filename_nfo) Then
                 Dim add As Boolean = True
-                If pattern = "*.vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
+                If pattern = ".vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
                     Dim name As String = filename_nfo
                     name = name.Replace(IO.Path.GetFileName(name), "VIDEO_TS.IFO")
                     If IO.File.Exists(name) Then
