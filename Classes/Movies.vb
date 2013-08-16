@@ -1052,14 +1052,15 @@ End If
             Return
         End If
 
-        Dim movie = New Movie(Me,NfoFilename)
+        Dim movie = New Movie(Me, NfoFilename)
+
+        movie.Rescrape = True
 
         Dim imdbid As String = movie.PossibleImdb 
 
         movie.DeleteScrapedFiles()
 
         'movie.DeleteScrapedFiles
-        'movie.Rescrape=True
 
         'ScrapeMovie(movie)
 
