@@ -1794,37 +1794,41 @@ Public Class Movie
     End Sub
     Sub DoDownloadExtraFanart
         Try
-            'Dim tmdb2 As New TMDb(_scrapedMovie.fullmoviebody.imdbid)
             If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
                 Dim fanartarray As New List(Of str_ListOfPosters)
-                Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\fanart" 'Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb
-                Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumb\thumb"
-                Dim xf As Boolean = Preferences.movxtrafanart 
-                Dim xt As Boolean = Preferences.movxtrathumb 
-                Dim owrite As Boolean = Preferences.overwritethumbs 
+                Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\fanart"
+                Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumbs\thumb"
+                Dim xf As Boolean = Preferences.movxtrafanart
+                Dim xt As Boolean = Preferences.movxtrathumb
+                Dim owrite As Boolean = Preferences.overwritethumbs
                 Dim tmpUrl As String = ""
-                fanartArray.Clear()
-                fanartArray.AddRange(tmdb.Fanart)
+                Dim xtraart As New List(Of String)
+                fanartarray.Clear()
+                fanartarray.AddRange(tmdb.Fanart)
                 If fanartarray.Count > 0 Then
-                    For i = 1 to 4
-                        tmpUrl = fanartarray(i-1).hdUrl
+                    For i = 1 To 4
+                        xtraart.Clear()
+                        tmpUrl = fanartarray(i - 1).hdUrl
                         If Utilities.UrlIsValid(tmpUrl) Then
-                            If xf Then 
+                            If xf Then
                                 If Not (IO.File.Exists((xfanart & i.ToString & ".jpg")) AndAlso Not owrite) Then
-                                    SaveFanartImageToCacheAndPath(tmpUrl, (xfanart & i.ToString & ".jpg"))
+                                    xtraart.Add((xfanart & i.ToString & ".jpg"))
                                 End If
                             End If
-                            If xt Then 
+                            If xt Then
                                 If Not (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then
-                                    SaveFanartImageToCacheAndPath(tmpUrl, (xthumb & i.ToString & ".jpg"))
+                                    xtraart.Add((xthumb & i.ToString & ".jpg"))
                                 End If
+                            End If
+                            If xtraart.Count > 0 Then
+                                SaveFanartImageToCacheAndPaths(tmpUrl, xtraart)
                             End If
                         End If
-                        If i-1 = fanartarray.Count-1 Then Exit For
+                        If i - 1 = fanartarray.Count - 1 Then Exit For
                     Next
                 End If
             Else
-                ReportProgress(MSG_OK,"!!! Extra Fanart not downloaded as movie is in Root Folder." & vbCrLf)
+                ReportProgress(MSG_OK, "!!! Extra Fanart not downloaded as movie is in Root Folder." & vbCrLf)
                 Exit Sub
             End If
             ReportProgress(MSG_OK,"!!! Extra Fanart Downloaded OK" & vbCrLf)
