@@ -573,6 +573,17 @@ is still saved, as it should be.</value>
   <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>771, 17</value>
   </metadata>
+  <data name="Label128.Text" xml:space="preserve">
+    <value>
+
+Using multisave mode it is possible to edit multiple movies at the same time.
+
+This can be any editable field including sets, and clicking the save button will
+                          save the new details to all selected movies.
+
+If you do not wish to edit a field then leave it blank, only fields that contain
+                                             text will be changed.</value>
+  </data>
   <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1381, 17</value>
   </metadata>
@@ -2839,17 +2850,6 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
         aWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgcAAAgI
         CAkCAAAAAQAAAAMAAAAPAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAs=
 </value>
-  </data>
-  <data name="Label128.Text" xml:space="preserve">
-    <value>
-
-Using multisave mode it is possible to edit multiple movies at the same time.
-
-This can be any editable field including sets, and clicking the save button will
-                          save the new details to all selected movies.
-
-If you do not wish to edit a field then leave it blank, only fields that contain
-                                             text will be changed.</value>
   </data>
   <data name="cbMovCreateFolderjpg.ToolTip" xml:space="preserve">
     <value>Enabling this option will allow Media Companion to save the Poster as folder.jpg.

@@ -10655,8 +10655,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RenameEp.Click
-        
+    Private Sub Tv_TreeViewContext_RenameEp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RenameEp.Click
+
         Try
             Dim renamelog As String = ""
             Dim tempint As Integer = 0
@@ -10883,6 +10883,104 @@ Public Class Form1
         End Try
 
     End Sub
+
+    Private Sub Tv_TreeViewContext_RescrapeMediaTags_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeMediaTags.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim tempint As Integer = 0
+            Dim nfofilestorename As New List(Of String)
+            nfofilestorename.Clear()
+            Dim donelist As New List(Of String)
+            donelist.Clear()
+            If TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
+                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                    'individual episode
+                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected episode" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    If tempint = DialogResult.No Then
+                        Exit Sub
+                    End If
+                    If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
+                        nfofilestorename.Add(TvTreeview.SelectedNode.Name)
+                    End If
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+                    'season
+                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected season" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    If tempint = DialogResult.No Then
+                        Exit Sub
+                    End If
+                    Dim childnode As TreeNode
+                    For Each childnode In TvTreeview.SelectedNode.Nodes
+                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("Missing: ") <> 0 Then
+                            nfofilestorename.Add(childnode.Name)
+                        End If
+                    Next
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
+                    'full show
+                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected show" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    If tempint = DialogResult.No Then
+                        Exit Sub
+                    End If
+                    Dim childnode As TreeNode
+                    Dim childchildnode As TreeNode
+                    For Each childnode In TvTreeview.SelectedNode.Nodes
+                        For Each childchildnode In childnode.Nodes
+                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("Missing: ") <> 0 Then
+                                nfofilestorename.Add(childchildnode.Name)
+                            End If
+                        Next
+                    Next
+                End If
+            End If
+
+            Dim messbox As New frmMessageBox("Getting Media Tags for episodes,", "", "   Please Wait")
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            If nfofilestorename.Count <= 0 Then
+                messbox.Close()
+                Exit Sub
+            End If
+
+            For Each nfo In nfofilestorename
+                Dim ThisEp As New List(Of TvEpisode)
+                ThisEp.Clear()
+                ThisEp = nfoFunction.ep_NfoLoadGeneric(nfo)
+                For h = ThisEp.Count - 1 To 0 Step -1
+
+                    Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
+                    ThisEp(h).Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+
+                    For Each audioStream In fileStreamDetails.filedetails_audio
+                        ThisEp(h).Details.StreamDetails.Audio.Add(audioStream)
+                    Next
+
+                    If ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
+                        Try
+                            Dim tempstring As String
+                            tempstring = ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value
+                            If Preferences.intruntime Then
+                                ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString
+                            Else
+                                ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                            End If
+
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
+                        End Try
+                        nfoFunction.saveepisodenfo(ThisEp, ThisEp(0).NfoFilePath)
+                    End If
+                Next
+            Next
+            messbox.Close()
+            tv_CacheRefresh(WorkingTvShow)
+        Catch ex As Exception
+            messbox.Close()
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
 
     Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
         Try
@@ -20537,26 +20635,8 @@ Public Class Form1
                                     listofnewepisodes(h).GetFileDetails()
                                     If listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                                         Try
-                                            '1h 24mn 48s 546ms
-                                            'Dim tempint As Integer = 0
-                                            'Dim hours As Integer = 0
-                                            'Dim minutes As Integer = 0
                                             Dim tempstring As String
                                             tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
-                                            'tempint = tempstring.IndexOf("h")
-                                            'If tempint <> -1 Then
-                                            '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                            '    tempstring = Trim(tempstring)
-                                            'End If
-                                            'tempint = tempstring.IndexOf("mn")
-                                            'If tempint <> -1 Then
-                                            '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            'End If
-                                            'If hours <> 0 Then
-                                            '    hours = hours * 60
-                                            'End If
-                                            'minutes = minutes + hours
                                             If Preferences.intruntime Then
                                                 listofnewepisodes(h).Runtime.Value = Math.Round(tempstring/60).ToString
                                             Else
@@ -20569,9 +20649,6 @@ Public Class Form1
 #End If
                                         End Try
                                         nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
-                                        'For Each Episode In listofnewepisodes
-                                        '    Episode.Save()
-                                        'Next
                                     End If
                                 Next
                             End If
@@ -25237,4 +25314,5 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
+
 End Class

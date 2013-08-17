@@ -2103,24 +2103,7 @@ Partial Public Class Form1
                                     Next
 
                                     If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
-                                        '1h 24mn 48s 546ms
-                                        'Dim hours As Integer = 0
-                                        'Dim minutes As Integer = 0
                                         tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
-                                        'tempint = tempstring.IndexOf("h")
-                                        'If tempint <> -1 Then
-                                        'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                        'tempstring = Trim(tempstring)
-                                        'End If
-                                        'tempint = tempstring.IndexOf("mn")
-                                        'If tempint <> -1 Then
-                                        'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        'End If
-                                        'If hours <> 0 Then
-                                        'minutes += hours * 60
-                                        'End If
-                                        'minutes = minutes + hours
                                         If Preferences.intruntime Then
                                             singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
                                         Else
