@@ -1449,10 +1449,11 @@ Public Class Preferences
                 lst.Add(path)
             End If
             If Preferences.FrodoEnabled Then
-                If videots = "" Then
+                If Not Preferences.EdenEnabled Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
                     lst.Add(path)
-                Else
+                End If
+                If Not videots = "" Then
                     path = videots + "fanart.jpg"
                     lst.Add(path)
                 End If
@@ -1460,9 +1461,9 @@ Public Class Preferences
             If Preferences.basicsavemode Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
             End If
-        End If
+            End If
 
-        Return lst
+            Return lst
     End Function
 
 
