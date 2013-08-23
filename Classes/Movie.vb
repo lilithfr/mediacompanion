@@ -1508,14 +1508,16 @@ Public Class Movie
         If Not Preferences.DownloadTrailerDuringScrape And Not forceTrailerDl Then
             Exit Sub
         End If
-
-        'Don't re-download if trailer exists
-        If File.Exists(ActualTrailerPath) then
+        
+        If TrailerUrl = "" then
             Exit Sub
         End if
 
-        If TrailerUrl = "" then
+        'Don't re-download if trailer exists and not Forced
+        If File.Exists(ActualTrailerPath) And Not forceTrailerDl then
             Exit Sub
+        Else 
+            Utilities.SafeDeleteFile(ActualTrailerPath)
         End if
 
         If Not Utilities.UrlIsValid(TrailerUrl) Then

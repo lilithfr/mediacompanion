@@ -4372,6 +4372,7 @@ Public Class Form1
             If File.Exists(FileName) Then Return FileName
         Next
 
+        'set default trailer path and filename
         Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
     End Function
 
