@@ -2105,14 +2105,15 @@ Public Class Form1
             ButtonTrailer.Text = "Play Trailer"
             ButtonTrailer.Enabled = True
         Else
-            If Not Utilities.UrlIsValid(fmd.fullmoviebody.trailer) Then
+            ' Disabled this routine as slowed down browsing of movies.  Also checks in place when downloading a trailer.
+            'If Not Utilities.UrlIsValid(fmd.fullmoviebody.trailer) Then
 
-                If fmd.fullmoviebody.trailer <> "" Then
-                    fmd.fullmoviebody.trailer = ""
-                    'WorkingWithNfoFiles.mov_NfoSave(fmd.fileinfo.fullpathandfilename, fmd, True)
-                    Movie.SaveNFO(fmd.fileinfo.fullpathandfilename, fmd)
-                End If
-
+            '    If fmd.fullmoviebody.trailer <> "" Then
+            '        fmd.fullmoviebody.trailer = ""
+            '        'WorkingWithNfoFiles.mov_NfoSave(fmd.fileinfo.fullpathandfilename, fmd, True)
+            '        Movie.SaveNFO(fmd.fileinfo.fullpathandfilename, fmd)
+            '    End If
+            If fmd.fullmoviebody.trailer = ""
                 ButtonTrailer.Text = "No trailer found"
             Else
                 ButtonTrailer.Text = "Download Trailer"
