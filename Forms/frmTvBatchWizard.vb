@@ -433,6 +433,14 @@
     End Sub
     Private Sub tv_batch_wizard_Load(sender As Object, e As System.EventArgs) Handles Me.Load
         cbepStreamDetails.Enabled = Preferences.enabletvhdtags
+        Dim TitleText As String = "Tv Batch Wizard - "
+        If Form1.singleshow Then
+            Dim workingshow As TvShow = Form1.tv_ShowSelectedCurrently
+            TitleText += workingshow.Title.Value
+        Else
+            TitleText += "All Shows"
+        End If
+        Me.Text = TitleText
     End Sub
 
 

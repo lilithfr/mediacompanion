@@ -226,6 +226,8 @@ Public Class Form1
     Dim showstoscrapelist As New List(Of String)
     Dim processnow As Boolean = True
     Dim currenttitle As String
+    Public singleshow As Boolean = False
+    Public showslist As Object
     Public homemovietabindex As Integer = 0
 
     Dim MoviesFiltersResizeCalled As Boolean = False
@@ -10886,6 +10888,20 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Tv_TreeViewContext_RescrapeWizard_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeWizard.Click
+        Try
+            singleshow = True
+            TV_BatchRescrapeWizardToolStripMenuItem.PerformClick()
+            While tvbckrescrapewizard.IsBusy
+                Application.DoEvents()
+            End While
+
+            singleshow = False
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Private Sub Tv_TreeViewContext_RescrapeMediaTags_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeMediaTags.Click
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -20119,8 +20135,20 @@ Public Class Form1
             Dim progresstext As String = ""
             Dim progress As Integer = 0
             Dim progcount As Integer = 0
+            'Dim singleshnum As Integer = 0
+            Dim shcachecount As Integer = Cache.TvCache.Shows.Count
             Dim done As Integer = 0
-            For f = Cache.TvCache.Shows.Count - 1 To 0 Step -1
+            'Dim SelectedShow As TvShow
+            If singleshow Then
+                showslist = tv_ShowSelectedCurrently()
+                For x = Cache.TvCache.Shows.Count - 1 To 0 Step -1
+                    If Cache.TvCache.Shows(x).Title.Value = showslist.Title.Value Then
+                        shcachecount = x + 1
+                        Exit For
+                    End If
+                Next
+            End If
+            For f = shcachecount - 1 To 0 Step -1
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open Or Cache.TvCache.Shows(f).State = -1 Or tvBatchList.includeLocked = True Then
                     If tvBatchList.doEpisodes = True Then
                         showprocesscount += Cache.TvCache.Shows(f).Episodes.Count
@@ -20131,10 +20159,11 @@ Public Class Form1
                         progcount += 1
                     End If
                 End If
+                If singleshow Then Exit For
             Next
             Dim showsdone As Integer = 0
             Dim showcounter As Integer = 0
-            For f = Cache.TvCache.Shows.Count - 1 To 0 Step -1
+            For f = shcachecount - 1 To 0 Step -1
                 showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
                     If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
@@ -20144,7 +20173,7 @@ Public Class Form1
                     tvBatchList.RewriteAllNFOs = False
                 End If
 
-                If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open Or Cache.TvCache.Shows(f).State = -1 Or tvBatchList.includeLocked = True Then
+                If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open OrElse Cache.TvCache.Shows(f).State = -1 OrElse tvBatchList.includeLocked = True Then
                     progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount
                     If done > 0 Then
                         progress = (100 / showprocesscount) * done
@@ -20264,7 +20293,7 @@ Public Class Form1
                                                                 If destsorted = True Then
                                                                     Dim filename As String = acts.actorname.Replace(" ", "_")
                                                                     filename = filename & ".tbn"
-                                                                        filename = IO.Path.Combine(workingpath, filename)
+                                                                    filename = IO.Path.Combine(workingpath, filename)
                                                                     Utilities.DownloadFile(acts.actorthumb, filename)
                                                                     If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
                                                                         Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
@@ -20463,7 +20492,7 @@ Public Class Form1
                                                 finalString += tempepisode.Substring(i * chunkSize, chunkSize2) & vbCrLf
                                             Next
                                             'MsgBox("tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value, MsgBoxStyle.OkOnly, "tvdb ERROR!")
-                                            progresstext="tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
+                                            progresstext = "tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                                             tvbckrescrapewizard.ReportProgress(progress, progresstext)
                                             'MsgBox("TVDB reported the following error" & vbCrLf & finalString, MsgBoxStyle.OkOnly, "ERROR!")
 
@@ -20537,7 +20566,7 @@ Public Class Form1
                                                                     myProcess.StartInfo.CreateNoWindow = False
                                                                     myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
                                                                     If Preferences.EdenEnabled = True Then
-                                                                        Dim seconds As Integer = Preferences.ScrShtDelay 
+                                                                        Dim seconds As Integer = Preferences.ScrShtDelay
                                                                         proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                                                                         myProcess.StartInfo.Arguments = proc_arguments
                                                                         myProcess.Start()
@@ -20640,11 +20669,11 @@ Public Class Form1
                                             Dim tempstring As String
                                             tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
                                             If Preferences.intruntime Then
-                                                listofnewepisodes(h).Runtime.Value = Math.Round(tempstring/60).ToString
+                                                listofnewepisodes(h).Runtime.Value = Math.Round(tempstring / 60).ToString
                                             Else
-                                                listofnewepisodes(h).Runtime.Value = Math.Round(tempstring/60).ToString & " min"
+                                                listofnewepisodes(h).Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
                                             End If
-                                            
+
                                         Catch ex As Exception
 #If SilentErrorScream Then
                                             Throw ex
@@ -20659,6 +20688,7 @@ Public Class Form1
                     End If
                     done += 1
                 End If
+                If singleshow Then Exit For
             Next
 
         Catch ex As Exception
@@ -25316,5 +25346,6 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
+
 
 End Class

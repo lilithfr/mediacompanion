@@ -173,6 +173,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
             Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_RescrapeWizard.Enabled = True
             Tv_TreeViewContext_FindMissArt.Enabled = True
             Tv_TreeViewContext_RefreshShow.Enabled = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = True
@@ -194,6 +195,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = False
             Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_RescrapeWizard.Enabled = False
             Tv_TreeViewContext_FindMissArt.Enabled = False
             Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
@@ -215,6 +217,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
             Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_RescrapeWizard.Enabled = False
             Tv_TreeViewContext_FindMissArt.Enabled = False
             Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
