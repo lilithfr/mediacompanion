@@ -382,6 +382,7 @@ Public Class TvEpisode
 
         Dim tmpaud As String = ""
         'get audio data
+        Me.Details.StreamDetails.Audio.Clear()
         If numOfAudioStreams > 0 Then
             While curAS < numOfAudioStreams
                 Dim audio As New AudioDetails
