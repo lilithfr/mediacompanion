@@ -1826,6 +1826,7 @@ Public Class Form1
                 pathtxt.Text = workingMovie.fullpathandfilename
                 ratingtxt.Text = workingMovieDetails.fullmoviebody.rating.FormatRating
                 imdbtxt.Text = workingMovieDetails.fullmoviebody.imdbid
+                tagtxt.Text = ""
                 If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
                     For Each t In workingMovieDetails.fullmoviebody.tag
                         tagtxt.Text &= t & ", "
