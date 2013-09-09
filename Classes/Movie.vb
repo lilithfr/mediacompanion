@@ -746,13 +746,13 @@ Public Class Movie
 
     Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
         Actions.Items.Add( New ScrapeAction(AddressOf ImdbScrapeActors            , "IMDB Actors scraper"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
@@ -2114,20 +2114,23 @@ Public Class Movie
         Dim nextStackPart As String = ""
         Dim stackdesignator As String = ""
         Dim newextension As String = IO.Path.GetExtension(mediaFile)
-        Dim newfilename As String = Preferences.MovieRenameTemplate
+        Dim newfilename As String = UserDefinedBaseFileName 'Preferences.MovieRenameTemplate
         Dim targetMovieFile As String = ""
         Dim targetNfoFile As String = ""
         Dim aFileExists As Boolean = False
         Try
-            'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-            newfilename = newfilename.Replace("%T", movieDetails.title.SafeTrim)  'replaces %T with movie title
-            newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
-            newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
-            newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
-            newfilename = newfilename.Replace("%R", movieDetails.rating)        'replaces %R with rating 
-            newfilename = newfilename.Replace("%L", movieDetails.runtime)       'replaces %L with runtime (length)
-            newfilename = newfilename.Replace("%S", movieDetails.source)        'replaces %S with movie source
-            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)      'removes chars that can't be in a filename
+            ''create new filename (hopefully removing invalid chars first else Move (rename) will fail)
+            'newfilename = newfilename.Replace("%T", movieDetails.title.SafeTrim)  'replaces %T with movie title
+            'newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
+            'newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
+            'newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
+            'newfilename = newfilename.Replace("%R", movieDetails.rating)        'replaces %R with rating
+            ''newfilename = newfilename.Replace("%R", )        'replaces %R with video Resolution
+            ''newfilename = newfilename.Replace("%A", movieDetails.rating)        'replaces %A with audio Codec & channels 
+            ''newfilename = newfilename.Replace("%V", movieFileInfo.ScrapedMovie.filedetails.filedetails_video.VideoResolution)        'replaces %R with video Codec & fornat
+            'newfilename = newfilename.Replace("%L", movieDetails.runtime)       'replaces %L with runtime (length)
+            'newfilename = newfilename.Replace("%S", movieDetails.source)        'replaces %S with movie source
+            'newfilename = Utilities.cleanFilenameIllegalChars(newfilename)      'removes chars that can't be in a filename
 
             'designate the new main movie file (without extension) and test the new filenames do not already exist
             targetMovieFile = newpath & newfilename
@@ -2670,6 +2673,10 @@ Public Class Movie
     ReadOnly Property UserDefinedBaseFileName As String
         Get
             Dim s As String = Path.GetFileNameWithoutExtension(NfoPathAndFilename)
+            Dim ac1 As String = AudioCodecChannels  
+            Dim vc As String = VideoCodec
+            Dim vr As String = VideoResolution 
+            
 
             Try
                 If Preferences.MovieRenameEnable Then
@@ -2678,7 +2685,10 @@ Public Class Movie
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
-                    s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)        
+                    s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
+                    s = s.Replace("%V", vr)        
+                    s = s.Replace("%A", ac1)
+                    s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source)        
                     s = Utilities.cleanFilenameIllegalChars(s)     
@@ -2690,6 +2700,55 @@ Public Class Movie
         End Get
     End Property
 
+    ReadOnly Property AudioCodecChannels As String
+        Get
+            Dim ac As String = ""
+            Try
+                Dim ac1 As String = _scrapedMovie.filedetails.filedetails_audio.Item(0).Codec.Value
+                Dim ac2 As String = _scrapedMovie.filedetails.filedetails_audio.Item(0).Channels.Value.RemoveWhitespace.Replace("/","-")
+                If ac1.Contains("dts") Then ac1 = "DTS"
+                
+                ac = ac1 & " " & ac2 & "CH"
+            Catch ex As Exception
+
+            End Try
+            Return ac
+        End Get
+    End Property
+
+    ReadOnly Property VideoCodec As String
+        Get
+            Dim vc As String = ""
+            Try
+                Dim vc1 = _scrapedMovie.filedetails.filedetails_video.Codec.value
+                vc = vc1.ToUpper
+            Catch ex As Exception
+
+            End Try
+            Return vc
+        End Get
+    End Property
+
+    ReadOnly Property VideoResolution As String
+        Get
+            Dim vr As String
+            Try
+                Dim vr1 As String = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
+                Dim vr2 As String = _scrapedMovie.filedetails.filedetails_video.ScanType.Value
+                If vr2.ToLower = "progressive" Then
+                    vr2 = "P"
+                Else If vr2.ToLower = "interlaced" or vr2.ToLower = "mbaff" or vr2.ToLower = "paff" Then
+                    vr2 = "I"
+                Else
+                    vr2 = ""
+                End If
+                vr = vr1 & vr2
+            Catch ex As Exception
+                Return ""
+            End Try
+            Return vr
+        End Get
+    End Property
 
     Function RenameFile(oldName As String, newName As String, Optional ByRef log As String="") As Boolean
 
