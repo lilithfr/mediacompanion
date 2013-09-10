@@ -1095,6 +1095,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         Return "Error"
     End Function
+
+    Public Shared Function SpacesToUnderscores( ByVal inputText as String) As String
+        Return inputText.Replace(" ","_")
+    End Function
+
     Public Shared Function cleanruntime(ByVal runtime As String) As String
         Try
             Dim tempstring As String = runtime

@@ -2931,6 +2931,28 @@ The search for offline movies is not recursive, so make
 sure the folders you want added are in one of your
 offline movie folder roots.</value>
   </data>
+  <data name="Label196.Text" xml:space="preserve">
+    <value>Notes:
+Folder Rename - If Movie is in Root folder, new folder created
+                         - Separate folders with '\' character
+                         - If %N (Movieset) is empty, folder for movieset is not
+                              created, but MovieTitle folder is created.</value>
+  </data>
+  <data name="Label100.Text" xml:space="preserve">
+    <value>Legend:
+
+%T - Movie Title
+%Y - Year
+%I - IMDbId
+%S - Movie Source 
+%N - MovieSet
+%P - Premiered Date
+%R - Rating
+%L - Runtime length
+%V - Video Resolution
+%C - Video Codec
+%A - Audio Codec + Ch</value>
+  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>613, 56</value>
   </metadata>

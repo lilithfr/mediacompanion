@@ -14725,7 +14725,8 @@ Public Class Form1
         ListBox9                    .SelectedItem   = Preferences.imdbmirror
         cbPreferredTrailerResolution.Enabled        = Preferences.gettrailer
         TextBox_OfflineDVDTitle     .Text           = Preferences.OfflineDVDTitle
-        MovieRenameTemplateTextBox  .Text           = Preferences.MovieRenameTemplate
+        tb_MovieRenameEnable        .Text           = Preferences.MovieRenameTemplate
+        tb_MovFolderRename          .Text           = Preferences.MovFolderRenameTemplate 
         localactorpath              .Text           = Preferences.actorsavepath
         xbmcactorpath               .Text           = Preferences.actornetworkpath
         cbPreferredTrailerResolution.Text           = Preferences.moviePreferredTrailerResolution.ToUpper()
@@ -14763,7 +14764,9 @@ Public Class Form1
         cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
         cbxCleanFilenameIgnorePart.CheckState   = If(Preferences.movieignorepart, CheckState.Checked, CheckState.Unchecked)
         ScrapeFullCertCheckBox.CheckState       = If(Preferences.scrapefullcert, CheckState.Checked, CheckState.Unchecked)
-        MovieRenameCheckBox.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
+        cbMovieRenameEnable.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
+        cbMovFolderRename.CheckState            = If(Preferences.MovFolderRename, CheckState.Checked, CheckState.Unchecked)
+        cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
@@ -21574,10 +21577,13 @@ Public Class Form1
         Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
-        Me.MovieRenameCheckBox.Checked = Preferences.MovieRenameEnable
+        Me.cbMovieRenameEnable.Checked = Preferences.MovieRenameEnable
+        Me.cbMovFolderRename.Checked = Preferences.MovFolderRename
+        Me.cbRenameUnderscore.Checked = Preferences.MovRenameUnderscore 
         Me.ManualRenameChkbox.Checked = Preferences.MovieManualRename
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
-        Me.MovieRenameTemplateTextBox.Text = Preferences.MovieRenameTemplate
+        Me.tb_MovieRenameEnable.Text = Preferences.MovieRenameTemplate
+        Me.tb_MovFolderRename.Text = Preferences.MovFolderRenameTemplate 
         Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
@@ -22077,9 +22083,9 @@ Public Class Form1
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub MovieRenameTemplateTextBox_TextChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameTemplateTextBox.TextChanged
+    Private Sub tb_MovieRenameEnable_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovieRenameEnable.TextChanged
         Try
-            Preferences.MovieRenameTemplate = MovieRenameTemplateTextBox.Text
+            Preferences.MovieRenameTemplate = tb_MovieRenameEnable.Text
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -22087,12 +22093,52 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub MovieRenameCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameCheckBox.CheckedChanged
+    Private Sub tb_MovFolderRename_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovFolderRename.TextChanged
         Try
-            If MovieRenameCheckBox.CheckState = CheckState.Checked Then
+            Preferences.MovFolderRenameTemplate = tb_MovFolderRename.Text
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovieRenameEnable_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRenameEnable.CheckedChanged
+        Try
+            If cbMovieRenameEnable.CheckState = CheckState.Checked Then
                 Preferences.MovieRenameEnable = True
             Else
                 Preferences.MovieRenameEnable = False
+                'Preferences.XbmcTmdbRenameMovie = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovFolderRename_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovFolderRename.CheckedChanged
+        Try
+            If cbMovFolderRename.CheckState = CheckState.Checked Then
+                Preferences.MovFolderRename = True
+            Else
+                Preferences.MovFolderRename = False
+                'Preferences.XbmcTmdbRenameMovie = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
+        Try
+            If cbRenameUnderscore.CheckState = CheckState.Checked Then
+                Preferences.MovRenameUnderscore = True
+            Else
+                Preferences.MovRenameUnderscore = False
                 'Preferences.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True

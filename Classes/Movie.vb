@@ -2690,7 +2690,7 @@ Public Class Movie
                     s = s.Replace("%A", ac1)
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
-                    s = s.Replace("%S", _scrapedMovie.fullmoviebody.source)        
+                    s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
                     s = Utilities.cleanFilenameIllegalChars(s)     
                 End If
             Catch

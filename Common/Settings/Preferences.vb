@@ -194,6 +194,9 @@ Public Class Preferences
     Public Shared MovieManualRename As Boolean
     Public Shared MovieRenameEnable As Boolean
     Public Shared MovieRenameTemplate As String
+    Public Shared MovFolderRename As Boolean
+    Public Shared MovFolderRenameTemplate As String
+    Public Shared MovRenameUnderscore As Boolean
     Public Shared MovieImdbGenreRegEx As String
     Public Shared showsortdate As Boolean
     Public Shared TMDbSelectedLanguageName As String = "English - US"
@@ -499,6 +502,9 @@ Public Class Preferences
         MovieManualRename = False
         MovieRenameEnable = False
         MovieRenameTemplate = "%T (%Y)"
+        MovFolderRename = False
+        MovRenameUnderscore = False
+        MovFolderRenameTemplate = "%N\%T (%Y)"
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
 
 
@@ -799,8 +805,11 @@ Public Class Preferences
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
         root.AppendChild(doc, "moviemanualrename",                  MovieManualRename)                  'MovieManualRename
-        root.AppendChild(doc, "movierenameenable",                  MovieRenameEnable)                  'MovieRenameCheckBox
-        root.AppendChild(doc, "movierenametemplate",                MovieRenameTemplate)                'MovieRenameTemplateTextBox
+        root.AppendChild(doc, "MovieRenameEnable",                  MovieRenameEnable)                  'cbMovieRenameEnable
+        root.AppendChild(doc, "movierenametemplate",                MovieRenameTemplate)                'tb_MovieRenameEnable
+        root.AppendChild(doc, "MovFolderRename",                    MovFolderRename)                    'cbMovFolderRename
+        root.AppendChild(doc, "MovFolderRenameTemplate",            MovFolderRenameTemplate)            'tb_MovFolderRename
+        root.AppendChild(doc, "MovRenameUnderscore",                MovRenameUnderscore)                'cbRenameUnderscore
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
         root.AppendChild(doc, "moviePreferredHDTrailerResolution",  moviePreferredTrailerResolution)    'cbPreferredTrailerResolution
         root.AppendChild(doc, "GetMovieSetFromTMDb",                GetMovieSetFromTMDb)                'cbGetMovieSetFromTMDb
@@ -1126,8 +1135,11 @@ Public Class Preferences
                     Case "startuptab"                           : startuptab = Convert.ToByte(thisresult.InnerText)
                     Case "offlinemovielabeltext"                : OfflineDVDTitle = thisresult.InnerText
                     Case "moviemanualrename"                    : MovieManualRename = thisresult.InnerXml
-                    Case "movierenameenable"                    : MovieRenameEnable = thisresult.InnerXml
+                    Case "MovieRenameEnable"                    : MovieRenameEnable = thisresult.InnerXml
                     Case "movierenametemplate"                  : MovieRenameTemplate = thisresult.InnerText
+                    Case "MovFolderRename"                      : MovFolderRename = thisresult.InnerText 
+                    Case "MovFolderRenameTemplate"              : MovFolderRenameTemplate = thisresult.InnerText 
+                    Case "MovRenameUnderscore"                  : MovRenameUnderscore = thisresult.InnerText 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml
                     Case "moviePreferredHDTrailerResolution"    : moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()
