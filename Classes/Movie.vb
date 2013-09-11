@@ -2115,6 +2115,7 @@ Public Class Movie
         Dim stackdesignator As String = ""
         Dim newextension As String = IO.Path.GetExtension(mediaFile)
         Dim newfilename As String = UserDefinedBaseFileName 'Preferences.MovieRenameTemplate
+        Dim newfoldername As String = UserDefinedBaseFolderName 'Preferences.MovFolderRenameTemplate
         Dim targetMovieFile As String = ""
         Dim targetNfoFile As String = ""
         Dim aFileExists As Boolean = False
@@ -2561,6 +2562,7 @@ Public Class Movie
         Dim isFirstPart     = True
         Dim newextension    = IO.Path.GetExtension(mediaFile)
         Dim newfilename     = UserDefinedBaseFileName
+        Dim newfoldername   = UserDefinedBaseFolderName
 
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
@@ -2632,13 +2634,34 @@ Public Class Movie
 
             RenamedBaseName = targetNfoFile
 
+            'Part 3.1 - Create Folder or Rename Folder
+            If Preferences.MovFolderRename Then
+                Dim movfol As Boolean = RenameMovFolder
+            End If
+
         Catch ex As Exception
             log &= "!!!Rename Movie File FAILED !!!" & vbCrLf
         End Try
         Return log
     End Function
 
-  
+  Public Function RenameMovFolder As Boolean
+        Dim success As Boolean = False
+        Dim isroot As Boolean = False
+        Dim RootFolder As String = ""
+        Dim lastfolder As String = Utilities.GetLastFolder(NfoPathAndFilename)
+            Dim rtfolder As String = Nothing
+            For Each rfolder In Preferences.movieFolders
+                rtfolder = Path.GetFileName(rfolder)
+                If rtfolder = lastfolder Then isroot = True
+            Next
+        Try
+
+        Catch ex As Exception
+            Return False
+        End Try
+        Return success
+  End Function
 
     Public Function GetActualName(anciliaryFile As String) As String
       
@@ -2677,7 +2700,6 @@ Public Class Movie
             Dim vc As String = VideoCodec
             Dim vr As String = VideoResolution 
             
-
             Try
                 If Preferences.MovieRenameEnable Then
                     s = Preferences.MovieRenameTemplate
@@ -2691,7 +2713,43 @@ Public Class Movie
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
-                    s = Utilities.cleanFilenameIllegalChars(s)     
+                    s = Utilities.cleanFilenameIllegalChars(s)
+                    If Preferences.MovRenameUnderscore Then
+                        s = Utilities.SpacesToUnderscores(s)
+                    End If
+                End If
+            Catch
+            End Try
+
+            Return s
+        End Get
+    End Property
+
+    ReadOnly Property UserDefinedBaseFolderName As String
+        Get
+            Dim s As String = NfoPath
+            Dim ac1 As String = AudioCodecChannels  
+            Dim vc As String = VideoCodec
+            Dim vr As String = VideoResolution 
+            
+            Try
+                If Preferences.MovFolderRename Then
+                    s = Preferences.MovFolderRenameTemplate
+                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)         
+                    s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
+                    s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
+                    s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
+                    s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
+                    s = s.Replace("%N", _scrapedMovie.fullmoviebody.movieset)
+                    s = s.Replace("%V", vr)        
+                    s = s.Replace("%A", ac1)
+                    s = s.Replace("%C", vc)
+                    s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
+                    s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
+                    s = Utilities.cleanFoldernameIllegalChars(s)
+                    If Preferences.MovRenameUnderscore Then
+                        s = Utilities.SpacesToUnderscores(s)
+                    End If
                 End If
             Catch
             End Try

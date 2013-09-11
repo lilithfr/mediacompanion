@@ -2576,6 +2576,27 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return string2clean
     End Function
 
+    Public Shared Function cleanFoldernameIllegalChars(ByVal string2clean As String) As String
+        Dim strIllegalChars As String = "/:""*?<>|"
+        Dim illegalChars As Char() = strIllegalChars.ToCharArray
+        Dim M As Match = Regex.Match(string2clean, "[\" & strIllegalChars & "]") 'HACK ALERT! - back-slash added to regex pattern string to escape illegal back-slash character!
+        If M.Success = True Then
+            Dim changeTo As String = ""
+            For Each c As Char In illegalChars
+                Select Case c
+                    Case """"
+                        changeTo = "'"
+                    Case ":", "|"
+                        changeTo = " -"
+                    Case Else
+                        changeTo = ""
+                End Select
+                string2clean = string2clean.Replace(c, changeTo)
+            Next
+        End If
+        Return string2clean
+    End Function
+
     Public Shared Function CheckForXMLIllegalChars(ByRef xmlfile As String) As Boolean
         Dim xmlOK As Boolean = False
         Dim numCharLimit As Integer = 10    'Arbitrary limit so we don't get lost in an infinite loop
