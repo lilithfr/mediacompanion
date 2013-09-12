@@ -1,4 +1,4 @@
-Imports System.ComponentModel
+Imports System.ComponentModel 
 Imports System.IO
 Imports System.Linq
 Imports System.Text.RegularExpressions
@@ -2360,7 +2360,7 @@ Public Class Movie
         HandleOfflineFile()             ' Do we need this?
         SaveNFO()
 
-        If rl.Rename_Files And Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+        If rl.Rename_Files Then   'And Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
             ReportProgress(, RenameExistingMetaFiles)
             'SaveNFO
         End If
@@ -2562,11 +2562,12 @@ Public Class Movie
         Dim isFirstPart     = True
         Dim newextension    = IO.Path.GetExtension(mediaFile)
         Dim newfilename     = UserDefinedBaseFileName
-        Dim newfoldername   = UserDefinedBaseFolderName
+        'Dim newfoldername   = UserDefinedBaseFolderName
 
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
+            If Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
             targetMovieFile = newpath & newfilename
             targetNfoFile   = targetMovieFile
 
@@ -2634,6 +2635,8 @@ Public Class Movie
 
             RenamedBaseName = targetNfoFile
 
+            End If
+
             'Part 3.1 - Create Folder or Rename Folder
             If Preferences.MovFolderRename Then
                 Dim movfol As Boolean = RenameMovFolder
@@ -2647,14 +2650,51 @@ Public Class Movie
 
   Public Function RenameMovFolder As Boolean
         Dim success As Boolean = False
-        Dim isroot As Boolean = False
-        Dim RootFolder As String = ""
-        Dim lastfolder As String = Utilities.GetLastFolder(NfoPathAndFilename)
-            Dim rtfolder As String = Nothing
-            For Each rfolder In Preferences.movieFolders
-                rtfolder = Path.GetFileName(rfolder)
-                If rtfolder = lastfolder Then isroot = True
-            Next
+        Dim FilePath As String = nfopath
+        Dim currentroot As String = ""
+        For Each rtfold In Preferences.movieFolders
+            If FilePath.Contains(rtfold) Then currentroot = rtfold
+        Next
+        Dim inrootfolder As Boolean = (currentroot = FilePath)
+        Dim newFolder As String = UserDefinedBaseFolderName
+        Dim newpatharr As New List(Of String)
+        newpatharr.AddRange(newFolder.Split("\"))
+        If newpatharr.Count > 0 Then           'Remove -none- if no Movieset
+            Dim badfolder As Integer = 0
+            Do Until badfolder = -1
+                badfolder = -1
+                For num = 0 to newpatharr.Count-1
+                    If newpatharr(num).ToLower = "-none-" Then 
+                        badfolder = num
+                        Exit For
+                    End If
+                Next
+                If badfolder >= 0 Then
+                    newpatharr.RemoveAt(badfolder)
+                End If
+            Loop
+        Else If newpatharr.Count = 0 Then
+            Return False
+        End If
+
+        If newpatharr.Count = 1 Then         'check if new folder is same as existing folder
+            If newpatharr(0) = Utilities.GetLastFolder(FilePath) Then
+                Return False
+            End If
+        End If
+        'Dim lastfolder As String = Utilities.GetLastFolder(NfoPathAndFilename)
+        '    Dim rtfolder As String = Nothing
+        '    For Each rfolder In Preferences.movieFolders
+        '        rtfolder = Path.GetFileName(rfolder)
+        '        If rtfolder = lastfolder Then isroot = True
+        '    Next
+        Dim checkfolder As String = currentroot
+        For Each folder In newpatharr
+            checkfolder &= "\" & folder
+            If Not Directory.Exists(checkfolder) Then
+                Directory.CreateDirectory(checkfolder)
+            End If
+        Next
         Try
 
         Catch ex As Exception
