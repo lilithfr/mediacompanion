@@ -2680,6 +2680,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return state
     End Function
 
+    Public Shared Function IsDirectoryEmpty(ByVal testdir As String) As Boolean
+        Dim s() As String = Directory.GetFiles(testdir)
+        If s.Length = 0 Then
+            Return True
+        End If
+        Return False
+    End Function
+
     Public Shared Function RootVideoTsFolder(ByVal FullPath As String) As String
 
             If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then

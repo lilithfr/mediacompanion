@@ -2650,8 +2650,10 @@ Public Class Movie
 
   Public Function RenameMovFolder As Boolean
         Dim success As Boolean = False
-        Dim FilePath As String = nfopath
+        Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
+
+        'Get current root folder
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
         Next
@@ -2659,7 +2661,9 @@ Public Class Movie
         Dim newFolder As String = UserDefinedBaseFolderName
         Dim newpatharr As New List(Of String)
         newpatharr.AddRange(newFolder.Split("\"))
-        If newpatharr.Count > 0 Then           'Remove -none- if no Movieset
+        
+        'Remove -none- if no Movieset
+        If newpatharr.Count > 0 Then
             Dim badfolder As Integer = 0
             Do Until badfolder = -1
                 badfolder = -1
@@ -2677,17 +2681,15 @@ Public Class Movie
             Return False
         End If
 
-        If newpatharr.Count = 1 Then         'check if new folder is same as existing folder
+        'check if new folder is same as existing folder
+        If newpatharr.Count = 1 Then
             If newpatharr(0) = Utilities.GetLastFolder(FilePath) Then
+                
                 Return False
             End If
         End If
-        'Dim lastfolder As String = Utilities.GetLastFolder(NfoPathAndFilename)
-        '    Dim rtfolder As String = Nothing
-        '    For Each rfolder In Preferences.movieFolders
-        '        rtfolder = Path.GetFileName(rfolder)
-        '        If rtfolder = lastfolder Then isroot = True
-        '    Next
+        
+        'Create new directory/s
         Dim checkfolder As String = currentroot
         For Each folder In newpatharr
             checkfolder &= "\" & folder
@@ -2695,6 +2697,36 @@ Public Class Movie
                 Directory.CreateDirectory(checkfolder)
             End If
         Next
+
+        'If not in root, move files to new path and any sub folders
+        If Not inrootfolder Then
+            Dim toPathInfo = New DirectoryInfo(checkfolder)
+            Dim fromPathInfo = New DirectoryInfo(FilePath)
+            ''move all files
+            For Each file As IO.FileInfo In fromPathInfo.GetFiles()
+                file.MoveTo(Path.Combine(checkfolder, file.Name))
+            Next
+            ''move any sub directories
+            For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
+                dir.MoveTo(Path.Combine(checkfolder, dir.Name))
+            Next
+            If Utilities.IsDirectoryEmpty(FilePath) Then
+                IO.Directory.Delete(FilePath)
+            End If
+        Else
+            'Else if in Root folder, gather filenames to be moved
+            Dim Moviename As String = RenamedBaseName
+            
+            'Copy actor images from root .actor folder to new folder's .actor folder
+
+        End If
+
+        'update cache info
+        _movieCache.fullpathandfilename = checkfolder & "\" & NfoPathAndFilename.Replace(FilePath,"")
+        '_movieCache.filename = ""
+        _movieCache.foldername = Utilities.GetLastFolder(_movieCache.fullpathandfilename)
+        UpdateMovieCache
+
         Try
 
         Catch ex As Exception
