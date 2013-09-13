@@ -2657,7 +2657,7 @@ Public Class Movie
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
         Next
-        Dim inrootfolder As Boolean = (currentroot = FilePath)
+        Dim inrootfolder As Boolean = ((currentroot & "\") = FilePath)
         Dim newFolder As String = UserDefinedBaseFolderName
         Dim newpatharr As New List(Of String)
         newpatharr.AddRange(newFolder.Split("\"))
@@ -2714,8 +2714,12 @@ Public Class Movie
                 IO.Directory.Delete(FilePath)
             End If
         Else
-            'Else if in Root folder, gather filenames to be moved
-            Dim Moviename As String = RenamedBaseName
+            'Else if in Root folder, moved to new folder movie and ancillary files.
+            Dim Moviename As String = _movieCache.filename
+            Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
+            For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*"))
+                fi.MoveTo(Path.Combine(checkfolder, fi.Name))
+            Next
             
             'Copy actor images from root .actor folder to new folder's .actor folder
 
@@ -2723,7 +2727,6 @@ Public Class Movie
 
         'update cache info
         _movieCache.fullpathandfilename = checkfolder & "\" & NfoPathAndFilename.Replace(FilePath,"")
-        '_movieCache.filename = ""
         _movieCache.foldername = Utilities.GetLastFolder(_movieCache.fullpathandfilename)
         UpdateMovieCache
 
