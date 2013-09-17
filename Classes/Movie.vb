@@ -1810,7 +1810,7 @@ Public Class Movie
                 If fanartarray.Count > 0 Then
                     For i = 1 To 4
                         xtraart.Clear()
-                        tmpUrl = fanartarray(i - 1).hdUrl
+                        tmpUrl = fanartarray(i).hdUrl
                         If Utilities.UrlIsValid(tmpUrl) Then
                             If xf Then
                                 If Not (IO.File.Exists((xfanart & i.ToString & ".jpg")) AndAlso Not owrite) Then
@@ -1826,7 +1826,7 @@ Public Class Movie
                                 SaveFanartImageToCacheAndPaths(tmpUrl, xtraart)
                             End If
                         End If
-                        If i - 1 = fanartarray.Count - 1 Then Exit For
+                        If i = fanartarray.Count - 1 Then Exit For
                     Next
                 End If
             Else
@@ -2118,22 +2118,63 @@ Public Class Movie
         Dim newfoldername As String = UserDefinedBaseFolderName 'Preferences.MovFolderRenameTemplate
         Dim targetMovieFile As String = ""
         Dim targetNfoFile As String = ""
+        Dim currentroot As String = ""
+        Dim afolder As Boolean = False
+        Dim oldpath As String = ""
+        'Get current root folder
+        For Each rtfold In Preferences.movieFolders
+            If newpath.Contains(rtfold) Then currentroot = rtfold
+        Next
+        Dim inrootfolder As Boolean = ((currentroot & "\") = newpath)
+        Dim newpatharr As New List(Of String)
+        newpatharr.AddRange(newfoldername.Split("\"))
+
+        'Remove -none- if no Movieset
+        If newpatharr.Count > 0 Then
+            Dim badfolder As Integer = 0
+            Do Until badfolder = -1
+                badfolder = -1
+                For num = 0 To newpatharr.Count - 1
+                    If newpatharr(num).ToLower = "-none-" Then
+                        badfolder = num
+                        Exit For
+                    End If
+                Next
+                If badfolder >= 0 Then
+                    newpatharr.RemoveAt(badfolder)
+                End If
+            Loop
+            afolder = True
+        ElseIf newpatharr.Count = 0 Then
+            log &= "!!!No Folder string set in Preferences" & vbCrLf
+            afolder = False
+        End If
+
+        'Check if new path already exists and if not, Create new directory/s
+        Dim checkfolder As String = currentroot
+        For Each folder In newpatharr
+            checkfolder &= "\" & folder
+        Next
+        If Not Directory.Exists(checkfolder) Then
+            afolder = True
+        Else
+            If (checkfolder & "\") = newpath Then
+                log &= "!!!Path already Exists, no need to move files" & vbCrLf
+                afolder = False
+            End If
+        End If
+
+        If Preferences.MovFolderRename And afolder Then
+            Directory.CreateDirectory(checkfolder)
+            oldpath = newpath
+            newpath = checkfolder & "\"
+            log &= "!!! Movie moved to new folder:- " & newpath & vbCrLf
+        End If
+
         Dim aFileExists As Boolean = False
         Try
             ''create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-            'newfilename = newfilename.Replace("%T", movieDetails.title.SafeTrim)  'replaces %T with movie title
-            'newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
-            'newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
-            'newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
-            'newfilename = newfilename.Replace("%R", movieDetails.rating)        'replaces %R with rating
-            ''newfilename = newfilename.Replace("%R", )        'replaces %R with video Resolution
-            ''newfilename = newfilename.Replace("%A", movieDetails.rating)        'replaces %A with audio Codec & channels 
-            ''newfilename = newfilename.Replace("%V", movieFileInfo.ScrapedMovie.filedetails.filedetails_video.VideoResolution)        'replaces %R with video Codec & fornat
-            'newfilename = newfilename.Replace("%L", movieDetails.runtime)       'replaces %L with runtime (length)
-            'newfilename = newfilename.Replace("%S", movieDetails.source)        'replaces %S with movie source
-            'newfilename = Utilities.cleanFilenameIllegalChars(newfilename)      'removes chars that can't be in a filename
-
-            'designate the new main movie file (without extension) and test the new filenames do not already exist
+            
             targetMovieFile = newpath & newfilename
             targetNfoFile = targetMovieFile
             If Utilities.testForFileByName(targetMovieFile, newextension) Then
@@ -2179,7 +2220,11 @@ Public Class Movie
                 movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
 
                 RenamedBaseName = targetNfoFile
-
+                If Preferences.MovFolderRename And afolder Then               'remove old directory if present
+                    If oldpath <> newpath And oldpath <> currentroot Then
+                        Directory.Delete(oldpath)
+                    End If
+                End If
         '        movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
        '         movieFileInfo.Title = newfilename                                   'new title
             Else
