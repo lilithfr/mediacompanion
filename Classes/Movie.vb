@@ -2152,9 +2152,14 @@ Public Class Movie
 
         'Check if new path already exists and if not, Create new directory/s
         Dim checkfolder As String = currentroot
-        For Each folder In newpatharr
-            checkfolder &= "\" & folder
-        Next
+        If newpatharr.Count = 1 And Not inrootfolder Then
+            Dim lastfolder As String = Utilities.GetLastFolderInPath(newpath)
+            checkfolder = newpath.Replace((lastfolder & "\"), newpatharr(0))
+        Else
+            For Each folder In newpatharr
+                checkfolder &= "\" & folder
+            Next
+        End If
         If Not Directory.Exists(checkfolder) Then
             afolder = True
         Else
@@ -2733,9 +2738,15 @@ Public Class Movie
         
         'Check if new path already exists and if not, Create new directory/s
         Dim checkfolder As String = currentroot
-        For Each folder In newpatharr
-            checkfolder &= "\" & folder
-        Next
+        If newpatharr.Count = 1 And Not inrootfolder Then                       'If only one folder in new folder pattern,
+            Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
+            checkfolder = FilePath.Replace((lastfolder & "\"), newpatharr(0))   'movie is in root folder already
+        Else
+            For Each folder In newpatharr
+                checkfolder &= "\" & folder
+            Next
+        End If
+
         If Not Directory.Exists(checkfolder) Then
                 Directory.CreateDirectory(checkfolder)
                 log &= "!!! New path created:- " & checkfolder & vbCrLf 
