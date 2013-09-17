@@ -2422,10 +2422,12 @@ Public Class Movie
 
         If Not IsNothing(c) Then
             c.Assign(_movieCache)
-
+            Try
             Dim dgv_c As Data_GridViewMovie = _parent.FindData_GridViewCachedMovie(key)
-
+            
             dgv_c.Assign(_movieCache)
+            Catch
+            End Try
             Return
         End If
         
@@ -2652,7 +2654,7 @@ Public Class Movie
         Dim success As Boolean = False
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
-
+        RemoveMovieFromCache 
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
@@ -2697,8 +2699,9 @@ Public Class Movie
                 Directory.CreateDirectory(checkfolder)
             End If
         Next
-
+        
         'If not in root, move files to new path and any sub folders
+        FilePath = FilePath.Replace("VIDEO_TS\","")    'If DVD VIDEO_TS folder, step back one folder for all artwork if Frodo.
         If Not inrootfolder Then
             Dim toPathInfo = New DirectoryInfo(checkfolder)
             Dim fromPathInfo = New DirectoryInfo(FilePath)
@@ -2715,7 +2718,7 @@ Public Class Movie
             End If
         Else
             'Else if in Root folder, moved to new folder movie and ancillary files.
-            Dim Moviename As String = _movieCache.filename
+            Dim Moviename As String = _movieCache.filename.Replace(".nfo","")
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
             For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
@@ -2723,11 +2726,29 @@ Public Class Movie
             
             'Copy actor images from root .actor folder to new folder's .actor folder
 
+            Dim actorsource As String= currentroot & "\.actors\"
+            Dim NewActorFolder As String = checkfolder & "\.actors"
+            If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
+            NewActorFolder &= "\"
+            For Each act In Actors
+                Dim actorfilename As String = act.ActorName.Replace(" ","_") & ".tbn"
+                Dim sourceactor As String = actorsource & actorfilename
+                If File.Exists(sourceactor) Then
+                    Utilities.SafeCopyFile(sourceactor, (NewActorFolder & actorfilename), True)
+                End If
+                Dim Frodoactorsource As String = sourceactor.Replace(".tbn",".jpg")
+                actorfilename = actorfilename.Replace(".tbn",".jpg")
+                If File.Exists(Frodoactorsource)
+                    Utilities.SafeCopyFile(Frodoactorsource, (NewActorFolder & actorfilename), True)
+                End If
+            Next
         End If
 
         'update cache info
         _movieCache.fullpathandfilename = checkfolder & "\" & NfoPathAndFilename.Replace(FilePath,"")
         _movieCache.foldername = Utilities.GetLastFolder(_movieCache.fullpathandfilename)
+        mediapathandfilename = _movieCache.fullpathandfilename
+        RenamedBaseName = mediapathandfilename
         UpdateMovieCache
 
         Try
