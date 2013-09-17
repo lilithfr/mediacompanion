@@ -2610,6 +2610,7 @@ Public Class Movie
 
                 RenameFile(oldName, newName, log)
             Next
+                log &= "!!! Movie Renamed as:- " & newfilename & vbCrLf 
 
 
             '
@@ -2641,20 +2642,21 @@ Public Class Movie
 
             'Part 3.1 - Create Folder or Rename Folder
             If Preferences.MovFolderRename Then
-                Dim movfol As Boolean = RenameMovFolder
+                log &= RenameMovFolder
             End If
-
+            log &= vbCrLf 
         Catch ex As Exception
-            log &= "!!!Rename Movie File FAILED !!!" & vbCrLf
+            log &= "!!!Rename Movie File FAILED !!!" & vbCrLf & vbCrLf
         End Try
         Return log
     End Function
 
-  Public Function RenameMovFolder As Boolean
+  Public Function RenameMovFolder As String
+        Dim log As String = ""
         Dim success As Boolean = False
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
-        RemoveMovieFromCache 
+         
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
@@ -2680,26 +2682,27 @@ Public Class Movie
                 End If
             Loop
         Else If newpatharr.Count = 0 Then
-            Return False
-        End If
-
-        'check if new folder is same as existing folder
-        If newpatharr.Count = 1 Then
-            If newpatharr(0) = Utilities.GetLastFolder(FilePath) Then
-                
-                Return False
-            End If
+            log &= "!!!No Folder string set in Preferences" & vbCrLf 
+            Return log
         End If
         
-        'Create new directory/s
+        'Check if new path already exists and if not, Create new directory/s
         Dim checkfolder As String = currentroot
         For Each folder In newpatharr
             checkfolder &= "\" & folder
-            If Not Directory.Exists(checkfolder) Then
-                Directory.CreateDirectory(checkfolder)
-            End If
         Next
+        If Not Directory.Exists(checkfolder) Then
+                Directory.CreateDirectory(checkfolder)
+                log &= "!!! New path created:- " & checkfolder & vbCrLf 
+        Else
+            If (checkfolder & "\") = FilePath Then
+                log &= "!!!Path already Exists, no need to move files" & vbCrLf 
+                Return log
+            End If
+        End If
         
+        RemoveMovieFromCache         'Due to path changes, remove from Cache beforehand.
+
         'If not in root, move files to new path and any sub folders
         FilePath = FilePath.Replace("VIDEO_TS\","")    'If DVD VIDEO_TS folder, step back one folder for all artwork if Frodo.
         If Not inrootfolder Then
@@ -2716,6 +2719,7 @@ Public Class Movie
             If Utilities.IsDirectoryEmpty(FilePath) Then
                 IO.Directory.Delete(FilePath)
             End If
+            log &= "!!! All files/Folders moved to new path" & vbCrLf 
         Else
             'Else if in Root folder, moved to new folder movie and ancillary files.
             Dim Moviename As String = _movieCache.filename.Replace(".nfo","")
@@ -2723,6 +2727,7 @@ Public Class Movie
             For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
             Next
+            log &= "Movie moved from Root folder into new path" & vbCrLf 
             
             'Copy actor images from root .actor folder to new folder's .actor folder
 
@@ -2742,6 +2747,7 @@ Public Class Movie
                     Utilities.SafeCopyFile(Frodoactorsource, (NewActorFolder & actorfilename), True)
                 End If
             Next
+            log &= "Actors copied from Root actor folder, into new Movie's actor folder" & vbCrLf 
         End If
 
         'update cache info
@@ -2750,13 +2756,13 @@ Public Class Movie
         mediapathandfilename = _movieCache.fullpathandfilename
         RenamedBaseName = mediapathandfilename
         UpdateMovieCache
-
+        log &= "!!! Folder structure created successfully"
         Try
 
         Catch ex As Exception
-            Return False
+            Return log
         End Try
-        Return success
+        Return log
   End Function
 
     Public Function GetActualName(anciliaryFile As String) As String
