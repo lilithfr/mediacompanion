@@ -1125,7 +1125,7 @@ Public Class Movie
     End Sub
     
     Sub DoRename
-        If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
+        If Preferences.MovieRenameEnable AndAlso Not Preferences.basicsavemode Then 'AndAlso Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts")  ''Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
             ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
         End If
     End Sub
@@ -2153,6 +2153,9 @@ Public Class Movie
         'Check if new path already exists and if not, Create new directory/s
         Dim checkfolder As String = currentroot
         If newpatharr.Count = 1 And Not inrootfolder Then
+            If newpath.Contains("\VIDEO_TS") Then
+                newpath = newpath.Replace("\VIDEO_TS","")
+            End If
             Dim lastfolder As String = Utilities.GetLastFolderInPath(newpath)
             checkfolder = newpath.Replace((lastfolder & "\"), newpatharr(0))
         Else
@@ -2207,19 +2210,47 @@ Public Class Movie
             If aFileExists = False Then         'if none of the possible renamed files already exist then we rename found media files
                 Dim logRename As String = ""    'used to build up a string of the renamed files for the log
                 movieStackList.Sort()           'we're sure hoping the originals were labelled correctly, ie only incremental numbers changing!
-                For i = 0 To movieStackList.Count - 1
-                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
-                    File.Move(movieStackList(i), newpath & changename)
-                    logRename &= If(i, " and ", "") & changename
-                Next
-                log &= "Renamed Movie File to " & logRename & vbCrLf
 
-                For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
-                    If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile)) Then
-                        File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile), targetMovieFile & anciliaryFile)
-                        log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
+                'If usefoldernames or video_ts, bypass renaming of files in folders, but allow renaming of folder.
+                If Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") Then
+                    For i = 0 To movieStackList.Count - 1
+                        Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
+                        File.Move(movieStackList(i), newpath & changename)
+                        logRename &= If(i, " and ", "") & changename
+                    Next
+                    log &= "Renamed Movie File to " & logRename & vbCrLf
+
+                    For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
+                        If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile)) Then
+                            File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile), targetMovieFile & anciliaryFile)
+                            log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
+                        End If
+                    Next
+                    movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
+                Else
+                    If afolder Then
+                        oldpath = oldpath.Replace("\VIDEO_TS","")    'If DVD VIDEO_TS folder, step back one folder so we copy folder as well.
+                        Dim toPathInfo = New DirectoryInfo(newpath)
+                        Dim fromPathInfo = New DirectoryInfo(oldpath)
+                        'move all files
+                        For Each fi As IO.FileInfo In fromPathInfo.GetFiles()
+                            fi.MoveTo(Path.Combine(newpath, fi.Name))
+                        Next
+                        'move any sub directories
+                        For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
+                            dir.MoveTo(Path.Combine(newpath, dir.Name))
+                        Next
+                        'If Utilities.IsDirectoryEmpty(oldpath) Then
+                        '    IO.Directory.Delete(oldpath)
+                        'End If
+                        targetMovieFile = mediaFile.Replace(oldpath, newpath)
+                    Else 
+                        targetMovieFile = mediaFile
                     End If
-                Next
+                    targetMovieFile = targetMovieFile.Replace(newextension, "")
+                    'movieFileInfo.mediapathandfilename = mediaFile.Replace(oldpath, newpath) 'targetMovieFile & newextension 'this is the new full path & filname to the rename media file
+                    targetNfoFile = targetMovieFile
+                End If
 
                 'update the new movie structure with the new data
                 movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
@@ -2619,74 +2650,74 @@ Public Class Movie
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
-            If Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
-            targetMovieFile = newpath & newfilename
-            targetNfoFile   = targetMovieFile
+            If Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+                targetMovieFile = newpath & newfilename
+                targetNfoFile   = targetMovieFile
 
 
-            '
-            'PART 1 - Rename movie file(s):
-            '
+                '
+                'PART 1 - Rename movie file(s):
+                '
 
-            '1.1 - Get movie file name(s):
-            Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
-                If isFirstPart Then
-                    isStack = True    
-                    Dim i As Integer  
+                '1.1 - Get movie file name(s):
+                Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
+                    If isFirstPart Then
+                        isStack = True    
+                        Dim i As Integer  
                        
-                    If Not Preferences.MovieRenameEnable Then
-                        newfilename=stackName
-                    End If
+                        If Not Preferences.MovieRenameEnable Then
+                            newfilename=stackName
+                        End If
                                          
-                    targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                        targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
                     
-                    If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
-                Else
-                    movieStackList.Add(mediaFile)
-                End If
-                stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
-                mediaFile = stackName
-            Loop
+                        If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                    Else
+                        movieStackList.Add(mediaFile)
+                    End If
+                    stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
+                    mediaFile = stackName
+                Loop
 
-            movieStackList.Sort 
+                movieStackList.Sort 
             
-            '1.2 - Rename movie file name(s):
-            For i = 0 To movieStackList.Count - 1
+                '1.2 - Rename movie file name(s):
+                For i = 0 To movieStackList.Count - 1
 
-                Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
+                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
                 
-                oldName = movieStackList(i)
-                newName = newpath & changename
+                    oldName = movieStackList(i)
+                    newName = newpath & changename
 
-                RenameFile(oldName, newName, log)
-            Next
-                log &= "!!! Movie Renamed as:- " & newfilename & vbCrLf 
+                    RenameFile(oldName, newName, log)
+                Next
+                    log &= "!!! Movie Renamed as:- " & newfilename & vbCrLf 
 
 
-            '
-            'PART 2 - Rename anciliary file(s) (nfo,poster,fanart & trailer):
-            '
-            For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts
+                '
+                'PART 2 - Rename anciliary file(s) (nfo,poster,fanart & trailer):
+                '
+                For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts
 
-                newName = targetNfoFile & anciliaryFile
+                    newName = targetNfoFile & anciliaryFile
 
-                oldName = GetActualName(anciliaryFile)
+                    oldName = GetActualName(anciliaryFile)
 
-                If oldName<>"unknown" And anciliaryFile=".nfo" Then
-                    RemoveMovieFromCache
-                End If
+                    If oldName<>"unknown" And anciliaryFile=".nfo" Then
+                        RemoveMovieFromCache
+                    End If
 
-                If RenameFile(oldName, newName, log) And anciliaryFile=".nfo" Then
-                    _movieCache.fullpathandfilename = newName
-                    _movieCache.filename            = Path.GetFileName(newName)
-                    _movieCache.foldername          = Utilities.GetLastFolder(newName)
-                    UpdateMovieCache
-                End If
-             Next
+                    If RenameFile(oldName, newName, log) And anciliaryFile=".nfo" Then
+                        _movieCache.fullpathandfilename = newName
+                        _movieCache.filename            = Path.GetFileName(newName)
+                        _movieCache.foldername          = Utilities.GetLastFolder(newName)
+                        UpdateMovieCache
+                    End If
+                 Next
 
-            mediapathandfilename = targetMovieFile & newextension
+                mediapathandfilename = targetMovieFile & newextension
 
-            RenamedBaseName = targetNfoFile
+                RenamedBaseName = targetNfoFile
 
             End If
 
@@ -2703,7 +2734,7 @@ Public Class Movie
 
   Public Function RenameMovFolder As String
         Dim log As String = ""
-        Dim success As Boolean = False
+        Dim NoDel As Boolean = False
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
          
@@ -2737,6 +2768,7 @@ Public Class Movie
         End If
         
         'Check if new path already exists and if not, Create new directory/s
+        FilePath = FilePath.Replace("VIDEO_TS\","")             'If DVD VIDEO_TS folder, step back one folder so we copy folder as well.
         Dim checkfolder As String = currentroot
         If newpatharr.Count = 1 And Not inrootfolder Then                       'If only one folder in new folder pattern,
             Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
@@ -2760,7 +2792,6 @@ Public Class Movie
         RemoveMovieFromCache         'Due to path changes, remove from Cache beforehand.
 
         'If not in root, move files to new path and any sub folders
-        FilePath = FilePath.Replace("VIDEO_TS\","")    'If DVD VIDEO_TS folder, step back one folder for all artwork if Frodo.
         If Not inrootfolder Then
             Dim toPathInfo = New DirectoryInfo(checkfolder)
             Dim fromPathInfo = New DirectoryInfo(FilePath)
@@ -2773,7 +2804,12 @@ Public Class Movie
                 dir.MoveTo(Path.Combine(checkfolder, dir.Name))
             Next
             If Utilities.IsDirectoryEmpty(FilePath) Then
-                IO.Directory.Delete(FilePath)
+                Try
+                    IO.Directory.Delete(FilePath)
+                Catch ex As IOException 
+                    log &= "!!! Could not delete original folder:- " & FilePath & vbCrLf 
+                    NoDel = True
+                End Try
             End If
             log &= "!!! All files/Folders moved to new path" & vbCrLf 
         Else
@@ -2812,11 +2848,13 @@ Public Class Movie
         mediapathandfilename = _movieCache.fullpathandfilename
         RenamedBaseName = mediapathandfilename
         UpdateMovieCache
-        log &= "!!! Folder structure created successfully"
+        log &= "!!! Folder structure created successfully" & vbCrLf 
         Try
-
+            If NoDel Then
+                IO.Directory.Delete(FilePath)
+            End If
         Catch ex As Exception
-            Return log
+            log &= "!!! Could not Repeat delete original folder:- " & FilePath & vbCrLf
         End Try
         Return log
   End Function
