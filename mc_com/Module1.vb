@@ -3705,9 +3705,9 @@ Module Module1
 
             Thread.Sleep(200)
         End While
-        For Each lgstr In logstr
-            ConsoleOrLog(lgstr)
-        Next
+        'For Each lgstr In logstr
+        '    ConsoleOrLog(lgstr)
+        'Next
     End Sub
 
 Private Sub scraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs)  Handles scraper.DoWork
@@ -3719,7 +3719,8 @@ Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.Co
 
     If Not IsNothing(oProgress.Log) Then
         If oProgress.Log.Contains("!!! ") Then
-            logstr.Add(oProgress.Log.Replace("!!! ", ""))
+'            logstr.Add(oProgress.Log.Replace("!!! ", ""))
+            ConsoleOrLog(oProgress.Log.Replace("!!! ", ""))
         End If
     End If
     Thread.Sleep(1)
