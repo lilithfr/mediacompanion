@@ -4345,12 +4345,18 @@ Public Class Form1
 
             _rescrapeList.FullPathAndFilenames.Clear()
 
-            For Each row As DataGridViewRow In DataGridViewMovies.Rows
+            If DataGridViewMovies.SelectedRows.Count > 1 Then   'run batch wizard on multiple selected movies
+                For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value.ToString)
+                Next
+            Else                                                 'Otherwise run batch wizard on all movies.
+                For Each row As DataGridViewRow In DataGridViewMovies.Rows
 
-                Dim m As Data_GridViewMovie = row.DataBoundItem
+                    Dim m As Data_GridViewMovie = row.DataBoundItem
 
-                _rescrapeList.FullPathAndFilenames.Add(m.fullpathandfilename)
-            Next
+                    _rescrapeList.FullPathAndFilenames.Add(m.fullpathandfilename)
+                Next
+            End If
 
             RunBackgroundMovieScrape("BatchRescrape")
         End If
@@ -23384,12 +23390,12 @@ Public Class Form1
         DisplayMovie
     End Sub
 
-    Private Sub Mov_ToolStripRenameMovie_click(sender As Object, e As EventArgs) Handles Mov_ToolStripRenameMovie.Click
+    Private Sub tsmi_RenMovieOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieOnly.Click
         Dim ismovrenenabled As Boolean = Preferences.MovieRenameEnable
-        Dim isusefolder As Boolean = Preferences.usefoldernames 
+        'Dim isusefolder As Boolean = Preferences.usefoldernames 
         If Preferences.MovieManualRename Then
             Preferences.MovieRenameEnable = True
-            Preferences.usefoldernames = False
+            'Preferences.usefoldernames = False
             mov_ScrapeSpecific("rename_files")
             While BckWrkScnMovies.IsBusy 
                 Application.DoEvents
@@ -23398,7 +23404,53 @@ Public Class Form1
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
         Preferences.MovieRenameEnable = ismovrenenabled
-        Preferences.usefoldernames = isusefolder
+        'Preferences.usefoldernames = isusefolder
+    End Sub
+
+    Private Sub tsmi_RenMovFolderOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovFolderOnly.Click
+        Dim isMovFoldRenEnabled As Boolean = Preferences.MovFolderRename 
+        'Dim isusefolder As Boolean = Preferences.usefoldernames 
+        If Preferences.MovieManualRename Then
+            Preferences.MovFolderRename = True
+            'Preferences.usefoldernames = False
+            mov_ScrapeSpecific("rename_folders")
+            While BckWrkScnMovies.IsBusy 
+                Application.DoEvents
+            End While
+        Else
+            MsgBox("Manual Movie Rename is not enabled", 0)
+        End If
+        Preferences.MovFolderRename = isMovFoldRenEnabled
+        'Preferences.usefoldernames = isusefolder
+    End Sub
+
+    Private Sub tsmi_RenMovieAndFolder_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieAndFolder.Click
+        Dim isMovFoldRenEnabled As Boolean = Preferences.MovFolderRename
+        Dim isMovRenEnabled As Boolean = Preferences.MovieRenameEnable
+        'Dim isusefolder As Boolean = Preferences.usefoldernames 
+        If Preferences.MovieManualRename Then
+            Preferences.MovFolderRename = True
+            Preferences.MovieRenameEnable = True
+            _rescrapeList.FullPathAndFilenames.Clear()
+
+            For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+                _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value.ToString)
+            Next
+            rescrapeList.ResetFields
+            rescrapeList.Rename_Folders = True
+            rescrapeList.Rename_Files = True
+
+            RunBackgroundMovieScrape("BatchRescrape")
+
+            While BckWrkScnMovies.IsBusy 
+                Application.DoEvents
+            End While
+        Else
+            MsgBox("Manual Movie Rename is not enabled", 0)
+        End If
+        Preferences.MovFolderRename = isMovFoldRenEnabled
+        Preferences.MovieRenameEnable = isMovRenEnabled
+        'Preferences.usefoldernames = isusefolder
     End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged

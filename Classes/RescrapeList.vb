@@ -29,10 +29,11 @@ Public Class RescrapeList
     Property tmdb_set_name       As Boolean
     Property Download_Trailer    As Boolean
     Property Rename_Files        As Boolean
+    Property Rename_Folders      As Boolean
     Property Frodo_Poster_Thumbs As Boolean
     Property Frodo_Fanart_Thumbs As Boolean
     Property Xbmc_Sync           As Boolean
-    Property Convert_To_Frodo      As Boolean
+    Property Convert_To_Frodo    As Boolean
 
     Sub New
     End Sub

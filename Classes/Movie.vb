@@ -2446,6 +2446,10 @@ Public Class Movie
             'SaveNFO
         End If
 
+        If rl.Rename_Folders Then
+            ReportProgress(, RenameMovFolder)
+        End If
+
         UpdateCaches()
     End Sub
 
@@ -2633,7 +2637,7 @@ Public Class Movie
 
         Dim log             = ""
         Dim targetMovieFile = ""
-        Dim targetNfoFile   = ""
+        Dim targetNfoFile   = "" 
         Dim oldName         = "" 
         Dim newName         = "" 
         Dim nextStackPart   = ""
@@ -2650,7 +2654,7 @@ Public Class Movie
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
-            If Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+            If Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
                 targetMovieFile = newpath & newfilename
                 targetNfoFile   = targetMovieFile
 
@@ -2703,7 +2707,7 @@ Public Class Movie
 
                     oldName = GetActualName(anciliaryFile)
 
-                    If oldName<>"unknown" And anciliaryFile=".nfo" Then
+                    If oldName<>"unknown" AndAlso anciliaryFile=".nfo" AndAlso oldName <> newName Then
                         RemoveMovieFromCache
                     End If
 
@@ -2718,13 +2722,17 @@ Public Class Movie
                 mediapathandfilename = targetMovieFile & newextension
 
                 RenamedBaseName = targetNfoFile
-
+            Else
+                log & = "!!! " & _scrapedMovie.fullmoviebody.originaltitle & vbCrLf 
+                log &= "!!! Rename bypassed as either Use Foldernames, Basic Save" & vbCrLf 
+                log &= "!!! selected, or files in DVD or Bluray folders" & vbCrLf 
             End If
 
-            'Part 3.1 - Create Folder or Rename Folder
-            If Preferences.MovFolderRename Then
-                log &= RenameMovFolder
-            End If
+            ''Part 3.1 - Create Folder or Rename Folder
+            'If Preferences.MovFolderRename Then
+            '    log &= RenameMovFolder
+            'End If
+
             log &= vbCrLf 
         Catch ex As Exception
             log &= "!!!Rename Movie File FAILED !!!" & vbCrLf & vbCrLf
@@ -2784,7 +2792,8 @@ Public Class Movie
                 log &= "!!! New path created:- " & checkfolder & vbCrLf 
         Else
             If (checkfolder & "\") = FilePath Then
-                log &= "!!!Path already Exists, no need to move files" & vbCrLf 
+                log &= "!!! Path for: " & checkfolder & vbCrLf 
+                log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
                 Return log
             End If
         End If
@@ -2839,7 +2848,7 @@ Public Class Movie
                     Utilities.SafeCopyFile(Frodoactorsource, (NewActorFolder & actorfilename), True)
                 End If
             Next
-            log &= "Actors copied from Root actor folder, into new Movie's actor folder" & vbCrLf 
+            log &= "Actors copied into new Movie's actor folder" & vbCrLf 
         End If
 
         'update cache info
@@ -2848,7 +2857,7 @@ Public Class Movie
         mediapathandfilename = _movieCache.fullpathandfilename
         RenamedBaseName = mediapathandfilename
         UpdateMovieCache
-        log &= "!!! Folder structure created successfully" & vbCrLf 
+        log &= "!!! Folder structure created successfully" & vbCrLf &vbCrLf 
         Try
             If NoDel Then
                 IO.Directory.Delete(FilePath)
@@ -2897,7 +2906,7 @@ Public Class Movie
             Dim vr As String = VideoResolution 
             
             Try
-                If Preferences.MovieRenameEnable Then
+                If Preferences.MovieRenameEnable Or Preferences.MovieManualRename Then
                     s = Preferences.MovieRenameTemplate
                     s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)         
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
@@ -2929,7 +2938,7 @@ Public Class Movie
             Dim vr As String = VideoResolution 
             
             Try
-                If Preferences.MovFolderRename Then
+                If Preferences.MovFolderRename or Preferences.MovieManualRename Then
                     s = Preferences.MovFolderRenameTemplate
                     s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)         
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          

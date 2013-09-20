@@ -311,11 +311,15 @@
 
     ReadOnly Property FilesRenamable As Boolean
         Get
-            Return Not Preferences.usefoldernames And Not Preferences.basicsavemode And Preferences.MovieRenameEnable
+            Return Not Preferences.usefoldernames And Not Preferences.basicsavemode And Preferences.MovieManualRename
         End Get
     End Property
 
-
+    ReadOnly Property FoldersRenamable As Boolean
+        Get
+            Return Preferences.MovieManualRename
+        End Get
+    End Property
 
 
     'Disabled controls don't show tool tips (friggin' MS poo), so need to filter invalid changes 
@@ -328,8 +332,16 @@
         End If
     End Sub
 
+    Private Sub cbRenameFolders_CheckedChanged( sender As Object,  e As EventArgs) Handles cbRenameFolders.CheckedChanged
+        If FoldersRenamable Then
+            Form1.rescrapeList.Rename_Folders = cbRenameFolders.Checked
+        Else
+            cbRenameFolders.Checked = False
+        End If
+    End Sub
+
     'Fix MS XP tool tip won't display a second time bug (more friggin' MS poo)
-    Private Sub ForceToolTipDisplay( sender As System.Object,  e As System.EventArgs) Handles cbRenameFiles.MouseEnter,cbFrodo_Poster_Thumbs.MouseEnter,cbFrodo_Fanart_Thumbs.MouseEnter
+    Private Sub ForceToolTipDisplay( sender As System.Object,  e As System.EventArgs) Handles cbRenameFiles.MouseEnter,cbFrodo_Poster_Thumbs.MouseEnter,cbFrodo_Fanart_Thumbs.MouseEnter,cbRenameFolders.MouseEnter
         ttBatchUpdateWizard.Active = False
         ttBatchUpdateWizard.Active = True
     End Sub

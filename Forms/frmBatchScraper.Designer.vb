@@ -23,7 +23,6 @@ Partial Class frmBatchScraper
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmBatchScraper))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.cbTitle = New System.Windows.Forms.CheckBox()
         Me.cbTmdbSetName = New System.Windows.Forms.CheckBox()
@@ -46,10 +45,12 @@ Partial Class frmBatchScraper
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cbXtraFanart = New System.Windows.Forms.CheckBox()
         Me.CheckBox18 = New System.Windows.Forms.CheckBox()
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.btnStart = New System.Windows.Forms.Button()
         Me.gbOther = New System.Windows.Forms.GroupBox()
+        Me.cbRenameFolders = New System.Windows.Forms.CheckBox()
         Me.cbFrodo_Fanart_Thumbs = New System.Windows.Forms.CheckBox()
         Me.cbFrodo_Poster_Thumbs = New System.Windows.Forms.CheckBox()
         Me.cbRenameFiles = New System.Windows.Forms.CheckBox()
@@ -58,7 +59,6 @@ Partial Class frmBatchScraper
         Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
-        Me.cbXtraFanart = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -284,7 +284,7 @@ Partial Class frmBatchScraper
         '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(15, 347)
+        Me.btnCancel.Location = New System.Drawing.Point(14, 363)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 32
@@ -296,12 +296,22 @@ Partial Class frmBatchScraper
         Me.GroupBox3.Controls.Add(Me.cbXtraFanart)
         Me.GroupBox3.Controls.Add(Me.CheckBox18)
         Me.GroupBox3.Controls.Add(Me.CheckBox17)
-        Me.GroupBox3.Location = New System.Drawing.Point(15, 253)
+        Me.GroupBox3.Location = New System.Drawing.Point(14, 269)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(455, 88)
         Me.GroupBox3.TabIndex = 31
         Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Fanart && Posters"
+        '
+        'cbXtraFanart
+        '
+        Me.cbXtraFanart.AutoSize = true
+        Me.cbXtraFanart.Location = New System.Drawing.Point(6, 65)
+        Me.cbXtraFanart.Name = "cbXtraFanart"
+        Me.cbXtraFanart.Size = New System.Drawing.Size(342, 17)
+        Me.cbXtraFanart.TabIndex = 2
+        Me.cbXtraFanart.Text = "Attempt to Download Extra Thumbs/Fanart if Movies are in Folders."
+        Me.cbXtraFanart.UseVisualStyleBackColor = true
         '
         'CheckBox18
         '
@@ -325,7 +335,7 @@ Partial Class frmBatchScraper
         '
         'btnStart
         '
-        Me.btnStart.Location = New System.Drawing.Point(395, 347)
+        Me.btnStart.Location = New System.Drawing.Point(394, 363)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(75, 23)
         Me.btnStart.TabIndex = 33
@@ -334,6 +344,7 @@ Partial Class frmBatchScraper
         '
         'gbOther
         '
+        Me.gbOther.Controls.Add(Me.cbRenameFolders)
         Me.gbOther.Controls.Add(Me.cbFrodo_Fanart_Thumbs)
         Me.gbOther.Controls.Add(Me.cbFrodo_Poster_Thumbs)
         Me.gbOther.Controls.Add(Me.cbRenameFiles)
@@ -342,10 +353,23 @@ Partial Class frmBatchScraper
         Me.gbOther.Controls.Add(Me.CheckBox19)
         Me.gbOther.Location = New System.Drawing.Point(14, 180)
         Me.gbOther.Name = "gbOther"
-        Me.gbOther.Size = New System.Drawing.Size(456, 67)
+        Me.gbOther.Size = New System.Drawing.Size(456, 85)
         Me.gbOther.TabIndex = 34
         Me.gbOther.TabStop = false
         Me.gbOther.Text = "Other"
+        '
+        'cbRenameFolders
+        '
+        Me.cbRenameFolders.AutoSize = true
+        Me.cbRenameFolders.Location = New System.Drawing.Point(7, 64)
+        Me.cbRenameFolders.Name = "cbRenameFolders"
+        Me.cbRenameFolders.Size = New System.Drawing.Size(103, 17)
+        Me.cbRenameFolders.TabIndex = 19
+        Me.cbRenameFolders.Text = "Rename Folders"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbRenameFolders, "Renaming of Movie Folders as per 'Folder Renaming Pattern'"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Option to rename fold"& _ 
+        "ers during Autoscrape does not need to"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"be enabled, but Folder name pattern MUST"& _ 
+        " be valid.")
+        Me.cbRenameFolders.UseVisualStyleBackColor = true
         '
         'cbFrodo_Fanart_Thumbs
         '
@@ -377,7 +401,9 @@ Partial Class frmBatchScraper
         Me.cbRenameFiles.Size = New System.Drawing.Size(90, 17)
         Me.cbRenameFiles.TabIndex = 16
         Me.cbRenameFiles.Text = "Rename Files"
-        Me.ttBatchUpdateWizard.SetToolTip(Me.cbRenameFiles, resources.GetString("cbRenameFiles.ToolTip"))
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbRenameFiles, "Renames movie files to match the selected 'Name Mode' and your 'Movie Renaming' p"& _ 
+        "attern (Must be enabled). "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Conflicting options 'Save files as 'movie.nfo...' (A"& _ 
+        "dvanced tab) must be disabled.")
         Me.cbRenameFiles.UseVisualStyleBackColor = true
         '
         'CheckBox16
@@ -427,21 +453,11 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard.ReshowDelay = 100
         Me.ttBatchUpdateWizard.ShowAlways = true
         '
-        'cbXtraFanart
-        '
-        Me.cbXtraFanart.AutoSize = true
-        Me.cbXtraFanart.Location = New System.Drawing.Point(6, 65)
-        Me.cbXtraFanart.Name = "cbXtraFanart"
-        Me.cbXtraFanart.Size = New System.Drawing.Size(342, 17)
-        Me.cbXtraFanart.TabIndex = 2
-        Me.cbXtraFanart.Text = "Attempt to Download Extra Thumbs/Fanart if Movies are in Folders."
-        Me.cbXtraFanart.UseVisualStyleBackColor = true
-        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(485, 388)
+        Me.ClientSize = New System.Drawing.Size(485, 398)
         Me.ControlBox = false
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.btnCancel)
@@ -450,8 +466,8 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.gbOther)
         Me.Controls.Add(Me.Label1)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(493, 415)
-        Me.MinimumSize = New System.Drawing.Size(493, 415)
+        Me.MaximumSize = New System.Drawing.Size(493, 425)
+        Me.MinimumSize = New System.Drawing.Size(493, 425)
         Me.Name = "frmBatchScraper"
         Me.Text = "Batch Update Wizard"
         Me.GroupBox1.ResumeLayout(false)
@@ -499,4 +515,5 @@ End Sub
     Friend WithEvents cbFrodo_Poster_Thumbs As System.Windows.Forms.CheckBox
     Friend WithEvents cbTitle As System.Windows.Forms.CheckBox
     Friend WithEvents cbXtraFanart As System.Windows.Forms.CheckBox
+    Friend WithEvents cbRenameFolders As System.Windows.Forms.CheckBox
 End Class
