@@ -16,7 +16,8 @@ Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
-                                                 ".dvr-ms", ".img", ".strm", ".ssif", ".mk3d", ".webm", "video_ts.ifo" }  'video_ts.ifo must be last in list
+                                                 ".dvr-ms", ".img", ".strm", ".ssif", ".mk3d", ".webm", ".bdmv", 
+                                                 "video_ts.ifo" }  'video_ts.ifo must be last in list
 
     'files that support main movie file, ie. art, subtitles, and trailers
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
@@ -573,6 +574,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             If (Item.ToString.ToLower.Contains("thumbnails")) Then Continue For
             If (Item.ToString.ToLower.Contains("extrafanart")) Then Continue For
             If (Item.ToString.ToLower.Contains("extrathumbs")) Then Continue For
+            If (Item.ToString.ToLower.Contains("bdmv")) Then 
+                If Not File.Exists(Item.ToString & "\index.bdmv") Then Continue For
+            End If
+            'Continue For
+            If (Item.ToString.ToLower.Contains("certificate")) Then Continue For
             If Level <= MaxLevels Then
                 If ValidMovieDir(Item) Then
                     TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))

@@ -447,7 +447,7 @@ Public Class Movie
 
     ReadOnly Property Title As String
         Get
-            If Preferences.usefoldernames Or Extension.ToLower = ".ifo" Then
+            If Preferences.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv" Then
                 Dim rtfolder As Boolean = Preferences.GetRootFolderCheck(NfoPathAndFilename)
                 If rtfolder Then
                     Return Path.GetFileNameWithoutExtension(TitleFull)
@@ -692,6 +692,10 @@ Public Class Movie
         'ignore whatever this is meant to be!
         If fileInfo.FullName.ToLower.IndexOf("sample") <> -1 And fileInfo.FullName.ToLower.IndexOf("people") = -1 Then 
             Return False
+        End If
+
+        If fileInfo.FullName.ToLower.Contains(".bdmv") Then
+            If fileInfo.Name.ToString.ToLower <> "index.bdmv" Then Return False
         End If
 
         If fileInfo.Extension = "ttt" Then
