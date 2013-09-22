@@ -3055,18 +3055,51 @@ Public Class Movie
     End Function
 
 
-    Shared Function GetMissingDataText(missingdata1 As Byte) As String
- 
-        If missingdata1 = 0 Then Return "None"
-        If missingdata1 = 1 Then Return "Fanart"
-        If missingdata1 = 2 Then Return "Poster"
-        If missingdata1 = 3 Then Return "Fanart & Poster"
-        If missingdata1 = 4 Then Return "Trailer"
-        If missingdata1 = 5 Then Return "Fanart & Trailer"
-        If missingdata1 = 6 Then Return "Poster & Trailer"
-        If missingdata1 = 7 Then Return "Fanart, Poster & Trailer"
+    Shared Function GetMissingDataText(missingdata1 As Int32) As String
 
-        Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
+        Dim missingstring As String = ""
+        If missingdata1 - 8 > -1 Then missingstring &= "Local Actor(s)" : missingdata1 = missingdata1 - 8
+        If missingdata1 - 4 > -1 Then
+            If Not missingstring = "" Then
+                missingstring &= ", "
+            End If
+            missingstring &= "Trailer" : missingdata1 = missingdata1 - 4
+        End If
+        If missingdata1 - 2 > -1 Then
+            If Not missingstring = "" Then
+                missingstring &= ", "
+            End If
+            missingstring &= "Poster" : missingdata1 = missingdata1 - 2
+        End If
+        If missingdata1 - 1 > -1 Then
+            If Not missingstring = "" Then
+                missingstring &= ", "
+            End If
+            missingstring &= "Fanart" : missingdata1 = missingdata1 - 1
+        End If
+        If missingdata1 = 0 Then
+            If missingstring = "" Then
+                missingstring &= "None"
+            End If
+            Return missingstring
+        Else
+            Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
+        End If
+        'If missingdata1 = 0 Then Return "None"
+        'If missingdata1 = 1 Then Return "Fanart"
+        'If missingdata1 = 2 Then Return "Poster"
+        'If missingdata1 = 3 Then Return "Fanart & Poster"
+        'If missingdata1 = 4 Then Return "Trailer"
+        'If missingdata1 = 5 Then Return "Fanart & Trailer"
+        'If missingdata1 = 6 Then Return "Poster & Trailer"
+        'If missingdata1 = 7 Then Return "Fanart, Poster & Trailer"
+        'If missingdata1 = 8 Then Return "Local Actor(s)"
+        'If missingdata1 = 9 Then Return "Local Actor(s), Fanart"
+        'If missingdata1 = 10 Then Return "Local Actor(s), Poster"
+        'If missingdata1 = 11 Then Return "Local Actor(s), Fanart & Poster"
+        'If missingdata1 = 12 Then Return "Trailer & Local Actor(s)"
+
+        'Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
 
     End Function
 
