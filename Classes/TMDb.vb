@@ -688,34 +688,34 @@ Public Class TMDb
 
     Private Sub Fetch
         Try
-            If _movie.id=0 and Not __Serialising and Not _fetched then
+            If _movie.id = 0 And Not __Serialising And Not _fetched Then
 
                 _fetched = True
 
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
-            
-                rhs.Add( new RetryHandler(AddressOf GetMovieByIMDB  ) )
-                rhs.Add( new RetryHandler(AddressOf GetMovieImages  ) )
-                rhs.Add( new RetryHandler(AddressOf GetMovieTrailers) )
-      
-                For Each rh in rhs
+
+                rhs.Add(New RetryHandler(AddressOf GetMovieByIMDB))
+                rhs.Add(New RetryHandler(AddressOf GetMovieImages))
+                rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
+
+                For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
                 Next
-                  
+
                 'If movie isn't found -> Create empty child objects
-                If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
-                If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
-                If IsNothing(_trailers.youtube     ) then _trailers.youtube      = New List(Of WatTmdb.V3.Youtube )
+                If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
+                If IsNothing(_movieImages.posters) Then _movieImages.posters = New List(Of WatTmdb.V3.Poster)
+                If IsNothing(_trailers.youtube) Then _trailers.youtube = New List(Of WatTmdb.V3.Youtube)
 
-                FixUpMovieImages
+                FixUpMovieImages()
 
-                AssignValidBackDrops
-                AssignValidPosters
-                AssignMC_Posters
-                AssignMC_Thumbs
-                AssignMC_Backdrops
-                AssignFrodoExtraPosterThumbs
-                AssignFrodoExtraFanartThumbs
+                AssignValidBackDrops()
+                AssignValidPosters()
+                AssignMC_Posters()
+                AssignMC_Thumbs()
+                AssignMC_Backdrops()
+                AssignFrodoExtraPosterThumbs()
+                AssignFrodoExtraFanartThumbs()
             End If
         Catch ex As Exception
             Throw New Exception (ex.Message)

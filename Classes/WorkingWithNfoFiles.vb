@@ -1284,6 +1284,9 @@ Public Class WorkingWithNfoFiles
                         End Try
                     Loop
                 End If
+                If String.IsNullOrEmpty(newmovie.fullmoviebody.imdbid) Then
+                    newmovie.fullmoviebody.imdbid = "0"
+                End If
                 newmovie.fileinfo.fullpathandfilename = path
                 newmovie.fileinfo.filename = IO.Path.GetFileName(path)
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)

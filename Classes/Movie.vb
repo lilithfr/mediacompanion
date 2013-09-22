@@ -1571,17 +1571,17 @@ Public Class Movie
         DoDownloadPoster
     End Sub
  
-    Sub DoDownloadPoster
+    Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
+        If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
         '_videotsrootpath= Utilities.RootVideoTsFolder(NfoPathPrefName)
-        Dim edenart As String = NfoPathPrefName.Replace(".nfo",".tbn")
-        Dim frodoart As String = edenart.Replace(".tbn","-poster.jpg")
-        If _videotsrootpath<>"" Then 
-            frodoart = _videotsrootpath+"poster.jpg"
+        Dim edenart As String = NfoPathPrefName.Replace(".nfo", ".tbn")
+        Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
+        If _videotsrootpath <> "" Then
+            frodoart = _videotsrootpath + "poster.jpg"
         End If
         If Not Preferences.overwritethumbs Then
             If eden And File.Exists(edenart) And Not frodo Then
@@ -1618,7 +1618,7 @@ Public Class Movie
             End Try
 
             validUrl = Utilities.UrlIsValid(PosterUrl)
-            If validUrl Then
+            If validUrl Or batch Then
                 Exit For
             End If
         Next
@@ -1629,10 +1629,10 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
-                Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
+                Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
-                SavePosterToPosterWallCache 
+                SavePosterToPosterWallCache()
 
                 ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
 
@@ -2386,7 +2386,7 @@ Public Class Movie
             If Cancelled() Then Exit Sub
 
             If rl.missingposters Then           'Download Missing Posters
-                DoDownloadPoster()
+                DoDownloadPoster(rl.missingposters)
             End If
 
             If Cancelled() Then Exit Sub
