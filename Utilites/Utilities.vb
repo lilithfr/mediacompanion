@@ -286,7 +286,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim paths() As String
         paths = FullPath.Split(Path.DirectorySeparatorChar)
         For g = UBound(paths) To 0 Step -1
-            If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g) <> "" Then
+            If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g).ToLower.IndexOf("bdmv") = -1 And paths(g) <> "" Then
                 foldername = paths(g)
                 Return foldername
             End If
@@ -2705,7 +2705,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim paths() As String
         paths = FullPath.Split(Path.DirectorySeparatorChar)
         For g = UBound(paths) To 0 Step -1
-            If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g) <> "" Then
+            If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g).ToLower.IndexOf("bdmv") = -1And paths(g) <> "" Then
                 length = g
                 Exit For
             End If

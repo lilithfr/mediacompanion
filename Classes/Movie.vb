@@ -1574,7 +1574,7 @@ Public Class Movie
     Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
+        If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
         '_videotsrootpath= Utilities.RootVideoTsFolder(NfoPathPrefName)
@@ -1760,7 +1760,7 @@ Public Class Movie
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
         Dim isMovieFanart As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
         Dim frodoart As String =""
-        If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
+        If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower="index.nfo"Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
             frodoart = _videotsrootpath+"fanart.jpg"
         End If
@@ -2159,6 +2159,8 @@ Public Class Movie
         If newpatharr.Count = 1 And Not inrootfolder Then
             If newpath.Contains("\VIDEO_TS") Then
                 newpath = newpath.Replace("\VIDEO_TS","")
+            ElseIf newpath.Contains("\BDMV") Then
+                newpath = newpath.Replace("\BDMV","")
             End If
             Dim lastfolder As String = Utilities.GetLastFolderInPath(newpath)
             checkfolder = newpath.Replace((lastfolder & "\"), newpatharr(0))
@@ -2216,7 +2218,7 @@ Public Class Movie
                 movieStackList.Sort()           'we're sure hoping the originals were labelled correctly, ie only incremental numbers changing!
 
                 'If usefoldernames or video_ts, bypass renaming of files in folders, but allow renaming of folder.
-                If Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") Then
+                If Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not nfopathandfilename.ToLower.Contains("bdmv") Then
                     For i = 0 To movieStackList.Count - 1
                         Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
                         File.Move(movieStackList(i), newpath & changename)
@@ -2234,6 +2236,7 @@ Public Class Movie
                 Else
                     If afolder Then
                         oldpath = oldpath.Replace("\VIDEO_TS","")    'If DVD VIDEO_TS folder, step back one folder so we copy folder as well.
+                        oldpath = oldpath.Replace("\BDMV","")    'If BD BDMV folder, step back one folder so we copy folder as well.
                         Dim toPathInfo = New DirectoryInfo(newpath)
                         Dim fromPathInfo = New DirectoryInfo(oldpath)
                         'move all files
@@ -2658,7 +2661,7 @@ Public Class Movie
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
-            If Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+            If Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not NfoPathAndFilename.ToLower.Contains("bdmv") AndAlso Not Preferences.basicsavemode Then
                 targetMovieFile = newpath & newfilename
                 targetNfoFile   = targetMovieFile
 
@@ -2781,6 +2784,7 @@ Public Class Movie
         
         'Check if new path already exists and if not, Create new directory/s
         FilePath = FilePath.Replace("VIDEO_TS\","")             'If DVD VIDEO_TS folder, step back one folder so we copy folder as well.
+        FilePath = FilePath.Replace("BDMV\","")             'If BD BDMV folder, step back one folder so we copy folder as well.
         Dim checkfolder As String = currentroot
         If newpatharr.Count = 1 And Not inrootfolder Then                       'If only one folder in new folder pattern,
             Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if

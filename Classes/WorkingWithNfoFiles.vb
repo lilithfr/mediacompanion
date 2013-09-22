@@ -1290,7 +1290,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.fullpathandfilename = path
                 newmovie.fileinfo.filename = IO.Path.GetFileName(path)
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)
-                If IO.Path.GetFileName(path).ToLower="video_ts.nfo" Then
+                If IO.Path.GetFileName(path).ToLower = "video_ts.nfo" or IO.Path.GetFileName(path).ToLower="index.nfo" Then
                     newmovie.fileinfo.videotspath= Utilities.RootVideoTsFolder(path)
                 Else
                     newmovie.fileinfo.videotspath=""
