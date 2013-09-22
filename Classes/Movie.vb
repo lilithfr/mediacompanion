@@ -412,6 +412,9 @@ Public Class Movie
     ReadOnly Property MissingLocalActors As Boolean
         Get
             For Each Actor In _scrapedMovie.listactors
+
+                If Actor.actorthumb="" Then Continue For
+
                 Dim ActorPath = GetActorPath(_movieCache.fullpathandfilename, actor.actorname)
 
                 If Not File.Exists(ActorPath) Then Return True
