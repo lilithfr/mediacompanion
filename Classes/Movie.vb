@@ -2247,9 +2247,11 @@ Public Class Movie
                             fi.MoveTo(Path.Combine(newpath, fi.Name))
                         Next
                         'move any sub directories
-                        For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
-                            dir.MoveTo(Path.Combine(newpath, dir.Name))
-                        Next
+                        If Not inrootfolder Then
+                            For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
+                                dir.MoveTo(Path.Combine(newpath, dir.Name))
+                            Next
+                        End If
                         'If Utilities.IsDirectoryEmpty(oldpath) Then
                         '    IO.Directory.Delete(oldpath)
                         'End If

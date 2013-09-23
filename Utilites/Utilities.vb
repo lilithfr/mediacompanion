@@ -420,6 +420,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return aFileExists
     End Function
 
+    Public Shared Function GetbdMainStream(ByVal path) As String
+        If path.ToString.Contains(".nfo") Then Return path
+        Dim di As New DirectoryInfo(path.Replace("index.bdmv","STREAM\"))
+        Dim fi As IO.FileInfo() = di.GetFiles("*.m2ts")
+        Dim sort =  fi.OrderByDescending(Function(f) f.Length)
+        Return sort(0).FullName
+    End Function
+
     Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = True) As String
         Dim tempstring As String
         Dim tempfilename As String = path
@@ -429,6 +437,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
             actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
+        End If
+        If path.ToLower.Contains(".bdmv") Then
+            Dim bdlargestfile As String = GetbdMainStream(path)
+            actualpathandfilename = bdlargestfile  'tempfilename.Replace("index.bdmv", "STREAM\" & bdlargestfile)
         End If
 
         If actualpathandfilename = "" Then
@@ -575,7 +587,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             If (Item.ToString.ToLower.Contains("extrafanart")) Then Continue For
             If (Item.ToString.ToLower.Contains("extrathumbs")) Then Continue For
             If (Item.ToString.ToLower.Contains("bdmv")) Then 
-                If Not File.Exists(Item.ToString & "\index.bdmv") Then Continue For
+                If Not File.Exists(Item.ToString.Replace("BDMV", "BDMV\index.bdmv")) Then Continue For
             End If
             'Continue For
             If (Item.ToString.ToLower.Contains("certificate")) Then Continue For

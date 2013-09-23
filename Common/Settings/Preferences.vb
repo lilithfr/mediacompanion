@@ -1574,6 +1574,7 @@ Public Class Preferences
             Dim tempstring As String
             tempstring = Utilities.GetFileName(filename)
             playlist = Utilities.GetMediaList(tempstring)
+            If filename <> tempstring then filename = tempstring 
 
             If Not IO.File.Exists(filename) Then
                 Return Nothing
