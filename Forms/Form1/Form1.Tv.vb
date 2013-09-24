@@ -1723,7 +1723,7 @@ Partial Public Class Form1
                 WhichScraper = "MC TVDB"
             End If
 
-            progresstext = String.Concat("Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
+            progresstext = String.Concat("ESC to Cancel : Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
             Dim removal As String = ""

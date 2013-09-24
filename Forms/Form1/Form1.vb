@@ -24309,8 +24309,9 @@ Public Class Form1
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
 
-        If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
-        If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
+        If               e.KeyCode = Keys.Escape Then bckgrndcancel 'BckWrkScnMovies_Cancel
+        If               e.KeyCode = Keys.F5     Then doRefresh
+        If e.Control And e.KeyCode = Keys.C      Then AbortFileDownload
     End Sub
 
 
@@ -24318,6 +24319,11 @@ Public Class Form1
         BckWrkScnMovies_Cancel()
     End Sub
 
+    Sub bckgrndcancel
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
+        If CurrentTab = "movies" Then BckWrkScnMovies_Cancel
+        If CurrentTab = "tv shows" Then bckgroundscanepisodes.CancelAsync()
+    End Sub
 
     Sub BckWrkScnMovies_Cancel
         If BckWrkScnMovies.IsBusy Then
@@ -24331,6 +24337,12 @@ Public Class Form1
         Monitor.Enter(countLock)
         blnAbortFileDownload = True
         Monitor.Exit(countLock)
+    End Sub
+
+    Sub doRefresh
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
+        If CurrentTab = "movies" Then mov_RebuildMovieCaches()
+        If CurrentTab = "tv shows" Then tv_CacheRefresh()
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
