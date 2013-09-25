@@ -1415,7 +1415,8 @@ Public Class Classimdb
             For f = 1 To actorcount
                 If actors(f, 0) <> Nothing Then
                     totalinfo = totalinfo & "<actor>" & vbCrLf
-                    actors(f, 0) = Utilities.cleanSpecChars(actors(f, 0))
+                    actors(f, 0) = Utilities.cleanSpecChars           (actors(f, 0))
+                    actors(f, 0) = Utilities.cleanFilenameIllegalChars(actors(f, 0))
                     actors(f, 0) = encodespecialchrs(actors(f, 0))
                     totalinfo = totalinfo & "<name>" & actors(f, 0) & "</name>" & vbCrLf
                     If actors(f, 1) <> Nothing Then
