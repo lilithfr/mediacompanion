@@ -565,6 +565,7 @@ Public Class Form1
                 TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
+                _tv_SplitContainer.SplitterDistance = Preferences.splt6
                 TabLevel1.SelectedIndex = 0
             ElseIf Preferences.startuptab = 1 Then
                 SplitContainer1.SplitterDistance = Preferences.splt1
@@ -573,12 +574,14 @@ Public Class Form1
                 TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
+                _tv_SplitContainer.SplitterDistance = Preferences.splt6
             ElseIf Preferences.startuptab > 1 Then
                 SplitContainer1.SplitterDistance = Preferences.splt1
                 SplitContainer2.SplitterDistance = Preferences.splt2
                 SplitContainer5.SplitterDistance = Preferences.splt5
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
+                _tv_SplitContainer.SplitterDistance = Preferences.splt6
                 TabLevel1.SelectedIndex = Preferences.StartupTab
             End If
 
@@ -1002,6 +1005,7 @@ Public Class Form1
             Preferences.splt3 = SplitContainer3.SplitterDistance
             Preferences.splt4 = SplitContainer4.SplitterDistance
             Preferences.splt5 = SplitContainer5.SplitterDistance
+            Preferences.splt6 = _tv_SplitContainer.SplitterDistance 
 
 
             If Me.WindowState = FormWindowState.Minimized Then
@@ -7672,6 +7676,7 @@ Public Class Form1
         
         Dim tvdbase(availableshows.Count, 8) as String
         DataGridView2.Rows.Clear()
+        DataGridView2.Columns.Item(1).DefaultCellStyle.WrapMode = DataGridViewTriState.True
 
         Try
             Dim lst As List(Of TvShow) = (From x In availableshows Order By x.Title.Value).ToList
@@ -16539,6 +16544,7 @@ Public Class Form1
             TabLevel1.SelectedIndex = 1
             SplitContainer3.SplitterDistance = Preferences.splt3
             SplitContainer4.SplitterDistance = Preferences.splt4
+            _tv_SplitContainer.SplitterDistance = Preferences.splt6 
             TabLevel1.SelectedIndex = 0
         Else
             SplitContainer1.SplitterDistance = Preferences.splt1
@@ -16547,12 +16553,14 @@ Public Class Form1
             TabLevel1.SelectedIndex = 1
             SplitContainer3.SplitterDistance = Preferences.splt3
             SplitContainer4.SplitterDistance = Preferences.splt4
+            _tv_SplitContainer.SplitterDistance = Preferences.splt6
         End If
         SplitContainer1.IsSplitterFixed = False
         SplitContainer2.IsSplitterFixed = False
         SplitContainer3.IsSplitterFixed = False
         SplitContainer4.IsSplitterFixed = False
         SplitContainer5.IsSplitterFixed = False
+        _tv_SplitContainer.IsSplitterFixed = False
         'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
         Try
