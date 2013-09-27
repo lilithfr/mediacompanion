@@ -2914,9 +2914,9 @@ Public Class Movie
     ReadOnly Property UserDefinedBaseFileName As String
         Get
             Dim s As String = Path.GetFileNameWithoutExtension(NfoPathAndFilename)
-            Dim ac1 As String = AudioCodecChannels  
-            Dim vc As String = VideoCodec
-            Dim vr As String = VideoResolution 
+            Dim ac1 As String = AudioCodecChannels.ToLower
+            Dim vc As String = VideoCodec.ToLower
+            Dim vr As String = VideoResolution.ToLower
             
             Try
                 If Preferences.MovieRenameEnable Or Preferences.MovieManualRename Then
@@ -2946,9 +2946,9 @@ Public Class Movie
     ReadOnly Property UserDefinedBaseFolderName As String
         Get
             Dim s As String = NfoPath
-            Dim ac1 As String = AudioCodecChannels  
-            Dim vc As String = VideoCodec
-            Dim vr As String = VideoResolution 
+            Dim ac1 As String = AudioCodecChannels.ToLower
+            Dim vc As String = VideoCodec.ToLower
+            Dim vr As String = VideoResolution.ToLower
             
             Try
                 If Preferences.MovFolderRename or Preferences.MovieManualRename Then
