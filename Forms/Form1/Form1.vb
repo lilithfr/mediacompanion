@@ -24571,7 +24571,8 @@ Public Class Form1
 
     Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
 
-        Preferences.moviesets.Clear
+        Preferences.moviesets.Clear()
+        Preferences.moviesets.Add("-None-")
         ListofMovieSets.Items.Clear
 
         Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)

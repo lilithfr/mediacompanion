@@ -1704,7 +1704,9 @@ End If
             movie.LoadNFO(False)
 
             If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
-
+            If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
+                Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
+            End If
             Cache.Add(movie.Cache)
         Next
     End Sub
@@ -1797,7 +1799,9 @@ End If
             movie.LoadNFO(False)
 
             If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
-
+            If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
+                Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
+            End If
             TmpMovieCache.Add(movie.Cache)
         Next
 
