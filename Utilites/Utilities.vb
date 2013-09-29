@@ -24,6 +24,9 @@ Public Class Utilities
                                                                 "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm",
                                                                 ".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}
 
+    'subtitle extensions for check of multi-part subtitle files
+    Public Shared ReadOnly subexts() As String = {".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}
+
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
 
