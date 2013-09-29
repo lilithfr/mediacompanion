@@ -35,6 +35,11 @@ Public Class TVShows
                 showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
             End If
         End If
+        If Preferences.ignoreAarticle Then
+            If showtitle.ToLower.IndexOf("a ") = 0 Then
+                showtitle = showtitle.Substring(2, showtitle.Length - 2) & ", A"
+            End If
+        End If
 
         Dim returnpath As String = "false"
 

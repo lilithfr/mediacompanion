@@ -2680,6 +2680,11 @@ Public Class WorkingWithNfoFiles
                                         tempstring = tempstring & ", The"
                                     End If
                                 End If
+                                If Preferences.ignoreAarticle Then
+                                    If tempstring.ToLower.IndexOf("a ") = 0 Then
+                                        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
+                                    End If
+                                End If
                                 newmovie.fullmoviebody.title = tempstring
                             Case "set"
                                 newmovie.fullmoviebody.movieset = thisresult.InnerText

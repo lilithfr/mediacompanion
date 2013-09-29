@@ -120,6 +120,7 @@ Public Class Preferences
     Public Shared externalbrowser As Boolean
     Public Shared selectedBrowser As String
     Public Shared ignorearticle As Boolean
+    Public Shared ignoreAarticle As Boolean
     Public Shared intruntime As Boolean
     Public Shared XBMC_version As Byte
     Public Shared ShowMovieGridToolTip As Boolean = False
@@ -450,6 +451,7 @@ Public Class Preferences
     Public Shared Sub SetUpPreferences()
         'General
         ignorearticle = False
+        ignoreAarticle = False
         externalbrowser = False
         selectedBrowser = ""
         backgroundcolour = "Silver"
@@ -733,6 +735,7 @@ Public Class Preferences
         root.AppendChild(doc, "externalbrowser",        externalbrowser)        'CheckBox12
         root.AppendChild(doc, "selectedBrowser",        selectedBrowser)        'btnFindBrowser
         root.AppendChild(doc, "ignorearticle",          ignorearticle)          'CheckBox41
+        root.AppendChild(doc, "ignoreAarticle",         ignoreAarticle)
         root.AppendChild(doc, "intruntime",             intruntime)             'CheckBox38
         root.AppendChild(doc, "xbmcartwork",            XBMC_version)           'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
         root.AppendChild(doc, "ShowMovieGridToolTip" ,  ShowMovieGridToolTip )  'cbShowMovieGridToolTip
@@ -1094,7 +1097,7 @@ Public Class Preferences
                     Case "movxtrathumb"                         : movxtrathumb = thisresult.InnerXml
                     Case "movxtrafanart"                        : movxtrafanart = thisresult.InnerXml
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
-                    Case "dlTVxtrafanart" : dlTVxtrafanart = thisresult.InnerXml
+                    Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
                     Case "allfolders"                           : allfolders = thisresult.InnerXml
                     Case "createfolderjpg"                      : createfolderjpg = thisresult.InnerXml
                     Case "basicsavemode"                        : basicsavemode = thisresult.InnerXml
@@ -1107,6 +1110,7 @@ Public Class Preferences
                     Case "roundminutes"                         : roundminutes = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml
+                    Case "ignoreArticle"                        : ignoreAarticle = thisresult.InnerXml
                     Case "TVShowUseXBMCScraper"                 : tvshow_useXBMC_Scraper = thisresult.InnerXml
                     Case "moviesUseXBMCScraper"                 : movies_useXBMC_Scraper = thisresult.InnerXml
                     Case "downloadtvposter"                     : tvposter = thisresult.InnerXml

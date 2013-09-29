@@ -157,6 +157,8 @@ Public Class Data_GridViewMovie
            
             If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
                 Return t.Substring(4, t.Length - 4) & ", The"
+            ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
+                Return t.Substring(2, t.Length -2) & ", A"
             Else
                 Return t
             End If            
@@ -416,6 +418,8 @@ Public Class Data_GridViewMovie
            
             If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
                 Return t.Substring(4, t.Length - 4) & ", The"
+            ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
+                Return t.Substring(2, t.Length -2) & ", A"
             Else
                 Return t
             End If            
