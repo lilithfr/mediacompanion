@@ -9252,6 +9252,16 @@ Public Class Form1
         End Try
     End Sub
 
+    Sub EnableTvBannerScrolling
+        Try
+            Dim rb As RadioButton = Panel16.Controls("postercheckbox0")
+
+            rb.Select
+            rb.Checked = Not rb.Checked
+        Catch
+        End Try
+    End Sub
+
     Private Sub Tv_FanartDisplay()
         Dim fanartorextrapath As String = Tv_FanartORExtrathumbPath
         Dim xtra As Boolean = False
@@ -11556,9 +11566,11 @@ Public Class Form1
                 End If
             Next
         End If
-        Me.Refresh()
+        
+        'Me.Refresh()
         Application.DoEvents()
-
+        If rbTVbanner.Checked AndAlso Me.Panel16.Controls.Count > 0 Then EnableTvBannerScrolling
+        Me.Refresh()
     End Sub
 
     Private Sub tv_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
@@ -25496,6 +25508,5 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
-
 
 End Class
