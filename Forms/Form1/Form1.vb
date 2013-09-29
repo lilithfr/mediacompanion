@@ -11408,31 +11408,36 @@ Public Class Form1
             Call tv_PosterPanelClear()
             Exit Sub
         End If
-
-        If usedlist.Count > Preferences.maximumthumbs Then
-            Button54.Visible = True
-            Button55.Visible = True
-            If usedlist.Count >= Preferences.maximumthumbs Then
-                Label72.Text = "Displaying 1 to 10 of " & usedlist.Count.ToString & " Images"
+        If Not rbTVbanner.Checked Then
+            If usedlist.Count > Preferences.maximumthumbs Then
+                Button54.Visible = True
+                Button55.Visible = True
+                If usedlist.Count >= Preferences.maximumthumbs Then
+                    Label72.Text = "Displaying 1 to 10 of " & usedlist.Count.ToString & " Images"
+                Else
+                    Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
+                End If
+                Label72.Visible = True
+                Me.Refresh()
+                Application.DoEvents()
+                Button55.Enabled = False
+                Button54.Enabled = True
             Else
-                Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
+                Button54.Visible = False
+                Button55.Visible = False
+                If posterArray.Count >= Preferences.maximumthumbs Then
+                    Label72.Text = "Displaying 1 to " & Preferences.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
+                Else
+                    Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
+                End If
+                Label72.Visible = True
+                Me.Refresh()
+                Application.DoEvents()
             End If
-            Label72.Visible = True
-            Me.Refresh()
-            Application.DoEvents()
-            Button55.Enabled = False
-            Button54.Enabled = True
         Else
             Button54.Visible = False
             Button55.Visible = False
-            If posterArray.Count >= Preferences.maximumthumbs Then
-                Label72.Text = "Displaying 1 to " & Preferences.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
-            Else
-                Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
-            End If
-            Label72.Visible = True
-            Me.Refresh()
-            Application.DoEvents()
+            Label72.Text = "Displaying 1 to " & usedlist.Count.ToString
         End If
         Call tv_PosterSelectionDisplay()
     End Sub
@@ -11458,7 +11463,12 @@ Public Class Form1
             tempint2 = usedlist.Count
         End If
 
+        If Not rbTVbanner.Checked Then
         Label72.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & usedlist.Count.ToString & " Images"
+        Else
+            Label72.Text = "Displaying 1 to " & usedlist.Count.ToString
+            tempint2 = usedlist.Count
+        End If
 
         Dim location As Integer = 0
         Dim itemcounter As Integer = 0
