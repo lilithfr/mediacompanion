@@ -10346,7 +10346,7 @@ Public Class Form1
                                 '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                                 Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
-                                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Preferences.maxactors)
+                                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, Preferences.maxactors)
                                 Dim tempactorlist As New List(Of str_MovieActors)
                                 Dim thumbstring As New XmlDocument
                                 Dim thisresult As XmlNode = Nothing

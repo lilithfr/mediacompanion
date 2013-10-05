@@ -55,7 +55,7 @@ Public Class actors
                                 '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                                 Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
-                                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Preferences.maxactors)
+                                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, Preferences.maxactors)
                                 Dim thumbstring As New XmlDocument
                                 Dim thisresult As XmlNode = Nothing
                                 Try

@@ -1,9 +1,12 @@
+Imports System.Text.RegularExpressions
 
 Public Structure str_MovieActors
+
     Public actorname As String
     Public actorrole As String
     Public actorthumb As String
     Public actorid As String
+
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         actorname = ""
         actorrole = ""
@@ -32,5 +35,91 @@ Public Structure str_MovieActors
 
         Return Temp
     End Operator
-    
+
+    Function GetActorFileName(ActorPath As String) As String
+        Return IO.Path.Combine(ActorPath, actorname.Replace(" ", "_") & ".jpg")
+    End Function
+
+    Public Sub SaveActor(ActorPath As String)
+
+        If actorthumb <> Nothing Then
+
+            Dim filename As String
+
+            If Preferences.actorseasy Then
+
+                Dim hg As New IO.DirectoryInfo(ActorPath)
+
+                If Not hg.Exists Then
+                    IO.Directory.CreateDirectory(ActorPath)
+                End If
+
+                filename = GetActorFileName(ActorPath)
+
+                Movie.SaveActorImageToCacheAndPath(actorthumb, filename)
+
+                ActorSave(filename)
+
+            Else
+                If Preferences.actorsave And actorid <> "" Then
+                    Dim tempstring = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2)
+
+                    Dim hg As New IO.DirectoryInfo(tempstring)
+                    If Not hg.Exists Then
+                        IO.Directory.CreateDirectory(tempstring)
+                    End If
+
+                    Dim workingpath = tempstring & "\" & actorid & ".jpg"
+
+                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
+
+                    ActorSave(workingpath)
+
+                    actorthumb = IO.Path.Combine(Preferences.actornetworkpath, actorid.Substring(actorid.Length - 2, 2))
+
+                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                        actorthumb = Preferences.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
+                    Else
+                        actorthumb = Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
+                    End If
+                End If
+            End If
+
+        End If
+
+    End Sub
+
+
+    Sub ActorSave(workingpath As String)
+        If Preferences.EdenEnabled And Not Preferences.FrodoEnabled Then
+            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Preferences.overwritethumbs)
+            Utilities.SafeDeleteFile(workingpath)
+        ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Preferences.overwritethumbs)
+        End If
+    End Sub
+
+
+    'Input  : http://ia.media-imdb.com/images/M/MV5BMTY3Njc5ODc4OV5BMl5BanBnXkFtZTYwNjY5MTU0._V1_SX32_CR0,0,32,44_.jpg
+    'Output : http://ia.media-imdb.com/images/M/MV5BMTY3Njc5ODc4OV5BMl5BanBnXkFtZTYwNjY5MTU0._V1._SY400_SX300_.jpg
+
+    Public Function GetBigThumb(smallThumb As String) As String
+
+        If smallThumb="" Then Return ""
+        Return smallThumb.Substring(0, smallThumb.IndexOf("._V1_")) & "._V1._SY400_SX300_.jpg"
+    End Function
+
+
+
+    Public Sub AssignFromImdbTr(Tr As String)
+
+        Dim m As Match = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_2, RegexOptions.Singleline)
+
+        actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars.EncodeSpecialChrs
+        actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim
+        actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
+        actorid    = m.Groups("actorid").ToString
+    End Sub
+
+
 End Structure

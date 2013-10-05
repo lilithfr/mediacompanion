@@ -29,7 +29,11 @@ Public Class MovieRegExs
     Public Const REGEX_STUDIO              = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
     Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
     Public Const REGEX_ORIGINAL_TITLE      = "<span class=""title-extra"" itemprop=""name"">(.*?)<i>\(original title\)</i>"
-    Public Const REGEX_OUTLINE                = "itemprop=""description"">(?<outline>.*?)<"
+    Public Const REGEX_OUTLINE             = "itemprop=""description"">(?<outline>.*?)<"
+    Public Const REGEX_ACTORS_TABLE        = "<table class=""cast_list"">(.*?)</table>"
+    Public Const REGEX_TR                  = "<tr.*?>(.*?)</tr>"
+    Public Const REGEX_ACTOR               = "<tr.*?<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)""?src=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>.*?</tr>"
+    Public Const REGEX_ACTOR_2             = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
 End Class
 
 
@@ -92,7 +96,7 @@ Module ModGlobals
                           
     End Function  
 
-     <Extension()> _
+    <Extension()> _
     Function EncodeSpecialChrs(ByRef s As String) As String
         s = s.Replace("&", "&amp;")
         s = s.Replace("<", "&lt;")
@@ -103,7 +107,17 @@ Module ModGlobals
         Return s
     End Function
 
+    <Extension()> _
+    Function CleanSpecChars(ByRef s As String) As String
+        Return Utilities.cleanSpecChars(s)
+    End Function
 
+    <Extension()> _
+    Function CleanFilenameIllegalChars(ByRef s As String) As String
+        Return Utilities.cleanFilenameIllegalChars(s)
+    End Function
+
+    
 End Module
 
 
@@ -805,6 +819,55 @@ Public Class Classimdb
         End Get
     End Property
 
+  
+    ReadOnly Property Actors_Rows As String
+        Get
+            Return Regex.Match(Html,MovieRegExs.REGEX_ACTORS_TABLE, RegexOptions.Singleline).Groups(1).Value
+        End Get
+    End Property
+   
+
+
+
+    ReadOnly Property Actors As List(Of str_MovieActors)
+        Get
+            Dim results As New List(Of str_MovieActors)
+
+            Dim actorRows As String = Actors_Rows
+
+            Dim mc As MatchCollection = Regex.Matches(actorRows, MovieRegExs.REGEX_ACTOR, RegexOptions.Singleline)
+
+            For Each m In mc
+
+                Dim actor As str_MovieActors        
+
+                actor.actorname  = m.Groups( "actorname"  ).ToString.CleanSpecChars.CleanFilenameIllegalChars.Encodespecialchrs
+                actor.actorrole  = m.Groups( "actorrole"  ).ToString.StripTagsLeaveContent.CleanSpecChars.Encodespecialchrs
+                actor.actorthumb = m.Groups( "actorthumb" ).ToString.Encodespecialchrs
+                actor.actorid    = m.Groups( "actorid"    ).ToString
+  
+                'If actor.actorname.IndexOf("http://resume.imdb.com") <> -1 Then actor.actorname = actor.actorname.Replace("http://resume.imdb.com", "")
+                'If actor.actorname.IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actor.actorname = actor.actorname.Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
+                'If actor.actorname.indexof("http://ia.media-imdb.com/images/") <> -1 Then
+                '    Dim tempint6 As Integer
+                '    Dim tempint7 As Integer
+                '    tempint6 = actor.actorname.indexof("http://ia.media-imdb.com/images/")
+                '    tempint7 = actor.actorname.indexof("._V1._")
+                '    actor.actorthumb = actor.actorname.substring(tempint6, tempint7 - tempint6 + 3)
+                '    actor.actorthumb = actor.actorthumb & "._V1._SY400_SX300_.jpg"
+                'End If
+
+
+               results.Add(actor)
+            Next
+
+            Return results
+        End Get
+    End Property
+
+
+    
+
 
     Function GetNames(RegExPattern As String, Optional ByVal Max As Integer=-1) As String
         Dim s As String=""
@@ -1315,7 +1378,7 @@ Public Class Classimdb
 
 
 
-    Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999) As String
+    Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As String
         Dim webpage As New List(Of String)
         Dim actors(5000, 3)
         Dim tempstring As String
@@ -1445,6 +1508,52 @@ Public Class Classimdb
 
         Return "Error"
     End Function
+
+
+
+    Public Function GetImdbActorsList(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors)
+
+        If maxactors = 9999 Then 
+            maxactors= Preferences.maxactors
+        End If
+
+        Dim tbl As String = GetActorsTable(  loadwebpage(imdbmirror & "title/" & imdbid & "/fullcredits#cast", True)  )
+
+        Dim mc As MatchCollection = Regex.Matches(tbl, MovieRegExs.REGEX_TR, RegexOptions.Singleline)
+
+        Dim results As New List(Of str_MovieActors)
+
+        Dim first As Boolean = True
+
+        For Each m In mc
+
+            If first Then
+                first = False
+                Continue For
+            End If
+
+            Dim actor As str_MovieActors = New str_MovieActors
+
+            actor.AssignFromImdbTr(m.ToString)
+
+            results.Add(actor)
+
+            If results.Count>=maxactors Then Exit For
+        Next 
+
+        Return results
+    End Function
+
+
+    Public Function GetActorsTable(Html As String) As String
+            Return Regex.Match(Html,MovieRegExs.REGEX_ACTORS_TABLE, RegexOptions.Singleline).Groups(1).Value
+    End Function
+   
+
+
+
+
+
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String) As String
         Monitor.Enter(Me)
         Dim allok As Boolean = False
