@@ -3407,30 +3407,30 @@ Partial Public Class Form1
             If sortorder = "" Then sortorder = "default"
 
 
-            If id = Nothing Then
+            If String.IsNullOrEmpty(id) Then
                 MsgBox("No ID is available for this show")
                 Exit Sub
             End If
-            If id = "" Then
-                MsgBox("No ID is available for this show")
-                Exit Sub
-            End If
-            If episodeno = Nothing Then
+            'If id = "" Then
+            '    MsgBox("No ID is available for this show")
+            '    Exit Sub
+            'End If
+            If String.IsNullOrEmpty(episodeno) Then
                 MsgBox("No Episode Number is available for this show")
                 Exit Sub
             End If
-            If episodeno = "" Then
-                MsgBox("No Episode Number is available for this show")
-                Exit Sub
-            End If
-            If seasonno = Nothing Then
+            'If episodeno = "" Then
+            '    MsgBox("No Episode Number is available for this show")
+            '    Exit Sub
+            'End If
+            If String.IsNullOrEmpty(seasonno) Then
                 MsgBox("No Season Number is available for this show")
                 Exit Sub
             End If
-            If seasonno = "" Then
-                MsgBox("No Season Number is available for this show")
-                Exit Sub
-            End If
+            'If seasonno = "" Then
+            '    MsgBox("No Season Number is available for this show")
+            '    Exit Sub
+            'End If
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             messbox.Refresh()
@@ -3504,8 +3504,181 @@ Partial Public Class Form1
         End Try
     End Sub
 
-#End Region
 
+
+    Private Sub TvScrapePosterBanner(ByVal postertype As String)
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+
+            'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim messbox As frmMessageBox = New frmMessageBox("Searching TVDB for " & If(postertype = "poster", "Poster", "Banner"), "", "Please Wait")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            Dim id As String = WorkingTvShow.TvdbId.Value
+            Dim mainimages As Boolean = TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow
+            Dim posterpath As String = ""
+            Dim seasonno As String = ""
+            If Not mainimages Then
+                seasonno = tv_SeasonSelectedCurrently.ToString
+                seasonno = seasonno.ToLower.Replace("season ","")
+                Dim tmp As Integer = seasonno.ToInt
+                seasonno = tmp.ToString 
+            End If
+            Dim language As String = WorkingTvShow.Language.Value
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled
+            If String.IsNullOrEmpty(language) Then language = "en"
+            Dim tvdbstuff As New TVDBScraper
+            Dim showlist As New XmlDocument
+            Dim thumblist As String = tvdbstuff.GetPosterList(id)
+            showlist.LoadXml(thumblist)
+            Dim thisresult As XmlNode = Nothing
+            Dim artlist As New List(Of TvBanners)
+            artlist.Clear()
+            For Each thisresult In showlist("banners")
+                Select Case thisresult.Name
+                    Case "banner"
+                        Dim individualposter As New TvBanners
+                        For Each results In thisresult.ChildNodes
+                            Select Case results.Name
+                                Case "url"
+                                    individualposter.Url = results.InnerText
+                                Case "bannertype"
+                                    individualposter.BannerType = results.InnerText
+                                Case "resolution"
+                                    individualposter.Resolution = results.InnerText
+                                Case "language"
+                                    individualposter.Language = results.InnerText
+                                Case "season"
+                                    individualposter.Season = results.InnerText
+                            End Select
+                        Next
+                        artlist.Add(individualposter)
+                End Select
+            Next
+            If artlist.Count = 0 Then
+                messbox.Close()
+                MsgBox("No " & If(postertype = "poster", "Poster", "Banner") & " found")
+                Exit Sub
+            End If
+            If mainimages Then
+                For Each Image In artlist
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = postertype And Image.Season = Nothing Then
+                        posterpath = Image.Url
+                        Exit For
+                    End If
+                Next
+                If posterpath = "" Then
+                    For Each Image In artlist
+                        If Image.Language = "en" And Image.BannerType = postertype And Image.Season = Nothing Then
+                            posterpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If posterpath = "" Then
+                    For Each Image In artlist
+                        If Image.BannerType = postertype And Image.Season = Nothing Then
+                            posterpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+            Else
+                Dim istype As String = ""
+                If postertype = "poster" Then
+                    istype = "season"
+                Else
+                    istype = "seasonwide"
+                End If
+                For Each Image In artlist
+                    If Image.Season = seasonno And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = istype Then
+                        posterpath = Image.Url
+                        Exit For
+                    End If
+                Next
+                If posterpath = "" Then
+                    For Each Image In artlist
+                        If Image.Season = seasonno And Image.Language = "en" And Image.Resolution = istype Then
+                            posterpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If posterpath = "" Then
+                    For Each Image In artlist
+                        If Image.Season = seasonno And Image.Resolution = istype Then
+                            posterpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+            End If
+            If posterpath <> "" Then
+                Dim imagepath as New List(Of String)
+                If mainimages Then
+                    If postertype = "poster" Then
+                        If frodo Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "poster.jpg"))
+                        End If
+                        If eden Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
+                        End If
+                    Else
+                        If frodo Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "banner.jpg"))
+                        End If
+                        If eden And Preferences.postertype = "banner" Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
+                        End If
+                    End If
+                Else 
+                    If seasonno.ToInt < 10 Then seasonno = "0" & seasonno 
+                    If postertype = "poster" Then
+                        If eden Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
+                        End If
+                        If frodo Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-poster.jpg"))
+                        End If
+                    Else
+                        If eden And Preferences.postertype = "banner" Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
+                        End If
+                        If frodo Then
+                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-banner.jpg"))
+                        End If
+                    End If
+                End If
+                For Each impath In imagepath
+                    Utilities.DownloadFile(posterpath, impath)
+                Next
+                'Dim Showname As TvShow = tv_ShowSelectedCurrently()
+                Dim last As Integer = imagepath.Count - 1
+                If postertype = "poster" Then
+                    util_ImageLoad(tv_PictureBoxRight, imagepath(last), Utilities.DefaultPosterPath)
+                Else
+                    util_ImageLoad(tv_PictureBoxBottom, imagepath(last), Utilities.DefaultBannerPath)
+                End If
+                'tv_ShowLoad(Showname)
+            Else 
+                messbox.Close()
+                MsgBox("No " & If(postertype = "poster", "Poster", "Banner") & " found")
+            End If
+
+            messbox.Close()
+        Catch ex As Exception
+            messbox.Close()
+        End Try
+    End Sub
+
+    Private Sub TvSelectPosterBanner(ByVal poster As Boolean)
+
+    End Sub
+
+#End Region
     'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
     '    Try
     '        For Each Task In TaskCache.Tasks

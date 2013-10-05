@@ -25065,67 +25065,107 @@ Public Class Form1
 
 
 
-Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
-        Try
-            Dim Showname As TvShow = tv_ShowSelectedCurrently()
-            'Me.tvBatchList.shFanart = True
-            TvGetArtwork(Showname,True, False, False, False)
-            tv_ShowLoad(Showname)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-End Sub
+    Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
+            Try
+                Dim Showname As TvShow = tv_ShowSelectedCurrently()
+                'Me.tvBatchList.shFanart = True
+                TvGetArtwork(Showname,True, False, False, False)
+                tv_ShowLoad(Showname)
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
 
-Private Sub SelNewFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles SelNewFanartToolStripMenuItem.Click
-        Try
-            Me.TabPage12.Select
-            TabControl3.SelectedIndex=1
+    Private Sub SelNewFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles SelNewFanartToolStripMenuItem.Click
+            Try
+                Me.TabPage12.Select
+                TabControl3.SelectedIndex=1
             
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-End Sub
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
 
-Private Sub RescrapeTvEpThumbToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles RescrapeTvEpThumbToolStripMenuItem.Click
-        Try
-            TvEpThumbRescrape()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-End Sub
+    Private Sub RescrapeTvEpThumbToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles RescrapeTvEpThumbToolStripMenuItem.Click
+            Try
+                TvEpThumbRescrape()
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
 
-Private Sub RescrapeTvEpScreenShotToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles RescrapeTvEpScreenShotToolStripMenuItem.Click
-        Try
-            TvEpThumbScreenShot()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-End Sub
+    Private Sub RescrapeTvEpScreenShotToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles RescrapeTvEpScreenShotToolStripMenuItem.Click
+            Try
+                TvEpThumbScreenShot()
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
 
-Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles tv_PictureBoxLeft.MouseUp, tv_PictureBoxLeft.Click
-        Try
-            If e.Button = Windows.Forms.MouseButtons.Right Then
-                ReScrFanartToolStripMenuItem.Visible=False
-                SelNewFanartToolStripMenuItem.Visible=False
-                RescrapeTvEpThumbToolStripMenuItem.Visible=False
-                RescrapeTvEpScreenShotToolStripMenuItem.Visible=False
-                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-                    ReScrFanartToolStripMenuItem.Visible=True
-                    SelNewFanartToolStripMenuItem.Visible=True
-                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-                    RescrapeTvEpThumbToolStripMenuItem.Visible=True
-                    RescrapeTvEpScreenShotToolStripMenuItem.Visible=True
-                Else
-                    Exit Sub
+    Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles tv_PictureBoxLeft.MouseUp, tv_PictureBoxLeft.Click
+            Try
+                If e.Button = Windows.Forms.MouseButtons.Right Then
+                    ReScrFanartToolStripMenuItem.Visible=False
+                    SelNewFanartToolStripMenuItem.Visible=False
+                    RescrapeTvEpThumbToolStripMenuItem.Visible=False
+                    RescrapeTvEpScreenShotToolStripMenuItem.Visible=False
+                    If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+                        ReScrFanartToolStripMenuItem.Visible=True
+                        SelNewFanartToolStripMenuItem.Visible=True
+                    ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                        RescrapeTvEpThumbToolStripMenuItem.Visible=True
+                        RescrapeTvEpScreenShotToolStripMenuItem.Visible=True
+                    Else
+                        Exit Sub
+                    End If
                 End If
-            End If
-        Catch ex As Exception
+            Catch ex As Exception
 
-        End Try
+            End Try
 
-End Sub
+    End Sub
 
+    Private Sub tv_PictureBoxRight_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles tv_PictureBoxRight.MouseUp, tv_PictureBoxRight.Click
+            Try
+                If e.Button = Windows.Forms.MouseButtons.Right Then
+                    tsm_TvScrapeBanner.Visible = False
+                    tsm_TvScrapePoster.Visible = False
+                    tsm_TvSelectBanner.Visible = False
+                    tsm_TvSelectPoster.Visible = False
+                    If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                        tsm_TvScrapePoster.Visible=True
+                        tsm_TvSelectPoster.Visible=True
+                    Else
+                        Exit Sub
+                    End If
+                End If
+            Catch ex As Exception
 
+            End Try
+
+    End Sub
+
+    Private Sub tv_PictureBoxBottom_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles tv_PictureBoxBottom.MouseUp, tv_PictureBoxBottom.Click
+            Try
+                If e.Button = Windows.Forms.MouseButtons.Right Then
+                    tsm_TvScrapeBanner.Visible = False
+                    tsm_TvScrapePoster.Visible = False
+                    tsm_TvSelectBanner.Visible = False
+                    tsm_TvSelectPoster.Visible = False
+                    If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                        tsm_TvScrapeBanner.Visible=True
+                        tsm_TvSelectBanner.Visible=True
+                    Else
+                        Exit Sub
+                    End If
+                End If
+            Catch ex As Exception
+
+            End Try
+
+    End Sub
+
+    
 
     Sub BckWrkCheckNewVersion_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkCheckNewVersion.DoWork
 
@@ -25134,7 +25174,37 @@ End Sub
         e.Result = New NewVersionCheckResult(ShowNoNewVersionMsgBox,CheckForNewVersion)
     End Sub
 
+    Private Sub tsm_TvScrapePoster_Click( sender As System.Object,  e As System.EventArgs) Handles tsm_TvScrapePoster.Click
+            Try
+                TvScrapePosterBanner("poster")
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
 
+    Private Sub tsm_TvSelectPoster_Click( sender As System.Object,  e As System.EventArgs) Handles tsm_TvSelectPoster.Click
+            Try
+                TvSelectPosterBanner(False)
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
+
+    Private Sub tsm_TvScrapeBanner_Click( sender As System.Object,  e As System.EventArgs) Handles tsm_TvScrapeBanner.Click
+            Try
+                TvScrapePosterBanner("series")
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
+
+    Private Sub tsm_TvSelectBanner_Click( sender As System.Object,  e As System.EventArgs) Handles tsm_TvSelectBanner.Click
+            Try
+                TvSelectPosterBanner(True)
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+    End Sub
 
     Private Sub BckWrkCheckNewVersion_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkCheckNewVersion.RunWorkerCompleted
 
