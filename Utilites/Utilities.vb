@@ -2648,6 +2648,18 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return String.Join(Environment.NewLine, lines)
     End Function
 
+    Public Shared Function cleanTvActorRole (ByVal s As String) As String
+        Dim a As Integer = 1
+        Dim Words As String() = s.Split(" ")
+        s = Words(0)
+        Do Until Words(a) = "" and Words(a+1) = ""
+            s &= " " & Words(a)
+            a = a + 1
+        Loop
+
+        Return s
+    End Function
+
     Public Shared Function SafeDeleteFile(ByVal fileName As String) As Boolean
         If Not File.Exists(fileName) Then Return True
         Try

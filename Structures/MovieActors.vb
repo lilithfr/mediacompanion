@@ -111,15 +111,35 @@ Public Structure str_MovieActors
 
 
 
+    'Public Sub AssignFromImdbTr(Tr As String)
+
+    '    Dim m As Match = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_2, RegexOptions.Singleline)
+
+    '    actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars.EncodeSpecialChrs
+    '    actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim
+    '    actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
+    '    actorid    = m.Groups("actorid").ToString
+    'End Sub
+
     Public Sub AssignFromImdbTr(Tr As String)
 
         Dim m As Match = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_2, RegexOptions.Singleline)
-
+        Try
         actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars.EncodeSpecialChrs
+        Catch
+        End Try
+        Try
         actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim
+        Catch
+        End Try
+        Try 
         actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
+        Catch
+        End Try
+        Try
         actorid    = m.Groups("actorid").ToString
+        Catch
+        End Try
     End Sub
-
 
 End Structure
