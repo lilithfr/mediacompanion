@@ -117,6 +117,17 @@ Module ModGlobals
         Return Utilities.cleanFilenameIllegalChars(s)
     End Function
 
+    <Extension()> _
+    Function CleanActorRole(ByRef s As String) As String
+        Dim a As Integer = s.IndexOf("  ")-2
+        Dim Words As String() = s.Split(Chr(32)& Chr(32))
+        If a >0 Then
+            s = s.Substring(0, a)
+        End If
+        s = s.Replace(" /","")
+
+        Return s
+    End Function
     
 End Module
 

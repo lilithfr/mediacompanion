@@ -129,7 +129,7 @@ Public Structure str_MovieActors
         Catch
         End Try
         Try
-        actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim
+        actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim.CleanActorRole
         Catch
         End Try
         Try 

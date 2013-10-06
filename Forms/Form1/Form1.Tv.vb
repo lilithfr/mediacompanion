@@ -3209,7 +3209,7 @@ Partial Public Class Form1
 
         For Each thisresult in actorlist 
             
-            thisresult.actorrole = Utilities.cleanTvActorRole(thisresult.actorrole)
+            'thisresult.actorrole = Utilities.cleanTvActorRole(thisresult.actorrole)
 
             If thisresult.actorthumb <> Nothing And actcount < (actmax + 1) Then
                 If Preferences.actorsave = True And thisresult.actorid <> "" And Preferences.tvshowautoquick = False Then
