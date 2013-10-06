@@ -123,21 +123,29 @@ Public Structure str_MovieActors
 
     Public Sub AssignFromImdbTr(Tr As String)
 
-        Dim m As Match = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_2, RegexOptions.Singleline)
+        Dim m As Match
+
+        If Tr.IndexOf("loadlate")=-1 Then
+            m = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_NO_IMAGE, RegexOptions.Singleline)
+        Else
+            m = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_WITH_IMAGE, RegexOptions.Singleline)
+        End If
+
+        
         Try
-        actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars.EncodeSpecialChrs
+            actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars
         Catch
         End Try
         Try
-        actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim.CleanActorRole
+            actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.Trim.CleanActorRole
         Catch
         End Try
         Try 
-        actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
+            actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
         Catch
         End Try
         Try
-        actorid    = m.Groups("actorid").ToString
+            actorid    = m.Groups("actorid").ToString
         Catch
         End Try
     End Sub

@@ -32,8 +32,8 @@ Public Class MovieRegExs
     Public Const REGEX_OUTLINE             = "itemprop=""description"">(?<outline>.*?)<"
     Public Const REGEX_ACTORS_TABLE        = "<table class=""cast_list"">(.*?)</table>"
     Public Const REGEX_TR                  = "<tr.*?>(.*?)</tr>"
-    Public Const REGEX_ACTOR               = "<tr.*?<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)""?src=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>.*?</tr>"
-    Public Const REGEX_ACTOR_2             = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
+    Public Const REGEX_ACTOR_NO_IMAGE      = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
+    Public Const REGEX_ACTOR_WITH_IMAGE    = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
 End Class
 
 
@@ -831,53 +831,6 @@ Public Class Classimdb
     End Property
 
   
-    ReadOnly Property Actors_Rows As String
-        Get
-            Return Regex.Match(Html,MovieRegExs.REGEX_ACTORS_TABLE, RegexOptions.Singleline).Groups(1).Value
-        End Get
-    End Property
-   
-
-
-
-    ReadOnly Property Actors As List(Of str_MovieActors)
-        Get
-            Dim results As New List(Of str_MovieActors)
-
-            Dim actorRows As String = Actors_Rows
-
-            Dim mc As MatchCollection = Regex.Matches(actorRows, MovieRegExs.REGEX_ACTOR, RegexOptions.Singleline)
-
-            For Each m In mc
-
-                Dim actor As str_MovieActors        
-
-                actor.actorname  = m.Groups( "actorname"  ).ToString.CleanSpecChars.CleanFilenameIllegalChars.Encodespecialchrs
-                actor.actorrole  = m.Groups( "actorrole"  ).ToString.StripTagsLeaveContent.CleanSpecChars.Encodespecialchrs
-                actor.actorthumb = m.Groups( "actorthumb" ).ToString.Encodespecialchrs
-                actor.actorid    = m.Groups( "actorid"    ).ToString
-  
-                'If actor.actorname.IndexOf("http://resume.imdb.com") <> -1 Then actor.actorname = actor.actorname.Replace("http://resume.imdb.com", "")
-                'If actor.actorname.IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actor.actorname = actor.actorname.Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
-                'If actor.actorname.indexof("http://ia.media-imdb.com/images/") <> -1 Then
-                '    Dim tempint6 As Integer
-                '    Dim tempint7 As Integer
-                '    tempint6 = actor.actorname.indexof("http://ia.media-imdb.com/images/")
-                '    tempint7 = actor.actorname.indexof("._V1._")
-                '    actor.actorthumb = actor.actorname.substring(tempint6, tempint7 - tempint6 + 3)
-                '    actor.actorthumb = actor.actorthumb & "._V1._SY400_SX300_.jpg"
-                'End If
-
-
-               results.Add(actor)
-            Next
-
-            Return results
-        End Get
-    End Property
-
-
-    
 
 
     Function GetNames(RegExPattern As String, Optional ByVal Max As Integer=-1) As String
