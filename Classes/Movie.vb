@@ -1096,16 +1096,30 @@ Public Class Movie
             End Select
         Next
 
-        _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title               'Sort order defaults to title
-
-        If _scrapedMovie.fullmoviebody.plot      = ""      Then _scrapedMovie.fullmoviebody.plot      = _scrapedMovie.fullmoviebody.outline     ' If plot is empty, use outline
+        If Preferences.sorttitleignorearticle Then                              'add ignored articles to end of
+            Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.
+            'If Preferences.ignorearticle Then                                  'But only on Scraping or Rescrape Specific
+            If titletext.ToLower.IndexOf("the ") = 0 Then
+                titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
+            End If
+            'End If
+            'If Preferences.ignoreAarticle Then
+            If titletext.ToLower.IndexOf("a ") = 0 Then
+                titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
+            End If
+            'End If
+            _scrapedMovie.fullmoviebody.sortorder = titletext
+        Else
+            _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title               'Sort order defaults to title
+        End If
+        If _scrapedMovie.fullmoviebody.plot = "" Then _scrapedMovie.fullmoviebody.plot = _scrapedMovie.fullmoviebody.outline ' If plot is empty, use outline
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
-        If _scrapedMovie.fullmoviebody.top250    = Nothing Then _scrapedMovie.fullmoviebody.top250    = "0"
+        If _scrapedMovie.fullmoviebody.top250 = Nothing Then _scrapedMovie.fullmoviebody.top250 = "0"
 
         ' Assign certificate
         Dim done As Boolean = False
         For g = 0 To UBound(Preferences.certificatepriority)
-            For Each cert In certificates
+            For Each cert In Certificates
                 If cert.IndexOf(Preferences.certificatepriority(g)) <> -1 Then
                     _scrapedMovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
                     done = True
@@ -1117,7 +1131,7 @@ Public Class Movie
 
 
         If Rescrape Then
-            _scrapedMovie.fullmoviebody.source    = _previousCache.source
+            _scrapedMovie.fullmoviebody.source = _previousCache.source
             _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
             _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
@@ -2294,7 +2308,7 @@ Public Class Movie
 
                 RenamedBaseName = targetNfoFile
                 If Preferences.MovFolderRename And afolder Then               'remove old directory if present
-                    If oldpath <> newpath And oldpath <> currentroot Then
+                    If oldpath <> newpath And oldpath <> (currentroot & "\") Then
                         Directory.Delete(oldpath)
                     End If
                 End If
@@ -2304,7 +2318,7 @@ Public Class Movie
                 log &= String.Format("A file exists with the target filename of '{0}' - RENAME SKIPPED{1}", newfilename, vbCrLf)
             End If
         Catch ex As Exception
-            log &= "!!!Rename Movie File FAILED !!!" & vbCrLf
+            log &= "!!! !!Rename Movie File FAILED !!!" & vbCrLf
         End Try
         Return log
     End Function
@@ -2360,11 +2374,27 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.votes    , _scrapedMovie.fullmoviebody.votes    , rl.votes     )  
             UpdateProperty( _rescrapedMovie.fullmoviebody.country  , _scrapedMovie.fullmoviebody.country  , rl.country   )  
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.title    , _scrapedMovie.fullmoviebody.title    , rl.title     )  
+            UpdateProperty(_rescrapedMovie.fullmoviebody.title     , _scrapedMovie.fullmoviebody.title    , rl.title)
+
+            If rl.title And Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
+                Dim x As Boolean = False
+                Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.                                
+                If titletext.ToLower.IndexOf("the ") = 0 Then                       'But only on Scraping or Rescrape Specific etc
+                    titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
+                    x = True
+                End If
+                If titletext.ToLower.IndexOf("a ") = 0 Then
+                    titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
+                    x = True
+                End If
+                If x Then 
+                    _scrapedMovie.fullmoviebody.sortorder = titletext
+                End If
+            End If
         End If
-        
-        If Cancelled then Exit Sub
-             
+
+        If Cancelled() Then Exit Sub
+
         If NeedTMDb(rl) Then
 
             IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
@@ -2373,18 +2403,18 @@ Public Class Movie
                 If TrailerExists Then
                     ReportProgress("Trailer already exists ", "Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
                 Else
-                    
+
                     _triedUrls.Clear()
                     GetTrailerUrlAlreadyRun = False
 
                     Dim more As Boolean = Not File.Exists(ActualTrailerPath)
 
                     While more
-                        If rl.trailer or _scrapedMovie.fullmoviebody.trailer = "" Then
+                        If rl.trailer Or _scrapedMovie.fullmoviebody.trailer = "" Then
                             _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
                             UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)
-                        Else 
-                            TrailerUrl = _scrapedMovie.fullmoviebody.trailer 
+                        Else
+                            TrailerUrl = _scrapedMovie.fullmoviebody.trailer
                         End If
                         If Preferences.DownloadTrailerDuringScrape Or rl.Download_Trailer Then
                             DownloadTrailer(TrailerUrl, rl.Download_Trailer)
@@ -2449,7 +2479,7 @@ Public Class Movie
 
         If rl.actors Then
             _rescrapedMovie.listactors.Clear()
-            _rescrapedMovie.listactors = GetImdbActors
+            _rescrapedMovie.listactors = GetImdbActors()
 
             If _rescrapedMovie.listactors.Count > 0 Then
                 _scrapedMovie.listactors.Clear()
@@ -2471,7 +2501,7 @@ Public Class Movie
         End If
 
 
-        If rl.Convert_To_Frodo Then ConvertToFrodo
+        If rl.Convert_To_Frodo Then ConvertToFrodo()
 
         AssignMovieToCache()
         '		AssignMovieToAddMissingData

@@ -14489,7 +14489,8 @@ Public Class Form1
 
         CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
         cb_IgnoreThe.CheckState             = If(Preferences.ignorearticle, CheckState.Checked, CheckState.Unchecked)
-        cb_IgnoreA.CheckState               = If(Preferences.ignoreAarticle, CheckState.Checked, CheckState.Unchecked)
+        cb_IgnoreA.CheckState = If(Preferences.ignoreAarticle, CheckState.Checked, CheckState.Unchecked)
+        cb_SorttitleIgnoreArticles.CheckState = If(Preferences.sorttitleignorearticle, CheckState.Checked, CheckState.Unchecked)
         CheckBox38.CheckState               = If(Preferences.intruntime, CheckState.Checked, CheckState.Unchecked)
         CheckBox33.CheckState               = If(Preferences.actorseasy, CheckState.Checked, CheckState.Unchecked)
 
@@ -21049,6 +21050,22 @@ Public Class Form1
                 Preferences.ignoreAarticle = True
             Else
                 Preferences.ignoreAarticle = False
+            End If
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
+        Try
+            If cb_SorttitleIgnoreArticles.CheckState = CheckState.Checked Then
+                Preferences.sorttitleignorearticle = True
+            Else
+                Preferences.sorttitleignorearticle = False
             End If
             If prefsload = False Then
                 generalprefschanged = True
