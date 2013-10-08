@@ -159,6 +159,7 @@
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
+    <Compile Include="Classes\UserRect.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEvent.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEventArgs.vb" />
     <Compile Include="Classes\XBMC_Link\DictItem.vb" />
@@ -197,6 +198,12 @@
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\TVShows.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
+    <Compile Include="Forms\frmMovPosterCrop.Designer.vb">
+      <DependentUpon>frmMovPosterCrop.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMovPosterCrop.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmMediaInfoEdit.Designer.vb">
       <DependentUpon>frmMediaInfoEdit.vb</DependentUpon>
     </Compile>
@@ -470,6 +477,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMediaInfoEdit.resx">
       <DependentUpon>frmMediaInfoEdit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMovPosterCrop.resx">
+      <DependentUpon>frmMovPosterCrop.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutputLog.resx">
       <DependentUpon>frmOutputLog.vb</DependentUpon>

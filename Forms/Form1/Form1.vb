@@ -5853,6 +5853,11 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub btn_MovEnableCrop_Click( sender As System.Object,  e As System.EventArgs) Handles btnMoviePosterEnableCrop.Click
+        Dim t As New frmMovPosterCrop
+            t.ShowDialog()
+    End Sub
+
     Private Function util_ImageCrop(ByVal SrcBmp As Bitmap, ByVal NewSize As Size, ByVal StartPoint As Point) As Bitmap
         If NewSize.Width < 1 Or NewSize.Height < 1 Then
             'MsgBox("Cant resize < 1")
@@ -7081,8 +7086,16 @@ Public Class Form1
             posterThumbedItsMade = False
             Try
                 Dim stream As New System.IO.MemoryStream
-                PictureBoxAssignedMoviePoster.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
-                moviethumb.Image = PictureBoxAssignedMoviePoster.Image
+                Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
+                For Each pth As String In PostPaths
+                    PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                    'posterpath = pth
+                Next
+                'PictureBoxAssignedMoviePoster.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
+                Dim bitmap1 As New Bitmap(PictureBoxAssignedMoviePoster.Image)
+                Dim bmp4 As New Bitmap(bitmap1)
+                bitmap1.Dispose()
+                moviethumb.Image = bmp4
                 btnMoviePosterResetImage.Enabled = False
                 btnMoviePosterSaveCroppedImage.Enabled = False
 
@@ -25610,5 +25623,6 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
+
 
 End Class
