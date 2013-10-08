@@ -1500,7 +1500,9 @@ Public Class Classimdb
 
             actor.AssignFromImdbTr(m.ToString)
 
-            results.Add(actor)
+            If actor.actorname<>"" Then
+                results.Add(actor)
+            End If
 
             If results.Count>=maxactors Then Exit For
         Next 
