@@ -1487,20 +1487,10 @@ Public Class Classimdb
 
         Dim results As New List(Of str_MovieActors)
 
-        Dim first As Boolean = True
-
         For Each m In mc
-
-            If first Then
-                first = False
-                Continue For
-            End If
-
             Dim actor As str_MovieActors = New str_MovieActors
 
-            actor.AssignFromImdbTr(m.ToString)
-
-            If actor.actorname<>"" Then
+            If actor.AssignFromImdbTr(m.ToString) Then
                 results.Add(actor)
             End If
 

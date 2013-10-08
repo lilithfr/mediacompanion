@@ -121,7 +121,7 @@ Public Structure str_MovieActors
     '    actorid    = m.Groups("actorid").ToString
     'End Sub
 
-    Public Sub AssignFromImdbTr(Tr As String)
+    Public Function AssignFromImdbTr(Tr As String) As Boolean
 
         Dim m As Match
 
@@ -136,18 +136,23 @@ Public Structure str_MovieActors
             actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars
         Catch
         End Try
+
         Try
             actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.Trim.CleanActorRole
         Catch
         End Try
+
         Try 
             actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
         Catch
         End Try
+
         Try
             actorid    = m.Groups("actorid").ToString
         Catch
         End Try
-    End Sub
+
+        Return actorname<>""
+    End Function
 
 End Structure
