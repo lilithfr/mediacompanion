@@ -109,6 +109,8 @@ Partial Class Form2
         Me.Label11 = New System.Windows.Forms.Label()
         Me.top250txt = New System.Windows.Forms.TextBox()
         Me.Createdatepicker = New System.Windows.Forms.DateTimePicker()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.tb_TrailerURL = New System.Windows.Forms.TextBox()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.Panel2.SuspendLayout
@@ -218,7 +220,7 @@ Partial Class Form2
         'taglinetxt
         '
         Me.taglinetxt.BackColor = System.Drawing.Color.White
-        Me.taglinetxt.Location = New System.Drawing.Point(127, 453)
+        Me.taglinetxt.Location = New System.Drawing.Point(126, 482)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
@@ -228,18 +230,18 @@ Partial Class Form2
         'plottxt
         '
         Me.plottxt.BackColor = System.Drawing.Color.White
-        Me.plottxt.Location = New System.Drawing.Point(127, 309)
+        Me.plottxt.Location = New System.Drawing.Point(127, 349)
         Me.plottxt.Margin = New System.Windows.Forms.Padding(4)
         Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
         Me.plottxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.plottxt.Size = New System.Drawing.Size(624, 136)
+        Me.plottxt.Size = New System.Drawing.Size(624, 119)
         Me.plottxt.TabIndex = 47
         '
         'outlinetxt
         '
         Me.outlinetxt.BackColor = System.Drawing.Color.White
-        Me.outlinetxt.Location = New System.Drawing.Point(127, 253)
+        Me.outlinetxt.Location = New System.Drawing.Point(127, 293)
         Me.outlinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
@@ -283,7 +285,7 @@ Partial Class Form2
         '
         Me.tagline.AutoSize = true
         Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tagline.Location = New System.Drawing.Point(21, 454)
+        Me.tagline.Location = New System.Drawing.Point(21, 482)
         Me.tagline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.tagline.Name = "tagline"
         Me.tagline.Size = New System.Drawing.Size(63, 16)
@@ -294,7 +296,7 @@ Partial Class Form2
         '
         Me.plot.AutoSize = true
         Me.plot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.plot.Location = New System.Drawing.Point(21, 309)
+        Me.plot.Location = New System.Drawing.Point(21, 349)
         Me.plot.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.plot.Name = "plot"
         Me.plot.Size = New System.Drawing.Size(40, 16)
@@ -305,7 +307,7 @@ Partial Class Form2
         '
         Me.outline.AutoSize = true
         Me.outline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.outline.Location = New System.Drawing.Point(21, 254)
+        Me.outline.Location = New System.Drawing.Point(21, 294)
         Me.outline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.outline.Name = "outline"
         Me.outline.Size = New System.Drawing.Size(58, 16)
@@ -413,7 +415,7 @@ Partial Class Form2
         'roletxt
         '
         Me.roletxt.BackColor = System.Drawing.Color.White
-        Me.roletxt.Location = New System.Drawing.Point(441, 518)
+        Me.roletxt.Location = New System.Drawing.Point(441, 547)
         Me.roletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.roletxt.Name = "roletxt"
         Me.roletxt.ReadOnly = true
@@ -424,7 +426,7 @@ Partial Class Form2
         '
         Me.Label5.AutoSize = true
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label5.Location = New System.Drawing.Point(437, 493)
+        Me.Label5.Location = New System.Drawing.Point(437, 522)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 16)
@@ -435,7 +437,7 @@ Partial Class Form2
         '
         Me.Label4.AutoSize = true
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label4.Location = New System.Drawing.Point(123, 493)
+        Me.Label4.Location = New System.Drawing.Point(123, 522)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 16)
@@ -446,7 +448,7 @@ Partial Class Form2
         '
         Me.actorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.actorcb.FormattingEnabled = true
-        Me.actorcb.Location = New System.Drawing.Point(127, 517)
+        Me.actorcb.Location = New System.Drawing.Point(127, 546)
         Me.actorcb.Margin = New System.Windows.Forms.Padding(4)
         Me.actorcb.Name = "actorcb"
         Me.actorcb.Size = New System.Drawing.Size(309, 21)
@@ -454,7 +456,7 @@ Partial Class Form2
         '
         'PictureBox1
         '
-        Me.PictureBox1.Location = New System.Drawing.Point(760, 485)
+        Me.PictureBox1.Location = New System.Drawing.Point(760, 509)
         Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(216, 174)
@@ -477,7 +479,7 @@ Partial Class Form2
         'filenametxt
         '
         Me.filenametxt.BackColor = System.Drawing.Color.White
-        Me.filenametxt.Location = New System.Drawing.Point(127, 634)
+        Me.filenametxt.Location = New System.Drawing.Point(127, 663)
         Me.filenametxt.Margin = New System.Windows.Forms.Padding(4)
         Me.filenametxt.Name = "filenametxt"
         Me.filenametxt.ReadOnly = true
@@ -497,7 +499,7 @@ Partial Class Form2
         '
         'btnaddactor
         '
-        Me.btnaddactor.Location = New System.Drawing.Point(19, 587)
+        Me.btnaddactor.Location = New System.Drawing.Point(19, 616)
         Me.btnaddactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btnaddactor.Name = "btnaddactor"
         Me.btnaddactor.Size = New System.Drawing.Size(100, 28)
@@ -508,7 +510,7 @@ Partial Class Form2
         '
         'btndeleteactor
         '
-        Me.btndeleteactor.Location = New System.Drawing.Point(19, 513)
+        Me.btndeleteactor.Location = New System.Drawing.Point(19, 542)
         Me.btndeleteactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btndeleteactor.Name = "btndeleteactor"
         Me.btndeleteactor.Size = New System.Drawing.Size(100, 28)
@@ -540,7 +542,7 @@ Partial Class Form2
         'btneditactor
         '
         Me.btneditactor.Enabled = false
-        Me.btneditactor.Location = New System.Drawing.Point(19, 549)
+        Me.btneditactor.Location = New System.Drawing.Point(19, 578)
         Me.btneditactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btneditactor.Name = "btneditactor"
         Me.btneditactor.Size = New System.Drawing.Size(100, 28)
@@ -552,7 +554,7 @@ Partial Class Form2
         'TextBox1
         '
         Me.TextBox1.Enabled = false
-        Me.TextBox1.Location = New System.Drawing.Point(127, 554)
+        Me.TextBox1.Location = New System.Drawing.Point(127, 583)
         Me.TextBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(309, 20)
@@ -561,7 +563,7 @@ Partial Class Form2
         'TextBox2
         '
         Me.TextBox2.Enabled = false
-        Me.TextBox2.Location = New System.Drawing.Point(441, 555)
+        Me.TextBox2.Location = New System.Drawing.Point(441, 584)
         Me.TextBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(309, 20)
@@ -569,7 +571,7 @@ Partial Class Form2
         '
         'TextBox3
         '
-        Me.TextBox3.Location = New System.Drawing.Point(127, 592)
+        Me.TextBox3.Location = New System.Drawing.Point(127, 621)
         Me.TextBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(309, 20)
@@ -577,7 +579,7 @@ Partial Class Form2
         '
         'TextBox4
         '
-        Me.TextBox4.Location = New System.Drawing.Point(441, 592)
+        Me.TextBox4.Location = New System.Drawing.Point(441, 621)
         Me.TextBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.Size = New System.Drawing.Size(309, 20)
@@ -718,7 +720,7 @@ Partial Class Form2
         '
         Me.Label8.AutoSize = true
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label8.Location = New System.Drawing.Point(168, 372)
+        Me.Label8.Location = New System.Drawing.Point(162, 391)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(535, 42)
@@ -904,7 +906,7 @@ Partial Class Form2
         '
         'starstxt
         '
-        Me.starstxt.Location = New System.Drawing.Point(127, 212)
+        Me.starstxt.Location = New System.Drawing.Point(127, 261)
         Me.starstxt.Name = "starstxt"
         Me.starstxt.Size = New System.Drawing.Size(623, 20)
         Me.starstxt.TabIndex = 115
@@ -913,7 +915,7 @@ Partial Class Form2
         '
         Me.Label6.AutoSize = true
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label6.Location = New System.Drawing.Point(21, 213)
+        Me.Label6.Location = New System.Drawing.Point(21, 262)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(45, 16)
         Me.Label6.TabIndex = 116
@@ -923,7 +925,7 @@ Partial Class Form2
         '
         Me.Label7.AutoSize = true
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label7.Location = New System.Drawing.Point(21, 638)
+        Me.Label7.Location = New System.Drawing.Point(21, 667)
         Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(44, 16)
@@ -968,9 +970,33 @@ Partial Class Form2
         Me.Createdatepicker.Size = New System.Drawing.Size(200, 20)
         Me.Createdatepicker.TabIndex = 123
         '
+        'Label19
+        '
+        Me.Label19.AutoSize = true
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label19.Location = New System.Drawing.Point(21, 202)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(83, 16)
+        Me.Label19.TabIndex = 124
+        Me.Label19.Text = "Trailer URL :"
+        '
+        'tb_TrailerURL
+        '
+        Me.tb_TrailerURL.BackColor = System.Drawing.Color.White
+        Me.tb_TrailerURL.Location = New System.Drawing.Point(127, 198)
+        Me.tb_TrailerURL.Margin = New System.Windows.Forms.Padding(4)
+        Me.tb_TrailerURL.Multiline = true
+        Me.tb_TrailerURL.Name = "tb_TrailerURL"
+        Me.tb_TrailerURL.ReadOnly = true
+        Me.tb_TrailerURL.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.tb_TrailerURL.Size = New System.Drawing.Size(623, 47)
+        Me.tb_TrailerURL.TabIndex = 125
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.tb_TrailerURL)
+        Me.Controls.Add(Me.Label19)
         Me.Controls.Add(Me.Createdatepicker)
         Me.Controls.Add(Me.top250txt)
         Me.Controls.Add(Me.Label11)
@@ -1144,4 +1170,6 @@ End Sub
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents top250txt As System.Windows.Forms.TextBox
     Friend WithEvents Createdatepicker As System.Windows.Forms.DateTimePicker
+    Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents tb_TrailerURL As System.Windows.Forms.TextBox
 End Class
