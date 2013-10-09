@@ -96,13 +96,16 @@ Public Class UserRect
     '    End If
     'End Sub
 
-    Public Function GetCropped() As Bitmap
-        Dim sx As Integer = rect.X
-        Dim sy As Integer = rect.Y
-        Dim sw As Integer = rect.Width
-        Dim sh As Integer = rect.Height
+    Public Function GetCropped(ByVal zm As Double) As Bitmap
+        
+        'Dim zm As Double = frmMovPosterCrop.zm
+        Dim sx As Integer = rect.X * zm
+        Dim sy As Integer = rect.Y * zm
+        Dim sw As Integer = rect.Width * zm
+        Dim sh As Integer = rect.Height * zm
+        
         Dim rect1 As Rectangle = New Rectangle(sx, sy, sw, sh)
-        Dim OriginalImage As Bitmap = New Bitmap(mPictureBox.Image, mPictureBox.Width, mPictureBox.Height)
+        Dim OriginalImage As Bitmap = New Bitmap(frmMovPosterCrop.img) ', mPictureBox.Width, mPictureBox.Height)
         Dim _img As New Bitmap(sw, sh) ' for cropinf image
         Dim g As Graphics = Graphics.FromImage(_img) ' create graphics
 
@@ -111,7 +114,7 @@ Public Class UserRect
         g.CompositingQuality = Drawing2D.CompositingQuality.HighQuality
 
         'set image attributes
-        g.DrawImage(OriginalImage, 0, 0, rect, GraphicsUnit.Pixel)
+        g.DrawImage(OriginalImage, 0, 0, rect1, GraphicsUnit.Pixel)
         Return _img
     End Function
 

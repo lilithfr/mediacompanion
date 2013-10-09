@@ -7,7 +7,8 @@ Imports System.Windows.Forms
 
 Public Class frmMovPosterCrop
     Private rect As UserRect
-    Dim img As Bitmap = Form1.PictureBoxAssignedMoviePoster.Image
+    Dim Public img As Bitmap = Form1.PictureBoxAssignedMoviePoster.Image
+    'Dim Public zm As Double = 1
 	Public Sub New()
 		InitializeComponent()
         'Dim img As Bitmap = Form1.PictureBoxAssignedMoviePoster.Image
@@ -20,9 +21,11 @@ Public Class frmMovPosterCrop
 	End Sub
 
     Private Sub btn_CropAccept_Click( sender As System.Object,  e As System.EventArgs) Handles btn_CropAccept.Click
+        Dim zm as Double = (img.Height/PicBox.Height)
         Form1.btnMoviePosterResetImage.Enabled = True
         Form1.btnMoviePosterSaveCroppedImage.Enabled = True
-        Form1.PictureBoxAssignedMoviePoster.Image = rect.GetCropped()
+        Form1.PictureBoxAssignedMoviePoster.Image = rect.GetCropped(zm)
+        Form1.lblCurrentLoadedPoster.Text = "Width: " & Form1.PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & Form1.PictureBoxAssignedMoviePoster.Image.Height.ToString
         PicBox.Dispose()
         Me.Close()
     End Sub
@@ -32,7 +35,8 @@ Public Class frmMovPosterCrop
     End Sub
 
     Private Sub SizePicBox()
-        Dim newW As Integer = Math.Ceiling(img.Width/(img.Height/PicBox.Height ))
+        'zm = (img.Height/PicBox.Height)
+        Dim newW As Integer = Math.Ceiling(img.Width/(img.Height/PicBox.Height))
         PicBox.Width = newW
         Dim newxpos = Math.Ceiling(245-(newW/2))
         PicBox.Location = New Point(newxpos, 15)

@@ -5854,8 +5854,12 @@ Public Class Form1
     End Sub
 
     Private Sub btn_MovEnableCrop_Click( sender As System.Object,  e As System.EventArgs) Handles btnMoviePosterEnableCrop.Click
-        Dim t As New frmMovPosterCrop
+        Try
+            Dim t As New frmMovPosterCrop
             t.ShowDialog()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Function util_ImageCrop(ByVal SrcBmp As Bitmap, ByVal NewSize As Size, ByVal StartPoint As Point) As Bitmap
