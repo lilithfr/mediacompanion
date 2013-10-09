@@ -1819,7 +1819,7 @@ End If
             'thismovie.Scraped=False
 
             AddMovieEventHandlers   ( aMovie )
-            aMovie.fileRename(aMovie.ScrapedMovie.fullmoviebody, aMovie)
+            aMovie.fileRename(aMovie)
             RemoveMovieEventHandlers( aMovie )
             NewFilenameandPath = aMovie.mediapathandfilename
 
