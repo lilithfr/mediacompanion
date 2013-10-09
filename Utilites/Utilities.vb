@@ -2642,6 +2642,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End While
         End Using
         Dim suspectLine As String = lines(linenumber - 1)
+        If suspectLine.Contains(Chr(1)) Then
+            lines(linenumber -1) = suspectLine.Replace(Chr(1),"")
+            Return String.Join(Environment.NewLine, lines)
+        End If
         If charpos > 1 Then charpos = charpos - 2 'Not ideal but the "illegal" character may be after a "<" so we have to go back an extra character position. 
         Dim suspectChar As String = suspectLine.Substring(charpos, 2)  '(charpos - 2, 2)   - Changed to above as character may be at start of xml file. 
         lines(linenumber - 1) = suspectLine.Replace(suspectChar, System.Security.SecurityElement.Escape(suspectChar))
