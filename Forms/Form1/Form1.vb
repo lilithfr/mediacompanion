@@ -9102,15 +9102,15 @@ Public Class Form1
         btnTvFanartSaveCropped.Visible = False
         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
             If Not tv_PictureBoxLeft.Image Is Nothing Then
-                PictureBox10.Image = tv_PictureBoxLeft.Image
-                PictureBox11.Image = tv_PictureBoxLeft.Image
+                PictureBox10.Image = tv_PictureBoxLeft.Image    '2check
+                PictureBox11.Image = tv_PictureBoxLeft.Image    '2check
             Else
                 PictureBox10.Image = Nothing
                 PictureBox11.Image = Nothing
             End If
         Else
-            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath)
-            util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath)
+            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultTvFanartPath)
+            util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultTvFanartPath)
 
         End If
         Try
@@ -9295,12 +9295,12 @@ Public Class Form1
                 PictureBox11.Image = Nothing
             End If
         Else
-            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath)
-            util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath)
+            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultTvFanartPath)
+            util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultTvFanartPath)
 
         End If
         Else
-            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", fanartorextrapath), Utilities.DefaultFanartPath)
+            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", fanartorextrapath), Utilities.DefaultTvFanartPath)
         End If
 
     End Sub
@@ -9398,12 +9398,12 @@ Public Class Form1
                     'If Utilities.DownloadImage(miscvar2, savepath, True, Preferences.resizefanart) Then
                     If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) Then
                         Try
-                            util_ImageLoad(PictureBox10, savepath, Utilities.DefaultFanartPath)
-                            util_ImageLoad(PictureBox11, savepath, Utilities.DefaultFanartPath)
+                            util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
+                            util_ImageLoad(PictureBox11, savepath, Utilities.DefaultTvFanartPath)
                             'PictureBox11.Image = PictureBox10.Image
                             If Not xtra Then
                                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultFanartPath)
+                                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
                                     'tv_PictureBoxLeft.ImageLocation = savepath
                                     'tv_PictureBoxLeft.Load()
                                 End If
@@ -9613,7 +9613,7 @@ Public Class Form1
                 PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
                 PictureBox11.Image = PictureBox10.Image
                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    tv_PictureBoxLeft.Image = PictureBox11.Image
+                    tv_PictureBoxLeft.Image = PictureBox11.Image    '2check
                 End If
                 Label58.Text = PictureBox10.Image.Height.ToString
                 Label59.Text = PictureBox10.Image.Width.ToString
@@ -9718,10 +9718,10 @@ Public Class Form1
                 Dim exists As Boolean = System.IO.File.Exists(savepath)
                 If exists = True Then
 
-                    util_ImageLoad(PictureBox10, savepath, Utilities.DefaultFanartPath)
+                    util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
 
                     If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                        util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultFanartPath)
+                        util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
 
                     End If
 
@@ -11806,19 +11806,21 @@ Public Class Form1
                 End If
             End If
             If PictureBox13.ImageLocation = btnTvPosterSaveBig.Tag And Not PictureBox13.Image Is Nothing Then
+                Dim savedpath As String = ""
                 For Each savepath As String In imagePaths
                     PictureBox13.Image.Save(savepath, Imaging.ImageFormat.Jpeg)
+                    savedpath = savepath
                 Next
                 'DownloadCache.SaveImageToCacheAndPaths(imageUrl, ImagePaths, True)
                 GC.Collect()
                 If combostart = ComboBox2.SelectedItem Then
                     If rbTVbanner.Checked = True Then
-                        tv_PictureBoxBottom.Image = PictureBox13.Image
+                        util_ImageLoad(tv_PictureBoxBottom, savedpath, Utilities.DefaultTvPosterPath) ' = PictureBox13.Image
                     Else
-                        tv_PictureBoxRight.Image = PictureBox13.Image
+                        util_ImageLoad(tv_PictureBoxRight, savedpath, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = PictureBox13.Image
                     End If
                 End If
-                PictureBox12.Image = PictureBox13.Image
+                util_ImageLoad(PictureBox12, savedpath, Utilities.DefaultTvPosterPath)   '.Image = PictureBox13.Image
                 Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
                 Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
@@ -11852,12 +11854,12 @@ Public Class Form1
 
                             'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
                             If rbTVbanner.Checked Then
-                                util_ImageLoad(tv_PictureBoxBottom, path, Utilities.DefaultBannerPath)
+                                util_ImageLoad(tv_PictureBoxBottom, path, Utilities.DefaultTvBannerPath)
                                 'tv_PictureBoxBottom.ImageLocation = path
                                 'tv_PictureBoxBottom.Load()
                             End If
                             If rbTVposter.Checked Then
-                                util_ImageLoad(tv_PictureBoxRight, path, Utilities.DefaultPosterPath)
+                                util_ImageLoad(tv_PictureBoxRight, path, Utilities.DefaultTvPosterPath)
                                 'tv_PictureBoxRight.ImageLocation = path
                                 'tv_PictureBoxRight.Load()
                             End If
@@ -12195,7 +12197,7 @@ Public Class Form1
                 PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
 
                 If combostart = ComboBox2.SelectedItem Then
-                    tv_PictureBoxRight.Image = PictureBox13.Image
+                    tv_PictureBoxRight.Image = PictureBox13.Image  '2check
                 End If
                 PictureBox12.Image = PictureBox13.Image
                 Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString

@@ -58,6 +58,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultPosterPath As String
     Public Shared Property DefaultBannerPath As String
     Public Shared Property DefaultFanartPath As String
+    Public Shared Property DefaultTvPosterPath As String
+    Public Shared Property DefaultTvBannerPath As String
+    Public Shared Property DefaultTvFanartPath As String
     Public Shared Property DefaultPreFrodoBannerPath As String
     Public Shared Property DefaultOfflineArtPath As String
     Public Shared Property DefaultActorPath As String
@@ -103,6 +106,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             DefaultPosterPath = IO.Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
             DefaultBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
             DefaultFanartPath = IO.Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
+            DefaultTvPosterPath = IO.Path.Combine(_ApplicationPath, "Resources\default_tvposter.jpg")
+            DefaultTvBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\default_tvbanner.jpg")
+            DefaultTvFanartPath = IO.Path.Combine(_ApplicationPath, "Resources\default_tvfanart.jpg")
             DefaultPreFrodoBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\prefrodo_banner.jpg")
             DefaultOfflineArtPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
             DefaultActorPath = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
