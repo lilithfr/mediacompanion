@@ -360,7 +360,7 @@ Public Class TVDBScraper
             episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
           
             xmlfile = Utilities.DownloadTextFiles(episodeurl) 'this function has gzip detection in it 
-
+            Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
 
             'If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
 

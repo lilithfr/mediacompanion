@@ -5805,7 +5805,7 @@ Public Class Form1
             openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
             openFD.Title = "Select a jpeg image file"
             openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png|All Files|*.*"
             openFD.FilterIndex = 0
             openFD.ShowDialog()
             TextBox5.Text = openFD.FileName
@@ -6872,7 +6872,7 @@ Public Class Form1
             openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
             openFD.Title = "Select a jpeg image File"
             openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png|All Files|*.*"
             openFD.FilterIndex = 0
             openFD.ShowDialog()
             TextBox4.Text = openFD.FileName

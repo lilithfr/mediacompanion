@@ -821,10 +821,10 @@ Partial Public Class Form1
 
         If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
             If Preferences.EdenEnabled Then
-                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultScreenShotPath)
+                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultFanartPath)
             End If
             If Preferences.FrodoEnabled Then
-                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultScreenShotPath)
+                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultFanartPath)
             End If
         End If
         If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
