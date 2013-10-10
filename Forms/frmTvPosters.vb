@@ -1022,7 +1022,7 @@ Public Class frmTvPosters
             openFD.InitialDirectory = Preferences.applicationPath
             openFD.Title = "Select a jpeg image file File"
             openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"
             openFD.FilterIndex = 0
             openFD.ShowDialog()
             TextBox5.Text = openFD.FileName

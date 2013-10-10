@@ -381,7 +381,7 @@ Public Class frmMovieFanart
             openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
             openFD.Title = "Select a jpeg image File"
             openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"
             openFD.FilterIndex = 0
             openFD.ShowDialog()
             TextBox5.Text = openFD.FileName
