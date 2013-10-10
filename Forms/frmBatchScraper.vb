@@ -371,6 +371,9 @@
         Form1.rescrapeList.title = cbTitle.Checked
     End Sub
 
+    Private Sub frmBatchScraper_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
 
+        If               e.KeyCode = Keys.Escape Then btnCancel.PerformClick 
+    End Sub
 
 End Class

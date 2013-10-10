@@ -84,8 +84,8 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(416, 353)
-        Me.SplitContainer1.SplitterDistance = 194
+        Me.SplitContainer1.Size = New System.Drawing.Size(416, 359)
+        Me.SplitContainer1.SplitterDistance = 197
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -385,8 +385,8 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
-        Me.SplitContainer2.Size = New System.Drawing.Size(416, 410)
-        Me.SplitContainer2.SplitterDistance = 353
+        Me.SplitContainer2.Size = New System.Drawing.Size(416, 417)
+        Me.SplitContainer2.SplitterDistance = 359
         Me.SplitContainer2.TabIndex = 1
         '
         'cbRewiteAllNfo
@@ -433,9 +433,10 @@ Partial Class tv_batch_wizard
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_TvBatchCancel
-        Me.ClientSize = New System.Drawing.Size(416, 410)
+        Me.ClientSize = New System.Drawing.Size(416, 417)
         Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
+        Me.KeyPreview = true
         Me.MaximumSize = New System.Drawing.Size(424, 444)
         Me.MinimumSize = New System.Drawing.Size(424, 444)
         Me.Name = "tv_batch_wizard"

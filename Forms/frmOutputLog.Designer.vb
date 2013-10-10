@@ -23,21 +23,21 @@ Partial Class frmoutputlog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmoutputlog))
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btn_savelog = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.ComboBoxLogViewType = New System.Windows.Forms.ComboBox()
         Me.SuspendLayout
         '
-        'Button1
+        'btn_savelog
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(752, 515)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(89, 23)
-        Me.Button1.TabIndex = 1
-        Me.Button1.Text = "Save Log"
-        Me.Button1.UseVisualStyleBackColor = true
+        Me.btn_savelog.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btn_savelog.Location = New System.Drawing.Point(752, 515)
+        Me.btn_savelog.Name = "btn_savelog"
+        Me.btn_savelog.Size = New System.Drawing.Size(89, 23)
+        Me.btn_savelog.TabIndex = 1
+        Me.btn_savelog.Text = "Save Log"
+        Me.btn_savelog.UseVisualStyleBackColor = true
         '
         'TextBox1
         '
@@ -70,10 +70,11 @@ Partial Class frmoutputlog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(853, 546)
         Me.Controls.Add(Me.ComboBoxLogViewType)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btn_savelog)
         Me.Controls.Add(Me.TextBox1)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.KeyPreview = true
         Me.Name = "frmoutputlog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.Text = "Media Companion Output Log"
@@ -81,7 +82,7 @@ Partial Class frmoutputlog
         Me.PerformLayout
 
 End Sub
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btn_savelog As System.Windows.Forms.Button
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents ComboBoxLogViewType As System.Windows.Forms.ComboBox

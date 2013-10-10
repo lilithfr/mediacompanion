@@ -21888,8 +21888,8 @@ Public Class Form1
                 '                                                   'Show Final Listing Screen
                 Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
                 MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
-                MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
-                MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+                MyFormObject.btn_savelog.AutoSize = True                                                    'change button size to text will fit automatically
+                MyFormObject.btn_savelog.Text = "Save Details..."                                           'change the button text
                 MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value          'change the form title text
                 MyFormObject.ShowDialog()                                                               'show the form
 
@@ -21952,8 +21952,8 @@ Public Class Form1
         Label148.Text = originallabeltext           'return the label text back after we have used it to diplay progress
         Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
         MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
-        MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
-        MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+        MyFormObject.btn_savelog.AutoSize = True                                                    'change button size to text will fit automatically
+        MyFormObject.btn_savelog.Text = "Save Details..."                                           'change the button text
         MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         MyFormObject.Text = "Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & " Fixed: " & correctionsfixed            'change the form title text
         MyFormObject.ShowDialog()                                                               'show the form

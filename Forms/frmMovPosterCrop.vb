@@ -41,4 +41,9 @@ Public Class frmMovPosterCrop
         Dim newxpos = Math.Ceiling(245-(newW/2))
         PicBox.Location = New Point(newxpos, 15)
     End Sub
+
+    Private Sub frmMovPosterCrop_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+        If               e.KeyCode = Keys.Escape Then btn_CropCancel.PerformClick 
+    End Sub
 End Class

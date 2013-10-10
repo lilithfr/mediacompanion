@@ -24,6 +24,7 @@ Partial Class frmBigTvEpisodeText
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmBigTvEpisodeText))
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.tbCert = New System.Windows.Forms.TextBox()
         Me.TextBox6 = New System.Windows.Forms.TextBox()
         Me.tbDuration = New System.Windows.Forms.TextBox()
@@ -40,7 +41,6 @@ Partial Class frmBigTvEpisodeText
         Me.tbGenre = New System.Windows.Forms.TextBox()
         Me.tbCloseMsg = New System.Windows.Forms.TextBox()
         Me.tbPlot = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.tbDetails = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout
         Me.SuspendLayout
@@ -70,6 +70,20 @@ Partial Class frmBigTvEpisodeText
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1294, 632)
         Me.Panel1.TabIndex = 0
+        '
+        'TextBox3
+        '
+        Me.TextBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
+        Me.TextBox3.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox3.ForeColor = System.Drawing.Color.White
+        Me.TextBox3.Location = New System.Drawing.Point(14, 214)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.ReadOnly = true
+        Me.TextBox3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox3.Size = New System.Drawing.Size(114, 31)
+        Me.TextBox3.TabIndex = 33
+        Me.TextBox3.Text = "Aired"
         '
         'tbCert
         '
@@ -212,13 +226,13 @@ Partial Class frmBigTvEpisodeText
         Me.tbRating.TabIndex = 22
         Me.tbRating.Text = "10.0"
         '
-        'lblMovieDetails
+        'lblDetails
         '
         Me.lblDetails.AutoSize = true
         Me.lblDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 21.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblDetails.ForeColor = System.Drawing.Color.White
         Me.lblDetails.Location = New System.Drawing.Point(8, 56)
-        Me.lblDetails.Name = "lblMovieDetails"
+        Me.lblDetails.Name = "lblDetails"
         Me.lblDetails.Size = New System.Drawing.Size(112, 33)
         Me.lblDetails.TabIndex = 21
         Me.lblDetails.Text = "Details"
@@ -295,20 +309,6 @@ Partial Class frmBigTvEpisodeText
         Me.tbPlot.TabIndex = 0
         Me.tbPlot.Text = resources.GetString("tbPlot.Text")
         '
-        'TextBox3
-        '
-        Me.TextBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
-        Me.TextBox3.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox3.ForeColor = System.Drawing.Color.White
-        Me.TextBox3.Location = New System.Drawing.Point(14, 214)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.ReadOnly = true
-        Me.TextBox3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox3.Size = New System.Drawing.Size(114, 31)
-        Me.TextBox3.TabIndex = 33
-        Me.TextBox3.Text = "Aired"
-        '
         'tbDetails
         '
         Me.tbDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
@@ -329,6 +329,7 @@ Partial Class frmBigTvEpisodeText
         Me.ClientSize = New System.Drawing.Size(1294, 632)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.KeyPreview = true
         Me.Name = "frmBigTvEpisodeText"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.Panel1.ResumeLayout(false)

@@ -28,7 +28,7 @@ Public Class frmoutputlog
     End Sub
 
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btn_savelog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_savelog.Click
         Try 'this is the save button, it will save the displayed text (full or brief)
             Dim strFileName As String
 
@@ -101,7 +101,13 @@ Public Class frmoutputlog
         TextBox1.Text = builder.ToString
     End Sub
 
-Private Sub frmoutputlog_Shown( sender As System.Object,  e As System.EventArgs) Handles MyBase.Shown
-    ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
-End Sub
+    Private Sub frmoutputlog_Shown( sender As System.Object,  e As System.EventArgs) Handles MyBase.Shown
+        ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
+    End Sub
+
+    Private Sub frmoutputlog_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown 
+
+        If               e.KeyCode = Keys.Escape Then Me.Close() 
+    End Sub
+
 End Class

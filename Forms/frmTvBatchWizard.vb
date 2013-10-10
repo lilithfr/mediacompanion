@@ -443,5 +443,9 @@
         Me.Text = TitleText
     End Sub
 
+    Private Sub tv_batch_wizard_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+        If               e.KeyCode = Keys.Escape Then btn_TvBatchCancel.PerformClick 
+    End Sub
 
 End Class

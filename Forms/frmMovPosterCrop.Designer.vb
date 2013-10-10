@@ -98,6 +98,7 @@ Partial Class frmMovPosterCrop
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btn_CropCancel)
         Me.Controls.Add(Me.btn_CropAccept)
+        Me.KeyPreview = true
         Me.MaximizeBox = false
         Me.MaximumSize = New System.Drawing.Size(500, 700)
         Me.MinimizeBox = false
