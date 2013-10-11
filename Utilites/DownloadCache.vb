@@ -173,6 +173,7 @@ Public Class DownloadCache
                 End Using
 
             Catch ex As WebException
+                If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
                 Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
                     Using errorRespStream As Stream = errorResp.GetResponseStream()
                         Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()

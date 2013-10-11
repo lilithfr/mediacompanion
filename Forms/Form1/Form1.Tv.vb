@@ -2086,7 +2086,7 @@ Partial Public Class Form1
                                         'Next
 
                                     Else
-                                        'tvscraperlog = tvscraperlog & "Unable To Get Actors From IMDB, Defaulting To TVDB" & vbCrLf
+                                        tvscraperlog = tvscraperlog & "Unable To Get Actors From IMDB" & vbCrLf
                                     End If
                                 End If
                                 If imdbid = "" Then
