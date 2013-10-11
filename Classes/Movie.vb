@@ -890,7 +890,7 @@ Public Class Movie
     Sub TidyUpAnyUnscrapedFields
         If _scrapedMovie.fullmoviebody.title = Nothing or _scrapedMovie.fullmoviebody.title = "" Then
             _scrapedMovie.fullmoviebody.title = Title
-            _scrapedMovie.fullmoviebody.plot  = "This movie could not be identified by Media Companion. To add the movie manually, go to the movie edit page and select ""Change Movie"", then select the correct movie."
+            _scrapedMovie.fullmoviebody.plot  = "This movie could not be identified, or IMDB is un-available. To add the movie manually, either go to the movie edit page and select ""Change Movie"", then select the correct movie, or change movie scraper to XBMC-TMDB and Rescrape Movie."
             _scrapedMovie.fullmoviebody.genre = "Problem"
         End If
 
