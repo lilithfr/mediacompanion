@@ -14886,9 +14886,9 @@ Public Class Form1
                 ComboBox6.SelectedItem = Preferences.maxmoviegenre.ToString
         End Select
 
-        If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Length Then
+        If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Count Then
             lbPosterSourcePriorities.Items.Clear()
-            For f = 0 To 3
+            For f = 0 To Preferences.moviethumbpriority.Count-1
                 lbPosterSourcePriorities.Items.Add(Preferences.moviethumbpriority(f))
             Next
         End If
@@ -14959,6 +14959,35 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub btn_MovTmbPriorityReset_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityReset.Click
+        Preferences.resetmovthumblist()
+        If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Count Then
+            lbPosterSourcePriorities.Items.Clear()
+            For f = 0 To Preferences.moviethumbpriority.Count-1
+                lbPosterSourcePriorities.Items.Add(Preferences.moviethumbpriority(f))
+            Next
+        End If
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub btn_MovPosterPriorityRemove_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityRemove.Click
+        Try
+            Dim selected As Integer = Me.lbPosterSourcePriorities.SelectedIndex
+            If selected = -1 Then Exit Sub
+            Me.lbPosterSourcePriorities.Items.RemoveAt(selected)
+            Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
+            Preferences.moviethumbpriority.Clear()
+            For f = 0 To mothpr
+                Preferences.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+            Next
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Private Sub Button73_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button73.Click
         Try
             Try
@@ -14969,7 +14998,9 @@ Public Class Form1
                     lbPosterSourcePriorities.Items.Insert(mSelectedIndex + 1, lbPosterSourcePriorities.Items(mOtherIndex))
                     lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex)
                 End If
-                For f = 0 To 3
+                Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
+                Preferences.moviethumbpriority.Clear()
+                For f = 0 To mothpr
                     Preferences.moviethumbpriority(f) = lbPosterSourcePriorities.Items(f)
                 Next
                 movieprefschanged = True
@@ -14994,7 +15025,9 @@ Public Class Form1
                     lbPosterSourcePriorities.Items.Insert(mSelectedIndex, lbPosterSourcePriorities.Items(mOtherIndex))
                     lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex + 1)
                 End If
-                For f = 0 To 3
+                Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
+                Preferences.moviethumbpriority.Clear()
+                For f = 0 To mothpr
                     Preferences.moviethumbpriority(f) = lbPosterSourcePriorities.Items(f)
                 Next
                 movieprefschanged = True
@@ -25655,6 +25688,7 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
+
 
 
 End Class

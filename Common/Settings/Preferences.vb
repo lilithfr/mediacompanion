@@ -229,7 +229,7 @@ Public Class Preferences
     Public Shared movieinvertorder As Boolean
     Public Shared moviesets As New List(Of String)
     Public Shared movietags As New List(Of String)
-    Public Shared moviethumbpriority() As String
+    Public Shared moviethumbpriority As New List(Of String)
     Public Shared certificatepriority() As String
     Public Shared releaseformat() As String
     Public Shared tableview As New List(Of String)
@@ -499,12 +499,12 @@ Public Class Preferences
         dlxtrafanart = False
         dlTVxtrafanart = False
         allfolders = False
-        ReDim moviethumbpriority(3)
+        'ReDim moviethumbpriority(3)
         maxmoviegenre = 99
-        moviethumbpriority(0) = "themoviedb.org"
-        moviethumbpriority(1) = "IMDB"
-        moviethumbpriority(2) = "Movie Poster DB"
-        moviethumbpriority(3) = "Internet Movie Poster Awards"
+        moviethumbpriority.Add("themoviedb.org")
+        moviethumbpriority.Add("IMDB")
+        moviethumbpriority.Add("Movie Poster DB")
+        moviethumbpriority.Add("Internet Movie Poster Awards")
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
         MovieManualRename = False
@@ -622,6 +622,13 @@ Public Class Preferences
 
     End Sub
 
+    Public Shared Sub resetmovthumblist
+        moviethumbpriority.Clear()
+        moviethumbpriority.Add("themoviedb.org")
+        moviethumbpriority.Add("IMDB")
+        moviethumbpriority.Add("Movie Poster DB")
+        moviethumbpriority.Add("Internet Movie Poster Awards")
+    End Sub
 
     Public Shared Sub SaveConfig()
         Dim tempstring As String = String.Empty
@@ -845,7 +852,7 @@ Public Class Preferences
         root.AppendChild(doc, "Original_Title",                     Original_Title         )            'chkbOriginal_Title
         root.AppendChild(doc, "UseMultipleThreads",                 UseMultipleThreads     )            'cbUseMultipleThreads
 
-        root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority    )             'Button61,Button73
+        root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority.ToArray    )             'Button61,Button73
         root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
 
@@ -927,6 +934,7 @@ Public Class Preferences
         tvFolders.Clear()
         tvRootFolders.Clear()
         tableview.Clear()
+        moviethumbpriority.Clear()
 
 
         If Not IO.File.Exists(workingProfile.Config) Then
@@ -1006,8 +1014,12 @@ Public Class Preferences
                     Case "ExcludeFolders" : ExcludeFolders.Load(thisresult)
 
                     Case "moviethumbpriority"
-                        ReDim moviethumbpriority(3)
-                        moviethumbpriority = thisresult.InnerXml.Split("|")
+                        'ReDim moviethumbpriority(3)
+                        Dim tmp() As String = thisresult.InnerXml.Split("|")
+                        For Each t In tmp
+                            moviethumbpriority.Add(t)
+                        Next
+                        'moviethumbpriority = thisresult.InnerXml.Split("|")
 
                     Case "certificatepriority"
                         ReDim certificatepriority(33)
