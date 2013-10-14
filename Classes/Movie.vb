@@ -1107,6 +1107,9 @@ Public Class Movie
             If titletext.ToLower.IndexOf("a ") = 0 Then
                 titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
             End If
+            If titletext.ToLower.IndexOf("an ") = 0 Then
+                titletext = titletext.Substring(2, titletext.Length - 3) & ", An"
+            End If
             'End If
             _scrapedMovie.fullmoviebody.sortorder = titletext
         Else
@@ -2984,7 +2987,8 @@ Public Class Movie
             Try
                 If Preferences.MovieRenameEnable Or Preferences.MovieManualRename Then
                     s = Preferences.MovieRenameTemplate
-                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)         
+                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)
+                    s = s.Replace("%Z", _scrapedMovie.fullmoviebody.sortorder.SafeTrim)
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
@@ -3016,7 +3020,8 @@ Public Class Movie
             Try
                 If Preferences.MovFolderRename or Preferences.MovieManualRename Then
                     s = Preferences.MovFolderRenameTemplate
-                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)         
+                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)
+                    s = s.Replace("%Z", _scrapedMovie.fullmoviebody.sortorder.SafeTrim)
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     

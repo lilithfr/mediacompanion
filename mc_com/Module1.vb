@@ -1714,6 +1714,11 @@ Module Module1
                                                 tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
                                             End If
                                         End If
+                                        If Preferences.ignoreAn Then
+                                            If tempstring.ToLower.IndexOf("an ") = 0 Then
+                                                tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
+                                            End If
+                                        End If
                                         newtvshow.title = tempstring
                                     Case "fullpathandfilename"
                                         newtvshow.fullpath = detail.InnerText

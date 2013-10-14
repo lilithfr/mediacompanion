@@ -9770,6 +9770,11 @@ Public Class Form1
                     TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
                 End If
             End If
+            If Preferences.ignoreAn Then
+                If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
+                    TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
+                End If
+            End If
             WorkingTvShow.Title.Value = TextBox_Title.Text
         Else
             WorkingEpisode.Title.Value = TextBox_Title.Text
@@ -10790,7 +10795,11 @@ Public Class Form1
                                 showtitle = showtitle.Substring(2, showtitle.Length - 2) & ", A"
                             End If
                         End If
-
+                        If Preferences.ignoreAn Then
+                            If showtitle.ToLower.IndexOf("an ") = 0 Then
+                                showtitle = showtitle.Substring(3, showtitle.Length - 3) & ", An"
+                            End If
+                        End If
                         For Each episode In tvshow.Episodes
                             If episode.NfoFilePath = renamefile Then
                                 If seasonno = "" Then
@@ -14508,7 +14517,8 @@ Public Class Form1
 
         CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
         cb_IgnoreThe.CheckState             = If(Preferences.ignorearticle, CheckState.Checked, CheckState.Unchecked)
-        cb_IgnoreA.CheckState = If(Preferences.ignoreAarticle, CheckState.Checked, CheckState.Unchecked)
+        cb_IgnoreA.CheckState               = If(Preferences.ignoreAarticle, CheckState.Checked, CheckState.Unchecked)
+        cb_IgnoreAn.CheckState              = If(Preferences.ignoreAn, CheckState.Checked, CheckState.Unchecked)
         cb_SorttitleIgnoreArticles.CheckState = If(Preferences.sorttitleignorearticle, CheckState.Checked, CheckState.Unchecked)
         CheckBox38.CheckState               = If(Preferences.intruntime, CheckState.Checked, CheckState.Unchecked)
         CheckBox33.CheckState               = If(Preferences.actorseasy, CheckState.Checked, CheckState.Unchecked)
@@ -21069,6 +21079,22 @@ Public Class Form1
                 Preferences.ignoreAarticle = True
             Else
                 Preferences.ignoreAarticle = False
+            End If
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreAn.CheckedChanged
+        Try
+            If cb_IgnoreAn.CheckState = CheckState.Checked Then
+                Preferences.ignoreAn = True
+            Else
+                Preferences.ignoreAn = False
             End If
             If prefsload = False Then
                 generalprefschanged = True

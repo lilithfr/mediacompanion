@@ -2945,6 +2945,7 @@ Folder Rename - If Movie is in Root folder, new folder created
     <value>Legend:
 
 %T - Movie Title
+%Z - Sort Title
 %Y - Year
 %I - IMDbId
 %S - Movie Source 
