@@ -2870,7 +2870,8 @@ Public Class Movie
                 Directory.CreateDirectory(checkfolder)
                 log &= "!!! New path created:- " & checkfolder & vbCrLf 
         Else
-            If (checkfolder & "\") = FilePath Then
+            Dim chkfldr As String = checkfolder & "\"
+            If chkfldr.ToLower = FilePath.ToLower Then
                 log &= "!!! Path for: " & checkfolder & vbCrLf 
                 log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
                 Return log

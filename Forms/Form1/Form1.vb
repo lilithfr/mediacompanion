@@ -23552,10 +23552,16 @@ Public Class Form1
 
     Private Sub tsmi_RenMovieOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieOnly.Click
         Dim ismovrenenabled As Boolean = Preferences.MovieRenameEnable
-        'Dim isusefolder As Boolean = Preferences.usefoldernames 
+        Dim isusefolder As Boolean = Preferences.usefoldernames 
         If Preferences.MovieManualRename Then
+            If isusefolder Then
+                Dim tempint As Integer = MessageBox.Show("You currently have 'UseFolderName' Selected" & vbCrLf & "Are you sure you wish to Rename this Movie file", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.No Then
+                        Exit Sub
+                    End If
+            End If
             Preferences.MovieRenameEnable = True
-            'Preferences.usefoldernames = False
+            Preferences.usefoldernames = False
             mov_ScrapeSpecific("rename_files")
             While BckWrkScnMovies.IsBusy 
                 Application.DoEvents
@@ -23564,7 +23570,7 @@ Public Class Form1
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
         Preferences.MovieRenameEnable = ismovrenenabled
-        'Preferences.usefoldernames = isusefolder
+        Preferences.usefoldernames = isusefolder
     End Sub
 
     Private Sub tsmi_RenMovFolderOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovFolderOnly.Click
@@ -23587,8 +23593,15 @@ Public Class Form1
     Private Sub tsmi_RenMovieAndFolder_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieAndFolder.Click
         Dim isMovFoldRenEnabled As Boolean = Preferences.MovFolderRename
         Dim isMovRenEnabled As Boolean = Preferences.MovieRenameEnable
-        'Dim isusefolder As Boolean = Preferences.usefoldernames 
+        Dim isusefolder As Boolean = Preferences.usefoldernames 
         If Preferences.MovieManualRename Then
+            Dim renmov As Boolean = True
+            If isusefolder Then
+                Dim tempint As Integer = MessageBox.Show("You currently have 'UseFolderName' Selected" & vbCrLf & "Are you sure you wish to Rename this Movie file" & vbCrLf & "Folder Renaming will still commence", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.No Then
+                        renmov = False
+                    End If
+            End If
             Preferences.MovFolderRename = True
             Preferences.MovieRenameEnable = True
             _rescrapeList.FullPathAndFilenames.Clear()
@@ -23598,7 +23611,7 @@ Public Class Form1
             Next
             rescrapeList.ResetFields
             rescrapeList.Rename_Folders = True
-            rescrapeList.Rename_Files = True
+            rescrapeList.Rename_Files = renmov
 
             RunBackgroundMovieScrape("BatchRescrape")
 
@@ -23610,7 +23623,7 @@ Public Class Form1
         End If
         Preferences.MovFolderRename = isMovFoldRenEnabled
         Preferences.MovieRenameEnable = isMovRenEnabled
-        'Preferences.usefoldernames = isusefolder
+        Preferences.usefoldernames = isusefolder
     End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
