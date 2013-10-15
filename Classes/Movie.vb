@@ -2982,6 +2982,7 @@ Public Class Movie
         Get
             Dim s As String = Path.GetFileNameWithoutExtension(NfoPathAndFilename)
             Dim ac1 As String = AudioCodecChannels.ToLower
+            Dim ach As String = AudioChannels.ToLower
             Dim vc As String = VideoCodec.ToLower
             Dim vr As String = VideoResolution.ToLower
             
@@ -2996,6 +2997,7 @@ Public Class Movie
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
+                    s = s.Replace("%O", ach)
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
@@ -3015,6 +3017,7 @@ Public Class Movie
         Get
             Dim s As String = NfoPath
             Dim ac1 As String = AudioCodecChannels.ToLower
+            Dim ach As String = AudioChannels.ToLower
             Dim vc As String = VideoCodec.ToLower
             Dim vr As String = VideoResolution.ToLower
             
@@ -3030,6 +3033,7 @@ Public Class Movie
                     s = s.Replace("%N", _scrapedMovie.fullmoviebody.movieset)
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
+                    s = s.Replace("%O", ach)
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
@@ -3058,6 +3062,19 @@ Public Class Movie
 
             End Try
             Return ac
+        End Get
+    End Property
+
+    ReadOnly Property AudioChannels As String
+        Get
+            Dim ach As String = ""
+            Try
+                Dim ach1 As String = _scrapedMovie.filedetails.filedetails_audio.Item(0).Channels.Value.RemoveWhitespace.Replace("/", "-")
+                ach = ach1 & "CH"
+            Catch ex As Exception
+
+            End Try
+            Return ach
         End Get
     End Property
 
