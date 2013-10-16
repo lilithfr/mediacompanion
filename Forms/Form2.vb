@@ -18,6 +18,7 @@ Public Class Form2
     Dim posterpath As String = ""
     Dim cropstring As String
     Dim datechanged As Boolean = False
+    Dim textBoxList As List(Of TextBox)
 
 
 
@@ -84,6 +85,7 @@ Public Class Form2
         End If
         editsmade = False
     End Sub
+
     Private Sub Form2_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
             workingmovieedit = Form1.workingMovieDetails
@@ -104,6 +106,22 @@ Public Class Form2
              
             Panel2.Dock = DockStyle.Fill
             Call setupdisplay()
+
+            textBoxList = New List(Of TextBox)
+
+            'Loop through every control on the form and add every textbox to the list
+            For Each c As Control In Me.Controls
+                If TypeOf c Is TextBox Then
+                    textBoxList.Add(DirectCast(c, TextBox))
+                End If
+            Next
+
+            'Loop through your list of textboxes and add eventhandlers
+            For Each txt As TextBox In textBoxList
+                AddHandler txt.TextChanged, AddressOf AnyTextBox_TextChanged
+            Next
+            RemoveHandler roletxt.TextChanged, AddressOf AnyTextBox_TextChanged
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -118,7 +136,6 @@ Public Class Form2
 
             End If
         End If
-
 
     End Sub
 
@@ -426,6 +443,17 @@ Public Class Form2
             If datechanged Then
                 workingmovieedit.fileinfo.createdate = Format(credate, Preferences.datePattern).ToString
             End If
+
+            ' check valid url of trailer if changed
+            If Not tb_TrailerURL.Text = workingmovieedit.fullmoviebody.trailer Then
+                Dim isvalid As Boolean = Utilities.UrlIsValid(tb_TrailerURL.Text)
+                If Not isvalid Then
+                    Dim t As Integer = MsgBox("The entered Trailer URL is not a Valid URL." & vbCrLf & "Do you wish to keep the new URL, revert to original URL?" & vbCrLf & "Yes to Keep, No to Revert", MsgBoxStyle.YesNo)
+                    If t = DialogResult.Yes Then
+                        workingmovieedit.fullmoviebody.trailer = tb_TrailerURL.Text
+                    End If
+                End If
+            End If
             'Call WorkingWithNfoFiles.mov_NfoSave(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             Movie.SaveNFO(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             editsmade = False
@@ -634,7 +662,11 @@ Public Class Form2
       Call Createdatepicker_ValueChanged(sender, EventArgs.Empty)
     End Sub
 
-    Private Sub mpaatxt_TextChanged(sender As Object, e As System.EventArgs) Handles mpaatxt.TextChanged, titletxt.TextChanged, directortxt.TextChanged
+    Private Sub AnyTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'Cast the 'sender' object into a TextBox (we are sure it is a textbox!)
+        'Dim txt As TextBox = DirectCast(sender, TextBox)
+        'MessageBox.Show(txt.Name)
         editsmade = True
     End Sub
+
 End Class

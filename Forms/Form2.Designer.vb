@@ -987,7 +987,6 @@ Partial Class Form2
         Me.tb_TrailerURL.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_TrailerURL.Multiline = true
         Me.tb_TrailerURL.Name = "tb_TrailerURL"
-        Me.tb_TrailerURL.ReadOnly = true
         Me.tb_TrailerURL.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.tb_TrailerURL.Size = New System.Drawing.Size(623, 47)
         Me.tb_TrailerURL.TabIndex = 125

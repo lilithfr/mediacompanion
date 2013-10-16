@@ -1848,6 +1848,7 @@ Public Class Movie
     End Sub
     Sub DoDownloadExtraFanart
         Try
+            Dim fcount As Integer = 0
             If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
                 Dim fanartarray As New List(Of str_ListOfPosters)
                 Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\fanart"
@@ -1859,8 +1860,10 @@ Public Class Movie
                 Dim xtraart As New List(Of String)
                 fanartarray.Clear()
                 fanartarray.AddRange(tmdb.Fanart)
-                If fanartarray.Count > 0 Then
-                    For i = 1 To 4
+                fcount = fanartarray.Count
+                If fcount > 1 Then
+                    Dim x As Integer = If(fcount > 4, 4, fcount)
+                    For i = 1 To x
                         xtraart.Clear()
                         tmpUrl = fanartarray(i).hdUrl
                         If Utilities.UrlIsValid(tmpUrl) Then
@@ -1885,9 +1888,13 @@ Public Class Movie
                 ReportProgress(MSG_OK, "!!! Extra Fanart not downloaded as movie is in Root Folder." & vbCrLf)
                 Exit Sub
             End If
-            ReportProgress(MSG_OK,"!!! Extra Fanart Downloaded OK" & vbCrLf)
+            If fcount > 1 Then
+                ReportProgress(MSG_OK, "!!! Extra Fanart Downloaded OK" & vbCrLf)
+            Else
+                ReportProgress(MSG_OK, "!!! Insufficient Fanart to download as Extrafanart" & vbCrLf)
+            End If
         Catch ex As Exception
-            ReportProgress(MSG_ERROR,"!!! Problem Saving Extra Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+            ReportProgress(MSG_ERROR, "!!! Problem Saving Extra Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
         End Try
     End Sub
 

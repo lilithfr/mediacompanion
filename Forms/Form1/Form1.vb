@@ -581,8 +581,11 @@ Public Class Form1
                 SplitContainer5.SplitterDistance = Preferences.splt5
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
-                _tv_SplitContainer.SplitterDistance = Preferences.splt6
-                TabLevel1.SelectedIndex = Preferences.StartupTab
+                Try
+                    _tv_SplitContainer.SplitterDistance = Preferences.splt6
+                Catch
+                End Try
+                TabLevel1.SelectedIndex = Preferences.startuptab
             End If
 
 
