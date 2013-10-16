@@ -211,7 +211,7 @@ Public Class Classimdb
             title = title.Replace("&", "%26")
             title = title.Replace(",", "")
             title = title.Replace("++", "+")
-            title = imdbmirror & "search/title?title=" & title & "&title_type=feature"
+            title = imdbmirror & "search/title?title=" & title & "&title_type=feature,tv_movie,tv_special"
             'title = imdbmirror & "find?s=tt&q=" & title
             Dim urllinecount As Integer
             Dim GOT_IMDBID As String
@@ -542,7 +542,8 @@ Public Class Classimdb
                 End If
             End If
 
-            Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
+            'Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
+            Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
             Dim titlesearch As String = title
             titlesearch = titlesearch.Replace(".", "+")
             titlesearch = titlesearch.Replace(" ", "+")
@@ -614,9 +615,10 @@ Public Class Classimdb
             titlesearch = titlesearch.Replace("&", "%26")
             titlesearch = titlesearch.Replace("++", "+")
             If goodyear = True Then
-                titlesearch = titlesearch & "+" & year
+                titlesearch = titlesearch & "+%28" & year & "%29"
             End If
-            url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
+            'url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
+            url = url & titlesearch & "&as_sitesearch=www.imdb.com"
 
             Dim webpage As String = loadwebpage(url, True)
 
