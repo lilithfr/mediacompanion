@@ -1389,6 +1389,7 @@ Public Class Form1
         Dim profilepath As String = IO.Path.Combine(applicationPath, "settings")
         profilepath = IO.Path.Combine(profilepath, "profile.xml")
 
+        Dim notportable As Boolean = False
         Dim path As String = profilepath
         If IO.File.Exists(path) Then
             Try
@@ -1404,21 +1405,31 @@ Public Class Form1
                             Case "profiledetails"
                                 Dim currentprofile As New ListOfProfiles
                                 For Each result In thisresult.childnodes
+                                    Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
+                                    If t > 0 Then notportable = True
                                     Select Case result.name
                                         Case "actorcache"
-                                            currentprofile.ActorCache = result.innertext
+                                            'Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.ActorCache = applicationPath & s 'result.innertext
                                         Case "config"
-                                            currentprofile.Config = result.innertext
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.Config = applicationPath & s 'result.innertext
                                         Case "moviecache"
-                                            currentprofile.MovieCache = result.innertext
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.MovieCache = applicationPath & s 'result.innertext
                                         Case "profilename"
+                                            'Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.ProfileName = result.innertext
                                         Case "regex"
-                                            currentprofile.RegExList = result.innertext
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.RegExList = applicationPath & s 'result.innertext
                                         Case "filters"
-                                            currentprofile.Filters = result.innertext
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.Filters = applicationPath & s 'result.innertext
                                         Case "tvcache"
-                                            currentprofile.TvCache = result.innertext
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.TvCache = applicationPath & s 'result.innertext
                                     End Select
                                 Next
                                 profileStruct.ProfileList.Add(currentprofile)
@@ -1434,6 +1445,9 @@ Public Class Form1
         Else
 
         End If
+
+        If notportable Then util_ProfileSave()
+
         If profileStruct.ProfileList.Count > 1 Then
             ProfilesToolStripMenuItem.Visible = True
             ProfilesToolStripMenuItem.Enabled = True
@@ -1483,15 +1497,15 @@ Public Class Form1
         For Each prof In profileStruct.ProfileList
             child = doc.CreateElement("profiledetails")
             childchild = doc.CreateElement("actorcache")
-            childchild.InnerText = prof.ActorCache
+            childchild.InnerText = prof.ActorCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("config")
-            childchild.InnerText = prof.Config
+            childchild.InnerText = prof.Config.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("moviecache")
-            childchild.InnerText = prof.MovieCache
+            childchild.InnerText = prof.MovieCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("profilename")
@@ -1499,15 +1513,15 @@ Public Class Form1
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("regex")
-            childchild.InnerText = prof.RegExList
+            childchild.InnerText = prof.RegExList.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("filters")
-            childchild.InnerText = prof.Filters
+            childchild.InnerText = prof.Filters.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("tvcache")
-            childchild.InnerText = prof.TvCache
+            childchild.InnerText = prof.TvCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
@@ -16532,7 +16546,7 @@ Public Class Form1
                     ListBox13.Items.Add(prof.ProfileName)
                     ProfilesToolStripMenuItem.DropDownItems.Add(prof.ProfileName)
                 Next
-
+                util_ProfileSave()
 
             End If
         Catch ex As Exception
