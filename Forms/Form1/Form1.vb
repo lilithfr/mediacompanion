@@ -365,7 +365,8 @@ Public Class Form1
             End If
         Else
             IO.Directory.CreateDirectory(tempstring)
-            workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
+            workingProfile.Config = applicationPath & "\Settings\config.xml"
+            'Preferences.resetmovthumblist()
             Preferences.SaveConfig()
         End If
 
