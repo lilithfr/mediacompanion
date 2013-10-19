@@ -23622,6 +23622,7 @@ Public Class Form1
             End If
             Preferences.MovFolderRename = True
             Preferences.MovieRenameEnable = True
+            Preferences.usefoldernames = False 
             _rescrapeList.FullPathAndFilenames.Clear()
 
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
