@@ -1192,13 +1192,14 @@ Public Class Classimdb
                     tempint = 0
                     Dim doo As Boolean = False
                     For Each line In webpage
-                        If doo = True Then
-                            plots(tempint) = line
-                            doo = False
-                        End If
-                        If line.IndexOf("plotpar") <> -1 Then
+                        'If doo = True Then
+                        '    plots(tempint) = line
+                        '    doo = False
+                        'End If
+                        If line.IndexOf("<br/>") <> -1 Then
                             tempint = tempint + 1
-                            doo = True
+                            plots(tempint) = line
+                            'doo = True
                         End If
                     Next
                     Dim sizes(tempint) As Integer
