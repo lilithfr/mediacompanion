@@ -11,8 +11,8 @@ Public Class Profiles
 
     Public Sub Load
         ProfileList.Clear()
-
-        Dim profilepath As String = Path.Combine(Preferences.applicationPath, "settings")
+        Dim applicationpath As String = Preferences.applicationPath 
+        Dim profilepath As String = Path.Combine(applicationpath, "settings")
 
         profilepath = Path.Combine(profilepath, "profile.xml")
 
@@ -32,21 +32,29 @@ Public Class Profiles
                         Case "profiledetails"
                             Dim currentprofile As New ListOfProfiles
                             For Each result In thisresult.childnodes
+                                Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
                                 Select Case result.name
                                     Case "actorcache"
-                                        currentprofile.ActorCache = result.innertext
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.ActorCache = applicationPath & s 'result.innertext
                                     Case "config"
-                                        currentprofile.Config = result.innertext
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.Config = applicationPath & s 'result.innertext
                                     Case "moviecache"
-                                        currentprofile.MovieCache = result.innertext
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.MovieCache = applicationPath & s 'result.innertext
                                     Case "profilename"
+                                        'Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.ProfileName = result.innertext
                                     Case "regex"
-                                        currentprofile.RegExList = result.innertext
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.RegExList = applicationPath & s 'result.innertext
                                     Case "filters"
-                                        currentprofile.Filters = result.innertext
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.Filters = applicationPath & s 'result.innertext
                                     Case "tvcache"
-                                        currentprofile.TvCache = result.innertext
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.TvCache = applicationPath & s 'result.innertext
                                 End Select
                             Next
                             ProfileList.Add(currentprofile)
