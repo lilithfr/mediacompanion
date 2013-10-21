@@ -103,6 +103,12 @@ Public NotInheritable Class URLs
         End Get
     End Property
 
+    Public Shared ReadOnly Property IMDBMediaIndexPoster(ByVal sIMDBId As String)
+        Get
+            Return (String.Format("{0}/mediaindex?refine=poster&ref_=ttmi_ref_pos", IMDBUrl(sIMDBId)))
+        End Get
+    End Property
+
     Public Shared ReadOnly Property IMDBMediaIndexPage(ByVal sIMDBId As String, ByVal iPageNo As Integer)
         Get
             Return (String.Format("{0}?page={1}", IMDBMediaIndex(sIMDBId), iPageNo.ToString()))

@@ -483,41 +483,99 @@ Public Class ScraperFunctions
         Monitor.Enter(Me)
         Dim thumburl As String = "na"
         Try
-            Dim allok As Boolean = False
+            'Dim allok As Boolean = False
 
 
-            Dim temp As String = posterimdbid
-            Dim fanarturl As String = "http://www.imdb.com/title/" & temp
+            'Dim temp As String = posterimdbid
+            'Dim fanarturl As String = "http://www.imdb.com/title/" & temp
 
-            Dim apple2(4000) As String
-            Dim fanartlinecount As Integer = 0
+            'Dim apple2(4000) As String
+            'Dim fanartlinecount As Integer = 0
 
-            Dim wrGETURL As WebRequest
+            'Dim wrGETURL As WebRequest
 
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
-            fanartlinecount = 0
+            'wrGETURL = WebRequest.Create(fanarturl)
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy.BypassProxyOnLocal = True
+            'Dim objStream As Stream
+            'objStream = wrGETURL.GetResponse.GetResponseStream()
+            'Dim objReader As New StreamReader(objStream)
+            'Dim sLine As String = ""
+            'fanartlinecount = 0
 
-            Do While Not sLine Is Nothing
-                fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
-            Loop
+            'Do While Not sLine Is Nothing
+            '    fanartlinecount += 1
+            '    sLine = objReader.ReadLine
+            '    apple2(fanartlinecount) = sLine
+            'Loop
 
-            fanartlinecount -= 1
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("article title-overview") <> -1 Then
-                    thumburl = apple2(f + 11)
-                    thumburl = thumburl.Substring(thumburl.IndexOf("http"), thumburl.IndexOf("._V1") - thumburl.IndexOf("http"))
-                    thumburl = thumburl & "._V1._SX1500_SY1000_.jpg"
+            'fanartlinecount -= 1
+            'For f = 1 To fanartlinecount
+            '    If apple2(f).IndexOf("article title-overview") <> -1 Then
+            '        thumburl = apple2(f + 11)
+            '        thumburl = thumburl.Substring(thumburl.IndexOf("http"), thumburl.IndexOf("._V1") - thumburl.IndexOf("http"))
+            '        thumburl = thumburl & "._V1._SX1500_SY1000_.jpg"
+            '        Exit For
+            '    End If
+            'Next
+            Dim posters(10000, 1) As String
+        Dim postercount As Integer = 0
+        Dim fanarturl As String
+        Dim fanartlinecount As Integer = 0
+        Dim allok As Boolean = True
+        Dim apple2(10000)
+
+        fanarturl = "http://www.imdb.com/title/" & posterimdbid & "/mediaindex?refine=poster&ref_=ttmi_ref_pos"
+
+        Dim wrGETURL2 As WebRequest
+        wrGETURL2 = WebRequest.Create(fanarturl)
+        Dim myProxy2 As New WebProxy("myproxy", 80)
+        myProxy2.BypassProxyOnLocal = True
+        Dim objStream2 As Stream
+        objStream2 = wrGETURL2.GetResponse.GetResponseStream()
+        Dim objReader2 As New StreamReader(objStream2)
+        Dim sLine2 As String = ""
+        fanartlinecount = 0
+
+        Do While Not sLine2 Is Nothing
+            fanartlinecount += 1
+            sLine2 = objReader2.ReadLine
+            apple2(fanartlinecount) = sLine2
+        Loop
+        fanartlinecount -= 1
+
+        Dim totalpages As Integer
+        Dim tempint As Integer
+        Dim reached As Boolean = False
+        Try
+        For f = 1 To fanartlinecount
+            If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
+                apple2(f) = apple2(f).Replace("<a href=""?page=", "")
+                apple2(f) = apple2(f).Substring(0, 1)
+                tempint = Convert.ToString(apple2(f))
+                If tempint > totalpages Then totalpages = tempint
+            End If
+                If apple2(f).IndexOf("<div class=""media_index_thumb_list""") <> -1 Then
+                    reached = True
+                End If
+            If reached = True Then
+                If apple2(f).IndexOf("</div>") <> -1 Then
+                    reached = False
                     Exit For
                 End If
-            Next
+                If apple2(f).IndexOf("src=""http://") <> -1 And apple2(f).IndexOf("._V1_") <> -1 Then
+                    apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src="""), apple2(f).Length - apple2(f).IndexOf("src="""))
+                    apple2(f).TrimStart()
+                    apple2(f) = apple2(f).Replace("src=""", "")
+                    posters(postercount, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1_"))
+                    posters(postercount, 1) = posters(postercount, 0)
+                    postercount += 1
+                End If
+            End If
+        Next
+                thumburl = (posters(postercount -1, 0) & ".jpg")
+        Catch ex As Exception 
+        End Try
 
             If thumburl.IndexOf("http") = -1 Or thumburl.IndexOf(".jpg") = -1 Then thumburl = "na"
 

@@ -475,7 +475,7 @@ Public Class frmCoverArt
             Dim allok As Boolean = True
             Dim apple2(10000)
 
-            fanarturl = URLs.IMDBMediaIndex(tmdbid)
+            fanarturl = URLs.IMDBMediaIndexPoster(tmdbid)
 
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
@@ -504,7 +504,7 @@ Public Class frmCoverArt
                     tempint = Convert.ToString(apple2(f))
                     If tempint > totalpages Then totalpages = tempint
                 End If
-                If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
+                If apple2(f).IndexOf("<div class=""media_index_thumb_list""") <> -1 Then
                     reached = True
                 End If
                 If reached = True Then
@@ -513,57 +513,57 @@ Public Class frmCoverArt
                         Exit For
                     End If
                     If apple2(f).IndexOf("src=""http://") <> -1 Then
-                        apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
+                        apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src="""), apple2(f).Length - apple2(f).IndexOf("src="""))
                         apple2(f).TrimStart()
                         apple2(f) = apple2(f).Replace("src=""", "")
                         count = count + 1
-                        posterurls(count, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
+                        posterurls(count, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1_"))
                     End If
                 End If
             Next
-            For g = 2 To totalpages
-                fanarturl = URLs.IMDBMediaIndexPage(tmdbid, g)
-                ReDim apple2(10000)
-                Dim wrGETURL As WebRequest
-                wrGETURL = WebRequest.Create(fanarturl)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
-                Dim objStream As Stream
-                objStream = wrGETURL.GetResponse.GetResponseStream()
-                Dim objReader As New StreamReader(objStream)
-                Dim sLine As String = ""
-                fanartlinecount = 0
+            'For g = 2 To totalpages
+            '    fanarturl = URLs.IMDBMediaIndexPage(tmdbid, g)
+            '    ReDim apple2(10000)
+            '    Dim wrGETURL As WebRequest
+            '    wrGETURL = WebRequest.Create(fanarturl)
+            '    Dim myProxy As New WebProxy("myproxy", 80)
+            '    myProxy.BypassProxyOnLocal = True
+            '    Dim objStream As Stream
+            '    objStream = wrGETURL.GetResponse.GetResponseStream()
+            '    Dim objReader As New StreamReader(objStream)
+            '    Dim sLine As String = ""
+            '    fanartlinecount = 0
 
-                Do While Not sLine Is Nothing
-                    fanartlinecount += 1
-                    sLine = objReader.ReadLine
-                    apple2(fanartlinecount) = sLine
-                Loop
-                fanartlinecount -= 1
+            '    Do While Not sLine Is Nothing
+            '        fanartlinecount += 1
+            '        sLine = objReader.ReadLine
+            '        apple2(fanartlinecount) = sLine
+            '    Loop
+            '    fanartlinecount -= 1
 
-                For f = 1 To fanartlinecount
-                    If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-                        reached = True
-                    End If
-                    If reached = True Then
-                        If apple2(f).IndexOf("</div>") <> -1 Then
-                            reached = False
-                            Exit For
-                        End If
-                        If apple2(f).IndexOf("src=""http://") <> -1 Then
-                            apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
-                            apple2(f).TrimStart()
-                            apple2(f) = apple2(f).Replace("src=""", "")
-                            count = count + 1
-                            posterurls(count, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
-                        End If
-                    End If
-                Next
-            Next
+            '    For f = 1 To fanartlinecount
+            '        If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
+            '            reached = True
+            '        End If
+            '        If reached = True Then
+            '            If apple2(f).IndexOf("</div>") <> -1 Then
+            '                reached = False
+            '                Exit For
+            '            End If
+            '            If apple2(f).IndexOf("src=""http://") <> -1 Then
+            '                apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
+            '                apple2(f).TrimStart()
+            '                apple2(f) = apple2(f).Replace("src=""", "")
+            '                count = count + 1
+            '                posterurls(count, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
+            '            End If
+            '        End If
+            '    Next
+            'Next
             Dim imdbcounter As Integer = 0
             For f = count To 1 Step -1
                 imdbcounter += 1
-                posterurls(imdbcounter, 1) = posterurls(f, 0) & "_V1._SX1000_SY1000_.jpg"
+                posterurls(imdbcounter, 1) = posterurls(f, 0) & ".jpg"  '"_V1._SX1000_SY1000_.jpg"
             Next
             For f = 1 To count
                 posterurls(f, 0) = posterurls(f, 1)

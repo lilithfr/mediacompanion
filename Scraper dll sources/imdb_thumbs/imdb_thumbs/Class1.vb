@@ -18,7 +18,7 @@ Public Class Class1
         Dim allok As Boolean = True
         Dim apple2(10000)
 
-        fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex"
+        fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?refine=poster&ref_=ttmi_ref_pos"
 
         Dim wrGETURL2 As WebRequest
         wrGETURL2 = WebRequest.Create(fanarturl)
@@ -48,19 +48,19 @@ Public Class Class1
                 tempint = Convert.ToString(apple2(f))
                 If tempint > totalpages Then totalpages = tempint
             End If
-            If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-                reached = True
-            End If
+                If apple2(f).IndexOf("<div class=""media_index_thumb_list""") <> -1 Then
+                    reached = True
+                End If
             If reached = True Then
                 If apple2(f).IndexOf("</div>") <> -1 Then
                     reached = False
                     Exit For
                 End If
-                If apple2(f).IndexOf("src=""http://") <> -1 And apple2(f).IndexOf("._V1._") <> -1 Then
-                    apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
+                If apple2(f).IndexOf("src=""http://") <> -1 And apple2(f).IndexOf("._V1_") <> -1 Then
+                    apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src="""), apple2(f).Length - apple2(f).IndexOf("src="""))
                     apple2(f).TrimStart()
                     apple2(f) = apple2(f).Replace("src=""", "")
-                    posters(postercount, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
+                    posters(postercount, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1_"))
                     posters(postercount, 1) = posters(postercount, 0)
                     postercount += 1
                 End If
@@ -68,47 +68,47 @@ Public Class Class1
         Next
         Catch ex As Exception 
         End Try
-        For g = 2 To totalpages
-            fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?page=" & g.ToString
-            ReDim apple2(10000)
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
-            fanartlinecount = 0
+        'For g = 2 To totalpages
+        '    fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?page=" & g.ToString
+        '    ReDim apple2(10000)
+        '    Dim wrGETURL As WebRequest
+        '    wrGETURL = WebRequest.Create(fanarturl)
+        '    Dim myProxy As New WebProxy("myproxy", 80)
+        '    myProxy.BypassProxyOnLocal = True
+        '    Dim objStream As Stream
+        '    objStream = wrGETURL.GetResponse.GetResponseStream()
+        '    Dim objReader As New StreamReader(objStream)
+        '    Dim sLine As String = ""
+        '    fanartlinecount = 0
 
-            Do While Not sLine Is Nothing
-                fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
-            Loop
-            fanartlinecount -= 1
+        '    Do While Not sLine Is Nothing
+        '        fanartlinecount += 1
+        '        sLine = objReader.ReadLine
+        '        apple2(fanartlinecount) = sLine
+        '    Loop
+        '    fanartlinecount -= 1
 
-            For f = 1 To fanartlinecount
+        '    For f = 1 To fanartlinecount
 
-                If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-                    reached = True
-                End If
-                If reached = True Then
-                    If apple2(f).IndexOf("</div>") <> -1 Then
-                        reached = False
-                        Exit For
-                    End If
-                    If apple2(f).IndexOf("src=""http://") <> -1 Then
-                        apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
-                        apple2(f).TrimStart()
-                        apple2(f) = apple2(f).Replace("src=""", "")
-                        posters(postercount, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
-                        posters(postercount, 1) = posters(postercount, 0)
-                        postercount += 1
-                    End If
-                End If
-            Next
-        Next
+        '        If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
+        '            reached = True
+        '        End If
+        '        If reached = True Then
+        '            If apple2(f).IndexOf("</div>") <> -1 Then
+        '                reached = False
+        '                Exit For
+        '            End If
+        '            If apple2(f).IndexOf("src=""http://") <> -1 Then
+        '                apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
+        '                apple2(f).TrimStart()
+        '                apple2(f) = apple2(f).Replace("src=""", "")
+        '                posters(postercount, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
+        '                posters(postercount, 1) = posters(postercount, 0)
+        '                postercount += 1
+        '            End If
+        '        End If
+        '    Next
+        'Next
         Dim imdbcounter As Integer = 0
         'For f = pagecount To 1 Step -1
         '    imdbcounter += 1
@@ -122,8 +122,8 @@ Public Class Class1
         For f = postercount-1 To 0 Step -1
             Try
                 If posters(f, 0).ToLower.IndexOf("http") <> -1 Then
-                    finalposters(counter, 0) = posters(f, 0) & "_V1._SX1000_SY1000_.jpg"
-                    finalposters(counter, 1) = posters(f, 1) & "_V1._SX1000_SY1000_.jpg"
+                    finalposters(counter, 0) = posters(f, 0) & ".jpg" '"_V1._SX1000_SY1000_.jpg"
+                    finalposters(counter, 1) = posters(f, 1) & ".jpg" '"_V1._SX1000_SY1000_.jpg"
                     counter += 1
                 End If
             Catch
