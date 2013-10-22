@@ -1123,6 +1123,31 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "Error"
     End Function
 
+    Public Shared Function save2postercache(ByVal fullpathandfilename As String, ByVal posterpath As String) As String
+        Dim bitmap3 As New Bitmap(posterpath)
+        Dim bitmap2 As New Bitmap(bitmap3)
+        bitmap3.Dispose()
+        Dim bm_source As New Bitmap(bitmap2)
+        Dim bm_dest As New Bitmap(150, 200)
+        Dim gr As Graphics = Graphics.FromImage(bm_dest)
+        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+        gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
+        Dim tempbitmap As Bitmap = bm_dest
+        Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
+        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+        Try
+            File.Delete(path)
+        Catch
+        End Try
+        Try
+            tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
+        Catch
+        End Try
+        tempbitmap.Dispose()
+        GC.Collect()
+        Return path
+    End Function
+
     Public Shared Function SpacesToUnderscores( ByVal inputText as String) As String
         Return inputText.Replace(" ","_")
     End Function
