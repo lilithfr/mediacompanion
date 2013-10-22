@@ -47,6 +47,7 @@ Public Class MovieFilters
     Property Border      As Integer =  4
     Property FilterSpace As Integer = 22
     Property Items       As New List(Of MovieFilter)
+    Property Filtercount As Integer = 15     'Placed here to be able to clean config files of duplicate filters
 
 
     Public Sub New
@@ -57,9 +58,15 @@ Public Class MovieFilters
     End Sub
 
     Public Sub Load(node As XmlNode)
-        For Each child As XmlNode In node.ChildNodes
-            Items.Add(New MovieFilter(child))
+        Dim x As Integer = 0                            'Found if multi profiles, filters were not cleared, but
+        For Each child As XmlNode In node.ChildNodes    'added again and again.
+            x += 1                                      'Count put in place to clean users config xml files
+            Items.Add(New MovieFilter(child))           'back to single list of filters.
+            If x = Filtercount Then Exit For
         Next
+    End Sub
+    Public Sub Reset()
+        Items.Clear()
     End Sub
 
 

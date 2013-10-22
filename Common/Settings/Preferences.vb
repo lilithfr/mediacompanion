@@ -935,6 +935,8 @@ Public Class Preferences
         tvRootFolders.Clear()
         tableview.Clear()
         moviethumbpriority.Clear()
+        homemoviefolders.Clear() 
+        movie_filters.Reset()
 
 
         If Not IO.File.Exists(workingProfile.Config) Then
