@@ -1680,7 +1680,8 @@ Public Class Movie
                 Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
-                SavePosterToPosterWallCache()
+                'SavePosterToPosterWallCache()
+                Utilities.save2postercache(_scrapedMovie.fileinfo.fullpathandfilename, paths(0))
 
                 ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
 
