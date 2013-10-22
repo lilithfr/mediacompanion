@@ -6839,15 +6839,15 @@ Public Class Form1
                 'bm_dest.Save(path, Imaging.ImageFormat.Jpeg)
                 'bm_dest.Dispose()
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
-
-                For Each poster As PictureBox In TabPage22.Controls
-                    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        'poster.ImageLocation = path
-                        'poster.Load()
-                        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                        Exit For
-                    End If
-                Next
+                updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                'For Each poster As PictureBox In TabPage22.Controls
+                '    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
+                '        'poster.ImageLocation = path
+                '        'poster.Load()
+                '        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                '        Exit For
+                '    End If
+                'Next
 
                 util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
 
@@ -6938,16 +6938,16 @@ Public Class Form1
                 'tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
                 'tempbitmap.Dispose()
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
+                updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                'For Each poster As PictureBox In TabPage22.Controls
+                '    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                For Each poster As PictureBox In TabPage22.Controls
-                    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-
-                        'poster.ImageLocation = path
-                        'poster.Load()
-                        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                        Exit For
-                    End If
-                Next
+                '        'poster.ImageLocation = path
+                '        'poster.Load()
+                '        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                '        Exit For
+                '    End If
+                'Next
             Catch ex As Exception
                 MsgBox("Unable To Download Image")
             End Try
@@ -7139,16 +7139,16 @@ Public Class Form1
                 'tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
                 'tempbitmap.Dispose()
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.posterpath)
+                updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
 
-
-                For Each poster As PictureBox In TabPage22.Controls
-                    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        'poster.ImageLocation = path
-                        'poster.Load()
-                        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                        Exit For
-                    End If
-                Next
+                'For Each poster As PictureBox In TabPage22.Controls
+                '    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
+                '        'poster.ImageLocation = path
+                '        'poster.Load()
+                '        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                '        Exit For
+                '    End If
+                'Next
 
                 XbmcLink_UpdateArtwork
 
@@ -19540,61 +19540,14 @@ Public Class Form1
                             posterpath = pth
                         Next
                         i1.Dispose()
-                 '      Utilities.DownloadImage(moviethumburl, posterpath)
-                        'Movie.SavePosterImageToCacheAndPath(moviethumburl, posterpath)
-                        'If Preferences.FrodoEnabled and isvideotspath<>"" Then
-                        '    If IO.File.Exists(isvideotspath) Then
-                        '        Utilities.SafeDeleteFile(isvideotspath)
-                        '    End If
-                        '    IO.File.Copy(posterpath,isvideotspath)
-                        '    GC.Collect
-                        '    If Not Preferences.EdenEnabled Then
-                        '        Utilities.SafeDeleteFile(posterpath)
-                        '    End If
-                        '    posterpath=isvideotspath
-                        'End If
-
-                        'Dim temppath As String = posterpath.Replace(System.IO.Path.GetFileName(posterpath), "folder.jpg")
-                        'If Preferences.createfolderjpg = True Then
-                        '    If Preferences.overwritethumbs Or Not System.IO.File.Exists(temppath) Then
-
-                        '  '      Utilities.DownloadImage(moviethumburl, temppath)
-                        '        File.Copy(posterpath, temppath, True)
-
-                        '    End If
-                        'End If
-
-                        'Dim bitmap3 As New Bitmap(posterpath)
-                        'Dim bmp4 As New Bitmap(bitmap3)
-                        'bitmap3.Dispose()
-                        'PictureBoxAssignedMoviePoster.Image = bmp4
-                        'moviethumb.Image = bmp4
+                 '      
                         util_ImageLoad(PictureBoxAssignedMoviePoster, posterpath, Utilities.DefaultPosterPath)
                         util_ImageLoad(moviethumb, posterpath, Utilities.DefaultPosterPath)
-                        'Dim bitmap5 As New Bitmap(posterpath)
-                        'Dim bitmap6 As New Bitmap(bitmap5)
-                        'bitmap5.Dispose()
-                        'Dim bm_source As New Bitmap(bitmap6)
-                        'Dim bm_dest As New Bitmap(150, 200)
-                        'Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                        'gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                        'gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
-                        'Dim tempbitmap As Bitmap = bm_dest
-                        'Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
-                        'Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                        'tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
-                        'tempbitmap.Dispose()
-                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, posterpath)
+                        
 
-                        For Each poster As PictureBox In TabPage22.Controls
-                            If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                                util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                                poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename 
-                                'poster.ImageLocation = path
-                                'poster.Load()
-                                Exit For
-                            End If
-                        Next
+                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, posterpath)
+                        updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+
                     Catch ex As Exception
                         MsgBox("Error [" & ex.Message & "] occurred while trying to download and save the poster")
                     End Try
@@ -19611,6 +19564,15 @@ Public Class Form1
             GC.Collect()
         End Try
 
+    End Sub
+
+    Public Shared Sub updateposterwall(ByVal path As String, ByVal movie As String)
+        For Each poster As PictureBox In Form1.TabPage22.Controls
+            If poster.Tag = movie Then
+                util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                poster.Tag = movie
+            End If
+        Next
     End Sub
 
     Public Sub mov_OfflineDvdProcess(ByVal nfopath As String, ByVal title As String, ByVal mediapath As String)

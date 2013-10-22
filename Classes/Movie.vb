@@ -1680,9 +1680,7 @@ Public Class Movie
                 Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
-                'SavePosterToPosterWallCache()
-                Utilities.save2postercache(_scrapedMovie.fileinfo.fullpathandfilename, paths(0))
-
+                SavePosterToPosterWallCache()
                 ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
 
 
@@ -2685,6 +2683,16 @@ Public Class Movie
                 'Invalid file
                 Utilities.SafeDeleteFile(PosterPath     )
                 Utilities.SafeDeleteFile(PosterCachePath)
+            End Try
+            Try
+                For Each poster As PictureBox In Form1.TabPage22.Controls
+            If poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename Then
+                poster.ImageLocation = posterpath
+                poster.Load()
+                poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename
+            End If
+        Next
+            Catch
             End Try
         End If
     End Sub

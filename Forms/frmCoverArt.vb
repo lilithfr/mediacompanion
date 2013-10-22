@@ -517,7 +517,7 @@ Public Class frmCoverArt
                         apple2(f).TrimStart()
                         apple2(f) = apple2(f).Replace("src=""", "")
                         count = count + 1
-                        posterurls(count, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1_"))
+                        posterurls(count, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1"))
                     End If
                 End If
             Next
@@ -563,7 +563,7 @@ Public Class frmCoverArt
             Dim imdbcounter As Integer = 0
             For f = count To 1 Step -1
                 imdbcounter += 1
-                posterurls(imdbcounter, 1) = posterurls(f, 0) & ".jpg"  '"_V1._SX1000_SY1000_.jpg"
+                posterurls(imdbcounter, 1) = posterurls(f, 0) & "._V1_SX1000_SY1000_.jpg" '".jpg"  '"_V1._SX1000_SY1000_.jpg"
             Next
             For f = 1 To count
                 posterurls(f, 0) = posterurls(f, 1)
@@ -1238,14 +1238,17 @@ Public Class frmCoverArt
                                 '    b1.Image.Save(frodopath)
                                 '    posterpath=frodopath
                                 'End If
-                                Form2.moviethumb.Image = b1.Image
-                                Form1.moviethumb.Image = b1.Image
-                                mainposter.Image = b1.Image
+                                Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
+                                Form1.util_ImageLoad(Form1.moviethumb, posterpath, Utilities.DefaultPosterPath)
+                                Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
+                                'Form2.moviethumb.Image = b1.Image
+                                'Form1.moviethumb.Image = b1.Image
+                                'mainposter.Image = b1.Image
                                 Label6.Visible = True
                                 tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
                                 Label6.Text = tempstring
                                 mainposter.Visible = True
-
+                                b1.Dispose()
                                 'Dim bm_source As New Bitmap(b1.image) 'save to postercache
                                 'Dim bm_dest As New Bitmap(150, 200)
                                 'Dim gr As Graphics = Graphics.FromImage(bm_dest)
@@ -1258,14 +1261,14 @@ Public Class frmCoverArt
                                 'tempbitmap.Dispose()
 
                                 Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath)
-
-                                For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
-                                    If poster.Tag = fullpathandfilename Then
-                                        poster.ImageLocation = path
-                                        poster.Load()
-                                        Exit For
-                                    End If
-                                Next
+                                Form1.updateposterwall(path, fullpathandfilename)
+                                'For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
+                                '    If poster.Tag = fullpathandfilename Then
+                                '        poster.ImageLocation = path
+                                '        poster.Load()
+                                '        Exit For
+                                '    End If
+                                'Next
                                 Me.Close()
                                 Exit For
                             Else
@@ -1326,6 +1329,7 @@ Public Class frmCoverArt
                                     b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                                     posterpath = pth
                                 Next
+                                
                                 'b1.Image.Save(posterpath)
                                 'If Preferences.createfolderjpg = True Then
                                 '    b1.Image.Save(folderjpgpath)
@@ -1335,9 +1339,12 @@ Public Class frmCoverArt
                                 '    b1.Image.Save(frodopath)
                                 '    posterpath=frodopath
                                 'End If
-                                Form2.moviethumb.Image = b1.Image
-                                Form1.moviethumb.Image = b1.Image
-                                mainposter.Image = b1.Image
+                                Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
+                                Form1.util_ImageLoad(Form1.moviethumb, posterpath, Utilities.DefaultPosterPath)
+                                Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
+                                'Form2.moviethumb.Image = b1.Image
+                                'Form1.moviethumb.Image = b1.Image
+                                'mainposter.Image = b1.Image
                                 Label6.Visible = True
                                 tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
                                 Label6.Text = tempstring
@@ -1346,7 +1353,7 @@ Public Class frmCoverArt
                                     .WaitOnLoad = True
                                     .ImageLocation = (posterurls(realnumber + 1, 1))
                                 End With
-
+                                b1.Dispose()
                                 'Dim bm_source As New Bitmap(b1.image) 'save to postercache
                                 'Dim bm_dest As New Bitmap(150, 200)
                                 'Dim gr As Graphics = Graphics.FromImage(bm_dest)
@@ -1359,14 +1366,14 @@ Public Class frmCoverArt
                                 'tempbitmap.Dispose()
 
                                 Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath)
-
-                                For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
-                                    If poster.Tag = fullpathandfilename Then
-                                        poster.ImageLocation = path
-                                        poster.Load()
-                                        Exit For
-                                    End If
-                                Next
+                                Form1.updateposterwall(path, fullpathandfilename)
+                                'For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
+                                '    If poster.Tag = fullpathandfilename Then
+                                '        poster.ImageLocation = path
+                                '        poster.Load()
+                                '        Exit For
+                                '    End If
+                                'Next
                                 Me.Close()
                                 Exit For
                             Else
