@@ -1108,7 +1108,7 @@ Public Class Movie
                 titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
             End If
             If titletext.ToLower.IndexOf("an ") = 0 Then
-                titletext = titletext.Substring(2, titletext.Length - 3) & ", An"
+                titletext = titletext.Substring(3, titletext.Length - 3) & ", An"
             End If
             'End If
             _scrapedMovie.fullmoviebody.sortorder = titletext
@@ -2393,19 +2393,27 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      )  
             UpdateProperty(_rescrapedMovie.fullmoviebody.title     , _scrapedMovie.fullmoviebody.title    , rl.title)
 
-            If rl.title And Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
-                Dim x As Boolean = False
-                Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.                                
-                If titletext.ToLower.IndexOf("the ") = 0 Then                       'But only on Scraping or Rescrape Specific etc
-                    titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
-                    x = True
-                End If
-                If titletext.ToLower.IndexOf("a ") = 0 Then
-                    titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
-                    x = True
-                End If
-                If x Then 
-                    _scrapedMovie.fullmoviebody.sortorder = titletext
+            If rl.title 
+                If Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
+                    Dim x As Boolean = False
+                    Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.                                
+                    If titletext.ToLower.IndexOf("the ") = 0 Then                       'But only on Scraping or Rescrape Specific etc
+                        titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
+                        x = True
+                    End If
+                    If titletext.ToLower.IndexOf("a ") = 0 Then
+                        titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
+                        x = True
+                    End If
+                    If titletext.ToLower.IndexOf("an ") = 0 Then
+                        titletext = titletext.Substring(3, titletext.Length - 3) & ", An"
+                        x = True
+                    End If
+                    If x Then 
+                        _scrapedMovie.fullmoviebody.sortorder = titletext
+                    End If
+                Else 
+                    _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title
                 End If
             End If
         End If
