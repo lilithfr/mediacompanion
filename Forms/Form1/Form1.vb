@@ -15025,7 +15025,7 @@ Public Class Form1
                 Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
                 Preferences.moviethumbpriority.Clear()
                 For f = 0 To mothpr
-                    Preferences.moviethumbpriority(f) = lbPosterSourcePriorities.Items(f)
+                    Preferences.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
                 Next
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
@@ -15052,7 +15052,7 @@ Public Class Form1
                 Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
                 Preferences.moviethumbpriority.Clear()
                 For f = 0 To mothpr
-                    Preferences.moviethumbpriority(f) = lbPosterSourcePriorities.Items(f)
+                    Preferences.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
                 Next
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
