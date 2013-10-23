@@ -225,6 +225,7 @@ Public Class TVDBScraper
 
         Dim xmlfile As String
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
+        Utilities.CheckForXMLIllegalChars(xmlfile)
         Dim showlist As New Tvdb.Actors
         'Try
         showlist.LoadXml(xmlfile)

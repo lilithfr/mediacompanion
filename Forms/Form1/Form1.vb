@@ -14371,7 +14371,7 @@ Public Class Form1
         Preferences.SaveConfig()
         'Call updatetree()
         If newTvFolders.Count = 0 Then
-            MsgBox("Changes Saved")
+            'MsgBox("Changes Saved")
             If Not bckgrnd_tvshowscraper.IsBusy Then
                 ' if this is not here, the tree view does not update correctly if the shows were removed.
                 ' ^^^ - not sure this statement is valid anymore; newTvFolders.Count = 0 does not execute
@@ -14379,7 +14379,7 @@ Public Class Form1
                 bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
         Else
-            MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
+            'MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
             If Not bckgrnd_tvshowscraper.IsBusy Then
                 ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
                 ToolStripStatusLabel5.Visible = True

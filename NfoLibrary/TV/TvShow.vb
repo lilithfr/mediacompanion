@@ -224,7 +224,9 @@ Public Class TvShow
         Me.Mpaa.Value = Series.ContentRating.Value
         Me.Genre.Value = Series.Genre.Value.Trim("|"c).Replace("|", " / ")
         Me.ImdbId.Value = Series.ImdbId.Value
-        Me.Plot.Value = Series.Overview.Value
+        Dim tmp As String = Series.Overview.Value.ToString
+        tmp = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
+        Me.Plot.Value = tmp 'Series.Overview.Value.Replace(vbCr, "")
         Me.Title.Value = If(Not String.IsNullOrEmpty(Series.SeriesName.Value), Series.SeriesName.Value, Me.Title.Value) 'not set up in ScrapeShowTask.vb
         Me.Runtime.Value = Series.RunTimeWithCommercials.Value
         Me.Rating.Value = Series.Rating.Value

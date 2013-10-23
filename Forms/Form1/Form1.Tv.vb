@@ -1489,11 +1489,11 @@ Partial Public Class Form1
                         NewShow.TvShowActorSource.Value = "imdb"
                     End If
 
-                    If tempstring = "0" Or tempstring = "2" Then
-                        NewShow.EpisodeActorSource.Value = "tvdb"
-                    Else
-                        NewShow.EpisodeActorSource.Value = "imdb"
-                    End If
+                    'If tempstring = "0" Or tempstring = "2" Then
+                    '    NewShow.EpisodeActorSource.Value = "tvdb"
+                    'Else
+                    '    NewShow.EpisodeActorSource.Value = "imdb"
+                    'End If
 
                     NewShow.SortOrder.Value = Preferences.sortorder
 
@@ -3088,13 +3088,13 @@ Partial Public Class Form1
 
             Dim NewAct As New Media_Companion.Actor
             NewAct.ActorId = Act.Id
-            NewAct.actorname = Act.Name.Value
+            NewAct.actorname = Utilities.cleanSpecChars(Act.Name.Value).TrimStart.TrimEnd 
             Dim newstring As String
             newstring = Act.Role.Value
             newstring = newstring.TrimEnd("|")
             newstring = newstring.TrimStart("|")
             newstring = newstring.Replace("|", ", ")
-            NewAct.actorrole = newstring
+            NewAct.actorrole = newstring.TrimStart.TrimEnd 
             If Act.Image.Value <> "" Then
                 NewAct.actorthumb = "http://thetvdb.com/banners/_cache/" & Act.Image.Value
             Else
