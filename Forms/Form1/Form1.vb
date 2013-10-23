@@ -9783,22 +9783,22 @@ Public Class Form1
         On Error Resume Next
         If Panel9.Visible = False Then
             '-------------- Aqui
-            If Preferences.ignorearticle = True Then
-                If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
-                    TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
-                End If
-            End If
-            If Preferences.ignoreAarticle Then
-                If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
-                    TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
-                End If
-            End If
-            If Preferences.ignoreAn Then
-                If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
-                    TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
-                End If
-            End If
-            WorkingTvShow.Title.Value = TextBox_Title.Text
+            'If Preferences.ignorearticle = True Then
+            '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
+            '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
+            '    End If
+            'End If
+            'If Preferences.ignoreAarticle Then
+            '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
+            '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
+            '    End If
+            'End If
+            'If Preferences.ignoreAn Then
+            '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
+            '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
+            '    End If
+            'End If
+            WorkingTvShow.Title.Value = Preferences.RemoveIgnoredArticles(TextBox_Title.Text)
         Else
             WorkingEpisode.Title.Value = TextBox_Title.Text
             Dim trueseason As String = WorkingEpisode.Season.Value
@@ -10806,23 +10806,23 @@ Public Class Form1
                 For Each tvshow In Cache.TvCache.Shows
                     Dim showpath As String = tvshow.NfoFilePath.Replace(IO.Path.GetFileName(tvshow.NfoFilePath), "")
                     If renamefile.IndexOf(showpath) <> -1 Then
-                        showtitle = tvshow.Title.Value
+                        showtitle = Preferences.RemoveIgnoredArticles(tvshow.Title.Value)
 
-                        If Preferences.ignorearticle = True Then
-                            If showtitle.ToLower.IndexOf("the ") = 0 Then
-                                showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
-                            End If
-                        End If
-                        If Preferences.ignoreAarticle Then
-                            If showtitle.ToLower.IndexOf("a ") = 0 Then
-                                showtitle = showtitle.Substring(2, showtitle.Length - 2) & ", A"
-                            End If
-                        End If
-                        If Preferences.ignoreAn Then
-                            If showtitle.ToLower.IndexOf("an ") = 0 Then
-                                showtitle = showtitle.Substring(3, showtitle.Length - 3) & ", An"
-                            End If
-                        End If
+                        'If Preferences.ignorearticle = True Then
+                        '    If showtitle.ToLower.IndexOf("the ") = 0 Then
+                        '        showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
+                        '    End If
+                        'End If
+                        'If Preferences.ignoreAarticle Then
+                        '    If showtitle.ToLower.IndexOf("a ") = 0 Then
+                        '        showtitle = showtitle.Substring(2, showtitle.Length - 2) & ", A"
+                        '    End If
+                        'End If
+                        'If Preferences.ignoreAn Then
+                        '    If showtitle.ToLower.IndexOf("an ") = 0 Then
+                        '        showtitle = showtitle.Substring(3, showtitle.Length - 3) & ", An"
+                        '    End If
+                        'End If
                         For Each episode In tvshow.Episodes
                             If episode.NfoFilePath = renamefile Then
                                 If seasonno = "" Then
@@ -14868,6 +14868,7 @@ Public Class Form1
         ScrapeFullCertCheckBox.CheckState       = If(Preferences.scrapefullcert, CheckState.Checked, CheckState.Unchecked)
         cbMovieRenameEnable.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
         cbMovFolderRename.CheckState            = If(Preferences.MovFolderRename, CheckState.Checked, CheckState.Unchecked)
+        cbMovSetIgnArticle.CheckState           = If(Preferences.MovSetIgnArticle, CheckState.Checked, CheckState.Unchecked) 
         cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
@@ -21734,6 +21735,7 @@ Public Class Form1
 
         Me.cbMovieRenameEnable.Checked = Preferences.MovieRenameEnable
         Me.cbMovFolderRename.Checked = Preferences.MovFolderRename
+        Me.cbMovSetIgnArticle.Checked = Preferences.MovSetIgnArticle 
         Me.cbRenameUnderscore.Checked = Preferences.MovRenameUnderscore 
         Me.ManualRenameChkbox.Checked = Preferences.MovieManualRename
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
@@ -22291,9 +22293,24 @@ Public Class Form1
     Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
         Try
             If cbRenameUnderscore.CheckState = CheckState.Checked Then
-                Preferences.MovRenameUnderscore = True
+                Preferences.MovSetIgnArticle = True
             Else
-                Preferences.MovRenameUnderscore = False
+                Preferences.MovSetIgnArticle = False
+                'Preferences.XbmcTmdbRenameMovie = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetIgnArticle.CheckedChanged
+        Try
+            If cbMovSetIgnArticle.CheckState = CheckState.Checked Then
+                Preferences.MovFolderRename = True
+            Else
+                Preferences.MovFolderRename = False
                 'Preferences.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True

@@ -2674,23 +2674,23 @@ Public Class WorkingWithNfoFiles
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
                                 '-------------- Aqui
-                                If Preferences.ignorearticle = True Then
-                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                        tempstring = tempstring & ", The"
-                                    End If
-                                End If
-                                If Preferences.ignoreAarticle Then
-                                    If tempstring.ToLower.IndexOf("a ") = 0 Then
-                                        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
-                                    End If
-                                End If
-                                If Preferences.ignoreAn Then
-                                    If tempstring.ToLower.IndexOf("an ") = 0 Then
-                                        tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
-                                    End If
-                                End If
-                                newmovie.fullmoviebody.title = tempstring
+                                'If Preferences.ignorearticle = True Then
+                                '    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                '        tempstring = tempstring & ", The"
+                                '    End If
+                                'End If
+                                'If Preferences.ignoreAarticle Then
+                                '    If tempstring.ToLower.IndexOf("a ") = 0 Then
+                                '        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
+                                '    End If
+                                'End If
+                                'If Preferences.ignoreAn Then
+                                '    If tempstring.ToLower.IndexOf("an ") = 0 Then
+                                '        tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
+                                '    End If
+                                'End If
+                                newmovie.fullmoviebody.title = Preferences.RemoveIgnoredArticles(tempstring)
                             Case "set"
                                 newmovie.fullmoviebody.movieset = thisresult.InnerText
                             Case "stars"

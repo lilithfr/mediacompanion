@@ -1098,20 +1098,20 @@ Public Class Movie
 
         If Preferences.sorttitleignorearticle Then                              'add ignored articles to end of
             Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.
-            'If Preferences.ignorearticle Then                                  'But only on Scraping or Rescrape Specific
-            If titletext.ToLower.IndexOf("the ") = 0 Then
-                titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
-            End If
+            ''If Preferences.ignorearticle Then                                 'But only on Scraping or Rescrape Specific
+            'If titletext.ToLower.IndexOf("the ") = 0 Then
+            '    titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
             'End If
-            'If Preferences.ignoreAarticle Then
-            If titletext.ToLower.IndexOf("a ") = 0 Then
-                titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
-            End If
-            If titletext.ToLower.IndexOf("an ") = 0 Then
-                titletext = titletext.Substring(3, titletext.Length - 3) & ", An"
-            End If
+            ''End If
+            ''If Preferences.ignoreAarticle Then
+            'If titletext.ToLower.IndexOf("a ") = 0 Then
+            '    titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
             'End If
-            _scrapedMovie.fullmoviebody.sortorder = titletext
+            'If titletext.ToLower.IndexOf("an ") = 0 Then
+            '    titletext = titletext.Substring(3, titletext.Length - 3) & ", An"
+            'End If
+            ''End If
+            _scrapedMovie.fullmoviebody.sortorder = Preferences.RemoveIgnoredArticles(titletext)
         Else
             _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title               'Sort order defaults to title
         End If
@@ -3054,7 +3054,7 @@ Public Class Movie
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
-                    s = s.Replace("%N", _scrapedMovie.fullmoviebody.movieset)
+                    s = s.Replace("%N", Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.movieset))
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
                     s = s.Replace("%O", ach)

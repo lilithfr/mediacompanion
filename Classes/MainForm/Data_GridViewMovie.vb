@@ -155,15 +155,16 @@ Public Class Data_GridViewMovie
         Get
             Dim t As String = If(IsNothing(title),"Unknown",title)
            
-            If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
-                Return t.Substring(4, t.Length - 4) & ", The"
-            ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
-                Return t.Substring(2, t.Length -2) & ", A"
-            ElseIf Preferences.ignoreAn And t.ToLower.IndexOf("an ") = 0 Then
-                Return t.Substring(3, t.Length -3) & ", An"
-            Else
-                Return t
-            End If            
+            'If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
+            '    Return t.Substring(4, t.Length - 4) & ", The"
+            'ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
+            '    Return t.Substring(2, t.Length -2) & ", A"
+            'ElseIf Preferences.ignoreAn And t.ToLower.IndexOf("an ") = 0 Then
+            '    Return t.Substring(3, t.Length -3) & ", An"
+            'Else
+            '    Return t
+            'End If
+            Return Preferences.RemoveIgnoredArticles(t)
         End Get
     End Property
 
@@ -418,15 +419,16 @@ Public Class Data_GridViewMovie
         Get
             Dim t As String = If(IsNothing(SortOrder),"Unknown",SortOrder)
            
-            If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
-                Return t.Substring(4, t.Length - 4) & ", The"
-            ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
-                Return t.Substring(2, t.Length -2) & ", A"
-            ElseIf Preferences.ignoreAn And t.ToLower.IndexOf("an ") = 0 Then
-                Return t.Substring(3, t.Length -3) & ", An"
-            Else
-                Return t
-            End If            
+            'If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
+            '    Return t.Substring(4, t.Length - 4) & ", The"
+            'ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
+            '    Return t.Substring(2, t.Length -2) & ", A"
+            'ElseIf Preferences.ignoreAn And t.ToLower.IndexOf("an ") = 0 Then
+            '    Return t.Substring(3, t.Length -3) & ", An"
+            'Else
+            '    Return t
+            'End If
+            Return Preferences.RemoveIgnoredArticles(t)
         End Get
     End Property
 

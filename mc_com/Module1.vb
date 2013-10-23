@@ -1703,23 +1703,23 @@ Module Module1
                                     Case "title"
                                         Dim tempstring As String = ""
                                         tempstring = detail.InnerText
-                                        If Preferences.ignorearticle = True Then
-                                            If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                                tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                                tempstring = tempstring & ", The"
-                                            End If
-                                        End If
-                                        If Preferences.ignoreAarticle Then
-                                            If tempstring.ToLower.IndexOf("a ") = 0 Then
-                                                tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
-                                            End If
-                                        End If
-                                        If Preferences.ignoreAn Then
-                                            If tempstring.ToLower.IndexOf("an ") = 0 Then
-                                                tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
-                                            End If
-                                        End If
-                                        newtvshow.title = tempstring
+                                        'If Preferences.ignorearticle = True Then
+                                        '    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                        '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                        '        tempstring = tempstring & ", The"
+                                        '    End If
+                                        'End If
+                                        'If Preferences.ignoreAarticle Then
+                                        '    If tempstring.ToLower.IndexOf("a ") = 0 Then
+                                        '        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
+                                        '    End If
+                                        'End If
+                                        'If Preferences.ignoreAn Then
+                                        '    If tempstring.ToLower.IndexOf("an ") = 0 Then
+                                        '        tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
+                                        '    End If
+                                        'End If
+                                        newtvshow.title = Preferences.RemoveIgnoredArticles(tempstring)
                                     Case "fullpathandfilename"
                                         newtvshow.fullpath = detail.InnerText
                                     Case "id"
