@@ -22308,9 +22308,9 @@ Public Class Form1
     Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetIgnArticle.CheckedChanged
         Try
             If cbMovSetIgnArticle.CheckState = CheckState.Checked Then
-                Preferences.MovFolderRename = True
+                Preferences.MovSetIgnArticle = True
             Else
-                Preferences.MovFolderRename = False
+                Preferences.MovSetIgnArticle = False
                 'Preferences.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True
