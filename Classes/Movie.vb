@@ -1837,13 +1837,12 @@ Public Class Movie
     End Sub
 
     Sub DownloadExtraFanart
-        If Not Preferences.dlxtrafanart  then
+        If Preferences.dlxtrafanart AndAlso (Preferences.allfolders Or Preferences.usefoldernames) Then
+            DoDownloadExtraFanart
+        Else
             ReportProgress(,"Scraping Extra Fanart-Thumbs not selected" & vbCrLf)
             Exit Sub
         End If
-
-        DoDownloadExtraFanart
-
     End Sub
     Sub DoDownloadExtraFanart
         Try

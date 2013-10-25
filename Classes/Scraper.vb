@@ -1194,17 +1194,18 @@ Public Class Classimdb
                     Dim plots(20) As String
                     webpage.Clear()
                     webpage = loadwebpage(tempstring, False)
+                    Dim webPg1 As String = String.Join( "" , webpage.ToArray() )
                     tempint = 0
                     Dim doo As Boolean = False
                     For Each line In webpage
-                        'If doo = True Then
-                        '    plots(tempint) = line
-                        '    doo = False
-                        'End If
-                        If line.IndexOf("<br/>") <> -1 Then
-                            tempint = tempint + 1
+                        If doo = True Then
                             plots(tempint) = line
-                            'doo = True
+                            doo = False
+                        End If
+                        If line.IndexOf("<p class=""plotSummary"">") <> -1 Then
+                            tempint = tempint + 1
+                            'plots(tempint) = line
+                            doo = True
                         End If
                     Next
                     Dim sizes(tempint) As Integer

@@ -15394,6 +15394,7 @@ Public Class Form1
                 Preferences.usefoldernames = True
                 cbMovieAllInFolders.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
+                cbDlXtraFanart.Enabled = True
                 If Preferences.basicsavemode Then
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Enabled = False
@@ -15410,6 +15411,8 @@ Public Class Form1
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = False
                     cbMoviePosterInFolder.Enabled = False
+                    cbDlXtraFanart.Checked = False
+                    cbDlXtraFanart.Enabled = False
                     'Preferences.createfolderjpg = False
                 ElseIf Not Preferences.allfolders AndAlso Preferences.basicsavemode Then
                     msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
@@ -15425,10 +15428,12 @@ Public Class Form1
 
     Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieAllInFolders.CheckedChanged 
         Try
-            Preferences.allfolders = cbMovieAllInFolders.Checked
-            If cbMovieAllInFolders.Checked = True Then 
+            'Preferences.allfolders = cbMovieAllInFolders.Checked
+            If cbMovieAllInFolders.CheckState = CheckState.Checked Then 
+                Preferences.allfolders = True
                 cbMovieUseFolderNames.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
+                cbDlXtraFanart.Enabled = True
                 If Preferences.basicsavemode Then
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Enabled = False
@@ -15437,13 +15442,17 @@ Public Class Form1
                     cbMoviePosterInFolder.Enabled = True
                 End If               
             Else
+                Preferences.allfolders = False
                 If Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode Then
+                    
                     cbMovCreateFolderjpg.Enabled = False
                     cbMovCreateFolderjpg.Checked = False
                     cbMovieFanartInFolders.Checked = False
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = False
                     cbMoviePosterInFolder.Enabled = False
+                    cbDlXtraFanart.Checked = False
+                    cbDlXtraFanart.Enabled = False
                 ElseIf Not Preferences.usefoldernames AndAlso Preferences.basicsavemode Then
                     msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
                     cbMovieAllInFolders.Checked = CheckState.Checked
