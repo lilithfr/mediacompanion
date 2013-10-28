@@ -239,7 +239,7 @@ Public Class Form1
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
+        PictureBoxAssignedMoviePoster.AllowDrop = True
         AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
         Label73.Text = ""
 
@@ -489,7 +489,7 @@ Public Class Form1
 
         If scrapeAndQuit = False Then
             Me.Visible = True
-
+            
 
             Dim intX As Integer = Screen.PrimaryScreen.Bounds.Width
             Dim intY As Integer = Screen.PrimaryScreen.Bounds.Height
@@ -589,7 +589,7 @@ Public Class Form1
                 TabLevel1.SelectedIndex = Preferences.startuptab
             End If
 
-
+            
             SplitContainer1.IsSplitterFixed = False
             SplitContainer2.IsSplitterFixed = False
             SplitContainer3.IsSplitterFixed = False
@@ -6873,7 +6873,7 @@ Public Class Form1
         messbox.Close()
     End Sub
 
-    Private Sub PictureBoxAssignedMoviePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxAssignedMoviePoster.Click
+    Private Sub PictureBoxAssignedMoviePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxAssignedMoviePoster.DoubleClick 
         Try
             If Not PictureBoxAssignedMoviePoster.Image Is Nothing Then
                 Me.ControlBox = False
@@ -6881,6 +6881,38 @@ Public Class Form1
                 'ToolStrip1.Enabled = False
                 Call util_ZoomImage(PictureBoxAssignedMoviePoster.Image)
             End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PictureBoxAssignedMoviePoster_DragEnter(ByVal sender As System.Object, ByVal e As DragEventArgs) Handles PictureBoxAssignedMoviePoster.DragEnter
+        Try
+            If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            e.Effect = DragDropEffects.Copy
+        End If
+            'If e.Data.GetDataPresent(DataFormats.Bitmap) Then
+            '    e.Effect = DragDropEffects.Copy
+            'Else
+            '    e.Effect = DragDropEffects.None
+            'End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PictureBoxAssignedMoviePoster_DragDrop(ByVal sender As System.Object, ByVal e As DragEventArgs) Handles PictureBoxAssignedMoviePoster.DragDrop 
+        Try
+            Dim Pic As String = CType(e.Data.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString  '"FileDrop", False)
+            Dim FInfo As IO.FileInfo = New IO.FileInfo(Pic)
+            If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
+                util_ImageLoad(PictureBoxAssignedMoviePoster, Pic, Utilities.DefaultPosterPath)
+                lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+                btnMoviePosterSaveCroppedImage.Enabled = True
+            Else
+                MessageBox.Show("Not a picture")
+            End If
+            
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -7113,10 +7145,13 @@ Public Class Form1
                 Dim posterpath As String = ""
                 Dim stream As New System.IO.MemoryStream
                 Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
+                Dim bitmap3 As New Bitmap(PictureBoxAssignedMoviePoster.Image)
                 For Each pth As String In PostPaths
-                    PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                    bitmap3.Save(pth, System.Drawing.Imaging.ImageFormat.Jpeg)
                     posterpath = pth
                 Next
+                bitmap3.Dispose()
+                GC.Collect()
                 'PictureBoxAssignedMoviePoster.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
                 'Dim bitmap1 As New Bitmap(PictureBoxAssignedMoviePoster.Image)
                 'Dim bmp4 As New Bitmap(bitmap1)
@@ -7161,6 +7196,24 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+    End Sub
+
+    Private Sub btnMovPasteClipboardPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPasteClipboardPoster.Click
+        Try
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
+                Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
+                Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
+                If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
+                    util_ImageLoad(PictureBoxAssignedMoviePoster, pth, Utilities.DefaultPosterPath)
+                    lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+                    btnMoviePosterSaveCroppedImage.Enabled = True
+                Else 
+                    MessageBox.Show("Not a picture")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick    'timer from movie poster crop - used for repeat crop if buttom held down
