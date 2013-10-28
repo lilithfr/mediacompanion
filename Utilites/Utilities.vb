@@ -19,6 +19,11 @@ Public Class Utilities
                                                  ".dvr-ms", ".img", ".strm", ".ssif", ".mk3d", ".webm", ".bdmv", 
                                                  "video_ts.ifo" }  'video_ts.ifo must be last in list
 
+    'file ext for trailers
+    Public Shared TrailerExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
+                                                 ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".rmvb", ".ogm",
+                                                 ".ts", ".m2ts", ".flv", ".webm" }
+
     'files that support main movie file, ie. art, subtitles, and trailers
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
                                                                 "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm",

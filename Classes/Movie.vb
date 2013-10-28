@@ -266,8 +266,8 @@ Public Class Movie
             Dim s = NfoPathPrefName
             Dim FileName As String = ""
         
-            For Each item In "mp4,flv,webm,mov,m4v".Split(",")
-                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
+            For Each item In Utilities.TrailerExtensions '"mp4,flv,webm,mov,m4v".Split(",")
+                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer" & item)
 
                 If File.Exists(FileName) Then Return FileName
             Next

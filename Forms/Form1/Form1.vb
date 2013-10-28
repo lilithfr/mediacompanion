@@ -4429,7 +4429,11 @@ Public Class Form1
         Dim playlist As New List(Of String)
         Select Case type
             Case "Movie"
-                tempstring = Utilities.GetFileName(tempstring)
+                If tempstring.IndexOf("index.nfo") <> -1 Then
+                    tempstring = tempstring.Replace(".nfo", ".bdmv")
+                Else
+                    tempstring = Utilities.GetFileName(tempstring)
+                End If
                 playlist = Utilities.GetMediaList(tempstring)
             Case "Trailer"
                 'Dim TrailerPath As String = Utilities.GetTrailerName(tempstring)
