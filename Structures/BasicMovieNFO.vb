@@ -22,6 +22,7 @@ Public Structure str_BasicMovieNFO
     Dim studio As String
     Dim trailer As String
     Dim playcount As String
+    Dim lastplayed As String
     Dim imdbid As String
     Dim top250 As String
     Dim filename As String
@@ -51,6 +52,7 @@ Public Structure str_BasicMovieNFO
         studio = ""
         trailer = ""
         playcount = ""
+        lastplayed = ""
         imdbid = ""
         top250 = ""
         filename = ""

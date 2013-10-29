@@ -1801,6 +1801,7 @@ Public Class Form1
 
             If IsNothing(workingMovieDetails) = False Then
                 If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
+                If workingMovieDetails.fullmoviebody.lastplayed = Nothing Then workingMovieDetails.fullmoviebody.lastplayed = ""
                 If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
                 If workingMovieDetails.fullmoviebody.director = Nothing Then workingMovieDetails.fullmoviebody.director = ""
                 If workingMovieDetails.fullmoviebody.stars = Nothing Then workingMovieDetails.fullmoviebody.stars = ""
@@ -3527,6 +3528,7 @@ Public Class Form1
                 newfullmovie.originaltitle = workingMovieDetails.fullmoviebody.originaltitle
                 newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
                 newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
+                newfullmovie.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
                 newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
                 newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
                 newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
@@ -3608,6 +3610,7 @@ Public Class Form1
 
             movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
             movie.ScrapedMovie.fullmoviebody.playcount = workingMovieDetails.fullmoviebody.playcount
+            movie.ScrapedMovie.fullmoviebody.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
             movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
             movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
             movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
@@ -4200,6 +4203,7 @@ Public Class Form1
                 newfullmovie2.genre = workingMovieDetails.fullmoviebody.genre
                 newfullmovie2.id = workingMovieDetails.fullmoviebody.imdbid
                 newfullmovie2.playcount = workingMovieDetails.fullmoviebody.playcount
+                newfullmovie2.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
                 newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating
                 '    newfullmovie2.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 newfullmovie2.year = workingMovieDetails.fullmoviebody.year
@@ -4575,6 +4579,7 @@ Public Class Form1
         workingMovie.genre = Nothing
         workingMovie.id = Nothing
         workingMovie.playcount = Nothing
+        workingMovie.lastplayed = Nothing
         workingMovie.rating = Nothing
         workingMovie.title = Nothing
         '    workingMovie.titleandyear = Nothing

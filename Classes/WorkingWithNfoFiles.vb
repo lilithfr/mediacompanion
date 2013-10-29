@@ -824,6 +824,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.originaltitle = newmovie.title
                     newmovie.outline = ""
                     newmovie.playcount = "0"
+                    newmovie.lastplayed = ""
                     newmovie.plot = ""
                     newmovie.rating = ""
                     newmovie.runtime = "0"
@@ -888,6 +889,8 @@ Public Class WorkingWithNfoFiles
                                 If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
                             Case "playcount"
                                 newmovie.playcount = thisresult.InnerText
+                            Case "lastplayed"
+                                newmovie.lastplayed = thisresult.InnerText 
                             Case "rating"
                                 'Dim tempStr As String = thisresult.InnerText
                                 'If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
@@ -1000,6 +1003,7 @@ Public Class WorkingWithNfoFiles
                 'for old movies since new ones will have the originaltitle created when scraped
                 If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
                 If newmovie.playcount = Nothing Then newmovie.playcount = "0"
+                If newmovie.lastplayed = Nothing Then newmovie.lastplayed = ""
                 If newmovie.plot = Nothing Then newmovie.plot = ""
                 If newmovie.rating = Nothing Then newmovie.rating = 0
                 If newmovie.runtime = Nothing Then newmovie.runtime = ""
@@ -1050,7 +1054,6 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.title = "Unknown" 'Utilities.CleanFileName(IO.Path.GetFileName(workingMovie.fullpathandfilename))
                     newmovie.fullmoviebody.year = "0000"
                     newmovie.fullmoviebody.top250 = "0"
-                    newmovie.fullmoviebody.playcount = "0"
                     newmovie.fullmoviebody.credits = ""
                     newmovie.fullmoviebody.director = ""
                     newmovie.fullmoviebody.stars = ""
@@ -1061,6 +1064,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.mpaa = ""
                     newmovie.fullmoviebody.outline = "This nfo file could not be loaded"
                     newmovie.fullmoviebody.playcount = "0"
+                    newmovie.fullmoviebody.lastplayed = ""
                     newmovie.fullmoviebody.plot = errorstring
                     newmovie.fullmoviebody.premiered = ""
                     newmovie.fullmoviebody.rating = ""
@@ -1171,6 +1175,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.imdbid = thisresult.InnerText
                         Case "playcount"
                             newmovie.fullmoviebody.playcount = thisresult.InnerText
+                        Case "lastplayed"
+                            newmovie.fullmoviebody.lastplayed = thisresult.InnerText 
                         Case "rating"
                             newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString
                             'If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
@@ -1863,6 +1869,13 @@ Public Class WorkingWithNfoFiles
                 Try
                     child = doc.CreateElement("playcount")
                     child.InnerText = movietosave.fullmoviebody.playcount
+                    root.AppendChild(child)
+                Catch
+                End Try
+                stage = 32
+                Try
+                    child = doc.CreateElement("lastplayed")
+                    child.InnerText = movietosave.fullmoviebody.lastplayed 
                     root.AppendChild(child)
                 Catch
                 End Try

@@ -18,6 +18,7 @@ Public Class ComboList
     Property genre                As String = ""
     Property tag                  As List(of String) = New List(Of String)
     Property playcount            As String = ""
+    Property lastplayed           As String = ""
     Property sortorder            As String = ""
     Property outline              As String = ""
     Property runtime              As String = ""
@@ -251,7 +252,8 @@ Public Class ComboList
         Me.top250               = From.top250             
         Me.genre                = From.genre  
         Me.tag                  = From.tag    
-        Me.playcount            = From.playcount          
+        Me.playcount            = From.playcount 
+        Me.lastplayed           = From.lastplayed  
         Me.sortorder            = From.sortorder          
         Me.outline              = From.outline            
         Me.runtime              = From.runtime            

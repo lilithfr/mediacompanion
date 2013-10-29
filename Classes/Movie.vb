@@ -906,6 +906,9 @@ Public Class Movie
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then
             _scrapedMovie.fullmoviebody.playcount = "0"
         End If
+        If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then
+            _scrapedMovie.fullmoviebody.lastplayed = ""
+        End If
 
         If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
             _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
@@ -1009,6 +1012,7 @@ Public Class Movie
         _movieCache.top250      = _scrapedMovie.fullmoviebody.top250
         _movieCache.genre       = _scrapedMovie.fullmoviebody.genre
         _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
+        _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         _movieCache.tag         = _scrapedMovie.fullmoviebody.tag
         AssignMovieToAddMissingData
@@ -1117,6 +1121,7 @@ Public Class Movie
         End If
         If _scrapedMovie.fullmoviebody.plot = "" Then _scrapedMovie.fullmoviebody.plot = _scrapedMovie.fullmoviebody.outline ' If plot is empty, use outline
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
+        If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
         If _scrapedMovie.fullmoviebody.top250 = Nothing Then _scrapedMovie.fullmoviebody.top250 = "0"
 
         ' Assign certificate
@@ -1136,6 +1141,7 @@ Public Class Movie
         If Rescrape Then
             _scrapedMovie.fullmoviebody.source = _previousCache.source
             _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
+            _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
             _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
         Else
@@ -2121,6 +2127,7 @@ Public Class Movie
 
         If _scrapedMovie.fullmoviebody.plot      = ""      Then _scrapedMovie.fullmoviebody.plot      = _scrapedMovie.fullmoviebody.outline
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
+        If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
         If _scrapedMovie.fullmoviebody.top250    = Nothing Then _scrapedMovie.fullmoviebody.top250    = "0"
 
     End Sub
