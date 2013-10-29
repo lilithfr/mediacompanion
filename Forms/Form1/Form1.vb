@@ -5816,9 +5816,43 @@ Public Class Form1
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Try
-            Panel3.Visible = True
+            Dim t As New frmImageBrowseOrUrl 
+            t.Location = Me.PointToScreen(New Point(Button1.Left-460, Button1.Top + 30))
+            t.ShowDialog()
+            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
+                t.Dispose()
+                Exit Sub
+            End If
+            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
+            t.Dispose()
+            t = Nothing
+            Dim eh As Boolean = Preferences.savefanart
+            Preferences.savefanart = True
+            Movie.SaveFanartImageToCacheAndPath(PathOrUrl, mov_FanartORExtrathumbPath)
+            Preferences.savefanart = eh
+            Dim exists As Boolean = IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
+
+            If exists Then
+                For Each paths In Preferences.offlinefolders
+                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
+                        Dim mediapath As String
+                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                    End If
+                Next
+
+                util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
+
+                util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+
+                mov_SplitContainerAutoPosition()
+            End If
+
+            UpdateMissingFanart
+            XbmcLink_UpdateArtwork
+            'Panel3.Visible = True
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            MsgBox("Unable To Download Image")
         End Try
     End Sub
 
@@ -7010,7 +7044,52 @@ Public Class Form1
 
     Private Sub Button20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button20.Click
         Try
-            Panel6.Visible = True
+            Dim t As New frmImageBrowseOrUrl 
+            t.Location = Me.PointToScreen(New Point(gbMoviePosterSelection.Left + 10, gbMoviePosterSelection.Top + gbMoviePosterSelection.Height))
+            t.ShowDialog()
+            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
+                t.Dispose()
+                Exit Sub
+            End If
+            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
+            t.Dispose()
+            t = Nothing
+
+            Dim tempstring As String = ""
+            Dim MyWebClient As New System.Net.WebClient
+
+            Try
+                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(PathOrUrl)
+                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+
+                PictureBoxAssignedMoviePoster.Image = New System.Drawing.Bitmap(ImageStream)
+                
+                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
+
+                For Each pth As String In Paths
+                    PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                Next
+
+                If Preferences.createfolderjpg = True Then
+                    tempstring = Paths(0).Replace(IO.Path.GetFileName(Paths(0)), "folder.jpg")
+                    PictureBoxAssignedMoviePoster.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
+                End If
+
+                util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
+
+                Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
+                updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                
+            Catch ex As Exception
+                MsgBox("Unable To Download Image")
+            End Try
+            GC.Collect()
+    
+            UpdateMissingPoster
+            Panel6.Visible = False
+
+            XbmcLink_UpdateArtwork
+            'Panel6.Visible = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9711,10 +9790,41 @@ Public Class Form1
 
     Private Sub btnTvFanartUrl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartUrl.Click
         Try
-            Panel11.Visible = True
+            Dim t As New frmImageBrowseOrUrl 
+            t.Location = Me.PointToScreen(New Point(btnTvFanartUrl.Left-480, btnTvFanartUrl.Top + btnTvFanartUrl.Height))
+            t.ShowDialog()
+            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
+                t.Dispose()
+                Exit Sub
+            End If
+            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
+            t.Dispose()
+            t = Nothing
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+            Dim eh As Boolean = Preferences.savefanart
+            Preferences.savefanart = True 
+            Movie.SaveFanartImageToCacheAndPath(PathOrUrl, savepath)
+            Preferences.savefanart = eh
+            Dim exists As Boolean = System.IO.File.Exists(savepath)
+            If exists = True Then
+
+                util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
+
+                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
+
+                End If
+
+            End If
+            Label59.Text = PictureBox10.Image.Width
+            Label58.Text = PictureBox10.Image.Height
+
+
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            MsgBox("Unable To Download Image")
         End Try
+        
     End Sub
 
     Private Sub Button32_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button32.Click
@@ -9795,25 +9905,25 @@ Public Class Form1
             '        End If
             '    End If
 
-                Dim exists As Boolean = System.IO.File.Exists(savepath)
-                If exists = True Then
+            Dim exists As Boolean = System.IO.File.Exists(savepath)
+            If exists = True Then
 
-                    util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
+                util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
 
-                    If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                        util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
-
-                    End If
+                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
 
                 End If
-                Label59.Text = PictureBox10.Image.Width
-                Label58.Text = PictureBox10.Image.Height
+
+            End If
+            Label59.Text = PictureBox10.Image.Width
+            Label58.Text = PictureBox10.Image.Height
 
 
-            Catch ex As Exception
-                MsgBox("Unable To Download Image")
-            End Try
-            Panel11.Visible = False
+        Catch ex As Exception
+            MsgBox("Unable To Download Image")
+        End Try
+        Panel11.Visible = False
         'Catch ex As Exception
         '    ExceptionHandler.LogError(ex)
         'End Try
@@ -12316,19 +12426,23 @@ Public Class Form1
     Private Sub Button59_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button59.Click
         Try
             Dim t As New frmImageBrowseOrUrl 
+            t.Location = Me.PointToScreen(New Point(Button59.Left-480, Groupbox23.Top + GroupBox23.Height))
             t.ShowDialog()
             If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
                 t.Dispose()
                 Exit Sub
             End If
+            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
+            t.Dispose()
+            t = Nothing
             Try
                 Dim MyWebClient As New System.Net.WebClient
 
-                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(t.tb_PathorUrl.Text)
+                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(PathOrUrl)
                 Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
                 PictureBox13.Image = New System.Drawing.Bitmap(ImageStream)
-                Call TvPosterSave(t.tb_PathorUrl.text)
+                Call TvPosterSave(PathOrUrl)
                 'PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
                 'btnTvPosterSaveBig.PerformClick()
                 'If combostart = ComboBox2.SelectedItem Then
