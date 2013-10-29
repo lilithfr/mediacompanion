@@ -11818,10 +11818,14 @@ Public Class Form1
     End Sub
 
     Private Sub btnTvPosterSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveBig.Click
+        Call TvPosterSave(btnTvPosterSaveBig.Tag)
+    End Sub
+
+    Private Sub TvPosterSave(ByVal imageUrl As String)
         Try
             Dim witherror As Boolean = False
             Dim witherror2 As Boolean = False
-            Dim imageUrl As String = btnTvPosterSaveBig.Tag
+            'Dim imageUrl2 As String = btnTvPosterSaveBig.Tag
             Dim path As String = ""
             Dim eden As Int16=0
             Dim frodo As Int16=0
@@ -11894,7 +11898,7 @@ Public Class Form1
                     End If
                 End If
             End If
-            If PictureBox13.ImageLocation = btnTvPosterSaveBig.Tag And Not PictureBox13.Image Is Nothing Then
+            If PictureBox13.ImageLocation = imageUrl And Not PictureBox13.Image Is Nothing Then  'btnTvPosterSaveBig.Tag
                 Dim savedpath As String = ""
                 For Each savepath As String In imagePaths
                     PictureBox13.Image.Save(savepath, Imaging.ImageFormat.Jpeg)
@@ -12311,7 +12315,31 @@ Public Class Form1
 
     Private Sub Button59_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button59.Click
         Try
-            Panel14.Visible = True
+            Dim t As New frmImageBrowseOrUrl 
+            t.ShowDialog()
+            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
+                t.Dispose()
+                Exit Sub
+            End If
+            Try
+                Dim MyWebClient As New System.Net.WebClient
+
+                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(t.tb_PathorUrl.Text)
+                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+
+                PictureBox13.Image = New System.Drawing.Bitmap(ImageStream)
+                Call TvPosterSave(t.tb_PathorUrl.text)
+                'PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
+                'btnTvPosterSaveBig.PerformClick()
+                'If combostart = ComboBox2.SelectedItem Then
+                '    tv_PictureBoxRight.Image = PictureBox13.Image  '2check
+                'End If
+                'PictureBox12.Image = PictureBox13.Image
+                'Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+            Catch ex As Exception
+                MsgBox(ex.ToString)
+            End Try
+            'Panel14.Visible = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
