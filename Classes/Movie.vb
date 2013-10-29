@@ -552,7 +552,13 @@ Public Class Movie
 
     Public ReadOnly Property PossibleYear As String
         Get
-            Dim M As Match = Regex.Match(nfopathandfilename, "[\(\[]([\d]{4})[\)\]]")
+            Dim s As String = ""
+            If Preferences.usefoldernames Then
+                s = Title
+            Else
+                s = nfopathandfilename 
+            End If
+            Dim M As Match = Regex.Match(s, "[\(\[]([\d]{4})[\)\]]")
             If M.Success = True Then
                 Return M.Groups(1).Value
             End If
