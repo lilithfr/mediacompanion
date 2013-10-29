@@ -3626,8 +3626,9 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
             movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
             movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-            movie.ScrapedMovie.fullmoviebody.tag = NewTagList
-
+            If TabControl2.SelectedTab.Name = "TabPage9" Then
+                movie.ScrapedMovie.fullmoviebody.tag = NewTagList
+            End If
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
             movie.SaveNFO()
@@ -3716,7 +3717,9 @@ Public Class Form1
                     'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
                     'End If
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-                    movie.ScrapedMovie.fullmoviebody.tag = NewTagList
+                    If TabControl2.SelectedTab.Name = "TabPage9" Then
+                        movie.ScrapedMovie.fullmoviebody.tag = NewTagList
+                    End If
 
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
