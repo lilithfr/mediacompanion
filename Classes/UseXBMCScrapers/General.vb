@@ -180,6 +180,15 @@ Module General
                     movieyear = Nothing
                 End If
             End If
+            If movieyear = Nothing Then
+                M = Regex.Match(S, "\d{4}")
+                If M.Success = True Then
+                    movieyear = M.Value
+                Else
+                    movieyear = Nothing
+                    Return movieyear
+                End If
+            End If
             Try
                 movieyear = movieyear.Trim
                 If movieyear.Length = 6 Then
@@ -1573,7 +1582,8 @@ Module General
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
-            ParametersForScraper(0) = Utilities.CleanFileName(MovieName)
+            MovieName = Utilities.CleanFileName(MovieName)
+            ParametersForScraper(0) = MovieName
             ParametersForScraper(1) = GetYearByFilename(MovieName, False)
             FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")

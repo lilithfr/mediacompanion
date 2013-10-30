@@ -13983,8 +13983,8 @@ Public Class Form1
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
  
-        'saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
-        saveactorchkbx.CheckState = CheckState.Unchecked
+        saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
+        'saveactorchkbx.CheckState = CheckState.Unchecked
 
         localactorpath.Enabled                  = Preferences.actorsave
         xbmcactorpath.Enabled                   = Preferences.actorsave

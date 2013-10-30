@@ -742,7 +742,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 filename = filename.Substring(0, currentposition)
                 filename = Regex.Replace(filename, "[" & cleanSeparators & "]+$", "")   ' remove any trailing separator characters
             End If
-
+            filename = filename.Replace(".", " ")
         Catch ex As Exception
             filename = "error"
         End Try
