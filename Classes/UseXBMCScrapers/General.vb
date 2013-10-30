@@ -154,54 +154,55 @@ Module General
 
 #Region "Misc.Movies Routines"
 
-    Public Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
-        Dim cleanname As String = filename
-        Try
-            If withextension = True Then
-                Try
-                    cleanname = filename.Replace(IO.Path.GetExtension(cleanname), "")
-                Catch
-                End Try
-            End If
-            Dim movieyear As String
-            Dim S As String = cleanname
-            Dim M As Match
-            M = Regex.Match(S, "(\([\d]{4}\))")
-            If M.Success = True Then
-                movieyear = M.Value
-            Else
-                movieyear = Nothing
-            End If
-            If movieyear = Nothing Then
-                M = Regex.Match(S, "(\[[\d]{4}\])")
-                If M.Success = True Then
-                    movieyear = M.Value
-                Else
-                    movieyear = Nothing
-                End If
-            End If
-            If movieyear = Nothing Then
-                M = Regex.Match(S, "\d{4}")
-                If M.Success = True Then
-                    movieyear = M.Value
-                Else
-                    movieyear = Nothing
-                    Return movieyear
-                End If
-            End If
-            Try
-                movieyear = movieyear.Trim
-                If movieyear.Length = 6 Then
-                    movieyear = movieyear.Remove(0, 1)
-                    movieyear = movieyear.Remove(4, 1)
-                End If
-            Catch
-            End Try
-            Return movieyear
-        Catch
-        End Try
-        Return "Error"
-    End Function
+    'Duplicate procedure as already in Utilities.vb
+    'Public Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
+    '    Dim cleanname As String = filename
+    '    Try
+    '        If withextension = True Then
+    '            Try
+    '                cleanname = filename.Replace(IO.Path.GetExtension(cleanname), "")
+    '            Catch
+    '            End Try
+    '        End If
+    '        Dim movieyear As String
+    '        Dim S As String = cleanname
+    '        Dim M As Match
+    '        M = Regex.Match(S, "(\([\d]{4}\))")
+    '        If M.Success = True Then
+    '            movieyear = M.Value
+    '        Else
+    '            movieyear = Nothing
+    '        End If
+    '        If movieyear = Nothing Then
+    '            M = Regex.Match(S, "(\[[\d]{4}\])")
+    '            If M.Success = True Then
+    '                movieyear = M.Value
+    '            Else
+    '                movieyear = Nothing
+    '            End If
+    '        End If
+    '        If movieyear = Nothing Then
+    '            M = Regex.Match(S, "\d{4}")
+    '            If M.Success = True Then
+    '                movieyear = M.Value
+    '            Else
+    '                movieyear = Nothing
+    '                Return movieyear
+    '            End If
+    '        End If
+    '        Try
+    '            movieyear = movieyear.Trim
+    '            If movieyear.Length = 6 Then
+    '                movieyear = movieyear.Remove(0, 1)
+    '                movieyear = movieyear.Remove(4, 1)
+    '            End If
+    '        Catch
+    '        End Try
+    '        Return movieyear
+    '    Catch
+    '    End Try
+    '    Return "Error"
+    'End Function
 
     Public Function ReplaceCharactersinXML(ByVal Entrada As String) As String
         Dim StringOriginaltoXML As New XmlDocument
@@ -1582,9 +1583,10 @@ Module General
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
+            Dim MovieYear As String = Utilities.GetYearByFilename(MovieName, False, Scraper)
             MovieName = Utilities.CleanFileName(MovieName)
             ParametersForScraper(0) = MovieName
-            ParametersForScraper(1) = GetYearByFilename(MovieName, False)
+            ParametersForScraper(1) = MovieYear    'GetYearByFilename(MovieName, False)
             FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
             FinalScrapResult = FinalScrapResult.Replace("</url>", "")

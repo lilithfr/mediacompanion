@@ -645,10 +645,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return TempReturn
     End Function
 
-    Public Shared Function GetYearByFilename(ByVal filename As String, Optional ByVal trimBrackets As Boolean = True)
+    Public Shared Function GetYearByFilename(ByVal filename As String, Optional ByVal trimBrackets As Boolean = True, Optional ByVal Scraper As String = "")
         Try
             Dim movieyear As String
             Dim S As String = filename
+            If S.Length < 7 Then Return Nothing    'check if year IS actual Title, ie: movie  2013
             Dim M As Match
             M = Regex.Match(S, "(\([\d]{4}\))")
             If M.Success = True Then
@@ -658,6 +659,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End If
             If movieyear = Nothing Then
                 M = Regex.Match(S, "(\[[\d]{4}\])")
+                If M.Success = True Then
+                    movieyear = M.Value
+                Else
+                    movieyear = Nothing
+                    'Return movieyear
+                End If
+            End If
+            If movieyear = Nothing AndAlso Scraper.ToLower = "tmdb" Then
+                M = Regex.Match(S, "\d{4}")
                 If M.Success = True Then
                     movieyear = M.Value
                 Else
@@ -687,6 +697,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Dim currentposition As Integer = filename.Length
         Try
+            '0: remove full stops from filename
+            filename = filename.Replace(".", " ")
             '1: check for multipart tags
             Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)[1a]$)")
             If M.Success = True Then
@@ -742,7 +754,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 filename = filename.Substring(0, currentposition)
                 filename = Regex.Replace(filename, "[" & cleanSeparators & "]+$", "")   ' remove any trailing separator characters
             End If
-            filename = filename.Replace(".", " ")
+            'filename = filename.Replace(".", " ")
         Catch ex As Exception
             filename = "error"
         End Try
