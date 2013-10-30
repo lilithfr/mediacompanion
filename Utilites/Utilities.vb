@@ -693,7 +693,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return filename.Replace(IO.Path.GetExtension(filename), "")
     End Function
 
-    Public Shared Function CleanFileName(ByVal filename As String) As String
+    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal Scraper As String = "") As String
 
         Dim currentposition As Integer = filename.Length
         Try
@@ -743,7 +743,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End If
 
             '7: remove year from filename, don't panic tho' - MC will still scrape with the year
-            Dim movieyear As String = GetYearByFilename(filename, False)
+            Dim movieyear As String = GetYearByFilename(filename, False, Scraper)
             If movieyear <> Nothing And movieyear <> "error" Then
                 Dim posYear As Integer = filename.IndexOf(movieyear)
                 If posYear <> -1 And posYear < currentposition Then currentposition = posYear
