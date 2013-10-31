@@ -2432,8 +2432,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             SaveImage = True
         Catch ex As Exception
             SaveImage = False
-        Finally
-            image.Dispose() 'because image is passed in ByRef, it should be disposed of, but alas it is not.
+        'Finally
+        '    image.Dispose() 'because image is passed in ByRef, it should be disposed of, but alas it is not.
         End Try
     End Function
 
