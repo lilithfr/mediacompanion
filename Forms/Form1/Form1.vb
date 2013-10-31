@@ -6445,21 +6445,34 @@ Public Class Form1
     End Sub
 
     Private Sub btnMovPasteClipboardPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPasteClipboardPoster.Click
-        Try
-            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
-                Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
-                Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
-                If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
-                    util_ImageLoad(PictureBoxAssignedMoviePoster, pth, Utilities.DefaultPosterPath)
-                    lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-                    btnMoviePosterSaveCroppedImage.Enabled = True
-                Else 
-                    MessageBox.Show("Not a picture")
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+
+        If AssignClipboardImage(PictureBoxAssignedMoviePoster) Then
+            lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+            btnMoviePosterSaveCroppedImage.Enabled = True
+        End If
+
+        'Try
+        '    If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
+        '        Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
+        '        Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
+        '        If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
+        '            util_ImageLoad(PictureBoxAssignedMoviePoster, pth, Utilities.DefaultPosterPath)
+        '            lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+        '            btnMoviePosterSaveCroppedImage.Enabled = True
+        '        Else 
+        '            MessageBox.Show("Not a picture")
+        '        End If
+        '    End If
+
+        '    If Clipboard.GetDataObject.GetDataPresent(DataFormats.Bitmap) Then
+        '        PictureBoxAssignedMoviePoster.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
+        '        lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+        '        btnMoviePosterSaveCroppedImage.Enabled = True
+        '    End If
+
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
     End Sub
 
     Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick    'timer from movie poster crop - used for repeat crop if buttom held down
@@ -24826,5 +24839,44 @@ End Sub
         Dim fixCreateDate As New frmCreateDateFix
         fixCreateDate.ShowDialog()
     End Sub
+
+
+    Private Sub btnMovPasteClipboardFanart_Click( sender As Object,  e As EventArgs) Handles btnMovPasteClipboardFanart.Click
+
+        If AssignClipboardImage(PictureBox2) Then
+            btnsavecropped.Enabled = True
+            Label16.Text = PictureBox2.Image.Width
+            Label17.Text = PictureBox2.Image.Height
+        End If
+
+    End Sub
+
+
+    Private Function AssignClipboardImage(picBox As PictureBox) As Boolean
+        Try
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
+                Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
+                Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
+                If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
+                    util_ImageLoad(picBox, pth, Utilities.DefaultPosterPath)
+                    Return True
+                Else 
+                    MessageBox.Show("Not a picture")
+                End If
+            End If
+
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Bitmap) Then
+                picBox.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
+                Return True
+            End If
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+        Return False
+    End Function
+
+
 
 End Class
