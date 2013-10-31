@@ -1274,10 +1274,11 @@ Public Class Movie
         ReportProgress("Actors")
 
         Dim actors As List(Of str_MovieActors) = _imdbScraper.GetImdbActorsList(Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
-
+        Dim actors2 As New List(Of str_MovieActors)
         For Each actor In actors
             Try
                 actor.SaveActor(ActorPath)
+                actors2.Add(actor)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
             End Try
@@ -1286,7 +1287,7 @@ Public Class Movie
         ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)
         If Not Preferences.actorseasy Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
 
-        Return actors
+        Return actors2
     End Function
 
 
