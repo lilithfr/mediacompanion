@@ -454,13 +454,6 @@ Public Class Movie
                 Dim rtfolder As Boolean = Preferences.GetRootFolderCheck(NfoPathAndFilename)
                 If rtfolder Then
                     Return Path.GetFileNameWithoutExtension(TitleFull)
-                'If Preferences.movrootfoldercheck Then
-                    'Dim lastfolder As String = Utilities.GetLastFolder(nfopathandfilename)
-                    'Dim rtfolder As Boolean = Preferences.GetRootFolderCheck(NfoPathAndFilename)
-                    'For Each rfolder in Preferences.movieFolders 
-                        'rtfolder = Path.GetFileName(rfolder)
-                        'If rtfolder Then Return Path.GetFileNameWithoutExtension(TitleFull)
-                    'Next
                 Else
                 Return Utilities.GetLastFolder(nfopathandfilename)
                 End If
@@ -1174,100 +1167,6 @@ Public Class Movie
         _scrapedMovie.listactors = GetImdbActors
     End Sub
 
-    'Sub ImdbScrapeActors(actors As List(Of str_MovieActors))
-
-    '    ReportProgress("Actors")
-
-    '    Dim actorlist   As String = _imdbScraper.getimdbactors(Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
-    '    Dim thumbstring As New XmlDocument
-    '    Dim thisresult  As XmlNode
-        
-
-    '    Try
-    '        thumbstring.LoadXml(actorlist)
-
-    '        For Each thisresult In thumbstring("actorlist")
-    '            Select Case thisresult.Name
-    '                Case "actor"
-
-    '                    Dim newactor As New str_MovieActors
-
-    '                    For Each detail In thisresult.ChildNodes
-    '                        Select Case detail.Name
-    '                            Case "name"
-    '                                newactor.actorname = detail.InnerText
-    '                            Case "role"
-    '                                newactor.actorrole = detail.InnerText
-    '                            Case "thumb"
-    '                                newactor.actorthumb = detail.InnerText
-    '                            Case "actorid"
-    '                                If newactor.actorthumb<>Nothing and detail.InnerText<>"" Then
-    '                                    Try
-    '                                        Dim filename As String
-    '                                        If Preferences.actorseasy Then
-
-    '                                            Dim hg As New IO.DirectoryInfo(ActorPath)
-    '                                            If Not hg.Exists Then
-    '                                                IO.Directory.CreateDirectory(ActorPath)
-    '                                            End If
-    '                                            filename = GetActorFileName(newactor.actorname)
-    '                                            SaveActorImageToCacheAndPath(newactor.actorthumb, filename)
-    '                                            If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-    '                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-    '                                                Utilities.SafeDeleteFile(filename)
-    '                                            ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-    '                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-    '                                            End If
-    '                                        Else
-    '                                            If Preferences.actorsave Then
-    '                                                Dim tempstring = Preferences.actorsavepath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-
-    '                                                Dim hg As New IO.DirectoryInfo(tempstring)
-    '                                                If Not hg.Exists Then
-    '                                                    IO.Directory.CreateDirectory(tempstring)
-    '                                                End If
-
-    '                                                Dim workingpath = tempstring & "\" & detail.InnerText & ".jpg"
-
-    '                                                DownloadCache.SaveImageToCacheAndPath(newactor.actorthumb, workingpath, Preferences.overwritethumbs, , GetHeightResolution(Preferences.ActorResolutionSI))
-    '                                                If Preferences.EdenEnabled And Not Preferences.FrodoEnabled Then
-    '                                                    Utilities.SafeCopyFile(workingpath, workingpath.replace(".jpg", ".tbn"), Preferences.overwritethumbs)
-    '                                                    Utilities.SafeDeleteFile(workingpath)
-    '                                                ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-    '                                                    Utilities.SafeCopyFile(workingpath, workingpath.replace(".jpg", ".tbn"), Preferences.overwritethumbs)
-    '                                                End If
-    '                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-
-    '                                                If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-    '                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-    '                                                Else
-    '                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-    '                                                End If
-    '                                            End If
-    '                                        End If
-    
-    '                                    Catch ex As Exception
-    '                                        ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
-    '                                    End Try
-    '                                End If
-    '                        End Select
-    '                    Next
-    '                    actors.Add(newactor)
-
-    '                    If actors.Count >= Preferences.maxactors then
-    '                        Exit For
-    '                    End If
-    '            End Select
-    '        Next
-
-
-    '        ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)
-    '        If Not Preferences.actorseasy Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
-    '    Catch ex As Exception
-    '        ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to scrape Actors" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
-    '        actors.Clear()
-    '    End Try
-    'End Sub
 
     Function GetImdbActors
 
@@ -1289,10 +1188,6 @@ Public Class Movie
 
         Return actors2
     End Function
-
-
-
-
 
 
     Sub AssignTrailerUrl
@@ -1556,7 +1451,6 @@ Public Class Movie
 
     Sub AssignRuntime(sm As FullMovieDetails, Optional runtime_file As Boolean=False)
         If sm.FileDetails.filedetails_video.DurationInSeconds.Value <> Nothing And (runtime_file or (Preferences.movieRuntimeFallbackToFile and sm.fullmoviebody.runtime = "")) Then
-            'sm.fullmoviebody.runtime = Utilities.cleanruntime(sm.FileDetails.filedetails_video.DurationInSeconds.Value) & " min"
             sm.fullmoviebody.runtime = Math.Round(sm.FileDetails.filedetails_video.DurationInSeconds.Value/60).ToString & " min"
         End If
     End Sub
@@ -1638,7 +1532,6 @@ Public Class Movie
         If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
-        '_videotsrootpath= Utilities.RootVideoTsFolder(NfoPathPrefName)
         Dim edenart As String = NfoPathPrefName.Replace(".nfo", ".tbn")
         Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
         If _videotsrootpath <> "" Then
@@ -1737,16 +1630,6 @@ Public Class Movie
                     Utilities.SafeDeleteFile(actorfilename.Replace(".tbn",".jpg"))
                 End If
             Next
-            'If Preferences.allfolders Then
-            '    For Each f In Directory.GetFiles(ActorPath, "*.tbn")
-            '        File.Delete(f)
-            '    Next
-
-            '    For Each f In Directory.GetFiles(ActorPath, "*.jpg")
-            '        File.Delete(f)
-            '    Next
-            '    Directory.Delete(ActorPath)
-            'End If
         Catch
         End Try
              
@@ -2308,8 +2191,6 @@ Public Class Movie
             End If
         End If
         
-        'RemoveMovieFromCache         'Due to path changes, remove from Cache beforehand.
-
         'If not in root, move files to new path and any sub folders
         If Not inrootfolder Then
             Dim toPathInfo = New DirectoryInfo(checkfolder)
@@ -2842,12 +2723,7 @@ Public Class Movie
                 log &= "!!! Rename bypassed as either Use Foldernames, Basic Save" & vbCrLf 
                 log &= "!!! selected, or files in DVD or Bluray folders" & vbCrLf 
             End If
-
-            ''Part 3.1 - Create Folder or Rename Folder
-            'If Preferences.MovFolderRename Then
-            '    log &= RenameMovFolder
-            'End If
-
+            
             log &= vbCrLf 
         Catch ex As Exception
             log &= "!!!Rename Movie File FAILED !!!" & vbCrLf & vbCrLf

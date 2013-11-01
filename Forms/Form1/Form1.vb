@@ -2296,6 +2296,7 @@ Public Class Form1
                 If Preferences.XbmcTmdbActorDL Then
                     Dim aok As Boolean = XbmcTmdbActorImageSave(aMovie, nfoFileandPath)
                     If aok Then scraperLog &= "Actor images saved" & vbCrLf
+                    'If aok And Preferences.actorsave Then 
                 End If
                 'mov_DBScrapedAdd(newFilename)
                 aMovie.UpdateCaches()
@@ -2359,31 +2360,49 @@ Public Class Form1
     '    Return newname
     'End Function
 
-    Private Function XbmcTmdbActorImageSave(thismovie As Movie, nfoFilename As String) As Boolean
+    Private Function XbmcTmdbActorImageSave(ByRef thismovie As Movie, nfoFilename As String) As Boolean
         Try
+            Dim ActorPath As String = nfoFilename.Replace(IO.Path.GetFileName(nfoFilename), "") & ".actors\"
+            Dim actors2 As New List(Of str_MovieActors)
+            For Each actor In thismovie.ScrapedMovie.listactors
+                Try
+                    actor.SaveActor(ActorPath)
+                    actors2.Add(actor)
+                Catch ex As Exception
+                    'ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
+                End Try
+            Next
+            thismovie.ScrapedMovie.listactors.Clear()
+            thismovie.ScrapedMovie.listactors.AddRange(actors2)
+            Dim check As String = ""
+            'For Each actor In actors2
+            '    Dim newthumb As String = actor.actorthumb 
+
+            'Next
             'Dim thismovie As New Movie
             'Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
             'Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
             'nfoFilename &= ".nfo"
             'thismovie = oMovies.LoadMovie(nfoFilename, False)
-            Dim ActorPath As String = nfoFilename.Replace(IO.Path.GetFileName(nfoFilename), "") & ".actors\"
-                Dim hg As New IO.DirectoryInfo(ActorPath)
-                If Not hg.Exists Then
-                    IO.Directory.CreateDirectory(ActorPath)
-                End If
-            Dim tmdbactors As New List (Of str_MovieActors)  
-            For Each Actor In thismovie.ScrapedMovie.listactors
-                If Not String.IsNullOrEmpty(Actor.actorthumb) Then
-                    Dim actorfilename = IO.Path.Combine(ActorPath, Actor.actorName.Replace(" ", "_") & ".tbn")
-                    Movie.SaveActorImageToCacheAndPath(Actor.actorthumb, actorfilename)
-                    If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                        Utilities.SafeCopyFile(actorfilename, actorfilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                        Utilities.SafeDeleteFile(actorfilename)
-                    ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                        Utilities.SafeCopyFile(actorfilename, actorfilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                    End If
-                End If
-            Next
+            'Dim ActorPath As String = nfoFilename.Replace(IO.Path.GetFileName(nfoFilename), "") & ".actors\"
+            '    Dim hg As New IO.DirectoryInfo(ActorPath)
+            '    If Not hg.Exists Then
+            '        IO.Directory.CreateDirectory(ActorPath)
+            '    End If
+            'Dim tmdbactors As New List (Of str_MovieActors)  
+
+            'For Each Actor In thismovie.ScrapedMovie.listactors
+            '    If Not String.IsNullOrEmpty(Actor.actorthumb) Then
+            '        Dim actorfilename = IO.Path.Combine(ActorPath, Actor.actorName.Replace(" ", "_") & ".tbn")
+            '        Movie.SaveActorImageToCacheAndPath(Actor.actorthumb, actorfilename)
+            '        If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+            '            Utilities.SafeCopyFile(actorfilename, actorfilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+            '            Utilities.SafeDeleteFile(actorfilename)
+            '        ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+            '            Utilities.SafeCopyFile(actorfilename, actorfilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+            '        End If
+            '    End If
+            'Next
 
 
             Return True

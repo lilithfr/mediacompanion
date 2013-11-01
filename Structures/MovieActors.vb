@@ -47,34 +47,25 @@ Public Structure str_MovieActors
             Dim filename As String
 
             If Preferences.actorseasy Then
-
                 Dim hg As New IO.DirectoryInfo(ActorPath)
-
                 If Not hg.Exists Then
                     IO.Directory.CreateDirectory(ActorPath)
                 End If
-
                 filename = GetActorFileName(ActorPath)
-
                 Movie.SaveActorImageToCacheAndPath(actorthumb, filename)
-
                 ActorSave(filename)
 
             Else
                 If Preferences.actorsave And actorid <> "" Then
                     Dim tempstring = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2)
-
                     Dim hg As New IO.DirectoryInfo(tempstring)
                     If Not hg.Exists Then
                         IO.Directory.CreateDirectory(tempstring)
                     End If
 
                     Dim workingpath = tempstring & "\" & actorid & ".jpg"
-
                     DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
-
                     ActorSave(workingpath)
-
                     actorthumb = IO.Path.Combine(Preferences.actornetworkpath, actorid.Substring(actorid.Length - 2, 2))
 
                     If Preferences.actornetworkpath.IndexOf("/") <> -1 Then

@@ -1583,7 +1583,7 @@ Module General
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
-            Dim MovieYear As String = Utilities.GetYearByFilename(MovieName, False, "tmdb")
+            Dim MovieYear As String = Utilities.GetYearByFilename(MovieName, true, "tmdb")
             MovieName = Utilities.CleanFileName(MovieName, "tmdb")
             ParametersForScraper(0) = MovieName
             ParametersForScraper(1) = MovieYear    'GetYearByFilename(MovieName, False)

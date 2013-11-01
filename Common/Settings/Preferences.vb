@@ -1553,10 +1553,7 @@ Public Class Preferences
     Public Shared Function GetActorThumbPath(Optional ByVal location As String = "")
         Dim actualpath As String = ""
         Try
-            If location = Nothing Then
-                Return "none"
-            End If
-            If location = "" Then
+            If String.IsNullOrEmpty(location) Then
                 Return "none"
             End If
 
@@ -1564,19 +1561,17 @@ Public Class Preferences
                 Return location
             Else
                 If location.IndexOf(actornetworkpath) <> -1 Then
-                    If actornetworkpath <> Nothing And actorsavepath <> Nothing Then
-                        If actornetworkpath <> "" And actorsavepath <> "" Then
-                            Dim filename As String = IO.Path.GetFileName(location)
-                            actualpath = IO.Path.Combine(actorsavepath, filename)
-                            If Not IO.File.Exists(actualpath) Then
-                                Dim extension As String = IO.Path.GetExtension(location)
-                                Dim purename As String = IO.Path.GetFileName(location)
-                                purename = purename.Replace(extension, "")
-                                actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
-                            End If
-                            If Not IO.File.Exists(actualpath) Then
-                                actualpath = "none"
-                            End If
+                    If Not String.IsNullOrEmpty(actornetworkpath) And Not String.IsNullOrEmpty(actorsavepath) Then
+                        Dim filename As String = IO.Path.GetFileName(location)
+                        actualpath = IO.Path.Combine(actorsavepath, filename)
+                        If Not IO.File.Exists(actualpath) Then
+                            Dim extension As String = IO.Path.GetExtension(location)
+                            Dim purename As String = IO.Path.GetFileName(location)
+                            purename = purename.Replace(extension, "")
+                            actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
+                        End If
+                        If Not IO.File.Exists(actualpath) Then
+                            actualpath = "none"
                         End If
                     Else
                         actualpath = "none"
@@ -1585,7 +1580,7 @@ Public Class Preferences
                     actualpath = "none"
                 End If
             End If
-            If actualpath = "" Then actualpath = "none"
+            If String.IsNullOrEmpty(actualpath) Then actualpath = "none"
             Return actualpath
         Catch
             Return "none"
