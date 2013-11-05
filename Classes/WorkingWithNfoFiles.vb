@@ -130,7 +130,7 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.Aired.Value = thisresult.InnerText
                             Case "plot"
                                 newtvepisode.Plot.Value = thisresult.InnerText
-
+                           
                         End Select
 
                     Catch ex As Exception
@@ -2400,7 +2400,7 @@ Public Class WorkingWithNfoFiles
         Return "Error"
     End Function
 
-    Public Sub ep_NfoSave(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String)
+    Public Shared Sub ep_NfoSave(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String)
         Dim document As New XmlDocument
         Dim root As XmlElement
         Dim xmlEpisode As XmlElement

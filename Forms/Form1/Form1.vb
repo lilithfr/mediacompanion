@@ -9047,6 +9047,54 @@ Public Class Form1
 
                     Episode.Save()
                     Episode.UpdateTreenode()
+                Else
+                    Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
+                    Do While trueseason.Substring(0, 1) = "0"
+                        trueseason = trueseason.Substring(1, trueseason.Length - 1)
+                    Loop
+                    Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
+                    Do While trueepisode.Substring(0, 1) = "0"
+                        trueepisode = trueepisode.Substring(1, trueseason.Length - 1)
+                    Loop
+                    tempstring = "S" & trueseason & "E" & trueepisode & " - "
+                    'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
+                    Episode.Plot.Value = TextBox_Plot.Text
+                    Episode.Aired.Value = TextBox_Aired.Text
+                    Episode.Rating.Value = TextBox_Rating.Text
+                    Episode.Credits.Value = TextBox_Credits.Text
+                    Episode.Director.Value = TextBox_Director.Text
+
+                    Dim episodelist As New List(Of TvEpisode)
+                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
+                    For Each ep In episodelist
+                        If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
+                            ep.Plot.Value = TextBox_Plot.Text
+                            ep.Aired.Value = TextBox_Aired.Text
+                            ep.Rating.Value = TextBox_Rating.Text
+                            ep.Credits.Value = TextBox_Credits.Text
+                            ep.Director.Value = TextBox_Director.Text
+                        End If
+                        Dim fullfiledetails As Media_Companion.FullFileDetails
+                        fullfiledetails = Media_Companion.Preferences.Get_HdTags(Episode.NfoFilePath)
+                        ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
+                        ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
+                        ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
+                        ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
+                        ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
+                        ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
+                        ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
+
+                        For Each track In fullfiledetails.filedetails_audio
+                            Dim newtrack As New AudioDetails
+                            newtrack.Codec = track.Codec
+                            newtrack.Channels = track.Channels
+                            newtrack.Bitrate = track.Bitrate
+                            ep.Details.StreamDetails.Audio.Add(newtrack)
+                        Next
+                    Next
+                    WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
+
+                    Episode.UpdateTreenode()
                 End If
             End If
 
@@ -10207,12 +10255,39 @@ Public Class Form1
 
     Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
         Try
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+
             Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
 
             If multi = False Then
-                Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
                 util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
                 WorkingEpisode.Save()
+            Else
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                Dim done As String = ""
+                For Each ep In episodelist
+                    util_EpisodeSetWatched(ep.PlayCount.Value, True)
+                    Dim fullfiledetails As Media_Companion.FullFileDetails
+                    fullfiledetails = Media_Companion.Preferences.Get_HdTags(ep.NfoFilePath)
+                    ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
+                    ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
+                    ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
+                    ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
+                    ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
+                    ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
+                    ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
+
+                    For Each track In fullfiledetails.filedetails_audio
+                        Dim newtrack As New AudioDetails
+                        newtrack.Codec = track.Codec
+                        newtrack.Channels = track.Channels
+                        newtrack.Bitrate = track.Bitrate
+                        ep.Details.StreamDetails.Audio.Add(newtrack)
+                    Next
+                Next
+
+                WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
