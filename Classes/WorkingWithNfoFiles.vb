@@ -46,7 +46,7 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Function ep_NfoLoad(ByVal path As String)
+    Public Shared Function ep_NfoLoad(ByVal path As String)
         'Try
         Dim episodelist As New List(Of TvEpisode)
 
@@ -87,11 +87,11 @@ Public Class WorkingWithNfoFiles
                 If newtvshow.Episode.Value = Nothing Then
                     newtvshow.Episode.Value = "-1"
                 End If
-                If newtvshow.Season.value = Nothing Then
-                    newtvshow.Season.value = "-1"
+                If newtvshow.Season.Value = Nothing Then
+                    newtvshow.Season.Value = "-1"
                 End If
-                If newtvshow.Season.value.IndexOf("0") = 0 Then
-                    newtvshow.Season.value = newtvshow.Season.value.Substring(1, 1)
+                If newtvshow.Season.Value.IndexOf("0") = 0 Then
+                    newtvshow.Season.Value = newtvshow.Season.Value.Substring(1, 1)
                 End If
                 If newtvshow.Episode.Value.IndexOf("0") = 0 Then
                     newtvshow.Episode.Value = newtvshow.Episode.Value.Substring(1, 1)
@@ -115,7 +115,7 @@ Public Class WorkingWithNfoFiles
                             Case "title"
                                 newtvepisode.Title.Value = thisresult.InnerText
                             Case "season"
-                                newtvepisode.Season.value = thisresult.InnerText
+                                newtvepisode.Season.Value = thisresult.InnerText
                             Case "episode"
                                 newtvepisode.Episode.Value = thisresult.InnerText
                             Case "tvdbid"
@@ -128,6 +128,9 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.PlayCount.Value = thisresult.InnerText
                             Case "aired"
                                 newtvepisode.Aired.Value = thisresult.InnerText
+                            Case "plot"
+                                newtvepisode.Plot.Value = thisresult.InnerText
+
                         End Select
 
                     Catch ex As Exception
@@ -155,8 +158,8 @@ Public Class WorkingWithNfoFiles
                 If newtvepisode.Episode.Value = Nothing Then
                     newtvepisode.Episode.Value = "-1"
                 End If
-                If newtvepisode.Season.value = Nothing Then
-                    newtvepisode.Season.value = "-1"
+                If newtvepisode.Season.Value = Nothing Then
+                    newtvepisode.Season.Value = "-1"
                 End If
                 If newtvepisode.TvdbId = Nothing Then newtvepisode.TvdbId.Value = ""
                 'If newtvepisode.status = Nothing Then newtvepisode.status = ""
@@ -169,8 +172,9 @@ Public Class WorkingWithNfoFiles
                         Case "episodedetails"
                             Dim newepisodenfo As XmlNode = Nothing
                             Dim anotherepisode As New TvEpisode
-
-                            ' For Each newepisodenfo In thisresult.ChildNodes
+                            Dim filedetails As String = ""
+                            Dim audio As String = ""
+                           
                             Dim tempint As Integer = thisresult.ChildNodes.Count - 1
                             For f = 0 To tempint
                                 Try
@@ -178,7 +182,7 @@ Public Class WorkingWithNfoFiles
                                         Case "title"
                                             anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
                                         Case "season"
-                                            anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Season.Value = thisresult.ChildNodes(f).InnerText
                                         Case "episode"
                                             anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
                                         Case "tvdbid"
@@ -189,7 +193,14 @@ Public Class WorkingWithNfoFiles
                                             If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
                                         Case "playcount"
                                             anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
-
+                                        Case "plot"
+                                            anotherepisode.Plot.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "director"
+                                            anotherepisode.Director.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "credits"
+                                            anotherepisode.Credits.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "aired"
+                                            anotherepisode.Aired.Value = thisresult.ChildNodes(f).InnerText
                                     End Select
                                 Catch ex As Exception
                                     MsgBox(ex.ToString)
@@ -217,8 +228,8 @@ Public Class WorkingWithNfoFiles
                                 If anotherepisode.Episode.Value = Nothing Then
                                     anotherepisode.Episode.Value = "-1"
                                 End If
-                                If anotherepisode.Season.value = Nothing Then
-                                    anotherepisode.Season.value = "-1"
+                                If anotherepisode.Season.Value = Nothing Then
+                                    anotherepisode.Season.Value = "-1"
                                 End If
                                 If anotherepisode.TvdbId = Nothing Then anotherepisode.TvdbId.Value = ""
                                 'If anotherepisode.status = Nothing Then anotherepisode.status = ""

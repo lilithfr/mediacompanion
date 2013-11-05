@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports System.Text
 'Imports System.Threading
 'Imports Media_Companion.ScraperFunctions
-
+Imports Media_Companion.WorkingWithNfoFiles
 Imports System.Xml
 Imports Media_Companion
 Imports Media_Companion.Preferences
@@ -750,94 +750,168 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
-        'If Episode.IsCache Then
-        Episode.Load()
-        'End If
-        Dim tempstring As String = ""
-        'TextBox_Title.Text = ""
-        'TextBox_Rating.Text = ""
-        'TextBox_Plot.Text = ""
-        'TextBox_Director.Text = ""
-        'TextBox_Credits.Text = ""
-        'TextBox_Aired.Text = ""
-        'TextBox25.Text = ""
-        'ComboBox5.Text = ""
-        'TextBox17.Text = ""
-        'TextBox29.Text = ""
+    Private Function TestForMultiepisode(ByVal path As String)
+        Dim multiepisode As Boolean = False
+        Try
+            Dim firstline As String = ""
+            If IO.File.Exists(path) Then
 
-        ComboBox5.Items.Clear()
-        TextBox29.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
-        TextBox17.Text = Utilities.ReplaceNothing(Episode.FolderPath)
-        If Not IO.File.Exists(Episode.NfoFilePath) Then
-            TextBox_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
-            Panel9.Visible = True
-            Episode.EpisodeNode.BackColor = Color.Red
-            Exit Sub
-        Else
-            Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
-        End If
-        TextBox_Title.Text = Utilities.ReplaceNothing(Episode.ShowObj.Title.Value, "?") & " - S" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.SeasonObj.SeasonNumber), 2) & "E" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.Episode.Value), 2) & " - '" & Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
-        TextBox_Rating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
-        TextBox_Plot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
-        TextBox_Director.Text = Utilities.ReplaceNothing(Episode.Director.Value)
-        TextBox_Credits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
-        TextBox_Aired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
-        util_EpisodeSetWatched(Episode.PlayCount.Value)
+                Dim listText As New List(Of String)
+                Dim objLine As String = ""
 
-
-        TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
-        TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
-        TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
-        TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
-
-        If Episode.Details.StreamDetails.Audio.Count > 0 Then
-            TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
-            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
-        End If
-
-
-        For Each actor In Episode.ListActors
-            If actor.actorname <> Nothing Then
-                ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
+                Using objReader As StreamReader = New StreamReader(path)
+                    Do
+                        objLine = objReader.ReadLine()
+                        If objLine.IndexOf("<multiepisodenfo>") <> -1 Then
+                            multiepisode = True
+                            Exit Do
+                        ElseIf objLine.IndexOf("<episodedetails>") <> -1 Then
+                            multiepisode = False
+                            Exit Do
+                        End If
+                    Loop Until objLine Is Nothing
+                End Using
             End If
-        Next
-        If ComboBox5.Items.Count = 0 Then
+        Catch
+        End Try
+        Return multiepisode
+    End Function
+
+    Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
+
+        'test for multiepisodenfo
+        Dim multiepisode As Boolean = TestForMultiepisode(Episode.NfoFilePath)
+
+        If multiepisode = False Then
+            'multiepisode manualhandler
+
+         
+
+            Episode.Load()
+
+
+
+            Dim tempstring As String = ""
+            'TextBox_Title.Text = ""
+            'TextBox_Rating.Text = ""
+            'TextBox_Plot.Text = ""
+            'TextBox_Director.Text = ""
+            'TextBox_Credits.Text = ""
+            'TextBox_Aired.Text = ""
+            'TextBox25.Text = ""
+            'ComboBox5.Text = ""
+            'TextBox17.Text = ""
+            'TextBox29.Text = ""
+
+            ComboBox5.Items.Clear()
+            TextBox29.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
+            TextBox17.Text = Utilities.ReplaceNothing(Episode.FolderPath)
+            If Not IO.File.Exists(Episode.NfoFilePath) Then
+                TextBox_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
+                Panel9.Visible = True
+                Episode.EpisodeNode.BackColor = Color.Red
+                Exit Sub
+            Else
+                Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
+            End If
+
+            TextBox_Title.Text = Utilities.ReplaceNothing(Episode.ShowObj.Title.Value, "?") & " - S" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.SeasonObj.SeasonNumber), 2) & "E" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.Episode.Value), 2) & " - '" & Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
+            TextBox_Rating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
+            TextBox_Plot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
+            TextBox_Director.Text = Utilities.ReplaceNothing(Episode.Director.Value)
+            TextBox_Credits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
+            TextBox_Aired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
+
+            util_EpisodeSetWatched(Episode.PlayCount.Value)
+
+
+            TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
+            TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
+            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
+
+            If Episode.Details.StreamDetails.Audio.Count > 0 Then
+                TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
+            End If
+
+
             For Each actor In Episode.ListActors
                 If actor.actorname <> Nothing Then
                     ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
                 End If
             Next
+            If ComboBox5.Items.Count = 0 Then
+                For Each actor In Episode.ListActors
+                    If actor.actorname <> Nothing Then
+                        ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
+                    End If
+                Next
+            Else
+                ComboBox5.SelectedIndex = 0
+            End If
+
+            'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
+            ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
+            ' It could have been why Billy has used two pictureboxes for each single one shown.....
+
+            If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
+                If Preferences.EdenEnabled Then
+                    util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultTvFanartPath)
+                End If
+                If Preferences.FrodoEnabled Then
+                    util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultTvFanartPath)
+                End If
+            End If
+            If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
+                If Preferences.EdenEnabled Then
+                    util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                End If
+                If Preferences.FrodoEnabled Then
+                    util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                    util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultTvBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                End If
+            End If
+
+            Dim video_flags = GetEpMediaFlags()
+            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, TextBox_Rating.Text, video_flags)
         Else
-            ComboBox5.SelectedIndex = 0
+            Dim episodelist As New List(Of TvEpisode)
+            episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
+            For Each Ep In episodelist
+                If Ep.Season.Value = Episode.Season.Value And Ep.Episode.Value = Episode.Episode.Value Then
+                    TextBox_Title.Text = Ep.Title.Value
+                    TextBox_Rating.Text = Ep.Rating.Value
+                    TextBox_Plot.Text = Ep.Plot.Value
+                    TextBox_Director.Text = Ep.Director.Value
+                    TextBox_Credits.Text = Ep.Credits.Value
+                    TextBox_Aired.Text = Ep.Aired.Value
+                    If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
+                        If Preferences.EdenEnabled Then
+                            util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultTvFanartPath)
+                        End If
+                        If Preferences.FrodoEnabled Then
+                            util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultTvFanartPath)
+                        End If
+                    End If
+                    If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
+                        If Preferences.EdenEnabled Then
+                            util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                        End If
+                        If Preferences.FrodoEnabled Then
+                            util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                            util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultTvBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                        End If
+                    End If
+
+                    Dim video_flags = GetMultiEpMediaFlags(Ep)
+                    movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, TextBox_Rating.Text, video_flags)
+                    TextBox29.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Ep.NfoFilePath))
+                    TextBox17.Text = Utilities.ReplaceNothing(Ep.FolderPath)
+                End If
+            Next
         End If
-
-        'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
-        ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
-        ' It could have been why Billy has used two pictureboxes for each single one shown.....
-
-        If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
-            If Preferences.EdenEnabled Then
-                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultTvFanartPath)
-            End If
-            If Preferences.FrodoEnabled Then
-                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultTvFanartPath)
-            End If
-        End If
-        If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
-            If Preferences.EdenEnabled Then
-                util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-            End If
-            If Preferences.FrodoEnabled Then
-                util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-                util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultTvBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-            End If
-        End If
-
-        Dim video_flags = GetEpMediaFlags()
-        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, TextBox_Rating.Text, video_flags)
-
         Panel9.Visible = True
 
     End Sub
@@ -2208,10 +2282,13 @@ Partial Public Class Form1
             Season = TvTreeview.SelectedNode.Tag
             Show = Season.GetParentShow
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-            Episode = TvTreeview.SelectedNode.Tag
-            Season = Episode.SeasonObj
-            Show = Episode.ShowObj
+          
+        
+                Episode = TvTreeview.SelectedNode.Tag
+                Season = Episode.SeasonObj
+                Show = Episode.ShowObj
         End If
+
 
         Return Show
     End Function
@@ -3818,7 +3895,66 @@ Partial Public Class Form1
         End Try
         Return flags
     End Function
+    Private Function GetMultiEpMediaFlags(ByVal thisep As TvEpisode) As Dictionary(Of String, String)
 
+        Dim fullfiledetails As Media_Companion.FullFileDetails
+
+        Dim tempstring2 As String = ""
+        Dim tempstring As String = ""
+        Dim pathandfilename As String = TvTreeview.SelectedNode.Name
+        If pathandfilename <> Nothing Then
+            If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
+                pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
+
+                Dim exists As Boolean = False
+                For Each ext In Utilities.VideoExtensions
+                    If ext = "VIDEO_TS.IFO" Then Continue For
+                    tempstring2 = pathandfilename & ext
+
+                    If IO.File.Exists(tempstring2) Then
+                        exists = True
+                        Exit For
+                    End If
+                Next
+
+            End If
+        End If
+
+        fullfiledetails = Media_Companion.Preferences.Get_HdTags(tempstring2)
+
+
+
+
+
+
+        Dim flags As New Dictionary(Of String, String)
+        Try
+            flags.Add("channels", If(fullfiledetails.filedetails_audio.Count = 0, "", fullfiledetails.filedetails_audio(0).Channels.Value))
+            flags.Add("audio", If(fullfiledetails.filedetails_audio.Count = 0, "", fullfiledetails.filedetails_audio(0).Codec.Value))
+            flags.Add("aspect", Utilities.GetStdAspectRatio(fullfiledetails.filedetails_video.Aspect.Value))
+            flags.Add("codec", fullfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)
+            flags.Add("resolution", If(fullfiledetails.filedetails_video.VideoResolution < 0, "", fullfiledetails.filedetails_video.VideoResolution.ToString))
+
+
+            TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Height.Value, "?")
+            TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Aspect.Value, "?") & ")"
+            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Codec.Value, "?")
+            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Bitrate.Value, "?")
+
+            If fullfiledetails.filedetails_audio.Count > 0 Then
+                TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Codec.Value, "?")
+                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Bitrate.Value, "?")
+                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Channels.Value, "?") & " channels"
+            End If
+
+
+
+
+
+        Catch
+        End Try
+        Return flags
+    End Function
 
 
 End Class

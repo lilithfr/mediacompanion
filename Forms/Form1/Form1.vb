@@ -8965,7 +8965,9 @@ Public Class Form1
     End Sub
 
     Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click  'save button
+
         Try
+
             Dim Show As Media_Companion.TvShow = Nothing
             Dim Season As Media_Companion.TvSeason = Nothing
             Dim Episode As Media_Companion.TvEpisode = Nothing
@@ -9033,16 +9035,19 @@ Public Class Form1
 
             Else
                 'its an episode
-                Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
-                Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
-                tempstring = "S" & trueseason & "E" & trueepisode & " - "
-                'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                Episode.Plot.Value = TextBox_Plot.Text
-                Episode.Aired.Value = TextBox_Aired.Text
-                Episode.Rating.Value = TextBox_Rating.Text
+                Dim multiepisode As Boolean = TestForMultiepisode(Episode.NfoFilePath)
+                If multiepisode = False Then
+                    Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
+                    Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
+                    tempstring = "S" & trueseason & "E" & trueepisode & " - "
+                    'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
+                    Episode.Plot.Value = TextBox_Plot.Text
+                    Episode.Aired.Value = TextBox_Aired.Text
+                    Episode.Rating.Value = TextBox_Rating.Text
 
-                Episode.Save()
-                Episode.UpdateTreenode()
+                    Episode.Save()
+                    Episode.UpdateTreenode()
+                End If
             End If
 
         Catch ex As Exception
@@ -10202,9 +10207,13 @@ Public Class Form1
 
     Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
         Try
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-            util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
-            WorkingEpisode.Save()
+            Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
+
+            If multi = False Then
+                Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+                util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
+                WorkingEpisode.Save()
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21233,6 +21242,8 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+
 
     Private Sub TvTreeview_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TvTreeview.MouseUp
 
