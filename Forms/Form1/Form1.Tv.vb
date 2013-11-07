@@ -992,6 +992,29 @@ Partial Public Class Form1
         Return False
     End Function
 
+    Private Sub Tv_EpisodesMissingLoad(ByVal ShowList As TvShow)
+        'For Each item In ShowList
+        Dim showid As String = ShowList.TvdbId.Value
+        If IsNumeric(showid) Then
+            Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
+            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
+            For Each fs_info As System.IO.FileInfo In fs_infos
+                Dim MissingEpisode As New TvEpisode
+                MissingEpisode.NfoFilePath = fs_info.FullName
+                MissingEpisode.Load()
+                If MissingEpisode.TvdbId.Value = showid Then
+                    Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
+                    If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
+                        MissingEpisode.IsMissing = True
+                        MissingEpisode.IsCache = True
+                        MissingEpisode.ShowObj = ShowList
+                        ShowList.AddEpisode(MissingEpisode)
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
@@ -1002,6 +1025,8 @@ Partial Public Class Form1
         frmSplash2.Show()
         Application.DoEvents()
 
+        Dim fulltvshowlist As New List(Of TvShow)
+        Dim fullepisodelist As New List(Of TvEpisode)
 
         tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
         TextBox_TotTVShowCount.Text = ""
@@ -1016,6 +1041,12 @@ Partial Public Class Form1
             Cache.TvCache.Remove(TvShowSelected)
             For Each episode In TvShowSelected.Episodes
                 Cache.TvCache.Remove(episode)
+            Next
+            For Each showitem In Cache.TvCache.Shows
+                fulltvshowlist.Add(showitem)
+                For Each episodeitem In Cache.TvCache.Episodes
+                    fullepisodelist.Add(episodeitem)
+                Next
             Next
         Else
             FolderList = Preferences.tvFolders ' add all folders to list to scan
@@ -1036,39 +1067,33 @@ Partial Public Class Form1
             Application.DoEvents()
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
-            newtvshownfo.Load(True)
+
+            newtvshownfo.Load(False)
+            fulltvshowlist.Add(newtvshownfo)
+            Dim episodelist As New List(Of TvEpisode)
+            episodelist = loadepisodes(newtvshownfo, episodelist)
+            For Each ep In episodelist
+                fullepisodelist.Add(ep)
+            Next
+
+
             If Preferences.displayMissingEpisodes Then
                 Try
                     Tv_EpisodesMissingLoad(newtvshownfo)
                 Catch
                 End Try
             End If
-            DirectCast(newtvshownfo.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = newtvshownfo.NfoFilePath
-            If newtvshownfo.Title.Value IsNot Nothing Then
-                If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
-                    If newtvshownfo.TvdbId.Value IsNot Nothing AndAlso newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
-                        tv_IMDbID_detected = True
-                        If Preferences.fixnfoid Then 'test if ID value should be fixed - i.e. IMDB value should be replaced by TVDB value
-                            newtvshownfo.ImdbId.Value = newtvshownfo.TvdbId.Value
-                            newtvshownfo.TvdbId.Value = newtvshownfo.IdTagCatch.Value
-                            Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True) 'save the nfo with the new ID data
-                            'Call tv_ShowLoad(newtvshownfo) ' reload the show to display..... SK: I think the current show will refresh anyway so this doesn't have to be called....
-                        End If
-                    End If
 
-                    Cache.TvCache.Add(newtvshownfo) 'add this show & episode data to the cache
-                End If
-                ' TvTreeview.Nodes.Add(newtvshownfo.ShowNode) 'Instead of updating the treeview directly we reload the treeview with the created cache at the end....
-            End If
-
-            realTvPaths.Add(tvfolder)
         Next
-
         frmSplash2.Label2.Visible = False
 
         frmSplash2.Label1.Text = "Saving Cache..."
         Windows.Forms.Application.DoEvents()
-        Tv_CacheSave()    'save the cache file
+
+       
+
+
+        Tv_RefreshCacheSave(fulltvshowlist, fullepisodelist)    'save the cache file
         frmSplash2.Label1.Text = "Loading Cache..."
         Windows.Forms.Application.DoEvents()
         tv_CacheLoad()    'reload the cache file to update the treeview
@@ -1095,6 +1120,122 @@ Partial Public Class Form1
         End If
         tv_Filter()
     End Sub
+
+
+
+    Private Sub Tv_RefreshCacheSave(ByVal tvshowlist As List(Of TvShow), ByVal episodeelist As List(Of TvEpisode))
+        Dim tvcachepath As String = Preferences.workingProfile.TvCache
+        Dim document As New XmlDocument
+        Dim root As XmlElement
+        Dim child As XmlElement
+        Dim childchild As XmlElement
+        Dim xmlproc As XmlDeclaration
+        xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        document.AppendChild(xmlproc)
+        root = document.CreateElement("tvcache")
+        root.SetAttribute("ver", "3.5")
+        For Each item In tvshowlist
+            child = document.CreateElement("tvshow")
+            child.SetAttribute("NfoPath", item.NfoFilePath)
+
+            childchild = document.CreateElement("state")
+            childchild.InnerText = "0"
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("title")
+            childchild.InnerText = item.Title.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("id")
+            childchild.InnerText = item.TvdbId.Value
+            child.AppendChild(childchild)
+
+            root.AppendChild(child)
+        Next
+
+        For Each item In episodeelist
+            child = document.CreateElement("episodedetails")
+            child.SetAttribute("NfoPath", item.NfoFilePath)
+
+            childchild = document.CreateElement("missing")
+            childchild.InnerText = "false"
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("title")
+            childchild.InnerText = item.Title.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("season")
+            childchild.InnerText = item.Season.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("episode")
+            childchild.InnerText = item.Episode.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("aired")
+            childchild.InnerText = item.Aired.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("showid")
+            childchild.InnerText = item.ShowId.Value
+            child.AppendChild(childchild)
+
+            root.AppendChild(child)
+
+        Next
+
+        document.AppendChild(root)
+
+        Dim output As New XmlTextWriter(tvcachepath, System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+
+        document.WriteTo(output)
+        output.Close()
+
+
+    End Sub
+
+
+
+    Private Function loadepisodes(ByVal newtvshownfo As TvShow, ByRef episodelist As List(Of TvEpisode))
+
+        Dim newlist As New List(Of String)
+        newlist.Clear()
+
+        newlist = Utilities.EnumerateFolders(newtvshownfo.FolderPath) 'TODO: Restore loging functions
+
+        newlist.Add(newtvshownfo.FolderPath)
+
+        For Each folder In newlist
+            Dim dir_info As New System.IO.DirectoryInfo(folder)
+
+            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
+            For Each fs_info As System.IO.FileInfo In fs_infos
+                'Application.DoEvents()
+                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
+                    Dim NewEpisode As New TvEpisode
+                    NewEpisode.NfoFilePath = fs_info.FullName
+                    Dim multiep As Boolean = TestForMultiepisode(NewEpisode.NfoFilePath)
+                    If multiep = False Then
+                        NewEpisode.Load()
+                        episodelist.Add(NewEpisode)
+                    Else
+                        Dim loader As New Media_Companion.Utilities
+                        Dim multiepisodelist As New List(Of TvEpisode)
+                        multiepisodelist = ep_NfoLoad(NewEpisode.NfoFilePath)
+                        For Each Ep In multiepisodelist
+                            Ep.ShowObj = newtvshownfo
+                            Ep.ShowId.Value = newtvshownfo.TvdbId.Value
+                            episodelist.Add(Ep)
+
+                        Next
+                    End If
+                End If
+            Next fs_info
+        Next
+        Return episodelist
+    End Function
 
     Private Sub tv_ShowListLoad()
         If TextBox26.Text <> "" Then
@@ -2160,7 +2301,7 @@ Partial Public Class Form1
                                         'Next
 
                                     Else
-                                        tvscraperlog = tvscraperlog & "Unable To Get Actors From IMDB" & vbCrLf
+                                        tvScraperLog = tvScraperLog & "Unable To Get Actors From IMDB" & vbCrLf
                                     End If
                                 End If
                                 If imdbid = "" Then
@@ -2282,11 +2423,11 @@ Partial Public Class Form1
             Season = TvTreeview.SelectedNode.Tag
             Show = Season.GetParentShow
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-          
-        
-                Episode = TvTreeview.SelectedNode.Tag
-                Season = Episode.SeasonObj
-                Show = Episode.ShowObj
+
+
+            Episode = TvTreeview.SelectedNode.Tag
+            Season = Episode.SeasonObj
+            Show = Episode.ShowObj
         End If
 
 
@@ -2633,28 +2774,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub Tv_EpisodesMissingLoad(ByVal ShowList As TvShow)
-        'For Each item In ShowList
-        Dim showid As String = ShowList.TvdbId.Value
-        If IsNumeric(showid) Then
-            Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
-            For Each fs_info As System.IO.FileInfo In fs_infos
-                Dim MissingEpisode As New TvEpisode
-                MissingEpisode.NfoFilePath = fs_info.FullName
-                MissingEpisode.Load()
-                If MissingEpisode.TvdbId.Value = showid Then
-                    Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
-                    If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
-                        MissingEpisode.IsMissing = True
-                        MissingEpisode.IsCache = True
-                        MissingEpisode.ShowObj = ShowList
-                        ShowList.AddEpisode(MissingEpisode)
-                    End If
-                End If
-            Next
-        End If
-    End Sub
+
 
 #End Region
 
@@ -2675,7 +2795,7 @@ Partial Public Class Form1
     '    Next
     'End Sub
 #Region "Tasks"
-    Private Sub lstTasks_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksList.SelectedIndexChanged
+    Private Sub lstTasks_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TasksList.SelectedIndexChanged
         If TasksList.SelectedItem Is Nothing Then Exit Sub
 
         Dim SelectedTask As ITask
@@ -2722,13 +2842,13 @@ Partial Public Class Form1
         Next
     End Sub
 
-    Private Sub lstTasks_Messages_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksMessages.SelectedIndexChanged
+    Private Sub lstTasks_Messages_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TasksMessages.SelectedIndexChanged
         If TasksMessages.SelectedItem Is Nothing Then Exit Sub
 
         TasksSelectedMessage.Text = TasksMessages.SelectedItem
     End Sub
 
-    Private Sub cmbTasks_Arguments_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksArgumentSelector.SelectedIndexChanged
+    Private Sub cmbTasks_Arguments_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TasksArgumentSelector.SelectedIndexChanged
         If TasksArgumentSelector.SelectedItem Is Nothing Then Exit Sub
 
         TasksArgumentDisplay.Controls.Clear()
@@ -2747,7 +2867,7 @@ Partial Public Class Form1
         End If
     End Sub
 
-    Private Sub TasksTest_Click(sender As System.Object, e As System.EventArgs) Handles TasksTest.Click
+    Private Sub TasksTest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TasksTest.Click
         For I = 0 To 20
             Common.Tasks.Add(New Tasks.BlankTask())
         Next
@@ -2755,11 +2875,11 @@ Partial Public Class Form1
         RefreshTaskList()
     End Sub
 
-    Private Sub TasksRefresh_Click(sender As System.Object, e As System.EventArgs) Handles TasksRefresh.Click
+    Private Sub TasksRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TasksRefresh.Click
         RefreshTaskList()
     End Sub
 
-    Private Sub TasksClearCompleted_Click(sender As System.Object, e As System.EventArgs) Handles TasksClearCompleted.Click
+    Private Sub TasksClearCompleted_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TasksClearCompleted.Click
         'Manually building a for loop
         Dim Count As Long = Common.Tasks.Count
         Dim Cursor As Long = 0
@@ -2820,7 +2940,7 @@ Partial Public Class Form1
 #End Region
 
 #Region "Tv Artwork, TV Actor & EP Thumbnail Routines"
-    Private Function TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean) As Boolean 
+    Private Function TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean) As Boolean
         '(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
         Dim success As Boolean = False
         Try
@@ -3165,13 +3285,13 @@ Partial Public Class Form1
 
             Dim NewAct As New Media_Companion.Actor
             NewAct.ActorId = Act.Id
-            NewAct.actorname = Utilities.cleanSpecChars(Act.Name.Value).TrimStart.TrimEnd 
+            NewAct.actorname = Utilities.cleanSpecChars(Act.Name.Value).TrimStart.TrimEnd
             Dim newstring As String
             newstring = Act.Role.Value
             newstring = newstring.TrimEnd("|")
             newstring = newstring.TrimStart("|")
             newstring = newstring.Replace("|", ", ")
-            NewAct.actorrole = newstring.TrimStart.TrimEnd 
+            NewAct.actorrole = newstring.TrimStart.TrimEnd
             If Act.Image.Value <> "" Then
                 NewAct.actorthumb = "http://thetvdb.com/banners/_cache/" & Act.Image.Value
             Else
@@ -3282,8 +3402,8 @@ Partial Public Class Form1
 
         'actorstring.LoadXml(actorlist)
 
-        For Each thisresult in actorlist 
-            
+        For Each thisresult In actorlist
+
             'thisresult.actorrole = Utilities.cleanTvActorRole(thisresult.actorrole)
 
             If thisresult.actorthumb <> Nothing And actcount < (actmax + 1) Then
@@ -3587,9 +3707,9 @@ Partial Public Class Form1
             Dim seasonno As String = ""
             If Not mainimages Then
                 seasonno = tv_SeasonSelectedCurrently.ToString
-                seasonno = seasonno.ToLower.Replace("season ","")
+                seasonno = seasonno.ToLower.Replace("season ", "")
                 Dim tmp As Integer = seasonno.ToInt
-                seasonno = tmp.ToString 
+                seasonno = tmp.ToString
             End If
             Dim language As String = WorkingTvShow.Language.Value
             Dim eden As Boolean = Preferences.EdenEnabled
@@ -3682,7 +3802,7 @@ Partial Public Class Form1
                 End If
             End If
             If posterpath <> "" Then
-                Dim imagepath as New List(Of String)
+                Dim imagepath As New List(Of String)
                 If mainimages Then
                     If postertype = "poster" Then
                         If frodo Then
@@ -3699,8 +3819,8 @@ Partial Public Class Form1
                             imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
                         End If
                     End If
-                Else 
-                    If seasonno.ToInt < 10 Then seasonno = "0" & seasonno 
+                Else
+                    If seasonno.ToInt < 10 Then seasonno = "0" & seasonno
                     If postertype = "poster" Then
                         If eden Then
                             imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
@@ -3728,7 +3848,7 @@ Partial Public Class Form1
                     util_ImageLoad(tv_PictureBoxBottom, imagepath(last), Utilities.DefaultTvBannerPath)
                 End If
                 'tv_ShowLoad(Showname)
-            Else 
+            Else
                 messbox.Close()
                 MsgBox("No " & If(postertype = "poster", "Poster", "Banner") & " found")
             End If
@@ -3769,7 +3889,7 @@ Partial Public Class Form1
         MyBase.Finalize()
     End Sub
 
-    Private Sub Label136_AutoSizeChanged(sender As Object, e As System.EventArgs) Handles Label136.AutoSizeChanged
+    Private Sub Label136_AutoSizeChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Label136.AutoSizeChanged
 
     End Sub
 

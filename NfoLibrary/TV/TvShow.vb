@@ -239,6 +239,7 @@ Public Class TvShow
 
     End Sub
 
+
     Public Sub SearchForEpisodesInFolder()
 
 
@@ -256,7 +257,7 @@ Public Class TvShow
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
             For Each fs_info As System.IO.FileInfo In fs_infos
                 'Application.DoEvents()
-                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" and fs_info.ToString.Substring(0,2)<>"._" Then
+                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
                     Dim NewEpisode As New TvEpisode
                     NewEpisode.NfoFilePath = fs_info.FullName
                     NewEpisode.Load()
@@ -267,7 +268,6 @@ Public Class TvShow
             Next fs_info
         Next
     End Sub
-
 
 
     Public Sub AddEpisode(ByRef Episode As TvEpisode)
