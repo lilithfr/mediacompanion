@@ -10268,23 +10268,23 @@ Public Class Form1
                 Dim done As String = ""
                 For Each ep In episodelist
                     util_EpisodeSetWatched(ep.PlayCount.Value, True)
-                    Dim fullfiledetails As Media_Companion.FullFileDetails
-                    fullfiledetails = Media_Companion.Preferences.Get_HdTags(ep.NfoFilePath)
-                    ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
-                    ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
-                    ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
-                    ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
-                    ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
-                    ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
-                    ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
+                    'Dim fullfiledetails As Media_Companion.FullFileDetails
+                    'fullfiledetails = Media_Companion.Preferences.Get_HdTags(ep.NfoFilePath)
+                    'ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
+                    'ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
+                    'ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
+                    'ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
+                    'ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
+                    'ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
+                    'ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
 
-                    For Each track In fullfiledetails.filedetails_audio
-                        Dim newtrack As New AudioDetails
-                        newtrack.Codec = track.Codec
-                        newtrack.Channels = track.Channels
-                        newtrack.Bitrate = track.Bitrate
-                        ep.Details.StreamDetails.Audio.Add(newtrack)
-                    Next
+                    'For Each track In fullfiledetails.filedetails_audio
+                    '    Dim newtrack As New AudioDetails
+                    '    newtrack.Codec = track.Codec
+                    '    newtrack.Channels = track.Channels
+                    '    newtrack.Bitrate = track.Bitrate
+                    '    ep.Details.StreamDetails.Audio.Add(newtrack)
+                    'Next
                 Next
 
                 WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
