@@ -831,9 +831,9 @@ Partial Public Class Form1
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
 
             If Episode.Details.StreamDetails.Audio.Count > 0 Then
-                TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                TextBox_Ep_Details.Text += "      Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
                 TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
+                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
             End If
 
 
@@ -887,6 +887,7 @@ Partial Public Class Form1
                     TextBox_Director.Text = Ep.Director.Value
                     TextBox_Credits.Text = Ep.Credits.Value
                     TextBox_Aired.Text = Ep.Aired.Value
+                    util_EpisodeSetWatched(Ep.PlayCount.Value)
                     If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
                         If Preferences.EdenEnabled Then
                             util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultTvFanartPath)
@@ -903,6 +904,15 @@ Partial Public Class Form1
                             util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
                             util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultTvBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
                         End If
+                    End If
+                    TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Height.Value, "?")
+                    TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+                    TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Codec.Value, "?")
+                    TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Bitrate.Value, "?")
+                    If Ep.Details.StreamDetails.Audio.Count > 0 Then
+                        TextBox_Ep_Details.Text += "      Audio: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                        TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+                        TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
                     End If
 
                     Dim video_flags = GetMultiEpMediaFlags(Ep)
@@ -4017,30 +4027,30 @@ Partial Public Class Form1
     End Function
     Private Function GetMultiEpMediaFlags(ByVal thisep As TvEpisode) As Dictionary(Of String, String)
 
-        Dim fullfiledetails As Media_Companion.FullFileDetails
+        'Dim fullfiledetails As Media_Companion.FullFileDetails
 
-        Dim tempstring2 As String = ""
-        Dim tempstring As String = ""
-        Dim pathandfilename As String = TvTreeview.SelectedNode.Name
-        If pathandfilename <> Nothing Then
-            If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
-                pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
+        'Dim tempstring2 As String = ""
+        'Dim tempstring As String = ""
+        'Dim pathandfilename As String = TvTreeview.SelectedNode.Name
+        'If pathandfilename <> Nothing Then
+        '    If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
+        '        pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
 
-                Dim exists As Boolean = False
-                For Each ext In Utilities.VideoExtensions
-                    If ext = "VIDEO_TS.IFO" Then Continue For
-                    tempstring2 = pathandfilename & ext
+        '        Dim exists As Boolean = False
+        '        For Each ext In Utilities.VideoExtensions
+        '            If ext = "VIDEO_TS.IFO" Then Continue For
+        '            tempstring2 = pathandfilename & ext
 
-                    If IO.File.Exists(tempstring2) Then
-                        exists = True
-                        Exit For
-                    End If
-                Next
+        '            If IO.File.Exists(tempstring2) Then
+        '                exists = True
+        '                Exit For
+        '            End If
+        '        Next
 
-            End If
-        End If
+        '    End If
+        'End If
 
-        fullfiledetails = Media_Companion.Preferences.Get_HdTags(tempstring2)
+        'fullfiledetails = Media_Companion.Preferences.Get_HdTags(tempstring2)
 
 
 
@@ -4049,23 +4059,28 @@ Partial Public Class Form1
 
         Dim flags As New Dictionary(Of String, String)
         Try
-            flags.Add("channels", If(fullfiledetails.filedetails_audio.Count = 0, "", fullfiledetails.filedetails_audio(0).Channels.Value))
-            flags.Add("audio", If(fullfiledetails.filedetails_audio.Count = 0, "", fullfiledetails.filedetails_audio(0).Codec.Value))
-            flags.Add("aspect", Utilities.GetStdAspectRatio(fullfiledetails.filedetails_video.Aspect.Value))
-            flags.Add("codec", fullfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)
-            flags.Add("resolution", If(fullfiledetails.filedetails_video.VideoResolution < 0, "", fullfiledetails.filedetails_video.VideoResolution.ToString))
+            'flags.Add("channels", If(fullfiledetails.filedetails_audio.Count = 0, "", fullfiledetails.filedetails_audio(0).Channels.Value))
+            'flags.Add("audio", If(fullfiledetails.filedetails_audio.Count = 0, "", fullfiledetails.filedetails_audio(0).Codec.Value))
+            'flags.Add("aspect", Utilities.GetStdAspectRatio(fullfiledetails.filedetails_video.Aspect.Value))
+            'flags.Add("codec", fullfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)
+            'flags.Add("resolution", If(fullfiledetails.filedetails_video.VideoResolution < 0, "", fullfiledetails.filedetails_video.VideoResolution.ToString))
+            
+            flags.Add("channels", If(thisep.Details.StreamDetails.Audio.Count = -1, "", thisep.Details.StreamDetails.Audio(0).Channels.Value))
+            flags.Add("audio", If(thisep.Details.StreamDetails.Audio.Count = -1, "", thisep.Details.StreamDetails.Audio(0).Codec.Value))
+            flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
+            flags.Add("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace)
+            flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))
 
+            'TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Height.Value, "?")
+            'TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Aspect.Value, "?") & ")"
+            'TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Codec.Value, "?")
+            'TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Bitrate.Value, "?")
 
-            TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Height.Value, "?")
-            TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Aspect.Value, "?") & ")"
-            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Codec.Value, "?")
-            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_video.Bitrate.Value, "?")
-
-            If fullfiledetails.filedetails_audio.Count > 0 Then
-                TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Codec.Value, "?")
-                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Bitrate.Value, "?")
-                TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Channels.Value, "?") & " channels"
-            End If
+            'If fullfiledetails.filedetails_audio.Count > 0 Then
+            '    TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Codec.Value, "?")
+            '    TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Bitrate.Value, "?")
+            '    TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(fullfiledetails.filedetails_audio(0).Channels.Value, "?") & " channels"
+            'End If
 
 
 
