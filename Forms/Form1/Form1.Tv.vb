@@ -1046,11 +1046,18 @@ Partial Public Class Form1
         Dim nofolder As New List(Of String)
         Dim prgCount As Integer = 0
         Dim FolderList As New List(Of String)
+
         If TvShowSelected IsNot Nothing Then ' if we have provided a tv show, then add just this show to the list, else scan through all of the folders
             FolderList.Add(TvShowSelected.FolderPath) 'add the single show to our list
             Cache.TvCache.Remove(TvShowSelected)
             For Each episode In TvShowSelected.Episodes
-                Cache.TvCache.Remove(episode)
+                If episode.IsMissing = True Then
+                    fullepisodelist.Add(episode)
+                    Cache.TvCache.Remove(episode)
+                Else
+                    Cache.TvCache.Remove(episode)
+                End If
+
             Next
             For Each showitem In Cache.TvCache.Shows
                 fulltvshowlist.Add(showitem)
@@ -1059,11 +1066,17 @@ Partial Public Class Form1
                 Next
             Next
         Else
+            For Each ep In Cache.TvCache.Episodes
+                If ep.IsMissing = True Then
+                    fullepisodelist.Add(ep)
+                End If
+            Next
             FolderList = Preferences.tvFolders ' add all folders to list to scan
             Cache.TvCache.Clear() 'Full rescan means clear all old data
             TvTreeview.Nodes.Clear()
             realTvPaths.Clear()
         End If
+
         For Each tvfolder In FolderList
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
@@ -1167,9 +1180,15 @@ Partial Public Class Form1
             child = document.CreateElement("episodedetails")
             child.SetAttribute("NfoPath", item.NfoFilePath)
 
-            childchild = document.CreateElement("missing")
-            childchild.InnerText = "false"
-            child.AppendChild(childchild)
+            If item.IsMissing = True Then
+                childchild = document.CreateElement("missing")
+                childchild.InnerText = "true"
+                child.AppendChild(childchild)
+            Else
+                childchild = document.CreateElement("missing")
+                childchild.InnerText = "false"
+                child.AppendChild(childchild)
+            End If
 
             childchild = document.CreateElement("title")
             childchild.InnerText = item.Title.Value
