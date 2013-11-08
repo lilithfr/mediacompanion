@@ -1076,6 +1076,7 @@ Partial Public Class Form1
             TvTreeview.Nodes.Clear()
             realTvPaths.Clear()
         End If
+
         For Each tvfolder In FolderList
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
