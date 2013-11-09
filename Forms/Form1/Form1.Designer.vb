@@ -275,7 +275,6 @@ Me.TabPageLevel2MovMainBrowser = New System.Windows.Forms.TabPage()
 Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
 Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
 Me.cbBtnLink = New System.Windows.Forms.CheckBox()
-Me.TooltipGridViewMovies1 = New Media_Companion.TooltipGridViewMovies()
 Me.DataGridViewMovies = New System.Windows.Forms.DataGridView()
 Me.cbSort = New System.Windows.Forms.ComboBox()
 Me.btnreverse = New System.Windows.Forms.CheckBox()
@@ -344,7 +343,6 @@ Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
 Me.Label128 = New System.Windows.Forms.Label()
 Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
 Me.TextBoxMutisave = New System.Windows.Forms.TextBox()
-Me.movieGraphicInfo = New Media_Companion.GraphicInfo()
 Me.plottxt = New System.Windows.Forms.TextBox()
 Me.outlinetxt = New System.Windows.Forms.TextBox()
 Me.taglinetxt = New System.Windows.Forms.TextBox()
@@ -1123,7 +1121,6 @@ Me.RadioButton38 = New System.Windows.Forms.RadioButton()
 Me.cbExternalbrowser = New System.Windows.Forms.CheckBox()
 Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
 Me.tpXbmcLink = New System.Windows.Forms.TabPage()
-Me.UcGenPref_XbmcLink = New Media_Companion.ucGenPref_XbmcLink()
 Me.TabPage33 = New System.Windows.Forms.TabPage()
 Me.TableLayoutPanel23 = New System.Windows.Forms.TableLayoutPanel()
 Me.btn_ToolsCommandRemove = New System.Windows.Forms.Button()
@@ -1253,6 +1250,9 @@ Me.tsProgressBarFileDownload = New System.Windows.Forms.ToolStripProgressBar()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+Me.TooltipGridViewMovies1 = New Media_Companion.TooltipGridViewMovies()
+Me.movieGraphicInfo = New Media_Companion.GraphicInfo()
+Me.UcGenPref_XbmcLink = New Media_Companion.ucGenPref_XbmcLink()
 Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
 Me.GroupBox11.SuspendLayout
 Me.GroupBox12.SuspendLayout
@@ -1552,7 +1552,7 @@ Me.cbMoviePosterSaveLoRes.Enabled = false
 Me.cbMoviePosterSaveLoRes.Location = New System.Drawing.Point(290, 46)
 Me.cbMoviePosterSaveLoRes.Margin = New System.Windows.Forms.Padding(4)
 Me.cbMoviePosterSaveLoRes.Name = "cbMoviePosterSaveLoRes"
-Me.cbMoviePosterSaveLoRes.Size = New System.Drawing.Size(120, 17)
+Me.cbMoviePosterSaveLoRes.Size = New System.Drawing.Size(134, 19)
 Me.cbMoviePosterSaveLoRes.TabIndex = 114
 Me.cbMoviePosterSaveLoRes.Text = "Save Lo-Res Image"
 Me.ToolTip1.SetToolTip(Me.cbMoviePosterSaveLoRes, "The default image saved is from the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"highest resolution available."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check this bo"& _ 
@@ -3186,7 +3186,7 @@ Me.Label191.Text = "Actor Images will be resized to 'Image Resizing' Settings"
 Me.cbXbmcTmdbActorDL.AutoSize = true
 Me.cbXbmcTmdbActorDL.Location = New System.Drawing.Point(13, 195)
 Me.cbXbmcTmdbActorDL.Name = "cbXbmcTmdbActorDL"
-Me.cbXbmcTmdbActorDL.Size = New System.Drawing.Size(196, 17)
+Me.cbXbmcTmdbActorDL.Size = New System.Drawing.Size(222, 19)
 Me.cbXbmcTmdbActorDL.TabIndex = 75
 Me.cbXbmcTmdbActorDL.Text = "Download Actor Images from TMDB"
 Me.cbXbmcTmdbActorDL.UseVisualStyleBackColor = true
@@ -3206,7 +3206,7 @@ Me.Label190.Text = "Allow Movie to be renamed as per settings on"&Global.Microso
 Me.cbXbmcTmdbRename.AutoSize = true
 Me.cbXbmcTmdbRename.Location = New System.Drawing.Point(13, 119)
 Me.cbXbmcTmdbRename.Name = "cbXbmcTmdbRename"
-Me.cbXbmcTmdbRename.Size = New System.Drawing.Size(220, 17)
+Me.cbXbmcTmdbRename.Size = New System.Drawing.Size(251, 19)
 Me.cbXbmcTmdbRename.TabIndex = 73
 Me.cbXbmcTmdbRename.Text = "Enable Renaming of XBMC TMDB movie"
 Me.cbXbmcTmdbRename.UseVisualStyleBackColor = true
@@ -3227,7 +3227,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Location = New System.Drawing.Point(11, 40)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Name = "CheckBox_XBMC_Scraper_TMDB_IMDBRatings"
-Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(124, 17)
+Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(140, 19)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.TabIndex = 71
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Text = "Get rating from IMDb"
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.UseVisualStyleBackColor = true
@@ -3249,7 +3249,7 @@ Me.cbXbmcTmdbFanart.AutoSize = true
 Me.cbXbmcTmdbFanart.Location = New System.Drawing.Point(11, 20)
 Me.cbXbmcTmdbFanart.Margin = New System.Windows.Forms.Padding(4)
 Me.cbXbmcTmdbFanart.Name = "cbXbmcTmdbFanart"
-Me.cbXbmcTmdbFanart.Size = New System.Drawing.Size(89, 17)
+Me.cbXbmcTmdbFanart.Size = New System.Drawing.Size(99, 19)
 Me.cbXbmcTmdbFanart.TabIndex = 67
 Me.cbXbmcTmdbFanart.Text = "Enable fanart"
 Me.cbXbmcTmdbFanart.UseVisualStyleBackColor = true
@@ -3374,7 +3374,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Trailer.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Location = New System.Drawing.Point(11, 149)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Name = "CheckBox_XBMC_Scraper_IMDB_Trailer"
-Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(147, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(166, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Text = "Fall back on IMDB trailers"
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.UseVisualStyleBackColor = true
@@ -3406,7 +3406,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Location = New System.Drawing.Point(11, 100)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(196, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(224, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.TabIndex = 4
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Text = "Enable posters from MoviePosterDB"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.UseVisualStyleBackColor = true
@@ -3417,7 +3417,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Location = New System.Drawing.Point(11, 80)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(176, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(201, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.TabIndex = 3
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Text = "Enable posters from IMPAwards"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.UseVisualStyleBackColor = true
@@ -3428,7 +3428,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Location = New System.Drawing.Point(11, 60)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(195, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(224, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.TabIndex = 2
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Text = "Enable posters from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.UseVisualStyleBackColor = true
@@ -3450,7 +3450,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Location = New System.Drawing.Point(11, 40)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Name = "CheckBox_XBMC_Scraper_IMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(188, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(215, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.TabIndex = 1
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Text = "Enable fanart from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.UseVisualStyleBackColor = true
@@ -3461,7 +3461,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Location = New System.Drawing.Point(11, 20)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Name = "CheckBox_XBMC_Scraper_IMDB_FullCredits"
-Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(132, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(148, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.TabIndex = 0
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Text = "Enable full cast credits"
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.UseVisualStyleBackColor = true
@@ -3976,15 +3976,6 @@ Me.cbBtnLink.Text = "Link"
 Me.cbBtnLink.TextAlign = System.Drawing.ContentAlignment.MiddleRight
 Me.cbBtnLink.UseVisualStyleBackColor = false
 '
-'TooltipGridViewMovies1
-'
-Me.TooltipGridViewMovies1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-Me.TooltipGridViewMovies1.Location = New System.Drawing.Point(114, 132)
-Me.TooltipGridViewMovies1.Name = "TooltipGridViewMovies1"
-Me.TooltipGridViewMovies1.Size = New System.Drawing.Size(198, 127)
-Me.TooltipGridViewMovies1.TabIndex = 177
-Me.TooltipGridViewMovies1.Visible = false
-'
 'DataGridViewMovies
 '
 Me.DataGridViewMovies.AllowDrop = true
@@ -4193,7 +4184,7 @@ Me.lblFilterSourceMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom 
 Me.lblFilterSourceMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterSourceMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterSourceMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterSourceMode.Location = New System.Drawing.Point(129, 140)
+Me.lblFilterSourceMode.Location = New System.Drawing.Point(129, 139)
 Me.lblFilterSourceMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterSourceMode.Name = "lblFilterSourceMode"
 Me.lblFilterSourceMode.Size = New System.Drawing.Size(17, 21)
@@ -4213,7 +4204,7 @@ Me.cbFilterSource.DropDownHeight = 1
 Me.cbFilterSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterSource.FormattingEnabled = true
 Me.cbFilterSource.IntegralHeight = false
-Me.cbFilterSource.Location = New System.Drawing.Point(147, 140)
+Me.cbFilterSource.Location = New System.Drawing.Point(147, 139)
 Me.cbFilterSource.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterSource.Name = "cbFilterSource"
 Me.cbFilterSource.QuickSelect = false
@@ -4228,7 +4219,7 @@ Me.lblFilterActorMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom O
 Me.lblFilterActorMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterActorMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterActorMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterActorMode.Location = New System.Drawing.Point(129, -4)
+Me.lblFilterActorMode.Location = New System.Drawing.Point(129, -5)
 Me.lblFilterActorMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterActorMode.Name = "lblFilterActorMode"
 Me.lblFilterActorMode.Size = New System.Drawing.Size(17, 21)
@@ -4248,7 +4239,7 @@ Me.cbFilterActor.DropDownHeight = 1
 Me.cbFilterActor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterActor.FormattingEnabled = true
 Me.cbFilterActor.IntegralHeight = false
-Me.cbFilterActor.Location = New System.Drawing.Point(147, -47)
+Me.cbFilterActor.Location = New System.Drawing.Point(147, -48)
 Me.cbFilterActor.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterActor.Name = "cbFilterActor"
 Me.cbFilterActor.QuickSelect = false
@@ -4263,7 +4254,7 @@ Me.lblFilterAudioLanguagesMode.Anchor = CType((System.Windows.Forms.AnchorStyles
 Me.lblFilterAudioLanguagesMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioLanguagesMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioLanguagesMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioLanguagesMode.Location = New System.Drawing.Point(129, 11)
+Me.lblFilterAudioLanguagesMode.Location = New System.Drawing.Point(129, 10)
 Me.lblFilterAudioLanguagesMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioLanguagesMode.Name = "lblFilterAudioLanguagesMode"
 Me.lblFilterAudioLanguagesMode.Size = New System.Drawing.Size(17, 21)
@@ -4283,7 +4274,7 @@ Me.cbFilterAudioLanguages.DropDownHeight = 1
 Me.cbFilterAudioLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterAudioLanguages.FormattingEnabled = true
 Me.cbFilterAudioLanguages.IntegralHeight = false
-Me.cbFilterAudioLanguages.Location = New System.Drawing.Point(147, 11)
+Me.cbFilterAudioLanguages.Location = New System.Drawing.Point(147, 10)
 Me.cbFilterAudioLanguages.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterAudioLanguages.Name = "cbFilterAudioLanguages"
 Me.cbFilterAudioLanguages.QuickSelect = false
@@ -4298,7 +4289,7 @@ Me.lblFilterNumAudioTracksMode.Anchor = CType((System.Windows.Forms.AnchorStyles
 Me.lblFilterNumAudioTracksMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterNumAudioTracksMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterNumAudioTracksMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterNumAudioTracksMode.Location = New System.Drawing.Point(129, 115)
+Me.lblFilterNumAudioTracksMode.Location = New System.Drawing.Point(129, 114)
 Me.lblFilterNumAudioTracksMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterNumAudioTracksMode.Name = "lblFilterNumAudioTracksMode"
 Me.lblFilterNumAudioTracksMode.Size = New System.Drawing.Size(17, 21)
@@ -4318,7 +4309,7 @@ Me.cbFilterNumAudioTracks.DropDownHeight = 1
 Me.cbFilterNumAudioTracks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterNumAudioTracks.FormattingEnabled = true
 Me.cbFilterNumAudioTracks.IntegralHeight = false
-Me.cbFilterNumAudioTracks.Location = New System.Drawing.Point(147, 115)
+Me.cbFilterNumAudioTracks.Location = New System.Drawing.Point(147, 114)
 Me.cbFilterNumAudioTracks.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterNumAudioTracks.Name = "cbFilterNumAudioTracks"
 Me.cbFilterNumAudioTracks.QuickSelect = false
@@ -4333,7 +4324,7 @@ Me.lblFilterAudioBitratesMode.Anchor = CType((System.Windows.Forms.AnchorStyles.
 Me.lblFilterAudioBitratesMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioBitratesMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioBitratesMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioBitratesMode.Location = New System.Drawing.Point(129, 92)
+Me.lblFilterAudioBitratesMode.Location = New System.Drawing.Point(129, 91)
 Me.lblFilterAudioBitratesMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioBitratesMode.Name = "lblFilterAudioBitratesMode"
 Me.lblFilterAudioBitratesMode.Size = New System.Drawing.Size(17, 21)
@@ -4353,7 +4344,7 @@ Me.cbFilterAudioBitrates.DropDownHeight = 1
 Me.cbFilterAudioBitrates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterAudioBitrates.FormattingEnabled = true
 Me.cbFilterAudioBitrates.IntegralHeight = false
-Me.cbFilterAudioBitrates.Location = New System.Drawing.Point(147, 92)
+Me.cbFilterAudioBitrates.Location = New System.Drawing.Point(147, 91)
 Me.cbFilterAudioBitrates.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterAudioBitrates.Name = "cbFilterAudioBitrates"
 Me.cbFilterAudioBitrates.QuickSelect = false
@@ -4368,7 +4359,7 @@ Me.lblFilterAudioChannelsMode.Anchor = CType((System.Windows.Forms.AnchorStyles.
 Me.lblFilterAudioChannelsMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioChannelsMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioChannelsMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioChannelsMode.Location = New System.Drawing.Point(129, 64)
+Me.lblFilterAudioChannelsMode.Location = New System.Drawing.Point(129, 63)
 Me.lblFilterAudioChannelsMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioChannelsMode.Name = "lblFilterAudioChannelsMode"
 Me.lblFilterAudioChannelsMode.Size = New System.Drawing.Size(17, 21)
@@ -4388,7 +4379,7 @@ Me.cbFilterAudioChannels.DropDownHeight = 1
 Me.cbFilterAudioChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterAudioChannels.FormattingEnabled = true
 Me.cbFilterAudioChannels.IntegralHeight = false
-Me.cbFilterAudioChannels.Location = New System.Drawing.Point(147, 64)
+Me.cbFilterAudioChannels.Location = New System.Drawing.Point(147, 63)
 Me.cbFilterAudioChannels.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterAudioChannels.Name = "cbFilterAudioChannels"
 Me.cbFilterAudioChannels.QuickSelect = false
@@ -4403,7 +4394,7 @@ Me.lblFilterCertificateMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bo
 Me.lblFilterCertificateMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterCertificateMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterCertificateMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterCertificateMode.Location = New System.Drawing.Point(129, 242)
+Me.lblFilterCertificateMode.Location = New System.Drawing.Point(129, 241)
 Me.lblFilterCertificateMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterCertificateMode.Name = "lblFilterCertificateMode"
 Me.lblFilterCertificateMode.Size = New System.Drawing.Size(17, 21)
@@ -4417,7 +4408,7 @@ Me.lblFilterAudioCodecsMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bo
 Me.lblFilterAudioCodecsMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioCodecsMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioCodecsMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioCodecsMode.Location = New System.Drawing.Point(129, 39)
+Me.lblFilterAudioCodecsMode.Location = New System.Drawing.Point(129, 38)
 Me.lblFilterAudioCodecsMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioCodecsMode.Name = "lblFilterAudioCodecsMode"
 Me.lblFilterAudioCodecsMode.Size = New System.Drawing.Size(17, 21)
@@ -4431,7 +4422,7 @@ Me.lblFilterResolutionMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bot
 Me.lblFilterResolutionMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterResolutionMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterResolutionMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterResolutionMode.Location = New System.Drawing.Point(129, -18)
+Me.lblFilterResolutionMode.Location = New System.Drawing.Point(129, -19)
 Me.lblFilterResolutionMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterResolutionMode.Name = "lblFilterResolutionMode"
 Me.lblFilterResolutionMode.Size = New System.Drawing.Size(17, 21)
@@ -4445,7 +4436,7 @@ Me.lblFilterSetMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or 
 Me.lblFilterSetMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterSetMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterSetMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterSetMode.Location = New System.Drawing.Point(129, -77)
+Me.lblFilterSetMode.Location = New System.Drawing.Point(129, -78)
 Me.lblFilterSetMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterSetMode.Name = "lblFilterSetMode"
 Me.lblFilterSetMode.Size = New System.Drawing.Size(17, 21)
@@ -4459,7 +4450,7 @@ Me.lblFilterGenreMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom O
 Me.lblFilterGenreMode.BackColor = System.Drawing.Color.Gray
 Me.lblFilterGenreMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterGenreMode.ForeColor = System.Drawing.Color.White
-Me.lblFilterGenreMode.Location = New System.Drawing.Point(129, -105)
+Me.lblFilterGenreMode.Location = New System.Drawing.Point(129, -106)
 Me.lblFilterGenreMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterGenreMode.Name = "lblFilterGenreMode"
 Me.lblFilterGenreMode.Size = New System.Drawing.Size(17, 21)
@@ -4479,7 +4470,7 @@ Me.cbFilterAudioCodecs.DropDownHeight = 1
 Me.cbFilterAudioCodecs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterAudioCodecs.FormattingEnabled = true
 Me.cbFilterAudioCodecs.IntegralHeight = false
-Me.cbFilterAudioCodecs.Location = New System.Drawing.Point(147, 39)
+Me.cbFilterAudioCodecs.Location = New System.Drawing.Point(147, 38)
 Me.cbFilterAudioCodecs.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterAudioCodecs.Name = "cbFilterAudioCodecs"
 Me.cbFilterAudioCodecs.QuickSelect = false
@@ -4500,7 +4491,7 @@ Me.cbFilterResolution.DropDownHeight = 1
 Me.cbFilterResolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterResolution.FormattingEnabled = true
 Me.cbFilterResolution.IntegralHeight = false
-Me.cbFilterResolution.Location = New System.Drawing.Point(147, -18)
+Me.cbFilterResolution.Location = New System.Drawing.Point(147, -19)
 Me.cbFilterResolution.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterResolution.Name = "cbFilterResolution"
 Me.cbFilterResolution.QuickSelect = false
@@ -4521,7 +4512,7 @@ Me.cbFilterSet.DropDownHeight = 1
 Me.cbFilterSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterSet.FormattingEnabled = true
 Me.cbFilterSet.IntegralHeight = false
-Me.cbFilterSet.Location = New System.Drawing.Point(147, -77)
+Me.cbFilterSet.Location = New System.Drawing.Point(147, -78)
 Me.cbFilterSet.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterSet.Name = "cbFilterSet"
 Me.cbFilterSet.QuickSelect = false
@@ -4542,7 +4533,7 @@ Me.cbFilterCertificate.DropDownHeight = 1
 Me.cbFilterCertificate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterCertificate.FormattingEnabled = true
 Me.cbFilterCertificate.IntegralHeight = false
-Me.cbFilterCertificate.Location = New System.Drawing.Point(147, 242)
+Me.cbFilterCertificate.Location = New System.Drawing.Point(147, 241)
 Me.cbFilterCertificate.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
 Me.cbFilterCertificate.Name = "cbFilterCertificate"
 Me.cbFilterCertificate.QuickSelect = false
@@ -4557,7 +4548,7 @@ Me.lblFilterCertificate.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom
 Me.lblFilterCertificate.BackColor = System.Drawing.Color.Gray
 Me.lblFilterCertificate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterCertificate.ForeColor = System.Drawing.Color.White
-Me.lblFilterCertificate.Location = New System.Drawing.Point(4, 242)
+Me.lblFilterCertificate.Location = New System.Drawing.Point(4, 241)
 Me.lblFilterCertificate.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterCertificate.Name = "lblFilterCertificate"
 Me.lblFilterCertificate.Size = New System.Drawing.Size(124, 21)
@@ -4577,7 +4568,7 @@ Me.cbFilterGenre.DropDownHeight = 1
 Me.cbFilterGenre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.cbFilterGenre.FormattingEnabled = true
 Me.cbFilterGenre.IntegralHeight = false
-Me.cbFilterGenre.Location = New System.Drawing.Point(147, -105)
+Me.cbFilterGenre.Location = New System.Drawing.Point(147, -106)
 Me.cbFilterGenre.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Normal
 Me.cbFilterGenre.Name = "cbFilterGenre"
 Me.cbFilterGenre.QuickSelect = false
@@ -4592,7 +4583,7 @@ Me.lblFilterYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or Sys
 Me.lblFilterYear.BackColor = System.Drawing.Color.Gray
 Me.lblFilterYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterYear.ForeColor = System.Drawing.Color.White
-Me.lblFilterYear.Location = New System.Drawing.Point(4, 218)
+Me.lblFilterYear.Location = New System.Drawing.Point(4, 217)
 Me.lblFilterYear.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterYear.Name = "lblFilterYear"
 Me.lblFilterYear.Size = New System.Drawing.Size(124, 21)
@@ -4607,7 +4598,7 @@ Me.cbFilterYear.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or Sys
 Me.cbFilterYear.Format = "D"
 Me.cbFilterYear.InternalSelectedMax = 1R
 Me.cbFilterYear.InternalSelectedMin = 0R
-Me.cbFilterYear.Location = New System.Drawing.Point(147, 218)
+Me.cbFilterYear.Location = New System.Drawing.Point(147, 217)
 Me.cbFilterYear.Max = 1R
 Me.cbFilterYear.Min = 0R
 Me.cbFilterYear.Mode = MC_UserControls.SelectionRangeSlider.OperatingMode.MinMax
@@ -4627,7 +4618,7 @@ Me.cbFilterVotes.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or Sy
 Me.cbFilterVotes.Format = "D"
 Me.cbFilterVotes.InternalSelectedMax = 1R
 Me.cbFilterVotes.InternalSelectedMin = 0R
-Me.cbFilterVotes.Location = New System.Drawing.Point(147, 191)
+Me.cbFilterVotes.Location = New System.Drawing.Point(147, 190)
 Me.cbFilterVotes.Max = 1R
 Me.cbFilterVotes.Min = 0R
 Me.cbFilterVotes.Mode = MC_UserControls.SelectionRangeSlider.OperatingMode.Values
@@ -4646,7 +4637,7 @@ Me.lblFilterVotes.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or Sy
 Me.lblFilterVotes.BackColor = System.Drawing.Color.Gray
 Me.lblFilterVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterVotes.ForeColor = System.Drawing.Color.White
-Me.lblFilterVotes.Location = New System.Drawing.Point(4, 191)
+Me.lblFilterVotes.Location = New System.Drawing.Point(4, 190)
 Me.lblFilterVotes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterVotes.Name = "lblFilterVotes"
 Me.lblFilterVotes.Size = New System.Drawing.Size(124, 21)
@@ -4660,7 +4651,7 @@ Me.lblFilterRating.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or S
 Me.lblFilterRating.BackColor = System.Drawing.Color.Gray
 Me.lblFilterRating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterRating.ForeColor = System.Drawing.Color.White
-Me.lblFilterRating.Location = New System.Drawing.Point(4, 167)
+Me.lblFilterRating.Location = New System.Drawing.Point(4, 166)
 Me.lblFilterRating.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterRating.Name = "lblFilterRating"
 Me.lblFilterRating.Size = New System.Drawing.Size(124, 21)
@@ -4674,7 +4665,7 @@ Me.lblFilterNumAudioTracks.Anchor = CType((System.Windows.Forms.AnchorStyles.Bot
 Me.lblFilterNumAudioTracks.BackColor = System.Drawing.Color.Gray
 Me.lblFilterNumAudioTracks.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterNumAudioTracks.ForeColor = System.Drawing.Color.White
-Me.lblFilterNumAudioTracks.Location = New System.Drawing.Point(4, 115)
+Me.lblFilterNumAudioTracks.Location = New System.Drawing.Point(4, 114)
 Me.lblFilterNumAudioTracks.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterNumAudioTracks.Name = "lblFilterNumAudioTracks"
 Me.lblFilterNumAudioTracks.Size = New System.Drawing.Size(124, 21)
@@ -4688,7 +4679,7 @@ Me.lblFilterAudioBitrates.Anchor = CType((System.Windows.Forms.AnchorStyles.Bott
 Me.lblFilterAudioBitrates.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioBitrates.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioBitrates.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioBitrates.Location = New System.Drawing.Point(4, 92)
+Me.lblFilterAudioBitrates.Location = New System.Drawing.Point(4, 91)
 Me.lblFilterAudioBitrates.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioBitrates.Name = "lblFilterAudioBitrates"
 Me.lblFilterAudioBitrates.Size = New System.Drawing.Size(124, 21)
@@ -4702,7 +4693,7 @@ Me.lblFilterAudioChannels.Anchor = CType((System.Windows.Forms.AnchorStyles.Bott
 Me.lblFilterAudioChannels.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioChannels.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioChannels.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioChannels.Location = New System.Drawing.Point(4, 64)
+Me.lblFilterAudioChannels.Location = New System.Drawing.Point(4, 63)
 Me.lblFilterAudioChannels.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioChannels.Name = "lblFilterAudioChannels"
 Me.lblFilterAudioChannels.Size = New System.Drawing.Size(124, 21)
@@ -4716,7 +4707,7 @@ Me.lblFilterAudioLanguages.Anchor = CType((System.Windows.Forms.AnchorStyles.Bot
 Me.lblFilterAudioLanguages.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioLanguages.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioLanguages.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioLanguages.Location = New System.Drawing.Point(4, 11)
+Me.lblFilterAudioLanguages.Location = New System.Drawing.Point(4, 10)
 Me.lblFilterAudioLanguages.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioLanguages.Name = "lblFilterAudioLanguages"
 Me.lblFilterAudioLanguages.Size = New System.Drawing.Size(124, 21)
@@ -4730,7 +4721,7 @@ Me.lblFilterAudioCodecs.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom
 Me.lblFilterAudioCodecs.BackColor = System.Drawing.Color.Gray
 Me.lblFilterAudioCodecs.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterAudioCodecs.ForeColor = System.Drawing.Color.White
-Me.lblFilterAudioCodecs.Location = New System.Drawing.Point(4, 39)
+Me.lblFilterAudioCodecs.Location = New System.Drawing.Point(4, 38)
 Me.lblFilterAudioCodecs.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterAudioCodecs.Name = "lblFilterAudioCodecs"
 Me.lblFilterAudioCodecs.Size = New System.Drawing.Size(124, 21)
@@ -4744,7 +4735,7 @@ Me.lblFilterResolution.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom 
 Me.lblFilterResolution.BackColor = System.Drawing.Color.Gray
 Me.lblFilterResolution.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterResolution.ForeColor = System.Drawing.Color.White
-Me.lblFilterResolution.Location = New System.Drawing.Point(4, -18)
+Me.lblFilterResolution.Location = New System.Drawing.Point(4, -19)
 Me.lblFilterResolution.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterResolution.Name = "lblFilterResolution"
 Me.lblFilterResolution.Size = New System.Drawing.Size(124, 21)
@@ -4758,7 +4749,7 @@ Me.lblFilterGeneral.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or 
 Me.lblFilterGeneral.BackColor = System.Drawing.Color.Gray
 Me.lblFilterGeneral.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterGeneral.ForeColor = System.Drawing.Color.White
-Me.lblFilterGeneral.Location = New System.Drawing.Point(4, -132)
+Me.lblFilterGeneral.Location = New System.Drawing.Point(4, -133)
 Me.lblFilterGeneral.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterGeneral.Name = "lblFilterGeneral"
 Me.lblFilterGeneral.Size = New System.Drawing.Size(124, 21)
@@ -4772,7 +4763,7 @@ Me.lblFilterActor.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or Sy
 Me.lblFilterActor.BackColor = System.Drawing.Color.Gray
 Me.lblFilterActor.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
 Me.lblFilterActor.ForeColor = System.Drawing.Color.White
-Me.lblFilterActor.Location = New System.Drawing.Point(4, -47)
+Me.lblFilterActor.Location = New System.Drawing.Point(4, -48)
 Me.lblFilterActor.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterActor.Name = "lblFilterActor"
 Me.lblFilterActor.Size = New System.Drawing.Size(124, 21)
@@ -4786,7 +4777,7 @@ Me.lblFilterSet.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or Syst
 Me.lblFilterSet.BackColor = System.Drawing.Color.Gray
 Me.lblFilterSet.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterSet.ForeColor = System.Drawing.Color.White
-Me.lblFilterSet.Location = New System.Drawing.Point(4, -77)
+Me.lblFilterSet.Location = New System.Drawing.Point(4, -78)
 Me.lblFilterSet.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterSet.Name = "lblFilterSet"
 Me.lblFilterSet.Size = New System.Drawing.Size(124, 21)
@@ -4800,7 +4791,7 @@ Me.lblFilterSource.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or S
 Me.lblFilterSource.BackColor = System.Drawing.Color.Gray
 Me.lblFilterSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterSource.ForeColor = System.Drawing.Color.White
-Me.lblFilterSource.Location = New System.Drawing.Point(4, 140)
+Me.lblFilterSource.Location = New System.Drawing.Point(4, 139)
 Me.lblFilterSource.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.lblFilterSource.Name = "lblFilterSource"
 Me.lblFilterSource.Size = New System.Drawing.Size(124, 21)
@@ -4815,7 +4806,7 @@ Me.lblFilterGenre.BackColor = System.Drawing.Color.Gray
 Me.lblFilterGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.lblFilterGenre.ForeColor = System.Drawing.Color.White
 Me.lblFilterGenre.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-Me.lblFilterGenre.Location = New System.Drawing.Point(4, -105)
+Me.lblFilterGenre.Location = New System.Drawing.Point(4, -106)
 Me.lblFilterGenre.Margin = New System.Windows.Forms.Padding(4, 0, 0, 0)
 Me.lblFilterGenre.Name = "lblFilterGenre"
 Me.lblFilterGenre.Size = New System.Drawing.Size(124, 21)
@@ -4833,7 +4824,7 @@ Me.cbFilterGeneral.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownLi
 Me.cbFilterGeneral.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
 Me.cbFilterGeneral.IntegralHeight = false
 Me.cbFilterGeneral.Items.AddRange(New Object() {"All", "Watched", "Unwatched", "Duplicates", "Missing Fanart", "Missing Poster", "Missing Plot", "Missing Trailer"})
-Me.cbFilterGeneral.Location = New System.Drawing.Point(147, -132)
+Me.cbFilterGeneral.Location = New System.Drawing.Point(147, -133)
 Me.cbFilterGeneral.Margin = New System.Windows.Forms.Padding(4)
 Me.cbFilterGeneral.MaxDropDownItems = 5
 Me.cbFilterGeneral.Name = "cbFilterGeneral"
@@ -4848,7 +4839,7 @@ Me.cbFilterRating.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or S
 Me.cbFilterRating.Format = "f1"
 Me.cbFilterRating.InternalSelectedMax = 5R
 Me.cbFilterRating.InternalSelectedMin = 0R
-Me.cbFilterRating.Location = New System.Drawing.Point(147, 167)
+Me.cbFilterRating.Location = New System.Drawing.Point(147, 166)
 Me.cbFilterRating.Max = 10R
 Me.cbFilterRating.Min = 0R
 Me.cbFilterRating.Mode = MC_UserControls.SelectionRangeSlider.OperatingMode.MinMax
@@ -5126,15 +5117,6 @@ Me.TextBoxMutisave.TabIndex = 181
 Me.TextBoxMutisave.Text = "Multisave Mode Activated"
 Me.TextBoxMutisave.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
 Me.TextBoxMutisave.Visible = false
-'
-'movieGraphicInfo
-'
-Me.movieGraphicInfo.BackColor = System.Drawing.Color.Transparent
-Me.movieGraphicInfo.Location = New System.Drawing.Point(3, 192)
-Me.movieGraphicInfo.Name = "movieGraphicInfo"
-Me.movieGraphicInfo.Size = New System.Drawing.Size(63, 36)
-Me.movieGraphicInfo.TabIndex = 226
-Me.movieGraphicInfo.Visible = false
 '
 'plottxt
 '
@@ -6064,7 +6046,7 @@ Me.GroupBoxFanartExtrathumbs.Text = "Fanart (Extrathumbs/ExtraFanart)"
 Me.RadioButtonThumb4.AutoSize = true
 Me.RadioButtonThumb4.Location = New System.Drawing.Point(121, 71)
 Me.RadioButtonThumb4.Name = "RadioButtonThumb4"
-Me.RadioButtonThumb4.Size = New System.Drawing.Size(64, 17)
+Me.RadioButtonThumb4.Size = New System.Drawing.Size(71, 19)
 Me.RadioButtonThumb4.TabIndex = 4
 Me.RadioButtonThumb4.Text = "Thumb4"
 Me.RadioButtonThumb4.UseVisualStyleBackColor = true
@@ -6074,7 +6056,7 @@ Me.RadioButtonThumb4.UseVisualStyleBackColor = true
 Me.RadioButtonThumb2.AutoSize = true
 Me.RadioButtonThumb2.Location = New System.Drawing.Point(7, 71)
 Me.RadioButtonThumb2.Name = "RadioButtonThumb2"
-Me.RadioButtonThumb2.Size = New System.Drawing.Size(64, 17)
+Me.RadioButtonThumb2.Size = New System.Drawing.Size(71, 19)
 Me.RadioButtonThumb2.TabIndex = 3
 Me.RadioButtonThumb2.Text = "Thumb2"
 Me.RadioButtonThumb2.UseVisualStyleBackColor = true
@@ -6084,7 +6066,7 @@ Me.RadioButtonThumb2.UseVisualStyleBackColor = true
 Me.RadioButtonThumb3.AutoSize = true
 Me.RadioButtonThumb3.Location = New System.Drawing.Point(121, 45)
 Me.RadioButtonThumb3.Name = "RadioButtonThumb3"
-Me.RadioButtonThumb3.Size = New System.Drawing.Size(64, 17)
+Me.RadioButtonThumb3.Size = New System.Drawing.Size(71, 19)
 Me.RadioButtonThumb3.TabIndex = 2
 Me.RadioButtonThumb3.Text = "Thumb3"
 Me.RadioButtonThumb3.UseVisualStyleBackColor = true
@@ -6094,7 +6076,7 @@ Me.RadioButtonThumb3.UseVisualStyleBackColor = true
 Me.RadioButtonThumb1.AutoSize = true
 Me.RadioButtonThumb1.Location = New System.Drawing.Point(7, 45)
 Me.RadioButtonThumb1.Name = "RadioButtonThumb1"
-Me.RadioButtonThumb1.Size = New System.Drawing.Size(64, 17)
+Me.RadioButtonThumb1.Size = New System.Drawing.Size(71, 19)
 Me.RadioButtonThumb1.TabIndex = 1
 Me.RadioButtonThumb1.Text = "Thumb1"
 Me.RadioButtonThumb1.UseVisualStyleBackColor = true
@@ -6105,7 +6087,7 @@ Me.RadioButtonFanart.AutoSize = true
 Me.RadioButtonFanart.Checked = true
 Me.RadioButtonFanart.Location = New System.Drawing.Point(7, 21)
 Me.RadioButtonFanart.Name = "RadioButtonFanart"
-Me.RadioButtonFanart.Size = New System.Drawing.Size(55, 17)
+Me.RadioButtonFanart.Size = New System.Drawing.Size(60, 19)
 Me.RadioButtonFanart.TabIndex = 0
 Me.RadioButtonFanart.TabStop = true
 Me.RadioButtonFanart.Text = "Fanart"
@@ -9914,7 +9896,7 @@ Me.Panel9.Controls.Add(Me.Label50)
 Me.Panel9.Location = New System.Drawing.Point(10, 382)
 Me.Panel9.Margin = New System.Windows.Forms.Padding(4)
 Me.Panel9.Name = "Panel9"
-Me.Panel9.Size = New System.Drawing.Size(513, 225)
+Me.Panel9.Size = New System.Drawing.Size(512, 225)
 Me.Panel9.TabIndex = 34
 '
 'TableLayoutPanel19
@@ -9955,7 +9937,7 @@ Me.TableLayoutPanel19.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Win
 Me.TableLayoutPanel19.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28!))
 Me.TableLayoutPanel19.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
 Me.TableLayoutPanel19.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-Me.TableLayoutPanel19.Size = New System.Drawing.Size(513, 225)
+Me.TableLayoutPanel19.Size = New System.Drawing.Size(512, 225)
 Me.TableLayoutPanel19.TabIndex = 24
 '
 'Label160
@@ -9982,7 +9964,7 @@ Me.TextBox_Plot.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox_Plot.Multiline = true
 Me.TextBox_Plot.Name = "TextBox_Plot"
 Me.TextBox_Plot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-Me.TextBox_Plot.Size = New System.Drawing.Size(431, 56)
+Me.TextBox_Plot.Size = New System.Drawing.Size(430, 56)
 Me.TextBox_Plot.TabIndex = 7
 '
 'TextBox_Ep_Details
@@ -9993,7 +9975,7 @@ Me.TableLayoutPanel19.SetColumnSpan(Me.TextBox_Ep_Details, 6)
 Me.TextBox_Ep_Details.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.TextBox_Ep_Details.Location = New System.Drawing.Point(77, 201)
 Me.TextBox_Ep_Details.Name = "TextBox_Ep_Details"
-Me.TextBox_Ep_Details.Size = New System.Drawing.Size(433, 21)
+Me.TextBox_Ep_Details.Size = New System.Drawing.Size(432, 21)
 Me.TextBox_Ep_Details.TabIndex = 22
 '
 'TextBox29
@@ -10007,7 +9989,7 @@ Me.TextBox29.Location = New System.Drawing.Point(78, 168)
 Me.TextBox29.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox29.Name = "TextBox29"
 Me.TextBox29.ReadOnly = true
-Me.TextBox29.Size = New System.Drawing.Size(431, 21)
+Me.TextBox29.Size = New System.Drawing.Size(430, 21)
 Me.TextBox29.TabIndex = 18
 '
 'Label40
@@ -10041,7 +10023,7 @@ Me.Label36.Text = "Path :"
 Me.Button48.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button48.BackColor = System.Drawing.Color.Red
 Me.Button48.Font = New System.Drawing.Font("Arial", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button48.Location = New System.Drawing.Point(407, 108)
+Me.Button48.Location = New System.Drawing.Point(406, 108)
 Me.Button48.Margin = New System.Windows.Forms.Padding(4)
 Me.Button48.Name = "Button48"
 Me.Button48.Size = New System.Drawing.Size(102, 23)
@@ -10059,7 +10041,7 @@ Me.TextBox17.Location = New System.Drawing.Point(78, 139)
 Me.TextBox17.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox17.Name = "TextBox17"
 Me.TextBox17.ReadOnly = true
-Me.TextBox17.Size = New System.Drawing.Size(431, 21)
+Me.TextBox17.Size = New System.Drawing.Size(430, 21)
 Me.TextBox17.TabIndex = 17
 '
 'Label49
@@ -10086,7 +10068,7 @@ Me.TextBox_Credits.Location = New System.Drawing.Point(332, 9)
 Me.TextBox_Credits.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox_Credits.Name = "TextBox_Credits"
 Me.TextBox_Credits.ReadOnly = true
-Me.TextBox_Credits.Size = New System.Drawing.Size(177, 21)
+Me.TextBox_Credits.Size = New System.Drawing.Size(176, 21)
 Me.TextBox_Credits.TabIndex = 9
 '
 'TextBox_Aired
@@ -10147,7 +10129,7 @@ Me.TextBox_Rating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, Sys
 Me.TextBox_Rating.Location = New System.Drawing.Point(278, 110)
 Me.TextBox_Rating.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox_Rating.Name = "TextBox_Rating"
-Me.TextBox_Rating.Size = New System.Drawing.Size(92, 21)
+Me.TextBox_Rating.Size = New System.Drawing.Size(91, 21)
 Me.TextBox_Rating.TabIndex = 6
 '
 'Label47
@@ -10198,13 +10180,13 @@ Me.TextBox25.Location = New System.Drawing.Point(331, -698)
 Me.TextBox25.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox25.Name = "TextBox25"
 Me.TextBox25.ReadOnly = true
-Me.TextBox25.Size = New System.Drawing.Size(5406, 21)
+Me.TextBox25.Size = New System.Drawing.Size(5405, 21)
 Me.TextBox25.TabIndex = 14
 '
 'PictureBox8
 '
 Me.PictureBox8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.PictureBox8.Location = New System.Drawing.Point(5555, -630)
+Me.PictureBox8.Location = New System.Drawing.Point(5554, -630)
 Me.PictureBox8.Margin = New System.Windows.Forms.Padding(4)
 Me.PictureBox8.Name = "PictureBox8"
 Me.PictureBox8.Size = New System.Drawing.Size(203, 249)
@@ -13839,7 +13821,7 @@ Me.Label118.Text = "Test String"
 Me.TabPage3.Controls.Add(Me.TabControl1)
 Me.TabPage3.Location = New System.Drawing.Point(4, 24)
 Me.TabPage3.Name = "TabPage3"
-Me.TabPage3.Size = New System.Drawing.Size(747, 72)
+Me.TabPage3.Size = New System.Drawing.Size(1061, 668)
 Me.TabPage3.TabIndex = 13
 Me.TabPage3.Text = "Home Movies"
 Me.TabPage3.UseVisualStyleBackColor = true
@@ -13856,7 +13838,7 @@ Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
 Me.TabControl1.Location = New System.Drawing.Point(0, 0)
 Me.TabControl1.Name = "TabControl1"
 Me.TabControl1.SelectedIndex = 0
-Me.TabControl1.Size = New System.Drawing.Size(747, 72)
+Me.TabControl1.Size = New System.Drawing.Size(1061, 668)
 Me.TabControl1.TabIndex = 0
 '
 'TabPage11
@@ -13871,7 +13853,7 @@ Me.TabPage11.Controls.Add(Me.TextBox22)
 Me.TabPage11.Location = New System.Drawing.Point(4, 27)
 Me.TabPage11.Name = "TabPage11"
 Me.TabPage11.Padding = New System.Windows.Forms.Padding(3)
-Me.TabPage11.Size = New System.Drawing.Size(739, 41)
+Me.TabPage11.Size = New System.Drawing.Size(1053, 637)
 Me.TabPage11.TabIndex = 0
 Me.TabPage11.Text = "Main Browser"
 Me.TabPage11.UseVisualStyleBackColor = true
@@ -13918,7 +13900,7 @@ Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Win
 Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 218!))
 Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
 Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55!))
-Me.TableLayoutPanel21.Size = New System.Drawing.Size(733, 35)
+Me.TableLayoutPanel21.Size = New System.Drawing.Size(1047, 631)
 Me.TableLayoutPanel21.TabIndex = 37
 '
 'btnHomeMovieSave
@@ -13926,7 +13908,7 @@ Me.TableLayoutPanel21.TabIndex = 37
 Me.btnHomeMovieSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.btnHomeMovieSave.BackgroundImage = CType(resources.GetObject("btnHomeMovieSave.BackgroundImage"),System.Drawing.Image)
 Me.btnHomeMovieSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-Me.btnHomeMovieSave.Location = New System.Drawing.Point(700, 13)
+Me.btnHomeMovieSave.Location = New System.Drawing.Point(1014, 13)
 Me.btnHomeMovieSave.Name = "btnHomeMovieSave"
 Me.btnHomeMovieSave.Size = New System.Drawing.Size(30, 30)
 Me.btnHomeMovieSave.TabIndex = 28
@@ -13941,7 +13923,7 @@ Me.HmMovPlot.Multiline = true
 Me.HmMovPlot.Name = "HmMovPlot"
 Me.TableLayoutPanel21.SetRowSpan(Me.HmMovPlot, 2)
 Me.HmMovPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-Me.HmMovPlot.Size = New System.Drawing.Size(320, 119)
+Me.HmMovPlot.Size = New System.Drawing.Size(634, 119)
 Me.HmMovPlot.TabIndex = 31
 '
 'HmMovStars
@@ -13961,7 +13943,7 @@ Me.PictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TableLayoutPanel21.SetColumnSpan(Me.PictureBox4, 3)
 Me.PictureBox4.Location = New System.Drawing.Point(370, 327)
 Me.PictureBox4.Name = "PictureBox4"
-Me.PictureBox4.Size = New System.Drawing.Size(104, 212)
+Me.PictureBox4.Size = New System.Drawing.Size(418, 212)
 Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
 Me.PictureBox4.TabIndex = 27
 Me.PictureBox4.TabStop = false
@@ -13988,7 +13970,7 @@ Me.Label113.Text = "Year:"
 '
 Me.Label168.AutoSize = true
 Me.Label168.Dock = System.Windows.Forms.DockStyle.Right
-Me.Label168.Location = New System.Drawing.Point(442, 10)
+Me.Label168.Location = New System.Drawing.Point(756, 10)
 Me.Label168.Name = "Label168"
 Me.Label168.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
 Me.Label168.Size = New System.Drawing.Size(32, 45)
@@ -13999,7 +13981,7 @@ Me.Label168.Text = "Sort:"
 '
 Me.HmMovSort.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovSort, 2)
-Me.HmMovSort.Location = New System.Drawing.Point(480, 13)
+Me.HmMovSort.Location = New System.Drawing.Point(794, 13)
 Me.HmMovSort.Name = "HmMovSort"
 Me.HmMovSort.Size = New System.Drawing.Size(210, 21)
 Me.HmMovSort.TabIndex = 20
@@ -14024,7 +14006,7 @@ Me.ListBox18.ItemHeight = 15
 Me.ListBox18.Location = New System.Drawing.Point(3, 13)
 Me.ListBox18.Name = "ListBox18"
 Me.TableLayoutPanel21.SetRowSpan(Me.ListBox18, 11)
-Me.ListBox18.Size = New System.Drawing.Size(288, 1)
+Me.ListBox18.Size = New System.Drawing.Size(288, 560)
 Me.ListBox18.TabIndex = 18
 '
 'HomeMovieContextMenu
@@ -14095,13 +14077,13 @@ Me.HmMovTitle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.W
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.HmMovTitle.Location = New System.Drawing.Point(370, 13)
 Me.HmMovTitle.Name = "HmMovTitle"
-Me.HmMovTitle.Size = New System.Drawing.Size(36, 21)
+Me.HmMovTitle.Size = New System.Drawing.Size(350, 21)
 Me.HmMovTitle.TabIndex = 19
 '
 'TextBox20
 '
 Me.TextBox20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox20.Location = New System.Drawing.Point(612, -2242)
+Me.TextBox20.Location = New System.Drawing.Point(926, -1646)
 Me.TextBox20.Name = "TextBox20"
 Me.TextBox20.Size = New System.Drawing.Size(121, 21)
 Me.TextBox20.TabIndex = 30
@@ -14110,7 +14092,7 @@ Me.TextBox20.TabIndex = 30
 '
 Me.Label169.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label169.AutoSize = true
-Me.Label169.Location = New System.Drawing.Point(571, -2239)
+Me.Label169.Location = New System.Drawing.Point(885, -1643)
 Me.Label169.Name = "Label169"
 Me.Label169.Size = New System.Drawing.Size(35, 15)
 Me.Label169.TabIndex = 29
@@ -14120,16 +14102,16 @@ Me.Label169.Text = "Year:"
 '
 Me.TextBox23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox23.Location = New System.Drawing.Point(364, -2242)
+Me.TextBox23.Location = New System.Drawing.Point(364, -1646)
 Me.TextBox23.Name = "TextBox23"
-Me.TextBox23.Size = New System.Drawing.Size(555, 21)
+Me.TextBox23.Size = New System.Drawing.Size(869, 21)
 Me.TextBox23.TabIndex = 26
 '
 'Label173
 '
 Me.Label173.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label173.AutoSize = true
-Me.Label173.Location = New System.Drawing.Point(305, -2239)
+Me.Label173.Location = New System.Drawing.Point(305, -1643)
 Me.Label173.Name = "Label173"
 Me.Label173.Size = New System.Drawing.Size(53, 15)
 Me.Label173.TabIndex = 25
@@ -14139,7 +14121,7 @@ Me.Label173.Text = "Starring:"
 '
 Me.Label172.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label172.AutoSize = true
-Me.Label172.Location = New System.Drawing.Point(309, -2364)
+Me.Label172.Location = New System.Drawing.Point(309, -1768)
 Me.Label172.Name = "Label172"
 Me.Label172.Size = New System.Drawing.Size(49, 15)
 Me.Label172.TabIndex = 24
@@ -14149,10 +14131,10 @@ Me.Label172.Text = "Outline:"
 '
 Me.TextBox22.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox22.Location = New System.Drawing.Point(364, -2364)
+Me.TextBox22.Location = New System.Drawing.Point(364, -1768)
 Me.TextBox22.Multiline = true
 Me.TextBox22.Name = "TextBox22"
-Me.TextBox22.Size = New System.Drawing.Size(555, 116)
+Me.TextBox22.Size = New System.Drawing.Size(869, 116)
 Me.TextBox22.TabIndex = 23
 '
 'TabPage35
@@ -14345,7 +14327,7 @@ Me.TabPage18.Controls.Add(Me.TabControl5)
 Me.TabPage18.Location = New System.Drawing.Point(4, 24)
 Me.TabPage18.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage18.Name = "TabPage18"
-Me.TabPage18.Size = New System.Drawing.Size(747, 72)
+Me.TabPage18.Size = New System.Drawing.Size(1061, 668)
 Me.TabPage18.TabIndex = 2
 Me.TabPage18.Text = "General Preferences"
 Me.TabPage18.ToolTipText = "Preferences"
@@ -14361,7 +14343,7 @@ Me.TabControl5.Location = New System.Drawing.Point(0, 0)
 Me.TabControl5.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl5.Name = "TabControl5"
 Me.TabControl5.SelectedIndex = 0
-Me.TabControl5.Size = New System.Drawing.Size(743, 68)
+Me.TabControl5.Size = New System.Drawing.Size(1057, 664)
 Me.TabControl5.TabIndex = 32
 '
 'TabPage29
@@ -14395,7 +14377,7 @@ Me.TabPage29.Location = New System.Drawing.Point(4, 24)
 Me.TabPage29.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage29.Name = "TabPage29"
 Me.TabPage29.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage29.Size = New System.Drawing.Size(735, 40)
+Me.TabPage29.Size = New System.Drawing.Size(1049, 636)
 Me.TabPage29.TabIndex = 0
 Me.TabPage29.Text = "General"
 Me.TabPage29.UseVisualStyleBackColor = true
@@ -14878,19 +14860,10 @@ Me.tpXbmcLink.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.
 Me.tpXbmcLink.Location = New System.Drawing.Point(4, 22)
 Me.tpXbmcLink.Name = "tpXbmcLink"
 Me.tpXbmcLink.Padding = New System.Windows.Forms.Padding(3)
-Me.tpXbmcLink.Size = New System.Drawing.Size(192, 74)
+Me.tpXbmcLink.Size = New System.Drawing.Size(735, 42)
 Me.tpXbmcLink.TabIndex = 2
 Me.tpXbmcLink.Text = "XBMC Link"
 Me.tpXbmcLink.UseVisualStyleBackColor = true
-'
-'UcGenPref_XbmcLink
-'
-Me.UcGenPref_XbmcLink.Dock = System.Windows.Forms.DockStyle.Fill
-Me.UcGenPref_XbmcLink.Location = New System.Drawing.Point(3, 3)
-Me.UcGenPref_XbmcLink.Margin = New System.Windows.Forms.Padding(0)
-Me.UcGenPref_XbmcLink.Name = "UcGenPref_XbmcLink"
-Me.UcGenPref_XbmcLink.Size = New System.Drawing.Size(186, 68)
-Me.UcGenPref_XbmcLink.TabIndex = 0
 '
 'TabPage33
 '
@@ -14898,7 +14871,7 @@ Me.TabPage33.Controls.Add(Me.TableLayoutPanel23)
 Me.TabPage33.Location = New System.Drawing.Point(4, 22)
 Me.TabPage33.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage33.Name = "TabPage33"
-Me.TabPage33.Size = New System.Drawing.Size(192, 74)
+Me.TabPage33.Size = New System.Drawing.Size(735, 42)
 Me.TabPage33.TabIndex = 1
 Me.TabPage33.Text = "Custom Commands - Tools Menu"
 Me.TabPage33.UseVisualStyleBackColor = true
@@ -14935,7 +14908,7 @@ Me.TableLayoutPanel23.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Win
 Me.TableLayoutPanel23.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37!))
 Me.TableLayoutPanel23.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40!))
 Me.TableLayoutPanel23.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-Me.TableLayoutPanel23.Size = New System.Drawing.Size(192, 74)
+Me.TableLayoutPanel23.Size = New System.Drawing.Size(735, 42)
 Me.TableLayoutPanel23.TabIndex = 9
 '
 'btn_ToolsCommandRemove
@@ -15060,7 +15033,7 @@ Me.TabPage34.Controls.Add(Me.Label149)
 Me.TabPage34.Location = New System.Drawing.Point(4, 24)
 Me.TabPage34.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage34.Name = "TabPage34"
-Me.TabPage34.Size = New System.Drawing.Size(747, 72)
+Me.TabPage34.Size = New System.Drawing.Size(1061, 668)
 Me.TabPage34.TabIndex = 4
 Me.TabPage34.Text = "Export"
 Me.TabPage34.UseVisualStyleBackColor = true
@@ -15123,7 +15096,7 @@ Me.TabControlDebug.Controls.Add(Me.TableLayoutPanel24)
 Me.TabControlDebug.Location = New System.Drawing.Point(4, 24)
 Me.TabControlDebug.Name = "TabControlDebug"
 Me.TabControlDebug.Padding = New System.Windows.Forms.Padding(3)
-Me.TabControlDebug.Size = New System.Drawing.Size(747, 72)
+Me.TabControlDebug.Size = New System.Drawing.Size(1061, 668)
 Me.TabControlDebug.TabIndex = 5
 Me.TabControlDebug.Text = "Debug"
 Me.TabControlDebug.UseVisualStyleBackColor = true
@@ -15160,7 +15133,7 @@ Me.TableLayoutPanel24.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Win
 Me.TableLayoutPanel24.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39!))
 Me.TableLayoutPanel24.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 260!))
 Me.TableLayoutPanel24.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-Me.TableLayoutPanel24.Size = New System.Drawing.Size(741, 66)
+Me.TableLayoutPanel24.Size = New System.Drawing.Size(1055, 662)
 Me.TableLayoutPanel24.TabIndex = 15
 '
 'Label3
@@ -15305,7 +15278,7 @@ Me.RadioButton_Fix_Filename.UseVisualStyleBackColor = true
 Me.TabConfigXML.Controls.Add(Me.RichTextBoxTabConfigXML)
 Me.TabConfigXML.Location = New System.Drawing.Point(4, 24)
 Me.TabConfigXML.Name = "TabConfigXML"
-Me.TabConfigXML.Size = New System.Drawing.Size(747, 72)
+Me.TabConfigXML.Size = New System.Drawing.Size(1061, 668)
 Me.TabConfigXML.TabIndex = 6
 Me.TabConfigXML.Text = "Config.xml"
 Me.TabConfigXML.UseVisualStyleBackColor = true
@@ -15318,7 +15291,7 @@ Me.RichTextBoxTabConfigXML.Font = New System.Drawing.Font("Courier New", 10.2!, 
 Me.RichTextBoxTabConfigXML.Location = New System.Drawing.Point(0, 0)
 Me.RichTextBoxTabConfigXML.Name = "RichTextBoxTabConfigXML"
 Me.RichTextBoxTabConfigXML.ReadOnly = true
-Me.RichTextBoxTabConfigXML.Size = New System.Drawing.Size(747, 72)
+Me.RichTextBoxTabConfigXML.Size = New System.Drawing.Size(1061, 668)
 Me.RichTextBoxTabConfigXML.TabIndex = 0
 Me.RichTextBoxTabConfigXML.Text = ""
 '
@@ -15327,7 +15300,7 @@ Me.RichTextBoxTabConfigXML.Text = ""
 Me.TabMovieCacheXML.Controls.Add(Me.RichTextBoxTabMovieCache)
 Me.TabMovieCacheXML.Location = New System.Drawing.Point(4, 24)
 Me.TabMovieCacheXML.Name = "TabMovieCacheXML"
-Me.TabMovieCacheXML.Size = New System.Drawing.Size(747, 72)
+Me.TabMovieCacheXML.Size = New System.Drawing.Size(1061, 668)
 Me.TabMovieCacheXML.TabIndex = 7
 Me.TabMovieCacheXML.Text = "MovieCache"
 Me.TabMovieCacheXML.UseVisualStyleBackColor = true
@@ -15340,7 +15313,7 @@ Me.RichTextBoxTabMovieCache.Font = New System.Drawing.Font("Courier New", 10.2!,
 Me.RichTextBoxTabMovieCache.Location = New System.Drawing.Point(0, 0)
 Me.RichTextBoxTabMovieCache.Name = "RichTextBoxTabMovieCache"
 Me.RichTextBoxTabMovieCache.ReadOnly = true
-Me.RichTextBoxTabMovieCache.Size = New System.Drawing.Size(747, 72)
+Me.RichTextBoxTabMovieCache.Size = New System.Drawing.Size(1061, 668)
 Me.RichTextBoxTabMovieCache.TabIndex = 0
 Me.RichTextBoxTabMovieCache.Text = ""
 '
@@ -15349,7 +15322,7 @@ Me.RichTextBoxTabMovieCache.Text = ""
 Me.TabTVCacheXML.Controls.Add(Me.RichTextBoxTabTVCache)
 Me.TabTVCacheXML.Location = New System.Drawing.Point(4, 24)
 Me.TabTVCacheXML.Name = "TabTVCacheXML"
-Me.TabTVCacheXML.Size = New System.Drawing.Size(747, 72)
+Me.TabTVCacheXML.Size = New System.Drawing.Size(1061, 668)
 Me.TabTVCacheXML.TabIndex = 8
 Me.TabTVCacheXML.Text = "TVCache"
 Me.TabTVCacheXML.UseVisualStyleBackColor = true
@@ -15362,7 +15335,7 @@ Me.RichTextBoxTabTVCache.Font = New System.Drawing.Font("Courier New", 10.2!, Sy
 Me.RichTextBoxTabTVCache.Location = New System.Drawing.Point(0, 0)
 Me.RichTextBoxTabTVCache.Name = "RichTextBoxTabTVCache"
 Me.RichTextBoxTabTVCache.ReadOnly = true
-Me.RichTextBoxTabTVCache.Size = New System.Drawing.Size(747, 72)
+Me.RichTextBoxTabTVCache.Size = New System.Drawing.Size(1061, 668)
 Me.RichTextBoxTabTVCache.TabIndex = 0
 Me.RichTextBoxTabTVCache.Text = ""
 '
@@ -15371,7 +15344,7 @@ Me.RichTextBoxTabTVCache.Text = ""
 Me.TabProfile.Controls.Add(Me.RichTextBoxTabProfile)
 Me.TabProfile.Location = New System.Drawing.Point(4, 24)
 Me.TabProfile.Name = "TabProfile"
-Me.TabProfile.Size = New System.Drawing.Size(747, 72)
+Me.TabProfile.Size = New System.Drawing.Size(1061, 668)
 Me.TabProfile.TabIndex = 9
 Me.TabProfile.Text = "Profile"
 Me.TabProfile.UseVisualStyleBackColor = true
@@ -15384,7 +15357,7 @@ Me.RichTextBoxTabProfile.Font = New System.Drawing.Font("Courier New", 10.2!, Sy
 Me.RichTextBoxTabProfile.Location = New System.Drawing.Point(0, 0)
 Me.RichTextBoxTabProfile.Name = "RichTextBoxTabProfile"
 Me.RichTextBoxTabProfile.ReadOnly = true
-Me.RichTextBoxTabProfile.Size = New System.Drawing.Size(747, 72)
+Me.RichTextBoxTabProfile.Size = New System.Drawing.Size(1061, 668)
 Me.RichTextBoxTabProfile.TabIndex = 0
 Me.RichTextBoxTabProfile.Text = ""
 '
@@ -15393,7 +15366,7 @@ Me.RichTextBoxTabProfile.Text = ""
 Me.TabActorCache.Controls.Add(Me.RichTextBoxTabActorCache)
 Me.TabActorCache.Location = New System.Drawing.Point(4, 24)
 Me.TabActorCache.Name = "TabActorCache"
-Me.TabActorCache.Size = New System.Drawing.Size(747, 72)
+Me.TabActorCache.Size = New System.Drawing.Size(1061, 668)
 Me.TabActorCache.TabIndex = 10
 Me.TabActorCache.Text = "ActorCache"
 Me.TabActorCache.UseVisualStyleBackColor = true
@@ -15406,7 +15379,7 @@ Me.RichTextBoxTabActorCache.Font = New System.Drawing.Font("Courier New", 10.2!,
 Me.RichTextBoxTabActorCache.Location = New System.Drawing.Point(0, 0)
 Me.RichTextBoxTabActorCache.Name = "RichTextBoxTabActorCache"
 Me.RichTextBoxTabActorCache.ReadOnly = true
-Me.RichTextBoxTabActorCache.Size = New System.Drawing.Size(747, 72)
+Me.RichTextBoxTabActorCache.Size = New System.Drawing.Size(1061, 668)
 Me.RichTextBoxTabActorCache.TabIndex = 0
 Me.RichTextBoxTabActorCache.Text = ""
 '
@@ -15415,7 +15388,7 @@ Me.RichTextBoxTabActorCache.Text = ""
 Me.TabRegex.Controls.Add(Me.RichTextBoxTabRegex)
 Me.TabRegex.Location = New System.Drawing.Point(4, 24)
 Me.TabRegex.Name = "TabRegex"
-Me.TabRegex.Size = New System.Drawing.Size(747, 72)
+Me.TabRegex.Size = New System.Drawing.Size(1061, 668)
 Me.TabRegex.TabIndex = 11
 Me.TabRegex.Text = "Regex"
 Me.TabRegex.UseVisualStyleBackColor = true
@@ -15428,7 +15401,7 @@ Me.RichTextBoxTabRegex.Font = New System.Drawing.Font("Courier New", 10.2!, Syst
 Me.RichTextBoxTabRegex.Location = New System.Drawing.Point(0, 0)
 Me.RichTextBoxTabRegex.Name = "RichTextBoxTabRegex"
 Me.RichTextBoxTabRegex.ReadOnly = true
-Me.RichTextBoxTabRegex.Size = New System.Drawing.Size(747, 72)
+Me.RichTextBoxTabRegex.Size = New System.Drawing.Size(1061, 668)
 Me.RichTextBoxTabRegex.TabIndex = 0
 Me.RichTextBoxTabRegex.Text = ""
 '
@@ -15448,7 +15421,7 @@ Me.TabTasks.Controls.Add(Me.TasksList)
 Me.TabTasks.Location = New System.Drawing.Point(4, 24)
 Me.TabTasks.Name = "TabTasks"
 Me.TabTasks.Padding = New System.Windows.Forms.Padding(3)
-Me.TabTasks.Size = New System.Drawing.Size(747, 72)
+Me.TabTasks.Size = New System.Drawing.Size(1061, 668)
 Me.TabTasks.TabIndex = 12
 Me.TabTasks.Text = "Tasks"
 Me.TabTasks.UseVisualStyleBackColor = true
@@ -15977,6 +15950,33 @@ Me.tsFileDownloadlabel.Text = "Downloading trailer - Press Control-C to cancel"
 Me.tsProgressBarFileDownload.AutoSize = false
 Me.tsProgressBarFileDownload.Name = "tsProgressBarFileDownload"
 Me.tsProgressBarFileDownload.Size = New System.Drawing.Size(100, 16)
+'
+'TooltipGridViewMovies1
+'
+Me.TooltipGridViewMovies1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+Me.TooltipGridViewMovies1.Location = New System.Drawing.Point(114, 132)
+Me.TooltipGridViewMovies1.Name = "TooltipGridViewMovies1"
+Me.TooltipGridViewMovies1.Size = New System.Drawing.Size(198, 127)
+Me.TooltipGridViewMovies1.TabIndex = 177
+Me.TooltipGridViewMovies1.Visible = false
+'
+'movieGraphicInfo
+'
+Me.movieGraphicInfo.BackColor = System.Drawing.Color.Transparent
+Me.movieGraphicInfo.Location = New System.Drawing.Point(3, 192)
+Me.movieGraphicInfo.Name = "movieGraphicInfo"
+Me.movieGraphicInfo.Size = New System.Drawing.Size(63, 36)
+Me.movieGraphicInfo.TabIndex = 226
+Me.movieGraphicInfo.Visible = false
+'
+'UcGenPref_XbmcLink
+'
+Me.UcGenPref_XbmcLink.Dock = System.Windows.Forms.DockStyle.Fill
+Me.UcGenPref_XbmcLink.Location = New System.Drawing.Point(3, 3)
+Me.UcGenPref_XbmcLink.Margin = New System.Windows.Forms.Padding(0)
+Me.UcGenPref_XbmcLink.Name = "UcGenPref_XbmcLink"
+Me.UcGenPref_XbmcLink.Size = New System.Drawing.Size(729, 36)
+Me.UcGenPref_XbmcLink.TabIndex = 0
 '
 'UcGenPref_XbmcLink1
 '

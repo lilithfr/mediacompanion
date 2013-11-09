@@ -9773,7 +9773,21 @@ Public Class Form1
             'newepisode.Save()  'this function doesn't save the video/audio stream details, have to revert to the old method.
             Dim eps As New List(Of Media_Companion.TvEpisode)
             eps.Add(newepisode)
-            Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
+            Dim multiepisode As Boolean = TestForMultiepisode(newepisode.NfoFilePath)
+            If multiepisode = False Then
+                Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
+            Else
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(newepisode.NfoFilePath)
+                For Each ep In episodelist
+                    If newepisode.Season.Value = ep.Season.Value And newepisode.Episode.Value = ep.Episode.Value Then
+                        episodelist.Remove(ep)
+                        episodelist.Add(newepisode)
+                        WorkingWithNfoFiles.ep_NfoSave(episodelist, newepisode.NfoFilePath)
+                        Exit For
+                    End If
+                Next
+            End If
             Dim fpath As String = newepisode.NfoFilePath
             Dim ext As String = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
             Dim ext1 As String = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
@@ -9782,7 +9796,7 @@ Public Class Form1
             Dim frodo As Boolean = Preferences.FrodoEnabled
             Dim edenart As Boolean = IO.File.Exists(ext1)
             Dim frodoart As Boolean = IO.File.Exists(ext2)
-            
+
             If Not newepisode.Thumbnail.FileName = Nothing And newepisode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
                 Dim url As String = newepisode.Thumbnail.FileName
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
