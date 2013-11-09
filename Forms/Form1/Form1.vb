@@ -9054,7 +9054,7 @@ Public Class Form1
                     Loop
                     Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
                     Do While trueepisode.Substring(0, 1) = "0"
-                        trueepisode = trueepisode.Substring(1, trueseason.Length - 1)
+                        trueepisode = trueepisode.Substring(1, trueepisode.Length - 1)
                     Loop
                     tempstring = "S" & trueseason & "E" & trueepisode & " - "
                     'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
@@ -9074,23 +9074,23 @@ Public Class Form1
                             ep.Credits.Value = TextBox_Credits.Text
                             ep.Director.Value = TextBox_Director.Text
                         End If
-                        Dim fullfiledetails As Media_Companion.FullFileDetails
-                        fullfiledetails = Media_Companion.Preferences.Get_HdTags(Episode.NfoFilePath)
-                        ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
-                        ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
-                        ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
-                        ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
-                        ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
-                        ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
-                        ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
+                        'Dim fullfiledetails As Media_Companion.FullFileDetails
+                        'fullfiledetails = Media_Companion.Preferences.Get_HdTags(Episode.NfoFilePath)
+                        'ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
+                        'ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
+                        'ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
+                        'ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
+                        'ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
+                        'ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
+                        'ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
 
-                        For Each track In fullfiledetails.filedetails_audio
-                            Dim newtrack As New AudioDetails
-                            newtrack.Codec = track.Codec
-                            newtrack.Channels = track.Channels
-                            newtrack.Bitrate = track.Bitrate
-                            ep.Details.StreamDetails.Audio.Add(newtrack)
-                        Next
+                        'For Each track In fullfiledetails.filedetails_audio
+                        '    Dim newtrack As New AudioDetails
+                        '    newtrack.Codec = track.Codec
+                        '    newtrack.Channels = track.Channels
+                        '    newtrack.Bitrate = track.Bitrate
+                        '    ep.Details.StreamDetails.Audio.Add(newtrack)
+                        'Next
                     Next
                     WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
 
