@@ -983,10 +983,12 @@ Partial Public Class Form1
         For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
             TvShow.UpdateTreenode()
             TvTreeview.Nodes.Add(TvShow.ShowNode)
+
         Next
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
         TvTreeview.Sort()
+     
     End Sub
 
     Private Sub tv_CacheRefreshSelected(ByVal Show As TvShow)

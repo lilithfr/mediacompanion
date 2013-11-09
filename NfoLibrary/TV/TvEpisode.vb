@@ -147,7 +147,7 @@ Public Class TvEpisode
             If Missing.Value Is Nothing Then
                 Missing.Value = Boolean.FalseString
             End If
-            If Missing.Value = Boolean.TrueString Then
+            If Missing.Value.ToLower = Boolean.TrueString.ToLower Then
                 Me.EpisodeNode.ForeColor = Drawing.Color.Blue
             Else
                 Me.EpisodeNode.ForeColor = Drawing.Color.Black
@@ -156,7 +156,7 @@ Public Class TvEpisode
         End Get
         Set(ByVal value As Boolean)
             Missing.Value = CStr(value)
-            If Missing.Value = Boolean.TrueString Then
+            If Missing.Value.ToLower = Boolean.TrueString.ToLower Then
                 Me.EpisodeNode.ForeColor = Drawing.Color.Blue
             Else
                 Me.EpisodeNode.ForeColor = Drawing.Color.Black
