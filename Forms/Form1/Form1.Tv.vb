@@ -1096,6 +1096,7 @@ Partial Public Class Form1
             Dim episodelist As New List(Of TvEpisode)
             episodelist = loadepisodes(newtvshownfo, episodelist)
             For Each ep In episodelist
+                ep.ShowId.Value = newtvshownfo.TvdbId.Value
                 fullepisodelist.Add(ep)
             Next
 
