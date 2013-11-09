@@ -1063,9 +1063,9 @@ Partial Public Class Form1
             Next
             For Each showitem In Cache.TvCache.Shows
                 fulltvshowlist.Add(showitem)
-                For Each episodeitem In Cache.TvCache.Episodes
-                    fullepisodelist.Add(episodeitem)
-                Next
+            Next
+            For Each episodeitem In Cache.TvCache.Episodes
+                fullepisodelist.Add(episodeitem)
             Next
         Else
             For Each ep In Cache.TvCache.Episodes
