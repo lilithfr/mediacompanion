@@ -7,6 +7,7 @@ Partial Public Class TvShow
     Public Sub UpdateTreenode()
         Me.ShowNode.Tag = Me
         Me.ShowNode.Text = Me.Title.Value
+        
         Select Case Me.State
             Case Media_Companion.ShowState.Open
                 ShowNode.ImageKey = "blank"
@@ -31,7 +32,7 @@ Partial Public Class TvShow
             ShowNode.ForeColor = Drawing.Color.Red
         End If
 
-        If Me.MissingEpisodes.Count > 0 Then
+        If Preferences.displayMissingEpisodes AndAlso Me.MissingEpisodes.Count > 0 Then
             ShowNode.ImageKey = "missing.png"
             ShowNode.SelectedImageKey = "missing.png"
         End If

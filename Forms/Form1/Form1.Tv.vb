@@ -981,9 +981,9 @@ Partial Public Class Form1
         TvTreeview.Nodes.Clear()              'clear the treeview of old data
         ''Dirty work around until TvShows is repalced with TvCache.Shows universally
         For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
-            TvShow.UpdateTreenode()
+            'TvShow.UpdateTreenode()
             TvTreeview.Nodes.Add(TvShow.ShowNode)
-
+            TvShow.UpdateTreenode()
         Next
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
@@ -1053,7 +1053,7 @@ Partial Public Class Form1
             FolderList.Add(TvShowSelected.FolderPath) 'add the single show to our list
             Cache.TvCache.Remove(TvShowSelected)
             For Each episode In TvShowSelected.Episodes
-                If episode.IsMissing = True Then
+                If Preferences.displayMissingEpisodes AndAlso episode.IsMissing = True Then
                     fullepisodelist.Add(episode)
                     Cache.TvCache.Remove(episode)
                 Else
@@ -1069,7 +1069,7 @@ Partial Public Class Form1
             Next
         Else
             For Each ep In Cache.TvCache.Episodes
-                If ep.IsMissing = True Then
+                If Preferences.displayMissingEpisodes AndAlso ep.IsMissing = True Then
                     fullepisodelist.Add(ep)
                 End If
             Next
@@ -1165,7 +1165,7 @@ Partial Public Class Form1
             child.SetAttribute("NfoPath", item.NfoFilePath)
 
             childchild = document.CreateElement("state")
-            childchild.InnerText = "0"
+            childchild.InnerText = item.State '"0"
             child.AppendChild(childchild)
 
             childchild = document.CreateElement("title")
