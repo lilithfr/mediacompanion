@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
+Imports Media_Companion.WorkingWithNfoFiles
 
 Public Class MediaInfoExport
 
@@ -31,7 +32,7 @@ Public Class MediaInfoExport
     Dim workingTemplate As mediaInfoExportTemplate
     Dim templateList As New List(Of mediaInfoExportTemplate)
     Dim fullTemplateString As String = Nothing
-    Dim mediaExportNfoFunction As New WorkingWithNfoFiles
+    'Dim mediaExportNfoFunction As New WorkingWithNfoFiles
     Dim templateFolder As String = Path.Combine(Application.StartupPath, "html_templates\")
     'RegexOptions.IgnoreCase to make the regex case insensitive, and RegexOptions.Singleline causes the dot to match newlines
     Dim regexBlockOption As RegexOptions = RegexOptions.IgnoreCase Or RegexOptions.Singleline
@@ -937,7 +938,7 @@ Public Class MediaInfoExport
                     End If
 
                 Case "ep_nfo"
-                    Dim TVEpisodeNFO As List(Of TvEpisode) = mediaExportNfoFunction.ep_NfoLoadGeneric(tvEpisode.NfoFilePath)
+                    Dim TVEpisodeNFO As List(Of TvEpisode) = WorkingWithNfoFiles.ep_NfoLoad(tvEpisode.NfoFilePath)   'ep_NfoLoadGeneric(tvEpisode.NfoFilePath)
                     Dim fullTVEpisodeDetails As TvEpisode = TVEpisodeNFO(0)
                     Try
                         Select Case tokenInstr(1)

@@ -7864,7 +7864,8 @@ Public Class Form1
         'For Each Episode As Nfo.TvEpisode In alleps
         '    Episode.Save()
         'Next
-        Call nfoFunction.saveepisodenfo(alleps, path)
+        'Call nfoFunction.saveepisodenfo(alleps, path)
+        WorkingWithNfoFiles.ep_NfoSave(alleps, path)
         Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
         Dim ext1 As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
         Dim ext2 As String = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
@@ -9775,7 +9776,8 @@ Public Class Form1
             eps.Add(newepisode)
             Dim multiepisode As Boolean = TestForMultiepisode(newepisode.NfoFilePath)
             If multiepisode = False Then
-                Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
+                'Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
+                WorkingWithNfoFiles.ep_NfoSave(eps, newepisode.NfoFilePath)
             Else
                 Dim episodelist As New List(Of TvEpisode)
                 episodelist = WorkingWithNfoFiles.ep_NfoLoad(newepisode.NfoFilePath)
@@ -10229,7 +10231,7 @@ Public Class Form1
             For Each nfo In nfofilestorename
                 Dim ThisEp As New List(Of TvEpisode)
                 ThisEp.Clear()
-                ThisEp = nfoFunction.ep_NfoLoadGeneric(nfo)
+                ThisEp = WorkingWithNfoFiles.ep_NfoLoad(nfo)  'nfoFunction.ep_NfoLoadGeneric(nfo)
                 For h = ThisEp.Count - 1 To 0 Step -1
 
                     Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
@@ -10254,7 +10256,8 @@ Public Class Form1
                                             Throw ex
 #End If
                         End Try
-                        nfoFunction.saveepisodenfo(ThisEp, ThisEp(0).NfoFilePath)
+                        'nfoFunction.saveepisodenfo(ThisEp, ThisEp(0).NfoFilePath)
+                        WorkingWithNfoFiles.ep_NfoSave(ThisEp, ThisEp(0).NfoFilePath)
                     End If
                 Next
             Next
@@ -19822,7 +19825,7 @@ Public Class Form1
                             If tvBatchList.doEpisodeBody = True Or (tvBatchList.doEpisodeActors = True And Cache.TvCache.Shows(f).EpisodeActorSource.Value <> "") Or (tvBatchList.doEpisodeArt = True) Then
                                 Dim listofnewepisodes As New List(Of TvEpisode)
                                 listofnewepisodes.Clear()
-                                listofnewepisodes = nfoFunction.ep_NfoLoadGeneric(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
+                                listofnewepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)   'Generic(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
                                     If listofnewepisodes(h).Season.Value = Cache.TvCache.Shows(f).Episodes(g).Season.Value And listofnewepisodes(h).Episode.Value = Cache.TvCache.Shows(f).Episodes(g).Episode.Value Then
                                         Dim newactors As New List(Of str_MovieActors)
@@ -20005,7 +20008,8 @@ Public Class Form1
 #End If
                                             'MsgBox("hekp")
                                         End Try
-                                        nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        'nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        WorkingWithNfoFiles.ep_NfoSave(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
                                         'For Each Episode In listofnewepisodes
                                         '    Episode.Save()
                                         'Next
@@ -20025,7 +20029,7 @@ Public Class Form1
                             If tvBatchList.doEpisodeMediaTags = True Then
                                 Dim listofnewepisodes As New List(Of TvEpisode)
                                 listofnewepisodes.Clear()
-                                listofnewepisodes = nfoFunction.ep_NfoLoadGeneric(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
+                                listofnewepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)   'Generic(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
                                     'listofnewepisodes(h).Details = Preferences.Get_HdTags(Utilities.GetFileName(listofnewepisodes(h).VideoFilePath))
                                     listofnewepisodes(h).GetFileDetails()
@@ -20044,7 +20048,8 @@ Public Class Form1
                                             Throw ex
 #End If
                                         End Try
-                                        nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        'nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        WorkingWithNfoFiles.ep_NfoSave(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
                                     End If
                                 Next
                             End If

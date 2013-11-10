@@ -130,7 +130,77 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.Aired.Value = thisresult.InnerText
                             Case "plot"
                                 newtvepisode.Plot.Value = thisresult.InnerText
-                           
+                            Case "fileinfo"
+                                Dim detail2 As XmlNode = Nothing
+                                For Each detail2 In thisresult.ChildNodes
+                                    Select Case detail2.Name
+                                        Case "streamdetails"
+                                            Dim detail As XmlNode = Nothing
+                                            For Each detail In detail2.ChildNodes
+                                                Select Case detail.Name
+                                                    Case "video"
+                                                        Dim videodetails As XmlNode = Nothing
+                                                        For Each videodetails In detail.ChildNodes
+                                                            Select Case videodetails.Name
+                                                                Case "width"
+                                                                    newtvepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
+                                                                Case "height"
+                                                                    newtvepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
+                                                                Case "aspect"
+                                                                    newtvepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
+                                                                Case "codec"
+                                                                    newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                                                Case "formatinfo"
+                                                                    newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                                Case "durationinseconds"
+                                                                    newtvepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+                                                                Case "bitrate"
+                                                                    newtvepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                                                Case "bitratemode"
+                                                                    newtvepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+                                                                Case "bitratemax"
+                                                                    newtvepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+                                                                Case "container"
+                                                                    newtvepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
+                                                                Case "codecid"
+                                                                    newtvepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+                                                                Case "codecidinfo"
+                                                                    newtvepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+                                                                Case "scantype"
+                                                                    newtvepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                                                            End Select
+                                                        Next
+                                                    Case "audio"
+                                                        Dim audiodetails As XmlNode = Nothing
+                                                        Dim audio As New AudioDetails
+                                                        For Each audiodetails In detail.ChildNodes
+                                                            Select Case audiodetails.Name
+                                                                Case "language"
+                                                                    audio.Language.Value = audiodetails.InnerText
+                                                                Case "codec"
+                                                                    audio.Codec.Value = audiodetails.InnerText
+                                                                Case "channels"
+                                                                    audio.Channels.Value = audiodetails.InnerText
+                                                                Case "bitrate"
+                                                                    audio.Bitrate.Value = audiodetails.InnerText
+                                                            End Select
+                                                        Next
+                                                        newtvepisode.Details.StreamDetails.Audio.Add(audio)
+                                                    Case "subtitle"
+                                                        Dim subsdetails As XmlNode = Nothing
+                                                        For Each subsdetails In detail.ChildNodes
+                                                            Select Case subsdetails.Name
+                                                                Case "language"
+                                                                    Dim sublang As New SubtitleDetails
+                                                                    sublang.Language.Value = subsdetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Subtitles.Add(sublang)
+                                                            End Select
+                                                        Next
+                                                End Select
+                                            Next
+                                            'newtvepisode.Details = newfilenfo
+                                    End Select
+                                Next
                         End Select
 
                     Catch ex As Exception
@@ -368,528 +438,527 @@ Public Class WorkingWithNfoFiles
         Next
         Return newtvshow
 
-
-
     End Function
+
     Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
         If IO.File.Exists(Path) And Not overwrite Then Exit Sub
 
         Show.Save(Path)
     End Sub
 
-    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
-        If listofepisodes.Count = 1 Then
-            'Hack to get ShowID with the data available at this point
-            Dim ThumbnailPath As String = listofepisodes(0).Thumbnail.FileName
-            Dim Split As String() = ThumbnailPath.Split("/")
-            Dim FoundShowID As String = ""
-            If Split.Length >= 6 Then
-                FoundShowID = Split(5)
-            End If
-            'end hack
+    'Public Sub saveepisodenfo(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
+    '    If listofepisodes.Count = 1 Then
+    '        'Hack to get ShowID with the data available at this point
+    '        Dim ThumbnailPath As String = listofepisodes(0).Thumbnail.FileName
+    '        Dim Split As String() = ThumbnailPath.Split("/")
+    '        Dim FoundShowID As String = ""
+    '        If Split.Length >= 6 Then
+    '            FoundShowID = Split(5)
+    '        End If
+    '        'end hack
 
-            Dim document As New XmlDocument
-            Dim root As XmlElement
-            Dim child As XmlElement
-            Dim actorchild As XmlElement
-            Dim filedetailschild As XmlElement
-            Dim filedetailschildchild As XmlElement
-            root = document.CreateElement("episodedetails")
-            Dim thispref As XmlNode = Nothing
-            Dim xmlproc As XmlDeclaration
+    '        Dim document As New XmlDocument
+    '        Dim root As XmlElement
+    '        Dim child As XmlElement
+    '        Dim actorchild As XmlElement
+    '        Dim filedetailschild As XmlElement
+    '        Dim filedetailschildchild As XmlElement
+    '        root = document.CreateElement("episodedetails")
+    '        Dim thispref As XmlNode = Nothing
+    '        Dim xmlproc As XmlDeclaration
 
-            xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-            document.AppendChild(xmlproc)
-            Dim anotherchild As XmlNode = Nothing
-            If Preferences.enabletvhdtags = True Then
-                Try
-                    child = document.CreateElement("fileinfo")
+    '        xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+    '        document.AppendChild(xmlproc)
+    '        Dim anotherchild As XmlNode = Nothing
+    '        If Preferences.enabletvhdtags = True Then
+    '            Try
+    '                child = document.CreateElement("fileinfo")
 
-                    anotherchild = document.CreateElement("streamdetails")
+    '                anotherchild = document.CreateElement("streamdetails")
 
-                    filedetailschild = document.CreateElement("video")
-                    If listofepisodes(0).Details.StreamDetails.Video.Width <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.Width.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("width")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Width.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.Height <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.Height.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("height")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Height.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.Aspect <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.Aspect.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("aspect")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Aspect.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.Codec <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.Codec.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("codec")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Codec.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.FormatInfo <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.FormatInfo.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("format")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.FormatInfo.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.DurationInSeconds <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("durationinseconds")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.DurationInSeconds.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.Bitrate <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.Bitrate.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("bitrate")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Bitrate.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.BitrateMode <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.BitrateMode.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("bitratemode")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.BitrateMode.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.BitrateMax <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.BitrateMax.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("bitratemax")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.BitrateMax.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.Container <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.Container.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("container")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Container.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.CodecId <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.CodecId.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("codecid")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.CodecId.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.CodecInfo <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.CodecInfo.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("codecidinfo")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.CodecInfo.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    If listofepisodes(0).Details.StreamDetails.Video.ScanType <> Nothing Then
-                        If listofepisodes(0).Details.StreamDetails.Video.ScanType.Value <> "" Then
-                            filedetailschildchild = document.CreateElement("scantype")
-                            filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.ScanType.Value
-                            filedetailschild.AppendChild(filedetailschildchild)
-                        End If
-                    End If
-                    anotherchild.AppendChild(filedetailschild)
+    '                filedetailschild = document.CreateElement("video")
+    '                If listofepisodes(0).Details.StreamDetails.Video.Width <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.Width.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("width")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Width.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.Height <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.Height.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("height")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Height.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.Aspect <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.Aspect.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("aspect")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Aspect.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.Codec <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.Codec.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("codec")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Codec.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.FormatInfo <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.FormatInfo.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("format")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.FormatInfo.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.DurationInSeconds <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("durationinseconds")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.DurationInSeconds.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.Bitrate <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.Bitrate.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("bitrate")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Bitrate.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.BitrateMode <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.BitrateMode.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("bitratemode")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.BitrateMode.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.BitrateMax <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.BitrateMax.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("bitratemax")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.BitrateMax.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.Container <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.Container.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("container")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.Container.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.CodecId <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.CodecId.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("codecid")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.CodecId.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.CodecInfo <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.CodecInfo.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("codecidinfo")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.CodecInfo.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                If listofepisodes(0).Details.StreamDetails.Video.ScanType <> Nothing Then
+    '                    If listofepisodes(0).Details.StreamDetails.Video.ScanType.Value <> "" Then
+    '                        filedetailschildchild = document.CreateElement("scantype")
+    '                        filedetailschildchild.InnerText = listofepisodes(0).Details.StreamDetails.Video.ScanType.Value
+    '                        filedetailschild.AppendChild(filedetailschildchild)
+    '                    End If
+    '                End If
+    '                anotherchild.AppendChild(filedetailschild)
 
-                    If listofepisodes(0).Details.StreamDetails.Audio.Count > 0 Then
-                        For Each item In listofepisodes(0).Details.StreamDetails.Audio
+    '                If listofepisodes(0).Details.StreamDetails.Audio.Count > 0 Then
+    '                    For Each item In listofepisodes(0).Details.StreamDetails.Audio
 
-                            filedetailschild = document.CreateElement("audio")
-                            If item.Language <> Nothing Then
-                                If item.Language.Value <> "" Then
-                                    filedetailschildchild = document.CreateElement("language")
-                                    filedetailschildchild.InnerText = item.Language.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                            If item.Codec <> Nothing Then
-                                If item.Codec.Value <> "" Then
-                                    filedetailschildchild = document.CreateElement("codec")
-                                    filedetailschildchild.InnerText = item.Codec.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                            If item.Channels <> Nothing Then
-                                If item.Channels.Value <> "" Then
-                                    filedetailschildchild = document.CreateElement("channels")
-                                    filedetailschildchild.InnerText = item.Channels.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                            If item.Bitrate <> Nothing Then
-                                If item.Bitrate.Value <> "" Then
-                                    filedetailschildchild = document.CreateElement("bitrate")
-                                    filedetailschildchild.InnerText = item.Bitrate.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                    anotherchild.AppendChild(filedetailschild)
-                                End If
-                            End If
-                        Next
-                        If listofepisodes(0).Details.StreamDetails.Subtitles.Count > 0 Then
-                            filedetailschild = document.CreateElement("subtitle")
-                            For Each entry In listofepisodes(0).Details.StreamDetails.Subtitles
-                                If entry.Language <> Nothing Then
-                                    If entry.Language.Value <> "" Then
-                                        filedetailschildchild = document.CreateElement("language")
-                                        filedetailschildchild.InnerText = entry.Language.Value
-                                        filedetailschild.AppendChild(filedetailschildchild)
-                                    End If
-                                End If
-                            Next
-                            anotherchild.AppendChild(filedetailschild)
-                        End If
-                    End If
-                    child.AppendChild(anotherchild)
-                    root.AppendChild(child)
-                Catch
-                End Try
-            End If
-
-
-            child = document.CreateElement("title")
-            child.InnerText = listofepisodes(0).Title.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("season")
-            child.InnerText = listofepisodes(0).Season.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("episode")
-            child.InnerText = listofepisodes(0).Episode.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("aired")
-            child.InnerText = listofepisodes(0).Aired.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("plot")
-            child.InnerText = listofepisodes(0).Plot.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("playcount")
-            child.InnerText = listofepisodes(0).PlayCount.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("director")
-            child.InnerText = listofepisodes(0).Director.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("credits")
-            child.InnerText = listofepisodes(0).Credits.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("rating")
-            child.InnerText = listofepisodes(0).Rating.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("runtime")
-            child.InnerText = listofepisodes(0).Runtime.Value
-            root.AppendChild(child)
-
-            child = document.CreateElement("showid")
-            child.InnerText = FoundShowID
-            root.AppendChild(child)
-
-            Dim actorstosave As Integer = listofepisodes(0).ListActors.Count
-            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
-            For f = 0 To actorstosave - 1
-                child = document.CreateElement("actor")
-                actorchild = document.CreateElement("name")
-                actorchild.InnerText = listofepisodes(0).ListActors(f).actorname
-                child.AppendChild(actorchild)
-                actorchild = document.CreateElement("role")
-                actorchild.InnerText = listofepisodes(0).ListActors(f).actorrole
-                child.AppendChild(actorchild)
-                If listofepisodes(0).ListActors(f).actorthumb <> Nothing Then
-                    If listofepisodes(0).ListActors(f).actorthumb <> "" Then
-                        actorchild = document.CreateElement("thumb")
-                        actorchild.InnerText = listofepisodes(0).ListActors(f).actorthumb
-                        child.AppendChild(actorchild)
-                    End If
-                End If
-                root.AppendChild(child)
-            Next
-            document.AppendChild(root)
-            Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-
-            document.WriteTo(output)
-            output.Close()
-        Else
-            Dim document As New XmlDocument
-            Dim root As XmlElement
-            Dim xmlEpisode As XmlElement
-            Dim xmlEpisodechild As XmlElement
-            Dim xmlStreamDetails As XmlElement
-            Dim xmlFileInfo As XmlElement
-            Dim xmlFileInfoType As XmlElement
-            Dim xmlFileInfoTypechild As XmlElement
-            Dim xmlActor As XmlElement
-            Dim xmlActorchild As XmlElement
-
-            Dim xmlproc As XmlDeclaration
-            xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-            document.AppendChild(xmlproc)
-
-            root = document.CreateElement("multiepisodenfo")
-            Dim done As Boolean = False
-            For Each ep In listofepisodes
-
-                'Hack to get ShowID with the data available at this point
-                Dim ThumbnailPath As String = ep.Thumbnail.FileName 'this path contains the showID - we just need to pull it out of the string
-                Dim Split As String() = ThumbnailPath.Split("/")
-                Dim FoundShowID As String = ""
-                If Split.Length >= 6 Then
-                    FoundShowID = Split(5) ' ShowID is section 5 from the thumbnail string
-                End If
-
-                'end hack
-
-                xmlEpisode = document.CreateElement("episodedetails")
-                If done = False Then
-                    'done = True
-                    If Preferences.enabletvhdtags = True Then
-                        Try
-                            xmlStreamDetails = document.CreateElement("streamdetails")
-                            xmlFileInfo = document.CreateElement("fileinfo")
-                            xmlFileInfoType = document.CreateElement("video")
-                            If ep.Details.StreamDetails.Video.Width <> Nothing Then
-                                If ep.Details.StreamDetails.Video.Width.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("width")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Width.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.Height <> Nothing Then
-                                If ep.Details.StreamDetails.Video.Height.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("height")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Height.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.Aspect <> Nothing Then
-                                If ep.Details.StreamDetails.Video.Aspect.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("aspect")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Aspect.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.Codec <> Nothing Then
-                                If ep.Details.StreamDetails.Video.Codec.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("codec")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.FormatInfo <> Nothing Then
-                                If ep.Details.StreamDetails.Video.FormatInfo.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("format")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
-                                If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("durationinseconds")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.Bitrate <> Nothing Then
-                                If ep.Details.StreamDetails.Video.Bitrate.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("bitrate")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.BitrateMode <> Nothing Then
-                                If ep.Details.StreamDetails.Video.BitrateMode.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("bitratemode")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.BitrateMax <> Nothing Then
-                                If ep.Details.StreamDetails.Video.BitrateMax.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("bitratemax")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.Container <> Nothing Then
-                                If ep.Details.StreamDetails.Video.Container.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("container")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Container.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.CodecId <> Nothing Then
-                                If ep.Details.StreamDetails.Video.CodecId.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("codecid")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.CodecInfo <> Nothing Then
-                                If ep.Details.StreamDetails.Video.CodecInfo.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("codecidinfo")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            If ep.Details.StreamDetails.Video.ScanType <> Nothing Then
-                                If ep.Details.StreamDetails.Video.ScanType.Value <> "" Then
-                                    xmlFileInfoTypechild = document.CreateElement("scantype")
-                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
-                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                End If
-                            End If
-                            xmlFileInfo.AppendChild(xmlFileInfoType)
-                            If ep.Details.StreamDetails.Audio.Count > 0 Then
-                                For Each aud In ep.Details.StreamDetails.Audio
-                                    xmlFileInfoType = document.CreateElement("audio")
-                                    If aud.Language <> Nothing Then
-                                        If aud.Language.Value <> "" Then
-                                            xmlFileInfoTypechild = document.CreateElement("language")
-                                            xmlFileInfoTypechild.InnerText = aud.Language.Value
-                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                        End If
-                                    End If
-                                    If aud.Codec <> Nothing Then
-                                        If aud.Codec.Value <> "" Then
-                                            xmlFileInfoTypechild = document.CreateElement("codec")
-                                            xmlFileInfoTypechild.InnerText = aud.Codec.Value
-                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                        End If
-                                    End If
-                                    If aud.Channels <> Nothing Then
-                                        If aud.Channels.Value <> "" Then
-                                            xmlFileInfoTypechild = document.CreateElement("channels")
-                                            xmlFileInfoTypechild.InnerText = aud.Channels.Value
-                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                        End If
-                                    End If
-                                    If aud.Bitrate <> Nothing Then
-                                        If aud.Bitrate.Value <> "" Then
-                                            xmlFileInfoTypechild = document.CreateElement("bitrate")
-                                            xmlFileInfoTypechild.InnerText = aud.Bitrate.Value
-                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                        End If
-                                    End If
-                                    xmlFileInfo.AppendChild(xmlFileInfoType)
-                                Next
-                            End If
-                            If ep.Details.StreamDetails.Subtitles.Count > 0 Then
-                                For Each subt In ep.Details.StreamDetails.Subtitles
-                                    If subt.Language <> Nothing Then
-                                        If subt.Language.Value <> "" Then
-                                            xmlFileInfoType = document.CreateElement("subtitle")
-                                            xmlFileInfoTypechild = document.CreateElement("language")
-                                            xmlFileInfoTypechild.InnerText = subt.Language.Value
-                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                                        End If
-                                    End If
-                                    xmlFileInfo.AppendChild(xmlFileInfoType)
-                                Next
-                            End If
-                            xmlStreamDetails.AppendChild(xmlFileInfo)
-                            xmlEpisode.AppendChild(xmlStreamDetails)
-                        Catch
-                        End Try
-                    End If
-                End If
+    '                        filedetailschild = document.CreateElement("audio")
+    '                        If item.Language <> Nothing Then
+    '                            If item.Language.Value <> "" Then
+    '                                filedetailschildchild = document.CreateElement("language")
+    '                                filedetailschildchild.InnerText = item.Language.Value
+    '                                filedetailschild.AppendChild(filedetailschildchild)
+    '                            End If
+    '                        End If
+    '                        If item.Codec <> Nothing Then
+    '                            If item.Codec.Value <> "" Then
+    '                                filedetailschildchild = document.CreateElement("codec")
+    '                                filedetailschildchild.InnerText = item.Codec.Value
+    '                                filedetailschild.AppendChild(filedetailschildchild)
+    '                            End If
+    '                        End If
+    '                        If item.Channels <> Nothing Then
+    '                            If item.Channels.Value <> "" Then
+    '                                filedetailschildchild = document.CreateElement("channels")
+    '                                filedetailschildchild.InnerText = item.Channels.Value
+    '                                filedetailschild.AppendChild(filedetailschildchild)
+    '                            End If
+    '                        End If
+    '                        If item.Bitrate <> Nothing Then
+    '                            If item.Bitrate.Value <> "" Then
+    '                                filedetailschildchild = document.CreateElement("bitrate")
+    '                                filedetailschildchild.InnerText = item.Bitrate.Value
+    '                                filedetailschild.AppendChild(filedetailschildchild)
+    '                                anotherchild.AppendChild(filedetailschild)
+    '                            End If
+    '                        End If
+    '                    Next
+    '                    If listofepisodes(0).Details.StreamDetails.Subtitles.Count > 0 Then
+    '                        filedetailschild = document.CreateElement("subtitle")
+    '                        For Each entry In listofepisodes(0).Details.StreamDetails.Subtitles
+    '                            If entry.Language <> Nothing Then
+    '                                If entry.Language.Value <> "" Then
+    '                                    filedetailschildchild = document.CreateElement("language")
+    '                                    filedetailschildchild.InnerText = entry.Language.Value
+    '                                    filedetailschild.AppendChild(filedetailschildchild)
+    '                                End If
+    '                            End If
+    '                        Next
+    '                        anotherchild.AppendChild(filedetailschild)
+    '                    End If
+    '                End If
+    '                child.AppendChild(anotherchild)
+    '                root.AppendChild(child)
+    '            Catch
+    '            End Try
+    '        End If
 
 
-                xmlEpisodechild = document.CreateElement("title")
-                xmlEpisodechild.InnerText = ep.Title.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("title")
+    '        child.InnerText = listofepisodes(0).Title.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("season")
-                xmlEpisodechild.InnerText = ep.Season.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("season")
+    '        child.InnerText = listofepisodes(0).Season.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("episode")
-                xmlEpisodechild.InnerText = ep.Episode.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("episode")
+    '        child.InnerText = listofepisodes(0).Episode.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("playcount")
-                xmlEpisodechild.InnerText = ep.PlayCount.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("aired")
+    '        child.InnerText = listofepisodes(0).Aired.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("credits")
-                xmlEpisodechild.InnerText = ep.Credits.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("plot")
+    '        child.InnerText = listofepisodes(0).Plot.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("director")
-                xmlEpisodechild.InnerText = ep.Director.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("playcount")
+    '        child.InnerText = listofepisodes(0).PlayCount.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("rating")
-                xmlEpisodechild.InnerText = ep.Rating.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("director")
+    '        child.InnerText = listofepisodes(0).Director.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("aired")
-                xmlEpisodechild.InnerText = ep.Aired.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("credits")
+    '        child.InnerText = listofepisodes(0).Credits.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("plot")
-                xmlEpisodechild.InnerText = ep.Plot.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("rating")
+    '        child.InnerText = listofepisodes(0).Rating.Value
+    '        root.AppendChild(child)
 
-                'xmlEpisodechild = document.CreateElement("thumb")
-                'xmlEpisodechild.InnerText = ep.Thumbnail.Path
-                'xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("runtime")
+    '        child.InnerText = listofepisodes(0).Runtime.Value
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("runtime")
-                xmlEpisodechild.InnerText = ep.Runtime.Value
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        child = document.CreateElement("showid")
+    '        child.InnerText = FoundShowID
+    '        root.AppendChild(child)
 
-                xmlEpisodechild = document.CreateElement("showid")
-                xmlEpisodechild.InnerText = FoundShowID
-                xmlEpisode.AppendChild(xmlEpisodechild)
+    '        Dim actorstosave As Integer = listofepisodes(0).ListActors.Count
+    '        If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+    '        For f = 0 To actorstosave - 1
+    '            child = document.CreateElement("actor")
+    '            actorchild = document.CreateElement("name")
+    '            actorchild.InnerText = listofepisodes(0).ListActors(f).actorname
+    '            child.AppendChild(actorchild)
+    '            actorchild = document.CreateElement("role")
+    '            actorchild.InnerText = listofepisodes(0).ListActors(f).actorrole
+    '            child.AppendChild(actorchild)
+    '            If listofepisodes(0).ListActors(f).actorthumb <> Nothing Then
+    '                If listofepisodes(0).ListActors(f).actorthumb <> "" Then
+    '                    actorchild = document.CreateElement("thumb")
+    '                    actorchild.InnerText = listofepisodes(0).ListActors(f).actorthumb
+    '                    child.AppendChild(actorchild)
+    '                End If
+    '            End If
+    '            root.AppendChild(child)
+    '        Next
+    '        document.AppendChild(root)
+    '        Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
+    '        output.Formatting = Formatting.Indented
 
-                Dim actorstosave As Integer = ep.ListActors.Count
-                If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
-                For f = 0 To actorstosave - 1
-                    xmlActor = document.CreateElement("actor")
-                    xmlActorchild = document.CreateElement("name")
-                    xmlActorchild.InnerText = ep.ListActors(f).actorname
-                    xmlActor.AppendChild(xmlActorchild)
-                    xmlActorchild = document.CreateElement("role")
-                    xmlActorchild.InnerText = ep.ListActors(f).actorrole
-                    xmlActor.AppendChild(xmlActorchild)
-                    If ep.ListActors(f).actorthumb <> Nothing Then
-                        If ep.ListActors(f).actorthumb <> "" Then
-                            xmlActorchild = document.CreateElement("thumb")
-                            xmlActorchild.InnerText = ep.ListActors(f).actorthumb
-                            xmlActor.AppendChild(xmlActorchild)
-                        End If
-                    End If
-                    xmlEpisode.AppendChild(xmlActor)
-                Next
-                root.AppendChild(xmlEpisode)
-            Next
-            document.AppendChild(root)
-            Try
-                Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-                output.Formatting = Formatting.Indented
+    '        document.WriteTo(output)
+    '        output.Close()
+    '    Else
+    '        Dim document As New XmlDocument
+    '        Dim root As XmlElement
+    '        Dim xmlEpisode As XmlElement
+    '        Dim xmlEpisodechild As XmlElement
+    '        Dim xmlStreamDetails As XmlElement
+    '        Dim xmlFileInfo As XmlElement
+    '        Dim xmlFileInfoType As XmlElement
+    '        Dim xmlFileInfoTypechild As XmlElement
+    '        Dim xmlActor As XmlElement
+    '        Dim xmlActorchild As XmlElement
 
-                document.WriteTo(output)
-                output.Close()
-            Catch
-            End Try
-        End If
-    End Sub
+    '        Dim xmlproc As XmlDeclaration
+    '        xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+    '        document.AppendChild(xmlproc)
+
+    '        root = document.CreateElement("multiepisodenfo")
+    '        Dim done As Boolean = False
+    '        For Each ep In listofepisodes
+
+    '            'Hack to get ShowID with the data available at this point
+    '            Dim ThumbnailPath As String = ep.Thumbnail.FileName 'this path contains the showID - we just need to pull it out of the string
+    '            Dim Split As String() = ThumbnailPath.Split("/")
+    '            Dim FoundShowID As String = ""
+    '            If Split.Length >= 6 Then
+    '                FoundShowID = Split(5) ' ShowID is section 5 from the thumbnail string
+    '            End If
+
+    '            'end hack
+
+    '            xmlEpisode = document.CreateElement("episodedetails")
+    '            If done = False Then
+    '                'done = True
+    '                If Preferences.enabletvhdtags = True Then
+    '                    Try
+    '                        xmlStreamDetails = document.CreateElement("streamdetails")
+    '                        xmlFileInfo = document.CreateElement("fileinfo")
+    '                        xmlFileInfoType = document.CreateElement("video")
+    '                        If ep.Details.StreamDetails.Video.Width <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.Width.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("width")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Width.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.Height <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.Height.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("height")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Height.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.Aspect <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.Aspect.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("aspect")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Aspect.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.Codec <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.Codec.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("codec")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.FormatInfo <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.FormatInfo.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("format")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("durationinseconds")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.Bitrate <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.Bitrate.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("bitrate")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.BitrateMode <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.BitrateMode.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("bitratemode")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.BitrateMax <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.BitrateMax.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("bitratemax")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.Container <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.Container.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("container")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Container.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.CodecId <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.CodecId.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("codecid")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.CodecInfo <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.CodecInfo.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("codecidinfo")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        If ep.Details.StreamDetails.Video.ScanType <> Nothing Then
+    '                            If ep.Details.StreamDetails.Video.ScanType.Value <> "" Then
+    '                                xmlFileInfoTypechild = document.CreateElement("scantype")
+    '                                xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
+    '                                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                            End If
+    '                        End If
+    '                        xmlFileInfo.AppendChild(xmlFileInfoType)
+    '                        If ep.Details.StreamDetails.Audio.Count > 0 Then
+    '                            For Each aud In ep.Details.StreamDetails.Audio
+    '                                xmlFileInfoType = document.CreateElement("audio")
+    '                                If aud.Language <> Nothing Then
+    '                                    If aud.Language.Value <> "" Then
+    '                                        xmlFileInfoTypechild = document.CreateElement("language")
+    '                                        xmlFileInfoTypechild.InnerText = aud.Language.Value
+    '                                        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                                    End If
+    '                                End If
+    '                                If aud.Codec <> Nothing Then
+    '                                    If aud.Codec.Value <> "" Then
+    '                                        xmlFileInfoTypechild = document.CreateElement("codec")
+    '                                        xmlFileInfoTypechild.InnerText = aud.Codec.Value
+    '                                        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                                    End If
+    '                                End If
+    '                                If aud.Channels <> Nothing Then
+    '                                    If aud.Channels.Value <> "" Then
+    '                                        xmlFileInfoTypechild = document.CreateElement("channels")
+    '                                        xmlFileInfoTypechild.InnerText = aud.Channels.Value
+    '                                        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                                    End If
+    '                                End If
+    '                                If aud.Bitrate <> Nothing Then
+    '                                    If aud.Bitrate.Value <> "" Then
+    '                                        xmlFileInfoTypechild = document.CreateElement("bitrate")
+    '                                        xmlFileInfoTypechild.InnerText = aud.Bitrate.Value
+    '                                        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                                    End If
+    '                                End If
+    '                                xmlFileInfo.AppendChild(xmlFileInfoType)
+    '                            Next
+    '                        End If
+    '                        If ep.Details.StreamDetails.Subtitles.Count > 0 Then
+    '                            For Each subt In ep.Details.StreamDetails.Subtitles
+    '                                If subt.Language <> Nothing Then
+    '                                    If subt.Language.Value <> "" Then
+    '                                        xmlFileInfoType = document.CreateElement("subtitle")
+    '                                        xmlFileInfoTypechild = document.CreateElement("language")
+    '                                        xmlFileInfoTypechild.InnerText = subt.Language.Value
+    '                                        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
+    '                                    End If
+    '                                End If
+    '                                xmlFileInfo.AppendChild(xmlFileInfoType)
+    '                            Next
+    '                        End If
+    '                        xmlStreamDetails.AppendChild(xmlFileInfo)
+    '                        xmlEpisode.AppendChild(xmlStreamDetails)
+    '                    Catch
+    '                    End Try
+    '                End If
+    '            End If
+
+
+    '            xmlEpisodechild = document.CreateElement("title")
+    '            xmlEpisodechild.InnerText = ep.Title.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("season")
+    '            xmlEpisodechild.InnerText = ep.Season.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("episode")
+    '            xmlEpisodechild.InnerText = ep.Episode.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("playcount")
+    '            xmlEpisodechild.InnerText = ep.PlayCount.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("credits")
+    '            xmlEpisodechild.InnerText = ep.Credits.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("director")
+    '            xmlEpisodechild.InnerText = ep.Director.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("rating")
+    '            xmlEpisodechild.InnerText = ep.Rating.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("aired")
+    '            xmlEpisodechild.InnerText = ep.Aired.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("plot")
+    '            xmlEpisodechild.InnerText = ep.Plot.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            'xmlEpisodechild = document.CreateElement("thumb")
+    '            'xmlEpisodechild.InnerText = ep.Thumbnail.Path
+    '            'xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("runtime")
+    '            xmlEpisodechild.InnerText = ep.Runtime.Value
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            xmlEpisodechild = document.CreateElement("showid")
+    '            xmlEpisodechild.InnerText = FoundShowID
+    '            xmlEpisode.AppendChild(xmlEpisodechild)
+
+    '            Dim actorstosave As Integer = ep.ListActors.Count
+    '            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+    '            For f = 0 To actorstosave - 1
+    '                xmlActor = document.CreateElement("actor")
+    '                xmlActorchild = document.CreateElement("name")
+    '                xmlActorchild.InnerText = ep.ListActors(f).actorname
+    '                xmlActor.AppendChild(xmlActorchild)
+    '                xmlActorchild = document.CreateElement("role")
+    '                xmlActorchild.InnerText = ep.ListActors(f).actorrole
+    '                xmlActor.AppendChild(xmlActorchild)
+    '                If ep.ListActors(f).actorthumb <> Nothing Then
+    '                    If ep.ListActors(f).actorthumb <> "" Then
+    '                        xmlActorchild = document.CreateElement("thumb")
+    '                        xmlActorchild.InnerText = ep.ListActors(f).actorthumb
+    '                        xmlActor.AppendChild(xmlActorchild)
+    '                    End If
+    '                End If
+    '                xmlEpisode.AppendChild(xmlActor)
+    '            Next
+    '            root.AppendChild(xmlEpisode)
+    '        Next
+    '        document.AppendChild(root)
+    '        Try
+    '            Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
+    '            output.Formatting = Formatting.Indented
+
+    '            document.WriteTo(output)
+    '            output.Close()
+    '        Catch
+    '        End Try
+    '    End If
+    'End Sub
 
     Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String) As ComboList
 
@@ -2119,385 +2188,384 @@ Public Class WorkingWithNfoFiles
     End Function
 
 
-    Public Function ep_NfoLoadGeneric(ByVal path As String) ', ByVal season As String, ByVal episode As String)
+    'Public Shared Function ep_NfoLoadGeneric(ByVal path As String) ', ByVal season As String, ByVal episode As String)
 
-        Dim newepisodelist As New List(Of TvEpisode)
-        Dim newepisode As New TvEpisode
-        If Not IO.File.Exists(path) Then
-            newepisode.Title.Value = IO.Path.GetFileName(path)
-            newepisode.Plot.Value = "missing file"
+    '    Dim newepisodelist As New List(Of TvEpisode)
+    '    Dim newepisode As New TvEpisode
+    '    If Not IO.File.Exists(path) Then
+    '        newepisode.Title.Value = IO.Path.GetFileName(path)
+    '        newepisode.Plot.Value = "missing file"
 
-            newepisode.NfoFilePath = path
-            If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
-                For Each regexp In Preferences.tv_RegexScraper
+    '        newepisode.NfoFilePath = path
+    '        If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
+    '            For Each regexp In Preferences.tv_RegexScraper
 
-                    Dim M As Match
-                    M = Regex.Match(newepisode.NfoFilePath, regexp)
-                    If M.Success = True Then
-                        Try
-                            newepisode.Season.Value = M.Groups(1).Value.ToString
-                            newepisode.Episode.Value = M.Groups(2).Value.ToString
-                            Exit For
-                        Catch
-                            newepisode.Season.Value = "-1"
-                            newepisode.Season.Value = "-1"
-                        End Try
-                    End If
-                Next
-            End If
-            If newepisode.Episode.Value = Nothing Then
-                newepisode.Episode.Value = "-1"
-            End If
-            If newepisode.Season.value = Nothing Then
-                newepisode.Season.value = "-1"
-            End If
-            newepisodelist.Add(newepisode)
-            Return newepisodelist
-            Exit Function
-        Else
-            Dim tvshow As New XmlDocument
-            Try
-                tvshow.Load(path)
-            Catch ex As Exception
-                'If Not validate_nfo(path) Then
-                '    Exit Function
-                'End If
-                newepisode.Title.Value = IO.Path.GetFileName(path)
-                newepisode.Plot.Value = "problem / xml error"
-                newepisode.NfoFilePath = path
-                'newepisode.VideoFilePath = path
-                If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
-                    For Each regexp In Preferences.tv_RegexScraper
+    '                Dim M As Match
+    '                M = Regex.Match(newepisode.NfoFilePath, regexp)
+    '                If M.Success = True Then
+    '                    Try
+    '                        newepisode.Season.Value = M.Groups(1).Value.ToString
+    '                        newepisode.Episode.Value = M.Groups(2).Value.ToString
+    '                        Exit For
+    '                    Catch
+    '                        newepisode.Season.Value = "-1"
+    '                        newepisode.Season.Value = "-1"
+    '                    End Try
+    '                End If
+    '            Next
+    '        End If
+    '        If newepisode.Episode.Value = Nothing Then
+    '            newepisode.Episode.Value = "-1"
+    '        End If
+    '        If newepisode.Season.value = Nothing Then
+    '            newepisode.Season.value = "-1"
+    '        End If
+    '        newepisodelist.Add(newepisode)
+    '        Return newepisodelist
+    '        Exit Function
+    '    Else
+    '        Dim tvshow As New XmlDocument
+    '        Try
+    '            tvshow.Load(path)
+    '        Catch ex As Exception
+    '            'If Not validate_nfo(path) Then
+    '            '    Exit Function
+    '            'End If
+    '            newepisode.Title.Value = IO.Path.GetFileName(path)
+    '            newepisode.Plot.Value = "problem / xml error"
+    '            newepisode.NfoFilePath = path
+    '            'newepisode.VideoFilePath = path
+    '            If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
+    '                For Each regexp In Preferences.tv_RegexScraper
 
-                        Dim M As Match
-                        M = Regex.Match(newepisode.NfoFilePath, regexp)
-                        If M.Success = True Then
-                            Try
-                                newepisode.Season.Value = M.Groups(1).Value.ToString
-                                newepisode.Episode.Value = M.Groups(2).Value.ToString
-                                Exit For
-                            Catch
-                                newepisode.Season.Value = "-1"
-                                newepisode.Season.Value = "-1"
-                            End Try
-                        End If
-                    Next
-                End If
-                If newepisode.Episode.Value = Nothing Then
-                    newepisode.Episode.Value = "-1"
-                End If
-                If newepisode.Season.value = Nothing Then
-                    newepisode.Season.value = "-1"
-                End If
-                newepisodelist.Add(newepisode)
-                Return newepisodelist
-                Exit Function
-            End Try
+    '                    Dim M As Match
+    '                    M = Regex.Match(newepisode.NfoFilePath, regexp)
+    '                    If M.Success = True Then
+    '                        Try
+    '                            newepisode.Season.Value = M.Groups(1).Value.ToString
+    '                            newepisode.Episode.Value = M.Groups(2).Value.ToString
+    '                            Exit For
+    '                        Catch
+    '                            newepisode.Season.Value = "-1"
+    '                            newepisode.Season.Value = "-1"
+    '                        End Try
+    '                    End If
+    '                Next
+    '            End If
+    '            If newepisode.Episode.Value = Nothing Then
+    '                newepisode.Episode.Value = "-1"
+    '            End If
+    '            If newepisode.Season.value = Nothing Then
+    '                newepisode.Season.value = "-1"
+    '            End If
+    '            newepisodelist.Add(newepisode)
+    '            Return newepisodelist
+    '            Exit Function
+    '        End Try
 
-            Dim thisresult As XmlNode = Nothing
-            Dim tempid As String = ""
-            If tvshow.DocumentElement.Name = "episodedetails" Then
-                Dim newtvepisode As New TvEpisode
-                For Each thisresult In tvshow("episodedetails")
-                    Try
-                        newtvepisode.NfoFilePath = path
-                        Select Case thisresult.Name
-                            Case "credits"
-                                newtvepisode.Credits.Value = thisresult.InnerText
-                            Case "director"
-                                newtvepisode.Director.Value = thisresult.InnerText
-                            Case "aired"
-                                newtvepisode.Aired.Value = thisresult.InnerText
-                            Case "plot"
-                                newtvepisode.Plot.Value = thisresult.InnerText
-                            Case "title"
-                                newtvepisode.Title.Value = thisresult.InnerText
-                            Case "season"
-                                newtvepisode.Season.value = thisresult.InnerText
-                            Case "episode"
-                                newtvepisode.Episode.Value = thisresult.InnerText
-                            Case "rating"
-                                newtvepisode.Rating.Value = thisresult.InnerText
-                                If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
-                                If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
-                            Case "playcount"
-                                newtvepisode.PlayCount.Value = thisresult.InnerText
-                            Case "thumb"
-                                newtvepisode.Thumbnail.FileName = thisresult.InnerText
-                            Case "actor"
-                                Dim actordetail As XmlNode = Nothing
-                                Dim newactor As New str_MovieActors(SetDefaults)
-                                For Each actordetail In thisresult.ChildNodes
-                                    Select Case actordetail.Name
-                                        Case "name"
-                                            newactor.actorname = actordetail.InnerText
-                                        Case "role"
-                                            newactor.actorrole = actordetail.InnerText
-                                        Case "thumb"
-                                            newactor.actorthumb = actordetail.InnerText
-                                    End Select
-                                Next
-                                newtvepisode.ListActors.Add(newactor)
-                            Case "fileinfo"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 In thisresult.ChildNodes
-                                    Select Case detail2.Name
-                                        Case "streamdetails"
+    '        Dim thisresult As XmlNode = Nothing
+    '        Dim tempid As String = ""
+    '        If tvshow.DocumentElement.Name = "episodedetails" Then
+    '            Dim newtvepisode As New TvEpisode
+    '            For Each thisresult In tvshow("episodedetails")
+    '                Try
+    '                    newtvepisode.NfoFilePath = path
+    '                    Select Case thisresult.Name
+    '                        Case "credits"
+    '                            newtvepisode.Credits.Value = thisresult.InnerText
+    '                        Case "director"
+    '                            newtvepisode.Director.Value = thisresult.InnerText
+    '                        Case "aired"
+    '                            newtvepisode.Aired.Value = thisresult.InnerText
+    '                        Case "plot"
+    '                            newtvepisode.Plot.Value = thisresult.InnerText
+    '                        Case "title"
+    '                            newtvepisode.Title.Value = thisresult.InnerText
+    '                        Case "season"
+    '                            newtvepisode.Season.value = thisresult.InnerText
+    '                        Case "episode"
+    '                            newtvepisode.Episode.Value = thisresult.InnerText
+    '                        Case "rating"
+    '                            newtvepisode.Rating.Value = thisresult.InnerText
+    '                            If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
+    '                            If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
+    '                        Case "playcount"
+    '                            newtvepisode.PlayCount.Value = thisresult.InnerText
+    '                        Case "thumb"
+    '                            newtvepisode.Thumbnail.FileName = thisresult.InnerText
+    '                        Case "actor"
+    '                            Dim actordetail As XmlNode = Nothing
+    '                            Dim newactor As New str_MovieActors(SetDefaults)
+    '                            For Each actordetail In thisresult.ChildNodes
+    '                                Select Case actordetail.Name
+    '                                    Case "name"
+    '                                        newactor.actorname = actordetail.InnerText
+    '                                    Case "role"
+    '                                        newactor.actorrole = actordetail.InnerText
+    '                                    Case "thumb"
+    '                                        newactor.actorthumb = actordetail.InnerText
+    '                                End Select
+    '                            Next
+    '                            newtvepisode.ListActors.Add(newactor)
+    '                        Case "fileinfo"
+    '                            Dim detail2 As XmlNode = Nothing
+    '                            For Each detail2 In thisresult.ChildNodes
+    '                                Select Case detail2.Name
+    '                                    Case "streamdetails"
+    '                                        Dim detail As XmlNode = Nothing
+    '                                        For Each detail In detail2.ChildNodes
+    '                                            Select Case detail.Name
+    '                                                Case "video"
+    '                                                    Dim videodetails As XmlNode = Nothing
+    '                                                    For Each videodetails In detail.ChildNodes
+    '                                                        Select Case videodetails.Name
+    '                                                            Case "width"
+    '                                                                newtvepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
+    '                                                            Case "height"
+    '                                                                newtvepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
+    '                                                            Case "aspect"
+    '                                                                newtvepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
+    '                                                            Case "codec"
+    '                                                                newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
+    '                                                            Case "formatinfo"
+    '                                                                newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+    '                                                            Case "durationinseconds"
+    '                                                                newtvepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+    '                                                            Case "bitrate"
+    '                                                                newtvepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+    '                                                            Case "bitratemode"
+    '                                                                newtvepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+    '                                                            Case "bitratemax"
+    '                                                                newtvepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+    '                                                            Case "container"
+    '                                                                newtvepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
+    '                                                            Case "codecid"
+    '                                                                newtvepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+    '                                                            Case "codecidinfo"
+    '                                                                newtvepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+    '                                                            Case "scantype"
+    '                                                                newtvepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+    '                                                        End Select
+    '                                                    Next
+    '                                                Case "audio"
+    '                                                    Dim audiodetails As XmlNode = Nothing
+    '                                                    Dim audio As New AudioDetails
+    '                                                    For Each audiodetails In detail.ChildNodes
+    '                                                        Select Case audiodetails.Name
+    '                                                            Case "language"
+    '                                                                audio.Language.Value = audiodetails.InnerText
+    '                                                            Case "codec"
+    '                                                                audio.Codec.Value = audiodetails.InnerText
+    '                                                            Case "channels"
+    '                                                                audio.Channels.Value = audiodetails.InnerText
+    '                                                            Case "bitrate"
+    '                                                                audio.Bitrate.Value = audiodetails.InnerText
+    '                                                        End Select
+    '                                                    Next
+    '                                                    newtvepisode.Details.StreamDetails.Audio.Add(audio)
+    '                                                Case "subtitle"
+    '                                                    Dim subsdetails As XmlNode = Nothing
+    '                                                    For Each subsdetails In detail.ChildNodes
+    '                                                        Select Case subsdetails.Name
+    '                                                            Case "language"
+    '                                                                Dim sublang As New SubtitleDetails
+    '                                                                sublang.Language.Value = subsdetails.InnerText
+    '                                                                newtvepisode.Details.StreamDetails.Subtitles.Add(sublang)
+    '                                                        End Select
+    '                                                    Next
+    '                                            End Select
+    '                                        Next
+    '                                        'newtvepisode.Details = newfilenfo
+    '                                End Select
+    '                            Next
+    '                    End Select
+    '                Catch ex As Exception
+    '                    MsgBox(ex.ToString)
+    '                End Try
+    '            Next
 
-                                            Dim detail As XmlNode = Nothing
-                                            For Each detail In detail2.ChildNodes
-                                                Select Case detail.Name
-                                                    Case "video"
-                                                        Dim videodetails As XmlNode = Nothing
-                                                        For Each videodetails In detail.ChildNodes
-                                                            Select Case videodetails.Name
-                                                                Case "width"
-                                                                    newtvepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
-                                                                Case "height"
-                                                                    newtvepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
-                                                                Case "aspect"
-                                                                    newtvepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
-                                                                Case "codec"
-                                                                    newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
-                                                                Case "formatinfo"
-                                                                    newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
-                                                                Case "durationinseconds"
-                                                                    newtvepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                                Case "bitrate"
-                                                                    newtvepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
-                                                                Case "bitratemode"
-                                                                    newtvepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
-                                                                Case "bitratemax"
-                                                                    newtvepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
-                                                                Case "container"
-                                                                    newtvepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
-                                                                Case "codecid"
-                                                                    newtvepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
-                                                                Case "codecidinfo"
-                                                                    newtvepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
-                                                                Case "scantype"
-                                                                    newtvepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                    Case "audio"
-                                                        Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New AudioDetails
-                                                        For Each audiodetails In detail.ChildNodes
-                                                            Select Case audiodetails.Name
-                                                                Case "language"
-                                                                    audio.Language.Value = audiodetails.InnerText
-                                                                Case "codec"
-                                                                    audio.Codec.Value = audiodetails.InnerText
-                                                                Case "channels"
-                                                                    audio.Channels.Value = audiodetails.InnerText
-                                                                Case "bitrate"
-                                                                    audio.Bitrate.Value = audiodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                        newtvepisode.Details.StreamDetails.Audio.Add(audio)
-                                                    Case "subtitle"
-                                                        Dim subsdetails As XmlNode = Nothing
-                                                        For Each subsdetails In detail.ChildNodes
-                                                            Select Case subsdetails.Name
-                                                                Case "language"
-                                                                    Dim sublang As New SubtitleDetails
-                                                                    sublang.Language.Value = subsdetails.InnerText
-                                                                    newtvepisode.Details.StreamDetails.Subtitles.Add(sublang)
-                                                            End Select
-                                                        Next
-                                                End Select
-                                            Next
-                                            'newtvepisode.Details = newfilenfo
-                                    End Select
-                                Next
-                        End Select
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
-                    End Try
-                Next
+    '            If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
+    '                For Each regexp In Preferences.tv_RegexScraper
 
-                If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
-                    For Each regexp In Preferences.tv_RegexScraper
+    '                    Dim M As Match
+    '                    M = Regex.Match(newtvepisode.NfoFilePath, regexp)
+    '                    If M.Success = True Then
+    '                        Try
+    '                            newtvepisode.Season.Value = M.Groups(1).Value.ToString
+    '                            newtvepisode.Episode.Value = M.Groups(2).Value.ToString
+    '                            Exit For
+    '                        Catch
+    '                            newtvepisode.Season.Value = "-1"
+    '                            newtvepisode.Season.Value = "-1"
+    '                        End Try
+    '                    End If
+    '                Next
+    '            End If
+    '            If newtvepisode.Episode.Value = Nothing Then
+    '                newtvepisode.Episode.Value = "-1"
+    '            End If
+    '            If newtvepisode.Season.value = Nothing Then
+    '                newtvepisode.Season.value = "-1"
+    '            End If
+    '            If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
+    '            newepisodelist.Add(newtvepisode)
+    '            Return newepisodelist
+    '            Exit Function
+    '        ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Then
+    '            For Each thisresult In tvshow("multiepisodenfo")
+    '                Select Case thisresult.Name
+    '                    Case "episodedetails"
+    '                        Dim newepisodenfo As XmlNode = Nothing
+    '                        Dim anotherepisode As New TvEpisode
 
-                        Dim M As Match
-                        M = Regex.Match(newtvepisode.NfoFilePath, regexp)
-                        If M.Success = True Then
-                            Try
-                                newtvepisode.Season.Value = M.Groups(1).Value.ToString
-                                newtvepisode.Episode.Value = M.Groups(2).Value.ToString
-                                Exit For
-                            Catch
-                                newtvepisode.Season.Value = "-1"
-                                newtvepisode.Season.Value = "-1"
-                            End Try
-                        End If
-                    Next
-                End If
-                If newtvepisode.Episode.Value = Nothing Then
-                    newtvepisode.Episode.Value = "-1"
-                End If
-                If newtvepisode.Season.value = Nothing Then
-                    newtvepisode.Season.value = "-1"
-                End If
-                If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
-                newepisodelist.Add(newtvepisode)
-                Return newepisodelist
-                Exit Function
-            ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Then
-                For Each thisresult In tvshow("multiepisodenfo")
-                    Select Case thisresult.Name
-                        Case "episodedetails"
-                            Dim newepisodenfo As XmlNode = Nothing
-                            Dim anotherepisode As New TvEpisode
-
-                            'anotherepisode.NfoFilePath = Nothing
-                            'anotherepisode.playcount = Nothing
-                            'anotherepisode.rating = Nothing
-                            'anotherepisode.Season.value = Nothing
-                            'anotherepisode.title = Nothing
-                            ' For Each newepisodenfo In thisresult.ChildNodes
-                            Dim tempint As Integer = thisresult.ChildNodes.Count - 1
-                            For f = 0 To tempint
-                                Try
-
-
-                                    'Public credits As String
-                                    'Public director As String
-                                    'Public aired As String
-                                    'Public plot As Integer
-                                    'Public fanartpath As String
-                                    'Public listactors As New List(Of movieactors)
-                                    'Public filedetails As New fullfiledetails
+    '                        'anotherepisode.NfoFilePath = Nothing
+    '                        'anotherepisode.playcount = Nothing
+    '                        'anotherepisode.rating = Nothing
+    '                        'anotherepisode.Season.value = Nothing
+    '                        'anotherepisode.title = Nothing
+    '                        ' For Each newepisodenfo In thisresult.ChildNodes
+    '                        Dim tempint As Integer = thisresult.ChildNodes.Count - 1
+    '                        For f = 0 To tempint
+    '                            Try
 
 
-                                    Select Case thisresult.ChildNodes(f).Name
-                                        Case "credits"
-                                            anotherepisode.Credits.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "director"
-                                            anotherepisode.Director.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "aired"
-                                            anotherepisode.Aired.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "plot"
-                                            anotherepisode.Plot.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "title"
-                                            anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "season"
-                                            anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
-                                        Case "episode"
-                                            anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "rating"
-                                            anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
-                                            If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
-                                            If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
-                                        Case "playcount"
-                                            anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "thumb"
-                                            anotherepisode.Thumbnail.FileName = thisresult.ChildNodes(f).InnerText
-                                        Case "runtime"
-                                            anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "actor"
-                                            Dim detail As XmlNode = Nothing
-                                            Dim newactor As New str_MovieActors(SetDefaults)
-                                            For Each detail In thisresult.ChildNodes(f).ChildNodes
-                                                Select Case detail.Name
-                                                    Case "name"
-                                                        newactor.actorname = detail.InnerText
-                                                    Case "role"
-                                                        newactor.actorrole = detail.InnerText
-                                                    Case "thumb"
-                                                        newactor.actorthumb = detail.InnerText
-                                                End Select
-                                            Next
-                                            anotherepisode.ListActors.Add(newactor)
-                                        Case "streamdetails"
-                                            Dim detail2 As XmlNode = Nothing
-                                            For Each detail2 In thisresult.ChildNodes(f).ChildNodes
-                                                Select Case detail2.Name
-                                                    Case "fileinfo"
-
-                                                        Dim detail As XmlNode = Nothing
-                                                        For Each detail In detail2.ChildNodes
-                                                            Select Case detail.Name
-                                                                Case "video"
-                                                                    Dim videodetails As XmlNode = Nothing
-                                                                    For Each videodetails In detail.ChildNodes
-                                                                        Select Case videodetails.Name
-                                                                            Case "width"
-                                                                                anotherepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
-                                                                            Case "height"
-                                                                                anotherepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
-                                                                            Case "codec"
-                                                                                anotherepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
-                                                                            Case "formatinfo"
-                                                                                anotherepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
-                                                                            Case "durationinseconds"
-                                                                                anotherepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                                            Case "bitrate"
-                                                                                anotherepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
-                                                                            Case "bitratemode"
-                                                                                anotherepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
-                                                                            Case "bitratemax"
-                                                                                anotherepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
-                                                                            Case "container"
-                                                                                anotherepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
-                                                                            Case "codecid"
-                                                                                anotherepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
-                                                                            Case "codecidinfo"
-                                                                                anotherepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
-                                                                            Case "scantype"
-                                                                                anotherepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
-                                                                        End Select
-                                                                    Next
-                                                                Case "audio"
-                                                                    Dim audiodetails As XmlNode = Nothing
-                                                                    Dim audio As New AudioDetails ' str_MediaNFOAudio(SetDefaults)
-                                                                    For Each audiodetails In detail.ChildNodes
-
-                                                                        Select Case audiodetails.Name
-                                                                            Case "language"
-                                                                                audio.language.value = audiodetails.InnerText
-                                                                            Case "codec"
-                                                                                audio.Codec.Value = audiodetails.InnerText
-                                                                            Case "channels"
-                                                                                audio.Channels.Value = audiodetails.InnerText
-                                                                            Case "bitrate"
-                                                                                audio.Bitrate.Value = audiodetails.InnerText
-                                                                        End Select
-                                                                    Next
-                                                                    anotherepisode.Details.StreamDetails.Audio.Add(audio)
-                                                                Case "subtitle"
-                                                                    Dim subsdetails As XmlNode = Nothing
-                                                                    For Each subsdetails In detail.ChildNodes
-                                                                        Select Case subsdetails.Name
-                                                                            Case "language"
-                                                                                Dim sublang As New SubtitleDetails
-                                                                                sublang.Language.Value = subsdetails.InnerText
-                                                                                anotherepisode.Details.StreamDetails.Subtitles.Add(sublang)
-                                                                        End Select
-                                                                    Next
-                                                            End Select
-                                                        Next
-                                                        'anotherepisode.Details = newfilenfo
-                                                End Select
-                                            Next
-                                    End Select
+    '                                'Public credits As String
+    '                                'Public director As String
+    '                                'Public aired As String
+    '                                'Public plot As Integer
+    '                                'Public fanartpath As String
+    '                                'Public listactors As New List(Of movieactors)
+    '                                'Public filedetails As New fullfiledetails
 
 
-                                Catch ex As Exception
-                                    MsgBox(ex.ToString)
-                                End Try
-                            Next f
-                            anotherepisode.NfoFilePath = path
-                            newepisodelist.Add(anotherepisode)
-                    End Select
-                Next
-                Return newepisodelist
-            End If
+    '                                Select Case thisresult.ChildNodes(f).Name
+    '                                    Case "credits"
+    '                                        anotherepisode.Credits.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "director"
+    '                                        anotherepisode.Director.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "aired"
+    '                                        anotherepisode.Aired.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "plot"
+    '                                        anotherepisode.Plot.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "title"
+    '                                        anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "season"
+    '                                        anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "episode"
+    '                                        anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "rating"
+    '                                        anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
+    '                                        If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
+    '                                        If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
+    '                                    Case "playcount"
+    '                                        anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "thumb"
+    '                                        anotherepisode.Thumbnail.FileName = thisresult.ChildNodes(f).InnerText
+    '                                    Case "runtime"
+    '                                        anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "actor"
+    '                                        Dim detail As XmlNode = Nothing
+    '                                        Dim newactor As New str_MovieActors(SetDefaults)
+    '                                        For Each detail In thisresult.ChildNodes(f).ChildNodes
+    '                                            Select Case detail.Name
+    '                                                Case "name"
+    '                                                    newactor.actorname = detail.InnerText
+    '                                                Case "role"
+    '                                                    newactor.actorrole = detail.InnerText
+    '                                                Case "thumb"
+    '                                                    newactor.actorthumb = detail.InnerText
+    '                                            End Select
+    '                                        Next
+    '                                        anotherepisode.ListActors.Add(newactor)
+    '                                    Case "streamdetails"
+    '                                        Dim detail2 As XmlNode = Nothing
+    '                                        For Each detail2 In thisresult.ChildNodes(f).ChildNodes
+    '                                            Select Case detail2.Name
+    '                                                Case "fileinfo"
+
+    '                                                    Dim detail As XmlNode = Nothing
+    '                                                    For Each detail In detail2.ChildNodes
+    '                                                        Select Case detail.Name
+    '                                                            Case "video"
+    '                                                                Dim videodetails As XmlNode = Nothing
+    '                                                                For Each videodetails In detail.ChildNodes
+    '                                                                    Select Case videodetails.Name
+    '                                                                        Case "width"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
+    '                                                                        Case "height"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
+    '                                                                        Case "codec"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
+    '                                                                        Case "formatinfo"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+    '                                                                        Case "durationinseconds"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+    '                                                                        Case "bitrate"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+    '                                                                        Case "bitratemode"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+    '                                                                        Case "bitratemax"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+    '                                                                        Case "container"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
+    '                                                                        Case "codecid"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+    '                                                                        Case "codecidinfo"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+    '                                                                        Case "scantype"
+    '                                                                            anotherepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+    '                                                                    End Select
+    '                                                                Next
+    '                                                            Case "audio"
+    '                                                                Dim audiodetails As XmlNode = Nothing
+    '                                                                Dim audio As New AudioDetails ' str_MediaNFOAudio(SetDefaults)
+    '                                                                For Each audiodetails In detail.ChildNodes
+
+    '                                                                    Select Case audiodetails.Name
+    '                                                                        Case "language"
+    '                                                                            audio.language.value = audiodetails.InnerText
+    '                                                                        Case "codec"
+    '                                                                            audio.Codec.Value = audiodetails.InnerText
+    '                                                                        Case "channels"
+    '                                                                            audio.Channels.Value = audiodetails.InnerText
+    '                                                                        Case "bitrate"
+    '                                                                            audio.Bitrate.Value = audiodetails.InnerText
+    '                                                                    End Select
+    '                                                                Next
+    '                                                                anotherepisode.Details.StreamDetails.Audio.Add(audio)
+    '                                                            Case "subtitle"
+    '                                                                Dim subsdetails As XmlNode = Nothing
+    '                                                                For Each subsdetails In detail.ChildNodes
+    '                                                                    Select Case subsdetails.Name
+    '                                                                        Case "language"
+    '                                                                            Dim sublang As New SubtitleDetails
+    '                                                                            sublang.Language.Value = subsdetails.InnerText
+    '                                                                            anotherepisode.Details.StreamDetails.Subtitles.Add(sublang)
+    '                                                                    End Select
+    '                                                                Next
+    '                                                        End Select
+    '                                                    Next
+    '                                                    'anotherepisode.Details = newfilenfo
+    '                                            End Select
+    '                                        Next
+    '                                End Select
 
 
-        End If
-        Return "Error"
-    End Function
+    '                            Catch ex As Exception
+    '                                MsgBox(ex.ToString)
+    '                            End Try
+    '                        Next f
+    '                        anotherepisode.NfoFilePath = path
+    '                        newepisodelist.Add(anotherepisode)
+    '                End Select
+    '            Next
+    '            Return newepisodelist
+    '        End If
+
+
+    '    End If
+    '    Return "Error"
+    'End Function
 
     Public Shared Sub ep_NfoSave(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String)
         Dim document As New XmlDocument
@@ -2909,6 +2977,7 @@ Public Class WorkingWithNfoFiles
         End Try
 
     End Sub
+
     Public Function nfoLoadHomeMovie(ByVal filenameandpath As String)
         Try
             Dim newmovie As New HomeMovieDetails
