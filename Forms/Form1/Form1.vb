@@ -12512,7 +12512,7 @@ Public Class Form1
 
                     TempEpisode.ShowObj.AddEpisode(TempEpisode)
                     TempEpisode.SeasonObj.UpdateTreenode()
-                    TempEpisode.UpdateTreenode()
+                    TempEpisode.UpdateTreenode(True)
                     'This bit updates the Epsiode Count on the fly when the progress is updated. It has to be done here to avoid thread issues. (GUI wouldn't update properly) 
                     TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
                 End If

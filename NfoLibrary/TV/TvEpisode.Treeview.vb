@@ -4,7 +4,7 @@ Imports Media_Companion
 Partial Public Class TvEpisode
     Public EpisodeNode As New TreeNode With {.SelectedImageKey = "blank", .ImageKey = "blank"}
 
-    Public Sub UpdateTreenode()
+    Public Sub UpdateTreenode(Optional ByVal scraping As Boolean = False)
         Me.EpisodeNode.Tag = Me
 
         Dim episode_count = 1
@@ -16,10 +16,24 @@ Partial Public Class TvEpisode
             End If
         End If
 
+        If scraping = True Then
+            For Each EpisodeNode2 As TreeNode In Me.SeasonObj.SeasonNode.Nodes
+                Try
+                    Dim TempEpisodeNo As String = EpisodeNode2.Text.Substring(0, EpisodeNode2.Text.IndexOf("-") - 1)
+                    Dim TempEpisodeTitle As String = EpisodeNode2.Text.Substring(TempEpisodeNo.Length + 2, EpisodeNode2.Text.Length - (TempEpisodeNo.Length + 2))
+                    TempEpisodeTitle = TempEpisodeTitle.Trim
+                    EpisodeNode2.Text = Utilities.PadNumber(TempEpisodeNo, episode_count) & " - " & TempEpisodeTitle
+                Catch ex As Exception
+
+                End Try
+            Next
+        End If
+
         If Me.Title.Value IsNot Nothing Then
             Me.EpisodeNode.Name = Me.NfoFilePath             ' save nfo path in this node
             If Me.Episode.Value IsNot Nothing Then
                 If IsNumeric(Me.Episode.Value) Then
+                    Dim seasonstring As String = Me.Episode.Value.ToString
                     Me.EpisodeNode.Text = Utilities.PadNumber(Me.Episode.Value, episode_count) & " - " & Me.Title.Value
                 Else
                     Me.EpisodeNode.Text = Utilities.PadNumber(Me.Episode.Value, episode_count) & " - " & Me.Title.Value
