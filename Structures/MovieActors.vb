@@ -57,21 +57,25 @@ Public Structure str_MovieActors
 
             Else
                 If Preferences.actorsave And actorid <> "" Then
-                    Dim tempstring = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2)
-                    Dim hg As New IO.DirectoryInfo(tempstring)
-                    If Not hg.Exists Then
-                        IO.Directory.CreateDirectory(tempstring)
-                    End If
+                    If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
+                        Dim tempstring = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2)
+                        Dim hg As New IO.DirectoryInfo(tempstring)
+                        If Not hg.Exists Then
+                            IO.Directory.CreateDirectory(tempstring)
+                        End If
 
-                    Dim workingpath = tempstring & "\" & actorid & ".jpg"
-                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
-                    ActorSave(workingpath)
-                    actorthumb = IO.Path.Combine(Preferences.actornetworkpath, actorid.Substring(actorid.Length - 2, 2))
+                        Dim workingpath = tempstring & "\" & actorid & ".jpg"
+                        DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
+                        ActorSave(workingpath)
+                        actorthumb = workingpath 'IO.Path.Combine(Preferences.actorsavepath, actorid.Substring(actorid.Length - 2, 2))
 
-                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                        actorthumb = Preferences.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
-                    Else
-                        actorthumb = Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
+                        If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
+                            If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                actorthumb = Preferences.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
+                            Else
+                                actorthumb = Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
+                            End If
+                        End If
                     End If
                 End If
             End If

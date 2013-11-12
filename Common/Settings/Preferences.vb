@@ -1561,7 +1561,7 @@ Public Class Preferences
                 Return location
             Else
                 If location.IndexOf(actornetworkpath) <> -1 Then
-                    If Not String.IsNullOrEmpty(actornetworkpath) And Not String.IsNullOrEmpty(actorsavepath) Then
+                    If Not String.IsNullOrEmpty(actornetworkpath) Or Not String.IsNullOrEmpty(actorsavepath) Then
                         Dim filename As String = IO.Path.GetFileName(location)
                         actualpath = IO.Path.Combine(actorsavepath, filename)
                         If Not IO.File.Exists(actualpath) Then
