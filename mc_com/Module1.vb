@@ -1794,65 +1794,132 @@ Module Module1
         If IO.File.Exists(fullpath) Then
             IO.File.Delete(fullpath)
         End If
-        Dim doc As New XmlDocument
-
-        Dim thispref As XmlNode = Nothing
-        Dim xmlproc As XmlDeclaration
-
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
+        Dim document As New XmlDocument
         Dim root As XmlElement
         Dim child As XmlElement
-        root = doc.CreateElement("tvcache")
-        root.SetAttribute("ver", "3.5")
         Dim childchild As XmlElement
+        Dim xmlproc As XmlDeclaration
+        xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        document.AppendChild(xmlproc)
+        root = document.CreateElement("tvcache")
+        root.SetAttribute("ver", "3.5")
         For Each item In basictvlist
-            For Each episode In item.allepisodes
-                child = doc.CreateElement("episodedetails")
-                child.SetAttribute("NfoPath", episode.episodepath)
-                '<episodedetails> attributes 'pure' and 'extension' no longer used? - HueyHQ
-                'Dim extension As String = episode.episodepath
-                'extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
-                'Dim tempstring As String = episode.episodepath
-                'tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
-                'If Not IsNothing(episode.pure) Then
-                '    child.SetAttribute("PureName", episode.pure)
-                'End If
-                'If Not IsNothing(episode.extension) Then
-                '    child.SetAttribute("MediaExtension", episode.extension)
-                'End If
-                'child.SetAttribute("MultiEpCount", "1")
-                childchild = doc.CreateElement("title")
-                childchild.InnerText = episode.title
-                child.AppendChild(childchild)
-                childchild = doc.CreateElement("season")
-                childchild.InnerText = episode.seasonno
-                child.AppendChild(childchild)
-                childchild = doc.CreateElement("episode")
-                childchild.InnerText = episode.episodeno
-                child.AppendChild(childchild)
-                childchild = doc.CreateElement("showid")
-                childchild.InnerText = episode.showid
-                child.AppendChild(childchild)
-                childchild = doc.CreateElement("missing")
-                childchild.InnerText = episode.missing
-                child.AppendChild(childchild)
-                root.AppendChild(child)
-            Next
-            child = doc.CreateElement("tvshow")
+            child = document.CreateElement("tvshow")
             child.SetAttribute("NfoPath", item.fullpath)
-            childchild = doc.CreateElement("title")
-            childchild.InnerText = item.title
+
+            childchild = document.CreateElement("state")
+            childchild.InnerText = item.locked '"0"
             child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
+
+            childchild = document.CreateElement("title")
+            childchild.InnerText = item.Title
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("id")
             childchild.InnerText = item.id
             child.AppendChild(childchild)
+
             root.AppendChild(child)
         Next
-        doc.AppendChild(root)
+        For Each item In basictvlist 
+        For Each episode In item.allepisodes
+            child = document.CreateElement("episodedetails")
+            child.SetAttribute("NfoPath", episode.episodepath)
+
+            If episode.missing = True Then
+                childchild = document.CreateElement("missing")
+                childchild.InnerText = "true"
+                child.AppendChild(childchild)
+            Else
+                childchild = document.CreateElement("missing")
+                childchild.InnerText = "false"
+                child.AppendChild(childchild)
+            End If
+
+            childchild = document.CreateElement("title")
+            childchild.InnerText = episode.Title
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("season")
+            childchild.InnerText = episode.seasonno
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("episode")
+            childchild.InnerText = episode.episodeno 
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("aired")
+            childchild.InnerText = episode.Aired
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("showid")
+            childchild.InnerText = episode.showid
+            child.AppendChild(childchild)
+
+            root.AppendChild(child)
+
+        Next
+        Next
+        'Dim doc As New XmlDocument
+
+        'Dim thispref As XmlNode = Nothing
+        'Dim xmlproc As XmlDeclaration
+
+        'xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        'doc.AppendChild(xmlproc)
+        'Dim root As XmlElement
+        'Dim child As XmlElement
+        'root = doc.CreateElement("tvcache")
+        'root.SetAttribute("ver", "3.5")
+        'Dim childchild As XmlElement
+
+        'For Each item In basictvlist
+        '    For Each episode In item.allepisodes
+        '        child = doc.CreateElement("episodedetails")
+        '        child.SetAttribute("NfoPath", episode.episodepath)
+        '        '<episodedetails> attributes 'pure' and 'extension' no longer used? - HueyHQ
+        '        'Dim extension As String = episode.episodepath
+        '        'extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
+        '        'Dim tempstring As String = episode.episodepath
+        '        'tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
+        '        'If Not IsNothing(episode.pure) Then
+        '        '    child.SetAttribute("PureName", episode.pure)
+        '        'End If
+        '        'If Not IsNothing(episode.extension) Then
+        '        '    child.SetAttribute("MediaExtension", episode.extension)
+        '        'End If
+        '        'child.SetAttribute("MultiEpCount", "1")
+        '        childchild = doc.CreateElement("title")
+        '        childchild.InnerText = episode.title
+        '        child.AppendChild(childchild)
+        '        childchild = doc.CreateElement("season")
+        '        childchild.InnerText = episode.seasonno
+        '        child.AppendChild(childchild)
+        '        childchild = doc.CreateElement("episode")
+        '        childchild.InnerText = episode.episodeno
+        '        child.AppendChild(childchild)
+        '        childchild = doc.CreateElement("showid")
+        '        childchild.InnerText = episode.showid
+        '        child.AppendChild(childchild)
+        '        childchild = doc.CreateElement("missing")
+        '        childchild.InnerText = episode.missing
+        '        child.AppendChild(childchild)
+        '        root.AppendChild(child)
+        '    Next
+        '    child = doc.CreateElement("tvshow")
+        '    child.SetAttribute("NfoPath", item.fullpath)
+        '    childchild = doc.CreateElement("title")
+        '    childchild.InnerText = item.title
+        '    child.AppendChild(childchild)
+        '    childchild = doc.CreateElement("id")
+        '    childchild.InnerText = item.id
+        '    child.AppendChild(childchild)
+        '    root.AppendChild(child)
+        'Next
+        document.AppendChild(root)
         Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
+        document.WriteTo(output)
         output.Close()
     End Sub
 

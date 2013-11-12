@@ -447,6 +447,18 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return aFileExists
     End Function
 
+    Public Shared Function ListSubtitleFilesExtensions(ByVal subFilename As String) As List(Of String)
+        Dim aFileExists As New List(Of String)
+        Dim fileTypes As New ArrayList
+        fileTypes.AddRange(acceptedsubextn)
+        For Each item As String In fileTypes
+            If System.IO.File.Exists(subFilename & item) Then
+                aFileExists.Add(item)
+            End If
+        Next
+        Return aFileExists
+    End Function
+
     Public Shared Function GetbdMainStream(ByVal path) As String
         If path.ToString.Contains(".nfo") Then Return path
         Dim di As New DirectoryInfo(path.Replace("index.bdmv","STREAM\"))
