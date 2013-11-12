@@ -2142,9 +2142,10 @@ Public Class WorkingWithNfoFiles
                         End If
                         root.AppendChild(child)
                     Next
-                    doc.AppendChild(root)
+                    'doc.AppendChild(root)
                 Catch
                 End Try
+                doc.AppendChild(root)
                 stage = 35
                 Try
                     Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
