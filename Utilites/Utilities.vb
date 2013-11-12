@@ -26,11 +26,10 @@ Public Class Utilities
 
     'files that support main movie file, ie. art, subtitles, and trailers
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
-                                                                "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm",
-                                                                ".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}
+                                                                "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm"}
 
     'subtitle extensions for check of multi-part subtitle files
-    Public Shared ReadOnly subexts() As String = {".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}
+    Public Shared ReadOnly acceptedsubextn() As String = {".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}
 
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
@@ -425,9 +424,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim fileTypes As New ArrayList
         fileTypes.Add(fileType)
         fileTypes.AddRange(acceptedAnciliaryExts)
+        fileTypes.AddRange(acceptedsubextn)
         For Each item As String In fileTypes 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
             If System.IO.File.Exists(targetMovieFile & item) Then
                 aFileExists = True
+                Exit For
+            End If
+        Next
+        Return aFileExists
+    End Function
+
+    Public Shared Function testForsubtitleByExtension(ByVal subFilename As String) As String
+        Dim aFileExists As String = ""
+        Dim fileTypes As New ArrayList
+        fileTypes.AddRange(acceptedsubextn)
+        For Each item As String In fileTypes 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
+            If System.IO.File.Exists(subFilename & item) Then
+                aFileExists = item
                 Exit For
             End If
         Next

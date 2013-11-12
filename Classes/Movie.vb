@@ -2064,13 +2064,18 @@ Public Class Movie
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         Dim stackName As String = mediaFile
         Dim isStack As Boolean = False
+        Dim isSubStack As Boolean = False
         Dim isFirstPart As Boolean = True
         Dim nextStackPart As String = ""
         Dim stackdesignator As String = ""
         Dim newextension As String = IO.Path.GetExtension(mediaFile)
+        Dim subName As String = mediafile.Replace(newextension,"")
         Dim newfilename As String = UserDefinedBaseFileName
         Dim targetMovieFile As String = ""
         Dim targetNfoFile As String = ""
+        Dim subextn As String = Utilities.testForsubtitleByExtension(subName)
+        Dim subStackList As New List(Of String)'(New String() {subName})
+        If Not subextn = "" Then subStackList.Add((subName & subextn))
 
         Dim aFileExists As Boolean = False
         Try
@@ -2098,6 +2103,26 @@ Public Class Movie
                     stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
                     mediaFile = stackName
                 Loop
+                'Check for multi-part subtitle files
+                If Not String.IsNullOrEmpty(subextn) Then    'If no subtitle file, then skip
+                    subName = subName & subextn
+                    Do While Utilities.isMultiPartMedia(subName, False, isFirstPart, stackdesignator, nextStackPart)
+                        If isFirstPart Then
+                            isSubStack = True                    'this media file has already been added to the list, but check for existing file with new name
+                            Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                            targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                            If Utilities.testForFileByName(targetMovieFile, subextn) Then
+                                aFileExists = True
+                                Exit Do
+                            End If
+                            'If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                        Else
+                            subStackList.Add(mediaFile)
+                        End If
+                        subName = newpath & subName & stackdesignator & nextStackPart & subextn
+                        mediaFile = subName
+                    Loop
+                End If
             End If
 
             If aFileExists = False Then         'if none of the possible renamed files already exist then we rename found media files
@@ -2110,6 +2135,15 @@ Public Class Movie
                         logRename &= If(i, " and ", "") & changename
                     Next
                     log &= "Renamed Movie File to " & logRename & vbCrLf
+                logRename = ""
+                    
+                    'rename subtitle files if any
+                    For i = 0 To subStackList.Count - 1
+                        Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn)
+                        File.Move(subStackList(i), newpath & changename)
+                        logRename &= If(i, " and ", "") & changename
+                    Next
+                    log &= "Renamed Subtitle File to " & logRename & vbCrLf
 
                     For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
                         If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile)) Then
@@ -2642,10 +2676,14 @@ Public Class Movie
         Dim mediaFile       = mediapathandfilename
         Dim stackName       = mediaFile
         Dim isStack         = False
+        Dim isSubStack      = False
         Dim isFirstPart     = True
         Dim newextension    = IO.Path.GetExtension(mediaFile)
         Dim newfilename     = UserDefinedBaseFileName
-        'Dim newfoldername   = UserDefinedBaseFolderName
+        Dim subName As String = mediafile.Replace(newextension,"")
+        Dim subextn As String = Utilities.testForsubtitleByExtension(subName)
+        Dim subStackList As New List(Of String)
+        If Not subextn = "" Then subStackList.Add((subName & subextn))
 
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
@@ -2663,14 +2701,11 @@ Public Class Movie
                 Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
                     If isFirstPart Then
                         isStack = True    
-                        Dim i As Integer  
-                       
+                        Dim i As Integer
                         If Not Preferences.MovieRenameEnable Then
                             newfilename=stackName
                         End If
-                                         
                         targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
-                    
                         If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
                     Else
                         movieStackList.Add(mediaFile)
@@ -2679,23 +2714,49 @@ Public Class Movie
                     mediaFile = stackName
                 Loop
 
-                movieStackList.Sort 
-            
-                '1.2 - Rename movie file name(s):
-                For i = 0 To movieStackList.Count - 1
+                '1.2 - Get Multi-part subtitle(s):
+                If Not String.IsNullOrEmpty(subextn) Then    'If no subtitle file, then skip
+                    subName = subName & subextn
+                    Do While Utilities.isMultiPartMedia(subName, False, isFirstPart, stackdesignator, nextStackPart)
+                        If isFirstPart Then
+                            isSubStack = True                    'this media file has already been added to the list, but check for existing file with new name
+                            Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                            targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                            'If Utilities.testForFileByName(targetMovieFile, subextn) Then
+                            '    aFileExists = True
+                            '    Exit Do
+                            'End If
+                            'If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                        Else
+                            subStackList.Add(mediaFile)
+                        End If
+                        subName = newpath & subName & stackdesignator & nextStackPart & subextn
+                        mediaFile = subName
+                    Loop
+                End If
 
+                'Part 2.1 - Rename movie file name(s):
+                movieStackList.Sort()
+                For i = 0 To movieStackList.Count - 1
                     Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
-                
                     oldName = movieStackList(i)
                     newName = newpath & changename
-
                     RenameFile(oldName, newName, log)
                 Next
                     log &= "!!! Movie Renamed as:- " & newfilename & vbCrLf 
 
+                'Part 2.2 - Rename Subtitle file name(s):
+                subStackList.Sort()
+                For i = 0 To subStackList.Count - 1
+                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn)
+                    oldName = subStackList(i)
+                    newName = newpath & changename
+                    RenameFile(oldName, newName, log)
+                Next
+                    log &= "!!! Subtitle Renamed as:- " & newfilename & vbCrLf 
 
                 '
-                'PART 2 - Rename anciliary file(s) (nfo,poster,fanart & trailer):
+                'PART 3 - Rename anciliary file(s) (nfo,poster,fanart & trailer):
                 '
                 For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts
 
