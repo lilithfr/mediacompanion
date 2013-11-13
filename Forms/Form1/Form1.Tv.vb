@@ -1543,7 +1543,7 @@ Partial Public Class Form1
 
                     NewShow.Title.Value = FolderName    'set default in case title is returned blank, it still shows up in tree
                     NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
-
+                    NewShow.Language.Value = templanguage
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
                         TvGetActorTvdb(NewShow)
                     End If
