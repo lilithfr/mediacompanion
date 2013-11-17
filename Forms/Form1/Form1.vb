@@ -9475,7 +9475,7 @@ Public Class Form1
             If language = "" Then language = "en"
             If actorsource = "" Then actorsource = "tvdb"
             If tvdbid.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
-            Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language)
+            Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language, True)
 
             If tempepisode.Contains("ERROR") Then
 

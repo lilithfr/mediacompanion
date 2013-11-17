@@ -3652,7 +3652,7 @@ Partial Public Class Form1
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            Dim tempepisode As String = episodescraper.getepisode(WorkingTvShow.TvdbId.Value, sortorder, seasonno, episodeno, language)
+            Dim tempepisode As String = episodescraper.getepisode(WorkingTvShow.TvdbId.Value, sortorder, seasonno, episodeno, language, True)
             Dim thumburl As String = ""
             messbox.Close()
             Dim scrapedepisode As New XmlDocument
