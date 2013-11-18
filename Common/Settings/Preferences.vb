@@ -236,6 +236,7 @@ Public Class Preferences
     Public Shared releaseformat() As String
     Public Shared tableview As New List(Of String)
     Public Shared tablesortorder As String
+    Public Shared MovSepLst As New List(Of String)
 
     Public Shared Original_Title     As Boolean=False
     Public Shared UseMultipleThreads As Boolean=False
@@ -507,6 +508,9 @@ Public Class Preferences
         moviethumbpriority.Add("IMDB")
         moviethumbpriority.Add("Movie Poster DB")
         moviethumbpriority.Add("Internet Movie Poster Awards")
+        MovSepLst.Add("3D")
+        MovSepLst.Add("Directors-Cut")
+        MovSepLst.Add("Extended-Edition")
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
         MovieManualRename = False
@@ -631,6 +635,13 @@ Public Class Preferences
         moviethumbpriority.Add("IMDB")
         moviethumbpriority.Add("Movie Poster DB")
         moviethumbpriority.Add("Internet Movie Poster Awards")
+    End Sub
+
+    Public Shared Sub ResetMovSepLst
+        MovSepLst.Clear()
+        MovSepLst.Add("3D")
+        MovSepLst.Add("Directors-Cut")
+        MovSepLst.Add("Extended-Edition")
     End Sub
 
     Public Shared Sub SaveConfig()
@@ -859,7 +870,7 @@ Public Class Preferences
         root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority.ToArray    )             'Button61,Button73
         root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
-
+        root.AppendChildList(doc, "movseplst",                      MovSepLst.ToArray)                  'lb_MovSepLst
 
         root.AppendChild(movie_filters.GetChild(doc))
 
@@ -939,6 +950,7 @@ Public Class Preferences
         tvRootFolders.Clear()
         tableview.Clear()
         moviethumbpriority.Clear()
+        MovSepLst.Clear()
         homemoviefolders.Clear() 
         movie_filters.Reset()
 
@@ -1026,6 +1038,11 @@ Public Class Preferences
                             moviethumbpriority.Add(t)
                         Next
                         'moviethumbpriority = thisresult.InnerXml.Split("|")
+                    Case "movseplst"
+                        Dim tmp() As String = thisresult.InnerXml.Split("|")
+                        For Each t In tmp
+                            MovSepLst.Add(t)
+                        Next
 
                     Case "certificatepriority"
                         ReDim certificatepriority(33)
@@ -1235,6 +1252,7 @@ Public Class Preferences
                 End Select
             End If
         Next
+        If MovSepLst.Count = 0 Then Call ResetMovSepLst() 
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
 
         XBMC_MC_MovieFolderMappings.IniFolders

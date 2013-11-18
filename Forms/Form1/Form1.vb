@@ -12925,6 +12925,10 @@ Public Class Form1
         Next
         lbCleanFilename.Items.Clear()
         lbCleanFilename.Items.AddRange(Preferences.moviecleanTags.Split("|"))
+        lb_MovSepLst.Items.Clear()
+        For Each t In Preferences.MovSepLst
+            lb_MovSepLst.Items.Add(t)
+        Next
     End Sub
 
 
@@ -14161,6 +14165,12 @@ Public Class Form1
             lbPosterSourcePriorities.Items.Clear()
             For f = 0 To Preferences.moviethumbpriority.Count-1
                 lbPosterSourcePriorities.Items.Add(Preferences.moviethumbpriority(f))
+            Next
+        End If
+        If lb_MovSepLst.Items.Count <> Preferences.MovSepLst.Count Then
+            lb_MovSepLst.Items.Clear()
+            For Each t In Preferences.MovSepLst 
+                lb_MovSepLst.Items.Add(t)
             Next
         End If
 
@@ -21873,6 +21883,24 @@ Public Class Form1
 #End If
         End Try
 
+    End Sub
+
+    Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
+        lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+        videosourceprefchanged = True
+    End Sub
+
+    Private Sub btn_MovSepRem_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepRem.Click
+        lb_MovSepLst.Items.RemoveAt(lb_MovSepLst.SelectedIndex)
+        Preferences.MovSepLst.Clear()
+        For Each t In lb_MovSepLst.Items
+            Preferences.MovSepLst.Add(t)
+        Next
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+        'videosourceprefchanged = True
     End Sub
 
     Private Sub cbxCleanFilenameIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxCleanFilenameIgnorePart.CheckedChanged 
