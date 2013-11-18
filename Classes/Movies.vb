@@ -925,14 +925,14 @@ End If
             ReportProgress( "Scraping " & i & " of " & NewMovies.Count )
             
             ScrapeMovie(newMovie)
-
+            Preferences.googlecount += 1
             If newMovie.TimingsLog <> "" then
                 ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
             End If
 
             If Cancelled then Exit Sub
         Next
-
+        Preferences.googlecount = 0
         ReportProgress( ,"!!! " & vbCrLf & "!!! Finished" )
     End Sub
 

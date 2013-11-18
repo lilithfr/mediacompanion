@@ -23524,6 +23524,7 @@ Public Class Form1
 
 
     Public Sub SearchForNewMovies
+        Preferences.googlecount = 0
         oMovies.FindNewMovies
     End Sub
 
