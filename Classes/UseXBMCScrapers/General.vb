@@ -1711,8 +1711,12 @@ Module General
         MovieTitle = Regex.Replace( MovieTitle, "-{2,}"    , "-"   )
 
         funcParams(0) = MovieTitle
-
-        Dim url As String = ScraperQuery.ExecuteQuery(theScraper, funcName, funcParams)
+        Dim url As String = ""
+        Try
+            url = ScraperQuery.ExecuteQuery(theScraper, funcName, funcParams)
+        Catch 
+            url = ""
+        End Try
 
         Dim match As Match = Regex.Match(url, "<trailer>(.*?)</trailer>")
 
