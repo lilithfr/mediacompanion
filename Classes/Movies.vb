@@ -926,6 +926,8 @@ End If
             
             ScrapeMovie(newMovie)
             Preferences.googlecount += 1
+            Preferences.engineno += 1
+            If Preferences.engineno = 3 Then Preferences.engineno = 0
             If newMovie.TimingsLog <> "" then
                 ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
             End If

@@ -50,7 +50,8 @@ Public Class Preferences
     Public Shared DoneAMov As Boolean = False
     Public Shared googlecount As Integer = 0
     Public Shared engineno As Integer = 0
-    Public Shared engine As New List(Of String)
+    Public Shared enginefront As New List(Of String)
+    Public Shared engineend As New List(Of String)
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
     Public Shared ReadOnly Property EdenEnabled As Boolean
@@ -647,10 +648,14 @@ Public Class Preferences
     End Sub
 
     Public Shared Sub engineupdate
-        engine.Clear()
-        engine.Add("http://www.google.co.uk/search?hl=en-US&as_q=")
-        engine.Add("http://www.bing.com/search?q=")
-        engine.Add("http://search.yahoo.com/search?p=")
+        enginefront.Clear()
+        engineend.Clear()
+        enginefront.Add("http://www.google.co.uk/search?hl=en-US&as_q=")
+        engineend.Add("&as_sitesearch=www.imdb.com")
+        enginefront.Add("http://www.bing.com/search?q=")
+        engineend.Add("+movie+site%3Aimdb.com")
+        enginefront.Add("http://search.yahoo.com/search?p=")
+        engineend.Add("+movie+site%3Aimdb.com")
     End Sub
     Public Shared Sub SaveConfig()
         Dim tempstring As String = String.Empty

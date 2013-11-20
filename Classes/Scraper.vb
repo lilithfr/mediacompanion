@@ -533,6 +533,7 @@ Public Class Classimdb
         End If
         Monitor.Enter(Me)
         Try
+            Dim engine As Integer = Preferences.engineno 
             Dim newimdbid As String = ""
             Dim allok As Boolean = False
             Dim goodyear As Boolean = False
@@ -543,7 +544,8 @@ Public Class Classimdb
             End If
 
             'Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
-            Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
+            'Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
+            Dim url As String = Preferences.enginefront(engine)
             Dim titlesearch As String = title
             titlesearch = titlesearch.Replace(".", "+")
             titlesearch = titlesearch.Replace(" ", "+")
@@ -618,8 +620,8 @@ Public Class Classimdb
                 titlesearch = titlesearch & "+%28" & year & "%29"
             End If
             'url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
-            url = url & titlesearch & "&as_sitesearch=www.imdb.com"
-
+            'url = url & titlesearch & "&as_sitesearch=www.imdb.com"
+            url = url & titlesearch & Preferences.engineend(engine)
             Dim webpage As String = loadwebpage(url, True)
 
 
@@ -932,7 +934,7 @@ Public Class Classimdb
             End If
             totalinfo = "<movie>" & vbCrLf
             If allok = False Then
-                If imdbcounter < 50 Then
+                If imdbcounter < 300 Then
                     imdbid = getimdbID(title, year)
                 Else
                     imdbid = getimdbID_fromimdb(title, imdbmirror, year)
