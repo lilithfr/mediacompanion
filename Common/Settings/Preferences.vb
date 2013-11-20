@@ -49,6 +49,8 @@ Public Class Preferences
     Public Shared TvInfoSite As String = "tvdb"
     Public Shared DoneAMov As Boolean = False
     Public Shared googlecount As Integer = 0
+    Public Shared engineno As Integer = 0
+    Public Shared engine As New List(Of String)
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
     Public Shared ReadOnly Property EdenEnabled As Boolean
@@ -644,6 +646,12 @@ Public Class Preferences
         MovSepLst.Add("Extended-Edition")
     End Sub
 
+    Public Shared Sub engineupdate
+        engine.Clear()
+        engine.Add("http://www.google.co.uk/search?hl=en-US&as_q=")
+        engine.Add("http://www.bing.com/search?q=")
+        engine.Add("http://search.yahoo.com/search?p=")
+    End Sub
     Public Shared Sub SaveConfig()
         Dim tempstring As String = String.Empty
         Dim doc As New XmlDocument
@@ -950,9 +958,10 @@ Public Class Preferences
         tvRootFolders.Clear()
         tableview.Clear()
         moviethumbpriority.Clear()
-        MovSepLst.Clear()
+        'MovSepLst.Clear()
         homemoviefolders.Clear() 
         movie_filters.Reset()
+        engineupdate()
 
 
         If Not IO.File.Exists(workingProfile.Config) Then
@@ -1040,6 +1049,7 @@ Public Class Preferences
                         'moviethumbpriority = thisresult.InnerXml.Split("|")
                     Case "movseplst"
                         Dim tmp() As String = thisresult.InnerXml.Split("|")
+                        MovSepLst.Clear()
                         For Each t In tmp
                             MovSepLst.Add(t)
                         Next
@@ -1252,7 +1262,7 @@ Public Class Preferences
                 End Select
             End If
         Next
-        If MovSepLst.Count = 0 Then Call ResetMovSepLst() 
+        'If MovSepLst.Count = 0 Then Call ResetMovSepLst() 
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
 
         XBMC_MC_MovieFolderMappings.IniFolders

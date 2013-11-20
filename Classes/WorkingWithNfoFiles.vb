@@ -2116,30 +2116,33 @@ Public Class WorkingWithNfoFiles
                         actorchild = doc.CreateElement("role")
                         actorchild.InnerText = movietosave.listactors(f).actorrole
                         child.AppendChild(actorchild)
-                        If movietosave.listactors(f).actorthumb <> Nothing Then
-                            If movietosave.listactors(f).actorthumb <> "" Then
-                                Dim actorthumb As String = movietosave.listactors(f).actorthumb
-                                actorchild = doc.CreateElement("thumb")
-                                If Preferences.actorsave Then
-                                    Dim uri As Uri
-                                    uri = New Uri(actorthumb)
+                        actorchild = doc.CreateElement("thumb")
+                        actorchild.InnerText = movietosave.listactors(f).actorthumb
+                        child.AppendChild(actorchild)
+'                        If movietosave.listactors(f).actorthumb <> Nothing Then
+'                            If movietosave.listactors(f).actorthumb <> "" Then
+'                                Dim actorthumb As String = movietosave.listactors(f).actorthumb
+'                                actorchild = doc.CreateElement("thumb")
+'                                If Preferences.actorsave Then
+'                                    Dim uri As Uri
+'                                    uri = New Uri(actorthumb)
 
-                                    If Len(Preferences.actornetworkpath) > 0 AndAlso Len(Preferences.actorsavepath) > 0 Then
-                                        Dim actorThumbFileName As String
-                                        Dim localActorThumbFileName As String
-                                        actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
-                                        localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
+'                                    If Len(Preferences.actornetworkpath) > 0 AndAlso Len(Preferences.actorsavepath) > 0 Then
+'                                        Dim actorThumbFileName As String
+'                                        Dim localActorThumbFileName As String
+'                                        actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
+'                                        localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
 
-'                                       Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
-                                        Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName )
+''                                       Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
+'                                        Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName )
 
-                                        actorthumb = actorThumbFileName
-                                    End If
-                                End If
-                                actorchild.InnerText = actorthumb
-                                child.AppendChild(actorchild)
-                            End If
-                        End If
+'                                        actorthumb = actorThumbFileName
+'                                    End If
+'                                End If
+'                                actorchild.InnerText = actorthumb
+'                                child.AppendChild(actorchild)
+'                            End If
+'                        End If
                         root.AppendChild(child)
                     Next
                     'doc.AppendChild(root)
