@@ -3009,6 +3009,11 @@ Public Class Movie
             Dim ach As String = AudioChannels.ToLower
             Dim vc As String = VideoCodec.ToLower
             Dim vr As String = VideoResolution.ToLower
+            Dim vgenre As String = _scrapedMovie.fullmoviebody.genre.ToString
+            If vgenre.IndexOf("/") <> -1 Then
+                Dim vg () As String = vgenre.Split("/")
+                vgenre = vg(0)
+            End If
             
             Try
                 If Preferences.MovFolderRename or Preferences.MovieManualRename Then
@@ -3019,6 +3024,7 @@ Public Class Movie
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
+                    s = s.Replace("%G", vgenre)
                     s = s.Replace("%N", Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.movieset))
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)

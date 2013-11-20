@@ -2946,6 +2946,7 @@ Folder Rename - If Movie is in Root folder, new folder created
 %Z - Sort Title
 %Y - Year
 %I - IMDbId
+%G - Genre (only first)
 %S - Movie Source 
 %N - MovieSet
 %P - Premiered Date
