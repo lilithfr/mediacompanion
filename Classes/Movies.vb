@@ -1791,18 +1791,21 @@ End If
             If Cancelled Then Exit Sub
 
             If Not File.Exists(oFileInfo.FullName) Then Continue For
+            Try
+                Dim movie = New Movie(Me,oFileInfo.FullName)
 
-            Dim movie = New Movie(Me,oFileInfo.FullName)
+                If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
 
-            If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
+                movie.LoadNFO(False)
 
-            movie.LoadNFO(False)
-
-            If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
-            If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
-                Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
-            End If
-            TmpMovieCache.Add(movie.Cache)
+                If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
+                If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
+                    Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
+                End If
+                TmpMovieCache.Add(movie.Cache)
+            Catch
+                MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
+            End Try
         Next
 
     End Sub
