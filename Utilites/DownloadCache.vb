@@ -135,7 +135,7 @@ Public Class DownloadCache
         If Not File.Exists(CachePath) OrElse ForceDownload Then
 
             'Check to see if URL is actually a local file
-            If File.Exists(URL) Then
+            If Not URL.Contains(":") AndAlso File.Exists(URL) Then
                 If CachePath <> URL Then
                     If Utilities.SafeDeleteFile(CachePath) Then
                         File.Copy(URL, CachePath)

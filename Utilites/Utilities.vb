@@ -701,10 +701,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 End If
             End If
             Try
-                movieyear = movieyear.Trim
-                If movieyear.Length = 6 AndAlso trimBrackets Then
-                    movieyear = movieyear.Remove(0, 1)
-                    movieyear = movieyear.Remove(4, 1)
+                If Not String.IsNullOrEmpty(movieyear) Then
+                    movieyear = movieyear.Trim
+                    If movieyear.Length = 6 AndAlso trimBrackets Then
+                        movieyear = movieyear.Remove(0, 1)
+                        movieyear = movieyear.Remove(4, 1)
+                    End If
                 End If
             Catch
             End Try

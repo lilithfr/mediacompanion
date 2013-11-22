@@ -30,7 +30,7 @@ Public Class VideoDetails
                 If w<= 720 And h<=480  Then Return 480
                 If w<= 768 And h<=576  Then Return 576
                 If w<= 960 And h<=544  Then Return 540
-                If w<=1280 And h<=720  Then Return 720
+                If w<=1600 And h<=720  Then Return 720  'If w<=1280 And h<=720  Then Return 720
             
                 Return 1080
             Catch
