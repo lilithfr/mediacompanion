@@ -24871,17 +24871,17 @@ End Sub
     End Sub
 
 
-    Private Sub ChangeFilterMode( sender As Object,  e As EventArgs) Handles lblFilterGenreMode        .Click,  lblFilterSetMode           .Click,  lblFilterResolutionMode   .Click, 
-                                                                             lblFilterAudioCodecsMode  .Click,  lblFilterCertificateMode   .Click,  lblFilterAudioChannelsMode.Click,
-                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click, 
-                                                                             lblFilterActorMode        .Click,  lblFilterSourceMode        .Click
+    Private Sub ChangeFilterMode(ByVal sender As Object, ByVal e As EventArgs) Handles lblFilterGenreMode.Click, lblFilterSetMode.Click, lblFilterResolutionMode.Click,
+                                                                             lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
+                                                                             lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
+                                                                             lblFilterActorMode.Click, lblFilterSourceMode.Click, lblFilterTagMode.Click
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
 
         filter.QuickSelect = Not filter.QuickSelect
 
-        lbl.Text = If(filter.QuickSelect, "S", "M" )
+        lbl.Text = If(filter.QuickSelect, "S", "M")
 
         movie_filters.GetItem(filter.Name).QuickSelect = filter.QuickSelect
 
