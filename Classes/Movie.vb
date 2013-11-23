@@ -3012,7 +3012,7 @@ Public Class Movie
             Dim vgenre As String = _scrapedMovie.fullmoviebody.genre.ToString
             If vgenre.IndexOf("/") <> -1 Then
                 Dim vg () As String = vgenre.Split("/")
-                vgenre = vg(0)
+                vgenre = vg(0).Trim()
             End If
             
             Try
