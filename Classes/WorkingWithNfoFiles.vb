@@ -995,7 +995,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.foldername = Utilities.GetLastFolder(path)
                     newmovie.fullpathandfilename = path
                     newmovie.genre = "problem / xml error"
-                    newmovie.tag.Clear
+                    newmovie.movietag.Clear()
                     newmovie.id = ""
                     newmovie.missingdata1 = 0
                     newmovie.MovieSet = ""
@@ -1058,7 +1058,7 @@ Public Class WorkingWithNfoFiles
                                     newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
                                 End If
                             Case "tag"
-                                newmovie.tag.Add(thisresult.InnerText)
+                                newmovie.movietag.Add(thisresult.InnerText)
                                 'If newmovie.tag.add = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "
                                 '    newmovie.tag = thisresult.InnerText
                                 'Else

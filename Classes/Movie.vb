@@ -990,7 +990,7 @@ Public Class Movie
         _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
         _movieCache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
         _movieCache.Premiered           = _scrapedMovie.fullmoviebody.premiered
-            
+        _movieCache.movietag = _scrapedMovie.fullmoviebody.tag
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
 
         Try
@@ -1013,7 +1013,7 @@ Public Class Movie
         _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
         _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
-        _movieCache.tag         = _scrapedMovie.fullmoviebody.tag
+        _movieCache.movietag = _scrapedMovie.fullmoviebody.tag
         AssignMovieToAddMissingData
     End Sub
 

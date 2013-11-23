@@ -217,6 +217,8 @@ Public Class clsGridViewMovie
 
     Public Sub mov_FiltersAndSortApply(Form1 As Form1)
 
+
+
         If Not Form1.MainFormLoadedStatus Then Exit Sub
  
         Dim b = From f In Form1.oMovies.Data_GridViewMovieCache
@@ -273,9 +275,9 @@ Public Class clsGridViewMovie
         If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
        
         If Form1.cbFilterGenre         .Visible Then b = Form1.oMovies.ApplyGenresFilter        ( b , Form1.cbFilterGenre          )
-        If Form1.cbFilterCertificate   .Visible Then b = Form1.oMovies.ApplyCertificatesFilter  ( b , Form1.cbFilterCertificate    )
-        If Form1.cbFilterSet           .Visible Then b = Form1.oMovies.ApplySetsFilter          ( b , Form1.cbFilterSet            )
-        If Form1.cbFilterResolution    .Visible Then b = Form1.oMovies.ApplyResolutionsFilter   ( b , Form1.cbFilterResolution     )
+        If Form1.cbFilterCertificate.Visible Then b = Form1.oMovies.ApplyCertificatesFilter(b, Form1.cbFilterCertificate)
+        If Form1.cbFilterSet.Visible Then b = Form1.oMovies.ApplySetsFilter(b, Form1.cbFilterSet)
+        If Form1.cbFilterResolution.Visible Then b = Form1.oMovies.ApplyResolutionsFilter(b, Form1.cbFilterResolution)
         If Form1.cbFilterAudioCodecs   .Visible Then b = Form1.oMovies.ApplyAudioCodecsFilter   ( b , Form1.cbFilterAudioCodecs    )
         If Form1.cbFilterAudioChannels .Visible Then b = Form1.oMovies.ApplyAudioChannelsFilter ( b , Form1.cbFilterAudioChannels  )
         If Form1.cbFilterAudioBitrates .Visible Then b = Form1.oMovies.ApplyAudioBitratesFilter ( b , Form1.cbFilterAudioBitrates  )
@@ -283,7 +285,7 @@ Public Class clsGridViewMovie
         If Form1.cbFilterAudioLanguages.Visible Then b = Form1.oMovies.ApplyAudioLanguagesFilter( b , Form1.cbFilterAudioLanguages )
         If Form1.cbFilterActor         .Visible Then b = Form1.oMovies.ApplyActorsFilter        ( b , Form1.cbFilterActor          )
         If Form1.cbFilterSource        .Visible Then b = Form1.oMovies.ApplySourcesFilter       ( b , Form1.cbFilterSource         )
-
+        If Form1.cbFilterTag.Visible Then b = Form1.oMovies.ApplyTagsFilter(b, Form1.cbFilterTag)
  
         Select Case Form1.cbSort.Text
             Case "A - Z"

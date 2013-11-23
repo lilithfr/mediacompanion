@@ -16,7 +16,7 @@ Public Class ComboList
     Property rating               As Double = 0
     Property top250               As String = 0
     Property genre                As String = ""
-    Property tag                  As List(of String) = New List(Of String)
+    Property movietag As New List(Of String)
     Property playcount            As String = ""
     Property lastplayed           As String = ""
     Property sortorder            As String = ""
@@ -251,7 +251,7 @@ Public Class ComboList
         Me.rating               = From.rating             
         Me.top250               = From.top250             
         Me.genre                = From.genre  
-        Me.tag                  = From.tag    
+        Me.movietag = From.movietag
         Me.playcount            = From.playcount 
         Me.lastplayed           = From.lastplayed  
         Me.sortorder            = From.sortorder          

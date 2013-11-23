@@ -29,9 +29,11 @@ Public Class Data_GridViewMovie
     Dim _IntRuntime As Integer=0
     Dim _DisplayFileDate   As String
     Dim _DisplayCreateDate As String
+    Dim _movietag As String
+
 
     Property Resolution As Integer = -1
-    Property Audio      As New List(Of AudioDetails)
+    Property Audio As New List(Of AudioDetails)
     Property Premiered As String
     Property FrodoPosterExists As Boolean
     Property PreFrodoPosterExists As Boolean
@@ -46,6 +48,7 @@ Public Class Data_GridViewMovie
     Public Sub Assign(movie As ComboList)
         fullpathandfilename = movie.fullpathandfilename
         movieset = movie.MovieSet
+        movietag = String.Join(", ", movie.movietag)
         filename = movie.filename
         foldername = movie.foldername
         title = movie.title
@@ -130,6 +133,15 @@ Public Class Data_GridViewMovie
         End Get
         Set(ByVal value)
             _movieset = value
+        End Set
+    End Property
+
+    Public Property movietag
+        Get
+            Return _movietag
+        End Get
+        Set(ByVal value)
+            _movietag = value
         End Set
     End Property
 

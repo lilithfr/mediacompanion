@@ -2995,6 +2995,10 @@ Public Class Form1
 
     'reset all filters
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonResetFilters.Click
+        resetallfilters()
+    End Sub
+
+    Public Sub resetallfilters()
         Try
             ResetFilters()
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
@@ -23209,21 +23213,22 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral       .SelectedValueChanged,  cbFilterSource        .TextChanged,
-                                                                                                    cbFilterGenre         .TextChanged,           cbFilterCertificate   .TextChanged, 
-                                                                                                    cbFilterSet           .TextChanged,           cbFilterResolution    .TextChanged, 
-                                                                                                    cbFilterAudioCodecs   .TextChanged,           cbFilterAudioChannels .TextChanged, 
-                                                                                                    cbFilterAudioBitrates .TextChanged,           cbFilterNumAudioTracks.TextChanged, 
-                                                                                                    cbFilterAudioLanguages.TextChanged,           cbFilterActor         .TextChanged
+    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterSource.TextChanged,
+                                                                                                    cbFilterGenre.TextChanged, cbFilterCertificate.TextChanged,
+                                                                                                    cbFilterSet.TextChanged, cbFilterResolution.TextChanged,
+                                                                                                    cbFilterAudioCodecs.TextChanged, cbFilterAudioChannels.TextChanged,
+                                                                                                    cbFilterAudioBitrates.TextChanged, cbFilterNumAudioTracks.TextChanged,
+                                                                                                    cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged
+
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
 
-            If x.opState<>0 Then
+            If x.opState <> 0 Then
                 Return
             End If
         End If
 
-        ApplyMovieFilters
+        ApplyMovieFilters()
     End Sub
      
 
@@ -23573,7 +23578,8 @@ Public Class Form1
 
         If cbFilterGenre         .Visible Then cbFilterGenre         .UpdateItems( oMovies.GenresFilter         )
         If cbFilterCertificate   .Visible Then cbFilterCertificate   .UpdateItems( oMovies.CertificatesFilter   )
-        If cbFilterSet           .Visible Then cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
+        If cbFilterSet.Visible Then cbFilterSet.UpdateItems(oMovies.SetsFilter)
+        If cbFilterTag.Visible Then cbFilterTag.UpdateItems(oMovies.TagFilter)
         If cbFilterResolution    .Visible Then cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
         If cbFilterAudioCodecs   .Visible Then cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
         If cbFilterAudioChannels .Visible Then cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
@@ -23603,12 +23609,12 @@ Public Class Form1
 
 
 
-    Private Function TriStateFilter_OnFormatItem(item As String) As String Handles  cbFilterGenre         .OnFormatItem,  cbFilterCertificate   .OnFormatItem, 
-                                                                                    cbFilterSet           .OnFormatItem,  cbFilterResolution    .OnFormatItem, 
-                                                                                    cbFilterAudioCodecs   .OnFormatItem,  cbFilterAudioChannels .OnFormatItem, 
-                                                                                    cbFilterAudioBitrates .OnFormatItem,  cbFilterNumAudioTracks.OnFormatItem, 
-                                                                                    cbFilterAudioLanguages.OnFormatItem,  cbFilterActor         .OnFormatItem, 
-                                                                                    cbFilterSource        .OnFormatItem
+    Private Function TriStateFilter_OnFormatItem(ByVal item As String) As String Handles cbFilterGenre.OnFormatItem, cbFilterCertificate.OnFormatItem,
+                                                                                    cbFilterSet.OnFormatItem, cbFilterResolution.OnFormatItem,
+                                                                                    cbFilterAudioCodecs.OnFormatItem, cbFilterAudioChannels.OnFormatItem,
+                                                                                    cbFilterAudioBitrates.OnFormatItem, cbFilterNumAudioTracks.OnFormatItem,
+                                                                                    cbFilterAudioLanguages.OnFormatItem, cbFilterActor.OnFormatItem,
+                                                                                    cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -24770,7 +24776,7 @@ Public Class Form1
         Try
             TagListBox.Items.Clear()
             For x = 0 to oMovies.MovieCache.Count-1
-                Dim movtag As list(of String) = oMovies.MovieCache(x).tag
+                Dim movtag As List(Of String) = oMovies.MovieCache(x).movietag
                 For Each mtag In movtag
                     If Not TagListBox.Items.Contains(mtag)
                         TagListBox.Items.Add(mtag)
@@ -24781,6 +24787,7 @@ Public Class Form1
             For Each mtag In TagListBox.Items
                 Preferences.movietags.Add(mtag)
             Next
+            UpdateFilteredList()
         Catch ex As Exception
 
         End Try
@@ -25034,5 +25041,11 @@ End Sub
 
         Return False
     End Function
+
+ 
+   
+
+
+
 
 End Class
