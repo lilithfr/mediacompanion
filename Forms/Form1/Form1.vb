@@ -25042,10 +25042,33 @@ End Sub
         Return False
     End Function
 
- 
-   
 
 
+    Private Sub BtnSearchGooglePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSearchGooglePoster.Click
+        'Open Webpage at Google image search for movietitle&year
+        Dim title As String = workingMovieDetails.fullmoviebody.title
+        Dim year As String = workingMovieDetails.fullmoviebody.year
 
+        Dim url As String = ""
+        If Not IsNothing(year) AndAlso IsNumeric(year) AndAlso year.Length = 4 Then
+            url = "http://images.google.com/images?q=" & title & "+" & year & "+poster"
+        Else
+            url = "http://images.google.com/images?q=" & title & "+poster"
+        End If
+        OpenUrl(url)
+    End Sub
 
+    Private Sub BtnSearchGoogleFanart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSearchGoogleFanart.Click
+        'Open Webpage at Google image search for movietitle&year
+        Dim title As String = workingMovieDetails.fullmoviebody.title
+        Dim year As String = workingMovieDetails.fullmoviebody.year
+
+        Dim url As String = ""
+        If Not IsNothing(year) AndAlso IsNumeric(year) AndAlso year.Length = 4 Then
+            url = "http://images.google.com/images?q=" & title & "+" & year & "+screenshot"
+        Else
+            url = "http://images.google.com/images?q=" & title & "+screenshot"
+        End If
+        OpenUrl(url)
+    End Sub
 End Class
