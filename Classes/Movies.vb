@@ -218,6 +218,7 @@ Public Class Movies
             lst.Add( "All"                    )
             lst.Add( Watched                  )
             lst.Add( Unwatched                )
+            lst.Add( ScrapeError              )
             lst.Add( Duplicates               )
             If Not Preferences.DisableNotMatchingRenamePattern Then
                 lst.Add( NotMatchingRenamePattern )
@@ -409,6 +410,12 @@ End If
             Return "Missing from XBMC (" & (From x In Form1.MC_Only_Movies).Count & ")" 
         End Get
     End Property  
+
+    Public ReadOnly Property ScrapeError
+        Get
+            Return "Scrape Error (" & (From x In MovieCache Where x.genre.ToLower = "problem").Count & ")"
+        End Get
+    End Property
 
 
     Public ReadOnly Property Duplicates As String

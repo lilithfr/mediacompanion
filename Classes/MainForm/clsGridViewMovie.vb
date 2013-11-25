@@ -234,6 +234,7 @@ Public Class clsGridViewMovie
 
                 Case "Watched"                     : b = From f In b Where     f.Watched
                 Case "Unwatched"                   : b = From f In b Where Not f.Watched
+                Case "Scrape Error"                : b = From f In b Where f.genre.ToLower = "problem"
 
                 Case "Duplicates"                  : Dim sort = b.GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
 
