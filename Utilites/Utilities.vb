@@ -720,6 +720,18 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return filename.Replace(IO.Path.GetExtension(filename), "")
     End Function
 
+    Public Shared Function checktitle(ByVal fulltitle As String, ByVal movseplst As List(Of String)) As String
+        Dim s As String = ""
+        For Each t In movseplst
+            If fulltitle.ToLower.Contains(t.ToLower) Then
+                s = t
+                Exit For
+            End If
+        Next
+        
+        Return s
+    End Function
+
     Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal Scraper As String = "") As String
 
         Dim currentposition As Integer = filename.Length

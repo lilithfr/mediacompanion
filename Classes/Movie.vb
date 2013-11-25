@@ -83,6 +83,7 @@ Public Class Movie
     Property LogScrapeTimes            As Boolean = Preferences.LogScrapeTimes
 '   Property TrailerUrl           As String = ""
     Property PosterUrl            As String = ""
+    Property SeparateMovie As String = ""
     Property Actions As New ScrapeActions
 '    Property nfopathandfilename As String = ""
     Property RenamedBaseName As String = ""
@@ -787,6 +788,7 @@ Public Class Movie
         If Not Scraped then
             Scraped  = True
             Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
+            Actions.Items.Add( New ScrapeAction(AddressOf getspecialMovie     , "Check if special version"       ) )
             Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
             Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) )            
             RunScrapeActions
@@ -839,6 +841,10 @@ Public Class Movie
 
         Return MSG_PREFIX + progressText
     End Function
+
+    Sub getspecialMovie
+        SeparateMovie = Utilities.checktitle(TitleFull, Preferences.MovSepLst)
+    End Sub
 
     Sub ImdbScraper_GetBody
         _imdbBody = ImdbScrapeBody(SearchName, PossibleYear, PossibleImdb)
@@ -1030,7 +1036,11 @@ Public Class Movie
         For Each thisresult In thumbstring("movie")
             Select Case thisresult.Name
                 Case "title"
-                    _scrapedMovie.fullmoviebody.title = thisresult.InnerText.ToString.SafeTrim
+                    Dim sepmov As String = ""
+                    If SeparateMovie <> "" Then
+                        sepmov = " " & SeparateMovie
+                    End If
+                    _scrapedMovie.fullmoviebody.title = thisresult.InnerText.ToString.SafeTrim & sepmov
                 Case "originaltitle"
                     _scrapedMovie.fullmoviebody.originaltitle = thisresult.InnerText.ToString.SafeTrim
                 Case "alternativetitle"
