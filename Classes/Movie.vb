@@ -2259,7 +2259,7 @@ Public Class Movie
             'Else if in Root folder, moved to new folder movie and ancillary files.
             Dim Moviename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
-            For Each fi As IO.FileInfo In di.GetFiles((Moviename & ".*"))
+            For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*.*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
             Next
             log &= "Movie moved from Root folder into new path" & vbCrLf  

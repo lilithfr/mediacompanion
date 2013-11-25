@@ -1830,7 +1830,7 @@ End If
 
     End Sub
 
-    Function xbmcTmdbRenameMovie(ByVal aMovie As Movie, ByVal filename As String) As String
+    Function xbmcTmdbRenameMovie(ByRef aMovie As Movie, ByVal filename As String) As String
         Dim NewFilenameandPath As String = filename
         Try
             If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not filename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 

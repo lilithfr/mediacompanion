@@ -2287,10 +2287,15 @@ Public Class Form1
                 Dim newFilename As String = newMovieFoundFilename 
                 Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
 
-                If Preferences.XbmcTmdbRenameMovie Then
-                    newFilename = oMovies.xbmcTmdbRenameMovie(aMovie, newMovieFoundFilename)
-                    If newFilename <> newMovieFoundFilename Then scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
-                End If
+                'If Preferences.XbmcTmdbRenameMovie Then
+                '    newFilename = oMovies.xbmcTmdbRenameMovie(aMovie, newMovieFoundFilename)
+                '    If newFilename <> newMovieFoundFilename Then
+                '        scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
+                '        aMovie.mediapathandfilename = newFilename
+                '        'aMovie._nfopathandfilename = newfilename
+                '        aMovie.RenamedBaseName = newFilename
+                '    End If
+                'End If
                 Dim posters As Boolean = oMovies.XbmcTmdbDlPosterFanart(aMovie)
                 If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
                 If Preferences.XbmcTmdbActorDL Then
@@ -2300,6 +2305,9 @@ Public Class Form1
                 End If
                 'mov_DBScrapedAdd(newFilename)
                 aMovie.UpdateCaches()
+                If Preferences.XbmcTmdbRenameMovie Then
+                    mov_XbmcTmdbRename(aMovie.NfoPathAndFilename)
+                End If
             End If
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             'UpdateFilteredList
@@ -2316,6 +2324,18 @@ Public Class Form1
                 scraperLog &= " - Scrape ERROR!" & vbCrLf
             End If
         End If
+    End Sub
+
+    Private Sub mov_XbmcTmdbRename(ByVal fullpathandfilename)
+        _rescrapeList.FullPathAndFilenames.Clear()
+        _rescrapeList.FullPathAndFilenames.Add(fullpathandfilename)
+        rescrapeList.ResetFields
+        rescrapeList.Rename_Folders = Preferences.MovFolderRename
+        rescrapeList.Rename_Files = Preferences.MovieRenameEnable 
+        RunBackgroundMovieScrape("BatchRescrape")
+        While BckWrkScnMovies.IsBusy 
+            Application.DoEvents
+        End While
     End Sub
 
     Private Sub mov_TMDbFail(ByRef fmd As FullMovieDetails, ByVal Filename As String, ByVal Title As String)
