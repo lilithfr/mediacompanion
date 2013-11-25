@@ -1856,13 +1856,14 @@ End If
 
     Function XbmcTmdbDlPosterFanart(ByVal aMovie as Movie) as Boolean
         Try
-            If Not Preferences.scrapemovieposters then
+            If Not Preferences.scrapemovieposters AndAlso Not Preferences.savefanart AndAlso Preferences.dlxtrafanart then
             Return False
         End If
             AddMovieEventHandlers ( aMovie )
-            aMovie.IniTmdb 
-            aMovie.DoDownloadPoster
-            aMovie.DoDownloadFanart 
+            aMovie.IniTmdb
+            If Preferences.scrapemovieposters Then aMovie.DoDownloadPoster
+            If Preferences.savefanart Then aMovie.DoDownloadFanart
+            If Preferences.dlxtrafanart Then aMovie.DoDownloadExtraFanart 
             RemoveMovieEventHandlers ( aMovie )
 
         Catch ex As Exception
