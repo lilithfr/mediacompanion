@@ -2307,6 +2307,7 @@ Public Class Form1
                 aMovie.UpdateCaches()
                 If Preferences.XbmcTmdbRenameMovie Then
                     mov_XbmcTmdbRename(aMovie.NfoPathAndFilename)
+                    scraperLog &= "Movie Successfully Renamed" & vbCrLf
                 End If
             End If
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
@@ -3158,17 +3159,17 @@ Public Class Form1
                 Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
 
                 'Dim newFilename As String = movie.mediapathandfilename 
-                If Preferences.XbmcTmdbRenameMovie Then
-                    newFilename = oMovies.xbmcTmdbRenameMovie(aMovie, RescrapeMovieName)
-                    If newFilename <> RescrapeMovieName Then
-                        Utilities.SafeDeleteFile(aMovie.NfoPathAndFilename)
-                        Call SearchForNew
+                'If Preferences.XbmcTmdbRenameMovie Then
+                '    newFilename = oMovies.xbmcTmdbRenameMovie(aMovie, RescrapeMovieName)
+                '    If newFilename <> RescrapeMovieName Then
+                '        Utilities.SafeDeleteFile(aMovie.NfoPathAndFilename)
+                '        Call SearchForNew
 
-                        'mov_XBMCScrapingInitialization()
-                        Exit Sub 
-                    End If
-                    'scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
-                End If
+                '        'mov_XBMCScrapingInitialization()
+                '        Exit Sub 
+                '    End If
+                '    'scraperLog &= "Movie Renamed to: " & newFilename & vbCrLf
+                'End If
                 Dim posters As Boolean = oMovies.XbmcTmdbDlPosterFanart(aMovie)
                 If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
                 If Preferences.XbmcTmdbActorDL Then
@@ -3176,6 +3177,10 @@ Public Class Form1
                     If aok Then scraperLog &= "Actor images saved" & vbCrLf
                 End If
                 aMovie.UpdateCaches()
+                If Preferences.XbmcTmdbRenameMovie Then
+                    mov_XbmcTmdbRename(aMovie.NfoPathAndFilename)
+                    scraperLog &= "Movie Successfully Renamed" & vbCrLf
+                End If
             End If
             
             'mov_ListRefresh()
