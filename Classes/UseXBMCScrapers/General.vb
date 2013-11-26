@@ -1458,8 +1458,9 @@ Module General
             ' load nfo file to clean
             Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfoFileandPath)
 
-            If fmd.fullmoviebody.movieset="" Then fmd.fullmoviebody.movieset="-None-"
-            If fmd.fullmoviebody.top250  ="" Then fmd.fullmoviebody.top250  ="0"
+            If fmd.fullmoviebody.movieset = "" Then fmd.fullmoviebody.movieset = "-None-"
+            If fmd.fullmoviebody.top250  = "" Then fmd.fullmoviebody.top250  ="0"
+            If fmd.fullmoviebody.outline = "" Then fmd.fullmoviebody.outline = fmd.fullmoviebody.plot ' Outline lonely 
 
             'if scraped by XBMC TMDB, one poster is allocated.  Move this to Frodoposter.
             If scraper <> "" Then
@@ -1580,6 +1581,7 @@ Module General
     Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
         ' 1st stage
         Dim ExtraID As String = Movie.getExtraIdFromNFO(Filename)
+        Dim Title As String = ""
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
@@ -1603,7 +1605,7 @@ Module General
             m_nodelist = m_xmld.SelectNodes("/results/entity")
             If Scraper = "metadata.imdb.com" Then
                 For Each m_node In m_nodelist
-                    Dim Title = m_node.ChildNodes.Item(0).InnerText
+                    Title = m_node.ChildNodes.Item(0).InnerText
                     Dim year = m_node.ChildNodes.Item(1).InnerText
                     Dim url = m_node.ChildNodes.Item(2).InnerText
                     Dim id = m_node.ChildNodes.Item(3).InnerText
@@ -1613,7 +1615,7 @@ Module General
                 Next
             ElseIf Scraper = "metadata.themoviedb.org" Then
                 For Each m_node In m_nodelist
-                    Dim Title = m_node.ChildNodes.Item(0).InnerText
+                    Title = m_node.ChildNodes.Item(0).InnerText
                     Dim id = m_node.ChildNodes.Item(1).InnerText
                     Dim year = m_node.ChildNodes.Item(2).InnerText
                     Dim url = m_node.ChildNodes.Item(3).InnerText
@@ -1633,6 +1635,10 @@ Module General
             'Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
             FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
+            Dim SeparateMovie As String = Utilities.checktitle(Filename, Preferences.MovSepLst)
+            If SeparateMovie <> "" Then
+                FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, Title)
+            End If
             FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
             'Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
         End If
@@ -1685,6 +1691,14 @@ Module General
         If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
         FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
         Return FinalScrapResult
+    End Function
+
+    Public Function AddSeparateMovieTitle(ByVal FinalScrape As String, ByVal SepMov As String, ByVal Title As String) As String
+        Try
+            FinalScrape = FinalScrape.Replace("<title>" & Title, "<title>" & Title & " " & SepMov)
+        Catch
+        End Try
+        Return FinalScrape
     End Function
 
     'Date  : Nov11 
