@@ -14152,6 +14152,7 @@ Public Class Form1
         cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
+        cb_XbmcTmdbMissingFromImdb.CheckState   = If(Preferences.XbmcTmdbMissingFromImdb, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
  
         saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
@@ -20641,6 +20642,20 @@ Public Class Form1
                 End If
             Else
                 Preferences.XbmcTmdbRenameMovie = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch
+            
+        End Try
+    End Sub
+
+    Private Sub cb_XbmcTmdbMissingFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_XbmcTmdbMissingFromImdb.CheckedChanged
+        Try
+            If cb_XbmcTmdbMissingFromImdb.CheckState = CheckState.Checked Then
+                Preferences.XbmcTmdbMissingFromImdb = True
+            Else
+                Preferences.XbmcTmdbMissingFromImdb = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True

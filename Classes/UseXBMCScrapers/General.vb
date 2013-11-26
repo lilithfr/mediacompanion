@@ -1461,7 +1461,7 @@ Module General
             If fmd.fullmoviebody.movieset = "" Then fmd.fullmoviebody.movieset = "-None-"
             If fmd.fullmoviebody.top250  = "" Then fmd.fullmoviebody.top250  ="0"
             If fmd.fullmoviebody.outline = "" Then fmd.fullmoviebody.outline = fmd.fullmoviebody.plot ' Outline lonely 
-
+                        
             'if scraped by XBMC TMDB, one poster is allocated.  Move this to Frodoposter.
             If scraper <> "" Then
                 If fmd.listthumbs.Count = 1 Then fmd.frodoPosterThumbs.Add(New FrodoPosterThumb("poster",fmd.listthumbs(0)))

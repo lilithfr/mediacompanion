@@ -196,6 +196,7 @@ Public Class Preferences
     Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
     Public Shared XbmcTmdbRenameMovie As Boolean
+    Public Shared XbmcTmdbMissingFromImdb As Boolean
     Public Shared XbmcTmdbActorDL As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared OfflineDVDTitle As String
@@ -494,6 +495,7 @@ Public Class Preferences
         movies_useXBMC_Scraper = False
         XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
+        XbmcTmdbMissingFromImdb = False
         XbmcTmdbActorDL = False
         moviedefaultlist = 0
         moviesortorder = 0
@@ -847,6 +849,7 @@ Public Class Preferences
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       'RadioButton52
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
+        root.AppendChild(doc, "XbmcTmdbMissingFromImdb",            XbmcTmdbMissingFromImdb)            'cb_XbmcTmdbMissingFromImdb
         root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
@@ -1096,8 +1099,9 @@ Public Class Preferences
                         End If
 
                     Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText
-                    Case "XbmcTmdbRenameMovie" : XbmcTmdbRenameMovie = thisresult.InnerText 
-                    Case "XbmcTmdbActorDL" : XbmcTmdbActorDL = thisresult.InnerText
+                    Case "XbmcTmdbRenameMovie"                  : XbmcTmdbRenameMovie = thisresult.InnerText 
+                    Case "XbmcTmdbMissingFromImdb"              : XbmcTmdbMissingFromImdb = thisresult.InnerText
+                    Case "XbmcTmdbActorDL"                      : XbmcTmdbActorDL = thisresult.InnerText
                     Case "seasonall"                            : seasonall = thisresult.InnerText
                     Case "splitcontainer1"                      : splt1 = Convert.ToInt32(thisresult.InnerText)
                     Case "splitcontainer2"                      : splt2 = Convert.ToInt32(thisresult.InnerText)
