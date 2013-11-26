@@ -2910,7 +2910,7 @@ Partial Class Form1
         Me.bnt_movRefreshAll.TabIndex = 184
         Me.bnt_movRefreshAll.Text = "Refresh"
         Me.bnt_movRefreshAll.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ToolTip1.SetToolTip(Me.bnt_movRefreshAll, "Refresh all movies")
+        Me.ToolTip1.SetToolTip(Me.bnt_movRefreshAll, "Refresh all movies (or press F5)")
         Me.bnt_movRefreshAll.UseVisualStyleBackColor = false
         '
         'bnt_movSearchNew
@@ -2926,7 +2926,7 @@ Partial Class Form1
         Me.bnt_movSearchNew.TabIndex = 179
         Me.bnt_movSearchNew.Text = "Search"
         Me.bnt_movSearchNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ToolTip1.SetToolTip(Me.bnt_movSearchNew, "Search for new movies")
+        Me.ToolTip1.SetToolTip(Me.bnt_movSearchNew, "Search for new movies (or press F3)")
         Me.bnt_movSearchNew.UseVisualStyleBackColor = false
         '
         'PictureBoxFanArt
@@ -15821,6 +15821,7 @@ Partial Class Form1
         Me.SearchALLForNewEpisodesToolStripMenuItem.Name = "SearchALLForNewEpisodesToolStripMenuItem"
         Me.SearchALLForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(240, 22)
         Me.SearchALLForNewEpisodesToolStripMenuItem.Text = "Search ALL for New Episodes"
+        Me.SearchALLForNewEpisodesToolStripMenuItem.ToolTipText = "Includes Locked Shows"
         '
         'TVShowBrowserToolStripMenuItem
         '

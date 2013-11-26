@@ -2305,8 +2305,9 @@ Public Class Form1
                 End If
                 'mov_DBScrapedAdd(newFilename)
                 aMovie.UpdateCaches()
-                If Preferences.XbmcTmdbRenameMovie Then
-                    mov_XbmcTmdbRename(aMovie.NfoPathAndFilename)
+                
+                If Preferences.XbmcTmdbMissingFromImdb or Preferences.XbmcTmdbRenameMovie Then
+                    mov_XbmcTmdbDoExtraAndRename(aMovie.NfoPathAndFilename)
                     scraperLog &= "Movie Successfully Renamed" & vbCrLf
                 End If
             End If
@@ -2327,12 +2328,19 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub mov_XbmcTmdbRename(ByVal fullpathandfilename)
+    Private Sub mov_XbmcTmdbDoExtraAndRename(ByVal fullpathandfilename)
         _rescrapeList.FullPathAndFilenames.Clear()
         _rescrapeList.FullPathAndFilenames.Add(fullpathandfilename)
         rescrapeList.ResetFields
-        rescrapeList.Rename_Folders = Preferences.MovFolderRename
-        rescrapeList.Rename_Files = Preferences.MovieRenameEnable 
+        If Preferences.XbmcTmdbRenameMovie Then
+            rescrapeList.Rename_Folders = Preferences.MovFolderRename
+            rescrapeList.Rename_Files = Preferences.MovieRenameEnable 
+        End If
+        If Preferences.XbmcTmdbMissingFromImdb Then
+            rescrapeList.plot = True
+            rescrapeList.mpaa = True
+            rescrapeList.stars = True
+        End If
         RunBackgroundMovieScrape("BatchRescrape")
         While BckWrkScnMovies.IsBusy 
             Application.DoEvents
@@ -3177,8 +3185,8 @@ Public Class Form1
                     If aok Then scraperLog &= "Actor images saved" & vbCrLf
                 End If
                 aMovie.UpdateCaches()
-                If Preferences.XbmcTmdbRenameMovie Then
-                    mov_XbmcTmdbRename(aMovie.NfoPathAndFilename)
+                If Preferences.XbmcTmdbMissingFromImdb Or Preferences.XbmcTmdbRenameMovie Then
+                    mov_XbmcTmdbDoExtraAndRename(aMovie.NfoPathAndFilename)
                     scraperLog &= "Movie Successfully Renamed" & vbCrLf
                 End If
             End If
@@ -23823,6 +23831,7 @@ Public Class Form1
 
         If               e.KeyCode = Keys.Escape Then bckgrndcancel 'BckWrkScnMovies_Cancel
         If               e.KeyCode = Keys.F5     Then doRefresh
+        If               e.KeyCode = Keys.F3     Then doSearchNew
         If e.Control And e.KeyCode = Keys.C      Then AbortFileDownload
     End Sub
 
@@ -23855,6 +23864,12 @@ Public Class Form1
         Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
         If CurrentTab = "movies" Then mov_RebuildMovieCaches()
         If CurrentTab = "tv shows" Then tv_CacheRefresh()
+    End Sub
+
+    Sub doSearchNew
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
+        If CurrentTab = "movies" Then SearchForNew()
+        If CurrentTab = "tv shows" Then ep_Search()
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
