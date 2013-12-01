@@ -14113,7 +14113,6 @@ Public Class Form1
         Call mov_SwitchRuntime()
 
         ListBox9                    .SelectedItem   = Preferences.imdbmirror
-        cbPreferredTrailerResolution.Enabled        = Preferences.gettrailer
         TextBox_OfflineDVDTitle     .Text           = Preferences.OfflineDVDTitle
         tb_MovieRenameEnable        .Text           = Preferences.MovieRenameTemplate
         tb_MovFolderRename          .Text           = Preferences.MovFolderRenameTemplate 
