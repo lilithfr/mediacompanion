@@ -701,11 +701,15 @@ Public Class Classimdb
     ReadOnly Property Outline As String
         Get
             Dim s As String = Regex.Match(Html,MovieRegExs.REGEX_OUTLINE, RegexOptions.Singleline).Groups(1).Value.Trim
+            If s.Contains("<a href=""/title") Then
+                Dim l = s.IndexOf("<a href=""/title")
+                s = s.Substring(0, l)
+            End If
             Dim p As String = Regex.Match(s, MovieRegExs.REGEX_HREF_PATTERN).ToString
             If p <> "" Then
                 s = Regex.Replace(s, "</?a.*?>", String.Empty)
             End If
-            Return s
+            Return s.Trim()
         End Get
     End Property
 
