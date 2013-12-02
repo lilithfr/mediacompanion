@@ -1546,13 +1546,22 @@ Public Class Preferences
             End If
             If Preferences.FrodoEnabled Then
                 If Not Preferences.EdenEnabled Then
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
-                    lst.Add(path)
+                    If Not videots = "" Then
+                        path = videots + "fanart.jpg"
+                        lst.Add(path)
+                    Else
+                        path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+                        lst.Add(path)
+                    End If
+                 Else
+                    If Not videots = "" Then
+                        path = videots + "fanart.jpg"
+                        lst.Add(path)
+                    End If
                 End If
-                If Not videots = "" Then
-                    path = videots + "fanart.jpg"
-                    lst.Add(path)
-                End If
+                'If Not videots = "" Then
+                    
+                'End If
             End If
             If Preferences.basicsavemode Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"

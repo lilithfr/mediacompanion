@@ -1713,34 +1713,51 @@ Public Class Movie
         Dim MoviePath As String = NfoPathPrefName
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg
         Dim isMovieFanart As String = MoviePath.Replace(".nfo","-fanart.jpg")
-        Dim frodoart As String =""
+        Dim eden As Boolean = EdenEnabled
+        Dim frodo As Boolean = FrodoEnabled 
+        'Dim frodoart As String =""
         If IO.Path.GetFileName(MoviePath).ToLower="video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower="index.nfo"Then
             _videotsrootpath = Utilities.RootVideoTsFolder(MoviePath)
-            frodoart = _videotsrootpath+"fanart.jpg"
+            'frodoart = _videotsrootpath+"fanart.jpg"
         End If
-
+        Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath,If(_videotsrootpath<>"",_videotsrootpath,""))
         If Not Preferences.overwritethumbs Then
-            If (EdenEnabled Or FrodoEnabled) AndAlso frodoart = "" Then
-                If File.Exists(isMovieFanart) Then
-                    ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-                    Exit Sub
+            Dim lst As New List(Of String)
+            For Each filepath In paths
+                If File.Exists(filepath) Then
+                    lst.Add(filepath)
                 End If
-            ElseIf (EdenEnabled And FrodoEnabled) AndAlso frodoart <> "" Then
-                If File.Exists(isMovieFanart) And File.Exists(frodoart) Then
-                    ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-                    Exit Sub
-                End If
-            ElseIf (Not EdenEnabled And FrodoEnabled) AndAlso frodoart <> "" Then
-                If File.Exists(frodoart) Then
-                    ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-                    Exit Sub
-                End If
-            ElseIf Preferences.basicsavemode Then
-                If File.Exists(isfanartjpg) OrElse File.Exists(frodoart) Then
-                    ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-                    Exit Sub
-                End If
+            Next
+            If lst.Count > 0 Then
+                For Each filepath In lst
+                    paths.Remove(filepath)
+                Next
             End If
+            If paths.Count = 0 Then
+                ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
+                Exit Sub
+            End If
+            'If (eden Or frodo) AndAlso frodoart = "" Then
+            '    If File.Exists(isMovieFanart) Then
+            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
+            '        Exit Sub
+            '    End If
+            'ElseIf (eden And frodo) AndAlso frodoart <> "" Then
+            '    If File.Exists(isMovieFanart) And File.Exists(frodoart) Then
+            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
+            '        Exit Sub
+            '    End If
+            'ElseIf (Not eden And frodo) AndAlso frodoart <> "" Then
+            '    If File.Exists(frodoart) Then
+            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
+            '        Exit Sub
+            '    End If
+            'ElseIf Preferences.basicsavemode Then
+            '    If File.Exists(isfanartjpg) OrElse File.Exists(frodoart) Then
+            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
+            '        Exit Sub
+            '    End If
+            'End If
         End If
 
         Dim FanartUrl As String=tmdb.GetBackDropUrl
@@ -1750,7 +1767,7 @@ Public Class Movie
         Else
             ReportProgress("Fanart",)
             Try
-                Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath,If(_videotsrootpath<>"",_videotsrootpath,""))
+                'Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath,If(_videotsrootpath<>"",_videotsrootpath,""))
 
                 SaveFanartImageToCacheAndPaths(FanartUrl, paths)
 
