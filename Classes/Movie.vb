@@ -1537,27 +1537,43 @@ Public Class Movie
     End Sub
  
     Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
-        Dim eden As Boolean = Preferences.EdenEnabled
-        Dim frodo As Boolean = Preferences.FrodoEnabled
+        'Dim eden As Boolean = Preferences.EdenEnabled
+        'Dim frodo As Boolean = Preferences.FrodoEnabled
         If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
-        Dim edenart As String = NfoPathPrefName.Replace(".nfo", ".tbn")
-        Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
-        If _videotsrootpath <> "" Then
-            frodoart = _videotsrootpath + "poster.jpg"
-        End If
+        'Dim edenart As String = NfoPathPrefName.Replace(".nfo", ".tbn")
+        'Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
+        'If _videotsrootpath <> "" Then
+        '    frodoart = _videotsrootpath + "poster.jpg"
+        'End If
+        Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
         If Not Preferences.overwritethumbs Then
-            If eden And File.Exists(edenart) And Not frodo Then
-                ReportProgress(, "Eden Poster already exists -> Skipping" & vbCrLf)
-                Exit Sub
-            ElseIf frodo And File.Exists(frodoart) And Not eden Then
-                ReportProgress(, "Frodo Poster already exists -> Skipping" & vbCrLf)
-                Exit Sub
-            ElseIf frodo And eden And File.Exists(edenart) And File.Exists(frodoart) Then
-                ReportProgress(, "Frodo & Eden Posters already exists -> Skipping" & vbCrLf)
+            Dim lst As New List(Of String)
+            For Each filepath In paths
+                If File.Exists(filepath) Then
+                    lst.Add(filepath)
+                End If
+            Next
+            If lst.Count > 0 Then
+                For Each filepath In lst
+                    paths.Remove(filepath)
+                Next
+            End If
+            If paths.Count = 0 Then
+                ReportProgress(,"Poster(s) already exists -> Skipping" & vbCrLf)
                 Exit Sub
             End If
+            'If eden And File.Exists(edenart) And Not frodo Then
+            '    ReportProgress(, "Eden Poster already exists -> Skipping" & vbCrLf)
+            '    Exit Sub
+            'ElseIf frodo And File.Exists(frodoart) And Not eden Then
+            '    ReportProgress(, "Frodo Poster already exists -> Skipping" & vbCrLf)
+            '    Exit Sub
+            'ElseIf frodo And eden And File.Exists(edenart) And File.Exists(frodoart) Then
+            '    ReportProgress(, "Frodo & Eden Posters already exists -> Skipping" & vbCrLf)
+            '    Exit Sub
+            'End If
         End If
 
         If Not Rescrape Then DeletePoster()
@@ -1593,7 +1609,7 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
-                Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                'Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
                 SavePosterToPosterWallCache()
@@ -1713,8 +1729,8 @@ Public Class Movie
         Dim MoviePath As String = NfoPathPrefName
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg
         Dim isMovieFanart As String = MoviePath.Replace(".nfo","-fanart.jpg")
-        Dim eden As Boolean = EdenEnabled
-        Dim frodo As Boolean = FrodoEnabled 
+        'Dim eden As Boolean = EdenEnabled
+        'Dim frodo As Boolean = FrodoEnabled 
         'Dim frodoart As String =""
         If IO.Path.GetFileName(MoviePath).ToLower="video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower="index.nfo"Then
             _videotsrootpath = Utilities.RootVideoTsFolder(MoviePath)
@@ -2343,7 +2359,7 @@ Public Class Movie
         
         'Loads previously scraped details from NFO into _scrapedMovie
         LoadNFO
-
+        ReportProgress(, "!!! Rescraping data for --> " & _scrapedMovie.fullmoviebody.title & vbCrLf)
         If Cancelled() Then Exit Sub
 
         If RescrapeBody(rl) then  
@@ -2525,7 +2541,7 @@ Public Class Movie
         If rl.Rename_Folders Then
             ReportProgress(, RenameMovFolder)
         End If
-
+        ReportProgress(, vbCrLf)
         UpdateCaches()
     End Sub
 
