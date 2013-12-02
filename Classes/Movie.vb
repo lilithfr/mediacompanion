@@ -3008,7 +3008,7 @@ Public Class Movie
             Catch
             End Try
 
-            Return s
+            Return s.Trim()
         End Get
     End Property
 
@@ -3050,7 +3050,7 @@ Public Class Movie
             Catch
             End Try
 
-            Return s
+            Return s.Trim()
         End Get
     End Property
 
