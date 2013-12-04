@@ -220,7 +220,6 @@ Module Module1
             oMovies.RebuildActorCache
         End Try
 
-
         If domovies Then
 
             StartNewMovies
@@ -261,6 +260,7 @@ Module Module1
                 Renamer.setRenamePref(Preferences.tv_RegexRename.Item(Preferences.tvrename), Preferences.tv_RegexScraper)
                 Call episodescraper(showstoscrapelist, False)
                 If DoneAEp Then
+                    Call cleantvcache()
                     Call savetvcache()
                     EnvExit +=4
                 End If
@@ -343,9 +343,9 @@ Module Module1
                 End If
                 If skip = False Then
                     Dim nfofilename As String = IO.Path.GetFileName(fullnfopath)
-                    For j = 0 To MediaFileExtensions.Count - 1
+                    For Each extn In MediaFileExtensions
                         Dim tempfilename As String = nfofilename
-                        tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), MediaFileExtensions(j))
+                        tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), extn)
                         Dim tempstring2 As String = fullnfopath.Replace(IO.Path.GetFileName(fullnfopath), tempfilename)
                         If IO.File.Exists(tempstring2) Then
                             Try
@@ -1496,7 +1496,6 @@ Module Module1
                     '    newwp.extension = extension
                     'End If
                     Shows.allepisodes.Add(newwp)
-
                 Next
             End If
         Next
@@ -1703,22 +1702,6 @@ Module Module1
                                     Case "title"
                                         Dim tempstring As String = ""
                                         tempstring = detail.InnerText
-                                        'If Preferences.ignorearticle = True Then
-                                        '    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                        '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                        '        tempstring = tempstring & ", The"
-                                        '    End If
-                                        'End If
-                                        'If Preferences.ignoreAarticle Then
-                                        '    If tempstring.ToLower.IndexOf("a ") = 0 Then
-                                        '        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
-                                        '    End If
-                                        'End If
-                                        'If Preferences.ignoreAn Then
-                                        '    If tempstring.ToLower.IndexOf("an ") = 0 Then
-                                        '        tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
-                                        '    End If
-                                        'End If
                                         newtvshow.title = Preferences.RemoveIgnoredArticles(tempstring)
                                     Case "fullpathandfilename"
                                         newtvshow.fullpath = detail.InnerText
@@ -1860,67 +1843,45 @@ Module Module1
 
         Next
         Next
-        'Dim doc As New XmlDocument
-
-        'Dim thispref As XmlNode = Nothing
-        'Dim xmlproc As XmlDeclaration
-
-        'xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        'doc.AppendChild(xmlproc)
-        'Dim root As XmlElement
-        'Dim child As XmlElement
-        'root = doc.CreateElement("tvcache")
-        'root.SetAttribute("ver", "3.5")
-        'Dim childchild As XmlElement
-
-        'For Each item In basictvlist
-        '    For Each episode In item.allepisodes
-        '        child = doc.CreateElement("episodedetails")
-        '        child.SetAttribute("NfoPath", episode.episodepath)
-        '        '<episodedetails> attributes 'pure' and 'extension' no longer used? - HueyHQ
-        '        'Dim extension As String = episode.episodepath
-        '        'extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
-        '        'Dim tempstring As String = episode.episodepath
-        '        'tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
-        '        'If Not IsNothing(episode.pure) Then
-        '        '    child.SetAttribute("PureName", episode.pure)
-        '        'End If
-        '        'If Not IsNothing(episode.extension) Then
-        '        '    child.SetAttribute("MediaExtension", episode.extension)
-        '        'End If
-        '        'child.SetAttribute("MultiEpCount", "1")
-        '        childchild = doc.CreateElement("title")
-        '        childchild.InnerText = episode.title
-        '        child.AppendChild(childchild)
-        '        childchild = doc.CreateElement("season")
-        '        childchild.InnerText = episode.seasonno
-        '        child.AppendChild(childchild)
-        '        childchild = doc.CreateElement("episode")
-        '        childchild.InnerText = episode.episodeno
-        '        child.AppendChild(childchild)
-        '        childchild = doc.CreateElement("showid")
-        '        childchild.InnerText = episode.showid
-        '        child.AppendChild(childchild)
-        '        childchild = doc.CreateElement("missing")
-        '        childchild.InnerText = episode.missing
-        '        child.AppendChild(childchild)
-        '        root.AppendChild(child)
-        '    Next
-        '    child = doc.CreateElement("tvshow")
-        '    child.SetAttribute("NfoPath", item.fullpath)
-        '    childchild = doc.CreateElement("title")
-        '    childchild.InnerText = item.title
-        '    child.AppendChild(childchild)
-        '    childchild = doc.CreateElement("id")
-        '    childchild.InnerText = item.id
-        '    child.AppendChild(childchild)
-        '    root.AppendChild(child)
-        'Next
         document.AppendChild(root)
         Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
         document.WriteTo(output)
         output.Close()
+    End Sub
+
+    Private Sub cleantvcache()
+        'For Each item In basictvlist 
+        '    Dim z As Integer = item.allepisodes.Count-1
+        '    If z < 2 Then
+        '        Exit Sub
+        '    End If
+        '    Dim x = 1
+        '    Dim w As New List(Of String)
+        '    Do Until x = z
+        '        For Each ep In item.allepisodes 
+        '            If item.allepisodes(x).title = ep.title Then
+        '                w.Add(x.ToString)
+        '            End If
+        '        Next
+        '        If w.Count > 0 Then
+        '            For Each v In w
+        '            item.allepisodes.RemoveAt(v.ToInt)
+        '            Next 
+        '        End If
+        '        x = x +1
+        '    Loop
+
+        '    'Dim y As Integer = 2
+        '    For x = z-1 to 1 Step -1
+        '        Dim aeptitle As String = item.allepisodes(x).title
+        '        Dim beptitle As String = item.allepisodes(x-1).title
+        '        If aeptitle = beptitle Then
+        '            item.allepisodes.RemoveAt(x-1)
+        '            z = z -1
+        '        End If
+        '    Next
+        'Next
     End Sub
 
     Private Sub util_RegexLoad()
@@ -1967,8 +1928,8 @@ Module Module1
             End If
 
             If actualpathandfilename = "" Then
-                For f = 0 To MediaFileExtensions.Count
-                    tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), MediaFileExtensions(f))
+                For Each extn In MediaFileExtensions
+                    tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), extn)
                     If IO.File.Exists(tempfilename) Then
                         actualpathandfilename = tempfilename
                         Exit For
@@ -1980,10 +1941,10 @@ Module Module1
                 If tempfilename.IndexOf("movie.nfo") <> -1 Then
                     Dim possiblemovies(1000) As String
                     Dim possiblemoviescount As Integer = 0
-                    For f = 1 To 23
+                    For Each extn In MediaFileExtensions
                         Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
                         Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                        Dim pattern As String = "*" & MediaFileExtensions(f)
+                        Dim pattern As String = "*" & extn
                         Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
                         For Each fs_info As System.IO.FileInfo In fs_infos
                             If IO.File.Exists(fs_info.FullName) Then
@@ -3671,32 +3632,35 @@ Module Module1
     Dim MediaFileExtensions As List(Of String) = New List(Of String)
 
     Private Sub InitMediaFileExtensions()
-        MediaFileExtensions.Add(".avi")
-        MediaFileExtensions.Add(".xvid")
-        MediaFileExtensions.Add(".divx")
-        MediaFileExtensions.Add(".img")
-        MediaFileExtensions.Add(".mpg")
-        MediaFileExtensions.Add(".mpeg")
-        MediaFileExtensions.Add(".mov")
-        MediaFileExtensions.Add(".rm")
-        MediaFileExtensions.Add(".3gp")
-        MediaFileExtensions.Add(".m4v")
-        MediaFileExtensions.Add(".wmv")
-        MediaFileExtensions.Add(".asf")
-        MediaFileExtensions.Add(".mp4")
-        MediaFileExtensions.Add(".mkv")
-        MediaFileExtensions.Add(".nrg")
-        MediaFileExtensions.Add(".iso")
-        MediaFileExtensions.Add(".rmvb")
-        MediaFileExtensions.Add(".ogm")
-        MediaFileExtensions.Add(".bin")
-        MediaFileExtensions.Add(".ts")
-        MediaFileExtensions.Add(".vob")
-        MediaFileExtensions.Add(".m2ts")
-        MediaFileExtensions.Add(".rar")
-        MediaFileExtensions.Add(".dvr-ms")
-        MediaFileExtensions.Add(".ifo")
-        MediaFileExtensions.Add(".ssif")
+        For Each extn In Utilities.VideoExtensions
+            MediaFileExtensions.Add(extn)
+        Next
+        'MediaFileExtensions.Add(".avi")
+        'MediaFileExtensions.Add(".xvid")
+        'MediaFileExtensions.Add(".divx")
+        'MediaFileExtensions.Add(".img")
+        'MediaFileExtensions.Add(".mpg")
+        'MediaFileExtensions.Add(".mpeg")
+        'MediaFileExtensions.Add(".mov")
+        'MediaFileExtensions.Add(".rm")
+        'MediaFileExtensions.Add(".3gp")
+        'MediaFileExtensions.Add(".m4v")
+        'MediaFileExtensions.Add(".wmv")
+        'MediaFileExtensions.Add(".asf")
+        'MediaFileExtensions.Add(".mp4")
+        'MediaFileExtensions.Add(".mkv")
+        'MediaFileExtensions.Add(".nrg")
+        'MediaFileExtensions.Add(".iso")
+        'MediaFileExtensions.Add(".rmvb")
+        'MediaFileExtensions.Add(".ogm")
+        'MediaFileExtensions.Add(".bin")
+        'MediaFileExtensions.Add(".ts")
+        'MediaFileExtensions.Add(".vob")
+        'MediaFileExtensions.Add(".m2ts")
+        'MediaFileExtensions.Add(".rar")
+        'MediaFileExtensions.Add(".dvr-ms")
+        'MediaFileExtensions.Add(".ifo")
+        'MediaFileExtensions.Add(".ssif")
     End Sub
 
     Private Function IsMediaExtension(ByVal fileinfo As System.IO.FileInfo) As Boolean
