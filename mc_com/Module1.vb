@@ -1852,36 +1852,41 @@ Module Module1
 
     Private Sub cleantvcache()
         'For Each item In basictvlist 
-        '    Dim z As Integer = item.allepisodes.Count-1
-        '    If z < 2 Then
-        '        Exit Sub
+        '    Dim epcount As Integer = item.allepisodes.Count-1
+        '    If epcount < 2 Then
+        '        Exit For
         '    End If
         '    Dim x = 1
-        '    Dim w As New List(Of String)
-        '    Do Until x = z
+        '    Dim w As New List(Of Integer)
+        '    Do Until x = epcount
         '        For Each ep In item.allepisodes 
         '            If item.allepisodes(x).title = ep.title Then
-        '                w.Add(x.ToString)
+        '                w.Add(x)
         '            End If
         '        Next
-        '        If w.Count > 0 Then
+        '        If w.Count > 1 Then
+        '            item.allepisodes.Insert(x, item.allepisodes(w(w.Count-1)))
+        '            item.allepisodes.RemoveAt(x+1)
+        '            If w(0) = x Then w.RemoveAt(0)
         '            For Each v In w
-        '            item.allepisodes.RemoveAt(v.ToInt)
+        '                item.allepisodes.RemoveAt(v)
+                        
         '            Next 
         '        End If
         '        x = x +1
+        '        w.Clear()
         '    Loop
 
-        '    'Dim y As Integer = 2
-        '    For x = z-1 to 1 Step -1
-        '        Dim aeptitle As String = item.allepisodes(x).title
-        '        Dim beptitle As String = item.allepisodes(x-1).title
-        '        If aeptitle = beptitle Then
-        '            item.allepisodes.RemoveAt(x-1)
-        '            z = z -1
-        '        End If
-        '    Next
-        'Next
+            ''Dim y As Integer = 2
+            ''For x = z-1 to 1 Step -1
+            ''    Dim aeptitle As String = item.allepisodes(x).title
+            ''    Dim beptitle As String = item.allepisodes(x-1).title
+            ''    If aeptitle = beptitle Then
+            ''        item.allepisodes.RemoveAt(x-1)
+            ''        z = z -1
+            ''    End If
+            ''Next
+        Next
     End Sub
 
     Private Sub util_RegexLoad()
