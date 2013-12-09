@@ -1851,42 +1851,35 @@ Module Module1
     End Sub
 
     Private Sub cleantvcache()
-        'For Each item In basictvlist 
-        '    Dim epcount As Integer = item.allepisodes.Count-1
-        '    If epcount < 2 Then
-        '        Exit For
-        '    End If
-        '    Dim x = 1
-        '    Dim w As New List(Of Integer)
-        '    Do Until x = epcount
-        '        For Each ep In item.allepisodes 
-        '            If item.allepisodes(x).title = ep.title Then
-        '                w.Add(x)
-        '            End If
-        '        Next
-        '        If w.Count > 1 Then
-        '            item.allepisodes.Insert(x, item.allepisodes(w(w.Count-1)))
-        '            item.allepisodes.RemoveAt(x+1)
-        '            If w(0) = x Then w.RemoveAt(0)
-        '            For Each v In w
-        '                item.allepisodes.RemoveAt(v)
-                        
-        '            Next 
-        '        End If
-        '        x = x +1
-        '        w.Clear()
-        '    Loop
-
-            ''Dim y As Integer = 2
-            ''For x = z-1 to 1 Step -1
-            ''    Dim aeptitle As String = item.allepisodes(x).title
-            ''    Dim beptitle As String = item.allepisodes(x-1).title
-            ''    If aeptitle = beptitle Then
-            ''        item.allepisodes.RemoveAt(x-1)
-            ''        z = z -1
-            ''    End If
-            ''Next
+        ConsoleOrLog("Cleaning TvCache")
+        For Each item In basictvlist 
+            Dim epcount As Integer = item.allepisodes.Count-1
+            If epcount < 2 Then
+                Exit For
+            End If
+            Dim x = 0
+            Dim w As New List(Of Integer)
+            Do Until x > epcount
+                For y = 0 to item.allepisodes.Count-1
+                    If item.allepisodes(x).seasonno = item.allepisodes(y).seasonno AndAlso item.allepisodes(x).episodeno = item.allepisodes(y).episodeno Then 'item.allepisodes(x).title = ep.title 
+                        w.Add(y)
+                    End If
+                Next
+                If w.Count > 1 Then
+                    item.allepisodes.Insert(x, item.allepisodes(w(w.Count-1)))
+                    item.allepisodes.RemoveAt(x+1)
+                    If w(0) = x Then w.RemoveAt(0)
+                    For y = w.Count-1 to 0 Step -1
+                        Dim v = w(y)
+                        item.allepisodes.RemoveAt(v)
+                        epcount = epcount -1
+                    Next 
+                End If
+                x = x +1
+                w.Clear()
+            Loop
         Next
+        ConsoleOrLog("TvCache Cleaned")
     End Sub
 
     Private Sub util_RegexLoad()
