@@ -2747,151 +2747,6 @@ Public Class WorkingWithNfoFiles
                     End If
                     xmlFileInfo.AppendChild(xmlStreamDetails)
                     xmlEpisode.AppendChild(xmlFileInfo)
-                    ' Removed as streamdetails as placed before fileinfo. Fixed.
-                    'xmlStreamDetails = document.CreateElement("streamdetails")
-                    'xmlFileInfo = document.CreateElement("fileinfo")
-                    'xmlFileInfoType = document.CreateElement("video")
-                    'If ep.Details.StreamDetails.Video.Width <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.Width.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("width")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Width.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.Height <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.Height.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("height")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Height.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.Aspect <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.Aspect.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("aspect")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Aspect.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.Codec <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.Codec.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("codec")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.FormatInfo <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.FormatInfo.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("format")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("durationinseconds")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.Bitrate <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.Bitrate.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("bitrate")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.BitrateMode <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.BitrateMode.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("bitratemode")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.BitrateMax <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.BitrateMax.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("bitratemax")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.Container <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.Container.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("container")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Container.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.CodecId <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.CodecId.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("codecid")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.CodecInfo <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.CodecInfo.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("codecidinfo")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'If ep.Details.StreamDetails.Video.ScanType <> Nothing Then
-                    '    If ep.Details.StreamDetails.Video.ScanType.Value <> "" Then
-                    '        xmlFileInfoTypechild = document.CreateElement("scantype")
-                    '        xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
-                    '        xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '    End If
-                    'End If
-                    'xmlFileInfo.AppendChild(xmlFileInfoType)
-                    'If ep.Details.StreamDetails.Audio.Count > 0 Then
-                    '    For Each aud In ep.Details.StreamDetails.Audio
-                    '        xmlFileInfoType = document.CreateElement("audio")
-                    '        If aud.Language <> Nothing Then
-                    '            If aud.Language.Value <> "" Then
-                    '                xmlFileInfoTypechild = document.CreateElement("language")
-                    '                xmlFileInfoTypechild.InnerText = aud.Language.Value
-                    '                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '            End If
-                    '        End If
-                    '        If aud.Codec <> Nothing Then
-                    '            If aud.Codec.Value <> "" Then
-                    '                xmlFileInfoTypechild = document.CreateElement("codec")
-                    '                xmlFileInfoTypechild.InnerText = aud.Codec.Value
-                    '                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '            End If
-                    '        End If
-                    '        If aud.Channels <> Nothing Then
-                    '            If aud.Channels.Value <> "" Then
-                    '                xmlFileInfoTypechild = document.CreateElement("channels")
-                    '                xmlFileInfoTypechild.InnerText = aud.Channels.Value
-                    '                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '            End If
-                    '        End If
-                    '        If aud.Bitrate <> Nothing Then
-                    '            If aud.Bitrate.Value <> "" Then
-                    '                xmlFileInfoTypechild = document.CreateElement("bitrate")
-                    '                xmlFileInfoTypechild.InnerText = aud.Bitrate.Value
-                    '                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '            End If
-                    '        End If
-                    '        xmlFileInfo.AppendChild(xmlFileInfoType)
-                    '    Next
-                    'End If
-                    'If ep.Details.StreamDetails.Subtitles.Count > 0 Then
-                    '    For Each subt In ep.Details.StreamDetails.Subtitles
-                    '        If subt.Language <> Nothing Then
-                    '            If subt.Language.Value <> "" Then
-                    '                xmlFileInfoType = document.CreateElement("subtitle")
-                    '                xmlFileInfoTypechild = document.CreateElement("language")
-                    '                xmlFileInfoTypechild.InnerText = subt.Language.Value
-                    '                xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
-                    '            End If
-                    '        End If
-                    '        xmlFileInfo.AppendChild(xmlFileInfoType)
-                    '    Next
-                    'End If
-                    'xmlStreamDetails.AppendChild(xmlFileInfo)
-                    'xmlEpisode.AppendChild(xmlStreamDetails)
                 Catch
                 End Try
             End If
@@ -2908,28 +2763,29 @@ Public Class WorkingWithNfoFiles
             xmlEpisodechild.InnerText = ep.Episode.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
 
+            xmlEpisodechild = document.CreateElement("aired")
+            xmlEpisodechild.InnerText = ep.Aired.Value
+            xmlEpisode.AppendChild(xmlEpisodechild)
+            
+            xmlEpisodechild = document.CreateElement("plot")
+            xmlEpisodechild.InnerText = ep.Plot.Value
+            xmlEpisode.AppendChild(xmlEpisodechild)
+
             xmlEpisodechild = document.CreateElement("playcount")
             xmlEpisodechild.InnerText = ep.PlayCount.Value
+            xmlEpisode.AppendChild(xmlEpisodechild)
+            
+            xmlEpisodechild = document.CreateElement("director")
+            xmlEpisodechild.InnerText = ep.Director.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             xmlEpisodechild = document.CreateElement("credits")
             xmlEpisodechild.InnerText = ep.Credits.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
 
-            xmlEpisodechild = document.CreateElement("director")
-            xmlEpisodechild.InnerText = ep.Director.Value
-            xmlEpisode.AppendChild(xmlEpisodechild)
 
             xmlEpisodechild = document.CreateElement("rating")
             xmlEpisodechild.InnerText = ep.Rating.Value
-            xmlEpisode.AppendChild(xmlEpisodechild)
-
-            xmlEpisodechild = document.CreateElement("aired")
-            xmlEpisodechild.InnerText = ep.Aired.Value
-            xmlEpisode.AppendChild(xmlEpisodechild)
-
-            xmlEpisodechild = document.CreateElement("plot")
-            xmlEpisodechild.InnerText = ep.Plot.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             'xmlEpisodechild = document.CreateElement("thumb")

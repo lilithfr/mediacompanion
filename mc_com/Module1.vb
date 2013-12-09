@@ -895,25 +895,9 @@ Module Module1
                                 Try
                                     singleepisode.filedetails = get_hdtags(getfilename(singleepisode.episodepath))
                                     If Not singleepisode.filedetails.filedetails_video.duration Is Nothing Then
-                                        '1h 24mn 48s 546ms
-                                        'Dim hours As Integer
                                         Dim minutes As Integer
                                         tempstring = singleepisode.filedetails.filedetails_video.duration
                                         If Not String.IsNullOrEmpty(tempstring) Then
-                                            'tempint = tempstring.IndexOf("h")
-                                            'If tempint <> -1 Then
-                                                'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                                'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                                'tempstring = Trim(tempstring)
-                                            'End If
-                                            'tempint = tempstring.IndexOf("mn")
-                                            'If tempint <> -1 Then
-                                                'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            'End If
-                                            'If hours <> 0 Then
-                                                'hours = hours * 60
-                                            'End If
-                                            'minutes = minutes + hours
                                             minutes =Math.Round(Convert.ToInt32(tempstring)/60)
                                             singleepisode.runtime = minutes.ToString & " min"
                                         Else
@@ -1117,9 +1101,9 @@ Module Module1
                                     filedetailschildchild = doc.CreateElement("bitrate")
                                     filedetailschildchild.InnerText = item.bitrate
                                     filedetailschild.AppendChild(filedetailschildchild)
-                                    anotherchild.AppendChild(filedetailschild)
                                 End If
                             End If
+                            anotherchild.AppendChild(filedetailschild)
                         Next
                         If listofepisodes(0).filedetails.filedetails_subtitles.Count > 0 Then
                             filedetailschild = doc.CreateElement("subtitle")
@@ -2051,6 +2035,9 @@ Module Module1
                     workingfiledetails.filedetails_audio.Add(audio)
                     CurAuStr += 1
                 End While
+            Else
+                Dim audio As New medianfo_audio
+                workingfiledetails.filedetails_audio.Add(audio)
             End If
             
             Dim NumSubStream As Integer = newfiledetails.filedetails_subtitles.Count
