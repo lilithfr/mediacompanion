@@ -2180,6 +2180,7 @@ Partial Public Class Form1
                                     End Select
                                 Next
                                 singleepisode.PlayCount.Value = "0"
+                                singleepisode.ShowId.Value = tvdbid 
 
                                 progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)

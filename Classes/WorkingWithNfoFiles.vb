@@ -2591,14 +2591,6 @@ Public Class WorkingWithNfoFiles
 
         root = document.CreateElement("multiepisodenfo")    'root starts out as multiepisode, but tested for single episode after initial population.
         For Each ep In listofepisodes
-            'Hack to get ShowID with the data available at this point
-            Dim ThumbnailPath As String = ep.Thumbnail.FileName 'this path contains the showID - we just need to pull it out of the string
-            Dim Split As String() = ThumbnailPath.Split("/")
-            Dim FoundShowID As String = ""
-            If Split.Length >= 6 Then
-                FoundShowID = Split(5) ' ShowID is section 5 from the thumbnail string
-            End If
-            'end hack
 
             xmlEpisode = document.CreateElement("episodedetails")
             If Preferences.enabletvhdtags = True Then
@@ -2797,7 +2789,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             xmlEpisodechild = document.CreateElement("showid")
-            xmlEpisodechild.InnerText = FoundShowID
+            xmlEpisodechild.InnerText = ep.ShowId.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             Dim actorstosave As Integer = ep.ListActors.Count
