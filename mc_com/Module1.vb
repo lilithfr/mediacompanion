@@ -47,6 +47,7 @@ Module Module1
         Dim domovies      As Boolean = False
         Dim dotvepisodes  As Boolean = False
         Dim domediaexport As Boolean = False
+        Dim docacheclean  As Boolean = False
         
 
         For Each arg As String In Environment.GetCommandLineArgs()
@@ -67,7 +68,7 @@ Module Module1
                     Dim arg As New arguments
                     arg.switch = arguments(f)
                     listofargs.Add(arg)
-                    ElseIf arguments(f) = "-v" Then
+                ElseIf arguments(f) = "-v" Then
                     visible = False
                 ElseIf arguments(f) = "-p" Then
                     Dim arg As New arguments
@@ -105,6 +106,10 @@ Module Module1
                         listofargs.Add(arg2)
                         Exit For
                     End Try
+                ElseIf arguments(f) = "-c" Then
+                    Dim arg As New arguments
+                    arg.switch = arguments(f)
+                    listofargs.Add(arg)
                 End If
             Next
         End If
@@ -163,6 +168,9 @@ Module Module1
             End If
             If arg.switch = "-x" Then
                 domediaexport = True
+            End If
+            If arg.switch = "-c" Then
+                docacheclean = True
             End If
         Next
 
@@ -233,7 +241,7 @@ Module Module1
         If dotvepisodes = True Then
             If IO.File.Exists(Preferences.workingProfile.tvcache) Then
                 ConsoleOrLog("Loading Tv cache")
-                Call loadtvcache()
+                Call tvcacheLoad()
             End If
             If IO.File.Exists(Preferences.workingProfile.regexlist) Then
                 Call util_RegexLoad()
@@ -260,8 +268,8 @@ Module Module1
                 Renamer.setRenamePref(Preferences.tv_RegexRename.Item(Preferences.tvrename), Preferences.tv_RegexScraper)
                 Call episodescraper(showstoscrapelist, False)
                 If DoneAEp Then
-                    Call cleantvcache()
-                    Call savetvcache()
+                    Call tvcacheClean()
+                    Call tvcacheSave()
                     EnvExit +=4
                 End If
             End If
@@ -287,6 +295,13 @@ Module Module1
                 End If
             Next
 
+        End If
+        If docacheclean Then
+            ConsoleOrLog("Tv Cache cleaning commencing")
+            Call tvcacheLoad()
+            Call tvcacheClean()
+            Call tvcacheSave()
+            ConsoleOrLog("Tv Cache cleaning complete")
         End If
         ConsoleOrLog("")
         ConsoleOrLog("Tasks Completed")
@@ -1665,7 +1680,7 @@ Module Module1
         fs_infos = Nothing
     End Sub
 
-    Private Sub loadtvcache()
+    Private Sub tvcacheLoad()
         Dim unsortedepisodelist As New List(Of episodeinfo)
         unsortedepisodelist.Clear()
         basictvlist.Clear()
@@ -1756,7 +1771,7 @@ Module Module1
         'Next
     End Sub
 
-    Private Sub savetvcache()
+    Private Sub tvcacheSave()
         Dim fullpath As String = Preferences.workingProfile.tvcache
         If IO.File.Exists(fullpath) Then
             IO.File.Delete(fullpath)
@@ -1834,8 +1849,7 @@ Module Module1
         output.Close()
     End Sub
 
-    Private Sub cleantvcache()
-        ConsoleOrLog("Cleaning TvCache")
+    Private Sub tvcacheClean()
         For Each item In basictvlist 
             Dim epcount As Integer = item.allepisodes.Count-1
             If epcount < 2 Then

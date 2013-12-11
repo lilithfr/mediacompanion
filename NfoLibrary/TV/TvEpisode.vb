@@ -19,15 +19,16 @@ Public Class TvEpisode
             _PureName = value
             MyBase.NfoFilePath = value & ".nfo"
             If String.IsNullOrEmpty(Me.MediaExtension) Then
-                If Not IsMissing Then
-                    For Each Item As String In Utilities.VideoExtensions
-                        If IO.File.Exists(_PureName & Item) Then
-                            _VideoFilePath = _PureName & Item
-                            Me.MediaExtension = Item
-                            Exit For
-                        End If
-                    Next
-                End If
+                ''  disable videofilepath to speed up cache as increases loading time.
+                'If Not IsMissing Then
+                '    'For Each Item As String In Utilities.VideoExtensions
+                '    '    If IO.File.Exists(_PureName & Item) Then
+                '    '        _VideoFilePath = _PureName & Item
+                '    '        Me.MediaExtension = Item
+                '    '        Exit For
+                '    '    End If
+                '    'Next
+                'End If
             Else
                 'If IO.File.Exists(_PureName & Me.MediaExtension) Then
                 _VideoFilePath = _PureName & Me.MediaExtension
