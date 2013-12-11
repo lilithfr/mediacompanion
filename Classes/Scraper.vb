@@ -1085,7 +1085,7 @@ Public Class Classimdb
                     'votes
                     If webpage(f).IndexOf("itemprop=""ratingCount""") <> -1 Then
                         Try
-                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},?\s]*[0-9]?)</span>")
+                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},.?\s]*[0-9]?)</span>")
                             If M.Success = True Then
                                 movienfoarray = M.Groups(1).Value
                             Else
