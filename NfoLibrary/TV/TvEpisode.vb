@@ -20,15 +20,20 @@ Public Class TvEpisode
             MyBase.NfoFilePath = value & ".nfo"
             If String.IsNullOrEmpty(Me.MediaExtension) Then
                 ''  disable videofilepath to speed up cache as increases loading time.
-                'If Not IsMissing Then
-                '    'For Each Item As String In Utilities.VideoExtensions
-                '    '    If IO.File.Exists(_PureName & Item) Then
-                '    '        _VideoFilePath = _PureName & Item
-                '    '        Me.MediaExtension = Item
-                '    '        Exit For
-                '    '    End If
-                '    'Next
-                'End If
+                If Not IsMissing Then
+                    If String.IsNullOrEmpty(EpExtn.Value) Then
+                        For Each Item As String In Utilities.VideoExtensions
+                            If IO.File.Exists(_PureName & Item) Then
+                                _VideoFilePath = _PureName & Item
+                                EpExtn.value = Item
+                                Me.MediaExtension = Item
+                                Exit For
+                            End If
+                        Next
+                    Else
+                        _VideoFilePath = _PureName & EpExtn.Value 
+                    End If
+                End If
             Else
                 'If IO.File.Exists(_PureName & Me.MediaExtension) Then
                 _VideoFilePath = _PureName & Me.MediaExtension
@@ -95,8 +100,9 @@ Public Class TvEpisode
     Public Property Studio As New ProtoProperty(Me, "studio")
     Public Property Trailer As New ProtoProperty(Me, "trailer")
     Public Property Genre As New ProtoProperty(Me, "genre")
-    Private Property Missing As New ProtoProperty(Me, "missing", CacheMode:=CacheMode.Both)
-
+    Public Property Missing As New ProtoProperty(Me, "missing", CacheMode:=CacheMode.Both)
+    Public Property EpExtn As New ProtoProperty(Me, "epexnt", CacheMode:=CacheMode.Both)  'Storing in tvcache so we don't have to search for correct extension every
+                                                                                          'time cache is loaded.
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
     Public Property ShowId As New ProtoProperty(Me, "ShowId", CacheMode:=CacheMode.Both)
