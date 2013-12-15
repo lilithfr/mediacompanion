@@ -553,6 +553,7 @@ Module Module1
             multieps2.episodeno = eps.episodeno
             multieps2.episodepath = eps.episodepath
             multieps2.mediaextension = eps.mediaextension
+            multieps2.extension = eps.extension 
             episodearray.Add(multieps2)
             ConsoleOrLog(vbCrLf & "Working on episode: " & eps.episodepath)
 
@@ -588,6 +589,7 @@ Module Module1
                             multieps.episodeno = M2.Groups(3).Value
                             multieps.episodepath = eps.episodepath
                             multieps.mediaextension = eps.mediaextension
+                            multieps.extension = eps.extension 
                             episodearray.Add(multieps)
                             allepisodes(epcount) = Convert.ToDecimal(M2.Groups(3).Value)
                         End If
@@ -1254,7 +1256,9 @@ Module Module1
                     newwp.seasonno = ep.seasonno
                     newwp.title = ep.title
                     newwp.missing = "False"
+                    newwp.aired = ep.aired
                     newwp.showid = Shows.id
+                    newwp.extension = ep.extension 
                     Shows.allepisodes.Add(newwp)
                 Next
             End If
@@ -1408,6 +1412,7 @@ Module Module1
                         Dim newep As New episodeinfo
                         newep.episodepath = filename2
                         newep.mediaextension = filename
+                        newep.extension = IO.Path.GetExtension(filename)
                         newEpisodeList.Add(newep)
                     End If
                 End If
@@ -1470,8 +1475,12 @@ Module Module1
                                     newepisode.episodeno = episodenew.InnerText
                                 Case "showid"
                                     newepisode.showid = episodenew.InnerText
+                                Case "aired"
+                                    newepisode.aired = episodenew.InnerText
                                 Case "missing"
                                     newepisode.missing = episodenew.innertext
+                                Case "epextn"
+                                    newepisode.extension = episodenew.InnerText
                             End Select
                         Next
                         unsortedepisodelist.Add(newepisode)
@@ -1569,6 +1578,10 @@ Module Module1
 
             childchild = document.CreateElement("showid")
             childchild.InnerText = episode.showid
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("epextn")
+            childchild.InnerText = episode.extension 
             child.AppendChild(childchild)
 
             root.AppendChild(child)

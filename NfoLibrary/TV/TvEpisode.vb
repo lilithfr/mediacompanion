@@ -101,7 +101,7 @@ Public Class TvEpisode
     Public Property Trailer As New ProtoProperty(Me, "trailer")
     Public Property Genre As New ProtoProperty(Me, "genre")
     Public Property Missing As New ProtoProperty(Me, "missing", CacheMode:=CacheMode.Both)
-    Public Property EpExtn As New ProtoProperty(Me, "epexnt", CacheMode:=CacheMode.Both)  'Storing in tvcache so we don't have to search for correct extension every
+    Public Property EpExtn As New ProtoProperty(Me, "epextn", CacheMode:=CacheMode.Both)  'Storing in tvcache so we don't have to search for correct extension every
                                                                                           'time cache is loaded.
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
