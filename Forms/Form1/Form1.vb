@@ -179,6 +179,7 @@ Public Class Form1
     Dim posterThumbedItsMade As Boolean = False
     Dim posterCropString As String
     Dim tab1 As Integer = 0
+    Dim actorflag As Boolean = False
 
     Dim listOfTvFanarts As New List(Of str_FanartList)
     Dim lockedList As Boolean = False
@@ -6681,8 +6682,12 @@ Public Class Form1
 
     Private Sub cbTvActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.SelectedIndexChanged
         Try
-            Call tv_ActorDisplay()
-            cbTvActor.Focus()
+            If Not actorflag Then
+                Call tv_ActorDisplay()
+                cbTvActor.Focus()
+            Else
+                actorflag = False
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6698,8 +6703,12 @@ Public Class Form1
 
     Private Sub cbTvActorRole_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.SelectedIndexChanged
         Try
-            Call tv_ActorRoleDisplay()
-            cbTvActorRole.Focus()
+            If Not actorflag Then 
+                Call tv_ActorRoleDisplay()
+                cbTvActorRole.Focus()
+            Else
+                actorflag = False
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17000,7 +17009,7 @@ Public Class Form1
                     TextBox29.Font = newFont
                     TextBox19.Font = newFont
                     cbTvActor.Font = newFont
-                    tbTvActorRole.Font = newFont
+                    cbTvActorRole.Font = newFont
                     TextBox15.Font = newFont
                     TextBox16.Font = newFont
                     TextBox10.Font = newFont

@@ -64,7 +64,8 @@ Partial Public Class Form1
         TextBox14.Text = ""
         TextBox15.Text = ""
         TextBox16.Text = ""
-        tbTvActorRole.Text = ""
+        cbTvActorRole.Items.Clear()
+        cbTvActorRole.Text = ""
 
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
@@ -83,7 +84,8 @@ Partial Public Class Form1
         TextBox14.Text = ""
         TextBox15.Text = ""
         TextBox16.Text = ""
-        tbTvActorRole.Text = ""
+        cbTvActorRole.Items.Clear()
+        cbTvActorRole.Text = ""
         TextBox19.Text = ""
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
@@ -99,7 +101,8 @@ Partial Public Class Form1
         TextBox14.Text = ""
         TextBox15.Text = ""
         TextBox16.Text = ""
-        tbTvActorRole.Text = ""
+        cbTvActorRole.Items.Clear()
+        cbTvActorRole.Text = ""
         TextBox19.Text = ""
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
@@ -553,7 +556,7 @@ Partial Public Class Form1
                 Call tv_ActorDisplay(True)
             Else
                 cbTvActor.SelectedIndex = 0
-                cbTvActorRole.SelectedIndex = 0
+                Call tv_ActorDisplay()
             End If
         End If
         Panel9.Visible = False
@@ -565,16 +568,21 @@ Partial Public Class Form1
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        tbTvActorRole.Clear()
+        'tbTvActorRole.Clear()
         PictureBox6.Image = Nothing
         If useDefault Then
             imgLocation = Utilities.DefaultActorPath
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorname = cbTvActor.Text Then
-                    Dim index As Integer = cbTvActor.SelectedIndex
-                    cbTvActorRole.SelectedIndex = index
-                    tbTvActorRole.Text = actor.actorrole
+                    For i = 0 to WorkingTvShow.ListActors.Count -1
+                        If cbTvActorRole.Items(i).ToString = actor.actorrole Then
+                            actorflag = True
+                            cbTvActorRole.SelectedIndex = i
+                            Exit For
+                        End If
+                    Next
+                    'tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
                     If eden And Not frodo Then
@@ -605,16 +613,21 @@ Partial Public Class Form1
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        tbTvActorRole.Clear()
+        'tbTvActorRole.Clear()
         PictureBox6.Image = Nothing
         If useDefault Then
             imgLocation = Utilities.DefaultActorPath
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorrole = cbTvActorRole.Text Then
-                    Dim index As Integer = cbTvActorRole.SelectedIndex
-                    cbTvActor.SelectedIndex = index
-                    tbTvActorRole.Text = actor.actorrole
+                    For i = 0 to WorkingTvShow.ListActors.Count -1
+                        If cbTvActor.Items(i).ToString = actor.actorname Then
+                            actorflag = True
+                            cbTvActor.SelectedIndex = i
+                            Exit For
+                        End If
+                    Next
+                    'tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
                     If eden And Not frodo Then
