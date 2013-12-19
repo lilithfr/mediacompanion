@@ -21911,10 +21911,12 @@ Public Class Form1
     End Sub
 
     Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
-        lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        videosourceprefchanged = True
+        If txtVideoSourceAdd.Text <> "" Then        
+            lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+            videosourceprefchanged = True
+        End If
     End Sub
 
     Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
@@ -21937,10 +21939,12 @@ Public Class Form1
     End Sub
 
     Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
-        lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        videosourceprefchanged = True
+        If tb_MovSeptb.Text <> "" Then
+            lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+            videosourceprefchanged = True
+        End If
     End Sub
 
     Private Sub btn_MovSepRem_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepRem.Click
