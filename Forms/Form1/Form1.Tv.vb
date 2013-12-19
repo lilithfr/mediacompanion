@@ -3687,8 +3687,10 @@ Partial Public Class Form1
                             Dim bitmap3 As New Bitmap(bitmap2)
                             bitmap2.Dispose()
                             If frodo And Not eden Then
-                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn", "-thumb.jpg"), True)
+                                Dim frodoimg As String = tempstring.Replace(".tbn", "-thumb.jpg")
+                                Utilities.SafeCopyFile(tempstring, frodoimg, True)
                                 IO.File.Delete(tempstring)
+                                tempstring = frodoimg 
                             ElseIf frodo And eden Then
                                 Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn", "-thumb.jpg"), True)
                             End If
