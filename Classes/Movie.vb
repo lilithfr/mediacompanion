@@ -2208,10 +2208,11 @@ Public Class Movie
                 'Dim oldname = 
                     For i = 0 To subStackList.Count - 1
                         Dim oldname = subStackList(i)
-                        Utilities.isMultiPartMedia(oldname, True) ', isFirstPart, stackdesignator, nextStackPart)
-                        'Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn)
-                        Dim changename As String = subStackList(i).Replace(oldname,newfilename)
-                        File.Move(subStackList(i), changename)
+                        Dim newsubextn As String = IO.Path.GetExtension(oldname)
+                        'Utilities.isMultiPartMedia(oldname, True) ', isFirstPart, stackdesignator, nextStackPart)
+                        Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newsubextn)
+                        'Dim changename As String = subStackList(i).Replace(oldname,newfilename)
+                        File.Move(subStackList(i), newpath & changename)
                         logRename &= If(i, " and ", "") & changename
                     Next
                     log &= "Renamed Subtitle File to " & logRename & vbCrLf
