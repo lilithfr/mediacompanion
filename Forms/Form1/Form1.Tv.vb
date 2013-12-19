@@ -539,9 +539,13 @@ Partial Public Class Form1
             'End If
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             cbTvActor.Items.Clear()
+            cbTvActorRole.Items.Clear()
             For Each actor In Show.ListActors
                 If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
                     cbTvActor.Items.Add(actor.actorname)
+                    Dim role As String = actor.actorrole
+                    If String.IsNullOrEmpty(role) Then role = "-Not Known-"
+                    cbTvActorRole.Items.Add(role)
                 End If
             Next
 
@@ -549,6 +553,7 @@ Partial Public Class Form1
                 Call tv_ActorDisplay(True)
             Else
                 cbTvActor.SelectedIndex = 0
+                cbTvActorRole.SelectedIndex = 0
             End If
         End If
         Panel9.Visible = False
@@ -567,6 +572,48 @@ Partial Public Class Form1
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorname = cbTvActor.Text Then
+                    Dim index As Integer = cbTvActor.SelectedIndex
+                    cbTvActorRole.SelectedIndex = index
+                    tbTvActorRole.Text = actor.actorrole
+                    Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
+                    Dim tempname As String = ""
+                    If eden And Not frodo Then
+                        tempname = actor.actorname.Replace(" ", "_") & ".tbn"
+                    ElseIf frodo Then
+                        tempname = actor.actorname.Replace(" ", "_") & ".jpg"
+                    End If
+                    temppath = temppath & ".actors\" & tempname
+                    If IO.File.Exists(temppath) Then
+                        imgLocation = temppath
+                    ElseIf (Not Preferences.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
+                        imgLocation = actor.actorthumb
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        Try
+            util_ImageLoad(PictureBox6, imgLocation, Utilities.DefaultActorPath)
+            PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
+        Catch
+        End Try
+    End Sub
+
+    Public Sub tv_ActorRoleDisplay(Optional ByVal useDefault As Boolean = False)
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        If WorkingTvShow Is Nothing Then Exit Sub
+        Dim imgLocation As String = Utilities.DefaultActorPath
+        Dim eden As Boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
+        tbTvActorRole.Clear()
+        PictureBox6.Image = Nothing
+        If useDefault Then
+            imgLocation = Utilities.DefaultActorPath
+        Else
+            For Each actor In WorkingTvShow.ListActors
+                If actor.actorrole = cbTvActorRole.Text Then
+                    Dim index As Integer = cbTvActorRole.SelectedIndex
+                    cbTvActor.SelectedIndex = index
                     tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""

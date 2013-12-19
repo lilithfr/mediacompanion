@@ -1267,6 +1267,7 @@ Partial Class Form1
         Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
+        Me.cbTvActorRole = New System.Windows.Forms.ComboBox()
         Me.GroupBox11.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.ContextMenuStrip2.SuspendLayout
@@ -3986,7 +3987,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(327, 624)
-        Me.SplitContainer5.SplitterDistance = 103
+        Me.SplitContainer5.SplitterDistance = 102
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -4061,7 +4062,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 5)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 4)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -4096,7 +4097,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 83)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 82)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -10453,7 +10454,8 @@ Partial Class Form1
         Me.TableLayoutPanel20.Controls.Add(Me.PictureBox6, 8, 6)
         Me.TableLayoutPanel20.Controls.Add(Me.Label8, 8, 0)
         Me.TableLayoutPanel20.Controls.Add(Me.cbTvActor, 10, 4)
-        Me.TableLayoutPanel20.Controls.Add(Me.tbTvActorRole, 10, 5)
+        Me.TableLayoutPanel20.Controls.Add(Me.tbTvActorRole, 10, 2)
+        Me.TableLayoutPanel20.Controls.Add(Me.cbTvActorRole, 10, 5)
         Me.TableLayoutPanel20.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel20.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel20.Name = "TableLayoutPanel20"
@@ -11000,7 +11002,7 @@ Partial Class Form1
         Me.tbTvActorRole.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel20.SetColumnSpan(Me.tbTvActorRole, 2)
         Me.tbTvActorRole.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tbTvActorRole.Location = New System.Drawing.Point(587, 387)
+        Me.tbTvActorRole.Location = New System.Drawing.Point(587, 100)
         Me.tbTvActorRole.Margin = New System.Windows.Forms.Padding(4)
         Me.tbTvActorRole.Name = "tbTvActorRole"
         Me.tbTvActorRole.ReadOnly = true
@@ -13080,10 +13082,10 @@ Partial Class Form1
         Me.TabPage24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TabPage24.Controls.Add(Me.btnTVPrefSaveChanges)
         Me.TabPage24.Controls.Add(Me.TabControl6)
-        Me.TabPage24.Location = New System.Drawing.Point(4, 27)
+        Me.TabPage24.Location = New System.Drawing.Point(4, 25)
         Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage24.Name = "TabPage24"
-        Me.TabPage24.Size = New System.Drawing.Size(1041, 625)
+        Me.TabPage24.Size = New System.Drawing.Size(1041, 627)
         Me.TabPage24.TabIndex = 9
         Me.TabPage24.Text = "TV Preferences"
         Me.TabPage24.UseVisualStyleBackColor = true
@@ -13107,7 +13109,7 @@ Partial Class Form1
         Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
         Me.TabControl6.Name = "TabControl6"
         Me.TabControl6.SelectedIndex = 0
-        Me.TabControl6.Size = New System.Drawing.Size(1037, 621)
+        Me.TabControl6.Size = New System.Drawing.Size(1037, 623)
         Me.TabControl6.TabIndex = 15
         '
         'TabPage30
@@ -13117,7 +13119,7 @@ Partial Class Form1
         Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage30.Name = "TabPage30"
         Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage30.Size = New System.Drawing.Size(1029, 593)
+        Me.TabPage30.Size = New System.Drawing.Size(1029, 595)
         Me.TabPage30.TabIndex = 0
         Me.TabPage30.Text = "General / Scraper"
         Me.TabPage30.UseVisualStyleBackColor = true
@@ -13146,7 +13148,7 @@ Partial Class Form1
         Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox17.Name = "GroupBox17"
         Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox17.Size = New System.Drawing.Size(1021, 585)
+        Me.GroupBox17.Size = New System.Drawing.Size(1021, 587)
         Me.GroupBox17.TabIndex = 22
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
@@ -13695,7 +13697,7 @@ Partial Class Form1
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(1029, 597)
+        Me.TabPage31.Size = New System.Drawing.Size(1029, 595)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -16159,6 +16161,15 @@ Partial Class Form1
         Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(404, 434)
         Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
+        'cbTvActorRole
+        '
+        Me.TableLayoutPanel20.SetColumnSpan(Me.cbTvActorRole, 2)
+        Me.cbTvActorRole.FormattingEnabled = true
+        Me.cbTvActorRole.Location = New System.Drawing.Point(586, 384)
+        Me.cbTvActorRole.Name = "cbTvActorRole"
+        Me.cbTvActorRole.Size = New System.Drawing.Size(114, 23)
+        Me.cbTvActorRole.TabIndex = 49
+        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -17790,6 +17801,7 @@ End Sub
     Friend WithEvents BtnSearchGoogleFanart As System.Windows.Forms.Button
     Friend WithEvents BtnSearchGooglePoster As System.Windows.Forms.Button
     Friend WithEvents cb_XbmcTmdbMissingFromImdb As System.Windows.Forms.CheckBox
+    Friend WithEvents cbTvActorRole As System.Windows.Forms.ComboBox
 
 
 

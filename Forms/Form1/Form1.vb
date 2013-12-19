@@ -6688,6 +6688,22 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbTvActorRole_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.MouseEnter
+        Try
+            cbTvActorRole.Focus()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvActorRole_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.SelectedIndexChanged
+        Try
+            Call tv_ActorRoleDisplay()
+            cbTvActorRole.Focus()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub ExpandAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandAllToolStripMenuItem.Click
         Try
