@@ -2244,6 +2244,12 @@ Public Class Movie
         Dim FilePath As String = movieFileInfo.nfopath   'current path
         Dim Filename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
         Dim currentroot As String = ""
+        Dim stackname As String = mediapathandfilename 
+        Dim isStack         = False
+        Dim isSubStack      = False
+        Dim isFirstPart     = True
+        Dim nextStackPart   = ""
+        Dim stackdesignator = ""
          
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
@@ -2321,7 +2327,13 @@ Public Class Movie
             log &= "!!! All files/Folders moved to new path" & vbCrLf 
         Else
             'Else if in Root folder, moved to new folder movie and ancillary files.
-            Dim Moviename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
+            Dim Moviename As String = ""
+            If Utilities.isMultiPartMedia(stackname, False, isFirstPart, stackdesignator, nextStackPart) Then
+                Moviename = stackname
+            Else
+                Moviename = stackname  '_movieCache.filename.Replace(".nfo","")
+            End If
+            'Dim Moviename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
             For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*.*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
@@ -2876,7 +2888,13 @@ Public Class Movie
         Dim NoDel As Boolean = False
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
-         
+        Dim stackname As String = mediapathandfilename 
+        Dim isStack         = False
+        Dim isSubStack      = False
+        Dim isFirstPart     = True
+        Dim nextStackPart   = ""
+        Dim stackdesignator = ""
+
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
@@ -2956,7 +2974,13 @@ Public Class Movie
             log &= "!!! All files/Folders moved to new path" & vbCrLf 
         Else
             'Else if in Root folder, moved to new folder movie and ancillary files.
-            Dim Moviename As String = _movieCache.filename.Replace(".nfo","")
+            Dim Moviename As String = ""
+            If Utilities.isMultiPartMedia(stackname, False, isFirstPart, stackdesignator, nextStackPart) Then
+                Moviename = stackname   'if multipart then returns excluding stackdesignator
+            Else
+                Moviename = stackname   
+            End If
+            'Dim Moviename As String = _movieCache.filename.Replace(".nfo","")
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
             For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
