@@ -406,6 +406,21 @@ Partial Public Class Form1
         'If Show.IsCache Then    'disabled this test, iscache=true  would not stick when doing batch wizard......
         Show.Load()
         'End If
+        
+        'Fix episodeguide tag
+        Dim lang As String = Show.EpisodeGuideUrl.Value
+        If String.IsNullOrEmpty(lang) Then 
+            lang = "en"
+        Else
+            lang = lang.Substring((lang.LastIndexOf("/")+1)).Replace(".zip","")
+        End If
+        
+        If Not Show.TvdbId.Value = "" Then
+        Show.EpisodeGuideUrl.Value = ""
+            Show.Url.Value = URLs.EpisodeGuide(Show.TvdbId.Value, lang) 'Show.Language.Value)
+            Show.Url.Node.SetAttributeValue("cache", Show.TvdbId.Value)
+        End If
+        'end fix
 
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
