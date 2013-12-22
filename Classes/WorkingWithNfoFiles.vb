@@ -429,7 +429,20 @@ Public Class WorkingWithNfoFiles
         Else
             newtvshow.NfoFilePath = path
             newtvshow.Load()
-
+            'Fix episodeguide tag
+            Dim lang As String = newtvshow.EpisodeGuideUrl.Value
+            If String.IsNullOrEmpty(lang) Then 
+                lang = "en"
+            Else
+                lang = lang.Substring((lang.LastIndexOf("/")+1)).Replace(".zip","")
+            End If
+        
+            If Not newtvshow.TvdbId.Value = "" Then
+            newtvshow.EpisodeGuideUrl.Value = ""
+                newtvshow.Url.Value = URLs.EpisodeGuide(newtvshow.TvdbId.Value, lang)
+                newtvshow.Url.Node.SetAttributeValue("cache", newtvshow.TvdbId.Value)
+            End If
+            'end fix
         End If
         For Each season As TvSeason In newtvshow.Seasons.Values
             For Each episode In season.Episodes

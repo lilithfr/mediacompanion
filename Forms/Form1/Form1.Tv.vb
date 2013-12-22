@@ -1326,17 +1326,27 @@ Partial Public Class Form1
                     Dim multiep As Boolean = TestForMultiepisode(NewEpisode.NfoFilePath)
                     If multiep = False Then
                         NewEpisode.Load()
+                        'Fix for episodes missing showid
+                        If NewEpisode.ShowId.Value <> newtvshownfo.TvdbId.value AndAlso newtvshownfo.TvdbId.Value <> "" Then
+                            NewEpisode.ShowId.Value = newtvshownfo.TvdbId.Value
+                            NewEpisode.Save()   'If new ShowID stored, resave episode nfo.
+                        End If
                         episodelist.Add(NewEpisode)
                     Else
                         Dim loader As New Media_Companion.Utilities
                         Dim multiepisodelist As New List(Of TvEpisode)
+                        Dim need2resave As Boolean = False
                         multiepisodelist = ep_NfoLoad(NewEpisode.NfoFilePath)
                         For Each Ep In multiepisodelist
                             Ep.ShowObj = newtvshownfo
-                            Ep.ShowId.Value = newtvshownfo.TvdbId.Value
+                            'Fix for episodes missing showid
+                            If Ep.ShowId.Value <> newtvshownfo.TvdbId.Value AndAlso newtvshownfo.TvdbId.Value <> "" Then
+                                Ep.ShowId.Value = newtvshownfo.TvdbId.Value
+                                need2resave = True
+                            End If
                             episodelist.Add(Ep)
-
                         Next
+                        If need2resave Then ep_NfoSave(multiepisodelist, NewEpisode.NfoFilePath)    'If new ShowID stored, resave episode nfo.
                     End If
                 End If
             Next fs_info
