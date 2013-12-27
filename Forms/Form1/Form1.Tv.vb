@@ -596,6 +596,9 @@ Partial Public Class Form1
                             cbTvActorRole.SelectedIndex = i
                             Exit For
                         End If
+                        If i = cbTvActorRole.Items.Count Then
+                            Exit For
+                        End If
                     Next
                     'tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
