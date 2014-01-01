@@ -2750,23 +2750,25 @@ Public Class Movie
 
     Public Function RenameExistingMetaFiles As String
 
-        Dim log             = ""
-        Dim targetMovieFile = ""
-        Dim targetNfoFile   = "" 
-        Dim oldName         = "" 
-        Dim newName         = "" 
-        Dim nextStackPart   = ""
-        Dim stackdesignator = ""
-        Dim newpath         = NfoPath
-        Dim mediaFile       = mediapathandfilename
-        Dim stackName       = mediaFile
-        Dim isStack         = False
-        Dim isSubStack      = False
-        Dim isFirstPart     = True
-        Dim newextension    = IO.Path.GetExtension(mediaFile)
-        Dim newfilename     = UserDefinedBaseFileName
-        Dim subName1 As String = mediafile.Replace(newextension,"")
-        Dim subName As String = subName1
+        Dim log                 = ""
+        Dim targetMovieFile     = ""
+        Dim targetNfoFile       = "" 
+        Dim oldName             = "" 
+        Dim newName             = "" 
+        Dim nextStackPart       = ""
+        Dim stackdesignator     = ""
+        Dim substackdesignator  = ""
+        Dim newpath             = NfoPath
+        Dim mediaFile           = mediapathandfilename
+        Dim stackName           = mediaFile
+        Dim isStack             = False
+        Dim isSubStack          = False
+        Dim isFirstPart         = True
+        Dim isSubFirstPart      = True
+        Dim newextension        = IO.Path.GetExtension(mediaFile)
+        Dim newfilename         = UserDefinedBaseFileName
+        Dim subName1 As String  = mediafile.Replace(newextension,"")
+        Dim subName As String   = subName1
         Dim subextn As List(Of String) = Utilities.ListSubtitleFilesExtensions(subName)
         Dim subStackList As New List(Of String)
 
@@ -2804,21 +2806,29 @@ Public Class Movie
                     For Each subex In subextn 
                         subName = subName1 & subex
                         subStackList.Add(subName)
-                        Do While Utilities.isMultiPartMedia(subName, False, isFirstPart, stackdesignator, nextStackPart)
-                            If isFirstPart Then
-                                isSubStack = True                    'this media file has already been added to the list, but check for existing file with new name
-                                Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
-                                targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
-                                'If Utilities.testForFileByName(targetMovieFile, subextn) Then
-                                '    aFileExists = True
-                                '    Exit Do
-                                'End If
-                                'If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                        nextStackPart = ""
+                        isSubStack = False
+                        Dim Stackpart As Integer = 0
+                        Dim newStackPart As String = ""
+                        Do While Utilities.isMultiPartMedia(subName, isSubStack, isSubFirstPart, substackdesignator, nextStackPart)
+                            If isSubFirstPart Then
+                                mediaFile = subName1 & subex
+                                subStackList.Remove(mediaFile)
+                                newStackPart = nextStackPart 
+                                isSubStack = True                  'this media file has already been added to the list, but check for existing file with new name
+                                'Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                                'targetMovieFile = newpath & newfilename & substackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
                             Else
-                                subStackList.Add(mediaFile)
+                                Stackpart = nextStackPart.ToInt - 1
+                                newStackPart = Stackpart.ToString
+                                'subStackList.Add(mediaFile)
                             End If
+                            Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                            targetMovieFile = newpath & newfilename & substackdesignator & (If(isSubFirstPart, If(Integer.TryParse(newStackPart, i), "1".PadLeft(newStackPart.Length, "0"), "A"), newStackPart))
+                            RenameFile(mediaFile, (targetMovieFile & subex), log)
                             subName = newpath & subName & stackdesignator & nextStackPart & subex
                             mediaFile = subName
+                            If Not File.Exists(subName) Then Exit Do
                         Loop
                     Next
                 End If
@@ -2837,7 +2847,11 @@ Public Class Movie
                 subStackList.Sort()
                 For i = 0 To subStackList.Count - 1
                     Dim oldname1 = subStackList(i)
-                    Utilities.isMultiPartMedia(oldname1, True)
+                    If Utilities.isMultiPartMedia(oldname1, False) Then
+                        Utilities.isMultiPartMedia(oldname1, True)
+                    'Else
+
+                    End If
                     'Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn)
                     Dim changename As String = subStackList(i).Replace(oldname1, newfilename)
                     oldName = subStackList(i)
@@ -3166,7 +3180,7 @@ Public Class Movie
             Dim vc As String = ""
             Try
                 Dim vc1 = _scrapedMovie.filedetails.filedetails_video.Codec.value
-                vc = vc1.ToUpper
+                If Not String.IsNullOrEmpty(vc1) Then vc = vc1.ToUpper
             Catch ex As Exception
 
             End Try
@@ -3179,7 +3193,7 @@ Public Class Movie
             Dim vr As String
             Try
                 Dim vr1 As String = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
-                Dim vr2 As String = _scrapedMovie.filedetails.filedetails_video.ScanType.Value
+                Dim vr2 As String = If(_scrapedMovie.filedetails.filedetails_video.ScanType.Value is Nothing, "", _scrapedMovie.filedetails.filedetails_video.ScanType.Value)
                 If vr2.ToLower = "progressive" Then
                     vr2 = "P"
                 Else If vr2.ToLower = "interlaced" or vr2.ToLower = "mbaff" or vr2.ToLower = "paff" Then

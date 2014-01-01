@@ -25024,7 +25024,7 @@ End Sub
     Public Function VidMediaFlags (ByVal Vidfiledetails As FullFileDetails) As Dictionary(Of String, String)
         Dim flags As New Dictionary(Of String, String)
         Try
-            flags.Add("channels", Vidfiledetails.filedetails_audio(0).Channels.Value.Substring(0,1))
+            flags.Add("channels", If(Vidfiledetails.filedetails_audio(0).Channels.Value = "", "", Vidfiledetails.filedetails_audio(0).Channels.Value.Substring(0,1)))
             flags.Add("audio", Vidfiledetails.filedetails_audio(0).Codec.Value)
             flags.Add("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value))
             flags.Add("codec", Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)
