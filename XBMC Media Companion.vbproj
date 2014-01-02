@@ -434,6 +434,12 @@
     <Compile Include="UserControls\ucGenPref_XbmcLink.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\Custom_Tv.Designer.vb">
+      <DependentUpon>Custom_Tv.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Custom_Tv.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmImageBrowseOrUrl.resx">
@@ -537,6 +543,9 @@
     <EmbeddedResource Include="Forms\frmTVShowBrowser.resx">
       <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Custom_Tv.resx">
+      <DependentUpon>Custom_Tv.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\GraphicInfo.resx">
       <DependentUpon>GraphicInfo.vb</DependentUpon>
