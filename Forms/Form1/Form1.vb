@@ -230,6 +230,7 @@ Public Class Form1
     Public singleshow As Boolean = False
     Public showslist As Object
     Public homemovietabindex As Integer = 0
+    Public MyCulture As New System.Globalization.CultureInfo("en-US")
 
     Dim MoviesFiltersResizeCalled As Boolean = False
 

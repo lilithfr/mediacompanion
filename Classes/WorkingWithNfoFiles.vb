@@ -2,11 +2,13 @@
 Imports System.IO
 Imports System.Threading
 Imports System.Text.RegularExpressions
+Imports System.Globalization
 Imports Media_Companion
 
 
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
+    Public Shared MyCulture As New System.Globalization.CultureInfo("en-US")
 
     Public Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
@@ -1370,7 +1372,8 @@ Public Class WorkingWithNfoFiles
                         Case "lastplayed"
                             newmovie.fullmoviebody.lastplayed = thisresult.InnerText 
                         Case "rating"
-                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString
+                            Dim y As String = thisresult.InnerText
+                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString' ("0.00", MyCulture)
                             'If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
                             'If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
                         Case "top250"
@@ -1877,7 +1880,7 @@ Public Class WorkingWithNfoFiles
                 End Try
                 Try
                     child = doc.CreateElement("rating")
-                    child.InnerText = movietosave.fullmoviebody.rating
+                    child.InnerText = movietosave.fullmoviebody.rating.ToRating.ToString("0.0", MyCulture)
                     root.AppendChild(child)
                 Catch
                 End Try
