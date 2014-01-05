@@ -1362,7 +1362,7 @@ Public Class Preferences
 
 
     Public Shared Function GetActorPath(ByVal FullPath As String, ByVal ActorName As String) As String
-
+        If String.IsNullOrEmpty(FullPath) or String.IsNullOrEmpty(ActorName) Then Return ""
         Dim Path As String = FullPath.Replace(IO.Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
 
         If Preferences.FrodoEnabled And IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
