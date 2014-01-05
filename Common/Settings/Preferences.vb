@@ -281,6 +281,7 @@ Public Class Preferences
     Public Shared sortorder As String
     Public Shared tvposter As Boolean
     Public Shared tvfanart As Boolean
+    Public Shared tvfolderjpg As Boolean
     Public Shared downloadtvseasonthumbs As Boolean
     Public Shared enabletvhdtags As Boolean
     Public Shared disabletvlogs As Boolean
@@ -540,6 +541,7 @@ Public Class Preferences
         tvrename = 0
         tvfanart = True
         tvposter = True
+        tvfolderjpg = False
         postertype = "poster"
         downloadtvseasonthumbs = True
         TvdbLanguage = "English"
@@ -897,6 +899,7 @@ Public Class Preferences
         root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42
         root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
         root.AppendChild(doc, "downloadtvfanart",       tvfanart)               'CheckBox10
+        root.AppendChild(doc, "tvfolderjpg",            tvfolderjpg)            'cb_TvFolderJpg
         root.AppendChild(doc, "downloadtvposter",       tvposter)               'CheckBox14
         root.AppendChild(doc, "downloadtvseasonthumbs", downloadtvseasonthumbs) 'CheckBox15
         root.AppendChild(doc, "hdtvtags",               enabletvhdtags)         'CheckBox20
@@ -1167,6 +1170,7 @@ Public Class Preferences
                     Case "usetransparency"                      : usetransparency = thisresult.InnerXml
                     Case "transparencyvalue"                    : transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
                     Case "downloadtvfanart"                     : tvfanart = thisresult.InnerXml
+                    Case "tvfolderjpg"                          : tvfolderjpg = thisresult.InnerXml 
                     Case "roundminutes"                         : roundminutes = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml

@@ -562,7 +562,7 @@ Partial Public Class Form1
                 If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
                     cbTvActor.Items.Add(actor.actorname)
                     Dim role As String = actor.actorrole
-                    If String.IsNullOrEmpty(role) Then role = "-Not Known-"
+                    If String.IsNullOrEmpty(role) Then role = actor.actorname
                     cbTvActorRole.Items.Add(role)
                 End If
             Next
@@ -3144,9 +3144,9 @@ Partial Public Class Form1
                             If isseasonall <> "none" Then
                                 success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"), overwriteimage)
                             End If
-                            If eden Then
+                            If eden OrElse Preferences.tvfolderjpg Then
                                 If isposter = "poster" Then success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "folder.jpg"), overwriteimage)
-                                If isseasonall = "poster" Then success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
+                                If eden AndAlso isseasonall = "poster" Then success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
                             End If
                         ElseIf eden And isseasonall <> "none" Then
                             If isseasonall = "poster" Then

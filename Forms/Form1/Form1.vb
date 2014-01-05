@@ -2602,78 +2602,79 @@ Public Class Form1
     '    Call PreferencesRefactor()
     'End Sub
 
-    Private Sub tv_PreferencesRefactor()                    'this is not called from anywhere.....
-        'If formsize2 = False Then options.chk_rememberformsize.CheckState = CheckState.Unchecked
-        Dim movielistcheck As New List(Of String)
-        Dim tvlistcheck As New List(Of String)
+    'Private Sub tv_PreferencesRefactor()                    'this is not called from anywhere.....
+    '    'If formsize2 = False Then options.chk_rememberformsize.CheckState = CheckState.Unchecked
+    '    Dim movielistcheck As New List(Of String)
+    '    Dim tvlistcheck As New List(Of String)
 
-        For Each folder In movieFolders
-            movielistcheck.Add(folder)
-        Next
+    '    For Each folder In movieFolders
+    '        movielistcheck.Add(folder)
+    '    Next
 
-        For Each folder In tvFolders
-            tvlistcheck.Add(folder)
-        Next
+    '    For Each folder In tvFolders
+    '        tvlistcheck.Add(folder)
+    '    Next
 
-        Dim save As New Preferences
-        'Call save.saveconfig()
-        Dim MyFormObject As New frmOptions
-        MyFormObject.ShowDialog()
+    '    Dim save As New Preferences
+    '    'Call save.saveconfig()
+    '    Dim MyFormObject As New frmOptions
+    '    MyFormObject.ShowDialog()
 
-        Call util_RegexSave()
+    '    Call util_RegexSave()
 
 
-        Preferences.moviesets.Clear()
-        movieFolders.Clear()
-        tvFolders.Clear()
-        Me.util_ConfigLoad()
-        Dim result As Boolean = True
+    '    Preferences.moviesets.Clear()
+    '    movieFolders.Clear()
+    '    tvFolders.Clear()
+    '    Me.util_ConfigLoad()
+    '    Dim result As Boolean = True
 
-        If movielistcheck.Count <> movieFolders.Count Then
-            result = False
-        End If
+    '    If movielistcheck.Count <> movieFolders.Count Then
+    '        result = False
+    '    End If
 
-        If result = True Then
-            For f = 0 To movielistcheck.Count - 1
-                If movielistcheck(f) <> movieFolders(f) Then
-                    result = False
-                    Exit For
-                End If
-            Next
-        End If
+    '    If result = True Then
+    '        For f = 0 To movielistcheck.Count - 1
+    '            If movielistcheck(f) <> movieFolders(f) Then
+    '                result = False
+    '                Exit For
+    '            End If
+    '        Next
+    '    End If
 
-        If result = False Then
-            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, Movie Folders have Changed", "", "Refreshing Movie DB")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
-            mov_RebuildMovieCaches()
-            messbox.Close()
-        End If
+    '    If result = False Then
+    '        Dim messbox As frmMessageBox = New frmMessageBox("Please wait, Movie Folders have Changed", "", "Refreshing Movie DB")
+    '        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+    '        messbox.Show()
+    '        Me.Refresh()
+    '        messbox.Refresh()
+    '        mov_RebuildMovieCaches()
+    '        messbox.Close()
+    '    End If
 
-        result = True
-        If tvlistcheck.Count <> tvFolders.Count Then
-            result = False
-        End If
-        If result = True Then
-            For f = 0 To tvlistcheck.Count - 1
-                If tvlistcheck(f) <> tvFolders(f) Then
-                    result = False
-                    Exit For
-                End If
-            Next
-        End If
-        If result = False Then
-            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, TV Folders have Changed", "", "Refreshing TV DB")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
-            Call tv_CacheRefresh()
-            messbox.Close()
-        End If
-    End Sub
+    '    result = True
+    '    If tvlistcheck.Count <> tvFolders.Count Then
+    '        result = False
+    '    End If
+    '    If result = True Then
+    '        For f = 0 To tvlistcheck.Count - 1
+    '            If tvlistcheck(f) <> tvFolders(f) Then
+    '                result = False
+    '                Exit For
+    '            End If
+    '        Next
+    '    End If
+    '    If result = False Then
+    '        Dim messbox As frmMessageBox = New frmMessageBox("Please wait, TV Folders have Changed", "", "Refreshing TV DB")
+    '        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+    '        messbox.Show()
+    '        Me.Refresh()
+    '        messbox.Refresh()
+    '        Call tv_CacheRefresh()
+    '        messbox.Close()
+    '    End If
+    'End Sub
+
     Sub mov_XBMCScrapeDroppedFiles()
 
         oMovies.AddNewMovies(droppedItems)
@@ -7190,23 +7191,11 @@ Public Class Form1
             Else
                 RadioButton8.Checked = True
             End If
-            If Preferences.tvfanart = True Then
-                cbTvChgShowDLFanart.CheckState = CheckState.Checked
-            Else
-                cbTvChgShowDLFanart.CheckState = CheckState.Unchecked
-            End If
 
-            If Preferences.tvposter = True Then
-                cbTvChgShowDLPoster.CheckState = CheckState.Checked
-            Else
-                cbTvChgShowDLPoster.CheckState = CheckState.Unchecked
-            End If
-
-            If Preferences.downloadtvseasonthumbs = True Then
-                cbTvChgShowDLSeason.CheckState = CheckState.Checked
-            Else
-                cbTvChgShowDLSeason.CheckState = CheckState.Unchecked
-            End If
+            cbTvChgShowDLFanart.CheckState      = If(Preferences.tvfanart, CheckState.Checked, CheckState.Unchecked)
+            cbTvChgShowDLPoster.CheckState      = If(Preferences.tvposter, CheckState.Checked, CheckState.Unchecked)
+            cbTvChgShowDLSeason.CheckState      = If(Preferences.downloadtvseasonthumbs, CheckState.Checked, CheckState.Unchecked)
+            
             If Preferences.tvshow_useXBMC_Scraper = True Then
                 GroupBox2.Enabled = False
                 GroupBox3.Enabled = False
@@ -11055,7 +11044,7 @@ Public Class Form1
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
             If ComboBox2.Text.ToLower = "main image" Then
-                If Preferences.EdenEnabled Then
+                If Preferences.EdenEnabled OrElse Preferences.tvfolderjpg Then
                     imagePaths.Add(workingposterpath)
                     eden =1
                 End If
@@ -13231,102 +13220,102 @@ Public Class Form1
 
 
 
-    Private Sub tv_PosterCheck(ByVal season As String, ByVal path As String, ByVal tvdbid As String)
-        Dim seasonposterpath As String = "na"
-        Dim seasonfilename As String = season 'Season 08
-        Dim seasonnumber As String
-        season = season.Replace("Season ", "season")
-        seasonnumber = season
-        seasonnumber = seasonnumber.Replace("season", "")
-        If seasonnumber.IndexOf("0") = 0 Then
-            Try
-                seasonnumber = seasonnumber.Substring(1, 1)
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-        End If
-        If season = "season00" Then
-            season = "season-specials.tbn"
-        Else
-            season = season & ".tbn"
-        End If
-        For Each folder In tvFolders
-            If path.IndexOf(folder) <> -1 Then
-                seasonposterpath = IO.Path.Combine(folder, season)
-            End If
-        Next
-        If seasonposterpath <> "na" Then
-            If IO.File.Exists(seasonposterpath) Then Exit Sub
-            Dim showlist As New XmlDocument
-            'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-            Dim tvdbstuff As New TVDBScraper
-            Dim thumblist As String = tvdbstuff.GetPosterList(tvdbid)
-            Try
-                showlist.LoadXml(thumblist)
-            Catch
-                Exit Sub
-            End Try
-            Dim tvseasonposterlist As New List(Of TvBanners)
-            tvseasonposterlist.Clear()
-            Dim backupposterurl As String = ""
-            Dim primaryposterurl As String = ""
-            For Each thisresult In showlist("banners")
-                Dim newtvposter As New TvBanners
-                Select Case thisresult.Name
-                    Case "banner"
+'    Private Sub tv_PosterCheck(ByVal season As String, ByVal path As String, ByVal tvdbid As String)
+'        Dim seasonposterpath As String = "na"
+'        Dim seasonfilename As String = season 'Season 08
+'        Dim seasonnumber As String
+'        season = season.Replace("Season ", "season")
+'        seasonnumber = season
+'        seasonnumber = seasonnumber.Replace("season", "")
+'        If seasonnumber.IndexOf("0") = 0 Then
+'            Try
+'                seasonnumber = seasonnumber.Substring(1, 1)
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'                Throw ex
+'#End If
+'            End Try
+'        End If
+'        If season = "season00" Then
+'            season = "season-specials.tbn"
+'        Else
+'            season = season & ".tbn"
+'        End If
+'        For Each folder In tvFolders
+'            If path.IndexOf(folder) <> -1 Then
+'                seasonposterpath = IO.Path.Combine(folder, season)
+'            End If
+'        Next
+'        If seasonposterpath <> "na" Then
+'            If IO.File.Exists(seasonposterpath) Then Exit Sub
+'            Dim showlist As New XmlDocument
+'            'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
+'            Dim tvdbstuff As New TVDBScraper
+'            Dim thumblist As String = tvdbstuff.GetPosterList(tvdbid)
+'            Try
+'                showlist.LoadXml(thumblist)
+'            Catch
+'                Exit Sub
+'            End Try
+'            Dim tvseasonposterlist As New List(Of TvBanners)
+'            tvseasonposterlist.Clear()
+'            Dim backupposterurl As String = ""
+'            Dim primaryposterurl As String = ""
+'            For Each thisresult In showlist("banners")
+'                Dim newtvposter As New TvBanners
+'                Select Case thisresult.Name
+'                    Case "banner"
 
-                        For Each results In thisresult.ChildNodes
-                            Select Case results.Name
-                                Case "url"
-                                    newtvposter.Url = results.InnerText
-                                Case "bannertype"
-                                    newtvposter.BannerType = results.InnerText
-                                Case "language"
-                                    newtvposter.Language = results.InnerText
-                                Case "season"
-                                    newtvposter.Season = results.InnerText
-                            End Select
-                        Next
-                End Select
-                If newtvposter.Language = Preferences.TvdbLanguageCode And newtvposter.Season = seasonnumber Then
-                    primaryposterurl = newtvposter.Url
-                    Exit For
-                Else
-                    If backupposterurl = "" And newtvposter.Season = seasonnumber Then backupposterurl = newtvposter.Url
-                End If
-            Next
-            If primaryposterurl <> "" Then
-                Dim i1 As New PictureBox
+'                        For Each results In thisresult.ChildNodes
+'                            Select Case results.Name
+'                                Case "url"
+'                                    newtvposter.Url = results.InnerText
+'                                Case "bannertype"
+'                                    newtvposter.BannerType = results.InnerText
+'                                Case "language"
+'                                    newtvposter.Language = results.InnerText
+'                                Case "season"
+'                                    newtvposter.Season = results.InnerText
+'                            End Select
+'                        Next
+'                End Select
+'                If newtvposter.Language = Preferences.TvdbLanguageCode And newtvposter.Season = seasonnumber Then
+'                    primaryposterurl = newtvposter.Url
+'                    Exit For
+'                Else
+'                    If backupposterurl = "" And newtvposter.Season = seasonnumber Then backupposterurl = newtvposter.Url
+'                End If
+'            Next
+'            If primaryposterurl <> "" Then
+'                Dim i1 As New PictureBox
 
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = primaryposterurl
-                    Catch
-                        Try
-                            .ImageLocation = backupposterurl
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                    End Try
-                End With
+'                With i1
+'                    .WaitOnLoad = True
+'                    Try
+'                        .ImageLocation = primaryposterurl
+'                    Catch
+'                        Try
+'                            .ImageLocation = backupposterurl
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                    End Try
+'                End With
 
-                Try
-                    If Not i1 Is Nothing Then
-                        i1.Image.Save(seasonposterpath, Imaging.ImageFormat.Jpeg)
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-            End If
-        End If
-    End Sub
+'                Try
+'                    If Not i1 Is Nothing Then
+'                        i1.Image.Save(seasonposterpath, Imaging.ImageFormat.Jpeg)
+'                    End If
+'                Catch ex As Exception
+'#If SilentErrorScream Then
+'                    Throw ex
+'#End If
+'                End Try
+'            End If
+'        End If
+'    End Sub
 
     Private Sub tv_FoldersSetup()
         ListBox5.Items.Clear()
@@ -15125,6 +15114,20 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cb_TvFolderJpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvFolderJpg.CheckedChanged
+        Try
+            If cb_TvFolderJpg.CheckState = CheckState.Checked Then
+                Preferences.tvfolderjpg = True
+            Else
+                Preferences.tvfolderjpg = False
+            End If
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub cbDlTvXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTvXtraFanart.CheckedChanged
         Try
             If cbDlTvXtraFanart.CheckState = CheckState.Checked Then
@@ -15289,6 +15292,7 @@ Public Class Form1
         CheckBox34.CheckState                       = If(Preferences.copytvactorthumbs, CheckState.Checked, CheckState.Unchecked)
         CheckBox14.CheckState                       = If(Preferences.tvposter, CheckState.Checked, CheckState.Unchecked)
         CheckBox10.CheckState                       = If(Preferences.tvfanart, CheckState.Checked, CheckState.Unchecked)
+        cb_TvFolderJpg.CheckState                   = If(Preferences.tvfolderjpg, CheckState.Checked, CheckState.Unchecked)
         CheckBox15.CheckState                       = If(Preferences.downloadtvseasonthumbs, CheckState.Checked, CheckState.Unchecked)
         CheckBox_Use_XBMC_TVDB_Scraper.CheckState   = If(Preferences.tvshow_useXBMC_Scraper, CheckState.Checked, CheckState.Unchecked)
         AutoScrnShtDelay.Text = ScrShtDelay
