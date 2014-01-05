@@ -9276,7 +9276,7 @@ Public Class Form1
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "name"
-                                        acts.actorname = results.InnerText
+                                        acts.actorname = results.InnerText.Trim
                                     Case "role"
                                         Dim newstring As String
                                         newstring = results.InnerText
@@ -9311,7 +9311,7 @@ Public Class Form1
                                             destsorted = True
                                         End If
                                         If destsorted = True Then
-                                            Dim filename As String = acts.actorname.Replace(" ", "_")
+                                            Dim filename As String = acts.actorname.Trim.Replace(" ", "_")
                                             filename = filename & ".tbn"
                                             filename = IO.Path.Combine(workingpath, filename)
                                             Utilities.DownloadFile(acts.actorthumb, filename)

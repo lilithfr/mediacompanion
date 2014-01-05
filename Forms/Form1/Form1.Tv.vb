@@ -3406,7 +3406,7 @@ Partial Public Class Form1
 
             Dim NewAct As New Media_Companion.Actor
             NewAct.ActorId = Act.Id
-            NewAct.actorname = Utilities.cleanSpecChars(Act.Name.Value).TrimStart.TrimEnd
+            NewAct.actorname = Utilities.cleanSpecChars(Act.Name.Value).Trim  'TrimStart.TrimEnd
             Dim newstring As String
             newstring = Act.Role.Value
             newstring = newstring.TrimEnd("|")
