@@ -2816,7 +2816,7 @@ Public Class Form1
 
                     Dim temppath = GetActorPath(workingMovieDetails.fileinfo.fullpathandfilename, actor.actorname)
 
-                    If IO.File.Exists(temppath) Then
+                    If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
                         util_ImageLoad(PictureBoxActor, temppath, Utilities.DefaultActorPath)
                         Exit Sub
                     End If
