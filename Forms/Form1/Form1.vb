@@ -6226,7 +6226,7 @@ Public Class Form1
 
                 PictureBoxAssignedMoviePoster.Image = New System.Drawing.Bitmap(ImageStream)
                 
-                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
+                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
 
                 For Each pth As String In Paths
                     PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
@@ -6309,7 +6309,7 @@ Public Class Form1
 
                 PictureBoxAssignedMoviePoster.Image = New System.Drawing.Bitmap(ImageStream)
                 
-                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
+                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
 
                 For Each pth As String In Paths
                     PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
