@@ -440,6 +440,12 @@
     <Compile Include="UserControls\Custom_Tv.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ucGenPref_Proxy.Designer.vb">
+      <DependentUpon>ucGenPref_Proxy.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucGenPref_Proxy.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmImageBrowseOrUrl.resx">
@@ -555,6 +561,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\TooltipGridViewMovies.resx">
       <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucGenPref_Proxy.resx">
+      <DependentUpon>ucGenPref_Proxy.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucGenPref_XbmcLink.resx">
       <DependentUpon>ucGenPref_XbmcLink.vb</DependentUpon>

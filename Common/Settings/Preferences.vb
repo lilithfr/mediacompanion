@@ -146,7 +146,12 @@ Public Class Preferences
         End Set
     End Property
 
-
+    'Saved General Proxy Prefs
+    Public Shared prxyEnabled As Boolean
+    Public Shared prxyIp As String
+    Public Shared prxyPort As String
+    Public Shared prxyUsername As String
+    Public Shared prxyPassword As String
 
 
     'Saved Movie Prefs
@@ -491,6 +496,12 @@ Public Class Preferences
         splt6 = 230
         showsortdate = False
         XBMC_version = 0
+        'Proxy settings
+        prxyEnabled = False
+        prxyIp = "127.0.0.1"
+        prxyPort = "8099"
+        prxyUsername = "username"
+        prxyPassword = "password"
 
         'Movies
         movies_useXBMC_Scraper = False
@@ -500,7 +511,7 @@ Public Class Preferences
         XbmcTmdbActorDL = False
         moviedefaultlist = 0
         moviesortorder = 0
-        '      movieinvertorder = 0
+        'movieinvertorder = 0
         imdbmirror = "http://www.imdb.com/"
         usefoldernames = False
         movxtrafanart = True
@@ -786,6 +797,11 @@ Public Class Preferences
         root.AppendChild(doc, "ShowLogOnError"       ,  ShowLogOnError       )  'cbShowLogOnError
         root.AppendChild(doc, "CheckForNewVersion"   ,  CheckForNewVersion   )
         root.AppendChild(doc, "MkvMergeGuiPath"      ,  MkvMergeGuiPath      )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyEnabled"          ,  prxyEnabled          )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyIp"               ,  prxyIp               )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyPort"             ,  prxyPort             )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyUsername"         ,  prxyUsername         )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'tbMkvMergeGuiPath
 
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1251,7 +1267,13 @@ Public Class Preferences
                     Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
                     Case "movie_filters"                        : movie_filters.Load(thisresult)
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
-                    Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml 
+                    Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml
+
+                    Case "prxyEnabled"                          : prxyEnabled               = thisresult.InnerXml
+                    Case "prxyIp"                               : prxyIp                    = thisresult.InnerText
+                    Case "prxyPort"                             : prxyPort                  = thisresult.InnerText
+                    Case "prxyUsername"                         : prxyUsername              = thisresult.InnerText
+                    Case "prxyPassword"                         : prxyPassword              = thisresult.InnerText
 
                         'Link properties
                     Case "XBMC_Active" : XBMC_Active = thisresult.InnerXml

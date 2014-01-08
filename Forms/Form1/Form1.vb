@@ -439,6 +439,7 @@ Public Class Form1
         SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
         SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
         SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
+        SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
 
         Try
             If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
@@ -630,6 +631,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
+            TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
 
             'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
             GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
@@ -25058,6 +25060,9 @@ End Sub
         UcGenPref_XbmcLink.Pop
     End Sub
 
+    Private Sub tpPrxy_Enter( sender As Object,  e As EventArgs) Handles tpPrxy.Enter
+        UcGenPref_Proxy1.Pop
+    End Sub
 
     Private Sub cbBtnLink_Click( sender As Object,  e As EventArgs) Handles cbBtnLink.Click
         SetcbBtnLink
