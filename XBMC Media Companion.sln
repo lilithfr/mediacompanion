@@ -46,6 +46,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MediaInfoNET", "MediaInfoNE
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "imdb_thumbs", "Scraper dll sources\imdb_thumbs\imdb_thumbs\imdb_thumbs.vbproj", "{13CBE750-A272-4F39-90D3-2B4E6E1FA04E}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Simplehttp", "C:\Documents and Settings\Rob\My Documents\Visual Studio 2010\Projects\ClassLibrary1\Simplehttp.vbproj", "{481F76A7-A15C-44AA-8671-7BA3115B8A05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +189,16 @@ Global
 		{13CBE750-A272-4F39-90D3-2B4E6E1FA04E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{13CBE750-A272-4F39-90D3-2B4E6E1FA04E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{13CBE750-A272-4F39-90D3-2B4E6E1FA04E}.Release|x86.ActiveCfg = Release|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{481F76A7-A15C-44AA-8671-7BA3115B8A05}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
