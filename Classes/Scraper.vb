@@ -622,7 +622,7 @@ Public Class Classimdb
             'url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
             'url = url & titlesearch & "&as_sitesearch=www.imdb.com"
             url = url & titlesearch & Preferences.engineend(engine)
-            Dim webpage As String = loadwebpage(url, True)
+            Dim webpage As String = loadwebpage(Preferences.proxysettings, url, True)
 
 
             'www.imdb.com/title/tt0402022
@@ -954,7 +954,7 @@ Public Class Classimdb
             If allok = True Then
                 tempstring = imdbmirror & "title/" & imdbid
                 webpage.Clear()
-                webpage = loadwebpage(tempstring, False)
+                webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
 
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
@@ -1199,7 +1199,7 @@ Public Class Classimdb
                     tempstring = imdbmirror & "title/" & imdbid & "/plotsummary"
                     Dim plots(20) As String
                     webpage.Clear()
-                    webpage = loadwebpage(tempstring, False)
+                    webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
                     Dim webPg1 As String = String.Join( "" , webpage.ToArray() )
                     tempint = 0
                     Dim doo As Boolean = False
@@ -1250,7 +1250,7 @@ Public Class Classimdb
                 Try
                     tempstring = imdbmirror & "title/" & imdbid & "/parentalguide#certification"
                     webpage.Clear()
-                    webpage = loadwebpage(tempstring, False)
+                    webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
                     For f = 0 To webpage.Count - 1
                         'mpaa
                         If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
@@ -1294,7 +1294,7 @@ Public Class Classimdb
                     'releaseinfo#akas
                     tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
                     webpage.Clear()
-                    webpage = loadwebpage(tempstring, False)
+                    webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
                     For f = 0 To webpage.Count - 1
                         If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
                             Dim loc As Integer = f
@@ -1370,7 +1370,7 @@ Public Class Classimdb
 
             tempstring = imdbmirror & "title/" & imdbid & "/fullcredits#cast"
             webpage.Clear()
-            webpage = loadwebpage(tempstring, False)
+            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
 
 
             Dim scrapertempint As Integer
@@ -1496,7 +1496,7 @@ Public Class Classimdb
             maxactors= Preferences.maxactors
         End If
 
-        Dim tbl As String = GetActorsTable(  loadwebpage(imdbmirror & "title/" & imdbid & "/fullcredits#cast", True)  )
+        Dim tbl As String = GetActorsTable(  loadwebpage(Preferences.proxysettings, imdbmirror & "title/" & imdbid & "/fullcredits#cast", True)  )
 
         Dim mc As MatchCollection = Regex.Matches(tbl, MovieRegExs.REGEX_TR, RegexOptions.Singleline)
 
@@ -1535,7 +1535,7 @@ Public Class Classimdb
         Try
             Dim webpage As List(Of String)
             tempstring = imdbmirror & "title/" & imdbid & "/trailers"
-            webpage = loadwebpage(tempstring, False)
+            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
             For f = 0 To webpage.Count - 1
                 If webpage(f).IndexOf("/screenplay/") <> -1 Then
                     first = webpage(f).IndexOf("")
@@ -1579,7 +1579,7 @@ Public Class Classimdb
             If allok = True Then
                 allok = False
                 webpage.Clear()
-                webpage = loadwebpage(tempstring, False)
+                webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
                 For f = 0 To webpage.Count - 1
                     If webpage(f).IndexOf("www.totaleclips.com") <> -1 Then
                         first = webpage(f).IndexOf("www.totaleclips.com")
@@ -1616,7 +1616,7 @@ Public Class Classimdb
         Return text
     End Function
 
-    Public Function loadwebpage(ByVal Url As String, ByVal IntoSingleString As Boolean, Optional TimeoutInSecs As Integer=-1)
+    Public Function loadwebpage(ByVal proxy As List(of String), ByVal Url As String, ByVal IntoSingleString As Boolean, Optional TimeoutInSecs As Integer=-1)
 
         Dim webpage As New List(Of String)
         Monitor.Enter(Me)
@@ -1627,8 +1627,14 @@ Public Class Classimdb
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
 
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
-
-            Dim myProxy As New WebProxy("myproxy", 80)
+            If proxy.Item(0).ToLower = "false" Then
+                Dim myProxy As New WebProxy("myproxy", 80)
+                'wrGETURL.Proxy = myProxy
+            Else
+                Dim myProxy As New WebProxy(proxy.Item(1), proxy.Item(2).ToInt)
+                myProxy.Credentials = New NetworkCredential(proxy.Item(3), proxy.item(4))
+                wrGETURL.Proxy = myProxy
+            End If
 
 
             Dim objStream As Stream

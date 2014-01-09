@@ -52,6 +52,7 @@ Public Class Preferences
     Public Shared engineno As Integer = 0
     Public Shared enginefront As New List(Of String)
     Public Shared engineend As New List(Of String)
+    Public Shared proxysettings As New List(Of String)
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
     Public Shared ReadOnly Property EdenEnabled As Boolean
@@ -662,6 +663,16 @@ Public Class Preferences
         MovSepLst.Add("Extended-Edition")
     End Sub
 
+    Public Shared Sub Proxyreload()
+        proxysettings.Clear()
+        proxysettings.Add(prxyEnabled)
+        proxysettings.Add(prxyIp)
+        proxysettings.Add(prxyPort)
+        proxysettings.Add(prxyUsername)
+        proxysettings.Add(prxyPassword)
+        
+    End Sub
+
     Public Shared Sub engineupdate
         enginefront.Clear()
         engineend.Clear()
@@ -969,7 +980,7 @@ Public Class Preferences
         Finally
             If Not IsNothing(output) Then output.Close
         End Try
-
+        Proxyreload()
     End Sub
 
 
@@ -1299,7 +1310,7 @@ Public Class Preferences
         Next
         'If MovSepLst.Count = 0 Then Call ResetMovSepLst() 
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
-
+        Proxyreload()
         XBMC_MC_MovieFolderMappings.IniFolders
     End Sub
 

@@ -631,7 +631,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
+            'TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
 
             'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
             GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
@@ -24741,7 +24741,7 @@ Public Class Form1
 
         Dim s As New Classimdb
 
-        Dim html As String = s.loadwebpage(HOME_PAGE,True,10).ToString
+        Dim html As String = s.loadwebpage(Preferences.proxysettings, HOME_PAGE,True,10).ToString
 
         Dim m = Regex.Match(html,MC_Version_RegEx, RegexOptions.Singleline)
 

@@ -3306,7 +3306,7 @@ Public Class Movie
 
         Dim s As New Classimdb
 
-        Dim html As String = s.loadwebpage(url,True,10).ToString
+        Dim html As String = s.loadwebpage(Preferences.proxysettings, url,True,10).ToString
 
         For Each m As Match In Regex.Matches(html, RegExPattern, RegexOptions.Singleline) 
 

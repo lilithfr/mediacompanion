@@ -11,5 +11,7 @@ Imports System.Security.Cryptography
 Imports Microsoft.Win32
 
 Public Class Simplehttp
-
+    Shared Sub Setproxy(ByRef req As HttpWebRequest)
+        
+    End Sub
 End Class
