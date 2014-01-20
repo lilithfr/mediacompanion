@@ -11,6 +11,10 @@
         End Try
     End Sub
 
+    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Activated
+        tb_PathorUrl.Focus()
+    End Sub
+
     Private Sub btn_Browse_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_Browse.Click
         Try
             'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -28,6 +32,19 @@
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub btn_paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_paste.Click
+        'Get the data stored in the clipboard
+        Dim iData As IDataObject = Clipboard.GetDataObject()
+        'Check to see if the data is in a text format
+        If iData.GetDataPresent(DataFormats.Text) Then
+            'If it's text, then paste it into the textbox
+            tb_PathorUrl.SelectedText = CType(iData.GetData(DataFormats.Text), String)
+        Else
+            'If it's not text, print a warning message
+            MsgBox("Data in the clipboard is not availble for entry into a textbox")
+        End If
     End Sub
 
     Private Sub btn_SetThumb_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_SetThumb.Click

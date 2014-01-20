@@ -5147,59 +5147,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        Try
-            openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
-            openFD.Title = "Select a jpeg image file"
-            openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"
-            openFD.FilterIndex = 0
-            openFD.ShowDialog()
-            TextBox5.Text = openFD.FileName
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
-        Try
-            Movie.SaveFanartImageToCacheAndPath(TextBox5.Text,mov_FanartORExtrathumbPath)
-
-            Dim exists As Boolean = IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
-
-            If exists Then
-                For Each paths In Preferences.offlinefolders
-                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
-                        Dim mediapath As String
-                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                    End If
-                Next
-
-                util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
-
-                util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-
-                mov_SplitContainerAutoPosition()
-            End If
-
-            UpdateMissingFanart
-            XbmcLink_UpdateArtwork
-        Catch ex As Exception
-            MsgBox("Unable To Download Image")
-        End Try
-        Panel3.Visible = False
-    End Sub
-
-    Private Sub btncancelgetthumburl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btncancelgetthumburl.Click
-        Try
-            TextBox5.Text = ""
-            Panel3.Visible = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub btn_MovEnableCrop_Click( sender As System.Object,  e As System.EventArgs) Handles btnMoviePosterEnableCrop.Click
         Try
             Dim t As New frmMovPosterCrop
@@ -6203,92 +6150,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
-        Try
-            openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
-            openFD.Title = "Select a jpeg image File"
-            openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"
-            openFD.FilterIndex = 0
-            openFD.ShowDialog()
-            TextBox4.Text = openFD.FileName
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnSetThumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetThumb.Click
-        Try
-            Dim tempstring As String = ""
-            Dim MyWebClient As New System.Net.WebClient
-
-            Try
-                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox4.Text)
-                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-
-                PictureBoxAssignedMoviePoster.Image = New System.Drawing.Bitmap(ImageStream)
-                
-                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
-
-                For Each pth As String In Paths
-                    PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                Next
-
-                If Preferences.createfolderjpg = True Then
-                    tempstring = Paths(0).Replace(IO.Path.GetFileName(Paths(0)), "folder.jpg")
-                    PictureBoxAssignedMoviePoster.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
-                End If
-
-                util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
-
-                'Dim bitmap3 As New Bitmap(Paths(0))
-                'Dim bitmap2 As New Bitmap(bitmap3)
-                'bitmap3.Dispose()
-                'Dim bm_source As New Bitmap(bitmap2)
-                'Dim bm_dest As New Bitmap(150, 200)
-                'Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                'gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                'gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
-                'Dim tempbitmap As Bitmap = bm_dest
-                'Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
-                'Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                'tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
-                'tempbitmap.Dispose()
-                Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
-                updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
-                'For Each poster As PictureBox In TabPage22.Controls
-                '    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-
-                '        'poster.ImageLocation = path
-                '        'poster.Load()
-                '        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                '        Exit For
-                '    End If
-                'Next
-            Catch ex As Exception
-                MsgBox("Unable To Download Image")
-            End Try
-            GC.Collect()
-    
-            UpdateMissingPoster
-            Panel6.Visible = False
-
-            XbmcLink_UpdateArtwork
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
-        Try
-            Panel6.Visible = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub Button20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button20.Click
         Try
             Dim t As New frmImageBrowseOrUrl 
@@ -6333,7 +6194,7 @@ Public Class Form1
             GC.Collect()
     
             UpdateMissingPoster
-            Panel6.Visible = False
+            'Panel6.Visible = False
 
             XbmcLink_UpdateArtwork
             'Panel6.Visible = True
@@ -8871,109 +8732,6 @@ Public Class Form1
         
     End Sub
 
-    Private Sub Button32_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button32.Click
-        Try
-            Panel11.Visible = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button31_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button31.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            'browser
-            openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
-            openFD.Title = "Select a jpeg image file"
-            openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"
-            openFD.FilterIndex = 0
-            openFD.ShowDialog()
-            TextBox27.Text = openFD.FileName
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button33_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button33.Click
-        Try
-            'set thumb
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-
-            Movie.SaveFanartImageToCacheAndPath(TextBox27.Text,savepath)
-
-
-            'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            'Dim MyWebClient As New System.Net.WebClient
-            'Try
-            '    Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox27.Text)
-            '    Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-            '    Dim tempstring As String
-
-            '    Dim bmp As New Bitmap(ImageStream)
-            '    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-
-            '    If Preferences.resizefanart = 1 Then
-            '        Try
-            '            Dim tempbitmap As Bitmap = bmp
-            '            tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
-            '        Catch ex As Exception
-            '            tempstring = ex.Message.ToString
-            '        End Try
-            '    ElseIf Preferences.resizefanart = 2 Then
-            '        If bmp.Width > 1280 Or bmp.Height > 720 Then
-            '            Dim bm_source As New Bitmap(bmp)
-            '            Dim bm_dest As New Bitmap(1280, 720)
-            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-            '            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-            '            Dim tempbitmap As Bitmap = bm_dest
-            '            tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
-            '        Else
-            '            Thread.Sleep(30)
-            '            bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-            '        End If
-            '    ElseIf Preferences.resizefanart = 3 Then
-            '        If bmp.Width > 960 Or bmp.Height > 540 Then
-            '            Dim bm_source As New Bitmap(bmp)
-            '            Dim bm_dest As New Bitmap(960, 540)
-            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-            '            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-            '            Dim tempbitmap As Bitmap = bm_dest
-            '            tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
-            '        Else
-            '            Thread.Sleep(30)
-            '            bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-            '        End If
-            '    End If
-
-            Dim exists As Boolean = System.IO.File.Exists(savepath)
-            If exists = True Then
-
-                util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
-
-                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
-
-                End If
-
-            End If
-            Label59.Text = PictureBox10.Image.Width
-            Label58.Text = PictureBox10.Image.Height
-
-
-        Catch ex As Exception
-            MsgBox("Unable To Download Image")
-        End Try
-        Panel11.Visible = False
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
-
-    End Sub
-
     Private Sub TextBox_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Enter
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
@@ -11472,58 +11230,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
-    End Sub
-
-    Private Sub Button49_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button49.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            'browse
-            openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
-            openFD.Title = "Select a jpeg image File"
-            openFD.FileName = ""
-            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"
-            openFD.FilterIndex = 0
-            openFD.ShowDialog()
-            TextBox30.Text = openFD.FileName
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button51_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button51.Click
-        Try
-            'set thumb
-            Try
-                Dim MyWebClient As New System.Net.WebClient
-
-                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox30.Text)
-                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-
-                PictureBox13.Image = New System.Drawing.Bitmap(ImageStream)
-                PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
-
-                If combostart = ComboBox2.SelectedItem Then
-                    tv_PictureBoxRight.Image = PictureBox13.Image  '2check
-                End If
-                PictureBox12.Image = PictureBox13.Image
-                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-            Catch ex As Exception
-                MsgBox(ex.ToString)
-            Finally
-                Panel14.Visible = False
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button50_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button50.Click
-        Try
-            'cancel
-            Panel14.Visible = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
     End Sub
 
     Private Sub Button59_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button59.Click
