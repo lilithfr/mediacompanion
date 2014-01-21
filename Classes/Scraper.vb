@@ -141,9 +141,10 @@ Public Class Classimdb
             Dim popularreturn As String = ""
             Dim exactreturn As String = ""
             Dim M As Match
+            title = StrConv(title, VbStrConv.ProperCase)
             title = title.Replace(".", "+")
             title = title.Replace(" ", "+")
-            title = title.Replace("&", "%26")
+            'title = title.Replace("&", "and")
             title = title.Replace("À", "%c0")
             title = title.Replace("Á", "%c1")
             title = title.Replace("Â", "%c2")
@@ -207,7 +208,8 @@ Public Class Classimdb
             title = title.Replace("ý", "%fd")
             title = title.Replace("þ", "%fe")
             title = title.Replace("ÿ", "%ff")
-
+            title = title.Replace("'","%27")
+            title = title.Replace("!", "%21")
             title = title.Replace("&", "%26")
             title = title.Replace(",", "")
             title = title.Replace("++", "+")
@@ -240,6 +242,10 @@ Public Class Classimdb
                     Exit For
                 Catch
                 End Try
+            Next
+            Dim webPg As String = ""
+            For I = 1 to urllinecount
+                webPg += websource(I).ToString
             Next
             GOT_IMDBID = ""
             Dim popular(1000) As String
@@ -476,7 +482,13 @@ Public Class Classimdb
             ' If GOT_IMDBID = "" And backup <> "" Then GOT_IMDBID = backup
             If GOT_IMDBID = "" Then
                 Dim matc As Match
-
+                Dim NoResults As Match
+                For f = 1 To urllinecount
+                    NoResults = Regex.Match(websource(f), "No results.")
+                    If NoResults.Success Then
+                        Return GOT_IMDBID 
+                    End If
+                Next
                 For f = 1 To urllinecount
                     matc = Regex.Match(websource(f), "tt\d{7}")
                     If matc.Success Then
@@ -938,7 +950,7 @@ Public Class Classimdb
             End If
             totalinfo = "<movie>" & vbCrLf
             If allok = False Then
-                If imdbcounter < 300 Then
+                If imdbcounter < 450 Then
                     imdbid = getimdbID(title, year)
                 Else
                     imdbid = getimdbID_fromimdb(title, imdbmirror, year)
