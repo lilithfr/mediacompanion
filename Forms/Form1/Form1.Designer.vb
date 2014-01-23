@@ -10832,7 +10832,7 @@ Me.cbTvActor.Location = New System.Drawing.Point(587, 354)
 Me.cbTvActor.Margin = New System.Windows.Forms.Padding(4)
 Me.cbTvActor.Name = "cbTvActor"
 Me.cbTvActor.Size = New System.Drawing.Size(112, 23)
-Me.cbTvActor.Sorted = true
+Me.cbTvActor.Sorted = false
 Me.cbTvActor.TabIndex = 27
 Me.cbTvActor.TabStop = false
 '

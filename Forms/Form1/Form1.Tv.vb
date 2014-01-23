@@ -404,6 +404,8 @@ Partial Public Class Form1
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
         'If Show.IsCache Then    'disabled this test, iscache=true  would not stick when doing batch wizard......
+        'Dim Show As New Media_Companion.TvShow
+        Show.ListActors.Clear()
         Show.Load()
         'End If
         
@@ -568,7 +570,7 @@ Partial Public Class Form1
             If actor.actorname <> Nothing AndAlso Not cbTvActor.Items.Contains(actor.actorname) Then
                 cbTvActor.Items.Add(actor.actorname)
                 Dim role As String = actor.actorrole
-                If String.IsNullOrEmpty(role) Then role = actor.actorname
+                If String.IsNullOrEmpty(role) Or role = Nothing Then role = actor.actorname
                 cbTvActorRole.Items.Add(role)
             End If
         Next
@@ -594,16 +596,16 @@ Partial Public Class Form1
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorname = cbTvActor.Text Then
-                    For i = 0 to WorkingTvShow.ListActors.Count -1
-                        If cbTvActorRole.Items(i).ToString = actor.actorrole Then
-                            actorflag = True
-                            cbTvActorRole.SelectedIndex = i
-                            Exit For
-                        End If
-                        If i = cbTvActorRole.Items.Count Then
-                            Exit For
-                        End If
-                    Next
+                    'For i = 0 to WorkingTvShow.ListActors.Count -1
+                    '    If cbTvActorRole.Items(i).ToString = actor.actorrole Then
+                    '        actorflag = True
+                    '        cbTvActorRole.SelectedIndex = i
+                    '        Exit For
+                    '    End If
+                    '    If i = cbTvActorRole.Items.Count Then
+                    '        Exit For
+                    '    End If
+                    'Next
                     'tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
@@ -642,13 +644,13 @@ Partial Public Class Form1
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorrole = cbTvActorRole.Text Then
-                    For i = 0 to WorkingTvShow.ListActors.Count -1
-                        If cbTvActor.Items(i).ToString = actor.actorname Then
-                            actorflag = True
-                            cbTvActor.SelectedIndex = i
-                            Exit For
-                        End If
-                    Next
+                    'For i = 0 to WorkingTvShow.ListActors.Count -1
+                    '    If cbTvActor.Items(i).ToString = actor.actorname Then
+                    '        actorflag = True
+                    '        cbTvActor.SelectedIndex = i
+                    '        Exit For
+                    '    End If
+                    'Next
                     'tbTvActorRole.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
@@ -676,6 +678,7 @@ Partial Public Class Form1
 
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
         'If SelectedSeason.ShowObj.IsCache Then
+        SelectedSeason.ShowObj.ListActors.Clear()
         SelectedSeason.ShowObj.Load()
         'End If
         Dim Show As Media_Companion.TvShow

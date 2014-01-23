@@ -6549,6 +6549,8 @@ Public Class Form1
     Private Sub cbTvActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.SelectedIndexChanged
         Try
             If Not actorflag Then
+                actorflag = True
+                cbTvActorRole.SelectedIndex = cbTvActor.SelectedIndex 
                 Call tv_ActorDisplay()
                 cbTvActor.Focus()
             Else
@@ -6570,6 +6572,8 @@ Public Class Form1
     Private Sub cbTvActorRole_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.SelectedIndexChanged
         Try
             If Not actorflag Then 
+                actorflag = True
+                cbTvActor.SelectedIndex = cbTvActorRole.SelectedIndex
                 Call tv_ActorRoleDisplay()
                 cbTvActorRole.Focus()
             Else

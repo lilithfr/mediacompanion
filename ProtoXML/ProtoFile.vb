@@ -213,7 +213,7 @@ Public Class ProtoFile
             End If
         Next
 
-        'Me.CleanDoc()
+        Me.CleanDoc()
         Me.IsCache = False
     End Sub
 
