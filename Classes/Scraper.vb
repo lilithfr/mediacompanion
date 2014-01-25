@@ -137,13 +137,12 @@ Public Class Classimdb
 
     Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
         Monitor.Enter(Me)
-        Dim Simple As Boolean = False
         Try
             Dim Got_Id As String = ""
 
                     'Pass title to IMDB Advanced Search.
 
-            Got_Id = getimdbID_fromimdb_advanced(Simple, title, imdbmirror, movieyear)
+            Got_Id = getimdbID_fromimdb_advanced(title, imdbmirror, movieyear)
             If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
 
                     'Adjust title Swap "&" with "and", or "and" with "&"
@@ -155,21 +154,22 @@ Public Class Classimdb
                 ElseIf title2.ToLower.Contains(" and ") Then
                     title2 = Regex.Replace(title2, "and", "&", RegexOptions.IgnoreCase)
                 End If
+                Got_Id = getimdbID_fromimdb_advanced(title2, imdbmirror, movieyear)
+                If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
             End If
-            Got_Id = getimdbID_fromimdb_advanced(Simple, title2, imdbmirror, movieyear)
-            If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
             
                     'Original Title, change to Proper Case
 
             Dim title3 As String = StrConv(title, VbStrConv.ProperCase)
-            Got_Id = getimdbID_fromimdb_advanced(Simple, title2, imdbmirror, movieyear)
-            If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
+            If title3 <> title Then
+                Got_Id = getimdbID_fromimdb_advanced(title3, imdbmirror, movieyear)
+                If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
+            End If
 
                     'If none of above pass movie, use IMDB's Simple search
 
-            Simple = True
-            Got_Id = getimdbID_fromimdb_advanced(Simple, title, imdbmirror, movieyear)
-            If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
+            Got_Id = getimdbID_fromimdb_simple(title, imdbmirror, movieyear)
+            'If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
 
             Return Got_Id
 
@@ -181,90 +181,19 @@ Public Class Classimdb
         
     End Function
 
-    Public Function getimdbID_fromimdb_advanced(ByVal Simple As Boolean, ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
+    Public Function getimdbID_fromimdb_advanced(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
         Monitor.Enter(Me)
         Try
+            Dim searchyear As String = ""
             Dim popularreturn As String = ""
             Dim exactreturn As String = ""
             Dim M As Match
             Dim titlesearch As String = searchurltitle(title)
-            'title = StrConv(title, VbStrConv.ProperCase)
-            'title = title.Replace(".", "+")
-            'title = title.Replace(" ", "+")
-            ''title = title.Replace("&", "and")
-            'title = title.Replace("À", "%c0")
-            'title = title.Replace("Á", "%c1")
-            'title = title.Replace("Â", "%c2")
-            'title = title.Replace("Ã", "%c3")
-            'title = title.Replace("Ä", "%c4")
-            'title = title.Replace("Å", "%c5")
-            'title = title.Replace("Æ", "%c6")
-            'title = title.Replace("Ç", "%c7")
-            'title = title.Replace("È", "%c8")
-            'title = title.Replace("É", "%c9")
-            'title = title.Replace("Ê", "%ca")
-            'title = title.Replace("Ë", "%cb")
-            'title = title.Replace("Ì", "%cc")
-            'title = title.Replace("Í", "%cd")
-            'title = title.Replace("Î", "%ce")
-            'title = title.Replace("Ï", "%cf")
-            'title = title.Replace("Ð", "%d0")
-            'title = title.Replace("Ñ", "%d1")
-            'title = title.Replace("Ò", "%d2")
-            'title = title.Replace("Ó", "%d3")
-            'title = title.Replace("Ô", "%d4")
-            'title = title.Replace("Õ", "%d5")
-            'title = title.Replace("Ö", "%d6")
-            'title = title.Replace("Ø", "%d8")
-            'title = title.Replace("Ù", "%d9")
-            'title = title.Replace("Ú", "%da")
-            'title = title.Replace("Û", "%db")
-            'title = title.Replace("Ü", "%dc")
-            'title = title.Replace("Ý", "%dd")
-            'title = title.Replace("Þ", "%de")
-            'title = title.Replace("ß", "%df")
-            'title = title.Replace("à", "%e0")
-            'title = title.Replace("á", "%e1")
-            'title = title.Replace("â", "%e2")
-            'title = title.Replace("ã", "%e3")
-            'title = title.Replace("ä", "%e4")
-            'title = title.Replace("å", "%e5")
-            'title = title.Replace("æ", "%e6")
-            'title = title.Replace("ç", "%e7")
-            'title = title.Replace("è", "%e8")
-            'title = title.Replace("é", "%e9")
-            'title = title.Replace("ê", "%ea")
-            'title = title.Replace("ë", "%eb")
-            'title = title.Replace("ì", "%ec")
-            'title = title.Replace("í", "%ed")
-            'title = title.Replace("î", "%ee")
-            'title = title.Replace("ï", "%ef")
-            'title = title.Replace("ð", "%f0")
-            'title = title.Replace("ñ", "%f1")
-            'title = title.Replace("ò", "%f2")
-            'title = title.Replace("ó", "%f3")
-            'title = title.Replace("ô", "%f4")
-            'title = title.Replace("õ", "%f5")
-            'title = title.Replace("ö", "%f6")
-            'title = title.Replace("÷", "%f7")
-            'title = title.Replace("ø", "%f8")
-            'title = title.Replace("ù", "%f9")
-            'title = title.Replace("ú", "%fa")
-            'title = title.Replace("û", "%fb")
-            'title = title.Replace("ü", "%fc")
-            'title = title.Replace("ý", "%fd")
-            'title = title.Replace("þ", "%fe")
-            'title = title.Replace("ÿ", "%ff")
-            'title = title.Replace("'","%27")
-            'title = title.Replace("!", "%21")
-            'title = title.Replace("&", "%26")
-            'title = title.Replace(",", "")
-            'title = title.Replace("++", "+")
-            If Not Simple Then
-                titlesearch = imdbmirror & "search/title?title=" & titlesearch & "&title_type=feature,tv_movie,tv_special"
-            Else
-                titlesearch = imdbmirror & "find?s=tt&q=" & titlesearch
+            If movieyear <> "" Then
+                Dim yr As Integer = movieyear.ToInt
+                searchyear = "release_date=" & (yr-1.ToString) & "," & (yr+1.ToString) & "&"
             End If
+            titlesearch = imdbmirror & "search/title?" & searchyear & "title=" & titlesearch & "&title_type=feature,tv_movie,tv_special"
             Dim urllinecount As Integer
             Dim GOT_IMDBID As String
             Dim allok As Boolean = False
@@ -317,7 +246,9 @@ Public Class Classimdb
                         Dim length As Integer
                         first = websource(f).LastIndexOf("href=""/title/tt") + 13
                         length = 9
-                        backup = websource(f).Substring(first, length)
+                        If first > 12 Then
+                            backup = websource(f).Substring(first, length)
+                        End If
                     End If
                 End If
                 If movieyear <> "" Then
@@ -346,7 +277,9 @@ Public Class Classimdb
                     Dim length As Integer
                     first = onlyid.LastIndexOf("href=""/title/tt") + 13
                     length = 9
-                    GOT_IMDBID = onlyid.Substring(first, length)
+                    If first > 12 Then
+                        GOT_IMDBID = onlyid.Substring(first, length)
+                    End If
                 End If
                 Dim populartotal As String = ""
                 Dim exacttotal As String = ""
@@ -557,6 +490,94 @@ Public Class Classimdb
         End Try
     End Function
 
+    Public Function getimdbID_fromimdb_simple(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
+        Monitor.Enter(Me)
+        Dim GOT_IMDBID As String = ""
+        Try
+            'Dim popularreturn As String = ""
+            'Dim exactreturn As String = ""
+            'Dim M As Match
+            Dim titlesearch As String = searchurltitle(title)
+            titlesearch = imdbmirror & "find?q=" & titlesearch & "&s=tt&exact=true&ref_=fn_tt_ex"
+            Dim urllinecount As Integer
+            'Dim GOT_IMDBID As String
+            Dim allok As Boolean = False
+            Dim websource(4000)
+            For f = 1 To 10
+                Try
+                    Dim wrGETURL As WebRequest
+                    wrGETURL = WebRequest.Create(titlesearch)
+                    Dim myProxy As New WebProxy("myproxy", 80)
+                    myProxy.BypassProxyOnLocal = True
+                    Dim objStream As Stream
+                    objStream = wrGETURL.GetResponse.GetResponseStream()
+                    Dim objReader As New StreamReader(objStream)
+                    Dim sLine As String = ""
+                    urllinecount = 0
+                    Do While Not sLine Is Nothing
+                        urllinecount += 1
+                        sLine = objReader.ReadLine
+                        If Not sLine Is Nothing Then
+                            websource(urllinecount) = sLine
+                        End If
+                    Loop
+                    urllinecount -= 1
+                    allok = True
+                    Exit For
+                Catch
+                End Try
+            Next
+
+            GOT_IMDBID = ""
+            Dim resultlist As String = ""
+            Dim popular(1000) As String
+            Dim atpopular As Boolean = False
+            Dim popularcount As Integer = 0
+            Dim exact() As String
+            Dim atexact As Boolean = False
+            Dim exactcount As Integer = 0
+
+            Dim yearcounter As Integer = 0
+            Dim year(1000) As Integer
+            Dim backup As String = ""
+
+
+            For f = 1 To urllinecount
+                If websource(f).IndexOf("<table class=""findList"">") <> -1 Then
+                    If websource(f+1).IndexOf("<tr class=""findResult") <> -1 Then
+                        resultlist = websource(f+1).ToString
+                        Exit For
+                    End If
+                End If
+            Next
+            If resultlist = "" Then
+                Return "Error"
+            Else
+                exact = Regex.Split(resultlist, "<tr class=")
+                exactcount = exact.GetUpperBound(0)
+            End If
+            If exactcount <> 0 Then
+                For f = 1 to exactcount
+                    If exact(f).Contains(title) AndAlso exact(f).Contains(movieyear) AndAlso Not exact(f).ToLower.Contains("tv episode") Then
+                            Dim first As Integer
+                            Dim length As Integer
+                            first = exact(f).LastIndexOf("href=""/title/tt") + 13
+                            length = 9
+                            backup = exact(f).Substring(first, length)
+                        Exit For
+                    End If
+                Next
+            End If
+            GOT_IMDBID = backup
+
+        Catch
+            Return "Error"
+        Finally
+            Monitor.Exit(Me)
+        End Try
+        Return GOT_IMDBID 
+    End Function
+
     Public Function CharCount(ByVal OrigString As String, ByVal Chars As String, Optional ByVal CaseSensitive As Boolean = False) As Long
 
         Dim lLen As Long
@@ -609,75 +630,6 @@ Public Class Classimdb
             'Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
             Dim url As String = Preferences.enginefront(engine)
             Dim titlesearch As String = searchurltitle(title)
-            'titlesearch = titlesearch.Replace(".", "+")
-            'titlesearch = titlesearch.Replace(" ", "+")
-            'titlesearch = titlesearch.Replace("_", "+")
-            'titlesearch = titlesearch.Replace("·", "%C2%B7")
-            'titlesearch = titlesearch.Replace("À", "%c0")
-            'titlesearch = titlesearch.Replace("Á", "%c1")
-            'titlesearch = titlesearch.Replace("Â", "%c2")
-            'titlesearch = titlesearch.Replace("Ã", "%c3")
-            'titlesearch = titlesearch.Replace("Ä", "%c4")
-            'titlesearch = titlesearch.Replace("Å", "%c5")
-            'titlesearch = titlesearch.Replace("Æ", "%c6")
-            'titlesearch = titlesearch.Replace("Ç", "%c7")
-            'titlesearch = titlesearch.Replace("È", "%c8")
-            'titlesearch = titlesearch.Replace("É", "%c9")
-            'titlesearch = titlesearch.Replace("Ê", "%ca")
-            'titlesearch = titlesearch.Replace("Ë", "%cb")
-            'titlesearch = titlesearch.Replace("Ì", "%cc")
-            'titlesearch = titlesearch.Replace("Í", "%cd")
-            'titlesearch = titlesearch.Replace("Î", "%ce")
-            'titlesearch = titlesearch.Replace("Ï", "%cf")
-            'titlesearch = titlesearch.Replace("Ð", "%d0")
-            'titlesearch = titlesearch.Replace("Ñ", "%d1")
-            'titlesearch = titlesearch.Replace("Ò", "%d2")
-            'titlesearch = titlesearch.Replace("Ó", "%d3")
-            'titlesearch = titlesearch.Replace("Ô", "%d4")
-            'titlesearch = titlesearch.Replace("Õ", "%d5")
-            'titlesearch = titlesearch.Replace("Ö", "%d6")
-            'titlesearch = titlesearch.Replace("Ø", "%d8")
-            'titlesearch = titlesearch.Replace("Ù", "%d9")
-            'titlesearch = titlesearch.Replace("Ú", "%da")
-            'titlesearch = titlesearch.Replace("Û", "%db")
-            'titlesearch = titlesearch.Replace("Ü", "%dc")
-            'titlesearch = titlesearch.Replace("Ý", "%dd")
-            'titlesearch = titlesearch.Replace("Þ", "%de")
-            'titlesearch = titlesearch.Replace("ß", "%df")
-            'titlesearch = titlesearch.Replace("à", "%e0")
-            'titlesearch = titlesearch.Replace("á", "%e1")
-            'titlesearch = titlesearch.Replace("â", "%e2")
-            'titlesearch = titlesearch.Replace("ã", "%e3")
-            'titlesearch = titlesearch.Replace("ä", "%e4")
-            'titlesearch = titlesearch.Replace("å", "%e5")
-            'titlesearch = titlesearch.Replace("æ", "%e6")
-            'titlesearch = titlesearch.Replace("ç", "%e7")
-            'titlesearch = titlesearch.Replace("è", "%e8")
-            'titlesearch = titlesearch.Replace("é", "%e9")
-            'titlesearch = titlesearch.Replace("ê", "%ea")
-            'titlesearch = titlesearch.Replace("ë", "%eb")
-            'titlesearch = titlesearch.Replace("ì", "%ec")
-            'titlesearch = titlesearch.Replace("í", "%ed")
-            'titlesearch = titlesearch.Replace("î", "%ee")
-            'titlesearch = titlesearch.Replace("ï", "%ef")
-            'titlesearch = titlesearch.Replace("ð", "%f0")
-            'titlesearch = titlesearch.Replace("ñ", "%f1")
-            'titlesearch = titlesearch.Replace("ò", "%f2")
-            'titlesearch = titlesearch.Replace("ó", "%f3")
-            'titlesearch = titlesearch.Replace("ô", "%f4")
-            'titlesearch = titlesearch.Replace("õ", "%f5")
-            'titlesearch = titlesearch.Replace("ö", "%f6")
-            'titlesearch = titlesearch.Replace("÷", "%f7")
-            'titlesearch = titlesearch.Replace("ø", "%f8")
-            'titlesearch = titlesearch.Replace("ù", "%f9")
-            'titlesearch = titlesearch.Replace("ú", "%fa")
-            'titlesearch = titlesearch.Replace("û", "%fb")
-            'titlesearch = titlesearch.Replace("ü", "%fc")
-            'titlesearch = titlesearch.Replace("ý", "%fd")
-            'titlesearch = titlesearch.Replace("þ", "%fe")
-            'titlesearch = titlesearch.Replace("ÿ", "%ff")
-            'titlesearch = titlesearch.Replace("&", "%26")
-            'titlesearch = titlesearch.Replace("++", "+")
             If goodyear = True Then
                 titlesearch = titlesearch & "+%28" & year & "%29"
             End If
@@ -1079,11 +1031,11 @@ Public Class Classimdb
             End If
             totalinfo = "<movie>" & vbCrLf
             If allok = False Then
-                'If imdbcounter < 450 Then
-                '    imdbid = getimdbID(title, year)
-                'Else
+                If imdbcounter < 450 Then
+                    imdbid = getimdbID(title, year)
+                Else
                     imdbid = getimdbID_fromimdb(title, imdbmirror, year)
-                'End If
+                End If
                 If imdbid <> "" And imdbid.IndexOf("tt") = 0 And imdbid.Length = 9 Then
                     allok = True
                 End If

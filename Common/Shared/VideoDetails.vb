@@ -23,6 +23,7 @@ Public Class VideoDetails
     Public ReadOnly Property VideoResolution As Integer
         Get
             Try
+                If String.IsNullOrEmpty(Width.Value) or String.IsNullOrEmpty(Height.Value) Then Return -1
                 Dim w As Integer = Convert.ToInt32(Width .Value)
                 Dim h As Integer = Convert.ToInt32(Height.Value)
 
