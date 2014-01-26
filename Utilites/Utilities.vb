@@ -1190,7 +1190,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
         Dim tempbitmap As Bitmap = bm_dest
         Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
-        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\") ' & filename & ".jpg"
+        If Not Directory.Exists(path) Then
+            Directory.CreateDirectory(path)
+        End If
+        path = path & filename & ".jpg"
         Try
             File.Delete(path)
         Catch

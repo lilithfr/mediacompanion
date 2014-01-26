@@ -2705,16 +2705,16 @@ Public Class Movie
                 Utilities.SafeDeleteFile(PosterPath     )
                 Utilities.SafeDeleteFile(PosterCachePath)
             End Try
-            Try
-                For Each poster As PictureBox In Form1.TabPage22.Controls
-            If poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename Then
-                poster.ImageLocation = posterpath
-                poster.Load()
-                poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename
-            End If
-        Next
-            Catch
-            End Try
+            'Try
+            '    For Each poster As PictureBox In Form1.TabPage22.Controls
+            '        If poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename Then
+            '            poster.ImageLocation = posterpath
+            '            poster.Load()
+            '            poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename
+            '        End If
+            '    Next
+            'Catch
+            'End Try
         End If
     End Sub
 
