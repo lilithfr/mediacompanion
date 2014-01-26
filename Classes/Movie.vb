@@ -2141,6 +2141,11 @@ Public Class Movie
         Dim subStackList As New List(Of String)'(New String() {subName})
         'If Not subextn = "" Then subStackList.Add((subName & subextn))
 
+        If newextension.ToLower = ".disc" Then
+            log &= "!!! Media Stub files are not to be renamed." & vbCrLf
+            Return log
+        End If
+
         Dim aFileExists As Boolean = False
         Try
             ''create new filename (hopefully removing invalid chars first else Move (rename) will fail)
@@ -2244,12 +2249,18 @@ Public Class Movie
         Dim FilePath As String = movieFileInfo.nfopath   'current path
         Dim Filename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
         Dim currentroot As String = ""
-        Dim stackname As String = mediapathandfilename 
+        Dim stackname As String = mediapathandfilename
+        Dim newextension As String = IO.Path.GetExtension(mediapathandfilename)
         Dim isStack         = False
         Dim isSubStack      = False
         Dim isFirstPart     = True
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
+
+        If newextension.ToLower = ".disc" Then
+            log &= "!!! Media Stub files are not to be renamed." & vbCrLf
+            Return log
+        End If
          
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
@@ -2772,6 +2783,11 @@ Public Class Movie
         Dim subextn As List(Of String) = Utilities.ListSubtitleFilesExtensions(subName)
         Dim subStackList As New List(Of String)
 
+        If newextension.ToLower = ".disc" Then
+            log &= "!!! Media Stub files are not to be renamed." & vbCrLf
+            Return log
+        End If
+
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
@@ -2902,12 +2918,18 @@ Public Class Movie
         Dim NoDel As Boolean = False
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
-        Dim stackname As String = mediapathandfilename 
+        Dim stackname As String = mediapathandfilename
+        Dim newextension    = IO.Path.GetExtension(mediapathandfilename)
         Dim isStack         = False
         Dim isSubStack      = False
         Dim isFirstPart     = True
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
+
+        If newextension.ToLower = ".disc" Then
+            log &= "!!! Media Stub files are not to be renamed." & vbCrLf
+            Return log
+        End If
 
         'Get current root folder
         For Each rtfold In Preferences.movieFolders

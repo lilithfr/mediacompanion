@@ -17,7 +17,7 @@ Public Class Utilities
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
                                                  ".dvr-ms", ".img", ".strm", ".ssif", ".mk3d", ".webm", ".bdmv", 
-                                                 "video_ts.ifo" }  'video_ts.ifo must be last in list
+                                                 ".disc", "video_ts.ifo" }  'video_ts.ifo must be last in list
 
     'file ext for trailers
     Public Shared TrailerExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
