@@ -410,6 +410,12 @@
     <Compile Include="Structures\TvShowLanguages.vb" />
     <Compile Include="Classes\TvWrap\TvEpisode.vb" />
     <Compile Include="Classes\TvWrap\TvShow.vb" />
+    <Compile Include="UserControls\MediaStubs.Designer.vb">
+      <DependentUpon>MediaStubs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaStubs.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\GraphicInfo.Designer.vb">
       <DependentUpon>GraphicInfo.vb</DependentUpon>
     </Compile>
@@ -549,6 +555,9 @@
     <EmbeddedResource Include="Forms\frmTVShowBrowser.resx">
       <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\MediaStubs.resx">
+      <DependentUpon>MediaStubs.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Custom_Tv.resx">
       <DependentUpon>Custom_Tv.vb</DependentUpon>
