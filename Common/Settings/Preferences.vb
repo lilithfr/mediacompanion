@@ -85,12 +85,14 @@ Public Class Preferences
     End Property
 
     'Saved Folder Prefs
-    Public Shared tvFolders        As New List(Of String)
-    Public Shared tvRootFolders    As New List(Of String)
-    Public Shared movieFolders     As New List(Of String)
-    Public Shared offlinefolders   As New List(Of String)
-    Public Shared homemoviefolders As New List(Of String)
-    Public Shared ExcludeFolders   As New Excludes("Folders")
+    Public Shared tvFolders         As New List(Of String)
+    Public Shared tvRootFolders     As New List(Of String)
+    Public Shared movieFolders      As New List(Of String)
+    Public Shared offlinefolders    As New List(Of String)
+    Public Shared stubfolder        As String
+    Public Shared stubmessage       As String = "Insert Media to Continue"
+    Public Shared homemoviefolders  As New List(Of String)
+    Public Shared ExcludeFolders    As New Excludes("Folders")
 
     'Saved Form Prefs
     Public Shared backgroundcolour As String
@@ -707,6 +709,8 @@ Public Class Preferences
         For Each path In movieFolders
             root.AppendChild(doc, "nfofolder", path)
         Next
+        root.AppendChild(doc, "stubfolder", stubfolder)
+        root.AppendChild(doc, "stubmessage", stubmessage)
         Dim list As New List(Of String)
         For Each path In offlinefolders
             If Not list.Contains(path) Then
@@ -992,6 +996,7 @@ Public Class Preferences
         movietags.Clear()
         movieFolders.Clear()
         offlinefolders.Clear()
+        stubfolder = ""
         tvFolders.Clear()
         tvRootFolders.Clear()
         tableview.Clear()
@@ -1062,6 +1067,10 @@ Public Class Preferences
                     Case "nfofolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         movieFolders.Add(decodestring)
+                    Case "stubfolder"
+                        stubfolder = thisresult.InnerText 
+                    Case "stubmessage"
+                        stubmessage = thisresult.InnerText
                     Case "offlinefolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         offlinefolders.Add(decodestring)
@@ -1894,5 +1903,23 @@ Public Class Preferences
             MsgBox("Failed to open file [" & file & "] Error message [" & ex.Message & "]")
         End Try
     End Sub
+
+    Public Shared Function stubofflinefolder(ByVal isfolderinlist As String) As Boolean
+        Dim match As Boolean = False
+        Try
+            For Each folder In movieFolders
+                If isfolderinlist.ToLower = folder.ToLower Then
+                    match = True
+                    Return match
+                End If
+            Next
+            movieFolders.Add(isfolderinlist)
+            Return True
+        Catch ex As Exception
+            MsgBox("Problem adding [" & isfolderinlist &"] to MovieFolder List. Error Message [" & ex.Message & "]")
+            match = False
+        End Try
+        Return match
+    End Function
 End Class
 

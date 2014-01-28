@@ -24,6 +24,10 @@ Partial Class MediaStubs
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MediaStubs))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.tb_disc_filename = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -34,14 +38,12 @@ Partial Class MediaStubs
         Me.tb_Stub_Message = New System.Windows.Forms.TextBox()
         Me.btnStubSaveStub = New System.Windows.Forms.Button()
         Me.tb_Stub_File = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.cb_Stub_Formats = New System.Windows.Forms.ComboBox()
         Me.btn_Browse_Offline_Folder = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -54,7 +56,7 @@ Partial Class MediaStubs
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBox1, 2, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.tb_disc_filename, 2, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.Label9, 1, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.Label8, 1, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 1, 10)
@@ -72,6 +74,7 @@ Partial Class MediaStubs
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 2, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.cb_Stub_Formats, 2, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.btn_Browse_Offline_Folder, 3, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.Button1, 3, 9)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -92,6 +95,50 @@ Partial Class MediaStubs
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(702, 557)
         Me.TableLayoutPanel1.TabIndex = 0
+        '
+        'tb_disc_filename
+        '
+        Me.tb_disc_filename.Location = New System.Drawing.Point(155, 270)
+        Me.tb_disc_filename.Name = "tb_disc_filename"
+        Me.tb_disc_filename.ReadOnly = True
+        Me.tb_disc_filename.Size = New System.Drawing.Size(342, 20)
+        Me.tb_disc_filename.TabIndex = 18
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(37, 273)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(112, 29)
+        Me.Label9.TabIndex = 17
+        Me.Label9.Text = "Filename Example:"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(71, 238)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(78, 29)
+        Me.Label8.TabIndex = 16
+        Me.Label8.Text = "Disc Format:"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(88, 378)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(61, 119)
+        Me.Label1.TabIndex = 13
+        Me.Label1.Text = "Stub File:"
         '
         'Label3
         '
@@ -189,18 +236,6 @@ Partial Class MediaStubs
         Me.tb_Stub_File.Size = New System.Drawing.Size(342, 119)
         Me.tb_Stub_File.TabIndex = 12
         '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(88, 378)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(61, 119)
-        Me.Label1.TabIndex = 13
-        Me.Label1.Text = "Stub File:"
-        '
         'Label2
         '
         Me.Label2.AutoSize = True
@@ -223,38 +258,6 @@ Partial Class MediaStubs
         Me.Label7.TabIndex = 15
         Me.Label7.Text = resources.GetString("Label7.Text")
         '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(71, 238)
-        Me.Label8.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(78, 29)
-        Me.Label8.TabIndex = 16
-        Me.Label8.Text = "Disc Format:"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(37, 273)
-        Me.Label9.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(112, 29)
-        Me.Label9.TabIndex = 17
-        Me.Label9.Text = "Filename Example:"
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(155, 270)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ReadOnly = True
-        Me.TextBox1.Size = New System.Drawing.Size(342, 20)
-        Me.TextBox1.TabIndex = 18
-        '
         'cb_Stub_Formats
         '
         Me.cb_Stub_Formats.FormattingEnabled = True
@@ -273,6 +276,16 @@ Partial Class MediaStubs
         Me.btn_Browse_Offline_Folder.TabIndex = 20
         Me.btn_Browse_Offline_Folder.Text = "Browse"
         Me.btn_Browse_Offline_Folder.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button1.Location = New System.Drawing.Point(503, 340)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(82, 29)
+        Me.Button1.TabIndex = 21
+        Me.Button1.Text = "Set as Default"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'MediaStubs
         '
@@ -300,10 +313,12 @@ Partial Class MediaStubs
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents tb_disc_filename As System.Windows.Forms.TextBox
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents cb_Stub_Formats As System.Windows.Forms.ComboBox
     Friend WithEvents btn_Browse_Offline_Folder As System.Windows.Forms.Button
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
 
 End Class

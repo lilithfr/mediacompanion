@@ -1,7 +1,9 @@
 ﻿Imports System.Reflection
 
 Public Class MediaStubs
-'#Region "Properties"
+#Region "Properties"
+    Private Property alt_title As String = ""
+
 '    Private MovieFolderMappings As XBMC_MC_FolderMappings = New XBMC_MC_FolderMappings
 
 '    ReadOnly Property Changed As Boolean
@@ -13,7 +15,7 @@ Public Class MediaStubs
 '                    tb_prxyPassword     .Text    <> Preferences.prxyPassword
 '        End Get
 '    End Property
-'#End Region         'Properties
+#End Region         'Properties
 
 '#Region "Event Handlers"
 '    Private Sub btnProxySaveChanges_Click( sender As Object,  e As EventArgs) Handles btnStubSaveStub.Click
@@ -65,4 +67,44 @@ Public Class MediaStubs
 '    End Sub
 '#End Region         'Other Subs
 
+    Private Sub MediaStubs_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        tb_Stub_folder.text = Preferences.stubfolder
+        tb_Stub_Alt_Title.Text = ""
+        tb_Stub_File.Text = ""
+        tb_Stub_filename.Text = ""
+        tb_Stub_Message.Text = Preferences.stubmessage
+        tb_disc_filename.Text = ""
+    End Sub
+
+    Private Sub btn_Browse_Offline_Folder_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_Browse_Offline_Folder.Click
+        Try
+            'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            'browse
+            'Form1.openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
+            If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
+                Dim newfolder As String = ""
+                newfolder = FolderBrowserDialog1.SelectedPath
+                If Preferences.stubofflinefolder(newfolder) Then
+                    Preferences.stubfolder = newfolder
+                    Preferences.SaveConfig
+                    tb_Stub_folder.Text = newfolder
+                Else
+                    MsgBox ("Folder " & vbCrLf & "[" & newfolder & "]" & vbCrLf & "already in Movie Folder List")
+                End If
+            Else
+                MsgBox ("No folder selected")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button1_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles Button1.Click
+            Preferences.stubmessage = tb_Stub_Message.Text
+            Preferences.SaveConfig 
+    End Sub
+
+    Private Sub btnStubSaveStub_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btnStubSaveStub.Click
+
+    End Sub
 End Class
