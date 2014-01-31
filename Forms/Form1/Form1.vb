@@ -22636,10 +22636,7 @@ Public Class Form1
         DataGridViewMovies.ClearSelection
         oMovies.SaveMovieCache
 
-        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-
-        Application.DoEvents
-        DisplayMovie
+        UpdateFilteredList
     End Sub
 
     Private Sub tsmi_RenMovieOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieOnly.Click
