@@ -2856,4 +2856,26 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return Extn
     End Function
 
+   Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
+      Dim size As Long          = 0
+      Dim di   As DirectoryInfo = New DirectoryInfo(DirPath)
+
+      Try
+         For Each fi In di.GetFiles()
+            size += fi.Length
+         Next
+
+         If IncludeSubFolders then
+            For Each sub_di In di.GetDirectories()
+               size += GetFolderSize(sub_di.FullName)
+            Next
+         End if
+
+         Return size
+      Catch
+         Return -1
+      End Try
+
+    End Function
+
 End Class

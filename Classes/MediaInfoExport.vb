@@ -195,6 +195,7 @@ Public Class MediaInfoExport
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCollection = tokenRegExp.Matches(text)
         Dim token As Match
+        Dim fi As System.IO.FileInfo 
 
         For Each token In tokenCollection
             Dim strNFOprop As String = ""
@@ -220,6 +221,13 @@ Public Class MediaInfoExport
 
                 Case "imdb_id"
                     strNFOprop = If(movie.id <> Nothing, movie.id, "")
+
+               Case "imdb_num"
+                  strNFOprop = movie.id.Replace("tt","")
+
+               Case "folder_size"
+                  fi         = New System.IO.FileInfo( movie.fullpathandfilename )
+                  strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
 
                 Case "imdb_url"
                     strNFOprop = If(movie.id <> Nothing, Preferences.imdbmirror & "title/" & movie.id & "/", Preferences.imdbmirror)
@@ -509,6 +517,7 @@ Public Class MediaInfoExport
 
             End Select
             Try
+               If IsNothing(strNFOprop) then strNFOprop = ""
                 Select Case filetype
                     Case "xml"
                         strNFOprop = Security.SecurityElement.Escape(strNFOprop)    'this may be applicable to HTML too? - Huey

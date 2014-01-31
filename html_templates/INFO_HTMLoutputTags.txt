@@ -7,7 +7,9 @@ MOVIE TAGS
 <<moviecount>>
 <<counter>>
 <<imdb_id>>
+<<imdb_num>>			Same as imdb_id, but without the "tt" prefix
 <<imdb_url>>
+<<folder_size>>		Size of the containing movie folder
 <<title>>
 <<movieyear>>
 <<movietitleandyear>>
