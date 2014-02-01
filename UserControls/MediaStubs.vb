@@ -142,6 +142,14 @@ Public Class MediaStubs
 #Region "Functions"
     Private Function savestub As Boolean
         Dim success As Boolean = False
+        Dim StubFileToSave As String = Preferences.stubfolder & "\" & StubFilename
+        If IO.File.Exists(StubFileToSave) Then
+            Dim fsize As Long = Utilities.GetFileSize(StubFileToSave)
+                If fsize > 600 Then
+                    MsgBox("Filename :- " & StubFileToSave & vbCrLf & "Already exists and is larger than valid" & vbCrLf & "Media Stub file")
+                    Return False
+                End If
+        End If
         Try
             Dim doc As New XmlDocument
             Dim root As XmlElement
@@ -169,24 +177,36 @@ Public Class MediaStubs
 
     Private Function loadstub As Boolean
         Dim success As Boolean = False
+        Dim StubFileToLoad As String = Preferences.stubfolder & "\" & StubFilename
+        Dim loadfail As Boolean = False
         Try
             Dim lstub As New XmlDocument
             Try
-                lstub.Load(Preferences.stubfolder & "\" & StubFilename)
+                lstub.Load(StubFileToLoad)
             Catch
-                Return False
-            End Try
-            For Each thisresult As XmlNode In lstub("discstub")
-                If thisresult.InnerXml <> "" Then
-                    Select Case thisresult.Name
-                        Case "title"
-                            tb_Stub_Alt_Title.Text = thisresult.InnerText
-                        Case "message"
-                            tb_Stub_Message.Text = thisresult.InnerText
-                    End Select
-                    success = True
+                Dim fsize As Long = Utilities.GetFileSize(StubFileToLoad)
+                If fsize < 600 Then
+                    If MsgBox("File is empty, do you wish to setup template" & vbCrLf & "so xml data can be saved?", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
+                        Return False
+                    Else
+                        loadfail = True
+                    End If
                 End If
-            Next
+                
+            End Try
+            If Not loadfail Then
+                For Each thisresult As XmlNode In lstub("discstub")
+                    If thisresult.InnerXml <> "" Then
+                        Select Case thisresult.Name
+                            Case "title"
+                                tb_Stub_Alt_Title.Text = thisresult.InnerText
+                            Case "message"
+                                tb_Stub_Message.Text = thisresult.InnerText
+                        End Select
+                        success = True
+                    End If
+                Next
+            End If
             Dim sp() As String = StubFilename.Split(".")
             tb_Stub_filename.Text = sp(0)
             If sp(1).Tolower <> "disc" Then
@@ -198,6 +218,10 @@ Public Class MediaStubs
                     End If
                 Next
                 cb_Stub_Formats.SelectedIndex = n
+            End If
+            If loadfail Then
+                tb_Stub_Alt_Title.Text = tb_Stub_filename.Text
+                tb_Stub_Message.Text = Preferences.stubmessage 
             End If
             tb_disc_filename.Text = StubFilename 
             UpdateStubfile()
