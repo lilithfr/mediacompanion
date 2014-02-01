@@ -24,6 +24,7 @@ Partial Class MediaStubs
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MediaStubs))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_StubClear = New System.Windows.Forms.Button()
         Me.tb_disc_filename = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -36,14 +37,13 @@ Partial Class MediaStubs
         Me.tb_Stub_filename = New System.Windows.Forms.TextBox()
         Me.tb_Stub_Alt_Title = New System.Windows.Forms.TextBox()
         Me.tb_Stub_Message = New System.Windows.Forms.TextBox()
-        Me.btnStubSaveStub = New System.Windows.Forms.Button()
+        Me.btn_StubSaveStub = New System.Windows.Forms.Button()
         Me.tb_Stub_File = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.cb_Stub_Formats = New System.Windows.Forms.ComboBox()
         Me.btn_Browse_Offline_Folder = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.btn_StubSetDefaultMessage = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -56,6 +56,7 @@ Partial Class MediaStubs
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_StubClear, 3, 11)
         Me.TableLayoutPanel1.Controls.Add(Me.tb_disc_filename, 2, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.Label9, 1, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.Label8, 1, 6)
@@ -68,13 +69,13 @@ Partial Class MediaStubs
         Me.TableLayoutPanel1.Controls.Add(Me.tb_Stub_filename, 2, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.tb_Stub_Alt_Title, 2, 8)
         Me.TableLayoutPanel1.Controls.Add(Me.tb_Stub_Message, 2, 9)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnStubSaveStub, 2, 11)
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_StubSaveStub, 2, 11)
         Me.TableLayoutPanel1.Controls.Add(Me.tb_Stub_File, 2, 10)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 2, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 2, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.cb_Stub_Formats, 2, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.btn_Browse_Offline_Folder, 3, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.Button1, 3, 9)
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_StubSetDefaultMessage, 3, 9)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -95,6 +96,16 @@ Partial Class MediaStubs
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(702, 557)
         Me.TableLayoutPanel1.TabIndex = 0
+        '
+        'btn_StubClear
+        '
+        Me.btn_StubClear.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_StubClear.Location = New System.Drawing.Point(503, 500)
+        Me.btn_StubClear.Name = "btn_StubClear"
+        Me.btn_StubClear.Size = New System.Drawing.Size(82, 29)
+        Me.btn_StubClear.TabIndex = 22
+        Me.btn_StubClear.Text = "Clear fields"
+        Me.btn_StubClear.UseVisualStyleBackColor = True
         '
         'tb_disc_filename
         '
@@ -216,15 +227,15 @@ Partial Class MediaStubs
         Me.tb_Stub_Message.Size = New System.Drawing.Size(342, 20)
         Me.tb_Stub_Message.TabIndex = 10
         '
-        'btnStubSaveStub
+        'btn_StubSaveStub
         '
-        Me.btnStubSaveStub.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnStubSaveStub.Location = New System.Drawing.Point(155, 500)
-        Me.btnStubSaveStub.Name = "btnStubSaveStub"
-        Me.btnStubSaveStub.Size = New System.Drawing.Size(342, 29)
-        Me.btnStubSaveStub.TabIndex = 11
-        Me.btnStubSaveStub.Text = "Save Media Stub File"
-        Me.btnStubSaveStub.UseVisualStyleBackColor = True
+        Me.btn_StubSaveStub.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_StubSaveStub.Location = New System.Drawing.Point(155, 500)
+        Me.btn_StubSaveStub.Name = "btn_StubSaveStub"
+        Me.btn_StubSaveStub.Size = New System.Drawing.Size(342, 29)
+        Me.btn_StubSaveStub.TabIndex = 11
+        Me.btn_StubSaveStub.Text = "Load Media Stub File"
+        Me.btn_StubSaveStub.UseVisualStyleBackColor = True
         '
         'tb_Stub_File
         '
@@ -261,7 +272,7 @@ Partial Class MediaStubs
         'cb_Stub_Formats
         '
         Me.cb_Stub_Formats.FormattingEnabled = True
-        Me.cb_Stub_Formats.Items.AddRange(New Object() {"DVD", "Bluray", "HDDVD", "SVCD", "VCD"})
+        Me.cb_Stub_Formats.Items.AddRange(New Object() {"", "DVD", "Bluray", "HDDVD", "SVCD", "VCD"})
         Me.cb_Stub_Formats.Location = New System.Drawing.Point(155, 235)
         Me.cb_Stub_Formats.Name = "cb_Stub_Formats"
         Me.cb_Stub_Formats.Size = New System.Drawing.Size(171, 21)
@@ -277,15 +288,15 @@ Partial Class MediaStubs
         Me.btn_Browse_Offline_Folder.Text = "Browse"
         Me.btn_Browse_Offline_Folder.UseVisualStyleBackColor = True
         '
-        'Button1
+        'btn_StubSetDefaultMessage
         '
-        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button1.Location = New System.Drawing.Point(503, 340)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(82, 29)
-        Me.Button1.TabIndex = 21
-        Me.Button1.Text = "Set as Default"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btn_StubSetDefaultMessage.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_StubSetDefaultMessage.Location = New System.Drawing.Point(503, 340)
+        Me.btn_StubSetDefaultMessage.Name = "btn_StubSetDefaultMessage"
+        Me.btn_StubSetDefaultMessage.Size = New System.Drawing.Size(82, 29)
+        Me.btn_StubSetDefaultMessage.TabIndex = 21
+        Me.btn_StubSetDefaultMessage.Text = "Set as Default"
+        Me.btn_StubSetDefaultMessage.UseVisualStyleBackColor = True
         '
         'MediaStubs
         '
@@ -308,7 +319,7 @@ Partial Class MediaStubs
     Friend WithEvents tb_Stub_filename As System.Windows.Forms.TextBox
     Friend WithEvents tb_Stub_Alt_Title As System.Windows.Forms.TextBox
     Friend WithEvents tb_Stub_Message As System.Windows.Forms.TextBox
-    Friend WithEvents btnStubSaveStub As System.Windows.Forms.Button
+    Friend WithEvents btn_StubSaveStub As System.Windows.Forms.Button
     Friend WithEvents tb_Stub_File As System.Windows.Forms.TextBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
@@ -318,7 +329,7 @@ Partial Class MediaStubs
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents cb_Stub_Formats As System.Windows.Forms.ComboBox
     Friend WithEvents btn_Browse_Offline_Folder As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents btn_StubSetDefaultMessage As System.Windows.Forms.Button
+    Friend WithEvents btn_StubClear As System.Windows.Forms.Button
 
 End Class
