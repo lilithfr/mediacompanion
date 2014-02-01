@@ -192,9 +192,12 @@ Public Class ScraperQuery
             Next
 
             For Each m As Match In Regex.Matches(result, SettingReplacementRegex)
-                If (m.Groups.Count > 1) Then
-                    result = result.Replace("$INFO[" + m.Groups(1).Value + "]", mScraper.GetSetting(m.Groups(1).Value).ValueString)
-                End If
+                Try
+                    If (m.Groups.Count > 1) Then
+                        result = result.Replace("$INFO[" + m.Groups(1).Value + "]", mScraper.GetSetting(m.Groups(1).Value).ValueString)
+                    End If
+                Catch
+                End Try
             Next
         Catch
             result = ""
