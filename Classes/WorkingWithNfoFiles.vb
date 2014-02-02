@@ -1227,6 +1227,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
     Public Shared Sub ConvertFileToUTF8IfNotAlready(FileName As String)
+        If Not IO.File.Exists(FileName) Then Exit Sub
         Dim _Detected As Encoding
 
         Dim r = New StreamReader(FileName, Encoding.Default)
