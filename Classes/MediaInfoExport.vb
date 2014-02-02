@@ -199,6 +199,7 @@ Public Class MediaInfoExport
 
         For Each token In tokenCollection
             Dim strNFOprop As String = ""
+            Dim preEscapeNFOprop As String = ""
             Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
             Dim tokenInstr() As String = valToken.Split(":")
             Select Case tokenInstr(0)
@@ -262,7 +263,7 @@ Public Class MediaInfoExport
                     strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
 
                     ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
-                Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "format", "filename", "nfo"
+                Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "actors", "format", "filename", "nfo"
                     Dim newplotdetails As New FullMovieDetails
                     newplotdetails = WorkingWithNfoFiles.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
@@ -283,6 +284,35 @@ Public Class MediaInfoExport
                         End If
                         If tokenInstr(0) = "releasedate" Then
                             strNFOprop = newplotdetails.fullmoviebody.premiered
+                        End If
+                        If tokenInstr(0) = "actors" Then
+                            Dim idxEndParam As Integer = tokenInstr.Length - 1
+                            Dim numActors As Integer = 9999
+                            If idxEndParam > 0 Then
+                                If IsNumeric(tokenInstr(idxEndParam)) Then
+                                    numActors = Int(tokenInstr(idxEndParam))
+                                    idxEndParam -= 1
+                                End If
+                                Dim count As Integer = 0
+                                For Each actor In newplotdetails.listactors
+                                    count += 1
+                                    If count > numActors Then Exit For
+                                    preEscapeNFOprop &= "<actor>"
+                                    For idx = 1 To idxEndParam
+                                        Select Case tokenInstr(idx).ToLower
+                                            Case "name"
+                                                preEscapeNFOprop &= String.Format("<name>{0}</name>", Security.SecurityElement.Escape(actor.actorname))
+                                            Case "role"
+                                                preEscapeNFOprop &= String.Format("<role>{0}</role>", Security.SecurityElement.Escape(actor.actorrole))
+                                            Case "thumb"
+                                                preEscapeNFOprop &= String.Format("<thumb>{0}</thumb>", Security.SecurityElement.Escape(actor.actorthumb))
+                                        End Select
+                                    Next
+                                    preEscapeNFOprop &= "</actor>"
+                                Next
+                            Else
+                                strNFOprop = newplotdetails.fullmoviebody.stars
+                            End If
                         End If
                         If tokenInstr(0) = "format" Then
                             Dim idxEndParam As Integer = tokenInstr.Length - 1
@@ -421,7 +451,7 @@ Public Class MediaInfoExport
                                     Case "year"
                                         strNFOprop = newplotdetails.fullmoviebody.year
                                     Case "set"
-                                        strNFOprop = If(newplotdetails.fullmoviebody.movieset="-None-","",newplotdetails.fullmoviebody.movieset)
+                                        strNFOprop = If(newplotdetails.fullmoviebody.movieset = "-None-", "", newplotdetails.fullmoviebody.movieset)
                                     Case "createdate", "premiered"
                                         Dim newDate, localDatePattern As String
                                         If tokenInstr(1) = "createdate" Then
@@ -498,7 +528,7 @@ Public Class MediaInfoExport
                                 End Select
 
                                 Select Case tokenInstr(1)
-                                    Case "file", "createdate", "premiered", "filename"
+                                    Case "file", "createdate", "premiered", "filename", "actors"
                                         'Do nothing
                                     Case Else
                                         If tokenInstr.Length > 2 Then
@@ -521,11 +551,13 @@ Public Class MediaInfoExport
                 Select Case filetype
                     Case "xml"
                         strNFOprop = Security.SecurityElement.Escape(strNFOprop)    'this may be applicable to HTML too? - Huey
+                        strNFOprop &= preEscapeNFOprop
                     Case "csv"
                         strNFOprop = strNFOprop.Replace(",", "")
                         strNFOprop = strNFOprop.Replace(Chr(34), "'")
                     Case Else
                         strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                        strNFOprop &= preEscapeNFOprop
                 End Select
                 text = text.Replace(token.Value, strNFOprop)
             Catch
