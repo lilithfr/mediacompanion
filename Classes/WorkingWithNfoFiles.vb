@@ -1240,7 +1240,7 @@ Public Class WorkingWithNfoFiles
             Try
                 File.WriteAllText(FileName, s, Encoding.UTF8)
             Catch ex As Exception
-                MsgBox("Error [" & ex.Message & "] occurred trying to convert file [" & FileName & "] from format [" & _Detected.ToString & "] to UTF-8. Recommended Action: Either delete the NFO and have MC re-create it or open it in NotePad as 'Save As... UFT-8" )
+                MsgBox("Error [" & ex.Message & "] occurred trying to convert file [" & FileName & "] from format [" & _Detected.ToString & "] to UTF-8. Recommended Action: Either delete the NFO and have MC re-create it or open it in NotePad and 'Save As... UFT-8" )
             End Try
         End If
     End Sub
