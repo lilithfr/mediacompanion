@@ -4258,7 +4258,7 @@ Public Class Form1
         Dim tempstring As String = ""
         Dim tab As String = TabControl2.SelectedTab.Text
 
-        If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" Then
+        If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" And tab <> "Media Stubs" Then
             If workingMovieDetails Is Nothing And movieFolders.Count = 0 And Preferences.offlinefolders.Count = 0 Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 MsgBox("There are no movies in your list to work on" & vbCrLf & "Add movie folders in the Folders Tab" & vbCrLf & "Then select the ""Search For New Movies"" Tab")
