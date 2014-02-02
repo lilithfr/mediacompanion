@@ -4,6 +4,7 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports System.Globalization
 Imports Media_Companion
+Imports System.Text
 
 
 Public Class WorkingWithNfoFiles
@@ -244,8 +245,8 @@ Public Class WorkingWithNfoFiles
                     If sp.Contains("<streamdetails><fileinfo>") Then
                         fixmulti = True
                         Try
-                            sp = sp.Replace("<streamdetails><fileinfo>","<fileinfo><streamdetails>")
-                            sp = sp.Replace("</fileinfo></streamdetails>","</streamdetails></fileinfo>")
+                            sp = sp.Replace("<streamdetails><fileinfo>", "<fileinfo><streamdetails>")
+                            sp = sp.Replace("</fileinfo></streamdetails>", "</streamdetails></fileinfo>")
                             thisresult.InnerXml = sp
                         'thisresult.InnerXml = thisresult.InnerXml.Replace("<streamdetails><fileinfo>","<fileinfo><streamdetails>")
                         'thisresult.InnerXml = thisresult.InnerXml.Replace("</fileinfo></streamdetails>","</streamdetails></fileinfo>")
@@ -258,7 +259,7 @@ Public Class WorkingWithNfoFiles
                             Dim anotherepisode As New TvEpisode
                             Dim filedetails As String = ""
                             Dim audio As String = ""
-                           
+
                             Dim tempint As Integer = thisresult.ChildNodes.Count - 1
                             For f = 0 To tempint
                                 Try
@@ -298,7 +299,7 @@ Public Class WorkingWithNfoFiles
                                                                     Dim videodetails As XmlNode = Nothing
                                                                     For Each videodetails In detail.ChildNodes
                                                                         Select Case videodetails.Name
-                                                                            Case "width" 
+                                                                            Case "width"
                                                                                 If videodetails.InnerText.ToLower.Contains("kbps") Then   'in place as multieps mediainfo was stored incorrectly.
                                                                                     anotherepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
                                                                                 Else
@@ -433,12 +434,12 @@ Public Class WorkingWithNfoFiles
             newtvshow.Load()
             'Fix episodeguide tag
             Dim lang As String = newtvshow.EpisodeGuideUrl.Value
-            If String.IsNullOrEmpty(lang) Then 
+            If String.IsNullOrEmpty(lang) Then
                 lang = "en"
             Else
-                lang = lang.Substring((lang.LastIndexOf("/")+1)).Replace(".zip","")
+                lang = lang.Substring((lang.LastIndexOf("/") + 1)).Replace(".zip", "")
             End If
-        
+
             If Not newtvshow.TvdbId.Value = "" Then
             newtvshow.EpisodeGuideUrl.Value = ""
                 newtvshow.Url.Value = URLs.EpisodeGuide(newtvshow.TvdbId.Value, lang)
@@ -1084,7 +1085,7 @@ Public Class WorkingWithNfoFiles
                             Case "playcount"
                                 newmovie.playcount = thisresult.InnerText
                             Case "lastplayed"
-                                newmovie.lastplayed = thisresult.InnerText 
+                                newmovie.lastplayed = thisresult.InnerText
                             Case "rating"
                                 'Dim tempStr As String = thisresult.InnerText
                                 'If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
@@ -1112,26 +1113,26 @@ Public Class WorkingWithNfoFiles
 
                             Case "fileinfo"
 
-                                Dim gotWidth  As Boolean
+                                Dim gotWidth As Boolean
                                 Dim gotHeight As Boolean
 
                                 For Each res In thisresult.ChildNodes
-                                    If res.name="streamdetails" Then
+                                    If res.name = "streamdetails" Then
 
                                         Dim newfilenfo As New FullFileDetails
 
                                         For Each detail In res.ChildNodes
                                             Select Case detail.Name
 
-                                                Case "video" 
+                                                Case "video"
                                                             For Each videodetails As XmlNode In detail.ChildNodes
                                                                 Select Case videodetails.Name
                                                                     Case "width"
                                                                         newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
-                                                                        gotWidth=True
+                                                                        gotWidth = True
                                                                     Case "height"
                                                                         newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
-                                                                        gotHeight=True
+                                                                        gotHeight = True
                                                                 End Select
 
                                                                 If gotWidth And gotHeight Then
@@ -1158,7 +1159,7 @@ Public Class WorkingWithNfoFiles
                                                         newmovie.Audio.Add(audio)
                                             End Select
                                         Next
-                            
+
                                         If gotWidth And gotHeight Then
                                             Exit For
                                         End If
@@ -1225,9 +1226,29 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
+    Public Shared Sub ConvertFileToUTF8IfNotAlready(FileName As String)
+        Dim _Detected As Encoding
+
+        Dim r = New StreamReader(FileName, Encoding.Default)
+        Dim s = r.ReadToEnd
+
+        _Detected = r.CurrentEncoding
+
+        r.Close
+
+        If _Detected.ToString <> "System.Text.UTF8Encoding" Then
+            Try
+                File.WriteAllText(FileName, s, Encoding.UTF8)
+            Catch ex As Exception
+                MsgBox("Error [" & ex.Message & "] occurred trying to convert file [" & FileName & "] from format [" & _Detected.ToString & "] to UTF-8. Recommended Action: Either delete the NFO and have MC re-create it or open it in NotePad as 'Save As... UFT-8" )
+            End Try
+        End If
+    End Sub
 
     Public Shared Function mov_NfoLoadFull(ByVal path As String) As FullMovieDetails
-        'Monitor.Enter(Me)
+
+        ConvertFileToUTF8IfNotAlready(path)
+
         Try
             Dim newmovie As New FullMovieDetails
             newmovie.fullmoviebody.genre = ""
@@ -1253,7 +1274,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.stars = ""
                     newmovie.fullmoviebody.filename = ""
                     newmovie.fullmoviebody.genre = ""
-                    newmovie.fullmoviebody.tag.clear    ' = ""
+                    newmovie.fullmoviebody.tag.Clear()    ' = ""
                     newmovie.fullmoviebody.imdbid = ""
                     newmovie.fullmoviebody.mpaa = ""
                     newmovie.fullmoviebody.outline = "This nfo file could not be loaded"
@@ -1328,8 +1349,8 @@ Public Class WorkingWithNfoFiles
                                 thumbstring = thisresult.InnerText
                             Else
                                 'Frodo - aspect="poster"
-                                If Not IsNothing(thisresult.Attributes.ItemOf("aspect"))  Then
-                                    newmovie.frodoPosterThumbs.Add(New FrodoPosterThumb( thisresult.Attributes("aspect").Value, thisresult.InnerText) )
+                                If Not IsNothing(thisresult.Attributes.ItemOf("aspect")) Then
+                                    newmovie.frodoPosterThumbs.Add(New FrodoPosterThumb(thisresult.Attributes("aspect").Value, thisresult.InnerText))
                                 Else
                                     newmovie.listthumbs.Add(thisresult.InnerText)
                                 End If
@@ -1370,10 +1391,10 @@ Public Class WorkingWithNfoFiles
                         Case "playcount"
                             newmovie.fullmoviebody.playcount = thisresult.InnerText
                         Case "lastplayed"
-                            newmovie.fullmoviebody.lastplayed = thisresult.InnerText 
+                            newmovie.fullmoviebody.lastplayed = thisresult.InnerText
                         Case "rating"
                             Dim y As String = thisresult.InnerText
-                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString' ("0.00", MyCulture)
+                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString ' ("0.00", MyCulture)
                             'If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
                             'If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
                         Case "top250"
@@ -1491,15 +1512,15 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.fullpathandfilename = path
                 newmovie.fileinfo.filename = IO.Path.GetFileName(path)
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)
-                If IO.Path.GetFileName(path).ToLower = "video_ts.nfo" or IO.Path.GetFileName(path).ToLower="index.nfo" Then
-                    newmovie.fileinfo.videotspath= Utilities.RootVideoTsFolder(path)
+                If IO.Path.GetFileName(path).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(path).ToLower = "index.nfo" Then
+                    newmovie.fileinfo.videotspath = Utilities.RootVideoTsFolder(path)
                 Else
-                    newmovie.fileinfo.videotspath=""
+                    newmovie.fileinfo.videotspath = ""
                 End If
-                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path,newmovie.fileinfo.filename)
+                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
-                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path,newmovie.fileinfo.filename)
+                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path, newmovie.fileinfo.filename)
 
                 If newmovie.fullmoviebody.movieset = "" Then
                     newmovie.fullmoviebody.movieset = "-None-"
@@ -1771,7 +1792,7 @@ Public Class WorkingWithNfoFiles
                         filedetailschild = doc.CreateElement("subtitle")
                         For Each entry In movietosave.filedetails.filedetails_subtitles
                             Try
-                                If entry.language <> Nothing Then
+                                If entry.Language <> Nothing Then
                                     If entry.Language.Value <> "" Then
                                         tempint += 1
                                         filedetailschildchild = doc.CreateElement("language")
@@ -1923,7 +1944,7 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 22
                 Try
-                    For Each item In movietosave.frodoPosterThumbs 
+                    For Each item In movietosave.frodoPosterThumbs
 
                         child = doc.CreateElement("thumb")
 
@@ -1931,7 +1952,7 @@ Public Class WorkingWithNfoFiles
                         child.InnerText = item.Url
                         root.AppendChild(child)
                     Next
-                    
+
                     root.AppendChild(movietosave.frodoFanartThumbs.GetChild(doc))
 
                     For Each thumbnail In movietosave.listthumbs
@@ -2070,7 +2091,7 @@ Public Class WorkingWithNfoFiles
                 stage = 32
                 Try
                     child = doc.CreateElement("lastplayed")
-                    child.InnerText = movietosave.fullmoviebody.lastplayed 
+                    child.InnerText = movietosave.fullmoviebody.lastplayed
                     root.AppendChild(child)
                 Catch
                 End Try
@@ -2595,9 +2616,9 @@ Public Class WorkingWithNfoFiles
         Dim xmlStreamDetails As XmlElement
         Dim xmlFileInfo As XmlElement
         'Dim xmlFileInfoType As 
-        Dim xmlStreamDetailsType As XmlElement 
+        Dim xmlStreamDetailsType As XmlElement
         'Dim xmlFileInfoTypechild As XmlElement
-        Dim xmlStreamDetailsTypeChild As XmlElement 
+        Dim xmlStreamDetailsTypeChild As XmlElement
         Dim xmlActor As XmlElement
         Dim xmlActorchild As XmlElement
 
@@ -2612,97 +2633,97 @@ Public Class WorkingWithNfoFiles
             If Preferences.enabletvhdtags = True Then
                 Try
                     xmlFileInfo = document.CreateElement("fileinfo")
-					xmlStreamDetails = document.CreateElement("streamdetails")
+               xmlStreamDetails = document.CreateElement("streamdetails")
                     xmlStreamDetailsType = document.CreateElement("video")
                     If ep.Details.StreamDetails.Video.Width <> Nothing Then
                         If ep.Details.StreamDetails.Video.Width.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("width")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.Width.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("width")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.Width.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.Height <> Nothing Then
                         If ep.Details.StreamDetails.Video.Height.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("height")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.Height.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("height")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.Height.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.Aspect <> Nothing Then
                         If ep.Details.StreamDetails.Video.Aspect.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("aspect")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.Aspect.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("aspect")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.Aspect.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.Codec <> Nothing Then
                         If ep.Details.StreamDetails.Video.Codec.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("codec")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("codec")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.FormatInfo <> Nothing Then
                         If ep.Details.StreamDetails.Video.FormatInfo.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("format")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("format")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                         If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("durationinseconds")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("durationinseconds")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.Bitrate <> Nothing Then
                         If ep.Details.StreamDetails.Video.Bitrate.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("bitrate")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("bitrate")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.BitrateMode <> Nothing Then
                         If ep.Details.StreamDetails.Video.BitrateMode.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("bitratemode")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("bitratemode")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.BitrateMax <> Nothing Then
                         If ep.Details.StreamDetails.Video.BitrateMax.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("bitratemax")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("bitratemax")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.Container <> Nothing Then
                         If ep.Details.StreamDetails.Video.Container.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("container")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.Container.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("container")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.Container.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.CodecId <> Nothing Then
                         If ep.Details.StreamDetails.Video.CodecId.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("codecid")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("codecid")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.CodecInfo <> Nothing Then
                         If ep.Details.StreamDetails.Video.CodecInfo.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("codecidinfo")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("codecidinfo")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     If ep.Details.StreamDetails.Video.ScanType <> Nothing Then
                         If ep.Details.StreamDetails.Video.ScanType.Value <> "" Then
-                            xmlStreamDetailsTypechild = document.CreateElement("scantype")
-                            xmlStreamDetailsTypechild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
-                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("scantype")
+                            xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                         End If
                     End If
                     xmlStreamDetails.AppendChild(xmlStreamDetailsType)
@@ -2711,30 +2732,30 @@ Public Class WorkingWithNfoFiles
                             xmlStreamDetailsType = document.CreateElement("audio")
                             If aud.Language <> Nothing Then
                                 If aud.Language.Value <> "" Then
-                                    xmlStreamDetailsTypechild = document.CreateElement("language")
-                                    xmlStreamDetailsTypechild.InnerText = aud.Language.Value
-                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                                    xmlStreamDetailsTypeChild = document.CreateElement("language")
+                                    xmlStreamDetailsTypeChild.InnerText = aud.Language.Value
+                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                                 End If
                             End If
                             If aud.Codec <> Nothing Then
                                 If aud.Codec.Value <> "" Then
-                                    xmlStreamDetailsTypechild = document.CreateElement("codec")
-                                    xmlStreamDetailsTypechild.InnerText = aud.Codec.Value
-                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                                    xmlStreamDetailsTypeChild = document.CreateElement("codec")
+                                    xmlStreamDetailsTypeChild.InnerText = aud.Codec.Value
+                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                                 End If
                             End If
                             If aud.Channels <> Nothing Then
                                 If aud.Channels.Value <> "" Then
-                                    xmlStreamDetailsTypechild = document.CreateElement("channels")
-                                    xmlStreamDetailsTypechild.InnerText = aud.Channels.Value
-                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                                    xmlStreamDetailsTypeChild = document.CreateElement("channels")
+                                    xmlStreamDetailsTypeChild.InnerText = aud.Channels.Value
+                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                                 End If
                             End If
                             If aud.Bitrate <> Nothing Then
                                 If aud.Bitrate.Value <> "" Then
-                                    xmlStreamDetailsTypechild = document.CreateElement("bitrate")
-                                    xmlStreamDetailsTypechild.InnerText = aud.Bitrate.Value
-                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                                    xmlStreamDetailsTypeChild = document.CreateElement("bitrate")
+                                    xmlStreamDetailsTypeChild.InnerText = aud.Bitrate.Value
+                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                                 End If
                             End If
                             xmlStreamDetails.AppendChild(xmlStreamDetailsType)
@@ -2745,9 +2766,9 @@ Public Class WorkingWithNfoFiles
                             If subt.Language <> Nothing Then
                                 If subt.Language.Value <> "" Then
                                     xmlStreamDetailsType = document.CreateElement("subtitle")
-                                    xmlStreamDetailsTypechild = document.CreateElement("language")
-                                    xmlStreamDetailsTypechild.InnerText = subt.Language.Value
-                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypechild)
+                                    xmlStreamDetailsTypeChild = document.CreateElement("language")
+                                    xmlStreamDetailsTypeChild.InnerText = subt.Language.Value
+                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                                 End If
                             End If
                             xmlStreamDetails.AppendChild(xmlStreamDetailsType)
@@ -2774,7 +2795,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisodechild = document.CreateElement("aired")
             xmlEpisodechild.InnerText = ep.Aired.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
-            
+
             xmlEpisodechild = document.CreateElement("plot")
             xmlEpisodechild.InnerText = ep.Plot.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
@@ -2782,7 +2803,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisodechild = document.CreateElement("playcount")
             xmlEpisodechild.InnerText = ep.PlayCount.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
-            
+
             xmlEpisodechild = document.CreateElement("director")
             xmlEpisodechild.InnerText = ep.Director.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
