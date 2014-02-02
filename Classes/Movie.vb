@@ -2257,10 +2257,10 @@ Public Class Movie
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
 
-        If newextension.ToLower = ".disc" Then
-            log &= "!!! Media Stub files are not to be renamed." & vbCrLf
-            Return log
-        End If
+        'If newextension.ToLower = ".disc" Then
+        '    log &= "!!! Media Stub files are not to be renamed." & vbCrLf
+        '    Return log
+        'End If
          
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
@@ -2926,10 +2926,10 @@ Public Class Movie
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
 
-        If newextension.ToLower = ".disc" Then
-            log &= "!!! Media Stub files are not to be renamed." & vbCrLf
-            Return log
-        End If
+        'If newextension.ToLower = ".disc" Then
+        '    log &= "!!! Media Stub files are not to be renamed." & vbCrLf
+        '    Return log
+        'End If
 
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
