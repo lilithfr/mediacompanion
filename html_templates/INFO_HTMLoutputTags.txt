@@ -1,16 +1,15 @@
 ***************************************
 MOVIE TAGS
 ***************************************
-<<media_item>>
+<<media_item[:limit]>>
 <<smallimage>>
-<<createimage[:sizelimit]>>
+<<createimage[:sizelimit][:nopath]>>
 <<moviecount>>
 <<counter>>
 <<imdb_id>>
 <<imdb_num>>			Same as imdb_id, but without the "tt" prefix
 <<imdb_url>>
-<<folder_size>>		Size of the containing movie folder
-<<title>>
+<<title[:none|append|article]>>
 <<movieyear>>
 <<movietitleandyear>>
 <<rating>>
@@ -20,11 +19,15 @@ MOVIE TAGS
 <<fullplot>>
 <<director>>
 <<stars>>
+<<actors[:name][:role][:thumb][:limit]>>
 <<writer>>
 <<moviegenre>>
-<<format>>
 <<releasedate>>
+<<folder_size>>			Size of the containing movie folder
+<<filename[:root][:path][:file][:ext]>>
+<<format[:container][:source][:resolution]>>
 <<nfo:[nfo parameter][:char_limit]>>
+<<nfo:createdate[:dateformat][:separator]>>
 Special Parameters:
     [sizelimit]     -   Integer. Defines the height of the movie poster. Maintains aspect ratio.
                         A zero(0) will keep the images original size.

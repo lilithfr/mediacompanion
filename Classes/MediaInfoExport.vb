@@ -224,11 +224,11 @@ Public Class MediaInfoExport
                     strNFOprop = If(movie.id <> Nothing, movie.id, "")
 
                Case "imdb_num"
-                  strNFOprop = movie.id.Replace("tt","")
+                    strNFOprop = If(movie.id <> Nothing, movie.id.Replace("tt", ""), "")
 
                Case "folder_size"
-                  fi         = New System.IO.FileInfo( movie.fullpathandfilename )
-                  strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
+                    fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                    strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
 
                 Case "imdb_url"
                     strNFOprop = If(movie.id <> Nothing, Preferences.imdbmirror & "title/" & movie.id & "/", Preferences.imdbmirror)
@@ -261,6 +261,32 @@ Public Class MediaInfoExport
 
                 Case "fullpathandfilename"
                     strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
+
+                Case "filename"
+                    Dim tempFileAndPath As String = Utilities.GetFileName(movie.fullpathandfilename)
+                    Dim idxEndParam As Integer = tokenInstr.Length - 1
+                    If idxEndParam > 0 Then
+                        Dim arrlstFormat As New ArrayList
+                        Dim separator As String = ""
+                        Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
+                        Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
+                        For i = 0 To idxEndParam - 1
+                            Select Case tokenInstr(i + 1).ToLower
+                                Case "root"
+                                    arrlstFormat.Add(tempRoot)
+                                Case "path"
+                                    arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
+                                Case "file"
+                                    arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
+                                Case "ext"
+                                    arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
+                            End Select
+                        Next
+                        Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
+                        strNFOprop = String.Join(separator, arrFormat)
+                    Else
+                        strNFOprop = tempFileAndPath
+                    End If
 
                     ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
                 Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "actors", "format", "filename", "nfo"
@@ -355,32 +381,6 @@ Public Class MediaInfoExport
                                 strNFOprop = String.Join(separator, arrFormat)
                             Else
                                 strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
-                            End If
-                        End If
-                        If tokenInstr(0) = "filename" Then
-                            Dim tempFileAndPath As String = Utilities.GetFileName(movie.fullpathandfilename)
-                            Dim idxEndParam As Integer = tokenInstr.Length - 1
-                            If idxEndParam > 0 Then
-                                Dim arrlstFormat As New ArrayList
-                                Dim separator As String = ""
-                                Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
-                                Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
-                                For i = 0 To idxEndParam - 1
-                                    Select Case tokenInstr(i + 1).ToLower
-                                        Case "root"
-                                            arrlstFormat.Add(tempRoot)
-                                        Case "path"
-                                            arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
-                                        Case "file"
-                                            arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
-                                        Case "ext"
-                                            arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
-                                    End Select
-                                Next
-                                Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
-                                strNFOprop = String.Join(separator, arrFormat)
-                            Else
-                                strNFOprop = tempFileAndPath
                             End If
                         End If
                         If tokenInstr(0) = "nfo" Then
