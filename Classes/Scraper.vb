@@ -1392,13 +1392,21 @@ Public Class Classimdb
                         If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
                             Dim loc As Integer = f
                             Dim ignore As Boolean = False
+                            Dim original As Boolean = False
                             For g = loc To loc + 500
                                 If webpage(g).IndexOf("</table>") <> -1 Then
                                     Exit For
                                 End If
                                 Dim skip As Boolean = Not ignore
+
                                 If webpage(g).IndexOf("<td>") <> -1 Then    'And ignore = True Then
                                     ignore = Not ignore
+                                End If
+
+                                If skip = True Then
+                                    If webpage(g).IndexOf("(original title)") <> -1 Then
+                                        original = True
+                                    End If
                                 End If
 
                                 If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
@@ -1409,7 +1417,17 @@ Public Class Classimdb
                                         tempstring = tempstring.Replace("</td>", "")
                                         tempstring = Utilities.cleanSpecChars(tempstring)
                                         tempstring = encodespecialchrs(tempstring)
-                                        totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                                        Dim TitleTag As String = "<originaltitle>" & tempstring & "</originaltitle>"
+                                        If original = False Then
+                                            totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                                        Else
+                                            If totalinfo.IndexOf(TitleTag) = -1 Then
+                                                totalinfo = totalinfo & "<originaltitle>" & tempstring & "</originaltitle>" & vbCrLf
+                                            Else
+                                                totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                                            End If
+                                            original = False
+                                        End If
                                     Else
                                         g = g + 1
                                     End If
