@@ -21684,6 +21684,8 @@ Public Class Form1
     Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
         If tb_MovSeptb.Text <> "" Then
             lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
+            Preferences.MovSepLst.Add(tb_MovSeptb.Text)
+            tb_MovSeptb.Text = ""
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
             videosourceprefchanged = True
