@@ -22648,7 +22648,7 @@ Public Class Form1
     Private Sub Mov_DeleteNfoArtwork()
 
         'Last remove from dataGridViewMovies and update cache.
-        Mov_RemoveMovie()
+        'Mov_RemoveMovie()
     End Sub
 
     Private Sub tsmi_RenMovieOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieOnly.Click
