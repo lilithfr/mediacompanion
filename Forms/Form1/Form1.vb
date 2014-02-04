@@ -4042,7 +4042,7 @@ Public Class Form1
             mov_ToolStripViewNfo.Visible = False
             ToolStripSeparator17.Visible = False
             ToolStripSeparator5.Visible = False
-            ToolStripSeparator4.Visible = False
+            'ToolStripSeparator4.Visible = False
             mov_ToolStripFanartBrowserAlt.Visible = False
             mov_ToolStripPosterBrowserAlt.Visible = False
             mov_ToolStripEditMovieAlt.Visible = False
@@ -22641,6 +22641,16 @@ Public Class Form1
         UpdateFilteredList
     End Sub
 
+    Private Sub mov_ToolStripDeleteNfoArtwork_Click( sender As System.Object,  e As System.EventArgs) Handles mov_ToolStripDeleteNfoArtwork.Click
+        Mov_DeleteNfoArtwork()
+    End Sub
+
+    Private Sub Mov_DeleteNfoArtwork()
+
+        'Last remove from dataGridViewMovies and update cache.
+        Mov_RemoveMovie()
+    End Sub
+
     Private Sub tsmi_RenMovieOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieOnly.Click
         Dim ismovrenenabled As Boolean = Preferences.MovieRenameEnable
         Dim isusefolder As Boolean = Preferences.usefoldernames 
@@ -23094,7 +23104,7 @@ Public Class Form1
     End Sub
 
 
-
+    'Private Sub Handles DataGridViewMovies.MouseMove
     'Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
 
     '    'If ToolTipGridMoviePosition.X <> e.X Or ToolTipGridMoviePosition.Y <> e.Y Then
@@ -24874,4 +24884,5 @@ End Sub
         End If
         OpenUrl(url)
     End Sub
+
 End Class
