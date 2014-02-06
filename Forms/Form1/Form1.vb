@@ -24270,7 +24270,8 @@ Public Class Form1
         If ProgState = ProgramState.ResizingSplitterPanel Then Return
 
         If Not MainFormLoadedStatus Then Return
- 
+        If Not SplitContainer5.Panel2.visible Then Return
+
         Dim maxSize = MovieFiltersPanelMaxHeight
         Dim minSize = 2
 
