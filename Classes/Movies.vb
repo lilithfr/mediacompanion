@@ -1891,6 +1891,21 @@ End If
         End Try
     End Function
 
+    Function DeleteScrapedFiles(nfoPathAndFilename As String) As Boolean
+        Try
+            Dim aMovie = New Movie(Me, nfoPathAndFilename)
+            aMovie.DeleteScrapedFiles(True)
+            Dim isRoot As Boolean = Preferences.GetRootFolderCheck(nfoPathAndFilename)
+            If Not isRoot Then
+                aMovie.DeleteExtraFiles()
+            End If
+            Return True
+
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
     Sub LoadActorCache()
         _actorDb.Clear()
 

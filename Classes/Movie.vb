@@ -1678,6 +1678,10 @@ Public Class Movie
         DeleteFile(ActualFanartPath)
     End Sub
 
+    Sub DeleteExtraFiles
+        DeleteFolder(NfoPath & "extrafanart")
+        DeleteFolder(NfoPath & "extrathumbs")
+    End Sub
 
     Sub DeleteTrailer
         DeleteFile(ActualTrailerPath)
@@ -1695,6 +1699,19 @@ Public Class Movie
             End If
         End Try
     End Sub
+
+    Sub DeleteFolder(foldername As String)
+        If Not IO.Directory.Exists(foldername) Then Exit Sub
+        Try
+            IO.Directory.Delete(foldername, True)
+        Catch ex As Exception
+            Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
+            If answer=MsgBoxResult.Yes then
+                ShowTakeOwnsershipHelp
+            End If
+        End Try
+    End Sub
+                     
 
     Sub ShowTakeOwnsershipHelp
        Try
