@@ -1448,10 +1448,43 @@ Public Class Preferences
 
         Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
 
+        If IO.Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
+            dir = Utilities.RootVideoTsFolder(nfoFile)
+            dir = dir.Substring(0,dir.Length-1)
+        End If
         If IO.File.Exists(dir & "\poster.jpg") Then Return True
         If IO.File.Exists(dir & "\folder.jpg") Then Return True
+        
 
         Return False
+    End Function
+
+    Public Shared Function FrodoPosterPath(ByVal nfoFile As String) As String
+        If IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg")) Then Return nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg")
+
+        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+
+        If IO.Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
+            dir = Utilities.RootVideoTsFolder(nfoFile)
+            dir = dir.Substring(0,dir.Length-1)
+        End If
+        If IO.File.Exists(dir & "\poster.jpg") Then Return dir & "\poster.jpg"
+        If IO.File.Exists(dir & "\folder.jpg") Then Return dir & "\folder.jpg"
+        Return ""
+    End Function
+
+    Public Shared Function FrodoFanartPath(ByVal nfoFile As String) As String
+        If IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-fanart.jpg")) Then Return nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-fanart.jpg")
+
+        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+
+        If IO.Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
+            dir = Utilities.RootVideoTsFolder(nfoFile)
+            dir = dir.Substring(0,dir.Length-1)
+        End If
+        If IO.File.Exists(dir & "\fanart.jpg") Then Return dir & "\fanart.jpg"
+        'If IO.File.Exists(dir & "\folder.jpg") Then Return dir & "\folder.jpg"
+        Return ""
     End Function
 
 

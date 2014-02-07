@@ -504,6 +504,12 @@ Public Class Movie
         End Get 
     End Property
 
+    Public ReadOnly Property PosterDVDFrodo As String
+        Get
+            Return Preferences.FrodoPosterPath(NfoPathPrefName)
+        End Get
+    End Property
+
     ReadOnly Property FrodoPosterExists As Boolean
         Get
             Return Preferences.FrodoPosterExists(NfoPathPrefName)
@@ -522,6 +528,12 @@ Public Class Movie
 
             Return Preferences.GetFanartPath(NfoPathPrefName)
         End Get 
+    End Property
+
+    Public ReadOnly Property FanartDVDFrodo As String
+        Get
+            Return Preferences.FrodoFanartPath(NfoPathPrefName)
+        End Get
     End Property
 
     Public ReadOnly Property PossibleImdb As String
@@ -1646,6 +1658,17 @@ Public Class Movie
    Sub DeleteActors
         Try
             'Only delete actors if movies are in separate folders
+            If Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then 
+                Dim thispath As String = IO.Path.GetDirectoryName(NfoPathAndFilename)
+                thispath &= "\.actors"
+                If IO.Directory.Exists(thispath) Then
+                    Try
+                        IO.Directory.Delete(thispath, True)
+                        Exit Sub
+                    Catch
+                    End Try
+                End If
+            End If
             Dim ap As String = ActorPath
             For Each act In Actors
                 Dim actorfilename As String = GetActorFileName(act.ActorName)
@@ -1669,12 +1692,14 @@ Public Class Movie
     Sub DeletePoster
         DeleteFile(PosterPath)
         DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
+        DeleteFile(PosterDVDFrodo)
         DeleteFile(ActualPosterPath)
     End Sub
 
 
     Sub DeleteFanart
         DeleteFile(FanartPath)
+        DeleteFile(FanartDVDFrodo)
         DeleteFile(ActualFanartPath)
     End Sub
 

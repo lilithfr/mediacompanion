@@ -2818,7 +2818,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function RootVideoTsFolder(ByVal FullPath As String) As String
 
-            If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
+        If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
             FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
         End If
 
