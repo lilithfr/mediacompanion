@@ -23798,7 +23798,7 @@ Public Class Form1
         If ScraperErrorDetected And Preferences.ShowLogOnError Then
             scraperLog = "******************************************************************************" & vbCrLf &
                          "* One or more errors were detected during scraping. See below for details.   *" & vbCrLf &
-                         "* To disable seeing this, turn off General Perference - 'Show log on error'. *" & vbCrLf & 
+                         "* To disable seeing this, turn off General Preferences -'Show log on error'. *" & vbCrLf & 
                          "******************************************************************************" & vbCrLf & vbCrLf & scraperLog
         End If
 
