@@ -285,6 +285,7 @@ Public Class clsGridViewMovie
         If Form1.cbFilterNumAudioTracks.Visible Then b = Form1.oMovies.ApplyNumAudioTracksFilter( b , Form1.cbFilterNumAudioTracks )
         If Form1.cbFilterAudioLanguages.Visible Then b = Form1.oMovies.ApplyAudioLanguagesFilter( b , Form1.cbFilterAudioLanguages )
         If Form1.cbFilterActor         .Visible Then b = Form1.oMovies.ApplyActorsFilter        ( b , Form1.cbFilterActor          )
+        If Form1.cbFilterDirector      .Visible Then b = Form1.oMovies.ApplyDirectorsFilter     ( b , Form1.cbFilterDirector       )
         If Form1.cbFilterSource        .Visible Then b = Form1.oMovies.ApplySourcesFilter       ( b , Form1.cbFilterSource         )
         If Form1.cbFilterTag.Visible Then b = Form1.oMovies.ApplyTagsFilter(b, Form1.cbFilterTag)
  

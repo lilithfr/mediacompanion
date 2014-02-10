@@ -222,10 +222,10 @@ Module Module1
 
 
         Try
-            ConsoleOrLog("Loading Actor Database cache")
-            oMovies.LoadActorCache
+            ConsoleOrLog("Loading Movie Database caches")
+            oMovies.LoadPeopleCaches
         Catch
-            oMovies.RebuildActorCache
+            oMovies.RebuildMoviePeopleCaches
         End Try
 
         If domovies Then
@@ -235,6 +235,7 @@ Module Module1
                 EnvExit +=2
                 oMovies.SaveMovieCache
                 oMovies.SaveActorCache
+                oMovies.SaveDirectorCache
             End If
             ConsoleOrLog("")
         End If
@@ -3221,64 +3222,66 @@ Module Module1
         Return MediaFileExtensions.Contains(extension.ToLower)
     End Function
 
-    Private Sub loadactorcache()
-        actorDB.Clear()
-        Dim loadpath As String = Preferences.workingProfile.actorcache
-        Dim actorlist As New XmlDocument
-        actorlist.Load(loadpath)
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In actorlist("actor_cache")
-            Select Case thisresult.Name
-                Case "actor"
-                    Dim newactor As New ActorDatabase
-                    newactor.actorname = ""
-                    newactor.movieid = ""
-                    Dim detail As XmlNode = Nothing
-                    For Each detail In thisresult.ChildNodes
-                        Select Case detail.Name
-                            Case "name"
-                                newactor.actorname = detail.InnerText
-                            Case "id"
-                                newactor.movieid = detail.InnerText
-                        End Select
-                        If newactor.actorname <> "" And newactor.movieid <> "" Then
-                            actorDB.Add(newactor)
-                        End If
-                    Next
-            End Select
-        Next
-    End Sub
+    'Obsolete...
+    'Private Sub loadactorcache()
+    '    actorDB.Clear()
+    '    Dim loadpath As String = Preferences.workingProfile.actorcache
+    '    Dim actorlist As New XmlDocument
+    '    actorlist.Load(loadpath)
+    '    Dim thisresult As XmlNode = Nothing
+    '    For Each thisresult In actorlist("actor_cache")
+    '        Select Case thisresult.Name
+    '            Case "actor"
+    '                Dim newactor As New ActorDatabase
+    '                newactor.actorname = ""
+    '                newactor.movieid = ""
+    '                Dim detail As XmlNode = Nothing
+    '                For Each detail In thisresult.ChildNodes
+    '                    Select Case detail.Name
+    '                        Case "name"
+    '                            newactor.actorname = detail.InnerText
+    '                        Case "id"
+    '                            newactor.movieid = detail.InnerText
+    '                    End Select
+    '                    If newactor.actorname <> "" And newactor.movieid <> "" Then
+    '                        actorDB.Add(newactor)
+    '                    End If
+    '                Next
+    '        End Select
+    '    Next
+    'End Sub
 
-    Private Sub SaveActorCache()
-        Dim savepath As String = Preferences.workingProfile.actorcache
-        Dim doc As New XmlDocument
+    'Obsolete
+    'Private Sub SaveActorCache()
+    '    Dim savepath As String = Preferences.workingProfile.actorcache
+    '    Dim doc As New XmlDocument
 
-        Dim thispref As XmlNode = Nothing
-        Dim xmlproc As XmlDeclaration
+    '    Dim thispref As XmlNode = Nothing
+    '    Dim xmlproc As XmlDeclaration
 
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
-        Dim root As XmlElement
-        Dim child As XmlElement
-        root = doc.CreateElement("actor_cache")
+    '    xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+    '    doc.AppendChild(xmlproc)
+    '    Dim root As XmlElement
+    '    Dim child As XmlElement
+    '    root = doc.CreateElement("actor_cache")
 
-        Dim childchild As XmlElement
-        For Each actor In actorDB
-            child = doc.CreateElement("actor")
-            childchild = doc.CreateElement("name")
-            childchild.InnerText = actor.actorname
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = actor.movieid
-            child.AppendChild(childchild)
-            root.AppendChild(child)
-        Next
-        doc.AppendChild(root)
-        Dim output As New XmlTextWriter(savepath, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
-    End Sub
+    '    Dim childchild As XmlElement
+    '    For Each actor In actorDB
+    '        child = doc.CreateElement("actor")
+    '        childchild = doc.CreateElement("name")
+    '        childchild.InnerText = actor.actorname
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("id")
+    '        childchild.InnerText = actor.movieid
+    '        child.AppendChild(childchild)
+    '        root.AppendChild(child)
+    '    Next
+    '    doc.AppendChild(root)
+    '    Dim output As New XmlTextWriter(savepath, System.Text.Encoding.UTF8)
+    '    output.Formatting = Formatting.Indented
+    '    doc.WriteTo(output)
+    '    output.Close()
+    'End Sub
 
     Private Sub StartNewMovies()
 

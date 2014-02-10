@@ -368,6 +368,7 @@ Public Class Form1
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = profileStruct.StartupProfile Then
                     workingProfile.actorcache = prof.actorcache
+                    workingProfile.DirectorCache = prof.DirectorCache
                     workingProfile.config = prof.config
                     workingProfile.moviecache = prof.moviecache
                     workingProfile.profilename = prof.profilename
@@ -393,6 +394,7 @@ Public Class Form1
             Dim currentprofile As New ListOfProfiles
             tempstring = applicationPath & "\Settings\"
             currentprofile.ActorCache = tempstring & "actorcache.xml"
+            currentprofile.DirectorCache = tempstring & "directorcache.xml"
             currentprofile.Config = tempstring & "config.xml"
             currentprofile.RegExList = tempstring & "regex.xml"
             currentprofile.TvCache = tempstring & "tvcache.xml"
@@ -406,6 +408,7 @@ Public Class Form1
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = profileStruct.StartupProfile Then
                     workingProfile.actorcache = prof.actorcache
+                    workingProfile.DirectorCache = prof.DirectorCache
                     workingProfile.config = prof.config
                     workingProfile.moviecache = prof.moviecache
                     workingProfile.profilename = prof.profilename
@@ -439,7 +442,11 @@ Public Class Form1
         SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
         SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
         SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
-        SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
+
+        Try
+            SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
+        Catch
+        End Try
 
         Try
             If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
@@ -1344,6 +1351,11 @@ Public Class Form1
                                             'Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.ActorCache = applicationPath & s 'result.innertext
+
+                                        Case "directorcache"
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.DirectorCache = applicationPath & s 'result.innertext
+
                                         Case "config"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.Config = applicationPath & s 'result.innertext
@@ -1428,8 +1440,13 @@ Public Class Form1
 
         For Each prof In profileStruct.ProfileList
             child = doc.CreateElement("profiledetails")
+
             childchild = doc.CreateElement("actorcache")
             childchild.InnerText = prof.ActorCache.Replace(applicationPath, "")
+            child.AppendChild(childchild)
+
+            childchild = doc.CreateElement("directorcache")
+            childchild.InnerText = prof.DirectorCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("config")
@@ -1496,7 +1513,7 @@ Public Class Form1
 
     Private Sub mov_ActorRebuild()
    '    mov_FixUpCorruptActors
-        oMovies.RebuildActorCache
+        oMovies.RebuildMoviePeopleCaches
     End Sub
 
     Public Sub mov_FormPopulate(Optional yieldIng As Boolean=False)
@@ -3071,9 +3088,9 @@ Public Class Form1
         oMovies.ActorsFilter_AlsoInclude.Clear()
         oMovies.SetsFilter_AlsoInclude.Clear()
 
-        cbFilterActor.UpdateItems(oMovies.ActorsFilter)
-        cbFilterSet.UpdateItems(oMovies.SetsFilter)
-
+        cbFilterActor   .UpdateItems(oMovies.ActorsFilter   )
+        cbFilterDirector.UpdateItems(oMovies.DirectorsFilter)
+        cbFilterSet     .UpdateItems(oMovies.SetsFilter     )
 
 
         Dim query = From c As Control In SplitContainer5.Panel2.Controls Where c.Name.IndexOf("cbFilter") = 0 And c.GetType().Namespace = "MC_UserControls"
@@ -11349,6 +11366,21 @@ Public Class Form1
     End Sub
 
 
+    Private Sub btnMovieDisplay_DirectorFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_DirectorFilter.Click
+        Try
+            ProgState=ProgramState.ResettingFilters
+            oMovies.DirectorsFilter_AddIfMissing(directortxt.Text)
+            cbFilterDirector.UpdateItems(oMovies.DirectorsFilter)
+            cbFilterDirector.SelectItem(directortxt.Text)
+            ProgState=ProgramState.Other
+            
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+
     Private Sub mov_WallReset()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
             'If  Is PictureBox(TabPage22.Controls(i)) Then
@@ -12446,6 +12478,7 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 
     Private Sub RefreshActorDBToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
         Try
@@ -13854,9 +13887,15 @@ Public Class Form1
         cbDisableNotMatchingRenamePattern.Checked   = Preferences.DisableNotMatchingRenamePattern
         cbMovieList_ShowColWatched  .Checked        = Preferences.MovieList_ShowColWatched
         nudMovieScraper_MaxStudios  .Text           = Preferences.MovieScraper_MaxStudios
+
         nudActorsFilterMinFilms     .Text           = Preferences.ActorsFilterMinFilms
         nudMaxActorsInFilter        .Text           = Preferences.MaxActorsInFilter
         cbMovieFilters_Actors_Order .SelectedIndex  = Preferences.MovieFilters_Actors_Order
+
+        nudDirectorsFilterMinFilms     .Text           = Preferences.DirectorsFilterMinFilms
+        nudMaxDirectorsInFilter        .Text           = Preferences.MaxDirectorsInFilter
+        cbMovieFilters_Directors_Order .SelectedIndex  = Preferences.MovieFilters_Directors_Order
+
         cbMissingMovie              .Checked        = Preferences.incmissingmovies 
         nudSetsFilterMinFilms       .Text           = Preferences.SetsFilterMinFilms
         nudMaxSetsInFilter          .Text           = Preferences.MaxSetsInFilter
@@ -15436,6 +15475,7 @@ Public Class Form1
             Dim tempstring As String = applicationPath & "\Settings\"
             Dim moviecachetocopy As String = String.Empty
             Dim actorcachetocopy As String = String.Empty
+            Dim directorcachetocopy As String = String.Empty
             Dim tvcachetocopy As String = String.Empty
             Dim configtocopy As String = String.Empty
             Dim filterstocopy As String = String.Empty
@@ -15444,6 +15484,7 @@ Public Class Form1
                 If profs.ProfileName = profileStruct.defaultprofile Then
                     moviecachetocopy = profs.MovieCache
                     actorcachetocopy = profs.ActorCache
+                    directorcachetocopy = profs.DirectorCache
                     tvcachetocopy = profs.TvCache
                     configtocopy = profs.Config
                     filterstocopy = profs.Filters
@@ -15453,6 +15494,7 @@ Public Class Form1
 
             Dim profiletoadd As New ListOfProfiles
             profiletoadd.ActorCache = tempstring & "actorcache" & tempint.ToString & ".xml"
+            profiletoadd.DirectorCache = tempstring & "directorcache" & tempint.ToString & ".xml"
             profiletoadd.Config = tempstring & "config" & tempint.ToString & ".xml"
             profiletoadd.Filters = tempstring & "filters" & tempint.ToString & ".xml"
             profiletoadd.MovieCache = tempstring & "moviecache" & tempint.ToString & ".xml"
@@ -15464,9 +15506,15 @@ Public Class Form1
             If System.IO.File.Exists(moviecachetocopy) = True Then
                 System.IO.File.Copy(moviecachetocopy, profiletoadd.MovieCache)
             End If
+
             If System.IO.File.Exists(actorcachetocopy) = True Then
                 System.IO.File.Copy(actorcachetocopy, profiletoadd.ActorCache)
             End If
+
+            If System.IO.File.Exists(directorcachetocopy) = True Then
+                System.IO.File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
+            End If
+
             If System.IO.File.Exists(tvcachetocopy) = True Then
                 System.IO.File.Copy(tvcachetocopy, profiletoadd.TvCache)
             End If
@@ -15541,6 +15589,7 @@ Public Class Form1
 
                     If profileStruct.profilelist(f).ProfileName = ListBox13.SelectedItem Then
                         tempint2 = f
+
                         Try
                             IO.File.Delete(profileStruct.profilelist(f).ActorCache)
                         Catch ex As Exception
@@ -15548,6 +15597,15 @@ Public Class Form1
                         Throw ex
 #End If
                         End Try
+
+                        Try
+                            IO.File.Delete(profileStruct.profilelist(f).DirectorCache)
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                        End Try
+
                         Try
                             IO.File.Delete(profileStruct.profilelist(f).Config)
                         Catch ex As Exception
@@ -15617,6 +15675,7 @@ Public Class Form1
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = e.ClickedItem.Text Then
                     workingProfile.actorcache = prof.actorcache
+                    workingProfile.DirectorCache = prof.DirectorCache
                     workingProfile.config = prof.config
                     workingProfile.filters = prof.filters
                     workingProfile.moviecache = prof.moviecache
@@ -16745,6 +16804,8 @@ Public Class Form1
                     cbFilterGenre.Font = newFont
                     cbFilterSet.Font = newFont
                     cbFilterActor.Font = newFont
+                    cbFilterTag.Font = newFont
+                    cbFilterDirector.Font = newFont
                     cbFilterSource.Font = newFont
                     cbFilterResolution.Font = newFont
                     cbFilterAudioCodecs.Font = newFont
@@ -22908,8 +22969,14 @@ Public Class Form1
                 RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml"
             Case = "tvcache" 
                 RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml"
+
             Case = "actorcache" 
                 RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml"
+
+            'This would be for debugging, i.e. not needed
+            'Case = "directorcache" 
+            '    RichTextBoxTabDirectorCache.Text = Utilities.LoadFullText(workingProfile.DirectorCache) '  applicationPath & "\settings\actorcache.xml"
+
             Case = "profile" 
                 RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml") '  applicationPath & "\settings\profile.xml"
             Case = "regex" 
@@ -23030,7 +23097,8 @@ Public Class Form1
                                                                                                     cbFilterSet.TextChanged, cbFilterResolution.TextChanged,
                                                                                                     cbFilterAudioCodecs.TextChanged, cbFilterAudioChannels.TextChanged,
                                                                                                     cbFilterAudioBitrates.TextChanged, cbFilterNumAudioTracks.TextChanged,
-                                                                                                    cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged
+                                                                                                    cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged,
+                                                                                                    cbFilterDirector.TextChanged
 
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
@@ -23390,8 +23458,8 @@ Public Class Form1
 
         If cbFilterGenre         .Visible Then cbFilterGenre         .UpdateItems( oMovies.GenresFilter         )
         If cbFilterCertificate   .Visible Then cbFilterCertificate   .UpdateItems( oMovies.CertificatesFilter   )
-        If cbFilterSet.Visible Then cbFilterSet.UpdateItems(oMovies.SetsFilter)
-        If cbFilterTag.Visible Then cbFilterTag.UpdateItems(oMovies.TagFilter)
+        If cbFilterSet           .Visible Then cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
+        If cbFilterTag           .Visible Then cbFilterTag           .UpdateItems( oMovies.TagFilter            )
         If cbFilterResolution    .Visible Then cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
         If cbFilterAudioCodecs   .Visible Then cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
         If cbFilterAudioChannels .Visible Then cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
@@ -23399,6 +23467,7 @@ Public Class Form1
         If cbFilterNumAudioTracks.Visible Then cbFilterNumAudioTracks.UpdateItems( oMovies.NumAudioTracksFilter )
         If cbFilterAudioLanguages.Visible Then cbFilterAudioLanguages.UpdateItems( oMovies.AudioLanguagesFilter )
         If cbFilterActor         .Visible Then cbFilterActor         .UpdateItems( oMovies.ActorsFilter         )
+        If cbFilterDirector      .Visible Then cbFilterDirector      .UpdateItems( oMovies.DirectorsFilter      )
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23426,7 +23495,8 @@ Public Class Form1
                                                                                     cbFilterAudioCodecs.OnFormatItem, cbFilterAudioChannels.OnFormatItem,
                                                                                     cbFilterAudioBitrates.OnFormatItem, cbFilterNumAudioTracks.OnFormatItem,
                                                                                     cbFilterAudioLanguages.OnFormatItem, cbFilterActor.OnFormatItem,
-                                                                                    cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem
+                                                                                    cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem,
+                                                                                    cbFilterDirector.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -24030,6 +24100,52 @@ Public Class Form1
             End Try
         End If
     End Sub
+
+
+
+
+
+    Private Sub nudDirectorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudDirectorsFilterMinFilms.ValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
+    Private Sub nudMaxDirectorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxDirectorsInFilter.ValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
+    Private Sub cbMovieFilters_Directors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Directors_Order.SelectedValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
+
+
 
 
     Private Sub nudSetsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudSetsFilterMinFilms.ValueChanged
@@ -24679,7 +24795,7 @@ End Sub
                                                                         lblFilterCertificate  .Click,  lblFilterGenre         .Click,  lblFilterYear         .Click,
                                                                         lblFilterResolution   .Click,  lblFilterAudioCodecs   .Click,  lblFilterAudioChannels.Click, 
                                                                         lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, 
-                                                                        lblFilterActor        .Click,  lblFilterSource        .Click,  lblFilterTag           .Click 
+                                                                        lblFilterActor        .Click,  lblFilterSource        .Click,  lblFilterTag           .Click, lblFilterDirector.Click 
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -24694,7 +24810,7 @@ End Sub
     Private Sub ChangeFilterMode(ByVal sender As Object, ByVal e As EventArgs) Handles lblFilterGenreMode.Click, lblFilterSetMode.Click, lblFilterResolutionMode.Click,
                                                                                        lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
                                                                                        lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
-                                                                                       lblFilterActorMode.Click,lblFilterSourceMode.Click, lblFilterTagMode.Click
+                                                                                       lblFilterActorMode.Click,lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
@@ -24894,5 +25010,6 @@ End Sub
         End If
         OpenUrl(url)
     End Sub
+
 
 End Class

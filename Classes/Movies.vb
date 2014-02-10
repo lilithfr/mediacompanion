@@ -24,10 +24,12 @@ Public Class Movies
     Public Event FileDownloadComplete    ()
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
-    Private _certificateMappings  As CertificateMappings
-    Private _actorDb              As New List(Of ActorDatabase)
-    Public _tmpActorDb            As New List(Of ActorDatabase)
-    Public Shared movRebuildCaches         As Boolean = False
+    Private _certificateMappings   As CertificateMappings
+    Private _actorDb               As New List(Of ActorDatabase)
+    Public _tmpActorDb             As New List(Of ActorDatabase)
+    Private _directorDb            As New List(Of ActorDatabase)
+    Public _tmpDirectorDb          As New List(Of ActorDatabase)
+    Public Shared movRebuildCaches As Boolean = False
 
     Public Property Bw            As BackgroundWorker = Nothing
     Public Property MovieCache    As New List(Of ComboList)
@@ -463,10 +465,36 @@ End If
     End Property    
 
 
+    Public ReadOnly Property DirectorsFilter_Preferences As IEnumerable(Of String)
+        Get
+            Dim q = From x In DirectorDb 
+                Group By 
+                    x.ActorName Into NumFilms=Count 
+                Where 
+                    NumFilms>=Preferences.DirectorsFilterMinFilms
+                                
+            If Preferences.MovieFilters_Directors_Order=0 Then 
+                q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
+            Else
+                q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
+            End If
+
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxDirectorsInFilter
+        End Get
+    End Property    
+
+
 
     Public ReadOnly Property ActorsFilter As List(Of String)
         Get
             Dim r = (From x In ActorsFilter_Preferences).Union(From x In ActorsFilter_Extras) 
+            Return r.ToList
+        End Get
+    End Property    
+
+    Public ReadOnly Property DirectorsFilter As List(Of String)
+        Get
+            Dim r = (From x In DirectorsFilter_Preferences).Union(From x In DirectorsFilter_Extras) 
             Return r.ToList
         End Get
     End Property    
@@ -486,12 +514,36 @@ End If
 
     Property ActorsFilter_AlsoInclude As New List(Of String)
 
-    Sub ActorsFilter_AddIfMissing(actorName As String)
-
-        If Not ActorsFilter.Contains(actorName) Then
-            ActorsFilter_AlsoInclude.Add(actorName)
+    Sub ActorsFilter_AddIfMissing(value As String)
+        If Not ActorsFilter.Any(Function(x) x.StartsWith(value)) Then
+            ActorsFilter_AlsoInclude.Add(value)
         End If
     End Sub
+
+
+
+    Public ReadOnly Property DirectorsFilter_Extras As IEnumerable(Of String)
+        Get
+            Dim q = From x In DirectorDb 
+                Group By 
+                    x.ActorName Into NumFilms=Count 
+                Where 
+                    DirectorsFilter_AlsoInclude.Contains(IIf(IsNothing(ActorName),"N/A",ActorName))
+            
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")"
+        End Get
+    End Property  
+
+
+    Property DirectorsFilter_AlsoInclude As New List(Of String)
+
+    Sub DirectorsFilter_AddIfMissing(value As String)
+        If Not DirectorsFilter.Any(Function(x) x.StartsWith(value)) Then
+            DirectorsFilter_AlsoInclude.Add(value)
+        End If
+    End Sub
+
+
 
     Public ReadOnly Property ResolutionFilter As List(Of String)
         Get
@@ -662,12 +714,19 @@ End If
     End Sub
 
 
-
     Public ReadOnly Property ActorDb As List(Of ActorDatabase)
         Get
             Return _actorDb
         End Get
     End Property
+
+
+    Public ReadOnly Property DirectorDb As List(Of ActorDatabase)
+        Get
+            Return _directorDb
+        End Get
+    End Property
+
 
     Public ReadOnly Property Cancelled As Boolean
         Get
@@ -1124,13 +1183,14 @@ End If
 
     Public Sub LoadCaches
         LoadMovieCache
-        LoadActorCache
+        LoadPeopleCaches
     End Sub
 
 
     Public Sub SaveCaches
         SaveMovieCache
         SaveActorCache
+        SaveDirectorCache
     End Sub
 
 
@@ -1453,7 +1513,13 @@ End If
     Public Sub LoadMovieCacheFromNfos
 '        MovieCache.Clear
         TmpMovieCache.Clear
-        If movRebuildCaches Then _actorDb.Clear : _tmpActorDb.Clear
+
+        If movRebuildCaches Then 
+            _actorDb      .Clear 
+            _tmpActorDb   .Clear
+            _directorDb   .Clear 
+            _tmpDirectorDb.Clear
+        End If
 
         Dim t As New List(Of String)
 
@@ -1479,6 +1545,15 @@ End If
                 _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
             Next
             SaveActorCache()
+
+
+            Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
+
+            For Each item In q2.Distinct()
+                _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+            Next
+            SaveDirectorCache()
+
         End If
         'No duplicates found...
         'Dim q = From item In TmpMovieCache Group by item.fullpathandfilename Into Group Select Group
@@ -1906,19 +1981,32 @@ End If
         End Try
     End Function
 
+    Sub LoadPeopleCaches()
+        LoadActorCache()
+        LoadDirectorCache()
+    End Sub
+
+
     Sub LoadActorCache()
-        _actorDb.Clear()
+        LoadPersonCache(_actorDb,"actor",Preferences.workingProfile.actorcache)
+    End Sub
 
-        Dim actorlist As New XmlDocument
+    Sub LoadDirectorCache()
+        LoadPersonCache(_directorDb,"director",Preferences.workingProfile.DirectorCache)
+    End Sub
 
-        actorlist.Load(Preferences.workingProfile.actorcache)
+    Sub LoadPersonCache(peopleDb As List(Of ActorDatabase),typeName As String,  fileName As String)
+        peopleDb.Clear()
+
+        Dim peopleList As New XmlDocument
+
+        peopleList.Load(fileName)
 
         Dim thisresult As XmlNode = Nothing
 
-        For Each thisresult In actorlist("actor_cache")
+        For Each thisresult In peopleList(typeName & "_cache")
             Select Case thisresult.Name
-                Case "actor"
-
+                Case typeName
                     Dim name = ""
                     Dim movieId = ""
                     Dim detail As XmlNode = Nothing
@@ -1932,30 +2020,38 @@ End If
                         End Select
                     Next
 
-                    actorDB.Add(New ActorDatabase(name, movieId))
+                    peopleDb.Add(New ActorDatabase(name, movieId))
             End Select
         Next
     End Sub
 
 
     Sub SaveActorCache()
+        SavePersonCache(ActorDb,"actor",Preferences.workingProfile.actorcache)
+    End Sub
+
+    Sub SaveDirectorCache()
+        SavePersonCache(DirectorDb,"director",Preferences.workingProfile.directorCache)
+    End Sub
+
+    Sub SavePersonCache(peopleDb As List(Of ActorDatabase), typeName As String, fileName As String)
         Dim doc As New XmlDocument
 
         Dim thispref As XmlNode = Nothing
-        Dim xmlproc As XmlDeclaration
+        Dim xmlproc  As XmlDeclaration
 
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
 
-        Dim root As XmlElement
+        Dim root  As XmlElement
         Dim child As XmlElement
 
-        root = doc.CreateElement("actor_cache")
+        root = doc.CreateElement(typeName & "_cache")
 
         Dim childchild As XmlElement
 
-        For Each actor In _actorDB
-            child = doc.CreateElement("actor")
+        For Each actor In peopleDb
+            child = doc.CreateElement(typeName)
             childchild = doc.CreateElement("name")
             childchild.InnerText = actor.actorname
             child.AppendChild(childchild)
@@ -1967,11 +2063,12 @@ End If
 
         doc.AppendChild(root)
 
-        Dim output As New XmlTextWriter(Preferences.workingProfile.actorcache, System.Text.Encoding.UTF8)
+        Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
         doc.WriteTo(output)
         output.Close()
     End Sub
+
 
 
     Public Sub RebuildCaches
@@ -1983,7 +2080,7 @@ End If
         RebuildMovieCache
         If Cancelled Then Exit Sub
         If Not movRebuildCaches Then
-            RebuildActorCache
+            RebuildMoviePeopleCaches
         Else
             movRebuildCaches = False
         End If
@@ -2007,35 +2104,40 @@ End If
     End Sub
 
 
-    Public Sub RebuildActorCache()
-        'FixUpCorruptActors
-        _actorDB.Clear()
+    Public Sub RebuildMoviePeopleCaches()
+
+        _actorDB   .Clear()
+        _directorDb.Clear()
 
         Dim i = 0
 
         For Each movie In MovieCache
             i += 1
             PercentDone = CalcPercentDone(i, MovieCache.Count)
-            ReportProgress("Rebuilding actor cache " & i & " of " & MovieCache.Count)
+            ReportProgress("Rebuilding caches " & i & " of " & MovieCache.Count)
 
-'           Dim m As New Movie(movie.fullpathandfilename, Me)
-'           Dim m As New Movie(Utilities.GetFileName(movie.fullpathandfilename,True), Me)
             Dim m = New Movie(Me,movie.fullpathandfilename)
 
             m.LoadNFO(False)
             m.UpdateActorCacheFromEmpty()
+            m.UpdateDirectorCacheFromEmpty()
             If Cancelled Then Exit Sub
         Next
 
         If Cancelled Then Exit Sub
 
         Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
-
         For Each item In q.Distinct()
             _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
         Next
 
+        Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
+        For Each item In q.Distinct()
+            _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+        Next
+
         SaveActorCache()
+        SaveDirectorCache()
     End Sub
 
  
@@ -2231,18 +2333,28 @@ End If
 
 
     Function ApplyActorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+        Return ApplyPeopleFilter(ActorDb, recs, ccb)
+    End Function
+
+
+    Function ApplyDirectorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+        Return ApplyPeopleFilter(DirectorDb, recs, ccb)
+    End Function
+
+
+
+    Function ApplyPeopleFilter(PeopleDb As List(Of ActorDatabase), recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 
         Dim fi As New FilteredItems(ccb)
 
         If fi.Include.Count>0 Then 
-            Dim MovieIds = (From a In ActorDb Where fi.Include.Contains(a.ActorName) Select a.MovieId).ToList
+            Dim MovieIds = (From a In PeopleDb Where fi.Include.Contains(a.ActorName) Select a.MovieId).ToList
                              
             recs = recs.Where( Function(x)     MovieIds.Contains(x.id) )
         End If
 
-
         If fi.Exclude.Count>0 Then 
-            Dim MovieIds = (From a In ActorDb Where fi.Exclude.Contains(a.ActorName) Select a.MovieId).ToList
+            Dim MovieIds = (From a In PeopleDb Where fi.Exclude.Contains(a.ActorName) Select a.MovieId).ToList
                              
             recs = recs.Where( Function(x) Not MovieIds.Contains(x.id) )
         End If

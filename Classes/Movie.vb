@@ -410,6 +410,16 @@ Public Class Movie
         End Get
     End Property
 
+    ReadOnly Property Director As ActorDatabase
+        Get
+            If _scrapedMovie.fullmoviebody.director = "" Then
+                Return Nothing
+            End If
+
+            Return New ActorDatabase(_scrapedMovie.fullmoviebody.director,_scrapedMovie.fullmoviebody.imdbid)
+        End Get
+    End Property
+
     ReadOnly Property MissingLocalActors As Boolean
         Get
             For Each Actor In _scrapedMovie.listactors
@@ -990,7 +1000,10 @@ Public Class Movie
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
         
-        If movRebuildCaches Then ME.UpdateActorCacheFromEmpty()
+        If movRebuildCaches Then 
+            UpdateActorCacheFromEmpty
+            UpdateDirectorCacheFromEmpty
+        End If
         
         If Not Preferences.usefoldernames Then
             If _movieCache.filename <> Nothing Then _movieCache.filename = _movieCache.filename.Replace(".nfo", "")
@@ -2619,17 +2632,27 @@ Public Class Movie
 
     Sub UpdateCaches
         UpdateActorCache
+        UpdateDirectorCache
         UpdateMovieCache
     End Sub
 
     Sub RemoveMovieFromCaches
         RemoveActorsFromCache
+        RemoveDirectorFromCache
         RemoveMovieFromCache
     End Sub
 
     Sub UpdateActorCache
         RemoveActorsFromCache
         _parent.ActorDb.AddRange(Actors)
+    End Sub
+
+    Sub UpdateDirectorCache
+        RemoveDirectorFromCache
+
+        If Not IsNothing(Director) Then
+            _parent.DirectorDb.Add(Director)
+        End If
     End Sub
 
     Sub RemoveActorsFromCache
@@ -2641,9 +2664,27 @@ Public Class Movie
         _parent.ActorDb.RemoveAll(Function(c) c.MovieId = MovieId)
     End Sub
 
+
+    Sub RemoveDirectorFromCache
+        If IsNothing(Director) Then Exit Sub
+        RemoveDirectorFromCache(Director.MovieId)
+    End Sub
+
+
+    Sub RemoveDirectorFromCache(MovieId)
+        _parent.DirectorDb.RemoveAll(Function(c) c.MovieId = MovieId)
+    End Sub
+
+
+
     Sub UpdateActorCacheFromEmpty
         If Actors.Count = 0 Then Exit Sub
         _parent._tmpActorDb.AddRange(Actors)
+    End Sub
+
+    Sub UpdateDirectorCacheFromEmpty
+        If IsNothing(Director) Then Exit Sub
+        _parent._tmpDirectorDb.Add(Director)
     End Sub
 
     Sub UpdateMovieCache

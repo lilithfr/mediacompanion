@@ -225,13 +225,17 @@ Public Class Preferences
     Public Shared PosterResolutionSI As Integer = 9     ' Height  1080  
     Public Shared BackDropResolutionSI As Integer = 15     ' Full HD 1920x1080
 
-    Public Shared ActorsFilterMinFilms      As Integer =   1
-    Public Shared MaxActorsInFilter         As Integer = 500
-    Public Shared MovieFilters_Actors_Order As Integer =   0        ' 0=Number of films desc 1=A-Z
+    Public Shared ActorsFilterMinFilms         As Integer =   1
+    Public Shared MaxActorsInFilter            As Integer = 500
+    Public Shared MovieFilters_Actors_Order    As Integer =   0        ' 0=Number of films desc 1=A-Z
 
-    Public Shared SetsFilterMinFilms        As Integer =   1             
-    Public Shared MaxSetsInFilter           As Integer = 500
-    Public Shared MovieFilters_Sets_Order   As Integer =   0        ' 0=Number of films desc 1=A-Z
+    Public Shared DirectorsFilterMinFilms      As Integer =   1
+    Public Shared MaxDirectorsInFilter         As Integer = 500
+    Public Shared MovieFilters_Directors_Order As Integer =   0        ' 0=Number of films desc 1=A-Z
+
+    Public Shared SetsFilterMinFilms           As Integer =   1             
+    Public Shared MaxSetsInFilter              As Integer = 500
+    Public Shared MovieFilters_Sets_Order      As Integer =   0        ' 0=Number of films desc 1=A-Z
 
 
     Public Shared DateFormat As String = "YYYY-MM-DD"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
@@ -907,9 +911,15 @@ Public Class Preferences
         root.AppendChild(doc, "DisableNotMatchingRenamePattern",    DisableNotMatchingRenamePattern)    'cDisableNotMatchingRenamePattern
         root.AppendChild(doc, "MovieList_ShowColWatched",           MovieList_ShowColWatched)           'cbMovieList_ShowColWatched
         root.AppendChild(doc, "MovieScraper_MaxStudios",            MovieScraper_MaxStudios)            'nudMovieScraper_MaxStudios
+
         root.AppendChild(doc, "ActorsFilterMinFilms",               ActorsFilterMinFilms)               'nudActorsFilterMinFilms
         root.AppendChild(doc, "MaxActorsInFilter",                  MaxActorsInFilter)                  'nudMaxActorsInFilter
         root.AppendChild(doc, "MovieFilters_Actors_Order",          MovieFilters_Actors_Order)          'cbMovieFilters_Actors_Order
+
+        root.AppendChild(doc, "DirectorsFilterMinFilms",               DirectorsFilterMinFilms)               'nudDirectorsFilterMinFilms
+        root.AppendChild(doc, "MaxDirectorsInFilter",                  MaxDirectorsInFilter)                  'nudMaxDirectorsInFilter
+        root.AppendChild(doc, "MovieFilters_Directors_Order",       MovieFilters_Directors_Order)       'cbMovieFilters_Directors_Order
+
         root.AppendChild(doc, "SetsFilterMinFilms",                 SetsFilterMinFilms)                 'nudSetsFilterMinFilms
         root.AppendChild(doc, "MaxSetsInFilter",                    MaxSetsInFilter)                    'nudMaxSetsInFilter
         root.AppendChild(doc, "MovieFilters_Sets_Order",            MovieFilters_Sets_Order)            'cbMovieFilters_Sets_Order
@@ -1278,6 +1288,10 @@ Public Class Preferences
                     Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
                     Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml
                     Case "MovieFilters_Actors_Order"            : MovieFilters_Actors_Order = thisresult.InnerXml
+
+                    Case "DirectorsFilterMinFilms"              : DirectorsFilterMinFilms      = thisresult.InnerXml
+                    Case "MaxDirectorsInFilter"                 : MaxDirectorsInFilter         = thisresult.InnerXml
+                    Case "MovieFilters_Directors_Order"         : MovieFilters_Directors_Order = thisresult.InnerXml
 
                     Case "SetsFilterMinFilms"                   : SetsFilterMinFilms        = thisresult.InnerXml
                     Case "MaxSetsInFilter"                      : MaxSetsInFilter           = thisresult.InnerXml

@@ -37,6 +37,11 @@ Public Class Profiles
                                     Case "actorcache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.ActorCache = applicationPath & s 'result.innertext
+
+                                    Case "directorcache"
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.DirectorCache = applicationPath & s 'result.innertext
+
                                     Case "config"
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.Config = applicationPath & s 'result.innertext

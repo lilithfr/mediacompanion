@@ -251,7 +251,7 @@ Public Class ComboList
         Me.rating               = From.rating             
         Me.top250               = From.top250             
         Me.genre                = From.genre  
-        Me.movietag = From.movietag
+        Me.movietag             = From.movietag
         Me.playcount            = From.playcount 
         Me.lastplayed           = From.lastplayed  
         Me.sortorder            = From.sortorder          
