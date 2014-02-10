@@ -1998,6 +1998,8 @@ End If
     Sub LoadPersonCache(peopleDb As List(Of ActorDatabase),typeName As String,  fileName As String)
         peopleDb.Clear()
 
+        If Not File.Exists(fileName) Then Exit Sub
+
         Dim peopleList As New XmlDocument
 
         peopleList.Load(fileName)
