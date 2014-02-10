@@ -2106,8 +2106,10 @@ End If
 
     Public Sub RebuildMoviePeopleCaches()
 
-        _actorDB   .Clear()
-        _directorDb.Clear()
+        _actorDB      .Clear()
+        _directorDb   .Clear()
+        _tmpActorDb   .Clear()
+        _tmpDirectorDb.Clear()
 
         Dim i = 0
 
@@ -2132,7 +2134,7 @@ End If
         Next
 
         Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
-        For Each item In q.Distinct()
+        For Each item In q2.Distinct()
             _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
         Next
 
