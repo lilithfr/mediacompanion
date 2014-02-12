@@ -243,6 +243,9 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PictureBoxAssignedMoviePoster.AllowDrop = True
         AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
+
+        Preferences.movie_filters.FilterPanel = SplitContainer5.Panel2
+
         Label73.Text = ""
 
         BckWrkScnMovies.WorkerReportsProgress      = true
@@ -22985,7 +22988,7 @@ Public Class Form1
             Case "movies"
                 If Not MoviesFiltersResizeCalled Then
                     MoviesFiltersResizeCalled = True
-                    Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
+                    Preferences.movie_filters.SetMovieFiltersVisibility
                     UpdateMovieFiltersPanel
                 End If
         End Select
@@ -24359,14 +24362,14 @@ Public Class Form1
 
     Sub UpdateMovieFiltersPanel
         'ResizeBottomLHSPanel
-        Preferences.movie_filters.UpdateFromPanel     (SplitContainer5.Panel2)
+        Preferences.movie_filters.UpdateFromPanel
         ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
-        Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
+        Preferences.movie_filters.PositionMovieFilters
     End Sub
 
     ReadOnly Property MovieFiltersPanelMaxHeight As Integer
         Get
-            Return Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
+            Return Preferences.movie_filters.CalculatedFilterPanelHeight
         End Get
     End Property
 

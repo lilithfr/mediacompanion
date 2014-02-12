@@ -47,6 +47,29 @@ Public Class MovieFilters
     Property Border      As Integer =  4
     Property FilterSpace As Integer = 22
     Property Items       As New List(Of MovieFilter)
+    Property FilterPanel As Panel
+
+    ReadOnly Property Filters As List(Of Control)
+        Get
+            Dim query = From c As Control In FilterPanel.Controls Where c.Name.IndexOf("cbFilter")=0 Order by Convert.ToInt16(c.Tag.ToString) Descending
+
+            Return query.ToList 
+        End Get
+    End Property
+
+    ReadOnly Property VisibleFilters As List(Of Control)
+        Get
+            Dim query = From c As Control In Filters Where c.Visible
+
+            Return query.ToList 
+        End Get
+    End Property
+
+    ReadOnly Property CalculatedFilterPanelHeight As Integer
+        Get
+            Return (VisibleFilters.Count*FilterSpace)+(Border*2) + 2
+        End Get
+    End Property
 
     Public Sub New
     End Sub
@@ -78,7 +101,7 @@ Public Class MovieFilters
         Return child
     End Function
 
-    Public Sub SetMovieFiltersVisibility(oPanel As Panel)
+    Public Sub SetMovieFiltersVisibility
         Dim c       As Control
         Dim lbl     As Label
         Dim lblMode As Label
@@ -87,9 +110,9 @@ Public Class MovieFilters
         For i=Items.Count-1 To 0 Step -1
 
             item    = Items(i)
-            c       = oPanel.Controls(item.Name)
-            lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
-            lblMode = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
+            c       = FilterPanel.Controls(item.Name)
+            lbl     = FilterPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
+            lblMode = FilterPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
 
             c  .Tag     = item.Tag
             c  .Visible = item.Visible
@@ -107,27 +130,18 @@ Public Class MovieFilters
         Next
     End Sub
 
-    Public Function GetMovieFilterPanelSize(oPanel As Panel) As Integer
-
-        Dim count As Integer = (From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible).Count
-
-        Return (count*FilterSpace)+(Border*2) + 2
-    End Function
-
-    Public Sub PositionMovieFilters(oPanel As Panel)
+    Public Sub PositionMovieFilters
         Dim index       As Integer =  1
         Dim count       As Integer =  0
         Dim Y           As Integer
         Dim lbl         As Label
         Dim lblMode     As Label
-        Dim width       As Integer = oPanel.Width - 154
+        Dim width       As Integer = FilterPanel.Width - 154
 
-        Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible Order by Convert.ToInt16(c.Tag.ToString) Descending
-
-        For Each c As Control In query
-            lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)       )
-            lblMode = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
-            Y       = oPanel.Height - ((index*FilterSpace)+Border)
+        For Each c As Control In VisibleFilters
+            lbl     = FilterPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)       )
+            lblMode = FilterPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
+            Y       = FilterPanel.Height - ((index*FilterSpace)+Border)
 
             c  .Width    = width
             c  .Location = New Point( c  .Location.X, Y )
@@ -149,12 +163,12 @@ Public Class MovieFilters
         Return Items.Find(Function(x) x.Name=filterName)
     End Function
 
-    Public Sub UpdateFromPanel(oPanel As Panel)
+    Public Sub UpdateFromPanel
         '
         'Add new since previous release
         '
         Dim query = From 
-                        c As Control In oPanel.Controls 
+                        c As Control In FilterPanel.Controls 
                     Where
                         c.Name.IndexOf("cbFilter")=0 _
                     And
@@ -171,14 +185,14 @@ Public Class MovieFilters
 
 
         For Each item in Items
-            Dim c As Control = oPanel.Controls(item.Name)
+            Dim c As Control = FilterPanel.Controls(item.Name)
 
             item.Tag     = c.Tag
             item.Visible = c.Visible 
 
             If TypeName(c) = "TriStateCheckedComboBox" Then
 
-                Dim lblMode As Label = oPanel.Controls(GetModeLabelName(c))
+                Dim lblMode As Label = FilterPanel.Controls(GetModeLabelName(c))
 
                 item.QuickSelect = (lblMode.Text="S")
             End If
