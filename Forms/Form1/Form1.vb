@@ -23587,7 +23587,9 @@ Public Class Form1
             ScraperErrorDetected = True
         End If
 
-        scraperLog += oProgress.Log
+        If Not IsNothing(oProgress.Log) Then
+            scraperLog += oProgress.Log
+        End If
     End Sub
 
 
