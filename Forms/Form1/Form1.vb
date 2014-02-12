@@ -8867,6 +8867,7 @@ Public Class Form1
                 Show.ImdbId.Value = TextBox12.Text
                 Show.TvdbId.Value = TextBox9.Text
                 Show.Mpaa.Value = TextBox14.Text
+                Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
 
                 Show.Save()
                 Show.UpdateTreenode()
