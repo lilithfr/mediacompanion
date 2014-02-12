@@ -482,6 +482,8 @@ Partial Public Class Form1
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultTvFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
 
             Panel9.Visible = False
+            lbl_sorttitle.Visible = True
+            TextBox_Sorttitle.Visible = True
 
             TextBox_Title.BackColor = Color.White
             If Show.Title.Value <> Nothing Then
@@ -503,6 +505,7 @@ Partial Public Class Form1
             TextBox15.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
             TextBox16.Text = Utilities.ReplaceNothing(Show.Studio.Value)
             TextBox19.Text = Utilities.ReplaceNothing(Show.Plot.Value)
+            TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
 
             If String.IsNullOrEmpty(Show.SortOrder.Value) Then Show.SortOrder.Value = Preferences.sortorder
             If Show.SortOrder.Value = "dvd" Then
@@ -715,6 +718,8 @@ Partial Public Class Form1
         TextBox16.Text = Utilities.ReplaceNothing(Show.Studio.Value)
         TextBox19.Text = Utilities.ReplaceNothing(Show.Plot.Value)
         Panel9.Visible = False
+        lbl_sorttitle.Visible = True
+        TextBox_Sorttitle.Visible = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
         ExpandAllToolStripMenuItem.Enabled = True
         CollapseAllToolStripMenuItem.Enabled = True
@@ -796,6 +801,8 @@ Partial Public Class Form1
 
         Call ep_Load(SeasonObj, SelectedEpisode)
 
+        lbl_sorttitle.Visible = False
+        TextBox_Sorttitle.Visible = false
         Tv_TreeViewContext_ViewNfo.Enabled = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
         ExpandAllToolStripMenuItem.Enabled = True

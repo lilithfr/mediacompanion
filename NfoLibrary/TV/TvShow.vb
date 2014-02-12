@@ -22,6 +22,7 @@ Public Class TvShow
     Public Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
 
     Public Property Title As New ProtoProperty(Me, "title", CacheMode:=CacheMode.Both)
+    Public Property SortTitle As New ProtoProperty(Me, "sorttitle")  'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
     Public Property Rating As New ProtoProperty(Me, "rating")
     Public Property Year As New ProtoProperty(Me, "year")
     Public Property Top250 As New ProtoProperty(Me, "top250")
