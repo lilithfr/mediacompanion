@@ -10071,6 +10071,7 @@ Public Class Form1
                     Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
                     ThisEp(h).Details.StreamDetails.Video = fileStreamDetails.filedetails_video
 
+                    ThisEp(h).Details.StreamDetails.Audio.Clear()
                     For Each audioStream In fileStreamDetails.filedetails_audio
                         ThisEp(h).Details.StreamDetails.Audio.Add(audioStream)
                     Next

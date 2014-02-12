@@ -47,7 +47,7 @@ Public Class MovieFilters
     Property Border      As Integer =  4
     Property FilterSpace As Integer = 22
     Property Items       As New List(Of MovieFilter)
-    Property Filtercount As Integer = 15     'Placed here to be able to clean config files of duplicate filters
+    Property Filtercount As Integer = 17     'Placed here to be able to clean config files of duplicate filters
 
 
     Public Sub New
