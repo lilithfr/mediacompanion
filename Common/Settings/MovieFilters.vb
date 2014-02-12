@@ -47,8 +47,6 @@ Public Class MovieFilters
     Property Border      As Integer =  4
     Property FilterSpace As Integer = 22
     Property Items       As New List(Of MovieFilter)
-    Property Filtercount As Integer = 17     'Placed here to be able to clean config files of duplicate filters
-
 
     Public Sub New
     End Sub
@@ -58,17 +56,16 @@ Public Class MovieFilters
     End Sub
 
     Public Sub Load(node As XmlNode)
-        Dim x As Integer = 0                            'Found if multi profiles, filters were not cleared, but
-        For Each child As XmlNode In node.ChildNodes    'added again and again.
-            x += 1                                      'Count put in place to clean users config xml files
-            Items.Add(New MovieFilter(child))           'back to single list of filters.
-            If x = Filtercount Then Exit For
+        For Each child As XmlNode In node.ChildNodes    
+            If Not Items.Any(Function(x) x.Name=child.Attributes("name").Value) Then
+                Items.Add(New MovieFilter(child))   
+            End If
         Next
     End Sub
+
     Public Sub Reset()
         Items.Clear()
     End Sub
-
 
     Public Function GetChild(doc As XmlDocument) As XmlElement
 
@@ -80,8 +77,6 @@ Public Class MovieFilters
 
         Return child
     End Function
-
-
 
     Public Sub SetMovieFiltersVisibility(oPanel As Panel)
         Dim c       As Control
@@ -111,7 +106,6 @@ Public Class MovieFilters
             End If
         Next
     End Sub
-
 
     Public Function GetMovieFilterPanelSize(oPanel As Panel) As Integer
 
@@ -150,13 +144,9 @@ Public Class MovieFilters
     Public Function GetModeLabelName(c As Control)
         Return "lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode"
     End Function
-
-
+    
     Public Function GetItem(filterName As String) As MovieFilter
-        For Each item In Items
-            If item.Name=filterName Then Return item
-        Next
-        Return Nothing
+        Return Items.Find(Function(x) x.Name=filterName)
     End Function
 
     Public Sub UpdateFromPanel(oPanel As Panel)
