@@ -366,31 +366,7 @@ Public Class Form1
 
 
 
-        If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
-            Call util_ProfilesLoad()
-            For Each prof In profileStruct.ProfileList
-                If prof.ProfileName = profileStruct.StartupProfile Then
-                    workingProfile.actorcache = prof.actorcache
-                    workingProfile.DirectorCache = prof.DirectorCache
-                    workingProfile.config = prof.config
-                    workingProfile.moviecache = prof.moviecache
-                    workingProfile.profilename = prof.profilename
-                    workingProfile.regexlist = prof.regexlist
-                    workingProfile.filters = prof.filters
-                    workingProfile.tvcache = prof.tvcache
-                    workingProfile.profilename = prof.profilename
-                    For Each item In ProfilesToolStripMenuItem.DropDownItems
-                        If item.text = workingProfile.profilename Then
-                            With item
-                                item.checked = True
-                            End With
-                        Else
-                            item.checked = False
-                        End If
-                    Next
-                End If
-            Next
-        Else
+        If Not IO.File.Exists(applicationPath & "\settings\profile.xml") Then
             profileStruct.WorkingProfileName = "Default"
             profileStruct.DefaultProfile = "Default"
             profileStruct.StartupProfile = "Default"
@@ -407,21 +383,56 @@ Public Class Form1
             profileStruct.ProfileList.Add(currentprofile)
             profileStruct.WorkingProfileName = "Default"
             Call util_ProfileSave()
-            Call util_ProfilesLoad()
-            For Each prof In profileStruct.ProfileList
-                If prof.ProfileName = profileStruct.StartupProfile Then
-                    workingProfile.actorcache = prof.actorcache
-                    workingProfile.DirectorCache = prof.DirectorCache
-                    workingProfile.config = prof.config
-                    workingProfile.moviecache = prof.moviecache
-                    workingProfile.profilename = prof.profilename
-                    workingProfile.regexlist = prof.regexlist
-                    workingProfile.filters = prof.filters
-                    workingProfile.tvcache = prof.tvcache
-                    workingProfile.profilename = prof.profilename
-                End If
-            Next
         End If
+            'Call util_ProfilesLoad()
+            'For Each prof In profileStruct.ProfileList
+            '    If prof.ProfileName = profileStruct.StartupProfile Then
+            '        workingProfile.actorcache = prof.actorcache
+            '        workingProfile.DirectorCache = prof.DirectorCache
+            '        workingProfile.config = prof.config
+            '        workingProfile.moviecache = prof.moviecache
+            '        workingProfile.profilename = prof.profilename
+            '        workingProfile.regexlist = prof.regexlist
+            '        workingProfile.filters = prof.filters
+            '        workingProfile.tvcache = prof.tvcache
+            '        workingProfile.profilename = prof.profilename
+            '        For Each item In ProfilesToolStripMenuItem.DropDownItems
+            '            If item.text = workingProfile.profilename Then
+            '                With item
+            '                    item.checked = True
+            '                End With
+            '            Else
+            '                item.checked = False
+            '            End If
+            '        Next
+            '    End If
+            'Next
+        'Else
+            
+        Call util_ProfilesLoad()
+        For Each prof In profileStruct.ProfileList
+            If prof.ProfileName = profileStruct.StartupProfile Then
+                workingProfile.actorcache = prof.actorcache
+                workingProfile.DirectorCache = prof.DirectorCache
+                workingProfile.config = prof.config
+                workingProfile.moviecache = prof.moviecache
+                workingProfile.profilename = prof.profilename
+                workingProfile.regexlist = prof.regexlist
+                workingProfile.filters = prof.filters
+                workingProfile.tvcache = prof.tvcache
+                workingProfile.profilename = prof.profilename
+                For Each item In ProfilesToolStripMenuItem.DropDownItems
+                    If item.text = workingProfile.profilename Then
+                        With item
+                            item.checked = True
+                        End With
+                    Else
+                        item.checked = False
+                    End If
+                Next
+            End If
+        Next
+        'End If
 
 
         If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
@@ -555,7 +566,7 @@ Public Class Form1
                 TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
-                _tv_SplitContainer.SplitterDistance = Preferences.splt6
+                '_tv_SplitContainer.SplitterDistance = Preferences.splt6
                 TabLevel1.SelectedIndex = 0
             ElseIf Preferences.startuptab = 1 Then
                 SplitContainer1.SplitterDistance = Preferences.splt1
@@ -564,17 +575,17 @@ Public Class Form1
                 TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
-                _tv_SplitContainer.SplitterDistance = Preferences.splt6
+                '_tv_SplitContainer.SplitterDistance = Preferences.splt6
             ElseIf Preferences.startuptab > 1 Then
                 SplitContainer1.SplitterDistance = Preferences.splt1
                 SplitContainer2.SplitterDistance = Preferences.splt2
                 SplitContainer5.SplitterDistance = Preferences.splt5
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
-                Try
-                    _tv_SplitContainer.SplitterDistance = Preferences.splt6
-                Catch
-                End Try
+                'Try
+                '    _tv_SplitContainer.SplitterDistance = Preferences.splt6
+                'Catch
+                'End Try
                 TabLevel1.SelectedIndex = Preferences.startuptab
             End If
 
@@ -996,6 +1007,7 @@ Public Class Form1
             Preferences.startuptab = TabLevel1.SelectedIndex
 
             Preferences.SaveConfig()
+            Call util_ProfileSave()
             Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
         Catch ex As Exception
             MessageBox.Show(ex.ToString, "Exception")
@@ -1103,6 +1115,7 @@ Public Class Form1
         'Set TVShow Splitter Auto Position
         Dim pic3ratio As Decimal
         Dim pic4ratio As Decimal
+        Dim pic5ratio As Decimal
         Try
             If (tv_PictureBoxLeft.Image IsNot Nothing AndAlso tv_PictureBoxRight.Image IsNot Nothing) Then
                 Dim pic3ImSzW = tv_PictureBoxLeft.Image.Size.Width
@@ -1111,10 +1124,11 @@ Public Class Form1
                 Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
                 pic3ratio = pic3ImSzW / pic3ImszH
                 pic4ratio = pic4ImSzW / pic4ImszH
+                pic5ratio = _tv_SplitContainer.Height - tv_PictureBoxBottom.Image.VerticalResolution - 8
             Else
                 pic3ratio = 2
                 pic4ratio = 1
-
+                pic5ratio = 235
             End If
             'MsgBox(from & " = " & SplitContainer4.SplitterDistance & " - " & pic3ImSzW & "x" & pic3ImszH & " " & pic4ImszH & "x" & pic4ImSzW)
         Catch ex As Exception
@@ -1122,6 +1136,7 @@ Public Class Form1
             pic4ratio = 1
             'MsgBox("TV Splitter Exception")
         End Try
+        _tv_SplitContainer.SplitterDistance = pic5ratio
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
     End Sub
 
