@@ -801,6 +801,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return filename
     End Function
 
+    Public Shared Function CleanReleaseFormat(ByVal title As String, ByVal relformat() As String) As String
+        Dim cleanfilename As String = title
+        Try
+            For i = 0 to relformat.Length -1
+                Dim p As Integer = title.IndexOf(relformat(i), 0, StringComparison.CurrentCultureIgnoreCase)
+                If p > -1 Then
+                    Dim s As String = title.Substring(p, relformat(i).Length)
+                    cleanfilename = title.Replace(s, "")
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
+
+        Return cleanfilename
+    End Function
+
     Public Shared Function GetMediaList(ByVal pathandfilename As String)
 
         Try

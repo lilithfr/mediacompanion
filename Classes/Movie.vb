@@ -869,7 +869,7 @@ Public Class Movie
     End Sub
 
     Sub ImdbScraper_GetBody
-        _imdbBody = ImdbScrapeBody(SearchName, PossibleYear, PossibleImdb)
+        _imdbBody = ImdbScrapeBody(Utilities.CleanReleaseFormat(SearchName, Preferences.releaseformat), PossibleYear, PossibleImdb)
     End Sub
 
     Sub ImdbScraper_GetBodyByImdbOnly
@@ -1157,7 +1157,16 @@ Public Class Movie
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
         If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
         If _scrapedMovie.fullmoviebody.top250 = Nothing Then _scrapedMovie.fullmoviebody.top250 = "0"
-
+        'check search name for movie source
+        Dim searchtitle As String = SearchName 
+        If searchtitle <> "" Then
+            For i = 0 to Preferences.releaseformat.Length -1
+                If searchtitle.ToLower.Contains(Preferences.releaseformat(i).ToLower) Then
+                    _scrapedMovie.fullmoviebody.source = Preferences.releaseformat(i)
+                    Exit For
+                End If
+            Next
+        End If
         ' Assign certificate
         Dim done As Boolean = False
         For g = 0 To UBound(Preferences.certificatepriority)
