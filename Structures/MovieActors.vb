@@ -80,7 +80,7 @@ Public Structure str_MovieActors
                 End If
             ElseIf Preferences.actorsave AndAlso Preferences.actorsavealpha Then
                 If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
-                    Dim actorfilename As String = filename.Substring(filename.LastIndexOf("\") + 1)
+                    Dim actorfilename As String = actorname.Replace(" ", "_") & "_" & actorid & ".jpg" 'filename.Substring(filename.LastIndexOf("\") + 1)
                     Dim actordir As String = Preferences.actorsavepath & "\" & actorfilename.Substring(0,1)
                     Dim hg As New IO.DirectoryInfo(actordir)
                     If Not hg.Exists Then
