@@ -126,6 +126,18 @@
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>588, 54</value>
+  </metadata>
+  <data name="cb_LocalActorSaveAlpha.ToolTip" xml:space="preserve">
+    <value>If this option is selected the file is saved in
+first letter of firstname folder, 
+firstname_lastname.jpg (or .tbn)
+example:
+\B\Brad_Pitt.jpg
+
+Default options is to use actor's imdb id as filename.</value>
+  </data>
   <data name="Label104.Text" xml:space="preserve">
     <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled. The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).</value>
   </data>
@@ -136,9 +148,6 @@
     <value>Under normal circumstances, Media Companion will include the internet location for each available actor thumbnail. There are a couple of problems with this, firstly, when XBMC scrapes each nfo, if you enable actor thumbnails, XBMC needs to download these from the internet. Secondly, since MC also uses these urls to display actor thumbs, it can slow  down the Media Companion browser.
 These settings allow you to override this behaviour, saving the actor thumbs to a local folder, and adding the path to this into the nfo instead of a url.</value>
   </data>
-  <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>429, 17</value>
-  </metadata>
   <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>678, 91</value>
   </metadata>
@@ -206,31 +215,102 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
         AfgBDwL/AQcBwAHwAR8L
 </value>
   </data>
-  <data name="cbMovieBasicSave.ToolTip" xml:space="preserve">
-    <value>Saving movies in Basic Save Mode is only possible if
-"Use Foder Names for Scraping", or "All Movies are in Folders"
-is also selected.
-Saving of fanart.jpg or poster.jpg is disabled as per XBMC
-requirements.</value>
-  </data>
-  <data name="cbMoviePosterInFolder.ToolTip" xml:space="preserve">
-    <value>Drops filename from in front of poster.jpg.
-Either "Use Foldernames" or "All Movies in Folders"
-must be enabled.
-If Both artwork model is selected, Pre-Frodo artwork
-is still saved, as it should be.</value>
-  </data>
-  <data name="cbMovieFanartInFolders.ToolTip" xml:space="preserve">
-    <value>Drops filename from in front of fanart.jpg.
-Either "Use Foldernames" or "All Movies in Folders"
-must be enabled.
-If Both artwork model is selected, Pre-Frodo artwork
-is still saved, as it should be.</value>
-  </data>
-  <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 54</value>
+  <metadata name="TvEpContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>378, 276</value>
+  </metadata>
+  <metadata name="TvPosterContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>195, 276</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="Button_Save_TvShow_Episode.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        /9j/4AAQSkZJRgABAgEAxgDGAAD/2wBDAEEtMTkxKUE5NTlJRUFNYqRqYlpaYsmPl3ak7dH69unR5eH/
+        /////////+Hl/////////////v//////////////2wBDAUVJSWJWYsBqasD//+X/////////////////
+        ////////////////////////////////////////////////////wAARCAE4ATMDAREAAhEBAxEB/8QA
+        HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh
+        MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW
+        V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
+        x8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQF
+        BgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV
+        YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
+        hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq
+        8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCGSRpWLMfoKAGUAFADWAyKADaPSgA2j0FABtHpQAbR6UAG0ego
+        Av2YxBx6mgCegAoAKACgAoAWgAoAKACgAoAKACgAoAKACgAoAKAEoAKAIrn/AFDUAUKACgAoAKACgAoA
+        khmaFsjkdxQBpRyLIoZTxQA+gDGoAKACgBG6igAoAKACgAoAKAL1p/qPxNAE9ABQAUAFABQAtABQAUAF
+        ABQAUAIWVerAfU0AJvT++v50AG9P76/nQAb0/vr+dABvT+8v50AKCD0IP0NAC0AJQBFc/wCoagChQAUA
+        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
+        UAJQAUAFABQAUAFABQAUAJQAUAFABQAUAFACUAFABQAUAFABQAlABQAUAFABQAUAR3H/AB7yf7tAGWn3
+        qAH0AFABQA9fuigBlABQAUANagDR0/8A49/+BGgC1QAUAJQAUAFABQAUAFACUAFABQAUAFABQAlABQAU
+        AFABQAUAJQAUAFABQAUAFABQAUAR3H/HvJ/u0AZafeoAfQAUAFAD1+6KAGUAFABQAjUAaGn/APHv/wAC
+        NAFqgBKADNABmgAoATNABmgAzQAUAFABmgBKACgAoAKADNABQAlABQAZoAKACgAzQAUAJQAZoAWgAoAj
+        uP8Aj3k/3aAMtOtAD6ACgAoAev3aAGUAFABQAjUAaGn/APHv/wACNAFmgAoAKACgAoAKACgBKACgAoAK
+        AEoAKACgAoAKACgBKACgAoAKACgAoASgAoAKACgAoAjuP+PeT/doAzE+9QA+gAoAKAJF+6KAI6ACgAoA
+        RqANDT/+Pf8A4EaALNABQAUAFABQAlABQAUAFABQAUAJQAUAFABQAlABQAUAFABQAlABQAUAFABQAUAF
+        ABQBHcf8e8n+7QBmL96gB9ABQAUASL90UAR0ALQAlACN2oA0NP8A+Pf/AIEaALNABQAnNABzQAUAHNAB
+        QAlABQAUAFABQAUAJQAUAFABQAlABQAc0AFABQAUAFABQAUAFABQBHcf8e8n+7QBmp96gB9ABQAlAEi/
+        doAZQAUAFADW7UAaFh/x7/8AAjQBZoAKACgBKACgAoAKACgAoASgAoAKACgBKACgAoAKAEoAKACgAoAK
+        ACgAoASgAoAKACgBlx/x7yf7tAGavWgB9ABQAUAPX7tADKACgAoAa1AGhYf8e/8AwI0AWaACgAoASgAo
+        AKACgBKACgAoAKACgBKACgAoAKAEoAKACgAoAKACgBKACgAoAKACgAoAjn/1En+7QBnL1oAfQAUAFAD1
+        +7QAygAoAKAGt0oA0LD/AI9/+BGgCzQAlAB+NAB+NAB+NACfjQAUAFABQAUAJQAUAFABQAlABQAUAFAB
+        QAlABQAUAFABQAUAFABQAUARz/6iT/doAzl60APoAKACgB6/doAYBkgDqaAH+TJ/cNAA0TqMlSBQBE1A
+        Fy1mSKD5zyWPAp2Fcl+2RerflRysLh9ri9W/KjlYXD7XF6t+VHKwuH2uL1b8qfKw5kH2qL1b8qOVhzIP
+        tUXqfyo5WHMg+1Rep/KjlYuZB9qi9T+VHKw5kH2mP1P5UcrDmQfaY/U/lRysOZB9pj9T+VHKw5kH2mP1
+        P5UcrDmQfaY/U/lRysOZCfaY/U/lRysOZB9oj9T+VHKw5kH2iP3/ACo5WHMg+0R+/wCVHKw5kH2iP3/K
+        jlYcyD7RH7/lRysOZCfaI/f8qOVhzIPtEfv+VHKw5kH2iP3/ACo5WHMg+0R+/wCVHKw5kH2iP3/KjlYc
+        yD7RH7/lRysOZCfaI/f8qOVhzIPtMfqfyo5WPmQfaY/U/lRysLjZJkeJwDzt70rBcpL1pDJVRn+6M4oA
+        XyZP7poAayMh+YYoAcv3aAEj/wBbH/vCgDWoAhvP9QaAMtu1AAOlWiWLVEi0AFABQIWgAoAKAFpgFABQ
+        IKACgAoAWgAoAKACgAoAKACgAoASgAoAKBiUAFIAoASgBD0NJ7FLcavWsyy7p/8Arn/3RQBfoAoX3+sH
+        0oAgX7tADASrKw6gg0AWft0v9xP1oAZJdSSrtZVA9qAIG7UAIOlXEhi0xBTAWgAoEFAC0AFABQAtMAoE
+        FABQAUALQAUAFABQAUAFABQAUAFACUAFABQAlAwpAJQAh6Gk9hrcavWszQmilaFyyhTkY5oAm+3S/wBx
+        P1oAhllaZssAPpQAL92gBlABQAUAI1ACCriSxaZIUwCgBaACgQUALQAUAFAC0xBQAUALQAUAFABQIKAC
+        gAoAKACgAoGFACUAFACUDCkAUANPQ0nsNbiL1rM0HUAFABQA9elACywvGxBBI7GgBmD6H8qADB9D+VAD
+        WB44P5UAAB9D+VWiWGD6H8qdxWFwfQ/lQFgwfQ/lRcVgwfQ/lRcLC4PofyoCwYPoaYWDB9DQFhcH0NFx
+        WDB9DQFgwfQ0BYXB9DQFgwfQ0XCwYPoaLhYXB9DTuKwYPoaLhZhg+houFmGD6Gi4WYYPoaLhZhg+houF
+        mGD6Gi4WYYPoaLhZhg+houFgwfQ0XCwmD6GlcLBg+houOwmD6GgAwfQ0BYTB9D+VA7CEHHQ/lSew1uNU
+        HPQ/lWZY/B9D+VABg+h/KgBQjMcBST9KALsdqBGN33u9AH//2Q==
+</value>
+  </data>
   <data name="Button44.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -478,97 +558,35 @@ is still saved, as it should be.</value>
         1wJvxwL/H3ANUi4lZjKDAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="Button_Save_TvShow_Episode.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        /9j/4AAQSkZJRgABAgEAxgDGAAD/2wBDAEEtMTkxKUE5NTlJRUFNYqRqYlpaYsmPl3ak7dH69unR5eH/
-        /////////+Hl/////////////v//////////////2wBDAUVJSWJWYsBqasD//+X/////////////////
-        ////////////////////////////////////////////////////wAARCAE4ATMDAREAAhEBAxEB/8QA
-        HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh
-        MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW
-        V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
-        x8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQF
-        BgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV
-        YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
-        hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq
-        8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCGSRpWLMfoKAGUAFADWAyKADaPSgA2j0FABtHpQAbR6UAG0ego
-        Av2YxBx6mgCegAoAKACgAoAWgAoAKACgAoAKACgAoAKACgAoAKAEoAKAIrn/AFDUAUKACgAoAKACgAoA
-        khmaFsjkdxQBpRyLIoZTxQA+gDGoAKACgBG6igAoAKACgAoAKAL1p/qPxNAE9ABQAUAFABQAtABQAUAF
-        ABQAUAIWVerAfU0AJvT++v50AG9P76/nQAb0/vr+dABvT+8v50AKCD0IP0NAC0AJQBFc/wCoagChQAUA
-        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
-        UAJQAUAFABQAUAFABQAUAJQAUAFABQAUAFACUAFABQAUAFABQAlABQAUAFABQAUAR3H/AB7yf7tAGWn3
-        qAH0AFABQA9fuigBlABQAUANagDR0/8A49/+BGgC1QAUAJQAUAFABQAUAFACUAFABQAUAFABQAlABQAU
-        AFABQAUAJQAUAFABQAUAFABQAUAR3H/HvJ/u0AZafeoAfQAUAFAD1+6KAGUAFABQAjUAaGn/APHv/wAC
-        NAFqgBKADNABmgAoATNABmgAzQAUAFABmgBKACgAoAKADNABQAlABQAZoAKACgAzQAUAJQAZoAWgAoAj
-        uP8Aj3k/3aAMtOtAD6ACgAoAev3aAGUAFABQAjUAaGn/APHv/wACNAFmgAoAKACgAoAKACgBKACgAoAK
-        AEoAKACgAoAKACgBKACgAoAKACgAoASgAoAKACgAoAjuP+PeT/doAzE+9QA+gAoAKAJF+6KAI6ACgAoA
-        RqANDT/+Pf8A4EaALNABQAUAFABQAlABQAUAFABQAUAJQAUAFABQAlABQAUAFABQAlABQAUAFABQAUAF
-        ABQBHcf8e8n+7QBmL96gB9ABQAUASL90UAR0ALQAlACN2oA0NP8A+Pf/AIEaALNABQAnNABzQAUAHNAB
-        QAlABQAUAFABQAUAJQAUAFABQAlABQAc0AFABQAUAFABQAUAFABQBHcf8e8n+7QBmp96gB9ABQAlAEi/
-        doAZQAUAFADW7UAaFh/x7/8AAjQBZoAKACgBKACgAoAKACgAoASgAoAKACgBKACgAoAKAEoAKACgAoAK
-        ACgAoASgAoAKACgBlx/x7yf7tAGavWgB9ABQAUAPX7tADKACgAoAa1AGhYf8e/8AwI0AWaACgAoASgAo
-        AKACgBKACgAoAKACgBKACgAoAKAEoAKACgAoAKACgBKACgAoAKACgAoAjn/1En+7QBnL1oAfQAUAFAD1
-        +7QAygAoAKAGt0oA0LD/AI9/+BGgCzQAlAB+NAB+NAB+NACfjQAUAFABQAUAJQAUAFABQAlABQAUAFAB
-        QAlABQAUAFABQAUAFABQAUARz/6iT/doAzl60APoAKACgB6/doAYBkgDqaAH+TJ/cNAA0TqMlSBQBE1A
-        Fy1mSKD5zyWPAp2Fcl+2RerflRysLh9ri9W/KjlYXD7XF6t+VHKwuH2uL1b8qfKw5kH2qL1b8qOVhzIP
-        tUXqfyo5WHMg+1Rep/KjlYuZB9qi9T+VHKw5kH2mP1P5UcrDmQfaY/U/lRysOZB9pj9T+VHKw5kH2mP1
-        P5UcrDmQfaY/U/lRysOZCfaY/U/lRysOZB9oj9T+VHKw5kH2iP3/ACo5WHMg+0R+/wCVHKw5kH2iP3/K
-        jlYcyD7RH7/lRysOZCfaI/f8qOVhzIPtEfv+VHKw5kH2iP3/ACo5WHMg+0R+/wCVHKw5kH2iP3/KjlYc
-        yD7RH7/lRysOZCfaI/f8qOVhzIPtMfqfyo5WPmQfaY/U/lRysLjZJkeJwDzt70rBcpL1pDJVRn+6M4oA
-        XyZP7poAayMh+YYoAcv3aAEj/wBbH/vCgDWoAhvP9QaAMtu1AAOlWiWLVEi0AFABQIWgAoAKAFpgFABQ
-        IKACgAoAWgAoAKACgAoAKACgAoASgAoAKBiUAFIAoASgBD0NJ7FLcavWsyy7p/8Arn/3RQBfoAoX3+sH
-        0oAgX7tADASrKw6gg0AWft0v9xP1oAZJdSSrtZVA9qAIG7UAIOlXEhi0xBTAWgAoEFAC0AFABQAtMAoE
-        FABQAUALQAUAFABQAUAFABQAUAFACUAFABQAlAwpAJQAh6Gk9hrcavWszQmilaFyyhTkY5oAm+3S/wBx
-        P1oAhllaZssAPpQAL92gBlABQAUAI1ACCriSxaZIUwCgBaACgQUALQAUAFAC0xBQAUALQAUAFABQIKAC
-        gAoAKACgAoGFACUAFACUDCkAUANPQ0nsNbiL1rM0HUAFABQA9elACywvGxBBI7GgBmD6H8qADB9D+VAD
-        WB44P5UAAB9D+VWiWGD6H8qdxWFwfQ/lQFgwfQ/lRcVgwfQ/lRcLC4PofyoCwYPoaYWDB9DQFhcH0NFx
-        WDB9DQFgwfQ0BYXB9DQFgwfQ0XCwYPoaLhYXB9DTuKwYPoaLhZhg+houFmGD6Gi4WYYPoaLhZhg+houF
-        mGD6Gi4WYYPoaLhZhg+houFgwfQ0XCwmD6GlcLBg+houOwmD6GgAwfQ0BYTB9D+VA7CEHHQ/lSew1uNU
-        HPQ/lWZY/B9D+VABg+h/KgBQjMcBST9KALsdqBGN33u9AH//2Q==
-</value>
+  <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>429, 17</value>
+  </metadata>
+  <data name="cbMovieBasicSave.ToolTip" xml:space="preserve">
+    <value>Saving movies in Basic Save Mode is only possible if
+"Use Foder Names for Scraping", or "All Movies are in Folders"
+is also selected.
+Saving of fanart.jpg or poster.jpg is disabled as per XBMC
+requirements.</value>
   </data>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>588, 54</value>
+  <data name="cbMoviePosterInFolder.ToolTip" xml:space="preserve">
+    <value>Drops filename from in front of poster.jpg.
+Either "Use Foldernames" or "All Movies in Folders"
+must be enabled.
+If Both artwork model is selected, Pre-Frodo artwork
+is still saved, as it should be.</value>
+  </data>
+  <data name="cbMovieFanartInFolders.ToolTip" xml:space="preserve">
+    <value>Drops filename from in front of fanart.jpg.
+Either "Use Foldernames" or "All Movies in Folders"
+must be enabled.
+If Both artwork model is selected, Pre-Frodo artwork
+is still saved, as it should be.</value>
+  </data>
+  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 239</value>
+  </metadata>
+  <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 54</value>
   </metadata>
   <data name="btnMovieDisplay_DirectorFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1646,9 +1664,6 @@ is still saved, as it should be.</value>
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 239</value>
-  </metadata>
   <data name="Label128.Text" xml:space="preserve">
     <value>
 
@@ -2736,9 +2751,6 @@ If you do not wish to edit a field then leave it blank, only fields that contain
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>588, 54</value>
-  </metadata>
   <data name="btnMovieDisplay_SetFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -3969,85 +3981,6 @@ eg. Add the movie set "Star Wars Collection", and make all
 Star Wars movies part of this set. They would be added to the XBMC library
 as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
   </data>
-  <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>572, 91</value>
-  </metadata>
-  <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAFUARcBVAEXASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
-        AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
-        AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
-        AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
-        AYIBwQHM/wAnAAHSAdMB1AG9AdgB3QFDAcMB1AE+AcYB4AE5AcsB4QE8AckB3wE9AccB3gE9AcYB3QE+
-        AcUB3QE9AcQB3AE8AcMB2wE8AcMB2gE8AcEB2gE8AcEB2QE7Ab8B2AE6Ab8B2AE6Ab8B1wE7Ab0B2AE5
-        AbwB1wE6AboB1gE6AboB1gE5AboB1QE5AbkB1QE4AbgB1AE5AbcB0gE4AbYB0gE5AbUB0gE4AbUB0QE5
-        AbMBzwE3AasBwgGxAc0B1QHRAtP/ACEAAY0B0QHbATcBwgHZAT8BxwHfAT0BzgHkATgBvAHWAToBvwHU
-        AToBvAHWATgBuwHUATwBugHUAToBuAHUATcBtgHSATkBuQHNATYBtQHQATkBtgHOATkBtQHOATcBtAHN
-        ATsBswHMATgBsQHNATYBsAHMATYBsAHKATMBrwHKATQBrQHKATMBrQHHATcBrAHJATcBqwHHATsBqgHG
-        ATIBqAHGATMBpwHFATgBtgHRATcBswHQATABqQHGAYQBwwHR/wAhAAF4AcwB2QE9AcYB3wE8AcoB4QE3
-        AcMB2QFHAcUB3AE/AVcBXgEyAUMBSAFLAZ8BqQFGAWoBcAEuAUEBRwFkAa8BvAEtAUgBTQFPAYwBlwFC
-        AWQBaQEtAUIBRgFVAa8BwgE4AVMBWgEvAUIBRgEtAUIBRQEuAUcBTQFGAXIBfwFFAbkBzAE1AU4BUgEv
-        AUEBRwFGAW0BcgEoAS8BNAFHAXQBfgE0Aa4BxwEzAaoBxwE0AbEBzQE4AbEBywFxAb0Bzf8AIQABeQHO
-        AdsBPAHJAeEBPwHJAeABPAHGAdsBRAHLAd8BHwEgASEBBAIBAUgBjQGYASwBOQE+AQQBAQECAWIBmQGh
-        AQkCAgE+AVwBYwEmATMBNAECAQABAQFZAawBuQIbAR8BBAIBARkBIwEkAQUBAQEDAQQCAgFZAacBtgIU
-        ARUBBAEBAQIBPgFUAVYBAwECAQEBEAERARIBRwG1AcsBMwGtAckBOAGxAc0BNgGzAcwBcgG/Ac//ACEA
-        AXkB0AHcAT0BzAHjATwBzAHiATwByQHeAUcBzQHkAR0BIAEhAQIBAQEAAUcBkAGZASkBOgE/AQMBAQEA
-        AWMBfgGGAQMBAQEAATEBPgFBAScBNgE4AQMBAAEBAVQBrQG6ARsBGgEfAwIBWwGPAZgBDwENAQ8BAgIB
-        AVUBmwGnAhMBFQECAgEBZAGXAaABAwICAQwBCAEKAUsBtQHOATUBsgHKATQBtAHMATcBtQHNAXEBwAHQ
-        /wAhAAF7AdIB3gE/Ac0B5QE9Ac0B4wFAAc0B4QFLAdAB5wEdASABIQECAgABSQGSAZsBKQE6AT8BAwIB
-        AVoBYwFlAwEBIAElASYBMgI5AQMBAQEAAVcBsAG+AhoBHgEDAgIBWAGRAZkCEAERAQMCAQFVAZoBpgEU
-        ARIBFAECAgEBZQGZAaEBAwEBAQIBCwEIAQoBTQG5AdEBOAG1Ac0BNgG2Ac4BNwG3Ac4BcwHCAdL/ACEA
-        AXwB0wHfAT8BzwHmAT0B0AHmAT0B0QHlAUsB1AHqAR0BIAEhAQMCAQFJAZQBnQEnATsBPwMBA0IBBQEE
-        AQUBEAEPARABLwEuAS8BAQIAAVgBsgHAAhoBHgECAQEBAwFZAZEBmwEPARABEQEDAgEBVQGdAagBFQES
-        ARQBAgIBAWQBmgGjAQUBAAEBAQsBCAEJAUsBvAHTATcBuQHRATcBtwHQATkBuAHQAXQBxAHT/wAhAAF9
-        AdUB4QFAAdAB6AE+AdIB6AFAAdMB5wFOAdcB7AEfASABIgEDAQABAQFJAZUBngEoATwBPwMBAxUDOQME
-        AxQDAAFaAbQBwQEaARsBHwEDAQEBAwFZAZMBnQIPAREBAwIBAVgBngGqARUBEgEVAQIBAQECAWYBkgGb
-        AgEBAAEMAQkBCgFNAb4B1QE6AbwB1AE5AboB0wE7AboB0gF1AcUB1P8AIQABfQHWAeIBQAHSAekBQAHU
-        AeoBQAHXAeoBTQHbAe8BHwEgASIBAwEAAQEBSwGXAaABKAE9AT8DAAEDAgEBUwFyAXYBCwEHAQkGAAFa
-        AbcBwwIaAR4BAgEBAQMBYgGWAZwBEAEOARECAgEBAVgBpAGvARMBEgEVAQQBAQECAR0BIAEiAQQCAQEd
-        ASEBJQFDAcUB2QE8Ab8B1wE6AbwB1AE7AbwB1AF1AccB1v8AIQABfgHYAeQBQQHUAeoBQQHVAesBQgHa
-        Ae4BTwHdAfIBHwEgASEBAgEAAQEBTAGYAaABKAE9AT8DAAECAgABWAGaAaQBGgEdASABAQIAAQECAAFc
-        AbkBxgEaARsBHgEDAQABBAEkASsBMAEFAgMBCQIFAVoBuwHJARQBEwEVAQICAQFZAaMBqAFGAZMBnQFN
-        AbcByAEyAZUBpgE3AZsBrwE3Ab8B1wE7Ab4B2AF2AckB2P8AIQABfQHaAeQBQQHXAewBQAHTAeoBRQHd
-        AfEBTgHhAfABPwFXAVsBLAFBAUIBWgGrAbgBQAFrAXEBKgFBAUUBLAFBAUIBVwHAAcsBQwFkAWsBKwFB
-        AUUBLAFAAUQBXAHFAc4BPwFSAVgBKgFAAUQBLAFBAUYBMgFRAVMBTAGUAZwBTQHSAeQBNAFLAVEBLgE+
-        AUMBTAG6AcUBPwHHAeMBOwHIAd8BOAGzAckBPAG1AcsBNgG7AdUBPAG/AdoBdwHLAdj/ACEAAZkB3wHn
-        AUgB4QHuAT8B2QHqAToBzwHjAT4B4wHyAUYB4QHyAUQB4AHyAT8B3gHxAUMB3QHwAUQB3AHvAUEB3QHs
-        AUIB2QHwAT0B2gHtAUQB2QHtAUIB2AHsAUAB1gHsAT8B1wHpAUEB1QHpAUEB1AHoAT4B0wHpAUAB0AHp
-        AUABzwHnAUEB0gHkAUMBzwHnAToBzgHmATsBzQHkAT8BywHiATsBzAHiATUBuAHSATwBxQHZAUIBygHc
-        AZMB1AHe/wAhAAHSAtQBxQHbAdwBUgHkAe8BPwHWAeoBQAHRAeYBOwHRAeUBPQHQAeQBQQHOAeQBPQHO
-        AeQBPQHNAeMBQAHLAeMBPwHMAeABPwHLAeEBPAHJAeEBPAHIAd8BPQHIAd0BPgHGAd0BPgHGAd4BPAHE
-        Ad0BOwHEAdsBOgHEAdoBOAHCAdsBOgHBAdoBOAHCAdgBOgHAAdcBOQHAAdgBOgG+AdUBPAG9AdQBPQHB
-        AdkBUgHQAeABxgHYAdsB0wLU/wAnAAGPAeUB6QFpAecB9gFnAeYB9AFmAecB9QFlAeUB9AFlAeYB9AFl
-        AeQB8wFkAeQB8wFkAeQB8QFjAeIB8QFkAeMB8AFlAeIB8AFmAeEB8AFiAeEB7wFjAeAB7gFlAd8B7gFl
-        Ad8B7QFkAd4B7AFkAd4B7AFjAdwB6wFiAdwB7AFjAdwB7QFnAdoB7AFlAdoB7AFnAdoB7AFmAdgB6gFi
-        AdcB6QGVAdkB4f8AJwABQgFNAT4HAAE+AwABKAMAAYADAAEPAwABAQEAAQEFAAHwFwAD/wEAAcACAAED
-        3AABwAIAAQMMAAs=
-</value>
-  </data>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>
-Separate folders are those that contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method means that all shows must be added manually.</value>
-  </data>
-  <data name="Label139.Text" xml:space="preserve">
-    <value>Enabling the 'Quick Add' option will speed up the
-scraping of TV Shows by not downloading available
-Art. All show art can be scraped at any time by using
-the TV context menu item to 'Download missing art'</value>
-  </data>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 239</value>
-  </metadata>
   <data name="Label86.Text" xml:space="preserve">
     <value>Add your movie folders from this location.
 
@@ -4119,43 +4052,69 @@ If these words are in the movie's title, then Media Companion will handle them a
 
 Media Companion will keep these it the Title, and in the Foldername.</value>
   </data>
-  <metadata name="TvEpContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>378, 276</value>
+  <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>572, 91</value>
   </metadata>
-  <metadata name="TvPosterContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>195, 276</value>
-  </metadata>
+  <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
+        CwAAAk1TRnQBSQFMAwEBAAFUARcBVAEXASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
+        AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
+        AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
+        AYIBwQHM/wAnAAHSAdMB1AG9AdgB3QFDAcMB1AE+AcYB4AE5AcsB4QE8AckB3wE9AccB3gE9AcYB3QE+
+        AcUB3QE9AcQB3AE8AcMB2wE8AcMB2gE8AcEB2gE8AcEB2QE7Ab8B2AE6Ab8B2AE6Ab8B1wE7Ab0B2AE5
+        AbwB1wE6AboB1gE6AboB1gE5AboB1QE5AbkB1QE4AbgB1AE5AbcB0gE4AbYB0gE5AbUB0gE4AbUB0QE5
+        AbMBzwE3AasBwgGxAc0B1QHRAtP/ACEAAY0B0QHbATcBwgHZAT8BxwHfAT0BzgHkATgBvAHWAToBvwHU
+        AToBvAHWATgBuwHUATwBugHUAToBuAHUATcBtgHSATkBuQHNATYBtQHQATkBtgHOATkBtQHOATcBtAHN
+        ATsBswHMATgBsQHNATYBsAHMATYBsAHKATMBrwHKATQBrQHKATMBrQHHATcBrAHJATcBqwHHATsBqgHG
+        ATIBqAHGATMBpwHFATgBtgHRATcBswHQATABqQHGAYQBwwHR/wAhAAF4AcwB2QE9AcYB3wE8AcoB4QE3
+        AcMB2QFHAcUB3AE/AVcBXgEyAUMBSAFLAZ8BqQFGAWoBcAEuAUEBRwFkAa8BvAEtAUgBTQFPAYwBlwFC
+        AWQBaQEtAUIBRgFVAa8BwgE4AVMBWgEvAUIBRgEtAUIBRQEuAUcBTQFGAXIBfwFFAbkBzAE1AU4BUgEv
+        AUEBRwFGAW0BcgEoAS8BNAFHAXQBfgE0Aa4BxwEzAaoBxwE0AbEBzQE4AbEBywFxAb0Bzf8AIQABeQHO
+        AdsBPAHJAeEBPwHJAeABPAHGAdsBRAHLAd8BHwEgASEBBAIBAUgBjQGYASwBOQE+AQQBAQECAWIBmQGh
+        AQkCAgE+AVwBYwEmATMBNAECAQABAQFZAawBuQIbAR8BBAIBARkBIwEkAQUBAQEDAQQCAgFZAacBtgIU
+        ARUBBAEBAQIBPgFUAVYBAwECAQEBEAERARIBRwG1AcsBMwGtAckBOAGxAc0BNgGzAcwBcgG/Ac//ACEA
+        AXkB0AHcAT0BzAHjATwBzAHiATwByQHeAUcBzQHkAR0BIAEhAQIBAQEAAUcBkAGZASkBOgE/AQMBAQEA
+        AWMBfgGGAQMBAQEAATEBPgFBAScBNgE4AQMBAAEBAVQBrQG6ARsBGgEfAwIBWwGPAZgBDwENAQ8BAgIB
+        AVUBmwGnAhMBFQECAgEBZAGXAaABAwICAQwBCAEKAUsBtQHOATUBsgHKATQBtAHMATcBtQHNAXEBwAHQ
+        /wAhAAF7AdIB3gE/Ac0B5QE9Ac0B4wFAAc0B4QFLAdAB5wEdASABIQECAgABSQGSAZsBKQE6AT8BAwIB
+        AVoBYwFlAwEBIAElASYBMgI5AQMBAQEAAVcBsAG+AhoBHgEDAgIBWAGRAZkCEAERAQMCAQFVAZoBpgEU
+        ARIBFAECAgEBZQGZAaEBAwEBAQIBCwEIAQoBTQG5AdEBOAG1Ac0BNgG2Ac4BNwG3Ac4BcwHCAdL/ACEA
+        AXwB0wHfAT8BzwHmAT0B0AHmAT0B0QHlAUsB1AHqAR0BIAEhAQMCAQFJAZQBnQEnATsBPwMBA0IBBQEE
+        AQUBEAEPARABLwEuAS8BAQIAAVgBsgHAAhoBHgECAQEBAwFZAZEBmwEPARABEQEDAgEBVQGdAagBFQES
+        ARQBAgIBAWQBmgGjAQUBAAEBAQsBCAEJAUsBvAHTATcBuQHRATcBtwHQATkBuAHQAXQBxAHT/wAhAAF9
+        AdUB4QFAAdAB6AE+AdIB6AFAAdMB5wFOAdcB7AEfASABIgEDAQABAQFJAZUBngEoATwBPwMBAxUDOQME
+        AxQDAAFaAbQBwQEaARsBHwEDAQEBAwFZAZMBnQIPAREBAwIBAVgBngGqARUBEgEVAQIBAQECAWYBkgGb
+        AgEBAAEMAQkBCgFNAb4B1QE6AbwB1AE5AboB0wE7AboB0gF1AcUB1P8AIQABfQHWAeIBQAHSAekBQAHU
+        AeoBQAHXAeoBTQHbAe8BHwEgASIBAwEAAQEBSwGXAaABKAE9AT8DAAEDAgEBUwFyAXYBCwEHAQkGAAFa
+        AbcBwwIaAR4BAgEBAQMBYgGWAZwBEAEOARECAgEBAVgBpAGvARMBEgEVAQQBAQECAR0BIAEiAQQCAQEd
+        ASEBJQFDAcUB2QE8Ab8B1wE6AbwB1AE7AbwB1AF1AccB1v8AIQABfgHYAeQBQQHUAeoBQQHVAesBQgHa
+        Ae4BTwHdAfIBHwEgASEBAgEAAQEBTAGYAaABKAE9AT8DAAECAgABWAGaAaQBGgEdASABAQIAAQECAAFc
+        AbkBxgEaARsBHgEDAQABBAEkASsBMAEFAgMBCQIFAVoBuwHJARQBEwEVAQICAQFZAaMBqAFGAZMBnQFN
+        AbcByAEyAZUBpgE3AZsBrwE3Ab8B1wE7Ab4B2AF2AckB2P8AIQABfQHaAeQBQQHXAewBQAHTAeoBRQHd
+        AfEBTgHhAfABPwFXAVsBLAFBAUIBWgGrAbgBQAFrAXEBKgFBAUUBLAFBAUIBVwHAAcsBQwFkAWsBKwFB
+        AUUBLAFAAUQBXAHFAc4BPwFSAVgBKgFAAUQBLAFBAUYBMgFRAVMBTAGUAZwBTQHSAeQBNAFLAVEBLgE+
+        AUMBTAG6AcUBPwHHAeMBOwHIAd8BOAGzAckBPAG1AcsBNgG7AdUBPAG/AdoBdwHLAdj/ACEAAZkB3wHn
+        AUgB4QHuAT8B2QHqAToBzwHjAT4B4wHyAUYB4QHyAUQB4AHyAT8B3gHxAUMB3QHwAUQB3AHvAUEB3QHs
+        AUIB2QHwAT0B2gHtAUQB2QHtAUIB2AHsAUAB1gHsAT8B1wHpAUEB1QHpAUEB1AHoAT4B0wHpAUAB0AHp
+        AUABzwHnAUEB0gHkAUMBzwHnAToBzgHmATsBzQHkAT8BywHiATsBzAHiATUBuAHSATwBxQHZAUIBygHc
+        AZMB1AHe/wAhAAHSAtQBxQHbAdwBUgHkAe8BPwHWAeoBQAHRAeYBOwHRAeUBPQHQAeQBQQHOAeQBPQHO
+        AeQBPQHNAeMBQAHLAeMBPwHMAeABPwHLAeEBPAHJAeEBPAHIAd8BPQHIAd0BPgHGAd0BPgHGAd4BPAHE
+        Ad0BOwHEAdsBOgHEAdoBOAHCAdsBOgHBAdoBOAHCAdgBOgHAAdcBOQHAAdgBOgG+AdUBPAG9AdQBPQHB
+        AdkBUgHQAeABxgHYAdsB0wLU/wAnAAGPAeUB6QFpAecB9gFnAeYB9AFmAecB9QFlAeUB9AFlAeYB9AFl
+        AeQB8wFkAeQB8wFkAeQB8QFjAeIB8QFkAeMB8AFlAeIB8AFmAeEB8AFiAeEB7wFjAeAB7gFlAd8B7gFl
+        Ad8B7QFkAd4B7AFkAd4B7AFjAdwB6wFiAdwB7AFjAdwB7QFnAdoB7AFlAdoB7AFnAdoB7AFmAdgB6gFi
+        AdcB6QGVAdkB4f8AJwABQgFNAT4HAAE+AwABKAMAAYADAAEPAwABAQEAAQEFAAHwFwAD/wEAAcACAAED
+        3AABwAIAAQMMAAs=
+</value>
+  </data>
   <data name="Label56.Text" xml:space="preserve">
     <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
 If none of the above are correct, then alter the search term and search again.</value>
   </data>
-  <metadata name="STitle.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SPlot.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SPremiered.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SRating.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SGenre.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SStudio.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="STVDBId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SIMDBId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="SCert.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="STitle.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -4205,6 +4164,17 @@ the program is running, use the
 menu item, located in the
 "TV Shows" drop down menu.</value>
   </data>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>
+Separate folders are those that contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method means that all shows must be added manually.</value>
+  </data>
   <data name="Label138.Text" xml:space="preserve">
     <value>If you have enabled the option to 'Save Actor
 Thumbs to the '.Actors' Folder' located in the
@@ -4219,6 +4189,12 @@ This preference gives you the option to copy an
 actors thumb, if available, to the episodes actor
 folder, allowing the higher quality TVDB actor
 thumb to be used for the episode.</value>
+  </data>
+  <data name="Label139.Text" xml:space="preserve">
+    <value>Enabling the 'Quick Add' option will speed up the
+scraping of TV Shows by not downloading available
+Art. All show art can be scraped at any time by using
+the TV context menu item to 'Download missing art'</value>
   </data>
   <data name="Label140.Text" xml:space="preserve">
     <value>Media Companion now offers the option to

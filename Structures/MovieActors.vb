@@ -44,20 +44,20 @@ Public Structure str_MovieActors
 
         If actorthumb <> Nothing Then
 
-            Dim filename As String
+            Dim filename As String = GetActorFileName(ActorPath)
 
             If Preferences.actorseasy Then  'Allow to save to .actors folder
                 Dim hg As New IO.DirectoryInfo(ActorPath)
                 If Not hg.Exists Then
                     IO.Directory.CreateDirectory(ActorPath)
                 End If
-                filename = GetActorFileName(ActorPath)
+                'filename = GetActorFileName(ActorPath)
                 Movie.SaveActorImageToCacheAndPath(actorthumb, filename)
                 ActorSave(filename)
             End If
 
             'Allow also to save to local path/network path
-            If Preferences.actorsave And actorid <> "" Then
+            If Preferences.actorsave AndAlso actorid <> "" AndAlso Not Preferences.actorsavealpha Then
                 If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
                     Dim tempstring = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2)
                     Dim hg As New IO.DirectoryInfo(tempstring)
@@ -77,6 +77,29 @@ Public Structure str_MovieActors
                             actorthumb = Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
                         End If
                     End If
+                End If
+            ElseIf Preferences.actorsave AndAlso Preferences.actorsavealpha Then
+                If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
+                    Dim actorfilename As String = filename.Substring(filename.LastIndexOf("\") + 1)
+                    Dim actordir As String = Preferences.actorsavepath & "\" & actorfilename.Substring(0,1)
+                    Dim hg As New IO.DirectoryInfo(actordir)
+                    If Not hg.Exists Then
+                        IO.Directory.CreateDirectory(actordir)
+                    End If
+
+                    Dim workingpath = actordir & "\" & actorfilename
+                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
+                    ActorSave(workingpath)
+                    actorthumb = workingpath
+
+                    If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
+                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                            actorthumb = Preferences.actornetworkpath & "/" & actorfilename.Substring(0,1) & "/" & actorfilename
+                        Else
+                            actorthumb = Preferences.actornetworkpath & "\" & actorfilename.Substring(0,1) & "\" & actorfilename
+                        End If
+                    End If
+
                 End If
             End If
 

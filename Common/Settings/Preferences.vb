@@ -187,6 +187,7 @@ Public Class Preferences
     Public Shared allfolders As Boolean
     Public Shared actorsave As Boolean
     Public Shared actorsavepath As String
+    Public Shared actorsavealpha As Boolean
     Public Shared actornetworkpath As String
     Public Shared imdbmirror As String
     Public Shared createfolderjpg As Boolean
@@ -583,6 +584,7 @@ Public Class Preferences
         ignoreactorthumbs = False
         actorsave = False
         actorsavepath = ""
+        actorsavealpha = False
         actornetworkpath = ""
         usefanart = True
         ignoretrailers = False
@@ -869,6 +871,7 @@ Public Class Preferences
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
         root.AppendChild(doc, "actorsavepath",                      actorsavepath)                      'localactorpath
+        root.AppendChild(doc, "actorsavealpha",                     actorsavealpha)                     'actorsavealpha
         root.AppendChild(doc, "actornetworkpath",                   actornetworkpath)                   'xbmcactorpath
         root.AppendChild(doc, "imdbmirror",                         imdbmirror)                         'ListBox9
         root.AppendChild(doc, "createfolderjpg",                    createfolderjpg)                    'chkbx_createfolderjpg
@@ -1191,6 +1194,7 @@ Public Class Preferences
                     Case "copytvactorthumbs"                    : copytvactorthumbs = thisresult.InnerXml
                     Case "displayMissingEpisodes"               : displayMissingEpisodes = thisresult.InnerXml
                     Case "actorsavepath"                        : actorsavepath = decxmlchars(thisresult.InnerText)
+                    Case "actorsavealpha"                       : actorsavealpha = thisresult.InnerXml
                     Case "actornetworkpath"                     : actornetworkpath = decxmlchars(thisresult.InnerText)
                     Case "overwritethumbs"                      : overwritethumbs = thisresult.InnerXml
                     Case "LocalActorImage"                      : LocalActorImage = thisresult.InnerText 
@@ -1708,7 +1712,12 @@ Public Class Preferences
                             Dim extension As String = IO.Path.GetExtension(location)
                             Dim purename As String = IO.Path.GetFileName(location)
                             purename = purename.Replace(extension, "")
-                            actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
+                            If actorsavealpha Then
+                                actualpath = actorsavepath & "\" & purename.Substring(0,1) & "\" & filename
+                            Else
+                                actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
+                            End If
+                            
                         End If
                         If Not IO.File.Exists(actualpath) Then
                             actualpath = "none"

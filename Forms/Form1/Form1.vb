@@ -13950,6 +13950,7 @@ Public Class Form1
         cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
  
         saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
+        cb_LocalActorSaveAlpha.CheckState       = If(Preferences.actorsavealpha, CheckState.Checked, CheckState.Unchecked)
         'saveactorchkbx.CheckState = CheckState.Unchecked
 
         localactorpath.Enabled                  = Preferences.actorsave
@@ -14206,6 +14207,7 @@ Public Class Form1
                 xbmcactorpath.Text = Preferences.actornetworkpath
                 localactorpath.Enabled = True
                 xbmcactorpath.Enabled = True
+                cb_LocalActorSaveAlpha.Enabled = True
                 Button77.Enabled = True
             Else
                 Preferences.actorsave = False
@@ -14213,6 +14215,7 @@ Public Class Form1
                 xbmcactorpath.Text = ""
                 localactorpath.Enabled = False
                 xbmcactorpath.Enabled = False
+                cb_LocalActorSaveAlpha.Enabled = False
                 Button77.Enabled = False
             End If
             movieprefschanged = True
@@ -14222,7 +14225,19 @@ Public Class Form1
         End Try
     End Sub
 
-
+    Private Sub cb_LocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_LocalActorSaveAlpha.CheckedChanged
+        Try
+            If cb_LocalActorSaveAlpha.CheckState = CheckState.Checked Then
+                Preferences.actorsavealpha = True
+            Else
+                Preferences.actorsavealpha = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMoviePosterScrape.CheckedChanged
         Try
