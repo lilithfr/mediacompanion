@@ -3136,12 +3136,47 @@ Public Class Form1
     Private Sub util_FileDetailsGet()
         Try
             Dim tempstring As String = String.Empty
+            Dim appPath As String = ""
             Dim exists As Boolean
             Dim movieinfo As String = String.Empty
             Dim medianfoexists As Boolean = False
-            If applicationPath.IndexOf("/") <> -1 Then tempstring = applicationPath & "/" & "MediaInfo.dll"
-            If applicationPath.IndexOf("\") <> -1 Then tempstring = applicationPath & "\" & "MediaInfo.dll"
-            exists = IO.File.Exists(tempstring)
+            tempstring = Utilities.GetFileName(pathtxt.Text)
+            If IO.Path.GetFileName(tempstring).ToLower = "video_ts.ifo" Then
+                Dim temppath As String = tempstring.Replace(IO.Path.GetFileName(tempstring), "VTS_01_0.IFO")
+                If IO.File.Exists(temppath) Then
+                    tempstring = temppath
+                End If
+            End If
+            Dim fileisiso As Boolean = (IO.Path.GetExtension(tempstring).ToLower = ".iso")
+            If fileisiso Then
+                If applicationPath.IndexOf("/") <> -1 Then appPath = applicationPath & "/" & "mediainfo-rar.exe"
+                If applicationPath.IndexOf("\") <> -1 Then appPath = applicationPath & "\" & "mediainfo-rar.exe"
+                If Not IO.File.Exists(appPath) Then
+                    MsgBox("Unable to find th file ""mediainfo-rar.exe""" & vbCrLf & vbCrLf & "Please make sure this file is available in the programs root directory")
+                Exit Sub
+                End If
+                Try
+                    Dim NewProcess As New System.Diagnostics.Process()
+
+                    With NewProcess.StartInfo
+                        .FileName = appPath
+                        .Arguments = tempstring
+                        .RedirectStandardOutput = True
+                        .RedirectStandardError = True
+                        .RedirectStandardInput = True
+                        .UseShellExecute = False
+                        .WindowStyle = ProcessWindowStyle.Hidden
+                        .CreateNoWindow = False 
+                    End With
+                    Dim To_Display As String = ""
+                    NewProcess.Start()
+                    movieinfo = NewProcess.StandardOutput.ReadToEnd
+                Catch ex As Exception 
+                End Try
+            Else
+            If applicationPath.IndexOf("/") <> -1 Then appPath = applicationPath & "/" & "MediaInfo.dll"
+            If applicationPath.IndexOf("\") <> -1 Then appPath = applicationPath & "\" & "MediaInfo.dll"
+            exists = IO.File.Exists(appPath)
             If exists = True Then
                 medianfoexists = True
             End If
@@ -3151,6 +3186,7 @@ Public Class Form1
             End If
             Dim To_Display As String = ""
             Dim tempstring5 As String
+            
             Dim MI As mediainfo
             MI = New mediainfo
             tempstring5 = MI.Option_("Info_Version", "0.7.0.0;MediaInfoDLL_Example_MSVB;0.7.0.0")
@@ -3158,19 +3194,15 @@ Public Class Form1
                 TextBox1.Text = "MediaInfo.Dll: this version of the DLL is not compatible"
                 Exit Sub
             End If
-            tempstring = Utilities.GetFileName(pathtxt.Text)
-            If IO.Path.GetFileName(tempstring).ToLower = "video_ts.ifo" Then
-                Dim temppath As String = tempstring.Replace(IO.Path.GetFileName(tempstring), "VTS_01_0.IFO")
-                If IO.File.Exists(temppath) Then
-                    tempstring = temppath
-                End If
-            End If
+            
             If IO.File.Exists(tempstring) Then
                 MI.Open(tempstring)
                 To_Display = MI.Inform
                 movieinfo = To_Display
                 MI.Close()
             End If
+            End If
+            
 
             TextBox8.Text = movieinfo
         Catch

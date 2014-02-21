@@ -1759,17 +1759,102 @@ Public Class Preferences
                     filename = temppath
                 End If
             End If
-
+            Dim tmpaud As String = ""
+            Dim possibleISO As String = String.Empty 
+            Dim workingfiledetails As New FullFileDetails
+            If IO.Path.GetExtension(filename).ToLower = ".iso" Then
+                possibleISO = Get_ISO_HDTags(filename)
+                If possibleISO <> "" Then
+                    Dim MInform As New XmlDocument
+                    MInform.LoadXml(possibleISO)
+                    For Each thisresult In MInform("File")
+                        Select Case thisresult.name
+                            Case "track"
+                                Dim check As String = thisresult.outerxml.ToString
+                                If check.Contains("""Video""") Then
+                                    For Each result In thisresult
+                                        Select Case result.name
+                                            Case "Format"
+                                                workingfiledetails.filedetails_video.Codec.Value = result.InnerText
+                                            Case "Format_version"
+                                                workingfiledetails.filedetails_video.FormatInfo.Value = result.InnerText
+                                            Case "Width"
+                                                workingfiledetails.filedetails_video.Width.Value = result.InnerText
+                                            Case "Height"
+                                                workingfiledetails.filedetails_video.Height.Value = result.InnerText
+                                            Case "Bit_rate_mode"
+                                                workingfiledetails.filedetails_video.BitrateMode.Value = result.InnerText
+                                            Case "Maximum_bit_rate"
+                                                workingfiledetails.filedetails_video.BitrateMax.Value = result.InnerText
+                                            Case "Display_aspect_ratio"
+                                                Dim Asp As String = result.InnerText
+                                                If Not Asp = "" Then
+                                                    If Asp = "16:9" Then Asp = "1.56:1"
+                                                    workingfiledetails.filedetails_video.Aspect.Value = Asp.Substring(0, Asp.IndexOf(":"))
+                                                End If
+                                            Case "Scan_type"
+                                                workingfiledetails.filedetails_video.ScanType.Value = result.InnerText
+                                        End Select
+                                    Next
+                                End If
+                                If workingfiledetails.filedetails_video.Codec.Value = "mpeg video" AndAlso workingfiledetails.filedetails_video.FormatInfo.Value.Contains("2") Then
+                                    workingfiledetails.filedetails_video.Codec.Value = "MPEG2VIDEO"
+                                End If
+                                workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
+                                workingfiledetails.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
+                                If check.Contains("""Audio""") Then
+                                    tmpaud = ""
+                                    Dim audio As New AudioDetails
+                                    For Each result In thisresult
+                                        Select Case result.name
+                                            Case "Format"
+                                                audio.Codec.Value = result.InnerText
+                                            Case "Format_Info"
+                                                tmpaud = result.InnerText
+                                                tmpaud = tmpaud.ToLower
+                                            Case "Channel_s_"
+                                                audio.Channels.Value = result.InnerText
+                                            Case "Bit_rate"
+                                                audio.Bitrate.Value = result.InnerText
+                                            Case "Language"
+                                                audio.Language.Value = result.InnerText
+                                        End Select
+                                    Next
+                                    If audio.Codec.Value = "TrueHD / AC-3" Then audio.Codec.Value = "truehd"
+                                    If audio.Codec.Value = "DTS" Then
+                                        If tmpaud.ToLower = "dts ma / core" Then
+                                            audio.Codec.Value = "dtshd_ma"
+                                        ElseIf tmpaud.ToLower = "dts hra / core" Then
+                                            audio.Codec.Value = "dtshd_hra"
+                                        ElseIf tmpaud.ToLower = "dts es" Then
+                                            audio.Codec.Value = "dts_es"
+                                        Else
+                                            audio.Codec.Value = "DTS"
+                                        End If
+                                    End If
+                                    workingfiledetails.filedetails_audio.Add(audio)
+                                End If
+                        End Select
+                    Next
+                    If workingfiledetails.filedetails_audio.Count = 0 Then
+                        Dim audio As New AudioDetails
+                        workingfiledetails.filedetails_audio.Add(audio)    'Must have at least one audio track, even if it's blank
+                    End If
+                    Return workingfiledetails
+                End If
+            End If
             Dim playlist As New List(Of String)
             Dim tempstring As String
             tempstring = Utilities.GetFileName(filename)
             playlist = Utilities.GetMediaList(tempstring)
-            If filename <> tempstring then filename = tempstring 
+            If Not filename.ToLower.Contains("vts") AndAlso filename <> tempstring Then
+                filename = tempstring 
+            End If
 
             If Not IO.File.Exists(filename) Then
                 Return Nothing
             End If
-            Dim workingfiledetails As New FullFileDetails
+            'Dim workingfiledetails As New FullFileDetails
             Dim MI As New mediainfo
             MI.Open(filename)
             Dim curVS As Integer = 0
@@ -1876,7 +1961,7 @@ Public Class Preferences
             Dim numOfAudioStreams As Integer = MI.Count_Get(StreamKind.Audio)
             Dim curAS As Integer = 0
             Dim addAS As Boolean = False
-            Dim tmpaud As String = ""
+            tmpaud = ""
             
 
             'get audio data
@@ -1947,6 +2032,33 @@ Public Class Preferences
         Return Nothing
     End Function
 
+    Public Shared Function Get_ISO_HDTags(ByVal filename As String) As String
+        Dim something As String = ""
+        Dim tempstring As String = String.Empty 
+        If applicationPath.IndexOf("/") <> -1 Then tempstring = applicationPath & "/" & "mediainfo-rar.exe"
+        If applicationPath.IndexOf("\") <> -1 Then tempstring = applicationPath & "\" & "mediainfo-rar.exe"
+        If Not IO.File.Exists(tempstring) Then Return ""
+        Try
+        Dim NewProcess As New System.Diagnostics.Process()
+
+        With NewProcess.StartInfo
+            .FileName = tempstring
+            .Arguments = " --Output=XML """ & filename
+            .RedirectStandardOutput = True
+            .RedirectStandardError = True
+            .RedirectStandardInput = True
+            .UseShellExecute = False
+            .WindowStyle = ProcessWindowStyle.Normal
+            .CreateNoWindow = False 
+        End With
+        Dim To_Display As String = ""
+        NewProcess.Start()
+        something = NewProcess.StandardOutput.ReadToEnd
+        Catch ex As Exception 
+        End Try
+
+        Return something
+    End Function
     Shared Sub OpenFileInAppPath(file As String)
         OpenFile( Path.Combine(AppPath,file) )
     End Sub
