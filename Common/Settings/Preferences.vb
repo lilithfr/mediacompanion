@@ -533,6 +533,8 @@ Public Class Preferences
         moviethumbpriority.Add("IMDB")
         moviethumbpriority.Add("Movie Poster DB")
         moviethumbpriority.Add("Internet Movie Poster Awards")
+        MovSepLst.Add("3DSBS")
+        MovSepLst.Add("3DTAB")
         MovSepLst.Add("3D")
         MovSepLst.Add("Directors-Cut")
         MovSepLst.Add("Extended-Edition")
@@ -666,6 +668,8 @@ Public Class Preferences
 
     Public Shared Sub ResetMovSepLst
         MovSepLst.Clear()
+        MovSepLst.Add("3DSBS")
+        MovSepLst.Add("3DTAB")
         MovSepLst.Add("3D")
         MovSepLst.Add("Directors-Cut")
         MovSepLst.Add("Extended-Edition")
@@ -1336,6 +1340,8 @@ Public Class Preferences
             End If
         Next
         'If MovSepLst.Count = 0 Then Call ResetMovSepLst() 
+        If Not MovSepLst.Contains("3DTAB") Then MovSepLst.Insert(0,"3DTAB")
+        If Not MovSepLst.Contains("3DSBS") Then MovSepLst.Insert(0,"3DSBS")
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
         Proxyreload()
         XBMC_MC_MovieFolderMappings.IniFolders
