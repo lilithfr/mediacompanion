@@ -995,6 +995,7 @@ Public Class Movie
     End Sub
 
     Sub AssignMovieToCache
+        'If _scrapedMovie.fullmoviebody.title = "Error" AndAlso _scrapedMovie.fullmoviebody.originaltitle = "" Then Exit Sub 
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source

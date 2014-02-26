@@ -1897,7 +1897,7 @@ End If
                 Dim movie = New Movie(Me,oFileInfo.FullName)
 
                 If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
-
+                If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
                 'If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For

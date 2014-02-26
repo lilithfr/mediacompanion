@@ -11,7 +11,7 @@ Public Class WorkingWithNfoFiles
     Const SetDefaults = True
     Public Shared MyCulture As New System.Globalization.CultureInfo("en-US")
 
-    Public Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
+    Public Shared Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
         Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
@@ -1264,6 +1264,11 @@ Public Class WorkingWithNfoFiles
                 Try
                     movie.Load(path)
                 Catch ex As Exception
+                    If Not util_NfoValidate(path) Then
+                        IO.File.Move(path,path.Replace(".nfo",".info"))
+                        newmovie.fullmoviebody.title = "Error"
+                        Return newmovie
+                    End If
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString

@@ -600,6 +600,21 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return passed
     End Function
 
+    Public Shared Function NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
+        Dim tempstring As String
+        Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
+        tempstring = filechck.ReadToEnd.ToLower
+        filechck.Close()
+        If tempstring = Nothing Then
+            Return False
+        End If
+        If tempstring.IndexOf("<movie>") <> -1 And tempstring.IndexOf("</movie>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
+            Return True
+            Exit Function
+        End If
+        Return False
+    End Function
+
     Public Shared Function EnumerateFolders(ByVal RootPath As String, Optional ByVal MaxLevels As Long = 999) As List(Of String)
         Return EnumerateFolders(RootPath, MaxLevels, 0)
     End Function
