@@ -54,8 +54,8 @@ Partial Public Class TvEpisode
                 Try
                     ' Is the episode in the future?
                     If Convert.ToDateTime(Aired.Value) > Now Then
-                        ' Yes, so change its colour to gray
-                        EpisodeNode.ForeColor = Drawing.Color.Gray
+                        ' Yes, so change its colour to Red
+                        EpisodeNode.ForeColor = Drawing.Color.Red
                     Else
                         EpisodeNode.ForeColor = Drawing.Color.Blue
                     End If

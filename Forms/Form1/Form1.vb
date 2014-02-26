@@ -6272,7 +6272,8 @@ Public Class Form1
 
 
     Private Sub btnChangeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChangeMovie.Click
-        
+        Dim messagestring As String = "Changing the movie will Overwrite all the current details"
+        messagestring &= vbCrLf & "If this is an offline video, please delete folder and add as New" & vbCrLf & "Do you wish to continue?"
         If MovieSearchEngine = "imdb" Then
             Dim mat = Regex.Match(WebBrowser1.Url.ToString, "(tt\d{7})")
 
@@ -6282,8 +6283,8 @@ Public Class Form1
                 MsgBox("Please Browse to a Movie page")
                 Exit Sub
             End If
-
-            If MessageBox.Show("Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
+            '"Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?"
+            If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
 
@@ -6299,7 +6300,8 @@ Public Class Form1
                 MsgBox("Please Browse to a Movie page")
                 Exit Sub
             End If
-            If MessageBox.Show("Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
+            '"Changing the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?"
+            If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
             mov_ReScrapingStartTemp()
@@ -15113,6 +15115,7 @@ Public Class Form1
         cb_TvFolderJpg.CheckState                   = If(Preferences.tvfolderjpg, CheckState.Checked, CheckState.Unchecked)
         CheckBox15.CheckState                       = If(Preferences.downloadtvseasonthumbs, CheckState.Checked, CheckState.Unchecked)
         CheckBox_Use_XBMC_TVDB_Scraper.CheckState   = If(Preferences.tvshow_useXBMC_Scraper, CheckState.Checked, CheckState.Unchecked)
+        cbTvMissingSpecials.CheckState              = If(Preferences.ignoreMissingSpecials, CheckState.Checked, CheckState.Unchecked)
         AutoScrnShtDelay.Text = ScrShtDelay
 
         Select Case Preferences.seasonall
@@ -18979,6 +18982,19 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
+        Try
+            If cbTvMissingSpecials.CheckState = CheckState.Checked Then
+                Preferences.ignoreMissingSpecials = True
+            Else
+                Preferences.ignoreMissingSpecials = False
+            End If
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub btn_ToolsCommandAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ToolsCommandAdd.Click
         Try

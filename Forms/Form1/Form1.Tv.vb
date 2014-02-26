@@ -2440,8 +2440,8 @@ Partial Public Class Form1
                                     Try
                                         ' Is the episode in the future?
                                         If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                            '  Yes, so change its colour to gray
-                                            episode.EpisodeNode.ForeColor = Color.Gray
+                                            '  Yes, so change its colour to Red
+                                            episode.EpisodeNode.ForeColor = Color.Red
                                         Else
                                             episode.EpisodeNode.ForeColor = Drawing.Color.Blue
                                         End If
@@ -2547,6 +2547,16 @@ Partial Public Class Form1
                         If (episode.IsMissing AndAlso Not (Preferences.displayMissingEpisodes Or (overrideIsMissing AndAlso episode.ShowObj.ToString = overrideShowIsMissing))) Then
                             episode.Visible = False
                         Else
+                            Try
+                            If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                '  Yes, so change its colour to Red
+                                episode.EpisodeNode.ForeColor = Color.Red
+                            Else
+                                episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                            End If
+                            Catch
+                                episode.EpisodeNode.ForeColor = Color.Red
+                            End Try
                             episode.Visible = True
                             containsVisibleEpisode = True
                         End If
@@ -2677,6 +2687,9 @@ Partial Public Class Form1
                     SeriesInfo.LoadXml(xmlfile)
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If Preferences.ignoreMissingSpecials AndAlso NewEpisode.SeasonNumber.Value = "0" Then
+                             Continue For
+                        End If
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
                         'NewEpisode.SeasonNumber.Value = Utilities.PadNumber(NewEpisode.SeasonNumber.Value,2)
                         'NewEpisode.EpisodeNumber.Value = Utilities.PadNumber(NewEpisode.EpisodeNumber.Value,2)

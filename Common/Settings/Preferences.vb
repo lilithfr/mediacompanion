@@ -291,6 +291,7 @@ Public Class Preferences
     Public Shared tvshowautoquick As Boolean
     Public Shared copytvactorthumbs As Boolean = False
     Public Shared displayMissingEpisodes As Boolean = False
+    Public Shared ignoreMissingSpecials As Boolean = False
     Public Shared sortorder As String
     Public Shared tvposter As Boolean
     Public Shared tvfanart As Boolean
@@ -573,6 +574,7 @@ Public Class Preferences
         fixnfoid = False
         logview = "0"  'first entry in combobox is 'Full' (log view)
         displayMissingEpisodes = False
+        ignoreMissingSpecials = False
         ScrShtDelay = 10
 
         'Unknown - need to be sorted/named better
@@ -763,6 +765,7 @@ Public Class Preferences
         root.AppendChild(doc, "moviesortorder",             moviesortorder)             'cbSort
         root.AppendChild(doc, "movieinvertorder",           movieinvertorder)           'btnreverse
         root.AppendChild(doc, "displayMissingEpisodes",     displayMissingEpisodes)     'SearchForMissingEpisodesToolStripMenuItem
+        root.AppendChild(doc, "ignoreMissingSpecials",      ignoreMissingSpecials)      'cbTvMissingSpecials
 
 
         'Still to do
@@ -1197,6 +1200,7 @@ Public Class Preferences
                     Case "actorseasy"                           : actorseasy = thisresult.InnerXml
                     Case "copytvactorthumbs"                    : copytvactorthumbs = thisresult.InnerXml
                     Case "displayMissingEpisodes"               : displayMissingEpisodes = thisresult.InnerXml
+                    Case "ignoreMissingSpecials"                : ignoreMissingSpecials = thisresult.InnerXml 
                     Case "actorsavepath"                        : actorsavepath = decxmlchars(thisresult.InnerText)
                     Case "actorsavealpha"                       : actorsavealpha = thisresult.InnerXml
                     Case "actornetworkpath"                     : actornetworkpath = decxmlchars(thisresult.InnerText)
