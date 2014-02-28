@@ -426,7 +426,7 @@ Public Class Movie
 
                 If Actor.actorthumb="" Then Continue For
 
-                Dim ActorPath = GetActorPath(_movieCache.fullpathandfilename, actor.actorname)
+                Dim ActorPath = GetActorPath(_movieCache.fullpathandfilename, actor.actorname, Actor.actorid)
 
                 If Not File.Exists(ActorPath) Then Return True
             Next
@@ -1229,7 +1229,7 @@ Public Class Movie
         Next
 
         ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)
-        If Not Preferences.actorseasy Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
+        If Not Preferences.actorseasy AndAlso Not Preferences.actorsave Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
 
         Return actors2
     End Function

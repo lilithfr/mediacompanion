@@ -79,8 +79,9 @@ Public Class MovieFilters
     End Sub
 
     Public Sub Load(node As XmlNode)
-        For Each child As XmlNode In node.ChildNodes    
-            If Not Items.Any(Function(x) x.Name=child.Attributes("name").Value) Then
+        For Each child As XmlNode In node.ChildNodes   
+            Dim achild As XmlNode = child
+            If Not Items.Any(Function(x) x.Name=achild.Attributes("name").Value) Then
                 Items.Add(New MovieFilter(child))   
             End If
         Next

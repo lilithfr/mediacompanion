@@ -57,49 +57,31 @@ Public Structure str_MovieActors
             End If
 
             'Allow also to save to local path/network path
-            If Preferences.actorsave AndAlso actorid <> "" AndAlso Not Preferences.actorsavealpha Then
+            If Preferences.actorsave AndAlso actorid <> "" Then  'AndAlso Not Preferences.actorsavealpha 
                 If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
-                    Dim tempstring = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2)
-                    Dim hg As New IO.DirectoryInfo(tempstring)
-                    If Not hg.Exists Then
-                        IO.Directory.CreateDirectory(tempstring)
+                    Dim tempstring As String = Preferences.actorsavepath
+                    Dim workingpath As String = ""
+                    If Preferences.actorsavealpha Then
+                        Dim actorfilename As String = actorname.Replace(" ", "_") & "_" & actorid & ".jpg"
+                        tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
+                        workingpath = tempstring & actorfilename 
+                    Else
+                        tempstring = tempstring & "\" & actorid.Substring(actorid.Length - 2, 2) & "\"
+                        workingpath = tempstring & actorid & ".jpg"
                     End If
-
-                    Dim workingpath = tempstring & "\" & actorid & ".jpg"
+                    Utilities.EnsureFolderExists(tempstring)
+                    
                     DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
                     ActorSave(workingpath)
-                    actorthumb = workingpath 'IO.Path.Combine(Preferences.actorsavepath, actorid.Substring(actorid.Length - 2, 2))
+                    'actorthumb = workingpath
 
                     If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
                         If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                            actorthumb = Preferences.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
+                            actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("\", "/") 'Preferences.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
                         Else
-                            actorthumb = Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
+                            actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("/", "\") 'Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
                         End If
                     End If
-                End If
-            ElseIf Preferences.actorsave AndAlso Preferences.actorsavealpha Then
-                If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
-                    Dim actorfilename As String = actorname.Replace(" ", "_") & "_" & actorid & ".jpg" 'filename.Substring(filename.LastIndexOf("\") + 1)
-                    Dim actordir As String = Preferences.actorsavepath & "\" & actorfilename.Substring(0,1)
-                    Dim hg As New IO.DirectoryInfo(actordir)
-                    If Not hg.Exists Then
-                        IO.Directory.CreateDirectory(actordir)
-                    End If
-
-                    Dim workingpath = actordir & "\" & actorfilename
-                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
-                    ActorSave(workingpath)
-                    actorthumb = workingpath
-
-                    If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
-                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                            actorthumb = Preferences.actornetworkpath & "/" & actorfilename.Substring(0,1) & "/" & actorfilename
-                        Else
-                            actorthumb = Preferences.actornetworkpath & "\" & actorfilename.Substring(0,1) & "\" & actorfilename
-                        End If
-                    End If
-
                 End If
             End If
 
@@ -108,10 +90,11 @@ Public Structure str_MovieActors
     End Sub
 
 
-    Sub ActorSave(workingpath As String)
+    Sub ActorSave(ByRef workingpath As String)
         If Preferences.EdenEnabled And Not Preferences.FrodoEnabled Then
             Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Preferences.overwritethumbs)
             Utilities.SafeDeleteFile(workingpath)
+            workingpath = workingpath.Replace(".jpg", ".tbn")
         ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
             Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Preferences.overwritethumbs)
         End If

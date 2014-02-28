@@ -517,13 +517,6 @@ Partial Public Class Form1
             '1	-	all from imdb
             '2	-	tv imdb, eps tvdb
             '3	-	tv TVDB, eps IMDB
-            'If Show.EpisodeActorSource.Value Is Nothing Then
-            '    If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
-            '        Show.EpisodeActorSource.Value = "tvdb"
-            '    Else
-            '        Show.EpisodeActorSource.Value = "imdb"
-            '    End If
-            'End If
 
             If String.IsNullOrEmpty(Show.EpisodeActorSource.Value) Then
                 If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
@@ -592,32 +585,13 @@ Partial Public Class Form1
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        'tbTvActorRole.Clear()
         PictureBox6.Image = Nothing
         If useDefault Then
             imgLocation = Utilities.DefaultActorPath
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorname = cbTvActor.Text Then
-                    'For i = 0 to WorkingTvShow.ListActors.Count -1
-                    '    If cbTvActorRole.Items(i).ToString = actor.actorrole Then
-                    '        actorflag = True
-                    '        cbTvActorRole.SelectedIndex = i
-                    '        Exit For
-                    '    End If
-                    '    If i = cbTvActorRole.Items.Count Then
-                    '        Exit For
-                    '    End If
-                    'Next
-                    'tbTvActorRole.Text = actor.actorrole
-                    Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
-                    Dim tempname As String = ""
-                    If eden And Not frodo Then
-                        tempname = actor.actorname.Replace(" ", "_") & ".tbn"
-                    ElseIf frodo Then
-                        tempname = actor.actorname.Replace(" ", "_") & ".jpg"
-                    End If
-                    temppath = temppath & ".actors\" & tempname
+                    Dim temppath As String = Preferences.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ActorId.Value)
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
                     ElseIf (Not Preferences.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
@@ -640,29 +614,13 @@ Partial Public Class Form1
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        'tbTvActorRole.Clear()
         PictureBox6.Image = Nothing
         If useDefault Then
             imgLocation = Utilities.DefaultActorPath
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorrole = cbTvActorRole.Text Then
-                    'For i = 0 to WorkingTvShow.ListActors.Count -1
-                    '    If cbTvActor.Items(i).ToString = actor.actorname Then
-                    '        actorflag = True
-                    '        cbTvActor.SelectedIndex = i
-                    '        Exit For
-                    '    End If
-                    'Next
-                    'tbTvActorRole.Text = actor.actorrole
-                    Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
-                    Dim tempname As String = ""
-                    If eden And Not frodo Then
-                        tempname = actor.actorname.Replace(" ", "_") & ".tbn"
-                    ElseIf frodo Then
-                        tempname = actor.actorname.Replace(" ", "_") & ".jpg"
-                    End If
-                    temppath = temppath & ".actors\" & tempname
+                    Dim temppath As String = Preferences.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ActorId.Value)
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
                     ElseIf (Not Preferences.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
@@ -3214,6 +3172,7 @@ Partial Public Class Form1
     Private Function TvGetActorTvdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
         Dim success As Boolean = False
         Dim tvdbstuff As New TVDBScraper
+        NewShow.ListActors.Clear()
         Dim tempstring As String = ""
         Dim TvdbActors As Tvdb.Actors = tvdbstuff.GetActors(NewShow.TvdbId.Value, templanguage)
         For Each Act As Tvdb.Actor In TvdbActors.Items
@@ -3237,93 +3196,75 @@ Partial Public Class Form1
                 NewAct.actorthumb = ""
             End If
 
+            Dim id As String = If(NewAct.ActorId = Nothing, "", NewAct.ActorId.value)
+            Dim results As XmlNode = Nothing
+            Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
+            filename = filename.Replace(" ", "_")
+            filename = filename & ".tbn"
 
-            If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId = Nothing Then
-                Dim id As String = ""
-                'Dim acts As New MovieActors
-                Dim results As XmlNode = Nothing
-                Dim lan As New str_PossibleShowList(SetDefaults)
+            If Not String.IsNullOrEmpty(NewAct.actorthumb) And NewAct.actorthumb <> "http://thetvdb.com/banners/" Then
 
+                'Save to .actor folder
+                If NewAct.actorthumb <> "" And Preferences.actorseasy = True And Preferences.tvshowautoquick = False Then
+                    If NewShow.TvShowActorSource.Value <> "imdb" Or NewShow.ImdbId = Nothing Then
+                        Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
+                        workingpath = workingpath & ".actors\"
 
-                If Not String.IsNullOrEmpty(NewAct.actorthumb) And NewAct.actorthumb <> "http://thetvdb.com/banners/" Then
-                    If NewAct.actorthumb <> "" And Preferences.actorseasy = True And Preferences.tvshowautoquick = False Then
-                        If NewShow.TvShowActorSource.Value <> "imdb" Or NewShow.ImdbId = Nothing Then
-                            Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
-                            workingpath = workingpath & ".actors\"
-
-                            Utilities.EnsureFolderExists(workingpath)
-                            '**Commented out the following as fairly certain Utilities.EnsureFolderExists() replaces this - Huey
-                            'Dim hg As New IO.DirectoryInfo(workingpath)
-                            'Dim destsorted As Boolean = False
-                            'If Not hg.Exists Then
-
-                            '    IO.Directory.CreateDirectory(workingpath)
-                            '    destsorted = True
-
-                            'Else
-                            '    destsorted = True
-                            'End If
-                            'If destsorted = True Then
-                            Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
-                            filename = filename.Replace(" ", "_")
-                            filename = filename & ".tbn"
-                            filename = IO.Path.Combine(workingpath, filename)
-                            'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
-                            If Utilities.DownloadFile(NewAct.actorthumb, filename) Then 'Removed "http://thetvdb.com/banners/_cache/" & from front of NewAct.actorthumb
-                                If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                                    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                                    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                    Utilities.SafeDeleteFile(filename)
-                                End If
+                        Utilities.EnsureFolderExists(workingpath)
+                            
+                        Dim ActorFilename As String = IO.Path.Combine(workingpath, filename)
+                        If Utilities.DownloadFile(NewAct.actorthumb, ActorFilename) Then 
+                            If Preferences.EdenEnabled AndAlso Preferences.FrodoEnabled Then
+                                Utilities.SafeCopyFile(ActorFilename, ActorFilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                Utilities.SafeCopyFile(ActorFilename, ActorFilename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                Utilities.SafeDeleteFile(ActorFilename)
                             End If
                         End If
-                    End If
-                    If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
-                        Dim workingpath As String = ""
-                        Dim networkpath As String = Preferences.actorsavepath
-
-                        tempstring = networkpath & "\" & id.Substring(id.Length - 2, 2)
-                        Dim hg As New IO.DirectoryInfo(tempstring)
-                        If Not hg.Exists Then
-                            IO.Directory.CreateDirectory(tempstring)
-                        End If
-                        workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
-                        If Not IO.File.Exists(workingpath) Then
-                            If Utilities.DownloadFile(NewAct.actorthumb, workingpath) Then
-                                If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                                    Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                                    Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                    Utilities.SafeDeleteFile(workingpath)
-                                End If
-                            End If
-                        End If
-                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
-                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                            NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
-                        Else
-                            NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
-                        End If
-
-
                     End If
                 End If
-                Dim exists As Boolean = False
-                For Each actors In NewShow.ListActors
-                    If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
-                        exists = True
-                        Exit For
+
+                'Save to Local actor folder
+                If Preferences.actorsave = True And id <> "" Then 'Allow Local folder save, separate from .actor folder saving 
+                    Dim workingpath As String = ""
+                    Dim networkpath As String = Preferences.actorsavepath
+                    filename = filename.Insert(filename.Length -4, "_" & id)
+                    tempstring = networkpath & "\" & filename.Substring(0,1) & "\"
+
+                    Utilities.EnsureFolderExists(tempstring)
+
+                    workingpath = tempstring & filename 
+                    If Not IO.File.Exists(workingpath) Then
+                        If Utilities.DownloadFile(NewAct.actorthumb, workingpath) Then
+                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                workingpath = workingpath.Replace(".tbn", ".jpg")
+                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                Utilities.SafeDeleteFile(workingpath)
+                                workingpath = workingpath.Replace(".tbn", ".jpg")
+                            End If
+                        End If
                     End If
-                Next
-                If exists = False Then
-                    NewShow.ListActors.Add(NewAct)
+                        
+                    NewAct.actorthumb = workingpath  'IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
+                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                        NewAct.actorthumb = workingpath.Replace(networkpath, Preferences.actornetworkpath).Replace("\","/") 'IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
+                    ElseIf Preferences.actornetworkpath.IndexOf("\") <> -1 
+                        NewAct.actorthumb = workingpath.Replace(networkpath, Preferences.actornetworkpath).Replace("/","\")'IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
+                    End If
                 End If
             End If
-
-
-
-
+            Dim exists As Boolean = False
+            For Each actors In NewShow.ListActors
+                If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = False Then
+                NewShow.ListActors.Add(NewAct)
+            End If
 
         Next
         Return success
@@ -3331,13 +3272,13 @@ Partial Public Class Form1
 
     Private Function TvGetActorImdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
         Dim imdbscraper As New Classimdb
-        Dim tempstring As String = ""
+        NewShow.ListActors.Clear()
         Dim success As Boolean = False
-        Dim actmax As Integer = 20  'Preferences.maxactors
+        Dim actmax As Integer = Preferences.maxactors
         Dim actcount As Integer = 0
         Dim actorstring As New XmlDocument
         If String.IsNullOrEmpty(NewShow.ImdbId.Value) Then Return success
-        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Preferences.imdbmirror, NewShow.ImdbId.Value, 20)
+        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Preferences.imdbmirror, NewShow.ImdbId.Value, actmax)
 
         'actorstring.LoadXml(actorlist)
 
@@ -3346,33 +3287,7 @@ Partial Public Class Form1
             'thisresult.actorrole = Utilities.cleanTvActorRole(thisresult.actorrole)
 
             If thisresult.actorthumb <> Nothing And actcount < (actmax + 1) Then
-                If Preferences.actorsave = True And thisresult.actorid <> "" And Preferences.tvshowautoquick = False Then
-                    Dim workingpath As String = ""
-                    Dim networkpath As String = Preferences.actorsavepath
-
-                    tempstring = networkpath & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2)
-                    Dim hg As New IO.DirectoryInfo(tempstring)
-                    If Not hg.Exists Then
-                        IO.Directory.CreateDirectory(tempstring)
-                    End If
-                    workingpath = networkpath & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\" & thisresult.actorid & ".jpg"
-                    If Not IO.File.Exists(workingpath) Then
-                        If Utilities.DownloadFile(thisresult.actorthumb, workingpath) Then
-                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                Utilities.SafeDeleteFile(workingpath)
-                            End If
-                        End If
-                    End If
-                    thisresult.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2))
-                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                        thisresult.actorthumb = Preferences.actornetworkpath & "/" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "/" & thisresult.actorid & ".jpg"
-                    Else
-                        thisresult.actorthumb = Preferences.actornetworkpath & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\" & thisresult.actorid & ".jpg"
-                    End If
-                ElseIf Preferences.actorseasy And thisresult.actorid <> "" And Preferences.tvshowautoquick = False Then
+                If Preferences.actorseasy And thisresult.actorid <> "" And Preferences.tvshowautoquick = False Then
                     Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
                     workingpath = workingpath & ".actors\"
 
@@ -3389,6 +3304,44 @@ Partial Public Class Form1
                         ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
                             Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
                             Utilities.SafeDeleteFile(filename)
+                        End If
+                    End If
+                End If
+                If Preferences.actorsave = True And thisresult.actorid <> "" And Preferences.tvshowautoquick = False Then
+                    Dim tempstring As String = Preferences.actorsavepath
+                    Dim workingpath As String = ""
+                    If Preferences.actorsavealpha Then
+                        Dim actorfilename As String = thisresult.actorname.Replace(" ", "_") & "_" & thisresult.actorid & ".tbn"
+                        tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
+                        workingpath = tempstring & actorfilename
+                    Else
+                        tempstring = tempstring & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\"
+                        workingpath = tempstring & thisresult.actorid & ".tbn"
+                    End If
+
+                    Utilities.EnsureFolderExists(tempstring)
+                    'tempstring = tempstring & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2)
+                    'Dim hg As New IO.DirectoryInfo(tempstring)
+                    'If Not hg.Exists Then
+                    '    IO.Directory.CreateDirectory(tempstring)
+                    'End If
+                   'workingpath = networkpath & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\" & thisresult.actorid & ".jpg"
+                    If Not IO.File.Exists(workingpath) Then
+                        If Utilities.DownloadFile(thisresult.actorthumb, workingpath) Then
+                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                Utilities.SafeDeleteFile(workingpath)
+                            End If
+                        End If
+                    End If
+                    'thisresult.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2))
+                    If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
+                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                            thisresult.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("\", "/") 'Preferences.actornetworkpath & "/" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "/" & thisresult.actorid & ".jpg"
+                        Else
+                            thisresult.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("/", "\") 'Preferences.actornetworkpath & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\" & thisresult.actorid & ".jpg"
                         End If
                     End If
                 End If

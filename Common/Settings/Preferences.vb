@@ -1431,10 +1431,20 @@ Public Class Preferences
     End Function
 
 
-    Public Shared Function GetActorPath(ByVal FullPath As String, ByVal ActorName As String) As String
+    Public Shared Function GetActorPath(ByVal FullPath As String, ByVal ActorName As String, ByVal actorid As String) As String
         If String.IsNullOrEmpty(FullPath) or String.IsNullOrEmpty(ActorName) Then Return ""
         Dim Path As String = FullPath.Replace(IO.Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
-
+        Dim Path2 As String = ""
+        If Preferences.actorsave AndAlso actorid <> "" Then
+            If Preferences.actorsavealpha Then
+                'Dim actorfilename = ActorName.Replace(" ", "_") & "_" & actorid
+                Path2 = Preferences.actorsavepath & "\" & ActorName.Substring(0,1) & "\" & ActorName.Replace(" ", "_") & "_" & actorid
+            Else
+                Path2 = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid
+            End If
+            If IO.File.Exists(Path2 & ".jpg") Then Return Path2 & ".jpg"
+            If IO.File.Exists(Path2 & ".tbn") Then Return Path2 & ".tbn"
+        End If
         If Preferences.FrodoEnabled And IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
         If Preferences.EdenEnabled  And IO.File.Exists(Path & ".tbn") Then Return Path & ".tbn"  
           

@@ -1412,6 +1412,8 @@ Public Class WorkingWithNfoFiles
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
+                                    Case "id"
+                                        newactor.actorid = detail.InnerText
                                     Case "name"
                                         newactor.actorname = detail.InnerText
                                     Case "role"
@@ -2153,6 +2155,9 @@ Public Class WorkingWithNfoFiles
                     If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
                     For f = 0 To actorstosave - 1
                         child = doc.CreateElement("actor")
+                        actorchild = doc.CreateElement("id")
+                        actorchild.InnerText = movietosave.listactors(f).actorid
+                        child.AppendChild(actorchild)
                         actorchild = doc.CreateElement("name")
                         actorchild.InnerText = movietosave.listactors(f).actorname
                         child.AppendChild(actorchild)
@@ -2162,30 +2167,6 @@ Public Class WorkingWithNfoFiles
                         actorchild = doc.CreateElement("thumb")
                         actorchild.InnerText = movietosave.listactors(f).actorthumb
                         child.AppendChild(actorchild)
-'                        If movietosave.listactors(f).actorthumb <> Nothing Then
-'                            If movietosave.listactors(f).actorthumb <> "" Then
-'                                Dim actorthumb As String = movietosave.listactors(f).actorthumb
-'                                actorchild = doc.CreateElement("thumb")
-'                                If Preferences.actorsave Then
-'                                    Dim uri As Uri
-'                                    uri = New Uri(actorthumb)
-
-'                                    If Len(Preferences.actornetworkpath) > 0 AndAlso Len(Preferences.actorsavepath) > 0 Then
-'                                        Dim actorThumbFileName As String
-'                                        Dim localActorThumbFileName As String
-'                                        actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
-'                                        localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
-
-''                                       Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
-'                                        Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName )
-
-'                                        actorthumb = actorThumbFileName
-'                                    End If
-'                                End If
-'                                actorchild.InnerText = actorthumb
-'                                child.AppendChild(actorchild)
-'                            End If
-'                        End If
                         root.AppendChild(child)
                     Next
                     'doc.AppendChild(root)
