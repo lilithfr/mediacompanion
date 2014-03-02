@@ -19105,11 +19105,17 @@ Public Class Form1
             If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
                 Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
                 Preferences.SaveConfig()
-                If Preferences.displayMissingEpisodes = False OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                If Preferences.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
                     RadioButton29.Checked = True
                     tv_CacheRefresh 
                     'tv_Filter()
                     Return
+                End If
+                Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
+                If answer = MsgBoxResult.Yes 
+                    Preferences.DlMissingEpData = True
+                Else
+                    Preferences.DlMissingEpData = False
                 End If
                 Dim ShowList As New List(Of TvShow)
                 For Each shows In Cache.TvCache.Shows

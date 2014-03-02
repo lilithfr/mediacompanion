@@ -2639,8 +2639,8 @@ Partial Public Class Form1
                     End If
                     Dim xmlfile As String
 
-                    xmlfile = Utilities.DownloadTextFiles(url)
-
+                    xmlfile = Utilities.DownloadTextFiles(url, Preferences.DlMissingEpData)
+                    
                     Dim SeriesInfo As New Tvdb.ShowData
                     SeriesInfo.LoadXml(xmlfile)
 

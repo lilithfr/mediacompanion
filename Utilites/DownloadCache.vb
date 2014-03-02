@@ -10,7 +10,7 @@ Public Class DownloadCache
 
     Public Shared Property CacheFolder As String
 
-    Private Shared Function GetCacheFileName(ByVal URL As String) As String
+    Public Shared Function GetCacheFileName(ByVal URL As String) As String
         Dim Buffer As Byte() = Utilities.ComputeHashValueToByte(URL)
 
         Dim Extention As String = URL.Split("?")(0)
@@ -142,6 +142,9 @@ Public Class DownloadCache
                     End If
                 End If
                 Return True
+            End If
+            If ForceDownload AndAlso File.Exists(CachePath) Then
+                File.Delete(CachePath)
             End If
 
             Try
