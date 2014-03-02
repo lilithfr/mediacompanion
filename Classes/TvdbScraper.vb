@@ -220,7 +220,11 @@ Public Class TVDBScraper
 
     End Function
 
-    Public Function GetActors(ByVal TvdbId As String, ByVal Language As String) As Tvdb.Actors
+    Public Function GetActors(ByVal TvdbId As String, ByVal Language As String, Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors) 'Tvdb.Actors
+        If maxactors = 9999 Then 
+            maxactors= Preferences.maxactors
+        End If
+        Dim results As New List(Of str_MovieActors)
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/actors.xml"
 
         Dim xmlfile As String
@@ -229,8 +233,27 @@ Public Class TVDBScraper
         Dim showlist As New Tvdb.Actors
         'Try
         showlist.LoadXml(xmlfile)
+        For Each Mc In showlist.items
+            Dim actor As str_MovieActors = New str_MovieActors
+            actor.actorid = Mc.Id.value
+            actor.actorname = Utilities.cleanSpecChars(Mc.Name.Value).Trim
+            Dim newstring As String
+            newstring = Mc.Role.Value
+            newstring = newstring.TrimEnd("|")
+            newstring = newstring.TrimStart("|")
+            newstring = newstring.Replace("|", ", ")
+            actor.actorrole = newstring.TrimStart.TrimEnd
+            If Mc.Image.Value <> "" Then
+                actor.actorthumb = "http://thetvdb.com/banners/_cache/" & Mc.Image.Value
+            Else
+                actor.actorthumb = ""
+            End If
+            'actor.actorthumb = Mc.Image.Value
+            results.Add(actor)
+        Next
 
-        Return showlist
+        'Return showlist
+        Return results
     End Function
 
     Public Function getshow(ByVal tvdbid As String, ByVal language As String)

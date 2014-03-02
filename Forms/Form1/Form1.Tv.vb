@@ -3172,31 +3172,32 @@ Partial Public Class Form1
     Private Function TvGetActorTvdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
         Dim success As Boolean = False
         Dim tvdbstuff As New TVDBScraper
-        NewShow.ListActors.Clear()
+        'Dim lan As New str_PossibleShowList(SetDefaults)
+        'NewShow.ListActors.Clear()
         Dim tempstring As String = ""
-        Dim TvdbActors As Tvdb.Actors = tvdbstuff.GetActors(NewShow.TvdbId.Value, templanguage)
-        For Each Act As Tvdb.Actor In TvdbActors.Items
-            success = True
-            If NewShow.ListActors.Count >= Preferences.maxactors Then
-                Exit For
-            End If
+        Dim TvdbActors As List(Of str_MovieActors) = tvdbstuff.GetActors(NewShow.TvdbId.Value, templanguage)
+        For Each NewAct In TvdbActors
+            'success = True
+            'If NewShow.ListActors.Count >= Preferences.maxactors Then
+            '    Exit For
+            'End If
 
-            Dim NewAct As New Media_Companion.Actor
-            NewAct.ActorId = Act.Id
-            NewAct.actorname = Utilities.cleanSpecChars(Act.Name.Value).Trim  'TrimStart.TrimEnd
-            Dim newstring As String
-            newstring = Act.Role.Value
-            newstring = newstring.TrimEnd("|")
-            newstring = newstring.TrimStart("|")
-            newstring = newstring.Replace("|", ", ")
-            NewAct.actorrole = newstring.TrimStart.TrimEnd
-            If Act.Image.Value <> "" Then
-                NewAct.actorthumb = "http://thetvdb.com/banners/_cache/" & Act.Image.Value
-            Else
-                NewAct.actorthumb = ""
-            End If
+            'Dim NewAct As New Media_Companion.Actor
+            'NewAct.ActorId = Act.actorid.Value
+            'NewAct.actorname = Utilities.cleanSpecChars(Act.actorname.Value).Trim  'TrimStart.TrimEnd
+            'Dim newstring As String
+            'newstring = Act.Role.Value
+            'newstring = newstring.TrimEnd("|")
+            'newstring = newstring.TrimStart("|")
+            'newstring = newstring.Replace("|", ", ")
+            'NewAct.actorrole = newstring.TrimStart.TrimEnd
+            'If Act.Image.Value <> "" Then
+            '    NewAct.actorthumb = "http://thetvdb.com/banners/_cache/" & Act.Image.Value
+            'Else
+            '    NewAct.actorthumb = ""
+            'End If
 
-            Dim id As String = If(NewAct.ActorId = Nothing, "", NewAct.ActorId.value)
+            Dim id As String = If(NewAct.ActorId = Nothing, "", NewAct.ActorId)
             Dim results As XmlNode = Nothing
             Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
             filename = filename.Replace(" ", "_")
@@ -3256,15 +3257,15 @@ Partial Public Class Form1
                 End If
             End If
             Dim exists As Boolean = False
-            For Each actors In NewShow.ListActors
-                If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
-                    exists = True
-                    Exit For
-                End If
-            Next
-            If exists = False Then
+            'For Each actors In NewShow.ListActors
+            '    If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
+            '        exists = True
+            '        Exit For
+            '    End If
+            'Next
+            'If exists = False Then
                 NewShow.ListActors.Add(NewAct)
-            End If
+            'End If
 
         Next
         Return success
@@ -3272,7 +3273,7 @@ Partial Public Class Form1
 
     Private Function TvGetActorImdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
         Dim imdbscraper As New Classimdb
-        NewShow.ListActors.Clear()
+        'NewShow.ListActors.Clear()
         Dim success As Boolean = False
         Dim actmax As Integer = Preferences.maxactors
         Dim actcount As Integer = 0

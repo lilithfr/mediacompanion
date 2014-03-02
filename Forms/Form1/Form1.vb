@@ -19485,6 +19485,12 @@ Public Class Form1
                     tvbckrescrapewizard.ReportProgress(progress, progresstext)
                     Dim editshow As New TvShow
                     editshow = nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath)
+                    If tvBatchList.doShowActors Then
+                        Dim lstact As Integer = editshow.ListActors.Count
+                        For i = lstact-1 to 0 Step -1
+                            editshow.ListActors.RemoveAt(i)
+                        Next
+                    End If
                     'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                     Dim tvdbstuff As New TVDBScraper
                     If tvBatchList.doShows = True Then
@@ -19544,7 +19550,7 @@ Public Class Form1
                                             editshow.Url.Value = thisresult.InnerText
                                             editshow.Url.Node.SetAttributeValue("cache", editshow.TvdbId.Value)
                                             editshow.Url.AttachToParentNode(editshow.EpisodeGuideUrl.Node)
-'                                        Case "actor"
+                                        Case "actor"
 '                                            If editshow.TvShowActorSource.Value = "tvdb" And tvBatchList.doShowActors = True Then
 '                                                If maxcount >= Preferences.maxactors Then
 '                                                    Exit For
@@ -19571,7 +19577,7 @@ Public Class Form1
 '                                                            acts.actorid = results.InnerText
 '                                                    End Select
 '                                                Next
-'                                                '.Add(acts)actorlist
+'                                                editshow.ListActors.Add(acts)   'actorlist
 '                                                If acts.actorthumb <> Nothing Then
 '                                                    If acts.actorthumb <> "" And Preferences.actorseasy = True Then
 '                                                        If editshow.TvShowActorSource.Value <> "imdb" Or editshow.ImdbId = Nothing Then
