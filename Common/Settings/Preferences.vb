@@ -1913,8 +1913,14 @@ Public Class Preferences
             End If
 
             workingfiledetails.filedetails_video.Codec.Value = tempmediainfo
-
-            workingfiledetails.filedetails_video.FormatInfo.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).CodecID)  'tempmediainfo 
+            tempmediainfo = If(aviFile.Video.Count = 0, "", aviFile.Video(0).CodecID)
+            If tempmediainfo.ToLower = "xvid" Then
+                workingfiledetails.filedetails_video.FormatInfo.Value = workingfiledetails.filedetails_video.Codec.Value
+                workingfiledetails.filedetails_video.Codec.Value = tempmediainfo
+            Else 
+                workingfiledetails.filedetails_video.FormatInfo.Value = tempmediainfo 
+            End If
+            
             'Dim fs(100) As String
             'For f = 1 To 100
             '    fs(f) = MI.Get_(StreamKind.Visual, 0, f)
