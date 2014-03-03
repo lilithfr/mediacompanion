@@ -1022,28 +1022,28 @@ Partial Public Class Form1
         Return False
     End Function
 
-    Private Sub Tv_EpisodesMissingLoad(ByVal ShowList As TvShow)
-        'For Each item In ShowList
-        Dim showid As String = ShowList.TvdbId.Value
-        If IsNumeric(showid) Then
-            Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
-            For Each fs_info As System.IO.FileInfo In fs_infos
-                Dim MissingEpisode As New TvEpisode
-                MissingEpisode.NfoFilePath = fs_info.FullName
-                MissingEpisode.Load()
-                If MissingEpisode.TvdbId.Value = showid Then
-                    Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
-                    If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
-                        MissingEpisode.IsMissing = True
-                        MissingEpisode.IsCache = True
-                        MissingEpisode.ShowObj = ShowList
-                        ShowList.AddEpisode(MissingEpisode)
-                    End If
-                End If
-            Next
-        End If
-    End Sub
+    'Private Sub Tv_EpisodesMissingLoad(ByVal ShowList As TvShow)
+    '    'For Each item In ShowList
+    '    Dim showid As String = ShowList.TvdbId.Value
+    '    If IsNumeric(showid) Then
+    '        Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
+    '        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
+    '        For Each fs_info As System.IO.FileInfo In fs_infos
+    '            Dim MissingEpisode As New TvEpisode
+    '            MissingEpisode.NfoFilePath = fs_info.FullName
+    '            MissingEpisode.Load()
+    '            If MissingEpisode.TvdbId.Value = showid Then
+    '                Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
+    '                If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
+    '                    MissingEpisode.IsMissing = True
+    '                    MissingEpisode.IsCache = True
+    '                    MissingEpisode.ShowObj = ShowList
+    '                    ShowList.AddEpisode(MissingEpisode)
+    '                End If
+    '            End If
+    '        Next
+    '    End If
+    'End Sub
 
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         frmSplash2.Text = "Refresh TV Shows..."
@@ -2282,10 +2282,26 @@ Partial Public Class Form1
             End If
             Preferences.tvScraperLog &= "!!!" & vbCrLf
         Next
-
+        'newEpisodeList 
+        tv_EpisodesMissingUpdate(newEpisodeList)
         bckgroundscanepisodes.ReportProgress(0, progresstext)
 
     End Sub
+    Public Function tv_EpisodesMissingUpdate(ByRef newEpList As List(Of TvEpisode)) As Boolean
+        Try
+            Dim missingPath = IO.Path.Combine(Preferences.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+            For Each Ep In newEpList
+                If IO.File.Exists(Ep.NfoFilePath) Then
+                    Dim missingNfoPath As String = missingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
+                    If IO.File.Exists(missingNfoPath) Then
+                        IO.File.Delete(missingNfoPath)
+                    End If
+                End If
+            Next
+        Catch
+        End Try
+        Return True
+    End Function
 
     Public Function tv_ShowSelectedCurrently() As Media_Companion.TvShow
         TvTreeview.Focus()
@@ -2502,15 +2518,17 @@ Partial Public Class Form1
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     Dim containsVisibleEpisode As Boolean = False
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                        If (episode.IsMissing AndAlso Not (Preferences.displayMissingEpisodes Or (overrideIsMissing AndAlso episode.ShowObj.ToString = overrideShowIsMissing))) Then
+                        If episode.IsMissing AndAlso Not (Preferences.displayMissingEpisodes Or (overrideIsMissing AndAlso episode.ShowObj.ToString = overrideShowIsMissing)) Then
                             episode.Visible = False
                         Else
                             Try
-                            If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                '  Yes, so change its colour to Red
-                                episode.EpisodeNode.ForeColor = Color.Red
-                            Else
-                                episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                            If episode.IsMissing Then
+                                If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                    '  Yes, so change its colour to Red
+                                    episode.EpisodeNode.ForeColor = Color.Red
+                                Else
+                                    episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                                End If
                             End If
                             Catch
                                 episode.EpisodeNode.ForeColor = Color.Red

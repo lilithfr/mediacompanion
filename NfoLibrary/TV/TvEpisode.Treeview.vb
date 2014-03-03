@@ -64,6 +64,8 @@ Partial Public Class TvEpisode
                     EpisodeNode.ForeColor = Drawing.Color.Blue
                 End Try
             End If
+        Else
+            EpisodeNode.ForeColor = Drawing.Color.Black
         End If
 
         If Me.FailedLoad Then
