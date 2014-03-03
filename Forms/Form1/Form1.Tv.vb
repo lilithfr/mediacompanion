@@ -2287,22 +2287,7 @@ Partial Public Class Form1
         bckgroundscanepisodes.ReportProgress(0, progresstext)
 
     End Sub
-    Public Function tv_EpisodesMissingUpdate(ByRef newEpList As List(Of TvEpisode)) As Boolean
-        Try
-            Dim missingPath = IO.Path.Combine(Preferences.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
-            For Each Ep In newEpList
-                If IO.File.Exists(Ep.NfoFilePath) Then
-                    Dim missingNfoPath As String = missingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
-                    If IO.File.Exists(missingNfoPath) Then
-                        IO.File.Delete(missingNfoPath)
-                    End If
-                End If
-            Next
-        Catch
-        End Try
-        Return True
-    End Function
-
+    
     Public Function tv_ShowSelectedCurrently() As Media_Companion.TvShow
         TvTreeview.Focus()
         If TvTreeview.SelectedNode Is Nothing Then
@@ -2628,6 +2613,7 @@ Partial Public Class Form1
                 ' ignore missing episodes checked entry for this forced node refresh
                 showToRefresh = ShowList(0).ToString()
             End If
+            tv_CacheLoad()
             tv_Filter(showToRefresh)
             MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
         Catch ex As Exception
@@ -2689,7 +2675,34 @@ Partial Public Class Form1
 
     End Sub
 
-
+    Public Function tv_EpisodesMissingUpdate(ByRef newEpList As List(Of TvEpisode)) As Boolean
+        Dim Removed As Boolean = False
+        Try
+            Dim missingPath = IO.Path.Combine(Preferences.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+            
+            Dim Ep2Remove As New TvEpisode 
+            For Each Ep In newEpList
+                If IO.File.Exists(Ep.NfoFilePath) Then
+                    Dim missingNfoPath As String = missingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
+                    If IO.File.Exists(missingNfoPath) Then
+                        IO.File.Delete(missingNfoPath)
+                        For Each epis As TvEpisode In Cache.TvCache.Episodes 
+                            If epis.TvdbId.Value = Ep.TvdbId.Value Then
+                                If epis.Season.Value = Ep.Season.Value AndAlso epis.Episode.Value = Ep.Episode.Value AndAlso epis.IsMissing = True Then
+                                    Ep2Remove = epis 
+                                    Removed = True
+                                    Exit For
+                                End If
+                            End If
+                        Next
+                        If Removed Then Cache.TvCache.Remove(Ep2Remove)
+                    End If
+                End If
+            Next
+        Catch
+        End Try
+        Return Removed
+    End Function
 
 #End Region
 

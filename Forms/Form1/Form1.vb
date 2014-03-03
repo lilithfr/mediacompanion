@@ -8159,7 +8159,8 @@ Public Class Form1
             'Call populatetvtree()
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
-
+            Tv_CacheSave()
+            tv_CacheLoad()
             'For Each Show As Nfo.TvShow In TvShows
             '    Show.SearchForEpisodesInFolder()
             'Next
