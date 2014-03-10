@@ -8806,50 +8806,50 @@ Public Class Form1
         
     End Sub
 
-    Private Sub TextBox_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Enter
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        If Panel9.Visible = False Then
-            TextBox_Title.Text = WorkingTvShow.Title.Value
-            If TextBox_Title.Text.ToLower.IndexOf(", the") = TextBox_Title.Text.Length - 5 Then
-                TextBox_Title.Text = "The " & TextBox_Title.Text.Substring(0, TextBox_Title.Text.Length - 5)
-            End If
-        Else
-            TextBox_Title.Text = WorkingEpisode.Title.Value
-        End If
+    Private Sub tb_Sh_Ep_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Enter
+        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        'If Panel9.Visible = False Then
+        '    tb_Sh_Ep_Title.Text = WorkingTvShow.Title.Value
+        '    If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 Then
+        '        tb_Sh_Ep_Title.Text = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
+        '    End If
+        'Else
+        '    tb_Sh_Ep_Title.Text = WorkingEpisode.Title.Value
+        'End If
     End Sub
 
-    Private Sub TextBox_Title_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Leave
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+    Private Sub tb_Sh_Ep_Title_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Leave
+        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        On Error Resume Next
-        If Panel9.Visible = False Then
-            '-------------- Aqui
-            'If Preferences.ignorearticle = True Then
-            '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
-            '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
-            '    End If
-            'End If
-            'If Preferences.ignoreAarticle Then
-            '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
-            '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
-            '    End If
-            'End If
-            'If Preferences.ignoreAn Then
-            '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
-            '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
-            '    End If
-            'End If
-            WorkingTvShow.Title.Value = Preferences.RemoveIgnoredArticles(TextBox_Title.Text)
-        Else
-            WorkingEpisode.Title.Value = TextBox_Title.Text
-            Dim trueseason As String = WorkingEpisode.Season.Value
-            Dim trueepisode As String = WorkingEpisode.Episode.Value
-            If trueseason.Length = 1 Then trueseason = "0" & trueseason
-            If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-            TextBox_Title.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
-        End If
+        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        'On Error Resume Next
+        'If Panel9.Visible = False Then
+        '    '-------------- Aqui
+        '    'If Preferences.ignorearticle = True Then
+        '    '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
+        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
+        '    '    End If
+        '    'End If
+        '    'If Preferences.ignoreAarticle Then
+        '    '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
+        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
+        '    '    End If
+        '    'End If
+        '    'If Preferences.ignoreAn Then
+        '    '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
+        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
+        '    '    End If
+        '    'End If
+        '    WorkingTvShow.Title.Value = Preferences.RemoveIgnoredArticles(tb_Sh_Ep_Title.Text)
+        'Else
+        '    WorkingEpisode.Title.Value = tb_Sh_Ep_Title.Text
+        '    Dim trueseason As String = WorkingEpisode.Season.Value
+        '    Dim trueepisode As String = WorkingEpisode.Episode.Value
+        '    If trueseason.Length = 1 Then trueseason = "0" & trueseason
+        '    If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
+        '    tb_Sh_Ep_Title.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
+        'End If
     End Sub
 
     Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click  'save button
@@ -8879,10 +8879,10 @@ Public Class Form1
             Dim tempstring As String = ""
             If Show IsNot Nothing Then
                 Dim changed As Integer = 0
-                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> TextBox9.Text Then
+                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> tb_ShTvdbId.Text Then
                     changed += 1
                 End If
-                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> TextBox12.Text.ToLower Then
+                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> tb_ShImdbId.Text.ToLower Then
                     changed += 2
                 End If
                 If changed > 0 Then
@@ -8904,19 +8904,30 @@ Public Class Form1
                     End If
                 End If
                 'its a tvshow
-                If TextBox_Title.Text.ToLower.IndexOf(", the") = TextBox_Title.Text.Length - 5 And TextBox_Title.Text.Length > 5 Then
-                    Show.Title.Value = "The " & TextBox_Title.Text.Substring(0, TextBox_Title.Text.Length - 5)
+                Dim TmpTitle As String = ""
+                If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 And tb_Sh_Ep_Title.Text.Length > 5 Then
+                    TmpTitle = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
                 Else
-                    Show.Title.Value = TextBox_Title.Text
+                    TmpTitle = tb_Sh_Ep_Title.Text
                 End If
-                Show.Plot.Value = TextBox19.Text
-                Show.Runtime.Value = TextBox15.Text
-                Show.Premiered.Value = TextBox10.Text
-                Show.Studio.Value = TextBox16.Text
-                Show.Rating.Value = TextBox13.Text
-                Show.ImdbId.Value = TextBox12.Text
-                Show.TvdbId.Value = TextBox9.Text
-                Show.Mpaa.Value = TextBox14.Text
+
+                If TmpTitle <> Show.Title.Value Then
+                    Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
+                    If TryTitle = MsgBoxResult.No Then 
+                        tb_Sh_Ep_Title.Text = Preferences.RemoveIgnoredArticles(Show.Title.Value)
+                        Exit Sub
+                    End If
+                    Show.Title.Value = TmpTitle
+                End If
+                Show.Plot.Value = tb_ShPlot.Text
+                Show.Runtime.Value = tb_ShRunTime.Text
+                Show.Premiered.Value = tb_ShPremiered.Text
+                Show.Studio.Value = tb_ShStudio.Text
+                Show.Rating.Value = tb_ShRating.Text
+                Show.ImdbId.Value = tb_ShImdbId.Text
+                Show.TvdbId.Value = tb_ShTvdbId.Text
+                Show.Mpaa.Value = tb_ShCert.Text
+                Show.Genre.Value = tb_ShGenre.Text
                 Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
 
                 Show.Save()
@@ -8929,10 +8940,11 @@ Public Class Form1
                     Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
                     Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
                     tempstring = "S" & trueseason & "E" & trueepisode & " - "
+
                     'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                    Episode.Plot.Value = TextBox_Plot.Text
-                    Episode.Aired.Value = TextBox_Aired.Text
-                    Episode.Rating.Value = TextBox_Rating.Text
+                    Episode.Plot.Value = tb_EpPlot.Text
+                    Episode.Aired.Value = tb_EpAired.Text
+                    Episode.Rating.Value = tb_EpRating.Text
 
                     Episode.Save()
                     Episode.UpdateTreenode()
@@ -8947,21 +8959,21 @@ Public Class Form1
                     Loop
                     tempstring = "S" & trueseason & "E" & trueepisode & " - "
                     'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                    Episode.Plot.Value = TextBox_Plot.Text
-                    Episode.Aired.Value = TextBox_Aired.Text
-                    Episode.Rating.Value = TextBox_Rating.Text
-                    Episode.Credits.Value = TextBox_Credits.Text
-                    Episode.Director.Value = TextBox_Director.Text
+                    Episode.Plot.Value = tb_EpPlot.Text
+                    Episode.Aired.Value = tb_EpAired.Text
+                    Episode.Rating.Value = tb_EpRating.Text
+                    Episode.Credits.Value = tb_EpCredits.Text
+                    Episode.Director.Value = tb_EpDirector.Text
 
                     Dim episodelist As New List(Of TvEpisode)
                     episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
                     For Each ep In episodelist
                         If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
-                            ep.Plot.Value = TextBox_Plot.Text
-                            ep.Aired.Value = TextBox_Aired.Text
-                            ep.Rating.Value = TextBox_Rating.Text
-                            ep.Credits.Value = TextBox_Credits.Text
-                            ep.Director.Value = TextBox_Director.Text
+                            ep.Plot.Value = tb_EpPlot.Text
+                            ep.Aired.Value = tb_EpAired.Text
+                            ep.Rating.Value = tb_EpRating.Text
+                            ep.Credits.Value = tb_EpCredits.Text
+                            ep.Director.Value = tb_EpDirector.Text
                         End If
                         'Dim fullfiledetails As Media_Companion.FullFileDetails
                         'fullfiledetails = Media_Companion.Preferences.Get_HdTags(Episode.NfoFilePath)
@@ -9983,8 +9995,8 @@ Public Class Form1
                                 Dim fi As New IO.FileInfo(items)
                                 If Not IO.File.Exists(newname) Then
                                     fi.MoveTo(newname)
-                                    If items.ToLower = IO.Path.Combine(TextBox17.Text, TextBox29.Text).ToLower Then
-                                        TextBox29.Text = IO.Path.GetFileName(fi.FullName)
+                                    If items.ToLower = IO.Path.Combine(tb_EpPath.Text, tb_EpFilename.Text).ToLower Then
+                                        tb_EpFilename.Text = IO.Path.GetFileName(fi.FullName)
                                     End If
                                     renamelog += "!!! Succeeded" & vbCrLf & "!!! " & vbCrLf
                                 Else
@@ -10159,7 +10171,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
+    Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_EpWatched.Click
         Try
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
 
@@ -12258,7 +12270,7 @@ Public Class Form1
                     Case Media_Companion.ShowState.Error
                     Case Media_Companion.ShowState.Unverified
                         TempShow.State = Media_Companion.ShowState.Open
-                        TextBox_Title.BackColor = Color.White
+                        tb_Sh_Ep_Title.BackColor = Color.White
                 End Select
 
 
@@ -16849,24 +16861,24 @@ Public Class Form1
                     ComboBox5.Font = newFont
                     TvTreeview.Font = newFont
                     TextBox25.Font = newFont
-                    TextBox_Director.Font = newFont
-                    TextBox_Credits.Font = newFont
-                    TextBox_Plot.Font = newFont
-                    TextBox_Aired.Font = newFont
-                    TextBox_Rating.Font = newFont
-                    TextBox17.Font = newFont
-                    TextBox29.Font = newFont
-                    TextBox19.Font = newFont
+                    tb_EpDirector.Font = newFont
+                    tb_EpCredits.Font = newFont
+                    tb_EpPlot.Font = newFont
+                    tb_EpAired.Font = newFont
+                    tb_EpRating.Font = newFont
+                    tb_EpPath.Font = newFont
+                    tb_EpFilename.Font = newFont
+                    tb_ShPlot.Font = newFont
                     cbTvActor.Font = newFont
                     cbTvActorRole.Font = newFont
-                    TextBox15.Font = newFont
-                    TextBox16.Font = newFont
-                    TextBox10.Font = newFont
-                    TextBox13.Font = newFont
-                    TextBox9.Font = newFont
-                    TextBox11.Font = newFont
-                    TextBox12.Font = newFont
-                    TextBox14.Font = newFont
+                    tb_ShRunTime.Font = newFont
+                    tb_ShStudio.Font = newFont
+                    tb_ShPremiered.Font = newFont
+                    tb_ShRating.Font = newFont
+                    tb_ShTvdbId.Font = newFont
+                    tb_ShGenre.Font = newFont
+                    tb_ShImdbId.Font = newFont
+                    tb_ShCert.Font = newFont
 
                     ratingtxt.Font = newFont
                     votestxt.Font = newFont
@@ -22070,7 +22082,7 @@ Public Class Form1
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub TextBox_Plot_DoubleClick(sender As System.Object, e As System.EventArgs) Handles TextBox_Plot.DoubleClick
+    Private Sub TextBox_Plot_DoubleClick(sender As System.Object, e As System.EventArgs) Handles tb_EpPlot.DoubleClick
         ShowBigTvEpisodeText()
     End Sub
 
@@ -22079,14 +22091,14 @@ Public Class Form1
         Dim frm As New frmBigTvEpisodeText
 
         frm.ShowDialog(
-                        TextBox_Title.Text,
-                        TextBox_Director.Text,
-                        TextBox_Aired.Text,
-                        TextBox_Rating.Text,
-                        TextBox15.Text,
-                        TextBox11.Text,
-                        TextBox14.Text,
-                        TextBox_Plot.Text
+                        tb_Sh_Ep_Title.Text,
+                        tb_EpDirector.Text,
+                        tb_EpAired.Text,
+                        tb_EpRating.Text,
+                        tb_ShRunTime.Text,
+                        tb_ShGenre.Text,
+                        tb_ShCert.Text,
+                        tb_EpPlot.Text
                         )
     End Sub
 
