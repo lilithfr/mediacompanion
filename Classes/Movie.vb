@@ -2880,7 +2880,12 @@ Public Class Movie
             log &= "!!! Media Stub files are not to be renamed." & vbCrLf
             Return log
         End If
-
+        For Each rtfold In Preferences.offlinefolders
+            If mediaFile.Contains(rtfold) Then 
+                log &= "!!! Movie is in an offline folder.  We can not change offline movie's Filename!" & vbCrLf 
+                Return log
+            End If
+        Next
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
@@ -3019,12 +3024,14 @@ Public Class Movie
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
 
-        'If newextension.ToLower = ".disc" Then
-        '    log &= "!!! Media Stub files are not to be renamed." & vbCrLf
-        '    Return log
-        'End If
-
+        
         'Get current root folder
+        For Each rtfold In Preferences.offlinefolders
+            If FilePath.Contains(rtfold) Then 
+                log &= "!!! Movie is in an offline folder.  We can not change offline movie's folder!" & vbCrLf 
+                Return log
+            End If
+        Next
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
         Next
@@ -3084,12 +3091,10 @@ Public Class Movie
         If Not inrootfolder Then
             Dim toPathInfo = New DirectoryInfo(checkfolder)
             Dim fromPathInfo = New DirectoryInfo(FilePath)
-            ''move all files
-            For Each file As IO.FileInfo In fromPathInfo.GetFiles()
+            For Each file As IO.FileInfo In fromPathInfo.GetFiles()             ''move all files
                 file.MoveTo(Path.Combine(checkfolder, file.Name))
             Next
-            ''move any sub directories
-            For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
+            For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()      ''move any sub directories
                 dir.MoveTo(Path.Combine(checkfolder, dir.Name))
             Next
             If Utilities.IsDirectoryEmpty(FilePath) Then
@@ -3117,25 +3122,47 @@ Public Class Movie
             log &= "Movie moved from Root folder into new path" & vbCrLf 
             
             'Copy actor images from root .actor folder to new folder's .actor folder
-
             Dim actorsource As String= currentroot & "\.actors\"
-            Dim NewActorFolder As String = checkfolder & "\.actors"
-            If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
-            NewActorFolder &= "\"
-            For Each act In Actors
-                Dim actorfilename As String = act.ActorName.Replace(" ","_") & ".tbn"
-                Dim sourceactor As String = actorsource & actorfilename
-                If File.Exists(sourceactor) Then
-                    Utilities.SafeCopyFile(sourceactor, (NewActorFolder & actorfilename), True)
-                End If
-                Dim Frodoactorsource As String = sourceactor.Replace(".tbn",".jpg")
-                actorfilename = actorfilename.Replace(".tbn",".jpg")
-                If File.Exists(Frodoactorsource)
-                    Utilities.SafeCopyFile(Frodoactorsource, (NewActorFolder & actorfilename), True)
-                End If
-            Next
-            log &= "Actors copied into new Movie's actor folder" & vbCrLf 
+            If IO.Directory.Exists(actorsource) Then
+                Dim NewActorFolder As String = checkfolder & "\.actors"
+                If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
+                NewActorFolder &= "\"
+                For Each act In Actors
+                    Dim actorfilename As String = act.ActorName.Replace(" ","_") & ".tbn"
+                    Dim sourceactor As String = actorsource & actorfilename
+                    If File.Exists(sourceactor) Then
+                        Utilities.SafeCopyFile(sourceactor, (NewActorFolder & actorfilename), True)
+                    End If
+                    Dim Frodoactorsource As String = sourceactor.Replace(".tbn",".jpg")
+                    actorfilename = actorfilename.Replace(".tbn",".jpg")
+                    If File.Exists(Frodoactorsource)
+                        Utilities.SafeCopyFile(Frodoactorsource, (NewActorFolder & actorfilename), True)
+                    End If
+                Next
+                log &= "Actors copied into new Movie's actor folder" & vbCrLf
+            End If
         End If
+
+        ' tidyup empty remaining folder
+        Dim oldpath As New List(Of String)
+        oldpath.AddRange(FilePath.Split("\"))
+        Dim opcount As Integer = oldpath.Count -1
+        If oldpath(opcount) = "" Then
+            oldpath.RemoveAt(opcount)
+            opcount = opcount -1
+        End If
+        Dim testpath As String = Filepath
+        For num = opcount to 0 Step -1
+            testpath = testpath.Replace((oldpath(num).ToString & "\"),"")
+            If testpath = (currentroot & "\") Then Exit For
+            If IO.Directory.Exists(testpath) Then
+                Dim isitempty as DirectoryInfo = New DirectoryInfo(testpath)
+                If Not (isitempty.EnumerateFiles().Any()) And Not (isitempty.EnumerateDirectories().Any()) Then
+                    IO.Directory.Delete(testpath)
+                End If
+            End If
+        Next
+
 
         'update cache info
         _movieCache.fullpathandfilename = checkfolder & "\" & NfoPathAndFilename.Replace(FilePath,"")
@@ -3144,6 +3171,7 @@ Public Class Movie
         RenamedBaseName = mediapathandfilename
         UpdateMovieCache
         log &= "!!! Folder structure created successfully" & vbCrLf &vbCrLf 
+
         Try
             If NoDel Then
                 IO.Directory.Delete(FilePath)
@@ -3151,6 +3179,7 @@ Public Class Movie
         Catch ex As Exception
             log &= "!!! Could not Repeat delete original folder:- " & FilePath & vbCrLf
         End Try
+
         Return log
   End Function
 
@@ -3195,7 +3224,7 @@ Public Class Movie
             Try
                 If Preferences.MovieRenameEnable Or Preferences.MovieManualRename Then
                     s = Preferences.MovieRenameTemplate
-                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)
+                    s = s.Replace("%T", If(Preferences.MovTitleIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
                     s = s.Replace("%Z", _scrapedMovie.fullmoviebody.sortorder.SafeTrim)
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
@@ -3235,14 +3264,14 @@ Public Class Movie
             Try
                 If Preferences.MovFolderRename or Preferences.MovieManualRename Then
                     s = Preferences.MovFolderRenameTemplate
-                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)
+                    s = s.Replace("%T", If(Preferences.MovTitleIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
                     s = s.Replace("%Z", _scrapedMovie.fullmoviebody.sortorder.SafeTrim)
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
                     s = s.Replace("%G", vgenre)
-                    s = s.Replace("%N", Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.movieset))
+                    s = s.Replace("%N", If(Preferences.MovSetIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.movieset), _scrapedMovie.fullmoviebody.movieset))
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
                     s = s.Replace("%O", ach)

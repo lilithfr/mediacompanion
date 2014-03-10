@@ -13978,6 +13978,7 @@ Public Class Form1
         cbMovieRenameEnable.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
         cbMovFolderRename.CheckState            = If(Preferences.MovFolderRename, CheckState.Checked, CheckState.Unchecked)
         cbMovSetIgnArticle.CheckState           = If(Preferences.MovSetIgnArticle, CheckState.Checked, CheckState.Unchecked) 
+        cbMovTitleIgnArticle.CheckState         = If(Preferences.MovTitleIgnArticle, CheckState.Checked, CheckState.Unchecked)
         cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
@@ -19107,51 +19108,33 @@ Public Class Form1
                 Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
                 Preferences.SaveConfig()
                 If Preferences.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                    RefreshMissingEpisodesToolStripMenuItem.Enabled = False
                     RadioButton29.Checked = True
                     tv_CacheRefresh 
                     'tv_Filter()
                     Return
                 End If
+                RefreshMissingEpisodesToolStripMenuItem.Enabled = True
                 Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
                 If answer = MsgBoxResult.Yes 
                     Preferences.DlMissingEpData = True
                 Else
                     Preferences.DlMissingEpData = False
                 End If
-                Dim ShowList As New List(Of TvShow)
-                For Each shows In Cache.TvCache.Shows
-                    shows.MissingEpisodes.Clear()
-                    ShowList.Add(shows)
-                Next
-                
-                'If MsgBox("This function will download & populate the treeview with all of the episode details missing from your collection." & vbCrLf & "The download will be completed in the background. You can watch the status in the status bar below." & vbCrLf & vbCrLf & "Do you want to proceed with the download for " & ShowList.Count & " shows?", MsgBoxStyle.YesNo, "Download Missing Episode Details") = Windows.Forms.DialogResult.No Then Exit Sub
-                'Dim nod As TreeNode
-                'For Each nod In TvTreeview.Nodes
-                '    Dim nod2 As TreeNode
-                '    For Each nod2 In nod.Nodes
-                '        Dim nod3 As TreeNode
-                '        For Each nod3 In nod2.Nodes
-                '            If nod3.Name.IndexOf("Missing: ") = 0 Then
-                '                nod3.Remove()
-                '            End If
-                '        Next
-                '    Next
-                'Next
-                ToolStripStatusLabel2.Text = "Starting search for missing episodes"
-                ToolStripStatusLabel2.Visible = True
-                Bckgrndfindmissingepisodes.RunWorkerAsync(ShowList)
+                tv_EpisodesMissingLoad(False)
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
                 MsgBox("Process is already running")
             Else
                 MsgBox("Missing episode search cannot be performed" & vbCrLf & "    when the episode scraper is running")
             End If
-
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-
+    Private Sub RefreshMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMissingEpisodesToolStripMenuItem.Click
+        tv_EpisodesMissingLoad(True)
+    End Sub
 
     Private Sub RefreshThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RefreshShow.Click
         Try
@@ -20960,12 +20943,14 @@ Public Class Form1
         Me.cbMovieRenameEnable.Checked = Preferences.MovieRenameEnable
         Me.cbMovFolderRename.Checked = Preferences.MovFolderRename
         Me.cbMovSetIgnArticle.Checked = Preferences.MovSetIgnArticle 
+        Me.cbMovTitleIgnArticle.Checked = Preferences.MovTitleIgnArticle
         Me.cbRenameUnderscore.Checked = Preferences.MovRenameUnderscore 
         Me.ManualRenameChkbox.Checked = Preferences.MovieManualRename
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
         Me.tb_MovieRenameEnable.Text = Preferences.MovieRenameTemplate
         Me.tb_MovFolderRename.Text = Preferences.MovFolderRenameTemplate 
         Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
+        Me.RefreshMissingEpisodesToolStripMenuItem.Enabled = Preferences.displayMissingEpisodes 
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
@@ -21519,9 +21504,9 @@ Public Class Form1
     Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
         Try
             If cbRenameUnderscore.CheckState = CheckState.Checked Then
-                Preferences.MovSetIgnArticle = True
+                Preferences.MovRenameUnderscore = True
             Else
-                Preferences.MovSetIgnArticle = False
+                Preferences.MovRenameUnderscore = False
                 'Preferences.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True
@@ -21537,7 +21522,20 @@ Public Class Form1
                 Preferences.MovSetIgnArticle = True
             Else
                 Preferences.MovSetIgnArticle = False
-                'Preferences.XbmcTmdbRenameMovie = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovTitleIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleIgnArticle.CheckedChanged
+        Try
+            If cbMovTitleIgnArticle.CheckState = CheckState.Checked Then
+                Preferences.MovTitleIgnArticle = True
+            Else
+                Preferences.MovTitleIgnArticle = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True

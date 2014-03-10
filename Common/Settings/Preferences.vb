@@ -217,6 +217,7 @@ Public Class Preferences
     Public Shared MovFolderRenameTemplate As String
     Public Shared MovRenameUnderscore As Boolean
     Public Shared MovSetIgnArticle As Boolean
+    Public Shared MovTitleIgnArticle As Boolean
     Public Shared MovieImdbGenreRegEx As String
     Public Shared showsortdate As Boolean
     Public Shared TMDbSelectedLanguageName As String = "English - US"
@@ -548,6 +549,7 @@ Public Class Preferences
         MovFolderRename = False
         MovRenameUnderscore = False
         MovSetIgnArticle = False
+        MovTitleIgnArticle = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
 
@@ -908,6 +910,7 @@ Public Class Preferences
         root.AppendChild(doc, "MovFolderRenameTemplate",            MovFolderRenameTemplate)            'tb_MovFolderRename
         root.AppendChild(doc, "MovRenameUnderscore",                MovRenameUnderscore)                'cbRenameUnderscore
         root.AppendChild(doc, "MovSetIgnArticle",                   MovSetIgnArticle)                   'cbMovSetIgnArticle
+        root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
         root.AppendChild(doc, "moviePreferredHDTrailerResolution",  moviePreferredTrailerResolution)    'cbPreferredTrailerResolution
         root.AppendChild(doc, "GetMovieSetFromTMDb",                GetMovieSetFromTMDb)                'cbGetMovieSetFromTMDb
@@ -1274,6 +1277,7 @@ Public Class Preferences
                     Case "MovFolderRenameTemplate"              : MovFolderRenameTemplate = thisresult.InnerText 
                     Case "MovRenameUnderscore"                  : MovRenameUnderscore = thisresult.InnerText 
                     Case "MovSetIgnArticle"                     : MovSetIgnArticle = thisresult.InnerXml 
+                    Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml
                     Case "moviePreferredHDTrailerResolution"    : moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()

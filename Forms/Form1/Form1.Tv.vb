@@ -2621,6 +2621,62 @@ Partial Public Class Form1
         End Try
     End Sub
 
+    Private Sub tv_EpisodesMissingLoad(ByVal refresh As Boolean)
+        Try
+            If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
+                If refresh Then
+                    'Dim nod As TreeNode
+                    'For Each nod In TvTreeview.Nodes
+                    '    Dim nod2 As TreeNode
+                    '    For Each nod2 In nod.Nodes
+                    '        Dim nod3 As TreeNode
+                    '        For Each nod3 In nod2.Nodes
+                    '            If nod3.Name.IndexOf("Missing: ") = 0 Then
+                    '                nod3.Remove()
+                    '            End If
+                    '            Dim episo As TvEpisode
+                    '            episo = nod3.Tag
+                    '            If episo.IsMissing Then
+                    '                nod3.Remove()
+                    '            End If
+                    '        Next
+                    '    Next
+                    'Next
+                Else
+                    Dim ShowList As New List(Of TvShow)
+                    For Each shows In Cache.TvCache.Shows
+                        shows.MissingEpisodes.Clear()
+                        ShowList.Add(shows)
+                    Next
+                
+                    'If MsgBox("This function will download & populate the treeview with all of the episode details missing from your collection." & vbCrLf & "The download will be completed in the background. You can watch the status in the status bar below." & vbCrLf & vbCrLf & "Do you want to proceed with the download for " & ShowList.Count & " shows?", MsgBoxStyle.YesNo, "Download Missing Episode Details") = Windows.Forms.DialogResult.No Then Exit Sub
+                    'Dim nod As TreeNode
+                    'For Each nod In TvTreeview.Nodes
+                    '    Dim nod2 As TreeNode
+                    '    For Each nod2 In nod.Nodes
+                    '        Dim nod3 As TreeNode
+                    '        For Each nod3 In nod2.Nodes
+                    '            If nod3.Name.IndexOf("Missing: ") = 0 Then
+                    '                nod3.Remove()
+                    '            End If
+                    '        Next
+                    '    Next
+                    'Next
+                    ToolStripStatusLabel2.Text = "Starting search for missing episodes"
+                    ToolStripStatusLabel2.Visible = True
+                    Bckgrndfindmissingepisodes.RunWorkerAsync(ShowList)
+                End If
+            ElseIf Bckgrndfindmissingepisodes.IsBusy Then
+                MsgBox("Process is already running")
+            Else
+                MsgBox("Missing episode search cannot be performed" & vbCrLf & "    when the episode scraper is running")
+            End If
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Private Sub tv_EpisodesMissingFind(ByVal ShowList As List(Of TvShow))
         Utilities.EnsureFolderExists(IO.Path.Combine(Preferences.applicationPath, "missing\"))
         For Each item In ShowList
