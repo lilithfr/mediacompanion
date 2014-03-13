@@ -190,7 +190,10 @@ Public Class XBMC_MC_FolderMappings
 
     ReadOnly Property MC_Folders As List(Of String)
         Get
-            Return IIf(Me.Type="Movie",Preferences.movieFolders,Preferences.tvFolders)
+            Dim MovFoldList As New List(Of String)
+            MovFoldList.AddRange(Preferences.movieFolders)
+            MovFoldList.AddRange(Preferences.offlinefolders)
+            Return IIf(Me.Type="Movie",MovFoldList,Preferences.tvFolders) '(Me.Type="Movie",Preferences.movieFolders,Preferences.tvFolders)
         End Get
     End Property
 
