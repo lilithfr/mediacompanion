@@ -329,7 +329,7 @@ Public Class Form1
                     AttachConsole(-1)
                     Console.WriteLine("")
                     Console.WriteLine("")
-		            Console.WriteLine("Unrecognosied commandline option : [" & arg & "]. Type ? for help")
+		            Console.WriteLine("Unrecognised commandline option : [" & arg & "]. Type ? for help")
                     Console.WriteLine("")
                     Environment.Exit(1)
                     'Me.Close()
