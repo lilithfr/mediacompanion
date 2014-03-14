@@ -165,7 +165,8 @@ Public Class Form1
     Dim frmSplash2 As New frmProgressScreen
     Dim progressmode As Boolean
     Dim overItem As String
-    Dim scrapeAndQuit As Boolean = False
+    Dim scrapeAndQuit  As Boolean = False
+    Dim refreshAndQuit As Boolean = False
     Dim sandq As Integer = 0
     Dim mouseDelta As Integer = 0
     Dim resLabels As Label
@@ -291,27 +292,56 @@ Public Class Form1
         
         TvTreeview.Sort()
 
-        For Each arg As String In Environment.GetCommandLineArgs()
-            Console.WriteLine(arg)
-            If arg = "sq" Then
-                Me.WindowState = FormWindowState.Minimized
-                scrapeAndQuit = True
-                sandq = 3
-            Else If arg = "st" Then
-                Me.WindowState = FormWindowState.Minimized
-                scrapeAndQuit = True
-                sandq = 1
-            Else If arg = "sm" Then
-                Me.WindowState = FormWindowState.Minimized
-                scrapeAndQuit = True
-                sandq = 2
-            End If
+        For Each arg As String In Environment.GetCommandLineArgs().Skip(1)
+            'Console.WriteLine(arg)
+
+            Select arg.ToLower
+                Case "sq" : 
+                    scrapeAndQuit = True
+                    sandq = 3
+                Case "st" :
+                    scrapeAndQuit = True
+                    sandq = 1
+                Case "sm" :
+                    scrapeAndQuit = True
+                    sandq = 2
+                Case "r" :
+                    refreshAndQuit = True
+                Case "?" :
+		            Console.WriteLine("Commandline options")
+		            Console.WriteLine("-------------------")
+		            Console.WriteLine("sq - Search for & scrape new movies & tv shows")
+		            Console.WriteLine("st - Search for & scrape newtv shows")
+		            Console.WriteLine("sm - Search for & scrape new movies")
+		            Console.WriteLine("r  - Refresh movie & tv caches")
+		            Console.WriteLine("?  - Show this page")
+                    Environment.Exit(1)
+                    'Me.Close()
+	            Case Else
+		            Console.WriteLine("Unrecognosied commandline option : [" & arg & "]. Type ? for help")
+                    Environment.Exit(1)
+                    'Me.Close()
+            End Select
+
+            'If arg = "sq" Then
+            '    Me.WindowState = FormWindowState.Minimized
+            '    scrapeAndQuit = True
+            '    sandq = 3
+            'Else If arg = "st" Then
+            '    Me.WindowState = FormWindowState.Minimized
+            '    scrapeAndQuit = True
+            '    sandq = 1
+            'Else If arg = "sm" Then
+            '    Me.WindowState = FormWindowState.Minimized
+            '    scrapeAndQuit = True
+            '    sandq = 2
+            'End If
         Next
 
-        If scrapeAndQuit = False Then
+        If scrapeAndQuit or refreshAndQuit Then
+            Me.WindowState = FormWindowState.Minimized
+        Else
             frmSplash.Show()
-
-
             frmSplash.Label3.Text = "Status :- Initialising Program"
             frmSplash.Label3.Refresh()
         End If
@@ -487,7 +517,7 @@ Public Class Form1
 
         Movies.SpinUpDrives
 
-        If scrapeAndQuit = False Then
+        If Not (scrapeAndQuit or refreshAndQuit) Then
             Me.Visible = True
             
 
@@ -599,7 +629,7 @@ Public Class Form1
 
         'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
-        If scrapeAndQuit Then
+        If scrapeAndQuit or refreshAndQuit Then
             Do_ScrapeAndQuit()
             Me.Close()
         Else
@@ -23927,16 +23957,29 @@ Public Class Form1
     End Sub
 
     Sub Do_ScrapeAndQuit
+
+        If refreshAndQuit Then
+            mov_RebuildMovieCaches()
+            tv_CacheRefresh()
+
+            While BckWrkScnMovies.IsBusy 
+                Thread.Sleep(100)
+                Application.DoEvents
+            End While
+        End If
+
         Do While sandq <> 0
             If sandq >= 2 Then
                 SearchForNew
                 Do Until sandq < 2
+                    Thread.Sleep(100)
                     Application.DoEvents()
                 Loop
             End If
             If sandq = 1 Then
                 ep_Search()
                 Do Until sandq < 1
+                    Thread.Sleep(100)
                     Application.DoEvents()
                 Loop
             End If
