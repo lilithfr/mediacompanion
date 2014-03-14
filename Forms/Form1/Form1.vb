@@ -4,6 +4,8 @@ Imports System.Net
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Threading
+Imports System.Runtime.InteropServices
+
 Imports Media_Companion.Preferences
 Imports System.Xml
 Imports System.Reflection
@@ -35,6 +37,8 @@ Public Class Form1
     Private                XBMC_Link_ErrorLog_Timer As Timers.Timer = New Timers.Timer()
     Private                XBMC_Link_Idle_Timer     As Timers.Timer = New Timers.Timer()
     Private                XBMC_Link_Check_Timer    As Timers.Timer = New Timers.Timer()
+
+    Declare Function AttachConsole Lib "kernel32.dll" (ByVal dwProcessId As Int32) As Boolean
 
     Shared ReadOnly Property Link_TotalQCount
         Get
@@ -308,6 +312,9 @@ Public Class Form1
                 Case "r" :
                     refreshAndQuit = True
                 Case "?" :
+                    AttachConsole(-1)
+                    Console.WriteLine("")
+                    Console.WriteLine("")
 		            Console.WriteLine("Commandline options")
 		            Console.WriteLine("-------------------")
 		            Console.WriteLine("sq - Search for & scrape new movies & tv shows")
@@ -315,10 +322,15 @@ Public Class Form1
 		            Console.WriteLine("sm - Search for & scrape new movies")
 		            Console.WriteLine("r  - Refresh movie & tv caches")
 		            Console.WriteLine("?  - Show this page")
+                    Console.WriteLine("")
                     Environment.Exit(1)
                     'Me.Close()
 	            Case Else
+                    AttachConsole(-1)
+                    Console.WriteLine("")
+                    Console.WriteLine("")
 		            Console.WriteLine("Unrecognosied commandline option : [" & arg & "]. Type ? for help")
+                    Console.WriteLine("")
                     Environment.Exit(1)
                     'Me.Close()
             End Select
