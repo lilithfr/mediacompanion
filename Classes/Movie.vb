@@ -1070,7 +1070,9 @@ Public Class Movie
                 Case "originaltitle"
                     _scrapedMovie.fullmoviebody.originaltitle = thisresult.InnerText.ToString.SafeTrim
                 Case "alternativetitle"
-                    _scrapedMovie.alternativetitles.Add(thisresult.InnerText)
+                    If Not Preferences.NoAltTitle Then
+                        _scrapedMovie.alternativetitles.Add(thisresult.InnerText)
+                    End If
                 Case "country"
                     _scrapedMovie.fullmoviebody.country = thisresult.InnerText
                 Case "credits"

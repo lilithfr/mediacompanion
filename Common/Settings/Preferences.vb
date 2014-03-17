@@ -160,6 +160,7 @@ Public Class Preferences
 
     'Saved Movie Prefs
     Public Shared DownloadTrailerDuringScrape As Boolean
+    Public Shared NoAltTitle As Boolean
     Public Shared gettrailer As Boolean
     Public Shared ignoretrailers As Boolean
     Public Shared moviePreferredTrailerResolution As String
@@ -607,6 +608,7 @@ Public Class Preferences
         maximumthumbs = 10
         gettrailer = False
         DownloadTrailerDuringScrape = False
+        NoAltTitle = False
         ReDim certificatepriority(33)
         certificatepriority(0) = "MPAA"
         certificatepriority(1) = "UK"
@@ -889,6 +891,7 @@ Public Class Preferences
         root.AppendChild(doc, "namemode",                           namemode)                           'cbxNameMode
         root.AppendChild(doc, "usetransparency",                    usetransparency)                    'set from frmOptions - obsolete
         root.AppendChild(doc, "transparencyvalue",                  transparencyvalue)                  'set from frmOptions - obsolete
+        root.AppendChild(doc, "NoAltTitle",                         NoAltTitle)                         'cbNoAltTitle
         root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
         root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'CheckBox13
@@ -1245,6 +1248,7 @@ Public Class Preferences
                     Case "downloadtvseasonthumbs"               : downloadtvseasonthumbs = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
+                    Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 
                     Case "disablelogs"                          : disablelogfiles = thisresult.InnerXml
                     Case "incmissingmovies"                     : incmissingmovies = thisresult.InnerText
                     Case "disabletvlogs"                        : disabletvlogs = thisresult.InnerXml

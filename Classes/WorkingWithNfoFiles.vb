@@ -1851,7 +1851,7 @@ Public Class WorkingWithNfoFiles
                 If movietosave.alternativetitles.Count > 0 Then
                     Try
                         For Each title In movietosave.alternativetitles
-                            If title <> movietosave.fullmoviebody.title Then
+                            If Not Preferences.NoAltTitle AndAlso title <> movietosave.fullmoviebody.title Then
                                 Try
                                     child = doc.CreateElement("alternativetitle")
                                     child.InnerText = title
