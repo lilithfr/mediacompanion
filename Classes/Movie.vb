@@ -777,7 +777,11 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf ImdbScrapeActors            , "IMDB Actors scraper"       ) ) 'GetImdbActors
+        If Preferences.movies_useXBMC_Scraper Then
+            Actions.Items.Add( New ScrapeAction(AddressOf TmdbActorSave           , "Tmdb Actor Save"           ) ) 'TMDB Actors already scraped, so just save images.
+        Else
+            Actions.Items.Add( New ScrapeAction(AddressOf ImdbScrapeActors            , "IMDB Actors scraper"       ) ) 'GetImdbActors
+        End If
         Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
@@ -975,6 +979,47 @@ Public Class Movie
             _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
         End If
 
+        If Preferences.movies_useXBMC_Scraper AndAlso Preferences.XbmcTmdbMissingFromImdb Then
+            Scraped  = True
+            'Rescrape = True
+            _rescrapedMovie = New FullMovieDetails
+            _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
+
+            If _imdbBody = "MIC" Then                        
+                ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Preferences.imdbmirror & """" & vbCrLf)
+                Exit Sub
+            'Else
+            '    ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
+            '    AssignScrapedMovie(_rescrapedMovie)
+            End If
+            Dim thumbstring As New XmlDocument
+            thumbstring.LoadXml(ImdbBody)
+            For Each thisresult In thumbstring("movie")
+                Select Case thisresult.Name
+                    Case "stars"
+                        _scrapedMovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                    Case "outline"
+                        _scrapedMovie.fullmoviebody.outline = thisresult.InnerText
+                    Case "mpaa"
+                        _scrapedMovie.fullmoviebody.mpaa = thisresult.InnerText
+                    Case "cert"
+                        _certificates.Add(thisresult.InnerText)
+                End Select
+            Next
+            ' Assign certificate
+            Dim done As Boolean = False
+            For g = 0 To UBound(Preferences.certificatepriority)
+                For Each cert In Certificates
+                    If cert.IndexOf(Preferences.certificatepriority(g)) <> -1 Then
+                        _scrapedMovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
+                        done = True
+                        Exit For
+                    End If
+                Next
+                If done = True Then Exit For
+            Next
+        End If
+
     End Sub
 
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
@@ -1168,6 +1213,27 @@ Public Class Movie
                     End If
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
+                Case "actor"
+                    If Preferences.movies_useXBMC_Scraper Then
+                        Dim newactor As New str_MovieActors(SetDefaults)
+                        Dim detail As XmlNode = Nothing
+                        For Each detail In thisresult.ChildNodes
+                            Select Case detail.Name
+                                Case "id"
+                                    newactor.actorid = detail.InnerText
+                                Case "name"
+                                    newactor.actorname = detail.InnerText
+                                Case "role"
+                                    newactor.actorrole = detail.InnerText
+                                Case "thumb"
+                                    newactor.actorthumb = detail.InnerText
+                                    If newactor.actorthumb.Contains("original/") Then
+                                        newactor.actorthumb = "http://image.tmdb.org/t/p/" & detail.InnerText
+                                    End If
+                            End Select
+                        Next
+                        _scrapedMovie.listactors.Add(newactor)
+                    End If
             End Select
         Next
 
@@ -1269,6 +1335,25 @@ Public Class Movie
 
         Return actors2
     End Function
+    Sub TmdbActorSave
+
+        ReportProgress("Actors")
+
+        Dim actors As List(Of str_MovieActors) = _scrapedMovie.listactors 
+        Dim actors2 As New List(Of str_MovieActors)
+        For Each actor In actors
+            Try
+                actor.SaveActor(ActorPath)
+                actors2.Add(actor)
+            Catch ex As Exception
+                ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
+            End Try
+        Next
+        _scrapedMovie.listactors.Clear()
+        _scrapedMovie.listactors = actors2
+        ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)
+        If Not Preferences.actorseasy AndAlso Not Preferences.actorsave Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
+    End Sub
 
 
     Sub AssignTrailerUrl

@@ -14441,7 +14441,7 @@ Public Class Form1
                 GroupBox_IMDB_Scraper_Preferences.Enabled = True
                 GroupBox_IMDB_Scraper_Preferences.Visible = True
                 GroupBox_IMDB_Scraper_Preferences.BringToFront()
-                GroupBox11.Visible = False
+                'GroupBox11.Visible = False
                 'ComboBox7.Visible = True 'False
                 'ComboBox6.Visible = True 'False
                 'Label98.Visible = True 'False
@@ -14481,7 +14481,7 @@ Public Class Form1
 
 
 
-                GroupBox11.Visible = True
+                'GroupBox11.Visible = True
                 'ComboBox7.Visible = True
                 'ComboBox6.Visible = True
                 'Label98.Visible = True
