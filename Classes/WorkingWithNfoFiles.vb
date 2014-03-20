@@ -1641,21 +1641,8 @@ Public Class WorkingWithNfoFiles
                         If movietosave.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                             If movietosave.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("durationinseconds")
-                                'Dim temptemp As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
-                                'If Preferences.intruntime = True Then
-                                    'temptemp = Utilities.cleanruntime(movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
-                                    'If IsNumeric(temptemp) Then
-                                        'filedetailschildchild.InnerText = temptemp
-                                        'filedetailschild.AppendChild(filedetailschildchild)
-                                    'Else
-                                        'filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
-                                        'filedetailschild.AppendChild(filedetailschildchild)
-                                    'End If
-                                'Else
                                     filedetailschildchild.InnerText = If(movietosave.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "", movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
                                     filedetailschild.AppendChild(filedetailschildchild)
-                                'End If
-
                             End If
                         End If
                     Catch
@@ -1840,7 +1827,7 @@ Public Class WorkingWithNfoFiles
                 Catch
                 End Try
                 child = doc.CreateElement("originaltitle")
-                If movietosave.fullmoviebody.originaltitle = Nothing Or movietosave.fullmoviebody.originaltitle = "" Then
+                If String.IsNullOrEmpty(movietosave.fullmoviebody.originaltitle) Then
                     child.InnerText = movietosave.fullmoviebody.title
                 Else
                     child.InnerText = movietosave.fullmoviebody.originaltitle
@@ -1848,10 +1835,10 @@ Public Class WorkingWithNfoFiles
 
                 root.AppendChild(child)
 
-                If movietosave.alternativetitles.Count > 0 Then
+                If Not Preferences.NoAltTitle AndAlso movietosave.alternativetitles.Count > 0 Then
                     Try
                         For Each title In movietosave.alternativetitles
-                            If Not Preferences.NoAltTitle AndAlso title <> movietosave.fullmoviebody.title Then
+                            If title <> movietosave.fullmoviebody.title Then
                                 Try
                                     child = doc.CreateElement("alternativetitle")
                                     child.InnerText = title
@@ -1882,10 +1869,7 @@ Public Class WorkingWithNfoFiles
 
 
                 Try
-                    If movietosave.fullmoviebody.sortorder = Nothing Then
-                        movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title
-                    End If
-                    If movietosave.fullmoviebody.sortorder = "" Then
+                    If String.IsNullOrEmpty(movietosave.fullmoviebody.sortorder) Then
                         movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title
                     End If
                     child = doc.CreateElement("sorttitle")
@@ -1991,12 +1975,6 @@ Public Class WorkingWithNfoFiles
                         minutes = minutes.Replace("mins", "")
                         minutes = minutes.Replace("min", "")
                         minutes = minutes.Replace(" ", "")
-                        'If Preferences.intruntime = True And Not IsNumeric(minutes) Then
-                        '    Dim tempstring As String = Form1.filefunction.cleanruntime(minutes)
-                        '    If IsNumeric(tempstring) Then
-                        '        minutes = tempstring
-                        '    End If
-                        'End If
                         Try
                             Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                                 minutes = minutes.Substring(1, minutes.Length - 1)
@@ -2048,16 +2026,6 @@ Public Class WorkingWithNfoFiles
                             child.InnerText = tags
                             root.AppendChild(child)
                         Next
-                    'If movietosave.fullmoviebody.tag <> "" Then
-                    '    Dim strArr() As String
-                    '    strArr = movietosave.fullmoviebody.tag.Split("/")
-                    '    For count = 0 To strArr.Length - 1
-                    '        child = doc.CreateElement("tag")
-                    '        strArr(count) = strArr(count).Trim
-                    '        child.InnerText = strArr(count)
-                    '        root.AppendChild(child)
-                    '    Next
-                    'End If
                     End If
                 Catch
                 End Try
@@ -2084,9 +2052,11 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 31
                 Try
-                    child = doc.CreateElement("trailer")
-                    child.InnerText = movietosave.fullmoviebody.trailer
-                    root.AppendChild(child)
+                    If Not String.IsNullOrEmpty(movietosave.fullmoviebody.trailer) Then
+                        child = doc.CreateElement("trailer")
+                        child.InnerText = movietosave.fullmoviebody.trailer
+                        root.AppendChild(child)
+                    End If
                 Catch
                 End Try
                 stage = 32
@@ -2105,26 +2075,18 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 33
                 Try
-                    If movietosave.fullmoviebody.imdbid <> Nothing Then
-                        If movietosave.fullmoviebody.imdbid <> "" Then
-                            child = doc.CreateElement("id")
-                            child.InnerText = movietosave.fullmoviebody.imdbid
-                            root.AppendChild(child)
-                        Else
-
-                        End If
-                    Else
-
+                    If Not String.IsNullOrEmpty(movietosave.fullmoviebody.imdbid) Then
+                        child = doc.CreateElement("id")
+                        child.InnerText = movietosave.fullmoviebody.imdbid
+                        root.AppendChild(child)
                     End If
                 Catch
                 End Try
                 Try
-                    If movietosave.fullmoviebody.source <> Nothing Then
-                        If movietosave.fullmoviebody.source <> "" Then
-                            child = doc.CreateElement("videosource")
-                            child.InnerText = movietosave.fullmoviebody.source
-                            root.AppendChild(child)
-                        End If
+                    If Not String.IsNullOrEmpty(movietosave.fullmoviebody.source) Then
+                        child = doc.CreateElement("videosource")
+                        child.InnerText = movietosave.fullmoviebody.source
+                        root.AppendChild(child)
                     End If
                 Catch ex As Exception
 
@@ -2169,7 +2131,6 @@ Public Class WorkingWithNfoFiles
                         child.AppendChild(actorchild)
                         root.AppendChild(child)
                     Next
-                    'doc.AppendChild(root)
                 Catch
                 End Try
                 doc.AppendChild(root)
@@ -2182,9 +2143,6 @@ Public Class WorkingWithNfoFiles
                     output.Close()
                 Catch
                 End Try
-                'Catch ex As Exception
-                '    MsgBox(ex.Message.ToString)
-                'End Try
             Else
                 MsgBox("File already exists")
             End If

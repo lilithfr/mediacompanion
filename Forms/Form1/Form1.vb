@@ -27,6 +27,7 @@ Public Class Form1
     Public Const MCToolsCommands As Integer = 2          ' increment when adding MC functions to ToolsToolStripMenuItem
 
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
+    'Public Dim WithEvents  BckWrkXbmcMovies      As BackgroundWorker = New BackgroundWorker 
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
     Shared Public          XbmcControllerQ       As PriorityQueue    = New PriorityQueue
@@ -2267,43 +2268,10 @@ Public Class Form1
                 End Try
             End If
         Next
-        '--------------------------End Search for New Media in Offline Folders
-
-        'newMovieList.Clear()
-        'Dim mediacounter As Integer = newMovieList.Count
-
-        'For g = 0 To NewMoviesFolders.Count - 1
-        '    Progress = ((100 / NewMoviesFolders.Count) * g) * 10
-        '    ProgressText = "Scanning folder " & g + 1 & " of " & NewMoviesFolders.Count & " " & NewMoviesFolders(g)
-        '    ToolStripProgressBar1.Visible = True
-        '    ToolStripProgressBar1.Value = Progress
-        '    ToolStripProgressBar1.ProgressBar.Refresh()
-        '    ToolStripProgressBar1.ProgressBar.PerformStep()
-        '    ToolStripStatusLabel1.Visible = True
-        '    ToolStripStatusLabel1.Text = ProgressText
-
-        '    For Each ext In Utilities.VideoExtensions
-        '        MoviePattern = If(ext.IndexOf(".IFO") <> -1, ext, "*" & ext)
-
-        '        DirPath = NewMoviesFolders(g)
-        '        Dim Dir_Info As New System.IO.DirectoryInfo(DirPath)
-        'SORT        Movies.listMovieFiles(Dir_Info, MoviePattern, scraperLog)
-        '        'mov_ListFiles2(DirInfo, MoviePattern, Dir_Info)
-        '    Next
-
-        '    TempInt = newMovieList.Count - mediacounter
-        '    mediacounter = newMovieList.Count
-        'Next
-
-
 
         Dim movieyear As String = ""
-        ' Dim newmoviecount As Integer = 0
-
-        ' newmoviecount =  newMovieList.Count.ToString
 
         oMovies.FindNewMovies(False)
-
 
         scraperLog &= vbCrLf & vbCrLf & "Starting Main XBMC Scraper Process" & vbCrLf & vbCrLf
 
@@ -10124,10 +10092,10 @@ Public Class Form1
             If TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
                 If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
                     'individual episode
-                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected episode" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                    If tempint = DialogResult.No Then
-                        Exit Sub
-                    End If
+                    'tempint = MessageBox.Show("This option will Rescrape Media tags for the selected episode" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    'If tempint = DialogResult.No Then
+                    '    Exit Sub
+                    'End If
                     If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
                         nfofilestorename.Add(TvTreeview.SelectedNode.Name)
                     End If
@@ -14474,16 +14442,16 @@ Public Class Form1
                 GroupBox_IMDB_Scraper_Preferences.Visible = True
                 GroupBox_IMDB_Scraper_Preferences.BringToFront()
                 GroupBox11.Visible = False
-                ComboBox7.Visible = False
-                ComboBox6.Visible = False
-                Label98.Visible = False
-                Label92.Visible = False
+                'ComboBox7.Visible = True 'False
+                'ComboBox6.Visible = True 'False
+                'Label98.Visible = True 'False
+                'Label92.Visible = True 'False
 
-                Label93.Enabled = False
-                Label99.Enabled = False
-                lbPosterSourcePriorities.Enabled = False
-                Button73.Enabled = False
-                Button61.Enabled = False
+                'Label93.Enabled = True 'False
+                'Label99.Enabled = True 'False
+                'lbPosterSourcePriorities.Enabled = True 'False
+                'Button73.Enabled = True 'False
+                'Button61.Enabled = True 'False
 
 
                 RadioButton51.Enabled = False    'Hidden IMDB option for XBMC Scrapers as XBMC IMDB Scraper is broken.
@@ -14514,15 +14482,15 @@ Public Class Form1
 
 
                 GroupBox11.Visible = True
-                ComboBox7.Visible = True
-                ComboBox6.Visible = True
-                Label98.Visible = True
-                Label92.Visible = True
-                Label93.Enabled = True
-                Label99.Enabled = True
-                lbPosterSourcePriorities.Enabled = True
-                Button73.Enabled = True
-                Button61.Enabled = True
+                'ComboBox7.Visible = True
+                'ComboBox6.Visible = True
+                'Label98.Visible = True
+                'Label92.Visible = True
+                'Label93.Enabled = True
+                'Label99.Enabled = True
+                'lbPosterSourcePriorities.Enabled = True
+                'Button73.Enabled = True
+                'Button61.Enabled = True
                 RadioButton51.Enabled = False
                 RadioButton52.Enabled = False
             End If
@@ -23480,6 +23448,13 @@ Public Class Form1
         End If
     End Sub
 
+    Sub RunBackgroundXBMCScrape(Optional ByVal action As String = "")
+
+        'If Not BckWrkXbmcMovies.IsBusy Then
+
+        'End If
+    End Sub
+
     Private  cbBtnLink_Checked As Boolean
 
     Sub EnableDisableByTag(tagQualifier As String, _state As Boolean)
@@ -23534,7 +23509,7 @@ Public Class Form1
 
     End Sub
 
-
+#Region "MC Scraper Calls"
     Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
         Select Case action
@@ -23609,6 +23584,101 @@ Public Class Form1
         oMovies.FindNewMovies
     End Sub
 
+    Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
+
+        Dim oProgress As Progress = CType(e.UserState, Progress)
+
+        If e.ProgressPercentage <> -1 Then
+            tsMultiMovieProgressBar.Value = e.ProgressPercentage
+        End If
+
+        If oProgress.Command = Progress.Commands.Append Then
+            tsStatusLabel.Text &= oProgress.Message
+        Else
+            tsStatusLabel.Text = oProgress.Message
+        End If
+
+        If oProgress.Message = Movie.MSG_ERROR then
+            ScraperErrorDetected = True
+        End If
+
+        If Not IsNothing(oProgress.Log) Then
+            scraperLog += oProgress.Log
+        End If
+    End Sub
+
+    Private Sub BckWrkScnMovies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
+
+        If scrapeAndQuit = True Then
+            sandq = sandq -2
+            Exit Sub
+        End If
+
+        LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
+        UpdateFilteredList()
+
+        ScraperStatusStrip.Visible = False
+        ssFileDownload.Visible = False
+        EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
+
+        DisplayLogFile()
+
+        'TabPage14.Text = "Search for new movies"
+        'TabPage14.ToolTipText = "Scan movie folders for new media files"
+    End Sub
+
+#End Region 
+
+#Region "XBMC TMDB Scraper Calls"
+
+    'Private Sub BckWrkXbmcMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkXbmcMovies.DoWork
+    '    Try
+            
+
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub 
+
+    'Private Sub BckWrkXbmcMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkXbmcMovies.ProgressChanged
+    '    Dim oProgress As Progress = CType(e.UserState, Progress)
+    '    If e.ProgressPercentage <> -1 Then
+    '        tsMultiMovieProgressBar.Value = e.ProgressPercentage
+    '    End If
+    '    If oProgress.Command = Progress.Commands.Append Then
+    '        tsStatusLabel.Text &= oProgress.Message
+    '    Else
+    '        tsStatusLabel.Text = oProgress.Message
+    '    End If
+    '    If oProgress.Message = Movie.MSG_ERROR then
+    '        ScraperErrorDetected = True
+    '    End If
+    '    If Not IsNothing(oProgress.Log) Then
+    '        scraperLog += oProgress.Log
+    '    End If
+    'End Sub
+
+    'Private Sub BckWrkXbmcMovies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkXbmcMovies.RunWorkerCompleted
+
+    '    If scrapeAndQuit = True Then
+    '        sandq = sandq -2
+    '        Exit Sub
+    '    End If
+
+    '    LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
+    '    UpdateFilteredList()
+
+    '    ScraperStatusStrip.Visible = False
+    '    ssFileDownload.Visible = False
+    '    EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
+
+    '    DisplayLogFile()
+
+    '    'TabPage14.Text = "Search for new movies"
+    '    'TabPage14.ToolTipText = "Scan movie folders for new media files"
+    'End Sub
+
+#End Region
 
     Private Sub UpdateFilteredList
 
@@ -23734,32 +23804,6 @@ Public Class Form1
     '    End If
     'End Sub
 
-
-
-    Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
-
-        Dim oProgress As Progress = CType(e.UserState, Progress)
-
-        If e.ProgressPercentage <> -1 Then
-            tsMultiMovieProgressBar.Value = e.ProgressPercentage
-        End If
-
-        If oProgress.Command = Progress.Commands.Append Then
-            tsStatusLabel.Text &= oProgress.Message
-        Else
-            tsStatusLabel.Text = oProgress.Message
-        End If
-
-        If oProgress.Message = Movie.MSG_ERROR then
-            ScraperErrorDetected = True
-        End If
-
-        If Not IsNothing(oProgress.Log) Then
-            scraperLog += oProgress.Log
-        End If
-    End Sub
-
-
     Private Sub XBMC_ProgressChanged(ByVal e As System.ComponentModel.ProgressChangedEventArgs)
         If Not scrapeAndQuit Then
             If e.ProgressPercentage <> 999999 Then
@@ -23769,28 +23813,6 @@ Public Class Form1
             End If
         End If
     End Sub
-
-
-    Private Sub BckWrkScnMovies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
-
-        If scrapeAndQuit = True Then
-            sandq = sandq -2
-            Exit Sub
-        End If
-
-        LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
-        UpdateFilteredList()
-
-        ScraperStatusStrip.Visible = False
-        ssFileDownload.Visible = False
-        EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
-
-        DisplayLogFile()
-
-        'TabPage14.Text = "Search for new movies"
-        'TabPage14.ToolTipText = "Scan movie folders for new media files"
-    End Sub
-
 
     Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
 
@@ -23973,14 +23995,16 @@ Public Class Form1
 
 
     Sub SearchForNew
-        If Preferences.movies_useXBMC_Scraper Then
-            Pre_Run_XBMC_Scraper
-            mov_XBMCScrapingInitialization
-            Post_Run_XBMC_Scraper
-            Exit Sub
-        End If
+        'If Preferences.movies_useXBMC_Scraper Then
+        '    Pre_Run_XBMC_Scraper
+        '    mov_XBMCScrapingInitialization
+        '    Post_Run_XBMC_Scraper
+        '    'Exit Sub
+        'Else
+            RunBackgroundMovieScrape("SearchForNewMovies")
+        'End If
 
-        RunBackgroundMovieScrape("SearchForNewMovies")
+        
     End Sub
 
     Sub Do_ScrapeAndQuit

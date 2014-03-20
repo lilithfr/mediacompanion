@@ -811,8 +811,13 @@ Public Class Movie
             Scraped  = True
             Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
             Actions.Items.Add( New ScrapeAction(AddressOf getspecialMovie     , "Check if special version"       ) )
-            Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
-            Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) )            
+            If Preferences.movies_useXBMC_Scraper
+                Actions.Items.Add( New ScrapeAction(AddressOf TmdbScraper_GetBody , "Scrape TMDB Main Body"          ) )
+                Actions.Items.Add( New ScrapeAction(AddressOf CheckTmdbBodyScrape , "Checking TMDB Main body scrape" ) )                                   
+            Else
+                Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
+                Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) ) 
+            End If
             RunScrapeActions
         End if
     End Sub
@@ -872,11 +877,10 @@ Public Class Movie
         _imdbBody = ImdbScrapeBody(Utilities.CleanReleaseFormat(SearchName, Preferences.releaseformat), PossibleYear, PossibleImdb)
     End Sub
 
-    Sub ImdbScraper_GetBodyByImdbOnly
-        _imdbBody = ImdbScrapeBody(, , PossibleImdb)
-    End Sub
-
-
+    'Sub ImdbScraper_GetBodyByImdbOnly
+    '    _imdbBody = ImdbScrapeBody(, , PossibleImdb)
+    'End Sub
+    
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
         If Not IsNothing(Title) then
@@ -912,6 +916,36 @@ Public Class Movie
             AppendScrapeSuccessActions
         End If
     End Sub
+
+    Sub TmdbScraper_GetBody()
+        _imdbBody = TmdbScrapeBody(Utilities.CleanReleaseFormat(SearchName, Preferences.releaseformat), PossibleYear, PossibleImdb)
+    End Sub
+
+    Sub CheckTmdbBodyScrape()
+        If ImdbBody.ToLower = "error" Then   'Failed...
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Preferences.imdbmirror & """" & vbCrLf & "IMDB may not be available or Movie Title is invalid" & vbCrLf )
+            AppendScrapeFailedActions
+        Else
+            ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
+            AppendScrapeSuccessActions
+        End If
+    End Sub
+
+    Function TmdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
+        If Not IsNothing(Title) then
+            ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
+        End If
+
+        If PossibleImdb <> "" then
+            ReportProgress( ,"Using TMDB : " & PossibleImdb & vbCrLf )
+        End If
+
+        ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
+
+        ReportProgress( "- Main body " )
+        
+        Return _imdbScraper.gettmdbbody(Title, PossibleYear, PossibleImdb, Preferences.imdbmirror, Preferences.googlecount)
+    End Function
 
 
     Sub TidyUpAnyUnscrapedFields

@@ -1431,56 +1431,6 @@ Module General
         End Try
         m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
     End Sub
-#End Region
-
-
-#Region "nfoFileFunctions"
-
-    Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String, Optional ByVal scraper As String = "", Optional ByRef nfoFileandPath As String = "") As Boolean
-        Try
-            Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
-            nfoFileandPath = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition)) & ".nfo"
-            'nfoFilename &= ".nfo"
-            Dim doc As New XmlDocument
-            doc.LoadXml(FileContent)
-            Dim xmlproc As XmlDeclaration
-            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-            Dim root As XmlElement = doc.DocumentElement
-            doc.InsertBefore(xmlproc, root)
-            Dim output As New XmlTextWriter(nfoFileandPath, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-            doc.WriteTo(output)
-            output.Close()
-
-            'Dim nfoGenerator As WorkingWithNfoFiles
-            'nfoGenerator = New WorkingWithNfoFiles
-
-            ' load nfo file to clean
-            Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfoFileandPath)
-
-            If fmd.fullmoviebody.movieset = "" Then fmd.fullmoviebody.movieset = "-None-"
-            If fmd.fullmoviebody.top250  = "" Then fmd.fullmoviebody.top250  ="0"
-            If fmd.fullmoviebody.outline = "" Then fmd.fullmoviebody.outline = fmd.fullmoviebody.plot ' Outline lonely 
-            fmd.fullmoviebody.outline = fmd.fullmoviebody.outline.Replace("\", "")
-            fmd.fullmoviebody.plot = fmd.fullmoviebody.plot.Replace("\", "")
-                        
-            'if scraped by XBMC TMDB, one poster is allocated.  Move this to Frodoposter.
-            If scraper <> "" Then
-                If fmd.listthumbs.Count = 1 Then fmd.frodoPosterThumbs.Add(New FrodoPosterThumb("poster",fmd.listthumbs(0)))
-                fmd.listthumbs.Clear()
-            End If
-
-            ' save to make sure additional features like saving actor thumbnails takes place
-            'WorkingWithNfoFiles.mov_NfoSave(nfoFileandPath, fmd, True)
-            Movie.SaveNFO(nfoFileandPath, fmd)
-            Return True
-        Catch
-            Return False
-        End Try
-    End Function
-
-#End Region
-
 
     Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of TvEpisode), ByVal Language As String) As List(Of TvEpisode)
         episodeInformation.Clear()
@@ -1579,6 +1529,58 @@ Module General
             Return "error"
         End Try
     End Function
+
+#End Region
+
+
+#Region "nfoFileFunctions"
+
+    Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String, Optional ByVal scraper As String = "", Optional ByRef nfoFileandPath As String = "") As Boolean
+        Try
+            Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
+            nfoFileandPath = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition)) & ".nfo"
+            'nfoFilename &= ".nfo"
+            Dim doc As New XmlDocument
+            doc.LoadXml(FileContent)
+            Dim xmlproc As XmlDeclaration
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+            Dim root As XmlElement = doc.DocumentElement
+            doc.InsertBefore(xmlproc, root)
+            Dim output As New XmlTextWriter(nfoFileandPath, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            doc.WriteTo(output)
+            output.Close()
+
+            'Dim nfoGenerator As WorkingWithNfoFiles
+            'nfoGenerator = New WorkingWithNfoFiles
+
+            ' load nfo file to clean
+            Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfoFileandPath)
+
+            If fmd.fullmoviebody.movieset = "" Then fmd.fullmoviebody.movieset = "-None-"
+            If fmd.fullmoviebody.top250  = "" Then fmd.fullmoviebody.top250  ="0"
+            If fmd.fullmoviebody.outline = "" Then fmd.fullmoviebody.outline = fmd.fullmoviebody.plot ' Outline lonely 
+            fmd.fullmoviebody.outline = fmd.fullmoviebody.outline.Replace("\", "")
+            fmd.fullmoviebody.plot = fmd.fullmoviebody.plot.Replace("\", "")
+                        
+            'if scraped by XBMC TMDB, one poster is allocated.  Move this to Frodoposter.
+            If scraper <> "" Then
+                If fmd.listthumbs.Count = 1 Then fmd.frodoPosterThumbs.Add(New FrodoPosterThumb("poster",fmd.listthumbs(0)))
+                fmd.listthumbs.Clear()
+            End If
+
+            ' save to make sure additional features like saving actor thumbnails takes place
+            'WorkingWithNfoFiles.mov_NfoSave(nfoFileandPath, fmd, True)
+            Movie.SaveNFO(nfoFileandPath, fmd)
+            Return True
+        Catch
+            Return False
+        End Try
+    End Function
+
+#End Region
+
+#Region "Tmdb Movie Routines"
 
     Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
         ' 1st stage
@@ -1702,6 +1704,8 @@ Module General
         End Try
         Return FinalScrape
     End Function
+
+#End Region
 
     'Date  : Nov11 
     'By    : AnotherPhil 

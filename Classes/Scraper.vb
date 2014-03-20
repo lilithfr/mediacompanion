@@ -9,8 +9,9 @@ Imports Media_Companion
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports System.IO.Compression
-Imports System.Xml.Serialization
-Imports System.Xml.XPath
+'Imports System.Xml.Serialization
+'Imports System.Xml.XPath
+Imports System.xml
 Imports System.Linq
 
 
@@ -21,7 +22,6 @@ Public Class MovieRegExs
     'Const REGEX_MOVIE_YEAR_PATTERN  = "<img alt="".*?\((.*?)\).*?"" title="""
     Public Const REGEX_RELEASE_DATE        = ">Release Date:</h4>(?<date>.*?)<span"
     Public Const REGEX_STARS               = "Stars:</h4>(.*?)</div>"
-
     Public Const REGEX_TITLE_AND_YEAR      = "<title>(.*?)</title>"
     Public Const REGEX_TITLE               = "<title>(.*?) \("
     Public Const REGEX_YEAR                = "\(.*?(\d{4}).*?\)" 
@@ -42,28 +42,21 @@ Module ModGlobals
     <Extension()> _
     Function CleanTitle(ByVal sString As String) As String
         Dim s As String = sString
-
         If s.StartsWith("""") Then s = s.Remove(0, 1)
         If s.EndsWith  ("""") Then s = s.Remove(s.Length - 1, 1)
-
         Return s
     End Function
 
-
     <Extension()> _
     Sub AppendValue(ByRef s As String, value As String, Optional separator As String=", ")
-
         value = value.Trim
-
         If s.IndexOf(value) > -1 Then Exit Sub
-
         If s="" Then
             s  = value
         Else
             s &= separator & value
         End If
     End Sub
-
 
     <Extension()> _
     Sub AppendList(ByRef s As String, lst As IEnumerable(Of String) , Optional separator As String=", ")
@@ -73,27 +66,19 @@ Module ModGlobals
         Next
     End Sub
 
-
     <Extension()> _
     Sub AppendTag(ByRef s As String, name As String, value As String)
-
         s &= "<" & name & ">" & value.Trim.EncodeSpecialChrs & "</" & name & ">"& vbCrLf
-        
     End Sub
-
 
     <Extension()> _
     Sub ExtractName(ByRef s As String)
-        
         If s.IndexOf("itemprop=""name"">")>-1 Then s=Net.WebUtility.HtmlDecode( Regex.Match(s,MovieRegExs.REGEX_NAME, RegexOptions.Singleline).Groups("name").Value )
-                          
     End Sub
 
     <Extension()> _
     Function StripTagsLeaveContent(ByRef s As String) As String
-        
         Return Net.WebUtility.HtmlDecode( Regex.Replace(s, "<(.|\n)+?>", String.Empty) )
-                          
     End Function  
 
     <Extension()> _
@@ -103,7 +88,6 @@ Module ModGlobals
         s = s.Replace(">", "&gt;")
         s = s.Replace(Chr(34), "&quot;")
         s = s.Replace("'", "&apos;")
-
         Return s
     End Function
 
@@ -125,7 +109,6 @@ Module ModGlobals
             s = s.Substring(0, a)
         End If
         s = s.Replace(" /","")
-
         Return s
     End Function
     
@@ -133,7 +116,6 @@ End Module
 
 
 Public Class Classimdb
-
 
     Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
         Monitor.Enter(Me)
@@ -748,7 +730,6 @@ Public Class Classimdb
 
     Property Html As String=""
 
-
     'ReadOnly Property Stars_Old As String
     '    Get
     '        Dim s As String=""
@@ -773,7 +754,6 @@ Public Class Classimdb
     '    End Get
     'End Property
    
-
     ReadOnly Property Stars As String
         Get
             Dim s       As String = ""
@@ -788,8 +768,6 @@ Public Class Classimdb
             Return s
         End Get
     End Property
-
-
 
     ReadOnly Property Outline As String
         Get
@@ -806,14 +784,12 @@ Public Class Classimdb
         End Get
     End Property
 
-
     ReadOnly Property TitleAndYear As String
         Get
             Return Regex.Match(Html,MovieRegExs.REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
         End Get
     End Property
    
-
     ReadOnly Property Title As String
         Get
             Dim s As String = ""
@@ -833,23 +809,18 @@ Public Class Classimdb
 
     End Property
    
-
     ReadOnly Property Year As String
         Get
             Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
         End Get
     End Property
    
-
     ReadOnly Property Original_Title As String
         Get
             Return Regex.Match(Html,MovieRegExs.REGEX_ORIGINAL_TITLE, RegexOptions.Singleline).Groups(1).Value.Trim
         End Get
     End Property
    
-
-   
-
     ReadOnly Property Genres As String
         Get
             Dim s As String=""
@@ -874,7 +845,6 @@ Public Class Classimdb
         End Get
     End Property
 
-
     ReadOnly Property Directors As String
         Get
             Dim s As String=""
@@ -895,14 +865,12 @@ Public Class Classimdb
         End Get
     End Property
 
-
     'Studio = Production
     ReadOnly Property Studio As String
         Get
             Return GetNames(MovieRegExs.REGEX_STUDIO,Preferences.MovieScraper_MaxStudios)
         End Get
     End Property
-
 
     'NB Credits = Writer
     ReadOnly Property Credits As String
@@ -911,13 +879,11 @@ Public Class Classimdb
         End Get
     End Property
 
-
     'ReadOnly Property Plot As String
     '    Get
     '        Return Regex.Match(Html,MovieRegExs.REGEX_PLOT, RegexOptions.Singleline).ToString.Trim.StripHRef
     '    End Get
     'End Property
-
 
     ReadOnly Property ReleaseDate As String
         Get
@@ -935,9 +901,6 @@ Public Class Classimdb
             Return s
         End Get
     End Property
-
-  
-
 
     Function GetNames(RegExPattern As String, Optional ByVal Max As Integer=-1) As String
         Dim s As String=""
@@ -962,7 +925,6 @@ Public Class Classimdb
         Return s
     End Function
     
-
     Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
 
@@ -970,7 +932,6 @@ Public Class Classimdb
         Dim webcounter As Integer
 
         Try
-          
             Dim first As Integer
             Dim tempstring As String
             Dim actors(10000, 3)
@@ -1466,7 +1427,61 @@ Public Class Classimdb
         End Try
     End Function
 
+    Public Function gettmdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
+        Monitor.Enter(Me)
+        Dim totalinfo As String = ""
+        Dim Thetitle As String = ""
+        Dim ParametersForScraper(10) As String
+        Dim FinalScrapResult As String
+        Dim Scraper As String = "metadata.themoviedb.org"
+        Try
+            ' 1st stage
+            ParametersForScraper(0) = title
+            ParametersForScraper(1) = year    'GetYearByFilename(MovieName, False)
+            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
+            FinalScrapResult = FinalScrapResult.Replace("<url>", "")
+            FinalScrapResult = FinalScrapResult.Replace("</url>", "")
+            FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+            ' 2st stage
+            ParametersForScraper(0) = FinalScrapResult
+            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return "error"
+            Dim m_xmld As XmlDocument
+            Dim m_nodelist As XmlNodeList
+            Dim m_node As XmlNode
+            m_xmld = New XmlDocument()
+            m_xmld.LoadXml(FinalScrapResult)
+            m_nodelist = m_xmld.SelectNodes("/results/entity")
+            For Each m_node In m_nodelist
+                TheTitle = m_node.ChildNodes.Item(0).InnerText
+                Dim id = m_node.ChildNodes.Item(1).InnerText
+                Dim Theyear = m_node.ChildNodes.Item(2).InnerText
+                Dim url = m_node.ChildNodes.Item(3).InnerText
+                ParametersForScraper(0) = url
+                ParametersForScraper(1) = id
+                Exit For
+            Next
+            ' 3st stage
+            FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" Then
+                Return "error"
+            End If
+            FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+            FinalScrapResult = FinalScrapResult.Replace("details>","movie>")
+            FinalScrapResult = FinalScrapResult.Replace("</genre>" & vbcrlf & "  <genre>", " / ")
+            If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
+            Dim SeparateMovie As String = Utilities.checktitle(title, Preferences.MovSepLst)
+            If SeparateMovie <> "" Then
+                FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, TheTitle)
+            End If            
 
+            Return FinalScrapResult
+        Catch ex As Exception
+            Return "error"
+        Finally
+            Monitor.Exit(Me)
+        End Try
+    End Function
 
     Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As String
         Dim webpage As New List(Of String)
@@ -1599,8 +1614,6 @@ Public Class Classimdb
         Return "Error"
     End Function
 
-
-
     Public Function GetImdbActorsList(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors)
 
         If maxactors = 9999 Then 
@@ -1626,16 +1639,10 @@ Public Class Classimdb
         Return results
     End Function
 
-
     Public Function GetActorsTable(Html As String) As String
             Return Regex.Match(Html,MovieRegExs.REGEX_ACTORS_TABLE, RegexOptions.Singleline).Groups(1).Value
     End Function
    
-
-
-
-
-
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String) As String
         Monitor.Enter(Me)
         Dim allok As Boolean = False
@@ -1717,7 +1724,6 @@ Public Class Classimdb
         Return ""
     End Function
 
-
     Private Function encodespecialchrs(ByVal text As String)
         If text.IndexOf("&") <> -1 Then text = text.Replace("&", "&amp;")
         If text.IndexOf("<") <> -1 Then text = text.Replace("<", "&lt;")
@@ -1789,7 +1795,6 @@ Public Class Classimdb
             Monitor.Exit(Me)
         End Try
     End Function
-
 
     Function GetGenres( ByVal webPage As String )
 
