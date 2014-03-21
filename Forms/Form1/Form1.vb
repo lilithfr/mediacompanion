@@ -24038,13 +24038,13 @@ Public Class Form1
     End Sub
 
     Sub DoScrapeDroppedFiles()
-        If Preferences.movies_useXBMC_Scraper Then
-            Pre_Run_XBMC_Scraper()
-            mov_XBMCScrapeDroppedFiles()
-            droppedItems.Clear()
-            Post_Run_XBMC_Scraper()
-            Exit Sub
-        End If
+        'If Preferences.movies_useXBMC_Scraper Then
+        '    Pre_Run_XBMC_Scraper()
+        '    mov_XBMCScrapeDroppedFiles()
+        '    droppedItems.Clear()
+        '    Post_Run_XBMC_Scraper()
+        '    Exit Sub
+        'End If
 
         RunBackgroundMovieScrape("ScrapeDroppedFiles")
     End Sub

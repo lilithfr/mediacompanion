@@ -777,11 +777,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
-        If Preferences.movies_useXBMC_Scraper Then
-            Actions.Items.Add( New ScrapeAction(AddressOf TmdbActorSave           , "Tmdb Actor Save"           ) ) 'TMDB Actors already scraped, so just save images.
-        Else
-            Actions.Items.Add( New ScrapeAction(AddressOf ImdbScrapeActors            , "IMDB Actors scraper"       ) ) 'GetImdbActors
-        End If
+        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "IMDB Actors scraper"       ) ) 'GetImdbActors
         Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
@@ -1309,15 +1305,18 @@ Public Class Movie
         End If
     End Sub
 
-    Sub ImdbScrapeActors
-        _scrapedMovie.listactors.Clear
-        _scrapedMovie.listactors = GetImdbActors
+    Sub GetActors
+        If Preferences.XbmcTmdbActorDL Then
+            TmdbActorSave()
+        Else
+            _scrapedMovie.listactors.Clear
+            _scrapedMovie.listactors = GetImdbActors
+        End If
     End Sub
-
 
     Function GetImdbActors
 
-        ReportProgress("Actors")
+        ReportProgress("IMDB Actors")
 
         Dim actors As List(Of str_MovieActors) = _imdbScraper.GetImdbActorsList(Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
         Dim actors2 As New List(Of str_MovieActors)
@@ -1337,7 +1336,7 @@ Public Class Movie
     End Function
     Sub TmdbActorSave
 
-        ReportProgress("Actors")
+        ReportProgress("TMDB Actors")
 
         Dim actors As List(Of str_MovieActors) = _scrapedMovie.listactors 
         Dim actors2 As New List(Of str_MovieActors)
