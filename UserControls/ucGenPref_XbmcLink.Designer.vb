@@ -149,7 +149,7 @@ Partial Class ucGenPref_XbmcLink
         Me.btnUndo.MaximumSize = New System.Drawing.Size(195, 30)
         Me.btnUndo.Name = "btnUndo"
         Me.btnUndo.Size = New System.Drawing.Size(147, 30)
-        Me.btnUndo.TabIndex = 90
+        Me.btnUndo.TabIndex = 14
         Me.btnUndo.Text = "Undo Changes"
         Me.btnUndo.UseVisualStyleBackColor = true
         '
@@ -161,7 +161,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label203.Location = New System.Drawing.Point(201, 303)
         Me.Label203.Name = "Label203"
         Me.Label203.Size = New System.Drawing.Size(89, 13)
-        Me.Label203.TabIndex = 20
+        Me.Label203.TabIndex = 12
         Me.Label203.Text = "Coming later..."
         '
         'Label202
@@ -171,7 +171,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label202.Location = New System.Drawing.Point(79, 303)
         Me.Label202.Name = "Label202"
         Me.Label202.Size = New System.Drawing.Size(116, 13)
-        Me.Label202.TabIndex = 19
+        Me.Label202.TabIndex = 0
         Me.Label202.Text = "TV folder mappings"
         '
         'Label194
@@ -191,7 +191,7 @@ Partial Class ucGenPref_XbmcLink
         Me.llXBMC_MovieFolderMappings.Location = New System.Drawing.Point(201, 273)
         Me.llXBMC_MovieFolderMappings.Name = "llXBMC_MovieFolderMappings"
         Me.llXBMC_MovieFolderMappings.Size = New System.Drawing.Size(29, 13)
-        Me.llXBMC_MovieFolderMappings.TabIndex = 18
+        Me.llXBMC_MovieFolderMappings.TabIndex = 11
         Me.llXBMC_MovieFolderMappings.TabStop = true
         Me.llXBMC_MovieFolderMappings.Text = "Edit"
         '
@@ -202,7 +202,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label195.Location = New System.Drawing.Point(165, 63)
         Me.Label195.Name = "Label195"
         Me.Label195.Size = New System.Drawing.Size(30, 13)
-        Me.Label195.TabIndex = 1
+        Me.Label195.TabIndex = 0
         Me.Label195.Text = "Port"
         '
         'tbXBMC_ThumbnailsFolder
@@ -212,7 +212,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_ThumbnailsFolder.Location = New System.Drawing.Point(201, 240)
         Me.tbXBMC_ThumbnailsFolder.Name = "tbXBMC_ThumbnailsFolder"
         Me.tbXBMC_ThumbnailsFolder.Size = New System.Drawing.Size(402, 20)
-        Me.tbXBMC_ThumbnailsFolder.TabIndex = 16
+        Me.tbXBMC_ThumbnailsFolder.TabIndex = 10
         Me.tbXBMC_ThumbnailsFolder.Text = "Thumbnails"
         '
         'Label201
@@ -222,7 +222,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label201.Location = New System.Drawing.Point(61, 273)
         Me.Label201.Name = "Label201"
         Me.Label201.Size = New System.Drawing.Size(134, 13)
-        Me.Label201.TabIndex = 17
+        Me.Label201.TabIndex = 0
         Me.Label201.Text = "Movie folder mappings"
         '
         'tbXBMC_TexturesDb
@@ -232,7 +232,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_TexturesDb.Location = New System.Drawing.Point(201, 210)
         Me.tbXBMC_TexturesDb.Name = "tbXBMC_TexturesDb"
         Me.tbXBMC_TexturesDb.Size = New System.Drawing.Size(402, 20)
-        Me.tbXBMC_TexturesDb.TabIndex = 15
+        Me.tbXBMC_TexturesDb.TabIndex = 9
         Me.tbXBMC_TexturesDb.Text = "Database\Textures13.db"
         '
         'Label196
@@ -242,7 +242,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label196.Location = New System.Drawing.Point(132, 93)
         Me.Label196.Name = "Label196"
         Me.Label196.Size = New System.Drawing.Size(63, 13)
-        Me.Label196.TabIndex = 2
+        Me.Label196.TabIndex = 0
         Me.Label196.Text = "Username"
         '
         'tbXBMC_Password
@@ -252,7 +252,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_Password.Location = New System.Drawing.Point(201, 120)
         Me.tbXBMC_Password.Name = "tbXBMC_Password"
         Me.tbXBMC_Password.Size = New System.Drawing.Size(402, 20)
-        Me.tbXBMC_Password.TabIndex = 11
+        Me.tbXBMC_Password.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Password, "Same as XBMC - Settings - Services - Webserver")
         '
         'tbXBMC_Username
@@ -262,7 +262,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_Username.Location = New System.Drawing.Point(201, 90)
         Me.tbXBMC_Username.Name = "tbXBMC_Username"
         Me.tbXBMC_Username.Size = New System.Drawing.Size(402, 20)
-        Me.tbXBMC_Username.TabIndex = 12
+        Me.tbXBMC_Username.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Username, "Same as XBMC - Settings - Services - Webserver")
         '
         'tbXBMC_Port
@@ -272,7 +272,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_Port.Location = New System.Drawing.Point(201, 60)
         Me.tbXBMC_Port.Name = "tbXBMC_Port"
         Me.tbXBMC_Port.Size = New System.Drawing.Size(402, 20)
-        Me.tbXBMC_Port.TabIndex = 13
+        Me.tbXBMC_Port.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Port, "Same as XBMC - Settings - Services - Webserver")
         '
         'tbXBMC_Address
@@ -282,7 +282,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_Address.Location = New System.Drawing.Point(201, 30)
         Me.tbXBMC_Address.Name = "tbXBMC_Address"
         Me.tbXBMC_Address.Size = New System.Drawing.Size(402, 20)
-        Me.tbXBMC_Address.TabIndex = 14
+        Me.tbXBMC_Address.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.tbXBMC_Address, "localhost \ 192.169.0.1")
         '
         'Label197
@@ -292,7 +292,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label197.Location = New System.Drawing.Point(134, 123)
         Me.Label197.Name = "Label197"
         Me.Label197.Size = New System.Drawing.Size(61, 13)
-        Me.Label197.TabIndex = 3
+        Me.Label197.TabIndex = 0
         Me.Label197.Text = "Password"
         '
         'Label198
@@ -302,7 +302,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label198.Location = New System.Drawing.Point(98, 183)
         Me.Label198.Name = "Label198"
         Me.Label198.Size = New System.Drawing.Size(97, 13)
-        Me.Label198.TabIndex = 4
+        Me.Label198.TabIndex = 0
         Me.Label198.Text = "Userdata Folder"
         '
         'Label199
@@ -312,7 +312,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label199.Location = New System.Drawing.Point(119, 213)
         Me.Label199.Name = "Label199"
         Me.Label199.Size = New System.Drawing.Size(76, 13)
-        Me.Label199.TabIndex = 5
+        Me.Label199.TabIndex = 0
         Me.Label199.Text = "Textures Db"
         '
         'Label200
@@ -322,7 +322,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label200.Location = New System.Drawing.Point(85, 243)
         Me.Label200.Name = "Label200"
         Me.Label200.Size = New System.Drawing.Size(110, 13)
-        Me.Label200.TabIndex = 6
+        Me.Label200.TabIndex = 0
         Me.Label200.Text = "Thumbnails Folder"
         '
         'tbXBMC_UserdataFolder
@@ -331,7 +331,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbXBMC_UserdataFolder.Location = New System.Drawing.Point(201, 180)
         Me.tbXBMC_UserdataFolder.Name = "tbXBMC_UserdataFolder"
         Me.tbXBMC_UserdataFolder.Size = New System.Drawing.Size(369, 20)
-        Me.tbXBMC_UserdataFolder.TabIndex = 9
+        Me.tbXBMC_UserdataFolder.TabIndex = 7
         '
         'btnSelect_XBMC_UserdataFolder
         '
@@ -339,7 +339,7 @@ Partial Class ucGenPref_XbmcLink
         Me.btnSelect_XBMC_UserdataFolder.Location = New System.Drawing.Point(576, 178)
         Me.btnSelect_XBMC_UserdataFolder.Name = "btnSelect_XBMC_UserdataFolder"
         Me.btnSelect_XBMC_UserdataFolder.Size = New System.Drawing.Size(27, 23)
-        Me.btnSelect_XBMC_UserdataFolder.TabIndex = 10
+        Me.btnSelect_XBMC_UserdataFolder.TabIndex = 8
         Me.btnSelect_XBMC_UserdataFolder.Text = "..."
         Me.btnSelect_XBMC_UserdataFolder.UseVisualStyleBackColor = true
         '
@@ -352,7 +352,7 @@ Partial Class ucGenPref_XbmcLink
         Me.btnValidate.MaximumSize = New System.Drawing.Size(195, 30)
         Me.btnValidate.Name = "btnValidate"
         Me.btnValidate.Size = New System.Drawing.Size(147, 30)
-        Me.btnValidate.TabIndex = 79
+        Me.btnValidate.TabIndex = 13
         Me.btnValidate.Text = "Validate"
         Me.btnValidate.UseVisualStyleBackColor = true
         '
@@ -365,7 +365,7 @@ Partial Class ucGenPref_XbmcLink
         Me.tbDialogue.Name = "tbDialogue"
         Me.tbDialogue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.tbDialogue.Size = New System.Drawing.Size(402, 66)
-        Me.tbDialogue.TabIndex = 80
+        Me.tbDialogue.TabIndex = 0
         '
         'pbResult1
         '
@@ -460,7 +460,7 @@ Partial Class ucGenPref_XbmcLink
         Me.btnGeneralPrefsSaveChanges.MaximumSize = New System.Drawing.Size(195, 30)
         Me.btnGeneralPrefsSaveChanges.Name = "btnGeneralPrefsSaveChanges"
         Me.btnGeneralPrefsSaveChanges.Size = New System.Drawing.Size(147, 30)
-        Me.btnGeneralPrefsSaveChanges.TabIndex = 78
+        Me.btnGeneralPrefsSaveChanges.TabIndex = 15
         Me.btnGeneralPrefsSaveChanges.Text = "Apply Changes"
         Me.btnGeneralPrefsSaveChanges.UseVisualStyleBackColor = true
         '
@@ -471,7 +471,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label1.Location = New System.Drawing.Point(3, 153)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(192, 13)
-        Me.Label1.TabIndex = 91
+        Me.Label1.TabIndex = 0
         Me.Label1.Text = "Delete images from XBMC cache"
         Me.ToolTip1.SetToolTip(Me.Label1, "Check to enable fanart & poster updates. [*Recommended*]"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Uncheck to keep XBMC's "& _ 
         "cached images.")
@@ -483,7 +483,7 @@ Partial Class ucGenPref_XbmcLink
         Me.cbXBMC_Delete_Cached_Images.Location = New System.Drawing.Point(201, 153)
         Me.cbXBMC_Delete_Cached_Images.Name = "cbXBMC_Delete_Cached_Images"
         Me.cbXBMC_Delete_Cached_Images.Size = New System.Drawing.Size(369, 14)
-        Me.cbXBMC_Delete_Cached_Images.TabIndex = 92
+        Me.cbXBMC_Delete_Cached_Images.TabIndex = 6
         Me.ToolTip1.SetToolTip(Me.cbXBMC_Delete_Cached_Images, "Check to enable fanart & poster updates. [*Recommended*]"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Uncheck to keep XBMC's "& _ 
         "cached images.")
         Me.cbXBMC_Delete_Cached_Images.UseVisualStyleBackColor = true
@@ -495,7 +495,7 @@ Partial Class ucGenPref_XbmcLink
         Me.cbXBMC_Active.Location = New System.Drawing.Point(201, 5)
         Me.cbXBMC_Active.Name = "cbXBMC_Active"
         Me.cbXBMC_Active.Size = New System.Drawing.Size(369, 14)
-        Me.cbXBMC_Active.TabIndex = 93
+        Me.cbXBMC_Active.TabIndex = 1
         Me.cbXBMC_Active.UseVisualStyleBackColor = true
         '
         'Label2
@@ -505,7 +505,7 @@ Partial Class ucGenPref_XbmcLink
         Me.Label2.Location = New System.Drawing.Point(121, 6)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(74, 13)
-        Me.Label2.TabIndex = 94
+        Me.Label2.TabIndex = 0
         Me.Label2.Text = "Enable Link"
         '
         'ucGenPref_XbmcLink
