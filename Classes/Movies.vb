@@ -1019,7 +1019,7 @@ End If
     End Sub
 
 
-    Sub ChangeMovie(NfoPathAndFilename As String, imdb As String)
+    Sub ChangeMovie(NfoPathAndFilename As String, ChangeMovieId As String, MovieSearchEngine As String)
 
   '     Dim movie = New Movie(Utilities.GetFileName(NfoPathAndFilename,True),Me)
         Dim movie = New Movie(Me,NfoPathAndFilename)
@@ -1030,7 +1030,8 @@ End If
 
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False
-        movie.Scrape(imdb)
+        movie.MovieSearchEngine = MovieSearchEngine
+        movie.Scrape(ChangeMovieId)
         RemoveMovieEventHandlers( movie )
     End Sub
 

@@ -64,8 +64,7 @@ Public Class Form1
     Public rescrapeList        As New RescrapeList
     Public workingMovieDetails As     FullMovieDetails
     Public _rescrapeList       As New RescrapeSpecificParams
-    Public ChangeMovieImdb     = ""
-    Public ChangeMovieTmdb     = ""
+    Public ChangeMovieId       = ""
     Public droppedItems        As New List(Of String)
     Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
 
@@ -3234,7 +3233,7 @@ Public Class Form1
         'FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, Utilities.GetFileName(DataGridViewMovies.Item(0, i).Value.ToString))
             FullFileContent = Start_XBMC_MoviesReScraping(Scraper, movie.ScrapedMovie.fullmoviebody.imdbid, movie.mediapathandfilename)
         Else 
-            FullFileContent = Start_XBMC_MoviesReScraping(Scraper, ChangeMovieTmdb, movie.mediapathandfilename)
+            FullFileContent = Start_XBMC_MoviesReScraping(Scraper, ChangeMovieId, movie.mediapathandfilename)
         End If
 
         If FullFileContent.ToLower <> "error" Then
@@ -6288,7 +6287,7 @@ Public Class Form1
             Dim mat = Regex.Match(WebBrowser1.Url.ToString, "(tt\d{7})")
 
             If mat.Success Then
-                ChangeMovieImdb = mat.Value
+                ChangeMovieId = mat.Value
             Else
                 MsgBox("Please Browse to a Movie page")
                 Exit Sub
@@ -6305,7 +6304,7 @@ Public Class Form1
             Dim urlsplit As String()
             urlsplit = Split(mat,"-")
             If Integer.TryParse(urlsplit(0),nothing) Then
-                ChangeMovieTmdb = urlsplit(0)
+                ChangeMovieId = urlsplit(0)
             Else
                 MsgBox("Please Browse to a Movie page")
                 Exit Sub
@@ -6314,8 +6313,9 @@ Public Class Form1
             If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
-            mov_ReScrapingStartTemp()
-            UpdateFilteredList()
+            RunBackgroundMovieScrape("ChangeMovie")
+            'mov_ReScrapingStartTemp()
+            'UpdateFilteredList()
         End If
 
         TabControl2.SelectedIndex = 0
@@ -23549,7 +23549,7 @@ Public Class Form1
 
 
     Public Sub ChangeMovie
-        oMovies.ChangeMovie(workingMovieDetails.fileinfo.fullpathandfilename, ChangeMovieImdb)
+        oMovies.ChangeMovie(workingMovieDetails.fileinfo.fullpathandfilename, ChangeMovieId, MovieSearchEngine)
     End Sub
 
 

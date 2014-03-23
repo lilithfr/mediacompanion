@@ -1427,7 +1427,7 @@ Public Class Classimdb
         End Try
     End Function
 
-    Public Function gettmdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
+    Public Function gettmdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal tmdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
         Dim totalinfo As String = ""
         Dim Thetitle As String = ""
@@ -1435,32 +1435,41 @@ Public Class Classimdb
         Dim FinalScrapResult As String
         Dim Scraper As String = "metadata.themoviedb.org"
         Try
-            ' 1st stage
-            ParametersForScraper(0) = title
-            ParametersForScraper(1) = year    'GetYearByFilename(MovieName, False)
-            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
-            FinalScrapResult = FinalScrapResult.Replace("<url>", "")
-            FinalScrapResult = FinalScrapResult.Replace("</url>", "")
-            FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
-            ' 2st stage
-            ParametersForScraper(0) = FinalScrapResult
-            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
-            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return "error"
-            Dim m_xmld As XmlDocument
-            Dim m_nodelist As XmlNodeList
-            Dim m_node As XmlNode
-            m_xmld = New XmlDocument()
-            m_xmld.LoadXml(FinalScrapResult)
-            m_nodelist = m_xmld.SelectNodes("/results/entity")
-            For Each m_node In m_nodelist
-                TheTitle = m_node.ChildNodes.Item(0).InnerText
-                Dim id = m_node.ChildNodes.Item(1).InnerText
-                Dim Theyear = m_node.ChildNodes.Item(2).InnerText
-                Dim url = m_node.ChildNodes.Item(3).InnerText
-                ParametersForScraper(0) = url
-                ParametersForScraper(1) = id
-                Exit For
-            Next
+            If String.IsNullOrEmpty(tmdbid) Then
+                ' 1st stage
+                ParametersForScraper(0) = title
+                ParametersForScraper(1) = year    'GetYearByFilename(MovieName, False)
+                FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
+                FinalScrapResult = FinalScrapResult.Replace("<url>", "")
+                FinalScrapResult = FinalScrapResult.Replace("</url>", "")
+                FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+                ' 2st stage
+                ParametersForScraper(0) = FinalScrapResult
+                FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
+                If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return "error"
+                Dim m_xmld As XmlDocument
+                Dim m_nodelist As XmlNodeList
+                Dim m_node As XmlNode
+                m_xmld = New XmlDocument()
+                m_xmld.LoadXml(FinalScrapResult)
+                m_nodelist = m_xmld.SelectNodes("/results/entity")
+                For Each m_node In m_nodelist
+                    TheTitle = m_node.ChildNodes.Item(0).InnerText
+                    Dim id = m_node.ChildNodes.Item(1).InnerText
+                    Dim Theyear = m_node.ChildNodes.Item(2).InnerText
+                    Dim url = m_node.ChildNodes.Item(3).InnerText
+                    ParametersForScraper(0) = url
+                    ParametersForScraper(1) = id
+                    Exit For
+                Next
+            Else
+                If tmdbid.Substring(0, 2) <> "tt" Then
+                    ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", tmdbid, TMDb.LanguageCodes(0))
+                    ParametersForScraper(1) = tmdbid
+                Else
+                    Return "error"
+                End If
+            End If
             ' 3st stage
             FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
             If FinalScrapResult.ToLower = "error" Then

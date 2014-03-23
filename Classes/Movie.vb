@@ -54,6 +54,7 @@ Public Class Movie
     Private _imdbCounter              As Integer =  0
     Private _imdbBody                 As String  = ""
     Property Scraped                  As Boolean = False
+    Property MovieSearchEngine        As String = ""
     Private _scrapedMovie             As New FullMovieDetails
     Private _rescrapedMovie           As FullMovieDetails
     Public  _movieCache               As New ComboList
@@ -811,7 +812,7 @@ Public Class Movie
             Scraped  = True
             Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
             Actions.Items.Add( New ScrapeAction(AddressOf getspecialMovie     , "Check if special version"       ) )
-            If Preferences.movies_useXBMC_Scraper
+            If Preferences.movies_useXBMC_Scraper Or MovieSearchEngine = "tmdb"
                 Actions.Items.Add( New ScrapeAction(AddressOf TmdbScraper_GetBody , "Scrape TMDB Main Body"          ) )
                 Actions.Items.Add( New ScrapeAction(AddressOf CheckTmdbBodyScrape , "Checking TMDB Main body scrape" ) )                                   
             Else
