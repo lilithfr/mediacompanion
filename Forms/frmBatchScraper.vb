@@ -376,4 +376,18 @@
         If               e.KeyCode = Keys.Escape Then btnCancel.PerformClick 
     End Sub
 
+    Private Sub cb_ScrapeEmptyTags_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_ScrapeEmptyTags.CheckedChanged
+        Dim ChkBox As CheckBox = Nothing
+        Dim Ischecked As Boolean = cb_ScrapeEmptyTags.CheckState 
+        For Each xObject As Object In Me.GroupBox1.Controls
+            If TypeOf xObject Is CheckBox Then
+                ChkBox = xObject
+                If Not ChkBox.Text.ToLower.Contains("tmdb") Then
+                ChkBox.Checked = Ischecked
+                End If
+            End If
+        Next
+        Form1.rescrapeList.EmptyMainTags = cb_ScrapeEmptyTags.checked
+    End Sub
+
 End Class
