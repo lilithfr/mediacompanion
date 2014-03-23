@@ -778,7 +778,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "IMDB Actors scraper"       ) ) 'GetImdbActors
+        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
         Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
@@ -2585,23 +2585,23 @@ Public Class Movie
                 AssignScrapedMovie(_rescrapedMovie)
             End If
         
-            UpdateProperty( _rescrapedMovie.fullmoviebody.credits  , _scrapedMovie.fullmoviebody.credits  , rl.credits   )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.director , _scrapedMovie.fullmoviebody.director , rl.director  )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.stars    , _scrapedMovie.fullmoviebody.stars    , rl.stars     )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.genre    , _scrapedMovie.fullmoviebody.genre    , rl.genre     )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.mpaa     , _scrapedMovie.fullmoviebody.mpaa     , rl.mpaa      )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.plot     , _scrapedMovie.fullmoviebody.plot     , rl.plot      )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.premiered, _scrapedMovie.fullmoviebody.premiered, rl.premiered )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.rating   , _scrapedMovie.fullmoviebody.rating   , rl.rating    )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.runtime  , _scrapedMovie.fullmoviebody.runtime  , rl.runtime   )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.studio   , _scrapedMovie.fullmoviebody.studio   , rl.studio    )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.tagline  , _scrapedMovie.fullmoviebody.tagline  , rl.tagline   )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.outline  , _scrapedMovie.fullmoviebody.outline  , rl.outline   )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.top250   , _scrapedMovie.fullmoviebody.top250   , rl.top250    )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.votes    , _scrapedMovie.fullmoviebody.votes    , rl.votes     )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.country  , _scrapedMovie.fullmoviebody.country  , rl.country   )  
-            UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      )  
-            UpdateProperty(_rescrapedMovie.fullmoviebody.title     , _scrapedMovie.fullmoviebody.title    , rl.title)
+            UpdateProperty( _rescrapedMovie.fullmoviebody.credits  , _scrapedMovie.fullmoviebody.credits  , rl.credits   , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.director , _scrapedMovie.fullmoviebody.director , rl.director  , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.stars    , _scrapedMovie.fullmoviebody.stars    , rl.stars     , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.genre    , _scrapedMovie.fullmoviebody.genre    , rl.genre     , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.mpaa     , _scrapedMovie.fullmoviebody.mpaa     , rl.mpaa      , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.plot     , _scrapedMovie.fullmoviebody.plot     , rl.plot      , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.premiered, _scrapedMovie.fullmoviebody.premiered, rl.premiered , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.rating   , _scrapedMovie.fullmoviebody.rating   , rl.rating    , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.runtime  , _scrapedMovie.fullmoviebody.runtime  , rl.runtime   , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.studio   , _scrapedMovie.fullmoviebody.studio   , rl.studio    , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.tagline  , _scrapedMovie.fullmoviebody.tagline  , rl.tagline   , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.outline  , _scrapedMovie.fullmoviebody.outline  , rl.outline   , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.top250   , _scrapedMovie.fullmoviebody.top250   , rl.top250    , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.votes    , _scrapedMovie.fullmoviebody.votes    , rl.votes     , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.country  , _scrapedMovie.fullmoviebody.country  , rl.country   , rl.EmptyMainTags)  
+            UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      , rl.EmptyMainTags)  
+            UpdateProperty(_rescrapedMovie.fullmoviebody.title     , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
 
             If rl.title 
                 If Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
@@ -2638,7 +2638,6 @@ Public Class Movie
                 If TrailerExists Then
                     ReportProgress("Trailer already exists ", "Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
                 Else
-
                     _triedUrls.Clear()
                     GetTrailerUrlAlreadyRun = False
 
@@ -2665,15 +2664,9 @@ Public Class Movie
             If Cancelled() Then Exit Sub
 
 
-            If rl.Frodo_Poster_Thumbs Then
-                GetFrodoPosterThumbs()
-            End If
+            If rl.Frodo_Poster_Thumbs Then GetFrodoPosterThumbs()
 
-
-            If rl.Frodo_Fanart_Thumbs Then
-                GetFrodoFanartThumbs()
-            End If
-
+            If rl.Frodo_Fanart_Thumbs Then GetFrodoFanartThumbs()
 
             'Clears the existing poster urls and adds the rescraped ones directly into _scrapedMovie
             If rl.posterurls Then
@@ -2683,19 +2676,13 @@ Public Class Movie
 
             If Cancelled() Then Exit Sub
 
-            If rl.missingposters Then           'Download Missing Posters
-                DoDownloadPoster(rl.missingposters)
-            End If
+            If rl.missingposters Then DoDownloadPoster(rl.missingposters)
 
             If Cancelled() Then Exit Sub
 
-            If rl.missingfanart Then            'Download Missing Fanart
-                DownloadFanart()
-            End If
+            If rl.missingfanart Then DownloadFanart()
 
-            If rl.dlxtraart Then                'Download Missing Extra Thumbs or Extra Fanart
-                DownloadExtraFanart()
-            End If
+            If rl.dlxtraart Then DownloadExtraFanart()
 
             If rl.tmdb_set_name Then
                 Try
@@ -2703,7 +2690,7 @@ Public Class Movie
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                         _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
                     End If
-                    UpdateProperty(_rescrapedMovie.fullmoviebody.movieset, _scrapedMovie.fullmoviebody.movieset)
+                    UpdateProperty(_rescrapedMovie.fullmoviebody.movieset, _scrapedMovie.fullmoviebody.movieset, , rl.EmptyMainTags)
                 Catch
                 End Try
             End If
@@ -2748,16 +2735,16 @@ Public Class Movie
             'SaveNFO
         End If
 
-        If rl.Rename_Folders Then
-            ReportProgress(, RenameMovFolder)
-        End If
+        If rl.Rename_Folders Then ReportProgress(, RenameMovFolder)
+        
         ReportProgress(, vbCrLf)
         UpdateCaches()
     End Sub
 
-    Sub UpdateProperty(Of T) (ByVal fromField As T, ByRef toField As T,  Optional rescrape As Boolean=True )  
+    Sub UpdateProperty(Of T) (ByVal fromField As T, ByRef toField As T,  Optional rescrape As Boolean=True, Optional ifempty As Boolean = False )  
         If Not rescrape         Then Exit Sub
         If IsNothing(fromField) Then Exit Sub
+        If ifempty AndAlso Not String.IsNullOrEmpty(toField.ToString) Then Exit Sub
         toField = fromField
     End Sub    
 

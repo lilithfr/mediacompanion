@@ -460,9 +460,9 @@ Partial Class frmBatchScraper
         Me.cb_ScrapeEmptyTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.cb_ScrapeEmptyTags.Location = New System.Drawing.Point(48, 181)
         Me.cb_ScrapeEmptyTags.Name = "cb_ScrapeEmptyTags"
-        Me.cb_ScrapeEmptyTags.Size = New System.Drawing.Size(315, 17)
+        Me.cb_ScrapeEmptyTags.Size = New System.Drawing.Size(380, 17)
         Me.cb_ScrapeEmptyTags.TabIndex = 29
-        Me.cb_ScrapeEmptyTags.Text = "Scrape only empty tags (Excludes TMDB set name)"
+        Me.cb_ScrapeEmptyTags.Text = "Scrape only empty tags (Excludes TMDB set name and Trailer)"
         Me.ttBatchUpdateWizard.SetToolTip(Me.cb_ScrapeEmptyTags, "Selecting will re-scrape all selected movies, but ONLY"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"filling fields that are e"& _ 
         "mpty."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This excludes TMDB set name.  Select this separately if"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"required.")
         Me.cb_ScrapeEmptyTags.UseVisualStyleBackColor = true

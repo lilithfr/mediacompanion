@@ -382,7 +382,7 @@
         For Each xObject As Object In Me.GroupBox1.Controls
             If TypeOf xObject Is CheckBox Then
                 ChkBox = xObject
-                If Not ChkBox.Text.ToLower.Contains("tmdb") Then
+                If Not ChkBox.Text.ToLower.Contains("tmdb") And Not ChkBox.Text.ToLower.Contains("trailer")Then
                 ChkBox.Checked = Ischecked
                 End If
             End If
