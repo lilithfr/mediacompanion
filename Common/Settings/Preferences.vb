@@ -168,6 +168,7 @@ Public Class Preferences
     Public Shared nfoposterscraper As Integer
     Public Shared ignoreactorthumbs As Boolean
     Public Shared maxactors As Integer
+    Public Shared keywordlimit As Integer
     Public Shared maxmoviegenre As Integer
     Public Shared enablehdtags As Boolean
     Public Shared movieRuntimeDisplay As String
@@ -602,6 +603,7 @@ Public Class Preferences
         overwritethumbs = False
         LocalActorImage = True
         maxactors = 9999
+        keywordlimit = 10
         createfolderjpg = False
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
         namemode = "1"
@@ -864,6 +866,7 @@ Public Class Preferences
         root.AppendChild(doc, "alwaysuseimdbid",                    alwaysuseimdbid)                    'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreactorthumbs",                  ignoreactorthumbs)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "maxactors",                          maxactors)                          'ComboBox7
+        root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'ComboBox6
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
         root.AppendChild(doc, "movieruntimedisplay",                movieRuntimeDisplay)                'rbRuntimeScraper
@@ -1187,6 +1190,7 @@ Public Class Preferences
                     Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)
+                    Case "keywordlimit"                         : keywordlimit = Convert.ToInt32(thisresult.InnerXml)
                     Case "maxmoviegenre"                        : maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
                     Case "enablehdtags"                         : enablehdtags = thisresult.InnerXml
                     Case "movieruntimedisplay"                  : movieRuntimeDisplay = thisresult.InnerXml

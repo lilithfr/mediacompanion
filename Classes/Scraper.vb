@@ -1651,7 +1651,7 @@ Public Class Classimdb
     Public Function GetActorsTable(Html As String) As String
             Return Regex.Match(Html,MovieRegExs.REGEX_ACTORS_TABLE, RegexOptions.Singleline).Groups(1).Value
     End Function
-   
+      
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String) As String
         Monitor.Enter(Me)
         Dim allok As Boolean = False
@@ -1823,6 +1823,35 @@ Public Class Classimdb
         Return genres
     End Function
 
+    Public Function GetImdbKeyWords(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal keylimit As Integer = 10) As List(Of String)
+        Dim keywd As New List(Of String)
+
+        Return keywd
+    End Function
+
+    Public Function GetTmdbkeywords(ByVal ID As Integer, Optional ByVal keylimit As Integer = 10) As List(Of String)
+        Dim keywd As New List(Of String)
+        'Try
+        '    Dim request = TryCast(System.Net.WebRequest.Create("http://themoviedb.apiary-proxy.com/3/movie/584/keywords"), System.Net.HttpWebRequest)
+        '    request.Method = "GET"
+        '    request.Headers.Add("Accept", "application/json")
+        '    request.ContentLength = 0
+        '    Dim responseContent As String
+        '    Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
+        '      Using reader = New System.IO.StreamReader(response.GetResponseStream())
+        '        responseContent = reader.ReadToEnd()
+        '      End Using
+        '    End Using
+        '    If responseContent <> "" Then
+                
+        '    End If
+        'Catch
+
+        'Finally
+        
+        'End Try
+        Return keywd
+    End Function
 End Class
 
 

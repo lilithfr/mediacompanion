@@ -777,6 +777,7 @@ Public Class Movie
     Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
         Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
@@ -3589,5 +3590,22 @@ Public Class Movie
         End Try
     End Sub
 
+    Sub GetKeyWords
+        If Preferences.movies_useXBMC_Scraper Then
+            GetTmdbKeyWords
+        Else
+            GetImdbKeywords
+        End If
+    End Sub
+
+    Sub GetImdbKeywords
+
+        Dim imdbkeywrd As List(Of String) = _imdbScraper.GetImdbKeyWords(Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid, Preferences.keywordlimit)
+
+    End Sub
+
+    Sub GetTmdbKeyWords
+        Dim tmdbkeywrd As List(Of String) = _imdbScraper.GetTmdbkeywords(_possibleImdb , Preferences.keywordlimit)
+    End Sub
 
 End Class

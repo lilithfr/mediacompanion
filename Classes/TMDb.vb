@@ -58,6 +58,7 @@ Public Class TMDb
     Private _movieImages            As WatTmdb.V3.TmdbMovieImages
     Private _trailers               As WatTmdb.V3.TmdbMovieTrailers
     Private _releases               As WatTmdb.V3.TmdbMovieReleases
+    'Private _keywords               As WatTmdb.V3.MovieKeyword 
     
     Private _mc_posters             As New List(Of str_ListOfPosters)
     Private _mc_backdrops           As New List(Of str_ListOfPosters)
@@ -706,7 +707,6 @@ Public Class TMDb
                 If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
                 If IsNothing(_movieImages.posters) Then _movieImages.posters = New List(Of WatTmdb.V3.Poster)
                 If IsNothing(_trailers.youtube) Then _trailers.youtube = New List(Of WatTmdb.V3.Youtube)
-
                 FixUpMovieImages()
 
                 AssignValidBackDrops()
