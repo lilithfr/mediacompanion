@@ -58,7 +58,6 @@ Public Class TMDb
     Private _movieImages            As WatTmdb.V3.TmdbMovieImages
     Private _trailers               As WatTmdb.V3.TmdbMovieTrailers
     Private _releases               As WatTmdb.V3.TmdbMovieReleases
-    'Private _keywords               As WatTmdb.V3.MovieKeyword 
     
     Private _mc_posters             As New List(Of str_ListOfPosters)
     Private _mc_backdrops           As New List(Of str_ListOfPosters)

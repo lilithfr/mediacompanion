@@ -1343,6 +1343,15 @@ Public Class Classimdb
                 Catch
                 End Try
 
+                'placeholder for keywords.
+                Try
+                    'tempstring = imdbmirror & "title/" & imdbid & "keywords?ref_=tt_stry_kw"
+                    'webpage.Clear()
+                    'webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                Catch
+                End Try
+                
+
 
                 Try
                     'releaseinfo#akas
@@ -1831,27 +1840,34 @@ Public Class Classimdb
 
     Public Function GetTmdbkeywords(ByVal ID As Integer, Optional ByVal keylimit As Integer = 10) As List(Of String)
         Dim keywd As New List(Of String)
-        'Try
-        '    Dim request = TryCast(System.Net.WebRequest.Create("http://themoviedb.apiary-proxy.com/3/movie/584/keywords"), System.Net.HttpWebRequest)
-        '    request.Method = "GET"
-        '    request.Headers.Add("Accept", "application/json")
-        '    request.ContentLength = 0
-        '    Dim responseContent As String
-        '    Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
-        '      Using reader = New System.IO.StreamReader(response.GetResponseStream())
-        '        responseContent = reader.ReadToEnd()
-        '      End Using
-        '    End Using
-        '    If responseContent <> "" Then
-                
-        '    End If
-        'Catch
-
-        'Finally
-        
-        'End Try
+        Try
+            Dim url As String = String.Format("http://api.themoviedb.org/3/movie/{0}/keywords?api_key=57983e31fb435df4df77afb854740ea9&language={1}", Id, TMDb.LanguageCodes(0))
+            Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
+            request.Method = "GET"
+            Dim responseContent As String
+            Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
+              Using reader = New System.IO.StreamReader(response.GetResponseStream())
+                responseContent = reader.ReadToEnd()
+              End Using
+            End Using
+            If responseContent <> "" Then
+'{"id":584,"keywords":[{"id":830,"name":"car race"},{"id":999,"name":"sports car"},{"id":261,"name":"los angeles "},{"id":416,"name":"miami"}]}
+                Dim newkey As New List(Of String)
+                Dim RegExPattern = "name"":""(?<keyword>.*?)"""
+                For Each m As Match In Regex.Matches(responseContent, RegExPattern, RegexOptions.Singleline)
+                    Dim kwd As String = Net.WebUtility.HtmlDecode(m.Groups("keyword").Value)
+                    newkey.Add(kwd)
+                Next
+                Dim count As Integer = 0
+                For Each k In newkey
+                    count = count +1
+                    keywd.Add(k)
+                    If count = keylimit Then Exit For
+                Next
+            End If
+        Catch ex As Exception
+            Return keywd
+        End Try
         Return keywd
     End Function
 End Class
-
-
