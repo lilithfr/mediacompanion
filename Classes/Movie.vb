@@ -2327,7 +2327,7 @@ Public Class Movie
         Dim subextn As List(Of String) = Utilities.ListSubtitleFilesExtensions(subName)
         Dim subStackList As New List(Of String)'(New String() {subName})
         'If Not subextn = "" Then subStackList.Add((subName & subextn))
-
+        
         If newextension.ToLower = ".disc" Then
             log &= "!!! Media Stub files are not to be renamed." & vbCrLf
             Return log
@@ -2443,11 +2443,6 @@ Public Class Movie
         Dim isFirstPart     = True
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
-
-        'If newextension.ToLower = ".disc" Then
-        '    log &= "!!! Media Stub files are not to be renamed." & vbCrLf
-        '    Return log
-        'End If
          
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
@@ -2964,6 +2959,12 @@ Public Class Movie
     Public Function RenameExistingMetaFiles As String
 
         Dim log                 = ""
+        'Test for unknown movies and abort renaming of moviefile.
+        If _scrapedMovie.fullmoviebody.genre = "Problem" AndAlso _scrapedMovie.fullmoviebody.year = "0000" Then
+            log &= "!!! Scrape Error movies should not be renamed. File renaming Aborted" & vbCrLf
+            Return log
+        End If
+
         Dim targetMovieFile     = ""
         Dim targetNfoFile       = "" 
         Dim oldName             = "" 
@@ -3122,6 +3123,13 @@ Public Class Movie
 
     Public Function RenameMovFolder As String
         Dim log As String = ""
+
+        'Test for unknown movies and abort renaming of movie folder.
+        If _scrapedMovie.fullmoviebody.genre = "Problem" AndAlso _scrapedMovie.fullmoviebody.year = "0000" Then
+            log &= "!!! Scrape Error movies should not be renamed. Folder Renaming Aborted" & vbCrLf
+            Return log
+        End If
+
         Dim NoDel As Boolean = False
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
