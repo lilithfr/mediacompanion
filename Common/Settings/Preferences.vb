@@ -168,6 +168,7 @@ Public Class Preferences
     Public Shared nfoposterscraper As Integer
     Public Shared ignoreactorthumbs As Boolean
     Public Shared maxactors As Integer
+    Public Shared keywordasTag As Boolean
     Public Shared keywordlimit As Integer
     Public Shared maxmoviegenre As Integer
     Public Shared enablehdtags As Boolean
@@ -603,7 +604,8 @@ Public Class Preferences
         overwritethumbs = False
         LocalActorImage = True
         maxactors = 9999
-        keywordlimit = 10
+        keywordasTag = False
+        keywordlimit = 5
         createfolderjpg = False
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
         namemode = "1"
@@ -866,6 +868,7 @@ Public Class Preferences
         root.AppendChild(doc, "alwaysuseimdbid",                    alwaysuseimdbid)                    'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreactorthumbs",                  ignoreactorthumbs)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "maxactors",                          maxactors)                          'ComboBox7
+        root.AppendChild(doc, "keywordasTag",                       keywordasTag)                       'cb_keywordasTag
         root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'ComboBox6
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
@@ -1190,6 +1193,7 @@ Public Class Preferences
                     Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)
+                    Case "keywordasTag"                         : keywordasTag = thisresult.InnerXml
                     Case "keywordlimit"                         : keywordlimit = Convert.ToInt32(thisresult.InnerXml)
                     Case "maxmoviegenre"                        : maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
                     Case "enablehdtags"                         : enablehdtags = thisresult.InnerXml

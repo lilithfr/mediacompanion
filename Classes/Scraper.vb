@@ -34,7 +34,7 @@ Public Class MovieRegExs
     Public Const REGEX_TR                  = "<tr.*?>(.*?)</tr>"
     Public Const REGEX_ACTOR_NO_IMAGE      = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_ACTOR_WITH_IMAGE    = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
-    Public Const REGEX_KEYWORD             = ""
+    Public Const REGEX_IMDB_KEYWORD             = "ttkw_kw_[0-9]*"" >(?<keyword>.*?)<\/a"
 End Class
 
 
@@ -1822,7 +1822,7 @@ Public Class Classimdb
         Return genres
     End Function
 
-    Public Function GetImdbKeyWords(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal keylimit As Integer = 10) As List(Of String)
+    Public Function GetImdbKeyWords(ByVal keylimit As Integer, ByVal imdbmirror As String, Optional ByVal imdbid As String = "", ) As List(Of String)
         Dim keywd As New List(Of String)
         Dim tempstring As String = ""
         Dim webpage As New List(Of String)
@@ -1831,35 +1831,31 @@ Public Class Classimdb
             tempstring = imdbmirror & "title/" & imdbid & "keywords?ref_=tt_stry_kw"
             webpage.Clear()
             webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
-            'Dim webPg1 As String = String.Join( vbcrlf , webpage.ToArray() )
+            Dim webPg1 As String = String.Join( vbcrlf , webpage.ToArray() )
             For f = 0 To webpage.Count - 1
                 If webpage(f).IndexOf("Plot Keywords</h1") <> -1 Then
                     Dim loc As Integer = f + 6
-                    Dim count As Integer = 0
-                    
                     For g = loc to loc+500
                         If webpage(g).IndexOf("</tbody></table>") <> -1 Then
                             f = webpage.Count-1
                             Exit For
                         End If
                         If webpage(g).IndexOf("<td><a href=") <>-1 Then
-                            count = count +1
                             wbpage &= webpage(g).TrimStart 
-                        End If
-                        If count = keylimit Then
-                            f = webpage.Count-1
-                            Exit For
                         End If
                     Next
                 End If
             Next
             If wbpage <> "" Then
+                Dim count As Integer = 0
                 Dim keyw As String
-                For Each m As Match In Regex.Matches( wbpage, MovieRegExs.REGEX_KEYWORD )
+                For Each m As Match In Regex.Matches( wbpage, MovieRegExs.REGEX_IMDB_KEYWORD )
                     keyw = m.Groups("keyword").Value
                     If Not keywd.Contains( keyw ) then
+                        count +=1
                         keywd.Add( keyw )
                     End if
+                    If count = keylimit Then Exit For
                 Next
             End If
         Catch
@@ -1867,7 +1863,7 @@ Public Class Classimdb
         Return keywd
     End Function
 
-    Public Function GetTmdbkeywords(ByVal ID As Integer, Optional ByVal keylimit As Integer = 10) As List(Of String)
+    Public Function GetTmdbkeywords(ByVal ID As Integer, ByVal keylimit As Integer) As List(Of String)
         Dim keywd As New List(Of String)
         Try
             Dim url As String = String.Format("http://api.themoviedb.org/3/movie/{0}/keywords?api_key=57983e31fb435df4df77afb854740ea9&language={1}", Id, TMDb.LanguageCodes(0))

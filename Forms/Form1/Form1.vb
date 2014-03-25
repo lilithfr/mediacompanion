@@ -14045,6 +14045,16 @@ Public Class Form1
                 ComboBox6.SelectedItem = Preferences.maxmoviegenre.ToString
         End Select
 
+        cb_keywordasTag.Checkstate = If(Preferences.keywordasTag, CheckState.Checked, CheckState.Unchecked)
+        Select Case Preferences.keywordlimit 
+            Case 99
+                cb_keywordlimit.SelectedItem = "All Available"
+            Case 0
+                cb_keywordlimit.SelectedItem = "None"
+            Case Else
+                cb_keywordlimit.SelectedItem = Preferences.keywordlimit.ToString
+        End Select
+
         If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Count Then
             lbPosterSourcePriorities.Items.Clear()
             For f = 0 To Preferences.moviethumbpriority.Count-1
@@ -14774,6 +14784,40 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_keywordasTag.CheckedChanged
+        Try
+            If cb_keywordasTag.CheckState = CheckState.Checked Then
+                Preferences.keywordasTag = True
+                If Preferences.keywordlimit = 0 Then
+                    MsgBox(" Please select a limit above Zero keywords" & vbCrLf & "else no keywords will be stored as Tags")
+                End If
+            Else
+                Preferences.keywordasTag = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub cb_keywordlimit_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_keywordlimit.SelectedIndexChanged
+        Try
+            If IsNumeric(cb_keywordlimit.SelectedItem) Then
+                Preferences.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
+            ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
+                Preferences.keywordlimit = 0
+            Else
+                Preferences.keywordlimit = 99
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
     Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IMPA_chk.CheckedChanged

@@ -3591,21 +3591,17 @@ Public Class Movie
     End Sub
 
     Sub GetKeyWords
-        If Preferences.movies_useXBMC_Scraper Then
-            GetTmdbKeyWords
-        Else
-            GetImdbKeywords
+        If Preferences.keywordasTag AndAlso Preferences.keywordlimit > 0 Then
+            Dim keywords As New List(Of String)
+            If Preferences.movies_useXBMC_Scraper Then
+                keywords = _imdbScraper.GetTmdbkeywords(_possibleImdb , Preferences.keywordlimit)
+            Else
+                keywords = _imdbScraper.GetImdbKeyWords(Preferences.keywordlimit, Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
+            End If
+            If keywords.Count > 0 Then
+                _scrapedMovie.fullmoviebody.tag = keywords
+            End If
         End If
-    End Sub
-
-    Sub GetImdbKeywords
-
-        Dim imdbkeywrd As List(Of String) = _imdbScraper.GetImdbKeyWords(Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid, Preferences.keywordlimit)
-
-    End Sub
-
-    Sub GetTmdbKeyWords
-        Dim tmdbkeywrd As List(Of String) = _imdbScraper.GetTmdbkeywords(_possibleImdb , Preferences.keywordlimit)
     End Sub
 
 End Class
