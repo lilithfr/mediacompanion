@@ -34,6 +34,7 @@ Public Class MovieRegExs
     Public Const REGEX_TR                  = "<tr.*?>(.*?)</tr>"
     Public Const REGEX_ACTOR_NO_IMAGE      = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_ACTOR_WITH_IMAGE    = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
+    Public Const REGEX_KEYWORD             = ""
 End Class
 
 
@@ -1254,7 +1255,7 @@ Public Class Classimdb
                     Dim plots(20) As String
                     webpage.Clear()
                     webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
-                    Dim webPg1 As String = String.Join( "" , webpage.ToArray() )
+                    'Dim webPg1 As String = String.Join( vbcrlf , webpage.ToArray() )
                     tempint = 0
                     Dim doo As Boolean = False
                     For Each line In webpage
@@ -1343,16 +1344,6 @@ Public Class Classimdb
                 Catch
                 End Try
 
-                'placeholder for keywords.
-                Try
-                    'tempstring = imdbmirror & "title/" & imdbid & "keywords?ref_=tt_stry_kw"
-                    'webpage.Clear()
-                    'webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
-                Catch
-                End Try
-                
-
-
                 Try
                     'releaseinfo#akas
                     tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
@@ -1409,7 +1400,6 @@ Public Class Classimdb
                 Catch ex As Exception
 
                 End Try
-
 
             End If
             For f = 0 To 33
@@ -1834,7 +1824,46 @@ Public Class Classimdb
 
     Public Function GetImdbKeyWords(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal keylimit As Integer = 10) As List(Of String)
         Dim keywd As New List(Of String)
-
+        Dim tempstring As String = ""
+        Dim webpage As New List(Of String)
+        Dim wbpage As String = ""
+        Try
+            tempstring = imdbmirror & "title/" & imdbid & "keywords?ref_=tt_stry_kw"
+            webpage.Clear()
+            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            'Dim webPg1 As String = String.Join( vbcrlf , webpage.ToArray() )
+            For f = 0 To webpage.Count - 1
+                If webpage(f).IndexOf("Plot Keywords</h1") <> -1 Then
+                    Dim loc As Integer = f + 6
+                    Dim count As Integer = 0
+                    
+                    For g = loc to loc+500
+                        If webpage(g).IndexOf("</tbody></table>") <> -1 Then
+                            f = webpage.Count-1
+                            Exit For
+                        End If
+                        If webpage(g).IndexOf("<td><a href=") <>-1 Then
+                            count = count +1
+                            wbpage &= webpage(g).TrimStart 
+                        End If
+                        If count = keylimit Then
+                            f = webpage.Count-1
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
+            If wbpage <> "" Then
+                Dim keyw As String
+                For Each m As Match In Regex.Matches( wbpage, MovieRegExs.REGEX_KEYWORD )
+                    keyw = m.Groups("keyword").Value
+                    If Not keywd.Contains( keyw ) then
+                        keywd.Add( keyw )
+                    End if
+                Next
+            End If
+        Catch
+        End Try
         Return keywd
     End Function
 
