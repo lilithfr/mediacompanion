@@ -3188,9 +3188,20 @@ Public Class Movie
         Else
             Dim chkfldr As String = checkfolder & "\"
             If chkfldr.ToLower = FilePath.ToLower Then
-                log &= "!!! Path for: " & checkfolder & vbCrLf 
-                log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
+                log &= "!!! Movie already exists in : " & checkfolder & vbCrLf 
+                log &= "!!! Rename of this Movie folder skipped" & vbCrLf & vbcrlf
                 Return log
+            Else
+                log &= "!!! Path for: " & checkfolder & vbCrLf 
+                log &= "!!! already Exists" & vbCrLf & vbcrlf
+                Dim filename As String = stackname 
+                Utilities.isMultiPartMedia(filename, False, isFirstPart, stackdesignator, nextStackPart)
+                Dim moviename = chkfldr & filename & newextension 
+                If IO.File.Exists(moviename) Then
+                    log &= "!!! Movie of same filename already exists in: " & checkfolder & vbCrLf 
+                    log &= "!!! Aborting Movie move into existing folder!" & vbCrLf & vbcrlf
+                    Return log
+                End If
             End If
         End If
         
@@ -3223,7 +3234,6 @@ Public Class Movie
             Else
                 Moviename = stackname   
             End If
-            'Dim Moviename As String = _movieCache.filename.Replace(".nfo","")
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
             For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
