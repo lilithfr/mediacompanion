@@ -94,6 +94,7 @@ Public Class Preferences
     Public Shared stubmessage       As String = "Insert Media to Continue"
     Public Shared homemoviefolders  As New List(Of String)
     Public Shared ExcludeFolders    As New Excludes("Folders")
+    Public Shared MVidFolders       As New List(Of String)
 
     'Saved Form Prefs
     Public Shared backgroundcolour As String
@@ -666,6 +667,7 @@ Public Class Preferences
 
         movieFolders.Clear()
         tvFolders.Clear()
+        MVidFolders.Clear()
 
     End Sub
 
@@ -743,6 +745,10 @@ Public Class Preferences
         For Each Path In homemoviefolders
             root.AppendChild(doc, "homemoviefolder", Path)
             list.Add(Path)
+        Next
+
+        For Each Path In MVidFolders
+            root.AppendChild(doc, "MVidFolders", Path)
         Next
 
         root.AppendChild(ExcludeFolders.GetChild(doc))
@@ -1036,6 +1042,7 @@ Public Class Preferences
         moviethumbpriority.Clear()
         'MovSepLst.Clear()
         homemoviefolders.Clear() 
+        MVidFolders.Clear()
         movie_filters.Reset()
         engineupdate()
 
@@ -1117,6 +1124,10 @@ Public Class Preferences
                     Case "homemoviefolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         homemoviefolders.Add(decodestring)
+
+                    Case "MVidFolders"
+                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                        MVidFolders.Add(decodestring)
 
                     Case "ExcludeFolders" : ExcludeFolders.Load(thisresult)
 

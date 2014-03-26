@@ -158,8 +158,10 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\Music_Video_Class.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
     <Compile Include="Classes\UserRect.vb" />
+    <Compile Include="Classes\WikipediaMusivVideoScraper.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEvent.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEventArgs.vb" />
     <Compile Include="Classes\XBMC_Link\DictItem.vb" />
@@ -452,6 +454,12 @@
     <Compile Include="UserControls\ucGenPref_Proxy.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ucMusicVideo.Designer.vb">
+      <DependentUpon>ucMusicVideo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucMusicVideo.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmImageBrowseOrUrl.resx">
@@ -576,6 +584,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucGenPref_XbmcLink.resx">
       <DependentUpon>ucGenPref_XbmcLink.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucMusicVideo.resx">
+      <DependentUpon>ucMusicVideo.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
