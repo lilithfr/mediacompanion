@@ -419,6 +419,7 @@ Public Class Form1
             currentprofile.Config = tempstring & "config.xml"
             currentprofile.RegExList = tempstring & "regex.xml"
             currentprofile.TvCache = tempstring & "tvcache.xml"
+            currentprofile.MusicVideoCache = tempstring & "musicvideocache.xml"
             currentprofile.Filters = tempstring & "filters.txt"
             currentprofile.MovieCache = tempstring & "moviecache.xml"
             currentprofile.ProfileName = "Default"
@@ -426,6 +427,7 @@ Public Class Form1
             profileStruct.WorkingProfileName = "Default"
             Call util_ProfileSave()
         End If
+       
             'Call util_ProfilesLoad()
             'For Each prof In profileStruct.ProfileList
             '    If prof.ProfileName = profileStruct.StartupProfile Then
@@ -450,7 +452,7 @@ Public Class Form1
             '    End If
             'Next
         'Else
-            
+
         Call util_ProfilesLoad()
         For Each prof In profileStruct.ProfileList
             If prof.ProfileName = profileStruct.StartupProfile Then
@@ -462,7 +464,8 @@ Public Class Form1
                 workingProfile.regexlist = prof.regexlist
                 workingProfile.filters = prof.filters
                 workingProfile.tvcache = prof.tvcache
-                workingProfile.profilename = prof.profilename
+                workingProfile.ProfileName = prof.ProfileName
+                workingProfile.MusicVideoCache = prof.MusicVideoCache
                 For Each item In ProfilesToolStripMenuItem.DropDownItems
                     If item.text = workingProfile.profilename Then
                         With item
@@ -476,8 +479,29 @@ Public Class Form1
         Next
         'End If
 
+        'add musicvideocache to profile if it doesnt exist
+        Dim counter As Int16 = 0
+        tempstring = applicationPath & "\Settings\"
+        For Each prof In profileStruct.ProfileList
+            If counter = 0 Then
+                If prof.MusicVideoCache = "" Then
+                    prof.MusicVideoCache = "\Settings\musicvideocache.xml"
+                    If prof.ProfileName = workingProfile.ProfileName Then
+                        workingProfile.MusicVideoCache = tempstring & "\Settings\musicvideocache.xml"
+                    End If
+                End If
+            Else
+                If prof.MusicVideoCache = "" Then
+                    prof.MusicVideoCache = "\Settings\musicvideocache" & counter.ToString & ".xml"
+                End If
+                If prof.ProfileName = workingProfile.ProfileName Then
+                    workingProfile.MusicVideoCache = tempstring & "\Settings\musicvideocache" & counter.ToString & ".xml"
+                End If
+            End If
+                counter += 1
+        Next
 
-        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
+        If workingProfile.HomeMovieCache = "" Then workingProfile.HomeMovieCache = tempstring & "homemoviecache.xml"
         'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
         util_MainFormTitleUpdate()
 
@@ -1003,6 +1027,9 @@ Public Class Form1
                 Exit Sub
             End If
             Call HomeMovieCacheSave()
+
+            Call UcMusicVideo1.MusicVideoCacheSave()
+
             'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
 
             'Todo: Code a better way to serialize the data
@@ -1435,9 +1462,12 @@ Public Class Form1
                                         Case "tvcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.TvCache = applicationPath & s 'result.innertext
+                                        Case "musicvideocache"
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.MusicVideoCache = applicationPath & s 'result.innertext
                                     End Select
                                 Next
-                                profileStruct.ProfileList.Add(currentprofile)
+                profileStruct.ProfileList.Add(currentprofile)
                         End Select
                     Next
                 End If
@@ -1502,10 +1532,11 @@ Public Class Form1
         For Each prof In profileStruct.ProfileList
             child = doc.CreateElement("profiledetails")
 
+          
             childchild = doc.CreateElement("actorcache")
             childchild.InnerText = prof.ActorCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
-
+            
             childchild = doc.CreateElement("directorcache")
             childchild.InnerText = prof.DirectorCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
@@ -1532,6 +1563,10 @@ Public Class Form1
 
             childchild = doc.CreateElement("tvcache")
             childchild.InnerText = prof.TvCache.Replace(applicationPath, "")
+            child.AppendChild(childchild)
+            root.AppendChild(child)
+            childchild = doc.CreateElement("musicvideocache")
+            childchild.InnerText = prof.MusicVideoCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
@@ -15608,6 +15643,7 @@ Public Class Form1
                 Dim moviecachepath As String = tempstring2 & "moviecache" & f.ToString & ".xml"
                 Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
                 Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
+                Dim musicvideocachepath As String = tempstring2 & "musicvideocache" & f.ToString & ".xml"
                 Dim ok As Boolean = True
                 If IO.File.Exists(configpath) Then
                     ok = False
@@ -15627,6 +15663,9 @@ Public Class Form1
                 If IO.File.Exists(tvcachepath) Then
                     ok = False
                 End If
+                If IO.File.Exists(musicvideocachepath) Then
+                    ok = False
+                End If
                 If ok = True Then
                     tempint = f
                     Exit For
@@ -15636,13 +15675,16 @@ Public Class Form1
             Dim tempstring As String = applicationPath & "\Settings\"
             Dim moviecachetocopy As String = String.Empty
             Dim actorcachetocopy As String = String.Empty
+            Dim musiccachetocopy As String = String.Empty
+            Dim musicvideocachetocopy As String = String.Empty
             Dim directorcachetocopy As String = String.Empty
             Dim tvcachetocopy As String = String.Empty
             Dim configtocopy As String = String.Empty
             Dim filterstocopy As String = String.Empty
             Dim regextocopy As String = String.Empty
             For Each profs In profileStruct.ProfileList
-                If profs.ProfileName = profileStruct.defaultprofile Then
+                If profs.ProfileName = profileStruct.DefaultProfile Then
+                    musicvideocachetocopy = profs.MusicVideoCache
                     moviecachetocopy = profs.MovieCache
                     actorcachetocopy = profs.ActorCache
                     directorcachetocopy = profs.DirectorCache
@@ -15661,11 +15703,16 @@ Public Class Form1
             profiletoadd.MovieCache = tempstring & "moviecache" & tempint.ToString & ".xml"
             profiletoadd.RegExList = tempstring & "regex" & tempint.ToString & ".xml"
             profiletoadd.TvCache = tempstring & "tvcache" & tempint.ToString & ".xml"
+            profiletoadd.MusicVideoCache = tempstring & "musicvideocache" & tempint.ToString & ".xml"
             profiletoadd.ProfileName = TextBox42.Text
             profileStruct.ProfileList.Add(profiletoadd)
 
             If System.IO.File.Exists(moviecachetocopy) = True Then
                 System.IO.File.Copy(moviecachetocopy, profiletoadd.MovieCache)
+            End If
+
+            If System.IO.File.Exists(musicvideocachetocopy) = True Then
+                System.IO.File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
             End If
 
             If System.IO.File.Exists(actorcachetocopy) = True Then
@@ -21080,6 +21127,13 @@ Public Class Form1
             Call homemovieCacheLoad()
         End If
 
+        If IO.File.Exists(workingProfile.MusicVideoCache) Then
+            loadinginfo = "Status :- Loading Music Video Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call UcMusicVideo1.MusicVideoCacheLoad()
+        End If
+
         If Not prefs then
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building TV Database"
@@ -22620,7 +22674,7 @@ Public Class Form1
                 If IO.File.Exists(fullpath) Then
                     IO.File.Delete(fullpath)
                 End If
-            Catch 
+            Catch
             End Try
         End If
     End Sub

@@ -1,16 +1,18 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports System.Text.RegularExpressions
+Imports System.Xml
 
 Public Class ucMusicVideo
 Dim nfo As New WorkingWithNfoFiles
-    Dim musicVideoList As New List(Of Music_Video_Class)
+    Public musicVideoList As New List(Of Music_Video_Class)
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        musicVideoList.Clear()
+
         For Each item In Preferences.MVidFolders
             lstBoxFolders.Items.Add(item)
         Next
+        txtScreenshotTime.Text = "10"
     End Sub
 
 
@@ -99,6 +101,8 @@ Dim nfo As New WorkingWithNfoFiles
             Dim m = hms.Minutes.ToString
             Dim s = hms.Seconds.ToString
 
+            If s.Length = 1 Then s = "0" & s
+
             Dim runtime As String
             runtime = h & ":" & m & ":" & s
             If h = "0" Then
@@ -120,26 +124,40 @@ Dim nfo As New WorkingWithNfoFiles
             Application.DoEvents()
             Me.Refresh()
 
-        Next
 
+        Next
+        Call MusicVideoCacheSave()
     End Sub
     
-    Private Function createScreenshot(ByVal fullpathAndFilename)
+    Private Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False)
         Try
+
             Dim applicationpath As String = Application.StartupPath 'get application root path
 
             Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), ".jpg")
 
-            Dim myProcess As Process = New Process
-            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            myProcess.StartInfo.CreateNoWindow = False
-            myProcess.StartInfo.FileName = applicationpath & "\ffmpeg.exe"
-            Dim proc_arguments As String = "-y -i """ & fullpathAndFilename & """ -f mjpeg -ss " & "30" & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-            myProcess.StartInfo.Arguments = proc_arguments
-            myProcess.Start()
-            myProcess.WaitForExit()
+            If overwrite = True Then
+                If IO.File.Exists(thumbpathandfilename) Then
+                    Try
+                        IO.File.Delete(thumbpathandfilename)
+                    Catch
+                    End Try
+                End If
+            End If
 
-            Return True
+            If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
+                Dim myProcess As Process = New Process
+                myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                myProcess.StartInfo.CreateNoWindow = False
+                myProcess.StartInfo.FileName = applicationpath & "\ffmpeg.exe"
+                Dim proc_arguments As String = "-y -i """ & fullpathAndFilename & """ -f mjpeg -ss " & time & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                myProcess.StartInfo.Arguments = proc_arguments
+                myProcess.Start()
+                myProcess.WaitForExit()
+                Return True
+            Else
+                Return False
+            End If
         Catch
             Return False
         End Try
@@ -384,9 +402,190 @@ Dim nfo As New WorkingWithNfoFiles
                 Dim thumbpath As String = MusicVideo.fullPathAndFilename
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), ".jpg")
                 PcBxMusicVideoScreenShot.ImageLocation = thumbpath
+                pcBxScreenshot.ImageLocation = thumbpath
 
             End If
         Next
     End Sub
 
+    Public Sub MusicVideoCacheSave()
+        Dim fullpath As String = Preferences.workingProfile.MusicVideoCache
+        If musicVideoList.Count > 0 And Preferences.MVidFolders.Count > 0 Then
+
+            If IO.File.Exists(fullpath) Then
+                Dim don As Boolean = False
+                Dim count As Integer = 0
+                Do
+                    Try
+                        If IO.File.Exists(fullpath) Then
+                            IO.File.Delete(fullpath)
+                            don = True
+                        Else
+                            don = True
+                        End If
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                    Finally
+                        count += 1
+                    End Try
+                Loop Until don = True
+
+            End If
+
+          
+
+            Dim doc As New XmlDocument
+
+            Dim thispref As XmlNode = Nothing
+            Dim xmlproc As XmlDeclaration
+
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+            doc.AppendChild(xmlproc)
+            Dim root As XmlElement
+            Dim child As XmlElement
+            root = doc.CreateElement("music_video_cache")
+            Dim childchild As XmlElement
+
+            Dim count2 As Integer = 0
+
+            For Each item In musicVideoList
+
+                child = doc.CreateElement("musicvideo")
+                childchild = doc.CreateElement("fullpathandfilename")
+                childchild.InnerText = item.fullPathAndFilename
+                child.AppendChild(childchild)
+
+                childchild = doc.CreateElement("title")
+                childchild.InnerText = item.title
+                child.AppendChild(childchild)
+                root.AppendChild(child)
+            Next
+
+            doc.AppendChild(root)
+            For f = 1 To 100
+                Try
+
+                    Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
+                    output.Formatting = Formatting.Indented
+                    doc.WriteTo(output)
+                    output.Close()
+                    Exit For
+                Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+                End Try
+            Next
+        Else
+            Try
+                If IO.File.Exists(fullpath) Then
+                    IO.File.Delete(fullpath)
+                End If
+            Catch
+            End Try
+        End If
+    End Sub
+
+    Public Sub MusicVideoCacheLoad()
+        musicVideoList.Clear()
+
+        Dim musicvideocache As New XmlDocument
+        Dim objReader As New System.IO.StreamReader(Preferences.workingProfile.MusicVideoCache)
+        Dim tempstring As String = objReader.ReadToEnd
+        objReader.Close()
+
+
+
+        musicvideocache.LoadXml(tempstring)
+        Dim thisresult As XmlNode = Nothing
+        For Each thisresult In musicvideocache("music_video_cache")
+            Select Case thisresult.Name
+                Case "musicvideo"
+                    Dim newMV As New Music_Video_Class
+
+                    Dim detail As XmlNode = Nothing
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+                            'workingmovie.missingdata1
+
+                            Case "fullpathandfilename"
+                                newMV.fullPathAndFilename = detail.InnerText
+                            Case "title"
+                                newMV.title = detail.InnerText
+                        End Select
+                    Next
+                    musicVideoList.Add(newMV)
+            End Select
+        Next
+
+        Call loadMusicVideolist()
+        Try
+            lstBxMainList.SelectedIndex = 0
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+    End Sub
+
+    Private Sub loadMusicVideolist()
+        lstBxMainList.Items.Clear()
+        For Each item In musicVideoList
+            lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+        Next
+    End Sub
+
+    Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
+        If txtFilter.Text <> "" Then
+            lstBxMainList.Items.Clear()
+            For Each item In musicVideoList
+                If item.title.ToLower.IndexOf(txtFilter.Text.ToLower) <> -1 Then
+                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+                End If
+            Next
+        Else
+            For Each item In musicVideoList
+                lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+            Next
+        End If
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        PcBxMusicVideoScreenShot.Image = Nothing
+        pcBxScreenshot.Image = Nothing
+        If Not lstBxMainList.SelectedItem Is Nothing Then
+            For Each MusicVideo In musicVideoList
+                If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+                    Dim screenshotpath As String = MusicVideo.fullPathAndFilename
+
+                    createScreenshot(screenshotpath, txtScreenshotTime.Text, True)
+                    PcBxMusicVideoScreenShot.ImageLocation = screenshotpath.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
+                    pcBxScreenshot.ImageLocation = screenshotpath.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub btnScreenshotMinus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotMinus.Click
+        Dim number As Integer = CInt(txtScreenshotTime.Text)
+        If number > 1 Then
+            number -= 1
+            txtScreenshotTime.Text = number.ToString
+        Else
+            MsgBox("Cant be less than 1")
+        End If
+    End Sub
+
+    Private Sub btnScreenshotPlus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotPlus.Click
+        Dim number As Integer = CInt(txtScreenshotTime.Text)
+        number += 1
+        txtScreenshotTime.Text = number.ToString
+    End Sub
+
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        'save text routine
+
+    End Sub
 End Class

@@ -4,7 +4,7 @@ Public Class ListOfProfiles
     Property MovieCache     As String = ""
     Property TvCache        As String = ""
     Property ActorCache     As String = ""
-
+    Property MusicVideoCache As String = ""
     Private _directorCache As String = ""
 
     Property DirectorCache  As String
@@ -32,7 +32,8 @@ Public Class ListOfProfiles
         profileTo.RegExList     = RegExList
         profileTo.Filters       = Filters
         profileTo.TvCache       = TvCache
-        profileTo.ProfileName   = ProfileName
+        profileTo.ProfileName = ProfileName
+        profileTo.MusicVideoCache = MusicVideoCache
     End Sub
 
 End Class
