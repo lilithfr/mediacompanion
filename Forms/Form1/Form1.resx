@@ -3969,6 +3969,39 @@ Either "Use Foldernames" or "All Movies in Folders" must be enabled.
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>325, 165</value>
   </metadata>
+  <data name="Label81.Text" xml:space="preserve">
+    <value>
+Root Folders are folders that contain
+multiple TV Shows
+
+For example :-
+D:/Root/TV Show 1
+D:/Root/TV Show 2 
+You would add the path:
+D:/Root
+
+Folders added to this list can be
+checked for new TV Show folders
+and can be added to the Seperate
+Folders List automatically on startup.
+
+To check for new TV Folders when
+the program is running, use the 
+"Check Roots for New TV Shows"
+menu item, located in the
+"TV Shows" drop down menu.</value>
+  </data>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>
+Separate folders are those that contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method means that all shows must be added manually.</value>
+  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>572, 91</value>
   </metadata>
@@ -4169,39 +4202,6 @@ If none of the above are correct, then alter the search term and search again.</
   <metadata name="SCert.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="Label81.Text" xml:space="preserve">
-    <value>
-Root Folders are folders that contain
-multiple TV Shows
-
-For example :-
-D:/Root/TV Show 1
-D:/Root/TV Show 2 
-You would add the path:
-D:/Root
-
-Folders added to this list can be
-checked for new TV Show folders
-and can be added to the Seperate
-Folders List automatically on startup.
-
-To check for new TV Folders when
-the program is running, use the 
-"Check Roots for New TV Shows"
-menu item, located in the
-"TV Shows" drop down menu.</value>
-  </data>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>
-Separate folders are those that contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method means that all shows must be added manually.</value>
-  </data>
   <data name="Label138.Text" xml:space="preserve">
     <value>If you have enabled the option to 'Save Actor
 Thumbs to the '.Actors' Folder' located in the

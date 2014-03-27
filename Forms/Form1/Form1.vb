@@ -1651,6 +1651,7 @@ Public Class Form1
                 taglinetxt.Text = workingMovieDetails.fullmoviebody.tagline
                 txtStars.Text = workingMovieDetails.fullmoviebody.stars
                 genretxt.Text = workingMovieDetails.fullmoviebody.genre
+                premiertxt.Text = workingMovieDetails.fullmoviebody.premiered 
                 creditstxt.Text = workingMovieDetails.fullmoviebody.credits
                 directortxt.Text = workingMovieDetails.fullmoviebody.director
                 studiotxt.Text = workingMovieDetails.fullmoviebody.studio
