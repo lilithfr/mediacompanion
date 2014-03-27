@@ -1825,6 +1825,7 @@ Public Class Form1
             taglinetxt.Text = ""
             txtStars.Text = ""
             genretxt.Text = ""
+            premiertxt.Text = ""
             creditstxt.Text = ""
             directortxt.Text = ""
             studiotxt.Text = ""
@@ -3402,6 +3403,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
             movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
             movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
+            movie.ScrapedMovie.fullmoviebody.premiered = premiertxt.Text
             movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
             movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
             movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
@@ -3460,6 +3462,9 @@ Public Class Form1
                     End If
                     If genretxt.Text <> "" Then
                         movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
+                    End If
+                    If premiertxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.premiered = premiertxt.Text
                     End If
                     If certtxt.Text <> "" Then
                         movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
@@ -4058,6 +4063,7 @@ Public Class Form1
         taglinetxt.Text = ""
         txtStars.Text = ""
         genretxt.Text = ""
+        premiertxt.Text = ""
         creditstxt.Text = ""
         directortxt.Text = ""
         studiotxt.Text = ""
@@ -16911,6 +16917,7 @@ Public Class Form1
                     Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
                     Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
                     genretxt.Font = newFont
+                    premiertxt.Font = newFont 
                     certtxt.Font = newFont
                     directortxt.Font = newFont
                     creditstxt.Font = newFont
