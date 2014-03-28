@@ -719,7 +719,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             'TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
-            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
 
             'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
             GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
@@ -1004,7 +1004,8 @@ Public Class Form1
         Try
             Me.Dispose()
             Me.Finalize()
-            If cbClearCache.Checked = True Then ClearCacheFolder      ' Upon closing of MC, delete cache folder if option selected.
+            If cbClearCache.Checked = True Then   ClearCacheFolder    ' delete cache folder if option selected.
+            If cbClearMissingFolder.Checked = True Then ClearMissingFolder()  ' delete missing folder if option selected.
             End
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -1140,6 +1141,15 @@ Public Class Form1
             
         Catch ex As Exception
 
+        End Try
+    End Sub
+    Sub ClearMissingFolder()
+        Try
+            Dim missingfolder As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
+            If IO.Directory.Exists(missingfolder)
+                IO.Directory.Delete(missingfolder, True)
+            End If
+        Catch ex As Exception
         End Try
     End Sub
 
