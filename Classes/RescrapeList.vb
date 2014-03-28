@@ -35,6 +35,7 @@ Public Class RescrapeList
     Property Xbmc_Sync           As Boolean
     Property Convert_To_Frodo    As Boolean
     Property EmptyMainTags       As Boolean
+    Property TagsFromKeywords    As Boolean
 
     Sub New
     End Sub

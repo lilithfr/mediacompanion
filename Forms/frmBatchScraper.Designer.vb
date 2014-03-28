@@ -60,6 +60,7 @@ Partial Class frmBatchScraper
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.cb_ScrapeEmptyTags = New System.Windows.Forms.CheckBox()
+        Me.cbTagsFromKeywords = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -345,6 +346,7 @@ Partial Class frmBatchScraper
         '
         'gbOther
         '
+        Me.gbOther.Controls.Add(Me.cbTagsFromKeywords)
         Me.gbOther.Controls.Add(Me.cbRenameFolders)
         Me.gbOther.Controls.Add(Me.cbFrodo_Fanart_Thumbs)
         Me.gbOther.Controls.Add(Me.cbFrodo_Poster_Thumbs)
@@ -467,6 +469,18 @@ Partial Class frmBatchScraper
         "mpty."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This excludes TMDB set name.  Select this separately if"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"required.")
         Me.cb_ScrapeEmptyTags.UseVisualStyleBackColor = true
         '
+        'cbTagsFromKeywords
+        '
+        Me.cbTagsFromKeywords.AutoSize = true
+        Me.cbTagsFromKeywords.Location = New System.Drawing.Point(139, 64)
+        Me.cbTagsFromKeywords.Name = "cbTagsFromKeywords"
+        Me.cbTagsFromKeywords.Size = New System.Drawing.Size(158, 17)
+        Me.cbTagsFromKeywords.TabIndex = 38
+        Me.cbTagsFromKeywords.Text = "Scrape Tags from keywords"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbTagsFromKeywords, "Will scrape keywords from current selected scraper"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"and populate them into movie "& _ 
+        "Tags.")
+        Me.cbTagsFromKeywords.UseVisualStyleBackColor = true
+        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -533,4 +547,5 @@ End Sub
     Friend WithEvents cbXtraFanart As System.Windows.Forms.CheckBox
     Friend WithEvents cbRenameFolders As System.Windows.Forms.CheckBox
     Friend WithEvents cb_ScrapeEmptyTags As System.Windows.Forms.CheckBox
+    Friend WithEvents cbTagsFromKeywords As System.Windows.Forms.CheckBox
 End Class

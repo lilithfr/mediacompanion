@@ -340,6 +340,18 @@
         End If
     End Sub
 
+    Private Sub cbTagsFromKeywords_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTagsFromKeywords.CheckedChanged
+        Try
+            If cbTagsFromKeywords.CheckState = CheckState.Checked Then
+                Form1.rescrapeList.TagsFromKeywords = True
+            Else
+                Form1.rescrapeList.TagsFromKeywords = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     'Fix MS XP tool tip won't display a second time bug (more friggin' MS poo)
     Private Sub ForceToolTipDisplay( sender As System.Object,  e As System.EventArgs) Handles cbRenameFiles.MouseEnter,cbFrodo_Poster_Thumbs.MouseEnter,cbFrodo_Fanart_Thumbs.MouseEnter,cbRenameFolders.MouseEnter
         ttBatchUpdateWizard.Active = False
@@ -390,4 +402,5 @@
         Form1.rescrapeList.EmptyMainTags = cb_ScrapeEmptyTags.checked
     End Sub
 
+    
 End Class

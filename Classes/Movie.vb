@@ -2548,7 +2548,7 @@ Public Class Movie
 
     Function NeedTMDb(rl As RescrapeList)
         Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or
-               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart 
+               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords
     End Function
 
     Function RescrapeBody(rl As RescrapeList)
@@ -2624,6 +2624,10 @@ Public Class Movie
             End If
         End If
 
+        If Not Preferences.movies_useXBMC_Scraper AndAlso rl.TagsFromKeywords Then
+            GetKeyWords
+        End If
+
         If Cancelled() Then Exit Sub
 
         If NeedTMDb(rl) Then
@@ -2659,6 +2663,9 @@ Public Class Movie
 
             If Cancelled() Then Exit Sub
 
+            If rl.TagsFromKeywords AndAlso Preferences.movies_useXBMC_Scraper Then
+                GetKeyWords(tmdb.Movie.id)
+            End If
 
             If rl.Frodo_Poster_Thumbs Then GetFrodoPosterThumbs()
 
@@ -3608,11 +3615,16 @@ Public Class Movie
         End Try
     End Sub
 
-    Sub GetKeyWords
+    Sub GetKeyWords(Optional ByVal tmdbid As String = "")
         If Preferences.keywordasTag AndAlso Preferences.keywordlimit > 0 Then
             Dim keywords As New List(Of String)
             If Preferences.movies_useXBMC_Scraper Then
-                keywords = _imdbScraper.GetTmdbkeywords(_possibleImdb , Preferences.keywordlimit)
+                If tmdbid <> "" Then
+                    keywords = _imdbScraper.GetTmdbkeywords(tmdbid , Preferences.keywordlimit) 'if given by rescrape specific
+                Else
+                    keywords = _imdbScraper.GetTmdbkeywords(_possibleImdb , Preferences.keywordlimit) 'if during initial movie scrape
+                End If
+                
             Else
                 keywords = _imdbScraper.GetImdbKeyWords(Preferences.keywordlimit, Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
             End If
