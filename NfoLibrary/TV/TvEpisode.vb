@@ -154,11 +154,11 @@ Public Class TvEpisode
             If Missing.Value Is Nothing Then
                 Missing.Value = Boolean.FalseString
             End If
-            If Missing.Value.ToLower = Boolean.TrueString.ToLower Then
-                Me.EpisodeNode.ForeColor = Drawing.Color.Blue
-            Else
-                Me.EpisodeNode.ForeColor = Drawing.Color.Black
-            End If
+            'If Missing.Value.ToLower = Boolean.TrueString.ToLower Then
+            '    Me.EpisodeNode.ForeColor = Drawing.Color.Blue
+            'Else
+            '    Me.EpisodeNode.ForeColor = Drawing.Color.Black
+            'End If
             Return CBool(_Missing.Value)
         End Get
         Set(ByVal value As Boolean)

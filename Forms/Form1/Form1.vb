@@ -19252,12 +19252,12 @@ Public Class Form1
                     Return
                 End If
                 RefreshMissingEpisodesToolStripMenuItem.Enabled = True
-                Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
-                If answer = MsgBoxResult.Yes 
-                    Preferences.DlMissingEpData = True
-                Else
+                'Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
+                'If answer = MsgBoxResult.Yes 
+                    'Preferences.DlMissingEpData = True
+                'Else
                     Preferences.DlMissingEpData = False
-                End If
+                'End If
                 tv_EpisodesMissingLoad(False)
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
                 MsgBox("Process is already running")
@@ -19270,7 +19270,10 @@ Public Class Form1
     End Sub
 
     Private Sub RefreshMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMissingEpisodesToolStripMenuItem.Click
+        Preferences.DlMissingEpData = True
+        tv_EpisodesMissingClean
         tv_EpisodesMissingLoad(True)
+        
     End Sub
 
     Private Sub RefreshThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RefreshShow.Click

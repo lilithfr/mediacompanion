@@ -1022,29 +1022,6 @@ Partial Public Class Form1
         Return False
     End Function
 
-    'Private Sub Tv_EpisodesMissingLoad(ByVal ShowList As TvShow)
-    '    'For Each item In ShowList
-    '    Dim showid As String = ShowList.TvdbId.Value
-    '    If IsNumeric(showid) Then
-    '        Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
-    '        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(showid & ".*.NFO", SearchOption.TopDirectoryOnly)
-    '        For Each fs_info As System.IO.FileInfo In fs_infos
-    '            Dim MissingEpisode As New TvEpisode
-    '            MissingEpisode.NfoFilePath = fs_info.FullName
-    '            MissingEpisode.Load()
-    '            If MissingEpisode.TvdbId.Value = showid Then
-    '                Dim Episode As TvEpisode = ShowList.GetEpisode(MissingEpisode.Season.Value, MissingEpisode.Episode.Value)
-    '                If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
-    '                    MissingEpisode.IsMissing = True
-    '                    MissingEpisode.IsCache = True
-    '                    MissingEpisode.ShowObj = ShowList
-    '                    ShowList.AddEpisode(MissingEpisode)
-    '                End If
-    '            End If
-    '        Next
-    '    End If
-    'End Sub
-
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
@@ -2518,11 +2495,15 @@ Partial Public Class Form1
                         Else
                             Try
                             If episode.IsMissing Then
-                                If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                    '  Yes, so change its colour to Red
-                                    episode.EpisodeNode.ForeColor = Color.Red
+                                If episode.Aired.Value <> "" Then
+                                    If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                        '  Yes, so change its colour to Red
+                                        episode.EpisodeNode.ForeColor = Color.Red
+                                    Else
+                                        episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                                    End If
                                 Else
-                                    episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                                    episode.EpisodeNode.ForeColor = Drawing.Color.gray
                                 End If
                             End If
                             Catch
@@ -2614,6 +2595,7 @@ Partial Public Class Form1
     Private Sub Bckgrndfindmissingepisodes_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles Bckgrndfindmissingepisodes.RunWorkerCompleted
         Try
             Dim ShowList As List(Of TvShow) = e.Result
+            Preferences.DlMissingEpData = False
             ToolStripStatusLabel2.Visible = False
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
             Application.DoEvents()
@@ -2625,7 +2607,7 @@ Partial Public Class Form1
             End If
             tv_CacheLoad()
             tv_Filter(showToRefresh)
-            MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
+            'MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -2635,47 +2617,39 @@ Partial Public Class Form1
         Try
             If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
                 If refresh Then
-                    'Dim nod As TreeNode
-                    'For Each nod In TvTreeview.Nodes
-                    '    Dim nod2 As TreeNode
-                    '    For Each nod2 In nod.Nodes
-                    '        Dim nod3 As TreeNode
-                    '        For Each nod3 In nod2.Nodes
-                    '            If nod3.Name.IndexOf("Missing: ") = 0 Then
-                    '                nod3.Remove()
-                    '            End If
-                    '            Dim episo As TvEpisode
-                    '            episo = nod3.Tag
-                    '            If episo.IsMissing Then
-                    '                nod3.Remove()
-                    '            End If
-                    '        Next
-                    '    Next
-                    'Next
-                Else
-                    Dim ShowList As New List(Of TvShow)
-                    For Each shows In Cache.TvCache.Shows
-                        shows.MissingEpisodes.Clear()
-                        ShowList.Add(shows)
+                    Dim nod As TreeNode
+                    For Each nod In TvTreeview.Nodes
+                        Dim nod2 As TreeNode
+                        For Each nod2 In nod.Nodes
+                            Dim nod3 As TreeNode
+                            For I = nod2.Nodes.count-1 to 0 Step -1
+                                nod3 = nod2.Nodes(I)
+                                Dim episo As TvEpisode
+                                episo = nod3.Tag
+                                If episo.IsMissing Then
+                                    nod2.Nodes.RemoveAt(I)
+                                End If
+                            Next
+                        Next
                     Next
-                
-                    'If MsgBox("This function will download & populate the treeview with all of the episode details missing from your collection." & vbCrLf & "The download will be completed in the background. You can watch the status in the status bar below." & vbCrLf & vbCrLf & "Do you want to proceed with the download for " & ShowList.Count & " shows?", MsgBoxStyle.YesNo, "Download Missing Episode Details") = Windows.Forms.DialogResult.No Then Exit Sub
-                    'Dim nod As TreeNode
-                    'For Each nod In TvTreeview.Nodes
-                    '    Dim nod2 As TreeNode
-                    '    For Each nod2 In nod.Nodes
-                    '        Dim nod3 As TreeNode
-                    '        For Each nod3 In nod2.Nodes
-                    '            If nod3.Name.IndexOf("Missing: ") = 0 Then
-                    '                nod3.Remove()
-                    '            End If
-                    '        Next
-                    '    Next
-                    'Next
-                    ToolStripStatusLabel2.Text = "Starting search for missing episodes"
-                    ToolStripStatusLabel2.Visible = True
-                    Bckgrndfindmissingepisodes.RunWorkerAsync(ShowList)
+                    Dim epcount As Integer = Cache.TvCache.Episodes.Count -1
+                    For I = epcount to 0 Step -1 'Each episode In sh.Episodes
+                        Dim episode As TvEpisode = Cache.TvCache.Episodes.Item(I)
+                        If episode.IsMissing = True Then   'Preferences.displayMissingEpisodes AndAlso episode.IsMissing = True
+                            Cache.TvCache.Remove(episode)
+                        End If
+                    Next
+                    Tv_CacheSave()
+                    tv_CacheLoad()
                 End If
+                Dim ShowList As New List(Of TvShow)
+                For Each shows In Cache.TvCache.Shows
+                    'shows.MissingEpisodes.Clear()        ' - Commented out as MissingEpisodes is a Read-only list.
+                    ShowList.Add(shows)
+                Next
+                ToolStripStatusLabel2.Text = "Starting search for missing episodes"
+                ToolStripStatusLabel2.Visible = True
+                Bckgrndfindmissingepisodes.RunWorkerAsync(ShowList)
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
                 MsgBox("Process is already running")
             Else
@@ -2717,7 +2691,11 @@ Partial Public Class Form1
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                         If Preferences.ignoreMissingSpecials AndAlso NewEpisode.SeasonNumber.Value = "0" Then
-                             Continue For
+                            Dim missingspecialnfo As String = missingeppath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
+                            If IO.File.Exists(missingspecialnfo) Then
+                                Utilities.SafeDeleteFile(missingspecialnfo)
+                            End If
+                            Continue For
                         End If
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
                         'NewEpisode.SeasonNumber.Value = Utilities.PadNumber(NewEpisode.SeasonNumber.Value,2)
@@ -2725,11 +2703,15 @@ Partial Public Class Form1
                         If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
                             MissingEpisode.NfoFilePath = missingeppath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
-                            MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
-                            MissingEpisode.IsMissing = True
-                            MissingEpisode.IsCache = True
-                            MissingEpisode.ShowObj = item
-                            MissingEpisode.Save()
+                            If Not IO.File.Exists(MissingEpisode.NfoFilePath) Then
+                                MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
+                                MissingEpisode.IsMissing = True
+                                MissingEpisode.IsCache = True
+                                MissingEpisode.ShowObj = item
+                                MissingEpisode.Save()
+                            Else
+                                MissingEpisode.Load()
+                            End If
                             item.AddEpisode(MissingEpisode)
                             Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
                         End If
@@ -2770,6 +2752,20 @@ Partial Public Class Form1
         End Try
         Return Removed
     End Function
+
+    Public Sub tv_EpisodesMissingClean()
+        Dim missingnfopath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
+        Dim dir_info As New IO.DirectoryInfo(missingnfopath)
+        For Each File in dir_info.GetFiles(".nfo")
+            If IO.File.Exists(File.Fullname) Then
+                Try
+                    IO.File.Delete(File.FullName)
+                Catch
+                End Try
+            End If
+        Next
+        
+    End Sub
 
 #End Region
 
