@@ -32,7 +32,7 @@ Partial Class ucMusicVideo
         Me.txtGenre = New System.Windows.Forms.TextBox()
         Me.txtFullpath = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.txtStreamDetails = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -52,24 +52,24 @@ Partial Class ucMusicVideo
         Me.btnSearchNew = New System.Windows.Forms.Button()
         Me.lstBxMainList = New System.Windows.Forms.ListBox()
         Me.Label10 = New System.Windows.Forms.Label()
+        Me.tPScreenshotMV = New System.Windows.Forms.TabPage()
+        Me.txtScreenshotTime = New System.Windows.Forms.MaskedTextBox()
+        Me.btnScreenshotMinus = New System.Windows.Forms.Button()
+        Me.btnScreenshotPlus = New System.Windows.Forms.Button()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.pcBxScreenshot = New System.Windows.Forms.PictureBox()
         Me.tPPref = New System.Windows.Forms.TabPage()
         Me.btnBrowseFolders = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lstBoxFolders = New System.Windows.Forms.ListBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.tPScreenshotMV = New System.Windows.Forms.TabPage()
-        Me.pcBxScreenshot = New System.Windows.Forms.PictureBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.btnScreenshotPlus = New System.Windows.Forms.Button()
-        Me.btnScreenshotMinus = New System.Windows.Forms.Button()
-        Me.txtScreenshotTime = New System.Windows.Forms.MaskedTextBox()
         Me.TabControlMain.SuspendLayout()
         Me.tPMainMV.SuspendLayout()
         CType(Me.PcBxMusicVideoScreenShot, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tPPref.SuspendLayout()
         Me.tPScreenshotMV.SuspendLayout()
         CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tPPref.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControlMain
@@ -94,7 +94,7 @@ Partial Class ucMusicVideo
         Me.tPMainMV.Controls.Add(Me.txtGenre)
         Me.tPMainMV.Controls.Add(Me.txtFullpath)
         Me.tPMainMV.Controls.Add(Me.Label8)
-        Me.tPMainMV.Controls.Add(Me.TextBox9)
+        Me.tPMainMV.Controls.Add(Me.txtStreamDetails)
         Me.tPMainMV.Controls.Add(Me.Label7)
         Me.tPMainMV.Controls.Add(Me.Label6)
         Me.tPMainMV.Controls.Add(Me.Label5)
@@ -183,6 +183,7 @@ Partial Class ucMusicVideo
         Me.txtFullpath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtFullpath.Location = New System.Drawing.Point(330, 450)
         Me.txtFullpath.Name = "txtFullpath"
+        Me.txtFullpath.ReadOnly = True
         Me.txtFullpath.Size = New System.Drawing.Size(269, 26)
         Me.txtFullpath.TabIndex = 45
         '
@@ -191,20 +192,22 @@ Partial Class ucMusicVideo
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(785, 14)
+        Me.Label8.Location = New System.Drawing.Point(746, 18)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(87, 20)
         Me.Label8.TabIndex = 44
         Me.Label8.Text = "File Details"
         '
-        'TextBox9
+        'txtStreamDetails
         '
-        Me.TextBox9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox9.Location = New System.Drawing.Point(750, 46)
-        Me.TextBox9.Multiline = True
-        Me.TextBox9.Name = "TextBox9"
-        Me.TextBox9.Size = New System.Drawing.Size(203, 302)
-        Me.TextBox9.TabIndex = 43
+        Me.txtStreamDetails.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtStreamDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtStreamDetails.Location = New System.Drawing.Point(750, 46)
+        Me.txtStreamDetails.Multiline = True
+        Me.txtStreamDetails.Name = "txtStreamDetails"
+        Me.txtStreamDetails.ReadOnly = True
+        Me.txtStreamDetails.Size = New System.Drawing.Size(203, 302)
+        Me.txtStreamDetails.TabIndex = 43
         '
         'Label7
         '
@@ -289,6 +292,7 @@ Partial Class ucMusicVideo
         Me.txtRuntime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtRuntime.Location = New System.Drawing.Point(330, 386)
         Me.txtRuntime.Name = "txtRuntime"
+        Me.txtRuntime.ReadOnly = True
         Me.txtRuntime.Size = New System.Drawing.Size(269, 26)
         Me.txtRuntime.TabIndex = 34
         '
@@ -403,6 +407,91 @@ Partial Class ucMusicVideo
         Me.Label10.TabIndex = 46
         Me.Label10.Text = "Filename:"
         '
+        'tPScreenshotMV
+        '
+        Me.tPScreenshotMV.BackColor = System.Drawing.Color.LightGray
+        Me.tPScreenshotMV.Controls.Add(Me.txtScreenshotTime)
+        Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotMinus)
+        Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotPlus)
+        Me.tPScreenshotMV.Controls.Add(Me.Label12)
+        Me.tPScreenshotMV.Controls.Add(Me.Button1)
+        Me.tPScreenshotMV.Controls.Add(Me.pcBxScreenshot)
+        Me.tPScreenshotMV.Location = New System.Drawing.Point(4, 22)
+        Me.tPScreenshotMV.Name = "tPScreenshotMV"
+        Me.tPScreenshotMV.Padding = New System.Windows.Forms.Padding(3)
+        Me.tPScreenshotMV.Size = New System.Drawing.Size(967, 578)
+        Me.tPScreenshotMV.TabIndex = 2
+        Me.tPScreenshotMV.Text = "Screenshot"
+        '
+        'txtScreenshotTime
+        '
+        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtScreenshotTime.CausesValidation = False
+        Me.txtScreenshotTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtScreenshotTime.HidePromptOnLeave = True
+        Me.txtScreenshotTime.Location = New System.Drawing.Point(657, 543)
+        Me.txtScreenshotTime.Mask = "00000"
+        Me.txtScreenshotTime.Name = "txtScreenshotTime"
+        Me.txtScreenshotTime.Size = New System.Drawing.Size(68, 26)
+        Me.txtScreenshotTime.TabIndex = 6
+        Me.txtScreenshotTime.ValidatingType = GetType(Integer)
+        '
+        'btnScreenshotMinus
+        '
+        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotMinus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnScreenshotMinus.Location = New System.Drawing.Point(616, 536)
+        Me.btnScreenshotMinus.Name = "btnScreenshotMinus"
+        Me.btnScreenshotMinus.Size = New System.Drawing.Size(35, 36)
+        Me.btnScreenshotMinus.TabIndex = 5
+        Me.btnScreenshotMinus.Text = "-"
+        Me.btnScreenshotMinus.UseVisualStyleBackColor = True
+        '
+        'btnScreenshotPlus
+        '
+        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotPlus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnScreenshotPlus.Location = New System.Drawing.Point(731, 536)
+        Me.btnScreenshotPlus.Name = "btnScreenshotPlus"
+        Me.btnScreenshotPlus.Size = New System.Drawing.Size(35, 36)
+        Me.btnScreenshotPlus.TabIndex = 4
+        Me.btnScreenshotPlus.Text = "+"
+        Me.btnScreenshotPlus.UseVisualStyleBackColor = True
+        '
+        'Label12
+        '
+        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(353, 546)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(257, 20)
+        Me.Label12.TabIndex = 3
+        Me.Label12.Text = "Enter Time in Seconds for Capture:"
+        '
+        'Button1
+        '
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(772, 536)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(189, 36)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "Create New Screenshot"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'pcBxScreenshot
+        '
+        Me.pcBxScreenshot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pcBxScreenshot.Location = New System.Drawing.Point(6, 6)
+        Me.pcBxScreenshot.Name = "pcBxScreenshot"
+        Me.pcBxScreenshot.Size = New System.Drawing.Size(955, 528)
+        Me.pcBxScreenshot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pcBxScreenshot.TabIndex = 0
+        Me.pcBxScreenshot.TabStop = False
+        '
         'tPPref
         '
         Me.tPPref.BackColor = System.Drawing.Color.LightGray
@@ -443,91 +532,6 @@ Partial Class ucMusicVideo
         Me.lstBoxFolders.Size = New System.Drawing.Size(333, 498)
         Me.lstBoxFolders.TabIndex = 0
         '
-        'tPScreenshotMV
-        '
-        Me.tPScreenshotMV.BackColor = System.Drawing.Color.LightGray
-        Me.tPScreenshotMV.Controls.Add(Me.txtScreenshotTime)
-        Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotMinus)
-        Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotPlus)
-        Me.tPScreenshotMV.Controls.Add(Me.Label12)
-        Me.tPScreenshotMV.Controls.Add(Me.Button1)
-        Me.tPScreenshotMV.Controls.Add(Me.pcBxScreenshot)
-        Me.tPScreenshotMV.Location = New System.Drawing.Point(4, 22)
-        Me.tPScreenshotMV.Name = "tPScreenshotMV"
-        Me.tPScreenshotMV.Padding = New System.Windows.Forms.Padding(3)
-        Me.tPScreenshotMV.Size = New System.Drawing.Size(967, 578)
-        Me.tPScreenshotMV.TabIndex = 2
-        Me.tPScreenshotMV.Text = "Screenshot"
-        '
-        'pcBxScreenshot
-        '
-        Me.pcBxScreenshot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pcBxScreenshot.Location = New System.Drawing.Point(6, 6)
-        Me.pcBxScreenshot.Name = "pcBxScreenshot"
-        Me.pcBxScreenshot.Size = New System.Drawing.Size(955, 528)
-        Me.pcBxScreenshot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pcBxScreenshot.TabIndex = 0
-        Me.pcBxScreenshot.TabStop = False
-        '
-        'Button1
-        '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(772, 536)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(189, 36)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Create New Screenshot"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Label12
-        '
-        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(353, 546)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(257, 20)
-        Me.Label12.TabIndex = 3
-        Me.Label12.Text = "Enter Time in Seconds for Capture:"
-        '
-        'btnScreenshotPlus
-        '
-        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnScreenshotPlus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnScreenshotPlus.Location = New System.Drawing.Point(731, 536)
-        Me.btnScreenshotPlus.Name = "btnScreenshotPlus"
-        Me.btnScreenshotPlus.Size = New System.Drawing.Size(35, 36)
-        Me.btnScreenshotPlus.TabIndex = 4
-        Me.btnScreenshotPlus.Text = "+"
-        Me.btnScreenshotPlus.UseVisualStyleBackColor = True
-        '
-        'btnScreenshotMinus
-        '
-        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnScreenshotMinus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnScreenshotMinus.Location = New System.Drawing.Point(616, 536)
-        Me.btnScreenshotMinus.Name = "btnScreenshotMinus"
-        Me.btnScreenshotMinus.Size = New System.Drawing.Size(35, 36)
-        Me.btnScreenshotMinus.TabIndex = 5
-        Me.btnScreenshotMinus.Text = "-"
-        Me.btnScreenshotMinus.UseVisualStyleBackColor = True
-        '
-        'txtScreenshotTime
-        '
-        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtScreenshotTime.CausesValidation = False
-        Me.txtScreenshotTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtScreenshotTime.HidePromptOnLeave = True
-        Me.txtScreenshotTime.Location = New System.Drawing.Point(657, 543)
-        Me.txtScreenshotTime.Mask = "00000"
-        Me.txtScreenshotTime.Name = "txtScreenshotTime"
-        Me.txtScreenshotTime.Size = New System.Drawing.Size(68, 26)
-        Me.txtScreenshotTime.TabIndex = 6
-        Me.txtScreenshotTime.ValidatingType = GetType(Integer)
-        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -539,11 +543,11 @@ Partial Class ucMusicVideo
         Me.tPMainMV.ResumeLayout(False)
         Me.tPMainMV.PerformLayout()
         CType(Me.PcBxMusicVideoScreenShot, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tPPref.ResumeLayout(False)
-        Me.tPPref.PerformLayout()
         Me.tPScreenshotMV.ResumeLayout(False)
         Me.tPScreenshotMV.PerformLayout()
         CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tPPref.ResumeLayout(False)
+        Me.tPPref.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -553,7 +557,7 @@ Partial Class ucMusicVideo
     Friend WithEvents txtGenre As System.Windows.Forms.TextBox
     Friend WithEvents txtFullpath As System.Windows.Forms.TextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents TextBox9 As System.Windows.Forms.TextBox
+    Friend WithEvents txtStreamDetails As System.Windows.Forms.TextBox
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label

@@ -3542,6 +3542,7 @@ Public Class WorkingWithNfoFiles
 
     Public Function MVloadNfo(ByVal filePath)
         Dim NewMusicVideo As New Music_Video_Class
+        NewMusicVideo.fullPathAndFilename = filePath
         Dim document As New XmlDocument
         document.Load(filePath)
         Dim thisresult As XmlNode = Nothing
