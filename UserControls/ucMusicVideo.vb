@@ -42,6 +42,10 @@ Dim nfo As New WorkingWithNfoFiles
     End Sub
 
     Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
+        Call searchFornew()
+    End Sub
+
+    Private Sub searchFornew()
         Dim fullfolderlist As New List(Of String)
         fullfolderlist.Clear()
         fullfolderlist = listAllFolders()
@@ -204,7 +208,6 @@ Dim nfo As New WorkingWithNfoFiles
         Next
         Call MusicVideoCacheSave()
     End Sub
-    
     Private Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False)
         Try
 
@@ -560,7 +563,7 @@ Dim nfo As New WorkingWithNfoFiles
 
             End If
 
-          
+
 
             Dim doc As New XmlDocument
 
@@ -722,5 +725,11 @@ Dim nfo As New WorkingWithNfoFiles
         workingMusicVideo.year = txtYear.Text
 
         nfo.MVsaveNfo(workingMusicVideo)
+    End Sub
+
+    Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
+        musicVideoList.Clear()
+        lstBxMainList.Items.Clear()
+        Call searchFornew()
     End Sub
 End Class
