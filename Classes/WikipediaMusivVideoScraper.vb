@@ -69,36 +69,63 @@ Public Class WikipediaMusivVideoScraper
                 'get year
                 '<th scope="row" style="text-align:left;">Released</th>
                 If fullwebpage.IndexOf(">Released</th>") <> -1 Then
-                    Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("Released</th>"), fullwebpage.Length - fullwebpage.IndexOf("Released</th>"))
-                    tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
-                    Dim r As Regex = New Regex("\d{4}")
-                    Dim match As Match = r.Match(tempstring)
-                    musicVideoTitle.fullmoviebody.year = match.Value
+                    Try
+                        Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("Released</th>"), fullwebpage.Length - fullwebpage.IndexOf("Released</th>"))
+                        tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
+                        Dim r As Regex = New Regex("\d{4}")
+                        Dim match As Match = r.Match(tempstring)
+                        musicVideoTitle.fullmoviebody.year = match.Value
+                    Catch
+                    End Try
                 End If
 
                 'get genre
                 If fullwebpage.IndexOf(">Genre</a></th>") <> -1 Then
-                    Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf(">Genre</a></th>"), fullwebpage.Length - fullwebpage.IndexOf(">Genre</a></th>"))
-                    tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
-                    tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.fullmoviebody.genre = tempstring
+                    Try
+                        Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf(">Genre</a></th>"), fullwebpage.Length - fullwebpage.IndexOf(">Genre</a></th>"))
+                        tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
+                        tempstring = Regex.Replace(tempstring, "<.*?>", "")
+                        musicVideoTitle.fullmoviebody.genre = tempstring
+                    Catch
+                    End Try
                 End If
 
                 'get album title
                 If fullwebpage.IndexOf("from the album") <> -1 Then
-                    Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("from the album"), fullwebpage.Length - fullwebpage.IndexOf("from the album"))
-                    tempstring = tempstring.Replace("from the album ", "")
-                    tempstring = tempstring.Substring(0, tempstring.IndexOf("</i>"))
-                    tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.fullmoviebody.album = tempstring
+                    Try
+                        Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("from the album"), fullwebpage.Length - fullwebpage.IndexOf("from the album"))
+                        tempstring = tempstring.Replace("from the album ", "")
+                        tempstring = tempstring.Substring(0, tempstring.IndexOf("</i>"))
+                        tempstring = Regex.Replace(tempstring, "<.*?>", "")
+                        musicVideoTitle.fullmoviebody.album = tempstring
+                    Catch
+                    End Try
                 End If
 
                 'get studio
                 If fullwebpage.IndexOf("Label</a></th>") <> -1 Then
-                    Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("Label</a></th>"), fullwebpage.Length - fullwebpage.IndexOf("Label</a></th>"))
-                    tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
-                    tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.fullmoviebody.studio = tempstring
+                    Try
+                        Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("Label</a></th>"), fullwebpage.Length - fullwebpage.IndexOf("Label</a></th>"))
+                        tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
+                        tempstring = Regex.Replace(tempstring, "<.*?>", "")
+                        musicVideoTitle.fullmoviebody.studio = tempstring
+                    Catch
+                    End Try
+                End If
+
+                If fullwebpage.IndexOf("class=""image"">") <> -1 Then
+                    Try
+                        Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("class=""image"">"), fullwebpage.Length - fullwebpage.IndexOf("class=""image"">"))
+                        tempstring = tempstring.Substring(0, tempstring.IndexOf("></a></td>"))
+                        If tempstring.IndexOf(".jpg") <> -1 Then
+                            tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".jpg") - tempstring.LastIndexOf("//upload") + 4)
+                        ElseIf tempstring.IndexOf(".png") <> -1 Then
+                            tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".png") - tempstring.LastIndexOf("//upload") + 4)
+                        End If
+                        tempstring = "http:" & tempstring
+                        musicVideoTitle.listthumbs.Add(tempstring)
+                    Catch
+                    End Try
                 End If
             Catch
                 'If musicVideoTitle.fullmoviebody.album = Nothing Then musicVideoTitle.fullmoviebody.album = "Unknown"

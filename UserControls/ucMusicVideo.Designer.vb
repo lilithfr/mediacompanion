@@ -64,12 +64,14 @@ Partial Class ucMusicVideo
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lstBoxFolders = New System.Windows.Forms.ListBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.PcBxPoster = New System.Windows.Forms.PictureBox()
         Me.TabControlMain.SuspendLayout()
         Me.tPMainMV.SuspendLayout()
         CType(Me.PcBxMusicVideoScreenShot, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tPScreenshotMV.SuspendLayout()
         CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tPPref.SuspendLayout()
+        CType(Me.PcBxPoster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TabControlMain
@@ -87,6 +89,7 @@ Partial Class ucMusicVideo
         'tPMainMV
         '
         Me.tPMainMV.BackColor = System.Drawing.Color.LightGray
+        Me.tPMainMV.Controls.Add(Me.PcBxPoster)
         Me.tPMainMV.Controls.Add(Me.btnSave)
         Me.tPMainMV.Controls.Add(Me.txtFilter)
         Me.tPMainMV.Controls.Add(Me.btnRefresh)
@@ -162,7 +165,7 @@ Partial Class ucMusicVideo
         Me.Label11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(607, 453)
+        Me.Label11.Location = New System.Drawing.Point(607, 405)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(58, 20)
         Me.Label11.TabIndex = 48
@@ -172,7 +175,7 @@ Partial Class ucMusicVideo
         '
         Me.txtGenre.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGenre.Location = New System.Drawing.Point(670, 450)
+        Me.txtGenre.Location = New System.Drawing.Point(670, 402)
         Me.txtGenre.Name = "txtGenre"
         Me.txtGenre.Size = New System.Drawing.Size(283, 26)
         Me.txtGenre.TabIndex = 47
@@ -181,7 +184,7 @@ Partial Class ucMusicVideo
         '
         Me.txtFullpath.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtFullpath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtFullpath.Location = New System.Drawing.Point(330, 450)
+        Me.txtFullpath.Location = New System.Drawing.Point(330, 402)
         Me.txtFullpath.Name = "txtFullpath"
         Me.txtFullpath.ReadOnly = True
         Me.txtFullpath.Size = New System.Drawing.Size(269, 26)
@@ -197,6 +200,7 @@ Partial Class ucMusicVideo
         Me.Label8.Size = New System.Drawing.Size(87, 20)
         Me.Label8.TabIndex = 44
         Me.Label8.Text = "File Details"
+        Me.Label8.Visible = False
         '
         'txtStreamDetails
         '
@@ -208,13 +212,14 @@ Partial Class ucMusicVideo
         Me.txtStreamDetails.ReadOnly = True
         Me.txtStreamDetails.Size = New System.Drawing.Size(203, 302)
         Me.txtStreamDetails.TabIndex = 43
+        Me.txtStreamDetails.Visible = False
         '
         'Label7
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(607, 357)
+        Me.Label7.Location = New System.Drawing.Point(607, 309)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(47, 20)
         Me.Label7.TabIndex = 42
@@ -225,7 +230,7 @@ Partial Class ucMusicVideo
         Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(251, 389)
+        Me.Label6.Location = New System.Drawing.Point(251, 341)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(73, 20)
         Me.Label6.TabIndex = 41
@@ -236,7 +241,7 @@ Partial Class ucMusicVideo
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(251, 421)
+        Me.Label5.Location = New System.Drawing.Point(251, 373)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(69, 20)
         Me.Label5.TabIndex = 40
@@ -247,7 +252,7 @@ Partial Class ucMusicVideo
         Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(606, 421)
+        Me.Label4.Location = New System.Drawing.Point(606, 373)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(59, 20)
         Me.Label4.TabIndex = 39
@@ -258,7 +263,7 @@ Partial Class ucMusicVideo
         Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(251, 485)
+        Me.Label3.Location = New System.Drawing.Point(251, 437)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(40, 20)
         Me.Label3.TabIndex = 38
@@ -269,7 +274,7 @@ Partial Class ucMusicVideo
         Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(251, 357)
+        Me.Label2.Location = New System.Drawing.Point(251, 309)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(50, 20)
         Me.Label2.TabIndex = 37
@@ -280,7 +285,7 @@ Partial Class ucMusicVideo
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(607, 389)
+        Me.Label1.Location = New System.Drawing.Point(607, 341)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(58, 20)
         Me.Label1.TabIndex = 36
@@ -290,7 +295,7 @@ Partial Class ucMusicVideo
         '
         Me.txtRuntime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtRuntime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtRuntime.Location = New System.Drawing.Point(330, 386)
+        Me.txtRuntime.Location = New System.Drawing.Point(330, 338)
         Me.txtRuntime.Name = "txtRuntime"
         Me.txtRuntime.ReadOnly = True
         Me.txtRuntime.Size = New System.Drawing.Size(269, 26)
@@ -300,7 +305,7 @@ Partial Class ucMusicVideo
         '
         Me.txtYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtYear.Location = New System.Drawing.Point(670, 354)
+        Me.txtYear.Location = New System.Drawing.Point(670, 306)
         Me.txtYear.Name = "txtYear"
         Me.txtYear.Size = New System.Drawing.Size(283, 26)
         Me.txtYear.TabIndex = 33
@@ -310,18 +315,18 @@ Partial Class ucMusicVideo
         Me.txtPlot.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPlot.Location = New System.Drawing.Point(330, 482)
+        Me.txtPlot.Location = New System.Drawing.Point(330, 434)
         Me.txtPlot.Multiline = True
         Me.txtPlot.Name = "txtPlot"
         Me.txtPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtPlot.Size = New System.Drawing.Size(623, 70)
+        Me.txtPlot.Size = New System.Drawing.Size(623, 118)
         Me.txtPlot.TabIndex = 32
         '
         'txtStudio
         '
         Me.txtStudio.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtStudio.Location = New System.Drawing.Point(670, 418)
+        Me.txtStudio.Location = New System.Drawing.Point(670, 370)
         Me.txtStudio.Name = "txtStudio"
         Me.txtStudio.Size = New System.Drawing.Size(283, 26)
         Me.txtStudio.TabIndex = 31
@@ -330,7 +335,7 @@ Partial Class ucMusicVideo
         '
         Me.txtAlbum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtAlbum.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAlbum.Location = New System.Drawing.Point(670, 386)
+        Me.txtAlbum.Location = New System.Drawing.Point(670, 338)
         Me.txtAlbum.Name = "txtAlbum"
         Me.txtAlbum.Size = New System.Drawing.Size(283, 26)
         Me.txtAlbum.TabIndex = 30
@@ -339,7 +344,7 @@ Partial Class ucMusicVideo
         '
         Me.txtDirector.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDirector.Location = New System.Drawing.Point(330, 418)
+        Me.txtDirector.Location = New System.Drawing.Point(330, 370)
         Me.txtDirector.Name = "txtDirector"
         Me.txtDirector.Size = New System.Drawing.Size(269, 26)
         Me.txtDirector.TabIndex = 29
@@ -348,7 +353,7 @@ Partial Class ucMusicVideo
         '
         Me.txtArtist.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtArtist.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtArtist.Location = New System.Drawing.Point(330, 354)
+        Me.txtArtist.Location = New System.Drawing.Point(330, 306)
         Me.txtArtist.Name = "txtArtist"
         Me.txtArtist.Size = New System.Drawing.Size(269, 26)
         Me.txtArtist.TabIndex = 28
@@ -368,7 +373,7 @@ Partial Class ucMusicVideo
         Me.PcBxMusicVideoScreenShot.BackColor = System.Drawing.Color.White
         Me.PcBxMusicVideoScreenShot.Location = New System.Drawing.Point(255, 46)
         Me.PcBxMusicVideoScreenShot.Name = "PcBxMusicVideoScreenShot"
-        Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(489, 304)
+        Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(438, 254)
         Me.PcBxMusicVideoScreenShot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PcBxMusicVideoScreenShot.TabIndex = 26
         Me.PcBxMusicVideoScreenShot.TabStop = False
@@ -401,7 +406,7 @@ Partial Class ucMusicVideo
         Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(251, 453)
+        Me.Label10.Location = New System.Drawing.Point(251, 405)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(78, 20)
         Me.Label10.TabIndex = 46
@@ -532,6 +537,17 @@ Partial Class ucMusicVideo
         Me.lstBoxFolders.Size = New System.Drawing.Size(333, 498)
         Me.lstBoxFolders.TabIndex = 0
         '
+        'PcBxPoster
+        '
+        Me.PcBxPoster.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PcBxPoster.BackColor = System.Drawing.Color.White
+        Me.PcBxPoster.Location = New System.Drawing.Point(699, 46)
+        Me.PcBxPoster.Name = "PcBxPoster"
+        Me.PcBxPoster.Size = New System.Drawing.Size(254, 254)
+        Me.PcBxPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PcBxPoster.TabIndex = 52
+        Me.PcBxPoster.TabStop = False
+        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -548,6 +564,7 @@ Partial Class ucMusicVideo
         CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tPPref.ResumeLayout(False)
         Me.tPPref.PerformLayout()
+        CType(Me.PcBxPoster, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -592,5 +609,6 @@ Partial Class ucMusicVideo
     Friend WithEvents btnScreenshotMinus As System.Windows.Forms.Button
     Friend WithEvents btnScreenshotPlus As System.Windows.Forms.Button
     Friend WithEvents txtScreenshotTime As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents PcBxPoster As System.Windows.Forms.PictureBox
 
 End Class
