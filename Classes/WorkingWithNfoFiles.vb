@@ -3329,7 +3329,7 @@ Public Class WorkingWithNfoFiles
 
     '  All Music Video Load/Save Routines
 #Region " Music Video Routines "
-    Public Sub MVsaveNfo(ByVal movietosave As Music_Video_Class)
+    Public Shared Sub MVsaveNfo(ByVal movietosave As FullMovieDetails)
         Dim doc As New XmlDocument
         Dim thumbnailstring As String = ""
         Dim thispref As XmlNode = Nothing
@@ -3347,10 +3347,10 @@ Public Class WorkingWithNfoFiles
                 anotherchild = doc.CreateElement("streamdetails")
                     filedetailschild = doc.CreateElement("video")
         Try
-            If movietosave.streamdetails.filedetails_video.width <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.width.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.width <> Nothing Then
+                If movietosave.filedetails.filedetails_video.width.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("width")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.width.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.width.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3358,20 +3358,20 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.height <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.height.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.height <> Nothing Then
+                If movietosave.filedetails.filedetails_video.height.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("height")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.height.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.height.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
         Catch
         End Try
         Try
-            If movietosave.streamdetails.filedetails_video.aspect <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.aspect.value <> "" Then
+            If movietosave.filedetails.filedetails_video.aspect <> Nothing Then
+                If movietosave.filedetails.filedetails_video.aspect.value <> "" Then
                     filedetailschildchild = doc.CreateElement("aspect")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.Aspect.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Aspect.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3379,10 +3379,10 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.codec <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.codec.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.codec <> Nothing Then
+                If movietosave.filedetails.filedetails_video.codec.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("codec")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.codec.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.codec.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3390,15 +3390,15 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.DurationInSeconds  <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.DurationInSeconds.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.DurationInSeconds  <> Nothing Then
+                If movietosave.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("durationinseconds")
-                    Dim temptemp As String = movietosave.streamdetails.filedetails_video.DurationInSeconds.Value
+                    Dim temptemp As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
                     If IsNumeric(temptemp) Then
                         filedetailschildchild.InnerText = temptemp
                         filedetailschild.AppendChild(filedetailschildchild)
                     Else
-                        filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.DurationInSeconds.Value
+                        filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
                 End If
@@ -3407,10 +3407,10 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.bitrate <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.bitrate.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.bitrate <> Nothing Then
+                If movietosave.filedetails.filedetails_video.bitrate.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("bitrate")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.bitrate.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.bitrate.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3418,10 +3418,10 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.bitratemax <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.bitratemax.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.bitratemax <> Nothing Then
+                If movietosave.filedetails.filedetails_video.bitratemax.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("bitratemax")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.bitratemax.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.bitratemax.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3429,10 +3429,10 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.container <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.container.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.container <> Nothing Then
+                If movietosave.filedetails.filedetails_video.container.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("container")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.container.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.container.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3440,10 +3440,10 @@ Public Class WorkingWithNfoFiles
         End Try
 
         Try
-            If movietosave.streamdetails.filedetails_video.scantype <> Nothing Then
-                If movietosave.streamdetails.filedetails_video.scantype.Value <> "" Then
+            If movietosave.filedetails.filedetails_video.scantype <> Nothing Then
+                If movietosave.filedetails.filedetails_video.scantype.Value <> "" Then
                     filedetailschildchild = doc.CreateElement("scantype")
-                    filedetailschildchild.InnerText = movietosave.streamdetails.filedetails_video.scantype.Value
+                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.scantype.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
             End If
@@ -3451,7 +3451,7 @@ Public Class WorkingWithNfoFiles
         End Try
         anotherchild.AppendChild(filedetailschild)
 
-        For Each item In movietosave.streamdetails.filedetails_audio
+        For Each item In movietosave.filedetails.filedetails_audio
             filedetailschild = doc.CreateElement("audio")
             
             Try
@@ -3491,44 +3491,44 @@ Public Class WorkingWithNfoFiles
         root.AppendChild(child)
 
         child = doc.CreateElement("title")
-        child.InnerText = movietosave.title
+        child.InnerText = movietosave.fullmoviebody.title
         root.AppendChild(child)
 
         child = doc.CreateElement("year")
-        child.InnerText = movietosave.year
+        child.InnerText = movietosave.fullmoviebody.year
         root.AppendChild(child)
 
         child = doc.CreateElement("artist")
-        child.InnerText = movietosave.artist
+        child.InnerText = movietosave.fullmoviebody.artist
         root.AppendChild(child)
 
         child = doc.CreateElement("director")
-        child.InnerText = movietosave.director
+        child.InnerText = movietosave.fullmoviebody.director
         root.AppendChild(child)
 
         child = doc.CreateElement("album")
-        child.InnerText = movietosave.album
+        child.InnerText = movietosave.fullmoviebody.album
         root.AppendChild(child)
 
         child = doc.CreateElement("genre")
-        child.InnerText = movietosave.genre
+        child.InnerText = movietosave.fullmoviebody.genre
         root.AppendChild(child)
 
         child = doc.CreateElement("runtime")
-        child.InnerText = movietosave.runtime
+        child.InnerText = movietosave.fullmoviebody.runtime
         root.AppendChild(child)
 
         child = doc.CreateElement("plot")
-        child.InnerText = movietosave.plot
+        child.InnerText = movietosave.fullmoviebody.plot
         root.AppendChild(child)
 
         child = doc.CreateElement("studio")
-        child.InnerText = movietosave.studio
+        child.InnerText = movietosave.fullmoviebody.studio
         root.AppendChild(child)
        
         doc.AppendChild(root)
 
-        Dim nfopath As String = movietosave.fullPathAndFilename
+        Dim nfopath As String = movietosave.fileinfo.fullPathAndFilename
         nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
 
         Try
@@ -3540,9 +3540,9 @@ Public Class WorkingWithNfoFiles
         End Try
     End Sub
 
-    Public Function MVloadNfo(ByVal filePath)
-        Dim NewMusicVideo As New Music_Video_Class
-        NewMusicVideo.fullPathAndFilename = filePath
+    Public Shared Function MVloadNfo(ByVal filePath)
+        Dim NewMusicVideo As New FullMovieDetails 
+        NewMusicVideo.fileinfo.fullPathAndFilename = filePath
         Dim document As New XmlDocument
         document.Load(filePath)
         Dim thisresult As XmlNode = Nothing
@@ -3550,23 +3550,23 @@ Public Class WorkingWithNfoFiles
         For Each thisresult In document("musicvideo")
             Select Case thisresult.Name
                 Case "album"
-                    NewMusicVideo.album = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.album = (thisresult.InnerText)
                 Case "title"
-                    NewMusicVideo.title = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.title = (thisresult.InnerText)
                 Case "year"
-                    NewMusicVideo.year = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.year = (thisresult.InnerText)
                 Case "artist"
-                    NewMusicVideo.artist = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.artist = (thisresult.InnerText)
                 Case "director"
-                    NewMusicVideo.director = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.director = (thisresult.InnerText)
                 Case "genre"
-                    NewMusicVideo.genre = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.genre = (thisresult.InnerText)
                 Case "runtime"
-                    NewMusicVideo.runtime = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.runtime = (thisresult.InnerText)
                 Case "plot"
-                    NewMusicVideo.plot = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.plot = (thisresult.InnerText)
                 Case "studio"
-                    NewMusicVideo.studio = (thisresult.InnerText)
+                    NewMusicVideo.fullmoviebody.studio = (thisresult.InnerText)
                 Case "fileinfo"
                     Dim what As XmlNode = Nothing
                     For Each res In thisresult.ChildNodes
@@ -3640,7 +3640,7 @@ Public Class WorkingWithNfoFiles
                                     Dim audio As New AudioDetails
                                     newfilenfo.filedetails_audio.Add(audio)
                                 End If
-                                NewMusicVideo.streamdetails = newfilenfo
+                                NewMusicVideo.filedetails = newfilenfo
                         End Select
                     Next
             End Select

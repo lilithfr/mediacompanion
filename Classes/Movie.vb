@@ -777,30 +777,29 @@ Public Class Movie
     Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
-'		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToAddMissingData , "Assign missing data"       ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
     End Sub
  
     Sub AppendScrapeFailedActions
-        Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields  , "Tidy up unscraped fields"          ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields  , "Tidy up unscraped fields"          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
+        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
     End Sub
 
     Sub Scrape(imdb As String)
@@ -816,9 +815,12 @@ Public Class Movie
             If Preferences.movies_useXBMC_Scraper Or MovieSearchEngine = "tmdb"
                 Actions.Items.Add( New ScrapeAction(AddressOf TmdbScraper_GetBody , "Scrape TMDB Main Body"          ) )
                 Actions.Items.Add( New ScrapeAction(AddressOf CheckTmdbBodyScrape , "Checking TMDB Main body scrape" ) )                                   
-            Else
+            ElseIf Not Preferences.movies_useXBMC_Scraper AndAlso Not MovieSearchEngine = "tmdb" AndAlso Not Preferences.MusicVidScrape
                 Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
                 Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) ) 
+            Else If Preferences.MusicVidScrape
+                Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape TMDB Main Body"          ) )
+                Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape  , "Checking TMDB Main body scrape" ) )
             End If
             RunScrapeActions
         End if
@@ -915,6 +917,21 @@ Public Class Movie
             AppendScrapeFailedActions
         Else
             ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
+            AppendScrapeSuccessActions
+        End If
+    End Sub
+
+    Sub musicVid_GetBody()
+        Dim s As New WikipediaMusivVideoScraper 
+        _imdbBody = s.musicVideoScraper(SearchName)
+    End Sub
+
+    Sub CheckMusicVidBodyScrape()
+        If ImdbBody.ToLower = "error" Then
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs :" & searchname & vbCrLf )
+            AppendScrapeFailedActions
+        Else
+            ReportProgress(MSG_OK,"!!! Music Video Body Scraped OK" & vbCrLf)
             AppendScrapeSuccessActions
         End If
     End Sub
@@ -1043,10 +1060,13 @@ Public Class Movie
     Shared Sub SaveNFO(Nfo As String, fmd As FullMovieDetails,Optional media As String=Nothing)
 
         'Dim MovieUpdated As Boolean = File.Exists(Nfo)
+        If Preferences.MusicVidScrape Then
+        
+        Else
+            WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)    
+        End If
 
-        WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)
-
-        If Preferences.XbmcLinkReady Then
+        If Preferences.XbmcLinkReady AndAlso Not Preferences.MusicVidScrape Then
 
             If IsNothing(media) Then
                 media = Utilities.GetFileName(Nfo,True)
@@ -1073,6 +1093,10 @@ Public Class Movie
 
     Sub AssignMovieToCache
         'If _scrapedMovie.fullmoviebody.title = "Error" AndAlso _scrapedMovie.fullmoviebody.originaltitle = "" Then Exit Sub 
+        If Preferences.MusicVidScrape Then
+            ucMusicVideo.musicVideoList.Add(_scrapedMovie)
+            Exit Sub
+        End If
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
@@ -1232,10 +1256,14 @@ Public Class Movie
                         Next
                         _scrapedMovie.listactors.Add(newactor)
                     End If
+                Case "album"
+                    _scrapedMovie.fullmoviebody.album = thisresult.InnerText
+                Case "artist"
+                    _scrapedMovie.fullmoviebody.artist = thisresult.InnerText
             End Select
         Next
 
-        If Preferences.sorttitleignorearticle Then                              'add ignored articles to end of
+        If Preferences.sorttitleignorearticle AndAlso Not Preferences.MusicVidScrape Then                              'add ignored articles to end of
             Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.
             ''If Preferences.ignorearticle Then                                 'But only on Scraping or Rescrape Specific
             'If titletext.ToLower.IndexOf("the ") = 0 Then
@@ -1281,21 +1309,21 @@ Public Class Movie
             If done = True Then Exit For
         Next
 
-
-        If Rescrape Then
-            _scrapedMovie.fullmoviebody.source = _previousCache.source
-            _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
-            _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
-            _scrapedMovie.fileinfo.createdate = _previousCache.createdate
-            _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
-        Else
-            tmdb.Imdb = _possibleImdb
-            _scrapedMovie.fullmoviebody.movieset = "-None-"
-            If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+        If Not Preferences.MusicVidScrape Then
+            If Rescrape Then
+                _scrapedMovie.fullmoviebody.source = _previousCache.source
+                _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
+                _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
+                _scrapedMovie.fileinfo.createdate = _previousCache.createdate
+                _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
+            Else
+                tmdb.Imdb = _possibleImdb
+                _scrapedMovie.fullmoviebody.movieset = "-None-"
+                If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                    _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+                End If
             End If
         End If
-
     End Sub
     
     Sub DoRename
@@ -1694,16 +1722,10 @@ Public Class Movie
     End Sub
  
     Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
-        'Dim eden As Boolean = Preferences.EdenEnabled
-        'Dim frodo As Boolean = Preferences.FrodoEnabled
+        If Preferences.MusicVidScrape Then Exit Sub  ' Temporary till get music vid posters scraping.
         If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
-        'Dim edenart As String = NfoPathPrefName.Replace(".nfo", ".tbn")
-        'Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
-        'If _videotsrootpath <> "" Then
-        '    frodoart = _videotsrootpath + "poster.jpg"
-        'End If
         Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
         If Not Preferences.overwritethumbs Then
             Dim lst As New List(Of String)
@@ -1913,6 +1935,7 @@ Public Class Movie
     End Sub
 
     Sub DoDownloadFanart
+        If Preferences.MusicVidScrape Then Exit Sub  ' Temporary till get music vid posters scraping.
         Dim MoviePath As String = NfoPathPrefName
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg
         Dim isMovieFanart As String = MoviePath.Replace(".nfo","-fanart.jpg")
@@ -2308,6 +2331,7 @@ Public Class Movie
 
 
     Public Function fileRename(ByRef movieFileInfo As Movie) As String 'ByVal movieDetails As str_BasicMovieNFO, ByRef movieFileInfo As Movie) As String
+        If Preferences.MusicVidScrape Then Return ""  ' Temporary till get music vid posters scraping.
         Dim log As String = ""
         Dim newpath As String = movieFileInfo.NfoPath
         Dim mediaFile As String = movieFileInfo.mediapathandfilename
@@ -2431,6 +2455,7 @@ Public Class Movie
     End Function
 
     Public Function folderRename(ByRef movieFileInfo As Movie) As String
+        If Preferences.MusicVidScrape Then Return "" ' Temporary till get music vid posters scraping.
         Dim Log As String = ""
         Dim NoDel As Boolean = False
         Dim FilePath As String = movieFileInfo.nfopath   'current path

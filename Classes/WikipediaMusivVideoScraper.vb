@@ -5,14 +5,14 @@ Imports System.Text.RegularExpressions
 Public Class WikipediaMusivVideoScraper
 
     Public Function musicVideoScraper(ByVal fullpathandfilename)
-        Dim musicVideoTitle As New Music_Video_Class
+        Dim musicVideoTitle As New FullMovieDetails 
         Dim s As New Classimdb
-        musicVideoTitle.fullPathAndFilename = fullpathandfilename
+        musicVideoTitle.fileinfo.fullPathAndFilename = fullpathandfilename
         Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
         Dim strarr() As String
         strarr = filenameWithoutExtension.Split("-"c)
-        musicVideoTitle.artist = strarr(0).Trim
-        musicVideoTitle.title = strarr(1).Trim
+        musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
+        musicVideoTitle.fullmoviebody.title = strarr(1).Trim
 
         filenameWithoutExtension = s.searchurltitle(filenameWithoutExtension)
 
@@ -56,14 +56,14 @@ Public Class WikipediaMusivVideoScraper
                         Dim director As String = tempstring.Substring(tempstring.ToLower.IndexOf("directed by"), tempstring.Length - tempstring.ToLower.IndexOf("directed by"))
                         director = director.Substring(0, director.IndexOf("</a>"))
                         director = director.Substring(director.LastIndexOf(">") + 1, director.Length - director.LastIndexOf(">") - 1)
-                        musicVideoTitle.director = director
+                        musicVideoTitle.fullmoviebody.director = director
                     Catch
-                        musicVideoTitle.director = "Unknown"
+                        musicVideoTitle.fullmoviebody.director = "Unknown"
                     End Try
 
                     'strip html tags from plot
                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.plot = tempstring
+                    musicVideoTitle.fullmoviebody.plot = tempstring
                 End If
 
                 'get year
@@ -73,7 +73,7 @@ Public Class WikipediaMusivVideoScraper
                     tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
                     Dim r As Regex = New Regex("\d{4}")
                     Dim match As Match = r.Match(tempstring)
-                    musicVideoTitle.year = match.Value
+                    musicVideoTitle.fullmoviebody.year = match.Value
                 End If
 
                 'get genre
@@ -81,7 +81,7 @@ Public Class WikipediaMusivVideoScraper
                     Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf(">Genre</a></th>"), fullwebpage.Length - fullwebpage.IndexOf(">Genre</a></th>"))
                     tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.genre = tempstring
+                    musicVideoTitle.fullmoviebody.genre = tempstring
                 End If
 
                 'get album title
@@ -90,7 +90,7 @@ Public Class WikipediaMusivVideoScraper
                     tempstring = tempstring.Replace("from the album ", "")
                     tempstring = tempstring.Substring(0, tempstring.IndexOf("</i>"))
                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.album = tempstring
+                    musicVideoTitle.fullmoviebody.album = tempstring
                 End If
 
                 'get studio
@@ -98,26 +98,26 @@ Public Class WikipediaMusivVideoScraper
                     Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("Label</a></th>"), fullwebpage.Length - fullwebpage.IndexOf("Label</a></th>"))
                     tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                    musicVideoTitle.studio = tempstring
+                    musicVideoTitle.fullmoviebody.studio = tempstring
                 End If
             Catch
-                If musicVideoTitle.album = Nothing Then musicVideoTitle.album = "Unknown"
-                If musicVideoTitle.year = Nothing Then musicVideoTitle.year = "Unknown"
-                If musicVideoTitle.director = Nothing Then musicVideoTitle.director = "Unknown"
-                If musicVideoTitle.genre = Nothing Then musicVideoTitle.genre = "Unknown"
-                If musicVideoTitle.plot = Nothing Then musicVideoTitle.plot = "Unknown"
-                If musicVideoTitle.runtime = Nothing Then musicVideoTitle.runtime = "Unknown"
-                If musicVideoTitle.studio = Nothing Then musicVideoTitle.studio = "Unknown"
+                'If musicVideoTitle.fullmoviebody.album = Nothing Then musicVideoTitle.fullmoviebody.album = "Unknown"
+                'If musicVideoTitle.fullmoviebody.year = Nothing Then musicVideoTitle.fullmoviebody.year = "Unknown"
+                'If musicVideoTitle.fullmoviebody.director = Nothing Then musicVideoTitle.fullmoviebody.director = "Unknown"
+                'If musicVideoTitle.fullmoviebody.genre = Nothing Then musicVideoTitle.fullmoviebody.genre = "Unknown"
+                'If musicVideoTitle.fullmoviebody.plot = Nothing Then musicVideoTitle.fullmoviebody.plot = "Unknown"
+                'If musicVideoTitle.fullmoviebody.runtime = Nothing Then musicVideoTitle.fullmoviebody.runtime = "Unknown"
+                'If musicVideoTitle.fullmoviebody.studio = Nothing Then musicVideoTitle.fullmoviebody.studio = "Unknown"
             End Try
         End If
 
-        If musicVideoTitle.album = Nothing Then musicVideoTitle.album = "Unknown"
-        If musicVideoTitle.year = Nothing Then musicVideoTitle.year = "Unknown"
-        If musicVideoTitle.director = Nothing Then musicVideoTitle.director = "Unknown"
-        If musicVideoTitle.genre = Nothing Then musicVideoTitle.genre = "Unknown"
-        If musicVideoTitle.plot = Nothing Then musicVideoTitle.plot = "Unknown"
-        If musicVideoTitle.runtime = Nothing Then musicVideoTitle.runtime = "Unknown"
-        If musicVideoTitle.studio = Nothing Then musicVideoTitle.studio = "Unknown"
+        If musicVideoTitle.fullmoviebody.album = Nothing Then musicVideoTitle.fullmoviebody.album = "Unknown"
+        If musicVideoTitle.fullmoviebody.year = Nothing Then musicVideoTitle.fullmoviebody.year = "Unknown"
+        If musicVideoTitle.fullmoviebody.director = Nothing Then musicVideoTitle.fullmoviebody.director = "Unknown"
+        If musicVideoTitle.fullmoviebody.genre = Nothing Then musicVideoTitle.fullmoviebody.genre = "Unknown"
+        If musicVideoTitle.fullmoviebody.plot = Nothing Then musicVideoTitle.fullmoviebody.plot = "Unknown"
+        If musicVideoTitle.fullmoviebody.runtime = Nothing Then musicVideoTitle.fullmoviebody.runtime = "Unknown"
+        If musicVideoTitle.fullmoviebody.studio = Nothing Then musicVideoTitle.fullmoviebody.studio = "Unknown"
 
         Return musicVideoTitle
 

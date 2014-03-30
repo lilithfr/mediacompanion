@@ -29,6 +29,8 @@ Public Structure str_BasicMovieNFO
     Dim thumbnails As String
     Dim fanart As String
     Dim country As String
+    Dim album As String
+    Dim artist As String
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         title = ""
         originaltitle = ""
@@ -59,5 +61,7 @@ Public Structure str_BasicMovieNFO
         thumbnails = ""
         fanart = ""
         country = ""
+        album = ""
+        artist = ""
     End Sub
 End Structure

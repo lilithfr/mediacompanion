@@ -48,6 +48,7 @@ Public Class Preferences
     Public Shared configpath As String
     Public Shared TvInfoSite As String = "tvdb"
     Public Shared DoneAMov As Boolean = False
+    Public Shared MusicVidScrape As Boolean = False
     Public Shared DlMissingEpData As Boolean = False
     Public Shared googlecount As Integer = 0
     Public Shared engineno As Integer = 0

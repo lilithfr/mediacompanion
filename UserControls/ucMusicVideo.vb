@@ -4,10 +4,10 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 
 Public Class ucMusicVideo
-Dim nfo As New WorkingWithNfoFiles
-    Public musicVideoList As New List(Of Music_Video_Class)
+    'Dim nfo As New WorkingWithNfoFiles
+    Public Shared musicVideoList As New List(Of FullMovieDetails)
 
-    Dim workingMusicVideo As New Music_Video_Class
+    Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
@@ -46,6 +46,7 @@ Dim nfo As New WorkingWithNfoFiles
     End Sub
 
     Private Sub searchFornew()
+        Preferences.MusicVidScrape = True
         Dim fullfolderlist As New List(Of String)
         fullfolderlist.Clear()
         fullfolderlist = listAllFolders()
@@ -87,20 +88,20 @@ Dim nfo As New WorkingWithNfoFiles
                 Next
             Next
         Next
-        Dim newMusicVideoList As New List(Of Music_Video_Class)
+        Dim newMusicVideoList As New List(Of FullMovieDetails)
         newMusicVideoList.Clear()
         For Each videopath In FullFileList
 
-            Dim musicVideoTitle As New Music_Video_Class
+            Dim musicVideoTitle As New FullMovieDetails 
             Dim scraper As New WikipediaMusivVideoScraper
 
             If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) Then
                 musicVideoTitle = scraper.musicVideoScraper(videopath)
-                musicVideoTitle.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
+                musicVideoTitle.fileinfo.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
                 Dim newstreamdetails As New FullFileDetails
-                musicVideoTitle.streamdetails = Preferences.Get_HdTags(videopath)
+                musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
 
-                Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.streamdetails.filedetails_video.DurationInSeconds.Value)
+                Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
                 Dim hms = TimeSpan.FromSeconds(seconds)
                 Dim h = hms.Hours.ToString
                 Dim m = hms.Minutes.ToString
@@ -116,22 +117,22 @@ Dim nfo As New WorkingWithNfoFiles
                 If h = "0" And m = "0" Then
                     runtime = s
                 End If
-                musicVideoTitle.runtime = runtime
+                musicVideoTitle.fullmoviebody.runtime = runtime
 
-                nfo.MVsaveNfo(musicVideoTitle)
+                WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
 
                 Dim alreadyloaded As Boolean = False
                 For Each item In musicVideoList
-                    If item.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
+                    If item.fileinfo.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
                         alreadyloaded = True
                         Exit For
                     End If
                 Next
                 If alreadyloaded = False Then
-                    musicVideoTitle = nfo.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
+                    musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
                     musicVideoList.Add(musicVideoTitle)
 
-                    lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fullPathAndFilename, musicVideoTitle.title))
+                    lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullPathAndFilename, musicVideoTitle.fullmoviebody.title))
                 End If
 
 
@@ -139,16 +140,16 @@ Dim nfo As New WorkingWithNfoFiles
                 If validateMusicVideoNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) = False Then
 
                     Dim nfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
-                    musicVideoTitle.fullPathAndFilename = videopath
+                    musicVideoTitle.fileinfo.fullPathAndFilename = videopath
                     Dim oldnfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), "_old.nfo")
                     IO.File.Move(nfopath, oldnfopath)
 
                     musicVideoTitle = scraper.musicVideoScraper(videopath)
-                    musicVideoTitle.fullPathAndFilename = videopath
+                    musicVideoTitle.fileinfo.fullPathAndFilename = videopath
                     Dim newstreamdetails As New FullFileDetails
-                    musicVideoTitle.streamdetails = Preferences.Get_HdTags(videopath)
+                    musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
 
-                    Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.streamdetails.filedetails_video.DurationInSeconds.Value)
+                    Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
                     Dim hms = TimeSpan.FromSeconds(seconds)
                     Dim h = hms.Hours.ToString
                     Dim m = hms.Minutes.ToString
@@ -164,36 +165,36 @@ Dim nfo As New WorkingWithNfoFiles
                     If h = "0" And m = "0" Then
                         runtime = s
                     End If
-                    musicVideoTitle.runtime = runtime
-                    nfo.MVsaveNfo(musicVideoTitle)
+                    musicVideoTitle.fullmoviebody.runtime = runtime
+                    WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
                     Dim alreadyloaded As Boolean = False
                     For Each item In musicVideoList
-                        If item.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
+                        If item.fileinfo.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
                             alreadyloaded = True
                         End If
                     Next
                     If alreadyloaded = False Then
-                        musicVideoTitle = nfo.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
+                        musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
                         musicVideoList.Add(musicVideoTitle)
 
-                        lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fullPathAndFilename, musicVideoTitle.title))
+                        lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullPathAndFilename, musicVideoTitle.fullmoviebody.title))
                     End If
 
                 Else
-                    Dim existingMusicVideonfo As New Music_Video_Class
+                    Dim existingMusicVideonfo As New FullMovieDetails 
 
                     Dim alreadyloaded As Boolean = False
                     For Each item In musicVideoList
-                        If item.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
+                        If item.fileinfo.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
                             alreadyloaded = True
                         End If
                     Next
                     If alreadyloaded = False Then
-                        existingMusicVideonfo = nfo.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-                        existingMusicVideonfo.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
+                        existingMusicVideonfo = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
+                        existingMusicVideonfo.fileinfo.fullPathAndFilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
                         musicVideoList.Add(existingMusicVideonfo)
 
-                        lstBxMainList.Items.Add(New ValueDescriptionPair(existingMusicVideonfo.fullPathAndFilename, existingMusicVideonfo.title))
+                        lstBxMainList.Items.Add(New ValueDescriptionPair(existingMusicVideonfo.fileinfo.fullPathAndFilename, existingMusicVideonfo.fullmoviebody.title))
                     End If
                 End If
             End If
@@ -208,6 +209,7 @@ Dim nfo As New WorkingWithNfoFiles
         Next
         Call MusicVideoCacheSave()
     End Sub
+
     Private Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False)
         Try
 
@@ -489,46 +491,46 @@ Dim nfo As New WorkingWithNfoFiles
         For Each MusicVideo In musicVideoList
 
 
-            If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+            If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
 
-                Dim nfopath As String = MusicVideo.fullPathAndFilename
+                Dim nfopath As String = MusicVideo.fileinfo.fullPathAndFilename
                 nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
 
                 'Dim workingMusicVideo As New Music_Video_Class
-                workingMusicVideo = nfo.MVloadNfo(nfopath)
-                workingMusicVideo.fullPathAndFilename = MusicVideo.fullPathAndFilename
+                workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
+                workingMusicVideo.fileinfo.fullPathAndFilename = MusicVideo.fileinfo.fullPathAndFilename
                 'populate form
-                txtAlbum.Text = workingMusicVideo.album
-                txtArtist.Text = workingMusicVideo.artist
-                txtDirector.Text = workingMusicVideo.director
-                txtFullpath.Text = workingMusicVideo.fullPathAndFilename
-                txtPlot.Text = workingMusicVideo.plot
-                txtRuntime.Text = workingMusicVideo.runtime
-                txtStudio.Text = workingMusicVideo.studio
-                txtTitle.Text = workingMusicVideo.title
-                txtYear.Text = workingMusicVideo.year
-                txtGenre.Text = workingMusicVideo.genre
-                txtFullpath.Text = workingMusicVideo.fullPathAndFilename
+                txtAlbum.Text = workingMusicVideo.fullmoviebody.album
+                txtArtist.Text = workingMusicVideo.fullmoviebody.artist
+                txtDirector.Text = workingMusicVideo.fullmoviebody.director
+                txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
+                txtPlot.Text = workingMusicVideo.fullmoviebody.plot
+                txtRuntime.Text = workingMusicVideo.fullmoviebody.runtime
+                txtStudio.Text = workingMusicVideo.fullmoviebody.studio
+                txtTitle.Text = workingMusicVideo.fullmoviebody.title
+                txtYear.Text = workingMusicVideo.fullmoviebody.year
+                txtGenre.Text = workingMusicVideo.fullmoviebody.genre
+                txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
                 Dim streamdetails As String = "Video:" & vbCrLf
-                streamdetails = streamdetails & "Width: " & workingMusicVideo.streamdetails.filedetails_video.Width.Value & vbCrLf
-                streamdetails = streamdetails & "Height: " & workingMusicVideo.streamdetails.filedetails_video.Height.Value & vbCrLf
-                streamdetails = streamdetails & "Aspect: " & workingMusicVideo.streamdetails.filedetails_video.Aspect.Value & vbCrLf
-                streamdetails = streamdetails & "Codec: " & workingMusicVideo.streamdetails.filedetails_video.Codec.Value & vbCrLf
-                streamdetails = streamdetails & "Bitrate: " & workingMusicVideo.streamdetails.filedetails_video.Bitrate.Value & vbCrLf
-                streamdetails = streamdetails & "Bitrate Max: " & workingMusicVideo.streamdetails.filedetails_video.BitrateMax.Value & vbCrLf
-                streamdetails = streamdetails & "Container: " & workingMusicVideo.streamdetails.filedetails_video.Container.Value & vbCrLf
-                streamdetails = streamdetails & "Scantype: " & workingMusicVideo.streamdetails.filedetails_video.ScanType.Value & vbCrLf
-                streamdetails = streamdetails & "Duration (Seconds): " & workingMusicVideo.streamdetails.filedetails_video.DurationInSeconds.Value & vbCrLf & vbCrLf
+                streamdetails = streamdetails & "Width: " & workingMusicVideo.filedetails.filedetails_video.Width.Value & vbCrLf
+                streamdetails = streamdetails & "Height: " & workingMusicVideo.filedetails.filedetails_video.Height.Value & vbCrLf
+                streamdetails = streamdetails & "Aspect: " & workingMusicVideo.filedetails.filedetails_video.Aspect.Value & vbCrLf
+                streamdetails = streamdetails & "Codec: " & workingMusicVideo.filedetails.filedetails_video.Codec.Value & vbCrLf
+                streamdetails = streamdetails & "Bitrate: " & workingMusicVideo.filedetails.filedetails_video.Bitrate.Value & vbCrLf
+                streamdetails = streamdetails & "Bitrate Max: " & workingMusicVideo.filedetails.filedetails_video.BitrateMax.Value & vbCrLf
+                streamdetails = streamdetails & "Container: " & workingMusicVideo.filedetails.filedetails_video.Container.Value & vbCrLf
+                streamdetails = streamdetails & "Scantype: " & workingMusicVideo.filedetails.filedetails_video.ScanType.Value & vbCrLf
+                streamdetails = streamdetails & "Duration (Seconds): " & workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value & vbCrLf & vbCrLf
 
                 streamdetails = streamdetails & "Audio:" & vbCrLf
-                For Each audio In workingMusicVideo.streamdetails.filedetails_audio
+                For Each audio In workingMusicVideo.filedetails.filedetails_audio
                     streamdetails = streamdetails & "Codec: " & audio.Codec.Value & vbCrLf
                     streamdetails = streamdetails & "Channels: " & audio.Channels.Value & vbCrLf
                     streamdetails = streamdetails & "Bitrate: " & audio.Bitrate.Value & vbCrLf & vbCrLf
                 Next
                 txtStreamDetails.Text = streamdetails
                 'load poster
-                Dim thumbpath As String = MusicVideo.fullPathAndFilename
+                Dim thumbpath As String = MusicVideo.fileinfo.fullPathAndFilename
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), ".jpg")
                 PcBxMusicVideoScreenShot.ImageLocation = thumbpath
                 pcBxScreenshot.ImageLocation = thumbpath
@@ -583,11 +585,11 @@ Dim nfo As New WorkingWithNfoFiles
 
                 child = doc.CreateElement("musicvideo")
                 childchild = doc.CreateElement("fullpathandfilename")
-                childchild.InnerText = item.fullPathAndFilename
+                childchild.InnerText = item.fileinfo.fullPathAndFilename
                 child.AppendChild(childchild)
 
                 childchild = doc.CreateElement("title")
-                childchild.InnerText = item.title
+                childchild.InnerText = item.fullmoviebody.title
                 child.AppendChild(childchild)
                 root.AppendChild(child)
             Next
@@ -632,7 +634,7 @@ Dim nfo As New WorkingWithNfoFiles
         For Each thisresult In musicvideocache("music_video_cache")
             Select Case thisresult.Name
                 Case "musicvideo"
-                    Dim newMV As New Music_Video_Class
+                    Dim newMV As New FullMovieDetails  
 
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
@@ -640,9 +642,9 @@ Dim nfo As New WorkingWithNfoFiles
                             'workingmovie.missingdata1
 
                             Case "fullpathandfilename"
-                                newMV.fullPathAndFilename = detail.InnerText
+                                newMV.fileinfo.fullPathAndFilename = detail.InnerText
                             Case "title"
-                                newMV.title = detail.InnerText
+                                newMV.fullmoviebody.title = detail.InnerText
                         End Select
                     Next
                     musicVideoList.Add(newMV)
@@ -662,7 +664,7 @@ Dim nfo As New WorkingWithNfoFiles
     Private Sub loadMusicVideolist()
         lstBxMainList.Items.Clear()
         For Each item In musicVideoList
-            lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+            lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
         Next
     End Sub
 
@@ -670,13 +672,13 @@ Dim nfo As New WorkingWithNfoFiles
         If txtFilter.Text <> "" Then
             lstBxMainList.Items.Clear()
             For Each item In musicVideoList
-                If item.title.ToLower.IndexOf(txtFilter.Text.ToLower) <> -1 Then
-                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+                If item.fullmoviebody.title.ToLower.IndexOf(txtFilter.Text.ToLower) <> -1 Then
+                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
                 End If
             Next
         Else
             For Each item In musicVideoList
-                lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+                lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
             Next
         End If
     End Sub
@@ -686,8 +688,8 @@ Dim nfo As New WorkingWithNfoFiles
         pcBxScreenshot.Image = Nothing
         If Not lstBxMainList.SelectedItem Is Nothing Then
             For Each MusicVideo In musicVideoList
-                If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                    Dim screenshotpath As String = MusicVideo.fullPathAndFilename
+                If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+                    Dim screenshotpath As String = MusicVideo.fileinfo.fullPathAndFilename
 
                     createScreenshot(screenshotpath, txtScreenshotTime.Text, True)
                     PcBxMusicVideoScreenShot.ImageLocation = screenshotpath.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
@@ -715,16 +717,16 @@ Dim nfo As New WorkingWithNfoFiles
 
     Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
         'save text routine
-        workingMusicVideo.title = txtTitle.Text
-        workingMusicVideo.album = txtAlbum.Text
-        workingMusicVideo.artist = txtArtist.Text
-        workingMusicVideo.director = txtDirector.Text
-        workingMusicVideo.genre = txtGenre.Text
-        workingMusicVideo.plot = txtPlot.Text
-        workingMusicVideo.studio = txtStudio.Text
-        workingMusicVideo.year = txtYear.Text
+        workingMusicVideo.fullmoviebody.title = txtTitle.Text
+        workingMusicVideo.fullmoviebody.album = txtAlbum.Text
+        workingMusicVideo.fullmoviebody.artist = txtArtist.Text
+        workingMusicVideo.fullmoviebody.director = txtDirector.Text
+        workingMusicVideo.fullmoviebody.genre = txtGenre.Text
+        workingMusicVideo.fullmoviebody.plot = txtPlot.Text
+        workingMusicVideo.fullmoviebody.studio = txtStudio.Text
+        workingMusicVideo.fullmoviebody.year = txtYear.Text
 
-        nfo.MVsaveNfo(workingMusicVideo)
+        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo)
     End Sub
 
     Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
