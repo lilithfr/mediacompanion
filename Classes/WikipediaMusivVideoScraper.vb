@@ -4,45 +4,59 @@ Imports System.Text.RegularExpressions
 
 Public Class WikipediaMusivVideoScraper
 
-    Public Function musicVideoScraper(ByVal fullpathandfilename)
-        Dim musicVideoTitle As New FullMovieDetails 
+    Public Function musicVideoScraper(ByVal fullpathandfilename As String, Optional ByVal searchterm As String = "", Optional ByVal wikipediaURL As String = "")
+        Dim musicVideoTitle As New FullMovieDetails
         Dim s As New Classimdb
-        musicVideoTitle.fileinfo.fullPathAndFilename = fullpathandfilename
-        Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
-        Dim strarr() As String
-        strarr = filenameWithoutExtension.Split("-"c)
-        musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
-        musicVideoTitle.fullmoviebody.title = strarr(1).Trim
+        musicVideoTitle.fileinfo.fullpathandfilename = fullpathandfilename
 
-        filenameWithoutExtension = s.searchurltitle(filenameWithoutExtension)
+        If searchterm = "" And wikipediaURL = "" Then
+            Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
+            Dim strarr() As String
+            strarr = filenameWithoutExtension.Split("-"c)
+            musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
+            musicVideoTitle.fullmoviebody.title = strarr(1).Trim
 
-        Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & filenameWithoutExtension & "%20song&as_sitesearch=http://en.wikipedia.org/"
+            searchterm = s.searchurltitle(filenameWithoutExtension)
+        ElseIf searchterm <> "" Then
+            Dim strarr() As String
+            strarr = searchterm.Split("-"c)
+            musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
+            musicVideoTitle.fullmoviebody.title = strarr(1).Trim
+        ElseIf wikipediaURL <> "" Then
+            Dim strarr() As String
+            strarr = fullpathandfilename.Split("-"c)
+            musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
+            musicVideoTitle.fullmoviebody.title = strarr(1).Trim
+            searchterm = fullpathandfilename
+        End If
 
-        Dim webpage As New List(Of String)
-        webpage = s.loadwebpage(Preferences.proxysettings, searchurl, False, 10)
+        Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
 
-        Dim wikipediaURL As String = ""
-
-        For Each line In webpage
-            If line.IndexOf("<a href=""http://en.wikipedia.org/wiki/") <> -1 Then
-                wikipediaURL = ""
+        If wikipediaURL = "" Then
+            Dim webpage As New List(Of String)
+            webpage = s.loadwebpage(Preferences.proxysettings, searchurl, False, 10)
 
 
-                Exit For
-            ElseIf line.IndexOf("<a href=""/url?q=http://en.wikipedia.org/wiki/") <> -1 Then
-                Dim startinteger As Integer = line.IndexOf("<a href=""/url?q=http://en.wikipedia.org/wiki/")
-                wikipediaURL = line.Substring(startinteger + 16, 100)
-                wikipediaURL = wikipediaURL.Replace("%253F", "%3F")
-                wikipediaURL = wikipediaURL.Substring(0, wikipediaURL.IndexOf("&"))
-                Exit For
-            End If
-        Next
+            For Each line In webpage
+                If line.IndexOf("<a href=""http://en.wikipedia.org/wiki/") <> -1 Then
+                    wikipediaURL = ""
 
-        webpage.Clear()
 
+                    Exit For
+                ElseIf line.IndexOf("<a href=""/url?q=http://en.wikipedia.org/wiki/") <> -1 Then
+                    Dim startinteger As Integer = line.IndexOf("<a href=""/url?q=http://en.wikipedia.org/wiki/")
+                    wikipediaURL = line.Substring(startinteger + 16, 100)
+                    wikipediaURL = wikipediaURL.Replace("%253F", "%3F")
+                    wikipediaURL = wikipediaURL.Substring(0, wikipediaURL.IndexOf("&"))
+                    Exit For
+                End If
+            Next
+
+            webpage.Clear()
+        End If
         Dim fullwebpage As String = ""
         If wikipediaURL <> "" Then
-            fullwebpage = s.loadwebpage(Preferences.proxysettings,wikipediaURL, True, 10)
+            fullwebpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, True, 10)
             Try
                 'Scrape Plot and Director
                 If fullwebpage.IndexOf("<h2><span class=""mw-headline"" id=""Music_video"">") <> -1 Then
@@ -116,7 +130,7 @@ Public Class WikipediaMusivVideoScraper
                 If fullwebpage.IndexOf("class=""image"">") <> -1 Then
                     Try
                         Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("class=""image"">"), fullwebpage.Length - fullwebpage.IndexOf("class=""image"">"))
-                        tempstring = tempstring.Substring(0, tempstring.IndexOf("></a></td>"))
+                        tempstring = tempstring.Substring(0, tempstring.IndexOf("</td>"))
                         If tempstring.IndexOf(".jpg") <> -1 Then
                             tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".jpg") - tempstring.LastIndexOf("//upload") + 4)
                         ElseIf tempstring.IndexOf(".png") <> -1 Then
