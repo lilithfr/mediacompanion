@@ -25,14 +25,13 @@ Partial Class ucMusicVideo
         Me.components = New System.ComponentModel.Container()
         Me.TabControlMain = New System.Windows.Forms.TabControl()
         Me.tPMainMV = New System.Windows.Forms.TabPage()
+        Me.PcBxPoster = New System.Windows.Forms.PictureBox()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.txtFilter = New System.Windows.Forms.TextBox()
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.txtGenre = New System.Windows.Forms.TextBox()
         Me.txtFullpath = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.txtStreamDetails = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -57,22 +56,21 @@ Partial Class ucMusicVideo
         Me.btnScreenshotMinus = New System.Windows.Forms.Button()
         Me.btnScreenshotPlus = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnCreateScreenshot = New System.Windows.Forms.Button()
         Me.pcBxScreenshot = New System.Windows.Forms.PictureBox()
         Me.tPPref = New System.Windows.Forms.TabPage()
         Me.btnBrowseFolders = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lstBoxFolders = New System.Windows.Forms.ListBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.PcBxPoster = New System.Windows.Forms.PictureBox()
-        Me.TabControlMain.SuspendLayout()
-        Me.tPMainMV.SuspendLayout()
-        CType(Me.PcBxMusicVideoScreenShot, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tPScreenshotMV.SuspendLayout()
-        CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tPPref.SuspendLayout()
-        CType(Me.PcBxPoster, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
+        Me.TabControlMain.SuspendLayout
+        Me.tPMainMV.SuspendLayout
+        CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.PcBxMusicVideoScreenShot,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.tPScreenshotMV.SuspendLayout
+        CType(Me.pcBxScreenshot,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.tPPref.SuspendLayout
+        Me.SuspendLayout
         '
         'TabControlMain
         '
@@ -96,8 +94,6 @@ Partial Class ucMusicVideo
         Me.tPMainMV.Controls.Add(Me.Label11)
         Me.tPMainMV.Controls.Add(Me.txtGenre)
         Me.tPMainMV.Controls.Add(Me.txtFullpath)
-        Me.tPMainMV.Controls.Add(Me.Label8)
-        Me.tPMainMV.Controls.Add(Me.txtStreamDetails)
         Me.tPMainMV.Controls.Add(Me.Label7)
         Me.tPMainMV.Controls.Add(Me.Label6)
         Me.tPMainMV.Controls.Add(Me.Label5)
@@ -125,9 +121,20 @@ Partial Class ucMusicVideo
         Me.tPMainMV.TabIndex = 0
         Me.tPMainMV.Text = "Main Browser"
         '
+        'PcBxPoster
+        '
+        Me.PcBxPoster.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.PcBxPoster.BackColor = System.Drawing.Color.White
+        Me.PcBxPoster.Location = New System.Drawing.Point(699, 46)
+        Me.PcBxPoster.Name = "PcBxPoster"
+        Me.PcBxPoster.Size = New System.Drawing.Size(254, 254)
+        Me.PcBxPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PcBxPoster.TabIndex = 52
+        Me.PcBxPoster.TabStop = false
+        '
         'btnSave
         '
-        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btnSave.Image = Global.Media_Companion.My.Resources.Resources.Save
         Me.btnSave.Location = New System.Drawing.Point(919, 7)
         Me.btnSave.Name = "btnSave"
@@ -135,13 +142,13 @@ Partial Class ucMusicVideo
         Me.btnSave.TabIndex = 51
         Me.btnSave.Text = "Button2"
         Me.ToolTip1.SetToolTip(Me.btnSave, "Save Manual Edits")
-        Me.btnSave.UseVisualStyleBackColor = True
+        Me.btnSave.UseVisualStyleBackColor = true
         '
         'txtFilter
         '
-        Me.txtFilter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtFilter.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtFilter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtFilter.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtFilter.Location = New System.Drawing.Point(6, 46)
         Me.txtFilter.Name = "txtFilter"
         Me.txtFilter.Size = New System.Drawing.Size(243, 26)
@@ -150,21 +157,21 @@ Partial Class ucMusicVideo
         '
         'btnRefresh
         '
-        Me.btnRefresh.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRefresh.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btnRefresh.Location = New System.Drawing.Point(6, 519)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(243, 33)
         Me.btnRefresh.TabIndex = 49
         Me.btnRefresh.Text = "Refresh nfo's From Folder"
-        Me.ToolTip1.SetToolTip(Me.btnRefresh, "Reload all nfo's from" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Music Video Folders")
-        Me.btnRefresh.UseVisualStyleBackColor = True
+        Me.ToolTip1.SetToolTip(Me.btnRefresh, "Reload all nfo's from"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Music Video Folders")
+        Me.btnRefresh.UseVisualStyleBackColor = true
         '
         'Label11
         '
-        Me.Label11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label11.AutoSize = true
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label11.Location = New System.Drawing.Point(607, 405)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(58, 20)
@@ -173,8 +180,8 @@ Partial Class ucMusicVideo
         '
         'txtGenre
         '
-        Me.txtGenre.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtGenre.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtGenre.Location = New System.Drawing.Point(670, 402)
         Me.txtGenre.Name = "txtGenre"
         Me.txtGenre.Size = New System.Drawing.Size(283, 26)
@@ -182,43 +189,19 @@ Partial Class ucMusicVideo
         '
         'txtFullpath
         '
-        Me.txtFullpath.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtFullpath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtFullpath.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtFullpath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtFullpath.Location = New System.Drawing.Point(330, 402)
         Me.txtFullpath.Name = "txtFullpath"
-        Me.txtFullpath.ReadOnly = True
+        Me.txtFullpath.ReadOnly = true
         Me.txtFullpath.Size = New System.Drawing.Size(269, 26)
         Me.txtFullpath.TabIndex = 45
         '
-        'Label8
-        '
-        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(746, 18)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(87, 20)
-        Me.Label8.TabIndex = 44
-        Me.Label8.Text = "File Details"
-        Me.Label8.Visible = False
-        '
-        'txtStreamDetails
-        '
-        Me.txtStreamDetails.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtStreamDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtStreamDetails.Location = New System.Drawing.Point(750, 46)
-        Me.txtStreamDetails.Multiline = True
-        Me.txtStreamDetails.Name = "txtStreamDetails"
-        Me.txtStreamDetails.ReadOnly = True
-        Me.txtStreamDetails.Size = New System.Drawing.Size(203, 302)
-        Me.txtStreamDetails.TabIndex = 43
-        Me.txtStreamDetails.Visible = False
-        '
         'Label7
         '
-        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label7.AutoSize = true
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label7.Location = New System.Drawing.Point(607, 309)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(47, 20)
@@ -227,9 +210,9 @@ Partial Class ucMusicVideo
         '
         'Label6
         '
-        Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoSize = true
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label6.Location = New System.Drawing.Point(251, 341)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(73, 20)
@@ -238,9 +221,9 @@ Partial Class ucMusicVideo
         '
         'Label5
         '
-        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label5.AutoSize = true
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label5.Location = New System.Drawing.Point(251, 373)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(69, 20)
@@ -249,9 +232,9 @@ Partial Class ucMusicVideo
         '
         'Label4
         '
-        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoSize = true
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label4.Location = New System.Drawing.Point(606, 373)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(59, 20)
@@ -260,9 +243,9 @@ Partial Class ucMusicVideo
         '
         'Label3
         '
-        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label3.AutoSize = true
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label3.Location = New System.Drawing.Point(251, 437)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(40, 20)
@@ -271,9 +254,9 @@ Partial Class ucMusicVideo
         '
         'Label2
         '
-        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label2.AutoSize = true
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label2.Location = New System.Drawing.Point(251, 309)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(50, 20)
@@ -282,9 +265,9 @@ Partial Class ucMusicVideo
         '
         'Label1
         '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label1.Location = New System.Drawing.Point(607, 341)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(58, 20)
@@ -293,18 +276,18 @@ Partial Class ucMusicVideo
         '
         'txtRuntime
         '
-        Me.txtRuntime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtRuntime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtRuntime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtRuntime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtRuntime.Location = New System.Drawing.Point(330, 338)
         Me.txtRuntime.Name = "txtRuntime"
-        Me.txtRuntime.ReadOnly = True
+        Me.txtRuntime.ReadOnly = true
         Me.txtRuntime.Size = New System.Drawing.Size(269, 26)
         Me.txtRuntime.TabIndex = 34
         '
         'txtYear
         '
-        Me.txtYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtYear.Location = New System.Drawing.Point(670, 306)
         Me.txtYear.Name = "txtYear"
         Me.txtYear.Size = New System.Drawing.Size(283, 26)
@@ -312,11 +295,11 @@ Partial Class ucMusicVideo
         '
         'txtPlot
         '
-        Me.txtPlot.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtPlot.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtPlot.Location = New System.Drawing.Point(330, 434)
-        Me.txtPlot.Multiline = True
+        Me.txtPlot.Multiline = true
         Me.txtPlot.Name = "txtPlot"
         Me.txtPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtPlot.Size = New System.Drawing.Size(623, 118)
@@ -324,8 +307,8 @@ Partial Class ucMusicVideo
         '
         'txtStudio
         '
-        Me.txtStudio.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtStudio.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtStudio.Location = New System.Drawing.Point(670, 370)
         Me.txtStudio.Name = "txtStudio"
         Me.txtStudio.Size = New System.Drawing.Size(283, 26)
@@ -333,8 +316,8 @@ Partial Class ucMusicVideo
         '
         'txtAlbum
         '
-        Me.txtAlbum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtAlbum.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAlbum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtAlbum.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtAlbum.Location = New System.Drawing.Point(670, 338)
         Me.txtAlbum.Name = "txtAlbum"
         Me.txtAlbum.Size = New System.Drawing.Size(283, 26)
@@ -342,8 +325,8 @@ Partial Class ucMusicVideo
         '
         'txtDirector
         '
-        Me.txtDirector.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDirector.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtDirector.Location = New System.Drawing.Point(330, 370)
         Me.txtDirector.Name = "txtDirector"
         Me.txtDirector.Size = New System.Drawing.Size(269, 26)
@@ -351,8 +334,8 @@ Partial Class ucMusicVideo
         '
         'txtArtist
         '
-        Me.txtArtist.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtArtist.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtArtist.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtArtist.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtArtist.Location = New System.Drawing.Point(330, 306)
         Me.txtArtist.Name = "txtArtist"
         Me.txtArtist.Size = New System.Drawing.Size(269, 26)
@@ -360,8 +343,8 @@ Partial Class ucMusicVideo
         '
         'txtTitle
         '
-        Me.txtTitle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTitle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtTitle.Location = New System.Drawing.Point(255, 7)
         Me.txtTitle.Name = "txtTitle"
         Me.txtTitle.Size = New System.Drawing.Size(489, 31)
@@ -369,33 +352,33 @@ Partial Class ucMusicVideo
         '
         'PcBxMusicVideoScreenShot
         '
-        Me.PcBxMusicVideoScreenShot.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PcBxMusicVideoScreenShot.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.PcBxMusicVideoScreenShot.BackColor = System.Drawing.Color.White
         Me.PcBxMusicVideoScreenShot.Location = New System.Drawing.Point(255, 46)
         Me.PcBxMusicVideoScreenShot.Name = "PcBxMusicVideoScreenShot"
         Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(438, 254)
         Me.PcBxMusicVideoScreenShot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PcBxMusicVideoScreenShot.TabIndex = 26
-        Me.PcBxMusicVideoScreenShot.TabStop = False
+        Me.PcBxMusicVideoScreenShot.TabStop = false
         '
         'btnSearchNew
         '
-        Me.btnSearchNew.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSearchNew.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btnSearchNew.Location = New System.Drawing.Point(6, 7)
         Me.btnSearchNew.Name = "btnSearchNew"
         Me.btnSearchNew.Size = New System.Drawing.Size(243, 33)
         Me.btnSearchNew.TabIndex = 25
         Me.btnSearchNew.Text = "Search for New Music Videos"
-        Me.ToolTip1.SetToolTip(Me.btnSearchNew, "Search Folders For New" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "     Music Videos and" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "         Scrape Data")
-        Me.btnSearchNew.UseVisualStyleBackColor = True
+        Me.ToolTip1.SetToolTip(Me.btnSearchNew, "Search Folders For New"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"     Music Videos and"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"         Scrape Data")
+        Me.btnSearchNew.UseVisualStyleBackColor = true
         '
         'lstBxMainList
         '
-        Me.lstBxMainList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lstBxMainList.FormattingEnabled = True
+        Me.lstBxMainList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.lstBxMainList.FormattingEnabled = true
         Me.lstBxMainList.Location = New System.Drawing.Point(6, 80)
         Me.lstBxMainList.Name = "lstBxMainList"
         Me.lstBxMainList.Size = New System.Drawing.Size(243, 433)
@@ -403,9 +386,9 @@ Partial Class ucMusicVideo
         '
         'Label10
         '
-        Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label10.AutoSize = true
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label10.Location = New System.Drawing.Point(251, 405)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(78, 20)
@@ -419,7 +402,7 @@ Partial Class ucMusicVideo
         Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotMinus)
         Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotPlus)
         Me.tPScreenshotMV.Controls.Add(Me.Label12)
-        Me.tPScreenshotMV.Controls.Add(Me.Button1)
+        Me.tPScreenshotMV.Controls.Add(Me.btnCreateScreenshot)
         Me.tPScreenshotMV.Controls.Add(Me.pcBxScreenshot)
         Me.tPScreenshotMV.Location = New System.Drawing.Point(4, 22)
         Me.tPScreenshotMV.Name = "tPScreenshotMV"
@@ -430,10 +413,10 @@ Partial Class ucMusicVideo
         '
         'txtScreenshotTime
         '
-        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtScreenshotTime.CausesValidation = False
-        Me.txtScreenshotTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtScreenshotTime.HidePromptOnLeave = True
+        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.txtScreenshotTime.CausesValidation = false
+        Me.txtScreenshotTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.txtScreenshotTime.HidePromptOnLeave = true
         Me.txtScreenshotTime.Location = New System.Drawing.Point(657, 543)
         Me.txtScreenshotTime.Mask = "00000"
         Me.txtScreenshotTime.Name = "txtScreenshotTime"
@@ -443,59 +426,59 @@ Partial Class ucMusicVideo
         '
         'btnScreenshotMinus
         '
-        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnScreenshotMinus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotMinus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnScreenshotMinus.Location = New System.Drawing.Point(616, 536)
         Me.btnScreenshotMinus.Name = "btnScreenshotMinus"
         Me.btnScreenshotMinus.Size = New System.Drawing.Size(35, 36)
         Me.btnScreenshotMinus.TabIndex = 5
         Me.btnScreenshotMinus.Text = "-"
-        Me.btnScreenshotMinus.UseVisualStyleBackColor = True
+        Me.btnScreenshotMinus.UseVisualStyleBackColor = true
         '
         'btnScreenshotPlus
         '
-        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnScreenshotPlus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotPlus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnScreenshotPlus.Location = New System.Drawing.Point(731, 536)
         Me.btnScreenshotPlus.Name = "btnScreenshotPlus"
         Me.btnScreenshotPlus.Size = New System.Drawing.Size(35, 36)
         Me.btnScreenshotPlus.TabIndex = 4
         Me.btnScreenshotPlus.Text = "+"
-        Me.btnScreenshotPlus.UseVisualStyleBackColor = True
+        Me.btnScreenshotPlus.UseVisualStyleBackColor = true
         '
         'Label12
         '
-        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label12.AutoSize = true
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label12.Location = New System.Drawing.Point(353, 546)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(257, 20)
         Me.Label12.TabIndex = 3
         Me.Label12.Text = "Enter Time in Seconds for Capture:"
         '
-        'Button1
+        'btnCreateScreenshot
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(772, 536)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(189, 36)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Create New Screenshot"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnCreateScreenshot.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btnCreateScreenshot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnCreateScreenshot.Location = New System.Drawing.Point(772, 536)
+        Me.btnCreateScreenshot.Name = "btnCreateScreenshot"
+        Me.btnCreateScreenshot.Size = New System.Drawing.Size(189, 36)
+        Me.btnCreateScreenshot.TabIndex = 2
+        Me.btnCreateScreenshot.Text = "Create New Screenshot"
+        Me.btnCreateScreenshot.UseVisualStyleBackColor = true
         '
         'pcBxScreenshot
         '
-        Me.pcBxScreenshot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pcBxScreenshot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.pcBxScreenshot.Location = New System.Drawing.Point(6, 6)
         Me.pcBxScreenshot.Name = "pcBxScreenshot"
         Me.pcBxScreenshot.Size = New System.Drawing.Size(955, 528)
         Me.pcBxScreenshot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pcBxScreenshot.TabIndex = 0
-        Me.pcBxScreenshot.TabStop = False
+        Me.pcBxScreenshot.TabStop = false
         '
         'tPPref
         '
@@ -512,17 +495,17 @@ Partial Class ucMusicVideo
         '
         'btnBrowseFolders
         '
-        Me.btnBrowseFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnBrowseFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btnBrowseFolders.Location = New System.Drawing.Point(11, 524)
         Me.btnBrowseFolders.Name = "btnBrowseFolders"
         Me.btnBrowseFolders.Size = New System.Drawing.Size(333, 23)
         Me.btnBrowseFolders.TabIndex = 2
         Me.btnBrowseFolders.Text = "Browse for Music Video Folders"
-        Me.btnBrowseFolders.UseVisualStyleBackColor = True
+        Me.btnBrowseFolders.UseVisualStyleBackColor = true
         '
         'Label9
         '
-        Me.Label9.AutoSize = True
+        Me.Label9.AutoSize = true
         Me.Label9.Location = New System.Drawing.Point(8, 3)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(41, 13)
@@ -531,50 +514,37 @@ Partial Class ucMusicVideo
         '
         'lstBoxFolders
         '
-        Me.lstBoxFolders.FormattingEnabled = True
+        Me.lstBoxFolders.FormattingEnabled = true
         Me.lstBoxFolders.Location = New System.Drawing.Point(11, 19)
         Me.lstBoxFolders.Name = "lstBoxFolders"
         Me.lstBoxFolders.Size = New System.Drawing.Size(333, 498)
         Me.lstBoxFolders.TabIndex = 0
         '
-        'PcBxPoster
-        '
-        Me.PcBxPoster.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PcBxPoster.BackColor = System.Drawing.Color.White
-        Me.PcBxPoster.Location = New System.Drawing.Point(699, 46)
-        Me.PcBxPoster.Name = "PcBxPoster"
-        Me.PcBxPoster.Size = New System.Drawing.Size(254, 254)
-        Me.PcBxPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PcBxPoster.TabIndex = 52
-        Me.PcBxPoster.TabStop = False
-        '
         'ucMusicVideo
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.TabControlMain)
         Me.Name = "ucMusicVideo"
         Me.Size = New System.Drawing.Size(975, 604)
-        Me.TabControlMain.ResumeLayout(False)
-        Me.tPMainMV.ResumeLayout(False)
-        Me.tPMainMV.PerformLayout()
-        CType(Me.PcBxMusicVideoScreenShot, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tPScreenshotMV.ResumeLayout(False)
-        Me.tPScreenshotMV.PerformLayout()
-        CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tPPref.ResumeLayout(False)
-        Me.tPPref.PerformLayout()
-        CType(Me.PcBxPoster, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
+        Me.TabControlMain.ResumeLayout(false)
+        Me.tPMainMV.ResumeLayout(false)
+        Me.tPMainMV.PerformLayout
+        CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.PcBxMusicVideoScreenShot,System.ComponentModel.ISupportInitialize).EndInit
+        Me.tPScreenshotMV.ResumeLayout(false)
+        Me.tPScreenshotMV.PerformLayout
+        CType(Me.pcBxScreenshot,System.ComponentModel.ISupportInitialize).EndInit
+        Me.tPPref.ResumeLayout(false)
+        Me.tPPref.PerformLayout
+        Me.ResumeLayout(false)
 
-    End Sub
+End Sub
     Friend WithEvents TabControlMain As System.Windows.Forms.TabControl
     Friend WithEvents tPMainMV As System.Windows.Forms.TabPage
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents txtGenre As System.Windows.Forms.TextBox
     Friend WithEvents txtFullpath As System.Windows.Forms.TextBox
-    Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents txtStreamDetails As System.Windows.Forms.TextBox
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
@@ -604,7 +574,7 @@ Partial Class ucMusicVideo
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents tPScreenshotMV As System.Windows.Forms.TabPage
     Friend WithEvents Label12 As System.Windows.Forms.Label
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnCreateScreenshot As System.Windows.Forms.Button
     Friend WithEvents pcBxScreenshot As System.Windows.Forms.PictureBox
     Friend WithEvents btnScreenshotMinus As System.Windows.Forms.Button
     Friend WithEvents btnScreenshotPlus As System.Windows.Forms.Button

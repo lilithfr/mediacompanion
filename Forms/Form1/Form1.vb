@@ -25201,7 +25201,7 @@ End Sub
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
-    Public Function VidMediaFlags (ByVal Vidfiledetails As FullFileDetails) As Dictionary(Of String, String)
+    Public Shared Function VidMediaFlags (ByVal Vidfiledetails As FullFileDetails) As Dictionary(Of String, String)
         Dim flags As New Dictionary(Of String, String)
         Try
             flags.Add("channels", If(Vidfiledetails.filedetails_audio(0).Channels.Value = "", "", Vidfiledetails.filedetails_audio(0).Channels.Value.Substring(0,1)))

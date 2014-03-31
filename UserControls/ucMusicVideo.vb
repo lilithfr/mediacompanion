@@ -6,6 +6,7 @@ Imports System.Xml
 Public Class ucMusicVideo
     'Dim nfo As New WorkingWithNfoFiles
     Public Shared musicVideoList As New List(Of FullMovieDetails)
+    Dim movieGraphicInfo As New GraphicInfo
 
     Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
@@ -53,33 +54,9 @@ Public Class ucMusicVideo
 
         Dim FullFileList As New List(Of String)
         Dim filelist As New List(Of String)
-
-        Dim extensions As New List(Of String)
-        extensions.Add("*.avi")
-        extensions.Add("*.xvid")
-        extensions.Add("*.divx")
-        extensions.Add("*.img")
-        extensions.Add("*.mpg")
-        extensions.Add("*.mpeg")
-        extensions.Add("*.mov")
-        extensions.Add("*.rm")
-        extensions.Add("*.3gp")
-        extensions.Add("*.m4v")
-        extensions.Add("*.wmv")
-        extensions.Add("*.asf")
-        extensions.Add("*.mp4")
-        extensions.Add("*.mkv")
-        extensions.Add("*.nrg")
-        extensions.Add("*.iso")
-        extensions.Add("*.rmvb")
-        extensions.Add("*.ogm")
-        extensions.Add("*.bin")
-        extensions.Add("*.ts")
-        extensions.Add("*.vob")
-        extensions.Add("*.m2ts")
-
+        
         For Each folder In fullfolderlist
-            For Each extension In extensions
+            For Each extension In Utilities.VideoExtensions 
                 Dim dir_info As New System.IO.DirectoryInfo(folder)
                 filelist.Clear()
                 filelist = Listvideofiles(extension, dir_info)
@@ -556,29 +533,36 @@ Public Class ucMusicVideo
                 txtYear.Text = workingMusicVideo.fullmoviebody.year
                 txtGenre.Text = workingMusicVideo.fullmoviebody.genre
                 txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                Dim streamdetails As String = "Video:" & vbCrLf
-                streamdetails = streamdetails & "Width: " & workingMusicVideo.filedetails.filedetails_video.Width.Value & vbCrLf
-                streamdetails = streamdetails & "Height: " & workingMusicVideo.filedetails.filedetails_video.Height.Value & vbCrLf
-                streamdetails = streamdetails & "Aspect: " & workingMusicVideo.filedetails.filedetails_video.Aspect.Value & vbCrLf
-                streamdetails = streamdetails & "Codec: " & workingMusicVideo.filedetails.filedetails_video.Codec.Value & vbCrLf
-                streamdetails = streamdetails & "Bitrate: " & workingMusicVideo.filedetails.filedetails_video.Bitrate.Value & vbCrLf
-                streamdetails = streamdetails & "Bitrate Max: " & workingMusicVideo.filedetails.filedetails_video.BitrateMax.Value & vbCrLf
-                streamdetails = streamdetails & "Container: " & workingMusicVideo.filedetails.filedetails_video.Container.Value & vbCrLf
-                streamdetails = streamdetails & "Scantype: " & workingMusicVideo.filedetails.filedetails_video.ScanType.Value & vbCrLf
-                streamdetails = streamdetails & "Duration (Seconds): " & workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value & vbCrLf & vbCrLf
+                'Dim streamdetails As String = "Video:" & vbCrLf
+                'streamdetails = streamdetails & "Width: " & workingMusicVideo.filedetails.filedetails_video.Width.Value & vbCrLf
+                'streamdetails = streamdetails & "Height: " & workingMusicVideo.filedetails.filedetails_video.Height.Value & vbCrLf
+                'streamdetails = streamdetails & "Aspect: " & workingMusicVideo.filedetails.filedetails_video.Aspect.Value & vbCrLf
+                'streamdetails = streamdetails & "Codec: " & workingMusicVideo.filedetails.filedetails_video.Codec.Value & vbCrLf
+                'streamdetails = streamdetails & "Bitrate: " & workingMusicVideo.filedetails.filedetails_video.Bitrate.Value & vbCrLf
+                'streamdetails = streamdetails & "Bitrate Max: " & workingMusicVideo.filedetails.filedetails_video.BitrateMax.Value & vbCrLf
+                'streamdetails = streamdetails & "Container: " & workingMusicVideo.filedetails.filedetails_video.Container.Value & vbCrLf
+                'streamdetails = streamdetails & "Scantype: " & workingMusicVideo.filedetails.filedetails_video.ScanType.Value & vbCrLf
+                'streamdetails = streamdetails & "Duration (Seconds): " & workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value & vbCrLf & vbCrLf
 
-                streamdetails = streamdetails & "Audio:" & vbCrLf
-                For Each audio In workingMusicVideo.filedetails.filedetails_audio
-                    streamdetails = streamdetails & "Codec: " & audio.Codec.Value & vbCrLf
-                    streamdetails = streamdetails & "Channels: " & audio.Channels.Value & vbCrLf
-                    streamdetails = streamdetails & "Bitrate: " & audio.Bitrate.Value & vbCrLf & vbCrLf
-                Next
-                txtStreamDetails.Text = streamdetails
-                'load poster
+                'streamdetails = streamdetails & "Audio:" & vbCrLf
+                'For Each audio In workingMusicVideo.filedetails.filedetails_audio
+                '    streamdetails = streamdetails & "Codec: " & audio.Codec.Value & vbCrLf
+                '    streamdetails = streamdetails & "Channels: " & audio.Channels.Value & vbCrLf
+                '    streamdetails = streamdetails & "Bitrate: " & audio.Bitrate.Value & vbCrLf & vbCrLf
+                'Next
+                'txtStreamDetails.Text = streamdetails
+
+                'load Fanart/Screenshot image
                 Dim thumbpath As String = MusicVideo.fileinfo.fullPathAndFilename
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
                 Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
                 Form1.util_ImageLoad(pcBxScreenshot, thumbpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
+
+                'Set Media overlay
+                Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
+                movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
+
+                'Load Poster image
                 thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
                 If IO.File.Exists(thumbpath) Then
                     Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
@@ -736,7 +720,7 @@ Public Class ucMusicVideo
         End If
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCreateScreenshot.Click
         PcBxMusicVideoScreenShot.Image = Nothing
         pcBxScreenshot.Image = Nothing
         If Not lstBxMainList.SelectedItem Is Nothing Then
