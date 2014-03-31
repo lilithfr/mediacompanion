@@ -1,0 +1,39 @@
+
+Public Class ListOfProfiles
+
+    Property MovieCache     As String = ""
+    Property TvCache        As String = ""
+    Property ActorCache     As String = ""
+    Property MusicVideoCache As String = ""
+    Private _directorCache As String = ""
+
+    Property DirectorCache  As String
+        Get
+            Return IIf(_directorCache="",Preferences.applicationPath & "\Settings\directorcache.xml",_directorCache)
+        End Get
+
+        Set(value As String)
+            _directorCache=value
+        End Set
+    End Property
+
+    Property ProfileName    As String = ""
+    Property RegExList      As String = ""
+    Property Filters        As String = ""
+    Property Config         As String = ""
+    Property HomeMovieCache As String = ""
+
+    Public Sub Assign(profileTo As ListOfProfiles)
+        profileTo.ActorCache    = ActorCache
+        profileTo.DirectorCache = DirectorCache
+        profileTo.Config        = Config
+        profileTo.MovieCache    = MovieCache
+        profileTo.ProfileName   = ProfileName
+        profileTo.RegExList     = RegExList
+        profileTo.Filters       = Filters
+        profileTo.TvCache       = TvCache
+        profileTo.ProfileName = ProfileName
+        profileTo.MusicVideoCache = MusicVideoCache
+    End Sub
+
+End Class
