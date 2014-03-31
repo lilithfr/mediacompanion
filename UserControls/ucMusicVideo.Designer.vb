@@ -59,10 +59,14 @@ Partial Class ucMusicVideo
         Me.btnCreateScreenshot = New System.Windows.Forms.Button()
         Me.pcBxScreenshot = New System.Windows.Forms.PictureBox()
         Me.tPPref = New System.Windows.Forms.TabPage()
+        Me.btnRemoveFolder = New System.Windows.Forms.Button()
+        Me.btnAddFolderPath = New System.Windows.Forms.Button()
+        Me.tbFolderPath = New System.Windows.Forms.TextBox()
         Me.btnBrowseFolders = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lstBoxFolders = New System.Windows.Forms.ListBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).BeginInit
@@ -483,6 +487,10 @@ Partial Class ucMusicVideo
         'tPPref
         '
         Me.tPPref.BackColor = System.Drawing.Color.LightGray
+        Me.tPPref.Controls.Add(Me.Label8)
+        Me.tPPref.Controls.Add(Me.btnRemoveFolder)
+        Me.tPPref.Controls.Add(Me.btnAddFolderPath)
+        Me.tPPref.Controls.Add(Me.tbFolderPath)
         Me.tPPref.Controls.Add(Me.btnBrowseFolders)
         Me.tPPref.Controls.Add(Me.Label9)
         Me.tPPref.Controls.Add(Me.lstBoxFolders)
@@ -493,12 +501,37 @@ Partial Class ucMusicVideo
         Me.tPPref.TabIndex = 1
         Me.tPPref.Text = "Preferences"
         '
+        'btnRemoveFolder
+        '
+        Me.btnRemoveFolder.Location = New System.Drawing.Point(158, 526)
+        Me.btnRemoveFolder.Name = "btnRemoveFolder"
+        Me.btnRemoveFolder.Size = New System.Drawing.Size(122, 48)
+        Me.btnRemoveFolder.TabIndex = 5
+        Me.btnRemoveFolder.Text = "Remove Selected Folder"
+        Me.btnRemoveFolder.UseVisualStyleBackColor = true
+        '
+        'btnAddFolderPath
+        '
+        Me.btnAddFolderPath.Location = New System.Drawing.Point(286, 495)
+        Me.btnAddFolderPath.Name = "btnAddFolderPath"
+        Me.btnAddFolderPath.Size = New System.Drawing.Size(56, 32)
+        Me.btnAddFolderPath.TabIndex = 4
+        Me.btnAddFolderPath.Text = "Add"
+        Me.btnAddFolderPath.UseVisualStyleBackColor = true
+        '
+        'tbFolderPath
+        '
+        Me.tbFolderPath.Location = New System.Drawing.Point(11, 502)
+        Me.tbFolderPath.Name = "tbFolderPath"
+        Me.tbFolderPath.Size = New System.Drawing.Size(269, 20)
+        Me.tbFolderPath.TabIndex = 3
+        '
         'btnBrowseFolders
         '
         Me.btnBrowseFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnBrowseFolders.Location = New System.Drawing.Point(11, 524)
+        Me.btnBrowseFolders.Location = New System.Drawing.Point(11, 526)
         Me.btnBrowseFolders.Name = "btnBrowseFolders"
-        Me.btnBrowseFolders.Size = New System.Drawing.Size(333, 23)
+        Me.btnBrowseFolders.Size = New System.Drawing.Size(122, 48)
         Me.btnBrowseFolders.TabIndex = 2
         Me.btnBrowseFolders.Text = "Browse for Music Video Folders"
         Me.btnBrowseFolders.UseVisualStyleBackColor = true
@@ -517,8 +550,18 @@ Partial Class ucMusicVideo
         Me.lstBoxFolders.FormattingEnabled = true
         Me.lstBoxFolders.Location = New System.Drawing.Point(11, 19)
         Me.lstBoxFolders.Name = "lstBoxFolders"
-        Me.lstBoxFolders.Size = New System.Drawing.Size(333, 498)
+        Me.lstBoxFolders.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
+        Me.lstBoxFolders.Size = New System.Drawing.Size(333, 459)
         Me.lstBoxFolders.TabIndex = 0
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = true
+        Me.Label8.Location = New System.Drawing.Point(19, 485)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(197, 13)
+        Me.Label8.TabIndex = 6
+        Me.Label8.Text = "Manually add Path to Music Video folder"
         '
         'ucMusicVideo
         '
@@ -580,5 +623,9 @@ End Sub
     Friend WithEvents btnScreenshotPlus As System.Windows.Forms.Button
     Friend WithEvents txtScreenshotTime As System.Windows.Forms.MaskedTextBox
     Friend WithEvents PcBxPoster As System.Windows.Forms.PictureBox
+    Friend WithEvents btnRemoveFolder As System.Windows.Forms.Button
+    Friend WithEvents btnAddFolderPath As System.Windows.Forms.Button
+    Friend WithEvents tbFolderPath As System.Windows.Forms.TextBox
+    Friend WithEvents Label8 As System.Windows.Forms.Label
 
 End Class

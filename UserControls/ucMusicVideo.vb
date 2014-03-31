@@ -26,6 +26,7 @@ Public Class ucMusicVideo
         theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
         theFolderBrowser.ShowNewFolderButton = True
         theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+        theFolderBrowser.SelectedPath = Preferences.lastpath
         If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
             thefoldernames = (theFolderBrowser.SelectedPath)
             For Each item As Object In lstBoxFolders.Items
@@ -40,6 +41,16 @@ Public Class ucMusicVideo
                 MsgBox("        Folder Already Exists")
             End If
         End If
+    End Sub
+
+    Private Sub btnRemoveFolder_Click( sender As System.Object,  e As System.EventArgs) Handles btnRemoveFolder.Click
+        Try
+            While lstBoxFolders.SelectedItems.Count > 0
+                Preferences.MVidFolders.Remove(lstBoxFolders.SelectedItems(0))
+                lstBoxFolders.Items.Remove(lstBoxFolders.SelectedItems(0))
+            End While
+        Catch
+        End Try
     End Sub
 
     Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
@@ -485,7 +496,7 @@ Public Class ucMusicVideo
         Dim mediaList As New List(Of String)
 
 
-        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*"&pattern)
 
         For Each fs_info As System.IO.FileInfo In fs_infos
             mediaList.Add(fs_info.FullName)
@@ -502,7 +513,6 @@ Public Class ucMusicVideo
         txtGenre.Text = ""
         txtPlot.Text = ""
         txtRuntime.Text = ""
-        txtStreamDetails.Text = ""
         txtStudio.Text = ""
         txtTitle.Text = ""
         txtYear.Text = ""
@@ -770,5 +780,51 @@ Public Class ucMusicVideo
         musicVideoList.Clear()
         lstBxMainList.Items.Clear()
         Call searchFornew(False)
+    End Sub
+
+    
+    Private Sub btnAddFolderPath_Click(sender As Object, e As System.EventArgs) Handles btnAddFolderPath.Click
+        Try
+            If tbFolderPath.Text = Nothing Then
+                Exit Sub
+            End If
+            If tbFolderPath.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = tbFolderPath.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In lstBoxFolders.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    lstBoxFolders.Items.Add(tempstring)
+                    tbFolderPath.Text = ""
+                    Preferences.MVidFolders.Add(tempstring)
+                    lstBoxFolders.Refresh()
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        lstBoxFolders.Items.Add(tempstring)
+                        tbFolderPath.Text = ""
+                        Preferences.MVidFolders.Add(tempstring)
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 End Class
