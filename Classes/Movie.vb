@@ -787,22 +787,38 @@ Public Class Movie
     Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
+        If Preferences.MusicVidScrape Then SimplifyScrapeSuccessActions
+    End Sub
+    
+    Sub SimplifyScrapeSuccessActions    'Remove these actions when scraping Music Videos
+        Actions.Items.Remove( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
+        Actions.Items.Remove( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
+        Actions.Items.Remove( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
+        Actions.Items.Remove( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
     End Sub
  
     Sub AppendScrapeFailedActions
@@ -1732,7 +1748,7 @@ Public Class Movie
     End Sub
  
     Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
-        If Preferences.MusicVidScrape Then Exit Sub  ' Temporary till get music vid posters scraping.
+        
         If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
@@ -1791,7 +1807,10 @@ Public Class Movie
                 Exit For
             End If
         Next
-
+        If Preferences.MusicVidScrape Then 
+            PosterUrl = _scrapedMovie.listthumbs(0).ToString
+            validUrl = Utilities.UrlIsValid(PosterUrl)
+        End If
 
         If validUrl Then
 

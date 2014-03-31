@@ -225,6 +225,7 @@ Public Class ucMusicVideo
 
         Next
         Call MusicVideoCacheSave()
+        Preferences.MusicVidScrape = False
     End Sub
 
     Public Function saveposter(ByVal path As String, ByVal url As String)
@@ -244,12 +245,21 @@ Public Class ucMusicVideo
         End Try
     End Function
 
-    Private Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False)
+    Private Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False) As String
         Try
 
-            Dim applicationpath As String = Application.StartupPath 'get application root path
-
+            Dim applicationpath As String = Preferences.applicationPath 'get application root path
+            
             Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
+            Dim filepath As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "")
+            Dim fileexists As Boolean = False
+            For Each extn In Utilities.VideoExtensions
+                If IO.File.Exists(filepath & extn) Then
+                    filepath = filepath & extn
+                    fileexists = True
+                End If
+            Next
+            If Not fileexists Then Return ""
 
             If overwrite = True Then
                 If IO.File.Exists(thumbpathandfilename) Then
@@ -264,14 +274,14 @@ Public Class ucMusicVideo
                 Dim myProcess As Process = New Process
                 myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 myProcess.StartInfo.CreateNoWindow = False
-                myProcess.StartInfo.FileName = applicationpath & "\ffmpeg.exe"
-                Dim proc_arguments As String = "-y -i """ & fullpathAndFilename & """ -f mjpeg -ss " & time & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                myProcess.StartInfo.FileName = applicationpath & "\Assets\ffmpeg.exe"
+                Dim proc_arguments As String = "-y -i """ & filepath & """ -f mjpeg -ss " & time.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                 myProcess.StartInfo.Arguments = proc_arguments
                 myProcess.Start()
                 myProcess.WaitForExit()
-                Return True
+                Return thumbpathandfilename
             Else
-                Return False
+                Return ""
             End If
         Catch
             Return False
@@ -567,15 +577,15 @@ Public Class ucMusicVideo
                 'load poster
                 Dim thumbpath As String = MusicVideo.fileinfo.fullPathAndFilename
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
-                PcBxMusicVideoScreenShot.ImageLocation = thumbpath
-                pcBxScreenshot.ImageLocation = thumbpath
+                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
+                Form1.util_ImageLoad(pcBxScreenshot, thumbpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
                 thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
                 If IO.File.Exists(thumbpath) Then
-                    PcBxPoster.ImageLocation = thumbpath
+                    Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
                 Else
                     thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.png")
                     If IO.File.Exists(thumbpath) Then
-                        PcBxPoster.ImageLocation = thumbpath
+                        Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
                     End If
                 End If
             End If
@@ -732,11 +742,11 @@ Public Class ucMusicVideo
         If Not lstBxMainList.SelectedItem Is Nothing Then
             For Each MusicVideo In musicVideoList
                 If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                    Dim screenshotpath As String = MusicVideo.fileinfo.fullPathAndFilename
+                    Dim screenshotpath As String = createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True) 'MusicVideo.fileinfo.fullPathAndFilename
 
-                    createScreenshot(screenshotpath, txtScreenshotTime.Text, True)
-                    PcBxMusicVideoScreenShot.ImageLocation = screenshotpath.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
-                    pcBxScreenshot.ImageLocation = screenshotpath.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
+                    'createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True)
+                    Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
+                    Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)  'pcBxScreenshot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
                 End If
             Next
         End If
