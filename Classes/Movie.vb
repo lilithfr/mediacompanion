@@ -470,7 +470,17 @@ Public Class Movie
                 Return Utilities.GetLastFolder(nfopathandfilename)
                 End If
             Else
-                Return Path.GetFileNameWithoutExtension(TitleFull) 
+                Dim tmpTitle As String = TitleFull
+                If Extension.ToLower = ".disc" Then
+                    tmpTitle = tmpTitle.Replace(".disc","")
+                    Dim p = tmpTitle.LastIndexOf(".")
+                    If p >1 Then
+                        tmpTitle = tmpTitle.Substring(0, p)
+                    End If
+                End If
+                Return Path.GetFileNameWithoutExtension(tmpTitle)
+                
+                'Return _title 'Path.GetFileNameWithoutExtension(TitleFull) 
             End If
         End Get
     End Property
