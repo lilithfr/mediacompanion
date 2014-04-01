@@ -52,12 +52,21 @@ Partial Class ucMusicVideo
         Me.lstBxMainList = New System.Windows.Forms.ListBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.tPScreenshotMV = New System.Windows.Forms.TabPage()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.btnPasteFromClipboard = New System.Windows.Forms.Button()
+        Me.btnSaveCrop = New System.Windows.Forms.Button()
+        Me.btnCropReset = New System.Windows.Forms.Button()
+        Me.btnCrop = New System.Windows.Forms.Button()
         Me.txtScreenshotTime = New System.Windows.Forms.MaskedTextBox()
         Me.btnScreenshotMinus = New System.Windows.Forms.Button()
         Me.btnScreenshotPlus = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.btnCreateScreenshot = New System.Windows.Forms.Button()
         Me.pcBxScreenshot = New System.Windows.Forms.PictureBox()
+        Me.tPPosterScrape = New System.Windows.Forms.TabPage()
         Me.tPPref = New System.Windows.Forms.TabPage()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.btnRemoveFolder = New System.Windows.Forms.Button()
@@ -66,28 +75,42 @@ Partial Class ucMusicVideo
         Me.btnBrowseFolders = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lstBoxFolders = New System.Windows.Forms.ListBox()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.tPManualScrape = New System.Windows.Forms.TabPage()
         Me.chkBxOverWriteArt = New System.Windows.Forms.CheckBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.btnManualScrape = New System.Windows.Forms.Button()
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.btnGoogleSearch = New System.Windows.Forms.Button()
+        Me.pcBxSinglePoster = New System.Windows.Forms.PictureBox()
+        Me.btnGoogleSearchPoster = New System.Windows.Forms.Button()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.btnPosterPaste = New System.Windows.Forms.Button()
+        Me.btnPosterSave = New System.Windows.Forms.Button()
+        Me.btnPosterReset = New System.Windows.Forms.Button()
+        Me.btnPosterCrop = New System.Windows.Forms.Button()
         Me.TabControlMain.SuspendLayout()
         Me.tPMainMV.SuspendLayout()
         CType(Me.PcBxPoster, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PcBxMusicVideoScreenShot, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tPScreenshotMV.SuspendLayout()
         CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tPPosterScrape.SuspendLayout()
         Me.tPPref.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
+        Me.tPManualScrape.SuspendLayout()
+        CType(Me.pcBxSinglePoster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TabControlMain
         '
         Me.TabControlMain.Controls.Add(Me.tPMainMV)
         Me.TabControlMain.Controls.Add(Me.tPScreenshotMV)
+        Me.TabControlMain.Controls.Add(Me.tPPosterScrape)
         Me.TabControlMain.Controls.Add(Me.tPPref)
-        Me.TabControlMain.Controls.Add(Me.TabPage1)
+        Me.TabControlMain.Controls.Add(Me.tPManualScrape)
         Me.TabControlMain.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControlMain.Location = New System.Drawing.Point(0, 0)
         Me.TabControlMain.Name = "TabControlMain"
@@ -409,6 +432,15 @@ Partial Class ucMusicVideo
         'tPScreenshotMV
         '
         Me.tPScreenshotMV.BackColor = System.Drawing.Color.LightGray
+        Me.tPScreenshotMV.Controls.Add(Me.btnGoogleSearch)
+        Me.tPScreenshotMV.Controls.Add(Me.Label17)
+        Me.tPScreenshotMV.Controls.Add(Me.Label16)
+        Me.tPScreenshotMV.Controls.Add(Me.Label15)
+        Me.tPScreenshotMV.Controls.Add(Me.Label14)
+        Me.tPScreenshotMV.Controls.Add(Me.btnPasteFromClipboard)
+        Me.tPScreenshotMV.Controls.Add(Me.btnSaveCrop)
+        Me.tPScreenshotMV.Controls.Add(Me.btnCropReset)
+        Me.tPScreenshotMV.Controls.Add(Me.btnCrop)
         Me.tPScreenshotMV.Controls.Add(Me.txtScreenshotTime)
         Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotMinus)
         Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotPlus)
@@ -422,24 +454,114 @@ Partial Class ucMusicVideo
         Me.tPScreenshotMV.TabIndex = 2
         Me.tPScreenshotMV.Text = "Screenshot"
         '
+        'Label17
+        '
+        Me.Label17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(62, 441)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(66, 20)
+        Me.Label17.TabIndex = 15
+        Me.Label17.Text = "Label17"
+        '
+        'Label16
+        '
+        Me.Label16.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label16.AutoSize = True
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(62, 408)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(66, 20)
+        Me.Label16.TabIndex = 14
+        Me.Label16.Text = "Label16"
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(2, 441)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(60, 20)
+        Me.Label15.TabIndex = 13
+        Me.Label15.Text = "Height:"
+        '
+        'Label14
+        '
+        Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(2, 408)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(54, 20)
+        Me.Label14.TabIndex = 12
+        Me.Label14.Text = "Width:"
+        '
+        'btnPasteFromClipboard
+        '
+        Me.btnPasteFromClipboard.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPasteFromClipboard.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPasteFromClipboard.Location = New System.Drawing.Point(350, 405)
+        Me.btnPasteFromClipboard.Name = "btnPasteFromClipboard"
+        Me.btnPasteFromClipboard.Size = New System.Drawing.Size(165, 32)
+        Me.btnPasteFromClipboard.TabIndex = 11
+        Me.btnPasteFromClipboard.Text = "Paste from Clipboard"
+        Me.btnPasteFromClipboard.UseVisualStyleBackColor = True
+        '
+        'btnSaveCrop
+        '
+        Me.btnSaveCrop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnSaveCrop.Enabled = False
+        Me.btnSaveCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSaveCrop.Location = New System.Drawing.Point(521, 481)
+        Me.btnSaveCrop.Name = "btnSaveCrop"
+        Me.btnSaveCrop.Size = New System.Drawing.Size(131, 32)
+        Me.btnSaveCrop.TabIndex = 10
+        Me.btnSaveCrop.Text = "Save Changes"
+        Me.btnSaveCrop.UseVisualStyleBackColor = True
+        '
+        'btnCropReset
+        '
+        Me.btnCropReset.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnCropReset.Enabled = False
+        Me.btnCropReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCropReset.Location = New System.Drawing.Point(521, 443)
+        Me.btnCropReset.Name = "btnCropReset"
+        Me.btnCropReset.Size = New System.Drawing.Size(131, 32)
+        Me.btnCropReset.TabIndex = 9
+        Me.btnCropReset.Text = "Reset Image"
+        Me.btnCropReset.UseVisualStyleBackColor = True
+        '
+        'btnCrop
+        '
+        Me.btnCrop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCrop.Location = New System.Drawing.Point(521, 405)
+        Me.btnCrop.Name = "btnCrop"
+        Me.btnCrop.Size = New System.Drawing.Size(131, 32)
+        Me.btnCrop.TabIndex = 7
+        Me.btnCrop.Text = "Enable Crop"
+        Me.btnCrop.UseVisualStyleBackColor = True
+        '
         'txtScreenshotTime
         '
-        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtScreenshotTime.CausesValidation = False
         Me.txtScreenshotTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtScreenshotTime.HidePromptOnLeave = True
-        Me.txtScreenshotTime.Location = New System.Drawing.Point(657, 543)
+        Me.txtScreenshotTime.Location = New System.Drawing.Point(218, 530)
         Me.txtScreenshotTime.Mask = "00000"
         Me.txtScreenshotTime.Name = "txtScreenshotTime"
-        Me.txtScreenshotTime.Size = New System.Drawing.Size(68, 26)
+        Me.txtScreenshotTime.Size = New System.Drawing.Size(60, 26)
         Me.txtScreenshotTime.TabIndex = 6
         Me.txtScreenshotTime.ValidatingType = GetType(Integer)
         '
         'btnScreenshotMinus
         '
-        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnScreenshotMinus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnScreenshotMinus.Location = New System.Drawing.Point(616, 536)
+        Me.btnScreenshotMinus.Location = New System.Drawing.Point(177, 523)
         Me.btnScreenshotMinus.Name = "btnScreenshotMinus"
         Me.btnScreenshotMinus.Size = New System.Drawing.Size(35, 36)
         Me.btnScreenshotMinus.TabIndex = 5
@@ -448,9 +570,9 @@ Partial Class ucMusicVideo
         '
         'btnScreenshotPlus
         '
-        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnScreenshotPlus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnScreenshotPlus.Location = New System.Drawing.Point(731, 536)
+        Me.btnScreenshotPlus.Location = New System.Drawing.Point(284, 523)
         Me.btnScreenshotPlus.Name = "btnScreenshotPlus"
         Me.btnScreenshotPlus.Size = New System.Drawing.Size(35, 36)
         Me.btnScreenshotPlus.TabIndex = 4
@@ -459,22 +581,22 @@ Partial Class ucMusicVideo
         '
         'Label12
         '
-        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(353, 546)
+        Me.Label12.Location = New System.Drawing.Point(2, 519)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(257, 20)
+        Me.Label12.Size = New System.Drawing.Size(169, 40)
         Me.Label12.TabIndex = 3
-        Me.Label12.Text = "Enter Time in Seconds for Capture:"
+        Me.Label12.Text = "Enter Time in Seconds" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "for Capture:"
         '
         'btnCreateScreenshot
         '
-        Me.btnCreateScreenshot.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCreateScreenshot.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCreateScreenshot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCreateScreenshot.Location = New System.Drawing.Point(772, 536)
+        Me.btnCreateScreenshot.Location = New System.Drawing.Point(325, 527)
         Me.btnCreateScreenshot.Name = "btnCreateScreenshot"
-        Me.btnCreateScreenshot.Size = New System.Drawing.Size(189, 36)
+        Me.btnCreateScreenshot.Size = New System.Drawing.Size(188, 32)
         Me.btnCreateScreenshot.TabIndex = 2
         Me.btnCreateScreenshot.Text = "Create New Screenshot"
         Me.btnCreateScreenshot.UseVisualStyleBackColor = True
@@ -486,10 +608,29 @@ Partial Class ucMusicVideo
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pcBxScreenshot.Location = New System.Drawing.Point(6, 6)
         Me.pcBxScreenshot.Name = "pcBxScreenshot"
-        Me.pcBxScreenshot.Size = New System.Drawing.Size(955, 528)
+        Me.pcBxScreenshot.Size = New System.Drawing.Size(646, 393)
         Me.pcBxScreenshot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pcBxScreenshot.TabIndex = 0
         Me.pcBxScreenshot.TabStop = False
+        '
+        'tPPosterScrape
+        '
+        Me.tPPosterScrape.Controls.Add(Me.btnGoogleSearchPoster)
+        Me.tPPosterScrape.Controls.Add(Me.Label18)
+        Me.tPPosterScrape.Controls.Add(Me.Label19)
+        Me.tPPosterScrape.Controls.Add(Me.Label20)
+        Me.tPPosterScrape.Controls.Add(Me.Label21)
+        Me.tPPosterScrape.Controls.Add(Me.btnPosterPaste)
+        Me.tPPosterScrape.Controls.Add(Me.btnPosterSave)
+        Me.tPPosterScrape.Controls.Add(Me.btnPosterReset)
+        Me.tPPosterScrape.Controls.Add(Me.btnPosterCrop)
+        Me.tPPosterScrape.Controls.Add(Me.pcBxSinglePoster)
+        Me.tPPosterScrape.Location = New System.Drawing.Point(4, 22)
+        Me.tPPosterScrape.Name = "tPPosterScrape"
+        Me.tPPosterScrape.Size = New System.Drawing.Size(967, 578)
+        Me.tPPosterScrape.TabIndex = 4
+        Me.tPPosterScrape.Text = "Poster"
+        Me.tPPosterScrape.UseVisualStyleBackColor = True
         '
         'tPPref
         '
@@ -576,18 +717,18 @@ Partial Class ucMusicVideo
         Me.lstBoxFolders.Size = New System.Drawing.Size(333, 459)
         Me.lstBoxFolders.TabIndex = 0
         '
-        'TabPage1
+        'tPManualScrape
         '
-        Me.TabPage1.Controls.Add(Me.chkBxOverWriteArt)
-        Me.TabPage1.Controls.Add(Me.Label13)
-        Me.TabPage1.Controls.Add(Me.btnManualScrape)
-        Me.TabPage1.Controls.Add(Me.WebBrowser1)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Size = New System.Drawing.Size(967, 578)
-        Me.TabPage1.TabIndex = 3
-        Me.TabPage1.Text = "Manually find Correct Wiki Entry"
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.tPManualScrape.Controls.Add(Me.chkBxOverWriteArt)
+        Me.tPManualScrape.Controls.Add(Me.Label13)
+        Me.tPManualScrape.Controls.Add(Me.btnManualScrape)
+        Me.tPManualScrape.Controls.Add(Me.WebBrowser1)
+        Me.tPManualScrape.Location = New System.Drawing.Point(4, 22)
+        Me.tPManualScrape.Name = "tPManualScrape"
+        Me.tPManualScrape.Size = New System.Drawing.Size(967, 578)
+        Me.tPManualScrape.TabIndex = 3
+        Me.tPManualScrape.Text = "Manually find Correct Wiki Entry"
+        Me.tPManualScrape.UseVisualStyleBackColor = True
         '
         'chkBxOverWriteArt
         '
@@ -635,6 +776,129 @@ Partial Class ucMusicVideo
         Me.WebBrowser1.Size = New System.Drawing.Size(964, 520)
         Me.WebBrowser1.TabIndex = 0
         '
+        'btnGoogleSearch
+        '
+        Me.btnGoogleSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnGoogleSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGoogleSearch.Location = New System.Drawing.Point(218, 405)
+        Me.btnGoogleSearch.Name = "btnGoogleSearch"
+        Me.btnGoogleSearch.Size = New System.Drawing.Size(126, 32)
+        Me.btnGoogleSearch.TabIndex = 16
+        Me.btnGoogleSearch.Text = "Google Search"
+        Me.btnGoogleSearch.UseVisualStyleBackColor = True
+        '
+        'pcBxSinglePoster
+        '
+        Me.pcBxSinglePoster.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pcBxSinglePoster.Location = New System.Drawing.Point(3, 3)
+        Me.pcBxSinglePoster.Name = "pcBxSinglePoster"
+        Me.pcBxSinglePoster.Size = New System.Drawing.Size(646, 393)
+        Me.pcBxSinglePoster.TabIndex = 0
+        Me.pcBxSinglePoster.TabStop = False
+        '
+        'btnGoogleSearchPoster
+        '
+        Me.btnGoogleSearchPoster.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnGoogleSearchPoster.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGoogleSearchPoster.Location = New System.Drawing.Point(215, 402)
+        Me.btnGoogleSearchPoster.Name = "btnGoogleSearchPoster"
+        Me.btnGoogleSearchPoster.Size = New System.Drawing.Size(126, 32)
+        Me.btnGoogleSearchPoster.TabIndex = 30
+        Me.btnGoogleSearchPoster.Text = "Google Search"
+        Me.btnGoogleSearchPoster.UseVisualStyleBackColor = True
+        '
+        'Label18
+        '
+        Me.Label18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(59, 438)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(66, 20)
+        Me.Label18.TabIndex = 29
+        Me.Label18.Text = "Label18"
+        '
+        'Label19
+        '
+        Me.Label19.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Location = New System.Drawing.Point(59, 405)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(66, 20)
+        Me.Label19.TabIndex = 28
+        Me.Label19.Text = "Label19"
+        '
+        'Label20
+        '
+        Me.Label20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(-1, 438)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(60, 20)
+        Me.Label20.TabIndex = 27
+        Me.Label20.Text = "Height:"
+        '
+        'Label21
+        '
+        Me.Label21.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Location = New System.Drawing.Point(-1, 405)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(54, 20)
+        Me.Label21.TabIndex = 26
+        Me.Label21.Text = "Width:"
+        '
+        'btnPosterPaste
+        '
+        Me.btnPosterPaste.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPosterPaste.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPosterPaste.Location = New System.Drawing.Point(347, 402)
+        Me.btnPosterPaste.Name = "btnPosterPaste"
+        Me.btnPosterPaste.Size = New System.Drawing.Size(165, 32)
+        Me.btnPosterPaste.TabIndex = 25
+        Me.btnPosterPaste.Text = "Paste from Clipboard"
+        Me.btnPosterPaste.UseVisualStyleBackColor = True
+        '
+        'btnPosterSave
+        '
+        Me.btnPosterSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPosterSave.Enabled = False
+        Me.btnPosterSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPosterSave.Location = New System.Drawing.Point(518, 478)
+        Me.btnPosterSave.Name = "btnPosterSave"
+        Me.btnPosterSave.Size = New System.Drawing.Size(131, 32)
+        Me.btnPosterSave.TabIndex = 24
+        Me.btnPosterSave.Text = "Save Changes"
+        Me.btnPosterSave.UseVisualStyleBackColor = True
+        '
+        'btnPosterReset
+        '
+        Me.btnPosterReset.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPosterReset.Enabled = False
+        Me.btnPosterReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPosterReset.Location = New System.Drawing.Point(518, 440)
+        Me.btnPosterReset.Name = "btnPosterReset"
+        Me.btnPosterReset.Size = New System.Drawing.Size(131, 32)
+        Me.btnPosterReset.TabIndex = 23
+        Me.btnPosterReset.Text = "Reset Image"
+        Me.btnPosterReset.UseVisualStyleBackColor = True
+        '
+        'btnPosterCrop
+        '
+        Me.btnPosterCrop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPosterCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPosterCrop.Location = New System.Drawing.Point(518, 402)
+        Me.btnPosterCrop.Name = "btnPosterCrop"
+        Me.btnPosterCrop.Size = New System.Drawing.Size(131, 32)
+        Me.btnPosterCrop.TabIndex = 22
+        Me.btnPosterCrop.Text = "Enable Crop"
+        Me.btnPosterCrop.UseVisualStyleBackColor = True
+        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -650,10 +914,13 @@ Partial Class ucMusicVideo
         Me.tPScreenshotMV.ResumeLayout(False)
         Me.tPScreenshotMV.PerformLayout()
         CType(Me.pcBxScreenshot, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tPPosterScrape.ResumeLayout(False)
+        Me.tPPosterScrape.PerformLayout()
         Me.tPPref.ResumeLayout(False)
         Me.tPPref.PerformLayout()
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
+        Me.tPManualScrape.ResumeLayout(False)
+        Me.tPManualScrape.PerformLayout()
+        CType(Me.pcBxSinglePoster, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -701,10 +968,30 @@ Partial Class ucMusicVideo
     Friend WithEvents btnAddFolderPath As System.Windows.Forms.Button
     Friend WithEvents tbFolderPath As System.Windows.Forms.TextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents tPManualScrape As System.Windows.Forms.TabPage
     Friend WithEvents WebBrowser1 As System.Windows.Forms.WebBrowser
     Friend WithEvents btnManualScrape As System.Windows.Forms.Button
     Friend WithEvents chkBxOverWriteArt As System.Windows.Forms.CheckBox
     Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents tPPosterScrape As System.Windows.Forms.TabPage
+    Friend WithEvents btnCrop As System.Windows.Forms.Button
+    Friend WithEvents btnSaveCrop As System.Windows.Forms.Button
+    Friend WithEvents btnCropReset As System.Windows.Forms.Button
+    Friend WithEvents btnPasteFromClipboard As System.Windows.Forms.Button
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents Label16 As System.Windows.Forms.Label
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents btnGoogleSearch As System.Windows.Forms.Button
+    Friend WithEvents pcBxSinglePoster As System.Windows.Forms.PictureBox
+    Friend WithEvents btnGoogleSearchPoster As System.Windows.Forms.Button
+    Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents Label20 As System.Windows.Forms.Label
+    Friend WithEvents Label21 As System.Windows.Forms.Label
+    Friend WithEvents btnPosterPaste As System.Windows.Forms.Button
+    Friend WithEvents btnPosterSave As System.Windows.Forms.Button
+    Friend WithEvents btnPosterReset As System.Windows.Forms.Button
+    Friend WithEvents btnPosterCrop As System.Windows.Forms.Button
 
 End Class

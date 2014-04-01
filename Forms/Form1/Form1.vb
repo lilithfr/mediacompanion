@@ -33,7 +33,8 @@ Public Class Form1
     Shared Public          XbmcControllerQ       As PriorityQueue    = New PriorityQueue
     Shared Public          XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
     Shared Public Property MC_Only_Movies        As List(Of ComboList)
-    Shared Public Property MaxXbmcMovies         As List(Of MaxXbmcMovie)
+    Public Shared Property MaxXbmcMovies As List(Of MaxXbmcMovie)
+
     Public Property        XBMC_Controller_LogLastShownDt  As Date = Now
     Private                XBMC_Link_ErrorLog_Timer As Timers.Timer = New Timers.Timer()
     Private                XBMC_Link_Idle_Timer     As Timers.Timer = New Timers.Timer()
@@ -132,6 +133,7 @@ Public Class Form1
     Public NewTagList As New List(Of String)
     Public MovieSearchEngine As String = "imdb"
 
+    Public cropMode As String = "movieposter"
 
     Public noFanart As Boolean
     'Public Shared tvScraperLog As String = ""
@@ -518,10 +520,6 @@ Public Class Form1
 
         CheckForIllegalCrossThreadCalls = False
 
-        'These lines fixed the associated panel so that they don't automove when the Form1 is resized
-        SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
-        SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
-        SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
         Try
             SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
@@ -547,6 +545,12 @@ Public Class Form1
         Call util_RegexLoad()
 
         Call util_PrefsLoad()
+
+        'These lines fixed the associated panel so that they don't automove when the Form1 is resized
+        SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
+        SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
+        SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
+
 
         'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
         'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
@@ -2988,7 +2992,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub util_ZoomImage(ByVal file As Bitmap)
+    Public Sub util_ZoomImage(ByVal file As Bitmap)
         bigPanel = New Panel
         With bigPanel
             .Width = Me.Width
@@ -5278,6 +5282,7 @@ Public Class Form1
 
     Private Sub btn_MovEnableCrop_Click( sender As System.Object,  e As System.EventArgs) Handles btnMoviePosterEnableCrop.Click
         Try
+            cropMode = "movieposter"
             Dim t As New frmMovPosterCrop
             t.ShowDialog()
         Catch ex As Exception
@@ -22205,7 +22210,7 @@ Public Class Form1
     End Sub
 
     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
-    Private Sub OpenUrl(url As String)
+    Public Sub OpenUrl(ByVal url As String)
         Try
             If Preferences.selectedBrowser <> "" Then
                 Process.Start(Preferences.selectedBrowser, url)

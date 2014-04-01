@@ -7,6 +7,7 @@ Public Class ucMusicVideo
     'Dim nfo As New WorkingWithNfoFiles
     Public Shared musicVideoList As New List(Of FullMovieDetails)
     Dim movieGraphicInfo As New GraphicInfo
+    Public cropimage As Bitmap
 
     Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
@@ -532,7 +533,7 @@ Public Class ucMusicVideo
         PcBxMusicVideoScreenShot.Image = Nothing
         PcBxPoster.Image = Nothing
         pcBxScreenshot.Image = Nothing
-
+        pcBxSinglePoster.Image = Nothing
         For Each MusicVideo In musicVideoList
 
 
@@ -580,7 +581,8 @@ Public Class ucMusicVideo
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
                 Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
                 Form1.util_ImageLoad(pcBxScreenshot, thumbpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
-
+                Label16.Text = pcBxScreenshot.Image.Width
+                Label17.Text = pcBxScreenshot.Image.Height
                 'Set Media overlay
                 Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
                 movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
@@ -589,10 +591,16 @@ Public Class ucMusicVideo
                 thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
                 If IO.File.Exists(thumbpath) Then
                     Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                    Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                    Label19.Text = pcBxScreenshot.Image.Width
+                    Label18.Text = pcBxScreenshot.Image.Height
                 Else
                     thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.png")
                     If IO.File.Exists(thumbpath) Then
                         Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                        Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                        Label19.Text = pcBxScreenshot.Image.Width
+                        Label18.Text = pcBxScreenshot.Image.Height
                     End If
                 End If
             End If
@@ -835,6 +843,194 @@ Public Class ucMusicVideo
                         Preferences.MVidFolders.Add(tempstring)
                     End If
                 End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
+        Form1.cropMode = "mvscreenshot"
+        Try
+            Dim t As New frmMovPosterCrop
+            t.ShowDialog()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCropReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCropReset.Click
+        pcBxScreenshot.Image = PcBxMusicVideoScreenShot.Image
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+    End Sub
+
+    Private Sub btnSaveCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCrop.Click
+        Dim bitmap3 As New Bitmap(pcBxScreenshot.Image)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+        PcBxMusicVideoScreenShot.Image = Nothing
+        PcBxMusicVideoScreenShot.ImageLocation = thumbpathandfilename
+        pcBxScreenshot.ImageLocation = thumbpathandfilename
+    End Sub
+
+    Private Sub pcBxScreenshot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxScreenshot.DoubleClick
+        Try
+            If Not pcBxScreenshot.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(pcBxScreenshot.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnPasteFromClipboard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteFromClipboard.Click
+        If AssignClipboardImage(pcBxScreenshot) Then
+            btnCropReset.Enabled = True
+            btnSaveCrop.Enabled = True
+            Label16.Text = pcBxScreenshot.Image.Width
+            Label17.Text = pcBxScreenshot.Image.Height
+        End If
+    End Sub
+
+    Private Function AssignClipboardImage(ByVal picBox As PictureBox) As Boolean
+        Try
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
+                Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
+                Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
+                If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
+                    Form1.util_ImageLoad(picBox, pth, Utilities.DefaultPosterPath)
+                    Return True
+                Else
+                    MessageBox.Show("Not a picture")
+                End If
+            End If
+
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Bitmap) Then
+                picBox.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
+                Return True
+            End If
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+        Return False
+    End Function
+
+    Private Sub PcBxMusicVideoScreenShot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxMusicVideoScreenShot.DoubleClick
+        Try
+            If Not PcBxMusicVideoScreenShot.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(PcBxMusicVideoScreenShot.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
+        Try
+            If Not PcBxPoster.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(PcBxPoster.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub googleSearch()
+        Dim title As String = txtTitle.Text
+        Dim artist As String = txtArtist.Text
+
+        Dim url As String = "http://images.google.com/images?q=" & title & "+" & artist
+      
+        Form1.OpenUrl(url)
+    End Sub
+
+    Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click
+        Call googleSearch()
+    End Sub
+
+    Private Sub btnGoogleSearchPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearchPoster.Click
+        Call googleSearch()
+    End Sub
+
+    Private Sub btnPosterPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterPaste.Click
+        If AssignClipboardImage(pcBxSinglePoster) Then
+            btnPosterReset.Enabled = True
+            btnPosterSave.Enabled = True
+            Label16.Text = pcBxSinglePoster.Image.Width
+            Label17.Text = pcBxSinglePoster.Image.Height
+        End If
+    End Sub
+
+    Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
+        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+        pcBxSinglePoster.Image = Nothing
+        pcBxSinglePoster.ImageLocation = thumbpathandfilename
+        PcBxPoster.ImageLocation = thumbpathandfilename
+    End Sub
+
+    Private Sub btnPosterReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterReset.Click
+        pcBxSinglePoster.Image = PcBxPoster.Image
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+    End Sub
+
+    Private Sub btnPosterSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterSave.Click
+        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+        pcBxSinglePoster.Image = Nothing
+        PcBxPoster.Image = Nothing
+        PcBxPoster.ImageLocation = thumbpathandfilename
+        pcBxSinglePoster.ImageLocation = thumbpathandfilename
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+    End Sub
+
+    Private Sub pcBxSinglePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxSinglePoster.DoubleClick
+        Try
+            If Not pcBxSinglePoster.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(pcBxSinglePoster.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
