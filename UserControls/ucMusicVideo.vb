@@ -64,6 +64,7 @@ Public Class ucMusicVideo
         Preferences.MusicVidScrape = True
         oMovies.FindNewMusicVideos()
         Preferences.MusicVidScrape = False
+        Call searchFornew(False)
     End Sub
 
     Private Sub searchFornew(Optional ByVal scrape As Boolean = True)

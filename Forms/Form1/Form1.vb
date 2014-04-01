@@ -20717,12 +20717,7 @@ Public Class Form1
     Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
         Try
             If cbXbmcTmdbActorDL.CheckState = CheckState.Checked Then
-                If Preferences.actorseasy Then
-                    Preferences.XbmcTmdbActorDL = True
-                Else
-                    MsgBox("Downloading of actors must also be enabled")
-                    cbXbmcTmdbActorDL.CheckState = CheckState.Unchecked 
-                End If
+                Preferences.XbmcTmdbActorDL = True
             Else
                 Preferences.XbmcTmdbActorDL = False
             End If

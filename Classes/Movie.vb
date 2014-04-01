@@ -128,8 +128,7 @@ Public Class Movie
 
 
     #Region "Read-only properties"
-
-
+    
     ReadOnly Property NfoPathAndFilename As String
         Get
            If RenamedBaseName <>"" Then Return RenamedBaseName & ".nfo"
@@ -805,22 +804,14 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
-        If Preferences.MusicVidScrape Then SimplifyScrapeSuccessActions
     End Sub
     
-    Sub SimplifyScrapeSuccessActions    'Remove these actions when scraping Music Videos
-        Actions.Items.Remove( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
-        Actions.Items.Remove( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
-        Actions.Items.Remove( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
-        Actions.Items.Remove( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
+    Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
     End Sub
  
     Sub AppendScrapeFailedActions
@@ -828,6 +819,20 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
         If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
         If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
+    End Sub
+
+    Sub AppendScraperIMDBSpecific
+        Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) )
+    End Sub
+
+    Sub AppendScraperTMDBSpecific
+        Actions.Items.Add( New ScrapeAction(AddressOf TmdbScraper_GetBody , "Scrape TMDB Main Body"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf CheckTmdbBodyScrape , "Checking TMDB Main body scrape" ) ) 
+    End Sub
+
+    Sub AppendScraperMusicVidSpecific
+        Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape Wiki Main Body"          ) )
     End Sub
 
     Sub Scrape(imdb As String)
@@ -838,17 +843,15 @@ Public Class Movie
     Sub Scrape
         If Not Scraped then
             Scraped  = True
+            'General
             Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
             Actions.Items.Add( New ScrapeAction(AddressOf getspecialMovie     , "Check if special version"       ) )
-            If Preferences.movies_useXBMC_Scraper Or MovieSearchEngine = "tmdb"
-                Actions.Items.Add( New ScrapeAction(AddressOf TmdbScraper_GetBody , "Scrape TMDB Main Body"          ) )
-                Actions.Items.Add( New ScrapeAction(AddressOf CheckTmdbBodyScrape , "Checking TMDB Main body scrape" ) )                                   
+            If (Preferences.movies_useXBMC_Scraper Or MovieSearchEngine = "tmdb") AndAlso Not Preferences.MusicVidScrape
+                AppendScraperTMDBSpecific 
             ElseIf Not Preferences.movies_useXBMC_Scraper AndAlso Not MovieSearchEngine = "tmdb" AndAlso Not Preferences.MusicVidScrape
-                Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
-                Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) ) 
+                AppendScraperIMDBSpecific 
             Else If Preferences.MusicVidScrape
-                Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape Wiki Main Body"          ) )
-                'Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape  , "Checking WIki Main body scrape" ) )
+                AppendScraperMusicVidSpecific 
             End If
             RunScrapeActions
         End if
@@ -951,7 +954,8 @@ Public Class Movie
 
     Sub musicVid_GetBody()
         Dim s As New WikipediaMusivVideoScraper 
-        _imdbBody = s.musicVideoScraper(mediapathandfilename) '(SearchName)
+        _scrapedMovie = s.musicVideoScraper(mediapathandfilename) '(SearchName)
+        AppendMVScrapeSuccessActions
     End Sub
 
     Sub CheckMusicVidBodyScrape()
@@ -1089,7 +1093,7 @@ Public Class Movie
 
         'Dim MovieUpdated As Boolean = File.Exists(Nfo)
         If Preferences.MusicVidScrape Then
-        
+            WorkingWithNfoFiles.MVsaveNfo(fmd)
         Else
             WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)    
         End If
