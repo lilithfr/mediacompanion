@@ -1364,7 +1364,7 @@ Public Class Movie
     End Sub
 
     Sub GetActors
-        If Preferences.XbmcTmdbActorDL Then
+        If Preferences.XbmcTmdbActorDL AndAlso Preferences.movies_useXBMC_Scraper Then
             TmdbActorSave()
         Else
             _scrapedMovie.listactors.Clear
