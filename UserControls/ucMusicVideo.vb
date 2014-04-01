@@ -8,6 +8,7 @@ Public Class ucMusicVideo
     Public Shared musicVideoList As New List(Of FullMovieDetails)
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
+    Dim rescraping As Boolean = False
 
     Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
@@ -92,7 +93,8 @@ Public Class ucMusicVideo
             Dim scraper As New WikipediaMusivVideoScraper
 
             If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) And scrape = True Then
-                musicVideoTitle = scraper.musicVideoScraper(videopath)
+                Dim searchterm As String = getArtistAndTitle(videopath)
+                musicVideoTitle = scraper.musicVideoScraper(videopath, searchterm)
                 musicVideoTitle.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
                 Try
                     If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" And scrape = True Then
@@ -146,7 +148,8 @@ Public Class ucMusicVideo
                     Dim oldnfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), "_old.nfo")
                     IO.File.Move(nfopath, oldnfopath)
 
-                    musicVideoTitle = scraper.musicVideoScraper(videopath)
+                    Dim searchterm As String = getArtistAndTitle(videopath)
+                    musicVideoTitle = scraper.musicVideoScraper(videopath, searchterm)
                     musicVideoTitle.fileinfo.fullpathandfilename = videopath
                     Try
                         If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" And scrape = True Then
@@ -1035,5 +1038,137 @@ Public Class ucMusicVideo
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Function getArtistAndTitle(ByVal fullpathandfilename As String)
+        Dim searchTerm As String = ""
+        Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
+        If filenameWithoutExtension.IndexOf(" - ") <> -1 Then
+            searchTerm = filenameWithoutExtension
+        Else 'assume /artist/title.ext convention
+            Try
+                Dim lastfolder As String = Utilities.GetLastFolder(fullpathandfilename)
+                searchTerm = lastfolder & " - " & filenameWithoutExtension
+            Catch
+            End Try
+        End If
+
+        If searchTerm = "" Then
+            searchTerm = filenameWithoutExtension
+        End If
+
+        Return searchTerm
+    End Function
+
+    Private Sub TabControlMain_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControlMain.SelectedIndexChanged
+        If TabControlMain.SelectedTab.Text = "Manually find Correct Wiki Entry" Then
+
+            Dim searchterm As String = getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value)
+            Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
+
+            WebBrowser1.Stop()
+            WebBrowser1.ScriptErrorsSuppressed = True
+            WebBrowser1.Navigate(searchurl)
+            WebBrowser1.Refresh()
+        End If
+    End Sub
+
+   
+    Private Sub btnManualScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnManualScrape.Click
+        If WebBrowser1.Url.ToString.ToLower.IndexOf("wikipedia.org") = -1 Or WebBrowser1.Url.ToString.ToLower.IndexOf("google") <> -1 Then
+            MsgBox("You Must Browse to a Wikipedia Page")
+            Exit Sub
+        End If
+
+        Dim messagestring As String = "Changing the movie will Overwrite all the current details"
+        messagestring &= vbCrLf & "Do you wish to continue?"
+        If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
+            Exit Sub
+        Else
+
+            Dim videopath As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+            Dim musicVideoTitle As New FullMovieDetails
+            Dim scraper As New WikipediaMusivVideoScraper
+
+            Dim searchterm As String = getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value)
+            musicVideoTitle = scraper.musicVideoScraper(getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value), "", WebBrowser1.Url.ToString)
+
+            'poster
+            Try
+                If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" Then
+                    'save available posters if dont already exist
+                    saveposter(videopath, musicVideoTitle.listthumbs(0))
+                Else
+                    If chkBxOverWriteArt.CheckState = CheckState.Checked Then
+                        'IF overwrite chkbox ticked then delete and save new
+                        IO.File.Delete(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg"))
+                        saveposter(videopath, musicVideoTitle.listthumbs(0))
+                    End If
+                End If
+            Catch
+            End Try
+
+            'screenshot
+            If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-fanart.jpg")) Then
+                createScreenshot(videopath)
+            Else
+                If chkBxOverWriteArt.CheckState = CheckState.Checked Then
+                    'IF overwrite chkbox ticked then delete and save new
+                    IO.File.Delete(videopath.Replace(IO.Path.GetExtension(videopath), "-fanart.jpg"))
+                    createScreenshot(videopath)
+                End If
+            End If
+
+            'streamdetails
+            Dim newstreamdetails As New FullFileDetails
+            musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
+
+            Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
+            Dim hms = TimeSpan.FromSeconds(seconds)
+            Dim h = hms.Hours.ToString
+            Dim m = hms.Minutes.ToString
+            Dim s = hms.Seconds.ToString
+
+            If s.Length = 1 Then s = "0" & s
+
+            Dim runtime As String
+            runtime = h & ":" & m & ":" & s
+            If h = "0" Then
+                runtime = m & ":" & s
+            End If
+            If h = "0" And m = "0" Then
+                runtime = s
+            End If
+            musicVideoTitle.fullmoviebody.runtime = runtime
+            musicVideoTitle.fileinfo.fullpathandfilename = videopath
+            WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
+
+            For f = 0 To musicVideoList.Count - 1
+                If musicVideoList.Item(f).fileinfo.fullpathandfilename.ToLower = videopath.ToLower Then
+                    musicVideoList.RemoveAt(f)
+                    musicVideoList.Add(musicVideoTitle)
+                    Exit For
+                End If
+            Next
+
+            For f = 0 To lstBxMainList.Items.Count - 1
+                If CType(lstBxMainList.Items(f), ValueDescriptionPair).Value = musicVideoTitle.fileinfo.fullpathandfilename Then
+                    rescraping = True
+                    lstBxMainList.Items.RemoveAt(f)
+                    lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
+                    For g = 0 To lstBxMainList.Items.Count - 1
+                        If CType(lstBxMainList.Items(g), ValueDescriptionPair).Value = musicVideoTitle.fileinfo.fullpathandfilename Then
+                            rescraping = False
+                            lstBxMainList.SelectedItem = lstBxMainList.Items(g)
+                        End If
+                    Next
+                    Exit For
+                End If
+            Next
+
+        End If
+        rescraping = False
+        TabControlMain.SelectedIndex = 0
+
     End Sub
 End Class
