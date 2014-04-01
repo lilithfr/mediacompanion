@@ -1204,19 +1204,19 @@ Public Class Form1
                 Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
                 pic3ratio = pic3ImSzW / pic3ImszH
                 pic4ratio = pic4ImSzW / pic4ImszH
-                pic5ratio = _tv_SplitContainer.Height - tv_PictureBoxBottom.Image.VerticalResolution - 8
+                pic5ratio = _tv_SplitContainer.Height - (((_tv_SplitContainer.Width/tv_PictureBoxBottom.Image.Width)*tv_PictureBoxBottom.Image.Height) + 20)
             Else
                 pic3ratio = 2
                 pic4ratio = 1
                 pic5ratio = 235
             End If
-            'MsgBox(from & " = " & SplitContainer4.SplitterDistance & " - " & pic3ImSzW & "x" & pic3ImszH & " " & pic4ImszH & "x" & pic4ImSzW)
+            
         Catch ex As Exception
             pic3ratio = 2
             pic4ratio = 1
-            'MsgBox("TV Splitter Exception")
+            pic5ratio = 235
         End Try
-        _tv_SplitContainer.SplitterDistance = pic5ratio
+        _tv_SplitContainer.SplitterDistance = pic5ratio  '_tv_SplitContainer.Height - test
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
     End Sub
 

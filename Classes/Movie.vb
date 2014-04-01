@@ -700,11 +700,13 @@ Public Class Movie
         If Utilities.findFileOfType(movieNfoFile, ".nfo",Preferences.basicsavemode) Then
             Try
                 Dim filechck As StreamReader = File.OpenText(movieNfoFile)
+                Dim Searchstring As String = "<movie>"
+                If Preferences.MusicVidScrape Then Searchstring = "<musicvideo>"
                 Dim tempstring As String
                 Do
                     tempstring = filechck.ReadLine
                     If tempstring = Nothing Then Exit Do
-                    If tempstring.IndexOf("<movie>") <> -1 Then
+                    If tempstring.IndexOf(Searchstring) <> -1 Then
                         log &= " - valid MC .nfo found - scrape skipped!"
                         Return False
                     End If
@@ -845,8 +847,8 @@ Public Class Movie
                 Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
                 Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) ) 
             Else If Preferences.MusicVidScrape
-                Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape TMDB Main Body"          ) )
-                Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape  , "Checking TMDB Main body scrape" ) )
+                Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape Wiki Main Body"          ) )
+                'Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape  , "Checking WIki Main body scrape" ) )
             End If
             RunScrapeActions
         End if
@@ -949,7 +951,7 @@ Public Class Movie
 
     Sub musicVid_GetBody()
         Dim s As New WikipediaMusivVideoScraper 
-        _imdbBody = s.musicVideoScraper(SearchName)
+        _imdbBody = s.musicVideoScraper(mediapathandfilename) '(SearchName)
     End Sub
 
     Sub CheckMusicVidBodyScrape()

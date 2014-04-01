@@ -2200,7 +2200,7 @@ End If
 
         Dim folders As New List(Of String)
 
-        AddOnlineFolders ( folders , Preferences.movieFolders )
+        AddOnlineFolders ( folders , Preferences.MVidFolders )
         'AddOfflineFolders( folders )
 
         Dim i = 0

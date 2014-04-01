@@ -54,7 +54,14 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
+        'Call SearchForNewMV()    ' For Testing of using Movie Scraper routines.
         Call searchFornew()
+    End Sub
+
+    Private Sub SearchForNewMV()
+        Preferences.MusicVidScrape = True
+        oMovies.FindNewMusicVideos()
+        Preferences.MusicVidScrape = False
     End Sub
 
     Private Sub searchFornew(Optional ByVal scrape As Boolean = True)
