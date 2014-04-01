@@ -23640,6 +23640,7 @@ Public Class Form1
             Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
             Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
             Case "SearchForNewMovies"     : Return True
+            Case "SearchForNewMusicVideo" : Return True
             Case "RebuildCaches"          : Return True
         End Select
 
@@ -23704,6 +23705,10 @@ Public Class Form1
         oMovies.FindNewMovies
     End Sub
 
+    Public Sub SearchForNewMusicVideo
+        oMovies.FindNewMusicVideos()
+    End Sub
+
     Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
 
         Dim oProgress As Progress = CType(e.UserState, Progress)
@@ -23740,7 +23745,7 @@ Public Class Form1
         ScraperStatusStrip.Visible = False
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
-
+        Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
         DisplayLogFile()
 
         'TabPage14.Text = "Search for new movies"

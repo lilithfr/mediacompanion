@@ -56,19 +56,20 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
-        'Call SearchForNewMV()    ' For Testing of using Movie Scraper routines.
-        Call searchFornew()
+        Call SearchForNewMV()    ' For Testing of using Movie Scraper routines.
+        'Call searchFornew()
     End Sub
 
     Private Sub SearchForNewMV()
         Preferences.MusicVidScrape = True
-        oMovies.FindNewMusicVideos()
-        Preferences.MusicVidScrape = False
+        Form1.RunBackgroundMovieScrape("SearchForNewMusicVideo")
+        While Form1.BckWrkScnMovies.IsBusy
+            Application.DoEvents()
+        End While
         Call searchFornew(False)
     End Sub
 
     Private Sub searchFornew(Optional ByVal scrape As Boolean = True)
-        Preferences.MusicVidScrape = True
         Dim fullfolderlist As New List(Of String)
         fullfolderlist.Clear()
         fullfolderlist = listAllFolders()
@@ -225,7 +226,6 @@ Public Class ucMusicVideo
 
         Next
         Call MusicVideoCacheSave()
-        Preferences.MusicVidScrape = False
     End Sub
 
     Public Function saveposter(ByVal path As String, ByVal url As String)

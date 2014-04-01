@@ -954,9 +954,16 @@ Public Class Movie
 
     Sub musicVid_GetBody()
         Dim s As New WikipediaMusivVideoScraper 
+        Dim serchtitle As String = Utilities.CleanReleaseFormat(SearchName, Preferences.releaseformat)
+        If Not IsNothing(serchtitle) then
+            ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, serchtitle))
+            ReportProgress( String.Format(" - Using '{0}'", serchtitle ))
+            ReportProgress( "- Main body " )
+        End If
         _scrapedMovie = s.musicVideoScraper(mediapathandfilename) '(SearchName)
         AppendMVScrapeSuccessActions
     End Sub
+
 
     Sub CheckMusicVidBodyScrape()
         If ImdbBody.ToLower = "error" Then
