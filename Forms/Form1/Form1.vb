@@ -23745,9 +23745,9 @@ Public Class Form1
         ScraperStatusStrip.Visible = False
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
+        
+        If Not Preferences.MusicVidScrape Then DisplayLogFile()  ' no need to display log after music video scraping.
         Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
-        DisplayLogFile()
-
         'TabPage14.Text = "Search for new movies"
         'TabPage14.ToolTipText = "Scan movie folders for new media files"
     End Sub

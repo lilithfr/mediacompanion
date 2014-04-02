@@ -1,13 +1,16 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports System.Text.RegularExpressions
+Imports System.Threading
 
 Public Class WikipediaMusivVideoScraper
 
     Public Function musicVideoScraper(ByVal fullpathandfilename As String, Optional ByVal searchterm As String = "", Optional ByVal wikipediaURL As String = "")
+        Monitor.Enter(Me)
         Dim musicVideoTitle As New FullMovieDetails
         Dim s As New Classimdb
         musicVideoTitle.fileinfo.fullpathandfilename = fullpathandfilename
+        searchterm = getArtistAndTitle(fullpathandfilename)
 
         If searchterm = "" And wikipediaURL = "" Then
             Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
@@ -15,7 +18,6 @@ Public Class WikipediaMusivVideoScraper
             strarr = filenameWithoutExtension.Split("-"c)
             musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
             musicVideoTitle.fullmoviebody.title = strarr(1).Trim
-
             searchterm = s.searchurltitle(filenameWithoutExtension)
         ElseIf searchterm <> "" Then
             Dim strarr() As String
@@ -161,7 +163,29 @@ Public Class WikipediaMusivVideoScraper
         If musicVideoTitle.fullmoviebody.studio = Nothing Then musicVideoTitle.fullmoviebody.studio = "Unknown"
 
         Return musicVideoTitle
+        Monitor.Exit(Me)
+    End Function
 
+    Private Function getArtistAndTitle(ByVal fullpathandfilename As String)
+        Monitor.Enter(Me)
+        Dim searchTerm As String = ""
+        Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
+        If filenameWithoutExtension.IndexOf(" - ") <> -1 Then
+            searchTerm = filenameWithoutExtension
+        Else 'assume /artist/title.ext convention
+            Try
+                Dim lastfolder As String = Utilities.GetLastFolder(fullpathandfilename)
+                searchTerm = lastfolder & " - " & filenameWithoutExtension
+            Catch
+            End Try
+        End If
+
+        If searchTerm = "" Then
+            searchTerm = filenameWithoutExtension
+        End If
+
+        Return searchTerm
+        Monitor.Exit(Me)
     End Function
 
     'Public Function searchurltitle(ByVal title As String) As String

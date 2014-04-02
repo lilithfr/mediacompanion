@@ -1971,13 +1971,18 @@ Public Class Movie
             ReportProgress(,"Fanart scraping not enabled" & vbCrLf)
             Exit Sub
         End If
+        If Preferences.MusicVidScrape Then
+            ucMusicVideo.createScreenshot(mediapathandfilename, , True)
+        Else
+            DoDownloadFanart
+        End If
 
-        DoDownloadFanart
+        
 
     End Sub
 
     Sub DoDownloadFanart
-        If Preferences.MusicVidScrape Then Exit Sub  ' Temporary till get music vid posters scraping.
+        'If Preferences.MusicVidScrape Then Exit Sub  ' Temporary till get music vid posters scraping.
         Dim MoviePath As String = NfoPathPrefName
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg
         Dim isMovieFanart As String = MoviePath.Replace(".nfo","-fanart.jpg")

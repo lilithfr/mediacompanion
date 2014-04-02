@@ -3,13 +3,13 @@ Imports System.Net
 Imports System.Text.RegularExpressions
 Imports System.Xml
 
+
 Public Class ucMusicVideo
-    'Dim nfo As New WorkingWithNfoFiles
+    
     Public Shared musicVideoList As New List(Of FullMovieDetails)
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
     Dim rescraping As Boolean = False
-
     Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -18,46 +18,6 @@ Public Class ucMusicVideo
             lstBoxFolders.Items.Add(item)
         Next
         txtScreenshotTime.Text = "10"
-    End Sub
-
-
-    Private Sub btnBrowseFolders_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseFolders.Click
-        Dim allok As Boolean = True
-        Dim theFolderBrowser As New FolderBrowserDialog
-        Dim thefoldernames As String
-        theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
-        theFolderBrowser.ShowNewFolderButton = True
-        theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-        theFolderBrowser.SelectedPath = Preferences.lastpath
-        If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-            thefoldernames = (theFolderBrowser.SelectedPath)
-            For Each item As Object In lstBoxFolders.Items
-                If thefoldernames.ToString = item.ToString Then allok = False
-            Next
-
-            If allok = True Then
-                lstBoxFolders.Items.Add(thefoldernames)
-                lstBoxFolders.Refresh()
-                Preferences.MVidFolders.Add(thefoldernames)
-            Else
-                MsgBox("        Folder Already Exists")
-            End If
-        End If
-    End Sub
-
-    Private Sub btnRemoveFolder_Click( sender As System.Object,  e As System.EventArgs) Handles btnRemoveFolder.Click
-        Try
-            While lstBoxFolders.SelectedItems.Count > 0
-                Preferences.MVidFolders.Remove(lstBoxFolders.SelectedItems(0))
-                lstBoxFolders.Items.Remove(lstBoxFolders.SelectedItems(0))
-            End While
-        Catch
-        End Try
-    End Sub
-
-    Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
-        Call SearchForNewMV()    ' For Testing of using Movie Scraper routines.
-        'Call searchFornew()
     End Sub
 
     Private Sub SearchForNewMV()
@@ -245,7 +205,8 @@ Public Class ucMusicVideo
         End Try
     End Function
 
-    Private Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False) As String
+    Public Shared Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False) As String
+        
         Try
 
             Dim applicationpath As String = Preferences.applicationPath 'get application root path
@@ -286,10 +247,6 @@ Public Class ucMusicVideo
         Catch
             Return False
         End Try
-
-
-
-
 
     End Function
 
@@ -561,26 +518,6 @@ Public Class ucMusicVideo
                 txtYear.Text = workingMusicVideo.fullmoviebody.year
                 txtGenre.Text = workingMusicVideo.fullmoviebody.genre
                 txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                'Dim streamdetails As String = "Video:" & vbCrLf
-                'streamdetails = streamdetails & "Width: " & workingMusicVideo.filedetails.filedetails_video.Width.Value & vbCrLf
-                'streamdetails = streamdetails & "Height: " & workingMusicVideo.filedetails.filedetails_video.Height.Value & vbCrLf
-                'streamdetails = streamdetails & "Aspect: " & workingMusicVideo.filedetails.filedetails_video.Aspect.Value & vbCrLf
-                'streamdetails = streamdetails & "Codec: " & workingMusicVideo.filedetails.filedetails_video.Codec.Value & vbCrLf
-                'streamdetails = streamdetails & "Bitrate: " & workingMusicVideo.filedetails.filedetails_video.Bitrate.Value & vbCrLf
-                'streamdetails = streamdetails & "Bitrate Max: " & workingMusicVideo.filedetails.filedetails_video.BitrateMax.Value & vbCrLf
-                'streamdetails = streamdetails & "Container: " & workingMusicVideo.filedetails.filedetails_video.Container.Value & vbCrLf
-                'streamdetails = streamdetails & "Scantype: " & workingMusicVideo.filedetails.filedetails_video.ScanType.Value & vbCrLf
-                'streamdetails = streamdetails & "Duration (Seconds): " & workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value & vbCrLf & vbCrLf
-
-                'streamdetails = streamdetails & "Audio:" & vbCrLf
-                'For Each audio In workingMusicVideo.filedetails.filedetails_audio
-                '    streamdetails = streamdetails & "Codec: " & audio.Codec.Value & vbCrLf
-                '    streamdetails = streamdetails & "Channels: " & audio.Channels.Value & vbCrLf
-                '    streamdetails = streamdetails & "Bitrate: " & audio.Bitrate.Value & vbCrLf & vbCrLf
-                'Next
-                'txtStreamDetails.Text = streamdetails
-
-                'load Fanart/Screenshot image
                 Dim thumbpath As String = MusicVideo.fileinfo.fullPathAndFilename
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
                 Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
@@ -754,159 +691,7 @@ Public Class ucMusicVideo
             Next
         End If
     End Sub
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCreateScreenshot.Click
-        PcBxMusicVideoScreenShot.Image = Nothing
-        pcBxScreenshot.Image = Nothing
-        If Not lstBxMainList.SelectedItem Is Nothing Then
-            For Each MusicVideo In musicVideoList
-                If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                    Dim screenshotpath As String = createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True) 'MusicVideo.fileinfo.fullPathAndFilename
-
-                    'createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True)
-                    Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
-                    Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)  'pcBxScreenshot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
-                End If
-            Next
-        End If
-    End Sub
-
-    Private Sub btnScreenshotMinus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotMinus.Click
-        Dim number As Integer = CInt(txtScreenshotTime.Text)
-        If number > 1 Then
-            number -= 1
-            txtScreenshotTime.Text = number.ToString
-        Else
-            MsgBox("Cant be less than 1")
-        End If
-    End Sub
-
-    Private Sub btnScreenshotPlus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotPlus.Click
-        Dim number As Integer = CInt(txtScreenshotTime.Text)
-        number += 1
-        txtScreenshotTime.Text = number.ToString
-    End Sub
-
-    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
-        'save text routine
-        workingMusicVideo.fullmoviebody.title = txtTitle.Text
-        workingMusicVideo.fullmoviebody.album = txtAlbum.Text
-        workingMusicVideo.fullmoviebody.artist = txtArtist.Text
-        workingMusicVideo.fullmoviebody.director = txtDirector.Text
-        workingMusicVideo.fullmoviebody.genre = txtGenre.Text
-        workingMusicVideo.fullmoviebody.plot = txtPlot.Text
-        workingMusicVideo.fullmoviebody.studio = txtStudio.Text
-        workingMusicVideo.fullmoviebody.year = txtYear.Text
-
-        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo)
-    End Sub
-
-    Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
-        musicVideoList.Clear()
-        lstBxMainList.Items.Clear()
-        Call searchFornew(False)
-    End Sub
-
     
-    Private Sub btnAddFolderPath_Click(sender As Object, e As System.EventArgs) Handles btnAddFolderPath.Click
-        Try
-            If tbFolderPath.Text = Nothing Then
-                Exit Sub
-            End If
-            If tbFolderPath.Text = "" Then
-                Exit Sub
-            End If
-            Dim tempstring As String = tbFolderPath.Text
-            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Dim exists As Boolean = False
-            For Each item In lstBoxFolders.Items
-                If item.ToString.ToLower = tempstring.ToLower Then
-                    exists = True
-                    Exit For
-                End If
-            Next
-            If exists = True Then
-                MsgBox("        Folder Already Exists")
-            Else
-                Dim f As New IO.DirectoryInfo(tempstring)
-                If f.Exists Then
-                    lstBoxFolders.Items.Add(tempstring)
-                    tbFolderPath.Text = ""
-                    Preferences.MVidFolders.Add(tempstring)
-                    lstBoxFolders.Refresh()
-                Else
-                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then
-                        lstBoxFolders.Items.Add(tempstring)
-                        tbFolderPath.Text = ""
-                        Preferences.MVidFolders.Add(tempstring)
-                    End If
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
-        Form1.cropMode = "mvscreenshot"
-        Try
-            Dim t As New frmMovPosterCrop
-            t.ShowDialog()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnCropReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCropReset.Click
-        pcBxScreenshot.Image = PcBxMusicVideoScreenShot.Image
-        btnCropReset.Enabled = False
-        btnSaveCrop.Enabled = False
-    End Sub
-
-    Private Sub btnSaveCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCrop.Click
-        Dim bitmap3 As New Bitmap(pcBxScreenshot.Image)
-        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-        Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
-        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
-        bitmap3.Dispose()
-        btnCropReset.Enabled = False
-        btnSaveCrop.Enabled = False
-        PcBxMusicVideoScreenShot.Image = Nothing
-        PcBxMusicVideoScreenShot.ImageLocation = thumbpathandfilename
-        pcBxScreenshot.ImageLocation = thumbpathandfilename
-    End Sub
-
-    Private Sub pcBxScreenshot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxScreenshot.DoubleClick
-        Try
-            If Not pcBxScreenshot.Image Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(pcBxScreenshot.Image)
-                Call Form1.util_ZoomImage(newimage)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnPasteFromClipboard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteFromClipboard.Click
-        If AssignClipboardImage(pcBxScreenshot) Then
-            btnCropReset.Enabled = True
-            btnSaveCrop.Enabled = True
-            Label16.Text = pcBxScreenshot.Image.Width
-            Label17.Text = pcBxScreenshot.Image.Height
-        End If
-    End Sub
-
     Private Function AssignClipboardImage(ByVal picBox As PictureBox) As Boolean
         Try
             If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
@@ -931,39 +716,7 @@ Public Class ucMusicVideo
 
         Return False
     End Function
-
-    Private Sub PcBxMusicVideoScreenShot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxMusicVideoScreenShot.DoubleClick
-        Try
-            If Not PcBxMusicVideoScreenShot.Image Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PcBxMusicVideoScreenShot.Image)
-                Call Form1.util_ZoomImage(newimage)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
-        Try
-            If Not PcBxPoster.Image Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PcBxPoster.Image)
-                Call Form1.util_ZoomImage(newimage)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
+    
     Private Sub googleSearch()
         Dim title As String = txtTitle.Text
         Dim artist As String = txtArtist.Text
@@ -972,75 +725,7 @@ Public Class ucMusicVideo
       
         Form1.OpenUrl(url)
     End Sub
-
-    Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click
-        Call googleSearch()
-    End Sub
-
-    Private Sub btnGoogleSearchPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearchPoster.Click
-        Call googleSearch()
-    End Sub
-
-    Private Sub btnPosterPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterPaste.Click
-        If AssignClipboardImage(pcBxSinglePoster) Then
-            btnPosterReset.Enabled = True
-            btnPosterSave.Enabled = True
-            Label16.Text = pcBxSinglePoster.Image.Width
-            Label17.Text = pcBxSinglePoster.Image.Height
-        End If
-    End Sub
-
-    Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
-        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
-        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
-        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
-        bitmap3.Dispose()
-        btnPosterReset.Enabled = False
-        btnPosterSave.Enabled = False
-        pcBxSinglePoster.Image = Nothing
-        pcBxSinglePoster.ImageLocation = thumbpathandfilename
-        PcBxPoster.ImageLocation = thumbpathandfilename
-    End Sub
-
-    Private Sub btnPosterReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterReset.Click
-        pcBxSinglePoster.Image = PcBxPoster.Image
-        btnPosterReset.Enabled = False
-        btnPosterSave.Enabled = False
-    End Sub
-
-    Private Sub btnPosterSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterSave.Click
-        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
-        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
-        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
-        bitmap3.Dispose()
-        btnCropReset.Enabled = False
-        btnSaveCrop.Enabled = False
-        pcBxSinglePoster.Image = Nothing
-        PcBxPoster.Image = Nothing
-        PcBxPoster.ImageLocation = thumbpathandfilename
-        pcBxSinglePoster.ImageLocation = thumbpathandfilename
-        btnPosterReset.Enabled = False
-        btnPosterSave.Enabled = False
-    End Sub
-
-    Private Sub pcBxSinglePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxSinglePoster.DoubleClick
-        Try
-            If Not pcBxSinglePoster.Image Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(pcBxSinglePoster.Image)
-                Call Form1.util_ZoomImage(newimage)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
+    
     Private Function getArtistAndTitle(ByVal fullpathandfilename As String)
         Dim searchTerm As String = ""
         Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
@@ -1073,9 +758,23 @@ Public Class ucMusicVideo
             WebBrowser1.Refresh()
         End If
     End Sub
+    
+    Private Sub ScrnShtTimeAdjust(ByVal Direction As Boolean)
+        Dim number As Integer = CInt(txtScreenshotTime.Text)
+        If Direction Then
+            number += 1
+        Else
+            If number > 1 Then
+                number -= 1
+            Else
+                MsgBox("Cant be less than 1")
+                Exit Sub
+            End If
+        End If
+        txtScreenshotTime.Text = number.ToString
+    End Sub
 
-   
-    Private Sub btnManualScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnManualScrape.Click
+    Private Sub ManualScrape()
         If WebBrowser1.Url.ToString.ToLower.IndexOf("wikipedia.org") = -1 Or WebBrowser1.Url.ToString.ToLower.IndexOf("google") <> -1 Then
             MsgBox("You Must Browse to a Wikipedia Page")
             Exit Sub
@@ -1172,4 +871,315 @@ Public Class ucMusicVideo
         TabControlMain.SelectedIndex = 0
 
     End Sub
+
+'All Buttons
+#Region "Buttons"  
+    
+    'Scraping Buttons
+    Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
+        Call SearchForNewMV()    ' For Testing of using Movie Scraper routines.
+        'Call searchFornew()
+    End Sub
+
+    Private Sub btnManualScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnManualScrape.Click
+        ManualScrape()
+    End Sub
+    
+    Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
+        musicVideoList.Clear()
+        lstBxMainList.Items.Clear()
+        Call searchFornew(False)
+    End Sub
+
+    'Path buttons
+    Private Sub btnAddFolderPath_Click(sender As Object, e As System.EventArgs) Handles btnAddFolderPath.Click
+        Try
+            If tbFolderPath.Text = Nothing Then
+                Exit Sub
+            End If
+            If tbFolderPath.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = tbFolderPath.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In lstBoxFolders.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    lstBoxFolders.Items.Add(tempstring)
+                    tbFolderPath.Text = ""
+                    Preferences.MVidFolders.Add(tempstring)
+                    Preferences.SaveConfig
+                    lstBoxFolders.Refresh()
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        lstBoxFolders.Items.Add(tempstring)
+                        tbFolderPath.Text = ""
+                        Preferences.MVidFolders.Add(tempstring)
+                        Preferences.SaveConfig 
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub btnBrowseFolders_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseFolders.Click
+        Dim allok As Boolean = True
+        Dim theFolderBrowser As New FolderBrowserDialog
+        Dim thefoldernames As String
+        theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
+        theFolderBrowser.ShowNewFolderButton = True
+        theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+        theFolderBrowser.SelectedPath = Preferences.lastpath
+        If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+            thefoldernames = (theFolderBrowser.SelectedPath)
+            For Each item As Object In lstBoxFolders.Items
+                If thefoldernames.ToString = item.ToString Then allok = False
+            Next
+
+            If allok = True Then
+                lstBoxFolders.Items.Add(thefoldernames)
+                lstBoxFolders.Refresh()
+                Preferences.MVidFolders.Add(thefoldernames)
+            Else
+                MsgBox("        Folder Already Exists")
+            End If
+        End If
+    End Sub
+
+    Private Sub btnRemoveFolder_Click( sender As System.Object,  e As System.EventArgs) Handles btnRemoveFolder.Click
+        Try
+            While lstBoxFolders.SelectedItems.Count > 0
+                Preferences.MVidFolders.Remove(lstBoxFolders.SelectedItems(0))
+                lstBoxFolders.Items.Remove(lstBoxFolders.SelectedItems(0))
+            End While
+            Preferences.SaveConfig
+        Catch
+        End Try
+    End Sub
+    
+    'Poster/Image buttons
+    Private Sub btnCreateScreenshot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCreateScreenshot.Click
+        PcBxMusicVideoScreenShot.Image = Nothing
+        pcBxScreenshot.Image = Nothing
+        If Not lstBxMainList.SelectedItem Is Nothing Then
+            For Each MusicVideo In musicVideoList
+                If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+                    Dim screenshotpath As String = createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True) 'MusicVideo.fileinfo.fullPathAndFilename
+
+                    'createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True)
+                    Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
+                    Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)  'pcBxScreenshot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
+                End If
+            Next
+        End If
+    End Sub
+    
+    Private Sub btnScreenshotMinus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotMinus.Click
+        ScrnShtTimeAdjust(False)
+        'Dim number As Integer = CInt(txtScreenshotTime.Text)
+        'If number > 1 Then
+        '    number -= 1
+        '    txtScreenshotTime.Text = number.ToString
+        'Else
+        '    MsgBox("Cant be less than 1")
+        'End If
+    End Sub
+
+    Private Sub btnScreenshotPlus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotPlus.Click
+        ScrnShtTimeAdjust(True)
+        'Dim number As Integer = CInt(txtScreenshotTime.Text)
+        'number += 1
+        'txtScreenshotTime.Text = number.ToString
+    End Sub
+
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        'save text routine
+        workingMusicVideo.fullmoviebody.title = txtTitle.Text
+        workingMusicVideo.fullmoviebody.album = txtAlbum.Text
+        workingMusicVideo.fullmoviebody.artist = txtArtist.Text
+        workingMusicVideo.fullmoviebody.director = txtDirector.Text
+        workingMusicVideo.fullmoviebody.genre = txtGenre.Text
+        workingMusicVideo.fullmoviebody.plot = txtPlot.Text
+        workingMusicVideo.fullmoviebody.studio = txtStudio.Text
+        workingMusicVideo.fullmoviebody.year = txtYear.Text
+
+        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo)
+    End Sub
+    
+    Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
+        Form1.cropMode = "mvscreenshot"
+        Try
+            Dim t As New frmMovPosterCrop
+            t.ShowDialog()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCropReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCropReset.Click
+        pcBxScreenshot.Image = PcBxMusicVideoScreenShot.Image
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+    End Sub
+
+    Private Sub btnSaveCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCrop.Click
+        Dim bitmap3 As New Bitmap(pcBxScreenshot.Image)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+        PcBxMusicVideoScreenShot.Image = Nothing
+        PcBxMusicVideoScreenShot.ImageLocation = thumbpathandfilename
+        pcBxScreenshot.ImageLocation = thumbpathandfilename
+    End Sub
+    
+    Private Sub btnPosterPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterPaste.Click
+        If AssignClipboardImage(pcBxSinglePoster) Then
+            btnPosterReset.Enabled = True
+            btnPosterSave.Enabled = True
+            Label16.Text = pcBxSinglePoster.Image.Width
+            Label17.Text = pcBxSinglePoster.Image.Height
+        End If
+    End Sub
+
+    Private Sub btnPasteFromClipboard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteFromClipboard.Click
+        If AssignClipboardImage(pcBxScreenshot) Then
+            btnCropReset.Enabled = True
+            btnSaveCrop.Enabled = True
+            Label16.Text = pcBxScreenshot.Image.Width
+            Label17.Text = pcBxScreenshot.Image.Height
+        End If
+    End Sub
+
+    Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
+        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+        pcBxSinglePoster.Image = Nothing
+        pcBxSinglePoster.ImageLocation = thumbpathandfilename
+        PcBxPoster.ImageLocation = thumbpathandfilename
+    End Sub
+
+    Private Sub btnPosterReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterReset.Click
+        pcBxSinglePoster.Image = PcBxPoster.Image
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+    End Sub
+
+    Private Sub btnPosterSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterSave.Click
+        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+        pcBxSinglePoster.Image = Nothing
+        PcBxPoster.Image = Nothing
+        PcBxPoster.ImageLocation = thumbpathandfilename
+        pcBxSinglePoster.ImageLocation = thumbpathandfilename
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+    End Sub
+    
+    Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
+        Try
+            If Not PcBxPoster.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(PcBxPoster.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub pcBxSinglePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxSinglePoster.DoubleClick
+        Try
+            If Not pcBxSinglePoster.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(pcBxSinglePoster.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub pcBxScreenshot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxScreenshot.DoubleClick
+        Try
+            If Not pcBxScreenshot.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(pcBxScreenshot.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PcBxMusicVideoScreenShot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxMusicVideoScreenShot.DoubleClick
+        Try
+            If Not PcBxMusicVideoScreenShot.Image Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                'ToolStrip1.Enabled = False
+                Dim newimage As New Bitmap(PcBxMusicVideoScreenShot.Image)
+                Call Form1.util_ZoomImage(newimage)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    'Misc
+    Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click, btnGoogleSearchPoster.Click
+        Call googleSearch()
+    End Sub
+
+    'Private Sub btnGoogleSearchPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearchPoster.Click
+    '    Call googleSearch()
+    'End Sub
+       
+       
+
+#End Region
+
 End Class
