@@ -23641,6 +23641,7 @@ Public Class Form1
             Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
             Case "SearchForNewMovies"     : Return True
             Case "SearchForNewMusicVideo" : Return True
+            Case "ChangeMusicVideo"       : Return True
             Case "RebuildCaches"          : Return True
         End Select
 
@@ -23707,6 +23708,10 @@ Public Class Form1
 
     Public Sub SearchForNewMusicVideo
         oMovies.FindNewMusicVideos()
+    End Sub
+
+    Public Sub ChangeMusicVideo
+        oMovies.ChangeMovie(ucMusicVideo.changeMVList(0), "", ucMusicVideo.changeMVList(1))
     End Sub
 
     Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged

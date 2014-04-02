@@ -7,6 +7,8 @@ Imports System.Xml
 Public Class ucMusicVideo
     
     Public Shared musicVideoList As New List(Of FullMovieDetails)
+    Public Shared changeMVList As New List(Of String)
+    Private changefields As Boolean = False
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
     Dim rescraping As Boolean = False
@@ -26,6 +28,8 @@ Public Class ucMusicVideo
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
+        musicVideoList.Clear()
+        lstBxMainList.Items.Clear()
         Call searchFornew(False)
     End Sub
 
@@ -158,6 +162,7 @@ Public Class ucMusicVideo
 
                     Dim alreadyloaded As Boolean = False
                     For Each item In musicVideoList
+                        If IsNothing(item) Then Continue For
                         If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
                             alreadyloaded = True
                         End If
@@ -779,19 +784,40 @@ Public Class ucMusicVideo
             MsgBox("You Must Browse to a Wikipedia Page")
             Exit Sub
         End If
-
+        changeMVList.Clear()
         Dim messagestring As String = "Changing the movie will Overwrite all the current details"
         messagestring &= vbCrLf & "Do you wish to continue?"
         If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
             Exit Sub
         Else
+            changefields = chkBxOverWriteArt.CheckState
+            ChangeMusicVideo(WebBrowser1.Url.ToString)  ' ucMusicVideo Routine
+            'ChangeMV(WebBrowser1.Url.ToString, changefields)   ' For Testing through scraping routine.
+        End If
+    End Sub
 
+    Private Sub ChangeMV(ByRef url As String, ByVal overwrite As Boolean)
+        Dim videopath As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        changeMVList.Clear()
+        changeMVList.Add(videopath)
+        changeMVList.Add(url)
+        changeMVList.Add(overwrite)
+        Preferences.MusicVidScrape = True
+        Form1.RunBackgroundMovieScrape("ChangeMusicVideo")
+        While Form1.BckWrkScnMovies.IsBusy
+            Application.DoEvents()
+        End While
+        Call searchFornew(False)
+    End Sub
+
+    Private Sub ChangeMusicVideo(ByVal url As String)
+        Try
             Dim videopath As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
             Dim musicVideoTitle As New FullMovieDetails
             Dim scraper As New WikipediaMusivVideoScraper
 
             Dim searchterm As String = getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value)
-            musicVideoTitle = scraper.musicVideoScraper(getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value), "", WebBrowser1.Url.ToString)
+            musicVideoTitle = scraper.musicVideoScraper(getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value), "", url)
 
             'poster
             Try
@@ -865,11 +891,11 @@ Public Class ucMusicVideo
                     Exit For
                 End If
             Next
-
-        End If
+        Catch
+        End try
         rescraping = False
         TabControlMain.SelectedIndex = 0
-
+        changeMVList.Clear()
     End Sub
 
 'All Buttons

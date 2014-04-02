@@ -1026,7 +1026,7 @@ End If
 
         movie.DeleteScrapedFiles(True)
 
-        movie.ScrapedMovie.Init
+        If Not Preferences.MusicVidScrape Then movie.ScrapedMovie.Init
 
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False
