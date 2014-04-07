@@ -11489,6 +11489,9 @@ Public Class Form1
         Try
             ProgState=ProgramState.ResettingFilters
             oMovies.ActorsFilter_AddIfMissing(cbMovieDisplay_Actor.Text)
+
+            ShowMovieFilter(cbFilterActor)
+
             cbFilterActor.UpdateItems(oMovies.ActorsFilter)
             cbFilterActor.SelectItem(cbMovieDisplay_Actor.Text)
             ProgState=ProgramState.Other
@@ -11505,6 +11508,9 @@ Public Class Form1
         Try
             ProgState=ProgramState.ResettingFilters
             oMovies.DirectorsFilter_AddIfMissing(directortxt.Text)
+
+            ShowMovieFilter(cbFilterDirector)
+
             cbFilterDirector.UpdateItems(oMovies.DirectorsFilter)
             cbFilterDirector.SelectItem(directortxt.Text)
             ProgState=ProgramState.Other
@@ -11515,6 +11521,14 @@ Public Class Form1
         End Try
     End Sub
 
+
+    Sub ShowMovieFilter(cbFilter As Control)
+        If Not cbFilter.Visible Then 
+            movie_filters.GetItem(cbFilter.Name).Visible = True
+            Preferences.movie_filters.SetMovieFiltersVisibility
+            UpdateMovieFiltersPanel
+        End If
+    End Sub
 
     Private Sub mov_WallReset()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
@@ -12707,6 +12721,9 @@ Public Class Form1
         Try
             ProgState=ProgramState.ResettingFilters
             oMovies.SetsFilter_AddIfMissing(cbMovieDisplay_MovieSet.Text)
+
+            ShowMovieFilter(cbFilterSet)
+
             cbFilterSet.UpdateItems(oMovies.SetsFilter)
             cbFilterSet.SelectItem(cbMovieDisplay_MovieSet.Text)
 
