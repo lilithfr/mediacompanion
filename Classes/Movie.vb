@@ -1464,7 +1464,7 @@ Public Class Movie
 
         'Try YouTube for HD and SD...
         '
-        If TrailerUrl = "" and tmdb.Trailers.youtube.Count > 0 then
+        If TrailerUrl = "" AndAlso Not IsNothing(tmdb.Trailers) AndAlso tmdb.Trailers.youtube.Count > 0 then
 
             Dim tryAgain = True
 
@@ -2717,6 +2717,7 @@ Public Class Movie
 
                     While more
                         If rl.trailer Or _scrapedMovie.fullmoviebody.trailer = "" Then
+                            If Cancelled() Then Exit Sub
                             _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
                             UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)
                         Else
