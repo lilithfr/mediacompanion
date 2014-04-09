@@ -3514,6 +3514,29 @@ Public Class WorkingWithNfoFiles
         child.InnerText = movietosave.fullmoviebody.genre
         root.AppendChild(child)
 
+        If movietosave.fullmoviebody.runtime = "Unknown" Then
+            Try
+                Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
+                Dim hms = TimeSpan.FromSeconds(seconds)
+                Dim h = hms.Hours.ToString
+                Dim m = hms.Minutes.ToString
+                Dim s = hms.Seconds.ToString
+
+                If s.Length = 1 Then s = "0" & s
+
+                Dim runtime As String
+                runtime = h & ":" & m & ":" & s
+                If h = "0" Then
+                    runtime = m & ":" & s
+                End If
+                If h = "0" And m = "0" Then
+                    runtime = s
+                End If
+                movietosave.fullmoviebody.runtime = runtime
+            Catch
+            End Try
+        End If
+
         child = doc.CreateElement("runtime")
         child.InnerText = movietosave.fullmoviebody.runtime
         root.AppendChild(child)

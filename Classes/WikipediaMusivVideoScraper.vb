@@ -79,6 +79,14 @@ Public Class WikipediaMusivVideoScraper
 
                     'strip html tags from plot
                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
+
+                    'strip reference tags
+                    tempstring = Regex.Replace(tempstring, "\[(.*?)\]", "")
+
+                    'tidy up
+                    tempstring = tempstring.Replace("<edit>", "")
+                    tempstring = tempstring.Replace("Synopsis", vbCrLf & "Synopsis" & vbCrLf)
+                    tempstring = tempstring.Replace("Background", vbCrLf & "Background" & vbCrLf)
                     musicVideoTitle.fullmoviebody.plot = tempstring
                 End If
 
