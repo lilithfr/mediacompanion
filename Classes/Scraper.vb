@@ -779,7 +779,7 @@ Public Class Classimdb
             If p <> "" Then
                 s = Regex.Replace(s, "</?a.*?>", String.Empty)
             End If
-            Return s.Trim()
+            Return Utilities.CleanInvalidXmlChars(s.Trim())
         End Get
     End Property
 

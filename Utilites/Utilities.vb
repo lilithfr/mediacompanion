@@ -2762,6 +2762,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return xmlOK
     End Function
 
+    Public Shared Function CleanInvalidXmlChars(text As String) As String
+        ' From xml spec valid chars: 
+        ' #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]     
+        ' any Unicode character, excluding the surrogate blocks, FFFE, and FFFF. 
+        Dim re As String = "[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-u10FFFF]"
+        Return Regex.Replace(text, re, "")
+    End Function
+
     Public Shared Function ReplaceXMLIllegalChars(ByVal xmlfile As String, ByVal linenumber As Long, ByVal charpos As Integer) As String
         Dim lines As New List(Of String)
         Using reader As New StringReader(xmlfile)   'Using StringReader to take care of unknown newlines
