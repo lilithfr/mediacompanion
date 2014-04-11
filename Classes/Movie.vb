@@ -588,6 +588,10 @@ Public Class Movie
             If M.Success = True Then
                 Return M.Groups(1).Value
             End If
+            Dim N As Match = Regex.Match(s, "\.([\d]{4})\.")
+            If N.Success = True Then
+                Return N.Groups(1).Value
+            End If
 
             Return ""
         End Get
@@ -981,7 +985,7 @@ Public Class Movie
 
     Sub CheckTmdbBodyScrape()
         If ImdbBody.ToLower = "error" Then   'Failed...
-            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Preferences.imdbmirror & """" & vbCrLf & "IMDB may not be available or Movie Title is invalid" & vbCrLf )
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """" & vbCrLf & "TMDB may not be available or Movie Title is invalid" & vbCrLf )
             AppendScrapeFailedActions
         Else
             ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
