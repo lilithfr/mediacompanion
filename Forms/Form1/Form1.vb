@@ -14056,6 +14056,7 @@ Public Class Form1
         RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False )       
 
         cbNoAltTitle.CheckState                 = If(Preferences.NoAltTitle,CheckState.Checked, CheckState.Unchecked)
+        cbXtraFrodoUrls.CheckState              = If(Preferences.XtraFrodoUrls, CheckState.Unchecked, CheckState.Checked)
         CheckBox16.CheckState                   = If(Preferences.disablelogfiles, CheckState.Unchecked, CheckState.Checked)
 
         cbDlTrailerDuringScrape.CheckState      = If(Preferences.DownloadTrailerDuringScrape, CheckState.Checked, CheckState.Unchecked)
@@ -14187,6 +14188,20 @@ Public Class Form1
                 Preferences.NoAltTitle = True
             Else
                 Preferences.NoAltTitle = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbXtraFrodoUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXtraFrodoUrls.CheckedChanged
+        Try
+            If cbXtraFrodoUrls.CheckState = CheckState.Checked Then
+                Preferences.XtraFrodoUrls = False
+            Else
+                Preferences.XtraFrodoUrls = True
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True

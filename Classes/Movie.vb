@@ -500,7 +500,7 @@ Public Class Movie
     
     Public ReadOnly Property SearchName As String
         Get
-            Return Utilities.CleanFileName(Title)
+            Return Utilities.CleanFileName(Title, If(Preferences.movies_useXBMC_Scraper, "tmdb", ""))
         End Get 
     End Property
 
@@ -1538,11 +1538,11 @@ Public Class Movie
     Sub GetFrodoPosterThumbs
         _scrapedMovie.frodoPosterThumbs.Clear
 
-        If Preferences.FrodoEnabled Then
+        If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
             _scrapedMovie.frodoPosterThumbs.AddRange(tmdb.FrodoPosterThumbs)
             ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & " ", "Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & vbCrLf)
-        Else
-            ReportProgress(,"Frodo extra URL scraping not selected" & vbCrLf)
+        'Else
+            'ReportProgress(,"Frodo extra URL scraping not selected" & vbCrLf)
         End If
     End Sub
 
@@ -1550,7 +1550,7 @@ Public Class Movie
     Sub GetFrodoFanartThumbs
         _scrapedMovie.frodoFanartThumbs.Thumbs.Clear
 
-        If Preferences.FrodoEnabled Then
+        If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
             _scrapedMovie.frodoFanartThumbs.Thumbs.AddRange(tmdb.FrodoFanartThumbs.Thumbs)
             ReportProgress("Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & " ", "Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
         End If
