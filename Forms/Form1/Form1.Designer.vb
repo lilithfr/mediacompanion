@@ -3188,14 +3188,14 @@ Partial Class Form1
         'cb_keywordlimit
         '
         Me.cb_keywordlimit.FormattingEnabled = true
-        Me.cb_keywordlimit.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "110", "125", "150", "175", "200", "250"})
+        Me.cb_keywordlimit.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "100", "125", "150", "175", "200", "250", "300", "400", "500"})
         Me.cb_keywordlimit.Location = New System.Drawing.Point(247, 45)
         Me.cb_keywordlimit.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_keywordlimit.MaxDropDownItems = 30
         Me.cb_keywordlimit.Name = "cb_keywordlimit"
         Me.cb_keywordlimit.Size = New System.Drawing.Size(76, 23)
         Me.cb_keywordlimit.TabIndex = 65
-        Me.ToolTip1.SetToolTip(Me.cb_keywordlimit, "Media Companion will not scrape more than the number of actors set using this con"& _ 
+        Me.ToolTip1.SetToolTip(Me.cb_keywordlimit, "Media Companion will not scrape more than the number of Keywords set using this con"& _ 
         "trol")
         '
         'tagtxt

@@ -1833,7 +1833,7 @@ Public Class Classimdb
             For f = 0 To webpage.Count - 1
                 If webpage(f).IndexOf("Plot Keywords</h1") <> -1 Then
                     Dim loc As Integer = f + 6
-                    For g = loc to loc+500
+                    For g = loc to webpage.Count -10 'loc+500
                         If webpage(g).IndexOf("</tbody></table>") <> -1 Then
                             f = webpage.Count-1
                             Exit For
@@ -1853,7 +1853,9 @@ Public Class Classimdb
                         count +=1
                         keywd.Add( keyw )
                     End if
-                    If count = keylimit Then Exit For
+                    If count = keylimit Then
+                        Exit For
+                    End If
                 Next
             End If
         Catch

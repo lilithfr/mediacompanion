@@ -14122,7 +14122,7 @@ Public Class Form1
 
         cb_keywordasTag.Checkstate = If(Preferences.keywordasTag, CheckState.Checked, CheckState.Unchecked)
         Select Case Preferences.keywordlimit 
-            Case 99
+            Case 999
                 cb_keywordlimit.SelectedItem = "All Available"
             Case 0
                 cb_keywordlimit.SelectedItem = "None"
@@ -14885,7 +14885,7 @@ Public Class Form1
             ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
                 Preferences.keywordlimit = 0
             Else
-                Preferences.keywordlimit = 99
+                Preferences.keywordlimit = 999
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
