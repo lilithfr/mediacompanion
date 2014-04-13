@@ -2086,6 +2086,17 @@ Partial Public Class Form1
                                 singleepisode.PlayCount.Value = "0"
                                 singleepisode.ShowId.Value = tvdbid 
 
+                                'check file name for Episode source
+                                Dim searchtitle As String = singleepisode.NfoFilePath 
+                                If searchtitle <> "" Then
+                                    For i = 0 to Preferences.releaseformat.Length -1
+                                        If searchtitle.ToLower.Contains(Preferences.releaseformat(i).ToLower) Then
+                                            singleepisode.Source.value = Preferences.releaseformat(i)
+                                            Exit For
+                                        End If
+                                    Next
+                                End If
+
                                 progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
