@@ -2615,25 +2615,27 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 22
                 Try
-                    For Each item In movietosave.frodoPosterThumbs
+                    If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
+                        For Each item In movietosave.frodoPosterThumbs
 
-                        child = doc.CreateElement("thumb")
-
-                        child.SetAttribute("aspect", item.Aspect)
-                        child.InnerText = item.Url
-                        root.AppendChild(child)
-                    Next
-
-                    root.AppendChild(movietosave.frodoFanartThumbs.GetChild(doc))
-
-                    For Each thumbnail In movietosave.listthumbs
-                        Try
                             child = doc.CreateElement("thumb")
-                            child.InnerText = thumbnail
+
+                            child.SetAttribute("aspect", item.Aspect)
+                            child.InnerText = item.Url
                             root.AppendChild(child)
-                        Catch
-                        End Try
-                    Next
+                        Next
+
+                        root.AppendChild(movietosave.frodoFanartThumbs.GetChild(doc))
+
+                        For Each thumbnail In movietosave.listthumbs
+                            Try
+                                child = doc.CreateElement("thumb")
+                                child.InnerText = thumbnail
+                                root.AppendChild(child)
+                            Catch
+                            End Try
+                        Next
+                    End If
                 Catch
                 End Try
                 stage = 23

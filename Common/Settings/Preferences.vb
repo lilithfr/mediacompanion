@@ -2043,7 +2043,7 @@ Public Class Preferences
                         ElseIf tmpaud.ToLower = "dts hra / core" Then
                             audio.Codec.Value = "dtshd_hra"
                         ElseIf tmpaud.ToLower = "dts es" Then
-                            audio.Codec.Value = "dts""
+                            audio.Codec.Value = "dts"
                         End If
                         audio.Codec.Value = audio.Codec.Value.ToLower
                     End If
