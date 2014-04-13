@@ -1330,7 +1330,7 @@ Public Class Movie
         If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
         If _scrapedMovie.fullmoviebody.top250 = Nothing Then _scrapedMovie.fullmoviebody.top250 = "0"
         'check search name for movie source
-        Dim searchtitle As String = SearchName 
+        Dim searchtitle As String = Title ' SearchName 
         If searchtitle <> "" Then
             For i = 0 to Preferences.releaseformat.Length -1
                 If searchtitle.ToLower.Contains(Preferences.releaseformat(i).ToLower) Then

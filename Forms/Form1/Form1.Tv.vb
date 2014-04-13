@@ -806,7 +806,7 @@ Partial Public Class Form1
 
         If multiepisode = False Then
             'multiepisode manualhandler
-
+            Episode.ListActors.Clear()
             Episode.Load()
 
             Dim tempstring As String = ""
@@ -874,11 +874,11 @@ Partial Public Class Form1
                 'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
             End If
 
-            For Each actor In Episode.ListActors
-                If actor.actorname <> Nothing Then
-                    ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
-                End If
-            Next
+            'For Each actor In Episode.ListActors
+            '    If actor.actorname <> Nothing Then
+            '        ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
+            '    End If
+            'Next
             If ComboBox5.Items.Count = 0 Then
                 For Each actor In Episode.ListActors
                     If actor.actorname <> Nothing Then

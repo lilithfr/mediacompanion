@@ -150,6 +150,7 @@ Public Class ProtoFile
         If IO.File.Exists(Path) Then
             Try
                 Me.Doc = XDocument.Load(Path)
+                Me.Doc.DescendantNodes.OfType(Of XComment)().Remove()
             Catch
                 FailedLoad = True
                 Exit Sub
