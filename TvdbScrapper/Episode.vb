@@ -15,6 +15,8 @@ Namespace Tvdb
         Public Property DvdSeason As New ProtoProperty(Me, "DVD_season")
         '<Director>|Joseph McGinty Nichol|</Director>
         Public Property Director As New ProtoProperty(Me, "Director")
+        '<Credits>Bob Geldof</Credits>
+        Public Property Credits As New ProtoProperty(Me, "Credits")
         '<EpisodeName>Chuck Versus the World</EpisodeName>
         Public Property EpisodeName As New ProtoProperty(Me, "EpisodeName")
         '<EpisodeNumber>1</EpisodeNumber>
@@ -53,6 +55,8 @@ Namespace Tvdb
         Public Property SeasonId As New ProtoProperty(Me, "seasonid")
         '<seriesid>80348</seriesid>
         Public Property SeriesId As New ProtoProperty(Me, "seriesid")
+        '<videosource>bdrip</videosource>
+        Public Property Source As New ProtoProperty(Me, "videosource")
 
         Public ReadOnly Property ScreenShotUrl As String
             Get

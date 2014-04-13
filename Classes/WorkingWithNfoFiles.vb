@@ -173,6 +173,14 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.Aired.Value = thisresult.InnerText
                             Case "plot"
                                 newtvepisode.Plot.Value = thisresult.InnerText
+                            Case "director"
+                                newtvepisode.Director.Value = thisresult.InnerText
+                            Case "credits"
+                                newtvepisode.Credits.Value = thisresult.InnerText 
+                            Case "videosource"
+                                newtvepisode.Source.Value = thisresult.InnerText 
+                            Case "showid"
+                                newtvepisode.ShowId.Value = thisresult.InnerText 
                             Case "fileinfo"
                                 Dim detail2 As XmlNode = Nothing
                                 For Each detail2 In thisresult.ChildNodes
@@ -326,6 +334,10 @@ Public Class WorkingWithNfoFiles
                                             anotherepisode.Credits.Value = thisresult.ChildNodes(f).InnerText
                                         Case "aired"
                                             anotherepisode.Aired.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "videosource"
+                                            anotherepisode.Source.Value = thisresult.ChildNodes(f).InnerText 
+                                        Case "showid"
+                                            anotherepisode.ShowId.Value = thisresult.ChildNodes(f).InnerText 
                                         Case "fileinfo"
                                             Dim detail2 As XmlNode = Nothing
                                             For Each detail2 In thisresult.ChildNodes(f)
@@ -673,6 +685,10 @@ Public Class WorkingWithNfoFiles
 
             xmlEpisodechild = document.CreateElement("showid")
             xmlEpisodechild.InnerText = ep.ShowId.Value
+            xmlEpisode.AppendChild(xmlEpisodechild)
+
+            xmlEpisodechild = document.CreateElement("videosource")
+            xmlEpisodechild.InnerText = ep.Source.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             Dim actorstosave As Integer = ep.ListActors.Count

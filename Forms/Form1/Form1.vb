@@ -698,6 +698,7 @@ Public Class Form1
 #End If
             End Try
             mov_VideoSourcePopulate()
+            ep_VideoSourcePopulate()
             Call util_FontSetup()
 
             Dim mediaDropdown As New SortedList(Of String, String)
@@ -1841,6 +1842,7 @@ Public Class Form1
                 For f = 0 To cbMovieDisplay_Source.Items.Count - 1
                     If cbMovieDisplay_Source.Items(f) = workingMovieDetails.fullmoviebody.source Then
                         cbMovieDisplay_Source.SelectedIndex = f
+                        Exit For
                     End If
                 Next
 
@@ -2003,6 +2005,16 @@ Public Class Form1
         Dim validfile As Boolean = True
         Dim tempint2 As Integer = 0
         Dim tempstring As String
+        Dim extension As String
+        Dim tempname As String
+
+        'First check, is it a video file!
+        extension = System.IO.Path.GetExtension(fullpathandfilename)
+        Dim isvideofile As Boolean = False
+        For Each extn In Utilities.VideoExtensions
+            If extn = extension Then isvideofile = True
+        Next
+        If Not isvideofile Then Return False
 
         'if the file is a .vob then check it is not part of a dvd folder (Stop dvdfolders vobs getting seperate nfos)
         If IO.Path.GetExtension(fullpathandfilename) = ".vob" Then
@@ -2119,9 +2131,7 @@ Public Class Form1
 
 
         'check for movies ending a,b,c, etc (moviea, movieb) for multipart. movieb is multipart if moviea exists
-        Dim extension As String
-        Dim tempname As String
-        extension = System.IO.Path.GetExtension(fullpathandfilename)
+        'extension = System.IO.Path.GetExtension(fullpathandfilename)
         tempname = fullpathandfilename.Replace(extension, "")
         If tempname.Substring(tempname.Length - 1) = "b" Or tempname.Substring(tempname.Length - 1) = "c" Or tempname.Substring(tempname.Length - 1) = "d" Or tempname.Substring(tempname.Length - 1) = "e" Or tempname.Substring(tempname.Length - 1) = "B" Or tempname.Substring(tempname.Length - 1) = "C" Or tempname.Substring(tempname.Length - 1) = "D" Or tempname.Substring(tempname.Length - 1) = "E" Then
             tempname = fullpathandfilename.Substring(0, fullpathandfilename.Length - (1 + extension.Length)) & "a" & extension
@@ -9003,20 +9013,20 @@ Public Class Form1
 
             Else
                 'its an episode
-                Dim multiepisode As Boolean = TestForMultiepisode(Episode.NfoFilePath)
-                If multiepisode = False Then
-                    Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
-                    Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
-                    tempstring = "S" & trueseason & "E" & trueepisode & " - "
+                'Dim multiepisode As Boolean = TestForMultiepisode(Episode.NfoFilePath)
+                'If multiepisode = False Then
+                '    Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
+                '    Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
+                '    tempstring = "S" & trueseason & "E" & trueepisode & " - "
 
-                    'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                    Episode.Plot.Value = tb_EpPlot.Text
-                    Episode.Aired.Value = tb_EpAired.Text
-                    Episode.Rating.Value = tb_EpRating.Text
+                '    'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
+                '    Episode.Plot.Value = tb_EpPlot.Text
+                '    Episode.Aired.Value = tb_EpAired.Text
+                '    Episode.Rating.Value = tb_EpRating.Text
 
-                    Episode.Save()
-                    Episode.UpdateTreenode()
-                Else
+                '    Episode.Save()
+                '    Episode.UpdateTreenode()
+                'Else
                     Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
                     Do While trueseason.Substring(0, 1) = "0"
                         trueseason = trueseason.Substring(1, trueseason.Length - 1)
@@ -9025,13 +9035,13 @@ Public Class Form1
                     Do While trueepisode.Substring(0, 1) = "0"
                         trueepisode = trueepisode.Substring(1, trueepisode.Length - 1)
                     Loop
-                    tempstring = "S" & trueseason & "E" & trueepisode & " - "
+                '    tempstring = "S" & trueseason & "E" & trueepisode & " - "
                     'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                    Episode.Plot.Value = tb_EpPlot.Text
-                    Episode.Aired.Value = tb_EpAired.Text
-                    Episode.Rating.Value = tb_EpRating.Text
-                    Episode.Credits.Value = tb_EpCredits.Text
-                    Episode.Director.Value = tb_EpDirector.Text
+                    'Episode.Plot.Value = tb_EpPlot.Text
+                    'Episode.Aired.Value = tb_EpAired.Text
+                    'Episode.Rating.Value = tb_EpRating.Text
+                    'Episode.Credits.Value = tb_EpCredits.Text
+                    'Episode.Director.Value = tb_EpDirector.Text
 
                     Dim episodelist As New List(Of TvEpisode)
                     episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
@@ -9042,6 +9052,7 @@ Public Class Form1
                             ep.Rating.Value = tb_EpRating.Text
                             ep.Credits.Value = tb_EpCredits.Text
                             ep.Director.Value = tb_EpDirector.Text
+                            ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
                         End If
                         'Dim fullfiledetails As Media_Companion.FullFileDetails
                         'fullfiledetails = Media_Companion.Preferences.Get_HdTags(Episode.NfoFilePath)
@@ -9064,7 +9075,7 @@ Public Class Form1
                     WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
 
                     Episode.UpdateTreenode()
-                End If
+                'End If
             End If
 
         Catch ex As Exception
@@ -16073,6 +16084,7 @@ Public Class Form1
 #End If
         End Try
         mov_VideoSourcePopulate()
+        ep_VideoSourcePopulate()
         Try
             TabControl2.SelectedIndex = 0
             currentTabIndex = 0
@@ -22019,6 +22031,7 @@ Public Class Form1
             If cbMovieDisplay_Source.Text = strSelected Then cbMovieDisplay_Source.SelectedIndex = 0
             lbVideoSource.Items.RemoveAt(idxSelected)
             mov_VideoSourcePopulate()
+            ep_VideoSourcePopulate()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
             videosourceprefchanged = True
@@ -22096,6 +22109,7 @@ Public Class Form1
                 Preferences.releaseformat(g) = lbVideoSource.Items(g)
             Next
             mov_VideoSourcePopulate()
+            ep_VideoSourcePopulate()
             videosourceprefchanged = False
         End If
     End Sub

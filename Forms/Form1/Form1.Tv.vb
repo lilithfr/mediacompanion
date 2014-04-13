@@ -820,6 +820,8 @@ Partial Public Class Form1
             'ComboBox5.Text = ""
             'TextBox17.Text = ""
             'TextBox29.Text = ""
+            lb_EpDetails.Items.Clear()
+            lb_EpDetails.Items.Add("Details")
 
             ComboBox5.Items.Clear()
             tb_EpFilename.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
@@ -839,21 +841,38 @@ Partial Public Class Form1
             tb_EpDirector.Text = Utilities.ReplaceNothing(Episode.Director.Value)
             tb_EpCredits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
             tb_EpAired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
+            For f = 0 To cbTvSource.Items.Count - 1
+                If cbTvSource.Items(f) = Episode.Source.value Then
+                    cbTvSource.SelectedIndex = f
+                    Exit For
+                End If
+            Next
 
             util_EpisodeSetWatched(Episode.PlayCount.Value)
 
-
-            tb_EpDetails.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
-            tb_EpDetails.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
-            tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
-            tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
+            Dim epdetails As String = ""
+            epdetails += "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
+            epdetails += ", (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+            lb_EpDetails.Items.Add(epdetails)
+            epdetails = " :- " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
+            epdetails += ", @ " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
+            lb_EpDetails.Items.Add(epdetails)
+            
+            'tb_EpDetails.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
+            'tb_EpDetails.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+            'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
+            'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
 
             If Episode.Details.StreamDetails.Audio.Count > 0 Then
-                tb_EpDetails.Text += "      Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
-                tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-                tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
+                epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                lb_EpDetails.Items.Add(epdetails)
+                epdetails = Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+                epdetails += ", " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
+                lb_EpDetails.Items.Add(epdetails)
+                'tb_EpDetails.Text += "      Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+                'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
             End If
-
 
             For Each actor In Episode.ListActors
                 If actor.actorname <> Nothing Then
@@ -906,6 +925,13 @@ Partial Public Class Form1
                     tb_EpCredits.Text = Ep.Credits.Value
                     tb_EpAired.Text = Ep.Aired.Value
                     util_EpisodeSetWatched(Ep.PlayCount.Value)
+                    For f = 0 To cbTvSource.Items.Count - 1
+                    If cbTvSource.Items(f) = Ep.Source.value Then
+                            cbTvSource.SelectedIndex = f
+                            Exit For
+                        End If
+                    Next
+
                     If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
                         If Preferences.EdenEnabled Then
                             util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultTvFanartPath)
@@ -923,14 +949,27 @@ Partial Public Class Form1
                             util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultTvBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
                         End If
                     End If
-                    tb_EpDetails.Text = "Video: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Height.Value, "?")
-                    tb_EpDetails.Text += " (" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
-                    tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Codec.Value, "?")
-                    tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Bitrate.Value, "?")
+
+                    Dim epdetails As String = ""
+                    epdetails += "Video: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
+                    epdetails += ", (" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+                    lb_EpDetails.Items.Add(epdetails)
+                    epdetails = " :- " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Codec.Value, "?")
+                    epdetails += ", @ " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Bitrate.Value, "?")
+                    lb_EpDetails.Items.Add(epdetails)
+                    'tb_EpDetails.Text = "Video: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Height.Value, "?")
+                    'tb_EpDetails.Text += " (" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+                    'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Codec.Value, "?")
+                    'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Bitrate.Value, "?")
                     If Ep.Details.StreamDetails.Audio.Count > 0 Then
-                        tb_EpDetails.Text += "      Audio: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Codec.Value, "?")
-                        tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-                        tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
+                        epdetails = "Audio: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                        lb_EpDetails.Items.Add(epdetails)
+                        epdetails = Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+                        epdetails += ", " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
+                        lb_EpDetails.Items.Add(epdetails)
+                        'tb_EpDetails.Text += "      Audio: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Codec.Value, "?")
+                        'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+                        'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
                     End If
 
                     Dim video_flags = GetMultiEpMediaFlags(Ep)
@@ -942,6 +981,33 @@ Partial Public Class Form1
         End If
         Panel9.Visible = True
 
+    End Sub
+
+    Private Sub ep_VideoSourcePopulate()
+        Try
+            cbTvSource.Items.Clear()
+            cbTvSource.Items.Add("")
+            For Each mset In Preferences.releaseformat
+                cbTvSource.Items.Add(mset)
+ '              cbFilterSource.Items.Add(mset)
+            Next
+
+            cbTvSource.SelectedIndex = 0
+            'If IsNothing(workingMovieDetails) = False Then
+            '    If workingMovieDetails.fullmoviebody.source <> "" Then
+            '        For te = 0 To cbTvSource.Items.Count - 1
+            '            If cbTvSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
+            '                cbTvSource.SelectedIndex = te
+            '                Exit For
+            '            End If
+            '        Next
+            '    End If
+            'End If
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
     End Sub
 
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed

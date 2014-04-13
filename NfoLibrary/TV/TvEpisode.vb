@@ -114,6 +114,7 @@ Public Class TvEpisode
     Public Property Details As New FileInfo(Me, "fileinfo")
 
     Public Property ListActors As New ActorList(Me, "actor")
+    Public Property Source As New ProtoProperty(Me, "videosource")
 
     Public Property SeasonObj As TvSeason
     Private Property _showObj As TvShow
@@ -138,12 +139,14 @@ Public Class TvEpisode
         Me.Rating.Value = TvdbEpisode.Rating.Value
         Me.Plot.Value = TvdbEpisode.Overview.Value
         Me.Director.Value = TvdbEpisode.Director.Value
-        Me.ImdbId.Value = TvdbEpisode.ImdbId.Value
+        Me.Credits.Value = TvdbEpisode.Credits.Value
+        'Me.ImdbId.Value = TvdbEpisode.ImdbId.Value
         Me.MpaaCert.Value = TvdbEpisode.ProductionCode.Value
-        Me.TvdbId.Value = TvdbEpisode.Id.Value
+        'Me.TvdbId.Value = TvdbEpisode.Id.Value
         Me.Season.Value = TvdbEpisode.SeasonNumber.Value
         Me.Episode.Value = TvdbEpisode.EpisodeNumber.Value
         Me.Thumbnail.Url = TvdbEpisode.ScreenShotUrl
+        Me.Source.Value = TvdbEpisode.Source.Value
         Aired.Value = TvdbEpisode.FirstAired.Value ' Phyonics - Fix for issue #208
         Me.UpdateTreenode()
     End Sub
