@@ -110,6 +110,7 @@ Public Class Form1
     Public globalThreadCounter As Integer = 0
     Public nfoFunction As New WorkingWithNfoFiles
     Public mediaInfoExp As New MediaInfoExport
+    Shared Public langarray(300, 3) As String
 
     'Replace the list of structure by a list of objects
 
@@ -700,7 +701,7 @@ Public Class Form1
             mov_VideoSourcePopulate()
             ep_VideoSourcePopulate()
             Call util_FontSetup()
-
+            Call langarrsetup()
             Dim mediaDropdown As New SortedList(Of String, String)
             mediaInfoExp.addTemplates(mediaDropdown)
             For Each item In mediaDropdown
@@ -17094,6 +17095,37 @@ Public Class Form1
             End If
         End If
 
+
+    End Sub
+
+    Private Sub langarrsetup()
+        Dim strfilename As String
+        Dim num_rows As Long
+        Dim num_cols As Long
+        Dim x As Integer
+        Dim y As Integer
+        strfilename = applicationPath & "\Assets\" & "test.csv"
+        If File.Exists(strfilename) Then
+            Dim tmpstream As StreamReader = File.OpenText(strfilename)
+            Dim strlines() As String
+            Dim strline() As String
+
+            strlines = tmpstream.ReadToEnd().Split(Environment.NewLine)
+
+            num_rows = UBound(strlines)
+            strline = strlines(0).Split(",")
+            num_cols = UBound(strline)
+
+            ' Copy the data into the array.
+            For x = 0 To num_rows-1
+                strline = strlines(x).Split(",")
+                For y = 0 To num_cols
+                    langarray(x, y) = strline(y)
+                Next
+            Next
+
+
+        End If
 
     End Sub
 
