@@ -1483,7 +1483,7 @@ Public Class Movie
                             _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
 
                             If Not IsNothing(_youTubeTrailer) Then
-                                TrailerUrl = _youTubeTrailer.VideoUrl
+                                TrailerUrl = "plugin://plugin.video.youtube/?action=play_video&videoid=" & TrailerUrl   '_youTubeTrailer.VideoUrl
                                 tryAgain = False
                             End If
                         Else
@@ -1509,7 +1509,7 @@ Public Class Movie
                     _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
 
                     If Not IsNothing(_youTubeTrailer) Then
-                        TrailerUrl = _youTubeTrailer.VideoUrl
+                        TrailerUrl = "plugin://plugin.video.youtube/?action=play_video&videoid=" & Id   '_youTubeTrailer.VideoUrl '
                         Exit For
                     End If
                 End If
@@ -1523,6 +1523,8 @@ Public Class Movie
 
         If TrailerUrl = "" Then
             ReportProgress("-None found ","No trailer URL found" & vbCrLf)
+        ElseIf TrailerUrl.Contains("plugin://plugin") Then
+            ReportProgress(MSG_OK,"Youtube URL OK" & vbCrLf)
         Else
             If Utilities.UrlIsValid(TrailerUrl) Then
                 ReportProgress(MSG_OK,"Trailer URL Scraped OK" & vbCrLf)
@@ -1701,7 +1703,7 @@ Public Class Movie
     Sub DownloadTrailer(TrailerUrl As String, Optional forceTrailerDl As Boolean=False)
         'Check for and delete zero length trailer - created when Url is invalid
         DeleteZeroLengthFile(ActualTrailerPath)
-
+        Dim TempTrailerUrl As String = TrailerUrl
         If Not Preferences.DownloadTrailerDuringScrape And Not forceTrailerDl Then
             Exit Sub
         End If
@@ -1716,6 +1718,35 @@ Public Class Movie
         Else 
             Utilities.SafeDeleteFile(ActualTrailerPath)
         End if
+
+        'create download url if youtube trailer path.
+        If TrailerUrl.Contains("plugin://plugin.video.youtube") Then
+            Dim x As Integer = TrailerUrl.LastIndexOf("=")+1
+            Dim id As String = TrailerUrl.Substring(x, (TrailerUrl.Length)-x)
+
+            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+Id)
+            If yts.AvailableVideoFormat.Length>0 Then
+                _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+                If Not IsNothing(_youTubeTrailer) Then
+                    TrailerUrl = _youTubeTrailer.VideoUrl
+                    'Exit For
+                End If
+            End If
+            If Not Utilities.UrlIsValid(TrailerUrl) Then
+                Dim Ids As List(Of String) = GetYouTubeIds()
+                If Ids.Contains(id) Then Ids.Remove(id)
+                For Each utubeid In Ids
+                    Dim yturl as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+Id)
+                    If yturl.AvailableVideoFormat.Length>0 Then
+                        _youTubeTrailer = yturl.selectTrailer(Preferences.moviePreferredTrailerResolution)
+                        If Not IsNothing(_youTubeTrailer) Then
+                            TrailerUrl = _youTubeTrailer.VideoUrl
+                            Exit For
+                        End If
+                    End If
+                Next
+            End If
+        End If
 
         If Not Utilities.UrlIsValid(TrailerUrl) Then
             ReportProgress("Invalid Url","Invalid Trailer Url detected")
