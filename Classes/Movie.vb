@@ -1245,9 +1245,9 @@ Public Class Movie
                 Case "mpaa"
                     _scrapedMovie.fullmoviebody.mpaa = thisresult.InnerText
                 Case "outline"
-                    _scrapedMovie.fullmoviebody.outline = thisresult.InnerText
+                    _scrapedMovie.fullmoviebody.outline = Utilities.RemoveEscapeCharacter(thisresult.InnerText)
                 Case "plot"
-                    _scrapedMovie.fullmoviebody.plot = thisresult.InnerText
+                    _scrapedMovie.fullmoviebody.plot = Utilities.RemoveEscapeCharacter(thisresult.InnerText)
                 Case "premiered"
                     _scrapedMovie.fullmoviebody.premiered = thisresult.InnerText
                 Case "rating"

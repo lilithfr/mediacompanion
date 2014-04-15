@@ -2694,6 +2694,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return str
     End Function
 
+    Public Shared Function RemoveEscapeCharacter(ByVal s As String) As String
+        s = s.Replace("\"&Chr(34), Chr(34))
+        s = s.Replace("\'", "'")
+        Return s
+    End Function
+
     Public Shared Function cleanSpecChars(ByVal string2clean As String) As String
         Return WebUtility.HtmlDecode(string2clean)
     End Function
