@@ -158,6 +158,7 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\MVComboList.vb" />
     <Compile Include="Classes\Music_Video_Class.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
     <Compile Include="Classes\UserRect.vb" />

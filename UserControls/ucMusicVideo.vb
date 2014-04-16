@@ -7,6 +7,7 @@ Imports System.Xml
 Public Class ucMusicVideo
     
     Public Shared musicVideoList As New List(Of FullMovieDetails)
+    Public Property MVCache As New List(Of MVComboList)
     Public Shared changeMVList As New List(Of String)
     Private changefields As Boolean = False
     Dim movieGraphicInfo As New GraphicInfo

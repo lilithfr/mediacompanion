@@ -16002,7 +16002,9 @@ Public Class Form1
             Call tv_CacheLoad()
         End If
 
-
+        If IO.File.Exists(workingProfile.MusicVideoCache) Then
+            Call UcMusicVideo1.MusicVideoCacheLoad()
+        End If
 
 
         'If Preferences.maximised = True Then
