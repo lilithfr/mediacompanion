@@ -3566,6 +3566,18 @@ Public Class WorkingWithNfoFiles
         child = doc.CreateElement("studio")
         child.InnerText = movietosave.fullmoviebody.studio
         root.AppendChild(child)
+
+        child = doc.CreateElement("createdate")
+        If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
+            Dim myDate2 As Date = System.DateTime.Now
+            Try
+                child.InnerText = Format(myDate2, Preferences.datePattern).ToString
+            Catch ex2 As Exception
+            End Try
+        Else
+            child.InnerText = movietosave.fileinfo.createdate
+        End If
+        root.AppendChild(child)
        
         doc.AppendChild(root)
 
@@ -3590,24 +3602,16 @@ Public Class WorkingWithNfoFiles
         Dim newfilenfo As New FullFileDetails
         For Each thisresult In document("musicvideo")
             Select Case thisresult.Name
-                Case "album"
-                    NewMusicVideo.fullmoviebody.album = (thisresult.InnerText)
-                Case "title"
-                    NewMusicVideo.fullmoviebody.title = (thisresult.InnerText)
-                Case "year"
-                    NewMusicVideo.fullmoviebody.year = (thisresult.InnerText)
-                Case "artist"
-                    NewMusicVideo.fullmoviebody.artist = (thisresult.InnerText)
-                Case "director"
-                    NewMusicVideo.fullmoviebody.director = (thisresult.InnerText)
-                Case "genre"
-                    NewMusicVideo.fullmoviebody.genre = (thisresult.InnerText)
-                Case "runtime"
-                    NewMusicVideo.fullmoviebody.runtime = (thisresult.InnerText)
-                Case "plot"
-                    NewMusicVideo.fullmoviebody.plot = (thisresult.InnerText)
-                Case "studio"
-                    NewMusicVideo.fullmoviebody.studio = (thisresult.InnerText)
+                Case "album" : NewMusicVideo.fullmoviebody.album = (thisresult.InnerText)
+                Case "title" : NewMusicVideo.fullmoviebody.title = (thisresult.InnerText)
+                Case "year" : NewMusicVideo.fullmoviebody.year = (thisresult.InnerText)
+                Case "artist" : NewMusicVideo.fullmoviebody.artist = (thisresult.InnerText)
+                Case "director" : NewMusicVideo.fullmoviebody.director = (thisresult.InnerText)
+                Case "genre" : NewMusicVideo.fullmoviebody.genre = (thisresult.InnerText)
+                Case "runtime" : NewMusicVideo.fullmoviebody.runtime = (thisresult.InnerText)
+                Case "plot" : NewMusicVideo.fullmoviebody.plot = (thisresult.InnerText)
+                Case "studio" : NewMusicVideo.fullmoviebody.studio = (thisresult.InnerText)
+                Case "createdate" : NewMusicVideo.fileinfo.createdate = thisresult.InnerText
                 Case "fileinfo"
                     Dim what As XmlNode = Nothing
                     For Each res In thisresult.ChildNodes

@@ -2,17 +2,21 @@
 Imports System.Net
 Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports Media_Companion
+
 
 
 Public Class ucMusicVideo
     
     Public Shared musicVideoList As New List(Of FullMovieDetails)
     Public Property MVCache As New List(Of MVComboList)
+    Private Property tmpMVCache As New List(Of MVComboList)
     Public Shared changeMVList As New List(Of String)
     Private changefields As Boolean = False
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
     Dim rescraping As Boolean = False
+    Dim Movie As New Movie
     Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -556,85 +560,133 @@ Public Class ucMusicVideo
 
     Public Sub MusicVideoCacheSave()
         Dim fullpath As String = Preferences.workingProfile.MusicVideoCache
-        If musicVideoList.Count > 0 And Preferences.MVidFolders.Count > 0 Then
-
-            If IO.File.Exists(fullpath) Then
-                Dim don As Boolean = False
-                Dim count As Integer = 0
-                Do
-                    Try
-                        If IO.File.Exists(fullpath) Then
-                            IO.File.Delete(fullpath)
-                            don = True
-                        Else
-                            don = True
-                        End If
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                    Finally
-                        count += 1
-                    End Try
-                Loop Until don = True
-
-            End If
-
-
-
-            Dim doc As New XmlDocument
-
-            Dim thispref As XmlNode = Nothing
-            Dim xmlproc As XmlDeclaration
-
-            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-            doc.AppendChild(xmlproc)
-            Dim root As XmlElement
-            Dim child As XmlElement
-            root = doc.CreateElement("music_video_cache")
-            Dim childchild As XmlElement
-
-            Dim count2 As Integer = 0
-
-            For Each item In musicVideoList
-
-                child = doc.CreateElement("musicvideo")
-                childchild = doc.CreateElement("fullpathandfilename")
-                childchild.InnerText = item.fileinfo.fullPathAndFilename
-                child.AppendChild(childchild)
-
-                childchild = doc.CreateElement("title")
-                childchild.InnerText = item.fullmoviebody.title
-                child.AppendChild(childchild)
-                root.AppendChild(child)
-            Next
-
-            doc.AppendChild(root)
-            For f = 1 To 100
+        'If musicVideoList.Count > 0 And Preferences.MVidFolders.Count > 0 Then
+        If IO.File.Exists(fullpath) Then
+            Dim don As Boolean = False
+            Dim count As Integer = 0
+            Do
                 Try
-
-                    Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
-                    output.Formatting = Formatting.Indented
-                    doc.WriteTo(output)
-                    output.Close()
-                    Exit For
+                    If IO.File.Exists(fullpath) Then
+                        IO.File.Delete(fullpath)
+                        don = True
+                    Else
+                        don = True
+                    End If
                 Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
 #End If
+                Finally
+                    count += 1
                 End Try
-            Next
-        Else
-            Try
-                If IO.File.Exists(fullpath) Then
-                    IO.File.Delete(fullpath)
-                End If
-            Catch
-            End Try
+            Loop Until don = True
         End If
+
+        Dim doc As New XmlDocument
+        'Dim thispref As XmlNode = Nothing
+        Dim xmlproc As XmlDeclaration
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        Dim root As XmlElement
+        Dim child As XmlElement
+        root = doc.CreateElement("music_video_cache")
+        Dim childchild As XmlElement
+
+        Dim count2 As Integer = 0
+
+        For Each item In MVCache
+
+            child = doc.CreateElement("musicvideo")
+                
+        childchild = doc.CreateElement("fullpathandfilename")
+        childchild.InnerText = item.fullpathandfilename
+        child.AppendChild(childchild)
+			
+        childchild = doc.CreateElement("filename")
+        childchild.InnerText = item.filename
+        child.AppendChild(childchild)
+			
+		childchild = doc.CreateElement("foldername")
+        childchild.InnerText = item.foldername
+        child.AppendChild(childchild)
+			
+		childchild = doc.CreateElement("title")
+        childchild.InnerText = item.title
+        child.AppendChild(childchild)
+			
+		childchild = doc.CreateElement("artist")
+		childchild.InnerText = item.artist
+		child.AppendChild(childchild)
+			
+        childchild = doc.CreateElement("year")
+        childchild.InnerText = item.year
+        child.AppendChild(childchild)			
+			
+        childchild = doc.CreateElement("filedate")
+        childchild.InnerText = item.filedate
+        child.AppendChild(childchild)
+			
+        childchild = doc.CreateElement("createdate")
+        childchild.InnerText = item.createdate
+        child.AppendChild(childchild)
+			
+		childchild = doc.CreateElement("genre")
+        childchild.InnerText = item.genre
+        child.AppendChild(childchild)
+			
+		childchild = doc.CreateElement("playcount")
+        childchild.InnerText = item.playcount
+        child.AppendChild(childchild)
+			
+		childchild = doc.CreateElement("runtime")
+        childchild.InnerText = item.runtime
+        child.AppendChild(childchild)
+			
+        childchild = doc.CreateElement("Resolution")
+        childchild.InnerText = item.Resolution
+		child.AppendChild(childchild)
+			
+        childchild = doc.CreateElement("FrodoPosterExists")
+        childchild.InnerText = item.FrodoPosterExists
+		child.AppendChild(childchild)
+			
+        childchild = doc.CreateElement("PreFrodoPosterExists")
+        childchild.InnerText = item.PreFrodoPosterExists
+		child.AppendChild(childchild)
+
+		For Each track In item.Audio  
+            child.AppendChild(track.GetChild(doc))
+        Next
+            
+            root.AppendChild(child)
+        Next
+
+        doc.AppendChild(root)
+
+        Try
+
+            Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
+            output.Formatting = Xml.Formatting.Indented
+            doc.WriteTo(output)
+            output.Close()
+            'Exit For
+        Catch ex As Exception
+#If SilentErrorScream Then
+        Throw ex
+#End If
+        End Try
+        'Else
+        '    Try
+        '        If IO.File.Exists(fullpath) Then
+        '            IO.File.Delete(fullpath)
+        '        End If
+        '    Catch
+        '    End Try
+        'End If
     End Sub
 
     Public Sub MusicVideoCacheLoad()
+        MVCache.Clear()
         musicVideoList.Clear()
 
         Dim musicvideocache As New XmlDocument
@@ -649,20 +701,56 @@ Public Class ucMusicVideo
         For Each thisresult In musicvideocache("music_video_cache")
             Select Case thisresult.Name
                 Case "musicvideo"
-                    Dim newMV As New FullMovieDetails  
+                    Dim newMV As New MVComboList   
 
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
                             'workingmovie.missingdata1
 
-                            Case "fullpathandfilename"
-                                newMV.fileinfo.fullPathAndFilename = detail.InnerText
-                            Case "title"
-                                newMV.fullmoviebody.title = detail.InnerText
+                            Case "fullpathandfilename" : newMV.fullPathAndFilename = detail.InnerText
+                            Case "filename" : newMV.filename = detail.InnerText
+                            Case "foldername" : newMV.foldername = detail.InnerText
+                            Case "title" : newMV.title = detail.InnerText
+                            Case "artist" : newMV.artist = detail.InnerText
+                            Case "year" : newMV.year = detail.InnerText
+                            Case "filedate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                        newMV.filedate = "19000101000000" '01/01/1900 00:00:00
+                                    Else
+                                        newMV.filedate = detail.InnerText
+                                    End If
+                            Case "createdate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                        newMV.filedate = "19000101000000" '01/01/1900 00:00:00
+                                    Else
+                                        newMV.filedate = detail.InnerText
+                                    End If
+                            Case "genre" : newMV.genre = detail.InnerText & newMV.genre
+                            Case "playcount" : newMV.playcount = detail.InnerText
+                            Case "runtime" : newMV.runtime = detail.InnerText
+                            Case "plot" : newMV.plot = detail.InnerText
+                            Case "Resolution" : newMV.Resolution = detail.InnerText
+                            Case "FrodoPosterExists" : newMV.FrodoPosterExists = detail.InnerText
+                            Case "PreFrodoPosterExists" : newMV.PreFrodoPosterExists = detail.InnerText
+                            Case "audio"
+                                Dim audio As New AudioDetails
+                                For Each audiodetails As XmlNode In detail.ChildNodes
+                                    Select Case audiodetails.Name
+                                        Case "language"
+                                            audio.Language.Value = audiodetails.InnerText
+                                        Case "codec"
+                                            audio.Codec.Value = audiodetails.InnerText
+                                        Case "channels"
+                                            audio.Channels.Value = audiodetails.InnerText
+                                        Case "bitrate"
+                                            audio.Bitrate.Value = audiodetails.InnerText
+                                    End Select
+                                Next
+                                newMV.Audio.Add(audio)
                         End Select
                     Next
-                    musicVideoList.Add(newMV)
+                    MVCache.Add(newMV)
             End Select
         Next
 
@@ -676,6 +764,72 @@ Public Class ucMusicVideo
         End Try
     End Sub
 
+    Public Sub MVCacheLoadFromNfo()
+        tmpMVCache.Clear()
+        Dim t As New List(Of String)
+        t.AddRange(Preferences.MVidFolders)
+        MV_Load(t)
+
+    End Sub
+
+    Sub MV_Load(ByVal folderlist As List(Of String))
+        Dim tempint As Integer
+        Dim dirinfo As String = String.Empty
+        Const pattern = "*.nfo"
+        Dim moviePaths As New List(Of String)
+
+        For Each moviefolder In folderlist
+            If (New DirectoryInfo(moviefolder)).Exists Then
+                moviePaths.Add(moviefolder)
+            End If
+        Next
+        tempint = moviePaths.Count
+
+        'Add sub-folders
+        For f = 0 To tempint - 1
+            Try
+                For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
+                    moviePaths.Add(subfolder)
+                Next
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+            End Try
+        Next
+        'Dim i = 0
+        For Each Path In moviePaths
+            'i += 1
+            'PercentDone = CalcPercentDone(i, moviePaths.Count)
+            'ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
+
+            MV_ListFiles(pattern, New DirectoryInfo(Path))
+            'If Cancelled Then Exit Sub
+        Next
+        MVCache.Clear
+        MVCache.AddRange(tmpMVCache)
+    End Sub
+
+    Private Sub MV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+        'Dim incmissing As Boolean = Preferences.incmissingmovies 
+        If IsNothing(dirInfo) Then Exit Sub
+         
+        For Each oFileInfo In dirInfo.GetFiles(pattern)
+            Dim tmp As New MVComboList
+            Application.DoEvents
+            'If Cancelled Then Exit Sub
+            If Not File.Exists(oFileInfo.FullName) Then Continue For
+            Try
+                If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
+                Dim mvideo As New FullMovieDetails
+                mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
+                tmp.Assign(mvideo)
+                tmpMVCache.Add(tmp)
+            Catch
+                MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
+            End Try
+        Next
+
+    End Sub
+
     Private Sub loadMusicVideolist()
         lstBxMainList.Items.Clear()
         For Each item In musicVideoList
@@ -683,6 +837,11 @@ Public Class ucMusicVideo
         Next
     End Sub
 
+    'Private Function AssigntoCache(ByVal mv As FullMovieDetails ) As MVComboList 
+    '    Dim cache As New MVComboList
+    '    cache.fullpathandfilename = mv.fileinfo.fullpathandfilename
+    '    cache.filename = mv.fileinfo.filename
+    'End Function
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
         If txtFilter.Text <> "" Then
             lstBxMainList.Items.Clear()
@@ -915,7 +1074,10 @@ Public Class ucMusicVideo
     Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
         musicVideoList.Clear()
         lstBxMainList.Items.Clear()
-        Call searchFornew(False)
+        'Call searchFornew(False)
+        MVCacheLoadFromNfo
+        MusicVideoCacheSave()
+
     End Sub
 
     'Path buttons

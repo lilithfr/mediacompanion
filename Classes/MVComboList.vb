@@ -8,6 +8,7 @@ Public Class MVComboList
     Property filename             As String = ""
     Property foldername           As String = ""
     Property _title               As String = ""
+    Property artist               As String = ""
     Property year                 As Integer= 0
     Property filedate             As String = ""
     'Property rating               As Double = 0
@@ -16,9 +17,7 @@ Public Class MVComboList
     Property lastplayed           As String = ""
     Property runtime              As String = ""
     Property createdate           As String = ""
-    Property missingdata1         As Byte   = 0
     Property plot                 As String = ""
-    Property source               As String = ""
     'Property Votes                As Integer= 0
     Property Resolution           As Integer= -1
     Property Audio                As New List(Of AudioDetails)
@@ -47,18 +46,6 @@ Public Class MVComboList
                 End If
             End If
             Return _FolderNameYear
-        End Get
-    End Property
-
-    Public ReadOnly Property MissingFanart As Boolean
-        Get
-            Return _missingdata1 And 1
-        End Get
-    End Property
-
-    Public ReadOnly Property MissingPoster As Boolean
-        Get
-            Return _missingdata1 And 2
         End Get
     End Property
     
@@ -131,12 +118,13 @@ Public Class MVComboList
     '    End Get
     'End Property
 
-    Public Sub Assign(From As ComboList)
+    Public Sub Assign(From As MVComboList)
 
         Me.fullpathandfilename  = From.fullpathandfilename          
         Me.filename             = From.filename           
         Me.foldername           = From.foldername         
-        Me.title                = From.title    
+        Me.title                = From.title
+        Me.artist               = From.artist
         Me.year                 = From.year               
         Me.filedate             = From.filedate                 
         'Me.rating               = From.rating             
@@ -144,10 +132,8 @@ Public Class MVComboList
         Me.playcount            = From.playcount 
         Me.lastplayed           = From.lastplayed           
         Me.runtime              = From.runtime            
-        Me.createdate           = From.createdate         
-        Me.missingdata1         = From.missingdata1       
-        Me.plot                 = From.plot               
-        Me.source               = From.source             
+        Me.createdate           = From.createdate        
+        Me.plot                 = From.plot            
         'Me.Votes                = From.Votes              
         Me.Resolution           = From.Resolution 
         Me.FrodoPosterExists    = From.FrodoPosterExists
@@ -156,9 +142,45 @@ Public Class MVComboList
         AssignAudio(From.Audio)
     End Sub
 
+    Public Sub Assign(From As FullMovieDetails )
+
+        Me.fullpathandfilename  = From.fileinfo.fullpathandfilename
+        Me.filename             = Path.GetFileName(From.fileinfo.fullpathandfilename)
+        Me.foldername           = Utilities.GetLastFolder(From.fileinfo.fullpathandfilename)
+        Me.title                = From.fullmoviebody.title
+        Me.artist               = From.fullmoviebody.artist
+        Me.year                 = From.fullmoviebody.year
+        Dim filecreation As New IO.FileInfo(From.fileinfo.fullpathandfilename)
+        Try
+            Me.filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
+        Catch ex As Exception
+        End Try
+        'Me.rating               = From.rating             
+        Me.genre                = From.fullmoviebody.genre
+        Me.playcount            = From.fullmoviebody.playcount
+        Me.lastplayed           = From.fullmoviebody.lastplayed
+        Me.runtime              = From.fullmoviebody.runtime
+        If String.IsNullOrEmpty(From.fileinfo.createdate) Then
+            Me.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+        Else
+            Me.createdate = From.fileinfo.createdate
+        End If
+        Me.plot                 = From.fullmoviebody.plot
+        'Me.Votes                = From.Votes              
+        Me.Resolution           = From.filedetails.filedetails_video.VideoResolution
+        AssignMissingData(From)
+        AssignAudio(From.filedetails.filedetails_audio)
+    End Sub
+
     Public Sub AssignAudio(From As List(Of AudioDetails))
         Me.Audio.Clear
         Me.Audio.AddRange(From)
     End Sub
+
+    Public Sub AssignMissingData(From As FullMovieDetails )
+        Me.FrodoPosterExists = Preferences.FrodoPosterExists(From.fileinfo.fullpathandfilename)
+        Me.PreFrodoPosterExists = Preferences.PreFrodoPosterExists(From.fileinfo.fullpathandfilename)
+    End Sub
+
 
 End Class

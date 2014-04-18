@@ -169,7 +169,10 @@ Public Class WikipediaMusivVideoScraper
         If musicVideoTitle.fullmoviebody.plot = Nothing Then musicVideoTitle.fullmoviebody.plot = "Unknown"
         If musicVideoTitle.fullmoviebody.runtime = Nothing Then musicVideoTitle.fullmoviebody.runtime = "Unknown"
         If musicVideoTitle.fullmoviebody.studio = Nothing Then musicVideoTitle.fullmoviebody.studio = "Unknown"
-
+        If musicVideoTitle.fileinfo.createdate = Nothing Then 
+            Dim filecreation As New IO.FileInfo(fullpathandfilename)
+            musicVideoTitle.fileinfo.createdate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
+        End If
         Return musicVideoTitle
         Monitor.Exit(Me)
     End Function

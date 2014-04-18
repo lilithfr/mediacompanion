@@ -86,6 +86,7 @@ Module ModGlobals
         s = s.Replace("<", "&lt;")
         s = s.Replace(">", "&gt;")
         s = s.Replace(Chr(34), "&quot;")
+        s = s.Replace(Chr(31), "")
         s = s.Replace("'", "&apos;")
         Return s
     End Function

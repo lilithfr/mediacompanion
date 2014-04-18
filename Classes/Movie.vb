@@ -776,6 +776,13 @@ Public Class Movie
         mediapathandfilename = FullName
       '  nfopathandfilename = mediapathandfilename.Replace(Extension, ".nfo")
     End Sub
+
+    Sub New( parent As ucMusicVideo, NfoName As String )
+        Me.New
+        '_parent                   = parent
+        _actualNfoPathAndFilename = NfoName
+        mediapathandfilename      = Utilities.GetFileName(NfoName,True)
+    End Sub
     #End Region 'Constructors
 
 
