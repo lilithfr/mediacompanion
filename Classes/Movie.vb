@@ -1044,45 +1044,58 @@ Public Class Movie
             _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
         End If
 
-        If Preferences.movies_useXBMC_Scraper AndAlso Preferences.XbmcTmdbMissingFromImdb Then
-            Scraped  = True
-            'Rescrape = True
-            _rescrapedMovie = New FullMovieDetails
-            _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
+        If Preferences.movies_useXBMC_Scraper Then
+            tmdb.Imdb                               = _scrapedMovie.fullmoviebody.imdbid 
+            _scrapedMovie.fullmoviebody.mpaa        = tmdb.Certification
+            _scrapedMovie.fullmoviebody.premiered   = tmdb.releasedate
+            _scrapedMovie.fullmoviebody.votes       = tmdb.Movie.vote_count
+            If Preferences.XbmcTmdbMissingFromImdb Then
+                Scraped  = True
+                _rescrapedMovie = New FullMovieDetails
+                _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
 
-            If _imdbBody = "MIC" Then                        
-                ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Preferences.imdbmirror & """" & vbCrLf)
-                Exit Sub
-            'Else
-            '    ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
-            '    AssignScrapedMovie(_rescrapedMovie)
-            End If
-            Dim thumbstring As New XmlDocument
-            thumbstring.LoadXml(ImdbBody)
-            For Each thisresult In thumbstring("movie")
-                Select Case thisresult.Name
-                    Case "stars"
-                        _scrapedMovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
-                    Case "outline"
-                        _scrapedMovie.fullmoviebody.outline = thisresult.InnerText
-                    Case "mpaa"
-                        _scrapedMovie.fullmoviebody.mpaa = thisresult.InnerText
-                    Case "cert"
-                        _certificates.Add(thisresult.InnerText)
-                End Select
-            Next
-            ' Assign certificate
-            Dim done As Boolean = False
-            For g = 0 To UBound(Preferences.certificatepriority)
-                For Each cert In Certificates
-                    If cert.IndexOf(Preferences.certificatepriority(g)) <> -1 Then
-                        _scrapedMovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
-                        done = True
-                        Exit For
-                    End If
+                If _imdbBody = "MIC" Then                        
+                    ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Preferences.imdbmirror & """" & vbCrLf)
+                    Exit Sub
+                End If
+                Dim thumbstring As New XmlDocument
+                thumbstring.LoadXml(ImdbBody)
+                Dim mpaatmp As String = ""
+                For Each thisresult In thumbstring("movie")
+                    Select Case thisresult.Name
+                        Case "stars"
+                            If _scrapedMovie.fullmoviebody.stars = "" Then
+                                _scrapedMovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                            End If
+                        Case "outline"
+                            _scrapedMovie.fullmoviebody.outline = thisresult.InnerText
+                        Case "mpaa"
+                            mpaatmp = thisresult.InnerText
+                        Case "cert"
+                            _certificates.Add(thisresult.InnerText)
+                    End Select
                 Next
-                If done = True Then Exit For
-            Next
+                If _scrapedMovie.fullmoviebody.mpaa = "" Then
+                    _scrapedMovie.fullmoviebody.mpaa = mpaatmp 
+                    ' Assign certificate
+                    If _scrapedMovie.fullmoviebody.mpaa <> "" Then
+                        Dim done As Boolean = False
+                        For g = 0 To UBound(Preferences.certificatepriority)
+                            For Each cert In Certificates
+                                If cert.IndexOf(Preferences.certificatepriority(g)) <> -1 Then
+                                    _scrapedMovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
+                                    done = True
+                                    Exit For
+                                End If
+                            Next
+                            If done = True Then Exit For
+                        Next
+                    End If
+                End If
+            End If
+        End If
+        If _scrapedMovie.fullmoviebody.mpaa <> "" AndAlso Not _scrapedMovie.fullmoviebody.mpaa.ToLower.Contains("rated") Then
+            _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
         End If
 
     End Sub
@@ -1358,7 +1371,12 @@ Public Class Movie
             Next
             If done = True Then Exit For
         Next
-
+        'If Preferences.movies_useXBMC_Scraper Then
+        '    tmdb.Imdb = If(_possibleImdb.Contains("tt"), _possibleImdb, _scrapedMovie.fullmoviebody.imdbid)
+        '    Dim _mpaa = tmdb.Certification 
+        '    If Not _mpaa.ToLower.Contains("rated") Then _mpaa = "Rated " & _mpaa
+        '    _scrapedMovie.fullmoviebody.mpaa = _mpaa 
+        'End If
         If Not Preferences.MusicVidScrape Then
             If Rescrape Then
                 _scrapedMovie.fullmoviebody.source = _previousCache.source
@@ -1367,7 +1385,7 @@ Public Class Movie
                 _scrapedMovie.fileinfo.createdate = _previousCache.createdate
                 _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
             Else
-                tmdb.Imdb = _possibleImdb
+                tmdb.Imdb = If(_possibleImdb.Contains("tt"), _possibleImdb, _scrapedMovie.fullmoviebody.imdbid)
                 _scrapedMovie.fullmoviebody.movieset = "-None-"
                 If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                     _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name

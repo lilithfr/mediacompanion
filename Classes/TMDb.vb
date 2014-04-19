@@ -131,6 +131,12 @@ Public Class TMDb
         End Get 
     End Property
 
+    Public ReadOnly Property releasedate As String
+        Get
+            Fetch
+            Return movie.release_date 
+        End Get
+    End Property
 
     Public ReadOnly Property Genres As String
         Get
