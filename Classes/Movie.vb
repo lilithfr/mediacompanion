@@ -818,11 +818,12 @@ Public Class Movie
     End Sub
     
     Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"                  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                        ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"                 ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"                 ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache             , "Assigning music Video to cache"  ) )
     End Sub
  
     Sub AppendScrapeFailedActions
@@ -1156,10 +1157,10 @@ Public Class Movie
 
     Sub AssignMovieToCache
         'If _scrapedMovie.fullmoviebody.title = "Error" AndAlso _scrapedMovie.fullmoviebody.originaltitle = "" Then Exit Sub 
-        If Preferences.MusicVidScrape Then
-            ucMusicVideo.musicVideoList.Add(_scrapedMovie)
-            Exit Sub
-        End If
+        'If Preferences.MusicVidScrape Then
+        '    ucMusicVideo.MVCacheAdd(_scrapedMovie)
+        '    Exit Sub
+        'End If
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
@@ -1211,6 +1212,37 @@ Public Class Movie
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         _movieCache.movietag = _scrapedMovie.fullmoviebody.tag
         AssignMovieToAddMissingData
+    End Sub
+
+    Sub AssignMVToCache
+        Dim _mvcache As New MVComboList 
+        _mvcache.fullpathandfilename = NfoPathPrefName
+        _mvcache.filename            = Path.GetFileName(nfopathandfilename)
+        _mvcache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
+        _mvcache.title               = _scrapedMovie.fullmoviebody.title
+        _mvcache.runtime             = _scrapedMovie.fullmoviebody.runtime
+        _mvcache.plot                = _scrapedMovie.fullmoviebody.plot
+        _mvcache.year                = _scrapedMovie.fullmoviebody.year.ToInt
+        _mvcache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
+        _mvcache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
+        Dim filecreation As New IO.FileInfo(nfopathandfilename)
+        Try
+            _movieCache.filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+
+        If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
+            _movieCache.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+        Else
+            _movieCache.createdate = _scrapedMovie.fileinfo.createdate
+        End If
+        _mvcache.genre       = _scrapedMovie.fullmoviebody.genre
+        _mvcache.playcount   = _scrapedMovie.fullmoviebody.playcount
+        _mvcache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
+        ucMusicVideo.MVCache.Add(_mvcache)
     End Sub
 
 

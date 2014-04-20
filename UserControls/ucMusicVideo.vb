@@ -9,7 +9,7 @@ Imports Media_Companion
 Public Class ucMusicVideo
     
     Public Shared musicVideoList As New List(Of FullMovieDetails)
-    Public Property MVCache As New List(Of MVComboList)
+    Public Shared Property MVCache As New List(Of MVComboList)
     Private Property tmpMVCache As New List(Of MVComboList)
     Public Shared changeMVList As New List(Of String)
     Private changefields As Boolean = False
@@ -34,8 +34,8 @@ Public Class ucMusicVideo
             Application.DoEvents()
         End While
         musicVideoList.Clear()
-        lstBxMainList.Items.Clear()
-        Call searchFornew(False)
+        loadMusicVideolist()
+        'Call searchFornew(False)
     End Sub
 
     Private Sub searchFornew(Optional ByVal scrape As Boolean = True)
@@ -104,83 +104,84 @@ Public Class ucMusicVideo
                     End If
                 Next
                 If alreadyloaded = False Then
-                    musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-                    musicVideoList.Add(musicVideoTitle)
+                    MVCacheAddScraped(musicVideoTitle)
+                    'musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
+                    'musicVideoList.Add(musicVideoTitle)
 
-                    lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
-                End If
-
-
-            ElseIf IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) Then
-                If validateMusicVideoNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) = False And scrape = True Then
-
-                    Dim nfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
-                    musicVideoTitle.fileinfo.fullpathandfilename = videopath
-                    Dim oldnfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), "_old.nfo")
-                    IO.File.Move(nfopath, oldnfopath)
-
-                    Dim searchterm As String = getArtistAndTitle(videopath)
-                    musicVideoTitle = scraper.musicVideoScraper(videopath, searchterm)
-                    musicVideoTitle.fileinfo.fullpathandfilename = videopath
-                    Try
-                        If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" And scrape = True Then
-                            saveposter(videopath, musicVideoTitle.listthumbs(0))
-                        End If
-                    Catch
-                    End Try
-                    Dim newstreamdetails As New FullFileDetails
-                    musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
-
-                    Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
-                    Dim hms = TimeSpan.FromSeconds(seconds)
-                    Dim h = hms.Hours.ToString
-                    Dim m = hms.Minutes.ToString
-                    Dim s = hms.Seconds.ToString
-
-                    If s.Length = 1 Then s = "0" & s
-
-                    Dim runtime As String
-                    runtime = h & ":" & m & ":" & s
-                    If h = "0" Then
-                        runtime = m & ":" & s
-                    End If
-                    If h = "0" And m = "0" Then
-                        runtime = s
-                    End If
-                    musicVideoTitle.fullmoviebody.runtime = runtime
-                    WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
-                    Dim alreadyloaded As Boolean = False
-                    For Each item In musicVideoList
-                        If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
-                            alreadyloaded = True
-                        End If
-                    Next
-                    If alreadyloaded = False Then
-                        musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-                        musicVideoList.Add(musicVideoTitle)
-
-                        lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
-                    End If
-
-                Else
-                    Dim existingMusicVideonfo As New FullMovieDetails
-
-                    Dim alreadyloaded As Boolean = False
-                    For Each item In musicVideoList
-                        If IsNothing(item) Then Continue For
-                        If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
-                            alreadyloaded = True
-                        End If
-                    Next
-                    If alreadyloaded = False Then
-                        existingMusicVideonfo = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-                        existingMusicVideonfo.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
-                        musicVideoList.Add(existingMusicVideonfo)
-
-                        lstBxMainList.Items.Add(New ValueDescriptionPair(existingMusicVideonfo.fileinfo.fullpathandfilename, existingMusicVideonfo.fullmoviebody.title))
-                    End If
+                    'lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
                 End If
             End If
+
+            'ElseIf IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) Then
+            '    If validateMusicVideoNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) = False And scrape = True Then
+
+            '        Dim nfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
+            '        musicVideoTitle.fileinfo.fullpathandfilename = videopath
+            '        Dim oldnfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), "_old.nfo")
+            '        IO.File.Move(nfopath, oldnfopath)
+
+            '        Dim searchterm As String = getArtistAndTitle(videopath)
+            '        musicVideoTitle = scraper.musicVideoScraper(videopath, searchterm)
+            '        musicVideoTitle.fileinfo.fullpathandfilename = videopath
+            '        Try
+            '            If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" And scrape = True Then
+            '                saveposter(videopath, musicVideoTitle.listthumbs(0))
+            '            End If
+            '        Catch
+            '        End Try
+            '        Dim newstreamdetails As New FullFileDetails
+            '        musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
+
+            '        Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
+            '        Dim hms = TimeSpan.FromSeconds(seconds)
+            '        Dim h = hms.Hours.ToString
+            '        Dim m = hms.Minutes.ToString
+            '        Dim s = hms.Seconds.ToString
+
+            '        If s.Length = 1 Then s = "0" & s
+
+            '        Dim runtime As String
+            '        runtime = h & ":" & m & ":" & s
+            '        If h = "0" Then
+            '            runtime = m & ":" & s
+            '        End If
+            '        If h = "0" And m = "0" Then
+            '            runtime = s
+            '        End If
+            '        musicVideoTitle.fullmoviebody.runtime = runtime
+            '        WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
+            '        Dim alreadyloaded As Boolean = False
+            '        For Each item In musicVideoList
+            '            If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
+            '                alreadyloaded = True
+            '            End If
+            '        Next
+            '        If alreadyloaded = False Then
+            '            musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
+            '            musicVideoList.Add(musicVideoTitle)
+
+            '            lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
+            '        End If
+
+            '    Else
+            '        Dim existingMusicVideonfo As New FullMovieDetails
+
+            '        Dim alreadyloaded As Boolean = False
+            '        For Each item In musicVideoList
+            '            If IsNothing(item) Then Continue For
+            '            If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
+            '                alreadyloaded = True
+            '            End If
+            '        Next
+            '        If alreadyloaded = False Then
+            '            existingMusicVideonfo = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
+            '            existingMusicVideonfo.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
+            '            musicVideoList.Add(existingMusicVideonfo)
+
+            '            lstBxMainList.Items.Add(New ValueDescriptionPair(existingMusicVideonfo.fileinfo.fullpathandfilename, existingMusicVideonfo.fullmoviebody.title))
+            '        End If
+            '    End If
+            'End If
             Try
                 If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-fanart.jpg")) And scrape = True Then
                     createScreenshot(videopath)
@@ -188,11 +189,8 @@ Public Class ucMusicVideo
             Catch
             End Try
 
-        
-
             Application.DoEvents()
             Me.Refresh()
-
 
         Next
         Call MusicVideoCacheSave()
@@ -505,17 +503,17 @@ Public Class ucMusicVideo
         PcBxPoster.Image = Nothing
         pcBxScreenshot.Image = Nothing
         pcBxSinglePoster.Image = Nothing
-        For Each MusicVideo In musicVideoList
+        For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
 
 
-            If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+            If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
 
-                Dim nfopath As String = MusicVideo.fileinfo.fullPathAndFilename
+                Dim nfopath As String = MusicVideo.fullPathAndFilename
                 nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
 
                 'Dim workingMusicVideo As New Music_Video_Class
                 workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
-                workingMusicVideo.fileinfo.fullPathAndFilename = MusicVideo.fileinfo.fullPathAndFilename
+                workingMusicVideo.fileinfo.fullPathAndFilename = MusicVideo.fullPathAndFilename
                 'populate form
                 txtAlbum.Text = workingMusicVideo.fullmoviebody.album
                 txtArtist.Text = workingMusicVideo.fullmoviebody.artist
@@ -528,7 +526,7 @@ Public Class ucMusicVideo
                 txtYear.Text = workingMusicVideo.fullmoviebody.year
                 txtGenre.Text = workingMusicVideo.fullmoviebody.genre
                 txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                Dim thumbpath As String = MusicVideo.fileinfo.fullPathAndFilename
+                Dim thumbpath As String = MusicVideo.fullPathAndFilename
                 thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
                 Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
                 Form1.util_ImageLoad(pcBxScreenshot, thumbpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
@@ -539,14 +537,14 @@ Public Class ucMusicVideo
                 movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
 
                 'Load Poster image
-                thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
+                thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.jpg")
                 If IO.File.Exists(thumbpath) Then
                     Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
                     Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
                     Label19.Text = pcBxScreenshot.Image.Width
                     Label18.Text = pcBxScreenshot.Image.Height
                 Else
-                    thumbpath = MusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fileinfo.fullpathandfilename), "-poster.png")
+                    thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.png")
                     If IO.File.Exists(thumbpath) Then
                         Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
                         Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
@@ -769,7 +767,19 @@ Public Class ucMusicVideo
         Dim t As New List(Of String)
         t.AddRange(Preferences.MVidFolders)
         MV_Load(t)
+        loadMusicVideolist()
+        '...load datagridview??
+    End Sub
 
+    Public Sub MVCacheAddScraped(tmpMV As FullMovieDetails)
+        MVCacheadd(tmpMV)
+        loadMusicVideolist()
+    End Sub
+
+    Shared Sub MVCacheadd(tmpMv As FullMovieDetails)
+        Dim tmpMVcb As New MVComboList
+        tmpMVcb.Assign(tmpMV)
+        MVCache.Add(tmpMVcb)
     End Sub
 
     Sub MV_Load(ByVal folderlist As List(Of String))
@@ -832,8 +842,11 @@ Public Class ucMusicVideo
 
     Private Sub loadMusicVideolist()
         lstBxMainList.Items.Clear()
-        For Each item In musicVideoList
-            lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
+        'For Each item In musicVideoList
+        '    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
+        'Next
+        For Each item As MVComboList In MVCache' musicVideoList
+            lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
         Next
     End Sub
 
@@ -845,14 +858,14 @@ Public Class ucMusicVideo
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
         If txtFilter.Text <> "" Then
             lstBxMainList.Items.Clear()
-            For Each item In musicVideoList
-                If item.fullmoviebody.title.ToLower.IndexOf(txtFilter.Text.ToLower) <> -1 Then
-                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
+            For Each item As MVComboList In MVCache 'musicVideoList
+                If item.title.ToLower.IndexOf(txtFilter.Text.ToLower) <> -1 Then
+                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
                 End If
             Next
         Else
-            For Each item In musicVideoList
-                lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
+            For Each item As MVComboList In MVCache 'musicVideoList
+                lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
             Next
         End If
     End Sub
@@ -1072,7 +1085,7 @@ Public Class ucMusicVideo
     End Sub
     
     Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
-        musicVideoList.Clear()
+        'musicVideoList.Clear()
         lstBxMainList.Items.Clear()
         'Call searchFornew(False)
         MVCacheLoadFromNfo
@@ -1168,9 +1181,9 @@ Public Class ucMusicVideo
         PcBxMusicVideoScreenShot.Image = Nothing
         pcBxScreenshot.Image = Nothing
         If Not lstBxMainList.SelectedItem Is Nothing Then
-            For Each MusicVideo In musicVideoList
-                If MusicVideo.fileinfo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                    Dim screenshotpath As String = createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True) 'MusicVideo.fileinfo.fullPathAndFilename
+            For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
+                If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+                    Dim screenshotpath As String = createScreenshot(MusicVideo.fullPathAndFilename, txtScreenshotTime.Text, True) 'MusicVideo.fileinfo.fullPathAndFilename
 
                     'createScreenshot(MusicVideo.fileinfo.fullPathAndFilename, txtScreenshotTime.Text, True)
                     Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = screenshotpath '.Replace(IO.Path.GetExtension(screenshotpath), ".jpg")
