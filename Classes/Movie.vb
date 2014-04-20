@@ -1102,12 +1102,19 @@ Public Class Movie
     End Sub
 
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
-        _scrapedMovie = WorkingWithNfoFiles.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
+        If Preferences.MusicVidScrape Then
+            _scrapedMovie = WorkingWithNfoFiles.MVloadNfo(ActualNfoPathAndFilename)  'NfoPathPrefName
+        Else
+            _scrapedMovie = WorkingWithNfoFiles.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
+        End If
+        
         _nfoPathAndFilename=ActualNfoPathAndFilename
         Scraped=True
         Try
-            AssignMovieToCache
-            If bUpdateCaches Then UpdateCaches
+            If Not Preferences.MusicVidScrape Then
+                AssignMovieToCache
+                If bUpdateCaches Then UpdateCaches
+            End If
         Catch
         End Try
     End Sub
@@ -1939,16 +1946,16 @@ Public Class Movie
     Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
         Try
             LoadNFO
-            DeleteActors     'remove actor images if present
+            If Not Preferences.MusicVidScrape Then
+                DeleteActors     'remove actor images if present
 
-            RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
-            RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
-
+                RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
+                RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
+                If incTrailer Then DeleteTrailer
+            End If
             
             DeletePoster
             DeleteFanart
-
-            If incTrailer Then DeleteTrailer
 
             DeleteNFO
         Catch ex As Exception

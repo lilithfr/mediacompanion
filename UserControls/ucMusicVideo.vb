@@ -556,6 +556,7 @@ Public Class ucMusicVideo
         Next
     End Sub
 
+#Region " Music Video Cache Routines"
     Public Sub MusicVideoCacheSave()
         Dim fullpath As String = Preferences.workingProfile.MusicVideoCache
         'If musicVideoList.Count > 0 And Preferences.MVidFolders.Count > 0 Then
@@ -782,6 +783,12 @@ Public Class ucMusicVideo
         MVCache.Add(tmpMVcb)
     End Sub
 
+    Sub MVCacheRemove(nfopath As String)
+        MVCache.RemoveAll(Function(c) c.fullpathandfilename = nfopath)
+    End Sub
+
+#End Region 
+
     Sub MV_Load(ByVal folderlist As List(Of String))
         Dim tempint As Integer
         Dim dirinfo As String = String.Empty
@@ -855,6 +862,7 @@ Public Class ucMusicVideo
     '    cache.fullpathandfilename = mv.fileinfo.fullpathandfilename
     '    cache.filename = mv.fileinfo.filename
     'End Function
+
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
         If txtFilter.Text <> "" Then
             lstBxMainList.Items.Clear()
@@ -958,19 +966,20 @@ Public Class ucMusicVideo
             Exit Sub
         End If
         changeMVList.Clear()
-        Dim messagestring As String = "Changing the movie will Overwrite all the current details"
-        messagestring &= vbCrLf & "Do you wish to continue?"
-        If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
-            Exit Sub
-        Else
+        'Dim messagestring As String = "Changing the movie will Overwrite all the current details"
+        'messagestring &= vbCrLf & "Do you wish to continue?"
+        'If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
+        '    Exit Sub
+        'Else
             changefields = chkBxOverWriteArt.CheckState
-            ChangeMusicVideo(WebBrowser1.Url.ToString)  ' ucMusicVideo Routine
-            'ChangeMV(WebBrowser1.Url.ToString, changefields)   ' For Testing through scraping routine.
-        End If
+            'ChangeMusicVideo(WebBrowser1.Url.ToString)  ' ucMusicVideo Routine
+            ChangeMV(WebBrowser1.Url.ToString, changefields)   ' For Testing through scraping routine.
+        'End If
     End Sub
 
     Private Sub ChangeMV(ByRef url As String, ByVal overwrite As Boolean)
         Dim videopath As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        MVCacheRemove(videopath)
         changeMVList.Clear()
         changeMVList.Add(videopath)
         changeMVList.Add(url)
@@ -980,7 +989,8 @@ Public Class ucMusicVideo
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
-        Call searchFornew(False)
+        loadMusicVideolist()
+        'Call searchFornew(False)
     End Sub
 
     Private Sub ChangeMusicVideo(ByVal url As String)

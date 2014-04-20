@@ -9,7 +9,9 @@ Public Class WikipediaMusivVideoScraper
         Monitor.Enter(Me)
         Dim musicVideoTitle As New FullMovieDetails
         Dim s As New Classimdb
+        Dim webpage As List(Of String)
         musicVideoTitle.fileinfo.fullpathandfilename = fullpathandfilename
+        Dim wikiurlpassed As String = wikipediaURL 
         searchterm = getArtistAndTitle(fullpathandfilename)
 
         If searchterm = "" And wikipediaURL = "" Then
@@ -19,7 +21,7 @@ Public Class WikipediaMusivVideoScraper
             musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
             musicVideoTitle.fullmoviebody.title = strarr(1).Trim
             searchterm = s.searchurltitle(filenameWithoutExtension)
-        ElseIf searchterm <> "" Then
+        ElseIf searchterm <> "" And wikipediaURL = "" Then
             Dim strarr() As String
             strarr = searchterm.Split("-"c)
             musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
@@ -35,7 +37,6 @@ Public Class WikipediaMusivVideoScraper
         Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
 
         If wikipediaURL = "" Then
-            Dim webpage As New List(Of String)
             webpage = s.loadwebpage(Preferences.proxysettings, searchurl, False, 10)
 
 
@@ -58,7 +59,9 @@ Public Class WikipediaMusivVideoScraper
         End If
         Dim fullwebpage As String = ""
         If wikipediaURL <> "" Then
-            fullwebpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, True, 10)
+            webpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, False, 10)
+            Dim webPg As String = String.Join( "" , webpage.ToArray() )
+            fullwebpage = webPg
             Try
                 'Scrape Plot and Director
                 If fullwebpage.IndexOf("<h2><span class=""mw-headline"" id=""Music_video"">") <> -1 Then
@@ -151,19 +154,45 @@ Public Class WikipediaMusivVideoScraper
                     Catch
                     End Try
                 End If
+
+                If wikipediaURL = wikiurlpassed Then  '  If change music video, get new title and artist.
+
+                    'Get artist
+                    If fullwebpage.IndexOf(""">Single</a>") <> -1 Then
+                        Try
+                            Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf(""">Single</a>"), 150 )
+                            tempstring = tempstring.Replace(""">Single</a>", "")
+                            tempstring = tempstring.Substring((tempstring.IndexOf(""">")+2), (tempstring.IndexOf("</a></th>") - tempstring.IndexOf(""">"))-2)
+                            tempstring = Regex.Replace(tempstring, "<.*?>", "")
+                        
+                            musicVideoTitle.fullmoviebody.artist = tempstring
+                        Catch
+                        End Try
+                    End If
+
+                    'Get Title
+                    For f = 0 to webpage.Count-1
+                        If webpage(f).IndexOf("""</th>") <> -1 Then
+                            Try
+                                Dim d = webpage(f).IndexOf(""">")+3
+                                Dim w = If(d > 0, webpage(f).IndexOf("""</th>", d), 0)
+                                If Not D <= 0 And Not W <= 0 Then
+                                    Dim tempstring As String = webpage(f).Substring(d, w - d)
+                                    tempstring = Regex.Replace(tempstring, "<.*?>", "")
+                                    musicVideoTitle.fullmoviebody.title = tempstring
+                                End If
+                                Exit For
+                            Catch
+                            End Try
+                        End If
+                    Next
+                End If
             Catch
-                'If musicVideoTitle.fullmoviebody.album = Nothing Then musicVideoTitle.fullmoviebody.album = "Unknown"
-                'If musicVideoTitle.fullmoviebody.year = Nothing Then musicVideoTitle.fullmoviebody.year = "Unknown"
-                'If musicVideoTitle.fullmoviebody.director = Nothing Then musicVideoTitle.fullmoviebody.director = "Unknown"
-                'If musicVideoTitle.fullmoviebody.genre = Nothing Then musicVideoTitle.fullmoviebody.genre = "Unknown"
-                'If musicVideoTitle.fullmoviebody.plot = Nothing Then musicVideoTitle.fullmoviebody.plot = "Unknown"
-                'If musicVideoTitle.fullmoviebody.runtime = Nothing Then musicVideoTitle.fullmoviebody.runtime = "Unknown"
-                'If musicVideoTitle.fullmoviebody.studio = Nothing Then musicVideoTitle.fullmoviebody.studio = "Unknown"
             End Try
         End If
 
         If musicVideoTitle.fullmoviebody.album = Nothing Then musicVideoTitle.fullmoviebody.album = "Unknown"
-        If musicVideoTitle.fullmoviebody.year = Nothing Then musicVideoTitle.fullmoviebody.year = "Unknown"
+        If musicVideoTitle.fullmoviebody.year = Nothing Then musicVideoTitle.fullmoviebody.year = "0000"
         If musicVideoTitle.fullmoviebody.director = Nothing Then musicVideoTitle.fullmoviebody.director = "Unknown"
         If musicVideoTitle.fullmoviebody.genre = Nothing Then musicVideoTitle.fullmoviebody.genre = "Unknown"
         If musicVideoTitle.fullmoviebody.plot = Nothing Then musicVideoTitle.fullmoviebody.plot = "Unknown"
