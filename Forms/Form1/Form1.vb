@@ -34,6 +34,7 @@ Public Class Form1
     Shared Public          XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
     Shared Public Property MC_Only_Movies        As List(Of ComboList)
     Public Shared Property MaxXbmcMovies As List(Of MaxXbmcMovie)
+    Shared Public MyCulture As New System.Globalization.CultureInfo("en-US")
 
     Public Property        XBMC_Controller_LogLastShownDt  As Date = Now
     Private                XBMC_Link_ErrorLog_Timer As Timers.Timer = New Timers.Timer()
@@ -238,7 +239,7 @@ Public Class Form1
     Public singleshow As Boolean = False
     Public showslist As Object
     Public homemovietabindex As Integer = 0
-    Public MyCulture As New System.Globalization.CultureInfo("en-US")
+    
 
     Dim MoviesFiltersResizeCalled As Boolean = False
 
@@ -14081,6 +14082,7 @@ Public Class Form1
         cbDlXtraFanart.CheckState               = If(Preferences.dlxtrafanart, CheckState.Checked, CheckState.Unchecked)
         cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         cbMovCreateFolderjpg.CheckState         = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
+        cbMovCreateFanartjpg.CheckState         = If(Preferences.createfanartjpg, CheckState.Checked, CheckState.Unchecked )
         cbMovRootFolderCheck.CheckState         = If(Preferences.movrootfoldercheck, CheckState.Checked, CheckState.Unchecked)
         cbMovieBasicSave.CheckState             = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
         cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
@@ -14090,6 +14092,7 @@ Public Class Form1
         cbMovFolderRename.CheckState            = If(Preferences.MovFolderRename, CheckState.Checked, CheckState.Unchecked)
         cbMovSetIgnArticle.CheckState           = If(Preferences.MovSetIgnArticle, CheckState.Checked, CheckState.Unchecked) 
         cbMovTitleIgnArticle.CheckState         = If(Preferences.MovTitleIgnArticle, CheckState.Checked, CheckState.Unchecked)
+        cbMovTitleCase.CheckState               = If(Preferences.MovTitleCase, CheckState.Checked, CheckState.Unchecked)
         cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
@@ -14106,8 +14109,9 @@ Public Class Form1
 
         If Not Preferences.usefoldernames and Not Preferences.allfolders then
             cbMovCreateFolderjpg.Enabled = False
-            cbMovieFanartInFolders.Enabled=False
-            cbMoviePosterInFolder.Enabled=False
+            cbMovCreateFanartjpg.Enabled = False
+            cbMovieFanartInFolders.Enabled = False
+            cbMoviePosterInFolder.Enabled = False
             Preferences.fanartjpg=False
             Preferences.posterjpg=False
         Else
@@ -14675,6 +14679,7 @@ Public Class Form1
                 Preferences.usefoldernames = True
                 cbMovieAllInFolders.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
+                cbMovCreateFanartjpg.Enabled = True
                 cbDlXtraFanart.Enabled = True
                 If Preferences.basicsavemode Then
                     cbMovieFanartInFolders.Enabled = False
@@ -14688,6 +14693,8 @@ Public Class Form1
                 If Not Preferences.allfolders AndAlso Not Preferences.basicsavemode Then
                     cbMovCreateFolderjpg.Checked = False
                     cbMovCreateFolderjpg.Enabled = False
+                    cbMovCreateFanartjpg.Enabled = False
+                    cbMovCreateFanartjpg.Checked = False
                     cbMovieFanartInFolders.Checked = False
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = False
@@ -14714,6 +14721,7 @@ Public Class Form1
                 Preferences.allfolders = True
                 cbMovieUseFolderNames.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
+                cbMovCreateFanartjpg.Enabled = True
                 cbDlXtraFanart.Enabled = True
                 If Preferences.basicsavemode Then
                     cbMovieFanartInFolders.Enabled = False
@@ -14728,6 +14736,8 @@ Public Class Form1
                     
                     cbMovCreateFolderjpg.Enabled = False
                     cbMovCreateFolderjpg.Checked = False
+                    cbMovCreateFanartjpg.Enabled = False
+                    cbMovCreateFanartjpg.Checked = False
                     cbMovieFanartInFolders.Checked = False
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = False
@@ -14782,6 +14792,20 @@ Public Class Form1
                 Preferences.createfolderjpg = True
             Else
                 Preferences.createfolderjpg = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovCreateFanartjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovCreateFanartjpg.CheckedChanged 
+        Try
+            If cbMovCreateFanartjpg.CheckState = CheckState.Checked and (Preferences.usefoldernames or Preferences.allfolders) Then
+                Preferences.createfanartjpg = True
+            Else
+                Preferences.createfanartjpg = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -21779,6 +21803,20 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbMovTitleCase_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleCase.CheckedChanged
+        Try
+            If cbMovTitleCase.CheckState = CheckState.Checked Then
+                Preferences.MovTitleCase = True
+            Else
+                Preferences.MovTitleCase = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub cbxNameMode_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxNameMode.CheckedChanged
         If cbxNameMode.Checked Then
             Preferences.namemode = "1"
@@ -23403,7 +23441,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
+    Private Sub btnMoviePrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try
             applyAdvancedLists()
 

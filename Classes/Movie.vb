@@ -150,13 +150,11 @@ Public Class Movie
         End Get
     End Property
 
-
     ReadOnly Property PosterCachePath As String
         Get
             Return Path.Combine(Preferences.applicationPath, "settings\postercache\" & Utilities.GetCRC32(NfoPathPrefName) & ".jpg")
         End Get
     End Property
-
 
     Public ReadOnly Property YouTubeTrailer As YouTubeVideoFile
         Get
@@ -164,13 +162,11 @@ Public Class Movie
         End Get
     End Property
 
-
     Shared Public ReadOnly Property Resolutions As XDocument
         Get
             Return XDocument.Load(Preferences.applicationPath & "\Assets\" & ResolutionsFile)
         End Get 
     End Property
-
 
     Shared Public ReadOnly Property AvailableHeightResolutions As List(Of Integer)
         Get
@@ -187,7 +183,6 @@ Public Class Movie
         End Get
     End Property
 
-
     Shared Sub LoadBackDropResolutionOptions(ByRef cb As ComboBox, Optional selectedIndex As Integer=0)
         cb.Items.Clear
         cb.Items.Add(MSG_DONT_RESIZE)
@@ -201,7 +196,6 @@ Public Class Movie
 
         cb.SelectedIndex = selectedIndex
     End Sub
-
 
     Shared Function GetBackDropResolution(selectedIndex As Integer) As Point
 
@@ -217,7 +211,6 @@ Public Class Movie
 
     End Function
 
-
     Shared Function GetHeightResolution(selectedIndex As Integer) As Integer
 
         'Don't resize selected
@@ -226,7 +219,6 @@ Public Class Movie
         Return AvailableHeightResolutions(selectedIndex-1)
     End Function
  
-
     Shared Sub LoadHeightResolutionOptions(ByRef cb As ComboBox, Optional selectedIndex As Integer=0)
         cb.Items.Clear
         cb.Items.Add(MSG_DONT_RESIZE)
@@ -245,7 +237,6 @@ Public Class Movie
         cb.SelectedIndex = selectedIndex
     End Sub
 
-
     'Shared Function GetHeightResolution(selectedIndex As Integer) As Integer
 
     '    Dim row = Resolutions.Descendants("Resolution").ElementAt(selectedIndex)
@@ -254,13 +245,11 @@ Public Class Movie
 
     'End Function
 
-
     ReadOnly Property TrailerExists As Boolean
         Get
             Return File.Exists(ActualTrailerPath)
         End Get
     End Property
-
 
     ReadOnly Property ActualTrailerPath As String
         Get
@@ -276,7 +265,6 @@ Public Class Movie
             Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
         End Get
     End Property
-
 
     ReadOnly Property ActualBaseName As String
         Get
@@ -312,7 +300,6 @@ Public Class Movie
         End Get
     End Property
 
-
     ReadOnly Property ActualNfoPathAndFilename As String
         Get
             If Not IsNothing(_actualNfoPathAndFilename) Then Return _actualNfoPathAndFilename
@@ -335,9 +322,6 @@ Public Class Movie
         End Get 
     End Property
 
-    
-
-
     Public ReadOnly Property ActualPosterPaths As List(Of String)
         Get
             Return Preferences.GetAllPosters(ScrapedMovie.fileinfo.fullpathandfilename)
@@ -356,7 +340,6 @@ Public Class Movie
         End Get 
     End Property
 
-
     Public ReadOnly Property ActualFanartPath As String
         Get
             Dim s = Preferences.GetFanartPath(NfoPathPrefName)
@@ -374,13 +357,11 @@ Public Class Movie
         End Get 
     End Property
 
-
     ReadOnly Property NfoPath As String
         Get
             Return NfoPath_NoDirectorySeparatorChar & IO.Path.DirectorySeparatorChar
         End Get
     End Property
-
 
     ReadOnly Property NfoPath_NoDirectorySeparatorChar As String
         Get
@@ -388,13 +369,11 @@ Public Class Movie
         End Get
     End Property
 
-
     ReadOnly Property ActorPath As String
         Get
             Return nfopathandfilename.Replace(IO.Path.GetFileName(nfopathandfilename), "") & ".actors\"
         End Get
     End Property
-
 
     ReadOnly Property TempOfflinePathAndFileName As String
         Get
@@ -1269,7 +1248,8 @@ Public Class Movie
                     If SeparateMovie <> "" Then
                         sepmov = " " & SeparateMovie
                     End If
-                    _scrapedMovie.fullmoviebody.title = thisresult.InnerText.ToString.SafeTrim & sepmov
+                    Dim temptitle As String = thisresult.InnerText.ToString.SafeTrim & sepmov
+                    _scrapedMovie.fullmoviebody.title = If(Preferences.MovTitleCase, Utilities.TitleCase(temptitle), temptitle)
                 Case "originaltitle"
                     _scrapedMovie.fullmoviebody.originaltitle = thisresult.InnerText.ToString.SafeTrim
                 Case "alternativetitle"
@@ -1383,6 +1363,9 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.sortorder = Preferences.RemoveIgnoredArticles(titletext)
         Else
             _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title               'Sort order defaults to title
+        End If
+        If Preferences.MovTitleCase Then
+            _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
         End If
         If _scrapedMovie.fullmoviebody.plot = "" Then _scrapedMovie.fullmoviebody.plot = _scrapedMovie.fullmoviebody.outline ' If plot is empty, use outline
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
@@ -2793,6 +2776,11 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title
                 End If
             End If
+        End If
+
+        If Preferences.MovTitleCase Then
+            _scrapedMovie.fullmoviebody.title = Utilities.TitleCase(_scrapedMovie.fullmoviebody.title)
+            _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
         End If
 
         If Not Preferences.movies_useXBMC_Scraper AndAlso rl.TagsFromKeywords Then

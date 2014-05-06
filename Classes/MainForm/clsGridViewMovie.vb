@@ -138,7 +138,7 @@ Public Class clsGridViewMovie
 
         Dim col As DataGridViewColumn = dgv.Columns(name)
 
-        If IsNothing(toolTip) Then toolTip = CapsFirstLetter(name)
+        If IsNothing(toolTip) Then toolTip = Utilities.TitleCase(name)  'CapsFirstLetter(name)
 
         col.Visible     = visible
         col.ToolTipText = toolTip
@@ -162,7 +162,8 @@ Public Class clsGridViewMovie
 
 
     Function CapsFirstLetter(words As String)
-        Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
+        'Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
+        Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
 

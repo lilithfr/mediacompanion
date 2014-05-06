@@ -133,7 +133,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Sub
 
-
+    Public Shared Function TitleCase(words As String)
+        Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
+        'Return Form1.MyCulture.TextInfo.ToTitleCase(words)
+    End Function
 
 
     Public Shared Function GetFreeSpace(ByVal Drive As String) As Long

@@ -9,7 +9,7 @@ Imports System.Text
 
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
-    Public Shared MyCulture As New System.Globalization.CultureInfo("en-US")
+    'Public Shared MyCulture As New System.Globalization.CultureInfo("en-US")
 
     Public Shared Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
@@ -2572,7 +2572,7 @@ Public Class WorkingWithNfoFiles
                 End Try
                 Try
                     child = doc.CreateElement("rating")
-                    child.InnerText = movietosave.fullmoviebody.rating.ToRating.ToString("0.0", MyCulture)
+                    child.InnerText = movietosave.fullmoviebody.rating.ToRating.ToString("0.0", Form1.MyCulture)
                     root.AppendChild(child)
                 Catch
                 End Try

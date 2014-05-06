@@ -198,12 +198,13 @@ Public Class Preferences
     Public Shared actornetworkpath As String
     Public Shared imdbmirror As String
     Public Shared createfolderjpg As Boolean
+    Public Shared createfanartjpg As Boolean    'Use to create fanart.jpg if in a folder
     Public Shared basicsavemode As Boolean
     Public Shared namemode As String
     Public Shared usetransparency As Boolean
     Public Shared transparencyvalue As Integer
     Public Shared savefanart As Boolean
-    Public Shared fanartjpg As Boolean
+    Public Shared fanartjpg As Boolean      'Used to create fanart.jpg instead of movie-fanart.jpg
     Public Shared roundminutes As Boolean
     Public Shared moviedefaultlist As Byte
     Public Shared moviesUseXBMCScraper As Boolean = False
@@ -224,6 +225,7 @@ Public Class Preferences
     Public Shared MovRenameUnderscore As Boolean
     Public Shared MovSetIgnArticle As Boolean
     Public Shared MovTitleIgnArticle As Boolean
+    Public Shared MovTitleCase As Boolean
     Public Shared MovieImdbGenreRegEx As String
     Public Shared showsortdate As Boolean
     Public Shared TMDbSelectedLanguageName As String = "English - US"
@@ -556,6 +558,7 @@ Public Class Preferences
         MovRenameUnderscore = False
         MovSetIgnArticle = False
         MovTitleIgnArticle = False
+        MovTitleCase = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
 
@@ -610,6 +613,7 @@ Public Class Preferences
         keywordasTag = False
         keywordlimit = 5
         createfolderjpg = False
+        createfanartjpg = False
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
         namemode = "1"
         maximumthumbs = 10
@@ -902,6 +906,7 @@ Public Class Preferences
         root.AppendChild(doc, "actornetworkpath",                   actornetworkpath)                   'xbmcactorpath
         root.AppendChild(doc, "imdbmirror",                         imdbmirror)                         'ListBox9
         root.AppendChild(doc, "createfolderjpg",                    createfolderjpg)                    'chkbx_createfolderjpg
+        root.AppendChild(doc, "createfanartjpg",                    createfanartjpg)                    'cbMovCreateFanartjpg
         root.AppendChild(doc, "basicsavemode",                      basicsavemode)                      'chkbx_basicsave
         root.AppendChild(doc, "namemode",                           namemode)                           'cbxNameMode
         root.AppendChild(doc, "usetransparency",                    usetransparency)                    'set from frmOptions - obsolete
@@ -911,7 +916,7 @@ Public Class Preferences
         root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
         root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'CheckBox13
-        root.AppendChild(doc, "fanartjpg",                          fanartjpg)                          'fanartjpg
+        root.AppendChild(doc, "fanartjpg",                          fanartjpg)                          'cbMovieFanartInFolders
         root.AppendChild(doc, "roundminutes",                       roundminutes)                       'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreparts",                        movieignorepart)                    'cbxCleanFilenameIgnorePart
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
@@ -930,6 +935,7 @@ Public Class Preferences
         root.AppendChild(doc, "MovRenameUnderscore",                MovRenameUnderscore)                'cbRenameUnderscore
         root.AppendChild(doc, "MovSetIgnArticle",                   MovSetIgnArticle)                   'cbMovSetIgnArticle
         root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
+        root.AppendChild(doc, "MovTitleCase",                       MovTitleCase)                       'cbMovTitleCase
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
         root.AppendChild(doc, "moviePreferredHDTrailerResolution",  moviePreferredTrailerResolution)    'cbPreferredTrailerResolution
         root.AppendChild(doc, "GetMovieSetFromTMDb",                GetMovieSetFromTMDb)                'cbGetMovieSetFromTMDb
@@ -1251,6 +1257,7 @@ Public Class Preferences
                     Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
                     Case "allfolders"                           : allfolders = thisresult.InnerXml
                     Case "createfolderjpg"                      : createfolderjpg = thisresult.InnerXml
+                    Case "createfanartjpg"                      : createfanartjpg = thisresult.InnerXml 
                     Case "basicsavemode"                        : basicsavemode = thisresult.InnerXml
                     Case "namemode"                             : namemode = thisresult.InnerXml
                     Case "tvdbmode"                             : sortorder = thisresult.InnerXml
@@ -1262,7 +1269,7 @@ Public Class Preferences
                     Case "roundminutes"                         : roundminutes = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml
-                    Case "ignoreArticle"                        : ignoreAarticle = thisresult.InnerXml
+                    Case "ignoreAarticle"                       : ignoreAarticle = thisresult.InnerXml
                     Case "ignoreAn"                             : ignoreAn = thisresult.InnerXml 
                     Case "sorttitleignorearticle"               : sorttitleignorearticle = thisresult.InnerXml
                     Case "TVShowUseXBMCScraper"                 : tvshow_useXBMC_Scraper = thisresult.InnerXml
@@ -1305,7 +1312,8 @@ Public Class Preferences
                     Case "MovFolderRenameTemplate"              : MovFolderRenameTemplate = thisresult.InnerText 
                     Case "MovRenameUnderscore"                  : MovRenameUnderscore = thisresult.InnerText 
                     Case "MovSetIgnArticle"                     : MovSetIgnArticle = thisresult.InnerXml 
-                    Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml 
+                    Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml
+                    Case "MovTitleCase"                         : MovTitleCase = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml
                     Case "moviePreferredHDTrailerResolution"    : moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()
@@ -1679,7 +1687,7 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             Else
-                If (fanartjpg And Preferences.FrodoEnabled) Or Preferences.basicsavemode Then
+                If (fanartjpg And Preferences.FrodoEnabled) Or Preferences.basicsavemode Or Preferences.createfanartjpg Then
                     path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
                     lst.Add(path)
                 End If

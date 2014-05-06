@@ -1107,7 +1107,8 @@ End If
         For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
             i += 1
             PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
-            ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
+            'ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
+            ReportProgress("Rescraping '" & Utilities.TitleCase(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             RescrapeSpecificMovie(FullPathAndFilename,rl)
 
             If Cancelled then Exit For
@@ -1116,7 +1117,8 @@ End If
     End Sub
 
     Function CapsFirstLetter(words As String)
-        Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
+        'Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
+        Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
 
