@@ -704,6 +704,10 @@ Public Class TMDb
                 rhs.Add(New RetryHandler(AddressOf GetMovieImages))
                 rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
 
+                If Not Utilities.UrlIsValid("www.themoviedb.org") Then
+                    Throw New Exception("TMDB is offline")
+                End If
+
                 For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
                 Next

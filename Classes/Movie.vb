@@ -865,8 +865,13 @@ Public Class Movie
                 If Cancelled then Exit Sub
 
             Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)                
-                Actions.Items.Clear         
+                If ex.Message.ToString.ToLower.Contains("offline") Then
+                    ReportProgress(,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)
+                    Actions.Items.RemoveAt(0)
+                Else
+                    ReportProgress(MSG_ERROR,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)                
+                Actions.Items.Clear
+                End If
             End Try
 
         End While
@@ -1409,7 +1414,7 @@ Public Class Movie
             Else
                 tmdb.Imdb = If(_possibleImdb.Contains("tt"), _possibleImdb, _scrapedMovie.fullmoviebody.imdbid)
                 _scrapedMovie.fullmoviebody.movieset = "-None-"
-                If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                     _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
                 End If
             End If
