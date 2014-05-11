@@ -4017,86 +4017,7 @@ Public Class Form1
         frmSplash2.Hide()
     End Sub
 
-    Private Sub DataGridViewMovies_DoubleClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles DataGridViewMovies.DoubleClick
-        Try
-            Dim info = DataGridViewMovies.HitTest(e.X, e.Y)
-
-            If info.Type <> DataGridViewHitTestType.ColumnHeader Then
-                mov_Play("Movie")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub DataGridViewMovies_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragDrop
-
-        Dim files() As String
-
-        files = e.Data.GetData(DataFormats.FileDrop)
-        For f = 0 To UBound(files)
-            If IO.File.Exists(files(f)) Then
-                ' This path is a file.
-                Dim skip As Boolean = False
-                For Each item In oMovies.MovieCache
-                    If item.fullpathandfilename = files(f) Then
-                        skip = True
-                        Exit For
-                    End If
-                Next
-                For Each item In droppedItems
-                    If item = files(f) Then
-                        skip = True
-                        Exit For
-                    End If
-                Next
-                If mov_FileCheckValid(files(f)) = True Then
-                    If skip = False Then droppedItems.Add(files(f))
-                End If
-            Else
-                If IO.Directory.Exists(files(f)) Then
-                    ' This path is a directory.
-                    Dim di As New IO.DirectoryInfo(files(f))
-                    Dim diar1 As IO.FileInfo() = di.GetFiles()
-                    Dim dra As IO.FileInfo
-
-                    'list the names of all files in the specified directory
-                    For Each dra In diar1
-                        Dim skip As Boolean = False
-                        For Each item In oMovies.MovieCache
-                            If item.fullpathandfilename = dra.FullName Then
-                                skip = True
-                                Exit For
-                            End If
-                        Next
-                        For Each item In droppedItems
-                            If item = dra.FullName Then
-                                skip = True
-                                Exit For
-                            End If
-                        Next
-                        If mov_FileCheckValid(dra.FullName) = True Then
-                            If skip = False Then droppedItems.Add(dra.FullName)
-                        End If
-                    Next
-                End If
-            End If
-        Next
-
-        If droppedItems.Count > 0 Then
-            DoScrapeDroppedFiles()
-        End If
-
-    End Sub
-
-    Private Sub DataGridViewMovies_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragEnter
-        Try
-            e.Effect = DragDropEffects.Copy
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    
 
 
     Private Sub MovieFormInit()
@@ -4321,6 +4242,210 @@ Public Class Form1
         Application.DoEvents()
         _yield = False
         DisplayMovie()
+    End Sub
+
+    Private Sub DataGridViewMovies_ColumnHeaderMouseClick( sender As Object,  e As DataGridViewCellMouseEventArgs) Handles DataGridViewMovies.ColumnHeaderMouseClick
+        btnreverse.Checked = Not btnreverse.Checked
+        btnreverse_CheckedChanged(Nothing,Nothing)
+    End Sub
+
+    Private Sub DataGridViewMovies_DoubleClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles DataGridViewMovies.DoubleClick
+        Try
+            Dim info = DataGridViewMovies.HitTest(e.X, e.Y)
+
+            If info.Type <> DataGridViewHitTestType.ColumnHeader Then
+                mov_Play("Movie")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+
+    Private Sub DataGridViewMovies_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragDrop
+
+        Dim files() As String
+
+        files = e.Data.GetData(DataFormats.FileDrop)
+        For f = 0 To UBound(files)
+            If IO.File.Exists(files(f)) Then
+                ' This path is a file.
+                Dim skip As Boolean = False
+                For Each item In oMovies.MovieCache
+                    If item.fullpathandfilename = files(f) Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                For Each item In droppedItems
+                    If item = files(f) Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                If mov_FileCheckValid(files(f)) = True Then
+                    If skip = False Then droppedItems.Add(files(f))
+                End If
+            Else
+                If IO.Directory.Exists(files(f)) Then
+                    ' This path is a directory.
+                    Dim di As New IO.DirectoryInfo(files(f))
+                    Dim diar1 As IO.FileInfo() = di.GetFiles()
+                    Dim dra As IO.FileInfo
+
+                    'list the names of all files in the specified directory
+                    For Each dra In diar1
+                        Dim skip As Boolean = False
+                        For Each item In oMovies.MovieCache
+                            If item.fullpathandfilename = dra.FullName Then
+                                skip = True
+                                Exit For
+                            End If
+                        Next
+                        For Each item In droppedItems
+                            If item = dra.FullName Then
+                                skip = True
+                                Exit For
+                            End If
+                        Next
+                        If mov_FileCheckValid(dra.FullName) = True Then
+                            If skip = False Then droppedItems.Add(dra.FullName)
+                        End If
+                    Next
+                End If
+            End If
+        Next
+
+        If droppedItems.Count > 0 Then
+            DoScrapeDroppedFiles()
+        End If
+
+    End Sub
+
+    Private Sub DataGridViewMovies_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
+        DisplayMovie(True)
+    End Sub
+
+    Private Sub DataGridViewMovies_KeyPress(sender As Object, e As KeyPressEventArgs) Handles DataGridViewMovies.Keypress
+	    If [Char].IsLetter(e.KeyChar) or [Char].IsDigit(e.KeyChar) Then
+            Dim ekey As String = e.KeyChar.ToString.ToLower
+		    For i As Integer = 0 To (DataGridViewMovies.Rows.Count) - 1
+                Dim rtitle As String = DataGridViewMovies.Rows(i).Cells("DisplayTitle").Value.ToString.ToLower
+			    If rtitle.StartsWith(ekey) Then
+                    Dim icell As Integer = DataGridViewMovies.CurrentCell.ColumnIndex 
+                    DataGridViewMovies.CurrentCell = DataGridViewMovies.Rows(i).Cells(icell)
+                    DisplayMovie()
+				    Return
+			    End If
+		    Next
+	    End If
+    End Sub
+    
+    Private Sub DataGridViewMovies_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseLeave
+        TooltipGridViewMovies1.Visible = False
+        TimerToolTip.Enabled = False
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseHover
+        TimerToolTip.Start()
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
+        Try
+            Dim MousePos       As Point                    = DataGridViewMovies.PointToClient(Control.MousePosition)
+            Dim objHitTestInfo As DataGridView.HitTestInfo = DataGridViewMovies.HitTest      (MousePos.X, MousePos.Y)
+            Dim MouseRowIndex  As Integer                  = objHitTestInfo.RowIndex
+ 
+            TimerToolTip.Enabled = True
+
+            If MouseRowIndex > -1 Then
+                Dim Runtime       As String = ""
+                Dim RatingRuntime As String = ""
+                Dim movietitle    As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Title" ).Value.ToString
+                Dim movieYear     As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Year"  ).Value.ToString
+                Dim Rating        As String = "Rating: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("Rating").Value.ToString.FormatRating
+
+                If DataGridViewMovies.Rows(MouseRowIndex).Cells("Runtime").Value.ToString.Length > 3 Then
+                    Runtime = "Runtime: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("IntRuntime").Value.ToString
+                End If
+
+                RatingRuntime = Rating & "     " & Runtime
+
+                Dim Plot As String = DataGridViewMovies.Rows(MouseRowIndex).Cells("Plot").Value.ToString
+
+                If objHitTestInfo.RowY > -1 Then
+                    TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
+
+                    TooltipGridViewMovies1.Textinfo(Plot)
+                    TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
+                    TooltipGridViewMovies1.TextMovieName(movietitle)
+                    TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
+
+                    TooltipGridViewMovies1.Left = MousePos.X+10
+                    TooltipGridViewMovies1.Top  = MousePos.Y+TooltipGridViewMovies1.Height+30
+                End If
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
+        mov_ToolStripPlayTrailer.Visible = True
+
+        'Try
+        'Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
+        'If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
+        If e.Button = MouseButtons.Right Then
+            Dim multistelect As Boolean = False
+            'If more than one movie is selected, check if right-click is on the selection.
+            'If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
+            If DataGridViewMovies.SelectedRows.Count > 1 Then
+                multistelect = True
+            End If
+            'Otherwise, bring up the context menu for a single movie
+
+
+            If multistelect = True Then
+                mov_ToolStripMovieName.BackColor = Color.Orange
+                mov_ToolStripMovieName.Text = "Multisave Mode"
+                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
+            Else
+
+                Try
+                    'MovieListComboBox.SelectedItems.Clear()
+                    'MovieListComboBox.SelectedIndex = ptIndex
+                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
+                    mov_ToolStripMovieName.BackColor = Color.Honeydew
+                    mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(6).Value.ToString & "'"
+                    mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+
+                    'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
+
+                    'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)) Then
+
+                    'Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
+
+                    'mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
+
+                    Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
+
+                    mov_ToolStripPlayTrailer.Visible = Not movie.MissingTrailer
+                Catch
+                End Try
+            End If
+        End If
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
     End Sub
 
     Private Function Mov_MissingMovie(ByVal qrylst As List(Of Data_GridViewMovie)) As Boolean
@@ -23365,57 +23490,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
-        mov_ToolStripPlayTrailer.Visible = True
-
-        'Try
-        'Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
-        'If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
-        If e.Button = MouseButtons.Right Then
-            Dim multistelect As Boolean = False
-            'If more than one movie is selected, check if right-click is on the selection.
-            'If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
-            If DataGridViewMovies.SelectedRows.Count > 1 Then
-                multistelect = True
-            End If
-            'Otherwise, bring up the context menu for a single movie
-
-
-            If multistelect = True Then
-                mov_ToolStripMovieName.BackColor = Color.Orange
-                mov_ToolStripMovieName.Text = "Multisave Mode"
-                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
-            Else
-
-                Try
-                    'MovieListComboBox.SelectedItems.Clear()
-                    'MovieListComboBox.SelectedIndex = ptIndex
-                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
-                    mov_ToolStripMovieName.BackColor = Color.Honeydew
-                    mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(6).Value.ToString & "'"
-                    mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-
-                    'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
-
-                    'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)) Then
-
-                    'Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
-
-                    'mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
-
-                    Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
-
-                    mov_ToolStripPlayTrailer.Visible = Not movie.MissingTrailer
-                Catch
-                End Try
-            End If
-        End If
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
-    End Sub
-
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
         HandleMovieList_DisplayChange("FileName")
     End Sub
@@ -23536,11 +23610,6 @@ Public Class Form1
         End If
     End Sub
 
-
-    Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
-        DisplayMovie(True)
-    End Sub
-
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bnt_movSearchNew.Click
         SearchForNew
     End Sub
@@ -23611,58 +23680,6 @@ Public Class Form1
     '    End Try
 
     'End Sub
-
-
-
-    Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
-        Try
-            Dim MousePos       As Point                    = DataGridViewMovies.PointToClient(Control.MousePosition)
-            Dim objHitTestInfo As DataGridView.HitTestInfo = DataGridViewMovies.HitTest      (MousePos.X, MousePos.Y)
-            Dim MouseRowIndex  As Integer                  = objHitTestInfo.RowIndex
- 
-            TimerToolTip.Enabled = True
-
-            If MouseRowIndex > -1 Then
-                Dim Runtime       As String = ""
-                Dim RatingRuntime As String = ""
-                Dim movietitle    As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Title" ).Value.ToString
-                Dim movieYear     As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Year"  ).Value.ToString
-                Dim Rating        As String = "Rating: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("Rating").Value.ToString.FormatRating
-
-                If DataGridViewMovies.Rows(MouseRowIndex).Cells("Runtime").Value.ToString.Length > 3 Then
-                    Runtime = "Runtime: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("IntRuntime").Value.ToString
-                End If
-
-                RatingRuntime = Rating & "     " & Runtime
-
-                Dim Plot As String = DataGridViewMovies.Rows(MouseRowIndex).Cells("Plot").Value.ToString
-
-                If objHitTestInfo.RowY > -1 Then
-                    TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
-
-                    TooltipGridViewMovies1.Textinfo(Plot)
-                    TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
-                    TooltipGridViewMovies1.TextMovieName(movietitle)
-                    TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
-
-                    TooltipGridViewMovies1.Left = MousePos.X+10
-                    TooltipGridViewMovies1.Top  = MousePos.Y+TooltipGridViewMovies1.Height+30
-                End If
-            End If
-        Catch
-        End Try
-    End Sub
-
-
-
-    Private Sub DataGridViewMovies_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseLeave
-        TooltipGridViewMovies1.Visible = False
-        TimerToolTip.Enabled = False
-    End Sub
-
-    Private Sub DataGridViewMovies_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseHover
-        TimerToolTip.Start()
-    End Sub
 
 #Region "Movie scraping stuff"
 
@@ -24701,10 +24718,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub DataGridViewMovies_ColumnHeaderMouseClick( sender As Object,  e As DataGridViewCellMouseEventArgs) Handles DataGridViewMovies.ColumnHeaderMouseClick
-        btnreverse.Checked = Not btnreverse.Checked
-        btnreverse_CheckedChanged(Nothing,Nothing)
-    End Sub
+    
 
     Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) Handles AutoScrnShtDelay.KeyPress
             Try
