@@ -571,6 +571,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "Error"
     End Function
 
+    Public Shared Function GetTvEpExtension(ByVal epnfopath As String) As String
+        Dim epfilename As String = RemoveFilenameExtension(epnfopath)
+        For Each extn In VideoExtensions
+            If IO.File.Exists(epfilename & extn) Then
+                Return extn
+            End If
+        Next
+        Return "error"
+    End Function
     Public Shared Function ValidMovieDir(ByVal PathToCheck As String) As Boolean
         Dim passed As Boolean = True
         Dim s As String = PathToCheck.ToLower
