@@ -1721,8 +1721,9 @@ Public Class Preferences
                     
                 'End If
             End If
-            If Preferences.basicsavemode Then
+            If Preferences.basicsavemode OrElse Preferences.createfanartjpg Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
+                lst.Add(path)
             End If
             End If
 
