@@ -2496,20 +2496,22 @@ Partial Public Class Form1
                                     progresstext &= " : HD Tags..."
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                     Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
-                                    singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-                                    For Each audioStream In fileStreamDetails.filedetails_audio
-                                        singleepisode.Details.StreamDetails.Audio.Add(audioStream)
-                                    Next
+                                    If Not IsNothing(fileStreamDetails) Then
+                                        singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                                        For Each audioStream In fileStreamDetails.filedetails_audio
+                                            singleepisode.Details.StreamDetails.Audio.Add(audioStream)
+                                        Next
 
-                                    If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
-                                        tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
-                                        If Preferences.intruntime Then
-                                            singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
-                                        Else
-                                            singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                                        If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                                            tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                                            If Preferences.intruntime Then
+                                                singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
+                                            Else
+                                                singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                                            End If
+                                            progresstext &= "OK."
+                                            bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                         End If
-                                        progresstext &= "OK."
-                                        bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                     End If
                                 End If
                             End If

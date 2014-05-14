@@ -1825,7 +1825,7 @@ Public Class Preferences
             Dim workingfiledetails As New FullFileDetails
             If IO.Path.GetExtension(filename).ToLower = ".iso" Then
                 possibleISO = Get_ISO_HDTags(filename)
-                If possibleISO <> "" Then
+                If possibleISO <> "" AndAlso Not possibleISO.ToLower.Contains("unable to get image file") Then
                     Dim MInform As New XmlDocument
                     MInform.LoadXml(possibleISO)
                     For Each thisresult In MInform("File")
@@ -1902,6 +1902,8 @@ Public Class Preferences
                         workingfiledetails.filedetails_audio.Add(audio)    'Must have at least one audio track, even if it's blank
                     End If
                     Return workingfiledetails
+                Else
+                    Return workingfiledetails 
                 End If
             End If
             Dim playlist As New List(Of String)
@@ -2086,7 +2088,7 @@ Public Class Preferences
             End If
 
             Return workingfiledetails
-        Catch ex As Exception
+         Catch ex As Exception
 
         Finally
         End Try
