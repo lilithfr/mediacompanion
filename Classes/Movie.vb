@@ -441,11 +441,10 @@ Public Class Movie
     ReadOnly Property Title As String
         Get
             If Preferences.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv" Then
-                Dim rtfolder As Boolean = Preferences.GetRootFolderCheck(NfoPathAndFilename)
-                If rtfolder Then
+                If Preferences.GetRootFolderCheck(NfoPathAndFilename) Then
                     Return Path.GetFileNameWithoutExtension(TitleFull)
                 Else
-                Return Utilities.GetLastFolder(nfopathandfilename)
+                    Return Utilities.GetLastFolder(nfopathandfilename)
                 End If
             Else
                 Dim tmpTitle As String = TitleFull
