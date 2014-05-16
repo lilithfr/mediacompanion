@@ -123,6 +123,28 @@ Public Class TMDb
         End Get
     End Property
 
+    Public ReadOnly Property Cast As List(Of str_MovieActors)
+        Get
+            Fetch
+            FetchCast
+            Dim alist As New List(Of str_MovieActors)
+            Try
+                Dim x = _cast.cast.Count-1
+                If x < 1 Then Return alist
+                For i = 0 to Preferences.maxactors-1
+                    Dim newact As str_MovieActors
+                    newact.actorid      = _cast.cast(i).id
+                    newact.actorname    = _cast.cast(i).name
+                    newact.actorrole    = _cast.cast(i).character
+                    newact.actorthumb   = "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path
+                    alist.Add(newact)
+                    If x = i Then Exit For
+                Next
+            Catch
+            End Try
+            Return alist
+        End Get
+    End Property
 
     Public ReadOnly Property Movie As WatTmdb.V3.TmdbMovie
         Get

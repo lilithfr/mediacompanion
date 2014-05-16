@@ -14,22 +14,22 @@ Public Class frmOptions
 
     Private Sub options_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Try
-            For f = 0 To 33
-                Preferences.certificatepriority(f) = ListBox5.Items(f)
-            Next
-            For f = 0 To 3
-                Preferences.moviethumbpriority(f) = ListBox3.Items(f)
-            Next
+            'For f = 0 To 33
+            '    Preferences.certificatepriority(f) = ListBox5.Items(f)
+            'Next
+            'For f = 0 To 3
+            '    Preferences.moviethumbpriority(f) = ListBox3.Items(f)
+            'Next
 
-            If Preferences.videomode = 4 Then
-                If Not IO.File.Exists(Preferences.selectedvideoplayer) Then
-                    MsgBox("You Have Not Selected Your Preferred Media Player")
-                    e.Cancel = True
-                    Exit Sub
-                End If
-            End If
+            'If Preferences.videomode = 4 Then
+            '    If Not IO.File.Exists(Preferences.selectedvideoplayer) Then
+            '        MsgBox("You Have Not Selected Your Preferred Media Player")
+            '        e.Cancel = True
+            '        Exit Sub
+            '    End If
+            'End If
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -76,7 +76,7 @@ Public Class frmOptions
             ElseIf Preferences.videomode = 4 Then
                 RadioButton4.Checked = True
             End If
-            Label4.Text = Preferences.selectedvideoplayer
+            Label4.Text = "Custom Player - " & Preferences.selectedvideoplayer
             If Preferences.overwritethumbs = True Then
                 CheckBox1.Checked = CheckState.Unchecked
             Else
@@ -251,7 +251,7 @@ Public Class frmOptions
                 CheckBox15.CheckState = CheckState.Unchecked
             End If
 
-            TabPage1.BackColor = Form1.BackColor
+            TPGenOld.BackColor = Form1.BackColor
             TabPage2.BackColor = Form1.BackColor
             TabPage3.BackColor = Form1.BackColor
             ListBox4.SelectedItem = Preferences.imdbmirror

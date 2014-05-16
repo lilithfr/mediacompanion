@@ -457,6 +457,18 @@ Public Class Form1
             'Next
         'Else
 
+        'hide debug xml view tabs - unhiden (i.e. added) via debug tab
+        TabLevel1.TabPages.Remove(Me.TabConfigXML)
+        TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
+        TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
+        TabLevel1.TabPages.Remove(Me.TabProfile)
+        TabLevel1.TabPages.Remove(Me.TabActorCache)
+        TabLevel1.TabPages.Remove(Me.TabRegex)
+        TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
+        'TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
+        TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+        PreferencesToolStripMenuItem.Visible = False
+
         Call util_ProfilesLoad()
         For Each prof In profileStruct.ProfileList
             If prof.ProfileName = profileStruct.StartupProfile Then
@@ -717,16 +729,8 @@ Public Class Form1
             startup = False
             frmSplash.Close()
 
-            'hide debug xml view tabs - unhiden (i.e. added) via debug tab
-            TabLevel1.TabPages.Remove(Me.TabConfigXML)
-            TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
-            TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
-            TabLevel1.TabPages.Remove(Me.TabProfile)
-            TabLevel1.TabPages.Remove(Me.TabActorCache)
-            TabLevel1.TabPages.Remove(Me.TabRegex)
-            TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            'TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
-            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            
+
 
             'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
             GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
@@ -12479,6 +12483,7 @@ Public Class Form1
         cbMovTitleCase.CheckState               = If(Preferences.MovTitleCase, CheckState.Checked, CheckState.Unchecked)
         cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
+        cbImdbgetTMDBActor.CheckState           = If(Preferences.TmdbActorsImdbScrape, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
         cb_XbmcTmdbMissingFromImdb.CheckState   = If(Preferences.XbmcTmdbMissingFromImdb, CheckState.Checked, CheckState.Unchecked)
         cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
@@ -12836,7 +12841,7 @@ Public Class Form1
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
-
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
@@ -12900,14 +12905,11 @@ Public Class Form1
                 Preferences.gettrailer = True
             Else
                 If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
-                    'Preferences.gettrailer = True
                     cbMovieTrailerUrl.CheckState = CheckState.Checked 
                 Else
                     Preferences.gettrailer = False
                 End If
             End If
-            'Preferences.gettrailer = cbMovieTrailerUrl.Checked
-            'cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch
@@ -12919,10 +12921,6 @@ Public Class Form1
             If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
                 Preferences.DownloadTrailerDuringScrape = True
                 cbMovieTrailerUrl.CheckState = CheckState.Checked 
-            
-                'cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
-                'Preferences.DownloadTrailerDuringScrape = cbDlTrailerDuringScrape.Checked
-                'cbMovieTrailerUrl.Checked = True
             Else 
                 Preferences.DownloadTrailerDuringScrape = False
             End If
@@ -12941,19 +12939,6 @@ Public Class Form1
                 GroupBox_IMDB_Scraper_Preferences.Enabled = True
                 GroupBox_IMDB_Scraper_Preferences.Visible = True
                 GroupBox_IMDB_Scraper_Preferences.BringToFront()
-                'GroupBox11.Visible = False
-                'ComboBox7.Visible = True 'False
-                'ComboBox6.Visible = True 'False
-                'Label98.Visible = True 'False
-                'Label92.Visible = True 'False
-
-                'Label93.Enabled = True 'False
-                'Label99.Enabled = True 'False
-                'lbPosterSourcePriorities.Enabled = True 'False
-                'Button73.Enabled = True 'False
-                'Button61.Enabled = True 'False
-
-
                 RadioButton51.Enabled = False    'Hidden IMDB option for XBMC Scrapers as XBMC IMDB Scraper is broken.
                 RadioButton52.Enabled = True
                 If Preferences.XBMC_Scraper = "imdb" Then
@@ -12978,19 +12963,6 @@ Public Class Form1
                 GroupBox_MovieIMDBMirror.Enabled = True
                 GroupBox_MovieIMDBMirror.Visible = True
                 GroupBox_MovieIMDBMirror.BringToFront()
-
-
-
-                'GroupBox11.Visible = True
-                'ComboBox7.Visible = True
-                'ComboBox6.Visible = True
-                'Label98.Visible = True
-                'Label92.Visible = True
-                'Label93.Enabled = True
-                'Label99.Enabled = True
-                'lbPosterSourcePriorities.Enabled = True
-                'Button73.Enabled = True
-                'Button61.Enabled = True
                 RadioButton51.Enabled = False
                 RadioButton52.Enabled = False
             End If
@@ -13000,6 +12972,20 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+    End Sub
+
+    Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.Click
+        Try
+            If cbImdbgetTMDBActor.CheckState = CheckState.Checked Then
+                Preferences.TmdbActorsImdbScrape = True
+            Else 
+                Preferences.TmdbActorsImdbScrape = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     '### RadioButton51 has been disabled due to XBMC no longer supporting the IMDb scraper
@@ -17735,6 +17721,16 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+    Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click 
+        Try
+            Dim t As New frmOptions
+            t.ShowDialog()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
 
     Private Sub SearchForMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForMissingEpisodesToolStripMenuItem.Click
         Try
@@ -23720,8 +23716,6 @@ End Sub
         Return False
     End Function
 
-
-
     Private Sub BtnSearchGooglePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSearchGooglePoster.Click
         'Open Webpage at Google image search for movietitle&year
         Dim title As String = workingMovieDetails.fullmoviebody.title
@@ -23749,6 +23743,5 @@ End Sub
         End If
         OpenUrl(url)
     End Sub
-
 
 End Class

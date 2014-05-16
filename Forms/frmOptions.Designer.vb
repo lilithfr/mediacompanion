@@ -137,7 +137,7 @@ Partial Class frmOptions
         Me.Button5 = New System.Windows.Forms.Button()
         Me.btn_addtvfolderdialogue = New System.Windows.Forms.Button()
         Me.btn_removetvfolder = New System.Windows.Forms.Button()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.TPGenOld = New System.Windows.Forms.TabPage()
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
@@ -145,7 +145,6 @@ Partial Class frmOptions
         Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
         Me.txtbox_maxposters = New System.Windows.Forms.TextBox()
         Me.Label32 = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.txtbx_minrarsize = New System.Windows.Forms.TextBox()
         Me.chkbx_basicsave = New System.Windows.Forms.CheckBox()
@@ -174,14 +173,17 @@ Partial Class frmOptions
         Me.TrackBar1 = New System.Windows.Forms.TrackBar()
         Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.btn_custommediaplayer = New System.Windows.Forms.Button()
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TPGen = New System.Windows.Forms.TabPage()
+        Me.TabControl3 = New System.Windows.Forms.TabControl()
+        Me.TPG1 = New System.Windows.Forms.TabPage()
+        Me.TPG2 = New System.Windows.Forms.TabPage()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox10.SuspendLayout
         Me.GroupBox12.SuspendLayout
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
@@ -204,13 +206,16 @@ Partial Class frmOptions
         Me.TabPage2.SuspendLayout
         Me.GroupBox1.SuspendLayout
         Me.GroupBox5.SuspendLayout
-        Me.TabPage1.SuspendLayout
+        Me.TPGenOld.SuspendLayout
         Me.GroupBox17.SuspendLayout
         Me.GroupBox11.SuspendLayout
         Me.GroupBox2.SuspendLayout
         CType(Me.TrackBar1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.GroupBox3.SuspendLayout
         Me.TabControl1.SuspendLayout
+        Me.TPGen.SuspendLayout
+        Me.TabControl3.SuspendLayout
+        Me.TPG1.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -1244,7 +1249,7 @@ Partial Class frmOptions
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(1000, 548)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Folders"
+        Me.TabPage2.Text = "Folders old"
         Me.TabPage2.UseVisualStyleBackColor = true
         '
         'GroupBox1
@@ -1339,39 +1344,37 @@ Partial Class frmOptions
         Me.btn_removetvfolder.Text = "Remove Selected"
         Me.btn_removetvfolder.UseVisualStyleBackColor = true
         '
-        'TabPage1
+        'TPGenOld
         '
-        Me.TabPage1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
-        Me.TabPage1.Controls.Add(Me.CheckBox11)
-        Me.TabPage1.Controls.Add(Me.GroupBox17)
-        Me.TabPage1.Controls.Add(Me.CheckBox5)
-        Me.TabPage1.Controls.Add(Me.chkbx_disablecache)
-        Me.TabPage1.Controls.Add(Me.txtbox_maxposters)
-        Me.TabPage1.Controls.Add(Me.Label32)
-        Me.TabPage1.Controls.Add(Me.Button2)
-        Me.TabPage1.Controls.Add(Me.Label27)
-        Me.TabPage1.Controls.Add(Me.txtbx_minrarsize)
-        Me.TabPage1.Controls.Add(Me.chkbx_basicsave)
-        Me.TabPage1.Controls.Add(Me.chkbx_ignoretrailers)
-        Me.TabPage1.Controls.Add(Me.chkbx_usefoldernames)
-        Me.TabPage1.Controls.Add(Me.GroupBox11)
-        Me.TabPage1.Controls.Add(Me.chkbx_notactorthumbs)
-        Me.TabPage1.Controls.Add(Me.Label24)
-        Me.TabPage1.Controls.Add(Me.chkbx_renamnfofiles)
-        Me.TabPage1.Controls.Add(Me.GroupBox2)
-        Me.TabPage1.Controls.Add(Me.chkbx_createfolderjpg)
-        Me.TabPage1.Controls.Add(Me.GroupBox3)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(1000, 548)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "General"
+        Me.TPGenOld.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.TPGenOld.Controls.Add(Me.CheckBox11)
+        Me.TPGenOld.Controls.Add(Me.GroupBox17)
+        Me.TPGenOld.Controls.Add(Me.CheckBox5)
+        Me.TPGenOld.Controls.Add(Me.chkbx_disablecache)
+        Me.TPGenOld.Controls.Add(Me.txtbox_maxposters)
+        Me.TPGenOld.Controls.Add(Me.Label32)
+        Me.TPGenOld.Controls.Add(Me.Label27)
+        Me.TPGenOld.Controls.Add(Me.txtbx_minrarsize)
+        Me.TPGenOld.Controls.Add(Me.chkbx_basicsave)
+        Me.TPGenOld.Controls.Add(Me.chkbx_ignoretrailers)
+        Me.TPGenOld.Controls.Add(Me.chkbx_usefoldernames)
+        Me.TPGenOld.Controls.Add(Me.GroupBox11)
+        Me.TPGenOld.Controls.Add(Me.chkbx_notactorthumbs)
+        Me.TPGenOld.Controls.Add(Me.Label24)
+        Me.TPGenOld.Controls.Add(Me.chkbx_renamnfofiles)
+        Me.TPGenOld.Controls.Add(Me.GroupBox2)
+        Me.TPGenOld.Controls.Add(Me.chkbx_createfolderjpg)
+        Me.TPGenOld.Location = New System.Drawing.Point(4, 22)
+        Me.TPGenOld.Name = "TPGenOld"
+        Me.TPGenOld.Padding = New System.Windows.Forms.Padding(3)
+        Me.TPGenOld.Size = New System.Drawing.Size(1000, 548)
+        Me.TPGenOld.TabIndex = 0
+        Me.TPGenOld.Text = "Gen Old"
         '
         'CheckBox11
         '
         Me.CheckBox11.AutoSize = true
-        Me.CheckBox11.Location = New System.Drawing.Point(709, 62)
+        Me.CheckBox11.Location = New System.Drawing.Point(650, 62)
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(148, 17)
         Me.CheckBox11.TabIndex = 31
@@ -1381,7 +1384,7 @@ Partial Class frmOptions
         'GroupBox17
         '
         Me.GroupBox17.Controls.Add(Me.ComboBox3)
-        Me.GroupBox17.Location = New System.Drawing.Point(244, 301)
+        Me.GroupBox17.Location = New System.Drawing.Point(244, 230)
         Me.GroupBox17.Name = "GroupBox17"
         Me.GroupBox17.Size = New System.Drawing.Size(359, 67)
         Me.GroupBox17.TabIndex = 30
@@ -1400,7 +1403,7 @@ Partial Class frmOptions
         'CheckBox5
         '
         Me.CheckBox5.AutoSize = true
-        Me.CheckBox5.Location = New System.Drawing.Point(709, 16)
+        Me.CheckBox5.Location = New System.Drawing.Point(650, 16)
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox5.TabIndex = 29
@@ -1410,7 +1413,7 @@ Partial Class frmOptions
         'chkbx_disablecache
         '
         Me.chkbx_disablecache.AutoSize = true
-        Me.chkbx_disablecache.Location = New System.Drawing.Point(709, 39)
+        Me.chkbx_disablecache.Location = New System.Drawing.Point(650, 39)
         Me.chkbx_disablecache.Name = "chkbx_disablecache"
         Me.chkbx_disablecache.Size = New System.Drawing.Size(285, 17)
         Me.chkbx_disablecache.TabIndex = 27
@@ -1432,16 +1435,6 @@ Partial Class frmOptions
         Me.Label32.Size = New System.Drawing.Size(387, 13)
         Me.Label32.TabIndex = 27
         Me.Label32.Text = "Maximum ammount of posters to display at a time within the movie poster browser"
-        '
-        'Button2
-        '
-        Me.Button2.Enabled = false
-        Me.Button2.Location = New System.Drawing.Point(865, 251)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(129, 23)
-        Me.Button2.TabIndex = 26
-        Me.Button2.Text = "Change MC Font"
-        Me.Button2.UseVisualStyleBackColor = true
         '
         'Label27
         '
@@ -1473,7 +1466,7 @@ Partial Class frmOptions
         'chkbx_ignoretrailers
         '
         Me.chkbx_ignoretrailers.AutoSize = true
-        Me.chkbx_ignoretrailers.Location = New System.Drawing.Point(244, 186)
+        Me.chkbx_ignoretrailers.Location = New System.Drawing.Point(244, 163)
         Me.chkbx_ignoretrailers.Name = "chkbx_ignoretrailers"
         Me.chkbx_ignoretrailers.Size = New System.Drawing.Size(265, 17)
         Me.chkbx_ignoretrailers.TabIndex = 22
@@ -1496,7 +1489,7 @@ Partial Class frmOptions
         Me.GroupBox11.Controls.Add(Me.Label28)
         Me.GroupBox11.Controls.Add(Me.chkbx_unstackposternames)
         Me.GroupBox11.Controls.Add(Me.Label14)
-        Me.GroupBox11.Location = New System.Drawing.Point(539, 374)
+        Me.GroupBox11.Location = New System.Drawing.Point(539, 308)
         Me.GroupBox11.Name = "GroupBox11"
         Me.GroupBox11.Size = New System.Drawing.Size(414, 130)
         Me.GroupBox11.TabIndex = 19
@@ -1546,7 +1539,7 @@ Partial Class frmOptions
         'chkbx_notactorthumbs
         '
         Me.chkbx_notactorthumbs.AutoSize = true
-        Me.chkbx_notactorthumbs.Location = New System.Drawing.Point(244, 163)
+        Me.chkbx_notactorthumbs.Location = New System.Drawing.Point(244, 143)
         Me.chkbx_notactorthumbs.Name = "chkbx_notactorthumbs"
         Me.chkbx_notactorthumbs.Size = New System.Drawing.Size(384, 17)
         Me.chkbx_notactorthumbs.TabIndex = 18
@@ -1556,7 +1549,7 @@ Partial Class frmOptions
         'Label24
         '
         Me.Label24.AutoSize = true
-        Me.Label24.Location = New System.Drawing.Point(249, 219)
+        Me.Label24.Location = New System.Drawing.Point(249, 187)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(469, 13)
         Me.Label24.TabIndex = 17
@@ -1566,7 +1559,7 @@ Partial Class frmOptions
         'chkbx_renamnfofiles
         '
         Me.chkbx_renamnfofiles.AutoSize = true
-        Me.chkbx_renamnfofiles.Location = New System.Drawing.Point(252, 236)
+        Me.chkbx_renamnfofiles.Location = New System.Drawing.Point(244, 203)
         Me.chkbx_renamnfofiles.Name = "chkbx_renamnfofiles"
         Me.chkbx_renamnfofiles.Size = New System.Drawing.Size(244, 17)
         Me.chkbx_renamnfofiles.TabIndex = 15
@@ -1590,7 +1583,7 @@ Partial Class frmOptions
         Me.GroupBox2.Enabled = false
         Me.GroupBox2.Location = New System.Drawing.Point(6, 7)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(232, 361)
+        Me.GroupBox2.Size = New System.Drawing.Size(232, 290)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = false
         Me.GroupBox2.Text = "Appearance"
@@ -1725,32 +1718,22 @@ Partial Class frmOptions
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.Label1)
         Me.GroupBox3.Controls.Add(Me.Label4)
         Me.GroupBox3.Controls.Add(Me.btn_custommediaplayer)
         Me.GroupBox3.Controls.Add(Me.RadioButton4)
-        Me.GroupBox3.Controls.Add(Me.Label3)
-        Me.GroupBox3.Controls.Add(Me.Label1)
         Me.GroupBox3.Controls.Add(Me.RadioButton2)
         Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Location = New System.Drawing.Point(6, 374)
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 20)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(527, 130)
+        Me.GroupBox3.Size = New System.Drawing.Size(456, 136)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = false
-        Me.GroupBox3.Text = "Player"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = true
-        Me.Label4.Location = New System.Drawing.Point(6, 106)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(10, 13)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "."
+        Me.GroupBox3.Text = "Media Player"
         '
         'btn_custommediaplayer
         '
-        Me.btn_custommediaplayer.Location = New System.Drawing.Point(183, 74)
+        Me.btn_custommediaplayer.Location = New System.Drawing.Point(168, 88)
         Me.btn_custommediaplayer.Name = "btn_custommediaplayer"
         Me.btn_custommediaplayer.Size = New System.Drawing.Size(185, 23)
         Me.btn_custommediaplayer.TabIndex = 7
@@ -1760,54 +1743,38 @@ Partial Class frmOptions
         'RadioButton4
         '
         Me.RadioButton4.AutoSize = true
-        Me.RadioButton4.Location = New System.Drawing.Point(6, 77)
+        Me.RadioButton4.Location = New System.Drawing.Point(6, 91)
         Me.RadioButton4.Name = "RadioButton4"
         Me.RadioButton4.Size = New System.Drawing.Size(129, 17)
         Me.RadioButton4.TabIndex = 6
         Me.RadioButton4.Text = "Select Different player"
         Me.RadioButton4.UseVisualStyleBackColor = true
         '
-        'Label3
-        '
-        Me.Label3.AutoSize = true
-        Me.Label3.Location = New System.Drawing.Point(180, 51)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(204, 13)
-        Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Launch WMP and play the selected file(s)"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = true
-        Me.Label1.Location = New System.Drawing.Point(180, 22)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(340, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "This option will open whatever the default player is for .m3u playlist files"
-        '
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = true
-        Me.RadioButton2.Location = New System.Drawing.Point(6, 48)
+        Me.RadioButton2.Location = New System.Drawing.Point(6, 68)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(155, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(367, 17)
         Me.RadioButton2.TabIndex = 1
-        Me.RadioButton2.Text = "Use Windows Media Player"
+        Me.RadioButton2.Text = "Use Windows Media Player --- Launch WMP and play the selected file(s)"
         Me.RadioButton2.UseVisualStyleBackColor = true
         '
         'RadioButton1
         '
         Me.RadioButton1.AutoSize = true
-        Me.RadioButton1.Location = New System.Drawing.Point(6, 19)
+        Me.RadioButton1.Location = New System.Drawing.Point(6, 45)
         Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(113, 17)
+        Me.RadioButton1.Size = New System.Drawing.Size(446, 17)
         Me.RadioButton1.TabIndex = 0
-        Me.RadioButton1.Text = "Use Default Player"
+        Me.RadioButton1.Text = "Use Default Player  ---------------  This option will open the default player for"& _ 
+    " .m3u playlist files"
         Me.RadioButton1.UseVisualStyleBackColor = true
         '
         'TabControl1
         '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
+        Me.TabControl1.Controls.Add(Me.TPGen)
+        Me.TabControl1.Controls.Add(Me.TPGenOld)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.Profiles)
@@ -1817,6 +1784,68 @@ Partial Class frmOptions
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(1008, 574)
         Me.TabControl1.TabIndex = 15
+        '
+        'TPGen
+        '
+        Me.TPGen.Controls.Add(Me.TabControl3)
+        Me.TPGen.Location = New System.Drawing.Point(4, 22)
+        Me.TPGen.Name = "TPGen"
+        Me.TPGen.Size = New System.Drawing.Size(1000, 548)
+        Me.TPGen.TabIndex = 4
+        Me.TPGen.Text = "General"
+        Me.TPGen.UseVisualStyleBackColor = true
+        '
+        'TabControl3
+        '
+        Me.TabControl3.Controls.Add(Me.TPG1)
+        Me.TabControl3.Controls.Add(Me.TPG2)
+        Me.TabControl3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl3.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl3.Name = "TabControl3"
+        Me.TabControl3.SelectedIndex = 0
+        Me.TabControl3.Size = New System.Drawing.Size(1000, 548)
+        Me.TabControl3.TabIndex = 0
+        '
+        'TPG1
+        '
+        Me.TPG1.BackColor = System.Drawing.SystemColors.Control
+        Me.TPG1.Controls.Add(Me.GroupBox3)
+        Me.TPG1.Location = New System.Drawing.Point(4, 22)
+        Me.TPG1.Name = "TPG1"
+        Me.TPG1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TPG1.Size = New System.Drawing.Size(992, 522)
+        Me.TPG1.TabIndex = 0
+        Me.TPG1.Text = "Media Companion"
+        '
+        'TPG2
+        '
+        Me.TPG2.BackColor = System.Drawing.Color.Gainsboro
+        Me.TPG2.Location = New System.Drawing.Point(4, 22)
+        Me.TPG2.Name = "TPG2"
+        Me.TPG2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TPG2.Size = New System.Drawing.Size(992, 522)
+        Me.TPG2.TabIndex = 1
+        Me.TPG2.Text = "Commands & Profiles"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = true
+        Me.Label4.Location = New System.Drawing.Point(6, 111)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(10, 13)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "."
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = true
+        Me.Label1.Location = New System.Drawing.Point(6, 16)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(421, 26)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "Media Companion can be used to playback media files.  Use the options below to se"& _ 
+    "lect"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"what program to use for playback.  Multipart media files utilises a m3u pl"& _ 
+    "aylist."
         '
         'frmOptions
         '
@@ -1867,8 +1896,8 @@ Partial Class frmOptions
         Me.TabPage2.ResumeLayout(false)
         Me.GroupBox1.ResumeLayout(false)
         Me.GroupBox5.ResumeLayout(false)
-        Me.TabPage1.ResumeLayout(false)
-        Me.TabPage1.PerformLayout
+        Me.TPGenOld.ResumeLayout(false)
+        Me.TPGenOld.PerformLayout
         Me.GroupBox17.ResumeLayout(false)
         Me.GroupBox11.ResumeLayout(false)
         Me.GroupBox11.PerformLayout
@@ -1878,6 +1907,9 @@ Partial Class frmOptions
         Me.GroupBox3.ResumeLayout(false)
         Me.GroupBox3.PerformLayout
         Me.TabControl1.ResumeLayout(false)
+        Me.TPGen.ResumeLayout(false)
+        Me.TabControl3.ResumeLayout(false)
+        Me.TPG1.ResumeLayout(false)
         Me.ResumeLayout(false)
 
 End Sub
@@ -1954,8 +1986,7 @@ End Sub
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents btn_addtvfolderdialogue As System.Windows.Forms.Button
     Friend WithEvents btn_removetvfolder As System.Windows.Forms.Button
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents TPGenOld As System.Windows.Forms.TabPage
     Friend WithEvents Label27 As System.Windows.Forms.Label
     Friend WithEvents txtbx_minrarsize As System.Windows.Forms.TextBox
     Friend WithEvents chkbx_basicsave As System.Windows.Forms.CheckBox
@@ -1984,11 +2015,8 @@ End Sub
     Friend WithEvents TrackBar1 As System.Windows.Forms.TrackBar
     Friend WithEvents chkbx_createfolderjpg As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-    Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents btn_custommediaplayer As System.Windows.Forms.Button
     Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
@@ -2039,4 +2067,10 @@ End Sub
     Friend WithEvents RadioButton9 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
     Friend WithEvents CheckBox11 As System.Windows.Forms.CheckBox
+    Friend WithEvents TPGen As System.Windows.Forms.TabPage
+    Friend WithEvents TabControl3 As System.Windows.Forms.TabControl
+    Friend WithEvents TPG1 As System.Windows.Forms.TabPage
+    Friend WithEvents TPG2 As System.Windows.Forms.TabPage
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

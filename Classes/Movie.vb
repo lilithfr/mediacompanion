@@ -1432,6 +1432,9 @@ Public Class Movie
     Sub GetActors
         If Preferences.XbmcTmdbActorDL AndAlso Preferences.movies_useXBMC_Scraper Then
             TmdbActorSave()
+        ElseIf Preferences.TmdbActorsImdbScrape Then
+            GetTmdbActors()
+            TmdbActorSave()
         Else
             _scrapedMovie.listactors.Clear
             _scrapedMovie.listactors = GetImdbActors
@@ -1609,6 +1612,10 @@ Public Class Movie
         End If
     End Sub
 
+    Sub GetTmdbActors
+        _scrapedMovie.listactors.Clear()
+        _scrapedMovie.listactors.AddRange(tmdb.Cast)
+    End Sub
 
     Sub AssignPosterUrls
         If Preferences.EdenEnabled Then
