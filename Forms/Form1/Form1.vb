@@ -4616,26 +4616,28 @@ Public Class Form1
 
                     If xtra OrElse Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath) Then
                         If Not xtra Then
-                            If Preferences.FrodoEnabled And workingMovieDetails.fileinfo.videotspath <> "" Then
-                                Dim OldFanartPath As String = FanartOrExtraPath
-                                FanartOrExtraPath = workingMovieDetails.fileinfo.videotspath + "fanart.jpg"
-                                If IO.File.Exists(FanartOrExtraPath) Then
-                                    Utilities.SafeDeleteFile(FanartOrExtraPath)
-                                End If
-                                workingMovieDetails.fileinfo.fanartpath = FanartOrExtraPath
-                                IO.File.Copy(OldFanartPath, FanartOrExtraPath)
-                                GC.Collect()
-                                If Not Preferences.EdenEnabled Then
-                                    Utilities.SafeDeleteFile(OldFanartPath)
-                                Else
-                                    Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-                                    If Not IO.File.Exists(edenart) Or OldFanartPath <> edenart Then
-                                        Utilities.SafeCopyFile(OldFanartPath, edenart, True)
-                                        GC.Collect()
-                                        Utilities.SafeDeleteFile(OldFanartPath)
-                                    End If
-                                End If
-                            End If
+                            Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                            Movie.SaveFanartImageToCacheAndPaths(tempstring2, paths)
+                            'If Preferences.FrodoEnabled And workingMovieDetails.fileinfo.videotspath <> "" Then
+                            '    Dim OldFanartPath As String = FanartOrExtraPath
+                            '    FanartOrExtraPath = workingMovieDetails.fileinfo.videotspath + "fanart.jpg"
+                            '    If IO.File.Exists(FanartOrExtraPath) Then
+                            '        Utilities.SafeDeleteFile(FanartOrExtraPath)
+                            '    End If
+                            '    workingMovieDetails.fileinfo.fanartpath = FanartOrExtraPath
+                            '    IO.File.Copy(OldFanartPath, FanartOrExtraPath)
+                            '    GC.Collect()
+                            '    If Not Preferences.EdenEnabled Then
+                            '        Utilities.SafeDeleteFile(OldFanartPath)
+                            '    Else
+                            '        Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                            '        If Not IO.File.Exists(edenart) Or OldFanartPath <> edenart Then
+                            '            Utilities.SafeCopyFile(OldFanartPath, edenart, True)
+                            '            GC.Collect()
+                            '            Utilities.SafeDeleteFile(OldFanartPath)
+                            '        End If
+                            '    End If
+                            'End If
                         End If
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
@@ -17146,52 +17148,23 @@ Public Class Form1
 
             End Try
 
-            'If Utilities.DownloadImage(FanartUrl, FanartPath) then
-            'If Movie.SaveFanartImageToCacheAndPath(FanartUrl, FanartPath) then
-            '    If isvideotspath<>"" Then
-            '        If Preferences.FrodoEnabled Then
-            '            If IO.File.Exists(isvideotspath) Then
-            '                Utilities.SafeDeleteFile(isvideotspath)
-            '            End If
-            '            IO.File.Copy(FanartPath,isvideotspath)
-            '            GC.Collect
-            '            FanartPath=isvideotspath
-            '        End If
-            '        If Not Preferences.EdenEnabled Then
-            '            Utilities.SafeDeleteFile(FanartPath)
-            '        Else
-            '            Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo","-fanart.jpg")
-            '            If FanartPath <> edenart Then
-		          '          Utilities.SafeCopyFile(FanartPath,edenart,True)
-		          '          GC.Collect
-		          '          Utilities.SafeDeleteFile(FanartPath)
-	           '         End If
-            '            FanartPath=edenart
-            '        End If
-            '    Else
-            '        If Preferences.EdenEnabled Then
-            '            Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo","-fanart.jpg")
-            '            If edenart <> FanartPath Then
-            '                Utilities.SafeCopyFile(FanartPath,edenart)
-            '            End If
-            '        End If
-            '    End If
+            For Each paths In Preferences.offlinefolders
+                Dim offlinepath As String = paths & "\"
+                If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                    Dim mediapath As String
+                    mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                    Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                End If
+            Next
 
-                For Each paths In Preferences.offlinefolders
-                    Dim offlinepath As String = paths & "\"
-                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
-                        Dim mediapath As String
-                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                    End If
-                Next
-
-                Dim bitmap3 As New Bitmap(FanartPath)
-                Dim bmp4 As New Bitmap(bitmap3)
-                bitmap3.Dispose()
-                PictureBoxFanArt.Image = bmp4
-                PictureBox2.Image = bmp4
- '               Rating1.PictureInit = bmp4
+            Dim bitmap3 As New Bitmap(FanartPath)
+            Dim bmp4 As New Bitmap(bitmap3)
+            bitmap3.Dispose()
+            
+            'PictureBoxFanArt.Image = bmp4
+            util_ImageLoad(PictureBoxFanArt, FanartPath, Utilities.DefaultFanartPath)
+            'PictureBox2.Image = bmp4
+            util_ImageLoad(PictureBox2, FanartPath, Utilities.DefaultFanartPath)
         End If
 
         messbox.Close()
