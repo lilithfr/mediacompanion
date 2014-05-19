@@ -3530,7 +3530,7 @@ Public Class Movie
                 If Preferences.MovieRenameEnable Or Preferences.MovieManualRename Then
                     s = Preferences.MovieRenameTemplate
                     s = s.Replace("%T", If(Preferences.MovTitleIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
-                    s = s.Replace("%Z", _scrapedMovie.fullmoviebody.sortorder.SafeTrim)
+                    s = s.Replace("%Z", If(Preferences.MovSortIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
@@ -3570,7 +3570,7 @@ Public Class Movie
                 If Preferences.MovFolderRename or Preferences.MovieManualRename Then
                     s = Preferences.MovFolderRenameTemplate
                     s = s.Replace("%T", If(Preferences.MovTitleIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
-                    s = s.Replace("%Z", _scrapedMovie.fullmoviebody.sortorder.SafeTrim)
+                    s = s.Replace("%Z", If(Preferences.MovSortIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     

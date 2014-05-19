@@ -225,6 +225,7 @@ Public Class Preferences
     Public Shared MovFolderRenameTemplate As String
     Public Shared MovRenameUnderscore As Boolean
     Public Shared MovSetIgnArticle As Boolean
+    Public Shared MovSortIgnArticle As Boolean
     Public Shared MovTitleIgnArticle As Boolean
     Public Shared MovTitleCase As Boolean
     Public Shared MovieImdbGenreRegEx As String
@@ -559,6 +560,7 @@ Public Class Preferences
         MovFolderRename = False
         MovRenameUnderscore = False
         MovSetIgnArticle = False
+        MovSortIgnArticle = False
         MovTitleIgnArticle = False
         MovTitleCase = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
@@ -937,6 +939,7 @@ Public Class Preferences
         root.AppendChild(doc, "MovFolderRenameTemplate",            MovFolderRenameTemplate)            'tb_MovFolderRename
         root.AppendChild(doc, "MovRenameUnderscore",                MovRenameUnderscore)                'cbRenameUnderscore
         root.AppendChild(doc, "MovSetIgnArticle",                   MovSetIgnArticle)                   'cbMovSetIgnArticle
+        root.AppendChild(doc, "MovSortIgnArticle",                  MovSortIgnArticle)                  'cbMovSortIgnArticle
         root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
         root.AppendChild(doc, "MovTitleCase",                       MovTitleCase)                       'cbMovTitleCase
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
@@ -1316,6 +1319,7 @@ Public Class Preferences
                     Case "MovFolderRenameTemplate"              : MovFolderRenameTemplate = thisresult.InnerText 
                     Case "MovRenameUnderscore"                  : MovRenameUnderscore = thisresult.InnerText 
                     Case "MovSetIgnArticle"                     : MovSetIgnArticle = thisresult.InnerXml 
+                    Case "MovSortIgnArticle"                    : MovSortIgnArticle = thisresult.InnerXml 
                     Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml
                     Case "MovTitleCase"                         : MovTitleCase = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText

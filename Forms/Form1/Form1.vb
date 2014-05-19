@@ -12481,6 +12481,7 @@ Public Class Form1
         cbMovieRenameEnable.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
         cbMovFolderRename.CheckState            = If(Preferences.MovFolderRename, CheckState.Checked, CheckState.Unchecked)
         cbMovSetIgnArticle.CheckState           = If(Preferences.MovSetIgnArticle, CheckState.Checked, CheckState.Unchecked) 
+        cbMovSortIgnArticle.CheckState           = If(Preferences.MovSortIgnArticle, CheckState.Checked, CheckState.Unchecked) 
         cbMovTitleIgnArticle.CheckState         = If(Preferences.MovTitleIgnArticle, CheckState.Checked, CheckState.Unchecked)
         cbMovTitleCase.CheckState               = If(Preferences.MovTitleCase, CheckState.Checked, CheckState.Unchecked)
         cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
@@ -20144,6 +20145,20 @@ Public Class Form1
                 Preferences.MovTitleIgnArticle = True
             Else
                 Preferences.MovTitleIgnArticle = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovSortIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSortIgnArticle.CheckedChanged
+        Try
+            If cbMovSortIgnArticle.CheckState = CheckState.Checked Then
+                Preferences.MovSortIgnArticle = True
+            Else
+                Preferences.MovSortIgnArticle = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
