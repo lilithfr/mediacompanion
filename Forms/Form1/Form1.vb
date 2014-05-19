@@ -1197,7 +1197,7 @@ Public Class Form1
         'Set TVShow Splitter Auto Position
         Dim pic3ratio As Decimal
         Dim pic4ratio As Decimal
-        Dim pic5ratio As Decimal
+        Dim HorizontalSplit As Decimal
         Try
             If (tv_PictureBoxLeft.Image IsNot Nothing AndAlso tv_PictureBoxRight.Image IsNot Nothing) Then
                 Dim pic3ImSzW = tv_PictureBoxLeft.Image.Size.Width
@@ -1206,20 +1206,19 @@ Public Class Form1
                 Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
                 pic3ratio = pic3ImSzW / pic3ImszH
                 pic4ratio = pic4ImSzW / pic4ImszH
-                pic5ratio = _tv_SplitContainer.Height - (((_tv_SplitContainer.Width/tv_PictureBoxBottom.Image.Width)*tv_PictureBoxBottom.Image.Height) + 20)
+                HorizontalSplit = ((SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio)) / pic3ratio)
             Else
                 pic3ratio = 2
                 pic4ratio = 1
-                pic5ratio = 235
+                HorizontalSplit = 235
             End If
-            
         Catch ex As Exception
             pic3ratio = 2
             pic4ratio = 1
-            pic5ratio = 235
+            HorizontalSplit = 235
         End Try
-        _tv_SplitContainer.SplitterDistance = pic5ratio  '_tv_SplitContainer.Height - test
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
+        _tv_SplitContainer.SplitterDistance = HorizontalSplit
     End Sub
 
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
