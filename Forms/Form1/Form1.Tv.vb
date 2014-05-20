@@ -1004,6 +1004,7 @@ Partial Public Class Form1
         Tv_TreeViewContext_ReloadFromCache.Enabled = True
         Tv_TreeViewContext_OpenFolder.Enabled = True
 
+        If SeasonObj.ShowObj.ListActors.Count = 0 Then Show.Load()
         Call tv_ActorsLoad(Show.ListActors)
     End Sub
 
