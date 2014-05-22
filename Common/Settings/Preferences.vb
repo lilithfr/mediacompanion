@@ -266,6 +266,7 @@ Public Class Preferences
     Public Shared tableview As New List(Of String)
     Public Shared tablesortorder As String
     Public Shared MovSepLst As New List(Of String)
+    Public Shared MovFiltLastSize As Integer
 
     Public Shared Original_Title     As Boolean=False
     Public Shared UseMultipleThreads As Boolean=False
@@ -565,6 +566,7 @@ Public Class Preferences
         MovTitleCase = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
+        MovFiltLastSize = 384
 
 
         'TV
@@ -720,6 +722,7 @@ Public Class Preferences
         engineend.Add("+movie+site%3Aimdb.com")
     End Sub
     Public Shared Sub SaveConfig()
+        
         Dim tempstring As String = String.Empty
         Dim doc As New XmlDocument
         Dim xmlproc As XmlDeclaration
@@ -975,6 +978,7 @@ Public Class Preferences
         root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
         root.AppendChildList(doc, "movseplst",                      MovSepLst.ToArray)                  'lb_MovSepLst
+        root.AppendChild(doc, "MovFiltLastSize",                    MovFiltLastSize)                    'Preference.MovFiltLastSize
 
         root.AppendChild(movie_filters.GetChild(doc))
 
@@ -1345,6 +1349,7 @@ Public Class Preferences
                     Case "moviesortorder"                       : moviesortorder = thisresult.InnerXml
                     Case "movieinvertorder"                     : movieinvertorder = thisresult.InnerXml
                     Case "MovieScraper_MaxStudios"              : MovieScraper_MaxStudios = thisresult.InnerXml
+                    Case "MovFiltLastSize"                      : MovFiltLastSize = thisresult.InnerXml 
 
                     Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
                     Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml

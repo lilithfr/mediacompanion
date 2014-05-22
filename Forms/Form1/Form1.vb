@@ -779,6 +779,8 @@ Public Class Form1
 
         UpdateFilteredList
 
+        If Not IsNothing(Preferences.MovFiltLastSize) Then ResizeBottomLHSPanel(Preferences.MovFiltLastSize)
+
         Common.Tasks.StartTaskEngine()
         ForegroundWorkTimer.Start()
 
@@ -1053,6 +1055,7 @@ Public Class Form1
             Preferences.splt4 = SplitContainer4.SplitterDistance
             Preferences.splt5 = SplitContainer5.SplitterDistance
             Preferences.splt6 = _tv_SplitContainer.SplitterDistance 
+            Preferences.MovFiltLastSize = SplitContainer5.Height - SplitContainer5.SplitterDistance
 
 
             If Me.WindowState = FormWindowState.Minimized Then
