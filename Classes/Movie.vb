@@ -1854,7 +1854,7 @@ Public Class Movie
     End Sub
  
     Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
-        
+        Dim imageexistspath As String = ""
         If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
@@ -1863,6 +1863,7 @@ Public Class Movie
             Dim lst As New List(Of String)
             For Each filepath In paths
                 If File.Exists(filepath) Then
+                    imageexistspath = filepath
                     lst.Add(filepath)
                 End If
             Next
@@ -1875,55 +1876,46 @@ Public Class Movie
                 ReportProgress(,"Poster(s) already exists -> Skipping" & vbCrLf)
                 Exit Sub
             End If
-            'If eden And File.Exists(edenart) And Not frodo Then
-            '    ReportProgress(, "Eden Poster already exists -> Skipping" & vbCrLf)
-            '    Exit Sub
-            'ElseIf frodo And File.Exists(frodoart) And Not eden Then
-            '    ReportProgress(, "Frodo Poster already exists -> Skipping" & vbCrLf)
-            '    Exit Sub
-            'ElseIf frodo And eden And File.Exists(edenart) And File.Exists(frodoart) Then
-            '    ReportProgress(, "Frodo & Eden Posters already exists -> Skipping" & vbCrLf)
-            '    Exit Sub
-            'End If
         End If
 
         If Not Rescrape Then DeletePoster()
 
         Dim validUrl = False
 
-        For Each scraper In Preferences.moviethumbpriority
-            Try
-                Select Case scraper
-                    Case "Internet Movie Poster Awards"
-                        PosterUrl = _scraperFunctions.impathumb(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year)
-                    Case "IMDB"
-                        PosterUrl = _scraperFunctions.imdbthumb(_scrapedMovie.fullmoviebody.imdbid)
-                    Case "Movie Poster DB"
-                        PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
-                    Case "themoviedb.org"
-                        'moviethumburl = scraperFunction2.tmdbthumb(_scrapedMovie.fullmoviebody.imdbid)
-                        PosterUrl = tmdb.FirstOriginalPosterUrl
-                End Select
-            Catch
-                PosterUrl = "na"
-            End Try
+        If imageexistspath = "" Then
+            For Each scraper In Preferences.moviethumbpriority
+                Try
+                    Select Case scraper
+                        Case "Internet Movie Poster Awards"
+                            PosterUrl = _scraperFunctions.impathumb(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year)
+                        Case "IMDB"
+                            PosterUrl = _scraperFunctions.imdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                        Case "Movie Poster DB"
+                            PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                        Case "themoviedb.org"
+                            'moviethumburl = scraperFunction2.tmdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                            PosterUrl = tmdb.FirstOriginalPosterUrl
+                    End Select
+                Catch
+                    PosterUrl = "na"
+                End Try
 
-            validUrl = Utilities.UrlIsValid(PosterUrl)
-            If validUrl Or batch Then
-                Exit For
-            End If
-        Next
+                validUrl = Utilities.UrlIsValid(PosterUrl)
+                If validUrl Or batch Then
+                    Exit For
+                End If
+            Next
+        End If
         If Preferences.MusicVidScrape Then 
             PosterUrl = _scrapedMovie.listthumbs(0).ToString
             validUrl = Utilities.UrlIsValid(PosterUrl)
         End If
 
-        If validUrl Then
+        If validUrl Or imageexistspath <> "" Then
 
             ReportProgress("Poster")
-
+            If imageexistspath <> "" Then PosterUrl = imageexistspath 
             Try
-                'Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
                 SavePosterToPosterWallCache()
@@ -2075,22 +2067,20 @@ Public Class Movie
     End Sub
 
     Sub DoDownloadFanart
-        'If Preferences.MusicVidScrape Then Exit Sub  ' Temporary till get music vid posters scraping.
+        Dim imageexistspath As String = ""
+        Dim FanartUrl As String = ""
         Dim MoviePath As String = NfoPathPrefName
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg
         Dim isMovieFanart As String = MoviePath.Replace(".nfo","-fanart.jpg")
-        'Dim eden As Boolean = EdenEnabled
-        'Dim frodo As Boolean = FrodoEnabled 
-        'Dim frodoart As String =""
         If IO.Path.GetFileName(MoviePath).ToLower="video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower="index.nfo"Then
             _videotsrootpath = Utilities.RootVideoTsFolder(MoviePath)
-            'frodoart = _videotsrootpath+"fanart.jpg"
         End If
         Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath,If(_videotsrootpath<>"",_videotsrootpath,""))
         If Not Preferences.overwritethumbs Then
             Dim lst As New List(Of String)
             For Each filepath In paths
                 If File.Exists(filepath) Then
+                    imageexistspath = filepath
                     lst.Add(filepath)
                 End If
             Next
@@ -2103,38 +2093,18 @@ Public Class Movie
                 ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
                 Exit Sub
             End If
-            'If (eden Or frodo) AndAlso frodoart = "" Then
-            '    If File.Exists(isMovieFanart) Then
-            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-            '        Exit Sub
-            '    End If
-            'ElseIf (eden And frodo) AndAlso frodoart <> "" Then
-            '    If File.Exists(isMovieFanart) And File.Exists(frodoart) Then
-            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-            '        Exit Sub
-            '    End If
-            'ElseIf (Not eden And frodo) AndAlso frodoart <> "" Then
-            '    If File.Exists(frodoart) Then
-            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-            '        Exit Sub
-            '    End If
-            'ElseIf Preferences.basicsavemode Then
-            '    If File.Exists(isfanartjpg) OrElse File.Exists(frodoart) Then
-            '        ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
-            '        Exit Sub
-            '    End If
-            'End If
         End If
-
-        Dim FanartUrl As String=tmdb.GetBackDropUrl
+        If imageexistspath = "" Then
+             FanartUrl = tmdb.GetBackDropUrl
+        Else
+            FanartUrl = imageexistspath 
+        End If
 
         If IsNothing(FanartUrl) then
             ReportProgress("-Not available ","Fanart not available for this movie on TMDb" & vbCrLf)
         Else
             ReportProgress("Fanart",)
             Try
-                'Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath,If(_videotsrootpath<>"",_videotsrootpath,""))
-
                 SaveFanartImageToCacheAndPaths(FanartUrl, paths)
 
                 ReportProgress(MSG_OK,"!!! Fanart URL Scraped OK" & vbCrLf)
