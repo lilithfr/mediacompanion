@@ -1452,6 +1452,16 @@ Module Module1
                                         newtvshow.fullpath = detail.InnerText
                                     Case "id"
                                         newtvshow.id = detail.InnerText
+                                    Case "sortorder"
+                                        newtvshow.sortorder = detail.InnerText
+                                    Case "imdbid"
+                                        newtvshow.imdbid = detail.InnerText
+                                    Case "episodeactorsource"
+                                        newtvshow.episodeactorsource = detail.InnerText
+                                    Case "language"
+                                        newtvshow.language = detail.InnerText
+                                    Case "state"
+                                        newtvshow.locked = detail.InnerText
                                 End Select
                             Next
                             basictvlist.Add(newtvshow)
@@ -1491,21 +1501,23 @@ Module Module1
         For Each show In basictvlist
             'fill in blanks
             Dim tvshowdata As New XmlDocument
-            tvshowdata.Load(show.fullpath)
-            For Each thisresult In tvshowdata("tvshow")
-                Select Case thisresult.Name
-                    Case "sortorder"
-                        show.sortorder = thisresult.InnerText
-                    Case "imdbid"
-                        show.imdbid = thisresult.InnerText
-                    Case "episodeactorsource"
-                        show.episodeactorsource = thisresult.InnerText
-                    Case "language"
-                        show.language = thisresult.InnerText
-                    Case "locked"
-                        show.locked = thisresult.InnerText
-                End Select
-            Next
+            If String.IsNullOrEmpty(show.language) Then      'if user still on old tvcache, fill in blanks from tvshow's nfo.
+                tvshowdata.Load(show.fullpath)
+                For Each thisresult In tvshowdata("tvshow")
+                    Select Case thisresult.Name
+                        Case "sortorder"
+                            show.sortorder = thisresult.InnerText
+                        Case "imdbid"
+                            show.imdbid = thisresult.InnerText
+                        Case "episodeactorsource"
+                            show.episodeactorsource = thisresult.InnerText
+                        Case "language"
+                            show.language = thisresult.InnerText
+                        Case "state"
+                            show.locked = thisresult.InnerText
+                    End Select
+                Next
+            End If
             For Each ep In unsortedepisodelist
                 If ep.showid = show.id Then
                     show.allepisodes.Add(ep)

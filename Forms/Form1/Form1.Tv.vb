@@ -1473,6 +1473,22 @@ Partial Public Class Form1
             childchild.InnerText = item.TvdbId.Value
             child.AppendChild(childchild)
 
+            childchild = document.CreateElement("sortorder")
+            childchild.InnerText = item.SortOrder.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("language")
+            childchild.InnerText = item.Language.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("episodeactorsource")
+            childchild.InnerText = item.EpisodeActorSource.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("imdbid")
+            childchild.InnerText = item.ImdbId.Value
+            child.AppendChild(childchild)
+
             root.AppendChild(child)
         Next
 

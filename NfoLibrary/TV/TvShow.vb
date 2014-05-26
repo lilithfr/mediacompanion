@@ -64,11 +64,11 @@ Public Class TvShow
 
     'Media Companion Specific
 
-    Public Property ImdbId As New ProtoProperty(Me, "imdbid") 'XBMC doesn't seem to use this.
-    Public Property SortOrder As New ProtoProperty(Me, "sortorder")
-    Public Property Language As New ProtoProperty(Me, "language")
+    Public Property ImdbId As New ProtoProperty(Me, "imdbid", CacheMode:=CacheMode.Both) 'XBMC doesn't seem to use this.
+    Public Property SortOrder As New ProtoProperty(Me, "sortorder", CacheMode:=CacheMode.Both)
+    Public Property Language As New ProtoProperty(Me, "language", CacheMode:=CacheMode.Both)
     Public Property TvShowActorSource As New ProtoProperty(Me, "tvshowactorsource")
-    Public Property EpisodeActorSource As New ProtoProperty(Me, "episodeactorsource")
+    Public Property EpisodeActorSource As New ProtoProperty(Me, "episodeactorsource", CacheMode:=CacheMode.Both)
 
     Private Property _State As New ProtoProperty(Me, "state", CacheMode:=CacheMode.Both)
     Public Shadows Property State As Media_Companion.ShowState
