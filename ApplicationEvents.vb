@@ -8,6 +8,14 @@
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
 
+        Private Sub MyApplication_UnhandledException(sender As Object, e As ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            e.ExitApplication = _
+            MessageBox.Show(e.Exception.Message & _
+                    vbCrLf & "Continue?", "Continue?", _
+                    MessageBoxButtons.YesNo, _
+                    MessageBoxIcon.Question) _
+                    = DialogResult.No
+        End Sub
     End Class
 
 

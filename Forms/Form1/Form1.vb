@@ -252,7 +252,7 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PictureBoxAssignedMoviePoster.AllowDrop = True
         AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
-
+        Try
         Preferences.movie_filters.FilterPanel = SplitContainer5.Panel2
 
         Label73.Text = ""
@@ -806,7 +806,9 @@ Public Class Form1
         AddHandler BckWrkXbmcController.DoWork         , AddressOf BckWrkXbmcController_DoWork
 
         BckWrkXbmcController.RunWorkerAsync(Me)
-
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
         'SendXbmcConnect
     End Sub
 

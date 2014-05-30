@@ -125,9 +125,10 @@ Public Class DownloadCache
     End Function
 
     Public Shared Function SaveImageToCache(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False) As Boolean
-
-        Utilities.EnsureFolderExists(CacheFolder)
         Dim returnCode As Boolean = True
+        Try
+        Utilities.EnsureFolderExists(CacheFolder)
+        
         If URL = "" Then Return False
         Dim CacheFileName As String = GetCacheFileName(URL)
         Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
@@ -191,6 +192,12 @@ Public Class DownloadCache
 
         End If
 
+        
+        Catch
+            MsgBox("URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
+        Finally
+            returnCode = False
+        End Try
         Return returnCode
     End Function
 
