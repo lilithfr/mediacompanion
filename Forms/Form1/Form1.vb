@@ -779,7 +779,7 @@ Public Class Form1
 
         UpdateFilteredList
 
-        If Not IsNothing(Preferences.MovFiltLastSize) Then ResizeBottomLHSPanel(Preferences.MovFiltLastSize)
+        If Not IsNothing(Preferences.MovFiltLastSize) Then ResizeBottomLHSPanel(Preferences.MovFiltLastSize, MovieFiltersPanelMaxHeight)
 
         Common.Tasks.StartTaskEngine()
         ForegroundWorkTimer.Start()
@@ -1223,7 +1223,10 @@ Public Class Form1
             HorizontalSplit = 235
         End Try
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
-        _tv_SplitContainer.SplitterDistance = HorizontalSplit
+        Try     'Try Catch for minimize of MC when Full-screen
+            _tv_SplitContainer.SplitterDistance = HorizontalSplit
+        Catch
+        End Try
     End Sub
 
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
@@ -23104,15 +23107,18 @@ Public Class Form1
     End Sub
 
 
-    Private Sub ResizeBottomLHSPanel(height As Integer)
+    Private Sub ResizeBottomLHSPanel(height As Integer, Optional ByVal MaxHeight As Integer = 0)
         ProgState = ProgramState.ResizingSplitterPanel
 
         SplitContainer5.SplitterDistance = SplitContainer5.Height - height
 
         DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 140
 
-        SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, height-10)
-
+        If MaxHeight = 0 Then
+            SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, height-10)
+        Else
+            SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, MaxHeight-10)
+        End If
 
         ProgState = ProgramState.Other
     End Sub
