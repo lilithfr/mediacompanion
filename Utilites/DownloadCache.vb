@@ -195,8 +195,7 @@ Public Class DownloadCache
         
         Catch
             MsgBox("URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
-        Finally
-            returnCode = False
+            returnCode = False            
         End Try
         Return returnCode
     End Function

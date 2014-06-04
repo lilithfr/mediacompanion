@@ -1632,6 +1632,7 @@ Public Class Classimdb
         Dim mc As MatchCollection = Regex.Matches(tbl, MovieRegExs.REGEX_TR, RegexOptions.Singleline)
 
         Dim results As New List(Of str_MovieActors)
+        If maxactors = 0 Then Return results 
 
         For Each m In mc
             Dim actor As str_MovieActors = New str_MovieActors

@@ -24,6 +24,7 @@ Public Class TMDb
     Private _lookupLanguages As List(Of String) = New List(Of String)
 
     Public Property Imdb As String
+    Public Property TmdbId As String
 
 
     Public Property Languages As List(Of String)
@@ -698,8 +699,22 @@ Public Class TMDb
     '    End If
     'End Sub
 
+    Function GetMovieBy As Boolean
+        If Imdb <> "" Then
+            Return GetMovieByIMDB
+        ElseIf TmdbId <> "" Then
+            Return GetMovieByTmdbId
+        End If
+        Return False
+    End Function
+
     Function GetMovieByIMDB As Boolean
         _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
+        Return Not IsNothing(_movie)
+    End Function
+
+    Function GetMovieByTmdbId As Boolean
+        _movie = _api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
         Return Not IsNothing(_movie)
     End Function
 
@@ -722,7 +737,7 @@ Public Class TMDb
 
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
 
-                rhs.Add(New RetryHandler(AddressOf GetMovieByIMDB))
+                rhs.Add(New RetryHandler(AddressOf GetMovieBy))
                 rhs.Add(New RetryHandler(AddressOf GetMovieImages))
                 rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
 

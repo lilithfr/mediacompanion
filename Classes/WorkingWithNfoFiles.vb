@@ -1713,6 +1713,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.genre = "problem / xml error"
                     newmovie.movietag.Clear()
                     newmovie.id = ""
+                    newmovie.tmdbid = ""
                     newmovie.missingdata1 = 0
                     newmovie.MovieSet = ""
                     newmovie.source = ""
@@ -1782,6 +1783,8 @@ Public Class WorkingWithNfoFiles
                                 'End If
                             Case "id"
                                 If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
+                            Case "tmdbid"
+                                newmovie.tmdbid = thisresult.InnerText 
                             Case "playcount"
                                 newmovie.playcount = thisresult.InnerText
                             Case "lastplayed"
@@ -1890,6 +1893,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.fullpathandfilename = path
                 If newmovie.genre = Nothing Then newmovie.genre = ""
                 If newmovie.id = Nothing Then newmovie.id = ""
+                If newmovie.tmdbid = Nothing Then newmovie.tmdbid = ""
                 If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source = Nothing Then newmovie.source = ""
                 If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
@@ -1962,6 +1966,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.genre = ""
                     newmovie.fullmoviebody.tag.Clear()    ' = ""
                     newmovie.fullmoviebody.imdbid = ""
+                    newmovie.fullmoviebody.tmdbid = ""
                     newmovie.fullmoviebody.mpaa = ""
                     newmovie.fullmoviebody.outline = "This nfo file could not be loaded"
                     newmovie.fullmoviebody.playcount = "0"
@@ -2074,6 +2079,8 @@ Public Class WorkingWithNfoFiles
                             'End If
                         Case "id"
                             newmovie.fullmoviebody.imdbid = thisresult.InnerText
+                        Case "tmdbid"
+                            newmovie.fullmoviebody.tmdbid = thisresult.InnerText 
                         Case "playcount"
                             newmovie.fullmoviebody.playcount = thisresult.InnerText
                         Case "lastplayed"
@@ -2759,6 +2766,14 @@ Public Class WorkingWithNfoFiles
                     If Not String.IsNullOrEmpty(movietosave.fullmoviebody.imdbid) Then
                         child = doc.CreateElement("id")
                         child.InnerText = movietosave.fullmoviebody.imdbid
+                        root.AppendChild(child)
+                    End If
+                Catch
+                End Try
+                Try
+                    If Not String.IsNullOrEmpty(movietosave.fullmoviebody.tmdbid) Then
+                        child = doc.CreateElement("tmdbid")
+                        child.InnerText = movietosave.fullmoviebody.tmdbid
                         root.AppendChild(child)
                     End If
                 Catch

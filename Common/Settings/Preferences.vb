@@ -207,7 +207,7 @@ Public Class Preferences
     Public Shared fanartjpg As Boolean      'Used to create fanart.jpg instead of movie-fanart.jpg
     Public Shared roundminutes As Boolean
     Public Shared moviedefaultlist As Byte
-    Public Shared moviesUseXBMCScraper As Boolean = False
+    'Public Shared moviesUseXBMCScraper As Boolean = False
     Public Shared movies_useXBMC_Scraper As Boolean
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean

@@ -24,6 +24,7 @@ Public Structure str_BasicMovieNFO
     Dim playcount As String
     Dim lastplayed As String
     Dim imdbid As String
+    Dim tmdbid As String
     Dim top250 As String
     Dim filename As String
     Dim thumbnails As String
@@ -56,6 +57,7 @@ Public Structure str_BasicMovieNFO
         playcount = ""
         lastplayed = ""
         imdbid = ""
+        tmdbid = ""
         top250 = ""
         filename = ""
         thumbnails = ""

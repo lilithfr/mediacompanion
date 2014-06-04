@@ -1030,6 +1030,7 @@ Public Class Movie
 
         If Preferences.movies_useXBMC_Scraper Then
             tmdb.Imdb                               = _scrapedMovie.fullmoviebody.imdbid 
+            tmdb.TmdbId                             = _scrapedMovie.fullmoviebody.tmdbid 
             _scrapedMovie.fullmoviebody.mpaa        = tmdb.Certification
             _scrapedMovie.fullmoviebody.premiered   = tmdb.releasedate
             _scrapedMovie.fullmoviebody.votes       = tmdb.Movie.vote_count
@@ -1194,6 +1195,7 @@ Public Class Movie
             _movieCache.createdate = _scrapedMovie.fileinfo.createdate
         End If
         _movieCache.id          = _scrapedMovie.fullmoviebody.imdbid
+        _movieCache.tmdbid      = _scrapedMovie.fullmoviebody.tmdbid 
         _movieCache.rating      = _scrapedMovie.fullmoviebody.rating.ToRating
         _movieCache.top250      = _scrapedMovie.fullmoviebody.top250
         _movieCache.genre       = _scrapedMovie.fullmoviebody.genre
@@ -1314,10 +1316,14 @@ Public Class Movie
                 Case "year"
                     _scrapedMovie.fullmoviebody.year = thisresult.InnerText
                 Case "id"
-                    _scrapedMovie.fullmoviebody.imdbid = thisresult.InnerText
-
-                    If String.IsNullOrEmpty(_possibleImdb) Then
-                        _possibleImdb = _scrapedMovie.fullmoviebody.imdbid
+                    Dim thisid As String = thisresult.InnerText
+                    If thisid <> "" Then
+                        If thisid.Contains("tt") Then
+                            _scrapedMovie.fullmoviebody.imdbid = thisid
+                            If String.IsNullOrEmpty(_possibleImdb) Then _possibleImdb = thisid 
+                        Else
+                            _scrapedMovie.fullmoviebody.tmdbid = thisid
+                        End If
                     End If
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
@@ -1411,7 +1417,8 @@ Public Class Movie
                 _scrapedMovie.fileinfo.createdate = _previousCache.createdate
                 _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
             Else
-                tmdb.Imdb = If(_possibleImdb.Contains("tt"), _possibleImdb, _scrapedMovie.fullmoviebody.imdbid)
+                tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
+                tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
                 _scrapedMovie.fullmoviebody.movieset = "-None-"
                 If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                     _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
@@ -1461,20 +1468,26 @@ Public Class Movie
 
         Return actors2
     End Function
+
     Sub TmdbActorSave
 
         ReportProgress("TMDB Actors")
-
+        Dim maxactors As Integer = Preferences.maxactors
         Dim actors As List(Of str_MovieActors) = _scrapedMovie.listactors 
         Dim actors2 As New List(Of str_MovieActors)
-        For Each actor In actors
-            Try
-                actor.SaveActor(ActorPath)
-                actors2.Add(actor)
-            Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
-            End Try
-        Next
+        If maxactors <> 0 Then
+            Dim count As Integer = 0
+            For Each actor In actors
+                Try
+                    actor.SaveActor(ActorPath)
+                    actors2.Add(actor)
+                    count += 1
+                Catch ex As Exception
+                    ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
+                End Try
+                If count = maxactors Then Exit For
+            Next
+        End If
         _scrapedMovie.listactors.Clear()
         _scrapedMovie.listactors = actors2
         ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)

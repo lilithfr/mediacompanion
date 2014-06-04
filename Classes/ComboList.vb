@@ -13,6 +13,7 @@ Public Class ComboList
     Property year                 As Integer= 0
     Property filedate             As String = ""
     Property id                   As String = ""
+    Property tmdbid               As String = ""
     Property rating               As Double = 0
     Property top250               As String = 0
     Property genre                As String = ""
@@ -247,7 +248,8 @@ Public Class ComboList
         Me.originaltitle        = From.originaltitle    
         Me.year                 = From.year               
         Me.filedate             = From.filedate           
-        Me.id                   = From.id                 
+        Me.id                   = From.id  
+        Me.tmdbid               = From.tmdbid        
         Me.rating               = From.rating             
         Me.top250               = From.top250             
         Me.genre                = From.genre  

@@ -202,8 +202,9 @@ Public Class frmMovieFanart
 '#End If
 '            End Try
 
-            Dim tmdb As New TMDb(Form1.workingmoviedetails.fullmoviebody.imdbid)
-
+            Dim tmdb As New TMDb '(Form1.workingmoviedetails.fullmoviebody.imdbid)
+            tmdb.Imdb = If(Form1.workingmoviedetails.fullmoviebody.imdbid.Contains("tt"), Form1.workingmoviedetails.fullmoviebody.imdbid, "")
+            tmdb.TmdbId = Form1.workingmoviedetails.fullmoviebody.tmdbid 
 
             fanartList.AddRange(tmdb.Fanart)
 

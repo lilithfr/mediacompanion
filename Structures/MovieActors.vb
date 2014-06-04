@@ -52,8 +52,8 @@ Public Structure str_MovieActors
                     IO.Directory.CreateDirectory(ActorPath)
                 End If
                 'filename = GetActorFileName(ActorPath)
-                Movie.SaveActorImageToCacheAndPath(actorthumb, filename)
-                ActorSave(filename)
+                Dim Success As Boolean = Movie.SaveActorImageToCacheAndPath(actorthumb, filename)
+                If Success Then ActorSave(filename)
             End If
 
             'Allow also to save to local path/network path

@@ -4312,8 +4312,9 @@ Public Class Form1
         noFanart = False
 
 
-        Dim tmdb As New TMDb(workingmoviedetails.fullmoviebody.imdbid)
-
+        Dim tmdb As New TMDb '(workingmoviedetails.fullmoviebody.imdbid)
+        tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+        tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
         fanartArray.AddRange(tmdb.Fanart)
 
         Try
@@ -5127,8 +5128,9 @@ Public Class Form1
             messbox.Refresh()
             Call mov_PosterInitialise()
             Try
-                Dim tmdb As New TMDb(workingMovieDetails.fullmoviebody.imdbid)
-
+                Dim tmdb As New TMDb  '(workingMovieDetails.fullmoviebody.imdbid)
+                tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+                tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
                 posterArray.AddRange( tmdb.MC_Posters )
 
             Catch ex As Exception
@@ -5361,6 +5363,10 @@ Public Class Form1
 
     Private Sub Button17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button17.Click
         Try
+            If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then 
+                MsgBox("No IMDB ID" & vbCrLf & "Searching IMDB for Posters halted")
+                Exit Sub
+            End If
             messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
@@ -5618,6 +5624,10 @@ Public Class Form1
 
     Private Sub btn_MPDB_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_MPDB_posters.Click
         Try
+            If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then 
+                MsgBox("No IMDB ID" & vbCrLf & "Searching Movie Poster DB halted")
+                Exit Sub
+            End If
             messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
@@ -17121,7 +17131,9 @@ Public Class Form1
         Application.DoEvents()
 
         Dim FanartPath As String=workingMovieDetails.fileinfo.fanartpath
-        Dim tmdb       As New TMDb(workingMovieDetails.fullmoviebody.imdbid)
+        Dim tmdb       As New TMDb '(workingMovieDetails.fullmoviebody.imdbid)
+        tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+        tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
         Dim FanartUrl  As String=tmdb.GetBackDropUrl()
         Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath="","",workingMovieDetails.fileinfo.videotspath+"fanart.jpg")
 
@@ -17274,23 +17286,24 @@ Public Class Form1
 
             If posterpath <> "" Then
                 Dim moviethumburl As String = ""
-                Dim tmdb As New TMDb(workingMovieDetails.fullmoviebody.imdbid)
-
+                Dim tmdb As New TMDb '(workingMovieDetails.fullmoviebody.imdbid)
+                tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+                tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
                 If source = "impa" Then
                     If workingMovieDetails.fullmoviebody.title <> "" And workingMovieDetails.fullmoviebody.year <> "" Then
                         moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                     End If
                 ElseIf source = "tmdb" Then
-                    If workingMovieDetails.fullmoviebody.imdbid <> "" Then
+                    If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") OrElse workingMovieDetails.fullmoviebody.tmdbid <> "" Then
                         'moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                         moviethumburl = tmdb.FirstOriginalPosterUrl
                     End If
                 ElseIf source = "mpdb" Then
-                    If workingMovieDetails.fullmoviebody.imdbid <> "" Then
+                    If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
                         moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                     End If
                 ElseIf source = "imdb" Then
-                    If workingMovieDetails.fullmoviebody.imdbid <> "" Then
+                    If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
                         moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                     End If
                 End If
