@@ -128,6 +128,12 @@ Public Class ComboList
         End Get
     End Property  
 
+    Public ReadOnly Property MissingIMDBId As Boolean
+        Get
+            Return id = "0"
+        End Get
+    End Property
+
 
     Public ReadOnly Property MissingRuntime As Boolean
         Get

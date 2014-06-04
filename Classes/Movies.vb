@@ -240,6 +240,7 @@ Public Class Movies
             lst.Add( MissingTrailer           )
             lst.Add( MissingVotes             )
             lst.Add( MissingYear              )
+            lst.Add( MissingIMDBId            )
 If Preferences.ShowExtraMovieFilters Then
             lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
             lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
@@ -391,6 +392,12 @@ End If
             Return "Missing Runtime (" & (From x In MovieCache Where x.MissingRuntime).Count & ")" 
         End Get
     End Property  
+
+    Public ReadOnly Property MissingIMDBId As String
+        Get
+            Return "Missing IMDB (" & (From x In MovieCache Where x.MissingIMDBId).Count & ")"
+        End Get
+    End Property
 
 
     Public ReadOnly Property MissingVotes As String

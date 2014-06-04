@@ -476,6 +476,12 @@ Public Class Data_GridViewMovie
         End Get
     End Property  
 
+    Public ReadOnly Property MissingIMDBId As Boolean
+        Get
+            Return id.ToString = "0"
+        End Get
+    End Property
+
     Public ReadOnly Property MissingCertificate As Boolean
         Get
             Return Certificate.ToString.Trim=""
