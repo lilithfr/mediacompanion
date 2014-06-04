@@ -1437,13 +1437,10 @@ Public Class Movie
     End Sub
 
     Sub GetActors
-        If Preferences.XbmcTmdbActorDL AndAlso Preferences.movies_useXBMC_Scraper Then
-            TmdbActorSave()
-        ElseIf Preferences.TmdbActorsImdbScrape Then
-            GetTmdbActors()
-            TmdbActorSave()
+        _scrapedMovie.listactors.Clear
+        If (Preferences.XbmcTmdbActorDL AndAlso Preferences.movies_useXBMC_Scraper) OrElse Preferences.TmdbActorsImdbScrape Then
+            _scrapedMovie.listactors = GetTmdbactors
         Else
-            _scrapedMovie.listactors.Clear
             _scrapedMovie.listactors = GetImdbActors
         End If
     End Sub
@@ -1469,11 +1466,11 @@ Public Class Movie
         Return actors2
     End Function
 
-    Sub TmdbActorSave
-
+    Function GetTmdbActors
         ReportProgress("TMDB Actors")
+        'Get actors from tmdb
         Dim maxactors As Integer = Preferences.maxactors
-        Dim actors As List(Of str_MovieActors) = _scrapedMovie.listactors 
+        Dim actors As List(Of str_MovieActors) = tmdb.cast 
         Dim actors2 As New List(Of str_MovieActors)
         If maxactors <> 0 Then
             Dim count As Integer = 0
@@ -1488,11 +1485,10 @@ Public Class Movie
                 If count = maxactors Then Exit For
             Next
         End If
-        _scrapedMovie.listactors.Clear()
-        _scrapedMovie.listactors = actors2
         ReportProgress(MSG_OK,"Actors scraped OK" & vbCrLf)
         If Not Preferences.actorseasy AndAlso Not Preferences.actorsave Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
-    End Sub
+        Return actors2
+    End Function
 
 
     Sub AssignTrailerUrl
@@ -1625,10 +1621,7 @@ Public Class Movie
         End If
     End Sub
 
-    Sub GetTmdbActors
-        _scrapedMovie.listactors.Clear()
-        _scrapedMovie.listactors.AddRange(tmdb.Cast)
-    End Sub
+    
 
     Sub AssignPosterUrls
         If Preferences.EdenEnabled Then
@@ -2696,7 +2689,7 @@ Public Class Movie
 
     Function NeedTMDb(rl As RescrapeList)
         Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or
-               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords
+               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors
     End Function
 
     Function RescrapeBody(rl As RescrapeList)
@@ -2786,6 +2779,8 @@ Public Class Movie
         If NeedTMDb(rl) Then
 
             IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
+            tmdb.Imdb = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, "")
+            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
 
             If rl.trailer Or rl.Download_Trailer Then
                 If TrailerExists Then
@@ -2852,18 +2847,21 @@ Public Class Movie
                 End Try
             End If
 
-        End If
+            If Cancelled() Then Exit Sub
 
-        If Cancelled() Then Exit Sub
-
-        If rl.actors Then
-            _rescrapedMovie.listactors.Clear()
-            _rescrapedMovie.listactors = GetImdbActors()
-
-            If _rescrapedMovie.listactors.Count > 0 Then
-                _scrapedMovie.listactors.Clear()
-                _scrapedMovie.listactors.AddRange(_rescrapedMovie.listactors)
+            If rl.actors Then
+                _rescrapedMovie.listactors.Clear()
+                If Preferences.TmdbActorsImdbScrape Then
+                    _rescrapedMovie.listactors = GetTmdbActors
+                Else
+                    _rescrapedMovie.listactors = GetImdbActors()
+                End If
+                If _rescrapedMovie.listactors.Count > 0 Then
+                    _scrapedMovie.listactors.Clear()
+                    _scrapedMovie.listactors.AddRange(_rescrapedMovie.listactors)
+                End If
             End If
+
         End If
 
         If Cancelled() Then Exit Sub
