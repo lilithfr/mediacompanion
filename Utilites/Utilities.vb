@@ -2591,7 +2591,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Sub copyImage(ByVal src As String, ByVal dest As String, Optional ByVal resizeFanart As Integer = 0)
         Try
-            Dim img As Bitmap = New Bitmap(src)
+            Dim img = Utilities.GetImage(src)
             Dim width As Integer = img.Width
             Dim height As Integer = img.Height
 
@@ -2607,6 +2607,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             img = Utilities.ResizeImage(img, width, height)
             Utilities.SaveImage(img, dest)
             img.Dispose()   'because image is passed in ByRef to SaveImage, it should be disposed of, but alas it is not.
+            GC.Collect()
         Catch
         End Try
     End Sub

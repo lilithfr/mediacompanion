@@ -6529,6 +6529,10 @@ Public Class Form1
     Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
         Dim url As String
         Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        If Show.TvdbId.Value.Contains("tt") Then
+            MsgBox("Invalid Tvdb ID" & vbCrLf & "Unable to load Show's TVDB page")
+            Exit Sub
+        End If
         Dim TvdbId As Integer = Show.TvdbId.value
         url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
         Try
