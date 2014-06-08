@@ -69,6 +69,7 @@ Public Class DownloadCache
     Public Shared Sub IfNotValidImage_Delete(filename As String)
         Try
             Dim testImage = new Drawing.Bitmap(filename)
+            testImage.Dispose()
         Catch ex As Exception
             Try
                 File.Delete(filename)
@@ -193,8 +194,8 @@ Public Class DownloadCache
         End If
 
         
-        Catch
-            MsgBox("URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
+        Catch ex As Exception
+            MsgBox(ex.Message.ToString & vbCrLf & "URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
             returnCode = False            
         End Try
         Return returnCode
