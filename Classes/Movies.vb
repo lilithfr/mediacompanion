@@ -241,6 +241,8 @@ Public Class Movies
             lst.Add( MissingVotes             )
             lst.Add( MissingYear              )
             lst.Add( MissingIMDBId            )
+            lst.Add( MissingSource            )
+            lst.Add( MissingDirector          )
 If Preferences.ShowExtraMovieFilters Then
             lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
             lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
@@ -399,6 +401,17 @@ End If
         End Get
     End Property
 
+    Public ReadOnly Property MissingSource As String
+        Get
+            Return "Missing Source (" & (From x In MovieCache Where x.MissingSource).Count & ")"
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingDirector As String
+        Get
+            Return "Missing Director (" & (From x In MovieCache Where x.MissingDirector).Count & ")"
+        End Get
+    End Property
 
     Public ReadOnly Property MissingVotes As String
         Get
@@ -1228,6 +1241,8 @@ End If
                                     newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
                                 Case "source"
                                     newmovie.source = detail.InnerText
+                                Case "director"
+                                    newmovie.director = detail.InnerText
                                 Case "set"
                                     newmovie.MovieSet = detail.InnerText
                                 Case "sortorder"
@@ -1395,6 +1410,9 @@ End If
                 childchild.InnerText = ""
                 child.AppendChild(childchild)
             End If
+            childchild = doc.CreateElement("director")
+            childchild.InnerText = movie.director 
+            child.AppendChild(childchild)
             If movie.MovieSet <> Nothing Then
                 If movie.MovieSet <> "" Or movie.MovieSet <> "-None-" Then
                     childchild = doc.CreateElement("set")

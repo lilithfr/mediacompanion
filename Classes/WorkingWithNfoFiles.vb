@@ -1717,6 +1717,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.missingdata1 = 0
                     newmovie.MovieSet = ""
                     newmovie.source = ""
+                    newmovie.director = ""
                     newmovie.originaltitle = newmovie.title
                     newmovie.outline = ""
                     newmovie.playcount = "0"
@@ -1762,6 +1763,8 @@ Public Class WorkingWithNfoFiles
                                 End If
                             Case "source"
                                 newmovie.source = thisresult.InnerText
+                            Case "diretor"
+                                newmovie.director = thisresult.InnerText 
                             Case "year"
                                 newmovie.year = thisresult.InnerText.ToInt
                             Case "outline"
@@ -1896,6 +1899,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.tmdbid = Nothing Then newmovie.tmdbid = ""
                 If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source = Nothing Then newmovie.source = ""
+                If newmovie.director = Nothing Then newmovie.director = ""
                 If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
                 'If newmovie.tag = Nothing Then newmovie.tag = ""
                 'if there is no entry for originaltitle, then use the current title. this should only come into use

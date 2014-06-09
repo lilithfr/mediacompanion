@@ -1155,6 +1155,7 @@ Public Class Movie
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
+        _movieCache.director            = _scrapedMovie.fullmoviebody.director 
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
         
         If movRebuildCaches Then 

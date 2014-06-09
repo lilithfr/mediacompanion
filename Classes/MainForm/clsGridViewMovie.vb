@@ -252,6 +252,8 @@ Public Class clsGridViewMovie
                 Case "Missing Year"                : b = From f In b Where f.MissingYear
                 Case "Missing IMDB"                : b = From f In b Where f.MissingIMDBId
                 Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
+                Case "Missing Source"              : b = From f In b Where f.MissingSource
+                Case "Missing Director"            : b = From f In b Where f.MissingDirector
                 Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
                 Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
                 Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )

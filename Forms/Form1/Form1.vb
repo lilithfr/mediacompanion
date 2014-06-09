@@ -16339,6 +16339,14 @@ Public Class Form1
                 End Try
 
                 Try
+                    oCachedMovie.director = gridrow.Cells("director").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+
+                Try
                     oCachedMovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -16390,6 +16398,7 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.movieset = oCachedMovie.MovieSet
                 oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
+                oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
 
                 oMovie.AssignMovieToCache
                 oMovie.SaveNFO

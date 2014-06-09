@@ -27,6 +27,7 @@ Public Class ComboList
     Property missingdata1         As Byte   = 0
     Property plot                 As String = ""
     Property source               As String = ""
+    Property director             As String = ""
     Property Votes                As Integer= 0
     Property Resolution           As Integer= -1
     Property Audio                As New List(Of AudioDetails)
@@ -134,6 +135,17 @@ Public Class ComboList
         End Get
     End Property
 
+    Public ReadOnly Property MissingSource As Boolean
+        Get
+            Return source = ""
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingDirector As Boolean
+        Get
+            Return director = ""
+        End Get
+    End Property
 
     Public ReadOnly Property MissingRuntime As Boolean
         Get
@@ -268,7 +280,8 @@ Public Class ComboList
         Me.createdate           = From.createdate         
         Me.missingdata1         = From.missingdata1       
         Me.plot                 = From.plot               
-        Me.source               = From.source             
+        Me.source               = From.source
+        Me.director             = From.director     
         Me.Votes                = From.Votes              
         Me.Resolution           = From.Resolution    
         Me.Premiered            = From.Premiered

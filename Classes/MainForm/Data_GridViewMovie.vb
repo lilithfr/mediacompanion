@@ -23,6 +23,7 @@ Public Class Data_GridViewMovie
     Dim _missingdata1 As Byte
     Dim _plot As String
     Dim _source As String
+    Dim _director As String
     Dim _votes As Integer=0
     Dim _TitleUcase As String
     'Dim _IntVotes As Integer=0
@@ -67,6 +68,7 @@ Public Class Data_GridViewMovie
         missingdata1 = movie.missingdata1
         plot = movie.plot.Trim
         source = movie.source
+        director = movie.director 
         Votes = movie.Votes
   '      Integer.TryParse(votes.Replace(",",""),IntVotes)
         TitleUcase = movie.title.ToUpper
@@ -106,6 +108,7 @@ Public Class Data_GridViewMovie
                                                   .missingdata1 = Me.missingdata1,
                                                   .plot = Me.plot.Trim,
                                                   .source = Me.source,
+                                                  .director = Me.director,
                                                   .Votes = Me.Votes,
                                                   .Resolution  = Me.Resolution,
                                                   .Audio       = Me.Audio,
@@ -330,6 +333,15 @@ Public Class Data_GridViewMovie
         End Set
     End Property
 
+    Public Property director
+        Get
+            Return _director
+        End Get
+        Set(ByVal value)
+            _director = value
+        End Set
+    End Property
+
     Public Property Votes As Integer
         Get
             Return _votes
@@ -479,6 +491,20 @@ Public Class Data_GridViewMovie
     Public ReadOnly Property MissingIMDBId As Boolean
         Get
             Return id.ToString = "0"
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingSource As Boolean
+        Get
+            If IsNothing(source) Then Return True
+            If source.ToString = "" Then Return True
+            Return False
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingDirector As Boolean
+        Get
+            Return director.ToString = ""
         End Get
     End Property
 
