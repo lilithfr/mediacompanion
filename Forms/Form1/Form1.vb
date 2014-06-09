@@ -6756,6 +6756,7 @@ Public Class Form1
     Private Sub util_LanguageCheck()
         Try
             If ListBox1.SelectedIndex < 0 Then ListBox1.SelectedIndex = languageList.FindIndex(Function(index As Tvdb.Language) index.Abbreviation.Value = Preferences.TvdbLanguageCode)
+            If ListBox3.SelectedIndex = -1 orElse listOfShows(ListBox3.SelectedIndex).showid = "none" Then Exit Sub
             Dim languagecode As String = languageList(ListBox1.SelectedIndex).Abbreviation.Value
             Dim url As String = "http://thetvdb.com/api/6E82FED600783400/series/" & listOfShows(ListBox3.SelectedIndex).showid & "/" & languagecode & ".xml"
             Dim websource(10000)

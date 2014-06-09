@@ -1252,12 +1252,12 @@ Partial Public Class Form1
 
         PicBox.Tag = Nothing
 
-        If File.Exists(ImagePath) Then
-            PathToUse = ImagePath
-        ElseIf Utilities.UrlIsValid(ImagePath) Then
+        If Utilities.UrlIsValid(ImagePath) Then
             PicBox.ImageLocation = ImagePath
             PicBox.Load()
             Return True
+        ElseIf File.Exists(ImagePath) Then
+            PathToUse = ImagePath
         End If
 
         Try
@@ -1879,6 +1879,9 @@ Partial Public Class Form1
                     NewShow.Title.Value = FolderName    'set default in case title is returned blank, it still shows up in tree
                     NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
                     NewShow.Language.Value = templanguage
+                    If NewShow.Premiered.Value <> "" Then
+                        NewShow.Year.Value = NewShow.Premiered.Value.Substring(0,4)
+                    End If
 
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
                         TvGetActorTvdb(NewShow)
@@ -1890,20 +1893,27 @@ Partial Public Class Form1
 
                     TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart)
 
-                    If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
-                        NewShow.EpisodeActorSource.Value = "tvdb"
-                    Else
-                        NewShow.EpisodeActorSource.Value = "imdb"
-                    End If
-                    If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
-                        NewShow.TvShowActorSource.Value = "tvdb"
-                    Else
-                        NewShow.TvShowActorSource.Value = "imdb"
-                    End If
-
-                    NewShow.SortOrder.Value = Preferences.sortorder
+                Else    'set default values if no show found
+                    NewShow.TvdbId.Value = "none"
+                    NewShow.ImdbId.Value = "none"
+                    NewShow.Language.Value = Preferences.TvdbLanguageCode 
+                    NewShow.Year.Value = "N/A"
 
                 End If
+
+                If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
+                    NewShow.EpisodeActorSource.Value = "tvdb"
+                Else
+                    NewShow.EpisodeActorSource.Value = "imdb"
+                End If
+                If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
+                    NewShow.TvShowActorSource.Value = "tvdb"
+                Else
+                    NewShow.TvShowActorSource.Value = "imdb"
+                End If
+                NewShow.SortOrder.Value = Preferences.sortorder
+
+
                 NewShow.Save()
                 NewShow.UpdateTreenode()
                 'Cache.TvCache.Shows.Add(NewShow)
