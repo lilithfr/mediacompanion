@@ -807,6 +807,9 @@ Partial Public Class Form1
         Next
 
         If cbTvActor.Items.Count = 0 Then
+            actorflag = true
+            cbTvActorRole.Items.Add("")
+            cbTvActorRole.SelectedIndex = 0
             Call tv_ActorDisplay(True)
         Else
             cbTvActor.SelectedIndex = 0
