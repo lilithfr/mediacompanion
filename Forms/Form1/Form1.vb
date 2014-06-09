@@ -12598,6 +12598,7 @@ Public Class Form1
 
         If Preferences.movies_useXBMC_Scraper = True Then
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
+            Read_XBMC_TMDB_Scraper_Config
         Else
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
             GroupBox_MovieIMDBMirror.Enabled = True
@@ -19207,9 +19208,9 @@ Public Class Form1
     Private Sub CheckBox_XBMC_Scraper_TMDB_IMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TMDB_IMDBRatings.CheckedChanged
         Try
             If CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Checked = True Then
-                Save_XBMC_TMDB_Scraper_Config("imdbrating", "true")
+                Save_XBMC_TMDB_Scraper_Config("ratings", "IMDb")
             Else
-                Save_XBMC_TMDB_Scraper_Config("imdbrating", "false")
+                Save_XBMC_TMDB_Scraper_Config("ratings", "TMDb")
             End If
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True

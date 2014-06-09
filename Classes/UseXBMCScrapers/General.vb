@@ -933,9 +933,9 @@ Module General
                                             Form1.ComboBox_TMDB_Title_Language.Items.Add(TempValue)
                                         Loop Until GetOut = True
                                         Form1.ComboBox_TMDB_Title_Language.Text = Test
-                                    Case "imdbrating"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Checked = Test
+                                    Case "ratings"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Checked = If(Test.ToLower = "imdb", True, False)
                                 End Select
                             Catch
                                 'empty node
@@ -970,7 +970,7 @@ Module General
                             Try
                                 If KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
                                     Select Case KeyToBeChanged
-                                        Case "imdbrating"
+                                        Case "ratings"
                                             NodeChild.Attributes("default").Value = ChangeValue
                                         Case "fanart"
                                             NodeChild.Attributes("default").Value = ChangeValue
