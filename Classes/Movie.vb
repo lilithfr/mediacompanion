@@ -2139,6 +2139,8 @@ Public Class Movie
                 Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumbs\thumb"
                 Dim xf As Boolean = Preferences.movxtrafanart
                 Dim xt As Boolean = Preferences.movxtrathumb
+                If xf then Directory.CreateDirectory(xfanart.Replace("\fanart",""))
+                If xt then Directory.CreateDirectory(xthumb.Replace("\thumb",""))
                 Dim owrite As Boolean = Preferences.overwritethumbs
                 Dim tmpUrl As String = ""
                 Dim xtraart As New List(Of String)
