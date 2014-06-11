@@ -34,6 +34,7 @@ Public Class Data_GridViewMovie
 
 
     Property Resolution As Integer = -1
+    Property VideoCodec As String = ""
     Property Audio As New List(Of AudioDetails)
     Property Premiered As String
     Property FrodoPosterExists As Boolean
@@ -74,6 +75,7 @@ Public Class Data_GridViewMovie
         TitleUcase = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
         Resolution = movie.Resolution
+        VideoCodec = movie.VideoCodec
         AssignAudio(movie.Audio)
         Premiered = movie.Premiered
         Certificate = movie.Certificate
@@ -111,6 +113,7 @@ Public Class Data_GridViewMovie
                                                   .director = Me.director,
                                                   .Votes = Me.Votes,
                                                   .Resolution  = Me.Resolution,
+                                                  .VideoCodec = Me.VideoCodec,
                                                   .Audio       = Me.Audio,
                                                   .Premiered   = Me.Premiered,
                                                   .Certificate = Me.Certificate,

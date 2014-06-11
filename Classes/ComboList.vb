@@ -30,6 +30,7 @@ Public Class ComboList
     Property director             As String = ""
     Property Votes                As Integer= 0
     Property Resolution           As Integer= -1
+    Property VideoCodec           As String = ""
     Property Audio                As New List(Of AudioDetails)
     Property Premiered            As String = ""
     Property Certificate          As String = ""
@@ -283,7 +284,8 @@ Public Class ComboList
         Me.source               = From.source
         Me.director             = From.director     
         Me.Votes                = From.Votes              
-        Me.Resolution           = From.Resolution    
+        Me.Resolution           = From.Resolution
+        Me.VideoCodec           = From.VideoCodec
         Me.Premiered            = From.Premiered
         Me.Certificate          = From.Certificate
         Me.FrodoPosterExists    = From.FrodoPosterExists

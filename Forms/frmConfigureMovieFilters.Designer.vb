@@ -32,7 +32,7 @@ Partial Class frmConfigureMovieFilters
         'btnDone
         '
         Me.btnDone.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnDone.Location = New System.Drawing.Point(152, 332)
+        Me.btnDone.Location = New System.Drawing.Point(152, 343)
         Me.btnDone.Name = "btnDone"
         Me.btnDone.Size = New System.Drawing.Size(49, 23)
         Me.btnDone.TabIndex = 6
@@ -46,7 +46,7 @@ Partial Class frmConfigureMovieFilters
         Me.clbMovieFilters.FormattingEnabled = true
         Me.clbMovieFilters.Location = New System.Drawing.Point(10, 12)
         Me.clbMovieFilters.Name = "clbMovieFilters"
-        Me.clbMovieFilters.Size = New System.Drawing.Size(191, 257)
+        Me.clbMovieFilters.Size = New System.Drawing.Size(191, 272)
         Me.clbMovieFilters.TabIndex = 9
         '
         'lblInfo
@@ -65,7 +65,7 @@ Partial Class frmConfigureMovieFilters
         Me.Panel1.BackColor = System.Drawing.SystemColors.Info
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.lblInfo)
-        Me.Panel1.Location = New System.Drawing.Point(9, 284)
+        Me.Panel1.Location = New System.Drawing.Point(9, 295)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(192, 42)
         Me.Panel1.TabIndex = 11
@@ -75,7 +75,7 @@ Partial Class frmConfigureMovieFilters
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DarkSeaGreen
-        Me.ClientSize = New System.Drawing.Size(213, 363)
+        Me.ClientSize = New System.Drawing.Size(213, 378)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.clbMovieFilters)
         Me.Controls.Add(Me.btnDone)

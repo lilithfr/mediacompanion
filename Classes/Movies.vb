@@ -98,8 +98,6 @@ Public Class Movies
         End Get
     End Property    
 
-
-
     Public ReadOnly Property MoviesWithUniqueMovieTitles As List(Of ComboList)
         Get
             Dim q = From x In MovieCache 
@@ -564,7 +562,6 @@ End If
     End Sub
 
 
-
     Public ReadOnly Property ResolutionFilter As List(Of String)
         Get
             Dim q = From x In MovieCache 
@@ -579,6 +576,19 @@ End If
         End Get
     End Property    
 
+    Public ReadOnly Property VideoCodecFilter As List(Of String)
+        Get
+            Dim q = From x In MovieCache 
+                Group By x.VideoCodec Into NumFilms=Count 
+                Order by Videocodec Descending
+
+            Dim r = (From x In q Select x.VideoCodec & " (" & x.NumFilms.ToString & ")").ToList
+
+            If r.Count>0 Then r.Item(r.Count-1) = r.Item(r.Count-1).Replace("-1","Unknown")
+
+            Return r
+        End Get
+    End Property
 
     Public ReadOnly Property NumAudioTracksFilter As List(Of String)
         Get
@@ -1237,16 +1247,11 @@ End If
                         For Each detail In thisresult.ChildNodes
                             Select Case detail.Name
 
-                                Case "missingdata1"
-                                    newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
-                                Case "source"
-                                    newmovie.source = detail.InnerText
-                                Case "director"
-                                    newmovie.director = detail.InnerText
-                                Case "set"
-                                    newmovie.MovieSet = detail.InnerText
-                                Case "sortorder"
-                                    newmovie.sortorder = detail.InnerText
+                                Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
+                                Case "source"               : newmovie.source = detail.InnerText
+                                Case "director"             : newmovie.director = detail.InnerText
+                                Case "set"                  : newmovie.MovieSet = detail.InnerText
+                                Case "sortorder"            : newmovie.sortorder = detail.InnerText
                                 Case "filedate"
                                     If detail.InnerText.Length <> 14 Then 'i.e. invalid date
                                         newmovie.filedate = "19000101000000" '01/01/1900 00:00:00
@@ -1259,64 +1264,34 @@ End If
                                     Else
                                         newmovie.createdate = detail.InnerText
                                     End If
-                                Case "tag"
-                                    newmovie.movietag.Add(detail.innertext)
-                                Case "filename"
-                                    newmovie.filename = detail.InnerText
-                                Case "foldername"
-                                    newmovie.foldername = detail.InnerText
-                                Case "fullpathandfilename"
-                                    newmovie.fullpathandfilename = detail.InnerText
-                                Case "genre"
-                                    newmovie.genre = detail.InnerText & newmovie.genre
-                                Case "id"
-                                    newmovie.id = detail.InnerText
-                                Case "playcount"
-                                    newmovie.playcount = detail.InnerText
-                                Case "rating"
-                                    newmovie.rating = detail.InnerText.ToString.ToRating
-                                Case "title"
-                                    newmovie.title = detail.InnerText
-                                Case "originaltitle"
-                                    newmovie.originaltitle = detail.InnerText
-                                    'Case "titleandyear"
-                                    '    '--------- aqui
-                                    '    Dim TempString2 As String = detail.InnerText
-                                    '    If Preferences.ignorearticle = True Then
-                                    '        If TempString2.ToLower.IndexOf("the ") = 0 Then
-                                    '            Dim Temp As String = TempString2.Substring(TempString2.Length - 7, 7)
-                                    '            TempString2 = TempString2.Substring(4, TempString2.Length - 11)
-                                    '            TempString2 = TempString2 & ", The" & Temp
-                                    '        End If
-                                    '    End If
-
-                                    '    newmovie.titleandyear = TempString2
-                                Case "top250"
-                                    newmovie.top250 = detail.InnerText
-                                Case "year"
-                                    newmovie.year = detail.InnerText
-                                Case "outline"
-                                    newmovie.outline = detail.InnerText
-                                Case "plot"
-                                    newmovie.plot = detail.InnerText
-                                Case "runtime"
-                                    newmovie.runtime = detail.InnerText
+                                Case "tag"                  : newmovie.movietag.Add(detail.innertext)
+                                Case "filename"             : newmovie.filename = detail.InnerText
+                                Case "foldername"           : newmovie.foldername = detail.InnerText
+                                Case "fullpathandfilename"  : newmovie.fullpathandfilename = detail.InnerText
+                                Case "genre"                : newmovie.genre = detail.InnerText & newmovie.genre
+                                Case "id"                   : newmovie.id = detail.InnerText
+                                Case "playcount"            : newmovie.playcount = detail.InnerText
+                                Case "rating"               : newmovie.rating = detail.InnerText.ToString.ToRating
+                                Case "title"                : newmovie.title = detail.InnerText
+                                Case "originaltitle"        : newmovie.originaltitle = detail.InnerText
+                                Case "top250"               : newmovie.top250 = detail.InnerText
+                                Case "year"                 : newmovie.year = detail.InnerText
+                                Case "outline"              : newmovie.outline = detail.InnerText
+                                Case "plot"                 : newmovie.plot = detail.InnerText
+                                Case "runtime"              : newmovie.runtime = detail.InnerText
                                 Case "votes"
                                     Try
                                         newmovie.Votes = detail.InnerText
                                     Catch
                                         newmovie.Votes = 0
                                     End Try
-
-                                Case "Resolution" : newmovie.Resolution = detail.InnerText
-
+                                Case "Resolution"           : newmovie.Resolution = detail.InnerText
+                                Case "VideoCodec"           : newmovie.VideoCodec = detail.InnerText
 
                                 Case "audio"
                                     '               newmovie.Audio.Clear
-
                                     Dim audio As New AudioDetails
                                     For Each audiodetails As XmlNode In detail.ChildNodes
-
                                         Select Case audiodetails.Name
                                             Case "language"
                                                 audio.Language.Value = audiodetails.InnerText
@@ -1329,12 +1304,10 @@ End If
                                         End Select
                                     Next
                                     newmovie.Audio.Add(audio)
-
-                                Case "Premiered" : newmovie.Premiered = detail.InnerText
-                                Case "Certificate" : newmovie.Certificate = detail.InnerText
-                                Case "FrodoPosterExists" : newmovie.FrodoPosterExists = detail.InnerText
+                                Case "Premiered"            : newmovie.Premiered = detail.InnerText
+                                Case "Certificate"          : newmovie.Certificate = detail.InnerText
+                                Case "FrodoPosterExists"    : newmovie.FrodoPosterExists = detail.InnerText
                                 Case "PreFrodoPosterExists" : newmovie.PreFrodoPosterExists = detail.InnerText
-
                             End Select
                         Next
                         If newmovie.source = Nothing Then
@@ -1474,23 +1447,6 @@ End If
             childchild.InnerText = movie.sortorder
             child.AppendChild(childchild)
 
-            '            childchild = doc.CreateElement("titleandyear")
-            '            Try
-            '                If movie.titleandyear.Length >= 5 Then
-            '                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 5 Then
-            '                        Dim Temp As String = movie.titleandyear.Replace(", the", String.Empty)
-            '                        movie.titleandyear = "The " & Temp
-            '                    End If
-            '                End If
-            '            Catch ex As Exception
-            '#If SilentErrorScream Then
-            '                Throw ex
-            '#End If
-            '            End Try
-            '            childchild.InnerText = movie.titleandyear
-            '            child.AppendChild(childchild)
-
-
             childchild = doc.CreateElement("runtime")
             childchild.InnerText = movie.runtime
             child.AppendChild(childchild)
@@ -1500,19 +1456,9 @@ End If
             childchild = doc.CreateElement("year")
             childchild.InnerText = movie.year
             child.AppendChild(childchild)
-
-            'If movie.Votes <> Nothing And movie.Votes <> "" Then
-            '    childchild = doc.CreateElement("votes")
-            '    childchild.InnerText = movie.Votes
-            '    child.AppendChild(childchild)
-            'Else
-            '    childchild = doc.CreateElement("votes")
-            '    childchild.InnerText = ""
-            '    child.AppendChild(childchild)
-            'End If
-
             child.AppendChild(doc, "votes", movie.Votes)
             child.AppendChild(doc, "Resolution", movie.Resolution)
+            child.AppendChild(doc, "VideoCodec", movie.VideoCodec)
 
             '        childchild = doc.CreateElement("audio")
 
@@ -2341,6 +2287,18 @@ End If
         Return recs
     End Function
 
+    Function ApplyVideoCodecFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb,"Unknown","-1")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.VideoCodec) )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.VideoCodec) )
+        End If
+
+        Return recs
+    End Function
 
     Function ApplyAudioCodecsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 

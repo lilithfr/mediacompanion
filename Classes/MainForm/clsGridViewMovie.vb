@@ -283,6 +283,7 @@ Public Class clsGridViewMovie
         If Form1.cbFilterCertificate.Visible Then b = Form1.oMovies.ApplyCertificatesFilter(b, Form1.cbFilterCertificate)
         If Form1.cbFilterSet.Visible Then b = Form1.oMovies.ApplySetsFilter(b, Form1.cbFilterSet)
         If Form1.cbFilterResolution.Visible Then b = Form1.oMovies.ApplyResolutionsFilter(b, Form1.cbFilterResolution)
+        If Form1.cbFilterVideoCodec.Visible Then b = Form1.oMovies.ApplyVideoCodecFilter(b, Form1.cbFilterVideoCodec)
         If Form1.cbFilterAudioCodecs   .Visible Then b = Form1.oMovies.ApplyAudioCodecsFilter   ( b , Form1.cbFilterAudioCodecs    )
         If Form1.cbFilterAudioChannels .Visible Then b = Form1.oMovies.ApplyAudioChannelsFilter ( b , Form1.cbFilterAudioChannels  )
         If Form1.cbFilterAudioBitrates .Visible Then b = Form1.oMovies.ApplyAudioBitratesFilter ( b , Form1.cbFilterAudioBitrates  )

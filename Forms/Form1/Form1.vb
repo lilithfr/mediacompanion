@@ -21,7 +21,7 @@ Imports XBMC.JsonRpc
 Public Class Form1
 
     Const HOME_PAGE            = "http://mediacompanion.codeplex.com"
-    Const NFO_INDEX As Integer = 4
+    Const NFO_INDEX As Integer = 5
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
     Public Const MCToolsCommands As Integer = 2          ' increment when adding MC functions to ToolsToolStripMenuItem
@@ -15495,6 +15495,7 @@ Public Class Form1
                     cbFilterDirector.Font = newFont
                     cbFilterSource.Font = newFont
                     cbFilterResolution.Font = newFont
+                    cbFilterVideoCodec.Font = newFont
                     cbFilterAudioCodecs.Font = newFont
                     cbFilterAudioLanguages.Font = newFont
                     cbFilterAudioBitrates .Font = newFont
@@ -21822,7 +21823,7 @@ Public Class Form1
                                                                                                     cbFilterAudioCodecs.TextChanged, cbFilterAudioChannels.TextChanged,
                                                                                                     cbFilterAudioBitrates.TextChanged, cbFilterNumAudioTracks.TextChanged,
                                                                                                     cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged,
-                                                                                                    cbFilterDirector.TextChanged
+                                                                                                    cbFilterDirector.TextChanged, cbFilterVideoCodec.TextChanged 
 
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
@@ -22240,6 +22241,7 @@ Public Class Form1
         If cbFilterSet           .Visible Then cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
         If cbFilterTag           .Visible Then cbFilterTag           .UpdateItems( oMovies.TagFilter            )
         If cbFilterResolution    .Visible Then cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
+        If cbFilterVideoCodec    .Visible Then cbFilterVideoCodec    .UpdateItems( oMovies.VideoCodecFilter     )
         If cbFilterAudioCodecs   .Visible Then cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
         If cbFilterAudioChannels .Visible Then cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
         If cbFilterAudioBitrates .Visible Then cbFilterAudioBitrates .UpdateItems( oMovies.AudioBitratesFilter  )
@@ -22275,7 +22277,7 @@ Public Class Form1
                                                                                     cbFilterAudioBitrates.OnFormatItem, cbFilterNumAudioTracks.OnFormatItem,
                                                                                     cbFilterAudioLanguages.OnFormatItem, cbFilterActor.OnFormatItem,
                                                                                     cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem,
-                                                                                    cbFilterDirector.OnFormatItem
+                                                                                    cbFilterDirector.OnFormatItem, cbFilterVideoCodec.OnFormatItem 
         Return item.RemoveAfterMatch
     End Function
 
@@ -23558,7 +23560,8 @@ End Sub
                                                                         lblFilterCertificate  .Click,  lblFilterGenre         .Click,  lblFilterYear         .Click,
                                                                         lblFilterResolution   .Click,  lblFilterAudioCodecs   .Click,  lblFilterAudioChannels.Click, 
                                                                         lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, 
-                                                                        lblFilterActor        .Click,  lblFilterSource        .Click,  lblFilterTag           .Click, lblFilterDirector.Click 
+                                                                        lblFilterActor        .Click,  lblFilterSource        .Click,  lblFilterTag           .Click, 
+                                                                        lblFilterDirector     .Click,  lblFilterVideoCodec    .Click
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -23573,7 +23576,8 @@ End Sub
     Private Sub ChangeFilterMode(ByVal sender As Object, ByVal e As EventArgs) Handles lblFilterGenreMode.Click, lblFilterSetMode.Click, lblFilterResolutionMode.Click,
                                                                                        lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
                                                                                        lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
-                                                                                       lblFilterActorMode.Click,lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click
+                                                                                       lblFilterActorMode.Click,lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click,
+                                                                                       lblFilterVideoCodecMode.Click 
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)

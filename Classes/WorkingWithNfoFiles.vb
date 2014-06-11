@@ -1831,21 +1831,23 @@ Public Class WorkingWithNfoFiles
                                             Select Case detail.Name
 
                                                 Case "video"
-                                                            For Each videodetails As XmlNode In detail.ChildNodes
-                                                                Select Case videodetails.Name
-                                                                    Case "width"
-                                                                        newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
-                                                                        gotWidth = True
-                                                                    Case "height"
-                                                                        newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
-                                                                        gotHeight = True
-                                                                End Select
+                                                    For Each videodetails As XmlNode In detail.ChildNodes
+                                                        Select Case videodetails.Name
+                                                            Case "width"
+                                                                newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
+                                                                gotWidth = True
+                                                            Case "height"
+                                                                newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
+                                                                gotHeight = True
+                                                            Case "codec"
+                                                                newmovie.VideoCodec = videodetails.InnerText
+                                                        End Select
 
-                                                                If gotWidth And gotHeight Then
-                                                                    newmovie.Resolution = newfilenfo.filedetails_video.VideoResolution
-                                                                    Exit For
-                                                                End If
-                                                            Next
+                                                        If gotWidth And gotHeight Then
+                                                            newmovie.Resolution = newfilenfo.filedetails_video.VideoResolution
+                                                            Exit For
+                                                        End If
+                                                    Next
 
                                                 Case "audio"
                                                         Dim audio As New AudioDetails

@@ -1177,6 +1177,7 @@ Public Class Movie
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.year                = _scrapedMovie.fullmoviebody.year.ToInt
         _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
+        _movieCache.VideoCodec          = _scrapedMovie.filedetails.filedetails_video.Codec.Value 
         _movieCache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
         _movieCache.Premiered           = _scrapedMovie.fullmoviebody.premiered
         _movieCache.movietag = _scrapedMovie.fullmoviebody.tag
