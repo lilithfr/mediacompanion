@@ -17034,7 +17034,9 @@ Public Class Form1
     Private Sub tsmiTMDbSetName_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbSetName.Click
         Call mov_ScrapeSpecific("tmdb_set_name")
     End Sub
-
+    Private Sub tsmiDlTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiDlTrailer.Click
+        Call mov_ScrapeSpecific("Download_Trailer")
+    End Sub
 
     Private Sub PictureBoxFanArt_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBoxFanArt.MouseUp, PictureBoxFanArt.Click
         Try

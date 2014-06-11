@@ -50,6 +50,8 @@ Partial Class frmBatchScraper
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.btnStart = New System.Windows.Forms.Button()
         Me.gbOther = New System.Windows.Forms.GroupBox()
+        Me.cbDlTrailer = New System.Windows.Forms.CheckBox()
+        Me.cbTagsFromKeywords = New System.Windows.Forms.CheckBox()
         Me.cbRenameFolders = New System.Windows.Forms.CheckBox()
         Me.cbFrodo_Fanart_Thumbs = New System.Windows.Forms.CheckBox()
         Me.cbFrodo_Poster_Thumbs = New System.Windows.Forms.CheckBox()
@@ -60,7 +62,6 @@ Partial Class frmBatchScraper
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.cb_ScrapeEmptyTags = New System.Windows.Forms.CheckBox()
-        Me.cbTagsFromKeywords = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -346,6 +347,7 @@ Partial Class frmBatchScraper
         '
         'gbOther
         '
+        Me.gbOther.Controls.Add(Me.cbDlTrailer)
         Me.gbOther.Controls.Add(Me.cbTagsFromKeywords)
         Me.gbOther.Controls.Add(Me.cbRenameFolders)
         Me.gbOther.Controls.Add(Me.cbFrodo_Fanart_Thumbs)
@@ -354,12 +356,35 @@ Partial Class frmBatchScraper
         Me.gbOther.Controls.Add(Me.CheckBox16)
         Me.gbOther.Controls.Add(Me.CheckBox15)
         Me.gbOther.Controls.Add(Me.CheckBox19)
-        Me.gbOther.Location = New System.Drawing.Point(14, 207)
+        Me.gbOther.Location = New System.Drawing.Point(15, 205)
         Me.gbOther.Name = "gbOther"
         Me.gbOther.Size = New System.Drawing.Size(456, 85)
         Me.gbOther.TabIndex = 0
         Me.gbOther.TabStop = false
         Me.gbOther.Text = "Other"
+        '
+        'cbDlTrailer
+        '
+        Me.cbDlTrailer.AutoSize = true
+        Me.cbDlTrailer.Location = New System.Drawing.Point(291, 64)
+        Me.cbDlTrailer.Name = "cbDlTrailer"
+        Me.cbDlTrailer.Size = New System.Drawing.Size(159, 17)
+        Me.cbDlTrailer.TabIndex = 39
+        Me.cbDlTrailer.Text = "Download Trailer if Url exists"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbDlTrailer, "Will only download trailer if"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Valid URL is already present")
+        Me.cbDlTrailer.UseVisualStyleBackColor = true
+        '
+        'cbTagsFromKeywords
+        '
+        Me.cbTagsFromKeywords.AutoSize = true
+        Me.cbTagsFromKeywords.Location = New System.Drawing.Point(123, 64)
+        Me.cbTagsFromKeywords.Name = "cbTagsFromKeywords"
+        Me.cbTagsFromKeywords.Size = New System.Drawing.Size(158, 17)
+        Me.cbTagsFromKeywords.TabIndex = 38
+        Me.cbTagsFromKeywords.Text = "Scrape Tags from keywords"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbTagsFromKeywords, "Will scrape keywords from current selected scraper"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"and populate them into movie "& _ 
+        "Tags.")
+        Me.cbTagsFromKeywords.UseVisualStyleBackColor = true
         '
         'cbRenameFolders
         '
@@ -377,7 +402,7 @@ Partial Class frmBatchScraper
         'cbFrodo_Fanart_Thumbs
         '
         Me.cbFrodo_Fanart_Thumbs.AutoSize = true
-        Me.cbFrodo_Fanart_Thumbs.Location = New System.Drawing.Point(296, 41)
+        Me.cbFrodo_Fanart_Thumbs.Location = New System.Drawing.Point(291, 41)
         Me.cbFrodo_Fanart_Thumbs.Name = "cbFrodo_Fanart_Thumbs"
         Me.cbFrodo_Fanart_Thumbs.Size = New System.Drawing.Size(127, 17)
         Me.cbFrodo_Fanart_Thumbs.TabIndex = 36
@@ -388,7 +413,7 @@ Partial Class frmBatchScraper
         'cbFrodo_Poster_Thumbs
         '
         Me.cbFrodo_Poster_Thumbs.AutoSize = true
-        Me.cbFrodo_Poster_Thumbs.Location = New System.Drawing.Point(139, 41)
+        Me.cbFrodo_Poster_Thumbs.Location = New System.Drawing.Point(123, 41)
         Me.cbFrodo_Poster_Thumbs.Name = "cbFrodo_Poster_Thumbs"
         Me.cbFrodo_Poster_Thumbs.Size = New System.Drawing.Size(127, 17)
         Me.cbFrodo_Poster_Thumbs.TabIndex = 35
@@ -412,7 +437,7 @@ Partial Class frmBatchScraper
         'CheckBox16
         '
         Me.CheckBox16.AutoSize = true
-        Me.CheckBox16.Location = New System.Drawing.Point(297, 19)
+        Me.CheckBox16.Location = New System.Drawing.Point(291, 19)
         Me.CheckBox16.Name = "CheckBox16"
         Me.CheckBox16.Size = New System.Drawing.Size(141, 17)
         Me.CheckBox16.TabIndex = 33
@@ -432,7 +457,7 @@ Partial Class frmBatchScraper
         'CheckBox19
         '
         Me.CheckBox19.AutoSize = true
-        Me.CheckBox19.Location = New System.Drawing.Point(139, 19)
+        Me.CheckBox19.Location = New System.Drawing.Point(123, 19)
         Me.CheckBox19.Name = "CheckBox19"
         Me.CheckBox19.Size = New System.Drawing.Size(131, 17)
         Me.CheckBox19.TabIndex = 32
@@ -469,23 +494,11 @@ Partial Class frmBatchScraper
         "mpty."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This excludes TMDB set name.  Select this separately if"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"required.")
         Me.cb_ScrapeEmptyTags.UseVisualStyleBackColor = true
         '
-        'cbTagsFromKeywords
-        '
-        Me.cbTagsFromKeywords.AutoSize = true
-        Me.cbTagsFromKeywords.Location = New System.Drawing.Point(139, 64)
-        Me.cbTagsFromKeywords.Name = "cbTagsFromKeywords"
-        Me.cbTagsFromKeywords.Size = New System.Drawing.Size(158, 17)
-        Me.cbTagsFromKeywords.TabIndex = 38
-        Me.cbTagsFromKeywords.Text = "Scrape Tags from keywords"
-        Me.ttBatchUpdateWizard.SetToolTip(Me.cbTagsFromKeywords, "Will scrape keywords from current selected scraper"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"and populate them into movie "& _ 
-        "Tags.")
-        Me.cbTagsFromKeywords.UseVisualStyleBackColor = true
-        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(485, 428)
+        Me.ClientSize = New System.Drawing.Size(485, 421)
         Me.ControlBox = false
         Me.Controls.Add(Me.cb_ScrapeEmptyTags)
         Me.Controls.Add(Me.GroupBox1)
@@ -548,4 +561,5 @@ End Sub
     Friend WithEvents cbRenameFolders As System.Windows.Forms.CheckBox
     Friend WithEvents cb_ScrapeEmptyTags As System.Windows.Forms.CheckBox
     Friend WithEvents cbTagsFromKeywords As System.Windows.Forms.CheckBox
+    Friend WithEvents cbDlTrailer As System.Windows.Forms.CheckBox
 End Class

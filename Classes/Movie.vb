@@ -2795,6 +2795,10 @@ Public Class Movie
                     Dim more As Boolean = Not File.Exists(ActualTrailerPath)
 
                     While more
+                        If Not rl.trailer AndAlso rl.Download_Trailer AndAlso _scrapedMovie.fullmoviebody.trailer = "" Then
+                            ReportProgress("No Trailer URL Present", "Download of Trailer skipped as no url pre-scraped")
+                            Exit While
+                        End If
                         If rl.trailer Or _scrapedMovie.fullmoviebody.trailer = "" Then
                             If Cancelled() Then Exit Sub
                             _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
