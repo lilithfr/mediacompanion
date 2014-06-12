@@ -4616,9 +4616,9 @@ Partial Public Class Form1
 
     'End Sub
 
-    Protected Overrides Sub Finalize()
-        MyBase.Finalize()
-    End Sub
+    'Protected Overrides Sub Finalize()
+    '    MyBase.Finalize()
+    'End Sub
 
     Private Sub Label136_AutoSizeChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Label136.AutoSizeChanged
 

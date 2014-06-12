@@ -2592,7 +2592,9 @@ Public Class WorkingWithNfoFiles
                 stage = 21
                 Try
                     child = doc.CreateElement("votes")
-                    child.InnerText = movietosave.fullmoviebody.votes
+                    Dim votes As String = movietosave.fullmoviebody.votes
+                    If Not String.IsNullOrEmpty(votes) then votes = votes.Replace(",", "")
+                    child.InnerText = votes   'movietosave.fullmoviebody.votes
                     root.AppendChild(child)
                 Catch
                 End Try
