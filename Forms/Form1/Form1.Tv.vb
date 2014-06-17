@@ -1896,11 +1896,11 @@ Partial Public Class Form1
 
                     TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart)
 
-                Else    'set default values if no show found
-                    NewShow.TvdbId.Value = "none"
-                    NewShow.ImdbId.Value = "none"
-                    NewShow.Language.Value = Preferences.TvdbLanguageCode 
-                    NewShow.Year.Value = "N/A"
+                'Else    'set default values if no show found
+                '    NewShow.TvdbId.Value = "none"
+                '    NewShow.ImdbId.Value = "none"
+                '    NewShow.Language.Value = Preferences.TvdbLanguageCode 
+                '    NewShow.Year.Value = "N/A"
 
                 End If
 
