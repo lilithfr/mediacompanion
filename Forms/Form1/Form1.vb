@@ -193,6 +193,7 @@ Public Class Form1
     Dim listOfTvFanarts As New List(Of str_FanartList)
     Dim lockedList As Boolean = False
     Dim tempTVDBiD As String = String.Empty
+    Dim _possibleTVDBId As String = ""
     Dim novaThread As Thread
     Dim newMovieFoundTitle As String = String.Empty
     Dim newMovieFoundFilename As String = String.Empty
@@ -6871,146 +6872,153 @@ Public Class Form1
                 TabControl3.SelectedIndex = 0
 
             Else
-                'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-                Dim tvdbstuff As New TVDBScraper
-                Dim tvshowxmlstring As String = tvdbstuff.GetShow(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
-                If tvshowxmlstring = "!!!Error!!!" Then
-                    MsgBox("Error scraping show")
-                    Exit Sub
-                End If
-
-                Dim posterurl As String
-                Dim bannerurl As String
-                Dim fanarturl As String
-
-                WorkingTvShow.clearActors()
-
-                WorkingTvShow.State = Media_Companion.ShowState.Open
-
-                WorkingTvShow.Title.Value = listOfShows(ListBox3.SelectedIndex).showtitle
-                WorkingTvShow.TvdbId.Value = listOfShows(ListBox3.SelectedIndex).showid
-                WorkingTvShow.Language.Value = LanCode
-
-                If cbTvChgShowOverwriteImgs.Checked Then
-                    TvDeleteShowArt(WorkingTvShow)
-                End If
-
-                If RadioButton11.Checked = True Then
-                    WorkingTvShow.EpisodeActorSource.Value = "tvdb"
-                Else
-                    WorkingTvShow.EpisodeActorSource.Value = "imdb"
-                End If
-
-                If RadioButton15.Checked = True Then
-                    WorkingTvShow.SortOrder.Value = "default"
-                Else
-                    WorkingTvShow.SortOrder.Value = "dvd"
-                End If
-
-                Dim showlist As New XmlDocument
-                showlist.LoadXml(tvshowxmlstring)
-                Dim thisresult As XmlNode = Nothing
-                For Each thisresult In showlist("fulltvshow")
-                    Select Case thisresult.Name
-                        Case "mpaa"
-                            WorkingTvShow.Mpaa.Value = thisresult.InnerText
-                        Case "premiered"
-                            If thisresult.InnerText <> "" Then
-                                WorkingTvShow.Premiered.Value = thisresult.InnerText
-                                WorkingTvShow.Year.Value = thisresult.InnerText.Substring(0, 4)
-                            Else
-                                WorkingTvShow.Premiered.Value = "N/A"
-                                WorkingTvShow.Year.Value = "N/A"
-                            End If
-                        Case "genre"
-                            Dim newstring As String
-                            newstring = thisresult.InnerText
-                            newstring = newstring.TrimEnd("|")
-                            newstring = newstring.TrimStart("|")
-                            newstring = newstring.Replace("|", " / ")
-                            WorkingTvShow.Genre.Value = newstring
-                        Case "imdbid"
-                            WorkingTvShow.ImdbId.Value = thisresult.InnerText
-                        Case "studio"
-                            WorkingTvShow.Studio.Value = thisresult.InnerText
-                        Case "plot"
-                            WorkingTvShow.Plot.Value = thisresult.InnerText
-                        Case "rating"
-                            WorkingTvShow.Rating.Value = thisresult.InnerText
-                        Case "runtime"
-                            WorkingTvShow.Runtime.Value = thisresult.InnerText
-                        Case "banner"
-                            bannerurl = thisresult.InnerText
-                        Case "fanart"
-                            fanarturl = thisresult.InnerText
-                        Case "poster"
-                            posterurl = thisresult.InnerText
-                        Case "episodeguideurl"
-                            WorkingTvShow.EpisodeGuideUrl.Value = ""
-                            WorkingTvShow.Url.Value = thisresult.InnerText
-                            WorkingTvShow.Url.Node.SetAttributeValue("cache", WorkingTvShow.TvdbId.Value)
-                            WorkingTvShow.Url.AttachToParentNode(WorkingTvShow.EpisodeGuideUrl.Node)
-                    End Select
-                Next
-
-                If RadioButton13.Checked = True Or WorkingTvShow.ImdbId = Nothing Then
-                    TvGetActorTvdb(WorkingTvShow)
-                End If
-
-                If RadioButton12.Checked = True And WorkingTvShow.ImdbId <> Nothing Then
-                    TvGetActorImdb(WorkingTvShow)
-                End If
-
-                Dim artdone As Boolean = False
-                If cbTvChgShowOverwriteImgs.Checked Then
-                    artdone = TvGetArtwork(WorkingTvShow, cbTvChgShowDLFanart.CheckState, cbTvChgShowDLPoster.CheckState, cbTvChgShowDLSeason.CheckState, Preferences.dlTVxtrafanart)
-                    'artdone = True
-                End If
-
-                Dim artlist As New List(Of TvBanners)
-                If artdone = False Then
-                    Dim thumblist As String = tvdbstuff.GetPosterList(listOfShows(ListBox3.SelectedIndex).showid)
-                    showlist.LoadXml(thumblist)
-                    artdone = True
-                    thisresult = Nothing
-                    'CheckBox3 = seasons
-                    'CheckBox4 = fanart
-                    'CheckBox5 = poster
-                    For Each thisresult In showlist("banners")
-                        Select Case thisresult.Name
-                            Case "banner"
-                                Dim individualposter As New TvBanners
-                                For Each results In thisresult.ChildNodes
-                                    Select Case results.Name
-                                        Case "url"
-                                            individualposter.Url = results.InnerText
-                                        Case "bannertype"
-                                            individualposter.BannerType = results.InnerText
-                                        Case "resolution"
-                                            individualposter.Resolution = results.InnerText
-                                        Case "language"
-                                            individualposter.Language = results.InnerText
-                                        Case "season"
-                                            individualposter.Season = results.InnerText
-                                    End Select
-                                Next
-                                artlist.Add(individualposter)
-                        End Select
-                    Next
-                End If
-                For Each url In artlist
-                    If url.BannerType <> "fanart" Then
-                        WorkingTvShow.posters.Add(url.Url)
-                    Else
-                        WorkingTvShow.fanart.Add(url.Url)
-                    End If
-                Next
-
-                nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True, "unlocked")
-                Call tv_ShowLoad(WorkingTvShow)
-                messbox.Close()
+                Cache.TvCache.Remove(WorkingTvShow)
+                newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
+                bckgrnd_tvshowscraper_Run(listOfShows(ListBox3.SelectedIndex).showid)
+                While bckgrnd_tvshowscraper.IsBusy
+                    Application.DoEvents 
+                End While
                 TabControl3.SelectedIndex = 0
-                End If
+                ''Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
+                'Dim tvdbstuff As New TVDBScraper
+                'Dim tvshowxmlstring As String = tvdbstuff.GetShow(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
+                'If tvshowxmlstring = "!!!Error!!!" Then
+                '    MsgBox("Error scraping show")
+                '    Exit Sub
+                'End If
+
+                'Dim posterurl As String
+                'Dim bannerurl As String
+                'Dim fanarturl As String
+
+                'WorkingTvShow.clearActors()
+
+                'WorkingTvShow.State = Media_Companion.ShowState.Open
+
+                'WorkingTvShow.Title.Value = listOfShows(ListBox3.SelectedIndex).showtitle
+                'WorkingTvShow.TvdbId.Value = listOfShows(ListBox3.SelectedIndex).showid
+                'WorkingTvShow.Language.Value = LanCode
+
+                'If cbTvChgShowOverwriteImgs.Checked Then
+                '    TvDeleteShowArt(WorkingTvShow)
+                'End If
+
+                'If RadioButton11.Checked = True Then
+                '    WorkingTvShow.EpisodeActorSource.Value = "tvdb"
+                'Else
+                '    WorkingTvShow.EpisodeActorSource.Value = "imdb"
+                'End If
+
+                'If RadioButton15.Checked = True Then
+                '    WorkingTvShow.SortOrder.Value = "default"
+                'Else
+                '    WorkingTvShow.SortOrder.Value = "dvd"
+                'End If
+
+                'Dim showlist As New XmlDocument
+                'showlist.LoadXml(tvshowxmlstring)
+                'Dim thisresult As XmlNode = Nothing
+                'For Each thisresult In showlist("fulltvshow")
+                '    Select Case thisresult.Name
+                '        Case "mpaa"
+                '            WorkingTvShow.Mpaa.Value = thisresult.InnerText
+                '        Case "premiered"
+                '            If thisresult.InnerText <> "" Then
+                '                WorkingTvShow.Premiered.Value = thisresult.InnerText
+                '                WorkingTvShow.Year.Value = thisresult.InnerText.Substring(0, 4)
+                '            Else
+                '                WorkingTvShow.Premiered.Value = "N/A"
+                '                WorkingTvShow.Year.Value = "N/A"
+                '            End If
+                '        Case "genre"
+                '            Dim newstring As String
+                '            newstring = thisresult.InnerText
+                '            newstring = newstring.TrimEnd("|")
+                '            newstring = newstring.TrimStart("|")
+                '            newstring = newstring.Replace("|", " / ")
+                '            WorkingTvShow.Genre.Value = newstring
+                '        Case "imdbid"
+                '            WorkingTvShow.ImdbId.Value = thisresult.InnerText
+                '        Case "studio"
+                '            WorkingTvShow.Studio.Value = thisresult.InnerText
+                '        Case "plot"
+                '            WorkingTvShow.Plot.Value = thisresult.InnerText
+                '        Case "rating"
+                '            WorkingTvShow.Rating.Value = thisresult.InnerText
+                '        Case "runtime"
+                '            WorkingTvShow.Runtime.Value = thisresult.InnerText
+                '        Case "banner"
+                '            bannerurl = thisresult.InnerText
+                '        Case "fanart"
+                '            fanarturl = thisresult.InnerText
+                '        Case "poster"
+                '            posterurl = thisresult.InnerText
+                '        Case "episodeguideurl"
+                '            WorkingTvShow.EpisodeGuideUrl.Value = ""
+                '            WorkingTvShow.Url.Value = thisresult.InnerText
+                '            WorkingTvShow.Url.Node.SetAttributeValue("cache", WorkingTvShow.TvdbId.Value)
+                '            WorkingTvShow.Url.AttachToParentNode(WorkingTvShow.EpisodeGuideUrl.Node)
+                '    End Select
+                'Next
+
+                'If RadioButton13.Checked = True Or WorkingTvShow.ImdbId = Nothing Then
+                '    TvGetActorTvdb(WorkingTvShow)
+                'End If
+
+                'If RadioButton12.Checked = True And WorkingTvShow.ImdbId <> Nothing Then
+                '    TvGetActorImdb(WorkingTvShow)
+                'End If
+
+                'Dim artdone As Boolean = False
+                'If cbTvChgShowOverwriteImgs.Checked Then
+                '    artdone = TvGetArtwork(WorkingTvShow, cbTvChgShowDLFanart.CheckState, cbTvChgShowDLPoster.CheckState, cbTvChgShowDLSeason.CheckState, Preferences.dlTVxtrafanart)
+                '    'artdone = True
+                'End If
+
+                'Dim artlist As New List(Of TvBanners)
+                'If artdone = False Then
+                '    Dim thumblist As String = tvdbstuff.GetPosterList(listOfShows(ListBox3.SelectedIndex).showid)
+                '    showlist.LoadXml(thumblist)
+                '    artdone = True
+                '    thisresult = Nothing
+                '    'CheckBox3 = seasons
+                '    'CheckBox4 = fanart
+                '    'CheckBox5 = poster
+                '    For Each thisresult In showlist("banners")
+                '        Select Case thisresult.Name
+                '            Case "banner"
+                '                Dim individualposter As New TvBanners
+                '                For Each results In thisresult.ChildNodes
+                '                    Select Case results.Name
+                '                        Case "url"
+                '                            individualposter.Url = results.InnerText
+                '                        Case "bannertype"
+                '                            individualposter.BannerType = results.InnerText
+                '                        Case "resolution"
+                '                            individualposter.Resolution = results.InnerText
+                '                        Case "language"
+                '                            individualposter.Language = results.InnerText
+                '                        Case "season"
+                '                            individualposter.Season = results.InnerText
+                '                    End Select
+                '                Next
+                '                artlist.Add(individualposter)
+                '        End Select
+                '    Next
+                'End If
+                'For Each url In artlist
+                '    If url.BannerType <> "fanart" Then
+                '        WorkingTvShow.posters.Add(url.Url)
+                '    Else
+                '        WorkingTvShow.fanart.Add(url.Url)
+                '    End If
+                'Next
+
+                'nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True, "unlocked")
+                'Call tv_ShowLoad(WorkingTvShow)
+                'messbox.Close()
+                'TabControl3.SelectedIndex = 0
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -11994,25 +12002,52 @@ Public Class Form1
         For Each item In ListBox5.Items
             tvRootFolders.Add(item)
         Next
+
         Preferences.SaveConfig()
-        'Call updatetree()
-        If newTvFolders.Count = 0 Then
-            'MsgBox("Changes Saved")
-            If Not bckgrnd_tvshowscraper.IsBusy Then
-                ' if this is not here, the tree view does not update correctly if the shows were removed.
-                ' ^^^ - not sure this statement is valid anymore; newTvFolders.Count = 0 does not execute
-                '       anything in bckgrnd_tvshowscraper.DoWork() - HueyHQ 20Feb2013
-                bckgrnd_tvshowscraper.RunWorkerAsync()
-            End If
+
+        bckgrnd_tvshowscraper_Run()
+
+        'If Not bckgrnd_tvshowscraper.IsBusy Then
+        '    If newTvFolders.Count > 0 Then
+        '        ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
+        '        ToolStripStatusLabel5.Visible = True
+        '    End If
+        '    bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
+        'End If
+
+        ''Call updatetree()
+        'If newTvFolders.Count = 0 Then
+        '    'MsgBox("Changes Saved")
+        '    If Not bckgrnd_tvshowscraper.IsBusy Then
+        '        ' if this is not here, the tree view does not update correctly if the shows were removed.
+        '        ' Required so .RunWorkerCompleted is called to update cache and Treeview.
+        '        bckgrnd_tvshowscraper.RunWorkerAsync()
+        '    End If
+        'Else
+        '    'MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
+        '    If Not bckgrnd_tvshowscraper.IsBusy Then
+        '        ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
+        '        ToolStripStatusLabel5.Visible = True
+        '        bckgrnd_tvshowscraper.RunWorkerAsync()
+        '    End If
+        'End If
+        'Me.Focus()
+    End Sub
+
+    Public Sub bckgrnd_tvshowscraper_Run(Optional ByVal GivenTvdbId As String = "")
+        If GivenTvdbId <> "" Then
+            _possibleTVDBId = GivenTvdbId 
         Else
-            'MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
-            If Not bckgrnd_tvshowscraper.IsBusy Then
+            _possibleTVDBId = ""
+        End If
+        If Not bckgrnd_tvshowscraper.IsBusy Then
+            If newTvFolders.Count > 0 Then
                 ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
                 ToolStripStatusLabel5.Visible = True
-                bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
+            bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
         End If
-        'Me.Focus()
+
     End Sub
 
     Private Sub btn_TvFoldersBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersBrowse.Click
@@ -14037,8 +14072,10 @@ Public Class Form1
         Try
             ToolStripStatusLabel5.Text = "Saving data"
             Tv_CacheSave()
-            ToolStripStatusLabel5.Text = "Populating shows"
-            tv_CacheRefresh()
+            tv_CacheLoad()
+            tv_Filter()
+            'ToolStripStatusLabel5.Text = "Populating shows"
+            'tv_CacheRefresh()
             ToolStripStatusLabel5.Visible = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

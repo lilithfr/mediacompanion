@@ -755,7 +755,9 @@ Public Class ucMusicVideo
 
         Call loadMusicVideolist()
         Try
-            lstBxMainList.SelectedIndex = 0
+            If lstBxMainList.Items.Count > 0 Then
+                lstBxMainList.SelectedIndex = 0
+            End If
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
