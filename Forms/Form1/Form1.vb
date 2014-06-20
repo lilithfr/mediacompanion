@@ -8264,7 +8264,9 @@ Public Class Form1
         If WorkingTvShow.TvdbId.Value.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
         If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
+            Dim selectednode As Integer = TvTreeview.SelectedNode.Index 
             tv_Rescrape_Show(WorkingTvShow)
+            TvTreeview.SelectedNode = TvTreeview.Nodes(selectednode)
         Else
             'its an episode
             tv_Rescrape_Episode(WorkingTvShow, WorkingEpisode)
