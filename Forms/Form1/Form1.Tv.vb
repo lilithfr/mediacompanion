@@ -402,7 +402,7 @@ Partial Public Class Form1
 
 #End Region
 
-    Sub tv_Rescrape_Show(ByRef WorkingTvShow, ByRef WorkingEpisode)
+    Sub tv_Rescrape_Show(ByVal WorkingTvShow)
         Dim tempint As Integer = 0
         Dim tempstring As String = ""
         tempint = MessageBox.Show("Rescraping the TV Show will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -416,40 +416,11 @@ Partial Public Class Form1
         Application.DoEvents()
         Dim langu As String = WorkingTvShow.Language.Value
         If langu = "" Then langu = "en"
-
-
+        
         If Preferences.tvshow_useXBMC_Scraper = True Then
-
             Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.TvdbId.Value, langu, WorkingTvShow.NfoFilePath)
             If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
             Call tv_ShowLoad(WorkingTvShow)
-            For Each item As TvShow In Cache.TvCache.Shows
-                If item.NfoFilePath = WorkingTvShow.NfoFilePath Then
-                    Dim newitem As New TvShow
-                    For Each episode In item.Episodes
-                        newitem.AddEpisode(episode)
-                    Next
-                    newitem.NfoFilePath = item.NfoFilePath
-                    newitem.Status.Value = "ok"
-                    newitem.EpisodeActorSource = item.EpisodeActorSource
-                    newitem.Genre = WorkingTvShow.Genre
-                    newitem.ImdbId = WorkingTvShow.ImdbId
-                    newitem.Language = WorkingTvShow.Language
-                    newitem.Rating = WorkingTvShow.Rating
-                    newitem.SortOrder = WorkingTvShow.SortOrder
-                    newitem.Title = WorkingTvShow.Title
-                    'newitem.titleandyear = item.titleandyear
-                    newitem.TvdbId = WorkingTvShow.TvdbId
-                    newitem.Year = WorkingTvShow.Year
-                    'TvShows.Remove(item)
-                    'TvShows.Add(newitem)
-                    'Call populatetvtree()
-                    Exit For
-                End If
-            Next
-            messbox.Close()
-            TabControl3.SelectedIndex = 0
-            Exit Sub
         Else
             Cache.TvCache.Remove(WorkingTvShow)
             newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
@@ -457,7 +428,6 @@ Partial Public Class Form1
             While bckgrnd_tvshowscraper.IsBusy
                 Application.DoEvents 
             End While
-            messbox.Close()
 '            Dim tvdbstuff As New TVDBScraper
 '            Dim tvshowxmlstring As String = tvdbstuff.GetShow(WorkingTvShow.TvdbId.Value, langu)
 '            If tvshowxmlstring = "!!!Error!!!" Then
@@ -641,6 +611,8 @@ Partial Public Class Form1
 '            Next
 '            messbox.Close()
         End If
+        messbox.Close()
+        TabControl3.SelectedIndex = 0
     End Sub
 
 

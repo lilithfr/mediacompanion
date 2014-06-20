@@ -8235,7 +8235,7 @@ Public Class Form1
         If WorkingTvShow.TvdbId.Value.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
         If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
-            tv_Rescrape_Show(WorkingTvShow, WorkingEpisode)
+            tv_Rescrape_Show(WorkingTvShow)
         Else
             'its an episode
             tv_Rescrape_Episode(WorkingTvShow, WorkingEpisode)
@@ -8243,7 +8243,7 @@ Public Class Form1
         'Tv_CacheSave()
         'tv_CacheLoad()
         'Dim show As String = WorkingTvShow.Title.Value
-        tv_CacheRefresh(WorkingTvShow)
+        'tv_CacheRefresh(WorkingTvShow)
 
         If Not tv_IMDbID_warned And tv_IMDbID_detected Then
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
