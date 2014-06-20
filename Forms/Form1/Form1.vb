@@ -154,6 +154,7 @@ Public Class Form1
     Dim maximised As Boolean = False
     Public imdbCounter As Integer = 0
     Dim tootip5 As New ToolTip
+    'Dim tvbannerExclude As Boolean = False
 
     Dim prefsload As Boolean = False
 
@@ -1058,6 +1059,7 @@ Public Class Form1
             Preferences.splt4 = SplitContainer4.SplitterDistance
             Preferences.splt5 = SplitContainer5.SplitterDistance
             Preferences.splt6 = _tv_SplitContainer.SplitterDistance 
+            Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.height, 2)
             Preferences.MovFiltLastSize = SplitContainer5.Height - SplitContainer5.SplitterDistance
 
 
@@ -1120,6 +1122,11 @@ Public Class Form1
         Try
             If Me.WindowState = FormWindowState.Maximized Then
                 mov_SplitContainerAutoPosition()
+                'tvbannerExclude = True
+                tv_SplitContainerAutoPosition()
+            End If
+            If Not Me.WindowState = FormWindowState.Minimized Then
+                'tvbannerExclude = True
                 tv_SplitContainerAutoPosition()
             End If
             If startup = False Then
@@ -1225,10 +1232,32 @@ Public Class Form1
         End Try
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
         Try     'Try Catch for minimize of MC when Full-screen
-            _tv_SplitContainer.SplitterDistance = HorizontalSplit
+            If _tv_SplitContainer.Height > 100 Then
+                If Preferences.tvbannersplit = 0 Then
+                    'tvbannerExclude = True
+                    _tv_SplitContainer.SplitterDistance = HorizontalSplit
+                Else
+                    'tvbannerExclude = True
+                    _tv_SplitContainer.SplitterDistance = _tv_SplitContainer.Height * Preferences.tvbannersplit 
+                End If
+            End If
         Catch
         End Try
     End Sub
+
+    'Private sub tvsplitcontResize() Handles _tv_SplitContainer.Resize
+    '    tvbannerExclude = True
+    'End Sub
+
+    'Private Sub tvbannersplitchange(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles _tv_SplitContainer.SplitterMoved
+
+    '    If Not MainFormLoadedStatus Then Exit Sub
+    '    If tvbannerExclude Then
+    '        tvbannerExclude = False
+    '        Exit Sub
+    '    End If
+    '    Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance/_tv_SplitContainer.Height)
+    'End Sub
 
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
         Try
@@ -21523,8 +21552,8 @@ Public Class Form1
         If MsgBox(" Are you sure you wish to delete" & vbCrLf & ".nfo, Fanart, Poster and Actors for" & vbCrLf & "Selected Movie(s)?",MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
             Dim movielist As New List(Of String)
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-                movielist.Add(row.Cells(4).Value.ToString)
-                oMovies.DeleteScrapedFiles(row.Cells(4).Value.ToString)
+                movielist.Add(row.Cells(NFO_INDEX).Value.ToString)
+                oMovies.DeleteScrapedFiles(row.Cells(NFO_INDEX).Value.ToString)
             Next
 
             'Last remove from dataGridViewMovies and update cache.

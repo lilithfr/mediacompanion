@@ -110,7 +110,8 @@ Public Class Preferences
     Public Shared splt3 As Integer
     Public Shared splt4 As Integer
     Public Shared splt5 As Integer
-    Public Shared splt6 As Integer  'Tv Banner Split distance
+    Public Shared splt6 As Integer  'Tv Banner Split distance  -  To be superceeded by tvbannersplit
+    Public Shared tvbannersplit As Double  ' Banner as Percentage
     Public Shared maximised As Boolean
     Public Shared startuptab As Byte
     Public Shared logview As Integer
@@ -516,6 +517,7 @@ Public Class Preferences
         formwidth = 1060
         splt5 = 0
         splt6 = 230
+        tvbannersplit = 0
         showsortdate = False
         XBMC_version = 0
         'Proxy settings
@@ -782,6 +784,7 @@ Public Class Preferences
         root.AppendChild(doc, "splitcontainer4",            splt4)
         root.AppendChild(doc, "splitcontainer5",            splt5)
         root.AppendChild(doc, "splitcontainer6",            splt6)
+        root.AppendChild(doc, "tvbannersplit",              tvbannersplit)
         root.AppendChild(doc, "maximised",                  maximised)
         root.AppendChild(doc, "startuptab",                 startuptab)
         root.AppendChild(doc, "logview",                    logview)
@@ -1213,6 +1216,7 @@ Public Class Preferences
                     Case "splitcontainer4"                      : splt4 = Convert.ToInt32(thisresult.InnerText)
                     Case "splitcontainer5"                      : splt5 = Convert.ToInt32(thisresult.InnerText)
                     Case "splitcontainer6"                      : splt6 = Convert.ToInt32(thisresult.InnerText)
+                    Case "tvbannersplit"                        : tvbannersplit = Convert.ToDouble(thisresult.InnerText)
                     Case "maximised"                            : maximised = thisresult.InnerXml
                     Case "locx"                                 : locx = Convert.ToInt32(thisresult.InnerText)
                     Case "locy"                                 : locy = Convert.ToInt32(thisresult.InnerText)

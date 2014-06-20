@@ -137,7 +137,7 @@ Partial Public Class Form1
                 MsgBox("None")
             End If
 
-            tv_SplitContainerAutoPosition() 'auto set container splits....after we have loaded data & pictures....
+            'tv_SplitContainerAutoPosition() 'auto set container splits....after we have loaded data & pictures....
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
