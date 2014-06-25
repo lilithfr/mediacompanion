@@ -134,6 +134,7 @@ Public Class Form1
     Public scraperLog As String = ""
     Public NewTagList As New List(Of String)
     Public MovieSearchEngine As String = "imdb"
+    Dim mov_TableColumnName As String = ""
 
     Public cropMode As String = "movieposter"
 
@@ -15558,10 +15559,29 @@ Public Class Form1
             Next
         Next f
 
-        For h = 0 to DataGridView1.Columns.Count-1
-            mov_TableEditDGV3.Columns.Add(DataGridView1.Columns(h).Clone())
+        'For h = 0 to DataGridView1.Columns.Count-1
+        For Each dgvCol As DataGridViewColumn In DataGridView1.columns
+            Dim dgvNewCol As New DataGridViewColumn
+            dgvNewCol = DirectCast(dgvCol.Clone(), DataGridViewColumn)
+            dgvNewCol.CellTemplate = DirectCast(dgvCol.CellTemplate, DataGridViewCell)
+            If dgvNewCol.Name = "plot" Or dgvNewCol.Name = "outline" Then
+                dgvNewCol.ReadOnly = True
+                dgvNewCol.DefaultCellStyle.BackColor = System.Drawing.Color.gray
+            End If
+            mov_TableEditDGV3.Columns.Add(dgvNewCol)
         Next
-        mov_TableEditDGV3.RowHeadersWidth = DataGridView1.RowHeadersWidth 
+        mov_TableEditDGV3.RowHeadersWidth = DataGridView1.RowHeadersWidth
+        mov_TableEditDGV3.ClearSelection 
+        mov_TableEditDGV3.ScrollBars = ScrollBars.None
+
+        Dim emptydata As String = FillEmptydoc().InnerXml 
+        Dim XMLreader3 As StringReader = New System.IO.StringReader(emptydata)
+
+        ' Create the Empty dataset
+        Dim emptydataset As DataSet = New DataSet
+        emptydataset.ReadXml(XMLreader3)
+        XMLreader3.Dispose()
+        mov_TableEditDGV3.DataSource = emptydataset.tables(0)
 
         Cmbobx_tablewatched.Items.Add("UnChanged")
         Cmbobx_tablewatched.Items.Add("Watched")
@@ -15613,9 +15633,55 @@ Public Class Form1
 #End If
         End Try
     End Sub
-    Private Sub DataGridView1_ColumnMove() Handles DataGridView1.ColumnDisplayIndexChanged
+    
+    Private Sub dataGridViews1_Scroll(sender As Object, e As ScrollEventArgs) Handles DataGridView1.Scroll 
+	    Dim offSetValue As Integer = DataGridView1.HorizontalScrollingOffset
 
-    End Sub
+	    Try
+		    mov_TableEditDGV3.HorizontalScrollingOffset = offSetValue
+	    Catch
+	    End Try
+
+	    DataGridView1.Invalidate()
+End Sub
+
+    Private Function FillEmptyDoc() As XmlDocument
+        Dim doc As New XmlDocument
+
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc As XmlDeclaration
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        Dim root As XmlElement
+        Dim child As XmlElement
+        root = doc.CreateElement("movie_cache")
+        Dim childchild As XmlElement
+        child = doc.CreateElement("movie")
+        childchild = doc.CreateElement("filedate") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("missingdata1") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("filename") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("foldername") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("set") : childchild.InnerText = "-None-" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("source") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("genre") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("id") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("playcount") : childchild.InnerText = "False" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("rating") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("title") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("outline") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("plot") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("sortorder") : childchild.InnerText = "" : child.AppendChild(childchild)
+
+        'childchild = doc.CreateElement("titleandyear") : childchild.InnerText = movie.titleandyear : child.AppendChild(childchild)
+
+        childchild = doc.CreateElement("runtime") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("top250") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("year") : childchild.InnerText = "" : child.AppendChild(childchild)
+        root.AppendChild(child)
+        doc.AppendChild(root)
+        Return doc
+    End Function
 
     Private Sub mov_TableChangesSave()
 
@@ -16139,7 +16205,8 @@ Public Class Form1
 
     Private Sub DataGridView1_ColumnDisplayIndexChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnDisplayIndexChanged
         Try
-            Call mov_TextBoxesSetup()
+
+            'Call mov_TextBoxesSetup()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -16147,38 +16214,51 @@ Public Class Form1
 
     Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
         Try
-            Call mov_TextBoxesSetup()
+            mov_TableEditDGV3.Columns(e.Column.Index).Width = e.Column.Width
+            'Call mov_TextBoxesSetup()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    'Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
-    '    Try
-    '        Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
-    '        If e.Button = Windows.Forms.MouseButtons.Right Then
-    '            If DataGridView1.SelectedRows.Count < 2 Then
 
-    '                If hti.Type = DataGridViewHitTestType.Cell Then
+    Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
+        Try
+            Dim ColIndexFromMouseDown = DataGridView1.HitTest(e.X, e.Y).ColumnIndex 
+            mov_TableColumnName = DataGridView1.Columns(ColIndexFromMouseDown).Name
 
-    '                    If Not DataGridView1.Rows(hti.RowIndex).Selected Then
+            'Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
+            'If e.Button = Windows.Forms.MouseButtons.Right Then
+            '    If DataGridView1.SelectedRows.Count < 2 Then
 
-    '                        ' User right clicked a row that is not selected, so throw away all other selections and select this row
+            '        If hti.Type = DataGridViewHitTestType.Cell Then
 
-    '                        DataGridView1.ClearSelection()
+            '            If Not DataGridView1.Rows(hti.RowIndex).Selected Then
 
-    '                        DataGridView1.Rows(hti.RowIndex).Selected = True
-    '                    End If
-    '                End If
+            '                ' User right clicked a row that is not selected, so throw away all other selections and select this row
 
-    '            End If
-    '        ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
-    '            DataGridView1.Rows(hti.RowIndex).Selected = True
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
+            '                DataGridView1.ClearSelection()
+
+            '                DataGridView1.Rows(hti.RowIndex).Selected = True
+            '            End If
+            '        End If
+
+            '    End If
+            'ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
+            '    DataGridView1.Rows(hti.RowIndex).Selected = True
+            'End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridView1.DragDrop
+        Dim ColNewIndex = DataGridView1.Columns.Contains(mov_TableColumnName)
+        Dim EditTableCol = mov_TableEditDGV3.Columns.Contains(mov_TableColumnName)
+        If EditTableCol = -1 Then
+
+        End If
+    End Sub
 
     Private Sub DataGridView1_RowHeadersWidthChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.RowHeadersWidthChanged
         Try
