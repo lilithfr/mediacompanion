@@ -14865,18 +14865,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub btnTableColumnsSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTableColumnsSelect.Click
-        Try
-            Dim frm As New frmConfigureTableColumns
-            frm.Init()
-            frm.ShowDialog()
-            mov_TableSetup()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
     Public Function Yield(yielding As Boolean) As Boolean
         If yielding Then
             Application.DoEvents
@@ -14885,6 +14873,189 @@ Public Class Form1
         Return False
     End Function
 
+    Private Sub util_FontSetup()
+        If Preferences.font <> Nothing Then
+            If Preferences.font <> "" Then
+                Try
+                    Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+                    Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
+                    genretxt.Font = newFont
+                    premiertxt.Font = newFont 
+                    certtxt.Font = newFont
+                    directortxt.Font = newFont
+                    creditstxt.Font = newFont
+                    outlinetxt.Font = newFont
+                    runtimetxt.Font = newFont
+                    studiotxt.Font = newFont
+                    taglinetxt.Font = newFont
+                    cbMovieDisplay_Actor.Font = newFont
+                    roletxt.Font = newFont
+                    pathtxt.Font = newFont
+                    'CheckedListBox1.Font = newFont
+                    TextBox34.Font = newFont
+                    DataGridViewMovies.Font = newFont
+                    plottxt.Font = newFont
+                    txtStars.Font = newFont
+                    'titletxt.Font = newFont
+                    'setsTxt.Font = newFont
+                    cbMovieDisplay_MovieSet.Font = newFont
+                    ComboBox5.Font = newFont
+                    TvTreeview.Font = newFont
+                    TextBox25.Font = newFont
+                    tb_EpDirector.Font = newFont
+                    tb_EpCredits.Font = newFont
+                    tb_EpPlot.Font = newFont
+                    tb_EpAired.Font = newFont
+                    tb_EpRating.Font = newFont
+                    tb_EpPath.Font = newFont
+                    tb_EpFilename.Font = newFont
+                    tb_ShPlot.Font = newFont
+                    cbTvActor.Font = newFont
+                    cbTvActorRole.Font = newFont
+                    tb_ShRunTime.Font = newFont
+                    tb_ShStudio.Font = newFont
+                    tb_ShPremiered.Font = newFont
+                    tb_ShRating.Font = newFont
+                    tb_ShTvdbId.Font = newFont
+                    tb_ShGenre.Font = newFont
+                    tb_ShImdbId.Font = newFont
+                    tb_ShCert.Font = newFont
+
+                    ratingtxt.Font = newFont
+                    votestxt.Font = newFont
+                    top250txt.Font = newFont
+                    imdbtxt.Font = newFont
+                    cbFilterGeneral.Font = newFont
+                    cbFilterGenre.Font = newFont
+                    cbFilterSet.Font = newFont
+                    cbFilterActor.Font = newFont
+                    cbFilterTag.Font = newFont
+                    cbFilterDirector.Font = newFont
+                    cbFilterSource.Font = newFont
+                    cbFilterResolution.Font = newFont
+                    cbFilterVideoCodec.Font = newFont
+                    cbFilterAudioCodecs.Font = newFont
+                    cbFilterAudioLanguages.Font = newFont
+                    cbFilterAudioBitrates .Font = newFont
+                    cbFilterAudioChannels .Font = newFont
+                    cbFilterNumAudioTracks.Font = newFont
+                    cbFilterCertificate   .Font = newFont
+                    LabelCountFilter.Font = newFont
+
+                    Me.Refresh()
+                    Application.DoEvents()
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+            End If
+        End If
+
+
+    End Sub
+
+    Private Sub langarrsetup()
+        Dim strfilename As String
+        Dim num_rows As Long
+        Dim num_cols As Long
+        Dim x As Integer
+        Dim y As Integer
+        strfilename = applicationPath & "\Assets\" & "test.csv"
+        If File.Exists(strfilename) Then
+            Dim tmpstream As StreamReader = File.OpenText(strfilename)
+            Dim strlines() As String
+            Dim strline() As String
+
+            strlines = tmpstream.ReadToEnd().Split(Environment.NewLine)
+
+            num_rows = UBound(strlines)
+            strline = strlines(0).Split(",")
+            num_cols = UBound(strline)
+
+            ' Copy the data into the array.
+            For x = 0 To num_rows-1
+                strline = strlines(x).Split(",")
+                For y = 0 To num_cols
+                    langarray(x, y) = strline(y)
+                Next
+            Next
+
+
+        End If
+
+    End Sub
+
+    Private Sub ListBox_tv_RegexScrape_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox_tv_RegexScrape.SelectedIndexChanged
+        Try
+            If ListBox_tv_RegexScrape.SelectedItem <> Nothing Then
+                TextBox_tv_RegexScrape_Edit.Text = ListBox_tv_RegexScrape.SelectedItem
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub ListBox_tv_RegexRename_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox_tv_RegexRename.SelectedIndexChanged
+        Try
+            If ListBox_tv_RegexRename.SelectedItem <> Nothing Then
+                TextBox_tv_RegexRename_Edit.Text = ListBox_tv_RegexRename.SelectedItem
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button96_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button96.Click
+        Try
+            Dim dlg As FontDialog = New FontDialog()
+            Dim res As DialogResult = dlg.ShowDialog()
+            If res = Windows.Forms.DialogResult.OK Then
+                Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+                Dim fontString As String = tc.ConvertToString(dlg.Font)
+
+                Preferences.font = fontString
+
+                Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+                Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
+
+                Label130.Font = newFont
+                Label130.Text = fontString
+                If prefsload = False Then
+                    generalprefschanged = True
+                    btnGeneralPrefsSaveChanges.Enabled = True
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#Region "Movie Table"
+
+    Private Sub tpMoviesTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Leave
+        DataGridView1.EndEdit()
+        Preferences.tableview.Clear()
+        For Each column In DataGridView1.Columns
+            Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
+            Preferences.tableview.Add(tempstring)
+        Next
+        If IsNothing(DataGridView1.SortedColumn) = False Then
+            Preferences.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
+            Preferences.SaveConfig()
+        End If
+
+        If DataDirty Then
+            Dim tempint As Integer = MessageBox.Show("You appear to have made changes to some of your movie details." & vbCrLf & vbCrLf & "Any changes will be lost if you do not save the changes now." & "                 Do wish to save the changes?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If tempint = DialogResult.Yes Then
+                Call mov_TableChangesSave()
+                MsgBox("Changes Saved")
+            End If
+        End If
+
+        DataDirty=False
+        btn_movTableSave.Enabled = DataDirty
+    End Sub
 
     Private Sub mov_TableViewSetup()
         Preferences.tableview.Clear()
@@ -14907,6 +15078,7 @@ Public Class Form1
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
+        mov_TableEditDGV3.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tableview.Count < 5 Then
@@ -14933,6 +15105,7 @@ Public Class Form1
 
 
         DataGridView1.AutoGenerateColumns = False
+        mov_TableEditDGV3.AutoGenerateColumns = False
 
         Dim doc As New XmlDocument
 
@@ -14949,93 +15122,42 @@ Public Class Form1
 
 '        For Each movie In filteredList
         For Each row As DataGridViewRow In DataGridViewMovies.Rows
-
             Dim movie As Data_GridViewMovie = row.DataBoundItem
-
             child = doc.CreateElement("movie")
-            childchild = doc.CreateElement("filedate")
-            childchild.InnerText = movie.filedate
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("missingdata1")
-            childchild.InnerText = movie.missingdata1.ToString
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("filename")
-            childchild.InnerText = movie.filename
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("foldername")
-            childchild.InnerText = movie.foldername
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("fullpathandfilename")
-            childchild.InnerText = movie.fullpathandfilename
-            child.AppendChild(childchild)
+            childchild = doc.CreateElement("filedate") : childchild.InnerText = movie.filedate : child.AppendChild(childchild)
+            childchild = doc.CreateElement("missingdata1") : childchild.InnerText = movie.missingdata1.ToString : child.AppendChild(childchild)
+            childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
+            childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
+            childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
             If movie.movieset <> Nothing Then
                 If movie.movieset <> "" Then
-                    childchild = doc.CreateElement("set")
-                    childchild.InnerText = movie.movieset
-                    child.AppendChild(childchild)
+                    childchild = doc.CreateElement("set") : childchild.InnerText = movie.movieset : child.AppendChild(childchild)
                 Else
-                    childchild = doc.CreateElement("set")
-                    childchild.InnerText = "-None-"
-                    child.AppendChild(childchild)
+                    childchild = doc.CreateElement("set") : childchild.InnerText = "-None-" : child.AppendChild(childchild)
                 End If
             Else
-                childchild = doc.CreateElement("set")
-                childchild.InnerText = "-None-"
-                child.AppendChild(childchild)
+                childchild = doc.CreateElement("set") : childchild.InnerText = "-None-" : child.AppendChild(childchild)
             End If
             If movie.source <> Nothing And movie.source <> "" Then
-                childchild = doc.CreateElement("source")
-                childchild.InnerText = movie.source
-                child.AppendChild(childchild)
+                childchild = doc.CreateElement("source") : childchild.InnerText = movie.source : child.AppendChild(childchild)
             Else
-                childchild = doc.CreateElement("source")
-                childchild.InnerText = ""
-                child.AppendChild(childchild)
+                childchild = doc.CreateElement("source") : childchild.InnerText = "" : child.AppendChild(childchild)
             End If
-            childchild = doc.CreateElement("genre")
-            childchild.InnerText = movie.genre
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = movie.id
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("playcount")
-            childchild.InnerText = movie.playcount
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("rating")
-            childchild.InnerText = movie.Rating
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("title")
-            childchild.InnerText = movie.title
-            child.AppendChild(childchild)
-            If movie.SortOrder = Nothing Then
-                movie.SortOrder = movie.DisplayTitle
-            End If
-            If movie.SortOrder = "" Then
-                movie.SortOrder = movie.DisplayTitle
-            End If
-            childchild = doc.CreateElement("outline")
-            childchild.InnerText = movie.outline
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("plot")
-            childchild.InnerText = movie.plot
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("sortorder")
-            childchild.InnerText = movie.SortOrder
-            child.AppendChild(childchild)
+            childchild = doc.CreateElement("genre") : childchild.InnerText = movie.genre : child.AppendChild(childchild)
+            childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
+            childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
+            childchild = doc.CreateElement("rating") : childchild.InnerText = movie.Rating : child.AppendChild(childchild)
+            childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
+            If String.IsNullOrEmpty(movie.SortOrder) Then movie.SortOrder = movie.DisplayTitle
+            childchild = doc.CreateElement("outline") : childchild.InnerText = movie.outline : child.AppendChild(childchild)
+            childchild = doc.CreateElement("plot") : childchild.InnerText = movie.plot : child.AppendChild(childchild)
+            childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.SortOrder : child.AppendChild(childchild)
 
-            'childchild = doc.CreateElement("titleandyear")
-            'childchild.InnerText = movie.titleandyear
-            'child.AppendChild(childchild)
+            'childchild = doc.CreateElement("titleandyear") : childchild.InnerText = movie.titleandyear : child.AppendChild(childchild)
 
-            childchild = doc.CreateElement("runtime")
-            childchild.InnerText = movie.runtime
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("top250")
-            childchild.InnerText = movie.top250
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("year")
-            childchild.InnerText = movie.year
-            child.AppendChild(childchild)
+            childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
+            childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
+            childchild = doc.CreateElement("year") : childchild.InnerText = movie.year : child.AppendChild(childchild)
             root.AppendChild(child)
         Next
 
@@ -15077,10 +15199,7 @@ Public Class Form1
                             End If
                         End If
                         If chi.Name = "playcount" Then
-                            If chi.InnerText = "" Then
-                                chi.InnerText = "0"
-                            End If
-                            If Not IsNumeric(chi.InnerText) Then
+                            If chi.InnerText = "" Or Not IsNumeric(chi.InnerText) Then
                                 chi.InnerText = "0"
                             End If
                             Dim play As Integer = Convert.ToInt32(chi.InnerText)
@@ -15112,6 +15231,7 @@ Public Class Form1
         XMLreader2.Dispose()
 
         DataGridView1.DataSource = Nothing
+        mov_TableEditDGV3.DataSource = Nothing
 
         Try
             DataGridView1.DataSource = newDS.Tables(0)
@@ -15319,7 +15439,6 @@ Public Class Form1
                         Case "sorttitle"
                             sorttitlecolumn.Width = col.width
                             If col.visible = True Then
-                                CheckBox21.CheckState = CheckState.Checked
                                 sorttitlecolumn.Visible = True
                             Else
                                 sorttitlecolumn.Visible = False
@@ -15330,7 +15449,6 @@ Public Class Form1
                             genrecolumn.Width = col.width
                             If col.visible = True Then
                                 genrecolumn.Visible = True
-                                CheckBox28.CheckState = CheckState.Checked
                             Else
                                 genrecolumn.Visible = False
                             End If
@@ -15340,7 +15458,6 @@ Public Class Form1
                             ratingcolumn.Width = col.width
                             If col.visible = True Then
                                 ratingcolumn.Visible = True
-                                CheckBox26.CheckState = CheckState.Checked
                             Else
                                 ratingcolumn.Visible = False
                             End If
@@ -15349,7 +15466,6 @@ Public Class Form1
                         Case "runtime"
                             runtimecolumn.Width = col.width
                             If col.visible = True Then
-                                CheckBox31.CheckState = CheckState.Checked
                                 runtimecolumn.Visible = True
                             Else
                                 runtimecolumn.Visible = False
@@ -15359,7 +15475,6 @@ Public Class Form1
                         Case "top250"
                             top250column.Width = col.width
                             If col.visible = True Then
-                                CheckBox29.CheckState = CheckState.Checked
                                 top250column.Visible = True
                             Else
                                 top250column.Visible = False
@@ -15370,7 +15485,6 @@ Public Class Form1
                             sourcecolumn.Width = col.width
                             If col.visible = True Then
                                 sourcecolumn.Visible = True
-                                CheckBox37.CheckState = CheckState.Checked
                             Else
                                 sourcecolumn.Visible = False
                             End If
@@ -15380,7 +15494,6 @@ Public Class Form1
                             watchedcolumn.Width = col.width
                             If col.visible = True Then
                                 watchedcolumn.Visible = True
-                                CheckBox25.CheckState = CheckState.Checked
                             Else
                                 watchedcolumn.Visible = False
                             End If
@@ -15390,8 +15503,6 @@ Public Class Form1
                             setscolumn.Width = col.width
                             If col.visible = True Then
                                 setscolumn.Visible = True
-                                CheckBox30.CheckState = CheckState.Checked
-                                'setscolumn.Visible = False
                             Else
                                 setscolumn.Visible = False
                             End If
@@ -15401,7 +15512,6 @@ Public Class Form1
                             outlinecolumn.Width = col.width
                             If col.visible = True Then
                                 outlinecolumn.Visible = True
-                                CheckBox27.CheckState = CheckState.Checked
                             Else
                                 outlinecolumn.Visible = False
                             End If
@@ -15411,7 +15521,6 @@ Public Class Form1
                             plotcolumn.Width = col.width
                             If col.visible = True Then
                                 plotcolumn.Visible = True
-                                CheckBox42.CheckState = CheckState.Checked
                             Else
                                 plotcolumn.Visible = False
                             End If
@@ -15420,7 +15529,6 @@ Public Class Form1
                         Case "id"
                             idcolumn.Width = col.width
                             If col.visible = True Then
-                                CheckBox24.CheckState = CheckState.Checked
                                 idcolumn.Visible = True
                             Else
                                 idcolumn.Visible = False
@@ -15430,7 +15538,6 @@ Public Class Form1
                         Case "missingdata1"
                             artcolumn.Width = col.width
                             If col.visible = True Then
-                                CheckBox32.CheckState = CheckState.Checked
                                 artcolumn.Visible = True
                             Else
                                 artcolumn.Visible = False
@@ -15440,7 +15547,6 @@ Public Class Form1
                         Case "fullpathandfilename"
                             pathcolumn.Width = col.width
                             If col.visible = True Then
-                                CheckBox23.CheckState = CheckState.Checked
                                 pathcolumn.Visible = True
                             Else
                                 pathcolumn.Visible = False
@@ -15451,6 +15557,11 @@ Public Class Form1
                 End If
             Next
         Next f
+
+        For h = 0 to DataGridView1.Columns.Count-1
+            mov_TableEditDGV3.Columns.Add(DataGridView1.Columns(h).Clone())
+        Next
+        mov_TableEditDGV3.RowHeadersWidth = DataGridView1.RowHeadersWidth 
 
         Cmbobx_tablewatched.Items.Add("UnChanged")
         Cmbobx_tablewatched.Items.Add("Watched")
@@ -15502,300 +15613,11 @@ Public Class Form1
 #End If
         End Try
     End Sub
-
-    Private Sub util_FontSetup()
-        If Preferences.font <> Nothing Then
-            If Preferences.font <> "" Then
-                Try
-                    Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                    Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
-                    genretxt.Font = newFont
-                    premiertxt.Font = newFont 
-                    certtxt.Font = newFont
-                    directortxt.Font = newFont
-                    creditstxt.Font = newFont
-                    outlinetxt.Font = newFont
-                    runtimetxt.Font = newFont
-                    studiotxt.Font = newFont
-                    taglinetxt.Font = newFont
-                    cbMovieDisplay_Actor.Font = newFont
-                    roletxt.Font = newFont
-                    pathtxt.Font = newFont
-                    'CheckedListBox1.Font = newFont
-                    TextBox34.Font = newFont
-                    DataGridViewMovies.Font = newFont
-                    plottxt.Font = newFont
-                    txtStars.Font = newFont
-                    'titletxt.Font = newFont
-                    'setsTxt.Font = newFont
-                    cbMovieDisplay_MovieSet.Font = newFont
-                    ComboBox5.Font = newFont
-                    TvTreeview.Font = newFont
-                    TextBox25.Font = newFont
-                    tb_EpDirector.Font = newFont
-                    tb_EpCredits.Font = newFont
-                    tb_EpPlot.Font = newFont
-                    tb_EpAired.Font = newFont
-                    tb_EpRating.Font = newFont
-                    tb_EpPath.Font = newFont
-                    tb_EpFilename.Font = newFont
-                    tb_ShPlot.Font = newFont
-                    cbTvActor.Font = newFont
-                    cbTvActorRole.Font = newFont
-                    tb_ShRunTime.Font = newFont
-                    tb_ShStudio.Font = newFont
-                    tb_ShPremiered.Font = newFont
-                    tb_ShRating.Font = newFont
-                    tb_ShTvdbId.Font = newFont
-                    tb_ShGenre.Font = newFont
-                    tb_ShImdbId.Font = newFont
-                    tb_ShCert.Font = newFont
-
-                    ratingtxt.Font = newFont
-                    votestxt.Font = newFont
-                    top250txt.Font = newFont
-                    imdbtxt.Font = newFont
-                    cbFilterGeneral.Font = newFont
-                    cbFilterGenre.Font = newFont
-                    cbFilterSet.Font = newFont
-                    cbFilterActor.Font = newFont
-                    cbFilterTag.Font = newFont
-                    cbFilterDirector.Font = newFont
-                    cbFilterSource.Font = newFont
-                    cbFilterResolution.Font = newFont
-                    cbFilterVideoCodec.Font = newFont
-                    cbFilterAudioCodecs.Font = newFont
-                    cbFilterAudioLanguages.Font = newFont
-                    cbFilterAudioBitrates .Font = newFont
-                    cbFilterAudioChannels .Font = newFont
-                    cbFilterNumAudioTracks.Font = newFont
-                    cbFilterCertificate   .Font = newFont
-                    LabelCountFilter.Font = newFont
-
-                    Me.Refresh()
-                    Application.DoEvents()
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-            End If
-        End If
-
+    Private Sub DataGridView1_ColumnMove() Handles DataGridView1.ColumnDisplayIndexChanged
 
     End Sub
 
-    Private Sub langarrsetup()
-        Dim strfilename As String
-        Dim num_rows As Long
-        Dim num_cols As Long
-        Dim x As Integer
-        Dim y As Integer
-        strfilename = applicationPath & "\Assets\" & "test.csv"
-        If File.Exists(strfilename) Then
-            Dim tmpstream As StreamReader = File.OpenText(strfilename)
-            Dim strlines() As String
-            Dim strline() As String
-
-            strlines = tmpstream.ReadToEnd().Split(Environment.NewLine)
-
-            num_rows = UBound(strlines)
-            strline = strlines(0).Split(",")
-            num_cols = UBound(strline)
-
-            ' Copy the data into the array.
-            For x = 0 To num_rows-1
-                strline = strlines(x).Split(",")
-                For y = 0 To num_cols
-                    langarray(x, y) = strline(y)
-                Next
-            Next
-
-
-        End If
-
-    End Sub
-
-    Private Sub ListBox_tv_RegexScrape_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox_tv_RegexScrape.SelectedIndexChanged
-        Try
-            If ListBox_tv_RegexScrape.SelectedItem <> Nothing Then
-                TextBox_tv_RegexScrape_Edit.Text = ListBox_tv_RegexScrape.SelectedItem
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ListBox_tv_RegexRename_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox_tv_RegexRename.SelectedIndexChanged
-        Try
-            If ListBox_tv_RegexRename.SelectedItem <> Nothing Then
-                TextBox_tv_RegexRename_Edit.Text = ListBox_tv_RegexRename.SelectedItem
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button96_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button96.Click
-        Try
-            Dim dlg As FontDialog = New FontDialog()
-            Dim res As DialogResult = dlg.ShowDialog()
-            If res = Windows.Forms.DialogResult.OK Then
-                Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                Dim fontString As String = tc.ConvertToString(dlg.Font)
-
-                Preferences.font = fontString
-
-                Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
-
-                Label130.Font = newFont
-                Label130.Text = fontString
-                If prefsload = False Then
-                    generalprefschanged = True
-                    btnGeneralPrefsSaveChanges.Enabled = True
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub tpMoviesTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Leave
-        DataGridView1.EndEdit()
-        Preferences.tableview.Clear()
-        For Each column In DataGridView1.Columns
-            Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
-            Preferences.tableview.Add(tempstring)
-        Next
-        If IsNothing(DataGridView1.SortedColumn) = False Then
-            Preferences.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
-            Preferences.SaveConfig()
-        End If
-
-        If DataDirty Then
-            Dim tempint As Integer = MessageBox.Show("You appear to have made changes to some of your movie details." & vbCrLf & vbCrLf & "Any changes will be lost if you do not save the changes now." & "                 Do wish to save the changes?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If tempint = DialogResult.Yes Then
-                Call mov_TableChangesSave()
-                MsgBox("Changes Saved")
-            End If
-        End If
-
-        DataDirty=False
-        btn_movTableSave.Enabled = DataDirty
-    End Sub
-
-    Private Sub CheckBox21_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox21.CheckedChanged
-        If CheckBox21.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("sorttitle")) = False Then DataGridView1.Columns("sorttitle").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("sorttitle")) = False Then DataGridView1.Columns("sorttitle").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox23_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox23.CheckedChanged
-        If CheckBox23.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("fullpathandfilename")) = False Then DataGridView1.Columns("fullpathandfilename").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("fullpathandfilename")) = False Then DataGridView1.Columns("fullpathandfilename").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox24_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox24.CheckedChanged
-        If CheckBox24.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("id")) = False Then DataGridView1.Columns("id").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("id")) = False Then DataGridView1.Columns("id").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox25_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox25.CheckedChanged
-        If CheckBox25.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("playcount")) = False Then DataGridView1.Columns("playcount").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("playcount")) = False Then DataGridView1.Columns("playcount").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox26_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox26.CheckedChanged
-        If CheckBox26.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("rating")) = False Then DataGridView1.Columns("rating").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("rating")) = False Then DataGridView1.Columns("rating").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox27_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox27.CheckedChanged
-        If CheckBox27.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("outline")) = False Then DataGridView1.Columns("outline").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("outline")) = False Then DataGridView1.Columns("outline").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox28_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox28.CheckedChanged
-        If CheckBox28.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("genre")) = False Then DataGridView1.Columns("genre").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("genre")) = False Then DataGridView1.Columns("genre").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox29_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox29.CheckedChanged
-        If CheckBox29.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("top250")) = False Then DataGridView1.Columns("top250").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("top250")) = False Then DataGridView1.Columns("top250").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox30_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox30.CheckedChanged
-        If CheckBox30.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("set")) = False Then DataGridView1.Columns("set").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("set")) = False Then DataGridView1.Columns("set").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox31_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox31.CheckedChanged
-        If CheckBox31.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("runtime")) = False Then DataGridView1.Columns("runtime").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("runtime")) = False Then DataGridView1.Columns("runtime").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-    Private Sub CheckBox37_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox37.CheckedChanged
-        If CheckBox37.CheckState = CheckState.Checked Then
-            If IsNothing(DataGridView1.Columns("source")) = False Then DataGridView1.Columns("source").Visible = True
-            Call mov_TextBoxesSetup()
-        Else
-            If IsNothing(DataGridView1.Columns("source")) = False Then DataGridView1.Columns("source").Visible = False
-            Call mov_TextBoxesSetup()
-        End If
-    End Sub
-
-   Private Sub mov_TableChangesSave()
+    Private Sub mov_TableChangesSave()
 
         DataDirty=False
 
@@ -16086,130 +15908,6 @@ Public Class Form1
         Me.BringToFront
     End Sub
 
-
-
-    Private Sub btn_movTableSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableSave.Click
-        Try
-            Call mov_TableChangesSave()
-            MsgBox("Changes Saved")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox32.CheckedChanged
-        Try
-            Try
-                If CheckBox32.CheckState = CheckState.Checked Then
-                    Me.DataGridView1.Columns("missingdata1").Visible = True
-                    Call mov_TextBoxesSetup()
-                Else
-                    Me.DataGridView1.Columns("missingdata1").Visible = False
-                    Call mov_TextBoxesSetup()
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub DataGridView1_ColumnDisplayIndexChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnDisplayIndexChanged
-        Try
-            Call mov_TextBoxesSetup()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
-        Try
-            Call mov_TextBoxesSetup()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    'Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
-    '    Try
-    '        Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
-    '        If e.Button = Windows.Forms.MouseButtons.Right Then
-    '            If DataGridView1.SelectedRows.Count < 2 Then
-
-    '                If hti.Type = DataGridViewHitTestType.Cell Then
-
-    '                    If Not DataGridView1.Rows(hti.RowIndex).Selected Then
-
-    '                        ' User right clicked a row that is not selected, so throw away all other selections and select this row
-
-    '                        DataGridView1.ClearSelection()
-
-    '                        DataGridView1.Rows(hti.RowIndex).Selected = True
-    '                    End If
-    '                End If
-
-    '            End If
-    '        ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
-    '            DataGridView1.Rows(hti.RowIndex).Selected = True
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
-    Private Sub DataGridView1_RowHeadersWidthChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.RowHeadersWidthChanged
-        Try
-            Call mov_TextBoxesSetup()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.SelectionChanged
-        Try
-            Call mov_TextBoxesSetup()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub DataGridView1_Sorted(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.Sorted
-        Try
-            For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
-                For Each tempCell As Windows.Forms.DataGridViewCell In tempRow.Cells
-                    If tempCell.Value = "Fanart" Or tempCell.Value = "Poster" Or tempCell.Value = "Poster & Fanart" Then
-                        tempCell.Style.BackColor = Color.Red
-                    End If
-                Next
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub MarkAllSelectedAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsWatchedToolStripMenuItem.Click
-        Try
-            For Each selecteditem In DataGridView1.SelectedRows
-                selecteditem.Cells("playcount").Value = True
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub MarkAllSelectedAsUnWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsUnWatchedToolStripMenuItem.Click
-        Try
-            For Each selecteditem In DataGridView1.SelectedRows
-                selecteditem.Cells("playcount").Value = False
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub mov_TextBoxesSetup()
         Dim multirowControlsVisibility As Boolean = DataGridView1.SelectedRows.Count > 1
         Dim textBoxLocY As Integer = DataGridView1.Height + 32
@@ -16363,38 +16061,6 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub GoToToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToToolStripMenuItem.Click
-        Try
-            Dim tempstring As String = ""
-            For Each selecteditem In DataGridView1.SelectedRows
-                tempstring = selecteditem.Cells("fullpathandfilename").Value
-            Next
-            For f = 0 To DataGridViewMovies.Rows.Count - 1
-                'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
-                    'MovieListComboBox.SelectedItems.Clear()
-                    'MovieListComboBox.SelectedIndex = f
-                    DataGridViewMovies.ClearSelection()
-                    DataGridViewMovies.Rows(f).Selected = True
-                    Application.DoEvents()
-                    currentTabIndex = 0
-                    Me.TabControl2.SelectedIndex = 0
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_movTableApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableApply.Click
-        Try
-            Call mov_TableUpdate()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    
     Private Sub mov_TableUpdate()
         Dim changed As Boolean = False
         For Each row In DataGridView1.SelectedRows
@@ -16443,7 +16109,128 @@ Public Class Form1
         btn_movTableSave.Enabled = changed
     End Sub
 
-    Private Sub GoToSelectedMoviePosterSelectorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToSelectedMoviePosterSelectorToolStripMenuItem.Click
+    Private Sub btnTableColumnsSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTableColumnsSelect.Click
+        Try
+            Dim frm As New frmConfigureTableColumns
+            frm.Init()
+            frm.ShowDialog()
+            mov_TableSetup()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_movTableSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableSave.Click
+        Try
+            Call mov_TableChangesSave()
+            MsgBox("Changes Saved")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_movTableApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableApply.Click
+        Try
+            Call mov_TableUpdate()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_ColumnDisplayIndexChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnDisplayIndexChanged
+        Try
+            Call mov_TextBoxesSetup()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
+        Try
+            Call mov_TextBoxesSetup()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    'Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
+    '    Try
+    '        Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
+    '        If e.Button = Windows.Forms.MouseButtons.Right Then
+    '            If DataGridView1.SelectedRows.Count < 2 Then
+
+    '                If hti.Type = DataGridViewHitTestType.Cell Then
+
+    '                    If Not DataGridView1.Rows(hti.RowIndex).Selected Then
+
+    '                        ' User right clicked a row that is not selected, so throw away all other selections and select this row
+
+    '                        DataGridView1.ClearSelection()
+
+    '                        DataGridView1.Rows(hti.RowIndex).Selected = True
+    '                    End If
+    '                End If
+
+    '            End If
+    '        ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
+    '            DataGridView1.Rows(hti.RowIndex).Selected = True
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
+
+    Private Sub DataGridView1_RowHeadersWidthChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.RowHeadersWidthChanged
+        Try
+            Call mov_TextBoxesSetup()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.SelectionChanged
+        Try
+            Call mov_TextBoxesSetup()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_Sorted(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.Sorted
+        Try
+            For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
+                For Each tempCell As Windows.Forms.DataGridViewCell In tempRow.Cells
+                    If tempCell.Value = "Fanart" Or tempCell.Value = "Poster" Or tempCell.Value = "Poster & Fanart" Then
+                        tempCell.Style.BackColor = Color.Red
+                    End If
+                Next
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub MarkAllSelectedAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsWatchedToolStripMenuItem.Click
+        Try
+            For Each selecteditem In DataGridView1.SelectedRows
+                selecteditem.Cells("playcount").Value = True
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub MarkAllSelectedAsUnWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsUnWatchedToolStripMenuItem.Click
+        Try
+            For Each selecteditem In DataGridView1.SelectedRows
+                selecteditem.Cells("playcount").Value = False
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub GoToToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
             For Each selecteditem In DataGridView1.SelectedRows
@@ -16454,6 +16241,27 @@ Public Class Form1
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(f).Selected = True
+                    Application.DoEvents()
+                    currentTabIndex = 0
+                    Me.TabControl2.SelectedIndex = 0
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub GoToSelectedMoviePosterSelectorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToSelectedMoviePosterSelectorToolStripMenuItem.Click
+        Try
+            Dim tempstring As String = ""
+            For Each selecteditem In DataGridView1.SelectedRows
+                tempstring = selecteditem.Cells("fullpathandfilename").Value
+            Next
+            For f = 0 To DataGridViewMovies.Rows.Count - 1
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
                     For Each tabs In TabControl2.TabPages
@@ -16477,12 +16285,8 @@ Public Class Form1
             For Each selecteditem In DataGridView1.SelectedRows
                 tempstring = selecteditem.Cells("fullpathandfilename").Value
             Next
-            'For f = 0 To MovieListComboBox.Items.Count - 1
             For f = 0 To DataGridViewMovies.RowCount - 1
-                'If DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString = tempstring Then
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
-                    'MovieListComboBox.SelectedItems.Clear()
-                    'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
                     For Each tabs In TabControl2.TabPages
@@ -16499,6 +16303,8 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+#End Region
 
     Private Sub SearchForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewEpisodesToolStripMenuItem.Click
         Try
@@ -16543,7 +16349,6 @@ Public Class Form1
 
         RunBackgroundMovieScrape("RescrapeSpecific")
     End Sub
-
 
     Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
         Try
@@ -19188,25 +18993,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub CheckBox42_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox42.CheckedChanged
-        Try
-            Try
-                If CheckBox42.CheckState = CheckState.Checked Then
-                    Me.DataGridView1.Columns("plot").Visible = True
-                    Call mov_TextBoxesSetup()
-                Else
-                    Me.DataGridView1.Columns("plot").Visible = False
-                    Call mov_TextBoxesSetup()
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+
 
 
     Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )

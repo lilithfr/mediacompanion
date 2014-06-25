@@ -13,7 +13,7 @@ Public Class frmConfigureTableColumns
     Sub PopCheckListBox
         clbColumnsSelect.Items.Clear
         Dim i   As Integer=0
-        For Each column In Preferences.tableview 
+        For Each column In Preferences.tableview
             tablecolumns.Add(column)
             Dim lbl As New Label
             Dim tempdata() As String
@@ -21,6 +21,9 @@ Public Class frmConfigureTableColumns
             lbl.text = tempdata(0)
             clbColumnsSelect.Items.Add(lbl.Text)
             clbColumnsSelect.SetItemChecked(i,Boolean.Parse(tempdata(3)))
+            If tempdata(0) = "title" or tempdata(0) = "year" Then
+                clbColumnsSelect.SetItemCheckState(i, CheckState.Indeterminate)
+            End If 
             i += 1
         Next
     End Sub
@@ -46,6 +49,14 @@ Public Class frmConfigureTableColumns
             Next
             Preferences.tableview.Add(newdata)
         Next
+    End Sub
+
+    'Set Title and Year as not able to unselect.
+    Private Sub clbColumnsSelect_MouseUp(sender As Object, e As MouseEventArgs) Handles clbColumnsSelect.MouseUp
+        clbColumnsSelect.SetItemChecked(0, True)
+        clbColumnsSelect.SetItemCheckState(0, CheckState.Indeterminate)
+        clbColumnsSelect.SetItemChecked(1,True)
+        clbColumnsSelect.SetItemCheckState(1, CheckState.Indeterminate)
     End Sub
 
 End Class
