@@ -15036,6 +15036,7 @@ Public Class Form1
 #Region "Movie Table"
 
 #Region "tabpage events"
+
     Private Sub tpMoviesTable_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Enter
         mov_TableSetup()
     End Sub
@@ -15063,9 +15064,11 @@ Public Class Form1
         DataDirty=False
         btn_movTableSave.Enabled = DataDirty
     End Sub
+
 #End Region
 
 #Region "Table Setup and update"
+
     Private Sub mov_TableViewSetup()
         Preferences.tableview.Clear()
         Preferences.tableview.Add("title|150|0|true")
@@ -15092,9 +15095,6 @@ Public Class Form1
         If Preferences.tableview.Count < 5 Then
             Call mov_TableViewSetup()
         End If
-        'cmbobx_tablesets.Items.Clear()
-        'Cmbobx_tablewatched.Items.Clear()
-        'cmbobx_tablesource.Items.Clear()
         tableSets.Clear()
         For Each item In Preferences.tableview
             Dim tempdata() As String
@@ -15125,7 +15125,6 @@ Public Class Form1
 
         Dim childchild As XmlElement
 
-'        For Each movie In filteredList
         For Each row As DataGridViewRow In DataGridViewMovies.Rows
             Dim movie As Data_GridViewMovie = row.DataBoundItem
             child = doc.CreateElement("movie")
@@ -15157,8 +15156,6 @@ Public Class Form1
             childchild = doc.CreateElement("outline") : childchild.InnerText = movie.outline : child.AppendChild(childchild)
             childchild = doc.CreateElement("plot") : childchild.InnerText = movie.plot : child.AppendChild(childchild)
             childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.SortOrder : child.AppendChild(childchild)
-
-            'childchild = doc.CreateElement("titleandyear") : childchild.InnerText = movie.titleandyear : child.AppendChild(childchild)
 
             childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
             childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
@@ -15209,14 +15206,6 @@ Public Class Form1
                             Else
                                 chi.InnerText = "Watched"
                             End If
-                            'Dim play As Integer = Convert.ToInt32(chi.InnerText)
-                            'Dim bbol As String = "False"
-                            'If play > 0 Then
-                            '    bbol = "True"
-                            'Else
-                            '    bbol = "False"
-                            'End If
-                            'chi.InnerText = bbol
                         End If
                         If chi.Name = "missingdata1" Then
                             If chi.InnerText = "" Or Not IsNumeric(chi.InnerText) Then
@@ -15248,7 +15237,7 @@ Public Class Form1
 
         DataGridView1.AllowUserToOrderColumns = True
         DataGridView1.RowHeadersVisible = True
-        DataGridView1.RowHeadersWidth = 30
+        DataGridView1.RowHeadersWidth = 25
 
         Dim titlecolumn As New DataGridViewColumn()
         With titlecolumn
@@ -15281,7 +15270,6 @@ Public Class Form1
             .Name = "id"
             .SortMode = DataGridViewColumnSortMode.Automatic
             .ReadOnly = True
-            '            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter
         End With
 
         Dim pathcolumn As New DataGridViewColumn()
@@ -15303,6 +15291,7 @@ Public Class Form1
             .DataPropertyName = "genre"
             .Name = "genre"
             .SortMode = DataGridViewColumnSortMode.Automatic
+            .ToolTipText = "Separate Genre's with a ""Space/Space"", ie: Action / Horror"
         End With
 
         Dim ratingcolumn As New DataGridViewColumn()
@@ -15320,7 +15309,6 @@ Public Class Form1
         With outlinecolumn
             Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
             .CellTemplate = oCell
-            '.DefaultCellStyle.WrapMode = DataGridViewTriState.True
             .HeaderText = "Outline"
             .DataPropertyName = "outline"
             .Name = "outline"
@@ -15331,7 +15319,6 @@ Public Class Form1
         With plotcolumn
             Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
             .CellTemplate = oCell
-            '.DefaultCellStyle.WrapMode = DataGridViewTriState.True
             .HeaderText = "Plot"
             .DataPropertyName = "plot"
             .Name = "plot"
@@ -15356,16 +15343,12 @@ Public Class Form1
             .DataPropertyName = "top250"
             .Name = "top250"
             .SortMode = DataGridViewColumnSortMode.Automatic
-            '            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter
         End With
 
-        Dim watchedcolumn As New DataGridViewComboBoxColumn() 'DataGridViewCheckBoxColumn()
-        watchedcolumn.Items.Add("UnChanged")
+        Dim watchedcolumn As New DataGridViewComboBoxColumn()
         watchedcolumn.Items.Add("UnWatched")
         watchedcolumn.Items.Add("Watched")
         With watchedcolumn
-            'Dim oCell As DataGridViewCell = New DataGridViewComboBoxCell
-            '.CellTemplate = oCell
             .HeaderText = "Watched"
             .Name = "playcount"
             .DataPropertyName = "playcount"
@@ -15374,12 +15357,9 @@ Public Class Form1
         End With
 
         Dim sourcecolumn As New DataGridViewComboBoxColumn()
-        'cmbobx_tablesource.Items.Add("UnChanged")
         For Each src In Preferences.releaseformat
             sourcecolumn.Items.Add(src)
-            'cmbobx_tablesource.Items.Add(src)
         Next
-        'cmbobx_tablesource.SelectedItem = "UnChanged"
         With sourcecolumn
             .HeaderText = "Source"
             .Name = "source"
@@ -15399,12 +15379,9 @@ Public Class Form1
         End With
 
         Dim setscolumn As New DataGridViewComboBoxColumn
-        'cmbobx_tablesets.Items.Add("UnChanged")
         For Each sets In Preferences.moviesets
             setscolumn.Items.Add(sets)
-            'cmbobx_tablesets.Items.Add(sets)
         Next
-        'cmbobx_tablesets.SelectedItem = "UnChanged"
         With setscolumn
             .HeaderText = "Sets"
             .Name = "set"
@@ -15430,150 +15407,83 @@ Public Class Form1
                     Select Case col.title
                         Case "title"
                             titlecolumn.Width = col.width
-                            If col.visible = True Then
-                                titlecolumn.Visible = True
-                            Else
-                                titlecolumn.Visible = False
-                            End If
+                            titlecolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, titlecolumn)
                             Exit For
                         Case "year"
                             yearcolumn.Width = col.width
-                            If col.visible = True Then
-                                yearcolumn.Visible = True
-                            Else
-                                yearcolumn.Visible = False
-                            End If
+                            yearcolumn.Visible =  col.visible
                             DataGridView1.Columns.Insert(f, yearcolumn)
                             Exit For
                         Case "sorttitle"
                             sorttitlecolumn.Width = col.width
-                            If col.visible = True Then
-                                sorttitlecolumn.Visible = True
-                            Else
-                                sorttitlecolumn.Visible = False
-                            End If
+                            sorttitlecolumn.Visible =  col.visible
                             DataGridView1.Columns.Insert(f, sorttitlecolumn)
                             Exit For
                         Case "genre"
                             genrecolumn.Width = col.width
-                            If col.visible = True Then
-                                genrecolumn.Visible = True
-                            Else
-                                genrecolumn.Visible = False
-                            End If
+                            genrecolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, genrecolumn)
                             Exit For
                         Case "rating"
                             ratingcolumn.Width = col.width
-                            If col.visible = True Then
-                                ratingcolumn.Visible = True
-                            Else
-                                ratingcolumn.Visible = False
-                            End If
+                            ratingcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, ratingcolumn)
                             Exit For
                         Case "runtime"
                             runtimecolumn.Width = col.width
-                            If col.visible = True Then
-                                runtimecolumn.Visible = True
-                            Else
-                                runtimecolumn.Visible = False
-                            End If
+                            runtimecolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, runtimecolumn)
                             Exit For
                         Case "top250"
                             top250column.Width = col.width
-                            If col.visible = True Then
-                                top250column.Visible = True
-                            Else
-                                top250column.Visible = False
-                            End If
+                            top250column.Visible = col.visible
                             DataGridView1.Columns.Insert(f, top250column)
                             Exit For
                         Case "source"
                             sourcecolumn.Width = col.width
-                            If col.visible = True Then
-                                sourcecolumn.Visible = True
-                            Else
-                                sourcecolumn.Visible = False
-                            End If
+                            sourcecolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, sourcecolumn)
                             Exit For
                         Case "playcount"
                             watchedcolumn.Width = col.width
-                            If col.visible = True Then
-                                watchedcolumn.Visible = True
-                            Else
-                                watchedcolumn.Visible = False
-                            End If
+                            watchedcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, watchedcolumn)
                             Exit For
                         Case "set"
                             setscolumn.Width = col.width
-                            If col.visible = True Then
-                                setscolumn.Visible = True
-                            Else
-                                setscolumn.Visible = False
-                            End If
+                            setscolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, setscolumn)
                             Exit For
                         Case "outline"
                             outlinecolumn.Width = col.width
-                            If col.visible = True Then
-                                outlinecolumn.Visible = True
-                            Else
-                                outlinecolumn.Visible = False
-                            End If
+                            outlinecolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, outlinecolumn)
                             Exit For
                         Case "plot"
                             plotcolumn.Width = col.width
-                            If col.visible = True Then
-                                plotcolumn.Visible = True
-                            Else
-                                plotcolumn.Visible = False
-                            End If
+                            plotcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, plotcolumn)
                             Exit For
                         Case "id"
                             idcolumn.Width = col.width
-                            If col.visible = True Then
-                                idcolumn.Visible = True
-                            Else
-                                idcolumn.Visible = False
-                            End If
+                            idcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, idcolumn)
                             Exit For
                         Case "missingdata1"
                             artcolumn.Width = col.width
-                            If col.visible = True Then
-                                artcolumn.Visible = True
-                            Else
-                                artcolumn.Visible = False
-                            End If
+                            artcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, artcolumn)
                             Exit For
                         Case "fullpathandfilename"
                             pathcolumn.Width = col.width
-                            If col.visible = True Then
-                                pathcolumn.Visible = True
-                            Else
-                                pathcolumn.Visible = False
-                            End If
+                            pathcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, pathcolumn)
                             Exit For
                     End Select
                 End If
             Next
         Next f
-
-        'Cmbobx_tablewatched.Items.Add("UnChanged")
-        'Cmbobx_tablewatched.Items.Add("Watched")
-        'Cmbobx_tablewatched.Items.Add("Unwatched")
-
-        'cmbobx_tablesets.SelectedIndex = 0
-        'Cmbobx_tablewatched.SelectedIndex = 0
 
         Dim sortheader As String
         Dim sortord As String
@@ -15602,7 +15512,6 @@ Public Class Form1
         Next
 
         Call mov_TableEditSetup()
-        'Call mov_TextBoxesSetup()
         Try
             For f = 0 To DataGridView1.Rows.Count-1
                 If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -15641,6 +15550,8 @@ Public Class Form1
         src_add.Items.Insert(0, "UnChanged")
         Dim set_add As DataGridViewComboBoxColumn = DirectCast(Me.mov_TableEditDGV.Columns("set"), DataGridViewComboBoxColumn)
         set_add.Items.Insert(0, "UnChanged")
+        Dim play_add As DataGridViewComboBoxColumn = DirectCast(Me.mov_TableEditDGV.Columns("playcount"), DataGridViewComboBoxColumn)
+        play_add.Items.Insert(0, "UnChanged")
 
         mov_TableEditDGV.RowHeadersWidth = DataGridView1.RowHeadersWidth
         mov_TableEditDGV.ClearSelection 
@@ -15678,7 +15589,6 @@ Public Class Form1
         Dim oCachedMovie  As ComboList
 
         For Each gridrow As DataGridViewRow In DataGridView1.Rows
-
             changed    = False
             progcount += 1
             frmSplash2.ProgressBar1.Value = progcount
@@ -15686,36 +15596,28 @@ Public Class Form1
             oCachedMovie = oMovies.FindCachedMovie( gridrow.Cells("fullpathandfilename").Value )
 
             Try
-                If oCachedMovie.title <> gridrow.Cells("Title").Value Then
-                    changed = True
-                End If
+                If oCachedMovie.title <> gridrow.Cells("Title").Value Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
 #End If
             End Try
             Try
-                If oCachedMovie.outline <> gridrow.Cells("Outline").Value Then
-                    changed = True
-                End If
+                If oCachedMovie.outline <> gridrow.Cells("Outline").Value Then  changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
 #End If
             End Try
             Try
-                If oCachedMovie.genre <> gridrow.Cells("genre").Value Then
-                    changed = True
-                End If
+                If oCachedMovie.genre <> gridrow.Cells("genre").Value Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
 #End If
             End Try
             Try
-                If oCachedMovie.rating <> gridrow.Cells("rating").Value Then
-                    changed = True
-                End If
+                If oCachedMovie.rating <> gridrow.Cells("rating").Value Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -15723,24 +15625,26 @@ Public Class Form1
             End Try
             Try
                 'If gridrow.Cells("playcount").Value = True Then
-                If gridrow.Cells("playcount").EditedFormattedValue Then
-                    If oCachedMovie.playcount <= 0 Then
-                        changed = True
-                    End If
-                Else
-                    If oCachedMovie.playcount > 0 Then
-                        changed = True
-                    End If
-                End If
+                Dim playstatus As String = gridrow.Cells("playcount").EditedFormattedValue
+                Dim plycnt As Integer = 0
+                If playstatus.tolower = "watched" Then plycnt = 1
+                If oCachedMovie.playcount <> plycnt Then Changed = True
+                'If gridrow.Cells("playcount").EditedFormattedValue = "Watched" Then
+                '    If oCachedMovie.playcount <= 0 Then
+                '        changed = True
+                '    End If
+                'Else
+                '    If oCachedMovie.playcount > 0 Then
+                '        changed = True
+                '    End If
+                'End If
             Catch
-                If oCachedMovie.playcount > 0 Then
-                    changed = True
-                End If
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             Try
-                If oCachedMovie.sortorder <> gridrow.Cells("sorttitle").Value Then
-                    changed = True
-                End If
+                If oCachedMovie.sortorder <> gridrow.Cells("sorttitle").Value Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -15748,9 +15652,7 @@ Public Class Form1
             End Try
             Try
                 If oCachedMovie.year <> gridrow.Cells("year").Value Then
-                    If IsNumeric(gridrow.Cells("year").Value) Then
-                        changed = True
-                    End If
+                    If IsNumeric(gridrow.Cells("year").Value) Then changed = True
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -15759,9 +15661,7 @@ Public Class Form1
             End Try
             Try
                 If Convert.ToInt32(oCachedMovie.top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
-                    If IsNumeric(gridrow.Cells("top250").Value) Then
-                        changed = True
-                    End If
+                    If IsNumeric(gridrow.Cells("top250").Value) Then changed = True
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -15781,10 +15681,7 @@ Public Class Form1
                 If IsNumeric(runtime) Then
                     intRunTime = Convert.ToInt32(runtime)
                     newRunTime = intRunTime.ToString & " min"
-                    If oCachedMovie.runtime <> newRunTime Then
-                        changed = True
-                        runTimeChanged = True
-                    End If
+                    If oCachedMovie.runtime <> newRunTime Then changed = True : runTimeChanged = True
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -15792,18 +15689,14 @@ Public Class Form1
 #End If
             End Try
             Try
-                If oCachedMovie.source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then
-                    changed = True
-                End If
+                If oCachedMovie.source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
 #End If
             End Try
             Try
-                If oCachedMovie.MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then
-                    changed = True
-                End If
+                If oCachedMovie.MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -15852,13 +15745,13 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
-                Try
-                    oCachedMovie.outline = gridrow.Cells("outline").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
+'                Try
+'                    oCachedMovie.outline = gridrow.Cells("outline").Value
+'                Catch ex As Exception
+'#If SilentErrorScream Then
+'                    Throw ex
+'#End If
+'                End Try
                 ' Because plot is truncated to 100 chars to save moviecache.xml length, we don't want the user to overwrite the real plot
                 '                            Try
                 '                                oCachedMovie.plot = gridrow.Cells("plot").Value
@@ -15898,11 +15791,11 @@ Public Class Form1
 #End If
                 End Try
                 Try
-                    If gridrow.Cells("playcount").EditedFormattedValue = True Then
-                        If Convert.ToInt32(oCachedMovie.playcount) > 0 Then
-                        Else
+                    If gridrow.Cells("playcount").EditedFormattedValue = "Watched" Then
+                        'If Convert.ToInt32(oCachedMovie.playcount) > 0 Then
+                        'Else
                             oCachedMovie.playcount = "1"
-                        End If
+                        'End If
                     Else
                         oCachedMovie.playcount = "0"
                     End If
@@ -15926,7 +15819,7 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.year = oCachedMovie.year
                 oMovie.ScrapedMovie.fullmoviebody.playcount = oCachedMovie.playcount
                 oMovie.ScrapedMovie.fullmoviebody.genre = oCachedMovie.genre
-                oMovie.ScrapedMovie.fullmoviebody.outline = oCachedMovie.outline
+                'oMovie.ScrapedMovie.fullmoviebody.outline = oCachedMovie.outline
                 'oMovie.ScrapedMovie.fullmoviebody.plot = oCachedMovie.plot
                 oMovie.ScrapedMovie.fullmoviebody.rating = oCachedMovie.rating
                 oMovie.ScrapedMovie.fullmoviebody.source = oCachedMovie.source
@@ -15950,215 +15843,51 @@ Public Class Form1
         Me.BringToFront
     End Sub
 
-    'Private Sub mov_TextBoxesSetup()
-    '    Dim multirowControlsVisibility As Boolean = DataGridView1.SelectedRows.Count > 1
-    '    Dim textBoxLocY As Integer = DataGridView1.Height + 32
-
-    '    txt_tabletitle.Visible = False
-    '    txt_tabletop250.Visible = False
-    '    txt_tableyear.Visible = False
-    '    txt_tablesorttitle.Visible = False
-    '    txt_tableruntime.Visible = False
-    '    txt_tablerating.Visible = False
-    '    txt_tableoutline.Visible = False
-    '    txt_tableplot.Visible = False
-    '    txt_tablegenre.Visible = False
-    '    Cmbobx_tablewatched.Visible = False
-    '    cmbobx_tablesets.Visible = False
-    '    cmbobx_tablesource.Visible = False
-    '    btn_movTableApply.Visible = False
-    '    lbl_movTableMulti.Visible = False
-
-    '    If Not multirowControlsVisibility Then
-    '        Exit Sub
-    '    End If
-
-    '    btn_movTableApply.Visible = True
-    '    lbl_movTableMulti.Visible = True
-    '    For Each column In DataGridView1.Columns
-    '        If column.visible Then
-    '            Select Case column.headertext.tolower
-    '                Case "title"
-    '                    txt_tabletitle.Width = column.width - 4
-    '                    txt_tabletitle.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("Title").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tabletitle.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "year"
-    '                    txt_tableyear.Width = column.width - 4
-    '                    txt_tableyear.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("Year").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tableyear.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "sort title"
-    '                    txt_tablesorttitle.Width = column.width - 4
-    '                    txt_tablesorttitle.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("sorttitle").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tablesorttitle.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "genre"
-    '                    txt_tablegenre.Width = column.width - 4
-    '                    txt_tablegenre.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("Genre").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tablegenre.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "rating"
-    '                    txt_tablerating.Width = column.width - 4
-    '                    txt_tablerating.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("Rating").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tablerating.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "runtime"
-    '                    txt_tableruntime.Width = column.width - 4
-    '                    txt_tableruntime.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("Runtime").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tableruntime.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "top 250"
-    '                    txt_tabletop250.Width = column.width - 4
-    '                    txt_tabletop250.Visible = True
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("top250").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    txt_tabletop250.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "source"
-    '                    cmbobx_tablesource.Visible = True
-    '                    cmbobx_tablesource.Width = column.width - 4
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("source").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    cmbobx_tablesource.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "watched"
-    '                    Cmbobx_tablewatched.Visible = True
-    '                    Cmbobx_tablewatched.Width = column.width - 4
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("playcount").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    Cmbobx_tablewatched.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "sets"
-    '                    cmbobx_tablesets.Visible = True
-    '                    cmbobx_tablesets.Width = column.width - 4
-    '                    Dim textBoxLocX As Integer = 0
-    '                    For Each col In DataGridView1.Columns
-    '                        If col.displayindex < DataGridView1.Columns("Set").DisplayIndex And col.visible = True Then
-    '                            textBoxLocX = textBoxLocX + col.width
-    '                        End If
-    '                    Next
-    '                    cmbobx_tablesets.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "outline"
-    '                    'txt_tableoutline.Width = column.width - 4
-    '                    txt_tableoutline.Visible = True
-    '                    'Dim textBoxLocX As Integer = 0
-    '                    'For Each col In DataGridView1.Columns
-    '                    '    If col.displayindex < DataGridView1.Columns("Outline").DisplayIndex And col.visible = True Then
-    '                    '        textBoxLocX = textBoxLocX + col.width
-    '                    '    End If
-    '                    'Next
-    '                    'txt_tableoutline.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '                Case "plot"
-    '                    'txt_tableplot.Width = column.width - 4
-    '                    txt_tableplot.Visible = True
-    '                    'Dim textBoxLocX As Integer = 0
-    '                    'For Each col In DataGridView1.Columns
-    '                    '    If col.displayindex < DataGridView1.Columns("Plot").DisplayIndex And col.visible = True Then
-    '                    '        textBoxLocX = textBoxLocX + col.width
-    '                    '    End If
-    '                    'Next
-    '                    'txt_tableplot.Location = New Point(textBoxLocX + 2, textBoxLocY)
-    '            End Select
-    '        End If
-    '    Next
-    'End Sub
-
     Private Sub mov_TableUpdate()
         Dim changed As Boolean = False
         For Each row In DataGridView1.SelectedRows
             If mov_TableEditDGV.Columns("title").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("title").Value <> "" Then
                 row.cells("title").value = mov_TableEditDGV.Rows(0).Cells("title").Value : changed = True
             End If
-            'If txt_tabletitle.Text <> "" And txt_tabletitle.Visible = True Then
-            '    row.cells("title").value = txt_tabletitle.Text : changed = True
-            'End If
             If mov_TableEditDGV.Columns("top250").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("top250").Value <> "" Then
-            'If txt_tabletop250.Text <> "" And txt_tabletop250.Visible = True Then
                 row.cells("top250").value = mov_TableEditDGV.Rows(0).Cells("top250").Value : changed = True
             End If
             If mov_TableEditDGV.Columns("year").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("year").Value <> "" Then
-            'If txt_tableyear.Text <> "" And txt_tableyear.Visible = True Then
                 row.cells("year").value = mov_TableEditDGV.Rows(0).Cells("year").Value : changed = True
             End If
             If mov_TableEditDGV.Columns("sorttitle").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("sorttitle").Value <> "" Then
-            'If txt_tablesorttitle.Text <> "" And txt_tablesorttitle.Visible = True Then
                 row.cells("sorttitle") = mov_TableEditDGV.Rows(0).Cells("sorttitle").Value : changed = True
             End If
             If mov_TableEditDGV.Columns("runtime").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("runtime").Value <> "" Then
-            'If txt_tableruntime.Text <> "" And txt_tableruntime.Visible = True Then
                 row.cells("runtime").value = mov_TableEditDGV.Rows(0).Cells("runtime").Value : changed = True
             End If
             If mov_TableEditDGV.Columns("rating").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("rating").Value <> "" Then
-            'If txt_tablerating.Text <> "" And txt_tablerating.Visible = True Then
                 row.cells("rating").value = mov_TableEditDGV.Rows(0).Cells("rating").Value : changed = True
             End If
+
+            ''Table View is not the best location to edit Outline, Plot, IMDB Id.
             'If mov_TableEditDGV3.Columns("outline").Visible AndAlso mov_TableEditDGV3.Rows(0).Cells("outline").Value <> "" Then
-            'If txt_tableoutline.Text <> "" And txt_tableoutline.Visible = True Then
-            '    row.cells("outline").value = txt_tableoutline.Text : changed = True
+            '    row.cells("outline").value = mov_TableEditDGV3.Rows(0).Cells("outline").Value : changed = True
             'End If
             'If mov_TableEditDGV3.Columns("plot").Visible AndAlso mov_TableEditDGV3.Rows(0).Cells("plot").Value <> "" Then
-            'If txt_tableplot.Text <> "" And txt_tableplot.Visible = True Then
-            '    row.cells("plot").value = txt_tableplot.Text : changed = True
+            '    row.cells("plot").value = mov_TableEditDGV3.Rows(0).Cells("plot").Value : changed = True
             'End If
+
             If mov_TableEditDGV.Columns("genre").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("genre").Value <> "" Then
-            'If txt_tablegenre.Text <> "" And txt_tablegenre.Visible = True Then
                 row.cells("genre").value = mov_TableEditDGV.Rows(0).Cells("genre").Value : changed = True
             End If
             If mov_TableEditDGV.Columns("source").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("source").Value <> "UnChanged" Then
-            'If cmbobx_tablesource.SelectedItem <> "UnChanged" And cmbobx_tablesource.Visible = True Then
                 row.cells("source").value = mov_TableEditDGV.Rows(0).Cells("source").Value : changed = True
             End If
             If mov_TableEditDGV.Columns("playcount").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("playcount").Value <> "UnChanged" Then
-            'If Cmbobx_tablewatched.SelectedIndex <> 0 And Cmbobx_tablewatched.Visible = True Then
-                row.cells("playcount").value = mov_TableEditDGV.Rows(0).Cells("playcount").Value : changed = True
-                'If Cmbobx_tablewatched.SelectedIndex = 1 Then
-                '    row.cells("playcount").value = True : changed = True
-                'ElseIf Cmbobx_tablewatched.SelectedIndex = 2 Then
-                '    row.cells("playcount").value = False : changed = True
-                'End If
+                If mov_TableEditDGV.Rows(0).Cells("playcount").Value = "Watched" Then
+                    row.cells("playcount").value = "Watched"
+                Else
+                    row.cells("playcount").value = "UnWatched"
+                End If
+                changed = True
             End If
             If mov_TableEditDGV.Columns("set").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("set").Value <> "UnChanged" Then
-            'If cmbobx_tablesets.SelectedItem <> "UnChanged" And cmbobx_tablesets.Visible = True Then
                 row.cells("set").value = mov_TableEditDGV.Rows(0).Cells("set").Value : changed = True
             End If
         Next
@@ -16203,9 +15932,11 @@ Public Class Form1
         doc.AppendChild(root)
         Return doc
     End Function
+
 #End Region
 
 #Region "Table buttons"
+
     Private Sub btnTableColumnsSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableColumnsSelect.Click
         Try
             Dim frm As New frmConfigureTableColumns
@@ -16233,24 +15964,24 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 #End Region
 
 #Region "Table - DataGridView1 events"
+
     Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
         Try
             mov_TableEditDGV.Columns(e.Column.Index).Width = e.Column.Width
             Dim offSetValue As Integer = DataGridView1.HorizontalScrollingOffset
             mov_TableEditDGV.HorizontalScrollingOffset = offSetValue
-            'Call mov_TextBoxesSetup()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub dataGridViews1_Scroll(sender As Object, e As ScrollEventArgs) Handles DataGridView1.Scroll 
-	    Dim offSetValue As Integer = DataGridView1.HorizontalScrollingOffset
-
-	    Try
+    Private Sub dataGridViews1_Scroll(sender As Object, e As ScrollEventArgs) Handles DataGridView1.Scroll
+        Try
+	        Dim offSetValue As Integer = DataGridView1.HorizontalScrollingOffset
 		    mov_TableEditDGV.HorizontalScrollingOffset = offSetValue
 	    Catch
 	    End Try
@@ -16308,22 +16039,6 @@ End Sub
         End If
     End Sub
 
-    'Private Sub DataGridView1_RowHeadersWidthChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.RowHeadersWidthChanged
-    '    Try
-    '        Call mov_TextBoxesSetup()
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
-    'Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.SelectionChanged
-    '    Try
-    '        Call mov_TextBoxesSetup()
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
     Private Sub DataGridView1_Sorted(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.Sorted
         Try
             For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
@@ -16349,6 +16064,7 @@ End Sub
 #End Region
 
 #Region "Table context toolstrips"
+
     Private Sub MarkAllSelectedAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsWatchedToolStripMenuItem.Click
         Try
             For Each selecteditem In DataGridView1.SelectedRows
@@ -16442,6 +16158,7 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 #End Region
 
 #End Region
