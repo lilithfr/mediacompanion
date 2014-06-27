@@ -15992,6 +15992,9 @@ End Sub
     Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
         Try
             Dim ColIndexFromMouseDown = DataGridView1.HitTest(e.X, e.Y).ColumnIndex 
+
+            If ColIndexFromMouseDown < 0 Then Exit Sub
+
             mov_TableColumnName = DataGridView1.Columns(ColIndexFromMouseDown).Name
 
             'Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
