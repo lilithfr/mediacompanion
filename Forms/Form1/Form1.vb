@@ -15084,19 +15084,20 @@ Public Class Form1
         Preferences.tableview.Add("source|150|6|false")
         Preferences.tableview.Add("playcount|120|7|true")
         Preferences.tableview.Add("set|150|8|true")
-        Preferences.tableview.Add("sorttitle|100|9|false")
-        Preferences.tableview.Add("outline|200|10|false")
-        Preferences.tableview.Add("plot|200|11|false")
-        Preferences.tableview.Add("id|82|12|false")
-        Preferences.tableview.Add("missingdata1|115|13|false")
-        Preferences.tableview.Add("fullpathandfilename|300|14|false")
+        Preferences.tableview.Add("certificate|100|9|false")
+        Preferences.tableview.Add("sorttitle|100|10|false")
+        Preferences.tableview.Add("outline|200|11|false")
+        Preferences.tableview.Add("plot|200|12|false")
+        Preferences.tableview.Add("id|82|13|false")
+        Preferences.tableview.Add("missingdata1|115|14|false")
+        Preferences.tableview.Add("fullpathandfilename|300|15|false")
     End Sub
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tableview.Count < 5 Then
+        If Preferences.tableview.Count < 16 Then
             Call mov_TableViewSetup()
         End If
         tableSets.Clear()
@@ -15156,6 +15157,7 @@ Public Class Form1
             childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
             childchild = doc.CreateElement("rating") : childchild.InnerText = movie.Rating : child.AppendChild(childchild)
             childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
+            childchild = doc.CreateElement("certificate") : childchild.InnerText = movie.Certificate : child.AppendChild(childchild)
             If String.IsNullOrEmpty(movie.SortOrder) Then movie.SortOrder = movie.DisplayTitle
             childchild = doc.CreateElement("outline") : childchild.InnerText = movie.outline : child.AppendChild(childchild)
             childchild = doc.CreateElement("plot") : childchild.InnerText = movie.plot : child.AppendChild(childchild)
@@ -15382,6 +15384,16 @@ Public Class Form1
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
+        Dim certificatecolumn As New DataGridViewColumn()
+        With certificatecolumn
+            Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
+            .CellTemplate = oCell
+            .HeaderText = "Certificate"
+            .Name = "certificate"
+            .DataPropertyName = "certificate"
+            .SortMode = DataGridViewColumnSortMode.Automatic
+        End With
+
         Dim setscolumn As New DataGridViewComboBoxColumn
         For Each sets In Preferences.moviesets
             setscolumn.Items.Add(sets)
@@ -15405,7 +15417,7 @@ Public Class Form1
             .ReadOnly = True
         End With
 
-        For f = 0 To 14
+        For f = 0 To 15
             For Each col In tableSets
                 If col.index = f Then
                     Select Case col.title
@@ -15444,6 +15456,10 @@ Public Class Form1
                             top250column.Visible = col.visible
                             DataGridView1.Columns.Insert(f, top250column)
                             Exit For
+                        Case "certificate"
+                            certificatecolumn.Width = col.width
+                            certificatecolumn.Visible = col.visible
+                            DataGridView1.Columns.Insert(f, certificatecolumn)
                         Case "source"
                             sourcecolumn.Width = col.width
                             sourcecolumn.Visible = col.visible
@@ -15672,7 +15688,13 @@ Public Class Form1
                 Throw ex
 #End If
             End Try
-
+            Try
+                If oCachedMovie.Certificate <> gridrow.Cells("certificate").Value Then changed = True
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
             Dim runtime        As String=""
             Dim intRunTime     As Integer
             Dim runTimeChanged As Boolean
@@ -15808,17 +15830,17 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
-
-               'oCachedMovie.runtime = Utilities.cleanruntime(gridrow.Cells("runtime").Value)
-
-               'oMovie.ScrapedMovie.fullmoviebody.runtime = oCachedMovie.runtime
+                Try
+                    oCachedMovie.Certificate = gridrow.Cells("certificate").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
 
                 If runTimeChanged Then
                     oMovie.ScrapedMovie.fullmoviebody.runtime = newRunTime
                 End If
-
-                'oMovie.ScrapedMovie.filedetails.filedetails_video.DurationInSeconds.Value = oCachedMovie.runtime.ToString
-
                 oMovie.ScrapedMovie.fullmoviebody.title = oCachedMovie.title
                 oMovie.ScrapedMovie.fullmoviebody.year = oCachedMovie.year
                 oMovie.ScrapedMovie.fullmoviebody.playcount = oCachedMovie.playcount
@@ -15831,6 +15853,11 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
+                Dim checkmpaa = oCachedMovie.Certificate 
+                If checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
+                    checkmpaa = "Rated " & checkmpaa
+                End If
+                oMovie.ScrapedMovie.fullmoviebody.mpaa = checkmpaa
                 oMovie.AssignMovieToCache
                 oMovie.SaveNFO
                 oMovie.UpdateMovieCache
@@ -15868,7 +15895,9 @@ Public Class Form1
             If mov_TableEditDGV.Columns("rating").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("rating").Value <> "" Then
                 row.cells("rating").value = mov_TableEditDGV.Rows(0).Cells("rating").Value : changed = True
             End If
-
+            If mov_TableEditDGV.Columns("certificate").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("certificate").Value <> "" Then
+                row.cells("certificate").value = mov_TableEditDGV.Rows(0).Cells("certificate").Value : changed = True
+            End If
             ''Table View is not the best location to edit Outline, Plot, IMDB Id.
             'If mov_TableEditDGV3.Columns("outline").Visible AndAlso mov_TableEditDGV3.Rows(0).Cells("outline").Value <> "" Then
             '    row.cells("outline").value = mov_TableEditDGV3.Rows(0).Cells("outline").Value : changed = True
@@ -15923,6 +15952,7 @@ Public Class Form1
         childchild = doc.CreateElement("playcount") : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
         childchild = doc.CreateElement("rating") : childchild.InnerText = "" : child.AppendChild(childchild)
         childchild = doc.CreateElement("title") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("certificate") : childchild.InnerText = "" : child.AppendChild(childchild)
         childchild = doc.CreateElement("outline") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
         childchild = doc.CreateElement("plot") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
         childchild = doc.CreateElement("sortorder") : childchild.InnerText = "" : child.AppendChild(childchild)
@@ -16074,9 +16104,19 @@ End Sub
 
     Private Sub MarkAllSelectedAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsWatchedToolStripMenuItem.Click
         Try
-            For Each selecteditem In DataGridView1.SelectedRows
-                selecteditem.Cells("playcount").Value = True
+            Dim selectedrowindex As New List(Of Integer)
+            For Each row in DataGridView1.SelectedRows
+                selectedrowindex.Add(row.index)
             Next
+            If selectedrowindex.Count = 0 Then selectedrowindex.Add(DataGridView1.CurrentRow.Index)
+            DataGridView1.ClearSelection()            
+            DataGridView1.CurrentCell = DataGridView1.Rows(selectedrowindex.Item(0)).Cells(0)
+            For Each row In selectedrowindex
+                DataGridView1.rows(row).Selected = True
+                DataGridView1.rows(row).Cells("playcount").Value = "Watched"
+            Next
+            DataDirty = True
+            btn_movTableSave.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -16084,9 +16124,19 @@ End Sub
 
     Private Sub MarkAllSelectedAsUnWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsUnWatchedToolStripMenuItem.Click
         Try
-            For Each selecteditem In DataGridView1.SelectedRows
-                selecteditem.Cells("playcount").Value = False
+            Dim selectedrowindex As New List(Of Integer)
+            For Each row in DataGridView1.SelectedRows
+                selectedrowindex.Add(row.index)
             Next
+            If selectedrowindex.Count = 0 Then selectedrowindex.Add(DataGridView1.CurrentRow.Index)
+            DataGridView1.ClearSelection()            
+            DataGridView1.CurrentCell = DataGridView1.Rows(selectedrowindex.Item(0)).Cells(0)
+            For Each row In selectedrowindex
+                DataGridView1.rows(row).Selected = True
+                DataGridView1.rows(row).Cells("playcount").Value = "UnWatched"
+            Next
+            DataDirty = True
+            btn_movTableSave.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

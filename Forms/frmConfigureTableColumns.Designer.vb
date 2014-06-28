@@ -46,7 +46,7 @@ Partial Class frmConfigureTableColumns
         Me.clbColumnsSelect.FormattingEnabled = true
         Me.clbColumnsSelect.Location = New System.Drawing.Point(10, 12)
         Me.clbColumnsSelect.Name = "clbColumnsSelect"
-        Me.clbColumnsSelect.Size = New System.Drawing.Size(191, 227)
+        Me.clbColumnsSelect.Size = New System.Drawing.Size(191, 257)
         Me.clbColumnsSelect.TabIndex = 9
         '
         'lblInfo
