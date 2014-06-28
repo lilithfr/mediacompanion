@@ -6271,7 +6271,7 @@ Public Class Form1
 
     End Sub
 
-        Private Sub cbTvActor_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseEnter
+        Private Sub cbTvActor_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseHover
         Try
             cbTvActor.Focus()
         Catch ex As Exception
@@ -6295,7 +6295,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbTvActorRole_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.MouseEnter
+    Private Sub cbTvActorRole_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.MouseHover
         Try
             cbTvActorRole.Focus()
         Catch ex As Exception
@@ -6413,6 +6413,10 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+    End Sub
+
+    Private Sub TvTreeview_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.MouseHover
+        TvTreeview.Focus()
     End Sub
 
     Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ReloadFromCache.Click
