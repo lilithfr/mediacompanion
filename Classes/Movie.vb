@@ -1008,25 +1008,13 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.genre = "Problem"
         End If
 
-        If _scrapedMovie.fullmoviebody.year = Nothing Then
-            _scrapedMovie.fullmoviebody.year = "0000"
-        End If
-        If _scrapedMovie.fullmoviebody.rating = Nothing Then
-            _scrapedMovie.fullmoviebody.rating = "0"
-        End If
-        If _scrapedMovie.fullmoviebody.top250 = Nothing Then
-            _scrapedMovie.fullmoviebody.top250 = "0"
-        End If
-        If _scrapedMovie.fullmoviebody.playcount = Nothing Then
-            _scrapedMovie.fullmoviebody.playcount = "0"
-        End If
-        If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then
-            _scrapedMovie.fullmoviebody.lastplayed = ""
-        End If
+        If _scrapedMovie.fullmoviebody.year =       Nothing Then _scrapedMovie.fullmoviebody.year = "1901"
+        If _scrapedMovie.fullmoviebody.rating =     Nothing Then _scrapedMovie.fullmoviebody.rating = "0"
+        If _scrapedMovie.fullmoviebody.top250 =     Nothing Then _scrapedMovie.fullmoviebody.top250 = "0"
+        If _scrapedMovie.fullmoviebody.playcount =  Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
+        If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
 
-        If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
-            _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
-        End If
+        If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
 
         If Preferences.movies_useXBMC_Scraper Then
             tmdb.Imdb                               = _scrapedMovie.fullmoviebody.imdbid 
