@@ -2343,11 +2343,28 @@ End If
 
     Function ApplyAudioLanguagesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
-        Dim fi As New FilteredItems(ccb)
+        'Dim fi As New FilteredItems(ccb)
 
-        Dim leftOuterJoinTable = From m In recs From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
+        'Dim leftOuterJoinTable = From m In recs From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
 
-        Return Filter(recs,leftOuterJoinTable, fi)
+        'Return Filter(recs,leftOuterJoinTable, fi)
+
+
+        Dim i As Integer = 0
+
+        For Each item As CCBoxItem In ccb.Items
+
+            Dim value As String = item.Name.RemoveAfterMatch
+
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.Audio.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+                Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.Audio.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+            End Select
+
+            i += 1
+        Next
+
+        Return recs
     End Function
 
 
