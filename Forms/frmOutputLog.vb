@@ -10,6 +10,9 @@ Public Class frmoutputlog
         'Catch ex As Exception
         '    ExceptionHandler.LogError(ex)
         'End Try
+        Me.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+        Me.Width = 861
+        Me.Height = 580
     End Sub
 
     Public Sub New(ByVal displaystring As String, Optional ByVal forceoverride As Boolean = False)

@@ -228,4 +228,8 @@
         Next
         Form1.rescrapeList.EmptyMainTags = cb_ScrapeEmptyTags.checked
     End Sub
+
+    Private Sub frmBatchScraper_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Me.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+    End Sub
 End Class

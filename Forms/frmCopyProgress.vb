@@ -123,6 +123,11 @@ Public Class frmCopyProgress
     End Sub
 
     Shadows closing As Boolean = False
+
+    Private Sub frmCopyProgress_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then Button1.PerformClick()
+    End Sub
+
     Private Sub copyprogress_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             Me.Visible = False

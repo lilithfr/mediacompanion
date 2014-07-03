@@ -31,6 +31,7 @@ Public Class frmCoverArt
     Dim applicationPath As String = Preferences.applicationPath
 
 
+
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             posterpath = Form1.workingMovieDetails.fileinfo.posterpath

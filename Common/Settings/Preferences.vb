@@ -119,6 +119,7 @@ Public Class Preferences
     Public Shared ScrapeTimingsLogThreshold As Integer = 100
     Public Shared lastpath As String
     Public Shared maximumthumbs As Integer
+    Public Shared preferredscreen As Integer
 
     'Saved General Prefs
     Public Shared startupCache As Boolean
@@ -485,7 +486,6 @@ Public Class Preferences
         End Get
     End Property
 
-
     Public Shared Sub SetUpPreferences()
         'General
         ignorearticle = False
@@ -625,6 +625,7 @@ Public Class Preferences
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
         namemode = "1"
         maximumthumbs = 10
+        preferredscreen = 0
         gettrailer = False
         DownloadTrailerDuringScrape = False
         NoAltTitle = False
@@ -791,6 +792,7 @@ Public Class Preferences
         root.AppendChild(doc, "LogScrapeTimes",             LogScrapeTimes)
         root.AppendChild(doc, "ScrapeTimingsLogThreshold",  ScrapeTimingsLogThreshold)
         root.AppendChild(doc, "maximumthumbs",              maximumthumbs)
+        root.AppendChild(doc, "preferredscreen",            preferredscreen)
         root.AppendChild(doc, "lastpath",                   lastpath)
         root.AppendChild(doc, "MovieImdbGenreRegEx",        MovieImdbGenreRegEx)
         root.AppendChild(doc, "moviedefaultlist",           moviedefaultlist)           'RadioButtonFileName,RadioButtonTitleAndYear,RadioButtonFolder
@@ -1292,6 +1294,7 @@ Public Class Preferences
                     Case "downloadtvposter"                     : tvposter = thisresult.InnerXml
                     Case "downloadtvseasonthumbs"               : downloadtvseasonthumbs = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
+                    Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
                     Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 
                     Case "XtraFrodoUrls"                        : XtraFrodoUrls = thisresult.InnerXml
