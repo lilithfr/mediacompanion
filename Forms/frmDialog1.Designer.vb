@@ -88,6 +88,7 @@ Partial Class frmDialog1
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Cancel_Button)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmDialog1"

@@ -92,9 +92,9 @@ Partial Class frmCreateDateFix
         'statusDateFix
         '
         Me.statusDateFix.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statuslblDateFix})
-        Me.statusDateFix.Location = New System.Drawing.Point(0, 340)
+        Me.statusDateFix.Location = New System.Drawing.Point(0, 344)
         Me.statusDateFix.Name = "statusDateFix"
-        Me.statusDateFix.Size = New System.Drawing.Size(584, 22)
+        Me.statusDateFix.Size = New System.Drawing.Size(592, 22)
         Me.statusDateFix.TabIndex = 5
         Me.statusDateFix.Text = "StatusStrip1"
         '
@@ -117,7 +117,7 @@ Partial Class frmCreateDateFix
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(584, 362)
+        Me.ClientSize = New System.Drawing.Size(592, 366)
         Me.Controls.Add(Me.btnDateFix)
         Me.Controls.Add(Me.statusDateFix)
         Me.Controls.Add(Me.dateFixDataGridView)
@@ -125,6 +125,7 @@ Partial Class frmCreateDateFix
         Me.Controls.Add(Me.nudDateFix)
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.MinimumSize = New System.Drawing.Size(600, 400)
         Me.Name = "frmCreateDateFix"
         Me.Text = "Create Date Fix"

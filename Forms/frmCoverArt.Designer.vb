@@ -339,6 +339,7 @@ Partial Class frmCoverArt
         Me.Controls.Add(Me.btnSourceTMDB)
         Me.Controls.Add(Me.btnSourceManual)
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.MinimumSize = New System.Drawing.Size(795, 524)
         Me.Name = "frmCoverArt"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

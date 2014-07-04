@@ -35,6 +35,10 @@ Public Class frmOptions
         End Try
     End Sub
 
+    Private Sub frmOptions_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then Me.Close()
+    End Sub
+
     Private Sub options_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             Select Case Preferences.seasonall

@@ -80,6 +80,8 @@ Partial Class frmSplashscreen
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Label2)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.MaximumSize = New System.Drawing.Size(700, 350)
+        Me.MinimumSize = New System.Drawing.Size(700, 350)
         Me.Name = "frmSplashscreen"
         Me.ShowInTaskbar = False
         Me.Text = "splashscreen"

@@ -11,6 +11,10 @@ Public Class frmDialog1
         End Try
     End Sub
 
+    Private Sub frmDialog1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then Cancel_Button.PerformClick()
+    End Sub
+
     Private Sub Dialog1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             Me.TopMost = True

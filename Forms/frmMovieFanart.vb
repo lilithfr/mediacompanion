@@ -119,9 +119,9 @@ Public Class frmMovieFanart
         End If
     End Sub
 
-
-
-
+    Private Sub frmMovieFanart_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then Me.Close()
+    End Sub
 
     Private Sub moviefanart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try

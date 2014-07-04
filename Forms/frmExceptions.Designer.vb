@@ -53,7 +53,7 @@ Partial Class frmExceptions
         Me.lblMessage.Size = New System.Drawing.Size(728, 24)
         Me.lblMessage.TabIndex = 1
         Me.lblMessage.Text = "Oops, something went wrong. Why not file a bug to help us improve? Create a new i" & _
-            "ssue at "
+    "ssue at "
         '
         'txtExceptionTrace
         '
@@ -121,7 +121,7 @@ Partial Class frmExceptions
         Me.Label1.Size = New System.Drawing.Size(728, 24)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Please add a brief description of the circumstances under which the exception occ" & _
-            "urred, particularly the movie or show that may have contributed. Thanks!"
+    "urred, particularly the movie or show that may have contributed. Thanks!"
         '
         'Label2
         '
@@ -131,7 +131,7 @@ Partial Class frmExceptions
         Me.Label2.Size = New System.Drawing.Size(263, 26)
         Me.Label2.TabIndex = 7
         Me.Label2.Text = "Media Companion should be able to recover from most" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "exceptions, select continue " & _
-            "to attempt this process."
+    "to attempt this process."
         '
         'Button1
         '
@@ -139,7 +139,7 @@ Partial Class frmExceptions
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(97, 23)
         Me.Button1.TabIndex = 8
-        Me.Button1.Text = "Continue"
+        Me.Button1.Text = "&Continue"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'frmExceptions
@@ -162,6 +162,7 @@ Partial Class frmExceptions
         Me.Controls.Add(Me.pictSadFace)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(782, 553)
         Me.MinimizeBox = False
         Me.Name = "frmExceptions"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent

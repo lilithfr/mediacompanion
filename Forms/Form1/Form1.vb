@@ -72,21 +72,22 @@ Public Class Form1
 
     Property frmXBMC_Progress As frmXBMC_Progress = New frmXBMC_Progress
 
+
     #Region "Movie scraping related objects"
-    Public Dim WithEvents oMovies As New Movies
+            Public WithEvents oMovies As New Movies
 
-    Public filteredList        As New List(Of ComboList)
-    Public rescrapeList        As New RescrapeList
-    Public workingMovieDetails As     FullMovieDetails
-    Public _rescrapeList       As New RescrapeSpecificParams
-    Public ChangeMovieId       = ""
-    Public droppedItems        As New List(Of String)
-    Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
+            Public filteredList As New List(Of ComboList)
+            Public rescrapeList As New RescrapeList
+            Public workingMovieDetails As FullMovieDetails
+            Public _rescrapeList As New RescrapeSpecificParams
+            Public ChangeMovieId = ""
+            Public droppedItems As New List(Of String)
+            Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
 
-    Public Shared blnAbortFileDownload As Boolean
-    Public Shared ReadOnly countLock = New Object
-    Public ScraperErrorDetected As Boolean    
-    
+            Public Shared blnAbortFileDownload As Boolean
+            Public Shared ReadOnly countLock = New Object
+            Public ScraperErrorDetected As Boolean
+
     #End Region 'Movie scraping objects
 
 
@@ -312,12 +313,6 @@ Public Class Form1
                 Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
             Next
 
-            'Dim numberofmonitors As Integer = Screen.AllScreens.Length
-            'If numberofmonitors > 1 Then
-            '    Me.Bounds = Screen.AllScreens(1).Bounds
-            '    Me.StartPosition = FormStartPosition.Manual 
-            'End If
-        
             TvTreeview.Sort()
 
             For Each arg As String In Environment.GetCommandLineArgs().Skip(1)
@@ -376,6 +371,9 @@ Public Class Form1
             If scrapeAndQuit or refreshAndQuit Then
                 Me.WindowState = FormWindowState.Minimized
             Else
+                Dim scrn As Integer = splashscreenread()
+                frmSplash.Bounds = screen.AllScreens(scrn).Bounds
+                frmSplash.StartPosition = FormStartPosition.Manual
                 frmSplash.Show()
                 frmSplash.Label3.Text = "Status :- Initialising Program"
                 frmSplash.Label3.Refresh()
@@ -579,9 +577,6 @@ Public Class Form1
             SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
 
-            'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
-            'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
-
             Movies.SpinUpDrives
 
             If Not (scrapeAndQuit or refreshAndQuit) Then
@@ -732,9 +727,6 @@ Public Class Form1
                 startup = False
                 frmSplash.Close()
 
-
-
-
                 'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
                 GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
                 GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
@@ -793,6 +785,9 @@ Public Class Form1
             ' BckWrkXbmcController.WorkerSupportsCancellation = true
 
             oMovies.Bw = BckWrkScnMovies
+
+            frmXBMC_Progress.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            frmXBMC_Progress.StartPosition = FormStartPosition.Manual
 
             AddHandler XBMC_Link_ErrorLog_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
             Ini_Timer(XBMC_Link_ErrorLog_Timer, 3000)
@@ -983,7 +978,11 @@ Public Class Form1
         XBMC_Link_Check_Timer.Start
     End Sub
 
-
+    Private Function splashscreenread() As Integer
+        Dim scrn As Integer = 0
+        'If File.Exists() Then
+        Return scrn
+    End Function
 
     Private Sub util_BatchUpdate()
 
@@ -4939,6 +4938,8 @@ Public Class Form1
         Try
             cropMode = "movieposter"
             Dim t As New frmMovPosterCrop
+            t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            t.StartPosition = FormStartPosition.Manual
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -17117,6 +17118,8 @@ End Sub
     Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click 
         Try
             Dim t As New frmOptions
+            t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            t.StartPosition = FormStartPosition.Manual
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -17426,7 +17429,8 @@ End Sub
                 'Dim doepisodeart As Boolean
                 'Dim doepisodeactors As Boolean
                 Dim displaywizard As New tv_batch_wizard
-
+                displaywizard.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                displaywizard.StartPosition = FormStartPosition.Manual
                 displaywizard.ShowDialog()
 
                 If tvBatchList.activate = True Then
@@ -23075,6 +23079,12 @@ End Sub
 
     Private Sub FixNFOCreateDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FixNFOCreateDateToolStripMenuItem.Click
         Dim fixCreateDate As New frmCreateDateFix
+        Dim w As Integer = fixCreateDate.Width
+        Dim h As Integer = fixCreateDate.Height
+        fixCreateDate.Bounds = screen.AllScreens(CurrentScreen).Bounds
+        fixCreateDate.StartPosition = FormStartPosition.Manual
+        fixCreateDate.Width = w
+        fixCreateDate.Height = h
         fixCreateDate.ShowDialog()
     End Sub
 

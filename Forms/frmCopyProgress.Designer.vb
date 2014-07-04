@@ -105,6 +105,7 @@ Partial Class frmCopyProgress
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ProgressBar1)
+        Me.KeyPreview = True
         Me.MaximumSize = New System.Drawing.Size(454, 188)
         Me.Name = "frmCopyProgress"
         Me.Text = "File Copy"

@@ -24,6 +24,8 @@ Friend NotInheritable Class ExceptionHandler
 
             Try
                 Dim ofrmExcept As New frmExceptions
+                ofrmExcept.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+                ofrmExcept.StartPosition = FormStartPosition.Manual
                 
                 ofrmExcept.txtExceptionTrace.Text = msg
                 ofrmExcept.ShowDialog()

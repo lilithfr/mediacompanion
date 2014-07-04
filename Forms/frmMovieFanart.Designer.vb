@@ -24,13 +24,13 @@ Partial Class frmMovieFanart
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMovieFanart))
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnthumbbrowse = New System.Windows.Forms.Button()
         Me.btncancelgetthumburl = New System.Windows.Forms.Button()
         Me.btngetthumb = New System.Windows.Forms.Button()
         Me.TextBox5 = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.btn_SaveSelected = New System.Windows.Forms.Button()
@@ -44,8 +44,8 @@ Partial Class frmMovieFanart
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.AutoScroll = True
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel1.Controls.Add(Me.Label2)
@@ -53,6 +53,17 @@ Partial Class frmMovieFanart
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(429, 245)
         Me.Panel1.TabIndex = 0
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(3, 96)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(281, 25)
+        Me.Label2.TabIndex = 0
+        Me.Label2.Text = "No Local Fanart is Available"
+        Me.Label2.Visible = False
         '
         'Panel3
         '
@@ -112,21 +123,10 @@ Partial Class frmMovieFanart
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "Enter URL or Browse PC For Thumbnail"
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(3, 96)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(281, 25)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "No Local Fanart is Available"
-        Me.Label2.Visible = False
-        '
         'Panel2
         '
         Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel2.AutoScroll = True
         Me.Panel2.AutoScrollMargin = New System.Drawing.Size(0, 5)
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -182,6 +182,7 @@ Partial Class frmMovieFanart
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.Name = "frmMovieFanart"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "moviefanart"

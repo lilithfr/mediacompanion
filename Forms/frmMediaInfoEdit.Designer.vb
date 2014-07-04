@@ -36,6 +36,11 @@ Partial Class frmMediaInfoEdit
         Me.cb_AudCh = New System.Windows.Forms.ComboBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.tb_VidAspRatio = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.tb_VidMaxBitrate = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.tb_VidBitRate = New System.Windows.Forms.TextBox()
         Me.tb_VidHeight = New System.Windows.Forms.TextBox()
         Me.tb_VidWidth = New System.Windows.Forms.TextBox()
         Me.tb_VidDurationInSeconds = New System.Windows.Forms.TextBox()
@@ -54,11 +59,6 @@ Partial Class frmMediaInfoEdit
         Me.Button2 = New System.Windows.Forms.Button()
         Me.tb_MovTitle = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.tb_VidBitRate = New System.Windows.Forms.TextBox()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.tb_VidMaxBitrate = New System.Windows.Forms.TextBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.tb_VidAspRatio = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
@@ -211,6 +211,49 @@ Partial Class frmMediaInfoEdit
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Video Profile"
         '
+        'tb_VidAspRatio
+        '
+        Me.tb_VidAspRatio.Location = New System.Drawing.Point(464, 19)
+        Me.tb_VidAspRatio.Name = "tb_VidAspRatio"
+        Me.tb_VidAspRatio.Size = New System.Drawing.Size(99, 20)
+        Me.tb_VidAspRatio.TabIndex = 26
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(569, 90)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(34, 13)
+        Me.Label18.TabIndex = 25
+        Me.Label18.Text = "kbps"
+        Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'tb_VidMaxBitrate
+        '
+        Me.tb_VidMaxBitrate.Location = New System.Drawing.Point(464, 87)
+        Me.tb_VidMaxBitrate.Name = "tb_VidMaxBitrate"
+        Me.tb_VidMaxBitrate.Size = New System.Drawing.Size(99, 20)
+        Me.tb_VidMaxBitrate.TabIndex = 24
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(569, 57)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(34, 13)
+        Me.Label17.TabIndex = 11
+        Me.Label17.Text = "kbps"
+        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'tb_VidBitRate
+        '
+        Me.tb_VidBitRate.Location = New System.Drawing.Point(464, 54)
+        Me.tb_VidBitRate.Name = "tb_VidBitRate"
+        Me.tb_VidBitRate.Size = New System.Drawing.Size(99, 20)
+        Me.tb_VidBitRate.TabIndex = 23
+        '
         'tb_VidHeight
         '
         Me.tb_VidHeight.Location = New System.Drawing.Point(196, 54)
@@ -240,7 +283,7 @@ Partial Class frmMediaInfoEdit
         Me.Label10.Size = New System.Drawing.Size(116, 78)
         Me.Label10.TabIndex = 19
         Me.Label10.Text = "Change your video info" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "here." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Note:  Only ScanType" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "and Container fields" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "are " & _
-            "not editable."
+    "not editable."
         '
         'Label16
         '
@@ -371,49 +414,6 @@ Partial Class frmMediaInfoEdit
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "Currently Editing : "
         '
-        'tb_VidBitRate
-        '
-        Me.tb_VidBitRate.Location = New System.Drawing.Point(464, 54)
-        Me.tb_VidBitRate.Name = "tb_VidBitRate"
-        Me.tb_VidBitRate.Size = New System.Drawing.Size(99, 20)
-        Me.tb_VidBitRate.TabIndex = 23
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(569, 57)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(34, 13)
-        Me.Label17.TabIndex = 11
-        Me.Label17.Text = "kbps"
-        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'tb_VidMaxBitrate
-        '
-        Me.tb_VidMaxBitrate.Location = New System.Drawing.Point(464, 87)
-        Me.tb_VidMaxBitrate.Name = "tb_VidMaxBitrate"
-        Me.tb_VidMaxBitrate.Size = New System.Drawing.Size(99, 20)
-        Me.tb_VidMaxBitrate.TabIndex = 24
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(569, 90)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(34, 13)
-        Me.Label18.TabIndex = 25
-        Me.Label18.Text = "kbps"
-        Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'tb_VidAspRatio
-        '
-        Me.tb_VidAspRatio.Location = New System.Drawing.Point(464, 19)
-        Me.tb_VidAspRatio.Name = "tb_VidAspRatio"
-        Me.tb_VidAspRatio.Size = New System.Drawing.Size(99, 20)
-        Me.tb_VidAspRatio.TabIndex = 26
-        '
         'frmMediaInfoEdit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -428,6 +428,8 @@ Partial Class frmMediaInfoEdit
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox1)
+        Me.KeyPreview = True
+        Me.MaximumSize = New System.Drawing.Size(683, 491)
         Me.Name = "frmMediaInfoEdit"
         Me.Text = "Media Info Editing"
         Me.GroupBox1.ResumeLayout(False)

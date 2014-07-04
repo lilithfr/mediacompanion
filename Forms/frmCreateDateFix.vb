@@ -15,6 +15,12 @@ Public Class frmCreateDateFix
         Form1.oMovies.SaveMovieCache()
     End Sub
 
+    Private Sub frmCreateDateFix_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then Me.Close()
+    End Sub
+
+
+
     Private Sub frmCreateDateFix_Load(sender As Object, e As EventArgs) Handles Me.Load
         'Set up form elements
         AddHeaderCheckBox()

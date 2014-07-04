@@ -30,6 +30,10 @@ Public Class frmCoverArt
     Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
     Dim applicationPath As String = Preferences.applicationPath
 
+    Private Sub frmCoverArt_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then Me.Close()
+    End Sub
+
 
 
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
