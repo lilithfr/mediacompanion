@@ -65,8 +65,13 @@ Public Class Form1
 
     ReadOnly Shared Property CurrentScreen As Integer
         Get
-            Dim display As String = System.Windows.Forms.Screen.FromControl(Form1).DeviceName
-            Return ToInt(display.Substring(display.Length - 1)) - 1
+            Try
+                Dim display As String = System.Windows.Forms.Screen.FromControl(Form1).DeviceName
+                Dim m As String = Regex.Match(display, "DISPLAY[0-9]").Value
+                Return ToInt(m.Substring(m.Length - 1)) - 1
+            Catch
+                Return 0
+            End Try 
         End Get
     End Property
 
@@ -374,6 +379,9 @@ Public Class Form1
                 Dim scrn As Integer = splashscreenread()
                 frmSplash.Bounds = screen.AllScreens(scrn).Bounds
                 frmSplash.StartPosition = FormStartPosition.Manual
+                Dim x As Integer = screen.AllScreens(scrn).Bounds.X
+                frmSplash.Location = New Point(x+250, 250)
+                frmSplash.TopMost = True
                 frmSplash.Show()
                 frmSplash.Label3.Text = "Status :- Initialising Program"
                 frmSplash.Label3.Refresh()
@@ -980,9 +988,42 @@ Public Class Form1
 
     Private Function splashscreenread() As Integer
         Dim scrn As Integer = 0
-        'If File.Exists() Then
+        Dim checkpath As String = Preferences.applicationPath & "\Settings\screen.xml"
+        If File.Exists(checkpath) Then
+            Try
+                Dim document As XDocument = XDocument.Load(checkpath)
+                Dim sc = From t In document.Descendants("screen") Select t.Value
+                scrn = sc.First().ToInt
+                If scrn > NumOfScreens Then scrn = 0
+            Catch
+                scrn = 0
+            End Try
+        End If
         Return scrn
     End Function
+
+    Private Sub SplashscreenWrite()
+        Dim doc As New XmlDocument
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc As XmlDeclaration
+        Dim root As XmlElement = Nothing
+        Dim child As XmlElement = Nothing
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        root = doc.CreateElement("root")
+        child = doc.CreateElement("screen")
+        child.InnerText = CurrentScreen.ToString
+        root.AppendChild(child)
+        doc.AppendChild(root)
+        Dim screenpath As String = Preferences.applicationPath & "\Settings\screen.xml"
+        Try
+            Dim output As New XmlTextWriter(screenpath, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            doc.WriteTo(output)
+            output.Close()
+        Catch
+        End Try
+    End Sub
 
     Private Sub util_BatchUpdate()
 
@@ -1097,6 +1138,7 @@ Public Class Form1
             Preferences.startuptab = TabLevel1.SelectedIndex
 
             Preferences.SaveConfig()
+            SplashscreenWrite()
             Call util_ProfileSave()
             Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
         Catch ex As Exception
