@@ -1583,4 +1583,5 @@ Public Class frmOptions
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 End Class

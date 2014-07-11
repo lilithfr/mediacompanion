@@ -266,12 +266,8 @@ Public Class Form1
 
     Dim MoviesFiltersResizeCalled As Boolean = False
 
-    Private Sub Form1_BackgroundImageChanged(sender As Object, e As System.EventArgs) Handles Me.BackgroundImageChanged
-
-    End Sub
-
-
     'TODO: (Form1_Load) Need to refactor
+#Region "Form1 Events"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PictureBoxAssignedMoviePoster.AllowDrop = True
         AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
@@ -280,8 +276,8 @@ Public Class Form1
 
             Label73.Text = ""
 
-            BckWrkScnMovies.WorkerReportsProgress      = true
-            BckWrkScnMovies.WorkerSupportsCancellation = true
+            BckWrkScnMovies.WorkerReportsProgress = True
+            BckWrkScnMovies.WorkerSupportsCancellation = True
 
             oMovies.Bw = BckWrkScnMovies
 
@@ -299,17 +295,17 @@ Public Class Form1
                           "Do you wish to download the Full version?", _
                           MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
                     'Process.Start(RequiredNetURL)
-                    OpenUrl( RequiredNetURL )
+                    OpenUrl(RequiredNetURL)
                     End
                 End If
             End If
 
             'TasksList.DataSource = Common.Tasks
-            
+
             ForegroundWorkTimer.Interval = 500
-    #If Not DEBUG
+#If Not Debug Then
            AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
-    #End If
+#End If
 
             Dim asm As Assembly = Assembly.GetExecutingAssembly
             Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -321,38 +317,38 @@ Public Class Form1
             TvTreeview.Sort()
 
             For Each arg As String In Environment.GetCommandLineArgs().Skip(1)
-                
-                Select arg.ToLower
-                    Case "sq" : 
+
+                Select Case arg.ToLower
+                    Case "sq"
                         scrapeAndQuit = True
                         sandq = 3
-                    Case "st" :
+                    Case "st"
                         scrapeAndQuit = True
                         sandq = 1
-                    Case "sm" :
+                    Case "sm"
                         scrapeAndQuit = True
                         sandq = 2
-                    Case "r" :
+                    Case "r"
                         refreshAndQuit = True
-                    Case "?" :
+                    Case "?"
                         AttachConsole(-1)
                         Console.WriteLine("")
                         Console.WriteLine("")
-		                Console.WriteLine("Commandline options")
-		                Console.WriteLine("-------------------")
-		                Console.WriteLine("sq - Search for & scrape new movies & tv shows")
-		                Console.WriteLine("st - Search for & scrape newtv shows")
-		                Console.WriteLine("sm - Search for & scrape new movies")
-		                Console.WriteLine("r  - Refresh movie & tv caches")
-		                Console.WriteLine("?  - Show this page")
+                        Console.WriteLine("Commandline options")
+                        Console.WriteLine("-------------------")
+                        Console.WriteLine("sq - Search for & scrape new movies & tv shows")
+                        Console.WriteLine("st - Search for & scrape newtv shows")
+                        Console.WriteLine("sm - Search for & scrape new movies")
+                        Console.WriteLine("r  - Refresh movie & tv caches")
+                        Console.WriteLine("?  - Show this page")
                         Console.WriteLine("")
                         Environment.Exit(1)
                         'Me.Close()
-	                Case Else
+                    Case Else
                         AttachConsole(-1)
                         Console.WriteLine("")
                         Console.WriteLine("")
-		                Console.WriteLine("Unrecognised commandline option : [" & arg & "]. Type ? for help")
+                        Console.WriteLine("Unrecognised commandline option : [" & arg & "]. Type ? for help")
                         Console.WriteLine("")
                         Environment.Exit(1)
                         'Me.Close()
@@ -373,14 +369,14 @@ Public Class Form1
                 'End If
             Next
 
-            If scrapeAndQuit or refreshAndQuit Then
+            If scrapeAndQuit Or refreshAndQuit Then
                 Me.WindowState = FormWindowState.Minimized
             Else
                 Dim scrn As Integer = splashscreenread()
                 frmSplash.Bounds = screen.AllScreens(scrn).Bounds
                 frmSplash.StartPosition = FormStartPosition.Manual
                 Dim x As Integer = screen.AllScreens(scrn).Bounds.X
-                frmSplash.Location = New Point(x+250, 250)
+                frmSplash.Location = New Point(x + 250, 250)
                 frmSplash.TopMost = True
                 frmSplash.Show()
                 frmSplash.Label3.Text = "Status :- Initialising Program"
@@ -450,30 +446,30 @@ Public Class Form1
                 profileStruct.WorkingProfileName = "Default"
                 Call util_ProfileSave()
             End If
-       
-                'Call util_ProfilesLoad()
-                'For Each prof In profileStruct.ProfileList
-                '    If prof.ProfileName = profileStruct.StartupProfile Then
-                '        workingProfile.actorcache = prof.actorcache
-                '        workingProfile.DirectorCache = prof.DirectorCache
-                '        workingProfile.config = prof.config
-                '        workingProfile.moviecache = prof.moviecache
-                '        workingProfile.profilename = prof.profilename
-                '        workingProfile.regexlist = prof.regexlist
-                '        workingProfile.filters = prof.filters
-                '        workingProfile.tvcache = prof.tvcache
-                '        workingProfile.profilename = prof.profilename
-                '        For Each item In ProfilesToolStripMenuItem.DropDownItems
-                '            If item.text = workingProfile.profilename Then
-                '                With item
-                '                    item.checked = True
-                '                End With
-                '            Else
-                '                item.checked = False
-                '            End If
-                '        Next
-                '    End If
-                'Next
+
+            'Call util_ProfilesLoad()
+            'For Each prof In profileStruct.ProfileList
+            '    If prof.ProfileName = profileStruct.StartupProfile Then
+            '        workingProfile.actorcache = prof.actorcache
+            '        workingProfile.DirectorCache = prof.DirectorCache
+            '        workingProfile.config = prof.config
+            '        workingProfile.moviecache = prof.moviecache
+            '        workingProfile.profilename = prof.profilename
+            '        workingProfile.regexlist = prof.regexlist
+            '        workingProfile.filters = prof.filters
+            '        workingProfile.tvcache = prof.tvcache
+            '        workingProfile.profilename = prof.profilename
+            '        For Each item In ProfilesToolStripMenuItem.DropDownItems
+            '            If item.text = workingProfile.profilename Then
+            '                With item
+            '                    item.checked = True
+            '                End With
+            '            Else
+            '                item.checked = False
+            '            End If
+            '        Next
+            '    End If
+            'Next
             'Else
 
             'hide debug xml view tabs - unhiden (i.e. added) via debug tab
@@ -491,18 +487,18 @@ Public Class Form1
             Call util_ProfilesLoad()
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = profileStruct.StartupProfile Then
-                    workingProfile.actorcache = prof.actorcache
+                    workingProfile.ActorCache = prof.ActorCache
                     workingProfile.DirectorCache = prof.DirectorCache
-                    workingProfile.config = prof.config
-                    workingProfile.moviecache = prof.moviecache
-                    workingProfile.profilename = prof.profilename
-                    workingProfile.regexlist = prof.regexlist
-                    workingProfile.filters = prof.filters
-                    workingProfile.tvcache = prof.tvcache
+                    workingProfile.Config = prof.Config
+                    workingProfile.MovieCache = prof.MovieCache
+                    workingProfile.ProfileName = prof.ProfileName
+                    workingProfile.RegExList = prof.RegExList
+                    workingProfile.Filters = prof.Filters
+                    workingProfile.TvCache = prof.TvCache
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.MusicVideoCache = prof.MusicVideoCache
                     For Each item In ProfilesToolStripMenuItem.DropDownItems
-                        If item.text = workingProfile.profilename Then
+                        If item.text = workingProfile.ProfileName Then
                             With item
                                 item.checked = True
                             End With
@@ -533,7 +529,7 @@ Public Class Form1
                         workingProfile.MusicVideoCache = tempstring & "\Settings\musicvideocache" & counter.ToString & ".xml"
                     End If
                 End If
-                    counter += 1
+                counter += 1
             Next
 
             If workingProfile.HomeMovieCache = "" Then workingProfile.HomeMovieCache = tempstring & "homemoviecache.xml"
@@ -562,9 +558,9 @@ Public Class Form1
             Try
                 If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
             Catch ex As Exception
-    #If SilentErrorScream Then
+#If SilentErrorScream Then
                 Throw ex
-    #End If
+#End If
             End Try
 
             tempstring = applicationDatapath & "error.log"
@@ -585,11 +581,11 @@ Public Class Form1
             SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
 
-            Movies.SpinUpDrives
+            Movies.SpinUpDrives()
 
-            If Not (scrapeAndQuit or refreshAndQuit) Then
+            If Not (scrapeAndQuit Or refreshAndQuit) Then
                 Me.Visible = True
-            
+
                 Dim scrn As Integer = If(NumOfScreens > 0, Preferences.preferredscreen, 0)
                 Dim intX As Integer = screen.AllScreens(scrn).Bounds.X + screen.AllScreens(scrn).Bounds.Width 'Screen.PrimaryScreen.Bounds.Width
                 'Dim Scrn() As System.Windows.Forms.Screen = System.Windows.Forms.Screen.AllScreens
@@ -818,228 +814,6 @@ Public Class Form1
         'SendXbmcConnect
     End Sub
 
-    Sub Ini_Timer(t As Timers.Timer,Optional Interval As Integer=1000, Optional Repeating As Boolean=False)
-        t.Stop
-        t.Interval  = Interval
-        t.AutoReset = Repeating
-    End Sub
-
-    'Sub SendXbmcConnect
-    '    If Preferences.XbmcLinkReady Then 
-    '        XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
-    '    End If
-    'End Sub
-
-    Private Sub BckWrkXbmcController_DoWork(ByVal sender As Object, ByVal e As DoWorkEventArgs)
-
-        Dim bw As BackgroundWorker = CType(sender, BackgroundWorker)
-
-        Dim sm As New XbmcController(e.Argument,bw)
-
-        sm.Go()
-    End Sub
-
-
-
-    Private Sub XBMC_Controller_Log_TO_Timer_Elapsed
-        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count=0 Then
-            If DateDiff(DateInterval.Second,XBMC_Controller_LogLastShownDt,Now)>30 Then
-
-                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file )
-                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
-
-                frmXBMC_Progress.Reset
-                Dim ce As New BaseEvent(XbmcController.E.ResetErrorCount,New BaseEventArgs())
-                XbmcControllerQ.Write(ce)   
-            End If
-            XBMC_Controller_LogLastShownDt = Now
-            XBMC_Link_ErrorLog_Timer.Stop
-        End If
-    End Sub
-
-    Private Sub XBMC_Link_Idle_Timer_Elapsed
-        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count=0 Then
-            frmXBMC_Progress.Visible = False
-            XBMC_Link_ErrorLog_Timer.Stop
-        End If
-    End Sub
-
-    Sub Restart( tmr As Timers.Timer )
-        tmr.Stop
-        tmr.Start
-    End Sub
-
-    Private Sub BckWrkXbmcController_ReportProgress(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
-
-        Dim oProgress As XBMC_Controller_Progress = CType(e.UserState, XBMC_Controller_Progress)
-
-        If XBMC_Link_ErrorLog_Timer.Enabled Then
-            Restart(XBMC_Link_ErrorLog_Timer)
-        End If
-
-        Restart(XBMC_Link_Idle_Timer )
-        Restart(XBMC_Link_Check_Timer)
-
-        frmXBMC_Progress.Visible = True
-
-        If HandleEvents(oProgress) Then Return
-
-        If oProgress.ErrorCount>0 Then
-            If Preferences.ShowLogOnError Then
-                XBMC_Link_ErrorLog_Timer.Start
-            End If
-                
-            'frmXBMC_Progress.Reset
-            'Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
-            'XbmcControllerQ.Write(ce)       
-        End If
-
-        frmXBMC_Progress.UpdateDetails(oProgress)
-    End Sub
-
-
-    Function HandleEvents(oProgress As XBMC_Controller_Progress) As Boolean
-
-        Select oProgress.Evt
-
-            Case XbmcController.E.MC_Only_Movies 
-                MC_Only_Movies = CType(oProgress.Args, ComboList_EventArgs).XbmcMovies
-                Assign_FilterGeneral
-                Return True
-
-            Case XbmcController.E.MC_XbmcMcMovies
-                oMovies.XbmcMcMovies = CType(oProgress.Args, XBMC_MC_Movies_EventArgs).XbmcMcMovies
-                Assign_FilterGeneral
-                Return True
-
-            Case XbmcController.E.MC_XbmcOnlyMovies 
-                oMovies.XbmcOnlyMovies = CType(oProgress.Args, XBMC_Only_Movies_EventArgs).XbmcOnlyMovies
-                Return True
-
-            Case XbmcController.E.MC_XbmcQuit 
-                SetcbBtnLink
-                Return True
-
-            'Case XbmcController.E.MC_MaxMovieDetails
-            '    MaxXbmcMovies = CType(oProgress.Args, XBMC_MaxMovies_EventArgs).XbmcMovies
-            '    Return
-
-        End Select
-
-        Return False
-
-    End Function
-
-    Const MaxConseqFailures As Integer = 3
-
-    Dim ConnectSent       As Boolean
-    Dim XbmcLastLinkState As Boolean
-    Dim ConseqFailures    As Integer = 0
-
-    Sub SetcbBtnLink(Optional sender As Object=Nothing)
-        XBMC_Link_Check_Timer.Stop
-
-        'Only check when link is idle
-        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count=0 Then
-            Dim passed As Boolean = XBMC_TestsPassed
-
-            '
-            ' Sometimes the link test fails. Don't know why yet, maybe XBMC is busy...but anyway this should reduce the number of phantom 
-            ' link disablings...
-            ' 
-            If Not IsNothing(sender) Then
-                If cbBtnLink.Enabled And Not passed Then
-                    ConseqFailures += 1
-                Else
-                    ConseqFailures = 0
-                End If
-            Else
-                ConseqFailures = 0
-            End If
-
-            If IsNothing(sender) Or ConseqFailures<=MaxConseqFailures Then
-                cbBtnLink.Enabled = passed
-
-                If cbBtnLink.Enabled Then
-                    cbBtnLink.BackColor = IIf(cbBtnLink.Checked,Color.LightGreen,Color.Transparent)
-
-                    If Preferences.XBMC_Link <> cbBtnLink.Checked Then
-
-                        Preferences.XBMC_Link = cbBtnLink.Checked
-
-                        If Preferences.XbmcLinkReady Then
-                            XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
-                        End If
-
-                        Preferences.SaveConfig 
-                    End If
-                Else
-                    cbBtnLink.Checked   = False
-                    cbBtnLink.BackColor = Color.Transparent
-                End If
-
-                tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked 
-            End If
-        End If
-
-
-        XBMC_Link_Check_Timer.Start
-    End Sub
-
-    Private Function splashscreenread() As Integer
-        Dim scrn As Integer = 0
-        Dim checkpath As String = Preferences.applicationPath & "\Settings\screen.xml"
-        If File.Exists(checkpath) Then
-            Try
-                Dim document As XDocument = XDocument.Load(checkpath)
-                Dim sc = From t In document.Descendants("screen") Select t.Value
-                scrn = sc.First().ToInt
-                If scrn > NumOfScreens Then scrn = 0
-            Catch
-                scrn = 0
-            End Try
-        End If
-        Return scrn
-    End Function
-
-    Private Sub SplashscreenWrite()
-        Dim doc As New XmlDocument
-        Dim thispref As XmlNode = Nothing
-        Dim xmlproc As XmlDeclaration
-        Dim root As XmlElement = Nothing
-        Dim child As XmlElement = Nothing
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
-        root = doc.CreateElement("root")
-        child = doc.CreateElement("screen")
-        child.InnerText = CurrentScreen.ToString
-        root.AppendChild(child)
-        doc.AppendChild(root)
-        Dim screenpath As String = Preferences.applicationPath & "\Settings\screen.xml"
-        Try
-            Dim output As New XmlTextWriter(screenpath, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-            doc.WriteTo(output)
-            output.Close()
-        Catch
-        End Try
-    End Sub
-
-    Private Sub util_BatchUpdate()
-
-        rescrapeList.ResetFields()
-        rescrapeList.mediatags = True
-        rescrapeList.Rename_Files = True
-
-        _rescrapeList.FullPathAndFilenames.Clear()
-        For Each movie As ComboList In oMovies.MovieCache
-            _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
-        Next
-
-        oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
-
-    End Sub
-
 #If Refocus Then
     Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
         Try
@@ -1055,14 +829,12 @@ Public Class Form1
     End Sub
 #End If
 
-
-
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
         Try
             Me.Dispose()
             Me.Finalize()
-            If cbClearCache.Checked = True Then   ClearCacheFolder    ' delete cache folder if option selected.
-            If cbClearMissingFolder.Checked = True Then ClearMissingFolder()  ' delete missing folder if option selected.
+            If cbClearCache.Checked = True Then ClearCacheFolder() ' delete cache folder if option selected.
+            If cbClearMissingFolder.Checked = True Then ClearMissingFolder() ' delete missing folder if option selected.
             End
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -1072,13 +844,13 @@ Public Class Form1
 
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-        BckWrkScnMovies_Cancel
-        While BckWrkScnMovies.IsBusy 
-            Application.DoEvents
+        BckWrkScnMovies_Cancel()
+        While BckWrkScnMovies.IsBusy
+            Application.DoEvents()
         End While
 
         Try
-            oMovies.SaveCaches
+            oMovies.SaveCaches()
 
             If Tv_CacheSave() Then
                 e.Cancel = True
@@ -1099,8 +871,8 @@ Public Class Form1
             Preferences.splt3 = SplitContainer3.SplitterDistance
             Preferences.splt4 = SplitContainer4.SplitterDistance
             Preferences.splt5 = SplitContainer5.SplitterDistance
-            Preferences.splt6 = _tv_SplitContainer.SplitterDistance 
-            Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.height, 2)
+            Preferences.splt6 = _tv_SplitContainer.SplitterDistance
+            Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
             Preferences.MovFiltLastSize = SplitContainer5.Height - SplitContainer5.SplitterDistance
             Preferences.preferredscreen = CurrentScreen
 
@@ -1160,7 +932,6 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
         Try
             If Me.WindowState = FormWindowState.Maximized Then
@@ -1190,6 +961,278 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
+        Try
+            If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
+                Preferences.formwidth = Me.Width
+                Preferences.formheight = Me.Height
+
+                'Preferences.saveconfig()           'no need to save position, we do that when MC closes
+                Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
+                If maxcount2 <> maxcount Then
+                    maxcount = maxcount2
+                    Call mov_WallReset()
+                End If
+
+            End If
+            mov_SplitContainerAutoPosition()
+            tv_SplitContainerAutoPosition()
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Form1_BackgroundImageChanged(sender As Object, e As System.EventArgs) Handles Me.BackgroundImageChanged
+
+    End Sub
+
+    Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+        If e.KeyCode = Keys.Escape Then bckgrndcancel() 'BckWrkScnMovies_Cancel
+        If e.KeyCode = Keys.F5 Then doRefresh()
+        If e.KeyCode = Keys.F3 Then doSearchNew()
+        If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
+    End Sub
+
+#End Region
+
+    Sub Ini_Timer(t As Timers.Timer, Optional Interval As Integer = 1000, Optional Repeating As Boolean = False)
+        t.Stop()
+        t.Interval = Interval
+        t.AutoReset = Repeating
+    End Sub
+
+    'Sub SendXbmcConnect
+    '    If Preferences.XbmcLinkReady Then 
+    '        XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+    '    End If
+    'End Sub
+
+#Region "XBMC Link"
+    Private Sub BckWrkXbmcController_DoWork(ByVal sender As Object, ByVal e As DoWorkEventArgs)
+
+        Dim bw As BackgroundWorker = CType(sender, BackgroundWorker)
+
+        Dim sm As New XbmcController(e.Argument, bw)
+
+        sm.Go()
+    End Sub
+
+    Private Sub XBMC_Controller_Log_TO_Timer_Elapsed()
+        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count = 0 Then
+            If DateDiff(DateInterval.Second, XBMC_Controller_LogLastShownDt, Now) > 30 Then
+
+                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file)
+                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
+
+                frmXBMC_Progress.Reset()
+                Dim ce As New BaseEvent(XbmcController.E.ResetErrorCount, New BaseEventArgs())
+                XbmcControllerQ.Write(ce)
+            End If
+            XBMC_Controller_LogLastShownDt = Now
+            XBMC_Link_ErrorLog_Timer.Stop()
+        End If
+    End Sub
+
+    Private Sub XBMC_Link_Idle_Timer_Elapsed()
+        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count = 0 Then
+            frmXBMC_Progress.Visible = False
+            XBMC_Link_ErrorLog_Timer.Stop()
+        End If
+    End Sub
+
+    Sub Restart(tmr As Timers.Timer)
+        tmr.Stop()
+        tmr.Start()
+    End Sub
+
+    Private Sub BckWrkXbmcController_ReportProgress(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
+
+        Dim oProgress As XBMC_Controller_Progress = CType(e.UserState, XBMC_Controller_Progress)
+
+        If XBMC_Link_ErrorLog_Timer.Enabled Then
+            Restart(XBMC_Link_ErrorLog_Timer)
+        End If
+
+        Restart(XBMC_Link_Idle_Timer)
+        Restart(XBMC_Link_Check_Timer)
+
+        frmXBMC_Progress.Visible = True
+
+        If HandleEvents(oProgress) Then Return
+
+        If oProgress.ErrorCount > 0 Then
+            If Preferences.ShowLogOnError Then
+                XBMC_Link_ErrorLog_Timer.Start()
+            End If
+
+            'frmXBMC_Progress.Reset
+            'Dim ce As New BaseEvent(XbmcController.E.MC_ResetErrorCount,New BaseEventArgs())
+            'XbmcControllerQ.Write(ce)       
+        End If
+
+        frmXBMC_Progress.UpdateDetails(oProgress)
+    End Sub
+
+    Function HandleEvents(oProgress As XBMC_Controller_Progress) As Boolean
+
+        Select Case oProgress.Evt
+
+            Case XbmcController.E.MC_Only_Movies
+                MC_Only_Movies = CType(oProgress.Args, ComboList_EventArgs).XbmcMovies
+                Assign_FilterGeneral()
+                Return True
+
+            Case XbmcController.E.MC_XbmcMcMovies
+                oMovies.XbmcMcMovies = CType(oProgress.Args, XBMC_MC_Movies_EventArgs).XbmcMcMovies
+                Assign_FilterGeneral()
+                Return True
+
+            Case XbmcController.E.MC_XbmcOnlyMovies
+                oMovies.XbmcOnlyMovies = CType(oProgress.Args, XBMC_Only_Movies_EventArgs).XbmcOnlyMovies
+                Return True
+
+            Case XbmcController.E.MC_XbmcQuit
+                SetcbBtnLink()
+                Return True
+
+                'Case XbmcController.E.MC_MaxMovieDetails
+                '    MaxXbmcMovies = CType(oProgress.Args, XBMC_MaxMovies_EventArgs).XbmcMovies
+                '    Return
+
+        End Select
+
+        Return False
+
+    End Function
+
+    Const MaxConseqFailures As Integer = 3
+
+    Dim ConnectSent As Boolean
+    Dim XbmcLastLinkState As Boolean
+    Dim ConseqFailures As Integer = 0
+
+    Sub SetcbBtnLink(Optional sender As Object = Nothing)
+        XBMC_Link_Check_Timer.Stop()
+
+        'Only check when link is idle
+        If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count = 0 Then
+            Dim passed As Boolean = XBMC_TestsPassed
+
+            '
+            ' Sometimes the link test fails. Don't know why yet, maybe XBMC is busy...but anyway this should reduce the number of phantom 
+            ' link disablings...
+            ' 
+            If Not IsNothing(sender) Then
+                If cbBtnLink.Enabled And Not passed Then
+                    ConseqFailures += 1
+                Else
+                    ConseqFailures = 0
+                End If
+            Else
+                ConseqFailures = 0
+            End If
+
+            If IsNothing(sender) Or ConseqFailures <= MaxConseqFailures Then
+                cbBtnLink.Enabled = passed
+
+                If cbBtnLink.Enabled Then
+                    cbBtnLink.BackColor = IIf(cbBtnLink.Checked, Color.LightGreen, Color.Transparent)
+
+                    If Preferences.XBMC_Link <> cbBtnLink.Checked Then
+
+                        Preferences.XBMC_Link = cbBtnLink.Checked
+
+                        If Preferences.XbmcLinkReady Then
+                            XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
+                        End If
+
+                        Preferences.SaveConfig()
+                    End If
+                Else
+                    cbBtnLink.Checked = False
+                    cbBtnLink.BackColor = Color.Transparent
+                End If
+
+                tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked
+            End If
+        End If
+
+
+        XBMC_Link_Check_Timer.Start()
+    End Sub
+
+    Private Sub XBMC_Link_Check_Timer_Elapsed()
+        If ProgState = ProgramState.MovieControlsDisabled Then Return
+        'If XbmcControllerBufferQ.Count=0 Then
+        SetcbBtnLink(XBMC_Link_Check_Timer)
+        'End If
+    End Sub
+
+    Sub XbmcLink_UpdateArtwork()
+        If Preferences.XBMC_Delete_Cached_Images AndAlso Preferences.XbmcLinkReady Then
+            Dim m As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+            m.SaveNFO()
+        End If
+    End Sub
+#End Region
+
+    Private Function splashscreenread() As Integer
+        Dim scrn As Integer = 0
+        Dim checkpath As String = Preferences.applicationPath & "\Settings\screen.xml"
+        If File.Exists(checkpath) Then
+            Try
+                Dim document As XDocument = XDocument.Load(checkpath)
+                Dim sc = From t In document.Descendants("screen") Select t.Value
+                scrn = sc.First().ToInt
+                If scrn > NumOfScreens Then scrn = 0
+            Catch
+                scrn = 0
+            End Try
+        End If
+        Return scrn
+    End Function
+
+    Private Sub SplashscreenWrite()
+        Dim doc As New XmlDocument
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc As XmlDeclaration
+        Dim root As XmlElement = Nothing
+        Dim child As XmlElement = Nothing
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        root = doc.CreateElement("root")
+        child = doc.CreateElement("screen")
+        child.InnerText = CurrentScreen.ToString
+        root.AppendChild(child)
+        doc.AppendChild(root)
+        Dim screenpath As String = Preferences.applicationPath & "\Settings\screen.xml"
+        Try
+            Dim output As New XmlTextWriter(screenpath, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            doc.WriteTo(output)
+            output.Close()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub util_BatchUpdate()
+
+        rescrapeList.ResetFields()
+        rescrapeList.mediatags = True
+        rescrapeList.Rename_Files = True
+
+        _rescrapeList.FullPathAndFilenames.Clear()
+        For Each movie As ComboList In oMovies.MovieCache
+            _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
+        Next
+
+        oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
+
+    End Sub
+
     Sub ClearCacheFolder            
         Try
             Dim cacheFolder As String = applicationPath & "\cache"
@@ -1201,6 +1244,7 @@ Public Class Form1
 
         End Try
     End Sub
+
     Sub ClearMissingFolder()
         Try
             Dim missingfolder As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
@@ -1286,43 +1330,6 @@ Public Class Form1
             End If
         Catch
         End Try
-    End Sub
-
-    'Private sub tvsplitcontResize() Handles _tv_SplitContainer.Resize
-    '    tvbannerExclude = True
-    'End Sub
-
-    'Private Sub tvbannersplitchange(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles _tv_SplitContainer.SplitterMoved
-
-    '    If Not MainFormLoadedStatus Then Exit Sub
-    '    If tvbannerExclude Then
-    '        tvbannerExclude = False
-    '        Exit Sub
-    '    End If
-    '    Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance/_tv_SplitContainer.Height)
-    'End Sub
-
-    Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
-        Try
-            If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
-                Preferences.formwidth = Me.Width
-                Preferences.formheight = Me.Height
-
-                'Preferences.saveconfig()           'no need to save position, we do that when MC closes
-                Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
-                If maxcount2 <> maxcount Then
-                    maxcount = maxcount2
-                    Call mov_WallReset()
-                End If
-
-            End If
-            mov_SplitContainerAutoPosition()
-            tv_SplitContainerAutoPosition()
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
     End Sub
 
     Public Sub mov_CacheLoad()
@@ -1994,7 +2001,6 @@ Public Class Form1
         'mov_SplitContainerAutoPosition()
     End Sub
 
-
     Private Sub HandleTrailerBtn(ByVal fmd As FullMovieDetails)
 
         If IsNothing(fmd) Then
@@ -2063,7 +2069,6 @@ Public Class Form1
         ' the same.
         Return ((file1byte - file2byte) = 0)
     End Function
-
 
     Private Function mov_FileCheckValid(ByVal fullpathandfilename As String) As Boolean
         Dim validfile As Boolean = True
@@ -2331,7 +2336,6 @@ Public Class Form1
         Return validfile
     End Function
 
-
 #Region "Auxiliary Procedures for Multithreading of Rescraping Movies Procedure Below"
 
     Private Sub mov_XbmcTmdbDoExtraAndRename(ByVal fullpathandfilename)
@@ -2530,8 +2534,6 @@ Public Class Form1
 
         End Try
     End Sub
-
-
 
 
     Private Sub cbMovieDisplay_Actor_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbMovieDisplay_Actor.MouseEnter
@@ -3038,7 +3040,6 @@ Public Class Form1
 
         UpdateFilteredList()
     End Sub
-
 
     Private Sub mov_SaveQuick()
 
@@ -3829,6 +3830,7 @@ Public Class Form1
 
     End Sub
 
+#Region "DataGridViewMovies Events"
     Private Sub DataGridViewMovies_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewMovies.CellClick
         _yield = True
         Application.DoEvents()
@@ -3852,7 +3854,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
 
     Private Sub DataGridViewMovies_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragDrop
 
@@ -4040,6 +4041,8 @@ Public Class Form1
         'End Try
     End Sub
 
+#End Region
+
     Private Function Mov_MissingMovie(ByVal qrylst As List(Of Data_GridViewMovie)) As Boolean
         Dim missingstr As String
         Dim Filepathandname As String
@@ -4051,7 +4054,6 @@ Public Class Form1
         End If
     Return False
     End Function
-
 
     Private Sub TextBox1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
         Try
@@ -4069,7 +4071,6 @@ Public Class Form1
         End Try
     End Sub
 
-
     Private Sub TextBox_GenreFilter_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
         Try
             If lockedList = False Then
@@ -4081,7 +4082,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
 
     Private Sub btnreverse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnreverse.CheckedChanged
         If btnreverse.Checked Then
@@ -4771,14 +4771,6 @@ Public Class Form1
         End Try
     End Sub
 
-
-    Sub XbmcLink_UpdateArtwork
-        If Preferences.XBMC_Delete_Cached_Images AndAlso Preferences.XbmcLinkReady Then
-            Dim m As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-            m.SaveNFO
-        End If
-    End Sub
-
     Sub UpdateMissingFanart
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
@@ -4789,7 +4781,6 @@ Public Class Form1
 '       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         UpdateMissingFanartNav
     End Sub
-
 
     Sub UpdateMissingFanartNav
 
@@ -4837,7 +4828,6 @@ Public Class Form1
         End While
     End Sub
 
-
     Sub UpdateMissingFanartPrevBtn
         btnPrevMissingFanart.Enabled = False
 
@@ -4857,7 +4847,6 @@ Public Class Form1
         End While
     End Sub
 
-
     Sub UpdateMissingPoster
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
@@ -4869,8 +4858,6 @@ Public Class Form1
         UpdateMissingPosterNav             
     End Sub
 
-
-    
     Sub UpdateMissingPosterNav
 
         'Default to selecting first row if non selected
@@ -4882,7 +4869,6 @@ Public Class Form1
         UpdateMissingPosterPrevBtn
         UpdatelblPosterMissingCount
     End Sub
-
 
     Sub UpdatelblPosterMissingCount
         Dim i As Integer = 0
@@ -4917,7 +4903,6 @@ Public Class Form1
             i = i + 1
         End While
     End Sub
-
 
     Sub UpdateMissingPosterPrevBtn
         btnPrevMissingPoster.Enabled = False
@@ -6327,7 +6312,7 @@ Public Class Form1
 
     End Sub
 
-        Private Sub cbTvActor_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseHover
+    Private Sub cbTvActor_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseHover
         Try
             cbTvActor.Focus()
         Catch ex As Exception
@@ -7890,25 +7875,25 @@ Public Class Form1
         Return fanartpath
     End Function
 
-    Private Sub rbTvFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart.CheckedChanged
-        tv_FanartDisplay()
+    Private Sub rbTvFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbTvFanart.CheckedChanged, rbTvFanart1.CheckedChanged, rbTvFanart2.CheckedChanged, rbTvFanart3.CheckedChanged, rbTvFanart4.CheckedChanged
+        Tv_FanartDisplay()
     End Sub
 
-    Private Sub rbTvFanart1_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart1.CheckedChanged
-        tv_FanartDisplay()
-    End Sub
+    'Private Sub rbTvFanart1_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart1.CheckedChanged
+    '    tv_FanartDisplay()
+    'End Sub
 
-    Private Sub rbTvFanart2_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart2.CheckedChanged
-        tv_FanartDisplay()
-    End Sub
+    'Private Sub rbTvFanart2_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart2.CheckedChanged
+    '    tv_FanartDisplay()
+    'End Sub
 
-    Private Sub rbTvFanart3_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart3.CheckedChanged
-        tv_FanartDisplay()
-    End Sub
+    'Private Sub rbTvFanart3_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart3.CheckedChanged
+    '    tv_FanartDisplay()
+    'End Sub
 
-    Private Sub rbTvFanart4_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart4.CheckedChanged
-        tv_FanartDisplay()
-    End Sub
+    'Private Sub rbTvFanart4_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart4.CheckedChanged
+    '    tv_FanartDisplay()
+    'End Sub
 
     Private Sub tv_FanartCropTop()
         Dim imagewidth As Integer = PictureBox10.Image.Width
@@ -21807,16 +21792,6 @@ End Sub
         tsProgressBarFileDownload.Value = iTotalBytesRead
     End Sub
 
-
-    Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-
-        If               e.KeyCode = Keys.Escape Then bckgrndcancel 'BckWrkScnMovies_Cancel
-        If               e.KeyCode = Keys.F5     Then doRefresh
-        If               e.KeyCode = Keys.F3     Then doSearchNew
-        If e.Control And e.KeyCode = Keys.C      Then AbortFileDownload
-    End Sub
-
-
     Private Sub tsLabelEscCancel_Click(sender As System.Object, e As System.EventArgs) Handles tsLabelEscCancel.Click
         BckWrkScnMovies_Cancel()
     End Sub
@@ -23093,15 +23068,6 @@ End Sub
         SetcbBtnLink
         LabelCountFilter.Focus
     End Sub
-
-
-    Private Sub XBMC_Link_Check_Timer_Elapsed
-        If ProgState=ProgramState.MovieControlsDisabled Then Return
-        'If XbmcControllerBufferQ.Count=0 Then
-            SetcbBtnLink(XBMC_Link_Check_Timer)
-        'End If
-    End Sub
-   
 
     Private Sub tsmiSyncToXBMC_Click( sender As Object,  e As EventArgs) Handles tsmiSyncToXBMC.Click
         Try

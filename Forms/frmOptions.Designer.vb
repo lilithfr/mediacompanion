@@ -47,16 +47,6 @@ Partial Class frmOptions
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.Profiles = New System.Windows.Forms.TabPage()
-        Me.GroupBox15 = New System.Windows.Forms.GroupBox()
-        Me.ListBox6 = New System.Windows.Forms.ListBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.btndefaultprofile = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.brnaddprofile = New System.Windows.Forms.Button()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.btndeleteprofile = New System.Windows.Forms.Button()
         Me.GroupBox13 = New System.Windows.Forms.GroupBox()
         Me.Button13 = New System.Windows.Forms.Button()
         Me.Button8 = New System.Windows.Forms.Button()
@@ -184,11 +174,35 @@ Partial Class frmOptions
         Me.TabControl3 = New System.Windows.Forms.TabControl()
         Me.TPG1 = New System.Windows.Forms.TabPage()
         Me.TPG2 = New System.Windows.Forms.TabPage()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.GroupBox42 = New System.Windows.Forms.GroupBox()
+        Me.Label141 = New System.Windows.Forms.Label()
+        Me.GroupBox15 = New System.Windows.Forms.GroupBox()
+        Me.btn_ProfileSetStartup = New System.Windows.Forms.Button()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.lb_ProfileList = New System.Windows.Forms.ListBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.btn_ProfileSetDefault = New System.Windows.Forms.Button()
+        Me.tb_ProfileNew = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.btn_ProfileAdd = New System.Windows.Forms.Button()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.btn_ProfileRemove = New System.Windows.Forms.Button()
+        Me.lbl_CommandTitle = New System.Windows.Forms.Label()
+        Me.lcl_CommandCommand = New System.Windows.Forms.Label()
+        Me.tb_CommandTitle = New System.Windows.Forms.TextBox()
+        Me.tb_CommandCommand = New System.Windows.Forms.TextBox()
+        Me.btn_CommandRemove = New System.Windows.Forms.Button()
+        Me.lb_CommandTitle = New System.Windows.Forms.ListBox()
+        Me.lb_CommandCommand = New System.Windows.Forms.ListBox()
+        Me.btn_CommandAdd = New System.Windows.Forms.Button()
+        Me.btn_SettingsCancel = New System.Windows.Forms.Button()
+        Me.btn_SettingsClose = New System.Windows.Forms.Button()
+        Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.GroupBox10.SuspendLayout()
         Me.GroupBox12.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Profiles.SuspendLayout()
-        Me.GroupBox15.SuspendLayout()
         Me.GroupBox13.SuspendLayout()
         Me.GroupBox14.SuspendLayout()
         Me.TabPage3.SuspendLayout()
@@ -216,6 +230,10 @@ Partial Class frmOptions
         Me.TPGen.SuspendLayout()
         Me.TabControl3.SuspendLayout()
         Me.TPG1.SuspendLayout()
+        Me.TPG2.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.GroupBox42.SuspendLayout()
+        Me.GroupBox15.SuspendLayout()
         Me.SuspendLayout()
         '
         'OpenFileDialog1
@@ -395,7 +413,6 @@ Partial Class frmOptions
         '
         'Profiles
         '
-        Me.Profiles.Controls.Add(Me.GroupBox15)
         Me.Profiles.Controls.Add(Me.GroupBox13)
         Me.Profiles.Location = New System.Drawing.Point(4, 22)
         Me.Profiles.Name = "Profiles"
@@ -404,107 +421,6 @@ Partial Class frmOptions
         Me.Profiles.TabIndex = 3
         Me.Profiles.Text = "Profiles & Regex"
         Me.Profiles.UseVisualStyleBackColor = True
-        '
-        'GroupBox15
-        '
-        Me.GroupBox15.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.GroupBox15.Controls.Add(Me.ListBox6)
-        Me.GroupBox15.Controls.Add(Me.Label18)
-        Me.GroupBox15.Controls.Add(Me.Label5)
-        Me.GroupBox15.Controls.Add(Me.btndefaultprofile)
-        Me.GroupBox15.Controls.Add(Me.TextBox1)
-        Me.GroupBox15.Controls.Add(Me.Label17)
-        Me.GroupBox15.Controls.Add(Me.brnaddprofile)
-        Me.GroupBox15.Controls.Add(Me.Label16)
-        Me.GroupBox15.Controls.Add(Me.btndeleteprofile)
-        Me.GroupBox15.Location = New System.Drawing.Point(8, 6)
-        Me.GroupBox15.Name = "GroupBox15"
-        Me.GroupBox15.Size = New System.Drawing.Size(402, 504)
-        Me.GroupBox15.TabIndex = 11
-        Me.GroupBox15.TabStop = False
-        Me.GroupBox15.Text = "Profile Manager"
-        '
-        'ListBox6
-        '
-        Me.ListBox6.FormattingEnabled = True
-        Me.ListBox6.Location = New System.Drawing.Point(245, 108)
-        Me.ListBox6.Name = "ListBox6"
-        Me.ListBox6.Size = New System.Drawing.Size(143, 394)
-        Me.ListBox6.TabIndex = 1
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(6, 421)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(204, 16)
-        Me.Label18.TabIndex = 9
-        Me.Label18.Text = "Current Default Profile Is :- Default"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(242, 86)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(55, 13)
-        Me.Label5.TabIndex = 2
-        Me.Label5.Text = "Profile List"
-        '
-        'btndefaultprofile
-        '
-        Me.btndefaultprofile.Location = New System.Drawing.Point(75, 450)
-        Me.btndefaultprofile.Name = "btndefaultprofile"
-        Me.btndefaultprofile.Size = New System.Drawing.Size(152, 23)
-        Me.btndefaultprofile.TabIndex = 8
-        Me.btndefaultprofile.Text = "Set selected profile to default"
-        Me.btndefaultprofile.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Font = New System.Drawing.Font("Times New Roman", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(9, 108)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(137, 22)
-        Me.TextBox1.TabIndex = 3
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(6, 32)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(299, 26)
-        Me.Label17.TabIndex = 7
-        Me.Label17.Text = "The Default Profile can't be deleted, it is used as a template to" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "create new pro" & _
-    "files. You can set any created profile to default."
-        '
-        'brnaddprofile
-        '
-        Me.brnaddprofile.Location = New System.Drawing.Point(152, 107)
-        Me.brnaddprofile.Name = "brnaddprofile"
-        Me.brnaddprofile.Size = New System.Drawing.Size(75, 23)
-        Me.brnaddprofile.TabIndex = 4
-        Me.brnaddprofile.Text = "Add Profile"
-        Me.brnaddprofile.UseVisualStyleBackColor = True
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(6, 89)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(150, 16)
-        Me.Label16.TabIndex = 6
-        Me.Label16.Text = "Enter New Profile Name"
-        '
-        'btndeleteprofile
-        '
-        Me.btndeleteprofile.Location = New System.Drawing.Point(75, 479)
-        Me.btndeleteprofile.Name = "btndeleteprofile"
-        Me.btndeleteprofile.Size = New System.Drawing.Size(152, 23)
-        Me.btndeleteprofile.TabIndex = 5
-        Me.btndeleteprofile.Text = "Remove Selected Profile"
-        Me.btndeleteprofile.UseVisualStyleBackColor = True
         '
         'GroupBox13
         '
@@ -1724,7 +1640,8 @@ Partial Class frmOptions
         Me.GroupBox3.Controls.Add(Me.RadioButton4)
         Me.GroupBox3.Controls.Add(Me.RadioButton2)
         Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Location = New System.Drawing.Point(6, 20)
+        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(456, 136)
         Me.GroupBox3.TabIndex = 6
@@ -1734,6 +1651,7 @@ Partial Class frmOptions
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(6, 16)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(421, 26)
@@ -1747,12 +1665,13 @@ Partial Class frmOptions
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(6, 111)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(10, 13)
+        Me.Label4.Size = New System.Drawing.Size(11, 13)
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "."
         '
         'btn_custommediaplayer
         '
+        Me.btn_custommediaplayer.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_custommediaplayer.Location = New System.Drawing.Point(168, 88)
         Me.btn_custommediaplayer.Name = "btn_custommediaplayer"
         Me.btn_custommediaplayer.Size = New System.Drawing.Size(185, 23)
@@ -1763,6 +1682,7 @@ Partial Class frmOptions
         'RadioButton4
         '
         Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton4.Location = New System.Drawing.Point(6, 91)
         Me.RadioButton4.Name = "RadioButton4"
         Me.RadioButton4.Size = New System.Drawing.Size(129, 17)
@@ -1773,6 +1693,7 @@ Partial Class frmOptions
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton2.Location = New System.Drawing.Point(6, 68)
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(367, 17)
@@ -1783,6 +1704,7 @@ Partial Class frmOptions
         'RadioButton1
         '
         Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton1.Location = New System.Drawing.Point(6, 45)
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(446, 17)
@@ -1840,6 +1762,7 @@ Partial Class frmOptions
         'TPG2
         '
         Me.TPG2.BackColor = System.Drawing.Color.Gainsboro
+        Me.TPG2.Controls.Add(Me.TableLayoutPanel1)
         Me.TPG2.Location = New System.Drawing.Point(4, 22)
         Me.TPG2.Name = "TPG2"
         Me.TPG2.Padding = New System.Windows.Forms.Padding(3)
@@ -1847,11 +1770,299 @@ Partial Class frmOptions
         Me.TPG2.TabIndex = 1
         Me.TPG2.Text = "Commands & Profiles"
         '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 8
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 328.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 13.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 275.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.GroupBox42, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.GroupBox15, 6, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.lbl_CommandTitle, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.lcl_CommandCommand, 3, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.tb_CommandTitle, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.tb_CommandCommand, 3, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_CommandRemove, 5, 9)
+        Me.TableLayoutPanel1.Controls.Add(Me.lb_CommandTitle, 1, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.lb_CommandCommand, 3, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_CommandAdd, 5, 5)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 11
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 144.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 176.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(986, 516)
+        Me.TableLayoutPanel1.TabIndex = 0
+        '
+        'GroupBox42
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.GroupBox42, 3)
+        Me.GroupBox42.Controls.Add(Me.Label141)
+        Me.GroupBox42.Location = New System.Drawing.Point(11, 11)
+        Me.GroupBox42.Name = "GroupBox42"
+        Me.GroupBox42.Size = New System.Drawing.Size(445, 113)
+        Me.GroupBox42.TabIndex = 13
+        Me.GroupBox42.TabStop = False
+        '
+        'Label141
+        '
+        Me.Label141.AutoSize = True
+        Me.Label141.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label141.Location = New System.Drawing.Point(7, 17)
+        Me.Label141.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label141.Name = "Label141"
+        Me.Label141.Size = New System.Drawing.Size(417, 90)
+        Me.Label141.TabIndex = 0
+        Me.Label141.Text = resources.GetString("Label141.Text")
+        '
+        'GroupBox15
+        '
+        Me.GroupBox15.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.GroupBox15.Controls.Add(Me.btn_ProfileSetStartup)
+        Me.GroupBox15.Controls.Add(Me.Label3)
+        Me.GroupBox15.Controls.Add(Me.lb_ProfileList)
+        Me.GroupBox15.Controls.Add(Me.Label18)
+        Me.GroupBox15.Controls.Add(Me.btn_ProfileSetDefault)
+        Me.GroupBox15.Controls.Add(Me.tb_ProfileNew)
+        Me.GroupBox15.Controls.Add(Me.Label17)
+        Me.GroupBox15.Controls.Add(Me.btn_ProfileAdd)
+        Me.GroupBox15.Controls.Add(Me.Label16)
+        Me.GroupBox15.Controls.Add(Me.btn_ProfileRemove)
+        Me.GroupBox15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox15.Location = New System.Drawing.Point(706, 11)
+        Me.GroupBox15.Name = "GroupBox15"
+        Me.TableLayoutPanel1.SetRowSpan(Me.GroupBox15, 10)
+        Me.GroupBox15.Size = New System.Drawing.Size(268, 491)
+        Me.GroupBox15.TabIndex = 12
+        Me.GroupBox15.TabStop = False
+        Me.GroupBox15.Text = "Profile Manager"
+        '
+        'btn_ProfileSetStartup
+        '
+        Me.btn_ProfileSetStartup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileSetStartup.Location = New System.Drawing.Point(9, 459)
+        Me.btn_ProfileSetStartup.Name = "btn_ProfileSetStartup"
+        Me.btn_ProfileSetStartup.Size = New System.Drawing.Size(247, 23)
+        Me.btn_ProfileSetStartup.TabIndex = 11
+        Me.btn_ProfileSetStartup.Text = "Set Startup"
+        Me.btn_ProfileSetStartup.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(8, 441)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(191, 15)
+        Me.Label3.TabIndex = 10
+        Me.Label3.Text = "Current Startup Profile Is :- Default"
+        '
+        'lb_ProfileList
+        '
+        Me.lb_ProfileList.FormattingEnabled = True
+        Me.lb_ProfileList.Location = New System.Drawing.Point(9, 121)
+        Me.lb_ProfileList.Name = "lb_ProfileList"
+        Me.lb_ProfileList.Size = New System.Drawing.Size(247, 225)
+        Me.lb_ProfileList.TabIndex = 1
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(6, 387)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(191, 15)
+        Me.Label18.TabIndex = 9
+        Me.Label18.Text = "Current Default Profile Is :- Default"
+        '
+        'btn_ProfileSetDefault
+        '
+        Me.btn_ProfileSetDefault.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileSetDefault.Location = New System.Drawing.Point(9, 405)
+        Me.btn_ProfileSetDefault.Name = "btn_ProfileSetDefault"
+        Me.btn_ProfileSetDefault.Size = New System.Drawing.Size(247, 23)
+        Me.btn_ProfileSetDefault.TabIndex = 8
+        Me.btn_ProfileSetDefault.Text = "Set Default"
+        Me.btn_ProfileSetDefault.UseVisualStyleBackColor = True
+        '
+        'tb_ProfileNew
+        '
+        Me.tb_ProfileNew.Font = New System.Drawing.Font("Times New Roman", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_ProfileNew.Location = New System.Drawing.Point(9, 67)
+        Me.tb_ProfileNew.Name = "tb_ProfileNew"
+        Me.tb_ProfileNew.Size = New System.Drawing.Size(247, 22)
+        Me.tb_ProfileNew.TabIndex = 3
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(6, 16)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(250, 26)
+        Me.Label17.TabIndex = 7
+        Me.Label17.Text = "The Default Profile can't be deleted, it is used as a" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "template. You can set any " & _
+    "created profile to default."
+        '
+        'btn_ProfileAdd
+        '
+        Me.btn_ProfileAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileAdd.Location = New System.Drawing.Point(9, 95)
+        Me.btn_ProfileAdd.Name = "btn_ProfileAdd"
+        Me.btn_ProfileAdd.Size = New System.Drawing.Size(247, 23)
+        Me.btn_ProfileAdd.TabIndex = 4
+        Me.btn_ProfileAdd.Text = "Add Profile"
+        Me.btn_ProfileAdd.UseVisualStyleBackColor = True
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(6, 48)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(150, 16)
+        Me.Label16.TabIndex = 6
+        Me.Label16.Text = "Enter New Profile Name"
+        '
+        'btn_ProfileRemove
+        '
+        Me.btn_ProfileRemove.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileRemove.Location = New System.Drawing.Point(9, 352)
+        Me.btn_ProfileRemove.Name = "btn_ProfileRemove"
+        Me.btn_ProfileRemove.Size = New System.Drawing.Size(247, 23)
+        Me.btn_ProfileRemove.TabIndex = 5
+        Me.btn_ProfileRemove.Text = "Remove Selected Profile"
+        Me.btn_ProfileRemove.UseVisualStyleBackColor = True
+        '
+        'lbl_CommandTitle
+        '
+        Me.lbl_CommandTitle.AutoSize = True
+        Me.lbl_CommandTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_CommandTitle.Location = New System.Drawing.Point(13, 171)
+        Me.lbl_CommandTitle.Margin = New System.Windows.Forms.Padding(5, 7, 3, 0)
+        Me.lbl_CommandTitle.Name = "lbl_CommandTitle"
+        Me.lbl_CommandTitle.Size = New System.Drawing.Size(40, 17)
+        Me.lbl_CommandTitle.TabIndex = 14
+        Me.lbl_CommandTitle.Text = "Title"
+        '
+        'lcl_CommandCommand
+        '
+        Me.lcl_CommandCommand.AutoSize = True
+        Me.lcl_CommandCommand.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lcl_CommandCommand.Location = New System.Drawing.Point(177, 171)
+        Me.lcl_CommandCommand.Margin = New System.Windows.Forms.Padding(5, 7, 3, 0)
+        Me.lcl_CommandCommand.Name = "lcl_CommandCommand"
+        Me.lcl_CommandCommand.Size = New System.Drawing.Size(78, 17)
+        Me.lcl_CommandCommand.TabIndex = 15
+        Me.lcl_CommandCommand.Text = "Command"
+        '
+        'tb_CommandTitle
+        '
+        Me.tb_CommandTitle.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tb_CommandTitle.Location = New System.Drawing.Point(11, 203)
+        Me.tb_CommandTitle.Name = "tb_CommandTitle"
+        Me.tb_CommandTitle.Size = New System.Drawing.Size(150, 20)
+        Me.tb_CommandTitle.TabIndex = 16
+        '
+        'tb_CommandCommand
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.tb_CommandCommand, 2)
+        Me.tb_CommandCommand.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tb_CommandCommand.Location = New System.Drawing.Point(175, 203)
+        Me.tb_CommandCommand.Name = "tb_CommandCommand"
+        Me.tb_CommandCommand.Size = New System.Drawing.Size(335, 20)
+        Me.tb_CommandCommand.TabIndex = 17
+        '
+        'btn_CommandRemove
+        '
+        Me.btn_CommandRemove.Location = New System.Drawing.Point(528, 422)
+        Me.btn_CommandRemove.Margin = New System.Windows.Forms.Padding(15, 3, 3, 3)
+        Me.btn_CommandRemove.Name = "btn_CommandRemove"
+        Me.btn_CommandRemove.Size = New System.Drawing.Size(122, 29)
+        Me.btn_CommandRemove.TabIndex = 19
+        Me.btn_CommandRemove.Text = "Remove Selected"
+        Me.btn_CommandRemove.UseVisualStyleBackColor = True
+        '
+        'lb_CommandTitle
+        '
+        Me.lb_CommandTitle.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lb_CommandTitle.FormattingEnabled = True
+        Me.lb_CommandTitle.Location = New System.Drawing.Point(11, 238)
+        Me.lb_CommandTitle.Name = "lb_CommandTitle"
+        Me.lb_CommandTitle.Size = New System.Drawing.Size(150, 170)
+        Me.lb_CommandTitle.TabIndex = 20
+        '
+        'lb_CommandCommand
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.lb_CommandCommand, 3)
+        Me.lb_CommandCommand.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lb_CommandCommand.FormattingEnabled = True
+        Me.lb_CommandCommand.Location = New System.Drawing.Point(175, 238)
+        Me.lb_CommandCommand.Name = "lb_CommandCommand"
+        Me.lb_CommandCommand.Size = New System.Drawing.Size(525, 170)
+        Me.lb_CommandCommand.TabIndex = 21
+        '
+        'btn_CommandAdd
+        '
+        Me.btn_CommandAdd.Location = New System.Drawing.Point(528, 203)
+        Me.btn_CommandAdd.Margin = New System.Windows.Forms.Padding(15, 3, 3, 3)
+        Me.btn_CommandAdd.Name = "btn_CommandAdd"
+        Me.btn_CommandAdd.Size = New System.Drawing.Size(75, 21)
+        Me.btn_CommandAdd.TabIndex = 18
+        Me.btn_CommandAdd.Text = "Add"
+        Me.btn_CommandAdd.UseVisualStyleBackColor = True
+        '
+        'btn_SettingsCancel
+        '
+        Me.btn_SettingsCancel.Location = New System.Drawing.Point(140, 535)
+        Me.btn_SettingsCancel.Name = "btn_SettingsCancel"
+        Me.btn_SettingsCancel.Size = New System.Drawing.Size(109, 23)
+        Me.btn_SettingsCancel.TabIndex = 22
+        Me.btn_SettingsCancel.Text = "Cancel"
+        Me.btn_SettingsCancel.UseVisualStyleBackColor = True
+        '
+        'btn_SettingsClose
+        '
+        Me.btn_SettingsClose.Location = New System.Drawing.Point(260, 535)
+        Me.btn_SettingsClose.Name = "btn_SettingsClose"
+        Me.btn_SettingsClose.Size = New System.Drawing.Size(109, 23)
+        Me.btn_SettingsClose.TabIndex = 21
+        Me.btn_SettingsClose.Text = "Close"
+        Me.btn_SettingsClose.UseVisualStyleBackColor = True
+        '
+        'btn_SettingsApply
+        '
+        Me.btn_SettingsApply.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btn_SettingsApply.Location = New System.Drawing.Point(20, 535)
+        Me.btn_SettingsApply.Name = "btn_SettingsApply"
+        Me.btn_SettingsApply.Size = New System.Drawing.Size(109, 23)
+        Me.btn_SettingsApply.TabIndex = 20
+        Me.btn_SettingsApply.Text = "Apply"
+        Me.btn_SettingsApply.UseVisualStyleBackColor = True
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 574)
+        Me.Controls.Add(Me.btn_SettingsCancel)
+        Me.Controls.Add(Me.btn_SettingsClose)
+        Me.Controls.Add(Me.btn_SettingsApply)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -1862,59 +2073,64 @@ Partial Class frmOptions
         Me.MinimumSize = New System.Drawing.Size(1016, 608)
         Me.Name = "frmOptions"
         Me.Text = "Media Companion Preferences"
-        Me.GroupBox10.ResumeLayout(false)
-        Me.GroupBox10.PerformLayout
-        Me.GroupBox12.ResumeLayout(false)
-        Me.GroupBox12.PerformLayout
-        CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.Profiles.ResumeLayout(false)
-        Me.GroupBox15.ResumeLayout(false)
-        Me.GroupBox15.PerformLayout
-        Me.GroupBox13.ResumeLayout(false)
-        Me.GroupBox13.PerformLayout
-        Me.GroupBox14.ResumeLayout(false)
-        Me.GroupBox14.PerformLayout
-        Me.TabPage3.ResumeLayout(false)
-        Me.TabControl2.ResumeLayout(false)
-        Me.TabPage4.ResumeLayout(false)
-        Me.TabPage4.PerformLayout
-        Me.TabPage5.ResumeLayout(false)
-        Me.TabPage5.PerformLayout
-        Me.GroupBox16.ResumeLayout(false)
-        Me.GroupBox16.PerformLayout
-        Me.GroupBox4.ResumeLayout(false)
-        Me.GroupBox4.PerformLayout
-        Me.GroupBox9.ResumeLayout(false)
-        Me.GroupBox9.PerformLayout
-        Me.GroupBox8.ResumeLayout(false)
-        Me.GroupBox8.PerformLayout
-        Me.TabPage6.ResumeLayout(false)
-        Me.GroupBox6.ResumeLayout(false)
-        Me.GroupBox6.PerformLayout
-        Me.GroupBox18.ResumeLayout(false)
-        Me.GroupBox18.PerformLayout
-        Me.Panel2.ResumeLayout(false)
-        Me.Panel2.PerformLayout
-        Me.TabPage2.ResumeLayout(false)
-        Me.GroupBox1.ResumeLayout(false)
-        Me.GroupBox5.ResumeLayout(false)
-        Me.TPGenOld.ResumeLayout(false)
-        Me.TPGenOld.PerformLayout
-        Me.GroupBox17.ResumeLayout(false)
-        Me.GroupBox11.ResumeLayout(false)
-        Me.GroupBox11.PerformLayout
-        Me.GroupBox2.ResumeLayout(false)
-        Me.GroupBox2.PerformLayout
-        CType(Me.TrackBar1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.GroupBox3.ResumeLayout(false)
-        Me.GroupBox3.PerformLayout
-        Me.TabControl1.ResumeLayout(false)
-        Me.TPGen.ResumeLayout(false)
-        Me.TabControl3.ResumeLayout(false)
-        Me.TPG1.ResumeLayout(false)
-        Me.ResumeLayout(false)
+        Me.GroupBox10.ResumeLayout(False)
+        Me.GroupBox10.PerformLayout()
+        Me.GroupBox12.ResumeLayout(False)
+        Me.GroupBox12.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Profiles.ResumeLayout(False)
+        Me.GroupBox13.ResumeLayout(False)
+        Me.GroupBox13.PerformLayout()
+        Me.GroupBox14.ResumeLayout(False)
+        Me.GroupBox14.PerformLayout()
+        Me.TabPage3.ResumeLayout(False)
+        Me.TabControl2.ResumeLayout(False)
+        Me.TabPage4.ResumeLayout(False)
+        Me.TabPage4.PerformLayout()
+        Me.TabPage5.ResumeLayout(False)
+        Me.TabPage5.PerformLayout()
+        Me.GroupBox16.ResumeLayout(False)
+        Me.GroupBox16.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
+        Me.GroupBox9.ResumeLayout(False)
+        Me.GroupBox9.PerformLayout()
+        Me.GroupBox8.ResumeLayout(False)
+        Me.GroupBox8.PerformLayout()
+        Me.TabPage6.ResumeLayout(False)
+        Me.GroupBox6.ResumeLayout(False)
+        Me.GroupBox6.PerformLayout()
+        Me.GroupBox18.ResumeLayout(False)
+        Me.GroupBox18.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
+        Me.TabPage2.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox5.ResumeLayout(False)
+        Me.TPGenOld.ResumeLayout(False)
+        Me.TPGenOld.PerformLayout()
+        Me.GroupBox17.ResumeLayout(False)
+        Me.GroupBox11.ResumeLayout(False)
+        Me.GroupBox11.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
+        Me.TabControl1.ResumeLayout(False)
+        Me.TPGen.ResumeLayout(False)
+        Me.TabControl3.ResumeLayout(False)
+        Me.TPG1.ResumeLayout(False)
+        Me.TPG2.ResumeLayout(False)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
+        Me.GroupBox42.ResumeLayout(False)
+        Me.GroupBox42.PerformLayout()
+        Me.GroupBox15.ResumeLayout(False)
+        Me.GroupBox15.PerformLayout()
+        Me.ResumeLayout(False)
 
-End Sub
+    End Sub
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents ColorDialog As System.Windows.Forms.ColorDialog
     Friend WithEvents FontDialog As System.Windows.Forms.FontDialog
@@ -1925,15 +2141,6 @@ End Sub
     Friend WithEvents Profiles As System.Windows.Forms.TabPage
     Friend WithEvents GroupBox13 As System.Windows.Forms.GroupBox
     Friend WithEvents ListBox7 As System.Windows.Forms.ListBox
-    Friend WithEvents Label18 As System.Windows.Forms.Label
-    Friend WithEvents btndefaultprofile As System.Windows.Forms.Button
-    Friend WithEvents Label17 As System.Windows.Forms.Label
-    Friend WithEvents Label16 As System.Windows.Forms.Label
-    Friend WithEvents btndeleteprofile As System.Windows.Forms.Button
-    Friend WithEvents brnaddprofile As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents ListBox6 As System.Windows.Forms.ListBox
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
     Friend WithEvents GroupBox12 As System.Windows.Forms.GroupBox
     Friend WithEvents Label26 As System.Windows.Forms.Label
@@ -2034,7 +2241,6 @@ End Sub
     Friend WithEvents Button8 As System.Windows.Forms.Button
     Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
     Friend WithEvents Label31 As System.Windows.Forms.Label
-    Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox22 As System.Windows.Forms.CheckBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ComboBox2 As System.Windows.Forms.ComboBox
@@ -2075,4 +2281,29 @@ End Sub
     Friend WithEvents TPG2 As System.Windows.Forms.TabPage
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
+    Friend WithEvents btn_ProfileSetStartup As System.Windows.Forms.Button
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents lb_ProfileList As System.Windows.Forms.ListBox
+    Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents btn_ProfileSetDefault As System.Windows.Forms.Button
+    Friend WithEvents tb_ProfileNew As System.Windows.Forms.TextBox
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents btn_ProfileAdd As System.Windows.Forms.Button
+    Friend WithEvents Label16 As System.Windows.Forms.Label
+    Friend WithEvents btn_ProfileRemove As System.Windows.Forms.Button
+    Friend WithEvents GroupBox42 As System.Windows.Forms.GroupBox
+    Friend WithEvents Label141 As System.Windows.Forms.Label
+    Friend WithEvents lbl_CommandTitle As System.Windows.Forms.Label
+    Friend WithEvents lcl_CommandCommand As System.Windows.Forms.Label
+    Friend WithEvents tb_CommandTitle As System.Windows.Forms.TextBox
+    Friend WithEvents tb_CommandCommand As System.Windows.Forms.TextBox
+    Friend WithEvents btn_CommandAdd As System.Windows.Forms.Button
+    Friend WithEvents btn_CommandRemove As System.Windows.Forms.Button
+    Friend WithEvents lb_CommandTitle As System.Windows.Forms.ListBox
+    Friend WithEvents lb_CommandCommand As System.Windows.Forms.ListBox
+    Friend WithEvents btn_SettingsCancel As System.Windows.Forms.Button
+    Friend WithEvents btn_SettingsClose As System.Windows.Forms.Button
+    Friend WithEvents btn_SettingsApply As System.Windows.Forms.Button
 End Class
