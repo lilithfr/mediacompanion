@@ -161,6 +161,7 @@
     <Compile Include="Classes\MVComboList.vb" />
     <Compile Include="Classes\Music_Video_Class.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
+    <Compile Include="Classes\TvdbArgs.vb" />
     <Compile Include="Classes\UserRect.vb" />
     <Compile Include="Classes\WikipediaMusivVideoScraper.vb" />
     <Compile Include="Classes\XBMC_Link\BaseEvent.vb" />

@@ -204,7 +204,6 @@ Public Class TVDBScraper
     Public Function GetShow(ByVal TvdbId As String, ByVal Language As String, ByVal ReturnSeries As Boolean) As Tvdb.ShowData
         If Not ReturnSeries Then Return Nothing
 
-
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & Language & ".xml"
         Dim xmlfile As String
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl)

@@ -101,12 +101,7 @@ Namespace Tasks
         End Property
 
         Private Sub Scrape()
-            'Depreciated
-            'Dim speedy As Boolean = Preferences.tvshowautoquick
-
-            Dim speedy As Boolean = False
-
-
+            ' Should be identical to Form1.Tv.vb:bckgrnd_tvshowscraper_DoWork()
 
             If String.IsNullOrEmpty(Me.Show.NfoFilePath) Then
                 Me.Show.NfoFilePath = IO.Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
@@ -116,36 +111,19 @@ Namespace Tasks
 
             If Me.Show.FileContainsReadableXml And Not Me.Forced Then
                 Me.Show.Load()
-
-                'Cache.TvCache.Shows.Add(Me.Show)
-                'Me.Show.SearchForEpisodesInFolder()
-                'Me.Show.UpdateTreenode()
-
                 Exit Sub
             End If
 
             If Me.Show.TvdbId.Value IsNot Nothing Then
+                'Resolve show name from folder
                 Dim FolderName As String = Utilities.GetLastFolder(Me.Show.FolderPath)
-
-                Dim showyear As String = ""
-                If FolderName.Contains("(") Then
-                    Dim M As Match
-                    M = Regex.Match(FolderName, "(\([\d]{4}\))")
-                    If M.Success = True Then
-                        showyear = M.Value
-                        showyear = showyear.Replace("(", "")
-                        showyear = showyear.Replace(")", "")
-                        showyear = showyear.Replace("{", "")
-                        showyear = showyear.Replace("}", "")
-                    End If
-                    If FolderName.IndexOf("(") <> 0 Then
-                        FolderName = FolderName.Substring(0, FolderName.IndexOf("("))
-                        FolderName = FolderName.TrimEnd(" ")
-                        If showyear <> "" Then
-                            FolderName = FolderName & " (" & showyear & ")"
-                        End If
-                    End If
+                Dim M As Match
+                M = Regex.Match(FolderName, "\s*[\(\{\[](?<date>[\d]{4})[\)\}\]]")
+                If M.Success = True Then
+                    FolderName = String.Format("{0} ({1})", FolderName.Substring(0, M.Index), M.Groups("date").Value)
                 End If
+                Me.Show.Title.Value = FolderName
+
                 Me.Show.GetPossibleShows()
                 'Dim tvshowid As String
                 If Me.Show.PossibleShowList IsNot Nothing Then
@@ -176,6 +154,7 @@ Namespace Tasks
 
                     End If
                 Else
+                    Me.Show.State = Media_Companion.ShowState.Error
                     Messages.Add("Error downloading possible shows")
                     Me.RaiseError()
                     Exit Sub
@@ -229,7 +208,7 @@ Namespace Tasks
                         Dim id As String = ""
 
                         If Not String.IsNullOrEmpty(NewAct.actorthumb) Then
-                            If NewAct.actorthumb <> "" And Preferences.actorseasy = True And speedy = False Then
+                            If NewAct.actorthumb <> "" And Preferences.actorseasy = True Then
                                 If Me.Show.TvShowActorSource.Value <> "imdb" Or Me.Show.ImdbId = Nothing Then
                                     Dim workingpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "")
                                     workingpath = workingpath & ".actors\"
@@ -320,7 +299,7 @@ Namespace Tasks
                                             newactor.actorthumb = detail.InnerText
                                         Case "actorid"
                                             If newactor.actorthumb <> Nothing Then
-                                                If Preferences.actorsave = True And detail.InnerText <> "" And speedy = False Then
+                                                If Preferences.actorsave = True And detail.InnerText <> "" Then
                                                     Dim workingpath As String = ""
                                                     Dim networkpath As String = Preferences.actorsavepath
 
@@ -354,7 +333,7 @@ Namespace Tasks
                 End If
 
                 Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(Me.Show.TvdbId.Value, True)
-                If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
+                If Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none" Then
                     If Preferences.downloadtvseasonthumbs = True Then
                         For f = 0 To ArtList.Items.SeasonMax
                             Dim seasonposter As String = ""
@@ -430,10 +409,10 @@ Namespace Tasks
 
                             Dim seasonpath = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "fanart.jpg")
 
-                            Dim point      = GetBackDropResolution(Preferences.BackDropResolutionSI)
+                            Dim point = GetBackDropResolution(Preferences.BackDropResolutionSI)
 
                             Try
-                                DownloadCache.SaveImageToCacheAndPath(fanartposter, seasonpath, Preferences.overwritethumbs, point.x, point.y )  
+                                DownloadCache.SaveImageToCacheAndPath(fanartposter, seasonpath, Preferences.overwritethumbs, point.X, point.Y)
                             Catch ex As Exception
                                 Messages.Add("Error [" & ex.Message & "] downloading Fanart")
                                 Me.RaiseError()
@@ -500,7 +479,7 @@ Namespace Tasks
                             'End If
                         End If
 
-                        If posterurlpath <> "" And speedy = False Then
+                        If posterurlpath <> "" Then
 
                             Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "folder.jpg")
                             If Not IO.File.Exists(seasonpath) Then

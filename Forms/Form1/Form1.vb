@@ -215,7 +215,6 @@ Public Class Form1
     Dim listOfTvFanarts As New List(Of str_FanartList)
     Dim lockedList As Boolean = False
     Dim tempTVDBiD As String = String.Empty
-    Dim _possibleTVDBId As String = ""
     Dim novaThread As Thread
     Dim newMovieFoundTitle As String = String.Empty
     Dim newMovieFoundFilename As String = String.Empty
@@ -6949,9 +6948,10 @@ Public Class Form1
             Else
                 Cache.TvCache.Remove(WorkingTvShow)
                 newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
-                bckgrnd_tvshowscraper_Run(listOfShows(ListBox3.SelectedIndex).showid)
+                Dim args As TvdbArgs = New TvdbArgs(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
+                bckgrnd_tvshowscraper.RunWorkerAsync(args)
                 While bckgrnd_tvshowscraper.IsBusy
-                    Application.DoEvents 
+                    Application.DoEvents()
                 End While
                 TabControl3.SelectedIndex = 0
                 ''Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -12082,15 +12082,13 @@ Public Class Form1
 
         Preferences.SaveConfig()
 
-        bckgrnd_tvshowscraper_Run()
-
-        'If Not bckgrnd_tvshowscraper.IsBusy Then
-        '    If newTvFolders.Count > 0 Then
-        '        ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
-        '        ToolStripStatusLabel5.Visible = True
-        '    End If
-        '    bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
-        'End If
+        If Not bckgrnd_tvshowscraper.IsBusy Then
+            If newTvFolders.Count > 0 Then
+                ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
+                ToolStripStatusLabel5.Visible = True
+            End If
+            bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
+        End If
 
         ''Call updatetree()
         'If newTvFolders.Count = 0 Then
@@ -12103,28 +12101,12 @@ Public Class Form1
         'Else
         '    'MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
         '    If Not bckgrnd_tvshowscraper.IsBusy Then
-        '        ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
+        '        ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
         '        ToolStripStatusLabel5.Visible = True
         '        bckgrnd_tvshowscraper.RunWorkerAsync()
         '    End If
         'End If
         'Me.Focus()
-    End Sub
-
-    Public Sub bckgrnd_tvshowscraper_Run(Optional ByVal GivenTvdbId As String = "")
-        If GivenTvdbId <> "" Then
-            _possibleTVDBId = GivenTvdbId 
-        Else
-            _possibleTVDBId = ""
-        End If
-        If Not bckgrnd_tvshowscraper.IsBusy Then
-            If newTvFolders.Count > 0 Then
-                ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
-                ToolStripStatusLabel5.Visible = True
-            End If
-            bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
-        End If
-
     End Sub
 
     Private Sub btn_TvFoldersBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersBrowse.Click

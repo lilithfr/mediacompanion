@@ -217,6 +217,11 @@ Public Class TvShow
                 _PossibleShowList.Add(Item)
             End If
         Next
+        If _PossibleShowList.Count = 0 Then
+            _PossibleShowList = Nothing
+            Me.State = ShowState.Error
+            Me.FailedLoad = True
+        End If
     End Sub
 
     Public Sub AbsorbTvdbSeries(ByVal Series As Tvdb.Series)
