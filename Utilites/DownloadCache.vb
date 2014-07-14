@@ -26,14 +26,12 @@ Public Class DownloadCache
 
     Public Shared Function SaveImageToCacheAndPath(ByVal URL As String, Path As String, Optional ByVal ForceDownload As Boolean = False, _
                                            Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0) As Boolean
+        Dim CacheFileName As String = ""
+        If Not SaveImageToCache(URL, Path, ForceDownload, CacheFileName) Then Return False
 
-        If Not SaveImageToCache(URL, Path, ForceDownload) Then Return False
-
-        Dim CachePath = IO.Path.Combine(CacheFolder, GetCacheFileName(URL))
+        Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
 
         IfNotValidImage_Delete(CachePath)
-
-
 
         'Resize cache image only if need to
         CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
@@ -47,10 +45,10 @@ Public Class DownloadCache
 
     Public Shared Function SaveImageToCacheAndPaths(ByVal URL As String, Paths As List(Of String), Optional ByVal ForceDownload As Boolean = False, _
                                            Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0) As Boolean
+        Dim CacheFileName = ""
+        If Not SaveImageToCache(URL, Paths(0), ForceDownload, CacheFileName) Then Return False
 
-        If Not SaveImageToCache(URL, Paths(0), ForceDownload) Then Return False
-
-        Dim CachePath = IO.Path.Combine(CacheFolder, GetCacheFileName(URL))
+        Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
 
         IfNotValidImage_Delete(CachePath)
 
@@ -108,9 +106,10 @@ Public Class DownloadCache
                                           Optional ByVal resizeFanart As Integer = 0, _
                                           Optional ByRef strValue As String = "") As Boolean
 
-        Dim returnCode As Boolean = SaveImageToCache(URL, Path, ForceDownload)
+        Dim CacheFileName As String = ""
+        Dim returnCode As Boolean = SaveImageToCache(URL, Path, ForceDownload, CacheFileName)
         If returnCode Then
-            Dim CacheFileName As String = GetCacheFileName(URL)
+            'Dim CacheFileName As String = GetCacheFileName(URL)
             Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
 
 
@@ -125,78 +124,79 @@ Public Class DownloadCache
         Return returncode
     End Function
 
-    Public Shared Function SaveImageToCache(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False) As Boolean
+    Public Shared Function SaveImageToCache(ByVal URL As String, ByVal Path As String, ByVal ForceDownload As Boolean, ByRef CacheFileName As String) As Boolean
         Dim returnCode As Boolean = True
+        Dim CachePath As String = ""
         Try
-        Utilities.EnsureFolderExists(CacheFolder)
-        
-        If URL = "" Then Return False
-        Dim CacheFileName As String = GetCacheFileName(URL)
-        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
+            Utilities.EnsureFolderExists(CacheFolder)
 
-        If Not File.Exists(CachePath) OrElse ForceDownload Then
+            If URL = "" Then Return False
+            CacheFileName = GetCacheFileName(URL)
+            CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
 
-            'Check to see if URL is actually a local file
-            If Not URL.Contains("://") AndAlso File.Exists(URL) Then
-                If CachePath <> URL Then
-                    If Utilities.SafeDeleteFile(CachePath) Then
-                        File.Copy(URL, CachePath)
-                    End If
-                End If
-                Return True
-            End If
-            If ForceDownload AndAlso File.Exists(CachePath) Then
-                File.Delete(CachePath)
-            End If
+            If Not File.Exists(CachePath) OrElse ForceDownload Then
 
-            Try
-                Dim webReq As HttpWebRequest = WebRequest.Create(URL)
-                webReq.AllowAutoRedirect = True
-                webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
-
-                Using webResp As HttpWebResponse = webReq.GetResponse()
-                    Using responseStreamData As Stream = webResp.GetResponseStream()
-                        'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
-                        If String.IsNullOrEmpty(Path) Then
-                            IO.File.WriteAllText(CachePath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
-                        Else
-                            'If (File.Exists(CachePath)) Then
-                            'File.Delete(CachePath)
-                            'End If
-                            Utilities.SafeDeleteFile(CachePath)
-
-                            Using fileStream As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.Write)
-                                Dim buffer(webResp.ContentLength) As Byte
-                                Dim bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
-                                While bytesRead > 0
-                                    fileStream.Write(buffer, 0, bytesRead)
-                                    bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
-                                End While
-                            End Using
+                'Check to see if URL is actually a local file
+                If Not URL.Contains("://") AndAlso File.Exists(URL) Then
+                    If CachePath <> URL Then
+                        If Utilities.SafeDeleteFile(CachePath) Then
+                            File.Copy(URL, CachePath)
                         End If
+                    End If
+                    Return True
+                End If
+                If ForceDownload AndAlso File.Exists(CachePath) Then
+                    File.Delete(CachePath)
+                End If
+
+                Try
+                    Dim webReq As HttpWebRequest = WebRequest.Create(URL)
+                    webReq.AllowAutoRedirect = True
+                    webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
+
+                    Using webResp As HttpWebResponse = webReq.GetResponse()
+                        Using responseStreamData As Stream = webResp.GetResponseStream()
+                            'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
+                            If String.IsNullOrEmpty(Path) Then
+                                IO.File.WriteAllText(CachePath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
+                            Else
+                                'If (File.Exists(CachePath)) Then
+                                'File.Delete(CachePath)
+                                'End If
+                                Utilities.SafeDeleteFile(CachePath)
+
+                                Using fileStream As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.Write)
+                                    Dim buffer(webResp.ContentLength) As Byte
+                                    Dim bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
+                                    While bytesRead > 0
+                                        fileStream.Write(buffer, 0, bytesRead)
+                                        bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
+                                    End While
+                                End Using
+                            End If
+                        End Using
                     End Using
-                End Using
 
-            Catch ex As WebException
-                If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
-                Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
-                    Using errorRespStream As Stream = errorResp.GetResponseStream()
-                        Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
+                Catch ex As WebException
+                    If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
+                    Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
+                        Using errorRespStream As Stream = errorResp.GetResponseStream()
+                            Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
 
-                        'Writing to TvLog! -> Poo -> To do anyone -> Raise event?
-                        returnCode = False
-                        'Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", errorResp.StatusCode, vbCrLf)
+                            'Writing to TvLog! -> Poo -> To do anyone -> Raise event?
+                            returnCode = False
+                            'Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", errorResp.StatusCode, vbCrLf)
+                        End Using
                     End Using
-                End Using
-                returnCode = False
-            End Try
+                    returnCode = False
+                End Try
 
-        End If
+            End If
 
-        
+
         Catch ex As Exception
             MsgBox(ex.Message.ToString & vbCrLf & "URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
-            returnCode = False            
+            returnCode = False
         End Try
         Return returnCode
     End Function

@@ -125,7 +125,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String)
         Try
-            Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
+            Dim npapp As String = "notepad"    'Tweaked to use Notepad++ if installed.
+            Dim np As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\notepad++\notepad++.exe"
+            If File.Exists(np) Then npapp = "notepad++"
+            Dim thePSI As New System.Diagnostics.ProcessStartInfo(npapp)
             thePSI.Arguments = """" & nfopath & """"
             System.Diagnostics.Process.Start(thePSI)
         Catch ex As Exception
@@ -1316,14 +1319,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
         Dim intCounter As Integer = 0
         Dim lstStringFolders As New List(Of String)
-        'Dim strSubFolders As String()
-
         For Each SourceFolder In SourcePaths
             lstStringFolders.Add(SourceFolder)
         Next
         Do Until intCounter = lstStringFolders.Count
-            'strSubFolders = System.IO.Directory.GetDirectories(lstStringFolders.Item(intCounter))
-            'lstStringFolders.AddRange(strSubFolders)
             Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
             For Each foundDirectory In workingFolder.GetDirectories
                 If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden And _
@@ -1337,18 +1336,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Loop
         'sorts the folders so that related folders (parent/child) are together
         lstStringFolders.Sort()
-        'Dim strFolder As String
-        'Dim SourcePathsCounter As Integer = SourcePaths.Count
-        'Dim n As Integer = 0
-        'Do Until n = SourcePathsCounter
-        '    For Each Folder In lstStringFolders
-        '        If Folder = SourcePaths(n) Then
-        '            lstStringFolders.Remove(Folder)
-        '            n += 1
-        '            Exit For
-        '        End If
-        '    Next
-        'Loop
         Return lstStringFolders
     End Function
 
@@ -2512,7 +2499,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function SaveImage(ByRef image As Bitmap, ByVal path As String) As Boolean
-
         Try
             GC.Collect()
             If (File.Exists(path)) Then
@@ -2528,7 +2514,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         '    image.Dispose() 'because image is passed in ByRef, it should be disposed of, but alas it is not.
         End Try
     End Function
-
 
     Public Shared Function SaveImageNoDispose(ByVal image As Bitmap, ByVal path As String) As Boolean
         Try
@@ -2546,7 +2531,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-
     Public Shared Function ResizeImage(ByVal bm_source As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_dest As New Bitmap(width, height)
         Using gr As Graphics = Graphics.FromImage(bm_dest)
@@ -2555,8 +2539,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Using
         Return bm_dest
     End Function
-
-
 
     Public Shared Function GetImage(src As String) As Bitmap
 
@@ -2567,7 +2549,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Return bm2
     End Function
-
 
     Public Shared Function LoadImage(ByVal path As String) As Bitmap
         Try
@@ -2615,30 +2596,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function DownloadFile(ByVal URL As String, ByVal Path As String) As Boolean
         Try
             Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, True)
-            'DownloadCache.DownloadFileToDisk(URL, Path, True)
             Return returnstate
         Catch ex As Exception
             Return False
         End Try
 
     End Function
-
-    ' DownloadImage has been replaced - Please use these shared (aka static) functions:
-    '
-    '    Movie.SaveFanartImageToCacheAndPath(url As String, path As String)
-    '    Movie.SaveActorImageToCacheAndPath (url As String, path As String)
-    '    Movie.SavePosterImageToCacheAndPath(url As String, path As String)
-    '
-    'Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False, Optional ByVal ImageResize As Integer = 0) As Boolean
-    '    Try
-    '        DownloadImage = DownloadCache.DownloadFileAndCache(URL, Path, ForceDownload, ImageResize)
-    '        If Not System.IO.File.Exists(Path) Then
-    '            DownloadImage = False
-    '        End If
-    '    Catch ex As Exception
-    '        DownloadImage = False
-    '    End Try
-    'End Function
 
     Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
         Dim asm As Assembly = Assembly.GetExecutingAssembly
@@ -2815,7 +2778,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             s &= " " & Words(a)
             a = a + 1
         Loop
-
         Return s
     End Function
 
@@ -2881,11 +2843,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function RootVideoTsFolder(ByVal FullPath As String) As String
-
         If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
             FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
         End If
-
         Dim length As integer
         Dim foldername As String = ""
         Dim paths() As String
@@ -2904,9 +2864,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetLastFolderInPath(ByVal path As String) As String
-
         Return New IO.DirectoryInfo(path.TrimEnd("\")).Name
-        
     End Function
 
     Public Shared Function GetExtension(path As String) As String
@@ -2915,7 +2873,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim NoDot() As String
         NoDot = Split(path, “.”)
         Extn = NoDot(UBound(NoDot))
-
         'MsgBox (Extension)
         Return Extn
     End Function
@@ -2923,23 +2880,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
    Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
       Dim size As Long          = 0
       Dim di   As DirectoryInfo = New DirectoryInfo(DirPath)
-
       Try
          For Each fi In di.GetFiles()
             size += fi.Length
          Next
-
          If IncludeSubFolders then
             For Each sub_di In di.GetDirectories()
                size += GetFolderSize(sub_di.FullName)
             Next
          End if
-
          Return size
       Catch
          Return -1
       End Try
-
     End Function
 
 End Class

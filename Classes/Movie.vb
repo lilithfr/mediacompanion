@@ -1832,15 +1832,6 @@ Public Class Movie
 
     Property TrailerDownloaded As Boolean = False
 
-    Private Sub DeleteZeroLengthFile( fileName As String )
-        If File.Exists(fileName) then
-            If (New IO.FileInfo(fileName)).Length = 0 then
-                File.Delete(fileName)
-                ReportProgress("-Zero length trailer deleted ","Zero length trailer deleted : [" & fileName & "]")
-            End If
-        End If
-    End sub
-
     Private Sub DownloadPoster
         If Not Preferences.scrapemovieposters then
             Exit Sub
@@ -1855,6 +1846,9 @@ Public Class Movie
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
         Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
+
+        If Not Rescrape Then DeletePoster()
+
         If Not Preferences.overwritethumbs Then
             Dim lst As New List(Of String)
             For Each filepath In paths
@@ -1873,8 +1867,6 @@ Public Class Movie
                 Exit Sub
             End If
         End If
-
-        If Not Rescrape Then DeletePoster()
 
         Dim validUrl = False
 
@@ -1924,154 +1916,34 @@ Public Class Movie
         End If
     End Sub
 
-
-    Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
-        Try
-            LoadNFO
-            If Not Preferences.MusicVidScrape Then
-                DeleteActors     'remove actor images if present
-
-                RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
-                RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
-                If incTrailer Then DeleteTrailer
-            End If
-            
-            DeletePoster
-            DeleteFanart
-
-            DeleteNFO
-        Catch ex As Exception
-            ReportProgress(MSG_ERROR,"!!! Problem deleting scraped files" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf) 
-        End Try
-    End Sub
-
-   Sub DeleteActors
-        Try
-            'Only delete actors if movies are in separate folders
-            If Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then 
-                Dim thispath As String = IO.Path.GetDirectoryName(NfoPathAndFilename)
-                thispath &= "\.actors"
-                If IO.Directory.Exists(thispath) Then
-                    Try
-                        IO.Directory.Delete(thispath, True)
-                        Exit Sub
-                    Catch
-                    End Try
-                End If
-            End If
-            Dim ap As String = ActorPath
-            For Each act In Actors
-                Dim actorfilename As String = GetActorFileName(act.ActorName)
-                If File.Exists(actorfilename) Then
-                    Utilities.SafeDeleteFile(actorfilename)
-                End If
-                If File.Exists(actorfilename.Replace(".tbn",".jpg"))
-                    Utilities.SafeDeleteFile(actorfilename.Replace(".tbn",".jpg"))
-                End If
-            Next
-        Catch
-        End Try
-             
-        'To Do : Delete from networkpath = Preferences.actorsavepath
-    End Sub     
-
-    Sub DeleteNFO
-        Utilities.SafeDeleteFile(ActualNfoPathAndFilename)
-    End Sub
-
-    Sub DeletePoster
-        DeleteFile(PosterPath)
-        DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
-        DeleteFile(PosterDVDFrodo)
-        DeleteFile(ActualPosterPath)
-    End Sub
-
-
-    Sub DeleteFanart
-        DeleteFile(FanartPath)
-        DeleteFile(FanartDVDFrodo)
-        DeleteFile(ActualFanartPath)
-    End Sub
-
-    Sub DeleteExtraFiles
-        DeleteFolder(NfoPath & "extrafanart")
-        DeleteFolder(NfoPath & "extrathumbs")
-    End Sub
-
-    Sub DeleteTrailer
-        DeleteFile(ActualTrailerPath)
-    End Sub
-
-
-    Sub DeleteFile(fileName As String)
-        If Not IO.File.Exists(fileName) then Exit Sub
-        Try
-            File.Delete(fileName)
-        Catch ex As Exception
-            Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
-            If answer=MsgBoxResult.Yes then
-                ShowTakeOwnsershipHelp
-            End If
-        End Try
-    End Sub
-
-    Sub DeleteFolder(foldername As String)
-        If Not IO.Directory.Exists(foldername) Then Exit Sub
-        Try
-            IO.Directory.Delete(foldername, True)
-        Catch ex As Exception
-            Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
-            If answer=MsgBoxResult.Yes then
-                ShowTakeOwnsershipHelp
-            End If
-        End Try
-    End Sub
-                     
-
-    Sub ShowTakeOwnsershipHelp
-       Try
-            Dim FileName = Preferences.applicationPath & "\Assets\TakeOwnership.htm"
-            Dim helpFile =  "file:///" & FileName.Replace(" ", "%20").Replace("\","/")
-
-            If Preferences.selectedBrowser <> "" then
-                Process.Start(Preferences.selectedBrowser,helpFile)
-            Else
-                Try
-                    Process.Start(helpFile)
-                Catch ex As Exception
-                    MessageBox.Show( "An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
-                End Try
-            End If 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Sub DownloadFanart
-        If Not Preferences.savefanart then
-            ReportProgress(,"Fanart scraping not enabled" & vbCrLf)
+    Sub DownloadFanart()
+        If Not Preferences.savefanart Then
+            ReportProgress(, "Fanart scraping not enabled" & vbCrLf)
             Exit Sub
         End If
         If Preferences.MusicVidScrape Then
             ucMusicVideo.createScreenshot(mediapathandfilename, , True)
         Else
-            DoDownloadFanart
+            DoDownloadFanart()
         End If
 
-        
+
 
     End Sub
 
-    Sub DoDownloadFanart
+    Sub DoDownloadFanart()
         Dim imageexistspath As String = ""
         Dim FanartUrl As String = ""
         Dim MoviePath As String = NfoPathPrefName
-        Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg
-        Dim isMovieFanart As String = MoviePath.Replace(".nfo","-fanart.jpg")
-        If IO.Path.GetFileName(MoviePath).ToLower="video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower="index.nfo"Then
+        'Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg"
+        Dim isMovieFanart As String = MoviePath.Replace(".nfo", "-fanart.jpg")
+        If IO.Path.GetFileName(MoviePath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(MoviePath)
         End If
-        Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath,If(_videotsrootpath<>"",_videotsrootpath,""))
+
+        If Not Rescrape Then DeleteFanart()
+
+        Dim paths As List(Of String) = Preferences.GetfanartPaths(MoviePath, If(_videotsrootpath <> "", _videotsrootpath, ""))
         If Not Preferences.overwritethumbs Then
             Dim lst As New List(Of String)
             For Each filepath In paths
@@ -2086,40 +1958,41 @@ Public Class Movie
                 Next
             End If
             If paths.Count = 0 Then
-                ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
+                ReportProgress(, "Fanart already exists -> Skipping" & vbCrLf)
                 Exit Sub
             End If
         End If
         If imageexistspath = "" Then
-             FanartUrl = tmdb.GetBackDropUrl
+            FanartUrl = tmdb.GetBackDropUrl
         Else
-            FanartUrl = imageexistspath 
+            FanartUrl = imageexistspath
         End If
 
-        If IsNothing(FanartUrl) then
-            ReportProgress("-Not available ","Fanart not available for this movie on TMDb" & vbCrLf)
+        If IsNothing(FanartUrl) Then
+            ReportProgress("-Not available ", "Fanart not available for this movie on TMDb" & vbCrLf)
         Else
-            ReportProgress("Fanart",)
+            ReportProgress("Fanart", )
             Try
                 SaveFanartImageToCacheAndPaths(FanartUrl, paths)
 
-                ReportProgress(MSG_OK,"!!! Fanart URL Scraped OK" & vbCrLf)
+                ReportProgress(MSG_OK, "!!! Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+                ReportProgress(MSG_ERROR, "!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
-                    
+
         End If
     End Sub
 
-    Sub DownloadExtraFanart
+    Sub DownloadExtraFanart()
         If Preferences.dlxtrafanart AndAlso (Preferences.allfolders Or Preferences.usefoldernames) Then
-            DoDownloadExtraFanart
+            DoDownloadExtraFanart()
         Else
-            ReportProgress(,"Scraping Extra Fanart-Thumbs not selected" & vbCrLf)
+            ReportProgress(, "Scraping Extra Fanart-Thumbs not selected" & vbCrLf)
             Exit Sub
         End If
     End Sub
-    Sub DoDownloadExtraFanart
+
+    Sub DoDownloadExtraFanart()
         Try
             Dim fcount As Integer = 0
             If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
@@ -2128,8 +2001,8 @@ Public Class Movie
                 Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumbs\thumb"
                 Dim xf As Boolean = Preferences.movxtrafanart
                 Dim xt As Boolean = Preferences.movxtrathumb
-                If xf then Directory.CreateDirectory(xfanart.Replace("\fanart",""))
-                If xt then Directory.CreateDirectory(xthumb.Replace("\thumb",""))
+                If xf Then Directory.CreateDirectory(xfanart.Replace("\fanart", ""))
+                If xt Then Directory.CreateDirectory(xthumb.Replace("\thumb", ""))
                 Dim owrite As Boolean = Preferences.overwritethumbs
                 Dim tmpUrl As String = ""
                 Dim xtraart As New List(Of String)
@@ -2170,6 +2043,134 @@ Public Class Movie
             End If
         Catch ex As Exception
             ReportProgress(MSG_ERROR, "!!! Problem Saving Extra Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+        End Try
+    End Sub
+
+    Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
+        Try
+            LoadNFO
+            If Not Preferences.MusicVidScrape Then
+                DeleteActors     'remove actor images if present
+
+                RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
+                RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
+                If incTrailer Then DeleteTrailer
+            End If
+            
+            DeletePoster
+            DeleteFanart
+
+            DeleteNFO
+        Catch ex As Exception
+            ReportProgress(MSG_ERROR,"!!! Problem deleting scraped files" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf) 
+        End Try
+    End Sub
+
+    Sub DeleteActors()
+        Try
+            'Only delete actors if movies are in separate folders
+            If Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then
+                Dim thispath As String = IO.Path.GetDirectoryName(NfoPathAndFilename)
+                thispath &= "\.actors"
+                If IO.Directory.Exists(thispath) Then
+                    Try
+                        IO.Directory.Delete(thispath, True)
+                        Exit Sub
+                    Catch
+                    End Try
+                End If
+            End If
+            Dim ap As String = ActorPath
+            For Each act In Actors
+                Dim actorfilename As String = GetActorFileName(act.ActorName)
+                If File.Exists(actorfilename) Then
+                    Utilities.SafeDeleteFile(actorfilename)
+                End If
+                If File.Exists(actorfilename.Replace(".tbn", ".jpg")) Then
+                    Utilities.SafeDeleteFile(actorfilename.Replace(".tbn", ".jpg"))
+                End If
+            Next
+        Catch
+        End Try
+
+        'To Do : Delete from networkpath = Preferences.actorsavepath
+    End Sub
+
+    Sub DeleteNFO
+        Utilities.SafeDeleteFile(ActualNfoPathAndFilename)
+    End Sub
+
+    Sub DeletePoster
+        DeleteFile(PosterPath)
+        DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
+        DeleteFile(PosterDVDFrodo)
+        DeleteFile(ActualPosterPath)
+    End Sub
+
+    Sub DeleteFanart
+        DeleteFile(FanartPath)
+        DeleteFile(FanartDVDFrodo)
+        DeleteFile(ActualFanartPath)
+    End Sub
+
+    Sub DeleteExtraFiles
+        DeleteFolder(NfoPath & "extrafanart")
+        DeleteFolder(NfoPath & "extrathumbs")
+    End Sub
+
+    Sub DeleteTrailer
+        DeleteFile(ActualTrailerPath)
+    End Sub
+
+    Sub DeleteFile(fileName As String)
+        If Not IO.File.Exists(fileName) then Exit Sub
+        Try
+            File.Delete(fileName)
+        Catch ex As Exception
+            Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
+            If answer=MsgBoxResult.Yes then
+                ShowTakeOwnsershipHelp
+            End If
+        End Try
+    End Sub
+
+    Sub DeleteFolder(foldername As String)
+        If Not IO.Directory.Exists(foldername) Then Exit Sub
+        Try
+            IO.Directory.Delete(foldername, True)
+        Catch ex As Exception
+            Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
+            If answer=MsgBoxResult.Yes then
+                ShowTakeOwnsershipHelp
+            End If
+        End Try
+    End Sub
+
+    Private Sub DeleteZeroLengthFile(fileName As String)
+        If File.Exists(fileName) Then
+            If (New IO.FileInfo(fileName)).Length = 0 Then
+                File.Delete(fileName)
+                ReportProgress("-Zero length trailer deleted ", "Zero length trailer deleted : [" & fileName & "]")
+            End If
+        End If
+    End Sub
+
+    Sub ShowTakeOwnsershipHelp
+       Try
+            Dim FileName = Preferences.applicationPath & "\Assets\TakeOwnership.htm"
+            Dim helpFile =  "file:///" & FileName.Replace(" ", "%20").Replace("\","/")
+
+            If Preferences.selectedBrowser <> "" then
+                Process.Start(Preferences.selectedBrowser,helpFile)
+            Else
+                Try
+                    Process.Start(helpFile)
+                Catch ex As Exception
+                    MessageBox.Show( "An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
+                End Try
+            End If 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
@@ -3056,13 +3057,14 @@ Public Class Movie
     Sub SavePosterToPosterWallCache
         If File.Exists(PosterPath) Then
             Try
-                Dim bm As New Bitmap(PosterPath)
+                Dim bm As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(PosterPath)) 'New Bitmap(PosterPath)
+                Dim bm2 As New Bitmap(bm)
+                bm.Dispose()
+                bm2 = Utilities.ResizeImage(bm2, 150, 200)
 
-                bm = Utilities.ResizeImage(bm, 150, 200)
+                Utilities.SaveImage(bm2, PosterCachePath)
 
-                Utilities.SaveImage(bm, PosterCachePath)
-
-                bm.Dispose
+                bm2.Dispose()
             Catch
                 'Invalid file
                 Utilities.SafeDeleteFile(PosterPath     )
