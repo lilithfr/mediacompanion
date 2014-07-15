@@ -347,45 +347,45 @@ Module Module1
         End Try
     End Sub
 
-    Public Sub screenshot(ByVal fullnfopath As String, Optional ByVal overwrite As Boolean = False)
+    Public Sub screenshot(ByVal fullpathandfilename As String, ByVal SavePath As String, Optional ByVal overwrite As Boolean = False)
         Dim status As String = "working"
         Try
 
-            Dim thumbpathandfilename As String = fullnfopath.Replace(IO.Path.GetExtension(fullnfopath), ".tbn")
+            'Dim thumbpathandfilename As String = fullnfopath.Replace(IO.Path.GetExtension(fullnfopath), ".tbn")
             Dim skip As Boolean = False
-            If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
-                If IO.File.Exists(thumbpathandfilename) Then
+            If Not IO.File.Exists(SavePath) Or overwrite = True Then
+                If IO.File.Exists(SavePath) Then
                     Try
-                        IO.File.Delete(thumbpathandfilename)
+                        IO.File.Delete(SavePath)
                     Catch
                         status = "nodelete"
                         skip = True
                     End Try
                 End If
                 If skip = False Then
-                    Dim nfofilename As String = IO.Path.GetFileName(fullnfopath)
-                    For Each extn In MediaFileExtensions
-                        Dim tempfilename As String = nfofilename
-                        tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), extn)
-                        Dim tempstring2 As String = fullnfopath.Replace(IO.Path.GetFileName(fullnfopath), tempfilename)
-                        If IO.File.Exists(tempstring2) Then
-                            Try
-                                Dim seconds As Integer = Preferences.ScrShtDelay
-                                Dim myProcess As Process = New Process
-                                myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                                myProcess.StartInfo.CreateNoWindow = False
-                                myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
-                                Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                                myProcess.StartInfo.Arguments = proc_arguments
-                                myProcess.Start()
-                                myProcess.WaitForExit()
-                                status = "done"
-                                Exit For
-                            Catch ex As Exception
+                    'Dim nfofilename As String = IO.Path.GetFileName(fullnfopath)
+                    'For Each extn In MediaFileExtensions
+                    '    Dim tempfilename As String = nfofilename
+                    '    tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), extn)
+                    '    Dim tempstring2 As String = fullnfopath.Replace(IO.Path.GetFileName(fullnfopath), tempfilename)
+                    If IO.File.Exists(fullpathandfilename) Then
+                        Try
+                            Dim seconds As Integer = Preferences.ScrShtDelay
+                            Dim myProcess As Process = New Process
+                            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                            myProcess.StartInfo.CreateNoWindow = False
+                            myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
+                            Dim proc_arguments As String = "-y -i """ & fullpathandfilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & SavePath & """"
+                            myProcess.StartInfo.Arguments = proc_arguments
+                            myProcess.Start()
+                            myProcess.WaitForExit()
+                            status = "done"
+                            'Exit For
+                        Catch ex As Exception
 
-                            End Try
-                        End If
-                    Next
+                        End Try
+                    End If
+                    'Next
                 End If
             End If
         Catch
@@ -1264,53 +1264,27 @@ Module Module1
                 Next
             End If
         Next
-        Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        Dim ext1 As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        Dim ext2 As String = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
-        Dim eden As Boolean
-        Dim frodo As Boolean
-        Dim edenart As Boolean
-        Dim frodoart As Boolean
-        eden = Preferences.EdenEnabled
-        frodo = Preferences.FrodoEnabled
-        edenart = IO.File.Exists(ext1)
-        frodoart = IO.File.Exists(ext2)
+
+        Dim eden As Boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
+        Dim paths As New List(Of String)
+        If eden Then paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
+        If frodo Then paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
         Dim url As String = alleps(0).thumb
-        If Not url = Nothing And url <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
-                If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                    Utilities.DownloadFile(url, ext)
-                    If Not eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                        IO.File.Delete(ext)
-                        ConsoleOrLog("Frodo Episode Thumb downloaded")
-                    ElseIf eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                        ConsoleOrLog("Eden & Frodo Episode Thumb downloaded")
-                    End If
-                End If
-        ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-            ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Movie")
-            Call screenshot(ext)
-            If Not eden And frodo Then
-                IO.File.Copy(ext, ext2)
-                IO.File.Delete(ext)
-                ConsoleOrLog("Frodo Screenshot Saved")
-            ElseIf eden And frodo Then
-                IO.File.Copy(ext, ext2)
-                ConsoleOrLog("Eden & Frodo Screenshot Saved")
+        Dim ok As Boolean = False
+        If Not url = Nothing AndAlso url <> "http://www.thetvdb.com/banners/" Then  ' And Not edenart And Not frodoart Then
+            ok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True)
+            If ok Then
+                ConsoleOrLog("Thumbnail downloaded successfully")
+            Else
+                ConsoleOrLog("Failed to download Thumbnail")
             End If
-        ElseIf edenart Or frodoart Then
-            If edenart And Not eden And Not frodoart Then
-                IO.File.Copy(ext, ext2)
-                IO.File.Delete(ext)
-            ElseIf edenart And frodo And Not frodoart Then
-                IO.File.Copy(ext, ext2)
-            ElseIf frodoart And Not frodo And Not edenart Then
-                IO.File.Copy(ext2, ext)
-                IO.File.Delete(ext2)
-            ElseIf frodoart And eden And Not edenart Then
-                IO.File.Copy(ext2, ext)
-            End If
+        End If
+        If Not ok AndAlso Preferences.autoepisodescreenshot Then
+            ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Episode file")
+            Call screenshot(alleps(0).mediaextension, paths(0))
+            If paths.Count > 1 Then File.Copy(paths(0), paths(1))
+            ConsoleOrLog("Screenshot Saved")
         End If
     End Sub
 

@@ -3664,25 +3664,6 @@ Partial Public Class Form1
         Dim tempstring As String = ""
         Dim TvdbActors As List(Of str_MovieActors) = tvdbstuff.GetActors(NewShow.TvdbId.Value, templanguage)
         For Each NewAct In TvdbActors
-            'success = True
-            'If NewShow.ListActors.Count >= Preferences.maxactors Then
-            '    Exit For
-            'End If
-
-            'Dim NewAct As New Media_Companion.Actor
-            'NewAct.ActorId = Act.actorid.Value
-            'NewAct.actorname = Utilities.cleanSpecChars(Act.actorname.Value).Trim  'TrimStart.TrimEnd
-            'Dim newstring As String
-            'newstring = Act.Role.Value
-            'newstring = newstring.TrimEnd("|")
-            'newstring = newstring.TrimStart("|")
-            'newstring = newstring.Replace("|", ", ")
-            'NewAct.actorrole = newstring.TrimStart.TrimEnd
-            'If Act.Image.Value <> "" Then
-            '    NewAct.actorthumb = "http://thetvdb.com/banners/_cache/" & Act.Image.Value
-            'Else
-            '    NewAct.actorthumb = ""
-            'End If
 
             Dim id As String = If(NewAct.ActorId = Nothing, "", NewAct.ActorId)
             Dim results As XmlNode = Nothing
@@ -3744,16 +3725,7 @@ Partial Public Class Form1
                 End If
             End If
             Dim exists As Boolean = False
-            'For Each actors In NewShow.ListActors
-            '    If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
-            '        exists = True
-            '        Exit For
-            '    End If
-            'Next
-            'If exists = False Then
-                NewShow.ListActors.Add(NewAct)
-            'End If
-
+            NewShow.ListActors.Add(NewAct)
         Next
         Return success
     End Function
@@ -3768,11 +3740,7 @@ Partial Public Class Form1
         If String.IsNullOrEmpty(NewShow.ImdbId.Value) Then Return success
         Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Preferences.imdbmirror, NewShow.ImdbId.Value, actmax)
 
-        'actorstring.LoadXml(actorlist)
-
         For Each thisresult In actorlist
-
-            'thisresult.actorrole = Utilities.cleanTvActorRole(thisresult.actorrole)
 
             If thisresult.actorthumb <> Nothing And actcount < (actmax + 1) Then
                 If Preferences.actorseasy And thisresult.actorid <> "" And Preferences.tvshowautoquick = False Then
@@ -3808,12 +3776,6 @@ Partial Public Class Form1
                     End If
 
                     Utilities.EnsureFolderExists(tempstring)
-                    'tempstring = tempstring & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2)
-                    'Dim hg As New IO.DirectoryInfo(tempstring)
-                    'If Not hg.Exists Then
-                    '    IO.Directory.CreateDirectory(tempstring)
-                    'End If
-                   'workingpath = networkpath & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\" & thisresult.actorid & ".jpg"
                     If Not IO.File.Exists(workingpath) Then
                         If Utilities.DownloadFile(thisresult.actorthumb, workingpath) Then
                             If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
@@ -3824,7 +3786,6 @@ Partial Public Class Form1
                             End If
                         End If
                     End If
-                    'thisresult.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2))
                     If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
                         If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
                             thisresult.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("\", "/") 'Preferences.actornetworkpath & "/" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "/" & thisresult.actorid & ".jpg"

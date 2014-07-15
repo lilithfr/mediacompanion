@@ -205,51 +205,32 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return input
     End Function
 
-    Public Shared Function CreateScreenShot(ByVal FilePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As String
-        Dim thumbpathandfilename As String = FilePath.Replace(IO.Path.GetExtension(FilePath), ".tbn")
+    Public Shared Function CreateScreenShot(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As Boolean
 
-        Dim ThumbExists As Boolean = Not IO.File.Exists(thumbpathandfilename)
-
-        If ThumbExists AndAlso Overwrite Then
+        If Not File.Exists(SavePath) Or Overwrite Then
             Try
-                IO.File.Delete(thumbpathandfilename)
-                ThumbExists = False
+                IO.File.Delete(SavePath)
             Catch
-                Return "nodelete"
+                Return False
             End Try
-        Else
-            Return "nooverwrite"
-        End If
-
-        Dim nfofilename As String = IO.Path.GetFileName(FilePath)
-        Dim FullPath As String = IO.Path.GetFileName(FilePath)
-        Dim Extention As String = IO.Path.GetExtension(FilePath)
-        Dim tempfilename As String = nfofilename
-        For j = 0 To VideoExtensions.Length
-            tempfilename = nfofilename.Replace(Extention, VideoExtensions(j))
-
-            Dim tempstring2 As String = FilePath.Replace(FullPath, tempfilename)
-            If IO.File.Exists(tempstring2) Then
+            If IO.File.Exists(FullPathAndFilename) Then
                 Try
-                    Dim seconds As Integer = 100
+                    Dim seconds As Integer = sec
                     Dim myProcess As Process = New Process
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
-                    myProcess.StartInfo.FileName = Utilities.applicationPath & "\ffmpeg.exe"
-                    Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                    myProcess.StartInfo.FileName = Utilities.applicationPath & "\Assets\ffmpeg.exe"
+                    Dim proc_arguments As String = "-y -i """ & FullPathAndFilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & SavePath & """"
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
                     myProcess.WaitForExit()
-
-                    Return "done"
+                    Return True
                 Catch ex As Exception
                     Throw ex
                 End Try
             End If
-        Next
-
-
-        Return "failure"
+        End If
+        Return False
     End Function
 
     Public Shared Function DownloadTextFiles(ByVal StartURL As String, Optional ByVal ForceDownload As Boolean = False) As String
