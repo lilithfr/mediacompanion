@@ -156,7 +156,7 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAs
-        DQAAAk1TRnQBSQFMAgEBBwEAAWgBYwFoAWMBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DQAAAk1TRnQBSQFMAgEBBwEAAXgBYwF4AWMBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -3952,7 +3952,7 @@ Media Companion will keep these it the Title, and in the Foldername.</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAG8ARgBvAEYASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        CwAAAk1TRnQBSQFMAwEBAAHMARgBzAEYASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
         AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
         AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
         AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
@@ -6162,9 +6162,6 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
   </metadata>
   <metadata name="Timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>665, 165</value>
-  </metadata>
-  <metadata name="Timer3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>751, 165</value>
   </metadata>
   <metadata name="Timer4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 202</value>

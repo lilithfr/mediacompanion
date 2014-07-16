@@ -347,51 +347,42 @@ Module Module1
         End Try
     End Sub
 
-    Public Sub screenshot(ByVal fullpathandfilename As String, ByVal SavePath As String, Optional ByVal overwrite As Boolean = False)
-        Dim status As String = "working"
-        Try
+    'Public Sub screenshot(ByVal fullpathandfilename As String, ByVal SavePath As String, Optional ByVal overwrite As Boolean = False)
+    '    Dim status As String = "working"
+    '    Try
+    '        Dim skip As Boolean = False
+    '        If Not IO.File.Exists(SavePath) Or overwrite = True Then
+    '            If IO.File.Exists(SavePath) Then
+    '                Try
+    '                    IO.File.Delete(SavePath)
+    '                Catch
+    '                    status = "nodelete"
+    '                    skip = True
+    '                End Try
+    '            End If
+    '            If skip = False Then
+    '                If IO.File.Exists(fullpathandfilename) Then
+    '                    Try
+    '                        Dim seconds As Integer = Preferences.ScrShtDelay
+    '                        Dim myProcess As Process = New Process
+    '                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+    '                        myProcess.StartInfo.CreateNoWindow = False
+    '                        myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
+    '                        Dim proc_arguments As String = "-y -i """ & fullpathandfilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & SavePath & """"
+    '                        myProcess.StartInfo.Arguments = proc_arguments
+    '                        myProcess.Start()
+    '                        myProcess.WaitForExit()
+    '                        status = "done"
+    '                    Catch ex As Exception
 
-            'Dim thumbpathandfilename As String = fullnfopath.Replace(IO.Path.GetExtension(fullnfopath), ".tbn")
-            Dim skip As Boolean = False
-            If Not IO.File.Exists(SavePath) Or overwrite = True Then
-                If IO.File.Exists(SavePath) Then
-                    Try
-                        IO.File.Delete(SavePath)
-                    Catch
-                        status = "nodelete"
-                        skip = True
-                    End Try
-                End If
-                If skip = False Then
-                    'Dim nfofilename As String = IO.Path.GetFileName(fullnfopath)
-                    'For Each extn In MediaFileExtensions
-                    '    Dim tempfilename As String = nfofilename
-                    '    tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), extn)
-                    '    Dim tempstring2 As String = fullnfopath.Replace(IO.Path.GetFileName(fullnfopath), tempfilename)
-                    If IO.File.Exists(fullpathandfilename) Then
-                        Try
-                            Dim seconds As Integer = Preferences.ScrShtDelay
-                            Dim myProcess As Process = New Process
-                            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                            myProcess.StartInfo.CreateNoWindow = False
-                            myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
-                            Dim proc_arguments As String = "-y -i """ & fullpathandfilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & SavePath & """"
-                            myProcess.StartInfo.Arguments = proc_arguments
-                            myProcess.Start()
-                            myProcess.WaitForExit()
-                            status = "done"
-                            'Exit For
-                        Catch ex As Exception
-
-                        End Try
-                    End If
-                    'Next
-                End If
-            End If
-        Catch
-        Finally
-        End Try
-    End Sub
+    '                    End Try
+    '                End If
+    '            End If
+    '        End If
+    '    Catch
+    '    Finally
+    '    End Try
+    'End Sub
 
     Private Sub episodescraper(ByVal listofshowfolders As List(Of String), ByVal manual As Boolean)
         Dim tempstring As String = ""
@@ -1282,9 +1273,15 @@ Module Module1
         End If
         If Not ok AndAlso Preferences.autoepisodescreenshot Then
             ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Episode file")
-            Call screenshot(alleps(0).mediaextension, paths(0))
-            If paths.Count > 1 Then File.Copy(paths(0), paths(1))
-            ConsoleOrLog("Screenshot Saved")
+            Dim aok As Boolean = Utilities.CreateScreenShot(alleps(0).mediaextension, paths(0), Preferences.ScrShtDelay)
+            'Call screenshot(alleps(0).mediaextension, paths(0))
+            If aok AndAlso paths.Count > 1 Then
+                File.Copy(paths(0), paths(1))
+                ConsoleOrLog("Screenshot Saved O.K.")
+            End If
+            If Not aok Then
+                ConsoleOrLog("Screenshot save Failed!")
+            End If
         End If
     End Sub
 
@@ -1418,24 +1415,24 @@ Module Module1
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
+                                    Case "state"
+                                        newtvshow.locked = detail.InnerText
                                     Case "title"
                                         Dim tempstring As String = ""
                                         tempstring = detail.InnerText
                                         newtvshow.title = Preferences.RemoveIgnoredArticles(tempstring)
-                                    Case "fullpathandfilename"
-                                        newtvshow.fullpath = detail.InnerText
                                     Case "id"
                                         newtvshow.id = detail.InnerText
                                     Case "sortorder"
                                         newtvshow.sortorder = detail.InnerText
-                                    Case "imdbid"
-                                        newtvshow.imdbid = detail.InnerText
-                                    Case "episodeactorsource"
-                                        newtvshow.episodeactorsource = detail.InnerText
                                     Case "language"
                                         newtvshow.language = detail.InnerText
-                                    Case "state"
-                                        newtvshow.locked = detail.InnerText
+                                    Case "episodeactorsource"
+                                        newtvshow.episodeactorsource = detail.InnerText
+                                    Case "imdbid"
+                                        newtvshow.imdbid = detail.InnerText
+                                    Case "fullpathandfilename"
+                                        newtvshow.fullpath = detail.InnerText
                                 End Select
                             Next
                             basictvlist.Add(newtvshow)
@@ -1518,18 +1515,13 @@ Module Module1
             child = document.CreateElement("tvshow")
             child.SetAttribute("NfoPath", item.fullpath)
 
-            childchild = document.CreateElement("state")
-            childchild.InnerText = item.locked '"0"
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("title")
-            childchild.InnerText = item.Title
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("id")
-            childchild.InnerText = item.id
-            child.AppendChild(childchild)
-
+            childchild = document.CreateElement("state")              : childchild.InnerText = item.locked              : child.AppendChild(childchild)
+            childchild = document.CreateElement("title")              : childchild.InnerText = item.title               : child.AppendChild(childchild)
+            childchild = document.CreateElement("id")                 : childchild.InnerText = item.id                  : child.AppendChild(childchild)
+            childchild = document.CreateElement("sortorder")          : childchild.InnerText = item.sortorder           : child.AppendChild(childchild)
+            childchild = document.CreateElement("language")           : childchild.InnerText = item.language            : child.AppendChild(childchild)
+            childchild = document.CreateElement("episodeactorsource") : childchild.InnerText = item.episodeactorsource  : child.AppendChild(childchild)
+            childchild = document.CreateElement("imdbid")             : childchild.InnerText = item.imdbid              : child.AppendChild(childchild)
             root.AppendChild(child)
         Next
         For Each item In basictvlist 
@@ -1537,42 +1529,14 @@ Module Module1
             child = document.CreateElement("episodedetails")
             child.SetAttribute("NfoPath", episode.episodepath)
 
-            If episode.missing = True Then
-                childchild = document.CreateElement("missing")
-                childchild.InnerText = "true"
-                child.AppendChild(childchild)
-            Else
-                childchild = document.CreateElement("missing")
-                childchild.InnerText = "false"
-                child.AppendChild(childchild)
-            End If
-
-            childchild = document.CreateElement("title")
-            childchild.InnerText = episode.Title
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("season")
-            childchild.InnerText = episode.seasonno
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("episode")
-            childchild.InnerText = episode.episodeno 
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("aired")
-            childchild.InnerText = episode.Aired
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("showid")
-            childchild.InnerText = episode.showid
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("epextn")
-            childchild.InnerText = episode.extension 
-            child.AppendChild(childchild)
-
+            childchild = document.CreateElement("missing") : childchild.InnerText = episode.missing.ToString.ToLower : child.AppendChild(childchild)
+            childchild = document.CreateElement("title")    : childchild.InnerText = episode.Title      : child.AppendChild(childchild)
+            childchild = document.CreateElement("season")   : childchild.InnerText = episode.seasonno   : child.AppendChild(childchild)
+            childchild = document.CreateElement("episode")  : childchild.InnerText = episode.episodeno  : child.AppendChild(childchild)
+            childchild = document.CreateElement("aired")    : childchild.InnerText = episode.Aired      : child.AppendChild(childchild)
+            childchild = document.CreateElement("showid")   : childchild.InnerText = episode.showid     : child.AppendChild(childchild)
+            childchild = document.CreateElement("epextn")   : childchild.InnerText = episode.extension  : child.AppendChild(childchild)
             root.AppendChild(child)
-
         Next
         Next
         document.AppendChild(root)
@@ -1730,22 +1694,6 @@ Module Module1
         Return "Error"
     End Function
 
-    Public Sub EnumerateDirectories(ByRef directoryList As List(Of String), ByVal root As String)
-        If (File.GetAttributes(root) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-            'ignore 
-        Else
-            If Utilities.ValidMovieDir(root) Then
-
-                If Not (directoryList.Contains(root)) Then
-                    directoryList.Add(root)
-                    For Each s As String In Directory.GetDirectories(root)
-                        EnumerateDirectories(directoryList, s)
-                    Next
-                End If
-            End If
-        End If
-    End Sub
-
     Public Function get_hdtags(ByVal filename As String)
         Try
             If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
@@ -1805,1402 +1753,12 @@ Module Module1
         Return Nothing
     End Function
 
-    Public Function getlangcode(ByVal strLang As String) As String
-        Dim monitorobject As New Object
-        Monitor.Enter(monitorobject)
-        Try
-            Select Case strLang.ToLower
-                Case "english"
-                    Return "eng"
-                Case "german"
-                    Return "deu"
-                Case ""
-                    Return ""
-                Case "afar"
-                    Return "aar"
-                Case "abkhazian"
-                    Return "abk"
-                Case "achinese"
-                    Return "ace"
-                Case "acoli"
-                    Return "ach"
-                Case "adangme"
-                    Return "ada"
-                Case "adyghe", "adygei"
-                    Return "ady"
-                Case "afro-asiatic (other)"
-                    Return "afa"
-                Case "afrihili"
-                    Return "afh"
-                Case "afrikaans"
-                    Return "afr"
-                Case "ainu"
-                    Return "ain"
-                Case "akan"
-                    Return "aka"
-                Case "akkadian"
-                    Return "akk"
-                Case "albanian"
-                    Return "alb"
-                Case "aleut"
-                    Return "ale"
-                Case "algonquian languages"
-                    Return "alg"
-                Case "southern altai"
-                    Return "alt"
-                Case "amharic"
-                    Return "amh"
-                Case "english"
-                    Return "ang"
-                Case "angika"
-                    Return "anp"
-                Case "apache languages"
-                    Return "apa"
-                Case "arabic"
-                    Return "ara"
-                Case "official aramaic (700-300 bce)", "imperial aramaic (700-300 bce)"
-                    Return "arc"
-                Case "aragonese"
-                    Return "arg"
-                Case "armenian"
-                    Return "arm"
-                Case "mapudungun", "mapuche"
-                    Return "arn"
-                Case "arapaho"
-                    Return "arp"
-                Case "artificial (other)"
-                    Return "art"
-                Case "arawak"
-                    Return "arw"
-                Case "assamese"
-                    Return "asm"
-                Case "asturian", "bable", "leonese", "asturleonese"
-                    Return "ast"
-                Case "athapascan languages"
-                    Return "ath"
-                Case "australian languages"
-                    Return "aus"
-                Case "avaric"
-                    Return "ava"
-                Case "avestan"
-                    Return "ave"
-                Case "awadhi"
-                    Return "awa"
-                Case "aymara"
-                    Return "aym"
-                Case "azerbaijani"
-                    Return "aze"
-                Case "banda languages"
-                    Return "bad"
-                Case "bamileke languages"
-                    Return "bai"
-                Case "bashkir"
-                    Return "bak"
-                Case "baluchi"
-                    Return "bal"
-                Case "bambara"
-                    Return "bam"
-                Case "balinese"
-                    Return "ban"
-                Case "basque"
-                    Return "baq"
-                Case "basa"
-                    Return "bas"
-                Case "baltic (other)"
-                    Return "bat"
-                Case "beja", "bedawiyet"
-                    Return "bej"
-                Case "belarusian"
-                    Return "bel"
-                Case "bemba"
-                    Return "bem"
-                Case "bengali"
-                    Return "ben"
-                Case "berber (other)"
-                    Return "ber"
-                Case "bhojpuri"
-                    Return "bho"
-                Case "bihari"
-                    Return "bih"
-                Case "bikol"
-                    Return "bik"
-                Case "bini", "edo"
-                    Return "bin"
-                Case "bislama"
-                    Return "bis"
-                Case "siksika"
-                    Return "bla"
-                Case "bantu (other)"
-                    Return "bnt"
-                Case "bosnian"
-                    Return "bos"
-                Case "braj"
-                    Return "bra"
-                Case "breton"
-                    Return "bre"
-                Case "batak languages"
-                    Return "btk"
-                Case "buriat"
-                    Return "bua"
-                Case "buginese"
-                    Return "bug"
-                Case "bulgarian"
-                    Return "bul"
-                Case "burmese"
-                    Return "bur"
-                Case "blin", "bilin"
-                    Return "byn"
-                Case "caddo"
-                    Return "cad"
-                Case "central american indian (other)"
-                    Return "cai"
-                Case "galibi carib"
-                    Return "car"
-                Case "catalan", "valencian"
-                    Return "cat"
-                Case "caucasian (other)"
-                    Return "cau"
-                Case "cebuano"
-                    Return "ceb"
-                Case "celtic (other)"
-                    Return "cel"
-                Case "chamorro"
-                    Return "cha"
-                Case "chibcha"
-                    Return "chb"
-                Case "chechen"
-                    Return "che"
-                Case "chagatai"
-                    Return "chg"
-                Case "chinese"
-                    Return "chi"
-                Case "chuukese"
-                    Return "chk"
-                Case "mari"
-                    Return "chm"
-                Case "chinook jargon"
-                    Return "chn"
-                Case "choctaw"
-                    Return "cho"
-                Case "chipewyan", "dene suline"
-                    Return "chp"
-                Case "cherokee"
-                    Return "chr"
-                Case "church slavic", "old slavonic", "church slavonic", "old bulgarian", "old church slavonic"
-                    Return "chu"
-                Case "chuvash"
-                    Return "chv"
-                Case "cheyenne"
-                    Return "chy"
-                Case "chamic languages"
-                    Return "cmc"
-                Case "coptic"
-                    Return "cop"
-                Case "cornish"
-                    Return "cor"
-                Case "corsican"
-                    Return "cos"
-                Case "creoles and pidgins"
-                    Return "cpe"
-                Case "creoles and pidgins"
-                    Return "cpf"
-                Case "creoles and pidgins"
-                    Return "cpp"
-                Case "cree"
-                    Return "cre"
-                Case "crimean tatar", "crimean turkish"
-                    Return "crh"
-                Case "creoles and pidgins (other)"
-                    Return "crp"
-                Case "kashubian"
-                    Return "csb"
-                Case "cushitic (other)"
-                    Return "cus"
-                Case "czech"
-                    Return "cze"
-                Case "dakota"
-                    Return "dak"
-                Case "danish"
-                    Return "dan"
-                Case "dargwa"
-                    Return "dar"
-                Case "land dayak languages"
-                    Return "day"
-                Case "delaware"
-                    Return "del"
-                Case "slave (athapascan)"
-                    Return "den"
-                Case "dogrib"
-                    Return "dgr"
-                Case "dinka"
-                    Return "din"
-                Case "divehi", "dhivehi", "maldivian"
-                    Return "div"
-                Case "dogri"
-                    Return "doi"
-                Case "dravidian (other)"
-                    Return "dra"
-                Case "lower sorbian"
-                    Return "dsb"
-                Case "duala"
-                    Return "dua"
-                Case "dutch"
-                    Return "dum"
-                Case "dutch", "flemish"
-                    Return "dut"
-                Case "dyula"
-                    Return "dyu"
-                Case "dzongkha"
-                    Return "dzo"
-                Case "efik"
-                    Return "efi"
-                Case "egyptian (ancient)"
-                    Return "egy"
-                Case "ekajuk"
-                    Return "eka"
-                Case "elamite"
-                    Return "elx"
-                Case "english"
-                    Return "eng"
-                Case "english"
-                    Return "enm"
-                Case "esperanto"
-                    Return "epo"
-                Case "estonian"
-                    Return "est"
-                Case "ewe"
-                    Return "ewe"
-                Case "ewondo"
-                    Return "ewo"
-                Case "fang"
-                    Return "fan"
-                Case "faroese"
-                    Return "fao"
-                Case "fanti"
-                    Return "fat"
-                Case "fijian"
-                    Return "fij"
-                Case "filipino", "pilipino"
-                    Return "fil"
-                Case "finnish"
-                    Return "fin"
-                Case "finno-ugrian (other)"
-                    Return "fiu"
-                Case "fon"
-                    Return "fon"
-                Case "french"
-                    Return "fre"
-                Case "french"
-                    Return "frm"
-                Case "french"
-                    Return "fro"
-                Case "northern frisian"
-                    Return "frr"
-                Case "eastern frisian"
-                    Return "frs"
-                Case "western frisian"
-                    Return "fry"
-                Case "fulah"
-                    Return "ful"
-                Case "friulian"
-                    Return "fur"
-                Case "ga"
-                    Return "gaa"
-                Case "gayo"
-                    Return "gay"
-                Case "gbaya"
-                    Return "gba"
-                Case "germanic (other)"
-                    Return "gem"
-                Case "georgian"
-                    Return "geo"
-                Case "german"
-                    Return "ger"
-                Case "geez"
-                    Return "gez"
-                Case "gilbertese"
-                    Return "gil"
-                Case "gaelic", "scottish gaelic"
-                    Return "gla"
-                Case "irish"
-                    Return "gle"
-                Case "galician"
-                    Return "glg"
-                Case "manx"
-                    Return "glv"
-                Case "german"
-                    Return "gmh"
-                Case "german"
-                    Return "goh"
-                Case "gondi"
-                    Return "gon"
-                Case "gorontalo"
-                    Return "gor"
-                Case "gothic"
-                    Return "got"
-                Case "grebo"
-                    Return "grb"
-                Case "greek"
-                    Return "grc"
-                Case "greek"
-                    Return "gre"
-                Case "guarani"
-                    Return "grn"
-                Case "swiss german", "alemannic", "alsatian"
-                    Return "gsw"
-                Case "gujarati"
-                    Return "guj"
-                Case "gwich'in"
-                    Return "gwi"
-                Case "haida"
-                    Return "hai"
-                Case "haitian", "haitian creole"
-                    Return "hat"
-                Case "hausa"
-                    Return "hau"
-                Case "hawaiian"
-                    Return "haw"
-                Case "hebrew"
-                    Return "heb"
-                Case "herero"
-                    Return "her"
-                Case "hiligaynon"
-                    Return "hil"
-                Case "himachali"
-                    Return "him"
-                Case "hindi"
-                    Return "hin"
-                Case "hittite"
-                    Return "hit"
-                Case "hmong"
-                    Return "hmn"
-                Case "hiri motu"
-                    Return "hmo"
-                Case "croatian"
-                    Return "hrv"
-                Case "upper sorbian"
-                    Return "hsb"
-                Case "hungarian"
-                    Return "hun"
-                Case "hupa"
-                    Return "hup"
-                Case "iban"
-                    Return "iba"
-                Case "igbo"
-                    Return "ibo"
-                Case "icelandic"
-                    Return "ice"
-                Case "ido"
-                    Return "ido"
-                Case "sichuan yi", "nuosu"
-                    Return "iii"
-                Case "ijo languages"
-                    Return "ijo"
-                Case "inuktitut"
-                    Return "iku"
-                Case "interlingue", "occidental"
-                    Return "ile"
-                Case "iloko"
-                    Return "ilo"
-                Case "interlingua (international auxiliary language association)"
-                    Return "ina"
-                Case "indic (other)"
-                    Return "inc"
-                Case "indonesian"
-                    Return "ind"
-                Case "indo-european (other)"
-                    Return "ine"
-                Case "ingush"
-                    Return "inh"
-                Case "inupiaq"
-                    Return "ipk"
-                Case "iranian (other)"
-                    Return "ira"
-                Case "iroquoian languages"
-                    Return "iro"
-                Case "italian"
-                    Return "ita"
-                Case "javanese"
-                    Return "jav"
-                Case "lojban"
-                    Return "jbo"
-                Case "japanese"
-                    Return "jpn"
-                Case "judeo-persian"
-                    Return "jpr"
-                Case "judeo-arabic"
-                    Return "jrb"
-                Case "kara-kalpak"
-                    Return "kaa"
-                Case "kabyle"
-                    Return "kab"
-                Case "kachin", "jingpho"
-                    Return "kac"
-                Case "kalaallisut", "greenlandic"
-                    Return "kal"
-                Case "kamba"
-                    Return "kam"
-                Case "kannada"
-                    Return "kan"
-                Case "karen languages"
-                    Return "kar"
-                Case "kashmiri"
-                    Return "kas"
-                Case "kanuri"
-                    Return "kau"
-                Case "kawi"
-                    Return "kaw"
-                Case "kazakh"
-                    Return "kaz"
-                Case "kabardian"
-                    Return "kbd"
-                Case "khasi"
-                    Return "kha"
-                Case "khoisan (other)"
-                    Return "khi"
-                Case "central khmer"
-                    Return "khm"
-                Case "khotanese", "sakan"
-                    Return "kho"
-                Case "kikuyu", "gikuyu"
-                    Return "kik"
-                Case "kinyarwanda"
-                    Return "kin"
-                Case "kirghiz", "kyrgyz"
-                    Return "kir"
-                Case "kimbundu"
-                    Return "kmb"
-                Case "konkani"
-                    Return "kok"
-                Case "komi"
-                    Return "kom"
-                Case "kongo"
-                    Return "kon"
-                Case "korean"
-                    Return "kor"
-                Case "kosraean"
-                    Return "kos"
-                Case "kpelle"
-                    Return "kpe"
-                Case "karachay-balkar"
-                    Return "krc"
-                Case "karelian"
-                    Return "krl"
-                Case "kru languages"
-                    Return "kro"
-                Case "kurukh"
-                    Return "kru"
-                Case "kuanyama", "kwanyama"
-                    Return "kua"
-                Case "kumyk"
-                    Return "kum"
-                Case "kurdish"
-                    Return "kur"
-                Case "kutenai"
-                    Return "kut"
-                Case "ladino"
-                    Return "lad"
-                Case "lahnda"
-                    Return "lah"
-                Case "lamba"
-                    Return "lam"
-                Case "lao"
-                    Return "lao"
-                Case "latin"
-                    Return "lat"
-                Case "latvian"
-                    Return "lav"
-                Case "lezghian"
-                    Return "lez"
-                Case "limburgan", "limburger", "limburgish"
-                    Return "lim"
-                Case "lingala"
-                    Return "lin"
-                Case "lithuanian"
-                    Return "lit"
-                Case "mongo"
-                    Return "lol"
-                Case "lozi"
-                    Return "loz"
-                Case "luxembourgish", "letzeburgesch"
-                    Return "ltz"
-                Case "luba-lulua"
-                    Return "lua"
-                Case "luba-katanga"
-                    Return "lub"
-                Case "ganda"
-                    Return "lug"
-                Case "luiseno"
-                    Return "lui"
-                Case "lunda"
-                    Return "lun"
-                Case "luo (kenya and tanzania)"
-                    Return "luo"
-                Case "lushai"
-                    Return "lus"
-                Case "macedonian"
-                    Return "mac"
-                Case "madurese"
-                    Return "mad"
-                Case "magahi"
-                    Return "mag"
-                Case "marshallese"
-                    Return "mah"
-                Case "maithili"
-                    Return "mai"
-                Case "makasar"
-                    Return "mak"
-                Case "malayalam"
-                    Return "mal"
-                Case "mandingo"
-                    Return "man"
-                Case "maori"
-                    Return "mao"
-                Case "austronesian (other)"
-                    Return "map"
-                Case "marathi"
-                    Return "mar"
-                Case "masai"
-                    Return "mas"
-                Case "malay"
-                    Return "may"
-                Case "moksha"
-                    Return "mdf"
-                Case "mandar"
-                    Return "mdr"
-                Case "mende"
-                    Return "men"
-                Case "irish"
-                    Return "mga"
-                Case "mi'kmaq", "micmac"
-                    Return "mic"
-                Case "minangkabau"
-                    Return "min"
-                Case "uncoded languages"
-                    Return "mis"
-                Case "mon-khmer (other)"
-                    Return "mkh"
-                Case "malagasy"
-                    Return "mlg"
-                Case "maltese"
-                    Return "mlt"
-                Case "manchu"
-                    Return ("mnc")
-                Case "manipuri"
-                    Return "mni"
-                Case "manobo languages"
-                    Return "mno"
-                Case "mohawk"
-                    Return "moh"
-                Case "mongolian"
-                    Return "mon"
-                Case "mossi"
-                    Return "mos"
-                Case "multiple languages"
-                    Return "mul"
-                Case "munda languages"
-                    Return "mun"
-                Case "creek"
-                    Return "mus"
-                Case "mirandese"
-                    Return "mwl"
-                Case "marwari"
-                    Return "mwr"
-                Case "mayan languages"
-                    Return "myn"
-                Case "erzya"
-                    Return "myv"
-                Case "nahuatl languages"
-                    Return "nah"
-                Case "north american indian"
-                    Return "nai"
-                Case "neapolitan"
-                    Return "nap"
-                Case "nauru"
-                    Return "nau"
-                Case "navajo", "navaho"
-                    Return "nav"
-                Case "ndebele"
-                    Return "nbl"
-                Case "ndebele"
-                    Return "nde"
-                Case "ndonga"
-                    Return "ndo"
-                Case "low german", "low saxon", "german"
-                    Return "nds"
-                Case "nepali"
-                    Return "nep"
-                Case "nepal bhasa", "newari"
-                    Return "new"
-                Case "nias"
-                    Return "nia"
-                Case "niger-kordofanian (other)"
-                    Return "nic"
-                Case "niuean"
-                    Return "niu"
-                Case "norwegian nynorsk", "nynorsk"
-                    Return "nno"
-                Case "bokmål"
-                    Return "nob"
-                Case "nogai"
-                    Return "nog"
-                Case "norse"
-                    Return "non"
-                Case "norwegian"
-                    Return "nor"
-                Case "n'ko"
-                    Return "nqo"
-                Case "pedi", "sepedi", "northern sotho"
-                    Return "nso"
-                Case "nubian languages"
-                    Return "nub"
-                Case "classical newari", "old newari", "classical nepal bhasa"
-                    Return "nwc"
-                Case "chichewa", "chewa", "nyanja"
-                    Return "nya"
-                Case "nyamwezi"
-                    Return "nym"
-                Case "nyankole"
-                    Return "nyn"
-                Case "nyoro"
-                    Return "nyo"
-                Case "nzima"
-                    Return "nzi"
-                Case "occitan (post 1500)", "provençal"
-                    Return "oci"
-                Case "ojibwa"
-                    Return "oji"
-                Case "oriya"
-                    Return "ori"
-                Case "oromo"
-                    Return "orm"
-                Case "osage"
-                    Return "osa"
-                Case "ossetian", "ossetic"
-                    Return "oss"
-                Case "turkish"
-                    Return "ota"
-                Case "otomian languages"
-                    Return "oto"
-                Case "papuan (other)"
-                    Return "paa"
-                Case "pangasinan"
-                    Return "pag"
-                Case "pahlavi"
-                    Return "pal"
-                Case "pampanga", "kapampangan"
-                    Return "pam"
-                Case "panjabi", "punjabi"
-                    Return "pan"
-                Case "papiamento"
-                    Return "pap"
-                Case "palauan"
-                    Return "pau"
-                Case "persian"
-                    Return "peo"
-                Case "persian"
-                    Return "per"
-                Case "philippine (other)"
-                    Return "phi"
-                Case "phoenician"
-                    Return "phn"
-                Case "pali"
-                    Return "pli"
-                Case "polish"
-                    Return "pol"
-                Case "pohnpeian"
-                    Return "pon"
-                Case "portuguese"
-                    Return "por"
-                Case "prakrit languages"
-                    Return "pra"
-                Case "provençal"
-                    Return "pro"
-                Case "pushto", "pashto"
-                    Return "pus"
-                Case "reserved for local use"
-                    Return "qaa-qtz"
-                Case "quechua"
-                    Return "que"
-                Case "rajasthani"
-                    Return "raj"
-                Case "rapanui"
-                    Return "rap"
-                Case "rarotongan", "cook islands maori"
-                    Return "rar"
-                Case "romance (other)"
-                    Return "roa"
-                Case "romansh"
-                    Return "roh"
-                Case "romany"
-                    Return "rom"
-                Case "romanian", "moldavian", "moldovan"
-                    Return "rum"
-                Case "rundi"
-                    Return "run"
-                Case "aromanian", "arumanian", "macedo-romanian"
-                    Return "rup"
-                Case "russian"
-                    Return "rus"
-                Case "sandawe"
-                    Return "sad"
-                Case "sango"
-                    Return "sag"
-                Case "yakut"
-                    Return "sah"
-                Case "south american indian (other)"
-                    Return "sai"
-                Case "salishan languages"
-                    Return "sal"
-                Case "samaritan aramaic"
-                    Return "sam"
-                Case "sanskrit"
-                    Return "san"
-                Case "sasak"
-                    Return "sas"
-                Case "santali"
-                    Return "sat"
-                Case "sicilian"
-                    Return "scn"
-                Case "scots"
-                    Return "sco"
-                Case "selkup"
-                    Return "sel"
-                Case "semitic (other)"
-                    Return "sem"
-                Case "irish"
-                    Return "sga"
-                Case "sign languages"
-                    Return "sgn"
-                Case "shan"
-                    Return "shn"
-                Case "sidamo"
-                    Return "sid"
-                Case "sinhala", "sinhalese"
-                    Return "sin"
-                Case "siouan languages"
-                    Return "sio"
-                Case "sino-tibetan (other)"
-                    Return "sit"
-                Case "slavic (other)"
-                    Return "sla"
-                Case "slovak"
-                    Return "slo"
-                Case "slovenian"
-                    Return "slv"
-                Case "southern sami"
-                    Return "sma"
-                Case "northern sami"
-                    Return "sme"
-                Case "sami languages (other)"
-                    Return "smi"
-                Case "lule sami"
-                    Return "smj"
-                Case "inari sami"
-                    Return "smn"
-                Case "samoan"
-                    Return "smo"
-                Case "skolt sami"
-                    Return "sms"
-                Case "shona"
-                    Return "sna"
-                Case "sindhi"
-                    Return "snd"
-                Case "soninke"
-                    Return "snk"
-                Case "sogdian"
-                    Return "sog"
-                Case "somali"
-                    Return "som"
-                Case "songhai languages"
-                    Return "son"
-                Case "sotho"
-                    Return "sot"
-                Case "spanish", "castilian"
-                    Return "spa"
-                Case "sardinian"
-                    Return "srd"
-                Case "sranan tongo"
-                    Return "srn"
-                Case "serbian"
-                    Return "srp"
-                Case "serer"
-                    Return "srr"
-                Case "nilo-saharan (other)"
-                    Return "ssa"
-                Case "swati"
-                    Return "ssw"
-                Case "sukuma"
-                    Return "suk"
-                Case "sundanese"
-                    Return "sun"
-                Case "susu"
-                    Return "sus"
-                Case "sumerian"
-                    Return "sux"
-                Case "swahili"
-                    Return "swa"
-                Case "swedish"
-                    Return "swe"
-                Case "classical syriac"
-                    Return "syc"
-                Case "syriac"
-                    Return "syr"
-                Case "tahitian"
-                    Return "tah"
-                Case "tai (other)"
-                    Return "tai"
-                Case "tamil"
-                    Return "tam"
-                Case "tatar"
-                    Return "tat"
-                Case "telugu"
-                    Return "tel"
-                Case "timne"
-                    Return "tem"
-                Case "tereno"
-                    Return "ter"
-                Case "tetum"
-                    Return "tet"
-                Case "tajik"
-                    Return "tgk"
-                Case "tagalog"
-                    Return "tgl"
-                Case "thai"
-                    Return "tha"
-                Case "tibetan"
-                    Return "tib"
-                Case "tigre"
-                    Return "tig"
-                Case "tigrinya"
-                    Return "tir"
-                Case "tiv"
-                    Return "tiv"
-                Case "tokelau"
-                    Return "tkl"
-                Case "klingon", "tlhingan-hol"
-                    Return "tlh"
-                Case "tlingit"
-                    Return "tli"
-                Case "tamashek"
-                    Return "tmh"
-                Case "tonga (nyasa)"
-                    Return "tog"
-                Case "tonga (tonga islands)"
-                    Return "ton"
-                Case "tok pisin"
-                    Return "tpi"
-                Case "tsimshian"
-                    Return "tsi"
-                Case "tswana"
-                    Return "tsn"
-                Case "tsonga"
-                    Return "tso"
-                Case "turkmen"
-                    Return "tuk"
-                Case "tumbuka"
-                    Return "tum"
-                Case "tupi languages"
-                    Return "tup"
-                Case "turkish"
-                    Return "tur"
-                Case "altaic (other)"
-                    Return "tut"
-                Case "tuvalu"
-                    Return "tvl"
-                Case "twi"
-                    Return "twi"
-                Case "tuvinian"
-                    Return "tyv"
-                Case "udmurt"
-                    Return "udm"
-                Case "ugaritic"
-                    Return "uga"
-                Case "uighur", "uyghur"
-                    Return "uig"
-                Case "ukrainian"
-                    Return "ukr"
-                Case "umbundu"
-                    Return "umb"
-                Case "undetermined"
-                    Return "und"
-                Case "urdu"
-                    Return "urd"
-                Case "uzbek"
-                    Return "uzb"
-                Case "vai"
-                    Return "vai"
-                Case "venda"
-                    Return "ven"
-                Case "vietnamese"
-                    Return "vie"
-                Case "volapük"
-                    Return "vol"
-                Case "votic"
-                    Return "vot"
-                Case "wakashan languages"
-                    Return "wak"
-                Case "walamo"
-                    Return "wal"
-                Case "waray"
-                    Return "war"
-                Case "washo"
-                    Return "was"
-                Case "welsh"
-                    Return "wel"
-                Case "sorbian languages"
-                    Return "wen"
-                Case "walloon"
-                    Return "wln"
-                Case "wolof"
-                    Return "wol"
-                Case "kalmyk", "oirat"
-                    Return "xal"
-                Case "xhosa"
-                    Return "xho"
-                Case "yao"
-                    Return "yao"
-                Case "yapese"
-                    Return "yap"
-                Case "yiddish"
-                    Return "yid"
-                Case "yoruba"
-                    Return "yor"
-                Case "yupik languages"
-                    Return "ypk"
-                Case "zapotec"
-                    Return "zap"
-                Case "blissymbols", "blissymbolics", "bliss"
-                    Return "zbl"
-                Case "zenaga"
-                    Return "zen"
-                Case "zhuang", "chuang"
-                    Return "zha"
-                Case "zande languages"
-                    Return "znd"
-                Case "zulu"
-                    Return "zul"
-                Case "zuni"
-                    Return "zun"
-                Case "no linguistic content", "not applicable"
-                    Return "zxx"
-                Case "zaza", "dimili", "dimli", "kirdki", "kirmanjki", "zazaki"
-                    Return "zza"
-            End Select
-        Catch
-        Finally
-            Monitor.Exit(monitorobject)
-        End Try
-        Return "Error"
-    End Function
-
-    Public Function getmedialist(ByVal pathandfilename As String)
-        Try
-            Dim tempstring As String = pathandfilename
-            Dim playlist As New List(Of String)
-            If IO.File.Exists(tempstring) Then
-                playlist.Add(tempstring)
-            End If
-            tempstring = tempstring.ToLower
-            If tempstring.IndexOf("cd1") <> -1 Then
-                tempstring = tempstring.Replace("cd1", "cd2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd2", "cd3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd3", "cd4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd4", "cd5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd_1") <> -1 Then
-                tempstring = tempstring.Replace("cd_1", "cd_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_2", "cd_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_3", "cd_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_4", "cd_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd 1") <> -1 Then
-                tempstring = tempstring.Replace("cd 1", "cd 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 2", "cd 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 3", "cd 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 4", "cd 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd.1") <> -1 Then
-                tempstring = tempstring.Replace("cd.1", "cd.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.2", "cd.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.3", "cd.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.4", "cd.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd1") <> -1 Then
-                tempstring = tempstring.Replace("dvd1", "dvd2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd2", "dvd3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd3", "dvd4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd4", "dvd5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd_1") <> -1 Then
-                tempstring = tempstring.Replace("dvd_1", "dvd_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_2", "dvd_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_3", "dvd_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_4", "dvd_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd 1") <> -1 Then
-                tempstring = tempstring.Replace("dvd 1", "dvd 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 2", "dvd 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 3", "dvd 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 4", "dvd 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd.1") <> -1 Then
-                tempstring = tempstring.Replace("dvd.1", "dvd.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.2", "dvd.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.3", "dvd.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.4", "dvd.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part1") <> -1 Then
-                tempstring = tempstring.Replace("part1", "part2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part2", "part3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part3", "part4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part4", "part5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part_1") <> -1 Then
-                tempstring = tempstring.Replace("part_1", "part_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_2", "part_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_3", "part_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_4", "part_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part 1") <> -1 Then
-                tempstring = tempstring.Replace("part 1", "part 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 2", "part 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 3", "part 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 4", "part 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part.1") <> -1 Then
-                tempstring = tempstring.Replace("part.1", "part.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.2", "part.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.3", "part.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.4", "part.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk1") <> -1 Then
-                tempstring = tempstring.Replace("disk1", "disk2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk2", "disk3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk3", "disk4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk4", "disk5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk_1") <> -1 Then
-                tempstring = tempstring.Replace("disk_1", "disk_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_2", "disk_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_3", "disk_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_4", "disk_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk 1") <> -1 Then
-                tempstring = tempstring.Replace("disk 1", "disk 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 2", "disk 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 3", "disk 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 4", "disk 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk.1") <> -1 Then
-                tempstring = tempstring.Replace("disk.1", "disk.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.2", "disk.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.3", "disk.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.4", "disk.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt1") <> -1 Then
-                tempstring = tempstring.Replace("pt1", "pt2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt2", "pt3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt3", "pt4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt4", "pt5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt_1") <> -1 Then
-                tempstring = tempstring.Replace("pt_1", "pt_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_2", "pt_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_3", "pt_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_4", "pt_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt 1") <> -1 Then
-                tempstring = tempstring.Replace("pt 1", "pt 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 2", "pt 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 3", "pt 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 4", "pt 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt.1") <> -1 Then
-                tempstring = tempstring.Replace("pt.1", "pt.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.2", "pt.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.3", "pt.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.4", "pt.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            Return playlist
-        Catch
-
-        End Try
-        Return "0"
-    End Function
-
     Dim MediaFileExtensions As List(Of String) = New List(Of String)
 
     Private Sub InitMediaFileExtensions()
         For Each extn In Utilities.VideoExtensions
             MediaFileExtensions.Add(extn)
         Next
-        'MediaFileExtensions.Add(".avi")
-        'MediaFileExtensions.Add(".xvid")
-        'MediaFileExtensions.Add(".divx")
-        'MediaFileExtensions.Add(".img")
-        'MediaFileExtensions.Add(".mpg")
-        'MediaFileExtensions.Add(".mpeg")
-        'MediaFileExtensions.Add(".mov")
-        'MediaFileExtensions.Add(".rm")
-        'MediaFileExtensions.Add(".3gp")
-        'MediaFileExtensions.Add(".m4v")
-        'MediaFileExtensions.Add(".wmv")
-        'MediaFileExtensions.Add(".asf")
-        'MediaFileExtensions.Add(".mp4")
-        'MediaFileExtensions.Add(".mkv")
-        'MediaFileExtensions.Add(".nrg")
-        'MediaFileExtensions.Add(".iso")
-        'MediaFileExtensions.Add(".rmvb")
-        'MediaFileExtensions.Add(".ogm")
-        'MediaFileExtensions.Add(".bin")
-        'MediaFileExtensions.Add(".ts")
-        'MediaFileExtensions.Add(".vob")
-        'MediaFileExtensions.Add(".m2ts")
-        'MediaFileExtensions.Add(".rar")
-        'MediaFileExtensions.Add(".dvr-ms")
-        'MediaFileExtensions.Add(".ifo")
-        'MediaFileExtensions.Add(".ssif")
     End Sub
 
     Private Function IsMediaExtension(ByVal fileinfo As System.IO.FileInfo) As Boolean
@@ -3209,6 +1767,1387 @@ Module Module1
     End Function
 
     'Obsolete...
+
+    'Public Sub EnumerateDirectories(ByRef directoryList As List(Of String), ByVal root As String)
+    '    If (File.GetAttributes(root) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+    '        'ignore 
+    '    Else
+    '        If Utilities.ValidMovieDir(root) Then
+
+    '            If Not (directoryList.Contains(root)) Then
+    '                directoryList.Add(root)
+    '                For Each s As String In Directory.GetDirectories(root)
+    '                    EnumerateDirectories(directoryList, s)
+    '                Next
+    '            End If
+    '        End If
+    '    End If
+    'End Sub
+
+    'Public Function getlangcode(ByVal strLang As String) As String
+    '    Dim monitorobject As New Object
+    '    Monitor.Enter(monitorobject)
+    '    Try
+    '        Select Case strLang.ToLower
+    '            Case "english"
+    '                Return "eng"
+    '            Case "german"
+    '                Return "deu"
+    '            Case ""
+    '                Return ""
+    '            Case "afar"
+    '                Return "aar"
+    '            Case "abkhazian"
+    '                Return "abk"
+    '            Case "achinese"
+    '                Return "ace"
+    '            Case "acoli"
+    '                Return "ach"
+    '            Case "adangme"
+    '                Return "ada"
+    '            Case "adyghe", "adygei"
+    '                Return "ady"
+    '            Case "afro-asiatic (other)"
+    '                Return "afa"
+    '            Case "afrihili"
+    '                Return "afh"
+    '            Case "afrikaans"
+    '                Return "afr"
+    '            Case "ainu"
+    '                Return "ain"
+    '            Case "akan"
+    '                Return "aka"
+    '            Case "akkadian"
+    '                Return "akk"
+    '            Case "albanian"
+    '                Return "alb"
+    '            Case "aleut"
+    '                Return "ale"
+    '            Case "algonquian languages"
+    '                Return "alg"
+    '            Case "southern altai"
+    '                Return "alt"
+    '            Case "amharic"
+    '                Return "amh"
+    '            Case "english"
+    '                Return "ang"
+    '            Case "angika"
+    '                Return "anp"
+    '            Case "apache languages"
+    '                Return "apa"
+    '            Case "arabic"
+    '                Return "ara"
+    '            Case "official aramaic (700-300 bce)", "imperial aramaic (700-300 bce)"
+    '                Return "arc"
+    '            Case "aragonese"
+    '                Return "arg"
+    '            Case "armenian"
+    '                Return "arm"
+    '            Case "mapudungun", "mapuche"
+    '                Return "arn"
+    '            Case "arapaho"
+    '                Return "arp"
+    '            Case "artificial (other)"
+    '                Return "art"
+    '            Case "arawak"
+    '                Return "arw"
+    '            Case "assamese"
+    '                Return "asm"
+    '            Case "asturian", "bable", "leonese", "asturleonese"
+    '                Return "ast"
+    '            Case "athapascan languages"
+    '                Return "ath"
+    '            Case "australian languages"
+    '                Return "aus"
+    '            Case "avaric"
+    '                Return "ava"
+    '            Case "avestan"
+    '                Return "ave"
+    '            Case "awadhi"
+    '                Return "awa"
+    '            Case "aymara"
+    '                Return "aym"
+    '            Case "azerbaijani"
+    '                Return "aze"
+    '            Case "banda languages"
+    '                Return "bad"
+    '            Case "bamileke languages"
+    '                Return "bai"
+    '            Case "bashkir"
+    '                Return "bak"
+    '            Case "baluchi"
+    '                Return "bal"
+    '            Case "bambara"
+    '                Return "bam"
+    '            Case "balinese"
+    '                Return "ban"
+    '            Case "basque"
+    '                Return "baq"
+    '            Case "basa"
+    '                Return "bas"
+    '            Case "baltic (other)"
+    '                Return "bat"
+    '            Case "beja", "bedawiyet"
+    '                Return "bej"
+    '            Case "belarusian"
+    '                Return "bel"
+    '            Case "bemba"
+    '                Return "bem"
+    '            Case "bengali"
+    '                Return "ben"
+    '            Case "berber (other)"
+    '                Return "ber"
+    '            Case "bhojpuri"
+    '                Return "bho"
+    '            Case "bihari"
+    '                Return "bih"
+    '            Case "bikol"
+    '                Return "bik"
+    '            Case "bini", "edo"
+    '                Return "bin"
+    '            Case "bislama"
+    '                Return "bis"
+    '            Case "siksika"
+    '                Return "bla"
+    '            Case "bantu (other)"
+    '                Return "bnt"
+    '            Case "bosnian"
+    '                Return "bos"
+    '            Case "braj"
+    '                Return "bra"
+    '            Case "breton"
+    '                Return "bre"
+    '            Case "batak languages"
+    '                Return "btk"
+    '            Case "buriat"
+    '                Return "bua"
+    '            Case "buginese"
+    '                Return "bug"
+    '            Case "bulgarian"
+    '                Return "bul"
+    '            Case "burmese"
+    '                Return "bur"
+    '            Case "blin", "bilin"
+    '                Return "byn"
+    '            Case "caddo"
+    '                Return "cad"
+    '            Case "central american indian (other)"
+    '                Return "cai"
+    '            Case "galibi carib"
+    '                Return "car"
+    '            Case "catalan", "valencian"
+    '                Return "cat"
+    '            Case "caucasian (other)"
+    '                Return "cau"
+    '            Case "cebuano"
+    '                Return "ceb"
+    '            Case "celtic (other)"
+    '                Return "cel"
+    '            Case "chamorro"
+    '                Return "cha"
+    '            Case "chibcha"
+    '                Return "chb"
+    '            Case "chechen"
+    '                Return "che"
+    '            Case "chagatai"
+    '                Return "chg"
+    '            Case "chinese"
+    '                Return "chi"
+    '            Case "chuukese"
+    '                Return "chk"
+    '            Case "mari"
+    '                Return "chm"
+    '            Case "chinook jargon"
+    '                Return "chn"
+    '            Case "choctaw"
+    '                Return "cho"
+    '            Case "chipewyan", "dene suline"
+    '                Return "chp"
+    '            Case "cherokee"
+    '                Return "chr"
+    '            Case "church slavic", "old slavonic", "church slavonic", "old bulgarian", "old church slavonic"
+    '                Return "chu"
+    '            Case "chuvash"
+    '                Return "chv"
+    '            Case "cheyenne"
+    '                Return "chy"
+    '            Case "chamic languages"
+    '                Return "cmc"
+    '            Case "coptic"
+    '                Return "cop"
+    '            Case "cornish"
+    '                Return "cor"
+    '            Case "corsican"
+    '                Return "cos"
+    '            Case "creoles and pidgins"
+    '                Return "cpe"
+    '            Case "creoles and pidgins"
+    '                Return "cpf"
+    '            Case "creoles and pidgins"
+    '                Return "cpp"
+    '            Case "cree"
+    '                Return "cre"
+    '            Case "crimean tatar", "crimean turkish"
+    '                Return "crh"
+    '            Case "creoles and pidgins (other)"
+    '                Return "crp"
+    '            Case "kashubian"
+    '                Return "csb"
+    '            Case "cushitic (other)"
+    '                Return "cus"
+    '            Case "czech"
+    '                Return "cze"
+    '            Case "dakota"
+    '                Return "dak"
+    '            Case "danish"
+    '                Return "dan"
+    '            Case "dargwa"
+    '                Return "dar"
+    '            Case "land dayak languages"
+    '                Return "day"
+    '            Case "delaware"
+    '                Return "del"
+    '            Case "slave (athapascan)"
+    '                Return "den"
+    '            Case "dogrib"
+    '                Return "dgr"
+    '            Case "dinka"
+    '                Return "din"
+    '            Case "divehi", "dhivehi", "maldivian"
+    '                Return "div"
+    '            Case "dogri"
+    '                Return "doi"
+    '            Case "dravidian (other)"
+    '                Return "dra"
+    '            Case "lower sorbian"
+    '                Return "dsb"
+    '            Case "duala"
+    '                Return "dua"
+    '            Case "dutch"
+    '                Return "dum"
+    '            Case "dutch", "flemish"
+    '                Return "dut"
+    '            Case "dyula"
+    '                Return "dyu"
+    '            Case "dzongkha"
+    '                Return "dzo"
+    '            Case "efik"
+    '                Return "efi"
+    '            Case "egyptian (ancient)"
+    '                Return "egy"
+    '            Case "ekajuk"
+    '                Return "eka"
+    '            Case "elamite"
+    '                Return "elx"
+    '            Case "english"
+    '                Return "eng"
+    '            Case "english"
+    '                Return "enm"
+    '            Case "esperanto"
+    '                Return "epo"
+    '            Case "estonian"
+    '                Return "est"
+    '            Case "ewe"
+    '                Return "ewe"
+    '            Case "ewondo"
+    '                Return "ewo"
+    '            Case "fang"
+    '                Return "fan"
+    '            Case "faroese"
+    '                Return "fao"
+    '            Case "fanti"
+    '                Return "fat"
+    '            Case "fijian"
+    '                Return "fij"
+    '            Case "filipino", "pilipino"
+    '                Return "fil"
+    '            Case "finnish"
+    '                Return "fin"
+    '            Case "finno-ugrian (other)"
+    '                Return "fiu"
+    '            Case "fon"
+    '                Return "fon"
+    '            Case "french"
+    '                Return "fre"
+    '            Case "french"
+    '                Return "frm"
+    '            Case "french"
+    '                Return "fro"
+    '            Case "northern frisian"
+    '                Return "frr"
+    '            Case "eastern frisian"
+    '                Return "frs"
+    '            Case "western frisian"
+    '                Return "fry"
+    '            Case "fulah"
+    '                Return "ful"
+    '            Case "friulian"
+    '                Return "fur"
+    '            Case "ga"
+    '                Return "gaa"
+    '            Case "gayo"
+    '                Return "gay"
+    '            Case "gbaya"
+    '                Return "gba"
+    '            Case "germanic (other)"
+    '                Return "gem"
+    '            Case "georgian"
+    '                Return "geo"
+    '            Case "german"
+    '                Return "ger"
+    '            Case "geez"
+    '                Return "gez"
+    '            Case "gilbertese"
+    '                Return "gil"
+    '            Case "gaelic", "scottish gaelic"
+    '                Return "gla"
+    '            Case "irish"
+    '                Return "gle"
+    '            Case "galician"
+    '                Return "glg"
+    '            Case "manx"
+    '                Return "glv"
+    '            Case "german"
+    '                Return "gmh"
+    '            Case "german"
+    '                Return "goh"
+    '            Case "gondi"
+    '                Return "gon"
+    '            Case "gorontalo"
+    '                Return "gor"
+    '            Case "gothic"
+    '                Return "got"
+    '            Case "grebo"
+    '                Return "grb"
+    '            Case "greek"
+    '                Return "grc"
+    '            Case "greek"
+    '                Return "gre"
+    '            Case "guarani"
+    '                Return "grn"
+    '            Case "swiss german", "alemannic", "alsatian"
+    '                Return "gsw"
+    '            Case "gujarati"
+    '                Return "guj"
+    '            Case "gwich'in"
+    '                Return "gwi"
+    '            Case "haida"
+    '                Return "hai"
+    '            Case "haitian", "haitian creole"
+    '                Return "hat"
+    '            Case "hausa"
+    '                Return "hau"
+    '            Case "hawaiian"
+    '                Return "haw"
+    '            Case "hebrew"
+    '                Return "heb"
+    '            Case "herero"
+    '                Return "her"
+    '            Case "hiligaynon"
+    '                Return "hil"
+    '            Case "himachali"
+    '                Return "him"
+    '            Case "hindi"
+    '                Return "hin"
+    '            Case "hittite"
+    '                Return "hit"
+    '            Case "hmong"
+    '                Return "hmn"
+    '            Case "hiri motu"
+    '                Return "hmo"
+    '            Case "croatian"
+    '                Return "hrv"
+    '            Case "upper sorbian"
+    '                Return "hsb"
+    '            Case "hungarian"
+    '                Return "hun"
+    '            Case "hupa"
+    '                Return "hup"
+    '            Case "iban"
+    '                Return "iba"
+    '            Case "igbo"
+    '                Return "ibo"
+    '            Case "icelandic"
+    '                Return "ice"
+    '            Case "ido"
+    '                Return "ido"
+    '            Case "sichuan yi", "nuosu"
+    '                Return "iii"
+    '            Case "ijo languages"
+    '                Return "ijo"
+    '            Case "inuktitut"
+    '                Return "iku"
+    '            Case "interlingue", "occidental"
+    '                Return "ile"
+    '            Case "iloko"
+    '                Return "ilo"
+    '            Case "interlingua (international auxiliary language association)"
+    '                Return "ina"
+    '            Case "indic (other)"
+    '                Return "inc"
+    '            Case "indonesian"
+    '                Return "ind"
+    '            Case "indo-european (other)"
+    '                Return "ine"
+    '            Case "ingush"
+    '                Return "inh"
+    '            Case "inupiaq"
+    '                Return "ipk"
+    '            Case "iranian (other)"
+    '                Return "ira"
+    '            Case "iroquoian languages"
+    '                Return "iro"
+    '            Case "italian"
+    '                Return "ita"
+    '            Case "javanese"
+    '                Return "jav"
+    '            Case "lojban"
+    '                Return "jbo"
+    '            Case "japanese"
+    '                Return "jpn"
+    '            Case "judeo-persian"
+    '                Return "jpr"
+    '            Case "judeo-arabic"
+    '                Return "jrb"
+    '            Case "kara-kalpak"
+    '                Return "kaa"
+    '            Case "kabyle"
+    '                Return "kab"
+    '            Case "kachin", "jingpho"
+    '                Return "kac"
+    '            Case "kalaallisut", "greenlandic"
+    '                Return "kal"
+    '            Case "kamba"
+    '                Return "kam"
+    '            Case "kannada"
+    '                Return "kan"
+    '            Case "karen languages"
+    '                Return "kar"
+    '            Case "kashmiri"
+    '                Return "kas"
+    '            Case "kanuri"
+    '                Return "kau"
+    '            Case "kawi"
+    '                Return "kaw"
+    '            Case "kazakh"
+    '                Return "kaz"
+    '            Case "kabardian"
+    '                Return "kbd"
+    '            Case "khasi"
+    '                Return "kha"
+    '            Case "khoisan (other)"
+    '                Return "khi"
+    '            Case "central khmer"
+    '                Return "khm"
+    '            Case "khotanese", "sakan"
+    '                Return "kho"
+    '            Case "kikuyu", "gikuyu"
+    '                Return "kik"
+    '            Case "kinyarwanda"
+    '                Return "kin"
+    '            Case "kirghiz", "kyrgyz"
+    '                Return "kir"
+    '            Case "kimbundu"
+    '                Return "kmb"
+    '            Case "konkani"
+    '                Return "kok"
+    '            Case "komi"
+    '                Return "kom"
+    '            Case "kongo"
+    '                Return "kon"
+    '            Case "korean"
+    '                Return "kor"
+    '            Case "kosraean"
+    '                Return "kos"
+    '            Case "kpelle"
+    '                Return "kpe"
+    '            Case "karachay-balkar"
+    '                Return "krc"
+    '            Case "karelian"
+    '                Return "krl"
+    '            Case "kru languages"
+    '                Return "kro"
+    '            Case "kurukh"
+    '                Return "kru"
+    '            Case "kuanyama", "kwanyama"
+    '                Return "kua"
+    '            Case "kumyk"
+    '                Return "kum"
+    '            Case "kurdish"
+    '                Return "kur"
+    '            Case "kutenai"
+    '                Return "kut"
+    '            Case "ladino"
+    '                Return "lad"
+    '            Case "lahnda"
+    '                Return "lah"
+    '            Case "lamba"
+    '                Return "lam"
+    '            Case "lao"
+    '                Return "lao"
+    '            Case "latin"
+    '                Return "lat"
+    '            Case "latvian"
+    '                Return "lav"
+    '            Case "lezghian"
+    '                Return "lez"
+    '            Case "limburgan", "limburger", "limburgish"
+    '                Return "lim"
+    '            Case "lingala"
+    '                Return "lin"
+    '            Case "lithuanian"
+    '                Return "lit"
+    '            Case "mongo"
+    '                Return "lol"
+    '            Case "lozi"
+    '                Return "loz"
+    '            Case "luxembourgish", "letzeburgesch"
+    '                Return "ltz"
+    '            Case "luba-lulua"
+    '                Return "lua"
+    '            Case "luba-katanga"
+    '                Return "lub"
+    '            Case "ganda"
+    '                Return "lug"
+    '            Case "luiseno"
+    '                Return "lui"
+    '            Case "lunda"
+    '                Return "lun"
+    '            Case "luo (kenya and tanzania)"
+    '                Return "luo"
+    '            Case "lushai"
+    '                Return "lus"
+    '            Case "macedonian"
+    '                Return "mac"
+    '            Case "madurese"
+    '                Return "mad"
+    '            Case "magahi"
+    '                Return "mag"
+    '            Case "marshallese"
+    '                Return "mah"
+    '            Case "maithili"
+    '                Return "mai"
+    '            Case "makasar"
+    '                Return "mak"
+    '            Case "malayalam"
+    '                Return "mal"
+    '            Case "mandingo"
+    '                Return "man"
+    '            Case "maori"
+    '                Return "mao"
+    '            Case "austronesian (other)"
+    '                Return "map"
+    '            Case "marathi"
+    '                Return "mar"
+    '            Case "masai"
+    '                Return "mas"
+    '            Case "malay"
+    '                Return "may"
+    '            Case "moksha"
+    '                Return "mdf"
+    '            Case "mandar"
+    '                Return "mdr"
+    '            Case "mende"
+    '                Return "men"
+    '            Case "irish"
+    '                Return "mga"
+    '            Case "mi'kmaq", "micmac"
+    '                Return "mic"
+    '            Case "minangkabau"
+    '                Return "min"
+    '            Case "uncoded languages"
+    '                Return "mis"
+    '            Case "mon-khmer (other)"
+    '                Return "mkh"
+    '            Case "malagasy"
+    '                Return "mlg"
+    '            Case "maltese"
+    '                Return "mlt"
+    '            Case "manchu"
+    '                Return ("mnc")
+    '            Case "manipuri"
+    '                Return "mni"
+    '            Case "manobo languages"
+    '                Return "mno"
+    '            Case "mohawk"
+    '                Return "moh"
+    '            Case "mongolian"
+    '                Return "mon"
+    '            Case "mossi"
+    '                Return "mos"
+    '            Case "multiple languages"
+    '                Return "mul"
+    '            Case "munda languages"
+    '                Return "mun"
+    '            Case "creek"
+    '                Return "mus"
+    '            Case "mirandese"
+    '                Return "mwl"
+    '            Case "marwari"
+    '                Return "mwr"
+    '            Case "mayan languages"
+    '                Return "myn"
+    '            Case "erzya"
+    '                Return "myv"
+    '            Case "nahuatl languages"
+    '                Return "nah"
+    '            Case "north american indian"
+    '                Return "nai"
+    '            Case "neapolitan"
+    '                Return "nap"
+    '            Case "nauru"
+    '                Return "nau"
+    '            Case "navajo", "navaho"
+    '                Return "nav"
+    '            Case "ndebele"
+    '                Return "nbl"
+    '            Case "ndebele"
+    '                Return "nde"
+    '            Case "ndonga"
+    '                Return "ndo"
+    '            Case "low german", "low saxon", "german"
+    '                Return "nds"
+    '            Case "nepali"
+    '                Return "nep"
+    '            Case "nepal bhasa", "newari"
+    '                Return "new"
+    '            Case "nias"
+    '                Return "nia"
+    '            Case "niger-kordofanian (other)"
+    '                Return "nic"
+    '            Case "niuean"
+    '                Return "niu"
+    '            Case "norwegian nynorsk", "nynorsk"
+    '                Return "nno"
+    '            Case "bokmål"
+    '                Return "nob"
+    '            Case "nogai"
+    '                Return "nog"
+    '            Case "norse"
+    '                Return "non"
+    '            Case "norwegian"
+    '                Return "nor"
+    '            Case "n'ko"
+    '                Return "nqo"
+    '            Case "pedi", "sepedi", "northern sotho"
+    '                Return "nso"
+    '            Case "nubian languages"
+    '                Return "nub"
+    '            Case "classical newari", "old newari", "classical nepal bhasa"
+    '                Return "nwc"
+    '            Case "chichewa", "chewa", "nyanja"
+    '                Return "nya"
+    '            Case "nyamwezi"
+    '                Return "nym"
+    '            Case "nyankole"
+    '                Return "nyn"
+    '            Case "nyoro"
+    '                Return "nyo"
+    '            Case "nzima"
+    '                Return "nzi"
+    '            Case "occitan (post 1500)", "provençal"
+    '                Return "oci"
+    '            Case "ojibwa"
+    '                Return "oji"
+    '            Case "oriya"
+    '                Return "ori"
+    '            Case "oromo"
+    '                Return "orm"
+    '            Case "osage"
+    '                Return "osa"
+    '            Case "ossetian", "ossetic"
+    '                Return "oss"
+    '            Case "turkish"
+    '                Return "ota"
+    '            Case "otomian languages"
+    '                Return "oto"
+    '            Case "papuan (other)"
+    '                Return "paa"
+    '            Case "pangasinan"
+    '                Return "pag"
+    '            Case "pahlavi"
+    '                Return "pal"
+    '            Case "pampanga", "kapampangan"
+    '                Return "pam"
+    '            Case "panjabi", "punjabi"
+    '                Return "pan"
+    '            Case "papiamento"
+    '                Return "pap"
+    '            Case "palauan"
+    '                Return "pau"
+    '            Case "persian"
+    '                Return "peo"
+    '            Case "persian"
+    '                Return "per"
+    '            Case "philippine (other)"
+    '                Return "phi"
+    '            Case "phoenician"
+    '                Return "phn"
+    '            Case "pali"
+    '                Return "pli"
+    '            Case "polish"
+    '                Return "pol"
+    '            Case "pohnpeian"
+    '                Return "pon"
+    '            Case "portuguese"
+    '                Return "por"
+    '            Case "prakrit languages"
+    '                Return "pra"
+    '            Case "provençal"
+    '                Return "pro"
+    '            Case "pushto", "pashto"
+    '                Return "pus"
+    '            Case "reserved for local use"
+    '                Return "qaa-qtz"
+    '            Case "quechua"
+    '                Return "que"
+    '            Case "rajasthani"
+    '                Return "raj"
+    '            Case "rapanui"
+    '                Return "rap"
+    '            Case "rarotongan", "cook islands maori"
+    '                Return "rar"
+    '            Case "romance (other)"
+    '                Return "roa"
+    '            Case "romansh"
+    '                Return "roh"
+    '            Case "romany"
+    '                Return "rom"
+    '            Case "romanian", "moldavian", "moldovan"
+    '                Return "rum"
+    '            Case "rundi"
+    '                Return "run"
+    '            Case "aromanian", "arumanian", "macedo-romanian"
+    '                Return "rup"
+    '            Case "russian"
+    '                Return "rus"
+    '            Case "sandawe"
+    '                Return "sad"
+    '            Case "sango"
+    '                Return "sag"
+    '            Case "yakut"
+    '                Return "sah"
+    '            Case "south american indian (other)"
+    '                Return "sai"
+    '            Case "salishan languages"
+    '                Return "sal"
+    '            Case "samaritan aramaic"
+    '                Return "sam"
+    '            Case "sanskrit"
+    '                Return "san"
+    '            Case "sasak"
+    '                Return "sas"
+    '            Case "santali"
+    '                Return "sat"
+    '            Case "sicilian"
+    '                Return "scn"
+    '            Case "scots"
+    '                Return "sco"
+    '            Case "selkup"
+    '                Return "sel"
+    '            Case "semitic (other)"
+    '                Return "sem"
+    '            Case "irish"
+    '                Return "sga"
+    '            Case "sign languages"
+    '                Return "sgn"
+    '            Case "shan"
+    '                Return "shn"
+    '            Case "sidamo"
+    '                Return "sid"
+    '            Case "sinhala", "sinhalese"
+    '                Return "sin"
+    '            Case "siouan languages"
+    '                Return "sio"
+    '            Case "sino-tibetan (other)"
+    '                Return "sit"
+    '            Case "slavic (other)"
+    '                Return "sla"
+    '            Case "slovak"
+    '                Return "slo"
+    '            Case "slovenian"
+    '                Return "slv"
+    '            Case "southern sami"
+    '                Return "sma"
+    '            Case "northern sami"
+    '                Return "sme"
+    '            Case "sami languages (other)"
+    '                Return "smi"
+    '            Case "lule sami"
+    '                Return "smj"
+    '            Case "inari sami"
+    '                Return "smn"
+    '            Case "samoan"
+    '                Return "smo"
+    '            Case "skolt sami"
+    '                Return "sms"
+    '            Case "shona"
+    '                Return "sna"
+    '            Case "sindhi"
+    '                Return "snd"
+    '            Case "soninke"
+    '                Return "snk"
+    '            Case "sogdian"
+    '                Return "sog"
+    '            Case "somali"
+    '                Return "som"
+    '            Case "songhai languages"
+    '                Return "son"
+    '            Case "sotho"
+    '                Return "sot"
+    '            Case "spanish", "castilian"
+    '                Return "spa"
+    '            Case "sardinian"
+    '                Return "srd"
+    '            Case "sranan tongo"
+    '                Return "srn"
+    '            Case "serbian"
+    '                Return "srp"
+    '            Case "serer"
+    '                Return "srr"
+    '            Case "nilo-saharan (other)"
+    '                Return "ssa"
+    '            Case "swati"
+    '                Return "ssw"
+    '            Case "sukuma"
+    '                Return "suk"
+    '            Case "sundanese"
+    '                Return "sun"
+    '            Case "susu"
+    '                Return "sus"
+    '            Case "sumerian"
+    '                Return "sux"
+    '            Case "swahili"
+    '                Return "swa"
+    '            Case "swedish"
+    '                Return "swe"
+    '            Case "classical syriac"
+    '                Return "syc"
+    '            Case "syriac"
+    '                Return "syr"
+    '            Case "tahitian"
+    '                Return "tah"
+    '            Case "tai (other)"
+    '                Return "tai"
+    '            Case "tamil"
+    '                Return "tam"
+    '            Case "tatar"
+    '                Return "tat"
+    '            Case "telugu"
+    '                Return "tel"
+    '            Case "timne"
+    '                Return "tem"
+    '            Case "tereno"
+    '                Return "ter"
+    '            Case "tetum"
+    '                Return "tet"
+    '            Case "tajik"
+    '                Return "tgk"
+    '            Case "tagalog"
+    '                Return "tgl"
+    '            Case "thai"
+    '                Return "tha"
+    '            Case "tibetan"
+    '                Return "tib"
+    '            Case "tigre"
+    '                Return "tig"
+    '            Case "tigrinya"
+    '                Return "tir"
+    '            Case "tiv"
+    '                Return "tiv"
+    '            Case "tokelau"
+    '                Return "tkl"
+    '            Case "klingon", "tlhingan-hol"
+    '                Return "tlh"
+    '            Case "tlingit"
+    '                Return "tli"
+    '            Case "tamashek"
+    '                Return "tmh"
+    '            Case "tonga (nyasa)"
+    '                Return "tog"
+    '            Case "tonga (tonga islands)"
+    '                Return "ton"
+    '            Case "tok pisin"
+    '                Return "tpi"
+    '            Case "tsimshian"
+    '                Return "tsi"
+    '            Case "tswana"
+    '                Return "tsn"
+    '            Case "tsonga"
+    '                Return "tso"
+    '            Case "turkmen"
+    '                Return "tuk"
+    '            Case "tumbuka"
+    '                Return "tum"
+    '            Case "tupi languages"
+    '                Return "tup"
+    '            Case "turkish"
+    '                Return "tur"
+    '            Case "altaic (other)"
+    '                Return "tut"
+    '            Case "tuvalu"
+    '                Return "tvl"
+    '            Case "twi"
+    '                Return "twi"
+    '            Case "tuvinian"
+    '                Return "tyv"
+    '            Case "udmurt"
+    '                Return "udm"
+    '            Case "ugaritic"
+    '                Return "uga"
+    '            Case "uighur", "uyghur"
+    '                Return "uig"
+    '            Case "ukrainian"
+    '                Return "ukr"
+    '            Case "umbundu"
+    '                Return "umb"
+    '            Case "undetermined"
+    '                Return "und"
+    '            Case "urdu"
+    '                Return "urd"
+    '            Case "uzbek"
+    '                Return "uzb"
+    '            Case "vai"
+    '                Return "vai"
+    '            Case "venda"
+    '                Return "ven"
+    '            Case "vietnamese"
+    '                Return "vie"
+    '            Case "volapük"
+    '                Return "vol"
+    '            Case "votic"
+    '                Return "vot"
+    '            Case "wakashan languages"
+    '                Return "wak"
+    '            Case "walamo"
+    '                Return "wal"
+    '            Case "waray"
+    '                Return "war"
+    '            Case "washo"
+    '                Return "was"
+    '            Case "welsh"
+    '                Return "wel"
+    '            Case "sorbian languages"
+    '                Return "wen"
+    '            Case "walloon"
+    '                Return "wln"
+    '            Case "wolof"
+    '                Return "wol"
+    '            Case "kalmyk", "oirat"
+    '                Return "xal"
+    '            Case "xhosa"
+    '                Return "xho"
+    '            Case "yao"
+    '                Return "yao"
+    '            Case "yapese"
+    '                Return "yap"
+    '            Case "yiddish"
+    '                Return "yid"
+    '            Case "yoruba"
+    '                Return "yor"
+    '            Case "yupik languages"
+    '                Return "ypk"
+    '            Case "zapotec"
+    '                Return "zap"
+    '            Case "blissymbols", "blissymbolics", "bliss"
+    '                Return "zbl"
+    '            Case "zenaga"
+    '                Return "zen"
+    '            Case "zhuang", "chuang"
+    '                Return "zha"
+    '            Case "zande languages"
+    '                Return "znd"
+    '            Case "zulu"
+    '                Return "zul"
+    '            Case "zuni"
+    '                Return "zun"
+    '            Case "no linguistic content", "not applicable"
+    '                Return "zxx"
+    '            Case "zaza", "dimili", "dimli", "kirdki", "kirmanjki", "zazaki"
+    '                Return "zza"
+    '        End Select
+    '    Catch
+    '    Finally
+    '        Monitor.Exit(monitorobject)
+    '    End Try
+    '    Return "Error"
+    'End Function
+
+    'Public Function getmedialist(ByVal pathandfilename As String)
+    '    Try
+    '        Dim tempstring As String = pathandfilename
+    '        Dim playlist As New List(Of String)
+    '        If IO.File.Exists(tempstring) Then
+    '            playlist.Add(tempstring)
+    '        End If
+    '        tempstring = tempstring.ToLower
+    '        If tempstring.IndexOf("cd1") <> -1 Then
+    '            tempstring = tempstring.Replace("cd1", "cd2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd2", "cd3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd3", "cd4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd4", "cd5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("cd_1") <> -1 Then
+    '            tempstring = tempstring.Replace("cd_1", "cd_2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd_2", "cd_3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd_3", "cd_4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd_4", "cd_5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("cd 1") <> -1 Then
+    '            tempstring = tempstring.Replace("cd 1", "cd 2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd 2", "cd 3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd 3", "cd 4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd 4", "cd 5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("cd.1") <> -1 Then
+    '            tempstring = tempstring.Replace("cd.1", "cd.2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd.2", "cd.3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd.3", "cd.4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("cd.4", "cd.5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("dvd1") <> -1 Then
+    '            tempstring = tempstring.Replace("dvd1", "dvd2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd2", "dvd3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd3", "dvd4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd4", "dvd5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("dvd_1") <> -1 Then
+    '            tempstring = tempstring.Replace("dvd_1", "dvd_2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd_2", "dvd_3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd_3", "dvd_4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd_4", "dvd_5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("dvd 1") <> -1 Then
+    '            tempstring = tempstring.Replace("dvd 1", "dvd 2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd 2", "dvd 3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd 3", "dvd 4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd 4", "dvd 5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("dvd.1") <> -1 Then
+    '            tempstring = tempstring.Replace("dvd.1", "dvd.2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd.2", "dvd.3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd.3", "dvd.4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("dvd.4", "dvd.5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("part1") <> -1 Then
+    '            tempstring = tempstring.Replace("part1", "part2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part2", "part3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part3", "part4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part4", "part5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("part_1") <> -1 Then
+    '            tempstring = tempstring.Replace("part_1", "part_2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part_2", "part_3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part_3", "part_4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part_4", "part_5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("part 1") <> -1 Then
+    '            tempstring = tempstring.Replace("part 1", "part 2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part 2", "part 3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part 3", "part 4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part 4", "part 5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("part.1") <> -1 Then
+    '            tempstring = tempstring.Replace("part.1", "part.2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part.2", "part.3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part.3", "part.4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("part.4", "part.5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("disk1") <> -1 Then
+    '            tempstring = tempstring.Replace("disk1", "disk2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk2", "disk3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk3", "disk4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk4", "disk5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("disk_1") <> -1 Then
+    '            tempstring = tempstring.Replace("disk_1", "disk_2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk_2", "disk_3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk_3", "disk_4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk_4", "disk_5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("disk 1") <> -1 Then
+    '            tempstring = tempstring.Replace("disk 1", "disk 2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk 2", "disk 3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk 3", "disk 4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk 4", "disk 5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("disk.1") <> -1 Then
+    '            tempstring = tempstring.Replace("disk.1", "disk.2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk.2", "disk.3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk.3", "disk.4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("disk.4", "disk.5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("pt1") <> -1 Then
+    '            tempstring = tempstring.Replace("pt1", "pt2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt2", "pt3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt3", "pt4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt4", "pt5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("pt_1") <> -1 Then
+    '            tempstring = tempstring.Replace("pt_1", "pt_2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt_2", "pt_3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt_3", "pt_4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt_4", "pt_5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("pt 1") <> -1 Then
+    '            tempstring = tempstring.Replace("pt 1", "pt 2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt 2", "pt 3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt 3", "pt 4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt 4", "pt 5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        If tempstring.IndexOf("pt.1") <> -1 Then
+    '            tempstring = tempstring.Replace("pt.1", "pt.2")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt.2", "pt.3")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt.3", "pt.4")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '            tempstring = tempstring.Replace("pt.4", "pt.5")
+    '            If IO.File.Exists(tempstring) Then
+    '                playlist.Add(tempstring)
+    '            End If
+    '        End If
+    '        Return playlist
+    '    Catch
+
+    '    End Try
+    '    Return "0"
+    'End Function
+
     'Private Sub loadactorcache()
     '    actorDB.Clear()
     '    Dim loadpath As String = Preferences.workingProfile.actorcache

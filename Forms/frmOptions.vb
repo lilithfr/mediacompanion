@@ -74,13 +74,13 @@ Public Class frmOptions
             End If
 
             If Preferences.videomode = 1 Then
-                RadioButton1.Checked = True
+                rb_MediaPlayerDefault.Checked = True
             ElseIf Preferences.videomode = 2 Then
-                RadioButton2.Checked = True
+                rb_MediaPlayerWMP.Checked = True
             ElseIf Preferences.videomode = 4 Then
-                RadioButton4.Checked = True
+                rb_MediaPlayerUser.Checked = True
             End If
-            Label4.Text = "Custom Player - " & Preferences.selectedvideoplayer
+            lbl_MediaPlayerUser.Text = "Custom Player - " & Preferences.selectedvideoplayer
             If Preferences.overwritethumbs = True Then
                 CheckBox1.Checked = CheckState.Unchecked
             Else
@@ -723,9 +723,9 @@ Public Class frmOptions
         End Try
     End Sub
 
-    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+    Private Sub rb_MediaPlayerDefault_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rb_MediaPlayerDefault.CheckedChanged
         Try
-            If RadioButton1.Checked = True Then
+            If rb_MediaPlayerDefault.Checked = True Then
                 Preferences.videomode = 1
             End If
         Catch ex As Exception
@@ -733,9 +733,9 @@ Public Class frmOptions
         End Try
     End Sub
 
-    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+    Private Sub rb_MediaPlayerWMP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rb_MediaPlayerWMP.CheckedChanged
         Try
-            If RadioButton2.Checked = True Then
+            If rb_MediaPlayerWMP.Checked = True Then
                 Preferences.videomode = 2
             End If
         Catch ex As Exception
@@ -743,9 +743,9 @@ Public Class frmOptions
         End Try
     End Sub
 
-    Private Sub RadioButton4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.CheckedChanged
+    Private Sub rb_MediaPlayerUser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rb_MediaPlayerUser.CheckedChanged
         Try
-            If RadioButton4.Checked = True Then
+            If rb_MediaPlayerUser.Checked = True Then
                 Preferences.videomode = 4
             End If
         Catch ex As Exception
@@ -753,7 +753,7 @@ Public Class frmOptions
         End Try
     End Sub
 
-    Private Sub btn_custommediaplayer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_custommediaplayer.Click
+    Private Sub btn_MediaPlayerBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_MediaPlayerBrowse.Click
         Try
             Dim filebrowser As New OpenFileDialog
             Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
@@ -762,8 +762,8 @@ Public Class frmOptions
             filebrowser.Title = "Find Executable Of Preferred Media Player"
             If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 Preferences.selectedvideoplayer = filebrowser.FileName
-                Label4.Visible = True
-                Label4.Text = Preferences.selectedvideoplayer
+                lbl_MediaPlayerUser.Visible = True
+                lbl_MediaPlayerUser.Text = Preferences.selectedvideoplayer
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

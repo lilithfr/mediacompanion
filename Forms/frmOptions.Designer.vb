@@ -164,11 +164,11 @@ Partial Class frmOptions
         Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.btn_custommediaplayer = New System.Windows.Forms.Button()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.lbl_MediaPlayerUser = New System.Windows.Forms.Label()
+        Me.btn_MediaPlayerBrowse = New System.Windows.Forms.Button()
+        Me.rb_MediaPlayerUser = New System.Windows.Forms.RadioButton()
+        Me.rb_MediaPlayerWMP = New System.Windows.Forms.RadioButton()
+        Me.rb_MediaPlayerDefault = New System.Windows.Forms.RadioButton()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TPGen = New System.Windows.Forms.TabPage()
         Me.TabControl3 = New System.Windows.Forms.TabControl()
@@ -199,42 +199,42 @@ Partial Class frmOptions
         Me.btn_SettingsCancel = New System.Windows.Forms.Button()
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
-        Me.GroupBox10.SuspendLayout()
-        Me.GroupBox12.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Profiles.SuspendLayout()
-        Me.GroupBox13.SuspendLayout()
-        Me.GroupBox14.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
-        Me.TabControl2.SuspendLayout()
-        Me.TabPage4.SuspendLayout()
-        Me.TabPage5.SuspendLayout()
-        Me.GroupBox16.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.GroupBox9.SuspendLayout()
-        Me.GroupBox8.SuspendLayout()
-        Me.TabPage6.SuspendLayout()
-        Me.GroupBox6.SuspendLayout()
-        Me.GroupBox18.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
-        Me.TPGenOld.SuspendLayout()
-        Me.GroupBox17.SuspendLayout()
-        Me.GroupBox11.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox3.SuspendLayout()
-        Me.TabControl1.SuspendLayout()
-        Me.TPGen.SuspendLayout()
-        Me.TabControl3.SuspendLayout()
-        Me.TPG1.SuspendLayout()
-        Me.TPG2.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.GroupBox42.SuspendLayout()
-        Me.GroupBox15.SuspendLayout()
-        Me.SuspendLayout()
+        Me.GroupBox10.SuspendLayout
+        Me.GroupBox12.SuspendLayout
+        CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.Profiles.SuspendLayout
+        Me.GroupBox13.SuspendLayout
+        Me.GroupBox14.SuspendLayout
+        Me.TabPage3.SuspendLayout
+        Me.TabControl2.SuspendLayout
+        Me.TabPage4.SuspendLayout
+        Me.TabPage5.SuspendLayout
+        Me.GroupBox16.SuspendLayout
+        Me.GroupBox4.SuspendLayout
+        Me.GroupBox9.SuspendLayout
+        Me.GroupBox8.SuspendLayout
+        Me.TabPage6.SuspendLayout
+        Me.GroupBox6.SuspendLayout
+        Me.GroupBox18.SuspendLayout
+        Me.Panel2.SuspendLayout
+        Me.TabPage2.SuspendLayout
+        Me.GroupBox1.SuspendLayout
+        Me.GroupBox5.SuspendLayout
+        Me.TPGenOld.SuspendLayout
+        Me.GroupBox17.SuspendLayout
+        Me.GroupBox11.SuspendLayout
+        Me.GroupBox2.SuspendLayout
+        CType(Me.TrackBar1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.GroupBox3.SuspendLayout
+        Me.TabControl1.SuspendLayout
+        Me.TPGen.SuspendLayout
+        Me.TabControl3.SuspendLayout
+        Me.TPG1.SuspendLayout
+        Me.TPG2.SuspendLayout
+        Me.TableLayoutPanel1.SuspendLayout
+        Me.GroupBox42.SuspendLayout
+        Me.GroupBox15.SuspendLayout
+        Me.SuspendLayout
         '
         'OpenFileDialog1
         '
@@ -250,44 +250,44 @@ Partial Class frmOptions
         Me.GroupBox10.Name = "GroupBox10"
         Me.GroupBox10.Size = New System.Drawing.Size(335, 336)
         Me.GroupBox10.TabIndex = 21
-        Me.GroupBox10.TabStop = False
+        Me.GroupBox10.TabStop = false
         Me.GroupBox10.Text = "Select IMDB Certification Priorities"
-        Me.ToolTip1.SetToolTip(Me.GroupBox10, "You can select a specific locations certification to replace the MPAA entry on IM" & _
-        "DB if you wish," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "The Rating will be scraped by the first available from the abov" & _
+        Me.ToolTip1.SetToolTip(Me.GroupBox10, "You can select a specific locations certification to replace the MPAA entry on IM"& _ 
+        "DB if you wish,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"The Rating will be scraped by the first available from the abov"& _ 
         "e list.")
         '
         'Button11
         '
-        Me.Button11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Button11.Location = New System.Drawing.Point(247, 198)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(27, 23)
         Me.Button11.TabIndex = 6
         Me.Button11.Text = "↓"
-        Me.Button11.UseVisualStyleBackColor = True
+        Me.Button11.UseVisualStyleBackColor = true
         '
         'Button12
         '
-        Me.Button12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Button12.Location = New System.Drawing.Point(247, 126)
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(27, 23)
         Me.Button12.TabIndex = 5
         Me.Button12.Text = "↑"
-        Me.Button12.UseVisualStyleBackColor = True
+        Me.Button12.UseVisualStyleBackColor = true
         '
         'Label25
         '
-        Me.Label25.AutoSize = True
+        Me.Label25.AutoSize = true
         Me.Label25.Location = New System.Drawing.Point(211, 159)
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(99, 26)
         Me.Label25.TabIndex = 4
-        Me.Label25.Text = "Change Priority of" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Default Certification" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label25.Text = "Change Priority of"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Default Certification"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
         '
         'ListBox5
         '
-        Me.ListBox5.FormattingEnabled = True
+        Me.ListBox5.FormattingEnabled = true
         Me.ListBox5.Location = New System.Drawing.Point(6, 19)
         Me.ListBox5.Name = "ListBox5"
         Me.ListBox5.Size = New System.Drawing.Size(190, 303)
@@ -305,13 +305,13 @@ Partial Class frmOptions
         Me.GroupBox12.Name = "GroupBox12"
         Me.GroupBox12.Size = New System.Drawing.Size(676, 100)
         Me.GroupBox12.TabIndex = 30
-        Me.GroupBox12.TabStop = False
+        Me.GroupBox12.TabStop = false
         Me.GroupBox12.Text = "Download Actor Thumbs"
         Me.ToolTip1.SetToolTip(Me.GroupBox12, "Downloads actor thumbnails to Local or Network Location")
         '
         'Label26
         '
-        Me.Label26.AutoSize = True
+        Me.Label26.AutoSize = true
         Me.Label26.Location = New System.Drawing.Point(7, 75)
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(71, 13)
@@ -325,20 +325,20 @@ Partial Class frmOptions
         Me.Button1.Size = New System.Drawing.Size(29, 23)
         Me.Button1.TabIndex = 4
         Me.Button1.Text = "..."
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.UseVisualStyleBackColor = true
         '
         'xbmcactorpath
         '
-        Me.xbmcactorpath.Enabled = False
+        Me.xbmcactorpath.Enabled = false
         Me.xbmcactorpath.Location = New System.Drawing.Point(80, 72)
         Me.xbmcactorpath.Name = "xbmcactorpath"
         Me.xbmcactorpath.Size = New System.Drawing.Size(591, 20)
         Me.xbmcactorpath.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.xbmcactorpath, "Enter the path for the actors folder from XBMC." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "This may be a network path.")
+        Me.ToolTip1.SetToolTip(Me.xbmcactorpath, "Enter the path for the actors folder from XBMC."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This may be a network path.")
         '
         'Label19
         '
-        Me.Label19.AutoSize = True
+        Me.Label19.AutoSize = true
         Me.Label19.Location = New System.Drawing.Point(7, 45)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(67, 13)
@@ -347,7 +347,7 @@ Partial Class frmOptions
         '
         'localactorpath
         '
-        Me.localactorpath.Enabled = False
+        Me.localactorpath.Enabled = false
         Me.localactorpath.Location = New System.Drawing.Point(80, 42)
         Me.localactorpath.Name = "localactorpath"
         Me.localactorpath.Size = New System.Drawing.Size(556, 20)
@@ -356,51 +356,51 @@ Partial Class frmOptions
         '
         'saveactorchkbx
         '
-        Me.saveactorchkbx.AutoSize = True
+        Me.saveactorchkbx.AutoSize = true
         Me.saveactorchkbx.Location = New System.Drawing.Point(10, 19)
         Me.saveactorchkbx.Name = "saveactorchkbx"
         Me.saveactorchkbx.Size = New System.Drawing.Size(156, 17)
         Me.saveactorchkbx.TabIndex = 0
         Me.saveactorchkbx.Text = "Enable Save Actor Thumbs"
-        Me.saveactorchkbx.UseVisualStyleBackColor = True
+        Me.saveactorchkbx.UseVisualStyleBackColor = true
         '
         'RadioButton5
         '
-        Me.RadioButton5.AutoSize = True
+        Me.RadioButton5.AutoSize = true
         Me.RadioButton5.Location = New System.Drawing.Point(7, 43)
         Me.RadioButton5.Name = "RadioButton5"
         Me.RadioButton5.Size = New System.Drawing.Size(56, 17)
         Me.RadioButton5.TabIndex = 1
-        Me.RadioButton5.TabStop = True
+        Me.RadioButton5.TabStop = true
         Me.RadioButton5.Text = "TMDB"
         Me.ToolTip1.SetToolTip(Me.RadioButton5, "Set TMDB as movie data source")
-        Me.RadioButton5.UseVisualStyleBackColor = True
-        Me.RadioButton5.Visible = False
+        Me.RadioButton5.UseVisualStyleBackColor = true
+        Me.RadioButton5.Visible = false
         '
         'RadioButton3
         '
-        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.AutoSize = true
         Me.RadioButton3.Location = New System.Drawing.Point(7, 20)
         Me.RadioButton3.Name = "RadioButton3"
         Me.RadioButton3.Size = New System.Drawing.Size(52, 17)
         Me.RadioButton3.TabIndex = 0
-        Me.RadioButton3.TabStop = True
+        Me.RadioButton3.TabStop = true
         Me.RadioButton3.Text = "IMDB"
         Me.ToolTip1.SetToolTip(Me.RadioButton3, "Set IMDB as movie data source")
-        Me.RadioButton3.UseVisualStyleBackColor = True
+        Me.RadioButton3.UseVisualStyleBackColor = true
         '
         'CheckBox2
         '
-        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.AutoSize = true
         Me.CheckBox2.Location = New System.Drawing.Point(7, 66)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(200, 17)
         Me.CheckBox2.TabIndex = 2
         Me.CheckBox2.Text = "Use IMDB to get Movie ID for TMDB"
-        Me.ToolTip1.SetToolTip(Me.CheckBox2, "Finding the correct movie is much more" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "likely using IMDB, this ID can then be us" & _
-        "ed" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to scrape the correct details from TMDB")
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        Me.CheckBox2.Visible = False
+        Me.ToolTip1.SetToolTip(Me.CheckBox2, "Finding the correct movie is much more"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"likely using IMDB, this ID can then be us"& _ 
+        "ed"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"to scrape the correct details from TMDB")
+        Me.CheckBox2.UseVisualStyleBackColor = true
+        Me.CheckBox2.Visible = false
         '
         'PictureBox1
         '
@@ -408,8 +408,8 @@ Partial Class frmOptions
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(100, 50)
         Me.PictureBox1.TabIndex = 12
-        Me.PictureBox1.TabStop = False
-        Me.PictureBox1.Visible = False
+        Me.PictureBox1.TabStop = false
+        Me.PictureBox1.Visible = false
         '
         'Profiles
         '
@@ -420,11 +420,11 @@ Partial Class frmOptions
         Me.Profiles.Size = New System.Drawing.Size(1000, 548)
         Me.Profiles.TabIndex = 3
         Me.Profiles.Text = "Profiles & Regex"
-        Me.Profiles.UseVisualStyleBackColor = True
+        Me.Profiles.UseVisualStyleBackColor = true
         '
         'GroupBox13
         '
-        Me.GroupBox13.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.GroupBox13.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
         Me.GroupBox13.Controls.Add(Me.Button13)
         Me.GroupBox13.Controls.Add(Me.Button8)
         Me.GroupBox13.Controls.Add(Me.TextBox6)
@@ -439,7 +439,7 @@ Partial Class frmOptions
         Me.GroupBox13.Name = "GroupBox13"
         Me.GroupBox13.Size = New System.Drawing.Size(578, 498)
         Me.GroupBox13.TabIndex = 10
-        Me.GroupBox13.TabStop = False
+        Me.GroupBox13.TabStop = false
         Me.GroupBox13.Text = "TV Episode Regular Expression Manager"
         '
         'Button13
@@ -449,7 +449,7 @@ Partial Class frmOptions
         Me.Button13.Size = New System.Drawing.Size(101, 23)
         Me.Button13.TabIndex = 10
         Me.Button13.Text = "Restore Defaults"
-        Me.Button13.UseVisualStyleBackColor = True
+        Me.Button13.UseVisualStyleBackColor = true
         '
         'Button8
         '
@@ -458,7 +458,7 @@ Partial Class frmOptions
         Me.Button8.Size = New System.Drawing.Size(53, 23)
         Me.Button8.TabIndex = 9
         Me.Button8.Text = "Edit"
-        Me.Button8.UseVisualStyleBackColor = True
+        Me.Button8.UseVisualStyleBackColor = true
         '
         'TextBox6
         '
@@ -469,7 +469,7 @@ Partial Class frmOptions
         '
         'Label31
         '
-        Me.Label31.AutoSize = True
+        Me.Label31.AutoSize = true
         Me.Label31.Location = New System.Drawing.Point(9, 192)
         Me.Label31.Name = "Label31"
         Me.Label31.Size = New System.Drawing.Size(59, 13)
@@ -486,13 +486,13 @@ Partial Class frmOptions
         Me.GroupBox14.Name = "GroupBox14"
         Me.GroupBox14.Size = New System.Drawing.Size(563, 209)
         Me.GroupBox14.TabIndex = 5
-        Me.GroupBox14.TabStop = False
+        Me.GroupBox14.TabStop = false
         Me.GroupBox14.Text = "Test Selected Regex"
         '
         'TextBox5
         '
         Me.TextBox5.Location = New System.Drawing.Point(9, 46)
-        Me.TextBox5.Multiline = True
+        Me.TextBox5.Multiline = true
         Me.TextBox5.Name = "TextBox5"
         Me.TextBox5.Size = New System.Drawing.Size(548, 157)
         Me.TextBox5.TabIndex = 3
@@ -504,7 +504,7 @@ Partial Class frmOptions
         Me.Button7.Size = New System.Drawing.Size(53, 23)
         Me.Button7.TabIndex = 2
         Me.Button7.Text = "Test"
-        Me.Button7.UseVisualStyleBackColor = True
+        Me.Button7.UseVisualStyleBackColor = true
         '
         'TextBox4
         '
@@ -515,7 +515,7 @@ Partial Class frmOptions
         '
         'Label30
         '
-        Me.Label30.AutoSize = True
+        Me.Label30.AutoSize = true
         Me.Label30.Location = New System.Drawing.Point(4, 22)
         Me.Label30.Name = "Label30"
         Me.Label30.Size = New System.Drawing.Size(58, 13)
@@ -529,7 +529,7 @@ Partial Class frmOptions
         Me.Button6.Size = New System.Drawing.Size(103, 23)
         Me.Button6.TabIndex = 4
         Me.Button6.Text = "Remove Selected"
-        Me.Button6.UseVisualStyleBackColor = True
+        Me.Button6.UseVisualStyleBackColor = true
         '
         'Button3
         '
@@ -538,11 +538,11 @@ Partial Class frmOptions
         Me.Button3.Size = New System.Drawing.Size(53, 23)
         Me.Button3.TabIndex = 3
         Me.Button3.Text = "Add"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.Button3.UseVisualStyleBackColor = true
         '
         'Label29
         '
-        Me.Label29.AutoSize = True
+        Me.Label29.AutoSize = true
         Me.Label29.Location = New System.Drawing.Point(6, 218)
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(63, 13)
@@ -558,7 +558,7 @@ Partial Class frmOptions
         '
         'ListBox7
         '
-        Me.ListBox7.FormattingEnabled = True
+        Me.ListBox7.FormattingEnabled = true
         Me.ListBox7.Location = New System.Drawing.Point(7, 20)
         Me.ListBox7.Name = "ListBox7"
         Me.ListBox7.Size = New System.Drawing.Size(556, 134)
@@ -566,7 +566,7 @@ Partial Class frmOptions
         '
         'TabPage3
         '
-        Me.TabPage3.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.TabPage3.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
         Me.TabPage3.Controls.Add(Me.TabControl2)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
@@ -602,51 +602,51 @@ Partial Class frmOptions
         Me.TabPage4.Size = New System.Drawing.Size(986, 516)
         Me.TabPage4.TabIndex = 0
         Me.TabPage4.Text = "General Scraper"
-        Me.TabPage4.UseVisualStyleBackColor = True
+        Me.TabPage4.UseVisualStyleBackColor = true
         '
         'CheckBox6
         '
-        Me.CheckBox6.AutoSize = True
+        Me.CheckBox6.AutoSize = true
         Me.CheckBox6.Location = New System.Drawing.Point(23, 86)
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(225, 17)
         Me.CheckBox6.TabIndex = 31
         Me.CheckBox6.Text = "Prefix runtime with ""0"" if less than 100mins"
-        Me.CheckBox6.UseVisualStyleBackColor = True
+        Me.CheckBox6.UseVisualStyleBackColor = true
         '
         'CheckBox10
         '
-        Me.CheckBox10.AutoSize = True
+        Me.CheckBox10.AutoSize = true
         Me.CheckBox10.Location = New System.Drawing.Point(23, 19)
         Me.CheckBox10.Name = "CheckBox10"
         Me.CheckBox10.Size = New System.Drawing.Size(243, 17)
         Me.CheckBox10.TabIndex = 29
         Me.CheckBox10.Text = "Keep cleaned File/Folder name as Movie Title"
-        Me.CheckBox10.UseVisualStyleBackColor = True
+        Me.CheckBox10.UseVisualStyleBackColor = true
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.AutoSize = true
         Me.CheckBox1.Location = New System.Drawing.Point(23, 63)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(239, 17)
         Me.CheckBox1.TabIndex = 3
         Me.CheckBox1.Text = "Don't overwrite existing thumbnails and fanart"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox1.UseVisualStyleBackColor = true
         '
         'CheckBox15
         '
-        Me.CheckBox15.AutoSize = True
+        Me.CheckBox15.AutoSize = true
         Me.CheckBox15.Location = New System.Drawing.Point(23, 40)
         Me.CheckBox15.Name = "CheckBox15"
         Me.CheckBox15.Size = New System.Drawing.Size(215, 17)
         Me.CheckBox15.TabIndex = 20
         Me.CheckBox15.Text = "Disable output logs after scraping Media"
-        Me.CheckBox15.UseVisualStyleBackColor = True
+        Me.CheckBox15.UseVisualStyleBackColor = true
         '
         'Label23
         '
-        Me.Label23.AutoSize = True
+        Me.Label23.AutoSize = true
         Me.Label23.Location = New System.Drawing.Point(30, 226)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(225, 13)
@@ -655,7 +655,7 @@ Partial Class frmOptions
         '
         'ComboBox1
         '
-        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.FormattingEnabled = true
         Me.ComboBox1.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "110", "125", "150", "175", "200", "250"})
         Me.ComboBox1.Location = New System.Drawing.Point(255, 223)
         Me.ComboBox1.Name = "ComboBox1"
@@ -682,17 +682,17 @@ Partial Class frmOptions
         Me.TabPage5.Size = New System.Drawing.Size(986, 516)
         Me.TabPage5.TabIndex = 1
         Me.TabPage5.Text = "Movie Scraper"
-        Me.TabPage5.UseVisualStyleBackColor = True
+        Me.TabPage5.UseVisualStyleBackColor = true
         '
         'CheckBox4
         '
-        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.AutoSize = true
         Me.CheckBox4.Location = New System.Drawing.Point(13, 239)
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(251, 17)
         Me.CheckBox4.TabIndex = 37
         Me.CheckBox4.Text = "Include IMDB Movie Trailer url within the nfo file"
-        Me.CheckBox4.UseVisualStyleBackColor = True
+        Me.CheckBox4.UseVisualStyleBackColor = true
         '
         'GroupBox16
         '
@@ -706,67 +706,67 @@ Partial Class frmOptions
         Me.GroupBox16.Name = "GroupBox16"
         Me.GroupBox16.Size = New System.Drawing.Size(312, 141)
         Me.GroupBox16.TabIndex = 36
-        Me.GroupBox16.TabStop = False
+        Me.GroupBox16.TabStop = false
         Me.GroupBox16.Text = "nfo Poster Options"
         '
         'Label34
         '
-        Me.Label34.AutoSize = True
+        Me.Label34.AutoSize = true
         Me.Label34.Location = New System.Drawing.Point(7, 96)
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(290, 39)
         Me.Label34.TabIndex = 5
-        Me.Label34.Text = "Urls added to the nfo file can be browsed frow within XBMC." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Each option added wi" & _
-    "ll slow down the scrape and rescrape" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "functions." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label34.Text = "Urls added to the nfo file can be browsed frow within XBMC."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Each option added wi"& _ 
+    "ll slow down the scrape and rescrape"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"functions."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
         '
         'imdb_chk
         '
-        Me.imdb_chk.AutoSize = True
+        Me.imdb_chk.AutoSize = true
         Me.imdb_chk.Location = New System.Drawing.Point(68, 76)
         Me.imdb_chk.Name = "imdb_chk"
         Me.imdb_chk.Size = New System.Drawing.Size(53, 17)
         Me.imdb_chk.TabIndex = 4
         Me.imdb_chk.Text = "IMDB"
-        Me.imdb_chk.UseVisualStyleBackColor = True
+        Me.imdb_chk.UseVisualStyleBackColor = true
         '
         'mpdb_chk
         '
-        Me.mpdb_chk.AutoSize = True
+        Me.mpdb_chk.AutoSize = true
         Me.mpdb_chk.Location = New System.Drawing.Point(68, 53)
         Me.mpdb_chk.Name = "mpdb_chk"
         Me.mpdb_chk.Size = New System.Drawing.Size(57, 17)
         Me.mpdb_chk.TabIndex = 3
         Me.mpdb_chk.Text = "MPDB"
-        Me.mpdb_chk.UseVisualStyleBackColor = True
+        Me.mpdb_chk.UseVisualStyleBackColor = true
         '
         'tmdb_chk
         '
-        Me.tmdb_chk.AutoSize = True
+        Me.tmdb_chk.AutoSize = true
         Me.tmdb_chk.Location = New System.Drawing.Point(10, 76)
         Me.tmdb_chk.Name = "tmdb_chk"
         Me.tmdb_chk.Size = New System.Drawing.Size(57, 17)
         Me.tmdb_chk.TabIndex = 2
         Me.tmdb_chk.Text = "TMDB"
-        Me.tmdb_chk.UseVisualStyleBackColor = True
+        Me.tmdb_chk.UseVisualStyleBackColor = true
         '
         'IMPA_chk
         '
-        Me.IMPA_chk.AutoSize = True
+        Me.IMPA_chk.AutoSize = true
         Me.IMPA_chk.Location = New System.Drawing.Point(10, 53)
         Me.IMPA_chk.Name = "IMPA_chk"
         Me.IMPA_chk.Size = New System.Drawing.Size(52, 17)
         Me.IMPA_chk.TabIndex = 1
         Me.IMPA_chk.Text = "IMPA"
-        Me.IMPA_chk.UseVisualStyleBackColor = True
+        Me.IMPA_chk.UseVisualStyleBackColor = true
         '
         'Label33
         '
-        Me.Label33.AutoSize = True
+        Me.Label33.AutoSize = true
         Me.Label33.Location = New System.Drawing.Point(7, 20)
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(298, 26)
         Me.Label33.TabIndex = 0
-        Me.Label33.Text = "During autoscrape and rescrape, add poster urls to the nfo file" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "from the followi" & _
+        Me.Label33.Text = "During autoscrape and rescrape, add poster urls to the nfo file"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from the followi"& _ 
     "ng sources:"
         '
         'GroupBox4
@@ -778,7 +778,7 @@ Partial Class frmOptions
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(312, 122)
         Me.GroupBox4.TabIndex = 35
-        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.TabStop = false
         Me.GroupBox4.Text = "Default Movie Scraper"
         '
         'GroupBox9
@@ -790,22 +790,22 @@ Partial Class frmOptions
         Me.GroupBox9.Name = "GroupBox9"
         Me.GroupBox9.Size = New System.Drawing.Size(312, 150)
         Me.GroupBox9.TabIndex = 17
-        Me.GroupBox9.TabStop = False
+        Me.GroupBox9.TabStop = false
         Me.GroupBox9.Text = "IMDB Mirror"
         '
         'Label22
         '
-        Me.Label22.AutoSize = True
+        Me.Label22.AutoSize = true
         Me.Label22.Location = New System.Drawing.Point(1, 117)
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(298, 26)
         Me.Label22.TabIndex = 2
-        Me.Label22.Text = "Using ""www.imdb.de"" will result in an incomplete nfo file since" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "this mirror does" & _
+        Me.Label22.Text = "Using ""www.imdb.de"" will result in an incomplete nfo file since"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"this mirror does"& _ 
     "n't contain plot, tagline, or trailer information"
         '
         'Label21
         '
-        Me.Label21.AutoSize = True
+        Me.Label21.AutoSize = true
         Me.Label21.Location = New System.Drawing.Point(1, 16)
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(164, 13)
@@ -814,7 +814,7 @@ Partial Class frmOptions
         '
         'ListBox4
         '
-        Me.ListBox4.FormattingEnabled = True
+        Me.ListBox4.FormattingEnabled = true
         Me.ListBox4.Items.AddRange(New Object() {"http://www.imdb.com/", "http://uk.imdb.com/", "http://us.imdb.com/", "http://akas.imdb.com/", "http://italian.imdb.com/", "http://www.imdb.de/"})
         Me.ListBox4.Location = New System.Drawing.Point(4, 32)
         Me.ListBox4.Name = "ListBox4"
@@ -823,7 +823,7 @@ Partial Class frmOptions
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoSize = true
         Me.Label2.Location = New System.Drawing.Point(666, 454)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(213, 13)
@@ -832,7 +832,7 @@ Partial Class frmOptions
         '
         'ComboBox2
         '
-        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.FormattingEnabled = true
         Me.ComboBox2.Items.AddRange(New Object() {"All Available", "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
         Me.ComboBox2.Location = New System.Drawing.Point(885, 451)
         Me.ComboBox2.Name = "ComboBox2"
@@ -841,14 +841,14 @@ Partial Class frmOptions
         '
         'CheckBox23
         '
-        Me.CheckBox23.AutoSize = True
+        Me.CheckBox23.AutoSize = true
         Me.CheckBox23.Location = New System.Drawing.Point(345, 187)
         Me.CheckBox23.Name = "CheckBox23"
         Me.CheckBox23.Size = New System.Drawing.Size(191, 17)
         Me.CheckBox23.TabIndex = 34
         Me.CheckBox23.Text = "Add Information to the <studio> tag"
-        Me.CheckBox23.UseVisualStyleBackColor = True
-        Me.CheckBox23.Visible = False
+        Me.CheckBox23.UseVisualStyleBackColor = true
+        Me.CheckBox23.Visible = false
         '
         'GroupBox8
         '
@@ -860,42 +860,42 @@ Partial Class frmOptions
         Me.GroupBox8.Name = "GroupBox8"
         Me.GroupBox8.Size = New System.Drawing.Size(335, 98)
         Me.GroupBox8.TabIndex = 16
-        Me.GroupBox8.TabStop = False
+        Me.GroupBox8.TabStop = false
         Me.GroupBox8.Text = "Movie Scraper Thumbnail Priorities"
         '
         'Label20
         '
-        Me.Label20.AutoSize = True
-        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.AutoSize = true
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label20.Location = New System.Drawing.Point(179, 40)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(110, 24)
         Me.Label20.TabIndex = 3
-        Me.Label20.Text = "Change Priority of Default" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Movie Thumbnail Source" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label20.Text = "Change Priority of Default"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Movie Thumbnail Source"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Button10
         '
-        Me.Button10.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button10.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Button10.Location = New System.Drawing.Point(179, 68)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(27, 20)
         Me.Button10.TabIndex = 2
         Me.Button10.Text = "↓"
-        Me.Button10.UseVisualStyleBackColor = True
+        Me.Button10.UseVisualStyleBackColor = true
         '
         'Button9
         '
-        Me.Button9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Button9.Location = New System.Drawing.Point(179, 19)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(27, 20)
         Me.Button9.TabIndex = 1
         Me.Button9.Text = "↑"
-        Me.Button9.UseVisualStyleBackColor = True
+        Me.Button9.UseVisualStyleBackColor = true
         '
         'ListBox3
         '
-        Me.ListBox3.FormattingEnabled = True
+        Me.ListBox3.FormattingEnabled = true
         Me.ListBox3.Location = New System.Drawing.Point(4, 19)
         Me.ListBox3.Name = "ListBox3"
         Me.ListBox3.Size = New System.Drawing.Size(170, 69)
@@ -903,33 +903,33 @@ Partial Class frmOptions
         '
         'CheckBox3
         '
-        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.AutoSize = true
         Me.CheckBox3.Location = New System.Drawing.Point(13, 25)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(252, 17)
         Me.CheckBox3.TabIndex = 13
         Me.CheckBox3.Text = "During autoscrape, Download Fanart for Movies"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.CheckBox3.UseVisualStyleBackColor = true
         '
         'CheckBox18
         '
-        Me.CheckBox18.AutoSize = True
+        Me.CheckBox18.AutoSize = true
         Me.CheckBox18.Location = New System.Drawing.Point(13, 46)
         Me.CheckBox18.Name = "CheckBox18"
         Me.CheckBox18.Size = New System.Drawing.Size(263, 17)
         Me.CheckBox18.TabIndex = 28
         Me.CheckBox18.Text = "During autoscrape, Download  Posters For Movies"
-        Me.CheckBox18.UseVisualStyleBackColor = True
+        Me.CheckBox18.UseVisualStyleBackColor = true
         '
         'CheckBox22
         '
-        Me.CheckBox22.AutoSize = True
+        Me.CheckBox22.AutoSize = true
         Me.CheckBox22.Location = New System.Drawing.Point(13, 69)
         Me.CheckBox22.Name = "CheckBox22"
         Me.CheckBox22.Size = New System.Drawing.Size(210, 17)
         Me.CheckBox22.TabIndex = 31
         Me.CheckBox22.Text = "Create HD Media Tags when scraping."
-        Me.CheckBox22.UseVisualStyleBackColor = True
+        Me.CheckBox22.UseVisualStyleBackColor = true
         '
         'TabPage6
         '
@@ -939,7 +939,7 @@ Partial Class frmOptions
         Me.TabPage6.Size = New System.Drawing.Size(986, 516)
         Me.TabPage6.TabIndex = 2
         Me.TabPage6.Text = "TV Scraper"
-        Me.TabPage6.UseVisualStyleBackColor = True
+        Me.TabPage6.UseVisualStyleBackColor = true
         '
         'GroupBox6
         '
@@ -960,7 +960,7 @@ Partial Class frmOptions
         Me.GroupBox6.Name = "GroupBox6"
         Me.GroupBox6.Size = New System.Drawing.Size(499, 486)
         Me.GroupBox6.TabIndex = 11
-        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.TabStop = false
         Me.GroupBox6.Text = "Default TV Scraper Settings"
         '
         'GroupBox18
@@ -972,45 +972,45 @@ Partial Class frmOptions
         Me.GroupBox18.Name = "GroupBox18"
         Me.GroupBox18.Size = New System.Drawing.Size(270, 61)
         Me.GroupBox18.TabIndex = 12
-        Me.GroupBox18.TabStop = False
+        Me.GroupBox18.TabStop = false
         Me.GroupBox18.Text = "During autoscrape, download season-all.tbn"
         '
         'RadioButton10
         '
-        Me.RadioButton10.AutoSize = True
+        Me.RadioButton10.AutoSize = true
         Me.RadioButton10.Location = New System.Drawing.Point(121, 28)
         Me.RadioButton10.Name = "RadioButton10"
         Me.RadioButton10.Size = New System.Drawing.Size(59, 17)
         Me.RadioButton10.TabIndex = 2
-        Me.RadioButton10.TabStop = True
+        Me.RadioButton10.TabStop = true
         Me.RadioButton10.Text = "Banner"
-        Me.RadioButton10.UseVisualStyleBackColor = True
+        Me.RadioButton10.UseVisualStyleBackColor = true
         '
         'RadioButton9
         '
-        Me.RadioButton9.AutoSize = True
+        Me.RadioButton9.AutoSize = true
         Me.RadioButton9.Location = New System.Drawing.Point(60, 28)
         Me.RadioButton9.Name = "RadioButton9"
         Me.RadioButton9.Size = New System.Drawing.Size(55, 17)
         Me.RadioButton9.TabIndex = 1
-        Me.RadioButton9.TabStop = True
+        Me.RadioButton9.TabStop = true
         Me.RadioButton9.Text = "Poster"
-        Me.RadioButton9.UseVisualStyleBackColor = True
+        Me.RadioButton9.UseVisualStyleBackColor = true
         '
         'RadioButton6
         '
-        Me.RadioButton6.AutoSize = True
+        Me.RadioButton6.AutoSize = true
         Me.RadioButton6.Location = New System.Drawing.Point(3, 28)
         Me.RadioButton6.Name = "RadioButton6"
         Me.RadioButton6.Size = New System.Drawing.Size(51, 17)
         Me.RadioButton6.TabIndex = 0
-        Me.RadioButton6.TabStop = True
+        Me.RadioButton6.TabStop = true
         Me.RadioButton6.Text = "None"
-        Me.RadioButton6.UseVisualStyleBackColor = True
+        Me.RadioButton6.UseVisualStyleBackColor = true
         '
         'ListBox8
         '
-        Me.ListBox8.FormattingEnabled = True
+        Me.ListBox8.FormattingEnabled = true
         Me.ListBox8.Location = New System.Drawing.Point(10, 21)
         Me.ListBox8.Name = "ListBox8"
         Me.ListBox8.Size = New System.Drawing.Size(141, 303)
@@ -1018,33 +1018,33 @@ Partial Class frmOptions
         '
         'CheckBox9
         '
-        Me.CheckBox9.AutoSize = True
+        Me.CheckBox9.AutoSize = true
         Me.CheckBox9.Location = New System.Drawing.Point(160, 217)
         Me.CheckBox9.Name = "CheckBox9"
         Me.CheckBox9.Size = New System.Drawing.Size(247, 17)
         Me.CheckBox9.TabIndex = 10
         Me.CheckBox9.Text = "During autoscrape, Download TV Show Fanart"
-        Me.CheckBox9.UseVisualStyleBackColor = True
+        Me.CheckBox9.UseVisualStyleBackColor = true
         '
         'CheckBox8
         '
-        Me.CheckBox8.AutoSize = True
+        Me.CheckBox8.AutoSize = true
         Me.CheckBox8.Location = New System.Drawing.Point(160, 194)
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(284, 17)
         Me.CheckBox8.TabIndex = 9
         Me.CheckBox8.Text = "During autoscrape, Download TV Show poster/banner"
-        Me.CheckBox8.UseVisualStyleBackColor = True
+        Me.CheckBox8.UseVisualStyleBackColor = true
         '
         'CheckBox7
         '
-        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.AutoSize = true
         Me.CheckBox7.Location = New System.Drawing.Point(160, 240)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(247, 17)
         Me.CheckBox7.TabIndex = 8
         Me.CheckBox7.Text = "During autoscrape, Download Season Thumbs"
-        Me.CheckBox7.UseVisualStyleBackColor = True
+        Me.CheckBox7.UseVisualStyleBackColor = true
         '
         'Panel2
         '
@@ -1058,17 +1058,17 @@ Partial Class frmOptions
         '
         'banner
         '
-        Me.banner.AutoSize = True
+        Me.banner.AutoSize = true
         Me.banner.Location = New System.Drawing.Point(3, 35)
         Me.banner.Name = "banner"
         Me.banner.Size = New System.Drawing.Size(59, 17)
         Me.banner.TabIndex = 2
         Me.banner.Text = "Banner"
-        Me.banner.UseVisualStyleBackColor = True
+        Me.banner.UseVisualStyleBackColor = true
         '
         'Label15
         '
-        Me.Label15.AutoSize = True
+        Me.Label15.AutoSize = true
         Me.Label15.Location = New System.Drawing.Point(-4, 0)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(145, 13)
@@ -1077,29 +1077,29 @@ Partial Class frmOptions
         '
         'poster
         '
-        Me.poster.AutoSize = True
+        Me.poster.AutoSize = true
         Me.poster.Location = New System.Drawing.Point(3, 16)
         Me.poster.Name = "poster"
         Me.poster.Size = New System.Drawing.Size(55, 17)
         Me.poster.TabIndex = 1
-        Me.poster.TabStop = True
+        Me.poster.TabStop = true
         Me.poster.Text = "Poster"
-        Me.poster.UseVisualStyleBackColor = True
+        Me.poster.UseVisualStyleBackColor = true
         '
         'Label8
         '
-        Me.Label8.AutoSize = True
+        Me.Label8.AutoSize = true
         Me.Label8.Location = New System.Drawing.Point(7, 392)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(315, 52)
         Me.Label8.TabIndex = 6
-        Me.Label8.Text = "Use the Selection Box Below to choose where to get tv actor nfo" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "from." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only use " & _
-    "IMDB if the show series order is identical to thetvdb.com" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or wrong actors will " & _
+        Me.Label8.Text = "Use the Selection Box Below to choose where to get tv actor nfo"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Only use "& _ 
+    "IMDB if the show series order is identical to thetvdb.com"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"or wrong actors will "& _ 
     "be obtained"
         '
         'ComboBox5
         '
-        Me.ComboBox5.FormattingEnabled = True
+        Me.ComboBox5.FormattingEnabled = true
         Me.ComboBox5.Items.AddRange(New Object() {"everything from TVDB", "Everything from IMDB", "TV show Nfo From IMDB, Episode nfo from TVDB", "TV show Nfo From TVDB, Episode nfo from IMDB"})
         Me.ComboBox5.Location = New System.Drawing.Point(10, 452)
         Me.ComboBox5.Name = "ComboBox5"
@@ -1108,7 +1108,7 @@ Partial Class frmOptions
         '
         'Label7
         '
-        Me.Label7.AutoSize = True
+        Me.Label7.AutoSize = true
         Me.Label7.Location = New System.Drawing.Point(157, 47)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(169, 13)
@@ -1117,7 +1117,7 @@ Partial Class frmOptions
         '
         'Label6
         '
-        Me.Label6.AutoSize = True
+        Me.Label6.AutoSize = true
         Me.Label6.Location = New System.Drawing.Point(160, 74)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(96, 13)
@@ -1126,25 +1126,25 @@ Partial Class frmOptions
         '
         'RadioButton8
         '
-        Me.RadioButton8.AutoSize = True
+        Me.RadioButton8.AutoSize = true
         Me.RadioButton8.Location = New System.Drawing.Point(160, 109)
         Me.RadioButton8.Name = "RadioButton8"
         Me.RadioButton8.Size = New System.Drawing.Size(84, 17)
         Me.RadioButton8.TabIndex = 3
         Me.RadioButton8.Text = "DVD Sorting"
-        Me.RadioButton8.UseVisualStyleBackColor = True
+        Me.RadioButton8.UseVisualStyleBackColor = true
         '
         'RadioButton7
         '
-        Me.RadioButton7.AutoSize = True
-        Me.RadioButton7.Checked = True
+        Me.RadioButton7.AutoSize = true
+        Me.RadioButton7.Checked = true
         Me.RadioButton7.Location = New System.Drawing.Point(160, 90)
         Me.RadioButton7.Name = "RadioButton7"
         Me.RadioButton7.Size = New System.Drawing.Size(81, 17)
         Me.RadioButton7.TabIndex = 2
-        Me.RadioButton7.TabStop = True
+        Me.RadioButton7.TabStop = true
         Me.RadioButton7.Text = "Use Default"
-        Me.RadioButton7.UseVisualStyleBackColor = True
+        Me.RadioButton7.UseVisualStyleBackColor = true
         '
         'Button4
         '
@@ -1153,11 +1153,11 @@ Partial Class frmOptions
         Me.Button4.Size = New System.Drawing.Size(166, 23)
         Me.Button4.TabIndex = 1
         Me.Button4.Text = "Get Languages From TVDB"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.Button4.UseVisualStyleBackColor = true
         '
         'TabPage2
         '
-        Me.TabPage2.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.TabPage2.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
         Me.TabPage2.Controls.Add(Me.GroupBox1)
         Me.TabPage2.Controls.Add(Me.GroupBox5)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
@@ -1166,7 +1166,7 @@ Partial Class frmOptions
         Me.TabPage2.Size = New System.Drawing.Size(1000, 548)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Folders old"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.TabPage2.UseVisualStyleBackColor = true
         '
         'GroupBox1
         '
@@ -1177,12 +1177,12 @@ Partial Class frmOptions
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(493, 495)
         Me.GroupBox1.TabIndex = 0
-        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Movie Folders"
         '
         'ListBox2
         '
-        Me.ListBox2.FormattingEnabled = True
+        Me.ListBox2.FormattingEnabled = true
         Me.ListBox2.Location = New System.Drawing.Point(2, 20)
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -1196,7 +1196,7 @@ Partial Class frmOptions
         Me.btn_addmoviefolderdialogue.Size = New System.Drawing.Size(149, 23)
         Me.btn_addmoviefolderdialogue.TabIndex = 2
         Me.btn_addmoviefolderdialogue.Text = "Add Movie Folder Browser"
-        Me.btn_addmoviefolderdialogue.UseVisualStyleBackColor = True
+        Me.btn_addmoviefolderdialogue.UseVisualStyleBackColor = true
         '
         'btn_removemoviefolder
         '
@@ -1205,7 +1205,7 @@ Partial Class frmOptions
         Me.btn_removemoviefolder.Size = New System.Drawing.Size(149, 23)
         Me.btn_removemoviefolder.TabIndex = 1
         Me.btn_removemoviefolder.Text = "Remove Selected Movie Folder"
-        Me.btn_removemoviefolder.UseVisualStyleBackColor = True
+        Me.btn_removemoviefolder.UseVisualStyleBackColor = true
         '
         'GroupBox5
         '
@@ -1217,13 +1217,13 @@ Partial Class frmOptions
         Me.GroupBox5.Name = "GroupBox5"
         Me.GroupBox5.Size = New System.Drawing.Size(491, 495)
         Me.GroupBox5.TabIndex = 9
-        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.TabStop = false
         Me.GroupBox5.Text = "TV Show Folders"
         '
         'ListBox1
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.HorizontalScrollbar = True
+        Me.ListBox1.FormattingEnabled = true
+        Me.ListBox1.HorizontalScrollbar = true
         Me.ListBox1.Location = New System.Drawing.Point(7, 20)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -1232,37 +1232,37 @@ Partial Class frmOptions
         '
         'Button5
         '
-        Me.Button5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Button5.Location = New System.Drawing.Point(311, 465)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(116, 23)
         Me.Button5.TabIndex = 3
         Me.Button5.Text = "Add Root Folder"
-        Me.Button5.UseVisualStyleBackColor = True
+        Me.Button5.UseVisualStyleBackColor = true
         '
         'btn_addtvfolderdialogue
         '
-        Me.btn_addtvfolderdialogue.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_addtvfolderdialogue.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_addtvfolderdialogue.Location = New System.Drawing.Point(189, 465)
         Me.btn_addtvfolderdialogue.Name = "btn_addtvfolderdialogue"
         Me.btn_addtvfolderdialogue.Size = New System.Drawing.Size(116, 23)
         Me.btn_addtvfolderdialogue.TabIndex = 2
         Me.btn_addtvfolderdialogue.Text = "Add Single Folder"
-        Me.btn_addtvfolderdialogue.UseVisualStyleBackColor = True
+        Me.btn_addtvfolderdialogue.UseVisualStyleBackColor = true
         '
         'btn_removetvfolder
         '
-        Me.btn_removetvfolder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_removetvfolder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_removetvfolder.Location = New System.Drawing.Point(67, 465)
         Me.btn_removetvfolder.Name = "btn_removetvfolder"
         Me.btn_removetvfolder.Size = New System.Drawing.Size(116, 23)
         Me.btn_removetvfolder.TabIndex = 1
         Me.btn_removetvfolder.Text = "Remove Selected"
-        Me.btn_removetvfolder.UseVisualStyleBackColor = True
+        Me.btn_removetvfolder.UseVisualStyleBackColor = true
         '
         'TPGenOld
         '
-        Me.TPGenOld.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.TPGenOld.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
         Me.TPGenOld.Controls.Add(Me.CheckBox11)
         Me.TPGenOld.Controls.Add(Me.GroupBox17)
         Me.TPGenOld.Controls.Add(Me.CheckBox5)
@@ -1289,13 +1289,13 @@ Partial Class frmOptions
         '
         'CheckBox11
         '
-        Me.CheckBox11.AutoSize = True
+        Me.CheckBox11.AutoSize = true
         Me.CheckBox11.Location = New System.Drawing.Point(650, 62)
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(148, 17)
         Me.CheckBox11.TabIndex = 31
         Me.CheckBox11.Text = "Enable tvshow refresh log"
-        Me.CheckBox11.UseVisualStyleBackColor = True
+        Me.CheckBox11.UseVisualStyleBackColor = true
         '
         'GroupBox17
         '
@@ -1304,12 +1304,12 @@ Partial Class frmOptions
         Me.GroupBox17.Name = "GroupBox17"
         Me.GroupBox17.Size = New System.Drawing.Size(359, 67)
         Me.GroupBox17.TabIndex = 30
-        Me.GroupBox17.TabStop = False
+        Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "TV Episode Renaming Settings"
         '
         'ComboBox3
         '
-        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.FormattingEnabled = true
         Me.ComboBox3.Items.AddRange(New Object() {"Show Title - S01E01 - Episode Title.ext", "S01E01 - Episode Title.ext", "Show Title - 1x01 - Episode Title.ext", "1x01 - Episode Title.ext", "Show Title - 101 - Episode Title.ext", "101 - Episode Title.ext"})
         Me.ComboBox3.Location = New System.Drawing.Point(7, 20)
         Me.ComboBox3.Name = "ComboBox3"
@@ -1318,23 +1318,23 @@ Partial Class frmOptions
         '
         'CheckBox5
         '
-        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.AutoSize = true
         Me.CheckBox5.Location = New System.Drawing.Point(650, 16)
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox5.TabIndex = 29
         Me.CheckBox5.Text = "Use external Browser to display IMDB page"
-        Me.CheckBox5.UseVisualStyleBackColor = True
+        Me.CheckBox5.UseVisualStyleBackColor = true
         '
         'chkbx_disablecache
         '
-        Me.chkbx_disablecache.AutoSize = True
+        Me.chkbx_disablecache.AutoSize = true
         Me.chkbx_disablecache.Location = New System.Drawing.Point(650, 39)
         Me.chkbx_disablecache.Name = "chkbx_disablecache"
         Me.chkbx_disablecache.Size = New System.Drawing.Size(285, 17)
         Me.chkbx_disablecache.TabIndex = 27
         Me.chkbx_disablecache.Text = "Disable Caching of Media DB (Will Slow Down Startup)"
-        Me.chkbx_disablecache.UseVisualStyleBackColor = True
+        Me.chkbx_disablecache.UseVisualStyleBackColor = true
         '
         'txtbox_maxposters
         '
@@ -1345,7 +1345,7 @@ Partial Class frmOptions
         '
         'Label32
         '
-        Me.Label32.AutoSize = True
+        Me.Label32.AutoSize = true
         Me.Label32.Location = New System.Drawing.Point(301, 121)
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(387, 13)
@@ -1354,7 +1354,7 @@ Partial Class frmOptions
         '
         'Label27
         '
-        Me.Label27.AutoSize = True
+        Me.Label27.AutoSize = true
         Me.Label27.Location = New System.Drawing.Point(301, 94)
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(311, 13)
@@ -1370,34 +1370,34 @@ Partial Class frmOptions
         '
         'chkbx_basicsave
         '
-        Me.chkbx_basicsave.AutoSize = True
-        Me.chkbx_basicsave.Enabled = False
+        Me.chkbx_basicsave.AutoSize = true
+        Me.chkbx_basicsave.Enabled = false
         Me.chkbx_basicsave.Location = New System.Drawing.Point(244, 63)
         Me.chkbx_basicsave.Name = "chkbx_basicsave"
         Me.chkbx_basicsave.Size = New System.Drawing.Size(276, 17)
         Me.chkbx_basicsave.TabIndex = 23
         Me.chkbx_basicsave.Text = "Save files as ""movie.nfo"", ""movie.tbn"", && ""fanart.jpg"""
-        Me.chkbx_basicsave.UseVisualStyleBackColor = True
+        Me.chkbx_basicsave.UseVisualStyleBackColor = true
         '
         'chkbx_ignoretrailers
         '
-        Me.chkbx_ignoretrailers.AutoSize = True
+        Me.chkbx_ignoretrailers.AutoSize = true
         Me.chkbx_ignoretrailers.Location = New System.Drawing.Point(244, 163)
         Me.chkbx_ignoretrailers.Name = "chkbx_ignoretrailers"
         Me.chkbx_ignoretrailers.Size = New System.Drawing.Size(265, 17)
         Me.chkbx_ignoretrailers.TabIndex = 22
         Me.chkbx_ignoretrailers.Text = "Don't look for trailers (Speeds up Browsing Movies)"
-        Me.chkbx_ignoretrailers.UseVisualStyleBackColor = True
+        Me.chkbx_ignoretrailers.UseVisualStyleBackColor = true
         '
         'chkbx_usefoldernames
         '
-        Me.chkbx_usefoldernames.AutoSize = True
+        Me.chkbx_usefoldernames.AutoSize = true
         Me.chkbx_usefoldernames.Location = New System.Drawing.Point(244, 16)
         Me.chkbx_usefoldernames.Name = "chkbx_usefoldernames"
         Me.chkbx_usefoldernames.Size = New System.Drawing.Size(113, 17)
         Me.chkbx_usefoldernames.TabIndex = 20
         Me.chkbx_usefoldernames.Text = "Use Folder Names"
-        Me.chkbx_usefoldernames.UseVisualStyleBackColor = True
+        Me.chkbx_usefoldernames.UseVisualStyleBackColor = true
         '
         'GroupBox11
         '
@@ -1409,78 +1409,78 @@ Partial Class frmOptions
         Me.GroupBox11.Name = "GroupBox11"
         Me.GroupBox11.Size = New System.Drawing.Size(414, 130)
         Me.GroupBox11.TabIndex = 19
-        Me.GroupBox11.TabStop = False
+        Me.GroupBox11.TabStop = false
         Me.GroupBox11.Text = "File Naming Conventions"
         '
         'chkbx_unstackfanartnames
         '
-        Me.chkbx_unstackfanartnames.AutoSize = True
+        Me.chkbx_unstackfanartnames.AutoSize = true
         Me.chkbx_unstackfanartnames.Location = New System.Drawing.Point(9, 108)
         Me.chkbx_unstackfanartnames.Name = "chkbx_unstackfanartnames"
         Me.chkbx_unstackfanartnames.Size = New System.Drawing.Size(270, 17)
         Me.chkbx_unstackfanartnames.TabIndex = 3
         Me.chkbx_unstackfanartnames.Text = "Use unstacked filename method for fanart filenames"
-        Me.chkbx_unstackfanartnames.UseVisualStyleBackColor = True
+        Me.chkbx_unstackfanartnames.UseVisualStyleBackColor = true
         '
         'Label28
         '
-        Me.Label28.AutoSize = True
+        Me.Label28.AutoSize = true
         Me.Label28.Location = New System.Drawing.Point(6, 74)
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(366, 26)
         Me.Label28.TabIndex = 2
-        Me.Label28.Text = "If you are having an issue with your version of XBMC seeing your fanart then" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "sel" & _
+        Me.Label28.Text = "If you are having an issue with your version of XBMC seeing your fanart then"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"sel"& _ 
     "ect the option below"
         '
         'chkbx_unstackposternames
         '
-        Me.chkbx_unstackposternames.AutoSize = True
+        Me.chkbx_unstackposternames.AutoSize = true
         Me.chkbx_unstackposternames.Location = New System.Drawing.Point(9, 49)
         Me.chkbx_unstackposternames.Name = "chkbx_unstackposternames"
         Me.chkbx_unstackposternames.Size = New System.Drawing.Size(272, 17)
         Me.chkbx_unstackposternames.TabIndex = 1
         Me.chkbx_unstackposternames.Text = "Use unstacked filename method for poster filenames"
-        Me.chkbx_unstackposternames.UseVisualStyleBackColor = True
+        Me.chkbx_unstackposternames.UseVisualStyleBackColor = true
         '
         'Label14
         '
-        Me.Label14.AutoSize = True
+        Me.Label14.AutoSize = true
         Me.Label14.Location = New System.Drawing.Point(6, 19)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(394, 26)
         Me.Label14.TabIndex = 0
-        Me.Label14.Text = "If you are having an issue with your version of XBMC seeing your .tbn posters the" & _
-    "n" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "select the option below"
+        Me.Label14.Text = "If you are having an issue with your version of XBMC seeing your .tbn posters the"& _ 
+    "n"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"select the option below"
         '
         'chkbx_notactorthumbs
         '
-        Me.chkbx_notactorthumbs.AutoSize = True
+        Me.chkbx_notactorthumbs.AutoSize = true
         Me.chkbx_notactorthumbs.Location = New System.Drawing.Point(244, 143)
         Me.chkbx_notactorthumbs.Name = "chkbx_notactorthumbs"
         Me.chkbx_notactorthumbs.Size = New System.Drawing.Size(384, 17)
         Me.chkbx_notactorthumbs.TabIndex = 18
         Me.chkbx_notactorthumbs.Text = "Don't Download Actor Thumbs When Browsing Media (Speed Up Browsing)"
-        Me.chkbx_notactorthumbs.UseVisualStyleBackColor = True
+        Me.chkbx_notactorthumbs.UseVisualStyleBackColor = true
         '
         'Label24
         '
-        Me.Label24.AutoSize = True
+        Me.Label24.AutoSize = true
         Me.Label24.Location = New System.Drawing.Point(249, 187)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(469, 13)
         Me.Label24.TabIndex = 17
-        Me.Label24.Text = "The default behaviour is for MC to overwrite none complient nfo files, you can ch" & _
+        Me.Label24.Text = "The default behaviour is for MC to overwrite none complient nfo files, you can ch"& _ 
     "ange this below :-"
         '
         'chkbx_renamnfofiles
         '
-        Me.chkbx_renamnfofiles.AutoSize = True
+        Me.chkbx_renamnfofiles.AutoSize = true
         Me.chkbx_renamnfofiles.Location = New System.Drawing.Point(244, 203)
         Me.chkbx_renamnfofiles.Name = "chkbx_renamnfofiles"
         Me.chkbx_renamnfofiles.Size = New System.Drawing.Size(244, 17)
         Me.chkbx_renamnfofiles.TabIndex = 15
         Me.chkbx_renamnfofiles.Text = "Rename non-compliant scene .nfo files to .info"
-        Me.chkbx_renamnfofiles.UseVisualStyleBackColor = True
+        Me.chkbx_renamnfofiles.UseVisualStyleBackColor = true
         '
         'GroupBox2
         '
@@ -1496,27 +1496,27 @@ Partial Class frmOptions
         Me.GroupBox2.Controls.Add(Me.btn_setforcolour)
         Me.GroupBox2.Controls.Add(Me.btn_setbackcolour)
         Me.GroupBox2.Controls.Add(Me.TrackBar1)
-        Me.GroupBox2.Enabled = False
+        Me.GroupBox2.Enabled = false
         Me.GroupBox2.Location = New System.Drawing.Point(6, 7)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(232, 290)
         Me.GroupBox2.TabIndex = 5
-        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.TabStop = false
         Me.GroupBox2.Text = "Appearance"
         '
         'Chkbx_fanartnoposter
         '
-        Me.Chkbx_fanartnoposter.AutoSize = True
+        Me.Chkbx_fanartnoposter.AutoSize = true
         Me.Chkbx_fanartnoposter.Location = New System.Drawing.Point(9, 133)
         Me.Chkbx_fanartnoposter.Name = "Chkbx_fanartnoposter"
         Me.Chkbx_fanartnoposter.Size = New System.Drawing.Size(219, 17)
         Me.Chkbx_fanartnoposter.TabIndex = 11
         Me.Chkbx_fanartnoposter.Text = "If Fanart is displayed, don't display Poster"
-        Me.Chkbx_fanartnoposter.UseVisualStyleBackColor = True
+        Me.Chkbx_fanartnoposter.UseVisualStyleBackColor = true
         '
         'Label13
         '
-        Me.Label13.AutoSize = True
+        Me.Label13.AutoSize = true
         Me.Label13.Location = New System.Drawing.Point(133, 249)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(45, 13)
@@ -1525,7 +1525,7 @@ Partial Class frmOptions
         '
         'Label12
         '
-        Me.Label12.AutoSize = True
+        Me.Label12.AutoSize = true
         Me.Label12.Location = New System.Drawing.Point(50, 249)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(77, 13)
@@ -1534,8 +1534,8 @@ Partial Class frmOptions
         '
         'Label11
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.AutoSize = true
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label11.Location = New System.Drawing.Point(13, 226)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(31, 15)
@@ -1544,8 +1544,8 @@ Partial Class frmOptions
         '
         'Label10
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.AutoSize = true
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label10.Location = New System.Drawing.Point(198, 193)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(15, 15)
@@ -1554,7 +1554,7 @@ Partial Class frmOptions
         '
         'Label9
         '
-        Me.Label9.AutoSize = True
+        Me.Label9.AutoSize = true
         Me.Label9.Location = New System.Drawing.Point(28, 180)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(176, 13)
@@ -1563,35 +1563,35 @@ Partial Class frmOptions
         '
         'chkbxusealpha
         '
-        Me.chkbxusealpha.AutoSize = True
-        Me.chkbxusealpha.Checked = True
+        Me.chkbxusealpha.AutoSize = true
+        Me.chkbxusealpha.Checked = true
         Me.chkbxusealpha.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkbxusealpha.Location = New System.Drawing.Point(9, 156)
         Me.chkbxusealpha.Name = "chkbxusealpha"
         Me.chkbxusealpha.Size = New System.Drawing.Size(168, 17)
         Me.chkbxusealpha.TabIndex = 5
         Me.chkbxusealpha.Text = "Enable Textbox Transparency"
-        Me.chkbxusealpha.UseVisualStyleBackColor = True
+        Me.chkbxusealpha.UseVisualStyleBackColor = true
         '
         'chkbxfanart
         '
-        Me.chkbxfanart.AutoSize = True
+        Me.chkbxfanart.AutoSize = true
         Me.chkbxfanart.Location = New System.Drawing.Point(9, 110)
         Me.chkbxfanart.Name = "chkbxfanart"
         Me.chkbxfanart.Size = New System.Drawing.Size(200, 17)
         Me.chkbxfanart.TabIndex = 4
         Me.chkbxfanart.Text = "Use Available Fanart As Background"
-        Me.chkbxfanart.UseVisualStyleBackColor = True
+        Me.chkbxfanart.UseVisualStyleBackColor = true
         '
         'chk_rememberformsize
         '
-        Me.chk_rememberformsize.AutoSize = True
+        Me.chk_rememberformsize.AutoSize = true
         Me.chk_rememberformsize.Location = New System.Drawing.Point(9, 87)
         Me.chk_rememberformsize.Name = "chk_rememberformsize"
         Me.chk_rememberformsize.Size = New System.Drawing.Size(168, 17)
         Me.chk_rememberformsize.TabIndex = 2
         Me.chk_rememberformsize.Text = "Remember Main Window Size"
-        Me.chk_rememberformsize.UseVisualStyleBackColor = True
+        Me.chk_rememberformsize.UseVisualStyleBackColor = true
         '
         'btn_setforcolour
         '
@@ -1600,7 +1600,7 @@ Partial Class frmOptions
         Me.btn_setforcolour.Size = New System.Drawing.Size(188, 23)
         Me.btn_setforcolour.TabIndex = 1
         Me.btn_setforcolour.Text = "Set Foreground Colour"
-        Me.btn_setforcolour.UseVisualStyleBackColor = True
+        Me.btn_setforcolour.UseVisualStyleBackColor = true
         '
         'btn_setbackcolour
         '
@@ -1609,7 +1609,7 @@ Partial Class frmOptions
         Me.btn_setbackcolour.Size = New System.Drawing.Size(188, 23)
         Me.btn_setbackcolour.TabIndex = 0
         Me.btn_setbackcolour.Text = "Set Background Colour"
-        Me.btn_setbackcolour.UseVisualStyleBackColor = True
+        Me.btn_setbackcolour.UseVisualStyleBackColor = true
         '
         'TrackBar1
         '
@@ -1624,94 +1624,94 @@ Partial Class frmOptions
         '
         'chkbx_createfolderjpg
         '
-        Me.chkbx_createfolderjpg.AutoSize = True
+        Me.chkbx_createfolderjpg.AutoSize = true
         Me.chkbx_createfolderjpg.Location = New System.Drawing.Point(244, 39)
         Me.chkbx_createfolderjpg.Name = "chkbx_createfolderjpg"
         Me.chkbx_createfolderjpg.Size = New System.Drawing.Size(190, 17)
         Me.chkbx_createfolderjpg.TabIndex = 8
         Me.chkbx_createfolderjpg.Text = "Create folder.jpg file for each folder"
-        Me.chkbx_createfolderjpg.UseVisualStyleBackColor = True
+        Me.chkbx_createfolderjpg.UseVisualStyleBackColor = true
         '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.Label1)
-        Me.GroupBox3.Controls.Add(Me.Label4)
-        Me.GroupBox3.Controls.Add(Me.btn_custommediaplayer)
-        Me.GroupBox3.Controls.Add(Me.RadioButton4)
-        Me.GroupBox3.Controls.Add(Me.RadioButton2)
-        Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Controls.Add(Me.lbl_MediaPlayerUser)
+        Me.GroupBox3.Controls.Add(Me.btn_MediaPlayerBrowse)
+        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerUser)
+        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerWMP)
+        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerDefault)
+        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.GroupBox3.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(456, 136)
         Me.GroupBox3.TabIndex = 6
-        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Media Player"
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label1.Location = New System.Drawing.Point(6, 16)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(421, 26)
         Me.Label1.TabIndex = 9
-        Me.Label1.Text = "Media Companion can be used to playback media files.  Use the options below to se" & _
-    "lect" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "what program to use for playback.  Multipart media files utilises a m3u pl" & _
+        Me.Label1.Text = "Media Companion can be used to playback media files.  Use the options below to se"& _ 
+    "lect"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"what program to use for playback.  Multipart media files utilises a m3u pl"& _ 
     "aylist."
         '
-        'Label4
+        'lbl_MediaPlayerUser
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(6, 111)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(11, 13)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "."
+        Me.lbl_MediaPlayerUser.AutoSize = true
+        Me.lbl_MediaPlayerUser.Location = New System.Drawing.Point(6, 111)
+        Me.lbl_MediaPlayerUser.Name = "lbl_MediaPlayerUser"
+        Me.lbl_MediaPlayerUser.Size = New System.Drawing.Size(11, 13)
+        Me.lbl_MediaPlayerUser.TabIndex = 8
+        Me.lbl_MediaPlayerUser.Text = "."
         '
-        'btn_custommediaplayer
+        'btn_MediaPlayerBrowse
         '
-        Me.btn_custommediaplayer.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_custommediaplayer.Location = New System.Drawing.Point(168, 88)
-        Me.btn_custommediaplayer.Name = "btn_custommediaplayer"
-        Me.btn_custommediaplayer.Size = New System.Drawing.Size(185, 23)
-        Me.btn_custommediaplayer.TabIndex = 7
-        Me.btn_custommediaplayer.Text = "Browse to prefferred media player"
-        Me.btn_custommediaplayer.UseVisualStyleBackColor = True
+        Me.btn_MediaPlayerBrowse.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btn_MediaPlayerBrowse.Location = New System.Drawing.Point(168, 88)
+        Me.btn_MediaPlayerBrowse.Name = "btn_MediaPlayerBrowse"
+        Me.btn_MediaPlayerBrowse.Size = New System.Drawing.Size(185, 23)
+        Me.btn_MediaPlayerBrowse.TabIndex = 7
+        Me.btn_MediaPlayerBrowse.Text = "Browse to prefferred media player"
+        Me.btn_MediaPlayerBrowse.UseVisualStyleBackColor = true
         '
-        'RadioButton4
+        'rb_MediaPlayerUser
         '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton4.Location = New System.Drawing.Point(6, 91)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(129, 17)
-        Me.RadioButton4.TabIndex = 6
-        Me.RadioButton4.Text = "Select Different player"
-        Me.RadioButton4.UseVisualStyleBackColor = True
+        Me.rb_MediaPlayerUser.AutoSize = true
+        Me.rb_MediaPlayerUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_MediaPlayerUser.Location = New System.Drawing.Point(6, 91)
+        Me.rb_MediaPlayerUser.Name = "rb_MediaPlayerUser"
+        Me.rb_MediaPlayerUser.Size = New System.Drawing.Size(129, 17)
+        Me.rb_MediaPlayerUser.TabIndex = 6
+        Me.rb_MediaPlayerUser.Text = "Select Different player"
+        Me.rb_MediaPlayerUser.UseVisualStyleBackColor = true
         '
-        'RadioButton2
+        'rb_MediaPlayerWMP
         '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton2.Location = New System.Drawing.Point(6, 68)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(367, 17)
-        Me.RadioButton2.TabIndex = 1
-        Me.RadioButton2.Text = "Use Windows Media Player --- Launch WMP and play the selected file(s)"
-        Me.RadioButton2.UseVisualStyleBackColor = True
+        Me.rb_MediaPlayerWMP.AutoSize = true
+        Me.rb_MediaPlayerWMP.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_MediaPlayerWMP.Location = New System.Drawing.Point(6, 68)
+        Me.rb_MediaPlayerWMP.Name = "rb_MediaPlayerWMP"
+        Me.rb_MediaPlayerWMP.Size = New System.Drawing.Size(367, 17)
+        Me.rb_MediaPlayerWMP.TabIndex = 1
+        Me.rb_MediaPlayerWMP.Text = "Use Windows Media Player --- Launch WMP and play the selected file(s)"
+        Me.rb_MediaPlayerWMP.UseVisualStyleBackColor = true
         '
-        'RadioButton1
+        'rb_MediaPlayerDefault
         '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton1.Location = New System.Drawing.Point(6, 45)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(446, 17)
-        Me.RadioButton1.TabIndex = 0
-        Me.RadioButton1.Text = "Use Default Player  ---------------  This option will open the default player for" & _
+        Me.rb_MediaPlayerDefault.AutoSize = true
+        Me.rb_MediaPlayerDefault.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_MediaPlayerDefault.Location = New System.Drawing.Point(6, 45)
+        Me.rb_MediaPlayerDefault.Name = "rb_MediaPlayerDefault"
+        Me.rb_MediaPlayerDefault.Size = New System.Drawing.Size(446, 17)
+        Me.rb_MediaPlayerDefault.TabIndex = 0
+        Me.rb_MediaPlayerDefault.Text = "Use Default Player  ---------------  This option will open the default player for"& _ 
     " .m3u playlist files"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        Me.rb_MediaPlayerDefault.UseVisualStyleBackColor = true
         '
         'TabControl1
         '
@@ -1735,7 +1735,7 @@ Partial Class frmOptions
         Me.TPGen.Size = New System.Drawing.Size(1000, 548)
         Me.TPGen.TabIndex = 4
         Me.TPGen.Text = "General"
-        Me.TPGen.UseVisualStyleBackColor = True
+        Me.TPGen.UseVisualStyleBackColor = true
         '
         'TabControl3
         '
@@ -1773,14 +1773,14 @@ Partial Class frmOptions
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 8
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 328.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 13.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 275.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 328!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 13!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 275!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox42, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox15, 6, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_CommandTitle, 1, 3)
@@ -1795,17 +1795,17 @@ Partial Class frmOptions
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 11
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 144.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 176.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 144!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 176!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(986, 516)
         Me.TableLayoutPanel1.TabIndex = 0
         '
@@ -1817,12 +1817,12 @@ Partial Class frmOptions
         Me.GroupBox42.Name = "GroupBox42"
         Me.GroupBox42.Size = New System.Drawing.Size(445, 113)
         Me.GroupBox42.TabIndex = 13
-        Me.GroupBox42.TabStop = False
+        Me.GroupBox42.TabStop = false
         '
         'Label141
         '
-        Me.Label141.AutoSize = True
-        Me.Label141.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label141.AutoSize = true
+        Me.Label141.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label141.Location = New System.Drawing.Point(7, 17)
         Me.Label141.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label141.Name = "Label141"
@@ -1832,7 +1832,7 @@ Partial Class frmOptions
         '
         'GroupBox15
         '
-        Me.GroupBox15.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.GroupBox15.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
         Me.GroupBox15.Controls.Add(Me.btn_ProfileSetStartup)
         Me.GroupBox15.Controls.Add(Me.Label3)
         Me.GroupBox15.Controls.Add(Me.lb_ProfileList)
@@ -1843,29 +1843,29 @@ Partial Class frmOptions
         Me.GroupBox15.Controls.Add(Me.btn_ProfileAdd)
         Me.GroupBox15.Controls.Add(Me.Label16)
         Me.GroupBox15.Controls.Add(Me.btn_ProfileRemove)
-        Me.GroupBox15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.GroupBox15.Location = New System.Drawing.Point(706, 11)
         Me.GroupBox15.Name = "GroupBox15"
         Me.TableLayoutPanel1.SetRowSpan(Me.GroupBox15, 10)
         Me.GroupBox15.Size = New System.Drawing.Size(268, 491)
         Me.GroupBox15.TabIndex = 12
-        Me.GroupBox15.TabStop = False
+        Me.GroupBox15.TabStop = false
         Me.GroupBox15.Text = "Profile Manager"
         '
         'btn_ProfileSetStartup
         '
-        Me.btn_ProfileSetStartup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileSetStartup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_ProfileSetStartup.Location = New System.Drawing.Point(9, 459)
         Me.btn_ProfileSetStartup.Name = "btn_ProfileSetStartup"
         Me.btn_ProfileSetStartup.Size = New System.Drawing.Size(247, 23)
         Me.btn_ProfileSetStartup.TabIndex = 11
         Me.btn_ProfileSetStartup.Text = "Set Startup"
-        Me.btn_ProfileSetStartup.UseVisualStyleBackColor = True
+        Me.btn_ProfileSetStartup.UseVisualStyleBackColor = true
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.AutoSize = true
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label3.Location = New System.Drawing.Point(8, 441)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(191, 15)
@@ -1874,7 +1874,7 @@ Partial Class frmOptions
         '
         'lb_ProfileList
         '
-        Me.lb_ProfileList.FormattingEnabled = True
+        Me.lb_ProfileList.FormattingEnabled = true
         Me.lb_ProfileList.Location = New System.Drawing.Point(9, 121)
         Me.lb_ProfileList.Name = "lb_ProfileList"
         Me.lb_ProfileList.Size = New System.Drawing.Size(247, 225)
@@ -1882,8 +1882,8 @@ Partial Class frmOptions
         '
         'Label18
         '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.AutoSize = true
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label18.Location = New System.Drawing.Point(6, 387)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(191, 15)
@@ -1892,17 +1892,17 @@ Partial Class frmOptions
         '
         'btn_ProfileSetDefault
         '
-        Me.btn_ProfileSetDefault.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileSetDefault.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_ProfileSetDefault.Location = New System.Drawing.Point(9, 405)
         Me.btn_ProfileSetDefault.Name = "btn_ProfileSetDefault"
         Me.btn_ProfileSetDefault.Size = New System.Drawing.Size(247, 23)
         Me.btn_ProfileSetDefault.TabIndex = 8
         Me.btn_ProfileSetDefault.Text = "Set Default"
-        Me.btn_ProfileSetDefault.UseVisualStyleBackColor = True
+        Me.btn_ProfileSetDefault.UseVisualStyleBackColor = true
         '
         'tb_ProfileNew
         '
-        Me.tb_ProfileNew.Font = New System.Drawing.Font("Times New Roman", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_ProfileNew.Font = New System.Drawing.Font("Times New Roman", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.tb_ProfileNew.Location = New System.Drawing.Point(9, 67)
         Me.tb_ProfileNew.Name = "tb_ProfileNew"
         Me.tb_ProfileNew.Size = New System.Drawing.Size(247, 22)
@@ -1910,29 +1910,29 @@ Partial Class frmOptions
         '
         'Label17
         '
-        Me.Label17.AutoSize = True
-        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.AutoSize = true
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label17.Location = New System.Drawing.Point(6, 16)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(250, 26)
         Me.Label17.TabIndex = 7
-        Me.Label17.Text = "The Default Profile can't be deleted, it is used as a" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "template. You can set any " & _
+        Me.Label17.Text = "The Default Profile can't be deleted, it is used as a"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"template. You can set any "& _ 
     "created profile to default."
         '
         'btn_ProfileAdd
         '
-        Me.btn_ProfileAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_ProfileAdd.Location = New System.Drawing.Point(9, 95)
         Me.btn_ProfileAdd.Name = "btn_ProfileAdd"
         Me.btn_ProfileAdd.Size = New System.Drawing.Size(247, 23)
         Me.btn_ProfileAdd.TabIndex = 4
         Me.btn_ProfileAdd.Text = "Add Profile"
-        Me.btn_ProfileAdd.UseVisualStyleBackColor = True
+        Me.btn_ProfileAdd.UseVisualStyleBackColor = true
         '
         'Label16
         '
-        Me.Label16.AutoSize = True
-        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.AutoSize = true
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label16.Location = New System.Drawing.Point(6, 48)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(150, 16)
@@ -1941,18 +1941,18 @@ Partial Class frmOptions
         '
         'btn_ProfileRemove
         '
-        Me.btn_ProfileRemove.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_ProfileRemove.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_ProfileRemove.Location = New System.Drawing.Point(9, 352)
         Me.btn_ProfileRemove.Name = "btn_ProfileRemove"
         Me.btn_ProfileRemove.Size = New System.Drawing.Size(247, 23)
         Me.btn_ProfileRemove.TabIndex = 5
         Me.btn_ProfileRemove.Text = "Remove Selected Profile"
-        Me.btn_ProfileRemove.UseVisualStyleBackColor = True
+        Me.btn_ProfileRemove.UseVisualStyleBackColor = true
         '
         'lbl_CommandTitle
         '
-        Me.lbl_CommandTitle.AutoSize = True
-        Me.lbl_CommandTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_CommandTitle.AutoSize = true
+        Me.lbl_CommandTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_CommandTitle.Location = New System.Drawing.Point(13, 171)
         Me.lbl_CommandTitle.Margin = New System.Windows.Forms.Padding(5, 7, 3, 0)
         Me.lbl_CommandTitle.Name = "lbl_CommandTitle"
@@ -1962,8 +1962,8 @@ Partial Class frmOptions
         '
         'lcl_CommandCommand
         '
-        Me.lcl_CommandCommand.AutoSize = True
-        Me.lcl_CommandCommand.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lcl_CommandCommand.AutoSize = true
+        Me.lcl_CommandCommand.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lcl_CommandCommand.Location = New System.Drawing.Point(177, 171)
         Me.lcl_CommandCommand.Margin = New System.Windows.Forms.Padding(5, 7, 3, 0)
         Me.lcl_CommandCommand.Name = "lcl_CommandCommand"
@@ -1996,12 +1996,12 @@ Partial Class frmOptions
         Me.btn_CommandRemove.Size = New System.Drawing.Size(122, 29)
         Me.btn_CommandRemove.TabIndex = 19
         Me.btn_CommandRemove.Text = "Remove Selected"
-        Me.btn_CommandRemove.UseVisualStyleBackColor = True
+        Me.btn_CommandRemove.UseVisualStyleBackColor = true
         '
         'lb_CommandTitle
         '
         Me.lb_CommandTitle.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lb_CommandTitle.FormattingEnabled = True
+        Me.lb_CommandTitle.FormattingEnabled = true
         Me.lb_CommandTitle.Location = New System.Drawing.Point(11, 238)
         Me.lb_CommandTitle.Name = "lb_CommandTitle"
         Me.lb_CommandTitle.Size = New System.Drawing.Size(150, 170)
@@ -2011,7 +2011,7 @@ Partial Class frmOptions
         '
         Me.TableLayoutPanel1.SetColumnSpan(Me.lb_CommandCommand, 3)
         Me.lb_CommandCommand.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lb_CommandCommand.FormattingEnabled = True
+        Me.lb_CommandCommand.FormattingEnabled = true
         Me.lb_CommandCommand.Location = New System.Drawing.Point(175, 238)
         Me.lb_CommandCommand.Name = "lb_CommandCommand"
         Me.lb_CommandCommand.Size = New System.Drawing.Size(525, 170)
@@ -2025,7 +2025,7 @@ Partial Class frmOptions
         Me.btn_CommandAdd.Size = New System.Drawing.Size(75, 21)
         Me.btn_CommandAdd.TabIndex = 18
         Me.btn_CommandAdd.Text = "Add"
-        Me.btn_CommandAdd.UseVisualStyleBackColor = True
+        Me.btn_CommandAdd.UseVisualStyleBackColor = true
         '
         'btn_SettingsCancel
         '
@@ -2034,7 +2034,7 @@ Partial Class frmOptions
         Me.btn_SettingsCancel.Size = New System.Drawing.Size(109, 23)
         Me.btn_SettingsCancel.TabIndex = 22
         Me.btn_SettingsCancel.Text = "Cancel"
-        Me.btn_SettingsCancel.UseVisualStyleBackColor = True
+        Me.btn_SettingsCancel.UseVisualStyleBackColor = true
         '
         'btn_SettingsClose
         '
@@ -2043,7 +2043,7 @@ Partial Class frmOptions
         Me.btn_SettingsClose.Size = New System.Drawing.Size(109, 23)
         Me.btn_SettingsClose.TabIndex = 21
         Me.btn_SettingsClose.Text = "Close"
-        Me.btn_SettingsClose.UseVisualStyleBackColor = True
+        Me.btn_SettingsClose.UseVisualStyleBackColor = true
         '
         'btn_SettingsApply
         '
@@ -2053,11 +2053,11 @@ Partial Class frmOptions
         Me.btn_SettingsApply.Size = New System.Drawing.Size(109, 23)
         Me.btn_SettingsApply.TabIndex = 20
         Me.btn_SettingsApply.Text = "Apply"
-        Me.btn_SettingsApply.UseVisualStyleBackColor = True
+        Me.btn_SettingsApply.UseVisualStyleBackColor = true
         '
         'frmOptions
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 574)
         Me.Controls.Add(Me.btn_SettingsCancel)
@@ -2065,72 +2065,72 @@ Partial Class frmOptions
         Me.Controls.Add(Me.btn_SettingsApply)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.KeyPreview = True
-        Me.MaximizeBox = False
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.KeyPreview = true
+        Me.MaximizeBox = false
         Me.MaximumSize = New System.Drawing.Size(1016, 608)
-        Me.MinimizeBox = False
+        Me.MinimizeBox = false
         Me.MinimumSize = New System.Drawing.Size(1016, 608)
         Me.Name = "frmOptions"
         Me.Text = "Media Companion Preferences"
-        Me.GroupBox10.ResumeLayout(False)
-        Me.GroupBox10.PerformLayout()
-        Me.GroupBox12.ResumeLayout(False)
-        Me.GroupBox12.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Profiles.ResumeLayout(False)
-        Me.GroupBox13.ResumeLayout(False)
-        Me.GroupBox13.PerformLayout()
-        Me.GroupBox14.ResumeLayout(False)
-        Me.GroupBox14.PerformLayout()
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabControl2.ResumeLayout(False)
-        Me.TabPage4.ResumeLayout(False)
-        Me.TabPage4.PerformLayout()
-        Me.TabPage5.ResumeLayout(False)
-        Me.TabPage5.PerformLayout()
-        Me.GroupBox16.ResumeLayout(False)
-        Me.GroupBox16.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
-        Me.GroupBox9.ResumeLayout(False)
-        Me.GroupBox9.PerformLayout()
-        Me.GroupBox8.ResumeLayout(False)
-        Me.GroupBox8.PerformLayout()
-        Me.TabPage6.ResumeLayout(False)
-        Me.GroupBox6.ResumeLayout(False)
-        Me.GroupBox6.PerformLayout()
-        Me.GroupBox18.ResumeLayout(False)
-        Me.GroupBox18.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        Me.TabPage2.ResumeLayout(False)
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox5.ResumeLayout(False)
-        Me.TPGenOld.ResumeLayout(False)
-        Me.TPGenOld.PerformLayout()
-        Me.GroupBox17.ResumeLayout(False)
-        Me.GroupBox11.ResumeLayout(False)
-        Me.GroupBox11.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
-        Me.TabControl1.ResumeLayout(False)
-        Me.TPGen.ResumeLayout(False)
-        Me.TabControl3.ResumeLayout(False)
-        Me.TPG1.ResumeLayout(False)
-        Me.TPG2.ResumeLayout(False)
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout()
-        Me.GroupBox42.ResumeLayout(False)
-        Me.GroupBox42.PerformLayout()
-        Me.GroupBox15.ResumeLayout(False)
-        Me.GroupBox15.PerformLayout()
-        Me.ResumeLayout(False)
+        Me.GroupBox10.ResumeLayout(false)
+        Me.GroupBox10.PerformLayout
+        Me.GroupBox12.ResumeLayout(false)
+        Me.GroupBox12.PerformLayout
+        CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.Profiles.ResumeLayout(false)
+        Me.GroupBox13.ResumeLayout(false)
+        Me.GroupBox13.PerformLayout
+        Me.GroupBox14.ResumeLayout(false)
+        Me.GroupBox14.PerformLayout
+        Me.TabPage3.ResumeLayout(false)
+        Me.TabControl2.ResumeLayout(false)
+        Me.TabPage4.ResumeLayout(false)
+        Me.TabPage4.PerformLayout
+        Me.TabPage5.ResumeLayout(false)
+        Me.TabPage5.PerformLayout
+        Me.GroupBox16.ResumeLayout(false)
+        Me.GroupBox16.PerformLayout
+        Me.GroupBox4.ResumeLayout(false)
+        Me.GroupBox4.PerformLayout
+        Me.GroupBox9.ResumeLayout(false)
+        Me.GroupBox9.PerformLayout
+        Me.GroupBox8.ResumeLayout(false)
+        Me.GroupBox8.PerformLayout
+        Me.TabPage6.ResumeLayout(false)
+        Me.GroupBox6.ResumeLayout(false)
+        Me.GroupBox6.PerformLayout
+        Me.GroupBox18.ResumeLayout(false)
+        Me.GroupBox18.PerformLayout
+        Me.Panel2.ResumeLayout(false)
+        Me.Panel2.PerformLayout
+        Me.TabPage2.ResumeLayout(false)
+        Me.GroupBox1.ResumeLayout(false)
+        Me.GroupBox5.ResumeLayout(false)
+        Me.TPGenOld.ResumeLayout(false)
+        Me.TPGenOld.PerformLayout
+        Me.GroupBox17.ResumeLayout(false)
+        Me.GroupBox11.ResumeLayout(false)
+        Me.GroupBox11.PerformLayout
+        Me.GroupBox2.ResumeLayout(false)
+        Me.GroupBox2.PerformLayout
+        CType(Me.TrackBar1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.GroupBox3.ResumeLayout(false)
+        Me.GroupBox3.PerformLayout
+        Me.TabControl1.ResumeLayout(false)
+        Me.TPGen.ResumeLayout(false)
+        Me.TabControl3.ResumeLayout(false)
+        Me.TPG1.ResumeLayout(false)
+        Me.TPG2.ResumeLayout(false)
+        Me.TableLayoutPanel1.ResumeLayout(false)
+        Me.TableLayoutPanel1.PerformLayout
+        Me.GroupBox42.ResumeLayout(false)
+        Me.GroupBox42.PerformLayout
+        Me.GroupBox15.ResumeLayout(false)
+        Me.GroupBox15.PerformLayout
+        Me.ResumeLayout(false)
 
-    End Sub
+End Sub
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents ColorDialog As System.Windows.Forms.ColorDialog
     Friend WithEvents FontDialog As System.Windows.Forms.FontDialog
@@ -2224,10 +2224,10 @@ Partial Class frmOptions
     Friend WithEvents TrackBar1 As System.Windows.Forms.TrackBar
     Friend WithEvents chkbx_createfolderjpg As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-    Friend WithEvents btn_custommediaplayer As System.Windows.Forms.Button
-    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
+    Friend WithEvents btn_MediaPlayerBrowse As System.Windows.Forms.Button
+    Friend WithEvents rb_MediaPlayerUser As System.Windows.Forms.RadioButton
+    Friend WithEvents rb_MediaPlayerWMP As System.Windows.Forms.RadioButton
+    Friend WithEvents rb_MediaPlayerDefault As System.Windows.Forms.RadioButton
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents GroupBox14 As System.Windows.Forms.GroupBox
     Friend WithEvents Button6 As System.Windows.Forms.Button
@@ -2280,7 +2280,7 @@ Partial Class frmOptions
     Friend WithEvents TPG1 As System.Windows.Forms.TabPage
     Friend WithEvents TPG2 As System.Windows.Forms.TabPage
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents lbl_MediaPlayerUser As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
     Friend WithEvents btn_ProfileSetStartup As System.Windows.Forms.Button

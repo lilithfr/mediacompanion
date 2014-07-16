@@ -27,7 +27,6 @@ Public Class Form1
     Public Const MCToolsCommands As Integer = 2          ' increment when adding MC functions to ToolsToolStripMenuItem
 
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
-    'Public Dim WithEvents  BckWrkXbmcMovies      As BackgroundWorker = New BackgroundWorker 
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
     Shared Public          XbmcControllerQ       As PriorityQueue    = New PriorityQueue
@@ -113,10 +112,6 @@ Public Class Form1
 
     Public _yield               As Boolean
     Public LastMovieDisplayed   As String=""
-'   Public ActorFilter          As String=""
-
-    'Public Shared Preferences As New Structures
-
     Public MainFormLoadedStatus As Boolean = False
     Public movieRefreshNeeded As Boolean = True
     Public tvRefreshNeeded As Boolean = True
@@ -135,10 +130,7 @@ Public Class Form1
 
     'Replace the list of structure by a list of objects
 
- '   Private ToolTipGridMoviePosition As Point
-
     Public Data_GridViewMovie As Data_GridViewMovie
-    'Public filteredListObj As New List(Of Data_GridViewMovie)
     Public DataGridViewBindingSource As New BindingSource
 
 
@@ -175,7 +167,6 @@ Public Class Form1
     Dim maximised As Boolean = False
     Public imdbCounter As Integer = 0
     Dim tootip5 As New ToolTip
-    'Dim tvbannerExclude As Boolean = False
 
     Dim prefsload As Boolean = False
 
@@ -207,8 +198,8 @@ Public Class Form1
     Dim posterArray As New List(Of str_ListOfPosters)
     Dim pageCount As Integer = 0
     Dim currentPage As Integer = 0
-    Dim posterThumbedItsMade As Boolean = False
-    Dim posterCropString As String
+    'Dim posterThumbedItsMade As Boolean = False
+    'Dim posterCropString As String
     Dim tab1 As Integer = 0
     Dim actorflag As Boolean = False
 
@@ -316,7 +307,6 @@ Public Class Form1
             TvTreeview.Sort()
 
             For Each arg As String In Environment.GetCommandLineArgs().Skip(1)
-
                 Select Case arg.ToLower
                     Case "sq"
                         scrapeAndQuit = True
@@ -352,20 +342,6 @@ Public Class Form1
                         Environment.Exit(1)
                         'Me.Close()
                 End Select
-
-                'If arg = "sq" Then
-                '    Me.WindowState = FormWindowState.Minimized
-                '    scrapeAndQuit = True
-                '    sandq = 3
-                'Else If arg = "st" Then
-                '    Me.WindowState = FormWindowState.Minimized
-                '    scrapeAndQuit = True
-                '    sandq = 1
-                'Else If arg = "sm" Then
-                '    Me.WindowState = FormWindowState.Minimized
-                '    scrapeAndQuit = True
-                '    sandq = 2
-                'End If
             Next
 
             If scrapeAndQuit Or refreshAndQuit Then
@@ -404,8 +380,6 @@ Public Class Form1
                 Next
             End If
             CheckForIllegalCrossThreadCalls = False
-            'messbox.Show()
-            'messbox.Visible = False
 
             Preferences.maximised = False
             Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
@@ -414,7 +388,6 @@ Public Class Form1
             tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
             Dim hg As New IO.DirectoryInfo(tempstring)
             If hg.Exists Then
-                ' applicationdatapath = tempstring
                 Preferences.configpath = tempstring & "config.xml"
                 If Not IO.File.Exists(Preferences.configpath) Then
                     Preferences.SaveConfig()
@@ -422,7 +395,6 @@ Public Class Form1
             Else
                 IO.Directory.CreateDirectory(tempstring)
                 workingProfile.Config = applicationPath & "\Settings\config.xml"
-                'Preferences.resetmovthumblist()
                 Preferences.SaveConfig()
             End If
 
@@ -445,32 +417,7 @@ Public Class Form1
                 profileStruct.WorkingProfileName = "Default"
                 Call util_ProfileSave()
             End If
-
-            'Call util_ProfilesLoad()
-            'For Each prof In profileStruct.ProfileList
-            '    If prof.ProfileName = profileStruct.StartupProfile Then
-            '        workingProfile.actorcache = prof.actorcache
-            '        workingProfile.DirectorCache = prof.DirectorCache
-            '        workingProfile.config = prof.config
-            '        workingProfile.moviecache = prof.moviecache
-            '        workingProfile.profilename = prof.profilename
-            '        workingProfile.regexlist = prof.regexlist
-            '        workingProfile.filters = prof.filters
-            '        workingProfile.tvcache = prof.tvcache
-            '        workingProfile.profilename = prof.profilename
-            '        For Each item In ProfilesToolStripMenuItem.DropDownItems
-            '            If item.text = workingProfile.profilename Then
-            '                With item
-            '                    item.checked = True
-            '                End With
-            '            Else
-            '                item.checked = False
-            '            End If
-            '        Next
-            '    End If
-            'Next
-            'Else
-
+            
             'hide debug xml view tabs - unhiden (i.e. added) via debug tab
             TabLevel1.TabPages.Remove(Me.TabConfigXML)
             TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
@@ -479,7 +426,6 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            'TabControl5.TabPages.Remove(Me.tpPrxy)        'Hide Proxy tab while Work-In-Progress
             TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             PreferencesToolStripMenuItem.Visible = False
 
@@ -507,7 +453,6 @@ Public Class Form1
                     Next
                 End If
             Next
-            'End If
 
             'add musicvideocache to profile if it doesnt exist
             Dim counter As Int16 = 0
@@ -548,7 +493,6 @@ Public Class Form1
 
             CheckForIllegalCrossThreadCalls = False
 
-
             Try
                 SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
             Catch
@@ -567,9 +511,6 @@ Public Class Form1
                 IO.File.Delete(tempstring)
             End If
 
-
-            'ToolStrip1.Enabled = False
-
             Call util_RegexLoad()
 
             Call util_PrefsLoad()
@@ -579,20 +520,14 @@ Public Class Form1
             SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
             SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
-
             Movies.SpinUpDrives()
 
             If Not (scrapeAndQuit Or refreshAndQuit) Then
                 Me.Visible = True
 
                 Dim scrn As Integer = If(NumOfScreens > 0, Preferences.preferredscreen, 0)
-                Dim intX As Integer = screen.AllScreens(scrn).Bounds.X + screen.AllScreens(scrn).Bounds.Width 'Screen.PrimaryScreen.Bounds.Width
-                'Dim Scrn() As System.Windows.Forms.Screen = System.Windows.Forms.Screen.AllScreens
-                'Dim total As Integer = Scrn.GetUpperBound(0)
-                'For i = 0 To total
-                '    intX = Scrn(i).Bounds.X + Scrn(i).Bounds.Width
-                'Next
-                Dim intY As Integer = screen.AllScreens(scrn).Bounds.Height 'Screen.PrimaryScreen.Bounds.Height
+                Dim intX As Integer = screen.AllScreens(scrn).Bounds.X + screen.AllScreens(scrn).Bounds.Width
+                Dim intY As Integer = screen.AllScreens(scrn).Bounds.Height
                 SplitContainer1.IsSplitterFixed = True
                 SplitContainer2.IsSplitterFixed = True
                 SplitContainer3.IsSplitterFixed = True
@@ -651,7 +586,6 @@ Public Class Form1
                     TabLevel1.SelectedIndex = 1
                     SplitContainer3.SplitterDistance = Preferences.splt3
                     SplitContainer4.SplitterDistance = Preferences.splt4
-                    '_tv_SplitContainer.SplitterDistance = Preferences.splt6
                     TabLevel1.SelectedIndex = 0
                 ElseIf Preferences.startuptab = 1 Then
                     SplitContainer1.SplitterDistance = Preferences.splt1
@@ -660,17 +594,12 @@ Public Class Form1
                     TabLevel1.SelectedIndex = 1
                     SplitContainer3.SplitterDistance = Preferences.splt3
                     SplitContainer4.SplitterDistance = Preferences.splt4
-                    '_tv_SplitContainer.SplitterDistance = Preferences.splt6
                 ElseIf Preferences.startuptab > 1 Then
                     SplitContainer1.SplitterDistance = Preferences.splt1
                     SplitContainer2.SplitterDistance = Preferences.splt2
                     SplitContainer5.SplitterDistance = Preferences.splt5
                     SplitContainer3.SplitterDistance = Preferences.splt3
                     SplitContainer4.SplitterDistance = Preferences.splt4
-                    'Try
-                    '    _tv_SplitContainer.SplitterDistance = Preferences.splt6
-                    'Catch
-                    'End Try
                     TabLevel1.SelectedIndex = Preferences.startuptab
                 End If
 
@@ -681,8 +610,6 @@ Public Class Form1
                 SplitContainer4.IsSplitterFixed = False
                 SplitContainer5.IsSplitterFixed = False
             End If
-
-            'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
             If scrapeAndQuit Or refreshAndQuit Then
                 Do_ScrapeAndQuit()
@@ -738,18 +665,10 @@ Public Class Form1
 
                 mov_SplitContainerAutoPosition()
                 tv_ShowSelectedCurrently()
-                'Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
-                'Panel4.Width = SplitContainer4.Width.ToString
-                'Panel4.Height = SplitContainer4.Height.ToString / 2.11
                 tv_SplitContainerAutoPosition()
             End If
 
-            'Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
-
             'Parameters to display the movie grid at startup
-
-
-
             Select Case Preferences.moviedefaultlist
                 Case 0
                     RadioButtonTitleAndYear.Checked = True
@@ -935,11 +854,9 @@ Public Class Form1
         Try
             If Me.WindowState = FormWindowState.Maximized Then
                 mov_SplitContainerAutoPosition()
-                'tvbannerExclude = True
                 tv_SplitContainerAutoPosition()
             End If
             If Not Me.WindowState = FormWindowState.Minimized Then
-                'tvbannerExclude = True
                 tv_SplitContainerAutoPosition()
             End If
             If startup = False Then
@@ -965,8 +882,6 @@ Public Class Form1
             If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
                 Preferences.formwidth = Me.Width
                 Preferences.formheight = Me.Height
-
-                'Preferences.saveconfig()           'no need to save position, we do that when MC closes
                 Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
                 If maxcount2 <> maxcount Then
                     maxcount = maxcount2
@@ -1320,10 +1235,8 @@ Public Class Form1
         Try     'Try Catch for minimize of MC when Full-screen
             If _tv_SplitContainer.Height > 100 Then
                 If Preferences.tvbannersplit = 0 Then
-                    'tvbannerExclude = True
                     _tv_SplitContainer.SplitterDistance = HorizontalSplit
                 Else
-                    'tvbannerExclude = True
                     _tv_SplitContainer.SplitterDistance = _tv_SplitContainer.Height * Preferences.tvbannersplit 
                 End If
             End If
@@ -1340,10 +1253,8 @@ Public Class Form1
             mov_RebuildMovieCaches
             Return
         End If
-
-
-        filteredList   .Clear
-        filteredList   .AddRange(oMovies.MovieCache             )
+        filteredList.Clear
+        filteredList.AddRange(oMovies.MovieCache)
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -1532,35 +1443,32 @@ Public Class Form1
                                     If t > 0 Then notportable = True
                                     Select Case result.name
                                         Case "actorcache"
-                                            'Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.ActorCache = applicationPath & s 'result.innertext
-
+                                            currentprofile.ActorCache = applicationPath & s
                                         Case "directorcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.DirectorCache = applicationPath & s 'result.innertext
+                                            currentprofile.DirectorCache = applicationPath & s
 
                                         Case "config"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.Config = applicationPath & s 'result.innertext
+                                            currentprofile.Config = applicationPath & s
                                         Case "moviecache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.MovieCache = applicationPath & s 'result.innertext
+                                            currentprofile.MovieCache = applicationPath & s
                                         Case "profilename"
-                                            'Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.ProfileName = result.innertext
                                         Case "regex"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.RegExList = applicationPath & s 'result.innertext
+                                            currentprofile.RegExList = applicationPath & s
                                         Case "filters"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.Filters = applicationPath & s 'result.innertext
+                                            currentprofile.Filters = applicationPath & s
                                         Case "tvcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.TvCache = applicationPath & s 'result.innertext
+                                            currentprofile.TvCache = applicationPath & s
                                         Case "musicvideocache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.MusicVideoCache = applicationPath & s 'result.innertext
+                                            currentprofile.MusicVideoCache = applicationPath & s
                                     End Select
                                 Next
                 profileStruct.ProfileList.Add(currentprofile)
@@ -1667,8 +1575,6 @@ Public Class Form1
             root.AppendChild(child)
         Next
 
-
-
         doc.AppendChild(root)
         Dim saveing As New XmlTextWriter(profilepath, System.Text.Encoding.UTF8)
         saveing.Formatting = Formatting.Indented
@@ -1770,31 +1676,29 @@ Public Class Form1
                 For Each title In workingMovieDetails.alternativetitles
                     titletxt.Items.Add(title)
                 Next
-                titletxt.Text = workingMovieDetails.fullmoviebody.title '& " (" & workingmoviedetails.fullmoviebody.year & ")"
+                titletxt.Text = workingMovieDetails.fullmoviebody.title
                 TextBox3.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 tbCurrentMoviePoster.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 Me.ToolTip1.SetToolTip(Me.titletxt, "Original Title: '" & workingMovieDetails.fullmoviebody.originaltitle & "'")
                 If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
-                TextBox34.Text = workingMovieDetails.fullmoviebody.sortorder
+                TextBox34.Text  = workingMovieDetails.fullmoviebody.sortorder
                 outlinetxt.Text = workingMovieDetails.fullmoviebody.outline
-                plottxt.Text = workingMovieDetails.fullmoviebody.plot
+                plottxt.Text    = workingMovieDetails.fullmoviebody.plot
                 taglinetxt.Text = workingMovieDetails.fullmoviebody.tagline
-                txtStars.Text = workingMovieDetails.fullmoviebody.stars
-                genretxt.Text = workingMovieDetails.fullmoviebody.genre
+                txtStars.Text   = workingMovieDetails.fullmoviebody.stars
+                genretxt.Text   = workingMovieDetails.fullmoviebody.genre
                 premiertxt.Text = workingMovieDetails.fullmoviebody.premiered 
                 creditstxt.Text = workingMovieDetails.fullmoviebody.credits
                 directortxt.Text = workingMovieDetails.fullmoviebody.director
-                studiotxt.Text = workingMovieDetails.fullmoviebody.studio
-                pathtxt.Text = workingMovie.fullpathandfilename
-                ratingtxt.Text = workingMovieDetails.fullmoviebody.rating.FormatRating
-                imdbtxt.Text = workingMovieDetails.fullmoviebody.imdbid
-                tagtxt.Text = ""
+                studiotxt.Text  = workingMovieDetails.fullmoviebody.studio
+                pathtxt.Text    = workingMovie.fullpathandfilename
+                ratingtxt.Text  = workingMovieDetails.fullmoviebody.rating.FormatRating
+                imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
+                tagtxt.Text     = ""
                 If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
                     For Each t In workingMovieDetails.fullmoviebody.tag
                         tagtxt.Text &= t & ", "
                     Next
-                Else
-                    tagtxt.Text = ""
                 End If
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
@@ -1941,7 +1845,7 @@ Public Class Form1
             btnMoviePosterSaveCroppedImage.Enabled = False
             btnMoviePosterResetImage.Enabled = False
             thumbedItsMade = False
-            posterThumbedItsMade = False
+            'posterThumbedItsMade = False
             cbMoviePosterSaveLoRes.Enabled = False
             btnPosterTabs_SaveImage.Enabled = False
             Button9.Visible = False
@@ -6051,59 +5955,9 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-    Private Sub mov_PosterTimerSet(ByVal direction As String)
-        posterThumbedItsMade = True
-        btnMoviePosterSaveCroppedImage.Enabled = True
-        btnMoviePosterResetImage.Enabled = True
-        posterCropString = direction
-        Timer3.Interval = 1000 ' timer is set initially to 1000ms, user clicks & holds for over 1sec, then timer fires for repeat action, timer sets itself to 150ms when activated
-        mov_PosterCrop() ' we do a crop immediately that the button is pushed down, repeat will happen if button is not MouseUp which disables the timer
-        Timer3.Enabled = True   'start timer, repeat will happen after 1000ms unless mouse up
-    End Sub
-    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseDown
-        Try
-            'crop top
-            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
-            mov_PosterTimerSet("top")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseDown
-        Try
-            'crop bottom
-            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
-            mov_PosterTimerSet("bottom")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseDown
-        Try
-            'crop left
-            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
-            mov_PosterTimerSet("left")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseDown
-        Try
-            'crop right
-            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
-            mov_PosterTimerSet("right")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
     Private Sub btnMoviePosterResetImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePosterResetImage.Click
         Try
-            'reset
-            posterThumbedItsMade = False
             PictureBoxAssignedMoviePoster.Image = moviethumb.Image
             btnMoviePosterResetImage.Enabled = False
             btnMoviePosterSaveCroppedImage.Enabled = False
@@ -6115,8 +5969,6 @@ Public Class Form1
 
     Private Sub btnMoviePosterSaveCroppedImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePosterSaveCroppedImage.Click
         Try
-            'save cropped
-            posterThumbedItsMade = False
             Try
                 Dim posterpath As String = ""
                 Dim stream As New System.IO.MemoryStream
@@ -6133,18 +5985,7 @@ Public Class Form1
                 btnMoviePosterSaveCroppedImage.Enabled = False
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.posterpath)
                 updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
-
-                'For Each poster As PictureBox In TabPage22.Controls
-                '    If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                '        'poster.ImageLocation = path
-                '        'poster.Load()
-                '        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                '        Exit For
-                '    End If
-                'Next
-
                 XbmcLink_UpdateArtwork
-
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -6153,107 +5994,14 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
     End Sub
 
     Private Sub btnMovPasteClipboardPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPasteClipboardPoster.Click
-
         If AssignClipboardImage(PictureBoxAssignedMoviePoster) Then
             lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
             btnMoviePosterSaveCroppedImage.Enabled = True
         End If
-
-        'Try
-        '    If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
-        '        Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
-        '        Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
-        '        If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
-        '            util_ImageLoad(PictureBoxAssignedMoviePoster, pth, Utilities.DefaultPosterPath)
-        '            lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-        '            btnMoviePosterSaveCroppedImage.Enabled = True
-        '        Else 
-        '            MessageBox.Show("Not a picture")
-        '        End If
-        '    End If
-
-        '    If Clipboard.GetDataObject.GetDataPresent(DataFormats.Bitmap) Then
-        '        PictureBoxAssignedMoviePoster.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
-        '        lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-        '        btnMoviePosterSaveCroppedImage.Enabled = True
-        '    End If
-
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
     End Sub
-
-    Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick    'timer from movie poster crop - used for repeat crop if buttom held down
-        Try
-            Timer3.Interval = 75 'if this timer fires, then from now on we want it to fire quicker for repeat function
-            mov_PosterCrop()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub mov_PosterCrop()
-        Dim imagewidth As Integer = PictureBoxAssignedMoviePoster.Image.Width
-        Dim imageheight As Integer = PictureBoxAssignedMoviePoster.Image.Height
-        thumbedItsMade = True
-
-        Select Case posterCropString
-            Case "top"
-                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone()
-            Case "bottom"
-                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone()
-            Case "left"
-                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone()
-            Case "right"
-                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone()
-        End Select
-        PictureBoxAssignedMoviePoster.SizeMode = PictureBoxSizeMode.Zoom
-        lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-    End Sub
-
-    Private Sub Button23_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseUp
-        Try
-            Timer3.Enabled = False
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-    End Sub
-
-    Private Sub Button24_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseUp
-        Try
-            Timer3.Enabled = False
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-    End Sub
-
-    Private Sub Button25_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseUp
-        Try
-            Timer3.Enabled = False
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-    End Sub
-
-    Private Sub Button26_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseUp
-        Try
-            Timer3.Enabled = False
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-    End Sub
-
 
     Private Sub WebBrowser1_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles WebBrowser1.NewWindow
         Try
@@ -6276,7 +6024,6 @@ Public Class Form1
             Else
                 Exit Sub
             End If
-            'tv_SplitContainerAutoPosition("loadtvepisode") 'loadtvepisode()
 
             PictureBox8.Image = Nothing
             PictureBox8.Visible = True
