@@ -15,13 +15,17 @@
 -->
 
 <Certificates>
+  <Certificate find="6" replace=" 8" />
+  <Certificate find="9" replace=" 8" />
+  <Certificate find="U" replace=" 8" />
+  <Certificate find="Rated U" replace=" 8" />
+  <Certificate find="Rated 6" replace=" 8" />
+  <Certificate find="TV-G" replace=" 8" />
+
+  <Certificate find="G" replace="12" />
   <Certificate find="11" replace="12" />
   <Certificate find="12A" replace="12" />
   <Certificate find="13" replace="12" />
-  <Certificate find="14" replace="12" />
-  <Certificate find="15A" replace="15" />
-  <Certificate find="16" replace="15" />
-  <Certificate find="9" replace="12" />
   <Certificate find="A" replace="12" />
   <Certificate find="AA" replace="12" />
   <Certificate find="AL" replace="12" />
@@ -29,29 +33,52 @@
   <Certificate find="Approved" replace="12" />
   <Certificate find="K-11" replace="12" />
   <Certificate find="K-13" replace="12" />
-  <Certificate find="K-18" replace="18" />
   <Certificate find="K-3" replace="12" />
   <Certificate find="Livre" replace="12" />
   <Certificate find="M" replace="12" />
   <Certificate find="M/12" replace="12" />
-  <Certificate find="M18" replace="18" />
   <Certificate find="MA" replace="12" />
-  <Certificate find="MA15" replace="15" />
-  <Certificate find="MA15+" replace="15" />
-  <Certificate find="NC-16" replace="15" />
-  <Certificate find="Not Rated" replace="12" />
   <Certificate find="o.Al." replace="12" />
   <Certificate find="PG*" replace="12" />
-  <Certificate find="R" replace="18" />
-  <Certificate find="R18" replace="18" />
-  <Certificate find="Rated NC-17*" replace="18" />
   <Certificate find="Rated PG*" replace="12" />
-  <Certificate find="Rated R *" replace="18" />
-  <Certificate find="Refused Classification" replace="Refused" />
   <Certificate find="TV-14" replace="12" />
   <Certificate find="TV-MA" replace="12" />
   <Certificate find="TV-PG" replace="12" />
-  <Certificate find="U" replace="12" />
+  <Certificate find="E" replace="12" />
+  <Certificate find="Rated G" replace="12" />
+  <Certificate find="R-13" replace="12" />
+  <Certificate find="Rated 12*" replace="12" />
+
+
+  <Certificate find="14" replace="15" />
+  <Certificate find="15A" replace="15" />
+  <Certificate find="16" replace="15" />
+  <Certificate find="MA15" replace="15" />
+  <Certificate find="MA15+" replace="15" />
+  <Certificate find="NC-16" replace="15" />
+  <Certificate find="Rated R" replace="15" />
+  <Certificate find="Rated 15" replace="15" />
+  <Certificate find="Rated AA" replace="15" />
+  <Certificate find="R-16" replace="15" />
+  <Certificate find="R16" replace="15" />
+
+
+  <Certificate find="K-18" replace="18" />
+  <Certificate find="M18" replace="18" />
+  <Certificate find="Rated 18" replace="18" />
+  <Certificate find="R" replace="18" />
+  <Certificate find="R18" replace="18" />
+  <Certificate find="Rated NC-17*" replace="18" />
   <Certificate find="X" replace="18" />
+  <Certificate find="Rated AO" replace="18" />
+  <Certificate find="Rated X" replace="18" />
+  <Certificate find="Rated R *" replace="18" />
+  <Certificate find="VM18" replace="18" />
+
+  <Certificate find="Not Rated" replace="Unrated" />
+
+
+  <Certificate find="Refused Classification" replace="Refused" />
+
 </Certificates>
 
