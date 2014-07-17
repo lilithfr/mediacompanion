@@ -2620,53 +2620,45 @@ Partial Public Class Form1
                 End If
             Next
         End If
-        Dim fpath As String = newepisode.NfoFilePath
-        Dim ext As String = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
-        Dim ext1 As String = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
-        Dim ext2 As String = fpath.Replace(IO.Path.GetExtension(fpath), "-thumb.jpg")
-        Dim eden As Boolean = Preferences.EdenEnabled
-        Dim frodo As Boolean = Preferences.FrodoEnabled
-        Dim edenart As Boolean = IO.File.Exists(ext1)
-        Dim frodoart As Boolean = IO.File.Exists(ext2)
+        
+        '''''Get Episode Fanart
+        tvScraperLog &= tv_EpisodeFanartGet(newepisode, Preferences.autoepisodescreenshot) & vbcrlf
 
-        If Not newepisode.Thumbnail.FileName = Nothing And newepisode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
-            Dim url As String = newepisode.Thumbnail.FileName
-            If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                If Utilities.DownloadFile(url, ext) Then
-                    If Not eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                        IO.File.Delete(ext)
-                    ElseIf eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                    End If
-                ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-                    tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episodee" & vbCrLf
-                    Call ep_ScreenShotDo(ext)
-                Else
-                    tvScraperLog = tvScraperLog & "   ****   Unable to Download Episode Thumb  ****" & vbCrLf
-                End If
-            End If
-        ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-            tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episode" & vbCrLf
-            Call ep_ScreenShotDo(ext)
-        ElseIf edenart Or frodoart Then
-            If edenart And Not eden And Not frodoart Then
-                IO.File.Copy(ext, ext2)
-                IO.File.Delete(ext)
-            ElseIf edenart And frodo And Not frodoart Then
-                IO.File.Copy(ext, ext2)
-            ElseIf frodoart And Not frodo And Not edenart Then
-                IO.File.Copy(ext2, ext)
-                IO.File.Delete(ext2)
-            ElseIf frodoart And eden And Not edenart Then
-                IO.File.Copy(ext2, ext)
-            End If
-        End If
         '''''Call LoadTvEpisode(WorkingEpisode)
         tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
         messbox.Close()
     End Sub
 
+    Public Function tv_EpisodeFanartGet(ByVal episode As TvEpisode, ByVal doScreenShot As Boolean) As String
+        Dim result As String = "!!!  *** Unable to download Episode Thumb ***"
+        Dim fpath As String = episode.NfoFilePath.Replace(".nfo", ".tbn")
+        Dim paths As New List(Of String)
+        If Preferences.EdenEnabled AndAlso (Preferences.overwritethumbs Or Not File.Exists(fpath)) Then paths.Add(fpath)
+        fpath = fpath.Replace(".tbn", "-thumb.jpg")
+        If Preferences.FrodoEnabled AndAlso (Preferences.overwritethumbs Or Not File.Exists(fpath)) Then paths.Add(fpath)
+        If paths.Count > 0 Then
+            Dim downloadok As Boolean = False
+            If Not episode.Thumbnail.FileName = Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
+                Dim url As String = episode.Thumbnail.FileName
+                If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+                    downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs)
+                End If
+                If downloadok Then result = "!!! Episode Thumb downloaded"
+            Else
+                result = "!!! No thumbnail to download"
+            End If
+            If Not downloadok AndAlso doScreenShot Then
+                downloadok = Utilities.CreateScreenShot(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay, Preferences.overwritethumbs)
+                If downloadok AndAlso paths.Count > 1 Then
+                    File.Copy(paths(0), paths(1), Preferences.overwritethumbs)
+                End If
+                If downloadok Then result = "!!! No Episode thumb to download, Screenshot saved"
+            End If
+        ElseIf paths.Count = 0 Then
+            result = "!!! Episode Thumb(s) already exist and are not set to overwrite"
+        End If
+        Return result
+    End Function
 
     Public Function tv_ShowSelectedCurrently() As Media_Companion.TvShow
         TvTreeview.Focus()
@@ -3841,79 +3833,43 @@ Partial Public Class Form1
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
             If TextBox35.Text = "" Then TextBox35.Text = Preferences.ScrShtDelay
             If IsNumeric(TextBox35.Text) Then
-                Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
-                Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")
+                Dim paths As New List(Of String)
+                If Preferences.EdenEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", ".tbn"))
+                If Preferences.FrodoEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", "-thumb.jpg"))
                 Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                Dim exists As Boolean = False
-                For Each ext In Utilities.VideoExtensions
-                    Dim tempstring2 As String
-                    tempstring2 = pathandfilename & ext
-                    If IO.File.Exists(tempstring2) Then
-                        Dim seconds As Integer = Preferences.ScrShtDelay
-                        If Convert.ToInt32(TextBox35.Text) > 0 Then
-                            seconds = Convert.ToInt32(TextBox35.Text)
-                        End If
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-
-                        Dim proc_arguments As String = ""
-                        Dim myProcess As Process = New Process
-                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        myProcess.StartInfo.CreateNoWindow = False
-                        myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
-                        If Preferences.EdenEnabled = True Then
-                            If IO.File.Exists(thumbpathandfilename) Then
-                                PictureBox14.Image = Nothing
-                                IO.File.Delete(thumbpathandfilename)
-                            End If
-                            proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                            myProcess.StartInfo.Arguments = proc_arguments
-                            myProcess.Start()
-                            myProcess.WaitForExit()
-                        End If
-                        If Preferences.FrodoEnabled = True Then
-                            thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
-                            If IO.File.Exists(thumbpathandfilename) Then
-                                PictureBox14.Image = Nothing
-                                IO.File.Delete(thumbpathandfilename)
-                            End If
-                            proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                            myProcess.StartInfo.Arguments = proc_arguments
-                            myProcess.Start()
-                            myProcess.WaitForExit()
-                        End If
-
-                        If System.IO.File.Exists(thumbpathandfilename) Then
-                            'Dim bitmap2 As New Bitmap(thumbpathandfilename)
-                            'Dim bitmap3 As New Bitmap(bitmap2)
-                            'bitmap2.Dispose()
-                            'PictureBox14.Image = bitmap3
-                            'tv_PictureBoxLeft.Image = bitmap3
-                            util_ImageLoad(PictureBox14, thumbpathandfilename, Utilities.DefaultTvFanartPath)
-                            util_ImageLoad(tv_PictureBoxLeft, thumbpathandfilename, Utilities.DefaultTvFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
-                            Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
-                            If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
-                                Dim episodelist As New List(Of TvEpisode)
-                                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-                                For Each Ep In episodelist
-                                    If Ep.Season.Value = WorkingEpisode.Season.Value And Ep.Episode.Value = WorkingEpisode.Episode.value Then
-                                        Dim video_flags = GetMultiEpMediaFlags(ep)
-                                        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-                                    End If
-                                Next
-                            Else
-                                Dim video_flags = GetEpMediaFlags()
-                                movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-                            End If
-                            'Dim video_flags = GetEpMediaFlags()
-                            'movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-
-                        End If
-                        Exit For
+                Dim tempstring2 As String = WorkingEpisode.VideoFilePath 
+                If IO.File.Exists(tempstring2) Then
+                    Dim seconds As Integer = Preferences.ScrShtDelay
+                    If Convert.ToInt32(TextBox35.Text) > 0 Then
+                        seconds = Convert.ToInt32(TextBox35.Text)
                     End If
-                Next
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+
+                    Utilities.CreateScreenShot(tempstring2, paths(0), seconds, True)
+                    If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
+
+                    If File.Exists(paths(0)) Then
+                        util_ImageLoad(PictureBox14, paths(0), Utilities.DefaultTvFanartPath)
+                        util_ImageLoad(tv_PictureBoxLeft, paths(0), Utilities.DefaultTvFanartPath)
+                        Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
+                        If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
+                            Dim episodelist As New List(Of TvEpisode)
+                            episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                            For Each Ep In episodelist
+                                If Ep.Season.Value = WorkingEpisode.Season.Value And Ep.Episode.Value = WorkingEpisode.Episode.value Then
+                                    Dim video_flags = GetMultiEpMediaFlags(ep)
+                                    movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                                End If
+                            Next
+                        Else
+                            Dim video_flags = GetEpMediaFlags()
+                            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                        End If
+                    End If
+                End If
                 messbox.Close()
             Else
                 MsgBox("Please enter a numerical value into the textbox")

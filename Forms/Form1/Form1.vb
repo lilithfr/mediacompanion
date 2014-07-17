@@ -6225,7 +6225,6 @@ Public Class Form1
         Try
             Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
             Dim tab As String = TabControl3.SelectedTab.Text
-
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
             If (tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences") AndAlso Show Is Nothing Then
                 MsgBox("No TV Show is selected")
@@ -6234,7 +6233,6 @@ Public Class Form1
 
             Dim tempstring As String = ""
             If tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences" Then
-
                 If Show.NfoFilePath = "" And tvFolders.Count = 0 Then
                     Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                     MsgBox("There are no TV Shows in your list to work on" & vbCrLf & "Set the Preferences as you want them" & vbCrLf & "Using the Preferences Tab, then" & vbCrLf & "add your TV Folders using the Folders Tab" & vbCrLf & "Once the tvshow has been scraped then" & vbCrLf & "Use the tab, ""Search for new episodes""")
@@ -6274,7 +6272,6 @@ Public Class Form1
             ElseIf tab = "Main Browser" Then
                 If TvTreeview.Nodes.Count = 0 Then TvTreeview.SelectedNode = TvTreeview.TopNode
                 TvTreeview.Focus()
-
                 tvCurrentTabIndex = 0
             ElseIf tab = "Posters" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
@@ -6285,45 +6282,33 @@ Public Class Form1
             ElseIf tab = "TVDB/IMDB" Then
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
-                    
                     If Preferences.externalbrowser = True Then
                         Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                         Dim t As New frmMessageBox("Please Select","your preferred site","","1","1")
                         t.ShowDialog()
-                        
                         If Preferences.TvInfoSite = "tvdb" Then
                             tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                         Else
                             tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
                         End If
-                        'Process.Start(tempstring)
                         OpenUrl(tempstring)
                     Else
                         tvCurrentTabIndex = TabControl3.SelectedIndex
                         Dim url As String
                         url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                         Try
-                            'If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & TvdbId) = -1 Then
                             WebBrowser4.Stop()
                             WebBrowser4.ScriptErrorsSuppressed = True
-
                             WebBrowser4.Navigate(url)
-                            'WebBrowser4.Refresh()
-                            'End If
                         Catch
                             WebBrowser4.Stop()
                             WebBrowser4.ScriptErrorsSuppressed = True
-
                             WebBrowser4.Navigate(url)
-                            'WebBrowser4.Refresh()
-
                         End Try
                     End If
                 End If
-
             ElseIf tab.ToLower = "fanart" Then
                 Call tv_Fanart_Load()
-
                 tvCurrentTabIndex = TabControl3.SelectedIndex
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
@@ -6339,13 +6324,10 @@ Public Class Form1
             ElseIf tab.ToLower = "folders" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_FoldersSetup()
-
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
-
     End Sub
 
     Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
@@ -6358,19 +6340,13 @@ Public Class Form1
         Dim TvdbId As Integer = Show.TvdbId.value
         url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
         Try
-            'If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & TvdbId) = -1 Then
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
-
             WebBrowser4.Navigate(url)
-            'WebBrowser4.Refresh()
-            'End If
         Catch
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
-
             WebBrowser4.Navigate(url)
-            'WebBrowser4.Refresh()
 
         End Try
     End Sub
@@ -6380,19 +6356,13 @@ Public Class Form1
         Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
         url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
         Try
-            'If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & TvdbId) = -1 Then
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
-
             WebBrowser4.Navigate(url)
-            'WebBrowser4.Refresh()
-            'End If
         Catch
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
-
             WebBrowser4.Navigate(url)
-            'WebBrowser4.Refresh()
 
         End Try
     End Sub
@@ -6409,16 +6379,13 @@ Public Class Form1
             shload.Load(False)
             availableshows.Add(shload)
         Next
-
         messbox.Close()
-        
         Dim tvdbase(availableshows.Count, 8) as String
         DataGridView2.Rows.Clear()
         DataGridView2.Columns.Item(1).DefaultCellStyle.WrapMode = DataGridViewTriState.True
 
         Try
             Dim lst As List(Of TvShow) = (From x In availableshows Order By x.Title.Value).ToList
-                      
             For Each sh As TvShow In lst 
                 Dim n As Integer = DataGridView2.Rows.Add()
                 DataGridView2.Rows(n).Cells(0).Value = sh.Title.Value 
@@ -6431,9 +6398,6 @@ Public Class Form1
                 DataGridView2.Rows(n).Cells(7).Value = sh.ImdbId.Value
                 DataGridView2.Rows(n).Cells(8).Value = sh.Mpaa.Value 
             Next
-            'DataGridView2.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells
-            'DataGridView2.Columns(1).DefaultCellStyle.WrapMode = DataGridViewTriState.True
-            'DataGridView2.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
         Catch
         End Try
     End Sub
@@ -6466,11 +6430,6 @@ Public Class Form1
 
     Private Sub tv_ShowChangedRePopulate()
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        'messbox = New message_box("Please wait,", "", "Getting possible TV Shows from TVDB")
-        'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        'messbox.Show()
-        'Me.Refresh()
-        'messbox.Refresh()
         Try
             If languageList.Count = 0 Then
                 util_LanguageListLoad()
@@ -6559,8 +6518,6 @@ Public Class Form1
             tvCurrentTabIndex = 0
             TabControl3.SelectedIndex = 0
         End Try
-
-        'messbox.Close()
     End Sub
 
     Private Sub Button30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button30.Click
@@ -6691,7 +6648,6 @@ Public Class Form1
                 TvTreeview.Refresh()
                 messbox.Close()
                 TabControl3.SelectedIndex = 0
-
             Else
                 Cache.TvCache.Remove(WorkingTvShow)
                 newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
@@ -6701,150 +6657,10 @@ Public Class Form1
                     Application.DoEvents()
                 End While
                 TabControl3.SelectedIndex = 0
-                ''Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-                'Dim tvdbstuff As New TVDBScraper
-                'Dim tvshowxmlstring As String = tvdbstuff.GetShow(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
-                'If tvshowxmlstring = "!!!Error!!!" Then
-                '    MsgBox("Error scraping show")
-                '    Exit Sub
-                'End If
-
-                'Dim posterurl As String
-                'Dim bannerurl As String
-                'Dim fanarturl As String
-
-                'WorkingTvShow.clearActors()
-
-                'WorkingTvShow.State = Media_Companion.ShowState.Open
-
-                'WorkingTvShow.Title.Value = listOfShows(ListBox3.SelectedIndex).showtitle
-                'WorkingTvShow.TvdbId.Value = listOfShows(ListBox3.SelectedIndex).showid
-                'WorkingTvShow.Language.Value = LanCode
-
-                'If cbTvChgShowOverwriteImgs.Checked Then
-                '    TvDeleteShowArt(WorkingTvShow)
-                'End If
-
-                'If RadioButton11.Checked = True Then
-                '    WorkingTvShow.EpisodeActorSource.Value = "tvdb"
-                'Else
-                '    WorkingTvShow.EpisodeActorSource.Value = "imdb"
-                'End If
-
-                'If RadioButton15.Checked = True Then
-                '    WorkingTvShow.SortOrder.Value = "default"
-                'Else
-                '    WorkingTvShow.SortOrder.Value = "dvd"
-                'End If
-
-                'Dim showlist As New XmlDocument
-                'showlist.LoadXml(tvshowxmlstring)
-                'Dim thisresult As XmlNode = Nothing
-                'For Each thisresult In showlist("fulltvshow")
-                '    Select Case thisresult.Name
-                '        Case "mpaa"
-                '            WorkingTvShow.Mpaa.Value = thisresult.InnerText
-                '        Case "premiered"
-                '            If thisresult.InnerText <> "" Then
-                '                WorkingTvShow.Premiered.Value = thisresult.InnerText
-                '                WorkingTvShow.Year.Value = thisresult.InnerText.Substring(0, 4)
-                '            Else
-                '                WorkingTvShow.Premiered.Value = "N/A"
-                '                WorkingTvShow.Year.Value = "N/A"
-                '            End If
-                '        Case "genre"
-                '            Dim newstring As String
-                '            newstring = thisresult.InnerText
-                '            newstring = newstring.TrimEnd("|")
-                '            newstring = newstring.TrimStart("|")
-                '            newstring = newstring.Replace("|", " / ")
-                '            WorkingTvShow.Genre.Value = newstring
-                '        Case "imdbid"
-                '            WorkingTvShow.ImdbId.Value = thisresult.InnerText
-                '        Case "studio"
-                '            WorkingTvShow.Studio.Value = thisresult.InnerText
-                '        Case "plot"
-                '            WorkingTvShow.Plot.Value = thisresult.InnerText
-                '        Case "rating"
-                '            WorkingTvShow.Rating.Value = thisresult.InnerText
-                '        Case "runtime"
-                '            WorkingTvShow.Runtime.Value = thisresult.InnerText
-                '        Case "banner"
-                '            bannerurl = thisresult.InnerText
-                '        Case "fanart"
-                '            fanarturl = thisresult.InnerText
-                '        Case "poster"
-                '            posterurl = thisresult.InnerText
-                '        Case "episodeguideurl"
-                '            WorkingTvShow.EpisodeGuideUrl.Value = ""
-                '            WorkingTvShow.Url.Value = thisresult.InnerText
-                '            WorkingTvShow.Url.Node.SetAttributeValue("cache", WorkingTvShow.TvdbId.Value)
-                '            WorkingTvShow.Url.AttachToParentNode(WorkingTvShow.EpisodeGuideUrl.Node)
-                '    End Select
-                'Next
-
-                'If RadioButton13.Checked = True Or WorkingTvShow.ImdbId = Nothing Then
-                '    TvGetActorTvdb(WorkingTvShow)
-                'End If
-
-                'If RadioButton12.Checked = True And WorkingTvShow.ImdbId <> Nothing Then
-                '    TvGetActorImdb(WorkingTvShow)
-                'End If
-
-                'Dim artdone As Boolean = False
-                'If cbTvChgShowOverwriteImgs.Checked Then
-                '    artdone = TvGetArtwork(WorkingTvShow, cbTvChgShowDLFanart.CheckState, cbTvChgShowDLPoster.CheckState, cbTvChgShowDLSeason.CheckState, Preferences.dlTVxtrafanart)
-                '    'artdone = True
-                'End If
-
-                'Dim artlist As New List(Of TvBanners)
-                'If artdone = False Then
-                '    Dim thumblist As String = tvdbstuff.GetPosterList(listOfShows(ListBox3.SelectedIndex).showid)
-                '    showlist.LoadXml(thumblist)
-                '    artdone = True
-                '    thisresult = Nothing
-                '    'CheckBox3 = seasons
-                '    'CheckBox4 = fanart
-                '    'CheckBox5 = poster
-                '    For Each thisresult In showlist("banners")
-                '        Select Case thisresult.Name
-                '            Case "banner"
-                '                Dim individualposter As New TvBanners
-                '                For Each results In thisresult.ChildNodes
-                '                    Select Case results.Name
-                '                        Case "url"
-                '                            individualposter.Url = results.InnerText
-                '                        Case "bannertype"
-                '                            individualposter.BannerType = results.InnerText
-                '                        Case "resolution"
-                '                            individualposter.Resolution = results.InnerText
-                '                        Case "language"
-                '                            individualposter.Language = results.InnerText
-                '                        Case "season"
-                '                            individualposter.Season = results.InnerText
-                '                    End Select
-                '                Next
-                '                artlist.Add(individualposter)
-                '        End Select
-                '    Next
-                'End If
-                'For Each url In artlist
-                '    If url.BannerType <> "fanart" Then
-                '        WorkingTvShow.posters.Add(url.Url)
-                '    Else
-                '        WorkingTvShow.fanart.Add(url.Url)
-                '    End If
-                'Next
-
-                'nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True, "unlocked")
-                'Call tv_ShowLoad(WorkingTvShow)
-                'messbox.Close()
-                'TabControl3.SelectedIndex = 0
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
     End Sub
 
     Private Function util_ReplaceXMLChrs(ByVal Text As String)                  'Convert textcodes to real characters
@@ -6854,130 +6670,16 @@ Public Class Form1
         If Text.IndexOf("â€" & Chr(147)) <> -1 Then Text = Text.Replace("â€" & Chr(147), "-")
 
         Return Text
-
     End Function
-
-    Private Sub ep_ScreenShotDo(ByVal filenameandpath As String)
-        Dim thumbpathandfilename As String = filenameandpath
-        Dim pathandfilename As String = filenameandpath.Replace(IO.Path.GetExtension(filenameandpath), "")
-        Dim exists As Boolean = False
-        For Each ext In Utilities.VideoExtensions
-            Dim tempstring2 As String
-            tempstring2 = pathandfilename & ext
-            If IO.File.Exists(tempstring2) Then
-                Dim seconds As Integer = Preferences.ScrShtDelay 
-                Dim myProcess As Process = New Process
-                myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                myProcess.StartInfo.CreateNoWindow = False
-                myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
-                If Preferences.EdenEnabled = True Then
-                    Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                    myProcess.StartInfo.Arguments = proc_arguments
-                    myProcess.Start()
-                    myProcess.WaitForExit()
-                End If
-                If Preferences.FrodoEnabled = True Then
-                    thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
-                    Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                    myProcess.StartInfo.Arguments = proc_arguments
-                    myProcess.Start()
-                    myProcess.WaitForExit()
-                End If
-            End If
-        Next
-        messbox.Close()
-    End Sub
 
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
 
         tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
-        'For Each Episode As Nfo.TvEpisode In alleps
-        '    Episode.Save()
-        'Next
-        'Call nfoFunction.saveepisodenfo(alleps, path)
+
         WorkingWithNfoFiles.ep_NfoSave(alleps, path)
-        Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        Dim ext1 As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        Dim ext2 As String = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
-        Dim eden As Boolean = Preferences.EdenEnabled
-        Dim frodo As Boolean = Preferences.FrodoEnabled
-        Dim edenart As Boolean = IO.File.Exists(ext1)
-        Dim frodoart As Boolean = IO.File.Exists(ext2)
 
-        If Not alleps(0).Thumbnail.FileName = Nothing And alleps(0).Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
-            Dim url As String = alleps(0).Thumbnail.FileName
-            If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                If Utilities.DownloadFile(url, ext) then
-                    If Not eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                        IO.File.Delete(ext)
-                    ElseIf eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                    End If
-                ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-                        tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episode" & vbCrLf
-                        Call ep_ScreenShotDo(ext)
-                Else
-                    tvScraperLog = tvScraperLog & "   ****   Unable to Download Episode Thumb  ****" & vbCrLf
-                End If 
-            End If
-        ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-            tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episode" & vbCrLf
-            Call ep_ScreenShotDo(ext)
-        ElseIf edenart Or frodoart Then
-            If edenart And Not eden And Not frodoart Then
-                IO.File.Copy(ext, ext2)
-                IO.File.Delete(ext)
-            ElseIf edenart And frodo And Not frodoart Then
-                IO.File.Copy(ext, ext2)
-            ElseIf frodoart And Not frodo And Not edenart Then
-                IO.File.Copy(ext2, ext)
-                IO.File.Delete(ext2)
-            ElseIf frodoart And eden And Not edenart Then
-                IO.File.Copy(ext2, ext)
-            End If
-        End If
-        'End If
-        'End If
-        'Else
-        'If IO.File.Exists(ext1) Or IO.File.Exists(ext2) Then
-        'If eden And Not IO.File.Exists(ext1) And IO.File.Exists(2) Then
-        'Dim newname As String
-        'If Not FrodoEnabled Then
+        tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Preferences.autoepisodescreenshot) & vbcrlf
 
-        'End If
-        'End If
-        'If (IO.File.Exists(ext1) Or IO.File.Exists(ext2) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
-        'If Not IO.File.Exists(ext1) And Not IO.File.Exists(ext2) Then
-        'tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
-        'Call ep_ScreenShotDo(ext)
-        'End If
-
-        '    Else
-
-
-        'Dim url As String = alleps(0).Thumbnail.FileName
-        'If url = Nothing Then
-        'Else
-        'If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-        'Utilities.DownloadFile(url, ext)
-        'Else
-        'If (Not IO.File.Exists(ext1) Or Not IO.File.Exists(ext2)) And Preferences.autoepisodescreenshot = True Then
-        'tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
-        'Call ep_ScreenShotDo(ext)
-        'End If
-        'End If
-        'End If
-        'End If
-        'If Preferences.EdenEnabled And Preferences.FrodoEnabled Then        '...What if just Frodo enabled?
-        '           IO.File.Copy(ext, ext.Replace(".tbn", "-thumb.jpg"))
-
-        'Dim newName = ext.Replace(".tbn", "-thumb.jpg")
-
-        'If newName <> ext Then
-        'If Utilities.SafeDeleteFile(newName) Then File.Copy(ext, newName)
-        'End If
-        'End If
         If Preferences.autorenameepisodes = True Then
             Dim eps As New List(Of String)
             eps.Clear()
@@ -17451,28 +17153,7 @@ End Sub
                                                         Cache.TvCache.Shows(f).Episodes(g).Rating.Value = thisresult.InnerText
                                                     Case "thumb"
                                                         If tvBatchList.doEpisodeArt = True Then
-                                                            episodescreenurl = thisresult.InnerText
-                                                            Dim downloadok As Boolean = False
-                                                            Dim paths As New List(Of String)
-                                                            Dim tmppath As String = listofnewepisodes(h).NfoFilePath.Replace(".nfo", ".tbn")
-                                                            If Preferences.EdenEnabled Then
-                                                                If Preferences.overwritethumbs Or Not File.Exists(tmppath) Then paths.Add(tmppath)
-                                                            End If
-                                                            tmppath = tmppath.Replace(".tbn", "-thumb.jpg")
-                                                            If Preferences.FrodoEnabled Then
-                                                                If Preferences.overwritethumbs Or Not File.Exists(tmppath) Then paths.Add(tmppath)
-                                                            End If
-                                                            If paths.Count > 0 Then
-                                                                If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
-                                                                    downloadok = DownloadCache.SaveImageToCacheAndPaths(episodescreenurl, paths, Preferences.overwritethumbs)
-                                                                End If
-                                                                If Not downloadok AndAlso tvBatchList.epScreenshot Then
-                                                                    downloadok = Utilities.CreateScreenShot(listofnewepisodes(h).VideoFilePath, paths(0), Preferences.ScrShtDelay, Preferences.overwritethumbs)
-                                                                    If downloadok AndAlso paths.Count > 1 Then
-                                                                        File.Copy(paths(0), paths(1), Preferences.overwritethumbs)
-                                                                    End If
-                                                                End If
-                                                            End If
+                                                            progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epScreenshot).Replace("!!! ","")
                                                         End If
                                                     Case "actor"
                                                             If tvBatchList.epActor = True And Preferences.episodeacrorsource = "tvdb" Then
@@ -17509,12 +17190,7 @@ End Sub
 #End If
                                             'MsgBox("hekp")
                                         End Try
-                                        'nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
                                         WorkingWithNfoFiles.ep_NfoSave(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
-                                        'For Each Episode In listofnewepisodes
-                                        '    Episode.Save()
-                                        'Next
-                                        'Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).VideoFilePath, listofnewepisodes(h).Season.value, listofnewepisodes(h).episodeno, True )
                                         Exit For
                                     End If
                                 Next
@@ -17525,7 +17201,6 @@ End Sub
                                 listofnewepisodes.Clear()
                                 listofnewepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)   'Generic(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
-                                    'listofnewepisodes(h).Details = Preferences.Get_HdTags(Utilities.GetFileName(listofnewepisodes(h).VideoFilePath))
                                     listofnewepisodes(h).GetFileDetails()
                                     If listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                                         Try
@@ -17542,7 +17217,6 @@ End Sub
                                             Throw ex
 #End If
                                         End Try
-                                        'nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
                                         WorkingWithNfoFiles.ep_NfoSave(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
                                     End If
                                 Next
@@ -17565,9 +17239,6 @@ End Sub
         Try
             If e.ProgressPercentage = 999999 Then
                 ToolStripStatusLabel8.Text = e.UserState
-                'ElseIf e.ProgressPercentage = 888888 Then
-                '    'Dim getthumb As New createscreenshot
-                '    Dim result As String = Utilities.CreateScreenShot(e.UserState, Preferences.ScrShtDelay)
             Else
                 ToolStripStatusLabel8.Text = e.UserState
                 ToolStripProgressBar7.Value = e.ProgressPercentage
@@ -19991,22 +19662,10 @@ End Sub
                 Dim thumbpathandfilename As String = Preferences.GetFanartPath(item.FullPathAndFilename)
                 If Not IO.File.Exists(thumbpathandfilename) Then
                     Try
-                        Dim seconds As Integer = 10
-                        Dim myProcess As Process = New Process
-                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        myProcess.StartInfo.CreateNoWindow = False
-                        myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
-                        Dim proc_arguments As String = "-y -i """ & item.FullPathAndFilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                        myProcess.StartInfo.Arguments = proc_arguments
-                        myProcess.Start()
-                        myProcess.WaitForExit()
-
+                        Utilities.CreateScreenShot(item.FullPathAndFilename, thumbpathandfilename, 10)
                     Catch ex As Exception
 
                     End Try
-
-
-
                 End If
 
                 Dim nfofilename As String = ""
@@ -20524,23 +20183,15 @@ End Sub
         Try
 
             If IsNumeric(tbHomeMovieScreenShotDelay.Text) Then
-                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(WorkingHomeMovie.fileinfo.fullpathandfilename), "-fanart.jpg")
-                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(WorkingHomeMovie.fileinfo.fullpathandfilename), "")
+                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
                 Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                Dim exists As Boolean = False
                 For Each ext In Utilities.VideoExtensions
-                    Dim tempstring2 As String
-                    tempstring2 = pathandfilename & ext
+                    Dim tempstring2 As String = pathandfilename & ext
                     If IO.File.Exists(tempstring2) Then
                         Dim seconds As Integer = 10
                         If Convert.ToInt32(tbHomeMovieScreenShotDelay.Text) > 0 Then
                             seconds = Convert.ToInt32(tbHomeMovieScreenShotDelay.Text)
-                        End If
-
-                        If IO.File.Exists(thumbpathandfilename) Then
-                            PictureBox5.Image = Nothing
-                            PictureBox4.Image = Nothing
-                            IO.File.Delete(thumbpathandfilename)
                         End If
 
                         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -20548,24 +20199,12 @@ End Sub
                         messbox.Refresh()
                         Application.DoEvents()
 
+                        Utilities.CreateScreenShot(tempstring2, thumbpathandfilename, seconds, True)
 
-                        Dim myProcess As Process = New Process
-                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        myProcess.StartInfo.CreateNoWindow = False
-                        myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
-                        Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                        myProcess.StartInfo.Arguments = proc_arguments
-                        myProcess.Start()
-                        myProcess.WaitForExit()
-
-
-                        If System.IO.File.Exists(thumbpathandfilename) Then
+                        If File.Exists(thumbpathandfilename) Then
                             Try
-                                Dim bitmap2 As New Bitmap(thumbpathandfilename)
-                                Dim bitmap3 As New Bitmap(bitmap2)
-                                bitmap2.Dispose()
-                                PictureBox5.Image = bitmap3
-                                PictureBox4.Image = bitmap3
+                                util_ImageLoad(PictureBox5, thumbpathandfilename, Utilities.DefaultFanartPath)
+                                util_ImageLoad(PictureBox4, thumbpathandfilename, Utilities.DefaultFanartPath)
                             Catch
                                 messbox.Close()
                             End Try
