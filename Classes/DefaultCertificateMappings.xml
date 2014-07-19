@@ -11,7 +11,7 @@
   1. Add present these mappings only affect the Certificate movie filter list, i.e. changes ARE NOT written back to the NFO files.
   2. The find text isn't case sensitive.
   
-  Please subject corrections\improvements by raising a new Issue here: https://mediacompanion.codeplex.com/workitem/list/basic
+  Any corrections \ ommissions can be by incorporated into MC by raising a new Issue here: https://mediacompanion.codeplex.com/workitem/list/basic
 -->
 
 <Certificates>
@@ -20,9 +20,8 @@
   <Certificate find="U" replace=" 8" />
   <Certificate find="Rated U" replace=" 8" />
   <Certificate find="Rated 6" replace=" 8" />
-  <Certificate find="TV-G" replace=" 8" />
 
-
+  <Certificate find="TV-G" replace="12" />
   <Certificate find="G" replace="12" />
   <Certificate find="11" replace="12" />
   <Certificate find="12A" replace="12" />
@@ -42,7 +41,6 @@
   <Certificate find="o.Al." replace="12" />
   <Certificate find="PG*" replace="12" />
   <Certificate find="Rated PG*" replace="12" />
-  <Certificate find="TV-14" replace="12" />
   <Certificate find="TV-MA" replace="12" />
   <Certificate find="TV-PG" replace="12" />
   <Certificate find="E" replace="12" />
@@ -52,6 +50,7 @@
   <Certificate find="Rated TV-PG" replace="12" />
 
 
+  <Certificate find="TV-14" replace="15" />
   <Certificate find="14" replace="15" />
   <Certificate find="15A" replace="15" />
   <Certificate find="16" replace="15" />
