@@ -8,21 +8,16 @@ Public Class Form2
     Const SetDefaults = True
     Dim editsmade As Boolean = False
     Dim thumbeditsmade As Boolean = False
-    'Dim actorlist As Integer = Nothing
-    'Dim actors(1000, 3)
-    'Dim actorcount As Integer
-
     Dim oldactors(9999, 2)
     Dim actorcount As Integer = 0
     Dim workingmovieedit As New FullMovieDetails
     Dim posterpath As String = ""
     Dim cropstring As String
     Dim datechanged As Boolean = False
+    Dim PremierDateChanged As Boolean = False
     Dim textBoxList As List(Of TextBox)
 
-
-
-
+    
     Private Sub Form2_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Try
             Call checkforedits()
@@ -34,12 +29,15 @@ Public Class Form2
     Private Sub setupdisplay()
         actorcb.Items.Clear()
         If workingmovieedit.fullmoviebody.title <> Nothing Then titletxt.Text = workingmovieedit.fullmoviebody.title
+        If workingmovieedit.fullmoviebody.originaltitle <> Nothing Then originaltxt.Text = workingmovieedit.fullmoviebody.originaltitle
+        If workingmovieedit.fullmoviebody.sortorder <> Nothing Then sorttxt.Text = workingmovieedit.fullmoviebody.sortorder 
         If workingmovieedit.fullmoviebody.director <> Nothing Then directortxt.Text = workingmovieedit.fullmoviebody.director
         If workingmovieedit.fullmoviebody.stars <> Nothing Then starstxt.Text = workingmovieedit.fullmoviebody.stars
         If workingmovieedit.fullmoviebody.runtime <> Nothing Then runtimetxt.Text = workingmovieedit.fullmoviebody.runtime
         If workingmovieedit.fullmoviebody.credits <> Nothing Then creditstxt.Text = workingmovieedit.fullmoviebody.credits
         If workingmovieedit.fullmoviebody.mpaa <> Nothing Then mpaatxt.Text = workingmovieedit.fullmoviebody.mpaa
         If workingmovieedit.fullmoviebody.studio <> Nothing Then studiotxt.Text = workingmovieedit.fullmoviebody.studio
+        If workingmovieedit.fullmoviebody.country <> Nothing Then countrytxt.Text = workingmovieedit.fullmoviebody.country 
         If workingmovieedit.fullmoviebody.genre <> Nothing Then genretxt.Text = workingmovieedit.fullmoviebody.genre
         If workingmovieedit.fullmoviebody.year <> Nothing Then yeartxt.Text = workingmovieedit.fullmoviebody.year
         If workingmovieedit.fullmoviebody.rating <> Nothing Then ratingtxt.Text = workingmovieedit.fullmoviebody.rating
@@ -52,6 +50,10 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.trailer <> Nothing Then tb_TrailerURL.Text = workingmovieedit.fullmoviebody.trailer
         Try
             If workingmovieedit.fileinfo.createdate <> Nothing Then Createdatepicker.Value = workingmovieedit.fileinfo.createdate
+        Catch
+        End Try
+        Try
+            If workingmovieedit.fullmoviebody.premiered <> Nothing Then PremieredDatePicker.Value = workingmovieedit.fullmoviebody.premiered 
         Catch
         End Try
         If workingmovieedit.fileinfo.fullpathandfilename <> Nothing Then filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
@@ -101,8 +103,10 @@ Public Class Form2
                     End If
                 End If
             Next
-            Createdatepicker.CustomFormat = "yyyyMMddhhmmss"   'Preferences.DateFormat
-            Createdatepicker.Format = DateTimePickerFormat.Custom 
+            Createdatepicker.CustomFormat = Preferences.datePattern   '"yyyyMMddhhmmss"   
+            Createdatepicker.Format = DateTimePickerFormat.Custom
+            PremieredDatePicker.CustomFormat = Preferences.nfoDatePattern  '"yyyy-MM-dd"
+            PremieredDatePicker.Format = DateTimePickerFormat.Custom 
              
             Panel2.Dock = DockStyle.Fill
             Call setupdisplay()
@@ -139,7 +143,6 @@ Public Class Form2
 
     End Sub
 
-
     Private Sub btnexit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnexit.Click
         Try
             Me.Close()
@@ -172,6 +175,7 @@ Public Class Form2
             ExceptionHandler.LogError(ex)
         End Try
     End Sub ' Edit Actor Button
+
     Private Sub btndeleteactor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btndeleteactor.Click
         Try
             If actorcb.Items.Count <> 0 Then
@@ -195,6 +199,7 @@ Public Class Form2
             ExceptionHandler.LogError(ex)
         End Try
     End Sub ' Delete Actor Button
+
     Private Sub btnaddactor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnaddactor.Click
         Try
             Dim newactor As New Actor
@@ -220,24 +225,6 @@ Public Class Form2
     Private Sub btnchangemovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnchangemovie.Click
         Try
             MsgBox("Use 'Change Movie' on main Media Companion",vbExclamation)
-            'Dim tempstring As String
-            'Dim url As String
-            'If Preferences.usefoldernames = True Then
-            '    tempstring = Form1.workingMovie.foldername
-            'Else
-            '    tempstring = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)))
-            'End If
-
-            'tempstring = tempstring.Replace(" ", "+")
-            'tempstring = tempstring.Replace("&", "%26")
-
-
-            'url = Preferences.imdbmirror & "find?s=tt&q=" & tempstring
-            'WebBrowser2.Stop()
-            'WebBrowser2.ScriptErrorsSuppressed = True
-            'WebBrowser2.Navigate(url)
-            'WebBrowser2.Refresh()
-            'Panel2.Visible = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -261,7 +248,7 @@ Public Class Form2
     '_______________________________________________________
     '_________________Crop Thumbnail Code___________________
     '_______________________________________________________
-
+#Region "Crop"
     Private Function CropImage(ByVal SrcBmp As Bitmap, ByVal NewSize As Size, ByVal StartPoint As Point) As Bitmap
         Dim SrcRect As New Rectangle(StartPoint.X, StartPoint.Y, NewSize.Width, NewSize.Height)
         Dim DestRect As New Rectangle(0, 0, NewSize.Width, NewSize.Height)
@@ -406,7 +393,7 @@ Public Class Form2
             ExceptionHandler.LogError(ex)
         End Try
     End Sub ' Set auto repeat for crop
-
+#End Region 
 
 
     Private Sub btnsavechanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavechanges.Click
@@ -445,9 +432,17 @@ Public Class Form2
             Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
             Form1.workingMovieDetails.listactors = workingmovieedit.listactors
             Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
-            Dim credate As date = Createdatepicker.Value
             If datechanged Then
-                workingmovieedit.fileinfo.createdate = Format(credate, Preferences.datePattern).ToString
+                Dim credate As String =  Format(Createdatepicker.Value, Preferences.datePattern).ToString
+                If workingmovieedit.fileinfo.createdate <> credate Then
+                    workingmovieedit.fileinfo.createdate = credate 'Format(credate, Preferences.datePattern).ToString
+                End If
+            End If
+            If PremierDateChanged Then
+                Dim premdate As String = Format(PremieredDatePicker.Value, Preferences.nfoDatePattern).ToString
+                If workingmovieedit.fullmoviebody.premiered <> premdate Then
+                    workingmovieedit.fullmoviebody.premiered = premdate 
+                End If
             End If
 
             ' check valid url of trailer if changed
@@ -557,9 +552,12 @@ Public Class Form2
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Try
             titletxt.Text = ""
+            originaltxt.Text = ""
+            sorttxt.Text = ""
             directortxt.Text = ""
             creditstxt.Text = ""
             studiotxt.Text = ""
+            countrytxt.Text = ""
             yeartxt.Text = ""
             outlinetxt.Text = ""
             plottxt.Text = ""
@@ -587,10 +585,13 @@ Public Class Form2
             workingmovieedit.filedetails.filedetails_video.ScanType = Nothing
             workingmovieedit.filedetails.filedetails_video.Width = Nothing
             workingmovieedit.fullmoviebody.title = Nothing
+            workingmovieedit.fullmoviebody.originaltitle = Nothing
+            workingmovieedit.fullmoviebody.sortorder = Nothing
             workingmovieedit.fullmoviebody.director = Nothing
             workingmovieedit.fullmoviebody.stars = Nothing
             workingmovieedit.fullmoviebody.credits = Nothing
             workingmovieedit.fullmoviebody.studio = Nothing
+            workingmovieedit.fullmoviebody.country = Nothing
             workingmovieedit.fullmoviebody.outline = Nothing
             workingmovieedit.fullmoviebody.plot = Nothing
             workingmovieedit.fullmoviebody.tagline = Nothing
@@ -625,10 +626,13 @@ Public Class Form2
             TextBox3.Text = ""
             TextBox4.Text = ""
             titletxt.Text = ""
+            originaltxt.Text = ""
+            sorttxt.Text = ""
             directortxt.Text = ""
             creditstxt.Text = ""
             studiotxt.Text = ""
             yeartxt.Text = ""
+            countrytxt.Text = ""
             outlinetxt.Text = ""
             plottxt.Text = ""
             taglinetxt.Text = ""
@@ -672,6 +676,19 @@ Public Class Form2
     Private Sub Createdatepicker_CloseUp(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Createdatepicker.CloseUp
       AddHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
       Call Createdatepicker_ValueChanged(sender, EventArgs.Empty)
+    End Sub
+
+    Private Sub PremieredDatePicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles PremieredDatePicker.ValueChanged
+            PremierDateChanged = True
+    End Sub
+
+    Private Sub PremieredDatePicker_DropDown(ByVal sender As Object, ByVal e As EventArgs) Handles PremieredDatePicker.DropDown
+      RemoveHandler PremieredDatePicker.ValueChanged, AddressOf PremieredDatePicker_ValueChanged
+    End Sub
+
+    Private Sub PremieredDatePicker_CloseUp(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PremieredDatePicker.CloseUp
+      AddHandler PremieredDatePicker.ValueChanged, AddressOf PremieredDatePicker_ValueChanged
+      Call PremieredDatePicker_ValueChanged(sender, EventArgs.Empty)
     End Sub
 
     Private Sub AnyTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)

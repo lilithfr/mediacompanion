@@ -111,6 +111,14 @@ Partial Class Form2
         Me.Createdatepicker = New System.Windows.Forms.DateTimePicker()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.tb_TrailerURL = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.countrytxt = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.originaltxt = New System.Windows.Forms.TextBox()
+        Me.sorttxt = New System.Windows.Forms.TextBox()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.PremieredDatePicker = New System.Windows.Forms.DateTimePicker()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.Panel2.SuspendLayout
@@ -120,16 +128,16 @@ Partial Class Form2
         'runtimetxt
         '
         Me.runtimetxt.BackColor = System.Drawing.Color.White
-        Me.runtimetxt.Location = New System.Drawing.Point(488, 46)
+        Me.runtimetxt.Location = New System.Drawing.Point(127, 183)
         Me.runtimetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.runtimetxt.Name = "runtimetxt"
-        Me.runtimetxt.Size = New System.Drawing.Size(263, 20)
+        Me.runtimetxt.Size = New System.Drawing.Size(104, 20)
         Me.runtimetxt.TabIndex = 59
         '
         'votestxt
         '
         Me.votestxt.BackColor = System.Drawing.Color.White
-        Me.votestxt.Location = New System.Drawing.Point(293, 170)
+        Me.votestxt.Location = New System.Drawing.Point(309, 158)
         Me.votestxt.Margin = New System.Windows.Forms.Padding(4)
         Me.votestxt.Name = "votestxt"
         Me.votestxt.Size = New System.Drawing.Size(97, 20)
@@ -138,7 +146,7 @@ Partial Class Form2
         'ratingtxt
         '
         Me.ratingtxt.BackColor = System.Drawing.Color.White
-        Me.ratingtxt.Location = New System.Drawing.Point(293, 138)
+        Me.ratingtxt.Location = New System.Drawing.Point(309, 127)
         Me.ratingtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.ratingtxt.Name = "ratingtxt"
         Me.ratingtxt.Size = New System.Drawing.Size(97, 20)
@@ -147,17 +155,17 @@ Partial Class Form2
         'idtxt
         '
         Me.idtxt.BackColor = System.Drawing.Color.White
-        Me.idtxt.Location = New System.Drawing.Point(488, 138)
+        Me.idtxt.Location = New System.Drawing.Point(309, 183)
         Me.idtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.idtxt.Name = "idtxt"
         Me.idtxt.ReadOnly = true
-        Me.idtxt.Size = New System.Drawing.Size(262, 20)
+        Me.idtxt.Size = New System.Drawing.Size(97, 20)
         Me.idtxt.TabIndex = 56
         '
         'yeartxt
         '
         Me.yeartxt.BackColor = System.Drawing.Color.White
-        Me.yeartxt.Location = New System.Drawing.Point(127, 139)
+        Me.yeartxt.Location = New System.Drawing.Point(127, 127)
         Me.yeartxt.Margin = New System.Windows.Forms.Padding(4)
         Me.yeartxt.Name = "yeartxt"
         Me.yeartxt.Size = New System.Drawing.Size(104, 20)
@@ -166,7 +174,7 @@ Partial Class Form2
         'genretxt
         '
         Me.genretxt.BackColor = System.Drawing.Color.White
-        Me.genretxt.Location = New System.Drawing.Point(488, 108)
+        Me.genretxt.Location = New System.Drawing.Point(488, 99)
         Me.genretxt.Margin = New System.Windows.Forms.Padding(4)
         Me.genretxt.Name = "genretxt"
         Me.genretxt.Size = New System.Drawing.Size(263, 20)
@@ -175,7 +183,7 @@ Partial Class Form2
         'mpaatxt
         '
         Me.mpaatxt.BackColor = System.Drawing.Color.White
-        Me.mpaatxt.Location = New System.Drawing.Point(488, 78)
+        Me.mpaatxt.Location = New System.Drawing.Point(488, 127)
         Me.mpaatxt.Margin = New System.Windows.Forms.Padding(4)
         Me.mpaatxt.Name = "mpaatxt"
         Me.mpaatxt.Size = New System.Drawing.Size(263, 20)
@@ -184,28 +192,28 @@ Partial Class Form2
         'studiotxt
         '
         Me.studiotxt.BackColor = System.Drawing.Color.White
-        Me.studiotxt.Location = New System.Drawing.Point(127, 107)
+        Me.studiotxt.Location = New System.Drawing.Point(127, 99)
         Me.studiotxt.Margin = New System.Windows.Forms.Padding(4)
         Me.studiotxt.Name = "studiotxt"
-        Me.studiotxt.Size = New System.Drawing.Size(263, 20)
+        Me.studiotxt.Size = New System.Drawing.Size(279, 20)
         Me.studiotxt.TabIndex = 52
         '
         'creditstxt
         '
         Me.creditstxt.BackColor = System.Drawing.Color.White
-        Me.creditstxt.Location = New System.Drawing.Point(127, 76)
+        Me.creditstxt.Location = New System.Drawing.Point(488, 71)
         Me.creditstxt.Margin = New System.Windows.Forms.Padding(4)
         Me.creditstxt.Name = "creditstxt"
-        Me.creditstxt.Size = New System.Drawing.Size(263, 20)
+        Me.creditstxt.Size = New System.Drawing.Size(262, 20)
         Me.creditstxt.TabIndex = 51
         '
         'directortxt
         '
         Me.directortxt.BackColor = System.Drawing.Color.White
-        Me.directortxt.Location = New System.Drawing.Point(127, 46)
+        Me.directortxt.Location = New System.Drawing.Point(127, 71)
         Me.directortxt.Margin = New System.Windows.Forms.Padding(4)
         Me.directortxt.Name = "directortxt"
-        Me.directortxt.Size = New System.Drawing.Size(263, 20)
+        Me.directortxt.Size = New System.Drawing.Size(279, 20)
         Me.directortxt.TabIndex = 50
         '
         'titletxt
@@ -214,13 +222,13 @@ Partial Class Form2
         Me.titletxt.Location = New System.Drawing.Point(127, 15)
         Me.titletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.titletxt.Name = "titletxt"
-        Me.titletxt.Size = New System.Drawing.Size(624, 20)
+        Me.titletxt.Size = New System.Drawing.Size(357, 20)
         Me.titletxt.TabIndex = 49
         '
         'taglinetxt
         '
         Me.taglinetxt.BackColor = System.Drawing.Color.White
-        Me.taglinetxt.Location = New System.Drawing.Point(126, 482)
+        Me.taglinetxt.Location = New System.Drawing.Point(127, 491)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
@@ -230,7 +238,7 @@ Partial Class Form2
         'plottxt
         '
         Me.plottxt.BackColor = System.Drawing.Color.White
-        Me.plottxt.Location = New System.Drawing.Point(127, 349)
+        Me.plottxt.Location = New System.Drawing.Point(127, 359)
         Me.plottxt.Margin = New System.Windows.Forms.Padding(4)
         Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
@@ -241,7 +249,7 @@ Partial Class Form2
         'outlinetxt
         '
         Me.outlinetxt.BackColor = System.Drawing.Color.White
-        Me.outlinetxt.Location = New System.Drawing.Point(127, 293)
+        Me.outlinetxt.Location = New System.Drawing.Point(127, 303)
         Me.outlinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
@@ -252,7 +260,7 @@ Partial Class Form2
         '
         Me.runtime.AutoSize = true
         Me.runtime.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.runtime.Location = New System.Drawing.Point(399, 46)
+        Me.runtime.Location = New System.Drawing.Point(21, 183)
         Me.runtime.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.runtime.Name = "runtime"
         Me.runtime.Size = New System.Drawing.Size(66, 16)
@@ -263,7 +271,7 @@ Partial Class Form2
         '
         Me.studio.AutoSize = true
         Me.studio.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.studio.Location = New System.Drawing.Point(21, 107)
+        Me.studio.Location = New System.Drawing.Point(21, 99)
         Me.studio.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.studio.Name = "studio"
         Me.studio.Size = New System.Drawing.Size(55, 16)
@@ -274,7 +282,7 @@ Partial Class Form2
         '
         Me.imdb.AutoSize = true
         Me.imdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.imdb.Location = New System.Drawing.Point(399, 139)
+        Me.imdb.Location = New System.Drawing.Point(239, 184)
         Me.imdb.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.imdb.Name = "imdb"
         Me.imdb.Size = New System.Drawing.Size(66, 16)
@@ -285,7 +293,7 @@ Partial Class Form2
         '
         Me.tagline.AutoSize = true
         Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tagline.Location = New System.Drawing.Point(21, 482)
+        Me.tagline.Location = New System.Drawing.Point(22, 491)
         Me.tagline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.tagline.Name = "tagline"
         Me.tagline.Size = New System.Drawing.Size(63, 16)
@@ -296,7 +304,7 @@ Partial Class Form2
         '
         Me.plot.AutoSize = true
         Me.plot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.plot.Location = New System.Drawing.Point(21, 349)
+        Me.plot.Location = New System.Drawing.Point(21, 359)
         Me.plot.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.plot.Name = "plot"
         Me.plot.Size = New System.Drawing.Size(40, 16)
@@ -307,7 +315,7 @@ Partial Class Form2
         '
         Me.outline.AutoSize = true
         Me.outline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.outline.Location = New System.Drawing.Point(21, 294)
+        Me.outline.Location = New System.Drawing.Point(21, 304)
         Me.outline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.outline.Name = "outline"
         Me.outline.Size = New System.Drawing.Size(58, 16)
@@ -328,7 +336,7 @@ Partial Class Form2
         '
         Me.votes.AutoSize = true
         Me.votes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.votes.Location = New System.Drawing.Point(239, 171)
+        Me.votes.Location = New System.Drawing.Point(239, 159)
         Me.votes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.votes.Name = "votes"
         Me.votes.Size = New System.Drawing.Size(52, 16)
@@ -339,7 +347,7 @@ Partial Class Form2
         '
         Me.year.AutoSize = true
         Me.year.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.year.Location = New System.Drawing.Point(21, 140)
+        Me.year.Location = New System.Drawing.Point(21, 128)
         Me.year.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.year.Name = "year"
         Me.year.Size = New System.Drawing.Size(46, 16)
@@ -350,7 +358,7 @@ Partial Class Form2
         '
         Me.mpaa.AutoSize = true
         Me.mpaa.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.mpaa.Location = New System.Drawing.Point(399, 78)
+        Me.mpaa.Location = New System.Drawing.Point(414, 130)
         Me.mpaa.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.mpaa.Name = "mpaa"
         Me.mpaa.Size = New System.Drawing.Size(55, 16)
@@ -361,7 +369,7 @@ Partial Class Form2
         '
         Me.rating.AutoSize = true
         Me.rating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rating.Location = New System.Drawing.Point(239, 140)
+        Me.rating.Location = New System.Drawing.Point(239, 128)
         Me.rating.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.rating.Name = "rating"
         Me.rating.Size = New System.Drawing.Size(56, 16)
@@ -372,7 +380,7 @@ Partial Class Form2
         '
         Me.credits.AutoSize = true
         Me.credits.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.credits.Location = New System.Drawing.Point(21, 76)
+        Me.credits.Location = New System.Drawing.Point(414, 72)
         Me.credits.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.credits.Name = "credits"
         Me.credits.Size = New System.Drawing.Size(59, 16)
@@ -383,7 +391,7 @@ Partial Class Form2
         '
         Me.genre.AutoSize = true
         Me.genre.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.genre.Location = New System.Drawing.Point(399, 108)
+        Me.genre.Location = New System.Drawing.Point(414, 100)
         Me.genre.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.genre.Name = "genre"
         Me.genre.Size = New System.Drawing.Size(54, 16)
@@ -394,7 +402,7 @@ Partial Class Form2
         '
         Me.director.AutoSize = true
         Me.director.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.director.Location = New System.Drawing.Point(21, 46)
+        Me.director.Location = New System.Drawing.Point(21, 69)
         Me.director.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.director.Name = "director"
         Me.director.Size = New System.Drawing.Size(64, 16)
@@ -415,7 +423,7 @@ Partial Class Form2
         'roletxt
         '
         Me.roletxt.BackColor = System.Drawing.Color.White
-        Me.roletxt.Location = New System.Drawing.Point(441, 547)
+        Me.roletxt.Location = New System.Drawing.Point(441, 557)
         Me.roletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.roletxt.Name = "roletxt"
         Me.roletxt.ReadOnly = true
@@ -426,7 +434,7 @@ Partial Class Form2
         '
         Me.Label5.AutoSize = true
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label5.Location = New System.Drawing.Point(437, 522)
+        Me.Label5.Location = New System.Drawing.Point(437, 532)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 16)
@@ -437,7 +445,7 @@ Partial Class Form2
         '
         Me.Label4.AutoSize = true
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label4.Location = New System.Drawing.Point(123, 522)
+        Me.Label4.Location = New System.Drawing.Point(123, 532)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 16)
@@ -448,7 +456,7 @@ Partial Class Form2
         '
         Me.actorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.actorcb.FormattingEnabled = true
-        Me.actorcb.Location = New System.Drawing.Point(127, 546)
+        Me.actorcb.Location = New System.Drawing.Point(127, 556)
         Me.actorcb.Margin = New System.Windows.Forms.Padding(4)
         Me.actorcb.Name = "actorcb"
         Me.actorcb.Size = New System.Drawing.Size(309, 21)
@@ -483,7 +491,7 @@ Partial Class Form2
         Me.filenametxt.Margin = New System.Windows.Forms.Padding(4)
         Me.filenametxt.Name = "filenametxt"
         Me.filenametxt.ReadOnly = true
-        Me.filenametxt.Size = New System.Drawing.Size(624, 20)
+        Me.filenametxt.Size = New System.Drawing.Size(623, 20)
         Me.filenametxt.TabIndex = 69
         '
         'filename
@@ -499,7 +507,7 @@ Partial Class Form2
         '
         'btnaddactor
         '
-        Me.btnaddactor.Location = New System.Drawing.Point(19, 616)
+        Me.btnaddactor.Location = New System.Drawing.Point(19, 626)
         Me.btnaddactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btnaddactor.Name = "btnaddactor"
         Me.btnaddactor.Size = New System.Drawing.Size(100, 28)
@@ -510,7 +518,7 @@ Partial Class Form2
         '
         'btndeleteactor
         '
-        Me.btndeleteactor.Location = New System.Drawing.Point(19, 542)
+        Me.btndeleteactor.Location = New System.Drawing.Point(19, 552)
         Me.btndeleteactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btndeleteactor.Name = "btndeleteactor"
         Me.btndeleteactor.Size = New System.Drawing.Size(100, 28)
@@ -542,7 +550,7 @@ Partial Class Form2
         'btneditactor
         '
         Me.btneditactor.Enabled = false
-        Me.btneditactor.Location = New System.Drawing.Point(19, 578)
+        Me.btneditactor.Location = New System.Drawing.Point(19, 588)
         Me.btneditactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btneditactor.Name = "btneditactor"
         Me.btneditactor.Size = New System.Drawing.Size(100, 28)
@@ -554,7 +562,7 @@ Partial Class Form2
         'TextBox1
         '
         Me.TextBox1.Enabled = false
-        Me.TextBox1.Location = New System.Drawing.Point(127, 583)
+        Me.TextBox1.Location = New System.Drawing.Point(127, 593)
         Me.TextBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(309, 20)
@@ -563,7 +571,7 @@ Partial Class Form2
         'TextBox2
         '
         Me.TextBox2.Enabled = false
-        Me.TextBox2.Location = New System.Drawing.Point(441, 584)
+        Me.TextBox2.Location = New System.Drawing.Point(441, 594)
         Me.TextBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(309, 20)
@@ -571,7 +579,7 @@ Partial Class Form2
         '
         'TextBox3
         '
-        Me.TextBox3.Location = New System.Drawing.Point(127, 621)
+        Me.TextBox3.Location = New System.Drawing.Point(127, 631)
         Me.TextBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(309, 20)
@@ -579,7 +587,7 @@ Partial Class Form2
         '
         'TextBox4
         '
-        Me.TextBox4.Location = New System.Drawing.Point(441, 621)
+        Me.TextBox4.Location = New System.Drawing.Point(441, 631)
         Me.TextBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.Size = New System.Drawing.Size(309, 20)
@@ -720,7 +728,7 @@ Partial Class Form2
         '
         Me.Label8.AutoSize = true
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label8.Location = New System.Drawing.Point(162, 391)
+        Me.Label8.Location = New System.Drawing.Point(162, 401)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(535, 42)
@@ -906,7 +914,7 @@ Partial Class Form2
         '
         'starstxt
         '
-        Me.starstxt.Location = New System.Drawing.Point(127, 261)
+        Me.starstxt.Location = New System.Drawing.Point(127, 272)
         Me.starstxt.Name = "starstxt"
         Me.starstxt.Size = New System.Drawing.Size(623, 20)
         Me.starstxt.TabIndex = 115
@@ -915,7 +923,7 @@ Partial Class Form2
         '
         Me.Label6.AutoSize = true
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label6.Location = New System.Drawing.Point(21, 262)
+        Me.Label6.Location = New System.Drawing.Point(21, 273)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(45, 16)
         Me.Label6.TabIndex = 116
@@ -936,7 +944,7 @@ Partial Class Form2
         '
         Me.Label9.AutoSize = true
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label9.Location = New System.Drawing.Point(21, 168)
+        Me.Label9.Location = New System.Drawing.Point(21, 156)
         Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(66, 16)
@@ -947,7 +955,7 @@ Partial Class Form2
         '
         Me.Label11.AutoSize = true
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label11.Location = New System.Drawing.Point(398, 171)
+        Me.Label11.Location = New System.Drawing.Point(414, 188)
         Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(97, 16)
@@ -957,7 +965,7 @@ Partial Class Form2
         'top250txt
         '
         Me.top250txt.BackColor = System.Drawing.Color.White
-        Me.top250txt.Location = New System.Drawing.Point(127, 167)
+        Me.top250txt.Location = New System.Drawing.Point(127, 155)
         Me.top250txt.Margin = New System.Windows.Forms.Padding(4)
         Me.top250txt.Name = "top250txt"
         Me.top250txt.Size = New System.Drawing.Size(104, 20)
@@ -965,7 +973,7 @@ Partial Class Form2
         '
         'Createdatepicker
         '
-        Me.Createdatepicker.Location = New System.Drawing.Point(488, 166)
+        Me.Createdatepicker.Location = New System.Drawing.Point(518, 184)
         Me.Createdatepicker.Name = "Createdatepicker"
         Me.Createdatepicker.Size = New System.Drawing.Size(200, 20)
         Me.Createdatepicker.TabIndex = 123
@@ -974,7 +982,7 @@ Partial Class Form2
         '
         Me.Label19.AutoSize = true
         Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label19.Location = New System.Drawing.Point(21, 202)
+        Me.Label19.Location = New System.Drawing.Point(21, 221)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(83, 16)
         Me.Label19.TabIndex = 124
@@ -983,7 +991,7 @@ Partial Class Form2
         'tb_TrailerURL
         '
         Me.tb_TrailerURL.BackColor = System.Drawing.Color.White
-        Me.tb_TrailerURL.Location = New System.Drawing.Point(127, 198)
+        Me.tb_TrailerURL.Location = New System.Drawing.Point(127, 217)
         Me.tb_TrailerURL.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_TrailerURL.Multiline = true
         Me.tb_TrailerURL.Name = "tb_TrailerURL"
@@ -991,9 +999,89 @@ Partial Class Form2
         Me.tb_TrailerURL.Size = New System.Drawing.Size(623, 47)
         Me.tb_TrailerURL.TabIndex = 125
         '
+        'Label20
+        '
+        Me.Label20.AutoSize = true
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label20.Location = New System.Drawing.Point(414, 159)
+        Me.Label20.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(62, 16)
+        Me.Label20.TabIndex = 126
+        Me.Label20.Text = "Country : "
+        '
+        'countrytxt
+        '
+        Me.countrytxt.Location = New System.Drawing.Point(488, 155)
+        Me.countrytxt.Name = "countrytxt"
+        Me.countrytxt.Size = New System.Drawing.Size(262, 20)
+        Me.countrytxt.TabIndex = 127
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = true
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label21.Location = New System.Drawing.Point(22, 42)
+        Me.Label21.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(92, 16)
+        Me.Label21.TabIndex = 128
+        Me.Label21.Text = "Original Title : "
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = true
+        Me.Label22.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label22.Location = New System.Drawing.Point(414, 42)
+        Me.Label22.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(70, 16)
+        Me.Label22.TabIndex = 129
+        Me.Label22.Text = "Sort Title : "
+        '
+        'originaltxt
+        '
+        Me.originaltxt.Location = New System.Drawing.Point(127, 41)
+        Me.originaltxt.Name = "originaltxt"
+        Me.originaltxt.Size = New System.Drawing.Size(279, 20)
+        Me.originaltxt.TabIndex = 130
+        '
+        'sorttxt
+        '
+        Me.sorttxt.Location = New System.Drawing.Point(488, 41)
+        Me.sorttxt.Name = "sorttxt"
+        Me.sorttxt.Size = New System.Drawing.Size(262, 20)
+        Me.sorttxt.TabIndex = 131
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = true
+        Me.Label23.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label23.Location = New System.Drawing.Point(492, 16)
+        Me.Label23.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(80, 16)
+        Me.Label23.TabIndex = 132
+        Me.Label23.Text = "Premiered : "
+        '
+        'PremieredDatePicker
+        '
+        Me.PremieredDatePicker.Location = New System.Drawing.Point(569, 12)
+        Me.PremieredDatePicker.Name = "PremieredDatePicker"
+        Me.PremieredDatePicker.Size = New System.Drawing.Size(181, 20)
+        Me.PremieredDatePicker.TabIndex = 133
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.PremieredDatePicker)
+        Me.Controls.Add(Me.Label23)
+        Me.Controls.Add(Me.sorttxt)
+        Me.Controls.Add(Me.originaltxt)
+        Me.Controls.Add(Me.Label22)
+        Me.Controls.Add(Me.Label21)
+        Me.Controls.Add(Me.countrytxt)
+        Me.Controls.Add(Me.Label20)
         Me.Controls.Add(Me.tb_TrailerURL)
         Me.Controls.Add(Me.Label19)
         Me.Controls.Add(Me.Createdatepicker)
@@ -1171,4 +1259,12 @@ End Sub
     Friend WithEvents Createdatepicker As System.Windows.Forms.DateTimePicker
     Friend WithEvents Label19 As System.Windows.Forms.Label
     Friend WithEvents tb_TrailerURL As System.Windows.Forms.TextBox
+    Friend WithEvents Label20 As System.Windows.Forms.Label
+    Friend WithEvents countrytxt As System.Windows.Forms.TextBox
+    Friend WithEvents Label21 As System.Windows.Forms.Label
+    Friend WithEvents Label22 As System.Windows.Forms.Label
+    Friend WithEvents originaltxt As System.Windows.Forms.TextBox
+    Friend WithEvents sorttxt As System.Windows.Forms.TextBox
+    Friend WithEvents Label23 As System.Windows.Forms.Label
+    Friend WithEvents PremieredDatePicker As System.Windows.Forms.DateTimePicker
 End Class
