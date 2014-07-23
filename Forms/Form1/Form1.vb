@@ -1691,6 +1691,7 @@ Public Class Form1
                 creditstxt.Text = workingMovieDetails.fullmoviebody.credits
                 directortxt.Text = workingMovieDetails.fullmoviebody.director
                 studiotxt.Text  = workingMovieDetails.fullmoviebody.studio
+                countrytxt.Text = workingMovieDetails.fullmoviebody.country 
                 pathtxt.Text    = workingMovie.fullpathandfilename
                 ratingtxt.Text  = workingMovieDetails.fullmoviebody.rating.FormatRating
                 imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
@@ -1862,6 +1863,7 @@ Public Class Form1
             creditstxt.Text = ""
             directortxt.Text = ""
             studiotxt.Text = ""
+            countrytxt.Text = ""
             pathtxt.Text = ""
             imdbtxt.Text = ""
             'actorarray.Clear()
@@ -2963,6 +2965,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
             movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
             movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
+            movie.ScrapedMovie.fullmoviebody.country = countrytxt.Text 
             movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
             movie.ScrapedMovie.fullmoviebody.premiered = premiertxt.Text
             movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
@@ -3015,48 +3018,21 @@ Public Class Form1
                     pos += 1
                     mess.TextBox2.Text = pos.ToString + " of " + NfosToSave.Count.ToString
 
-                    If directortxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
-                    End If
-                    If creditstxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
-                    End If
-                    If genretxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
-                    End If
-                    If premiertxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.premiered = premiertxt.Text
-                    End If
-                    If certtxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
-                    End If
-                    If outlinetxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
-                    End If
-                    If runtimetxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
-                    End If
-                    If studiotxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
-                    End If
-                    If plottxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
-                    End If
-                    If taglinetxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
-                    End If
-                    If txtStars.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
-                    End If
-                    If ratingtxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
-                    End If
-                    If votestxt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
-                    End If
-                    If top250txt.Text <> "" Then
-                        movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
-                    End If
+                    If directortxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
+                    If creditstxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
+                    If genretxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
+                    If premiertxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.premiered = premiertxt.Text
+                    If certtxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
+                    If outlinetxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
+                    If runtimetxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
+                    If studiotxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
+                    If countrytxt.Text <> "" then movie.ScrapedMovie.fullmoviebody.country = countrytxt.Text 
+                    If plottxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
+                    If taglinetxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
+                    If txtStars.Text <> "" Then movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
+                    If ratingtxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
+                    If votestxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
+                    If top250txt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
 
                     If Not cbMovieDisplay_MovieSet.SelectedIndex = 0 Then 'cbMovieDisplay_MovieSet.SelectedItem = "-None-"
                         movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
@@ -3545,6 +3521,7 @@ Public Class Form1
         creditstxt.Text = ""
         directortxt.Text = ""
         studiotxt.Text = ""
+        countrytxt.Text = ""
         pathtxt.Text = ""
         cbMovieDisplay_Actor.Items.Clear()
         ratingtxt.Text = ""
@@ -14364,6 +14341,7 @@ Public Class Form1
                     outlinetxt.Font = newFont
                     runtimetxt.Font = newFont
                     studiotxt.Font = newFont
+                    countrytxt.Font = newFont
                     taglinetxt.Font = newFont
                     cbMovieDisplay_Actor.Font = newFont
                     roletxt.Font = newFont

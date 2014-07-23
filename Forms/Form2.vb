@@ -57,7 +57,15 @@ Public Class Form2
         Catch
         End Try
         If workingmovieedit.fileinfo.fullpathandfilename <> Nothing Then filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
-
+        If Convert.ToInt32(workingmovieedit.fullmoviebody.playcount ) > 0 Then
+            btnWatched.Text = "Watched"
+            btnWatched.BackColor = Color.LawnGreen
+            btnWatched.Refresh()
+        Else
+            btnWatched.Text = "UnWatched"
+            btnWatched.BackColor = Color.Red
+            btnWatched.Refresh()
+        End If
         For Each actor In workingmovieedit.listactors
             actorcb.Items.Add(actor.actorname)
         Next
@@ -103,12 +111,13 @@ Public Class Form2
                     End If
                 End If
             Next
+            RemoveHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
+            RemoveHandler PremieredDatePicker.ValueChanged, AddressOf PremieredDatePicker_ValueChanged
             Createdatepicker.CustomFormat = Preferences.datePattern   '"yyyyMMddhhmmss"   
             Createdatepicker.Format = DateTimePickerFormat.Custom
             PremieredDatePicker.CustomFormat = Preferences.nfoDatePattern  '"yyyy-MM-dd"
             PremieredDatePicker.Format = DateTimePickerFormat.Custom 
-             
-            Panel2.Dock = DockStyle.Fill
+            
             Call setupdisplay()
 
             textBoxList = New List(Of TextBox)
@@ -466,6 +475,20 @@ Public Class Form2
         End Try
     End Sub
 
+    Private Sub btnWatched_Click( sender As Object,  e As EventArgs) Handles btnWatched.Click
+        If btnWatched.Text = "Watched" Then
+            btnWatched.Text = "UnWatched"
+            btnWatched.BackColor = Color.Red
+            btnWatched.Refresh()
+            workingmovieedit.fullmoviebody.playcount = "0"
+        Else
+            btnWatched.Text = "Watched"
+            btnWatched.BackColor = Color.LawnGreen
+            btnWatched.Refresh()
+            workingmovieedit.fullmoviebody.playcount = "1"
+        End If
+    End Sub
+
     Private Sub saved()
 
     End Sub
@@ -549,7 +572,7 @@ Public Class Form2
     End Sub
 
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btn_BlankNfo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_BlankNfo.Click
         Try
             titletxt.Text = ""
             originaltxt.Text = ""
@@ -615,55 +638,55 @@ Public Class Form2
     End Sub
 
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-        Try
-            workingmovieedit = Nothing
-            actorcb.Text = ""
-            actorcb.Items.Clear()
-            roletxt.Text = ""
-            TextBox1.Text = ""
-            TextBox2.Text = ""
-            TextBox3.Text = ""
-            TextBox4.Text = ""
-            titletxt.Text = ""
-            originaltxt.Text = ""
-            sorttxt.Text = ""
-            directortxt.Text = ""
-            creditstxt.Text = ""
-            studiotxt.Text = ""
-            yeartxt.Text = ""
-            countrytxt.Text = ""
-            outlinetxt.Text = ""
-            plottxt.Text = ""
-            taglinetxt.Text = ""
-            runtimetxt.Text = ""
-            mpaatxt.Text = ""
-            genretxt.Text = ""
-            ratingtxt.Text = ""
-            votestxt.Text = ""
-            idtxt.Text = ""
-            workingmovieedit = Form1.workingMovieDetails
-            Dim newworkingmovieedit As FullMovieDetails = Form1.workingMovieDetails
-            newworkingmovieedit.listactors.Clear()
-            For f = 1 To actorcount
-                Dim actor As New str_MovieActors(SetDefaults)
-                If oldactors(f, 0) <> Nothing Then
-                    actor.actorname = oldactors(f, 0)
-                    If oldactors(f, 1) <> Nothing Then
-                        actor.actorrole = oldactors(f, 1)
-                    End If
-                    If oldactors(f, 2) <> Nothing Then
-                        actor.actorthumb = oldactors(f, 2)
-                    End If
-                    newworkingmovieedit.listactors.Add(actor)
-                End If
-            Next
-            Call setupdisplay()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    'Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        workingmovieedit = Nothing
+    '        actorcb.Text = ""
+    '        actorcb.Items.Clear()
+    '        roletxt.Text = ""
+    '        TextBox1.Text = ""
+    '        TextBox2.Text = ""
+    '        TextBox3.Text = ""
+    '        TextBox4.Text = ""
+    '        titletxt.Text = ""
+    '        originaltxt.Text = ""
+    '        sorttxt.Text = ""
+    '        directortxt.Text = ""
+    '        creditstxt.Text = ""
+    '        studiotxt.Text = ""
+    '        yeartxt.Text = ""
+    '        countrytxt.Text = ""
+    '        outlinetxt.Text = ""
+    '        plottxt.Text = ""
+    '        taglinetxt.Text = ""
+    '        runtimetxt.Text = ""
+    '        mpaatxt.Text = ""
+    '        genretxt.Text = ""
+    '        ratingtxt.Text = ""
+    '        votestxt.Text = ""
+    '        idtxt.Text = ""
+    '        workingmovieedit = Form1.workingMovieDetails
+    '        Dim newworkingmovieedit As FullMovieDetails = Form1.workingMovieDetails
+    '        newworkingmovieedit.listactors.Clear()
+    '        For f = 1 To actorcount
+    '            Dim actor As New str_MovieActors(SetDefaults)
+    '            If oldactors(f, 0) <> Nothing Then
+    '                actor.actorname = oldactors(f, 0)
+    '                If oldactors(f, 1) <> Nothing Then
+    '                    actor.actorrole = oldactors(f, 1)
+    '                End If
+    '                If oldactors(f, 2) <> Nothing Then
+    '                    actor.actorthumb = oldactors(f, 2)
+    '                End If
+    '                newworkingmovieedit.listactors.Add(actor)
+    '            End If
+    '        Next
+    '        Call setupdisplay()
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
 
-    End Sub
+    'End Sub
 
     Private Sub Createdatepicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles Createdatepicker.ValueChanged
             datechanged = True

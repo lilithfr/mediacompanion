@@ -72,17 +72,9 @@ Partial Class Form2
         Me.TextBox4 = New System.Windows.Forms.TextBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.btnchangemovie = New System.Windows.Forms.Button()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Button15 = New System.Windows.Forms.Button()
-        Me.Button14 = New System.Windows.Forms.Button()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Button13 = New System.Windows.Forms.Button()
-        Me.WebBrowser2 = New System.Windows.Forms.WebBrowser()
         Me.btnAltPosterBrowser = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btn_BlankNfo = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
         Me.btncropleft = New System.Windows.Forms.Button()
         Me.btncropright = New System.Windows.Forms.Button()
         Me.btncropbottom = New System.Windows.Forms.Button()
@@ -119,9 +111,9 @@ Partial Class Form2
         Me.sorttxt = New System.Windows.Forms.TextBox()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.PremieredDatePicker = New System.Windows.Forms.DateTimePicker()
+        Me.btnWatched = New System.Windows.Forms.Button()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.Panel2.SuspendLayout
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
         '
@@ -604,92 +596,6 @@ Partial Class Form2
         Me.ToolTip1.SetToolTip(Me.btnchangemovie, "Please use Change Movie on Main"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Media Companion page.")
         Me.btnchangemovie.UseVisualStyleBackColor = true
         '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.CheckBox1)
-        Me.Panel2.Controls.Add(Me.Button15)
-        Me.Panel2.Controls.Add(Me.Button14)
-        Me.Panel2.Controls.Add(Me.Label10)
-        Me.Panel2.Controls.Add(Me.Button13)
-        Me.Panel2.Controls.Add(Me.WebBrowser2)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1139, 674)
-        Me.Panel2.TabIndex = 92
-        Me.ToolTip1.SetToolTip(Me.Panel2, "Navigate to previous webpage")
-        Me.Panel2.Visible = false
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = true
-        Me.CheckBox1.Checked = true
-        Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox1.Location = New System.Drawing.Point(856, 629)
-        Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(202, 30)
-        Me.CheckBox1.TabIndex = 5
-        Me.CheckBox1.Text = "Un-check if you do not wish to delete"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"and attempt to rescrape movie art."
-        Me.CheckBox1.UseVisualStyleBackColor = true
-        '
-        'Button15
-        '
-        Me.Button15.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Button15.Location = New System.Drawing.Point(115, 638)
-        Me.Button15.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button15.Name = "Button15"
-        Me.Button15.Size = New System.Drawing.Size(141, 28)
-        Me.Button15.TabIndex = 4
-        Me.Button15.Text = "Cancel Search"
-        Me.Button15.UseVisualStyleBackColor = true
-        '
-        'Button14
-        '
-        Me.Button14.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Button14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button14.Location = New System.Drawing.Point(773, 638)
-        Me.Button14.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button14.Name = "Button14"
-        Me.Button14.Size = New System.Drawing.Size(75, 28)
-        Me.Button14.TabIndex = 3
-        Me.Button14.Text = "Go"
-        Me.Button14.UseVisualStyleBackColor = true
-        '
-        'Label10
-        '
-        Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Label10.AutoSize = true
-        Me.Label10.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label10.Location = New System.Drawing.Point(492, 641)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(205, 15)
-        Me.Label10.TabIndex = 2
-        Me.Label10.Text = "Find The Correct Movie and Click Go"
-        '
-        'Button13
-        '
-        Me.Button13.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.Button13.Location = New System.Drawing.Point(7, 638)
-        Me.Button13.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button13.Name = "Button13"
-        Me.Button13.Size = New System.Drawing.Size(100, 28)
-        Me.Button13.TabIndex = 1
-        Me.Button13.Text = "Page Back"
-        Me.Button13.UseVisualStyleBackColor = true
-        '
-        'WebBrowser2
-        '
-        Me.WebBrowser2.Location = New System.Drawing.Point(0, 0)
-        Me.WebBrowser2.Margin = New System.Windows.Forms.Padding(4)
-        Me.WebBrowser2.MinimumSize = New System.Drawing.Size(27, 25)
-        Me.WebBrowser2.Name = "WebBrowser2"
-        Me.WebBrowser2.Size = New System.Drawing.Size(1135, 622)
-        Me.WebBrowser2.TabIndex = 0
-        '
         'btnAltPosterBrowser
         '
         Me.btnAltPosterBrowser.Location = New System.Drawing.Point(988, 393)
@@ -701,16 +607,16 @@ Partial Class Form2
         Me.ToolTip1.SetToolTip(Me.btnAltPosterBrowser, "Re-Scrape Thumbnails from MoviePosterDB")
         Me.btnAltPosterBrowser.UseVisualStyleBackColor = true
         '
-        'Button1
+        'btn_BlankNfo
         '
-        Me.Button1.Location = New System.Drawing.Point(988, 486)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(140, 28)
-        Me.Button1.TabIndex = 114
-        Me.Button1.Text = "Blank Nfo"
-        Me.ToolTip1.SetToolTip(Me.Button1, "Blank All Fields, including actors")
-        Me.Button1.UseVisualStyleBackColor = true
+        Me.btn_BlankNfo.Location = New System.Drawing.Point(988, 486)
+        Me.btn_BlankNfo.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_BlankNfo.Name = "btn_BlankNfo"
+        Me.btn_BlankNfo.Size = New System.Drawing.Size(140, 28)
+        Me.btn_BlankNfo.TabIndex = 114
+        Me.btn_BlankNfo.Text = "Blank Nfo"
+        Me.ToolTip1.SetToolTip(Me.btn_BlankNfo, "Blank All Fields, including actors")
+        Me.btn_BlankNfo.UseVisualStyleBackColor = true
         '
         'Label1
         '
@@ -723,18 +629,6 @@ Partial Class Form2
         Me.Label1.TabIndex = 80
         Me.Label1.Text = "No Actor Thumb Available"
         Me.Label1.Visible = false
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = true
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label8.Location = New System.Drawing.Point(162, 401)
-        Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(535, 42)
-        Me.Label8.TabIndex = 87
-        Me.Label8.Text = "Scraping Movie - Please Wait"
-        Me.Label8.Visible = false
         '
         'btncropleft
         '
@@ -1071,9 +965,20 @@ Partial Class Form2
         Me.PremieredDatePicker.Size = New System.Drawing.Size(181, 20)
         Me.PremieredDatePicker.TabIndex = 133
         '
+        'btnWatched
+        '
+        Me.btnWatched.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnWatched.Location = New System.Drawing.Point(801, 314)
+        Me.btnWatched.Name = "btnWatched"
+        Me.btnWatched.Size = New System.Drawing.Size(120, 37)
+        Me.btnWatched.TabIndex = 134
+        Me.btnWatched.Text = "UnWatched"
+        Me.btnWatched.UseVisualStyleBackColor = true
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.btnWatched)
         Me.Controls.Add(Me.PremieredDatePicker)
         Me.Controls.Add(Me.Label23)
         Me.Controls.Add(Me.sorttxt)
@@ -1128,7 +1033,6 @@ Partial Class Form2
         Me.Controls.Add(Me.btnaddactor)
         Me.Controls.Add(Me.btndeleteactor)
         Me.Controls.Add(Me.btneditactor)
-        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.runtimetxt)
         Me.Controls.Add(Me.votestxt)
         Me.Controls.Add(Me.ratingtxt)
@@ -1155,7 +1059,7 @@ Partial Class Form2
         Me.Controls.Add(Me.Label13)
         Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.btnfanart)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btn_BlankNfo)
         Me.Controls.Add(Me.btnsavecropped)
         Me.Controls.Add(Me.btnresetimage)
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
@@ -1165,8 +1069,6 @@ Partial Class Form2
         Me.Text = "XBMC Media Companion - Movie Nfo Editor"
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.Panel2.ResumeLayout(false)
-        Me.Panel2.PerformLayout
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(false)
         Me.PerformLayout
@@ -1220,14 +1122,7 @@ End Sub
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents btnchangemovie As System.Windows.Forms.Button
-    Friend WithEvents Panel2 As System.Windows.Forms.Panel
-    Friend WithEvents WebBrowser2 As System.Windows.Forms.WebBrowser
-    Friend WithEvents Button14 As System.Windows.Forms.Button
-    Friend WithEvents Label10 As System.Windows.Forms.Label
-    Friend WithEvents Button13 As System.Windows.Forms.Button
-    Friend WithEvents Button15 As System.Windows.Forms.Button
     Friend WithEvents btncropleft As System.Windows.Forms.Button
     Friend WithEvents btncropright As System.Windows.Forms.Button
     Friend WithEvents btncropbottom As System.Windows.Forms.Button
@@ -1248,8 +1143,7 @@ End Sub
     Friend WithEvents btnfanart As System.Windows.Forms.Button
     Friend WithEvents btnresetimage As System.Windows.Forms.Button
     Friend WithEvents btnsavecropped As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents btn_BlankNfo As System.Windows.Forms.Button
     Friend WithEvents starstxt As System.Windows.Forms.TextBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
@@ -1267,4 +1161,5 @@ End Sub
     Friend WithEvents sorttxt As System.Windows.Forms.TextBox
     Friend WithEvents Label23 As System.Windows.Forms.Label
     Friend WithEvents PremieredDatePicker As System.Windows.Forms.DateTimePicker
+    Friend WithEvents btnWatched As System.Windows.Forms.Button
 End Class
