@@ -18,14 +18,6 @@ Public Class Form2
     Dim textBoxList As List(Of TextBox)
 
     
-    Private Sub Form2_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        Try
-            Call checkforedits()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub setupdisplay()
         actorcb.Items.Clear()
         If workingmovieedit.fullmoviebody.title <> Nothing Then titletxt.Text = workingmovieedit.fullmoviebody.title
@@ -49,8 +41,11 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.top250 <> Nothing Then top250txt.Text = workingmovieedit.fullmoviebody.top250 
         If workingmovieedit.fullmoviebody.trailer <> Nothing Then tb_TrailerURL.Text = workingmovieedit.fullmoviebody.trailer
         Try
-            If workingmovieedit.fileinfo.createdate <> Nothing Then Createdatepicker.Value = workingmovieedit.fileinfo.createdate
-        Catch
+            If workingmovieedit.fileinfo.createdate <> Nothing Then 
+                Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Preferences.datePattern, Nothing)
+            End If
+        Catch ex As Exception 
+            MsgBox(ex.tostring)
         End Try
         Try
             If workingmovieedit.fullmoviebody.premiered <> Nothing Then PremieredDatePicker.Value = workingmovieedit.fullmoviebody.premiered 
@@ -113,10 +108,11 @@ Public Class Form2
             Next
             RemoveHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
             RemoveHandler PremieredDatePicker.ValueChanged, AddressOf PremieredDatePicker_ValueChanged
-            Createdatepicker.CustomFormat = Preferences.datePattern   '"yyyyMMddhhmmss"   
             Createdatepicker.Format = DateTimePickerFormat.Custom
+            Createdatepicker.CustomFormat = Preferences.datePattern  '"yyyyMMddHHmmss"
+            PremieredDatePicker.Format = DateTimePickerFormat.Custom
             PremieredDatePicker.CustomFormat = Preferences.nfoDatePattern  '"yyyy-MM-dd"
-            PremieredDatePicker.Format = DateTimePickerFormat.Custom 
+            
             
             Call setupdisplay()
 
@@ -135,6 +131,14 @@ Public Class Form2
             Next
             RemoveHandler roletxt.TextChanged, AddressOf AnyTextBox_TextChanged
 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Form2_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        Try
+            Call checkforedits()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -176,20 +180,11 @@ Public Class Form2
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-    Private Sub btneditactor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btneditactor.Click
-        Try
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub ' Edit Actor Button
-
+    
     Private Sub btndeleteactor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btndeleteactor.Click
         Try
             If actorcb.Items.Count <> 0 Then
-                Dim tempint As Integer
-                tempint = actorcb.SelectedIndex
+                Dim tempint As Integer = actorcb.SelectedIndex
                 workingmovieedit.listactors.RemoveAt(actorcb.SelectedIndex)
                 actorcb.Items.RemoveAt(actorcb.SelectedIndex)
                 If workingmovieedit.listactors.Count <= tempint Then
@@ -201,6 +196,7 @@ Public Class Form2
                     actorcb.Text = ""
                     roletxt.Text = ""
                 End If
+                editsmade = True
             Else
                 MsgBox("No Actors to delete")
             End If
@@ -213,23 +209,22 @@ Public Class Form2
         Try
             Dim newactor As New Actor
             For Each currentactor In actorcb.items
-                If TextBox4.Text = currentactor Then
+                If tb_RoleAdd.Text = currentactor Then
                     MsgBox("Actor exists in this movie")
                     Exit sub
                 End If
             Next
             newactor.ActorId.value = ""
-            newactor.actorname = TextBox3.Text
-            newactor.actorrole = TextBox4.Text
+            newactor.actorname = tb_ActorAdd.Text
+            newactor.actorrole = tb_RoleAdd.Text
             newactor.actorthumb = ""
             workingmovieedit.listactors.Add(newactor)
             actorcb.Items.Add(newactor)
+            editsmade = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub ' Add Actor Button
-
-
 
     Private Sub btnchangemovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnchangemovie.Click
         Try
@@ -392,6 +387,32 @@ Public Class Form2
         End Try
     End Sub
 
+    Private Sub btnresetimage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnresetimage.Click
+        Try
+            thumbeditsmade = False
+            moviethumb.Image = Form1.moviethumb.Image
+            btnresetimage.Enabled = False
+            btnSaveCropped.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavecropped.Click
+        Try
+            thumbeditsmade = False
+            Dim tempstring As String
+            tempstring = Form1.workingMovieDetails.fileinfo.posterpath
+            Dim stream As New System.IO.MemoryStream
+            moviethumb.Image.Save(tempstring, System.Drawing.Imaging.ImageFormat.Jpeg)
+            Form1.moviethumb.Image = moviethumb.Image
+            btnresetimage.Enabled = False
+            btnSaveCropped.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub Timer1_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer1.Tick
         Try
             If cropstring = "top" Then Call croptop()
@@ -402,28 +423,13 @@ Public Class Form2
             ExceptionHandler.LogError(ex)
         End Try
     End Sub ' Set auto repeat for crop
+
 #End Region 
 
 
     Private Sub btnsavechanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavechanges.Click
         Try
-            'workingmovieedit.listactors.Clear()
-            'Form1.workingmoviedetails.listactors.Clear()
-
-            'For f = 1 To actorcount
-            '    If oldactors(f, 0) <> Nothing Then
-            '        Dim newactor As New movieactors
-            '        newactor.actorname = oldactors(f, 0)
-            '        If oldactors(f, 1) <> Nothing Then
-            '            newactor.actorrole = oldactors(f, 1)
-            '        End If
-            '        If oldactors(f, 2) <> Nothing Then
-            '            newactor.actorthumb = oldactors(f, 2)
-            '        End If
-            '        workingmovieedit.listactors.Add(newactor)
-            '    End If
-            'Next
-
+            
             workingmovieedit.fullmoviebody.plot = plottxt.Text
             workingmovieedit.fullmoviebody.title = titletxt.Text
             workingmovieedit.fullmoviebody.director = directortxt.Text
@@ -544,152 +550,31 @@ Public Class Form2
         End Try
     End Sub
 
-
-    Private Sub btnresetimage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnresetimage.Click
-        Try
-            thumbeditsmade = False
-            moviethumb.Image = Form1.moviethumb.Image
-            btnresetimage.Enabled = False
-            btnSaveCropped.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavecropped.Click
-        Try
-            thumbeditsmade = False
-            Dim tempstring As String
-            tempstring = Form1.workingMovieDetails.fileinfo.posterpath
-            Dim stream As New System.IO.MemoryStream
-            moviethumb.Image.Save(tempstring, System.Drawing.Imaging.ImageFormat.Jpeg)
-            Form1.moviethumb.Image = moviethumb.Image
-            btnresetimage.Enabled = False
-            btnSaveCropped.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
     Private Sub btn_BlankNfo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_BlankNfo.Click
         Try
-            titletxt.Text = ""
-            originaltxt.Text = ""
-            sorttxt.Text = ""
-            directortxt.Text = ""
-            creditstxt.Text = ""
-            studiotxt.Text = ""
-            countrytxt.Text = ""
-            yeartxt.Text = ""
-            outlinetxt.Text = ""
-            plottxt.Text = ""
-            taglinetxt.Text = ""
-            runtimetxt.Text = ""
-            mpaatxt.Text = ""
-            genretxt.Text = ""
-            ratingtxt.Text = ""
-            votestxt.Text = ""
-            idtxt.Text = ""
-            workingmovieedit.listactors.Clear()
-            workingmovieedit.listthumbs.Clear()
-            workingmovieedit.filedetails.filedetails_audio.Clear()
-            workingmovieedit.filedetails.filedetails_subtitles.Clear()
-            workingmovieedit.filedetails.filedetails_video.Bitrate = Nothing
-            workingmovieedit.filedetails.filedetails_video.BitrateMax = Nothing
-            workingmovieedit.filedetails.filedetails_video.BitrateMode = Nothing
-            workingmovieedit.filedetails.filedetails_video.Codec = Nothing
-            workingmovieedit.filedetails.filedetails_video.CodecId = Nothing
-            workingmovieedit.filedetails.filedetails_video.CodecInfo = Nothing
-            workingmovieedit.filedetails.filedetails_video.Container = Nothing
-            workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value = Nothing
-            workingmovieedit.filedetails.filedetails_video.FormatInfo = Nothing
-            workingmovieedit.filedetails.filedetails_video.Height = Nothing
-            workingmovieedit.filedetails.filedetails_video.ScanType = Nothing
-            workingmovieedit.filedetails.filedetails_video.Width = Nothing
-            workingmovieedit.fullmoviebody.title = Nothing
-            workingmovieedit.fullmoviebody.originaltitle = Nothing
-            workingmovieedit.fullmoviebody.sortorder = Nothing
-            workingmovieedit.fullmoviebody.director = Nothing
-            workingmovieedit.fullmoviebody.stars = Nothing
-            workingmovieedit.fullmoviebody.credits = Nothing
-            workingmovieedit.fullmoviebody.studio = Nothing
-            workingmovieedit.fullmoviebody.country = Nothing
-            workingmovieedit.fullmoviebody.outline = Nothing
-            workingmovieedit.fullmoviebody.plot = Nothing
-            workingmovieedit.fullmoviebody.tagline = Nothing
-            workingmovieedit.fullmoviebody.runtime = Nothing
-            workingmovieedit.fullmoviebody.mpaa = Nothing
-            workingmovieedit.fullmoviebody.genre = Nothing
-            workingmovieedit.fullmoviebody.year = Nothing
-            workingmovieedit.fullmoviebody.year = Nothing
-            workingmovieedit.fullmoviebody.rating = Nothing
-            workingmovieedit.fullmoviebody.votes = Nothing
-            workingmovieedit.fullmoviebody.imdbid = Nothing
-            actorcb.Text = ""
-            roletxt.Text = ""
-            TextBox1.Text = ""
-            TextBox2.Text = ""
-            TextBox3.Text = ""
-            TextBox4.Text = ""
+            For Each txt As TextBox In textBoxList
+                txt.Text = ""
+            Next
+            actorcb.Items.Clear()
+            PremieredDatePicker.Value = Date.Now
+            Createdatepicker.Value = Date.now
+            filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
+            Dim newmovie As New Media_Companion.FullMovieDetails
+            Dim currentfiledetails As FullFileDetails = workingmovieedit.filedetails
+            workingmovieedit = newmovie
+            PictureBox1.Image = Nothing
+            workingmovieedit.filedetails = currentfiledetails
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-
-    'Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Try
-    '        workingmovieedit = Nothing
-    '        actorcb.Text = ""
-    '        actorcb.Items.Clear()
-    '        roletxt.Text = ""
-    '        TextBox1.Text = ""
-    '        TextBox2.Text = ""
-    '        TextBox3.Text = ""
-    '        TextBox4.Text = ""
-    '        titletxt.Text = ""
-    '        originaltxt.Text = ""
-    '        sorttxt.Text = ""
-    '        directortxt.Text = ""
-    '        creditstxt.Text = ""
-    '        studiotxt.Text = ""
-    '        yeartxt.Text = ""
-    '        countrytxt.Text = ""
-    '        outlinetxt.Text = ""
-    '        plottxt.Text = ""
-    '        taglinetxt.Text = ""
-    '        runtimetxt.Text = ""
-    '        mpaatxt.Text = ""
-    '        genretxt.Text = ""
-    '        ratingtxt.Text = ""
-    '        votestxt.Text = ""
-    '        idtxt.Text = ""
-    '        workingmovieedit = Form1.workingMovieDetails
-    '        Dim newworkingmovieedit As FullMovieDetails = Form1.workingMovieDetails
-    '        newworkingmovieedit.listactors.Clear()
-    '        For f = 1 To actorcount
-    '            Dim actor As New str_MovieActors(SetDefaults)
-    '            If oldactors(f, 0) <> Nothing Then
-    '                actor.actorname = oldactors(f, 0)
-    '                If oldactors(f, 1) <> Nothing Then
-    '                    actor.actorrole = oldactors(f, 1)
-    '                End If
-    '                If oldactors(f, 2) <> Nothing Then
-    '                    actor.actorthumb = oldactors(f, 2)
-    '                End If
-    '                newworkingmovieedit.listactors.Add(actor)
-    '            End If
-    '        Next
-    '        Call setupdisplay()
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-
-    'End Sub
-
     Private Sub Createdatepicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles Createdatepicker.ValueChanged
+        Dim newdate As String = Format(Createdatepicker.Value, Preferences.datePattern).ToString
+        If workingmovieedit.fileinfo.createdate <> newdate Then
             datechanged = True
+            editsmade = True
+        End If
     End Sub
 
     Private Sub Createdatepicker_DropDown(ByVal sender As Object, ByVal e As EventArgs) Handles Createdatepicker.DropDown
@@ -702,7 +587,11 @@ Public Class Form2
     End Sub
 
     Private Sub PremieredDatePicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles PremieredDatePicker.ValueChanged
+        Dim newdate As String = Format(PremieredDatePicker.Value, Preferences.nfoDatePattern).ToString
+        If workingmovieedit.fullmoviebody.premiered <> newdate Then
             PremierDateChanged = True
+            editsmade = True
+        End If
     End Sub
 
     Private Sub PremieredDatePicker_DropDown(ByVal sender As Object, ByVal e As EventArgs) Handles PremieredDatePicker.DropDown

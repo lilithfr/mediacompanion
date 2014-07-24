@@ -65,11 +65,8 @@ Partial Class Form2
         Me.btndeleteactor = New System.Windows.Forms.Button()
         Me.btnsavechanges = New System.Windows.Forms.Button()
         Me.btnexit = New System.Windows.Forms.Button()
-        Me.btneditactor = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.tb_ActorAdd = New System.Windows.Forms.TextBox()
+        Me.tb_RoleAdd = New System.Windows.Forms.TextBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.btnchangemovie = New System.Windows.Forms.Button()
         Me.btnAltPosterBrowser = New System.Windows.Forms.Button()
@@ -220,7 +217,7 @@ Partial Class Form2
         'taglinetxt
         '
         Me.taglinetxt.BackColor = System.Drawing.Color.White
-        Me.taglinetxt.Location = New System.Drawing.Point(127, 491)
+        Me.taglinetxt.Location = New System.Drawing.Point(127, 526)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
@@ -235,7 +232,7 @@ Partial Class Form2
         Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
         Me.plottxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.plottxt.Size = New System.Drawing.Size(624, 119)
+        Me.plottxt.Size = New System.Drawing.Size(624, 143)
         Me.plottxt.TabIndex = 47
         '
         'outlinetxt
@@ -285,7 +282,7 @@ Partial Class Form2
         '
         Me.tagline.AutoSize = true
         Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tagline.Location = New System.Drawing.Point(22, 491)
+        Me.tagline.Location = New System.Drawing.Point(22, 526)
         Me.tagline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.tagline.Name = "tagline"
         Me.tagline.Size = New System.Drawing.Size(63, 16)
@@ -415,7 +412,7 @@ Partial Class Form2
         'roletxt
         '
         Me.roletxt.BackColor = System.Drawing.Color.White
-        Me.roletxt.Location = New System.Drawing.Point(441, 557)
+        Me.roletxt.Location = New System.Drawing.Point(441, 594)
         Me.roletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.roletxt.Name = "roletxt"
         Me.roletxt.ReadOnly = true
@@ -426,7 +423,7 @@ Partial Class Form2
         '
         Me.Label5.AutoSize = true
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label5.Location = New System.Drawing.Point(437, 532)
+        Me.Label5.Location = New System.Drawing.Point(454, 566)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 16)
@@ -437,7 +434,7 @@ Partial Class Form2
         '
         Me.Label4.AutoSize = true
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label4.Location = New System.Drawing.Point(123, 532)
+        Me.Label4.Location = New System.Drawing.Point(140, 566)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 16)
@@ -448,7 +445,7 @@ Partial Class Form2
         '
         Me.actorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.actorcb.FormattingEnabled = true
-        Me.actorcb.Location = New System.Drawing.Point(127, 556)
+        Me.actorcb.Location = New System.Drawing.Point(127, 593)
         Me.actorcb.Margin = New System.Windows.Forms.Padding(4)
         Me.actorcb.Name = "actorcb"
         Me.actorcb.Size = New System.Drawing.Size(309, 21)
@@ -510,7 +507,7 @@ Partial Class Form2
         '
         'btndeleteactor
         '
-        Me.btndeleteactor.Location = New System.Drawing.Point(19, 552)
+        Me.btndeleteactor.Location = New System.Drawing.Point(19, 589)
         Me.btndeleteactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btndeleteactor.Name = "btndeleteactor"
         Me.btndeleteactor.Size = New System.Drawing.Size(100, 28)
@@ -539,51 +536,21 @@ Partial Class Form2
         Me.btnexit.Text = "Exit"
         Me.btnexit.UseVisualStyleBackColor = true
         '
-        'btneditactor
+        'tb_ActorAdd
         '
-        Me.btneditactor.Enabled = false
-        Me.btneditactor.Location = New System.Drawing.Point(19, 588)
-        Me.btneditactor.Margin = New System.Windows.Forms.Padding(4)
-        Me.btneditactor.Name = "btneditactor"
-        Me.btneditactor.Size = New System.Drawing.Size(100, 28)
-        Me.btneditactor.TabIndex = 75
-        Me.btneditactor.Text = "Edit Actor"
-        Me.ToolTip1.SetToolTip(Me.btneditactor, "Input new details and click to edit"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"selected actor and role.")
-        Me.btneditactor.UseVisualStyleBackColor = true
+        Me.tb_ActorAdd.Location = New System.Drawing.Point(127, 631)
+        Me.tb_ActorAdd.Margin = New System.Windows.Forms.Padding(4)
+        Me.tb_ActorAdd.Name = "tb_ActorAdd"
+        Me.tb_ActorAdd.Size = New System.Drawing.Size(309, 20)
+        Me.tb_ActorAdd.TabIndex = 78
         '
-        'TextBox1
+        'tb_RoleAdd
         '
-        Me.TextBox1.Enabled = false
-        Me.TextBox1.Location = New System.Drawing.Point(127, 593)
-        Me.TextBox1.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(309, 20)
-        Me.TextBox1.TabIndex = 76
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Enabled = false
-        Me.TextBox2.Location = New System.Drawing.Point(441, 594)
-        Me.TextBox2.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(309, 20)
-        Me.TextBox2.TabIndex = 77
-        '
-        'TextBox3
-        '
-        Me.TextBox3.Location = New System.Drawing.Point(127, 631)
-        Me.TextBox3.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(309, 20)
-        Me.TextBox3.TabIndex = 78
-        '
-        'TextBox4
-        '
-        Me.TextBox4.Location = New System.Drawing.Point(441, 631)
-        Me.TextBox4.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(309, 20)
-        Me.TextBox4.TabIndex = 79
+        Me.tb_RoleAdd.Location = New System.Drawing.Point(441, 631)
+        Me.tb_RoleAdd.Margin = New System.Windows.Forms.Padding(4)
+        Me.tb_RoleAdd.Name = "tb_RoleAdd"
+        Me.tb_RoleAdd.Size = New System.Drawing.Size(309, 20)
+        Me.tb_RoleAdd.TabIndex = 79
         '
         'btnchangemovie
         '
@@ -867,6 +834,7 @@ Partial Class Form2
         '
         'Createdatepicker
         '
+        Me.Createdatepicker.CustomFormat = ""
         Me.Createdatepicker.Location = New System.Drawing.Point(518, 184)
         Me.Createdatepicker.Name = "Createdatepicker"
         Me.Createdatepicker.Size = New System.Drawing.Size(200, 20)
@@ -1032,7 +1000,6 @@ Partial Class Form2
         Me.Controls.Add(Me.btnsavechanges)
         Me.Controls.Add(Me.btnaddactor)
         Me.Controls.Add(Me.btndeleteactor)
-        Me.Controls.Add(Me.btneditactor)
         Me.Controls.Add(Me.runtimetxt)
         Me.Controls.Add(Me.votestxt)
         Me.Controls.Add(Me.ratingtxt)
@@ -1042,14 +1009,12 @@ Partial Class Form2
         Me.Controls.Add(Me.taglinetxt)
         Me.Controls.Add(Me.plottxt)
         Me.Controls.Add(Me.outlinetxt)
-        Me.Controls.Add(Me.TextBox4)
-        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.tb_RoleAdd)
         Me.Controls.Add(Me.filenametxt)
         Me.Controls.Add(Me.roletxt)
         Me.Controls.Add(Me.runtime)
         Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.tb_ActorAdd)
         Me.Controls.Add(Me.actorcb)
         Me.Controls.Add(Me.Label18)
         Me.Controls.Add(Me.Label17)
@@ -1115,11 +1080,8 @@ End Sub
     Friend WithEvents btndeleteactor As System.Windows.Forms.Button
     Friend WithEvents btnsavechanges As System.Windows.Forms.Button
     Friend WithEvents btnexit As System.Windows.Forms.Button
-    Friend WithEvents btneditactor As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
+    Friend WithEvents tb_ActorAdd As System.Windows.Forms.TextBox
+    Friend WithEvents tb_RoleAdd As System.Windows.Forms.TextBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents btnchangemovie As System.Windows.Forms.Button
