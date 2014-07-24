@@ -130,7 +130,6 @@ Public Class Form2
                 AddHandler txt.TextChanged, AddressOf AnyTextBox_TextChanged
             Next
             RemoveHandler roletxt.TextChanged, AddressOf AnyTextBox_TextChanged
-
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -219,8 +218,11 @@ Public Class Form2
             newactor.actorrole = tb_RoleAdd.Text
             newactor.actorthumb = ""
             workingmovieedit.listactors.Add(newactor)
-            actorcb.Items.Add(newactor)
+            actorcb.Items.Add(newactor.Actorname)
+            tb_ActorAdd.Text = ""
+            tb_RoleAdd.Text = ""
             editsmade = True
+            If actorcb.SelectedIndex = -1 AndAlso actorcb.Items.Count > 0 Then actorcb.SelectedIndex = 0
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -432,6 +434,8 @@ Public Class Form2
             
             workingmovieedit.fullmoviebody.plot = plottxt.Text
             workingmovieedit.fullmoviebody.title = titletxt.Text
+            workingmovieedit.fullmoviebody.originaltitle = originaltxt.Text
+            workingmovieedit.fullmoviebody.sortorder = sorttxt.text
             workingmovieedit.fullmoviebody.director = directortxt.Text
             workingmovieedit.fullmoviebody.stars = starstxt.Text
             workingmovieedit.fullmoviebody.runtime = runtimetxt.Text
@@ -439,6 +443,7 @@ Public Class Form2
             workingmovieedit.fullmoviebody.mpaa = mpaatxt.Text
             workingmovieedit.fullmoviebody.studio = studiotxt.Text
             workingmovieedit.fullmoviebody.genre = genretxt.Text
+            workingmovieedit.fullmoviebody.country = countrytxt.Text 
             workingmovieedit.fullmoviebody.year = yeartxt.Text
             workingmovieedit.fullmoviebody.rating = ratingtxt.Text
             workingmovieedit.fullmoviebody.votes = votestxt.Text
@@ -564,6 +569,7 @@ Public Class Form2
             workingmovieedit = newmovie
             PictureBox1.Image = Nothing
             workingmovieedit.filedetails = currentfiledetails
+            runtimetxt.Text = Math.Round(workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value/60).ToString & "min" 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

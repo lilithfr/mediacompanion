@@ -3257,7 +3257,7 @@ Public Class Form1
                 newfullmovie2.id = workingMovieDetails.fullmoviebody.imdbid
                 newfullmovie2.playcount = workingMovieDetails.fullmoviebody.playcount
                 newfullmovie2.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
-                newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating
+                newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating.ToRating
                 '    newfullmovie2.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 newfullmovie2.year = workingMovieDetails.fullmoviebody.year
 

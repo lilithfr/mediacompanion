@@ -116,12 +116,14 @@ Partial Class Form2
         '
         'runtimetxt
         '
-        Me.runtimetxt.BackColor = System.Drawing.Color.White
+        Me.runtimetxt.BackColor = System.Drawing.Color.Gainsboro
         Me.runtimetxt.Location = New System.Drawing.Point(127, 183)
         Me.runtimetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.runtimetxt.Name = "runtimetxt"
+        Me.runtimetxt.ReadOnly = true
         Me.runtimetxt.Size = New System.Drawing.Size(104, 20)
         Me.runtimetxt.TabIndex = 59
+        Me.runtimetxt.TabStop = false
         '
         'votestxt
         '
@@ -130,7 +132,7 @@ Partial Class Form2
         Me.votestxt.Margin = New System.Windows.Forms.Padding(4)
         Me.votestxt.Name = "votestxt"
         Me.votestxt.Size = New System.Drawing.Size(97, 20)
-        Me.votestxt.TabIndex = 58
+        Me.votestxt.TabIndex = 12
         '
         'ratingtxt
         '
@@ -139,7 +141,7 @@ Partial Class Form2
         Me.ratingtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.ratingtxt.Name = "ratingtxt"
         Me.ratingtxt.Size = New System.Drawing.Size(97, 20)
-        Me.ratingtxt.TabIndex = 57
+        Me.ratingtxt.TabIndex = 10
         '
         'idtxt
         '
@@ -149,7 +151,7 @@ Partial Class Form2
         Me.idtxt.Name = "idtxt"
         Me.idtxt.ReadOnly = true
         Me.idtxt.Size = New System.Drawing.Size(97, 20)
-        Me.idtxt.TabIndex = 56
+        Me.idtxt.TabIndex = 13
         '
         'yeartxt
         '
@@ -158,7 +160,7 @@ Partial Class Form2
         Me.yeartxt.Margin = New System.Windows.Forms.Padding(4)
         Me.yeartxt.Name = "yeartxt"
         Me.yeartxt.Size = New System.Drawing.Size(104, 20)
-        Me.yeartxt.TabIndex = 55
+        Me.yeartxt.TabIndex = 9
         '
         'genretxt
         '
@@ -167,7 +169,7 @@ Partial Class Form2
         Me.genretxt.Margin = New System.Windows.Forms.Padding(4)
         Me.genretxt.Name = "genretxt"
         Me.genretxt.Size = New System.Drawing.Size(263, 20)
-        Me.genretxt.TabIndex = 54
+        Me.genretxt.TabIndex = 6
         '
         'mpaatxt
         '
@@ -176,7 +178,7 @@ Partial Class Form2
         Me.mpaatxt.Margin = New System.Windows.Forms.Padding(4)
         Me.mpaatxt.Name = "mpaatxt"
         Me.mpaatxt.Size = New System.Drawing.Size(263, 20)
-        Me.mpaatxt.TabIndex = 53
+        Me.mpaatxt.TabIndex = 7
         '
         'studiotxt
         '
@@ -185,7 +187,7 @@ Partial Class Form2
         Me.studiotxt.Margin = New System.Windows.Forms.Padding(4)
         Me.studiotxt.Name = "studiotxt"
         Me.studiotxt.Size = New System.Drawing.Size(279, 20)
-        Me.studiotxt.TabIndex = 52
+        Me.studiotxt.TabIndex = 5
         '
         'creditstxt
         '
@@ -194,7 +196,7 @@ Partial Class Form2
         Me.creditstxt.Margin = New System.Windows.Forms.Padding(4)
         Me.creditstxt.Name = "creditstxt"
         Me.creditstxt.Size = New System.Drawing.Size(262, 20)
-        Me.creditstxt.TabIndex = 51
+        Me.creditstxt.TabIndex = 4
         '
         'directortxt
         '
@@ -203,7 +205,7 @@ Partial Class Form2
         Me.directortxt.Margin = New System.Windows.Forms.Padding(4)
         Me.directortxt.Name = "directortxt"
         Me.directortxt.Size = New System.Drawing.Size(279, 20)
-        Me.directortxt.TabIndex = 50
+        Me.directortxt.TabIndex = 3
         '
         'titletxt
         '
@@ -212,7 +214,7 @@ Partial Class Form2
         Me.titletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.titletxt.Name = "titletxt"
         Me.titletxt.Size = New System.Drawing.Size(357, 20)
-        Me.titletxt.TabIndex = 49
+        Me.titletxt.TabIndex = 0
         '
         'taglinetxt
         '
@@ -222,7 +224,7 @@ Partial Class Form2
         Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
         Me.taglinetxt.Size = New System.Drawing.Size(624, 36)
-        Me.taglinetxt.TabIndex = 48
+        Me.taglinetxt.TabIndex = 18
         '
         'plottxt
         '
@@ -233,7 +235,7 @@ Partial Class Form2
         Me.plottxt.Name = "plottxt"
         Me.plottxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.plottxt.Size = New System.Drawing.Size(624, 143)
-        Me.plottxt.TabIndex = 47
+        Me.plottxt.TabIndex = 17
         '
         'outlinetxt
         '
@@ -243,7 +245,7 @@ Partial Class Form2
         Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
         Me.outlinetxt.Size = New System.Drawing.Size(624, 48)
-        Me.outlinetxt.TabIndex = 46
+        Me.outlinetxt.TabIndex = 16
         '
         'runtime
         '
@@ -418,6 +420,7 @@ Partial Class Form2
         Me.roletxt.ReadOnly = true
         Me.roletxt.Size = New System.Drawing.Size(309, 20)
         Me.roletxt.TabIndex = 64
+        Me.roletxt.TabStop = false
         '
         'Label5
         '
@@ -427,7 +430,7 @@ Partial Class Form2
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 16)
-        Me.Label5.TabIndex = 63
+        Me.Label5.TabIndex = 21
         Me.Label5.Text = "Role"
         '
         'Label4
@@ -450,6 +453,7 @@ Partial Class Form2
         Me.actorcb.Name = "actorcb"
         Me.actorcb.Size = New System.Drawing.Size(309, 21)
         Me.actorcb.TabIndex = 61
+        Me.actorcb.TabStop = false
         '
         'PictureBox1
         '
@@ -475,13 +479,14 @@ Partial Class Form2
         '
         'filenametxt
         '
-        Me.filenametxt.BackColor = System.Drawing.Color.White
+        Me.filenametxt.BackColor = System.Drawing.Color.Gainsboro
         Me.filenametxt.Location = New System.Drawing.Point(127, 663)
         Me.filenametxt.Margin = New System.Windows.Forms.Padding(4)
         Me.filenametxt.Name = "filenametxt"
         Me.filenametxt.ReadOnly = true
         Me.filenametxt.Size = New System.Drawing.Size(623, 20)
         Me.filenametxt.TabIndex = 69
+        Me.filenametxt.TabStop = false
         '
         'filename
         '
@@ -501,6 +506,7 @@ Partial Class Form2
         Me.btnaddactor.Name = "btnaddactor"
         Me.btnaddactor.Size = New System.Drawing.Size(100, 28)
         Me.btnaddactor.TabIndex = 71
+        Me.btnaddactor.TabStop = false
         Me.btnaddactor.Text = "Add Actor"
         Me.ToolTip1.SetToolTip(Me.btnaddactor, "Enter Name of Actor and Role"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"you wish to add then click")
         Me.btnaddactor.UseVisualStyleBackColor = true
@@ -512,6 +518,7 @@ Partial Class Form2
         Me.btndeleteactor.Name = "btndeleteactor"
         Me.btndeleteactor.Size = New System.Drawing.Size(100, 28)
         Me.btndeleteactor.TabIndex = 72
+        Me.btndeleteactor.TabStop = false
         Me.btndeleteactor.Text = "Delete Actor"
         Me.ToolTip1.SetToolTip(Me.btndeleteactor, "Delete the selected Actor and Role")
         Me.btndeleteactor.UseVisualStyleBackColor = true
@@ -522,7 +529,7 @@ Partial Class Form2
         Me.btnsavechanges.Margin = New System.Windows.Forms.Padding(4)
         Me.btnsavechanges.Name = "btnsavechanges"
         Me.btnsavechanges.Size = New System.Drawing.Size(140, 28)
-        Me.btnsavechanges.TabIndex = 73
+        Me.btnsavechanges.TabIndex = 21
         Me.btnsavechanges.Text = "Save Changes"
         Me.btnsavechanges.UseVisualStyleBackColor = true
         '
@@ -532,7 +539,7 @@ Partial Class Form2
         Me.btnexit.Margin = New System.Windows.Forms.Padding(4)
         Me.btnexit.Name = "btnexit"
         Me.btnexit.Size = New System.Drawing.Size(75, 28)
-        Me.btnexit.TabIndex = 74
+        Me.btnexit.TabIndex = 22
         Me.btnexit.Text = "Exit"
         Me.btnexit.UseVisualStyleBackColor = true
         '
@@ -542,7 +549,7 @@ Partial Class Form2
         Me.tb_ActorAdd.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_ActorAdd.Name = "tb_ActorAdd"
         Me.tb_ActorAdd.Size = New System.Drawing.Size(309, 20)
-        Me.tb_ActorAdd.TabIndex = 78
+        Me.tb_ActorAdd.TabIndex = 19
         '
         'tb_RoleAdd
         '
@@ -550,7 +557,7 @@ Partial Class Form2
         Me.tb_RoleAdd.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_RoleAdd.Name = "tb_RoleAdd"
         Me.tb_RoleAdd.Size = New System.Drawing.Size(309, 20)
-        Me.tb_RoleAdd.TabIndex = 79
+        Me.tb_RoleAdd.TabIndex = 20
         '
         'btnchangemovie
         '
@@ -569,7 +576,7 @@ Partial Class Form2
         Me.btnAltPosterBrowser.Margin = New System.Windows.Forms.Padding(4)
         Me.btnAltPosterBrowser.Name = "btnAltPosterBrowser"
         Me.btnAltPosterBrowser.Size = New System.Drawing.Size(133, 35)
-        Me.btnAltPosterBrowser.TabIndex = 100
+        Me.btnAltPosterBrowser.TabIndex = 24
         Me.btnAltPosterBrowser.Text = "Alt Poster Browser"
         Me.ToolTip1.SetToolTip(Me.btnAltPosterBrowser, "Re-Scrape Thumbnails from MoviePosterDB")
         Me.btnAltPosterBrowser.UseVisualStyleBackColor = true
@@ -580,7 +587,7 @@ Partial Class Form2
         Me.btn_BlankNfo.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_BlankNfo.Name = "btn_BlankNfo"
         Me.btn_BlankNfo.Size = New System.Drawing.Size(140, 28)
-        Me.btn_BlankNfo.TabIndex = 114
+        Me.btn_BlankNfo.TabIndex = 25
         Me.btn_BlankNfo.Text = "Blank Nfo"
         Me.ToolTip1.SetToolTip(Me.btn_BlankNfo, "Blank All Fields, including actors")
         Me.btn_BlankNfo.UseVisualStyleBackColor = true
@@ -605,6 +612,7 @@ Partial Class Form2
         Me.btncropleft.Name = "btncropleft"
         Me.btncropleft.Size = New System.Drawing.Size(32, 28)
         Me.btncropleft.TabIndex = 93
+        Me.btncropleft.TabStop = false
         Me.btncropleft.Text = ">"
         Me.btncropleft.UseVisualStyleBackColor = true
         '
@@ -616,6 +624,7 @@ Partial Class Form2
         Me.btncropright.Name = "btncropright"
         Me.btncropright.Size = New System.Drawing.Size(32, 28)
         Me.btncropright.TabIndex = 94
+        Me.btncropright.TabStop = false
         Me.btncropright.Text = "<"
         Me.btncropright.UseVisualStyleBackColor = true
         '
@@ -627,6 +636,7 @@ Partial Class Form2
         Me.btncropbottom.Name = "btncropbottom"
         Me.btncropbottom.Size = New System.Drawing.Size(32, 28)
         Me.btncropbottom.TabIndex = 95
+        Me.btncropbottom.TabStop = false
         Me.btncropbottom.Text = "^"
         Me.btncropbottom.UseVisualStyleBackColor = true
         '
@@ -638,6 +648,7 @@ Partial Class Form2
         Me.btncroptop.Name = "btncroptop"
         Me.btncroptop.Size = New System.Drawing.Size(32, 28)
         Me.btncroptop.TabIndex = 96
+        Me.btncroptop.TabStop = false
         Me.btncroptop.Text = "V"
         Me.btncroptop.UseVisualStyleBackColor = true
         '
@@ -708,6 +719,7 @@ Partial Class Form2
         Me.zoom.Name = "zoom"
         Me.zoom.Size = New System.Drawing.Size(128, 28)
         Me.zoom.TabIndex = 106
+        Me.zoom.TabStop = false
         Me.zoom.Text = "Zoom In"
         Me.zoom.UseVisualStyleBackColor = true
         '
@@ -752,7 +764,7 @@ Partial Class Form2
         Me.btnfanart.Location = New System.Drawing.Point(988, 351)
         Me.btnfanart.Name = "btnfanart"
         Me.btnfanart.Size = New System.Drawing.Size(133, 35)
-        Me.btnfanart.TabIndex = 0
+        Me.btnfanart.TabIndex = 23
         Me.btnfanart.Text = "Alt Fanart Browser"
         '
         'btnresetimage
@@ -762,6 +774,7 @@ Partial Class Form2
         Me.btnresetimage.Name = "btnresetimage"
         Me.btnresetimage.Size = New System.Drawing.Size(75, 23)
         Me.btnresetimage.TabIndex = 0
+        Me.btnresetimage.TabStop = false
         Me.btnresetimage.Text = "Reset Crop"
         '
         'btnsavecropped
@@ -771,6 +784,7 @@ Partial Class Form2
         Me.btnsavecropped.Name = "btnsavecropped"
         Me.btnsavecropped.Size = New System.Drawing.Size(75, 23)
         Me.btnsavecropped.TabIndex = 0
+        Me.btnsavecropped.TabStop = false
         Me.btnsavecropped.Text = "Saved Cropped"
         '
         'starstxt
@@ -778,7 +792,7 @@ Partial Class Form2
         Me.starstxt.Location = New System.Drawing.Point(127, 272)
         Me.starstxt.Name = "starstxt"
         Me.starstxt.Size = New System.Drawing.Size(623, 20)
-        Me.starstxt.TabIndex = 115
+        Me.starstxt.TabIndex = 15
         '
         'Label6
         '
@@ -830,7 +844,7 @@ Partial Class Form2
         Me.top250txt.Margin = New System.Windows.Forms.Padding(4)
         Me.top250txt.Name = "top250txt"
         Me.top250txt.Size = New System.Drawing.Size(104, 20)
-        Me.top250txt.TabIndex = 120
+        Me.top250txt.TabIndex = 11
         '
         'Createdatepicker
         '
@@ -839,6 +853,7 @@ Partial Class Form2
         Me.Createdatepicker.Name = "Createdatepicker"
         Me.Createdatepicker.Size = New System.Drawing.Size(200, 20)
         Me.Createdatepicker.TabIndex = 123
+        Me.Createdatepicker.TabStop = false
         '
         'Label19
         '
@@ -859,7 +874,7 @@ Partial Class Form2
         Me.tb_TrailerURL.Name = "tb_TrailerURL"
         Me.tb_TrailerURL.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.tb_TrailerURL.Size = New System.Drawing.Size(623, 47)
-        Me.tb_TrailerURL.TabIndex = 125
+        Me.tb_TrailerURL.TabIndex = 14
         '
         'Label20
         '
@@ -877,7 +892,7 @@ Partial Class Form2
         Me.countrytxt.Location = New System.Drawing.Point(488, 155)
         Me.countrytxt.Name = "countrytxt"
         Me.countrytxt.Size = New System.Drawing.Size(262, 20)
-        Me.countrytxt.TabIndex = 127
+        Me.countrytxt.TabIndex = 8
         '
         'Label21
         '
@@ -906,14 +921,14 @@ Partial Class Form2
         Me.originaltxt.Location = New System.Drawing.Point(127, 41)
         Me.originaltxt.Name = "originaltxt"
         Me.originaltxt.Size = New System.Drawing.Size(279, 20)
-        Me.originaltxt.TabIndex = 130
+        Me.originaltxt.TabIndex = 1
         '
         'sorttxt
         '
         Me.sorttxt.Location = New System.Drawing.Point(488, 41)
         Me.sorttxt.Name = "sorttxt"
         Me.sorttxt.Size = New System.Drawing.Size(262, 20)
-        Me.sorttxt.TabIndex = 131
+        Me.sorttxt.TabIndex = 2
         '
         'Label23
         '
@@ -932,6 +947,7 @@ Partial Class Form2
         Me.PremieredDatePicker.Name = "PremieredDatePicker"
         Me.PremieredDatePicker.Size = New System.Drawing.Size(181, 20)
         Me.PremieredDatePicker.TabIndex = 133
+        Me.PremieredDatePicker.TabStop = false
         '
         'btnWatched
         '
@@ -939,7 +955,7 @@ Partial Class Form2
         Me.btnWatched.Location = New System.Drawing.Point(801, 314)
         Me.btnWatched.Name = "btnWatched"
         Me.btnWatched.Size = New System.Drawing.Size(120, 37)
-        Me.btnWatched.TabIndex = 134
+        Me.btnWatched.TabIndex = 26
         Me.btnWatched.Text = "UnWatched"
         Me.btnWatched.UseVisualStyleBackColor = true
         '
