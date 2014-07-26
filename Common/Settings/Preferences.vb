@@ -1878,12 +1878,13 @@ Public Class Preferences
                                                 workingfiledetails.filedetails_video.ScanType.Value = result.InnerText
                                         End Select
                                     Next
+                                    If workingfiledetails.filedetails_video.Codec.Value.ToLower = "mpeg video" AndAlso workingfiledetails.filedetails_video.FormatInfo.Value.Contains("2") Then
+                                        workingfiledetails.filedetails_video.Codec.Value = "MPEG2VIDEO"
+                                    End If
+                                    workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
+                                    workingfiledetails.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
                                 End If
-                                If workingfiledetails.filedetails_video.Codec.Value = "mpeg video" AndAlso workingfiledetails.filedetails_video.FormatInfo.Value.Contains("2") Then
-                                    workingfiledetails.filedetails_video.Codec.Value = "MPEG2VIDEO"
-                                End If
-                                workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
-                                workingfiledetails.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
+                                
                                 If check.Contains("""Audio""") Then
                                     tmpaud = ""
                                     Dim audio As New AudioDetails
@@ -2132,8 +2133,8 @@ Public Class Preferences
             .RedirectStandardError = True
             .RedirectStandardInput = True
             .UseShellExecute = False
-            .WindowStyle = ProcessWindowStyle.Normal
-            .CreateNoWindow = False 
+                .WindowStyle = ProcessWindowStyle.Hidden
+                .CreateNoWindow = True
         End With
         Dim To_Display As String = ""
         NewProcess.Start()
