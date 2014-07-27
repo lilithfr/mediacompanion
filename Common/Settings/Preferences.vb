@@ -1881,6 +1881,8 @@ Public Class Preferences
                                     If workingfiledetails.filedetails_video.Codec.Value.ToLower = "mpeg video" AndAlso workingfiledetails.filedetails_video.FormatInfo.Value.Contains("2") Then
                                         workingfiledetails.filedetails_video.Codec.Value = "MPEG2VIDEO"
                                     End If
+                                    workingfiledetails.filedetails_video.Width.Value = workingfiledetails.filedetails_video.Width.Value.Replace(" pixels", "")
+                                    workingfiledetails.filedetails_video.Height.Value = workingfiledetails.filedetails_video.Height.Value.Replace(" pixels", "")
                                     workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
                                     workingfiledetails.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
                                 End If
@@ -1915,6 +1917,7 @@ Public Class Preferences
                                             audio.Codec.Value = "dts"
                                         End If
                                     End If
+                                    If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "AC3"
                                     workingfiledetails.filedetails_audio.Add(audio)
                                 End If
                         End Select
