@@ -3898,7 +3898,7 @@ Public Class Form1
                     'MovieListComboBox.SelectedIndex = ptIndex
                     'update context menu with movie name & also if we show the 'Play Trailer' menu item
                     mov_ToolStripMovieName.BackColor = Color.Honeydew
-                    mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(6).Value.ToString & "'"
+                    mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(NFO_INDEX+4).Value.ToString & "'"
                     mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
 
                     'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then

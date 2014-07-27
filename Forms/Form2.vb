@@ -66,7 +66,9 @@ Public Class Form2
         Next
 
         Try
-            actorcb.SelectedItem = workingmovieedit.listactors(0).actorname
+            If workingmovieedit.listactors.Count > 0 Then
+                actorcb.SelectedItem = workingmovieedit.listactors(0).actorname
+            End If
         Catch ex As Exception
             'MsgBox(ex.ToString)
         End Try

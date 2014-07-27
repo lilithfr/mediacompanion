@@ -1521,34 +1521,37 @@ Public Class Movie
 
         'Try YouTube for HD and SD...
         '
-        If TrailerUrl = "" AndAlso Not IsNothing(tmdb.Trailers) AndAlso tmdb.Trailers.youtube.Count > 0 then
+        Try
+            If TrailerUrl = "" AndAlso Not IsNothing(tmdb.Trailers) AndAlso tmdb.Trailers.youtube.Count > 0 then
 
-            Dim tryAgain = True
+                Dim tryAgain = True
 
-            While tryAgain
-                TrailerUrl = tmdb.GetTrailerUrl(_triedUrls, Preferences.moviePreferredTrailerResolution)
-                If TrailerUrl <> "" then
-                    Try
-                        Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl)
+                While tryAgain
+                    TrailerUrl = tmdb.GetTrailerUrl(_triedUrls, Preferences.moviePreferredTrailerResolution)
+                    If TrailerUrl <> "" then
+                        Try
+                            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl)
 
-                        If yts.AvailableVideoFormat.Length>0 Then
+                            If yts.AvailableVideoFormat.Length>0 Then
 
-                            _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+                                _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
 
-                            If Not IsNothing(_youTubeTrailer) Then
-                                TrailerUrl = "plugin://plugin.video.youtube/?action=play_video&videoid=" & TrailerUrl   '_youTubeTrailer.VideoUrl
-                                tryAgain = False
+                                If Not IsNothing(_youTubeTrailer) Then
+                                    TrailerUrl = "plugin://plugin.video.youtube/?action=play_video&videoid=" & TrailerUrl   '_youTubeTrailer.VideoUrl
+                                    tryAgain = False
+                                End If
+                            Else
+                                TrailerUrl = ""
                             End If
-                        Else
-                            TrailerUrl = ""
-                        End If
-                    Catch       'Timed out...
-                    End Try
-                Else
-                    tryAgain = False
-                End If
-            End While
-        End If
+                        Catch       'Timed out...
+                        End Try
+                    Else
+                        tryAgain = False
+                    End If
+                End While
+            End If
+        Catch
+        End Try
 
 
         If TrailerUrl = "" Then
