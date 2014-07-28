@@ -3627,7 +3627,7 @@ Public Class Form1
 
             If Yield(yielding) Then Return
             'Dim MovpathandFilename As String = queryList(0).MoviePathAndFileName
-            If Not File.Exists(queryList(0).MoviePathAndFileName) AndAlso Not Preferences.folderhassinglemovie Then   'Detect if video file is missing
+            If Not File.Exists(queryList(0).MoviePathAndFileName) Then   'Detect if video file is missing
                 If Mov_MissingMovie(queryList) Then Exit Sub
             End If
 
@@ -12009,12 +12009,10 @@ Public Class Form1
         cbMoviePosterScrape.CheckState          = If(Preferences.scrapemovieposters, CheckState.Checked, CheckState.Unchecked)
         cbMovFanartScrape.CheckState            = If(Preferences.savefanart, CheckState.Checked, CheckState.Unchecked)
         cbMovieUseFolderNames.CheckState        = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
-        cb_folderhassinglemovie.CheckState      = If(Preferences.usefoldernames AndAlso Preferences.folderhassinglemovie, CheckState.Checked, CheckState.unchecked)
-        cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         cbMovXtraThumbs.CheckState              = If(Preferences.movxtrathumb, CheckState.Checked, CheckState.Unchecked)
         cbMovXtraFanart.CheckState              = If(Preferences.movxtrafanart, CheckState.Checked, CheckState.Unchecked)
         cbDlXtraFanart.CheckState               = If(Preferences.dlxtrafanart, CheckState.Checked, CheckState.Unchecked)
-        
+        cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         cbMovCreateFolderjpg.CheckState         = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
         cbMovCreateFanartjpg.CheckState         = If(Preferences.createfanartjpg, CheckState.Checked, CheckState.Unchecked )
         cbMovRootFolderCheck.CheckState         = If(Preferences.movrootfoldercheck, CheckState.Checked, CheckState.Unchecked)
@@ -12595,7 +12593,6 @@ Public Class Form1
         Try
             If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
                 Preferences.usefoldernames = True
-                cb_folderhassinglemovie.Enabled = True
                 cbMovieAllInFolders.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
                 cbMovCreateFanartjpg.Enabled = True
@@ -12609,8 +12606,6 @@ Public Class Form1
                 End If
             Else
                 Preferences.usefoldernames = False
-                Preferences.folderhassinglemovie = False
-                cb_folderhassinglemovie.Enabled = False
                 If Not Preferences.allfolders AndAlso Not Preferences.basicsavemode Then
                     cbMovCreateFolderjpg.Checked = False
                     cbMovCreateFolderjpg.Enabled = False
@@ -12627,24 +12622,6 @@ Public Class Form1
                     msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
                     cbMovieUseFolderNames.Checked = CheckState.Checked
                 End If
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub cb_folderhassinglemovie_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_folderhassinglemovie.CheckedChanged 
-        Try
-            If Not Preferences.folderhassinglemovie AndAlso cb_folderhassinglemovie.CheckState = CheckState.Checked and (Preferences.usefoldernames) Then
-                If MsgBox("Caution!!" & vbCrLf & "Setting this option will make nfo files incompatible" & vbCrLf & "for Library Mode" & vbCrLf & "Do you wish to continue", vbYesNo) = MsgBoxResult.Yes Then
-                    Preferences.folderhassinglemovie = True
-                Else
-                    cb_folderhassinglemovie.CheckState = CheckState.Unchecked
-                End If
-            Else
-                Preferences.folderhassinglemovie = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
