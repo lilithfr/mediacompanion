@@ -139,12 +139,13 @@ Public Class Movie
                 If Preferences.folderhassinglemovie Then
                     Dim s As String = Utilities.GetLastFolderInPath(Path.GetDirectoryName(mediapathandfilename)) & ".nfo"
                     _nfoPathAndFilename = Path.GetDirectoryName(mediapathandfilename) & "\" & s
-                End If
-                '_nfoPathAndFilename = mediapathandfilename.Replace(Extension, ".nfo")
+                Else
+                    _nfoPathAndFilename = mediapathandfilename.Replace(Extension, ".nfo")
 
-                If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
-                    If Preferences.namemode <> "1" Then
-                        _nfoPathAndFilename = NfoPath & movieStackName & ".nfo"
+                    If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
+                        If Preferences.namemode <> "1" Then
+                            _nfoPathAndFilename = NfoPath & movieStackName & ".nfo"
+                        End If
                     End If
                 End If
             End If
