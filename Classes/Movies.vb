@@ -1198,7 +1198,13 @@ End If
             ReportProgress(," - Already Added!")
             Return False
         End If
-
+        If Preferences.folderhassinglemovie Then
+            Dim foldername As String = fileInFo.DirectoryName & "\" & Utilities.GetLastFolderInPath(fileInFo.DirectoryName) & ".nfo"
+            If AlreadyAdded(foldername) Then
+                ReportProgress(," - Already Added!")
+                Return False
+            End If
+        End If
         Dim log   = ""
         Dim valid = Movie.IsValidMovieFile(fileInFo, log)
 
@@ -1856,8 +1862,7 @@ End If
     '    Next
     'End Sub
 
-    Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-        Dim incmissing As Boolean = Preferences.incmissingmovies 
+    Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo) 
         If IsNothing(dirInfo) Then Exit Sub
 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
@@ -1870,7 +1875,7 @@ End If
             Try
                 Dim movie = New Movie(Me,oFileInfo.FullName)
 
-                If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
+                If Not Preferences.incmissingmovies AndAlso movie.mediapathandfilename = "none" Then Continue For
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 

@@ -459,7 +459,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return sort(0).FullName
     End Function
 
-    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = True) As String
+    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = True, Optional usefolder As Boolean = False) As String
+        If usefolder Then Return ""
         Dim tempstring As String
         Dim tempfilename As String = path
         Dim actualpathandfilename As String = ""
@@ -475,15 +476,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
+            Dim tempfilename2 As String = tempfilename.Replace(IO.Path.GetExtension(tempfilename), "")
             For f = 0 To VideoExtensions.Length - 1
-                tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), VideoExtensions(f))
-                If IO.File.Exists(tempfilename) Then
-                    actualpathandfilename = tempfilename
+                'tempfilename2 = tempfilename2.Replace(IO.Path.GetExtension(tempfilename2), VideoExtensions(f))
+                If IO.File.Exists(tempfilename2 & VideoExtensions(f)) Then
+                    actualpathandfilename = tempfilename & VideoExtensions(f)
                     Exit For
                 End If
             Next
         End If
-
+        
         If actualpathandfilename = "" Then
             If tempfilename.IndexOf("movie.nfo") = -1 Then
                 Dim possiblemovies(1000) As String

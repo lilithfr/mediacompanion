@@ -189,6 +189,7 @@ Public Class Preferences
     Public Shared usefanart As Boolean
     Public Shared dontdisplayposter As Boolean
     Public Shared usefoldernames As Boolean
+    Public Shared folderhassinglemovie As Boolean
     Public Shared movxtrathumb As Boolean
     Public Shared movxtrafanart As Boolean
     Public Shared dlxtrafanart As Boolean
@@ -539,6 +540,7 @@ Public Class Preferences
         'movieinvertorder = 0
         imdbmirror = "http://www.imdb.com/"
         usefoldernames = False
+        folderhassinglemovie = False
         movxtrafanart = True
         movxtrathumb = False
         dlxtrafanart = False
@@ -907,6 +909,7 @@ Public Class Preferences
         root.AppendChild(doc, "usefanart",                          usefanart)                          'set from frmOptions - obsolete
         root.AppendChild(doc, "dontdisplayposter",                  dontdisplayposter)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "usefoldernames",                     usefoldernames)                     'chkbx_usefoldernames
+        root.AppendChild(doc, "folderhassinglemovie",               folderhassinglemovie)               'cb_folderhassinglemovie
         root.AppendChild(doc, "movxtrathumb",                       movxtrathumb)                       'cbMovXtraThumb
         root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
         root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
@@ -1268,6 +1271,7 @@ Public Class Preferences
                     Case "formheight"                           : formheight = Convert.ToInt32(thisresult.InnerXml)
                     Case "formwidth"                            : formwidth = Convert.ToInt32(thisresult.InnerXml)
                     Case "usefoldernames"                       : usefoldernames = thisresult.InnerXml
+                    Case "folderhassinglemovie"                 : folderhassinglemovie = thisresult.InnerXml 
                     Case "movxtrathumb"                         : movxtrathumb = thisresult.InnerXml
                     Case "movxtrafanart"                        : movxtrafanart = thisresult.InnerXml
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml

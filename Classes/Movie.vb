@@ -136,8 +136,11 @@ Public Class Movie
            If _nfoPathAndFilename = "" Then
                 Dim movieStackName = mediapathandfilename
                 Dim firstPart As Boolean
-
-                _nfoPathAndFilename = mediapathandfilename.Replace(Extension, ".nfo")
+                If Preferences.folderhassinglemovie Then
+                    Dim s As String = Utilities.GetLastFolderInPath(Path.GetDirectoryName(mediapathandfilename)) & ".nfo"
+                    _nfoPathAndFilename = Path.GetDirectoryName(mediapathandfilename) & "\" & s
+                End If
+                '_nfoPathAndFilename = mediapathandfilename.Replace(Extension, ".nfo")
 
                 If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
                     If Preferences.namemode <> "1" Then
@@ -270,7 +273,12 @@ Public Class Movie
         Get
             Dim pos As Integer=0
             Try
-                Dim BaseName = mediapathandfilename.Replace(Extension,"")
+                Dim BaseName As String = "" '= mediapathandfilename.Replace(Extension,"")
+                If Preferences.folderhassinglemovie Then
+                    BaseName = NfoPathAndFilename.Replace(".nfo", "")
+                Else
+                    BaseName = mediapathandfilename.Replace(Extension,"")
+                End If
 
                 pos = 1
 
@@ -349,9 +357,10 @@ Public Class Movie
                 s= NfoPathPrefName.Replace("movie.nfo","fanart.jpg")
                 Return s
             End If
-            'If Preferences.fanartjpg Then
-            '    s=IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
-            'End If
+            If Preferences.folderhassinglemovie Then
+                s=IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg"
+                Return s
+            End If
 
             Return ActualBaseName & "-fanart.jpg"
         End Get 
@@ -486,11 +495,10 @@ Public Class Movie
         Get
             If Rescrape Then Return ActualNfoPathAndFilename
 
-            If Preferences.basicsavemode  Then
+            If Preferences.basicsavemode Then
                 Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "movie.nfo")
-            Else
-                Return nfopathandfilename
-            End If            
+            End If
+            Return nfopathandfilename
         End Get 
     End Property
 
@@ -744,7 +752,7 @@ Public Class Movie
         Me.New
         _parent                   = parent
         _actualNfoPathAndFilename = NfoName
-        mediapathandfilename      = Utilities.GetFileName(NfoName,True)
+        mediapathandfilename      = Utilities.GetFileName(NfoName,True, Preferences.folderhassinglemovie)
     End Sub
 
 
@@ -1418,7 +1426,7 @@ Public Class Movie
     End Sub
     
     Sub DoRename
-        If Preferences.MovieRenameEnable AndAlso Not Preferences.basicsavemode AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not nfopathandfilename.ToLower.Contains("bdmv") Then 'AndAlso Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts")  ''Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
+        If Preferences.MovieRenameEnable AndAlso Not Preferences.basicsavemode AndAlso Not Preferences.folderhassinglemovie AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not nfopathandfilename.ToLower.Contains("bdmv") Then
             ReportProgress(,fileRename(me))
         End If
         If Preferences.MovFolderRename Then
@@ -2885,7 +2893,7 @@ Public Class Movie
         HandleOfflineFile()             ' Do we need this?
         SaveNFO()
 
-        If rl.Rename_Files Then   'And Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+        If rl.Rename_Files Then
             ReportProgress(, RenameExistingMetaFiles)
             'SaveNFO
         End If
