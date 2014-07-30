@@ -26,7 +26,6 @@ Public Class Data_GridViewMovie
     Dim _director As String
     Dim _votes As Integer=0
     Dim _TitleUcase As String
-    'Dim _IntVotes As Integer=0
     Dim _IntRuntime As Integer=0
     Dim _DisplayFileDate   As String
     Dim _DisplayCreateDate As String
@@ -54,7 +53,6 @@ Public Class Data_GridViewMovie
         foldername = movie.foldername
         title = movie.title
         originaltitle = movie.originaltitle
-        'titleandyear = movie.titleandyear
         year = movie.year
         filedate = movie.filedate
         id = movie.id
@@ -71,7 +69,6 @@ Public Class Data_GridViewMovie
         source = movie.source
         director = movie.director 
         Votes = movie.Votes
-  '      Integer.TryParse(votes.Replace(",",""),IntVotes)
         TitleUcase = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
         Resolution = movie.Resolution
@@ -163,16 +160,6 @@ Public Class Data_GridViewMovie
     ReadOnly Property DisplayTitle As String
         Get
             Dim t As String = If(IsNothing(title),"Unknown",title)
-           
-            'If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
-            '    Return t.Substring(4, t.Length - 4) & ", The"
-            'ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
-            '    Return t.Substring(2, t.Length -2) & ", A"
-            'ElseIf Preferences.ignoreAn And t.ToLower.IndexOf("an ") = 0 Then
-            '    Return t.Substring(3, t.Length -3) & ", An"
-            'Else
-            '    Return t
-            'End If
             Return Preferences.RemoveIgnoredArticles(t)
         End Get
     End Property
@@ -200,15 +187,6 @@ Public Class Data_GridViewMovie
             _originaltitle = value
         End Set
     End Property
-
-    'Public Property titleandyear
-    '    Get
-    '        Return _titleandyear
-    '    End Get
-    '    Set(ByVal value)
-    '        _titleandyear = value
-    '    End Set
-    'End Property
 
     Public Property year
         Get
@@ -363,15 +341,6 @@ Public Class Data_GridViewMovie
         End Set
     End Property
 
-    'Public Property IntVotes
-    '    Get
-    '        Return _IntVotes
-    '    End Get
-    '    Set(ByVal value)
-    '        _IntVotes = value
-    '    End Set
-    'End Property
-
     Public Property IntRuntime
         Get
             Return _IntRuntime
@@ -436,16 +405,6 @@ Public Class Data_GridViewMovie
     ReadOnly Property DisplaySortOrder As String
         Get
             Dim t As String = If(IsNothing(SortOrder),"Unknown",SortOrder)
-           
-            'If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
-            '    Return t.Substring(4, t.Length - 4) & ", The"
-            'ElseIf Preferences.ignoreAarticle And t.ToLower.IndexOf("a ") = 0 Then
-            '    Return t.Substring(2, t.Length -2) & ", A"
-            'ElseIf Preferences.ignoreAn And t.ToLower.IndexOf("an ") = 0 Then
-            '    Return t.Substring(3, t.Length -3) & ", An"
-            'Else
-            '    Return t
-            'End If
             Return Preferences.RemoveIgnoredArticles(t)
         End Get
     End Property
@@ -480,7 +439,7 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property MissingRating As Boolean
         Get
-            Return Rating=0     '.ToString.Trim=""
+            Return Rating=0
         End Get
     End Property  
 
@@ -534,14 +493,14 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property MissingVotes As Boolean
         Get
-            Return Votes = 0        '.ToString.Trim=""
+            Return Votes = 0
         End Get
     End Property  
 
 
     Public ReadOnly Property MissingYear As Boolean
         Get
-            Return year = 0     '.ToString.Trim=""
+            Return year = 0
         End Get
     End Property  
 

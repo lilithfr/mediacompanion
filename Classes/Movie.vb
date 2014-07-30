@@ -486,11 +486,9 @@ Public Class Movie
         Get
             If Rescrape Then Return ActualNfoPathAndFilename
 
-            If Preferences.basicsavemode  Then
-                Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "movie.nfo")
-            Else
-                Return nfopathandfilename
-            End If            
+            If Preferences.basicsavemode  Then Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "movie.nfo")
+
+            Return nfopathandfilename
         End Get 
     End Property
 
@@ -1002,10 +1000,12 @@ Public Class Movie
 
 
     Sub TidyUpAnyUnscrapedFields
+        Dim success As Boolean = True
         If _scrapedMovie.fullmoviebody.title = Nothing or _scrapedMovie.fullmoviebody.title = "" Then
             _scrapedMovie.fullmoviebody.title = Title
             _scrapedMovie.fullmoviebody.plot  = "This movie could not be identified, or IMDB is un-available. To add the movie manually, either go to the movie edit page and select ""Change Movie"", then select the correct movie, or change movie scraper to XBMC-TMDB and Rescrape Movie."
             _scrapedMovie.fullmoviebody.genre = "Problem"
+            success = False
         End If
 
         If _scrapedMovie.fullmoviebody.year =       Nothing Then _scrapedMovie.fullmoviebody.year = "1901"
@@ -1016,7 +1016,7 @@ Public Class Movie
 
         If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
 
-        If Preferences.movies_useXBMC_Scraper Then
+        If success AndAlso Preferences.movies_useXBMC_Scraper Then
             tmdb.Imdb                               = _scrapedMovie.fullmoviebody.imdbid 
             tmdb.TmdbId                             = _scrapedMovie.fullmoviebody.tmdbid 
             _scrapedMovie.fullmoviebody.mpaa        = tmdb.Certification
@@ -2885,7 +2885,7 @@ Public Class Movie
         HandleOfflineFile()             ' Do we need this?
         SaveNFO()
 
-        If rl.Rename_Files Then   'And Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+        If rl.Rename_Files Then
             ReportProgress(, RenameExistingMetaFiles)
             'SaveNFO
         End If

@@ -214,7 +214,6 @@ Public Class Movies
     Public ReadOnly Property GeneralFilters As List(Of String)
         Get
             Dim lst As List(Of String) = New List(Of String)
-
             lst.Add( "All"                    )
             lst.Add( Watched                  )
             lst.Add( Unwatched                )
@@ -241,17 +240,15 @@ Public Class Movies
             lst.Add( MissingIMDBId            )
             lst.Add( MissingSource            )
             lst.Add( MissingDirector          )
-If Preferences.ShowExtraMovieFilters Then
-            lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
-            lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
-            lst.Add( "Imdb not in folder name & year mismatch (" & NotImdbInFolderNameAndYearMisMatch & ")")
-            lst.Add( "Plot same as Outline (" &  PlotEqOutline & ")")
-End If
+            If Preferences.ShowExtraMovieFilters Then
+                lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
+                lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
+                lst.Add( "Imdb not in folder name & year mismatch (" & NotImdbInFolderNameAndYearMisMatch & ")")
+                lst.Add( "Plot same as Outline (" &  PlotEqOutline & ")")
+            End If
             If Preferences.XBMC_Link Then
                 If Not IsNothing(Form1.MC_Only_Movies) Then lst.Add( MC_Only_Movies )
-
                 If Not IsNothing(XbmcMcMovies) Then lst.Add( "Different titles (" & Xbmc_DifferentTitles.Count.ToString & ")"  )
-
             End If
 
             Return lst
@@ -681,7 +678,6 @@ End If
         End If
     End Sub
 
-
     Public ReadOnly Property SetsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In MovieCache 
@@ -700,8 +696,6 @@ End If
         End Get
     End Property    
 
-
-
     Public ReadOnly Property SetsFilter As List(Of String)
         Get
             Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras) 
@@ -709,7 +703,6 @@ End If
         End Get
     End Property    
  
-
     Public ReadOnly Property MoviesSetsIncNone As List(Of String)
         Get
             Try
@@ -722,7 +715,6 @@ End If
         End Get
     End Property
 
- 
     Public ReadOnly Property MoviesSetsExNone As List(Of String)
         Get
             Dim x = MoviesSetsIncNone
@@ -734,7 +726,6 @@ End If
         End Get
     End Property    
 
-
     Private Sub Rebuild_Data_GridViewMovieCache
         _data_GridViewMovieCache.Clear
 
@@ -743,20 +734,17 @@ End If
         Next
     End Sub
 
-
     Public ReadOnly Property ActorDb As List(Of ActorDatabase)
         Get
             Return _actorDb
         End Get
     End Property
 
-
     Public ReadOnly Property DirectorDb As List(Of ActorDatabase)
         Get
             Return _directorDb
         End Get
     End Property
-
 
     Public ReadOnly Property Cancelled As Boolean
         Get
@@ -768,7 +756,6 @@ End If
             Return False
         End Get
     End Property
-
 
     Sub New(Optional bw As BackgroundWorker=Nothing)
         _bw = bw
@@ -825,7 +812,6 @@ End If
 
     Public Function LoadMovie(fullpathandfilename As String, Optional ByVal Cacheupdate As Boolean = True) As Movie
 
-'       Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename,True),Me)
         Dim movie = New Movie(Me,fullpathandfilename)
 
         If IsNothing(movie) Then Return Nothing
@@ -890,7 +876,6 @@ End If
             If dirInfo.Exists Then
                 folders.Add(moviefolder)
                 ReportProgress("Searching movie Folder: " & dirInfo.FullName.ToString & vbCrLf)
-
                 Try
                     For Each subfolder In Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
                         folders.Add(subfolder)
@@ -953,16 +938,12 @@ End If
         Dim found   As Integer = 0
 
         For Each ext In Utilities.VideoExtensions
-            
             ext = If((ext = "video_ts.ifo"), ext, "*" & ext)
-
             Try
                 For Each fileInFo In dirInfo.GetFiles(ext)
-
                     If not ValidateFile(fileInFo) then
                         Continue For
                     End if
-
                     found += 1
                     NewMovies.Add( New Movie(fileInFo.FullName,Me) )
                 Next 
@@ -971,7 +952,6 @@ End If
                     Throw ex
                 #End If
             End Try
-
         Next
 
         If found > 0 then
@@ -995,19 +975,15 @@ End If
         Dim msg=""
         For Each file In files
             Dim fileInfo = New IO.FileInfo(file)
-
             i += 1
             PercentDone = CalcPercentDone(i,files.Count)
             msg="!!! Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
             ReportProgress(msg,msg & vbCrLf)
-
             If not ValidateFile(fileInFo) then
                 Continue For
             End if
-
             found += 1
             NewMovies.Add( New Movie(fileInFo.FullName,Me) )
-
             If Cancelled then Exit Sub
         Next
 
@@ -1020,7 +996,6 @@ End If
             ReportProgress(vbCrLf & vbCrLf & "No new movies found" & vbCrLf & vbCrLf,vbCrLf & vbCrLf & "!!! No new movies found" & vbCrLf & vbCrLf)
         End If
  
-
         Dim i = 0
         For Each newMovie In NewMovies
             i += 1
@@ -1034,7 +1009,6 @@ End If
             If newMovie.TimingsLog <> "" then
                 ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
             End If
-
             If Cancelled then Exit Sub
         Next
         Preferences.googlecount = 0
@@ -1051,7 +1025,6 @@ End If
 
     Sub ChangeMovie(NfoPathAndFilename As String, ChangeMovieId As String, MovieSearchEngine As String)
 
-  '     Dim movie = New Movie(Utilities.GetFileName(NfoPathAndFilename,True),Me)
         Dim movie = New Movie(Me,NfoPathAndFilename)
 
         movie.DeleteScrapedFiles(True)
@@ -1068,7 +1041,6 @@ End If
 
     Sub RescrapeSpecificMovie(fullpathandfilename As String,rl As RescrapeList)
 
-'       Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename,True),Me)
         Dim movie = New Movie(Me,fullpathandfilename)
 
         AddMovieEventHandlers   ( movie )
@@ -1094,19 +1066,12 @@ End If
         For Each item In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-
-'           Dim movie = New Movie(Utilities.GetFileName(item,True),Me)
             Dim movie = New Movie(Me,item)
-
             AddMovieEventHandlers   ( movie )
-
             ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " [" & movie.Title & "] ")
-
-
             movie.Scraped=False
             movie.RescrapeSpecific  ( rl    )
             RemoveMovieEventHandlers( movie )
-
             If Cancelled then Exit For
         Next
         SaveCaches
@@ -1119,10 +1084,8 @@ End If
         For Each NfoFilename In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-
             ReportProgress("Rescraping " & i & " of " & NfoFilenames.Count & " ")
             RescrapeMovie(NfoFilename)
-
             If Cancelled then Exit For
         Next
         SaveCaches
@@ -1137,7 +1100,6 @@ End If
         For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
             i += 1
             PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
-            'ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             ReportProgress("Rescraping '" & Utilities.TitleCase(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             RescrapeSpecificMovie(FullPathAndFilename,rl)
 
@@ -1147,13 +1109,11 @@ End If
     End Sub
 
     Function CapsFirstLetter(words As String)
-        'Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
         Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
 
-    Sub RescrapeMovie(NfoFilename as String)
-'       Dim movie = New Movie(Utilities.GetFileName(NfoFilename,True),Me)
+    Sub RescrapeMovie(NfoFilename as String, Optional ByVal tmdbid As String = "")
 
         If Not File.Exists(NfoFilename) Then 
             ReportProgress("NFO not found : [" & NfoFilename & "]  ")
@@ -1165,12 +1125,10 @@ End If
         movie.Rescrape = True
 
         Dim imdbid As String = movie.PossibleImdb 
-
+        If Preferences.movies_useXBMC_Scraper Then
+            imdbid = tmdbid
+        End If
         movie.DeleteScrapedFiles()
-
-        'movie.DeleteScrapedFiles
-
-        'ScrapeMovie(movie)
 
         movie.ScrapedMovie.Init
 
@@ -1179,8 +1137,6 @@ End If
         movie.Scrape(imdbid)
         RemoveMovieEventHandlers( movie )
     End Sub
-
-
 
     Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
         Try
@@ -1246,7 +1202,6 @@ End If
 
                         For Each detail In thisresult.ChildNodes
                             Select Case detail.Name
-
                                 Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
                                 Case "source"               : newmovie.source = detail.InnerText
                                 Case "director"             : newmovie.director = detail.InnerText
@@ -1287,9 +1242,7 @@ End If
                                     End Try
                                 Case "Resolution"           : newmovie.Resolution = detail.InnerText
                                 Case "VideoCodec"           : newmovie.VideoCodec = detail.InnerText
-
                                 Case "audio"
-                                    '               newmovie.Audio.Clear
                                     Dim audio As New AudioDetails
                                     For Each audiodetails As XmlNode In detail.ChildNodes
                                         Select Case audiodetails.Name
@@ -1338,7 +1291,6 @@ End If
         If File.Exists(cacheFile) Then
             File.Delete(cacheFile)
         End If
-
 
         Dim doc      As New XmlDocument
         Dim xmlproc  As XmlDeclaration
@@ -1485,7 +1437,6 @@ End If
 
 
     Public Sub LoadMovieCacheFromNfos
-'        MovieCache.Clear
         TmpMovieCache.Clear
 
         If movRebuildCaches Then 
@@ -1506,7 +1457,6 @@ End If
         If Cancelled Then Exit Sub
 
         If Not Preferences.usefoldernames Then
-    '       For Each movie In MovieCache
             For Each movie In TmpMovieCache
                 If movie.filename <> Nothing Then movie.filename = movie.filename.Replace(".nfo", "")
             Next
@@ -1529,21 +1479,13 @@ End If
             SaveDirectorCache()
 
         End If
-        'No duplicates found...
-        'Dim q = From item In TmpMovieCache Group by item.fullpathandfilename Into Group Select Group
-
-        'For Each item In q
-        '    MovieCache.Add(item(0))
-        'Next
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
         Rebuild_Data_GridViewMovieCache()
 
         If Preferences.XbmcLinkReady Then
-'            Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
-
             Form1.XbmcControllerQ.Write(evt)
         End If
     End Sub
@@ -1559,7 +1501,6 @@ End If
         TmpMovieCache.Clear
         TotalNumberOfFolders=0
         NumberOfFoldersDone =0
-        'If movRebuildCaches Then _actorDb.Clear : _tmpActorDb.Clear
 
         BWs.Clear
 
@@ -1618,24 +1559,13 @@ End If
       
         If Cancelled Then Exit Sub
 
-        'If movRebuildCaches Then
-        '    Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
-
-        '    For Each item In q.Distinct()
-        '        _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
-        '    Next
-	    '    SaveActorCache()
-        'End If
-
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
 
         Rebuild_Data_GridViewMovieCache
 
         If Preferences.XbmcLinkReady Then
-'           Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies, New ScanNewMoviesEventArgs(MovieCache.Count,PriorityQueue.Priorities.low))
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
-
             Form1.XbmcControllerQ.Write(evt)
         End If
     End Sub
@@ -1736,33 +1666,6 @@ End If
         End If
     End Sub
 
-
-
-'    Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
-
-'        Dim nfoFunction  As New WorkingWithNfoFiles
-'        Dim workingMovie As ComboList
-
-'        For Each oFileInfo In dirInfo.GetFiles(pattern)
-''            Application.DoEvents()
-
-'            If Cancelled Then Exit Sub
-
-'            If Not File.Exists(oFileInfo.FullName) Then Continue For
-
-
-'            workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
-
-'            If workingMovie.title = "Error"                    Then Continue For
-'            If workingMovie.genre.IndexOf("skipthisfile") > -1 Then Continue For
-
-'            workingMovie.foldername   = Utilities  .GetLastFolder (workingMovie.fullpathandfilename)
-'            workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
-
-'            Cache.Add(workingMovie)
-'        Next
-'    End Sub
-
     Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
         Dim incmissing As Boolean = Preferences.incmissingmovies 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
@@ -1779,16 +1682,12 @@ End If
        
             movie.LoadNFO(False)
 
-            'If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
             If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
                 Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
             End If
             Cache.Add(movie.Cache)
         Next
     End Sub
-
-
-
 
     Private Sub mov_NfoLoad(ByVal folderlist As List(Of String))
         Dim tempint As Integer
@@ -1815,7 +1714,6 @@ End If
             End Try
         Next
 
-
         Dim i = 0
         For Each Path In moviePaths
             i += 1
@@ -1827,54 +1725,19 @@ End If
         Next
     End Sub
 
-
-    'Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-
-    '    Dim nfoFunction As New WorkingWithNfoFiles
-
-    '    Dim workingMovie As ComboList
-
-    '    For Each oFileInfo In dirInfo.GetFiles(pattern)
-    '        Application.DoEvents()
-
-    '        If Cancelled Then Exit Sub
-
-    '        If Not File.Exists(oFileInfo.FullName) Then Continue For
-
-    '        workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
-
-    '        If workingMovie.title = "Error" Then Continue For
-
-    '        workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
-
-    '        If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
-
-    '            workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
-
-    '            TmpMovieCache.Add(workingMovie)
-    '        End If
-    '    Next
-    'End Sub
-
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-        Dim incmissing As Boolean = Preferences.incmissingmovies 
         If IsNothing(dirInfo) Then Exit Sub
-
         For Each oFileInfo In dirInfo.GetFiles(pattern)
-
             Application.DoEvents
-
             If Cancelled Then Exit Sub
-
             If Not File.Exists(oFileInfo.FullName) Then Continue For
             Try
                 Dim movie = New Movie(Me,oFileInfo.FullName)
 
-                If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
+                If Not Preferences.incmissingmovies AndAlso movie.mediapathandfilename = "none" Then Continue For
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
-                'If movie.ScrapedMovie.fullmoviebody.outline = "This nfo file could not be loaded" Then Continue For
                 If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
                     Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
                 End If
@@ -1883,45 +1746,34 @@ End If
                 MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
             End Try
         Next
-
     End Sub
 
     Function xbmcTmdbRenameMovie(ByRef aMovie As Movie, ByVal filename As String) As String
         Dim NewFilenameandPath As String = filename
         Try
-            If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not filename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
-            'Dim ExtensionPosition As Integer = filename.LastIndexOf(".")
-            'Dim nfoFilename As String = filename.Remove(ExtensionPosition, (filename.Length - ExtensionPosition))
-            'nfoFilename &= ".nfo"
-            'Dim thismovie = New Movie(Me, nfoFilename)
-            'thismovie = LoadMovie(nfoFilename, False)
-            'thismovie.Scraped=False
-
-            AddMovieEventHandlers   ( aMovie )
-            aMovie.fileRename(aMovie)
-            RemoveMovieEventHandlers( aMovie )
-            NewFilenameandPath = aMovie.mediapathandfilename
-
+            If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not filename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+                AddMovieEventHandlers   ( aMovie )
+                aMovie.fileRename(aMovie)
+                RemoveMovieEventHandlers( aMovie )
+                NewFilenameandPath = aMovie.mediapathandfilename
             End If
         Catch ex As Exception
             Return NewFilenameandPath
         End Try
-
         Return NewFilenameandPath
     End Function
 
     Function XbmcTmdbDlPosterFanart(ByVal aMovie as Movie) as Boolean
         Try
             If Not Preferences.scrapemovieposters AndAlso Not Preferences.savefanart AndAlso Preferences.dlxtrafanart then
-            Return False
-        End If
+                Return False
+            End If
             AddMovieEventHandlers ( aMovie )
             aMovie.IniTmdb
             If Preferences.scrapemovieposters Then aMovie.DoDownloadPoster
             If Preferences.savefanart Then aMovie.DoDownloadFanart
             If Preferences.dlxtrafanart Then aMovie.DoDownloadExtraFanart 
             RemoveMovieEventHandlers ( aMovie )
-
         Catch ex As Exception
             Return False
         End Try
@@ -1949,7 +1801,6 @@ End If
                 aMovie.DeleteExtraFiles()
             End If
             Return True
-
         Catch ex As Exception
             Return False
         End Try
@@ -1971,22 +1822,16 @@ End If
 
     Sub LoadPersonCache(peopleDb As List(Of ActorDatabase),typeName As String,  fileName As String)
         peopleDb.Clear()
-
         If Not File.Exists(fileName) Then Exit Sub
-
         Dim peopleList As New XmlDocument
-
         peopleList.Load(fileName)
-
         Dim thisresult As XmlNode = Nothing
-
         For Each thisresult In peopleList(typeName & "_cache")
             Select Case thisresult.Name
                 Case typeName
                     Dim name = ""
                     Dim movieId = ""
                     Dim detail As XmlNode = Nothing
-
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
                             Case "name"
@@ -1995,12 +1840,10 @@ End If
                                 movieId = detail.InnerText
                         End Select
                     Next
-
                     peopleDb.Add(New ActorDatabase(name, movieId))
             End Select
         Next
     End Sub
-
 
     Sub SaveActorCache()
         SavePersonCache(ActorDb,"actor",Preferences.workingProfile.actorcache)
@@ -2064,29 +1907,21 @@ End If
 
 
     Public Sub RebuildMovieCache
-        
         If Preferences.UseMultipleThreads Then
             MT_LoadMovieCacheFromNfos
         Else
             LoadMovieCacheFromNfos
         End If
-
-
-        If Cancelled Then 
-            Exit Sub
-        End If
-
+        If Cancelled Then Exit Sub
         SaveMovieCache
     End Sub
 
 
     Public Sub RebuildMoviePeopleCaches()
-
         _actorDB      .Clear()
         _directorDb   .Clear()
         _tmpActorDb   .Clear()
         _tmpDirectorDb.Clear()
-
         Dim i = 0
 
         For Each movie In MovieCache
@@ -2118,14 +1953,11 @@ End If
         SaveDirectorCache()
     End Sub
 
- 
     Sub RemoveMovieFromCache(fullpathandfilename)
 
         If fullpathandfilename = "" Then Exit Sub
-
         MovieCache             .RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
         Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
-
 
         If Preferences.XbmcLinkReady Then
             Dim media As String = Utilities.GetFileName(fullpathandfilename,True)
@@ -2140,8 +1972,6 @@ End If
             End If
         End If
     End Sub
-
-        
 
     Public Shared Sub SpinUpDrives
         For each item In Preferences.movieFolders
@@ -2197,34 +2027,6 @@ End If
 
 #Region "Filters"
 
-
-
-    'Function ApplyAudioLanguageFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
-
-    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
-
-    '    Return Filter(b,filterValue,leftOuterJoinTable)
-    'End Function
-
-
-    'Function Filter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String, leftOuterJoinTable As IEnumerable )
-
-    '    Return From m In b
-    '                Group Join 
-    '                    a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
-    '                Into
-    '                    ResultList = Group
-    '                From
-    '                    result In ResultList.DefaultIfEmpty
-    '                Where
-    '                    If( result Is Nothing, "Unassigned", result.field ) = filterValue
-    '                Select 
-    '                    m
-    '                Distinct
-    'End Function
-
-
-
     Function ApplyGenresFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim i As Integer = 0
 
@@ -2243,7 +2045,6 @@ End If
         Return recs
     End Function
 
-
     Function ApplyCertificatesFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 
         Dim fi As New FilteredItems(ccb, "Missing", "")
@@ -2258,8 +2059,6 @@ End If
         Return recs
     End Function
 
- 
-
     Function ApplySetsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb)
        
@@ -2272,7 +2071,6 @@ End If
 
         Return recs
     End Function
-
 
     Function ApplyResolutionsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb,"Unknown","-1")
@@ -2310,7 +2108,6 @@ End If
              
     End Function
 
-
     Function ApplyAudioChannelsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
         Dim fi As New FilteredItems(ccb)
@@ -2319,7 +2116,6 @@ End If
 
         Return Filter(recs,leftOuterJoinTable, fi)
     End Function
-
 
     Function ApplyAudioBitratesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
@@ -2330,7 +2126,6 @@ End If
         Return Filter(recs,leftOuterJoinTable, fi)
     End Function
 
-
     Function ApplyNumAudioTracksFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
         Dim fi As New FilteredItems(ccb)
@@ -2339,7 +2134,6 @@ End If
 
         Return Filter(recs,leftOuterJoinTable, fi)
     End Function
-
 
     Function ApplyAudioLanguagesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
@@ -2367,17 +2161,13 @@ End If
         Return recs
     End Function
 
-
     Function ApplyActorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
         Return ApplyPeopleFilter(ActorDb, recs, ccb)
     End Function
 
-
     Function ApplyDirectorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
         Return ApplyPeopleFilter(DirectorDb, recs, ccb)
     End Function
-
-
 
     Function ApplyPeopleFilter(PeopleDb As List(Of ActorDatabase), recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 
@@ -2397,8 +2187,6 @@ End If
 
         Return recs
     End Function
-
-
 
     Function ApplyTagsFilter(ByVal recs As IEnumerable(Of Data_GridViewMovie), ByVal ccb As TriStateCheckedComboBox)
         Dim i As Integer = 0
@@ -2432,11 +2220,9 @@ End If
         Return recs
     End Function
 
-
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
 
         If fi.Include.Count>0 Then
-
             recs = From m In recs
                     Group Join 
                         a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
@@ -2452,7 +2238,6 @@ End If
         End If
 
         If fi.Exclude.Count>0 Then
-
             recs = From m In recs
                     Group Join 
                         a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
@@ -2485,19 +2270,11 @@ End If
 
     End Sub
 
-
-
-
-
     Sub Handle_XbmcOnlyMoviesChanged
         
     End Sub
 
 
-    
-
 #End Region
-
- 
 
 End Class

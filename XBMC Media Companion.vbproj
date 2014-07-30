@@ -195,7 +195,6 @@
     <Compile Include="Classes\RescrapeList.vb" />
     <Compile Include="Classes\RescrapeSpecificParams.vb" />
     <Compile Include="Classes\RetryHandler.vb" />
-    <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\Thumb.vb" />
     <Compile Include="Classes\Times.vb" />
     <Compile Include="Classes\TMDb.vb" />
@@ -418,8 +417,6 @@
     <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
     <Compile Include="Structures\TvShowLanguages.vb" />
-    <Compile Include="Classes\TvWrap\TvEpisode.vb" />
-    <Compile Include="Classes\TvWrap\TvShow.vb" />
     <Compile Include="UserControls\MediaStubs.Designer.vb">
       <DependentUpon>MediaStubs.vb</DependentUpon>
     </Compile>

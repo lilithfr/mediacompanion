@@ -15,8 +15,7 @@ Public Class clsGridViewMovie
 
         Dim dgv As DataGridView = Form1.DataGridViewMovies
 
-        If dgv.Columns.Count < 27 Then Return  '24
-   '    If dgv.Rows   .Count <  1 Then Return
+        If dgv.Columns.Count < 27 Then Return
 
         Cursor.Current = Cursors.WaitCursor
 
@@ -162,14 +161,12 @@ Public Class clsGridViewMovie
 
 
     Function CapsFirstLetter(words As String)
-        'Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
         Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
 
     Sub SetColWidth(col As DataGridViewColumn, Optional widthAdjustment As Integer=0)
 
-    '   col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells          'AllCells = slow
         col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells    'Set auto-size mode
 
         Dim initialAutoSizeWidth As Integer = col.Width                 'Save calculated width after auto-sizing
@@ -218,8 +215,6 @@ Public Class clsGridViewMovie
 
     Public Sub mov_FiltersAndSortApply(Form1 As Form1)
 
-
-
         If Not Form1.MainFormLoadedStatus Then Exit Sub
  
         Dim b = From f In Form1.oMovies.Data_GridViewMovieCache
@@ -227,7 +222,6 @@ Public Class clsGridViewMovie
         If Form1.txt_titlesearch.Text.ToUpper<>"" Then
             b = From f In b Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
         End If
-
 
         'General
         If Form1.cbFilterGeneral.Visible Then
@@ -267,14 +261,11 @@ Public Class clsGridViewMovie
                                                           Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
                                                           Select f
                                                           )
-     
-
             End Select
         End If
 
         If Yield Then Return
 
-        
         If Form1.cbFilterRating.Visible Then b = From f In b Where f.Rating >= Form1.cbFilterRating.SelectedMin and f.Rating <= Form1.cbFilterRating.SelectedMax     'Rating
         If Form1.cbFilterVotes .Visible Then b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
         If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
@@ -346,7 +337,6 @@ Public Class clsGridViewMovie
         End Select
 
         If Yield Then Return
-
 
         Dim lst = b.ToList
 

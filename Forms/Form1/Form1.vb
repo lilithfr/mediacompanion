@@ -2819,41 +2819,41 @@ Public Class Form1
 
 #Region "Auxiliary Procedures for Multithreading of Rescraping Movies Procedure Below"
 
-    Private Sub mov_ReScrapingStartTemp()
-        Dim FullFileContent As String = ""
-        Dim movie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+    'Private Sub mov_ReScrapingStartTemp()
+    '    Dim FullFileContent As String = ""
+    '    Dim movie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
-        Dim Scraper As String = Preferences.XBMC_Scraper
+    '    Dim Scraper As String = Preferences.XBMC_Scraper
 
-        If Scraper = "imdb" Then
-            FullFileContent = Start_XBMC_MoviesReScraping(Scraper, movie.ScrapedMovie.fullmoviebody.imdbid, movie.mediapathandfilename)
-        Else 
-            FullFileContent = Start_XBMC_MoviesReScraping(Scraper, ChangeMovieId, movie.mediapathandfilename)
-        End If
+    '    If Scraper = "imdb" Then
+    '        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, movie.ScrapedMovie.fullmoviebody.imdbid, movie.mediapathandfilename)
+    '    Else 
+    '        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, ChangeMovieId, movie.mediapathandfilename)
+    '    End If
 
-        If FullFileContent.ToLower <> "error" Then
-            Dim RescrapeMovieName As String = movie.mediapathandfilename 
-            Dim nfoFileandPath As String = ""
-            Dim Teste As Boolean = CreateMovieNfo(RescrapeMovieName, FullFileContent, Scraper, nfoFileandPath)
-            If Teste Then
-                Dim newFilename As String = RescrapeMovieName 
-                Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
-                Dim posters As Boolean = oMovies.XbmcTmdbDlPosterFanart(aMovie)
-                If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
-                If Preferences.XbmcTmdbActorDL Then
-                    Dim aok As Boolean = XbmcTmdbActorImageSave(aMovie, nfoFileandPath)
-                    If aok Then scraperLog &= "Actor images saved" & vbCrLf
-                End If
-                aMovie.UpdateCaches()
-                If Preferences.XbmcTmdbMissingFromImdb Or Preferences.XbmcTmdbRenameMovie Then
-                    mov_XbmcTmdbDoExtraAndRename(aMovie.NfoPathAndFilename)
-                    scraperLog &= "Movie Successfully Renamed" & vbCrLf
-                End If
-            End If
-        End If
-        If messbox.Visible = True Then messbox.Close()
-        If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
-    End Sub
+    '    If FullFileContent.ToLower <> "error" Then
+    '        Dim RescrapeMovieName As String = movie.mediapathandfilename 
+    '        Dim nfoFileandPath As String = ""
+    '        Dim Teste As Boolean = CreateMovieNfo(RescrapeMovieName, FullFileContent, Scraper, nfoFileandPath)
+    '        If Teste Then
+    '            Dim newFilename As String = RescrapeMovieName 
+    '            Dim aMovie As Movie = oMovies.LoadMovie(nfoFileandPath, False)
+    '            Dim posters As Boolean = oMovies.XbmcTmdbDlPosterFanart(aMovie)
+    '            If posters Then scraperLog &= " Poster and Fanart Download successful" & vbCrLf
+    '            If Preferences.XbmcTmdbActorDL Then
+    '                Dim aok As Boolean = XbmcTmdbActorImageSave(aMovie, nfoFileandPath)
+    '                If aok Then scraperLog &= "Actor images saved" & vbCrLf
+    '            End If
+    '            aMovie.UpdateCaches()
+    '            If Preferences.XbmcTmdbMissingFromImdb Or Preferences.XbmcTmdbRenameMovie Then
+    '                mov_XbmcTmdbDoExtraAndRename(aMovie.NfoPathAndFilename)
+    '                scraperLog &= "Movie Successfully Renamed" & vbCrLf
+    '            End If
+    '        End If
+    '    End If
+    '    If messbox.Visible = True Then messbox.Close()
+    '    If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
+    'End Sub
 
     Private Sub mov_ListRefresh()
         Call mov_FormPopulate()
@@ -2928,22 +2928,24 @@ Public Class Form1
             Exit Sub
         End If
 
-        If Not Preferences.movies_useXBMC_Scraper Then
-            RunBackgroundMovieScrape("RescrapeDisplayedMovie")
-            Exit Sub
-        End If
-        Dim i As Integer = DataGridViewMovies.CurrentRow.Index 
-        messbox = New frmMessageBox("", "", "The Selected Movie is being Rescraped....")
-        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        messbox.Show()
-        messbox.Refresh()
-        Application.DoEvents()
+        RunBackgroundMovieScrape("RescrapeDisplayedMovie")
 
-        novaThread = New Thread(New ThreadStart(AddressOf mov_ReScrapingStartTemp))
-        novaThread.SetApartmentState(ApartmentState.STA)
-        novaThread.Start()
+        'If Not Preferences.movies_useXBMC_Scraper Then
+        '    RunBackgroundMovieScrape("RescrapeDisplayedMovie")
+        '    Exit Sub
+        'End If
+        'Dim i As Integer = DataGridViewMovies.CurrentRow.Index 
+        'messbox = New frmMessageBox("", "", "The Selected Movie is being Rescraped....")
+        'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        'messbox.Show()
+        'messbox.Refresh()
+        'Application.DoEvents()
 
-        UpdateFilteredList()
+        'novaThread = New Thread(New ThreadStart(AddressOf mov_ReScrapingStartTemp))
+        'novaThread.SetApartmentState(ApartmentState.STA)
+        'novaThread.Start()
+
+        'UpdateFilteredList()
     End Sub
 
     Private Sub mov_SaveQuick()
@@ -4060,7 +4062,6 @@ Public Class Form1
             UpdateFilteredList()
 
         ElseIf tab.ToLower = "file details" Then
-            'Me.TabControl2.SelectedIndex = m_CurrentTabIndex
             currentTabIndex = TabControl2.SelectedIndex
             If TextBox8.Text = "" Then Call util_FileDetailsGet()
 
@@ -4079,37 +4080,15 @@ Public Class Form1
             currentTabIndex = TabControl2.SelectedIndex
             UpdateMissingFanartNav()
             EnableFanartScrolling()
-
-            ElseIf tab.ToLower = "open folder" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
-
             ElseIf tab.ToLower = "posters" Then
                 currentTabIndex = TabControl2.SelectedIndex
                 gbMoviePostersAvailable.Refresh()
                 UpdateMissingPosterNav()
-
-            ElseIf tab.ToLower = "rescrape movie" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                Call mov_Rescrape()
             ElseIf tab.ToLower = "change movie" Then
                 Call mov_ChangeMovieSetup(MovieSearchEngine)
                 currentTabIndex = TabControl2.SelectedIndex
-            ElseIf tab.ToLower = "search for new movies" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                If Not BckWrkScnMovies.IsBusy Then
-                    SearchForNew()
-                Else
-                    MsgBox("This task is already running")
-                End If
-            ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
-                ' TabPage14.Text = "...Cancelling..."
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                BckWrkScnMovies.CancelAsync()
-
             ElseIf tab.ToLower = "wall" Then
                 Call mov_WallSetup()
-
             ElseIf tab.ToLower = "movie & tag sets" Then
                 ListofMovieSets.Items.Clear()
                 For Each mset In Preferences.moviesets
@@ -4129,8 +4108,6 @@ Public Class Form1
                         End If
                     Next
                 Next
-
-
             ElseIf tab.ToLower = "movie preferences" Then
                 Call mov_PreferencesSetup()
 
@@ -20615,7 +20592,7 @@ End Sub
 
 
     Public Sub RescrapeDisplayedMovie
-        oMovies.RescrapeMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+        oMovies.RescrapeMovie(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.tmdbid)
         oMovies.SaveCaches
     End Sub
 

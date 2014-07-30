@@ -140,9 +140,7 @@ Public Class TvEpisode
         Me.Plot.Value = TvdbEpisode.Overview.Value
         Me.Director.Value = TvdbEpisode.Director.Value
         Me.Credits.Value = TvdbEpisode.Credits.Value
-        'Me.ImdbId.Value = TvdbEpisode.ImdbId.Value
         Me.MpaaCert.Value = TvdbEpisode.ProductionCode.Value
-        'Me.TvdbId.Value = TvdbEpisode.Id.Value
         Me.Season.Value = TvdbEpisode.SeasonNumber.Value
         Me.Episode.Value = TvdbEpisode.EpisodeNumber.Value
         Me.Thumbnail.Url = TvdbEpisode.ScreenShotUrl
@@ -226,7 +224,6 @@ Public Class TvEpisode
 
 
         Dim MI As New mediainfo
-        'MI = New mediainfo
         MI.Open(filename)
         Dim curVS As Integer = 0
         Dim addVS As Boolean = False
@@ -242,39 +239,21 @@ Public Class TvEpisode
             If IsNumeric(Me.Details.StreamDetails.Video.Width) Then
                 If Me.Details.StreamDetails.Video.Height <> Nothing Then
                     If IsNumeric(Me.Details.StreamDetails.Video.Height) Then
-                        '                            Dim tempwidth As Integer = Convert.ToInt32(Me.Details.StreamDetails.Video.width)
-                        '                            Dim tempheight As Integer = Convert.ToInt32(Me.Details.StreamDetails.Video.height)
-                        '                            Dim aspect As Decimal
-                        '                                aspect = tempwidth / tempheight  'Next three line are wrong for getting display aspect ratio
-                        '                                aspect = FormatNumber(aspect, 3)
-                        '                                If aspect > 0 Then Me.Details.StreamDetails.Video.aspect = aspect.ToString
-
                         Dim Information As String = MI.Inform
                         Dim BeginString As Integer = Information.ToLower.IndexOf(":", Information.ToLower.IndexOf("display aspect ratio"))
                         Dim EndString As Integer = Information.ToLower.IndexOf("frame rate")
                         Dim SizeofString As Integer = EndString - BeginString
                         Dim DisplayAspectRatio As String = Information.Substring(BeginString, SizeofString).Trim(" ", ":", Chr(10), Chr(13))
-                        'DisplayAspectRatio = DisplayAspectRatio.Substring(0, Len(DisplayAspectRatio) - 1)
                         If Len(DisplayAspectRatio) > 0 Then
                             Me.Details.StreamDetails.Video.Aspect.Value = DisplayAspectRatio
                         Else
                             Me.Details.StreamDetails.Video.Aspect.Value = "Unknown"
                         End If
-
-
                     End If
                 End If
             End If
         End If
-        'Me.Details.StreamDetails.Video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
 
-
-        'tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
-        'If tempmediainfo.ToLower = "avc" Then
-        '    tempmediainfo2 = "h264"
-        'Else
-        '    tempmediainfo2 = tempmediainfo
-        'End If
         Try
             tempmediainfo = aviFile.Video(0).Format
         Catch
@@ -286,9 +265,7 @@ Public Class TvEpisode
             tempmediainfo2 = tempmediainfo
         End If
 
-        'Me.Details.StreamDetails.Video.codec = tempmediainfo2
-        'Me.Details.StreamDetails.Video.formatinfo = tempmediainfo
-        Me.Details.StreamDetails.Video.Codec.Value = tempmediainfo2 'MI.Get_(StreamKind.Visual, curVS, "CodecID")
+        Me.Details.StreamDetails.Video.Codec.Value = tempmediainfo2 
         If Me.Details.StreamDetails.Video.Codec.Value = "DX50" Then
             Me.Details.StreamDetails.Video.Codec.Value = "DIVX"
         End If
@@ -315,40 +292,6 @@ Public Class TvEpisode
                 Catch
                     Me.Details.StreamDetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration"))/1000)
                 End Try
-            ElseIf playlist.Count > 1 Then
-                'Dim totalmins As Integer = 0
-                'For f = 0 To playlist.Count - 1
-                '    Dim M2 As mediainfo
-                '    M2 = New mediainfo
-                '    M2.Open(playlist(f))
-                '    Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
-                '    Dim tempint As Integer
-                '    If temptime <> Nothing Then
-                '        Try
-                '            '1h 24mn 48s 546ms
-                '            Dim hours As Integer = 0
-                '            Dim minutes As Integer = 0
-                '            Dim tempstring2 As String = temptime
-                '            tempint = tempstring2.IndexOf("h")
-                '            If tempint <> -1 Then
-                '                hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                '                tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                '                tempstring2 = Trim(tempstring2)
-                '            End If
-                '            tempint = tempstring2.IndexOf("mn")
-                '            If tempint <> -1 Then
-                '                minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                '            End If
-                '            If hours <> 0 Then
-                '                hours = hours * 60
-                '            End If
-                '            minutes = minutes + hours
-                '            totalmins = totalmins + minutes
-                '        Catch
-                '        End Try
-                '    End If
-                'Next
-                'Me.Details.StreamDetails.Video.DurationInSeconds.Value = totalmins & " min"
             End If
         Catch
             Me.Details.StreamDetails.Video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 57)
@@ -360,7 +303,6 @@ Public Class TvEpisode
 
         tempmediainfo = IO.Path.GetExtension(filename) '"This is the extension of the file"
         Me.Details.StreamDetails.Video.Container.Value = tempmediainfo
-        'Me.Details.StreamDetails.Video.codecid = MI.Get_(StreamKind.Visual, curVS, "CodecID")
 
         Me.Details.StreamDetails.Video.CodecInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
         Me.Details.StreamDetails.Video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, 102)

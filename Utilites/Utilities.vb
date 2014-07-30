@@ -471,14 +471,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
         If path.ToLower.Contains(".bdmv") Then
             Dim bdlargestfile As String = GetbdMainStream(path)
-            actualpathandfilename = bdlargestfile  'tempfilename.Replace("index.bdmv", "STREAM\" & bdlargestfile)
+            actualpathandfilename = bdlargestfile
         End If
 
         If actualpathandfilename = "" Then
+            Dim extn As String = IO.Path.GetExtension(tempfilename)
             For f = 0 To VideoExtensions.Length - 1
-                tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), VideoExtensions(f))
-                If IO.File.Exists(tempfilename) Then
-                    actualpathandfilename = tempfilename
+                Dim isfilename As String = tempfilename.Replace(extn, VideoExtensions(f))
+                If IO.File.Exists(isfilename) Then
+                    actualpathandfilename = isfilename
                     Exit For
                 End If
             Next
@@ -1223,7 +1224,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
         Dim tempbitmap As Bitmap = bm_dest
         Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
-        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\") ' & filename & ".jpg"
+        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\")
         If Not Directory.Exists(path) Then
             Directory.CreateDirectory(path)
         End If
