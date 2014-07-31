@@ -151,7 +151,6 @@ Public Class Classimdb
                     'If none of above pass movie, use IMDB's Simple search
 
             Got_Id = getimdbID_fromimdb_simple(title, imdbmirror, movieyear)
-            'If Got_Id <> "" AndAlso Got_Id.ToLower <> "error" Then Return Got_Id
 
             Return Got_Id
 
@@ -295,24 +294,6 @@ Public Class Classimdb
                                 GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
                             End If
                         End If
-                        'temps = exacttotal
-                        'If temps.IndexOf(movieyear) <> -1 Then
-                        '    Dim count As Integer
-                        '    count = CharCount(temps, movieyear)
-                        '    If count = 1 Then
-                        '        temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                        '        Dim first As Integer
-                        '        Dim length As Integer
-                        '        Dim calc As String
-                        '        calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                        '        If temps.IndexOf("&#34;") = -1 Then
-                        '            first = temps.LastIndexOf("href=""/title/tt") + 13
-                        '            length = 9
-                        '            GOT_IMDBID = temps.Substring(first, length)
-                        '        End If
-                        '    End If
-                        'End If
-
                         If GOT_IMDBID = "" And populartotal <> "" Then
                             If populartotal.IndexOf(movieyear) <> -1 Then
                                 If CharCount(populartotal, movieyear) = 1 Then
@@ -324,25 +305,6 @@ Public Class Classimdb
                                 End If
                             End If
                         End If
-                        'If GOT_IMDBID = "" And populartotal <> "" Then
-                        '    temps = populartotal
-                        '    If temps.IndexOf(movieyear) <> -1 Then
-                        '        Dim count As Integer
-                        '        count = CharCount(temps, movieyear)
-                        '        If count = 1 Then
-                        '            temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
-                        '            Dim first As Integer
-                        '            Dim length As Integer
-                        '            Dim calc As String
-                        '            calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                        '            If temps.IndexOf("&#34;") = -1 Then
-                        '                first = temps.LastIndexOf("href=""/title/tt") + 13
-                        '                length = 9
-                        '                GOT_IMDBID = temps.Substring(first, length)
-                        '            End If
-                        '        End If
-                        '    End If
-                        'End If
                     End If
                 End If
             ElseIf movieyear = Nothing Then
@@ -439,12 +401,6 @@ Public Class Classimdb
                 If exactreturn = "" And popularreturn = "" And backup <> "" Then GOT_IMDBID = backup
             End If
 
-
-
-
-
-
-            'If GOT_IMDBID = "" And backup <> "" Then GOT_IMDBID = backup
             If GOT_IMDBID = "" Then
                 Dim matc As Match
                 Dim NoResults As Match
@@ -463,8 +419,6 @@ Public Class Classimdb
                 Next
             End If
             Return GOT_IMDBID
-
-
         Catch
             Return "Error"
         Finally
@@ -476,13 +430,9 @@ Public Class Classimdb
         Monitor.Enter(Me)
         Dim GOT_IMDBID As String = ""
         Try
-            'Dim popularreturn As String = ""
-            'Dim exactreturn As String = ""
-            'Dim M As Match
             Dim titlesearch As String = searchurltitle(title)
             titlesearch = imdbmirror & "find?q=" & titlesearch & "&s=tt&exact=true&ref_=fn_tt_ex"
             Dim urllinecount As Integer
-            'Dim GOT_IMDBID As String
             Dim allok As Boolean = False
             Dim websource(4000)
             For f = 1 To 10
@@ -615,17 +565,13 @@ Public Class Classimdb
             If goodyear = True Then
                 titlesearch = titlesearch & "+%28" & year & "%29"
             End If
-            'url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
-            'url = url & titlesearch & "&as_sitesearch=www.imdb.com"
             url = url & titlesearch & Preferences.engineend(engine)
             Dim webpage As String = loadwebpage(Preferences.proxysettings, url, True)
-
 
             'www.imdb.com/title/tt0402022
             If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then
                 newimdbid = webpage.Substring(webpage.IndexOf("www.imdb.com/title/tt") + 19, 9)
             End If
-
             If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
                 allok = True
             Else
@@ -634,7 +580,6 @@ Public Class Classimdb
                     allok = True
                 End If
             End If
-
             If allok = True Then
                 Return newimdbid
             Else
@@ -645,7 +590,6 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
-
     End Function
 
     Public Function searchurltitle(ByVal title As String) As String
@@ -730,30 +674,6 @@ Public Class Classimdb
 
     Property Html As String=""
 
-    'ReadOnly Property Stars_Old As String
-    '    Get
-    '        Dim s As String=""
-    '        Dim context = Regex.Match(Html,MovieRegExs.REGEX_STARS, RegexOptions.Singleline).ToString
-
-    '        If context = "" Then Return ""
-            
-    '        Dim star=""
-
-    '        For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline) 
-
-    '            star=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
-
-    '            star.ExtractName
-
-    '            If star.ToLower.IndexOf("see full cast and crew")>-1 Then Continue For
-
-    '            s.AppendValue(star)
-    '        Next   
-
-    '        Return s
-    '    End Get
-    'End Property
-   
     ReadOnly Property Stars As String
         Get
             Dim s       As String = ""
@@ -1064,37 +984,15 @@ Public Class Classimdb
                     If webpage(f).IndexOf("<h4 class=""inline"">Tagline") <> -1 Then
                         Try
                             movienfoarray = webpage(f + 1)
-
                             movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
-
-                '            movienfoarray = movienfoarray.Trim()
                             totalinfo = totalinfo & "<tagline>" & movienfoarray & "</tagline>" & vbCrLf
                         Catch
                             totalinfo = totalinfo & "<tagline>scraper error</tagline>" & vbCrLf
                         End Try
                     End If
 
-                    'runtime
-                    'If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
-                    '    movienfoarray = ""
-                    '    Try
-                    '        Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
-                    '        If M.Success = True Then
-                    '            movienfoarray = M.Groups(1).Value
-                    '        Else
-                    '            movienfoarray = "scraper error"
-                    '        End If
-
-                    '        movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                    '        movienfoarray = encodespecialchrs(movienfoarray)
-                    '        totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
-                    '    Catch
-                    '        totalinfo = totalinfo & "<runtime>scraper error</runtime>" & vbCrLf
-                    '    End Try
-                    'End If
 
                     If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
                         movienfoarray = ""
@@ -1248,13 +1146,11 @@ Public Class Classimdb
                     End If
                 Next
 
-                
                 Try
                     tempstring = imdbmirror & "title/" & imdbid & "/plotsummary"
                     Dim plots(20) As String
                     webpage.Clear()
                     webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
-                    'Dim webPg1 As String = String.Join( vbcrlf , webpage.ToArray() )
                     tempint = 0
                     Dim doo As Boolean = False
                     For Each line In webpage
@@ -1264,7 +1160,6 @@ Public Class Classimdb
                         End If
                         If line.IndexOf("<p class=""plotSummary"">") <> -1 Then
                             tempint = tempint + 1
-                            'plots(tempint) = line
                             doo = True
                         End If
                     Next
@@ -1276,23 +1171,10 @@ Public Class Classimdb
                         End If
                     Next
                     If plots(biggest) <> Nothing Then
-
                         movienfoarray = plots(biggest).StripTagsLeaveContent
-
-                        'If movienfoarray.IndexOf("<a href=") <> -1 Then
-                        '    Do Until movienfoarray.IndexOf("<a href=") = -1
-                        '        first = movienfoarray.LastIndexOf("<a href=")
-                        '        last = movienfoarray.LastIndexOf("/"">")
-                        '        tempstring = movienfoarray.Substring(first, last - first + 3)
-                        '        movienfoarray = movienfoarray.Replace(tempstring, "")
-                        '    Loop
-                        '    movienfoarray = movienfoarray.Replace("</a>", "")
-                        'End If
-
                         movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                         movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                         movienfoarray = encodespecialchrs(movienfoarray)
-'                        totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
                         totalinfo &= "<plot>" & movienfoarray & "</plot>"
                     End If
                 Catch
@@ -1419,7 +1301,6 @@ Public Class Classimdb
         Catch ex As Exception
             totalinfo = totalinfo & "</movie>" & vbCrLf
             Return totalinfo
-            'MsgBox(ex.ToString & vbCrLf & vbCrLf & "error 354")
         Finally
             Monitor.Exit(Me)
         End Try
@@ -1464,6 +1345,28 @@ Public Class Classimdb
                 If tmdbid.Substring(0, 2) <> "tt" Then
                     ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", tmdbid, TMDb.LanguageCodes(0))
                     ParametersForScraper(1) = tmdbid
+                ElseIf tmdbid.Substring(0, 2) = "tt"
+                    Dim url = String.Format("http://api.themoviedb.org/3/find/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}&external_source=imdb_id", tmdbid, TMDb.LanguageCodes(0))
+                    Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
+                    request.Method = "GET"
+                    Dim responseContent As String = ""
+                    Try
+                    Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
+                      Using reader = New System.IO.StreamReader(response.GetResponseStream())
+                        responseContent = reader.ReadToEnd()
+                      End Using
+                    End Using
+                    Catch
+                    End Try
+                    Dim RegExPattern = "id"":(.*?),"
+                    Dim m As Match = Regex.Match(responseContent, RegExPattern)
+                    If m.Success then
+                        tmdbid = m.Groups(1).ToString
+                        ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", tmdbid, TMDb.LanguageCodes(0))
+                        ParametersForScraper(1) = tmdbid
+                    Else
+                        Return "error"
+                    End If
                 Else
                     Return "error"
                 End If
@@ -1761,10 +1664,8 @@ Public Class Classimdb
                 wrGETURL.Proxy = myProxy
             End If
 
-
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-'            Dim objReader As New StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
             Dim objReader As New StreamReader(objStream)
             Dim sLine As String = ""
 
@@ -1788,13 +1689,12 @@ Public Class Classimdb
             End If
 
         Catch ex As WebException
-            'MsgBox("Unable to load webpage " & url & vbCrLf & vbCrLf & ex.ToString)
             If IntoSingleString = False Then
                 If webpage.Count > 0 Then
                     Return webpage
                 Else
                     webpage.Add("error")
-                    Return webpage  '"error"
+                    Return webpage
                 End If
             Else
                 Return "error"

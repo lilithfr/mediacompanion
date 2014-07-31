@@ -16,23 +16,19 @@ Public Structure str_MovieActors
 
     Shared Widening Operator CType(ByVal Input As Media_Companion.Actor) As str_MovieActors
         Dim Temp As New str_MovieActors(True)
-
         Temp.actorid = Input.ActorId.Value
         Temp.actorname = Input.Name.Value
         Temp.actorrole = Input.Role.Value
         Temp.actorthumb = Input.Thumb.Value
-
         Return Temp
     End Operator
 
     Shared Widening Operator CType(ByVal Input As str_MovieActors) As Media_Companion.Actor
         Dim Temp As New Media_Companion.Actor
-
         Temp.ActorId.Value = Input.actorid
         Temp.Name.Value = Input.actorname
         Temp.Role.Value = Input.actorrole
         Temp.Thumb.Value = Input.actorthumb
-
         Return Temp
     End Operator
 
@@ -42,7 +38,7 @@ Public Structure str_MovieActors
 
     Public Sub SaveActor(ActorPath As String)
 
-        If actorthumb <> Nothing Then
+        If Not String.IsNullOrEmpty(actorthumb) Then
 
             Dim filename As String = GetActorFileName(ActorPath)
 
@@ -51,13 +47,11 @@ Public Structure str_MovieActors
                 If Not hg.Exists Then
                     IO.Directory.CreateDirectory(ActorPath)
                 End If
-                'filename = GetActorFileName(ActorPath)
-                Dim Success As Boolean = Movie.SaveActorImageToCacheAndPath(actorthumb, filename)
-                If Success Then ActorSave(filename)
+                If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then ActorSave(filename)
             End If
 
             'Allow also to save to local path/network path
-            If Preferences.actorsave AndAlso actorid <> "" Then  'AndAlso Not Preferences.actorsavealpha 
+            If Preferences.actorsave AndAlso actorid <> "" Then
                 If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
                     Dim tempstring As String = Preferences.actorsavepath
                     Dim workingpath As String = ""
@@ -73,7 +67,6 @@ Public Structure str_MovieActors
                     
                     DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
                     ActorSave(workingpath)
-                    'actorthumb = workingpath
 
                     If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
                         If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
@@ -84,11 +77,8 @@ Public Structure str_MovieActors
                     End If
                 End If
             End If
-
         End If
-
     End Sub
-
 
     Sub ActorSave(ByRef workingpath As String)
         If Preferences.EdenEnabled And Not Preferences.FrodoEnabled Then
@@ -110,29 +100,14 @@ Public Structure str_MovieActors
         Return smallThumb.Substring(0, smallThumb.IndexOf("._V1_")) & "._V1._SY400_SX300_.jpg"
     End Function
 
-
-
-    'Public Sub AssignFromImdbTr(Tr As String)
-
-    '    Dim m As Match = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_2, RegexOptions.Singleline)
-
-    '    actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars.EncodeSpecialChrs
-    '    actorrole  = m.Groups("actorrole").ToString.StripTagsLeaveContent.CleanSpecChars.EncodeSpecialChrs.Trim
-    '    actorthumb = GetBigThumb(m.Groups("actorthumb").ToString).EncodeSpecialChrs
-    '    actorid    = m.Groups("actorid").ToString
-    'End Sub
-
     Public Function AssignFromImdbTr(Tr As String) As Boolean
-
         Dim m As Match
-
         If Tr.IndexOf("loadlate")=-1 Then
             m = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_NO_IMAGE, RegexOptions.Singleline)
         Else
             m = Regex.Match(Tr, MovieRegExs.REGEX_ACTOR_WITH_IMAGE, RegexOptions.Singleline)
         End If
 
-        
         Try
             actorname  = m.Groups("actorname").ToString.CleanSpecChars.CleanFilenameIllegalChars
         Catch

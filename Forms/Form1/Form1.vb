@@ -2241,51 +2241,6 @@ Public Class Form1
         Return validfile
     End Function
 
-#Region "Auxiliary Procedures for Multithreading of Rescraping Movies Procedure Below"
-
-    Private Sub mov_XbmcTmdbDoExtraAndRename(ByVal fullpathandfilename)
-        _rescrapeList.FullPathAndFilenames.Clear()
-        _rescrapeList.FullPathAndFilenames.Add(fullpathandfilename)
-        rescrapeList.ResetFields
-        If Preferences.XbmcTmdbRenameMovie Then
-            rescrapeList.Rename_Folders = Preferences.MovFolderRename
-            rescrapeList.Rename_Files = Preferences.MovieRenameEnable 
-        End If
-        If Preferences.XbmcTmdbMissingFromImdb Then
-            rescrapeList.plot = True
-            rescrapeList.mpaa = True
-            rescrapeList.stars = True
-        End If
-        RunBackgroundMovieScrape("BatchRescrape")
-        While BckWrkScnMovies.IsBusy 
-            Application.DoEvents
-        End While
-    End Sub
-
-    Private Function XbmcTmdbActorImageSave(ByRef thismovie As Movie, nfoFilename As String) As Boolean
-        Try
-            Dim ActorPath As String = nfoFilename.Replace(IO.Path.GetFileName(nfoFilename), "") & ".actors\"
-            Dim actors2 As New List(Of str_MovieActors)
-            For Each actor In thismovie.ScrapedMovie.listactors
-                Try
-                    actor.SaveActor(ActorPath)
-                    actors2.Add(actor)
-                Catch ex As Exception
-                    'ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
-                End Try
-            Next
-            thismovie.ScrapedMovie.listactors.Clear()
-            thismovie.ScrapedMovie.listactors.AddRange(actors2)
-            Dim check As String = ""
-            Return True
-        Catch ex As Exception
-            Return False
-        End Try
-
-    End Function
-
-#End Region
-
     Private Sub DeleteZeroLengthFile(ByVal fileName)
 
         If IO.File.Exists(fileName) Then
@@ -3555,7 +3510,6 @@ Public Class Form1
             Else
                 LastMovieDisplayed = ""
             End If
-
         Catch
             Return
         End Try
@@ -3569,14 +3523,10 @@ Public Class Form1
         'Clear all fields of the movie
         MovieFormInit()
 
-
         If selectedRows.Count = 0 Then Exit Sub
-
 
         Dim needtoload As Boolean = False
         Dim done As Boolean = False
-
-
         If selectedRows.Count > 1 Then
             mov_ToolStripPlayMovie.Visible = False
             mov_ToolStripOpenFolder.Visible = False
@@ -3593,7 +3543,6 @@ Public Class Form1
         If Yield(yielding) Then Return
 
         If selectedRows.Count = 1 Then
-
             mov_ToolStripPlayMovie.Visible = True
             mov_ToolStripOpenFolder.Visible = True
             mov_ToolStripViewNfo.Visible = True
@@ -3604,7 +3553,6 @@ Public Class Form1
             mov_ToolStripPosterBrowserAlt.Visible = True
             mov_ToolStripEditMovieAlt.Visible = True
             mov_ToolStripReloadFromCache.Visible = True
-
             If titletxt.Visible = False Then
                 needtoload = True
             End If
@@ -3617,18 +3565,13 @@ Public Class Form1
 
             If Yield(yielding) Then Return
 
-            'Check if the file trailer exist
-            '            mov_ToolStripPlayTrailer.Visible = IO.File.Exists(selectedCells(NFO_INDEX).Value.ToString)
-
             If Yield(yielding) Then Return
 
-            '			Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(NFO_INDEX).Value.ToString
             Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = selectedCells(NFO_INDEX).Value.ToString
 
             Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
             If Yield(yielding) Then Return
-            'Dim MovpathandFilename As String = queryList(0).MoviePathAndFileName
             If Not File.Exists(queryList(0).MoviePathAndFileName) Then   'Detect if video file is missing
                 If Mov_MissingMovie(queryList) Then Exit Sub
             End If
@@ -3643,12 +3586,9 @@ Public Class Form1
                 workingMovie.playcount = queryList(0).playcount
                 workingMovie.rating = queryList(0).Rating
                 workingMovie.title = queryList(0).title
-                '       workingMovie.titleandyear = queryList(0).titleandyear
                 workingMovie.top250 = queryList(0).top250
                 workingMovie.year = queryList(0).year
-
                 mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
-
                 Call mov_FormPopulate(yielding)
             Else
                 If needtoload = True Then Call mov_FormPopulate(yielding)
@@ -3656,7 +3596,6 @@ Public Class Form1
             done = True
         Else
             outlinetxt.Text = ""
-            'setsTxt.Text = ""
             PictureBoxFanArt.Image = Nothing
             moviethumb.Image = Nothing
             roletxt.Text = ""
@@ -3669,14 +3608,12 @@ Public Class Form1
             Label128.Visible = True
             cbMovieDisplay_MovieSet.Items.Insert(0, "")
             cbMovieDisplay_MovieSet.SelectedIndex = 0
-            'ComboBox3.SelectedIndex = -1
             Dim add As Boolean = True
             Dim watched As String = ""
             For Each sRow As DataGridViewRow In selectedRows
                 Dim old As String = watched
                 For Each item In oMovies.MovieCache
                     If item.fullpathandfilename = sRow.Cells(NFO_INDEX).Value.ToString Then
-
                         If watched = "" Then
                             watched = item.playcount
                             old = watched
@@ -3690,7 +3627,6 @@ Public Class Form1
                     End If
 
                     If Yield(yielding) Then Return
-
                 Next
             Next
             If add = False Then
@@ -3708,8 +3644,6 @@ Public Class Form1
                 End If
             End If
         End If
-
-
     End Sub
 
 #Region "DataGridViewMovies Events"
@@ -18769,35 +18703,26 @@ End Sub
         util_FixSeasonEpisode()
     End Sub
 
-
     Private Sub RadioButtonFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonFanart.CheckedChanged
-        If RadioButtonFanart.Checked Then
-            mov_DisplayFanart()
-        End If
+        If RadioButtonFanart.Checked Then mov_DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb1.CheckedChanged
-        If RadioButtonThumb1.Checked Then
-            mov_DisplayFanart()
-        End If
+        If RadioButtonThumb1.Checked Then mov_DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb2.CheckedChanged
-        If RadioButtonThumb2.Checked Then
-            mov_DisplayFanart()
-        End If
+        If RadioButtonThumb2.Checked Then mov_DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb3.CheckedChanged
-        If RadioButtonThumb3.Checked Then
-            mov_DisplayFanart()
-        End If
+        If RadioButtonThumb3.Checked Then mov_DisplayFanart()
     End Sub
+
     Private Sub RadioButtonThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb4.CheckedChanged
-        If RadioButtonThumb4.Checked Then
-            mov_DisplayFanart()
-        End If
+        If RadioButtonThumb4.Checked Then mov_DisplayFanart()
     End Sub
+
     Private Sub mov_DisplayFanart()
         If workingMovieDetails Is Nothing Then Exit Sub
 
@@ -18825,8 +18750,8 @@ End Sub
 #End If
             End Try
         End If
-
     End Sub
+
     Private Function mov_FanartORExtrathumbPath() As String
         Dim fanarttype As String = ""
         If RadioButtonFanart.Checked Then fanarttype = "Fanart"
@@ -18846,20 +18771,17 @@ End Sub
                 fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb3.jpg"
             Case "Thumb4"
                 fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb4.jpg"
-
         End Select
         Return fanartpath
     End Function
 
 
     Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
-        mov_SplitContainerAutoPosition()
-        'MsgBox("TabPageMainBrowser - MOV")  
+        mov_SplitContainerAutoPosition()  
     End Sub
 
     Private Sub TabPageTVMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2TVMainBrowser.Enter
         tv_SplitContainerAutoPosition()
-        'MsgBox("TabPageMainBrowser - tv")
     End Sub
 
     Private Sub plottxt_DoubleClick(sender As System.Object, e As System.EventArgs) Handles plottxt.DoubleClick
@@ -18884,7 +18806,6 @@ End Sub
                         )
     End Sub
 
-
     Private Function GetActorThumb(ByRef currentUri As String)
         Dim actorthumb As String = currentUri
         If Preferences.actorsave Then
@@ -18896,101 +18817,32 @@ End Sub
                 Dim localActorThumbFileName As String
                 actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
                 localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
-
-                ' Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
                 Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName)
-
                 actorthumb = actorThumbFileName
             End If
         End If
         Return actorthumb
     End Function
+
     Private Sub RescrapeAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripRescrapeAll.Click
-        'Try
-        'rescrape all
         mov_RescrapeAllSelected()
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
     End Sub
 
     Private Sub mov_RescrapeAllSelected()
-
         _rescrapeList.Field = Nothing
         _rescrapeList.FullPathAndFilenames.Clear()
-
-        'For Each selected In MovieListComboBox.SelectedItems
         For Each row In DataGridViewMovies.SelectedRows
             _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value)
         Next
-
         RunBackgroundMovieScrape("RescrapeAll")
     End Sub
-
-
-
-
-    ''22Feb12 - AnotherPhil - Fix up corrupt actor scraping
-    'Private Sub mov_FixUpCorruptActors()
-    '    Dim badNFOs As New List(Of ComboList)
-    '    For Each movie In oMovies.MovieCache
-    '        Dim movieadd As New FullMovieDetails
-    '        movieadd = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
-    '        If IsNothing(movieadd) Then
-    '            Continue For
-    '        End If
-    '        For Each actor In movieadd.listactors
-    '            If actor.actorname.IndexOf("<tr") > -1 Then
-    '                badNFOs.Add(movie)
-    '                Exit For
-    '            End If
-    '        Next
-    '    Next
-    '    If badNFOs.Count = 0 Then
-    '        Exit Sub
-    '    End If
-
-    '    ToolStripStatusLabel1.Visible = True
-    '    ToolStripStatusLabel1.Text = badNFOs.Count.ToString() + " NFO files found containing invalid actor data - Rescaping to fix problem..."
-
-    '    Application.DoEvents()
-
-
-    '    'Dim SavedList As New List(Of ComboList)
-    '    'For Each movie In filteredList
-    '    '    SavedList.Add(movie)
-    '    'Next
-
-    '    'filteredList.Clear()
-    '    'For Each movie In oMovies.MovieCache
-    '    '    filteredList.Add(movie)
-    '    'Next
-
-
-    '    _rescrapeList.Field = "actors"
-    '    _rescrapeList.FullPathAndFilenames.Clear
-
-    '    For Each movie In badNFOs
-    '        _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
-    '    Next
-
-    '    RunBackgroundMovieScrape("RescrapeSpecific")
-
-    '    'filteredList.Clear()
-    '    'For Each movie In SavedList
-    '    '    filteredList.Add(movie)
-    '    'Next
-
-    '    ToolStripStatusLabel1.Visible = False
-    'End Sub
-
+    
     Private Sub mov_VideoSourcePopulate()
         Try
             cbMovieDisplay_Source.Items.Clear()
             cbMovieDisplay_Source.Items.Add("")
             For Each mset In Preferences.releaseformat
                 cbMovieDisplay_Source.Items.Add(mset)
- '              cbFilterSource.Items.Add(mset)
             Next
                 
             cbFilterSource.UpdateItems( Preferences.releaseformat.ToList )
@@ -19120,115 +18972,13 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-
-    'Private Sub MovieAddSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieAddSetBtn.Click
-
-    '    If ListBox4.SelectedItems.Count=0 Then Return
-
-    '    ListBox14.Items.Clear
-
-    '    For Each item In ListBox4.SelectedItems
-    '        ListBox14.Items.Add(item)
-    '    Next
-
-    '    'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-
-    '    'setsTxt.Text = ListBox14.Items(0)
-
-    '    mov_SaveQuick
-
-
-
-    '    'If ListBox4.SelectedItem <> Nothing Then
-    '    '    If ListBox4.SelectedItem <> "" Then
-    '            'Dim exists As Boolean = False
-    '            'For Each item In ListBox14.Items
-    '            '    If item = ListBox4.SelectedItem Then
-    '            '        exists = True
-    '            '        Exit For
-    '            '    End If
-    '            'Next
-    '            'If exists = False Then
-    '            '    For f = ListBox14.Items.Count - 1 To 0 Step -1
-    '            '        If ListBox14.Items(f) = "-None-" Then
-    '            '            ListBox14.Items.RemoveAt(f)
-    '            '        End If
-    '            '    Next
-    '            '    ListBox14.Items.Add(ListBox4.SelectedItem)
-    '            'End If
-
-    '    '        workingMovieDetails.fullmoviebody.movieset = ""
-    '    '        Dim tempsets As String = ""
-    '    '        For f = 0 To ListBox14.Items.Count - 1
-
-    '    '            If f = 0 Then
-    '    '                tempsets = ListBox14.Items(f)
-    '    '            Else
-    '    '                tempsets = tempsets & " / " & ListBox14.Items(f)
-    '    '            End If
-    '    '        Next
-    '    '        'workingMovieDetails.fullmoviebody.movieset = tempsets
-    '    '        setsTxt.Text = tempsets
-
-    '    '        Call mov_SaveQuick()
-
-    '    '    End If
-    '    'End If
-
-
-
-
-    'End Sub
-
-
-
-
-    'Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
-    '    If ListBox14.SelectedItem <> "-None-" Then
-    '        ListBox14.Items.Remove(ListBox14.SelectedItem)
-    '        If ListBox14.Items.Count = 0 Then
-    '            ListBox14.Items.Add("-None-")
-    '        End If
-    '        workingMovieDetails.fullmoviebody.movieset = ""
-    '        Dim tempsets As String = ""
-    '        For f = 0 To ListBox14.Items.Count - 1
-    '            If f = 0 Then
-    '                tempsets = ListBox14.Items(f)
-    '            Else
-    '                tempsets = tempsets & " / " & ListBox14.Items(f)
-    '            End If
-    '        Next
-    '        'workingMovieDetails.fullmoviebody.movieset = tempsets
-    '        setsTxt.Text = tempsets
-
-    '        Call mov_SaveQuick()
-    '    Else
-    '        MsgBox("Can only remove Added Sets")
-    '    End If
-
-
-    'End Sub
-
-
+    
     Private Sub cbSort_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbSort.SelectedIndexChanged
         Mc.clsGridViewMovie.GridFieldToDisplay2 = cbSort.Text
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
         Preferences.moviesortorder = cbSort.SelectedIndex
     End Sub
-
-
-
-    Private Function GetVotes(votes As String)
-
-        Try
-            Return CInt(votes.Replace(",", "")).ToString("000,000")
-        Catch ex As Exception
-            Return "000,000"
-        End Try
-
-    End Function
 
     Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) Handles btnFindBrowser.Click
         Try
@@ -19293,7 +19043,6 @@ End Sub
                         )
     End Sub
 
-
     Private Sub PictureBoxActor_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxActor.DoubleClick
         ZoomActorPictureBox(PictureBoxActor)
     End Sub
@@ -19304,7 +19053,6 @@ End Sub
 
     Private Sub ZoomActorPictureBox(pictureBox As PictureBox)
 
-'        If pictureBox.ImageLocation = Utilities.DefaultActorPath Then
         If IsNothing(pictureBox.Tag) orElse  pictureBox.Tag.ToString = Utilities.DefaultActorPath Then
             Exit Sub
         End If
@@ -19313,95 +19061,17 @@ End Sub
         MenuStrip1.Enabled = False
 
         Try
-'            util_ZoomImage(New Bitmap(pictureBox.ImageLocation))
             util_ZoomImage(New Bitmap(pictureBox.Tag.ToString))
         Catch
             Dim wc As New WebClient()
             Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.Tag)
             Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-
             util_ZoomImage(New Bitmap(ImageStream))
         End Try
 
     End Sub
 
-    'Private Sub MovieAddSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieAddSetBtn.Click
-    '    If ListBox4.SelectedItem <> Nothing Then
-    '        If ListBox4.SelectedItem <> "" Then
-    '            Dim exists As Boolean = False
-    '            For Each item In ListBox14.Items
-    '                If item = ListBox4.SelectedItem Then
-    '                    exists = True
-    '                    Exit For
-    '                End If
-    '            Next
-    '            If exists = False Then
-    '                For f = ListBox14.Items.Count - 1 To 0 Step -1
-    '                    If ListBox14.Items(f) = "-None-" Then
-    '                        ListBox14.Items.RemoveAt(f)
-    '                    End If
-    '                Next
-    '                ListBox14.Items.Add(ListBox4.SelectedItem)
-    '            End If
-    '            workingMovieDetails.fullmoviebody.movieset = ""
-    '            Dim tempsets As String = ""
-    '            For f = 0 To ListBox14.Items.Count - 1
-
-    '                If f = 0 Then
-    '                    tempsets = ListBox14.Items(f)
-    '                Else
-    '                    tempsets = tempsets & " / " & ListBox14.Items(f)
-    '                End If
-    '            Next
-    '            'workingMovieDetails.fullmoviebody.movieset = tempsets
-    '            setsTxt.Text = tempsets
-
-    '            Call mov_SaveQuick()
-
-    '        End If
-    '    End If
-    'End Sub
-
-    'Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
-
-    '    If ListBox14.SelectedItems.Count=0 Then Return
-
-    '    Do While ListBox14.SelectedItems.Count>0
-    '        ListBox14.Items.Remove(ListBox14.SelectedItem)
-    '    Loop
-
-    '    If ListBox14.Items.Count=0 Then
-    '        ListBox14.Items.Add("-None-")
-    '    End If
-
-    '    'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-
-    '    'setsTxt.Text = ListBox14.Items(0)
-
-
-    '    'If ListBox14.SelectedItem <> "-None-" Then
-    '    '    ListBox14.Items.Remove(ListBox14.SelectedItem)
-    '    '    If ListBox14.Items.Count = 0 Then
-    '    '        ListBox14.Items.Add("-None-")
-    '    '    End If
-    '        workingMovieDetails.fullmoviebody.movieset = ""
-    '        Dim tempsets As String = ""
-    '        For f = 0 To ListBox14.Items.Count - 1
-    '            If f = 0 Then
-    '                tempsets = ListBox14.Items(f)
-    '            Else
-    '                tempsets = tempsets & " / " & ListBox14.Items(f)
-    '            End If
-    '        Next
-    '        workingMovieDetails.fullmoviebody.movieset = tempsets
-    '    '    setsTxt.Text = tempsets
-
-    '        mov_SaveQuick
-    '    'Else
-    '    '    MsgBox("Can only remove Added Sets")
-    '    'End If
-    'End Sub
-
+#Region "Home Movie routines"
     Private Sub SetupHomeMovies()
         If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
             MsgBox("Please add A Folder containing Home Movies")
@@ -19421,15 +19091,6 @@ End Sub
             End If
         End If
     End Sub
-
-
-
-    'Private Sub listhomemovies()
-    '    ListBox18.Items.Clear()
-    '    For Each mov In homemovielist
-    '        ListBox18.Items.Add(New ValueDescriptionPair(mov.Title, mov.FullPathAndFilename))
-    '    Next
-    'End Sub
 
     Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
         Call homeMovieScan()
@@ -19498,13 +19159,10 @@ End Sub
                     Else
                         newHomeMovieList.Add(newhomemovie)
                     End If
-
                 Next
             End If
         Next
-
         Call HomeMovieCacheSave()
-
     End Sub
 
     Private Sub homeMovieScan()
@@ -19734,8 +19392,6 @@ End Sub
         Dim tempstring As String = objReader.ReadToEnd
         objReader.Close()
 
-
-
         movielist.LoadXml(tempstring)
         Dim thisresult As XmlNode = Nothing
         For Each thisresult In movielist("homemovie_cache")
@@ -19808,7 +19464,6 @@ End Sub
         End Try
     End Sub
 
-
     Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
         Try
             For Each homemovie In homemovielist
@@ -19871,8 +19526,6 @@ End Sub
         nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
     End Sub
 
-
-
     Private Sub btnHomeFolderAdd_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFolderAdd.Click
         Try
             Dim allok As Boolean = True
@@ -19893,11 +19546,6 @@ End Sub
                     ListBox19.Items.Add(thefoldernames)
                     ListBox19.Refresh()
                     Call HomeMovieFoldersRefresh()
-                    'Preferences.homemoviefolders.Clear()
-                    'For Each item In ListBox19.Items
-                    '    Preferences.homemoviefolders.Add(item)
-                    'Next
-                    'Call SaveConfig()
                 Else
                     MsgBox("        Folder Already Exists")
                 End If
@@ -19913,18 +19561,12 @@ End Sub
                 ListBox19.Items.Remove(ListBox19.SelectedItems(0))
             End While
             Call HomeMovieFoldersRefresh()
-            'Preferences.homemoviefolders.Clear()
-            'For Each item In ListBox19.Items
-            '    Preferences.homemoviefolders.Add(item)
-            'Next
-            'Call SaveConfig()
-            'Call rebuildHomeMovies()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-        Private Sub btnHomeManualPathAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnHomeManualPathAdd.Click
+    Private Sub btnHomeManualPathAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnHomeManualPathAdd.Click
         Try
             If tbHomeManualPath.Text = Nothing Then
                 Exit Sub
@@ -19955,7 +19597,6 @@ End Sub
                     ListBox19.Refresh()
                     Call HomeMovieFoldersRefresh()
                     tbHomeManualPath.Text = ""
-                    'newTvFolders.Add(tempstring)
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
@@ -19963,7 +19604,6 @@ End Sub
                         ListBox19.Refresh()
                         Call HomeMovieFoldersRefresh()
                         tbHomeManualPath.Text = ""
-                        'newTvFolders.Add(tempstring)
                     End If
                     Call HomeMovieFoldersRefresh()
                 End If
@@ -19974,6 +19614,8 @@ End Sub
 
     End Sub
 
+#End Region   'Home Movie Routines, buttons etc.
+    
     Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
         Mov_RemoveMovie ()
     End Sub
@@ -20036,10 +19678,8 @@ End Sub
 
     Private Sub tsmi_RenMovFolderOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovFolderOnly.Click
         Dim isMovFoldRenEnabled As Boolean = Preferences.MovFolderRename 
-        'Dim isusefolder As Boolean = Preferences.usefoldernames 
         If Preferences.MovieManualRename Then
             Preferences.MovFolderRename = True
-            'Preferences.usefoldernames = False
             mov_ScrapeSpecific("rename_folders")
             While BckWrkScnMovies.IsBusy 
                 Application.DoEvents
@@ -20048,7 +19688,6 @@ End Sub
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
         Preferences.MovFolderRename = isMovFoldRenEnabled
-        'Preferences.usefoldernames = isusefolder
     End Sub
 
     Private Sub tsmi_RenMovieAndFolder_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieAndFolder.Click
@@ -20124,10 +19763,6 @@ End Sub
         Else
             homeTabIndex = TabControl1.SelectedIndex
         End If
-
-
-
-
     End Sub
 
     Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
@@ -20185,14 +19820,11 @@ End Sub
 
     Private Sub OpenFolderToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
         Try
-            'Try
             If Not WorkingHomeMovie.fileinfo.fullpathandfilename Is Nothing Then
                 Call util_OpenFolder(WorkingHomeMovie.fileinfo.fullpathandfilename)
             Else
                 MsgBox("There is no Movie selected to open")
             End If
-            'Catch
-            'End Try
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20239,14 +19871,8 @@ End Sub
                 RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml"
             Case = "tvcache" 
                 RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml"
-
             Case = "actorcache" 
                 RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml"
-
-            'This would be for debugging, i.e. not needed
-            'Case = "directorcache" 
-            '    RichTextBoxTabDirectorCache.Text = Utilities.LoadFullText(workingProfile.DirectorCache) '  applicationPath & "\settings\actorcache.xml"
-
             Case = "profile" 
                 RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml") '  applicationPath & "\settings\profile.xml"
             Case = "regex" 
@@ -20295,8 +19921,6 @@ End Sub
                 m.ClearStoredCalculatedFields()
             Next
 
-            'Assign_MovieFilter(cbFilterSet, oMovies.SetsFilter, SetFilter)
-            'Assign_FilterActor
             UpdateFilteredList
 
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
@@ -20330,11 +19954,6 @@ End Sub
         ApplyMovieFilters()
     End Sub
      
-
-    'Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    HandleMovieFilter_SelectedValueChanged(cbFilterActor,ActorFilter)
-    'End Sub
-
     Private Sub cbFilterRatingChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRating.SelectionChanged
         ApplyMovieFilters
     End Sub
@@ -20395,63 +20014,6 @@ End Sub
     End Sub
 
 
-    'Private Sub Handles DataGridViewMovies.MouseMove
-    'Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
-
-    '    'If ToolTipGridMoviePosition.X <> e.X Or ToolTipGridMoviePosition.Y <> e.Y Then
-    '    '    TooltipGridViewMovies1.Visible = False
-    '    '    TimerToolTip.Enabled = True
-    '    '    ToolTipGridMoviePosition.X = e.X
-    '    '    ToolTipGridMoviePosition.Y = e.Y
-    '    'End If
-
-
-    '    Try
-    '        Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
-    '        Dim objHitTestInfo As DataGridView.HitTestInfo
-    '        objHitTestInfo = DataGridViewMovies.HitTest(objMousePosition.X, objMousePosition.Y)
-    '        Dim indexunderthemouse As Integer = objHitTestInfo.RowIndex
-
-    '        Dim Runtime As String = ""
-    '        Dim RatingRuntime As String = ""
-
-    '        TimerToolTip.Enabled = True
-    ' '       ToolTipGridMoviePosition.X = objMousePosition.X
-    ' '      ToolTipGridMoviePosition.Y = objMousePosition.Y
-
-
-    '        If indexunderthemouse > -1 Then
-    '            Dim movietitle As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(5).Value.ToString
-    '            Dim movieYear As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(9).Value.ToString
-    '            Dim Rating As String = "Rating: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(12).Value.ToString
-    '            If DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.Length > 3 Then
-    '                Runtime = "Runtime: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.Substring(0, DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.IndexOf("min") + 3)
-    '            End If
-    '            RatingRuntime = Rating & "     " & Runtime
-
-    '            Dim Plot As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(17).Value.ToString
-
-    '            If objHitTestInfo.RowY > -1 Then
-    '                'TooltipGridViewMovies1.Visible = True
-    '           '     TooltipGridViewMovies1.Top = 116
-    '                'TooltipGridViewMovies1.Left = MousePositionX + 100
-    ''                TooltipGridViewMovies1.Left = 0
-
-    '                TooltipGridViewMovies1.Left = objMousePosition.X
-    '                TooltipGridViewMovies1.Top  = objMousePosition.Y
-
-    '                TooltipGridViewMovies1.Textinfo(Plot)
-    '                TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
-    '                TooltipGridViewMovies1.TextMovieName(movietitle)
-    '                TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
-    '            End If
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-
-    'End Sub
-
 #Region "Movie scraping stuff"
 
 
@@ -20472,13 +20034,6 @@ End Sub
         Else
             MsgBox("The Movie Scraper is Already Running")
         End If
-    End Sub
-
-    Sub RunBackgroundXBMCScrape(Optional ByVal action As String = "")
-
-        'If Not BckWrkXbmcMovies.IsBusy Then
-
-        'End If
     End Sub
 
     Private  cbBtnLink_Checked As Boolean
@@ -20659,8 +20214,6 @@ End Sub
         
         If Not Preferences.MusicVidScrape Then DisplayLogFile()  ' no need to display log after music video scraping.
         Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
-        'TabPage14.Text = "Search for new movies"
-        'TabPage14.ToolTipText = "Scan movie folders for new media files"
     End Sub
 
 #End Region 
@@ -20775,26 +20328,6 @@ End Sub
         Return item.RemoveAfterMatch
     End Function
 
-
-    'Sub Assign_FilterActor
-    '    cbFilterActor.Items.Clear
-    '    cbFilterActor.Items.Add("All")
-    '    For Each item In oMovies.ActorsFilter
-    '        cbFilterActor.Items.Add(item)
-    '    Next
-    '    If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
-
-    '    If ActorFilter<>"" Then
-    '        For Each item As String In cbFilterActor.Items
-    '            If item.IndexOf(ActorFilter & " (")=0 Then
-    '                cbFilterActor.SelectedItem=item
-    '                Exit For
-    '            End If
-    '        Next
-    '    End If
-    'End Sub
-
-
     Sub Assign_FilterGeneral
         If cbFilterGeneral.Visible Then
             Dim selected = cbFilterGeneral.Text
@@ -20814,33 +20347,7 @@ End Sub
             End If
         End If
     End Sub
-
-
-    'Sub Assign_MovieFilter(cb As ComboBox, items As List(Of String), filterValue As String)
-    '    cb.Items.Clear
-    '    cb.Items.Add("All")
-    '    cb.Items.AddRange(items.ToArray)
-
-    '    'For Each item In items
-    '    '    cb.Items.Add(item)
-    '    'Next
-
-    '    If cb.Text = "" Then cb.Text = "All"
-
-    '    If filterValue<>"" Then
-    '        Dim found As Boolean=False
-    '        For Each item As String In cb.Items
-    '            If item.IndexOf(filterValue & " (")=0 Then    
-    '                cb.SelectedItem=item    
-    '                found=True
-    '                Exit For
-    '            End If
-    '        Next
-
-    '        If Not found Then filterValue=""
-    '    End If
-    'End Sub
-
+    
     Private Sub XBMC_ProgressChanged(ByVal e As System.ComponentModel.ProgressChangedEventArgs)
         If Not scrapeAndQuit Then
             If e.ProgressPercentage <> 999999 Then
@@ -21080,37 +20587,7 @@ End Sub
     End Sub
 
     Sub DoScrapeDroppedFiles()
-        'If Preferences.movies_useXBMC_Scraper Then
-        '    Pre_Run_XBMC_Scraper()
-        '    mov_XBMCScrapeDroppedFiles()
-        '    droppedItems.Clear()
-        '    Post_Run_XBMC_Scraper()
-        '    Exit Sub
-        'End If
-
         RunBackgroundMovieScrape("ScrapeDroppedFiles")
-    End Sub
-
-    Private Sub Pre_Run_XBMC_Scraper()
-
-        scraperLog = "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
-
-        'If Preferences.usefoldernames Then
-        '    scraperLog &= "Using FOLDERNAMES to determine Movie Title...." & vbCrLf
-        'Else
-        '    scraperLog &= "Using FILENAMES to determine Movie Title...." & vbCrLf
-        'End If
-
-        scraperLog &= "Using XBMC Scraper...." & vbCrLf
-    End Sub
-
-
-    Private Sub Post_Run_XBMC_Scraper()
-        UpdateFilteredList()
-
-        scraperLog &= vbCrLf & vbCrLf &  "!!! Search for New Movies Complete." & vbCrLf
-
-        DisplayLogFile()
     End Sub
 
     Private Sub DisplayLogFile()

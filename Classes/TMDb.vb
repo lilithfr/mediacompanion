@@ -137,7 +137,7 @@ Public Class TMDb
                     newact.actorid      = _cast.cast(i).id
                     newact.actorname    = _cast.cast(i).name
                     newact.actorrole    = _cast.cast(i).character
-                    newact.actorthumb   = "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path
+                    newact.actorthumb   = If(_cast.cast(i).profile_path = Nothing, "", "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path)
                     alist.Add(newact)
                     If x = i Then Exit For
                 Next

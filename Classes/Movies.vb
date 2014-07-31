@@ -1077,7 +1077,6 @@ Public Class Movies
         SaveCaches
     End Sub
 
-
     Sub RescrapeAll( NfoFilenames As List(Of String) )
         Dim i=0
         ReportProgress(,"!!! Rescraping all data for:" & vbCrLf & vbCrLf )
@@ -1125,10 +1124,10 @@ Public Class Movies
         movie.Rescrape = True
 
         Dim imdbid As String = movie.PossibleImdb 
-        If Preferences.movies_useXBMC_Scraper Then
+        If Preferences.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then  'AndAlso tmdbid <> "" 
             imdbid = tmdbid
         End If
-        movie.DeleteScrapedFiles()
+        movie.DeleteScrapedFiles(True)
 
         movie.ScrapedMovie.Init
 
@@ -1747,50 +1746,6 @@ Public Class Movies
             End Try
         Next
     End Sub
-
-    Function xbmcTmdbRenameMovie(ByRef aMovie As Movie, ByVal filename As String) As String
-        Dim NewFilenameandPath As String = filename
-        Try
-            If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not filename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
-                AddMovieEventHandlers   ( aMovie )
-                aMovie.fileRename(aMovie)
-                RemoveMovieEventHandlers( aMovie )
-                NewFilenameandPath = aMovie.mediapathandfilename
-            End If
-        Catch ex As Exception
-            Return NewFilenameandPath
-        End Try
-        Return NewFilenameandPath
-    End Function
-
-    Function XbmcTmdbDlPosterFanart(ByVal aMovie as Movie) as Boolean
-        Try
-            If Not Preferences.scrapemovieposters AndAlso Not Preferences.savefanart AndAlso Preferences.dlxtrafanart then
-                Return False
-            End If
-            AddMovieEventHandlers ( aMovie )
-            aMovie.IniTmdb
-            If Preferences.scrapemovieposters Then aMovie.DoDownloadPoster
-            If Preferences.savefanart Then aMovie.DoDownloadFanart
-            If Preferences.dlxtrafanart Then aMovie.DoDownloadExtraFanart 
-            RemoveMovieEventHandlers ( aMovie )
-        Catch ex As Exception
-            Return False
-        End Try
-        Return True
-    End Function
-
-
-    Function XbmcTmdbChangeMovieCleanup(NfoPathAndFilename As String) As Boolean
-        Try
-            Dim movie = New Movie(Me,NfoPathAndFilename)
-
-            movie.DeleteScrapedFiles(True)
-            Return True
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
 
     Function DeleteScrapedFiles(nfoPathAndFilename As String) As Boolean
         Try

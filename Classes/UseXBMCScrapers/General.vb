@@ -23,66 +23,9 @@ Module General
     Public FinalScrapResult As String
 #End Region
 
-#Region "Code Lines not Used...saved for Future Reference"
-    'FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False)
-    'FinalScrapResult = FinalScrapResult.Replace("<url>", "")
-    'FinalScrapResult = FinalScrapResult.Replace("</url>", "")
-    'FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
-    '' 2st stage
-    'ParametersForScraper(0) = FinalScrapResult
-    'ParametersForScraper(1) = FinalScrapResult
-    'FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
-    'Dim m_xmld As XmlDocument
-    'Dim m_nodelist As XmlNodeList
-    'Dim m_node As XmlNode
-    'm_xmld = New XmlDocument()
-    'm_xmld.LoadXml(FinalScrapResult)
-    'm_nodelist = m_xmld.SelectNodes("/results/entity")
-    'Dim GetDetailsURLS(2) As String
-    'For Each m_node In m_nodelist
-    '    Dim Title = m_node.ChildNodes.Item(0).InnerText
-    '    Dim url = m_node.ChildNodes.Item(2).InnerText
-    '    Dim id = m_node.ChildNodes.Item(3).InnerText
-    '    GetDetailsURLS(0) = url.Substring(0, url.LastIndexOf("/"))
-    '    GetDetailsURLS(0) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("/")) & "/en.xml"
-    '    GetDetailsURLS(1) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("/")) & "/banners.xml"
-    '    GetDetailsURLS(2) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("/")) & "/actors.xml"
-    '    ParametersForScraper(9) = id
-    '    Exit For
-    'Next
-
-
-    'ParametersForScraper(4) = GetDetailsURLS(0)
-    'GetDetailsURLS(0) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
-    'ParametersForScraper(4) = GetDetailsURLS(1)
-    'GetDetailsURLS(1) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
-    'ParametersForScraper(4) = GetDetailsURLS(2)
-    'GetDetailsURLS(2) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
-
-    'GetDetailsURLS(0) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("<fanart url="))
-    'GetDetailsURLS(1) = GetDetailsURLS(1).Substring(GetDetailsURLS(1).IndexOf("<thumb>"), (GetDetailsURLS(1).LastIndexOf("</details>") - GetDetailsURLS(1).IndexOf("<thumb>")))
-    'GetDetailsURLS(2) = GetDetailsURLS(2).Substring(GetDetailsURLS(2).IndexOf("<actor>"), (GetDetailsURLS(2).LastIndexOf("<fanart url=") - GetDetailsURLS(2).IndexOf("<actor>"))) &  "</details>"
-    'Dim teste As String = GetDetailsURLS(0) & GetDetailsURLS(1) & GetDetailsURLS(2)
-    'ParametersForScraper(0) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/82066/all/en.xml")
-    'ParametersForScraper(1) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/82066/all/en.zip"
-    'ParametersForScraper(3) = GetDetailsURLS(0)
-    'ParametersForScraper(4) = Nothing
-
-#End Region
-
 #Region "XBMC Scraper Internal Routines"
 
     Private Function RetrieveUrls(ByVal URLAddress As String) As String
-        'Dim Saida As String = ""
-        'Try
-
-        '    Saida = New WebClient().DownloadString(URLAddress)
-        '    Return Saida
-        'Catch ex As WebException
-        '    MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + URLAddress, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        '    Return "ERROR" 'SK: added 
-        '    'Throw ex   'SK : this was originally uncommented 
-        'End Try
         Dim TMDBResponse As HttpWebResponse
         Dim responseFromServer As String = ""
         Try
@@ -602,60 +545,6 @@ Module General
         TempString &= "</movie>"
         Return TempString
     End Function
-
-    'Public Function MoviePosterandFanartDownload(ByVal FullString As String, ByVal Filename As String) As Boolean
-    '    Dim m_xmld As XmlDocument
-    '    Dim m_nodelist As XmlNodeList
-    '    Dim m_node As XmlNode
-
-    '    m_xmld = New XmlDocument()
-    '    m_xmld.LoadXml(FullString)
-    '    m_nodelist = m_xmld.SelectNodes("/details")
-    '    Dim NodeChild As XmlNode
-    '    Dim Nodechild1 As XmlNode
-    '    Dim Nodechild2 As XmlNode
-    '    Dim MoviePosterURL As String = ""
-    '    Dim MovieFanartURL As String = ""
-
-    '    For Each m_node In m_nodelist
-    '        For Each NodeChild In m_node.ChildNodes
-    '            If NodeChild.Name.ToLower = "thumb" Then
-    '                For Each Nodechild1 In NodeChild
-    '                    MoviePosterURL = Nodechild1.InnerText
-    '                    Exit For
-    '                Next
-    '            ElseIf NodeChild.Name.ToLower = "fanart" Then
-    '                For Each Nodechild2 In NodeChild
-    '                    MovieFanartURL = Nodechild2.InnerText
-    '                    Exit For
-    '                Next
-
-    '            End If
-    '        Next
-    '    Next
-    '    Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
-    '    Dim SlashPosition As Integer = Filename.LastIndexOf("\")
-    '    Dim NfoFilename As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
-    '    NfoFilename &= ".nfo"
-    '    Dim videotsrootpath As String = ""
-    '    If IO.Path.GetFileName(NfoFilename).ToLower="video_ts.nfo" Then
-    '        videotsrootpath = Utilities.RootVideoTsFolder(NfoFilename)
-    '    End If
-    '    Dim paths As List(Of String) = Preferences.GetfanartPaths(NfoFilename,videotsrootpath)
-
-    '    Movie.SaveFanartImageToCacheAndPaths(MovieFanartURL, paths)
-
-    '    Dim Posterpaths As List(Of String) = Preferences.GetPosterPaths(NfoFilename,videotsrootpath)
-
-    '    Movie.SavePosterImageToCacheAndPaths(MoviePosterURL,Posterpaths)
-
-    '    'Movie.SavePosterImageToCacheAndPath(MoviePosterURL, ImageFilename)
-    '    'File.Copy(ImageFilename, ImageFilename2, True)
-    '    'Movie.SaveFanartImageToCacheAndPath(MovieFanartURL, ImageFilename3)
-
-    '    Return True
-
-    'End Function
 
     Public Sub Read_XBMC_IMDB_Scraper_Config()
         Dim m_xmld As XmlDocument
@@ -1533,122 +1422,6 @@ Module General
 
 #End Region
 
-#Region "Tmdb Movie Routines"
-
-    'Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
-    '    ' 1st stage
-    '    Dim ExtraID As String = Movie.getExtraIdFromNFO(Filename)
-    '    Dim Title As String = ""
-    '    If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
-    '        If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
-    '        If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
-    '        Dim MovieYear As String = Utilities.GetYearByFilename(MovieName, true, "tmdb")
-    '        MovieName = Utilities.CleanFileName(MovieName, "tmdb")
-    '        ParametersForScraper(0) = MovieName
-    '        ParametersForScraper(1) = MovieYear    'GetYearByFilename(MovieName, False)
-    '        FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
-    '        FinalScrapResult = FinalScrapResult.Replace("<url>", "")
-    '        FinalScrapResult = FinalScrapResult.Replace("</url>", "")
-    '        FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
-    '        ' 2st stage
-    '        ParametersForScraper(0) = FinalScrapResult
-    '        FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
-    '        If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return FinalScrapResult
-    '        Dim m_xmld As XmlDocument
-    '        Dim m_nodelist As XmlNodeList
-    '        Dim m_node As XmlNode
-    '        m_xmld = New XmlDocument()
-    '        m_xmld.LoadXml(FinalScrapResult)
-    '        m_nodelist = m_xmld.SelectNodes("/results/entity")
-    '        If Scraper = "metadata.imdb.com" Then
-    '            For Each m_node In m_nodelist
-    '                Title = m_node.ChildNodes.Item(0).InnerText
-    '                Dim year = m_node.ChildNodes.Item(1).InnerText
-    '                Dim url = m_node.ChildNodes.Item(2).InnerText
-    '                Dim id = m_node.ChildNodes.Item(3).InnerText
-    '                ParametersForScraper(0) = url
-    '                ParametersForScraper(1) = id
-    '                Exit For
-    '            Next
-    '        ElseIf Scraper = "metadata.themoviedb.org" Then
-    '            For Each m_node In m_nodelist
-    '                Title = m_node.ChildNodes.Item(0).InnerText
-    '                Dim id = m_node.ChildNodes.Item(1).InnerText
-    '                Dim year = m_node.ChildNodes.Item(2).InnerText
-    '                Dim url = m_node.ChildNodes.Item(3).InnerText
-    '                ParametersForScraper(0) = url
-    '                ParametersForScraper(1) = id
-    '                Exit For
-    '            Next
-    '        End If
-    '    Else
-    '        Scraper = "metadata.imdb.com"
-    '        ParametersForScraper(0) = "http://akas.imdb.com/title/" & ExtraID
-    '        ParametersForScraper(1) = ExtraID
-    '    End If
-    '    ' 3st stage
-    '    FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
-    '    If FinalScrapResult.ToLower <> "error" Then
-    '        'Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
-    '        FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
-    '        If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
-    '        Dim SeparateMovie As String = Utilities.checktitle(Filename, Preferences.MovSepLst)
-    '        If SeparateMovie <> "" Then
-    '            FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, Title)
-    '        End If
-    '        FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
-    '        'Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
-    '    End If
-    '    Return FinalScrapResult
-    'End Function
-
-    'Public Function Start_XBMC_MoviesReScraping(ByVal Scraper As String, ByVal MovieID As String, ByVal Filename As String) As String
-    '    ' 1st stage
-        
-    '    If Scraper.ToLower = "imdb" Then
-    '        Scraper = "metadata.imdb.com"
-    '        If MovieID.Substring(0, 2) = "tt" Then
-    '            ParametersForScraper(0) = "http://akas.imdb.com/title/" & MovieID & "/"
-    '            ParametersForScraper(1) = MovieID
-    '        Else
-    '            MsgBox("Can't rescrape this movie because it was scraped with a scraper different from IMDB" & vbCrLf & "Delete the nfo file from the movie folder, refresh movie database, and try again", MsgBoxStyle.OkOnly, "Error")
-    '            Return "Error"
-    '            Exit Function
-    '        End If
-    '    ElseIf Scraper.ToLower = "tmdb" Then
-    '        Scraper = "metadata.themoviedb.org"
-
-    '        If MovieID.Substring(0, 2) = "tt" Then
-    '            Dim api As New WatTmdb.V3.Tmdb(TMDB.Key)
-
-    '            Dim movie = api.GetMovieByIMDB( MovieID, Preferences.TvdbLanguageCode )
-
-    '            MovieID = movie.id
-    '        End If
-
-
-    '        If MovieID.Substring(0, 2) <> "tt" Then
-    '            'ParametersForScraper(0) = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & MovieID
-    '            ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", MovieID, Preferences.TvdbLanguageCode)
-    '            ParametersForScraper(1) = MovieID
-    '        Else
-    '            MsgBox("Can't rescrape this movie because it was scraped with a scraper different from TheMovieDB" & vbCrLf & "Delete the nfo file from the movie folder, refresh movie database, and try again", MsgBoxStyle.OkOnly, "Error")
-    '            Return "Error"
-    '            Exit Function
-    '        End If
-    '    End If
-    '    ' 2nd stage - remove old files
-    '    Dim ExtPos As Integer = filename.LastIndexOf(".")
-    '    Dim oldnfopathandfilename As String = Filename.Remove(ExtPos, (Filename.Length - ExtPos)) & ".nfo"
-    '    Dim Renamed As Boolean = oMovies.XbmcTmdbChangeMovieCleanup(oldnfopathandfilename)
-
-    '    ' 3st stage
-    '    FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
-    '    FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
-    '    If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
-    '    FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
-    '    Return FinalScrapResult
-    'End Function
 
     Public Function AddSeparateMovieTitle(ByVal FinalScrape As String, ByVal SepMov As String, ByVal Title As String) As String
         Try
@@ -1658,7 +1431,6 @@ Module General
         Return FinalScrape
     End Function
 
-#End Region
 
     'Date  : Nov11 
     'By    : AnotherPhil 
