@@ -303,7 +303,8 @@ Public Class ucGenPref_XbmcLink
     End Sub
  
     Sub ClearImages
-        For row As Integer = 1 to 10
+        For row As Integer = 1 to 11
+            If row = 5 Or row = 10 Then row +=1
             Try
                 GetPictureBox(row).Image = Nothing
             Catch
