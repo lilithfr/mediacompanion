@@ -14757,7 +14757,7 @@ End Sub
     Public Sub OpenUrl(ByVal url As String)
         Try
             If Preferences.selectedBrowser <> "" Then
-                Process.Start(Preferences.selectedBrowser, url)
+                Process.Start(Preferences.selectedBrowser, Uri.EscapeUriString(url))
             Else
                 Try
                     Process.Start(url)
@@ -21413,7 +21413,7 @@ End Sub
 
 
 
-    Private Sub BtnSearchGooglePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSearchGooglePoster.Click
+    Private Sub BtnGoogleSearchPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnGoogleSearchPoster.Click
         'Open Webpage at Google image search for movietitle&year
         Dim title As String = workingMovieDetails.fullmoviebody.title
         Dim year As String = workingMovieDetails.fullmoviebody.year
