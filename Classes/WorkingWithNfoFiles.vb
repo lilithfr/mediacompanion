@@ -37,7 +37,7 @@ Public Class WorkingWithNfoFiles
 
         r.Close
 
-        If _Detected.ToString <> "System.Text.UTF8Encoding" Then
+        If _Detected.ToString <> "System.Text.UTF8Encoding" AndAlso _Detected.ToString <> "System.Text.SBCSCodePageEncoding" Then
             Try
                 File.WriteAllText(FileName, s, Encoding.UTF8)
             Catch ex As Exception
@@ -45,7 +45,7 @@ Public Class WorkingWithNfoFiles
             End Try
         End If
     End Sub
-
+    
     Public Function util_CharsConvert(ByVal line As String)
         Monitor.Enter(Me)
         Try
