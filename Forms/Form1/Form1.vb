@@ -12725,76 +12725,40 @@ End Sub
     End Sub
 
     Private Sub mov_FanartGet()
-
-        If IsNothing(workingMovieDetails)
-            Return
-        End If
-
+        If IsNothing(workingMovieDetails) Then Return
         Dim messbox As New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
-
-        messbox.Show()
-        messbox.Refresh()
+        messbox.Show() : messbox.Refresh()
         Application.DoEvents()
-
-        Dim FanartPath As String=workingMovieDetails.fileinfo.fanartpath
-        Dim tmdb       As New TMDb '(workingMovieDetails.fullmoviebody.imdbid)
+        Dim tmdb       As New TMDb
         tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
         tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
-        Dim FanartUrl  As String=tmdb.GetBackDropUrl()
-        Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath="","",workingMovieDetails.fileinfo.videotspath+"fanart.jpg")
-
-        If IsNothing(FanartUrl) then
-            MsgBox("No Fanart Found on TMDB")
-        Else
-            Try
-                Dim i1 As New PictureBox
-                Dim backup As String = ""
-
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = FanartUrl 
-                    Catch
-                        .ImageLocation = backup
-                    End Try
-                End With
-
-                If Not i1.Image Is Nothing Then
-                    If i1.Image.Width < 20 Then
-                        i1.ImageLocation = backup
-                    End If
-                End If
+        Try
+            Dim FanartUrl As String = tmdb.GetBackDropUrl()
+            Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath="","",workingMovieDetails.fileinfo.videotspath+"fanart.jpg")
+            If IsNothing(FanartUrl) then
+                MsgBox("No Fanart Found on TMDB")
+            Else
                 Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
-                For Each pth As String In Paths
-                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                    FanartPath = pth
-                Next
-
-            Catch ex As Exception
-
-            End Try
-
-            For Each paths In Preferences.offlinefolders
-                Dim offlinepath As String = paths & "\"
-                If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
-                    Dim mediapath As String
-                    mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                    Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                End If
-            Next
-
-            Dim bitmap3 As New Bitmap(FanartPath)
-            Dim bmp4 As New Bitmap(bitmap3)
-            bitmap3.Dispose()
-            
-            'PictureBoxFanArt.Image = bmp4
-            util_ImageLoad(PictureBoxFanArt, FanartPath, Utilities.DefaultFanartPath)
-            'PictureBox2.Image = bmp4
-            util_ImageLoad(PictureBox2, FanartPath, Utilities.DefaultFanartPath)
-        End If
-
+                Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(FanartUrl, paths, True)
+                If Not aok Then Throw New Exception("TMDB is offline")
+                'For Each thispath In Preferences.offlinefolders
+                '    Dim offlinepath As String = thispath & "\"
+                '    If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                '        Dim mediapath As String
+                '        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                '        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                '    End If
+                'Next
+                util_ImageLoad(PictureBoxFanArt, paths(0), Utilities.DefaultFanartPath)
+                util_ImageLoad(PictureBox2, paths(0), Utilities.DefaultFanartPath)
+            End If
+        Catch ex As Exception
+            If ex.Message = "TMDB is offline" Then
+                messbox.Close()
+                MsgBox("Unable to connect to TheMovieDb.org." & vbCrLf & "Please confirm site is online")
+            End If
+        End Try
         messbox.Close()
-
     End Sub
 
     'Rescrape Poster
@@ -12872,87 +12836,57 @@ End Sub
 
     Private Sub mov_PosterGet(ByVal source As String)
         Try
+            If workingMovieDetails Is Nothing Then Exit Sub
             Dim messbox As New frmMessageBox("          Please Wait,", "", "Attempting to download Poster from " & source.ToUpper)
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            Dim posterpath As String = ""
             Dim isvideotspath As String = ""
-            If Not workingMovieDetails Is Nothing Then
-                If workingMovieDetails.fileinfo.fullpathandfilename <> Nothing Then
-                    If workingMovieDetails.fileinfo.fullpathandfilename <> "" Then
-                        posterpath = Preferences.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)
-                    End If
-                    If workingMovieDetails.fileinfo.videotspath<>"" Then
-                        isvideotspath=workingMovieDetails.fileinfo.videotspath+"poster.jpg"
-                    End If
+            If workingMovieDetails.fileinfo.videotspath<>"" Then
+                isvideotspath=workingMovieDetails.fileinfo.videotspath+"poster.jpg"
+            End If
+            Dim moviethumburl As String = ""
+            Dim tmdb As New TMDb 
+            tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+            tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
+            If tmdb.Imdb = "" AndAlso tmdb.TmdbId = "" Then Exit Sub
+
+            If source = "impa" Then
+                If workingMovieDetails.fullmoviebody.title <> "" And workingMovieDetails.fullmoviebody.year <> "" Then
+                    moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
+                End If
+            ElseIf source = "tmdb" Then
+                If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") OrElse workingMovieDetails.fullmoviebody.tmdbid <> "" Then
+                    Try
+                    moviethumburl = tmdb.FirstOriginalPosterUrl
+                    Catch
+                    End Try
+                End If
+            ElseIf source = "mpdb" Then
+                If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
+                    moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
+                End If
+            ElseIf source = "imdb" Then
+                If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
+                    moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                 End If
             End If
 
-            If posterpath <> "" Then
-                Dim moviethumburl As String = ""
-                Dim tmdb As New TMDb '(workingMovieDetails.fullmoviebody.imdbid)
-                tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
-                tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
-                If source = "impa" Then
-                    If workingMovieDetails.fullmoviebody.title <> "" And workingMovieDetails.fullmoviebody.year <> "" Then
-                        moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
-                    End If
-                ElseIf source = "tmdb" Then
-                    If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") OrElse workingMovieDetails.fullmoviebody.tmdbid <> "" Then
-                        'moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
-                        moviethumburl = tmdb.FirstOriginalPosterUrl
-                    End If
-                ElseIf source = "mpdb" Then
-                    If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
-                        moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
-                    End If
-                ElseIf source = "imdb" Then
-                    If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
-                        moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
-                    End If
-                End If
+            If moviethumburl <> "" And moviethumburl <> "na" Then
+                Try
+                    Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
+                    Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True)
+                    If Not aok Then Throw New Exception()
+                    util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
+                    util_ImageLoad(moviethumb, PostPaths(0), Utilities.DefaultPosterPath)
+                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0))
+                    updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
 
-                If moviethumburl <> "" And moviethumburl <> "na" Then
-
-                    Try
-                        Dim i1 As New PictureBox
-                        Dim backup As String = ""
-
-                        With i1
-                            .WaitOnLoad = True
-                            Try
-                                .ImageLocation = moviethumburl
-                            Catch
-                                .ImageLocation = backup
-                            End Try
-                        End With
-
-                        If Not i1.Image Is Nothing Then
-                            If i1.Image.Width < 20 Then
-                                i1.ImageLocation = backup
-                            End If
-                        End If
-                        Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
-                        For Each pth As String In PostPaths
-                            i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                            posterpath = pth
-                        Next
-                        i1.Dispose()
-                 '      
-                        util_ImageLoad(PictureBoxAssignedMoviePoster, posterpath, Utilities.DefaultPosterPath)
-                        util_ImageLoad(moviethumb, posterpath, Utilities.DefaultPosterPath)
-                        
-
-                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, posterpath)
-                        updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
-
-                    Catch ex As Exception
-                        MsgBox("Error [" & ex.Message & "] occurred while trying to download and save the poster")
-                    End Try
-                Else
-                    MsgBox("Unable to obtain a Poster from " & source.ToUpper)
-                End If
+                Catch ex As Exception
+                    MsgBox("Error [" & ex.Message & "] occurred while trying to download and save the poster")
+                End Try
+            Else
+                MsgBox("Unable to obtain a Poster from " & source.ToUpper)
             End If
             messbox.Close()
         Catch ex As Exception
@@ -12960,9 +12894,8 @@ End Sub
             Throw ex
 #End If
         Finally
-            GC.Collect()
+            messbox.Close()
         End Try
-
     End Sub
 
     Public Shared Sub updateposterwall(ByVal path As String, ByVal movie As String)
