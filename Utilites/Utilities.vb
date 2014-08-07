@@ -837,10 +837,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
             '6: check user tags
             If userCleanTags <> "" Then
-                M = Regex.Match(filename, "([" & cleanSeparators & "]?(" & userCleanTags & "))")
-                If M.Success = True Then
-                    If M.Index < currentposition Then currentposition = M.Index
-                End If
+                Dim escapedCleanTags As String = EscapeSpecialCharacters(userCleanTags)
+                Dim splitcleantags As String() = escapedCleanTags.Split("|")
+                For Each splittag In splitcleantags
+                    M = Regex.Match(filename, "([" & cleanSeparators & "]?(" & splittag & "))")
+                    If M.Success = True Then
+                        If M.Index < currentposition Then currentposition = M.Index
+                    End If
+                Next
+                
             End If
 
             '7: remove year from filename, don't panic tho' - MC will still scrape with the year
@@ -2697,6 +2702,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return str
     End Function
 
+    Public Shared Function EscapeSpecialCharacters(s As String) As String
+        s = s.Replace("(", "\(")
+        s = s.Replace(")", "\)")
+        s = s.Replace("{", "\{")
+        s = s.Replace("}", "\}")
+        s = s.Replace("[", "\[")
+        s = s.Replace("]", "\]")
+        Return s
+    End Function
+
     Public Shared Function RemoveEscapeCharacter(ByVal s As String) As String
         s = s.Replace("\"&Chr(34), Chr(34))
         s = s.Replace("\'", "'")
@@ -2706,6 +2721,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function cleanSpecChars(ByVal string2clean As String) As String
         Return WebUtility.HtmlDecode(string2clean)
     End Function
+
     Public Shared Function ReplaceNothing(ByVal text As String, Optional ByVal replacetext As String = "") As String
         If text Is Nothing Then
             text = replacetext
