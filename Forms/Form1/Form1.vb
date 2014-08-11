@@ -569,29 +569,29 @@ Public Class Form1
                     End If
                 End If
 
-                If Preferences.startuptab = 0 Then
-                    SplitContainer1.SplitterDistance = Preferences.splt1
-                    SplitContainer2.SplitterDistance = Preferences.splt2
-                    SplitContainer5.SplitterDistance = Preferences.splt5
-                    TabLevel1.SelectedIndex = 1
-                    SplitContainer3.SplitterDistance = Preferences.splt3
-                    SplitContainer4.SplitterDistance = Preferences.splt4
-                    TabLevel1.SelectedIndex = 0
-                ElseIf Preferences.startuptab = 1 Then
-                    SplitContainer1.SplitterDistance = Preferences.splt1
-                    SplitContainer2.SplitterDistance = Preferences.splt2
-                    SplitContainer5.SplitterDistance = Preferences.splt5
-                    TabLevel1.SelectedIndex = 1
-                    SplitContainer3.SplitterDistance = Preferences.splt3
-                    SplitContainer4.SplitterDistance = Preferences.splt4
-                ElseIf Preferences.startuptab > 1 Then
+                'If Preferences.startuptab = 0 Then
+                '    SplitContainer1.SplitterDistance = Preferences.splt1
+                '    SplitContainer2.SplitterDistance = Preferences.splt2
+                '    SplitContainer5.SplitterDistance = Preferences.splt5
+                '    TabLevel1.SelectedIndex = 1
+                '    SplitContainer3.SplitterDistance = Preferences.splt3
+                '    SplitContainer4.SplitterDistance = Preferences.splt4
+                '    TabLevel1.SelectedIndex = 0
+                'ElseIf Preferences.startuptab = 1 Then
+                '    SplitContainer1.SplitterDistance = Preferences.splt1
+                '    SplitContainer2.SplitterDistance = Preferences.splt2
+                '    SplitContainer5.SplitterDistance = Preferences.splt5
+                '    TabLevel1.SelectedIndex = 1
+                '    SplitContainer3.SplitterDistance = Preferences.splt3
+                '    SplitContainer4.SplitterDistance = Preferences.splt4
+                'ElseIf Preferences.startuptab > 1 Then
                     SplitContainer1.SplitterDistance = Preferences.splt1
                     SplitContainer2.SplitterDistance = Preferences.splt2
                     SplitContainer5.SplitterDistance = Preferences.splt5
                     SplitContainer3.SplitterDistance = Preferences.splt3
                     SplitContainer4.SplitterDistance = Preferences.splt4
                     TabLevel1.SelectedIndex = Preferences.startuptab
-                End If
+                'End If
 
 
                 SplitContainer1.IsSplitterFixed = False

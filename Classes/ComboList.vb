@@ -164,7 +164,7 @@ Public Class ComboList
 
     Public ReadOnly Property MissingYear As Boolean
         Get
-            Return year=0           '.ToString.Trim=""
+            Return year < 1901           '.ToString.Trim=""
         End Get
     End Property  
 

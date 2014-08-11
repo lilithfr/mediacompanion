@@ -500,7 +500,7 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property MissingYear As Boolean
         Get
-            Return year = 0
+            Return year < 1901
         End Get
     End Property  
 
