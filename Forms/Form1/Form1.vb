@@ -5779,53 +5779,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub cbTvActor_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseHover
-        Try
-            cbTvActor.Focus()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub cbTvActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.SelectedIndexChanged
-        Try
-            If Not actorflag Then
-                actorflag = True
-                cbTvActorRole.SelectedIndex = cbTvActor.SelectedIndex 
-                Call tv_ActorDisplay()
-                cbTvActor.Focus()
-            Else
-                actorflag = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub cbTvActorRole_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.MouseHover
-        Try
-            cbTvActorRole.Focus()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub cbTvActorRole_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.SelectedIndexChanged
-        Try
-            If Not actorflag Then 
-                actorflag = True
-                cbTvActor.SelectedIndex = cbTvActorRole.SelectedIndex
-                Call tv_ActorRoleDisplay()
-                cbTvActorRole.Focus()
-            Else
-                actorflag = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub ExpandAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandAllToolStripMenuItem.Click
         Try
             Dim node As TreeNode
@@ -5868,64 +5821,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub TvTreeview_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.DoubleClick
-        Try
-            If TvTreeview.SelectedNode Is Nothing Then Exit Sub
-            Dim tempstring2 As String
-            Dim tempstring As String = ""
-            Dim pathandfilename As String = TvTreeview.SelectedNode.Name
-            If pathandfilename.IndexOf("tvshow.nfo") <> -1 Then Exit Sub
-            If pathandfilename = "" Then Exit Sub
-            If pathandfilename <> Nothing Then
-                If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
-                    pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
-
-                    Dim exists As Boolean = False
-                    For Each ext In Utilities.VideoExtensions
-                        If ext = "VIDEO_TS.IFO" Then Continue For
-                        tempstring2 = pathandfilename & ext
-
-                        If IO.File.Exists(tempstring2) Then
-                            exists = True
-                            tempstring = applicationPath & "\settings\temp.m3u"
-                            Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
-                            file.WriteLine(tempstring2)
-                            file.Close()
-
-
-
-                            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-                            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-
-                            If Preferences.videomode = 3 Then
-                                Preferences.videomode = 2
-                                Call util_VideoMode2(tempstring)
-                            End If
-
-                            If Preferences.videomode >= 4 Then
-                                If Preferences.selectedvideoplayer <> Nothing Then
-                                    Call util_VideoMode4(tempstring)
-                                Else
-                                    Call util_VideoMode1(tempstring)
-                                End If
-                            End If
-                            Exit For
-                        End If
-                    Next
-                    If exists = False Then
-                        MsgBox("Could not find file: """ & pathandfilename & """ with any supported extension")
-                    End If
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub TvTreeview_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.MouseHover
-        TvTreeview.Focus()
-    End Sub
+    
 
     Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ReloadFromCache.Click
         Try
@@ -6051,42 +5947,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
-        Dim url As String
-        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
-        If Show.TvdbId.Value.Contains("tt") Then
-            MsgBox("Invalid Tvdb ID" & vbCrLf & "Unable to load Show's TVDB page")
-            Exit Sub
-        End If
-        Dim TvdbId As Integer = Show.TvdbId.value
-        url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
-        Try
-            WebBrowser4.Stop()
-            WebBrowser4.ScriptErrorsSuppressed = True
-            WebBrowser4.Navigate(url)
-        Catch
-            WebBrowser4.Stop()
-            WebBrowser4.ScriptErrorsSuppressed = True
-            WebBrowser4.Navigate(url)
-
-        End Try
-    End Sub
-
-    Private Sub btn_TvIMDB_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvIMDB.Click
-        Dim url As String
-        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
-        url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
-        Try
-            WebBrowser4.Stop()
-            WebBrowser4.ScriptErrorsSuppressed = True
-            WebBrowser4.Navigate(url)
-        Catch
-            WebBrowser4.Stop()
-            WebBrowser4.ScriptErrorsSuppressed = True
-            WebBrowser4.Navigate(url)
-
-        End Try
-    End Sub
     
     Private Sub tv_TableView()
         Dim availableshows As New List(Of TvShow)
@@ -6241,18 +6101,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button30.Click
-        Try
-            Call tv_ShowListLoad()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ListBox3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox3.SelectedIndexChanged
-        util_ImageLoad(PictureBox9, listOfShows(ListBox3.SelectedIndex).showbanner, Utilities.DefaultBannerPath)
-    End Sub
-
     Private Sub util_LanguageCheck()
         Try
             If ListBox1.SelectedIndex < 0 Then ListBox1.SelectedIndex = languageList.FindIndex(Function(index As Tvdb.Language) index.Abbreviation.Value = Preferences.TvdbLanguageCode)
@@ -6312,14 +6160,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ListBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
-        Try
-            Call util_LanguageCheck()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub RefreshShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshShowsToolStripMenuItem.Click
         Call tv_CacheRefresh()
     End Sub
@@ -6336,54 +6176,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub btnTvShowSelectorScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShowSelectorScrape.Click
-
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
-                MsgBox("No show is selected")
-                Exit Sub
-            End If
-            Dim tempstring As String = ""
-            If Label55.Text.IndexOf("is not available in") <> -1 Then
-                MsgBox("Please select a language that is available for this show")
-                Exit Sub
-            End If
-            Dim messbox As frmMessageBox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            messbox.Refresh()
-            Application.DoEvents()
-
-            Dim LanCode As String
-            If ListBox1.SelectedIndex = -1 Then
-                LanCode = Preferences.TvdbLanguageCode
-            Else
-                LanCode = languageList(ListBox1.SelectedIndex).Abbreviation.Value
-            End If
-            If Preferences.tvshow_useXBMC_Scraper = True Then
-
-                Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(ListBox3.SelectedIndex).showid, LanCode, WorkingTvShow.NfoFilePath)
-                If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
-                Call tv_ShowLoad(WorkingTvShow)
-                TvTreeview.Refresh()
-                messbox.Close()
-                TabControl3.SelectedIndex = 0
-            Else
-                Cache.TvCache.Remove(WorkingTvShow)
-                newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
-                Dim args As TvdbArgs = New TvdbArgs(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
-                bckgrnd_tvshowscraper.RunWorkerAsync(args)
-                While bckgrnd_tvshowscraper.IsBusy
-                    Application.DoEvents()
-                End While
-                TabControl3.SelectedIndex = 0
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
+    
     Private Function util_ReplaceXMLChrs(ByVal Text As String)                  'Convert textcodes to real characters
         If Text.IndexOf("â€˜") <> -1 Then Text = Text.Replace("â€˜", "'")
         If Text.IndexOf("â€™") <> -1 Then Text = Text.Replace("â€™", "'")
@@ -7045,9 +6838,7 @@ Public Class Form1
         Return fanartpath
     End Function
 
-    Private Sub rbTvFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbTvFanart.CheckedChanged, rbTvFanart1.CheckedChanged, rbTvFanart2.CheckedChanged, rbTvFanart3.CheckedChanged, rbTvFanart4.CheckedChanged
-        Tv_FanartDisplay()
-    End Sub
+    
 
     Private Sub tv_FanartCropTop()
         Dim imagewidth As Integer = PictureBox10.Image.Width
@@ -7077,383 +6868,9 @@ Public Class Form1
         PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
     End Sub
 
-    Private Sub Button35_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button35.MouseDown
-        Try
-            'up
-            If PictureBox10.Image Is Nothing Then Exit Sub
-            thumbedItsMade = True
-            Button40.Visible = True
-            btnTvFanartSaveCropped.Visible = True
-            cropString = "top"
-            Timer4.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    
 
-    Private Sub Button36_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button36.MouseDown
-        Try
-            'down
-            If PictureBox10.Image Is Nothing Then Exit Sub
-            thumbedItsMade = True
-            Button40.Visible = True
-            btnTvFanartSaveCropped.Visible = True
-            cropString = "bottom"
-            Timer4.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button38_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button38.MouseDown
-        Try
-            If PictureBox10.Image Is Nothing Then Exit Sub
-            thumbedItsMade = True
-            Button40.Visible = True
-            btnTvFanartSaveCropped.Visible = True
-            cropString = "left"
-            Timer4.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try 'left
-    End Sub
-
-    Private Sub Button37_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button37.MouseDown
-        Try
-            'right
-            If PictureBox10.Image Is Nothing Then Exit Sub
-            thumbedItsMade = True
-            Button40.Visible = True
-            btnTvFanartSaveCropped.Visible = True
-            cropString = "right"
-            Timer4.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Timer4_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer4.Tick
-        Try
-            If cropString = "top" Then Call tv_FanartCropTop()
-            If cropString = "bottom" Then Call tv_FanartCropBottom()
-            If cropString = "left" Then Call tv_FanartCropLeft()
-            If cropString = "right" Then Call tv_FanartCropRight()
-            Label58.Text = PictureBox10.Image.Height.ToString
-            Label59.Text = PictureBox10.Image.Width.ToString
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Button35_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button35.MouseUp
-        Try
-            Timer4.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button36_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button36.MouseUp
-        Try
-            Timer4.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button38_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button38.MouseUp
-        Try
-            Timer4.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button37_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button37.MouseUp
-        Try
-            Timer4.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button40_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button40.Click
-        Try
-            PictureBox10.Image = PictureBox11.Image
-            Label58.Text = PictureBox10.Image.Height.ToString
-            Label59.Text = PictureBox10.Image.Width.ToString
-            Button40.Visible = False
-            btnTvFanartSaveCropped.Visible = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnTvFanartSaveCropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSaveCropped.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            Try
-                Dim stream As New System.IO.MemoryStream
-                PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
-                PictureBox11.Image = PictureBox10.Image
-                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    tv_PictureBoxLeft.Image = PictureBox11.Image    '2check
-                End If
-                Label58.Text = PictureBox10.Image.Height.ToString
-                Label59.Text = PictureBox10.Image.Width.ToString
-                Button40.Visible = False
-                btnTvFanartSaveCropped.Visible = False
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnTvFanartUrl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartUrl.Click
-        Try
-            Dim t As New frmImageBrowseOrUrl 
-            t.Location = Me.PointToScreen(New Point(btnTvFanartUrl.Left-480, btnTvFanartUrl.Top + btnTvFanartUrl.Height))
-            t.ShowDialog()
-            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
-                t.Dispose()
-                Exit Sub
-            End If
-            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
-            t.Dispose()
-            t = Nothing
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-            Dim eh As Boolean = Preferences.savefanart
-            Preferences.savefanart = True 
-            Movie.SaveFanartImageToCacheAndPath(PathOrUrl, savepath)
-            Preferences.savefanart = eh
-            Dim exists As Boolean = System.IO.File.Exists(savepath)
-            If exists = True Then
-
-                util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
-
-                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
-
-                End If
-
-            End If
-            Label59.Text = PictureBox10.Image.Width
-            Label58.Text = PictureBox10.Image.Height
-
-
-        Catch ex As Exception
-            MsgBox("Unable To Download Image")
-        End Try
-        
-    End Sub
-
-    Private Sub tb_Sh_Ep_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Enter
-        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        'If Panel9.Visible = False Then
-        '    tb_Sh_Ep_Title.Text = WorkingTvShow.Title.Value
-        '    If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 Then
-        '        tb_Sh_Ep_Title.Text = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
-        '    End If
-        'Else
-        '    tb_Sh_Ep_Title.Text = WorkingEpisode.Title.Value
-        'End If
-    End Sub
-
-    Private Sub tb_Sh_Ep_Title_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Leave
-        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-
-        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        'On Error Resume Next
-        'If Panel9.Visible = False Then
-        '    '-------------- Aqui
-        '    'If Preferences.ignorearticle = True Then
-        '    '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
-        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
-        '    '    End If
-        '    'End If
-        '    'If Preferences.ignoreAarticle Then
-        '    '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
-        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
-        '    '    End If
-        '    'End If
-        '    'If Preferences.ignoreAn Then
-        '    '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
-        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
-        '    '    End If
-        '    'End If
-        '    WorkingTvShow.Title.Value = Preferences.RemoveIgnoredArticles(tb_Sh_Ep_Title.Text)
-        'Else
-        '    WorkingEpisode.Title.Value = tb_Sh_Ep_Title.Text
-        '    Dim trueseason As String = WorkingEpisode.Season.Value
-        '    Dim trueepisode As String = WorkingEpisode.Episode.Value
-        '    If trueseason.Length = 1 Then trueseason = "0" & trueseason
-        '    If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-        '    tb_Sh_Ep_Title.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
-        'End If
-    End Sub
-
-    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click  'save button
-
-        Try
-
-            Dim Show As Media_Companion.TvShow = Nothing
-            Dim Season As Media_Companion.TvSeason = Nothing
-            Dim Episode As Media_Companion.TvEpisode = Nothing
-            If TvTreeview.SelectedNode IsNot Nothing Then
-                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-                    Show = TvTreeview.SelectedNode.Tag
-                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-                    Episode = TvTreeview.SelectedNode.Tag
-                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-                    Exit Sub
-                    'Season = TvTreeview.SelectedNode.Tag
-                    'Show = Season.GetParentShow
-                Else
-                    Exit Sub
-                End If
-            Else
-                Exit Sub
-            End If
-
-            Dim tempint As Integer = 0
-            Dim tempstring As String = ""
-            If Show IsNot Nothing Then
-                Dim changed As Integer = 0
-                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> tb_ShTvdbId.Text Then
-                    changed += 1
-                End If
-                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> tb_ShImdbId.Text.ToLower Then
-                    changed += 2
-                End If
-                If changed > 0 Then
-                    If changed = 1 Then
-                        tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes and art" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                        If tempint = DialogResult.No Then
-                            Exit Sub
-                        End If
-                    ElseIf changed = 2 Then
-                        tempint = MessageBox.Show("It appears that you have changed the IMDB ID" & vbCrLf & "Media Companion depends on this ID for scraping actors from IMDB" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                        If tempint = DialogResult.No Then
-                            Exit Sub
-                        End If
-                    ElseIf changed = 3 Then
-                        tempint = MessageBox.Show("It appears that you have changed the IMDB ID & TVDB ID" & vbCrLf & "Media Companion depends on these IDs being correct for a number of scraping operations" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                        If tempint = DialogResult.No Then
-                            Exit Sub
-                        End If
-                    End If
-                End If
-                'its a tvshow
-                Dim TmpTitle As String = ""
-                If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 And tb_Sh_Ep_Title.Text.Length > 5 Then
-                    TmpTitle = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
-                Else
-                    TmpTitle = tb_Sh_Ep_Title.Text
-                End If
-
-                If TmpTitle <> Show.Title.Value Then
-                    Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
-                    If TryTitle = MsgBoxResult.No Then 
-                        tb_Sh_Ep_Title.Text = Preferences.RemoveIgnoredArticles(Show.Title.Value)
-                        Exit Sub
-                    End If
-                    Show.Title.Value = TmpTitle
-                End If
-                Show.Plot.Value = tb_ShPlot.Text
-                Show.Runtime.Value = tb_ShRunTime.Text
-                Show.Premiered.Value = tb_ShPremiered.Text
-                Show.Studio.Value = tb_ShStudio.Text
-                Show.Rating.Value = tb_ShRating.Text
-                Show.ImdbId.Value = tb_ShImdbId.Text
-                Show.TvdbId.Value = tb_ShTvdbId.Text
-                Show.Mpaa.Value = tb_ShCert.Text
-                Show.Genre.Value = tb_ShGenre.Text
-                Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
-
-                Show.Save()
-                Show.UpdateTreenode()
-
-            Else
-                'its an episode
-                'Dim multiepisode As Boolean = TestForMultiepisode(Episode.NfoFilePath)
-                'If multiepisode = False Then
-                '    Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
-                '    Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
-                '    tempstring = "S" & trueseason & "E" & trueepisode & " - "
-
-                '    'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                '    Episode.Plot.Value = tb_EpPlot.Text
-                '    Episode.Aired.Value = tb_EpAired.Text
-                '    Episode.Rating.Value = tb_EpRating.Text
-
-                '    Episode.Save()
-                '    Episode.UpdateTreenode()
-                'Else
-                    Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
-                    Do While trueseason.Substring(0, 1) = "0"
-                        trueseason = trueseason.Substring(1, trueseason.Length - 1)
-                    Loop
-                    Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
-                    Do While trueepisode.Substring(0, 1) = "0"
-                        trueepisode = trueepisode.Substring(1, trueepisode.Length - 1)
-                    Loop
-                '    tempstring = "S" & trueseason & "E" & trueepisode & " - "
-                    'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
-                    'Episode.Plot.Value = tb_EpPlot.Text
-                    'Episode.Aired.Value = tb_EpAired.Text
-                    'Episode.Rating.Value = tb_EpRating.Text
-                    'Episode.Credits.Value = tb_EpCredits.Text
-                    'Episode.Director.Value = tb_EpDirector.Text
-
-                    Dim episodelist As New List(Of TvEpisode)
-                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
-                    For Each ep In episodelist
-                        If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
-                            ep.Plot.Value = tb_EpPlot.Text
-                            ep.Aired.Value = tb_EpAired.Text
-                            ep.Rating.Value = tb_EpRating.Text
-                            ep.Credits.Value = tb_EpCredits.Text
-                            ep.Director.Value = tb_EpDirector.Text
-                            ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
-                        End If
-                        'Dim fullfiledetails As Media_Companion.FullFileDetails
-                        'fullfiledetails = Media_Companion.Preferences.Get_HdTags(Episode.NfoFilePath)
-                        'ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
-                        'ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
-                        'ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
-                        'ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
-                        'ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
-                        'ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
-                        'ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
-
-                        'For Each track In fullfiledetails.filedetails_audio
-                        '    Dim newtrack As New AudioDetails
-                        '    newtrack.Codec = track.Codec
-                        '    newtrack.Channels = track.Channels
-                        '    newtrack.Bitrate = track.Bitrate
-                        '    ep.Details.StreamDetails.Audio.Add(newtrack)
-                        'Next
-                    Next
-                    WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
-
-                    Episode.UpdateTreenode()
-                'End If
-            End If
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
+    
     Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
@@ -7480,90 +6897,6 @@ Public Class Form1
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
             tv_IMDbID_warned = True
         End If
-
-    End Sub
-
-    Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
-        Try
-            tv_Rescrape()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-
-            Dim TVShowNFOContent As String = ""
-            If Button45.Text = "TVDB" Then
-                If WorkingTvShow.ImdbId.Value<>"" Then
-                    WorkingTvShow.TvShowActorSource.Value = "imdb"
-                    Button45.Text = "IMDB"
-                Else
-                    MsgBox("No IMDB ID allocated to this Show!")
-                End If
-            Else
-                WorkingTvShow.TvShowActorSource.Value = "tvdb"
-                Button45.Text = "TVDB"
-            End If
-            WorkingTvShow.Save()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button46_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button46.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            Dim TVShowNFOContent As String = ""
-            If Button46.Text = "TVDB" Then
-                WorkingTvShow.EpisodeActorSource.Value = "imdb"
-                Button46.Text = "IMDB"
-            Else
-                WorkingTvShow.EpisodeActorSource.Value = "tvdb"
-                Button46.Text = "TVDB"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-
-            Dim TVShowNFOContent As String = ""
-            If Button47.Text = "Default" Then
-                WorkingTvShow.SortOrder.Value = "dvd"
-                Button47.Text = "DVD"
-            Else
-                WorkingTvShow.SortOrder.Value = "Default"
-                Button47.Text = "Default"
-            End If
-            'Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
-            'If DiditWork = True Then
-
-
-            '    For Each Shows In TvShows
-            '        If WorkingTvShow.path = Shows.fullpath Then
-            '            Dim newtv As New TvShow
-            '            newtv = Shows
-            '            If Button47.Text = "Default" Then
-            '                newtv.sortorder = "default"
-            '            Else
-            '                newtv.sortorder = "dvd"
-            '            End If
-            '            TvShows.Remove(Shows)
-            '            TvShows.Add(newtv)
-            '            Exit For
-            '        End If
-            '    Next
-            'End If
-            '        Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
 
     End Sub
 
@@ -7902,48 +7235,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_EpWatched.Click
-        Try
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-
-            Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
-
-            If multi = False Then
-                util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
-                WorkingEpisode.Save()
-            Else
-                Dim episodelist As New List(Of TvEpisode)
-                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-                Dim done As String = ""
-                For Each ep In episodelist
-                    util_EpisodeSetWatched(ep.PlayCount.Value, True)
-                    'Dim fullfiledetails As Media_Companion.FullFileDetails
-                    'fullfiledetails = Media_Companion.Preferences.Get_HdTags(ep.NfoFilePath)
-                    'ep.Details.StreamDetails.Video.Width = fullfiledetails.filedetails_video.Width
-                    'ep.Details.StreamDetails.Video.Height = fullfiledetails.filedetails_video.Height
-                    'ep.Details.StreamDetails.Video.Codec = fullfiledetails.filedetails_video.Codec
-                    'ep.Details.StreamDetails.Video.FormatInfo = fullfiledetails.filedetails_video.FormatInfo
-                    'ep.Details.StreamDetails.Video.DurationInSeconds = fullfiledetails.filedetails_video.DurationInSeconds
-                    'ep.Details.StreamDetails.Video.Bitrate = fullfiledetails.filedetails_video.Bitrate
-                    'ep.Details.StreamDetails.Video.Container = fullfiledetails.filedetails_video.Container
-
-                    'For Each track In fullfiledetails.filedetails_audio
-                    '    Dim newtrack As New AudioDetails
-                    '    newtrack.Codec = track.Codec
-                    '    newtrack.Channels = track.Channels
-                    '    newtrack.Bitrate = track.Bitrate
-                    '    ep.Details.StreamDetails.Audio.Add(newtrack)
-                    'Next
-                Next
-
-                WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
     Private Sub tv_PosterSetup()
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -8187,10 +7478,6 @@ Public Class Form1
         End Try
     End Function
 
-    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
-        BannerAndPosterViewer()
-    End Sub
-
     Private Sub tv_TvdbThumbsGet()
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -8233,70 +7520,6 @@ Public Class Form1
                     tvdbposterlist.Add(individualposter)
             End Select
         Next
-    End Sub
-
-    Private Sub Button53_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button53.Click
-        Try
-
-            'tvdb specific
-            tvdbmode = True
-            usedlist.Clear()
-            btnTvPosterSaveBig.Visible = False
-            'Button57.Visible = False
-            If tvdbposterlist.Count = 0 Then
-                Call tv_TvdbThumbsGet()
-            End If
-
-            Dim tempseason As String = ""
-            If ComboBox2.SelectedItem.indexof("Season ") <> -1 Then
-                tempseason = ComboBox2.SelectedItem.replace("Season ", "")
-            End If
-            If tempseason.IndexOf("0") = 0 And tempseason.Length > 1 Then
-                tempseason = tempseason.Substring(1, tempseason.Length - 1)
-            End If
-            If ComboBox2.SelectedItem.indexof("Specials") <> -1 Then
-                tempseason = "0"
-            End If
-            'If ComboBox2.SelectedItem.indexof("Main Image") <> -1 And CheckBox8.Checked = True Then
-            If ComboBox2.SelectedItem.indexof("Main Image") <> -1 And rbTVposter.Checked = True Then
-                tempseason = "poster"
-                'ElseIf ComboBox2.SelectedItem.indexof("Main Image") <> -1 And CheckBox8.Checked = False Then
-            ElseIf ComboBox2.SelectedItem.indexof("Main Image") <> -1 And rbTVposter.Checked = False Then
-                tempseason = "series"
-            End If
-            If tempseason = "poster" Or tempseason = "series" Then
-                For Each poster In tvdbposterlist
-                    'If poster.bannerType = "poster" And CheckBox8.Checked = True Then
-                    If poster.BannerType = "poster" And rbTVposter.Checked = True Then
-                        If poster.BannerType <> "fanart" Then usedlist.Add(poster)
-                    End If
-                    'If poster.bannerType = "series" And CheckBox8.Checked = False Then
-                    If poster.BannerType = "series" And rbTVposter.Checked = False Then
-                        If poster.BannerType <> "fanart" Then usedlist.Add(poster)
-                    End If
-                Next
-            Else
-                For Each poster In tvdbposterlist
-                    If poster.Season = tempseason Then
-                        If rbTVbanner.Checked = True Then
-                            If poster.Resolution = "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "poster" Then 
-                                usedlist.Add(poster)
-                            End If
-                        End If
-                        If rbTVposter.Checked = True Then
-                            If poster.Resolution <> "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "banner" Then
-                                usedlist.Add(poster)
-                            End If
-                        End If
-                    End If
-                Next
-            End If
-
-            Call tv_PosterPanelPopulate()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
     End Sub
 
     Private Sub tv_PosterPanelPopulate()
@@ -8572,44 +7795,8 @@ Public Class Form1
         messbox.Close()
     End Sub
 
-    Private Sub Button52_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button52.Click
-        Try
-            'tvdb all
-            tvdbmode = True
-            usedlist.Clear()
-            btnTvPosterSaveBig.Visible = False
-            'Button57.Visible = False
-            If tvdbposterlist.Count = 0 Then
-                Call tv_TvdbThumbsGet()
-            End If
-            For Each poster In tvdbposterlist
-                'If CheckBox8.Visible = False Then
-                If rbTVbanner.Enabled = False Then
-                    If poster.BannerType <> "fanart" And poster.BannerType <> "series" Then
-                        usedlist.Add(poster)
-                    End If
-                Else
-                    'If CheckBox8.Checked = False And poster.BannerType = "series" Then
-                    If rbTVposter.Checked = False And poster.BannerType = "series" Then
-                        usedlist.Add(poster)
-                        'ElseIf CheckBox8.Checked = True And poster.BannerType <> "fanart" Then
-                    ElseIf rbTVposter.Checked = True And poster.BannerType <> "fanart" Then
-                        If poster.BannerType <> "series" Then usedlist.Add(poster)
-                    End If
-
-                End If
-            Next
-
-
-            Call tv_PosterPanelPopulate()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnTvPosterSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveBig.Click
-        Call TvPosterSave(btnTvPosterSaveBig.Tag)
-    End Sub
+    
+    
 
     Private Sub TvPosterSave(ByVal imageUrl As String)
         Try
@@ -8779,324 +7966,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btnTvPosterSaveSmall_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveSmall.Click ' disabled
-        'Try
-        '    'savesmall
-        '    Dim postname As String = ""
-        '    Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        '    Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
-        '    For Each Control In Panel16.Controls
-        '        If Control.name.indexof("postercheckbox") <> -1 Then
-        '            Dim rb As RadioButton = Control
-        '            If rb.Checked = True Then
-        '                postname = Control.name.replace("postercheckbox", "poster")
-        '                Exit For
-        '            End If
-        '        End If
-        '    Next
-        '    If postname <> "" Then
-        '        For Each Control In Panel16.Controls
-        '            If Control.name = postname Then
-        '                Try
-        '                    '                           Dim path As String = ""
-        '                    Dim picBox As PictureBox = Control
-
-        '                    If ComboBox2.Text.ToLower = "main image" Then
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        '                                If Preferences.XBMC_version = 0 Then
-        '                        '                                    path = workingposterpath
-        '                        '                                ElseIf Preferences.XBMC_version = 2 Then
-        '                        '                                    If rbTVbanner.Checked = True Then
-        '                        '                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
-        '                        '                                    ElseIf rbTVposter.Checked = True Then
-        '                        '                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
-        '                        '                                    End If
-        '                        '                                End If
-
-        '                    ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
-
-        '                        Dim temp As String = ComboBox2.Text.ToLower
-        '                        temp = temp.Replace(" ", "")
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        'If Preferences.XBMC_version = 0 Then
-        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
-        '                        'ElseIf Preferences.XBMC_version = 2 Then
-        '                        '    If rbTVbanner.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
-        '                        '    ElseIf rbTVposter.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
-        '                        '    End If
-        '                        'End If
-
-        '                    ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        'If Preferences.XBMC_version = 0 Then
-        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
-        '                        'ElseIf Preferences.XBMC_version = 2 Then
-        '                        '    If rbTVbanner.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
-        '                        '    ElseIf rbTVposter.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
-        '                        '    End If
-        '                        'End If
-
-        '                    ElseIf ComboBox2.Text.ToLower = "specials" Then
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        'If Preferences.XBMC_version = 0 Then
-        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
-        '                        'ElseIf Preferences.XBMC_version = 2 Then
-        '                        '    If rbTVbanner.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
-        '                        '    ElseIf rbTVposter.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
-        '                        '    End If
-        '                        'End If
-        '                    End If
-        '                    'Dim newpicbox As PictureBox = Control
-        '                    'newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
-        '                    If combostart = ComboBox2.SelectedItem Then
-        '                        If rbTVbanner.Checked = True Then
-        '                            tv_PictureBoxBottom.Image = PictureBox13.Image
-        '                        Else
-        '                            tv_PictureBoxRight.Image = PictureBox13.Image
-        '                        End If
-        '                    End If
-        '                    'PictureBox12.Image = newpicbox.Image
-
-        '                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-
-        '                    '                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-        '                    ''                                tv_PictureBoxRight.ImageLocation = path
-        '                    '                                tv_PictureBoxRight.ImageLocation = workingposterpath
-        '                    '                                tv_PictureBoxRight.Load()
-        '                    '                            End If
-
-
-
-        '                    If rbTVbanner.Checked Then
-        '                        tv_PictureBoxBottom.ImageLocation = workingposterpath
-        '                        tv_PictureBoxBottom.Load()
-        '                    End If
-        '                    If rbTVposter.Checked Then
-        '                        tv_PictureBoxRight.ImageLocation = workingposterpath
-        '                        tv_PictureBoxRight.Load()
-        '                    End If
-
-
-
-        '                    'workingposterpath = path
-        '                Catch ex As Exception
-        '                    MsgBox(ex.ToString)
-        '                End Try
-        '            End If
-        '        Next
-        '    End If
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
-
-    End Sub
-
-    Private Sub Button54_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button54.Click
-        Try
-            tvposterpage += 1
-            btnTvPosterSaveBig.Visible = False
-            'Button57.Visible = False
-            If usedlist.Count < 10 * tvposterpage Then
-                Button54.Enabled = False
-            End If
-            Call tv_PosterSelectionDisplay()
-            Button55.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button55_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button55.Click
-        Try
-            tvposterpage -= 1
-            btnTvPosterSaveBig.Visible = False
-            'Button57.Visible = False
-            If tvposterpage = 1 Then
-                Button55.Enabled = False
-            End If
-            Call tv_PosterSelectionDisplay()
-            Button54.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button58_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button58.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            If WorkingTvShow.ImdbId = Nothing Then
-                MsgBox("No IMDB ID is available for this movie, cant scrape posters")
-                Exit Sub
-            End If
-            If WorkingTvShow.ImdbId.Value = "" Then
-                MsgBox("No IMDB ID is available for this movie, cant scrape posters")
-                Exit Sub
-            End If
-            Dim ok As Boolean = False
-            If WorkingTvShow.ImdbId.Value.ToLower.IndexOf("tt") = 0 Then
-                Dim tempstring As String = WorkingTvShow.ImdbId.Value.ToLower.Substring(2, WorkingTvShow.ImdbId.Value.Length - 2)
-                If IsNumeric(tempstring) Then
-                    ok = True
-                End If
-            End If
-            If IsNumeric(WorkingTvShow.ImdbId) And WorkingTvShow.ImdbId.Value.Length = 7 Then
-                WorkingTvShow.ImdbId.Value = "tt" & WorkingTvShow.ImdbId.Value
-                ok = True
-            End If
-
-            If ok = False Then
-                MsgBox("IMDB ID seems to be an invalid format, can't scrape posters")
-                Exit Sub
-            End If
-
-            tvdbmode = False
-            usedlist.Clear()
-            If imdbposterlist.Count <= 0 Then
-                Dim newobject2 As New imdb_thumbs.Class1
-                Dim posters(,) As String = newobject2.getimdbposters(WorkingTvShow.ImdbId.Value)
-                For f = 0 To UBound(posters)
-                    If posters(f, 0) <> Nothing Then
-                        Dim individualposter As New TvBanners
-                        individualposter.SmallUrl = posters(f, 0)
-                        individualposter.Url = posters(f, 0)
-                        imdbposterlist.Add(individualposter)
-                    End If
-                Next
-            End If
-            For Each po In imdbposterlist
-                usedlist.Add(po)
-            Next
-            usedlist.Reverse()
-            Call tv_PosterPanelPopulate()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Button59_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button59.Click
-        Try
-            Dim t As New frmImageBrowseOrUrl 
-            t.Location = Me.PointToScreen(New Point(Button59.Left-480, Groupbox23.Top + GroupBox23.Height))
-            t.ShowDialog()
-            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
-                t.Dispose()
-                Exit Sub
-            End If
-            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
-            t.Dispose()
-            t = Nothing
-            Try
-                Dim MyWebClient As New System.Net.WebClient
-
-                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(PathOrUrl)
-                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-
-                PictureBox13.Image = New System.Drawing.Bitmap(ImageStream)
-                Call TvPosterSave(PathOrUrl)
-                'PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
-                'btnTvPosterSaveBig.PerformClick()
-                'If combostart = ComboBox2.SelectedItem Then
-                '    tv_PictureBoxRight.Image = PictureBox13.Image  '2check
-                'End If
-                'PictureBox12.Image = PictureBox13.Image
-                'Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-            Catch ex As Exception
-                MsgBox(ex.ToString)
-            End Try
-            'Panel14.Visible = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub TextBox26_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox26.KeyDown
-        Try
-            If e.KeyCode = Keys.Enter Then
-                Call tv_ShowListLoad()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
+    
+    
     Private Sub RefreshMovieNfoFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMovieNfoFilesToolStripMenuItem.Click
         Try
             Call util_BatchUpdate()
@@ -9109,39 +7980,6 @@ Public Class Form1
         Try
             Call mov_SaveQuick()
         
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
-        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-            e.Handled = True
-        End If
-    End Sub
-
-    Private Sub tv_EpThumbScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbScreenShot.Click
-        Try
-            TvEpThumbScreenShot
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox35.Leave
-        If TextBox35.Text = "" Then
-            MsgBox("Please enter a numerical value >0 into the textbox")
-            TextBox35.Focus()
-        ElseIf Convert.ToInt32(TextBox35.Text) = 0 Then
-            MsgBox("Please enter a numerical value >0 into the textbox")
-            TextBox35.Focus()
-        End If
-    End Sub
-
-    Private Sub tv_EpThumbRescrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbRescrape.Click
-        Try
-            TvEpThumbRescrape
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9999,45 +8837,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button_TV_State_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TV_State.Click
-        Try
-            Dim Btn As Button = sender
-            If TypeOf Btn.Tag Is Media_Companion.TvShow Then
-                Dim TempShow As Media_Companion.TvShow = Btn.Tag
-                Select Case TempShow.State
-                    Case Media_Companion.ShowState.Locked
-                        TempShow.State = Media_Companion.ShowState.Open
-                    Case Media_Companion.ShowState.Open
-                        TempShow.State = Media_Companion.ShowState.Locked
-                    Case Media_Companion.ShowState.Error
-                    Case Media_Companion.ShowState.Unverified
-                        TempShow.State = Media_Companion.ShowState.Open
-                        tb_Sh_Ep_Title.BackColor = Color.White
-                End Select
-
-
-                If TempShow.State = Media_Companion.ShowState.Locked Then
-                    Button_TV_State.Text = "Locked"
-                    Button_TV_State.BackColor = Color.Red
-                ElseIf TempShow.State = Media_Companion.ShowState.Open Then
-                    Button_TV_State.Text = "Open"
-                    Button_TV_State.BackColor = Color.LawnGreen
-                ElseIf TempShow.State = Media_Companion.ShowState.Unverified Then
-                    Button_TV_State.Text = "Un-Verified"
-                    Button_TV_State.BackColor = Color.Yellow
-                Else
-                    Button_TV_State.Text = "Error"
-                    Button_TV_State.BackColor = Color.Gray
-                End If
-                TempShow.UpdateTreenode()   'update the treenode so we can see the state change
-                TempShow.Save()             'save the nfo immediately (you don't have to press save button)
-            End If
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
+    
 
 #Region "Media Info Export"
     Dim exportMovieInfo As Boolean = False  'these are used to allow only a single execution of media export functions
@@ -10389,46 +9189,6 @@ Public Class Form1
             ProgState=ProgramState.Other
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton32.CheckedChanged
-        Try
-            If RadioButton32.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton30_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton30.CheckedChanged
-        Try
-            If RadioButton30.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton29_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton29.CheckedChanged
-        Try
-            If RadioButton29.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton31_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton31.CheckedChanged
-        Try
-            If RadioButton31.Checked = True Then
-                Call tv_Filter()
-            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -10927,23 +9687,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub TabPage26_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage26.Leave
-        Try
-            If movieprefschanged Then
-                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If tempint = DialogResult.Yes Then
-                    applyAdvancedLists()
-                    Preferences.SaveConfig()
-                Else
-                    util_ConfigLoad(True)
-                End If
-            End If
-            movieprefschanged = False
-            btnMoviePrefSaveChanges.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    
 
     Private Function util_RegexValidate(ByVal regexs As String)
         Try
@@ -10955,27 +9699,7 @@ Public Class Form1
         Return True
     End Function
 
-    Private Sub TabPage24_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage24.Leave
-        Try
-            If tvprefschanged = True Then
-                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If tempint = DialogResult.Yes Then
-
-                    Call util_RegexSave()
-                    Preferences.SaveConfig()
-                    MsgBox("Changes Saved")
-                Else
-
-                    Me.util_ConfigLoad(True)
-                    Call util_RegexLoad()
-                End If
-                tvprefschanged = False
-                btnTVPrefSaveChanges.Enabled = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    
 
     Private Sub bckgrnd_tvshowscraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bckgrnd_tvshowscraper.RunWorkerCompleted
         Try
@@ -11401,8 +10125,7 @@ Public Class Form1
 
 #Region "Movie Table"
 
-#Region "tabpage events"
-
+'tabpage events
     Private Sub tpMoviesTable_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Enter
         mov_TableSetup()
     End Sub
@@ -11431,10 +10154,7 @@ Public Class Form1
         btn_movTableSave.Enabled = DataDirty
     End Sub
 
-#End Region
-
-#Region "Table Setup and update"
-
+'Table Setup and update
     Private Sub mov_TableViewSetup()
         Preferences.tableview.Clear()
         Preferences.tableview.Add("title|150|0|true")
@@ -12329,10 +11049,7 @@ Public Class Form1
         Return doc
     End Function
 
-#End Region
-
-#Region "Table buttons"
-
+'Table buttons
     Private Sub btnTableColumnsSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableColumnsSelect.Click
         Try
             Dim frm As New frmConfigureTableColumns
@@ -12361,10 +11078,7 @@ Public Class Form1
         End Try
     End Sub
 
-#End Region
-
-#Region "Table - DataGridView1 events"
-
+'Table - DataGridView1 events
     Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
         Try
             mov_TableEditDGV.Columns(e.Column.Index).Width = e.Column.Width
@@ -12460,10 +11174,12 @@ End Sub
         End Try
     End Sub
 
-#End Region
+    Private Sub DataGridView1_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles DataGridView1.CurrentCellDirtyStateChanged
+        DataDirty = True
+        btn_movTableSave.Enabled = DataDirty
+    End Sub
 
-#Region "Table context toolstrips"
-
+'Table context toolstrips
     Private Sub MarkAllSelectedAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsWatchedToolStripMenuItem.Click
         Try
             Dim selectedrowindex As New List(Of Integer)
@@ -12577,8 +11293,6 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-#End Region
 
 #End Region 'Movie Tableview code
 
@@ -13132,27 +11846,6 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
 
-    End Sub
-
-    Private Sub RadioButton44_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton44.CheckedChanged
-        Try
-            If RadioButton44.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    ' Phyonics - Fix for issue #208
-    Private Sub RadioButton53_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton53.CheckedChanged
-        Try
-            If RadioButton53.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
     End Sub
 
     Private Sub LockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LockAllToolStripMenuItem.Click
@@ -13831,94 +12524,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLSeason.CheckedChanged
-        Try
-            If cbTvChgShowDLSeason.Checked = True Then
-                Preferences.downloadtvseasonthumbs = True
-            Else
-                Preferences.downloadtvseasonthumbs = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanart.CheckedChanged
-        Try
-            If cbTvChgShowDLFanart.Checked = True Then
-                Preferences.tvfanart = True
-            Else
-                Preferences.tvfanart = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLPoster.CheckedChanged
-        Try
-            If cbTvChgShowDLPoster.Checked = True Then
-                Preferences.tvposter = True
-            Else
-                Preferences.tvposter = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
-        Try
-            If RadioButton8.Checked = True Then
-                Preferences.postertype = "banner"
-            Else
-                Preferences.postertype = "poster"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
-        Try
-            If RadioButton9.Checked = True Then
-                Preferences.postertype = "poster"
-            Else
-                Preferences.postertype = "banner"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton16.CheckedChanged
-        Try
-            If RadioButton16.Checked = True Then
-                Preferences.seasonall = "wide"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub RadioButton17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton17.CheckedChanged
-        Try
-            If RadioButton17.Checked = True Then
-                Preferences.seasonall = "poster"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub RadioButton18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton18.CheckedChanged
-        Try
-            If RadioButton18.Checked = True Then
-                Preferences.seasonall = "none"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
+    
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
 
         Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
@@ -14334,29 +12940,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub TvTreeview_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TvTreeview.MouseUp
-
-        If e.Button = MouseButtons.Right Then
-            Dim pt As Point
-            pt.X = e.X
-            pt.Y = e.Y
-            'MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
-
-            Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
-            Dim objHitTestInfo As DataGridView.HitTestInfo
-            objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
-            'DataGridViewMovies.Rows(objHitTestInfo.RowIndex).Selected = True
-
-            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
-
-            'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
-
-            Tv_TreeViewContextMenuItemsEnable()
-
-        End If
-
-    End Sub
-
+    
     Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
         Try
             If TvTreeview.SelectedNode Is Nothing Then Exit Sub
@@ -14671,13 +13255,6 @@ End Sub
         End If
     End Sub
 
-    Private Sub ToolStripMenuItem1_Click_1(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem1.Click
-        Try
-            Call mov_ScrapeSpecific("trailer")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
     
     Private Sub cbSort_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbSort.SelectedIndexChanged
         Mc.clsGridViewMovie.GridFieldToDisplay2 = cbSort.Text
@@ -14703,34 +13280,13 @@ End Sub
         End Try
     End Sub
 
-    Private Sub TextBox_Plot_DoubleClick(sender As System.Object, e As System.EventArgs) Handles tb_EpPlot.DoubleClick
-        ShowBigTvEpisodeText()
-    End Sub
-
-    Private Sub ShowBigTvEpisodeText()
-
-        Dim frm As New frmBigTvEpisodeText
-        frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
-        frm.StartPosition = FormStartPosition.Manual
-        frm.ShowDialog(
-                        tb_Sh_Ep_Title.Text,
-                        tb_EpDirector.Text,
-                        tb_EpAired.Text,
-                        tb_EpRating.Text,
-                        tb_ShRunTime.Text,
-                        tb_ShGenre.Text,
-                        tb_ShCert.Text,
-                        tb_EpPlot.Text
-                        )
-    End Sub
+    
 
     Private Sub PictureBoxActor_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxActor.DoubleClick
         ZoomActorPictureBox(PictureBoxActor)
     End Sub
 
-    Private Sub PictureBox6_DoubleClick(sender As System.Object, e As System.EventArgs) Handles PictureBox6.DoubleClick
-        ZoomActorPictureBox(PictureBox6)
-    End Sub
+    
 
     Private Sub ZoomActorPictureBox(pictureBox As PictureBox)
 
@@ -16044,27 +14600,14 @@ End Sub
 
 #End Region 'Movie scraping stuff
 
-    
-
     Sub SearchForNew
-        'If Preferences.movies_useXBMC_Scraper Then
-        '    Pre_Run_XBMC_Scraper
-        '    mov_XBMCScrapingInitialization
-        '    Post_Run_XBMC_Scraper
-        '    'Exit Sub
-        'Else
-            RunBackgroundMovieScrape("SearchForNewMovies")
-        'End If
-
-        
+        RunBackgroundMovieScrape("SearchForNewMovies")
     End Sub
 
     Sub Do_ScrapeAndQuit
-
         If refreshAndQuit Then
             mov_RebuildMovieCaches()
             tv_CacheRefresh()
-
             While BckWrkScnMovies.IsBusy 
                 Thread.Sleep(100)
                 Application.DoEvents
@@ -16110,19 +14653,6 @@ End Sub
         End If
 
         ScraperErrorDetected=False
-    End Sub
-
-    Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
-        BannerAndPosterViewer()
-    End Sub
-
-    Private Sub DataGridView1_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles DataGridView1.CurrentCellDirtyStateChanged
-        DataDirty = True
-        btn_movTableSave.Enabled = DataDirty
-    End Sub
-
-    Private Sub RenameFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
-        mov_ScrapeSpecific("rename_files")
     End Sub
 
     Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
@@ -16172,6 +14702,17 @@ End Sub
 
 #Region "ToolStripmenu Movie Rescrape Specific"
 
+    Private Sub ToolStripMenuItem1_Click_1(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem1.Click
+        Try
+            Call mov_ScrapeSpecific("trailer")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub RenameFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
+        mov_ScrapeSpecific("rename_files")
+    End Sub
     Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
         Try
             Call mov_ScrapeSpecific("title")
@@ -17585,8 +16126,29 @@ End Sub
 
 #End Region  'General Preferences Tab
 
-
 #Region "Tv Preferences"
+
+    Private Sub TabPage24_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage24.Leave
+        Try
+            If tvprefschanged = True Then
+                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If tempint = DialogResult.Yes Then
+
+                    Call util_RegexSave()
+                    Preferences.SaveConfig()
+                    MsgBox("Changes Saved")
+                Else
+
+                    Me.util_ConfigLoad(True)
+                    Call util_RegexLoad()
+                End If
+                tvprefschanged = False
+                btnTVPrefSaveChanges.Enabled = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVPrefSaveChanges.Click
         Try
@@ -17975,6 +16537,20 @@ End Sub
                 ExceptionHandler.LogError(ex)
             End Try
 
+    End Sub
+
+    Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AutoScrnShtDelay.TextChanged
+        If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
+            Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
+        Else
+            Preferences.ScrShtDelay = 10
+            AutoScrnShtDelay.Text = "10"
+            MsgBox("Please enter a numerical Value that is 1 or more")
+        End If
+        If tvprefschanged = False Then
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
@@ -18420,8 +16996,25 @@ End Sub
 
 #End Region  'Tv Preferences Tab
 
-
 #Region "Movie Preferences"
+
+    Private Sub TabPage26_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage26.Leave
+        Try
+            If movieprefschanged Then
+                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If tempint = DialogResult.Yes Then
+                    applyAdvancedLists()
+                    Preferences.SaveConfig()
+                Else
+                    util_ConfigLoad(True)
+                End If
+            End If
+            movieprefschanged = False
+            btnMoviePrefSaveChanges.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub btnMoviePrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try
@@ -19268,8 +17861,7 @@ End Sub
 
 #Region "Movie Preferences -> General Tab"
 
-#Region "General Options"
-
+'General Options Settings
     Private Sub cbMovieTrailerUrl_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieTrailerUrl.CheckedChanged
         Try
             If cbMovieTrailerUrl.CheckState = CheckState.Checked Then
@@ -19414,8 +18006,6 @@ End Sub
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-#End Region 'Movie Preferences -> General Tab -> General Options Settings
-
     Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
         Try
             Preferences.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
@@ -19516,8 +18106,7 @@ End Sub
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-#Region "Rename Movie Settings"
-
+'Rename Movie Settings
     Private Sub tb_MovieRenameEnable_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovieRenameEnable.TextChanged
         Try
             Preferences.MovieRenameTemplate = tb_MovieRenameEnable.Text
@@ -19637,8 +18226,6 @@ End Sub
         End If
     End Sub
 
-#End Region  'Movie Preferences -> General Tab -> Rename Movie Settings
-
     Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
         Try
             If ScrapeFullCertCheckBox.Checked Then
@@ -19704,8 +18291,7 @@ End Sub
         End Try
     End Sub
 
-#Region "Movie Filters Settings"
-
+'Movie Filters settings
     Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
         If MainFormLoadedStatus Then
             Try
@@ -19826,13 +18412,10 @@ End Sub
         End If
     End Sub
 
-#End Region 'Movie Preferences -> General Tab -> Movie Filters settings
-
 #End Region 'Movie Preferences -> General Tab
 
 #Region "Movie Preferences -> Advanced Tab"
-
-#Region "Download Actor Thumbs"
+    'Download Actor Thumbs
     Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
         Try
             If saveactorchkbx.CheckState = CheckState.Checked Then
@@ -19911,10 +18494,8 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-#End Region  'Movie Preferences -> Advanced -> Download Actor Thumbs
 
-#Region "nfo Poster Options"
-
+    'nfoPoster Options
     Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IMPA_chk.CheckedChanged
         Try
             Call mov_ThumbNailUrlsSet()
@@ -19954,8 +18535,6 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-#End Region  'Movie Preferences -> Advanced ->  nfoPoster Options
 
     Private Sub cbMovRootFolderCheck_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovRootFolderCheck.CheckedChanged
         Try
@@ -20014,10 +18593,9 @@ End Sub
 
     End Sub
 
-#End Region   'Movie Preferences -> Advanced Tab
+#End Region 'Movie Preferences -> Advanced Tab
 
-#Region "Movie Preferences -> Advanced2 Tab"
-
+#Region "Movie Preferences -> Advanced2 Tab""
     Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
         If tb_MovSeptb.Text <> "" Then
             lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
@@ -20040,10 +18618,9 @@ End Sub
         'videosourceprefchanged = True
     End Sub
 
-#End Region   'Movie Preferences -> Advanced2 Tab
+#End Region 'Movie Preferences -> Advanced2 Tab
 
 #End Region   'Movie Preferences Tab
-
 
 
     Private Sub tv_FoldersSetup()
@@ -20056,258 +18633,6 @@ End Sub
             ListBox6.Items.Add(folder)
         Next
     End Sub
-
-#Region "Tv Folder"
-
-    Private Sub btn_TvFoldersRootAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootAdd.Click
-        Try
-            If TextBox39.Text = Nothing Then
-                Exit Sub
-            End If
-            If TextBox39.Text = "" Then
-                Exit Sub
-            End If
-            Dim tempstring As String = TextBox39.Text
-            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Dim exists As Boolean = False
-            For Each item In ListBox5.Items
-                If item.ToString.ToLower = tempstring.ToLower Then
-                    exists = True
-                    Exit For
-                End If
-            Next
-            If exists = True Then
-                MsgBox("        Folder Already Exists")
-            Else
-                Dim f As New IO.DirectoryInfo(tempstring)
-                If f.Exists Then
-                    ListBox5.Items.Add(tempstring)
-                    TextBox39.Text = ""
-                Else
-                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then
-                        ListBox5.Items.Add(tempstring)
-                        TextBox39.Text = ""
-                    End If
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub btn_TvFoldersRootBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootBrowse.Click
-        Try
-            'browse for root tv folder
-            Dim allok As Boolean = True
-            Dim cancelregex As Boolean = False
-            Dim newtvshow As Boolean = False
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim strfolder As String
-            Dim tempstring3 As String
-            Dim tempint As Integer = 0
-            Dim tempint2 As Integer = 0
-            theFolderBrowser.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                strfolder = (theFolderBrowser.SelectedPath)
-                Preferences.lastpath = strfolder
-                'Try
-                allok = True
-                For Each item As Object In ListBox5.Items
-                    If strfolder = item.ToString Then allok = False
-                Next
-                Dim hasseason As Boolean = False
-                If allok = True Then
-                    For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
-                        Dim M As Match
-                        tempstring3 = strfolder2.ToLower
-                        M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
-                        If M.Success = True Then
-                            hasseason = True
-                            Exit For
-                        End If
-                    Next
-                    If hasseason = True Then
-                        tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                        If tempint = DialogResult.Yes Then
-                            ListBox5.Items.Add(strfolder)
-                        ElseIf tempint = DialogResult.No Then
-                            tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                            If tempint2 = DialogResult.Yes Then
-                                Dim test As Boolean = True
-                                For Each folder In ListBox6.Items
-                                    If folder = strfolder Then
-                                        test = False
-                                        MsgBox("Folder not added, Already exists")
-                                        Exit For
-                                    End If
-                                Next
-                                If test = True Then
-                                    ListBox6.Items.Add(strfolder)
-                                End If
-                            End If
-                        End If
-                    Else
-                        ListBox5.Items.Add(strfolder)
-                    End If
-                Else
-                    MsgBox("Root already exists")
-                End If
-                'Catch ex As Exception
-                '    MsgBox("error")
-                'End Try
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub btn_TvFoldersRootRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootRemove.Click
-        Try
-            While ListBox5.SelectedItems.Count > 0
-                ListBox5.Items.Remove(ListBox5.SelectedItems(0))
-            End While
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub bnt_TvChkFolderList_Click( sender As System.Object,  e As System.EventArgs) Handles bnt_TvChkFolderList.Click
-        Try
-            Call tv_Showremovedfromlist()
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-    Private Sub btn_TvFoldersAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAdd.Click
-        Try
-            If TextBox40.Text = Nothing Then
-                Exit Sub
-            End If
-            If TextBox40.Text = "" Then
-                Exit Sub
-            End If
-            Dim tempstring As String = TextBox40.Text
-            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Dim exists As Boolean = False
-            For Each item In ListBox6.Items
-                If item.ToString.ToLower = tempstring.ToLower Then
-                    exists = True
-                    Exit For
-                End If
-            Next
-            If exists = True Then
-                MsgBox("        Folder Already Exists")
-            Else
-                Dim f As New IO.DirectoryInfo(tempstring)
-                If f.Exists Then
-                    ListBox6.Items.Add(tempstring)
-                    TextBox40.Text = ""
-                    newTvFolders.Add(tempstring)
-                Else
-                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then
-                        ListBox6.Items.Add(tempstring)
-                        TextBox40.Text = ""
-                        newTvFolders.Add(tempstring)
-                    End If
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub btn_TvFoldersAddFromRoot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAddFromRoot.Click
-        Try
-            tv_ShowFind()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_TvFoldersBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersBrowse.Click
-        Try
-            Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select TV Folder to Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
-                For Each item As Object In ListBox6.Items
-                    If thefoldernames.ToString = item.ToString Then allok = False
-                Next
-                Preferences.lastpath = thefoldernames
-                If allok = True Then
-                    ListBox6.Items.Add(thefoldernames)
-                    newTvFolders.Add(thefoldernames)
-                Else
-                    MsgBox("        Folder Already Exists", MsgBoxStyle.OkOnly)
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_TvFoldersRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRemove.Click
-        Try
-            Dim Folder As String
-            While ListBox6.SelectedItems.Count > 0
-                Folder = ListBox6.SelectedItems(0)
-
-                For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    If Item.FolderPath.Trim("\") = Folder.Trim("\") Then
-                        TvTreeview.Nodes.Remove(Item.ShowNode)
-                        Cache.TvCache.Remove(Item)
-                        Exit For
-                    End If
-                Next
-                ListBox6.Items.Remove(ListBox6.SelectedItems(0))
-            End While
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_TvFoldersUndo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersUndo.Click
-        Try
-            'newTvFolders.Clear()
-            'Call setuptvfolders()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
-        Try
-            tv_ShowScrape()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-#End Region  'Controls for Tv Folders tab
 
 
 #Region "Movie Folder"
@@ -20629,22 +18954,495 @@ End Sub
 #End Region   'Controls for Movie Folders tab
 
     
-    Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AutoScrnShtDelay.TextChanged
-        If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
-            Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
-        Else
-            Preferences.ScrShtDelay = 10
-            AutoScrnShtDelay.Text = "10"
-            MsgBox("Please enter a numerical Value that is 1 or more")
-        End If
-        If tvprefschanged = False Then
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        End If
+#Region "Tv Browser Form"
+
+    Private Sub TvTreeview_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.DoubleClick
+        Try
+            If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+            Dim tempstring2 As String
+            Dim tempstring As String = ""
+            Dim pathandfilename As String = TvTreeview.SelectedNode.Name
+            If pathandfilename.IndexOf("tvshow.nfo") <> -1 Then Exit Sub
+            If pathandfilename = "" Then Exit Sub
+            If pathandfilename <> Nothing Then
+                If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
+                    pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
+
+                    Dim exists As Boolean = False
+                    For Each ext In Utilities.VideoExtensions
+                        If ext = "VIDEO_TS.IFO" Then Continue For
+                        tempstring2 = pathandfilename & ext
+
+                        If IO.File.Exists(tempstring2) Then
+                            exists = True
+                            tempstring = applicationPath & "\settings\temp.m3u"
+                            Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
+                            file.WriteLine(tempstring2)
+                            file.Close()
+
+
+
+                            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
+                            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
+
+                            If Preferences.videomode = 3 Then
+                                Preferences.videomode = 2
+                                Call util_VideoMode2(tempstring)
+                            End If
+
+                            If Preferences.videomode >= 4 Then
+                                If Preferences.selectedvideoplayer <> Nothing Then
+                                    Call util_VideoMode4(tempstring)
+                                Else
+                                    Call util_VideoMode1(tempstring)
+                                End If
+                            End If
+                            Exit For
+                        End If
+                    Next
+                    If exists = False Then
+                        MsgBox("Could not find file: """ & pathandfilename & """ with any supported extension")
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
+    Private Sub TvTreeview_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.MouseHover
+        TvTreeview.Focus()
+    End Sub
 
-#Region "Tv Browser Form"
+    Private Sub TvTreeview_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TvTreeview.MouseUp
+
+        If e.Button = MouseButtons.Right Then
+            Dim pt As Point
+            pt.X = e.X
+            pt.Y = e.Y
+            'MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
+
+            Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
+            Dim objHitTestInfo As DataGridView.HitTestInfo
+            objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
+            'DataGridViewMovies.Rows(objHitTestInfo.RowIndex).Selected = True
+
+            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
+
+            'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
+
+            Tv_TreeViewContextMenuItemsEnable()
+
+        End If
+
+    End Sub
+
+    Private Sub RadioButton32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton32.CheckedChanged
+        Try
+            If RadioButton32.Checked = True Then
+                Call tv_Filter()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton30_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton30.CheckedChanged
+        Try
+            If RadioButton30.Checked = True Then
+                Call tv_Filter()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton29_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton29.CheckedChanged
+        Try
+            If RadioButton29.Checked = True Then
+                Call tv_Filter()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton31_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton31.CheckedChanged
+        Try
+            If RadioButton31.Checked = True Then
+                Call tv_Filter()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton44_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton44.CheckedChanged
+        Try
+            If RadioButton44.Checked = True Then
+                Call tv_Filter()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    ' Phyonics - Fix for issue #208
+    Private Sub RadioButton53_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton53.CheckedChanged
+        Try
+            If RadioButton53.Checked = True Then
+                Call tv_Filter()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_EpWatched.Click
+        Try
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
+            If multi = False Then
+                util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
+                WorkingEpisode.Save()
+            Else
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                Dim done As String = ""
+                For Each ep In episodelist
+                    util_EpisodeSetWatched(ep.PlayCount.Value, True)
+                Next
+                WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
+        Try
+            tv_Rescrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub TextBox_Plot_DoubleClick(sender As System.Object, e As System.EventArgs) Handles tb_EpPlot.DoubleClick
+        ShowBigTvEpisodeText()
+    End Sub
+
+    Private Sub ShowBigTvEpisodeText()
+
+        Dim frm As New frmBigTvEpisodeText
+        frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
+        frm.StartPosition = FormStartPosition.Manual
+        frm.ShowDialog(
+                        tb_Sh_Ep_Title.Text,
+                        tb_EpDirector.Text,
+                        tb_EpAired.Text,
+                        tb_EpRating.Text,
+                        tb_ShRunTime.Text,
+                        tb_ShGenre.Text,
+                        tb_ShCert.Text,
+                        tb_EpPlot.Text
+                        )
+    End Sub
+
+    Private Sub tb_Sh_Ep_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Enter
+        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        'If Panel9.Visible = False Then
+        '    tb_Sh_Ep_Title.Text = WorkingTvShow.Title.Value
+        '    If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 Then
+        '        tb_Sh_Ep_Title.Text = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
+        '    End If
+        'Else
+        '    tb_Sh_Ep_Title.Text = WorkingEpisode.Title.Value
+        'End If
+    End Sub
+
+    Private Sub tb_Sh_Ep_Title_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Leave
+        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+
+        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        'On Error Resume Next
+        'If Panel9.Visible = False Then
+        '    '-------------- Aqui
+        '    'If Preferences.ignorearticle = True Then
+        '    '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
+        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
+        '    '    End If
+        '    'End If
+        '    'If Preferences.ignoreAarticle Then
+        '    '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
+        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
+        '    '    End If
+        '    'End If
+        '    'If Preferences.ignoreAn Then
+        '    '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
+        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
+        '    '    End If
+        '    'End If
+        '    WorkingTvShow.Title.Value = Preferences.RemoveIgnoredArticles(tb_Sh_Ep_Title.Text)
+        'Else
+        '    WorkingEpisode.Title.Value = tb_Sh_Ep_Title.Text
+        '    Dim trueseason As String = WorkingEpisode.Season.Value
+        '    Dim trueepisode As String = WorkingEpisode.Episode.Value
+        '    If trueseason.Length = 1 Then trueseason = "0" & trueseason
+        '    If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
+        '    tb_Sh_Ep_Title.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
+        'End If
+    End Sub
+
+    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click  'save button
+        Try
+            Dim Show As Media_Companion.TvShow = Nothing
+            Dim Season As Media_Companion.TvSeason = Nothing
+            Dim Episode As Media_Companion.TvEpisode = Nothing
+            If TvTreeview.SelectedNode IsNot Nothing Then
+                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
+                    Show = TvTreeview.SelectedNode.Tag
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                    Episode = TvTreeview.SelectedNode.Tag
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+                    Exit Sub
+                Else
+                    Exit Sub
+                End If
+            Else
+                Exit Sub
+            End If
+
+            Dim tempint As Integer = 0
+            Dim tempstring As String = ""
+            If Show IsNot Nothing Then
+                Dim changed As Integer = 0
+                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> tb_ShTvdbId.Text Then
+                    changed += 1
+                End If
+                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> tb_ShImdbId.Text.ToLower Then
+                    changed += 2
+                End If
+                If changed > 0 Then
+                    If changed = 1 Then
+                        tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes and art" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                        If tempint = DialogResult.No Then
+                            Exit Sub
+                        End If
+                    ElseIf changed = 2 Then
+                        tempint = MessageBox.Show("It appears that you have changed the IMDB ID" & vbCrLf & "Media Companion depends on this ID for scraping actors from IMDB" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                        If tempint = DialogResult.No Then
+                            Exit Sub
+                        End If
+                    ElseIf changed = 3 Then
+                        tempint = MessageBox.Show("It appears that you have changed the IMDB ID & TVDB ID" & vbCrLf & "Media Companion depends on these IDs being correct for a number of scraping operations" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                        If tempint = DialogResult.No Then
+                            Exit Sub
+                        End If
+                    End If
+                End If
+                'its a tvshow
+                Dim TmpTitle As String = ""
+                If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 And tb_Sh_Ep_Title.Text.Length > 5 Then
+                    TmpTitle = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
+                Else
+                    TmpTitle = tb_Sh_Ep_Title.Text
+                End If
+
+                If TmpTitle <> Show.Title.Value Then
+                    Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
+                    If TryTitle = MsgBoxResult.No Then 
+                        tb_Sh_Ep_Title.Text = Preferences.RemoveIgnoredArticles(Show.Title.Value)
+                        Exit Sub
+                    End If
+                    Show.Title.Value = TmpTitle
+                End If
+                Show.Plot.Value = tb_ShPlot.Text
+                Show.Runtime.Value = tb_ShRunTime.Text
+                Show.Premiered.Value = tb_ShPremiered.Text
+                Show.Studio.Value = tb_ShStudio.Text
+                Show.Rating.Value = tb_ShRating.Text
+                Show.ImdbId.Value = tb_ShImdbId.Text
+                Show.TvdbId.Value = tb_ShTvdbId.Text
+                Show.Mpaa.Value = tb_ShCert.Text
+                Show.Genre.Value = tb_ShGenre.Text
+                Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
+
+                Show.Save()
+                Show.UpdateTreenode()
+            Else
+                Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
+                Do While trueseason.Substring(0, 1) = "0"
+                    trueseason = trueseason.Substring(1, trueseason.Length - 1)
+                Loop
+                Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
+                Do While trueepisode.Substring(0, 1) = "0"
+                    trueepisode = trueepisode.Substring(1, trueepisode.Length - 1)
+                Loop
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
+                For Each ep In episodelist
+                    If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
+                        ep.Plot.Value = tb_EpPlot.Text
+                        ep.Aired.Value = tb_EpAired.Text
+                        ep.Rating.Value = tb_EpRating.Text
+                        ep.Credits.Value = tb_EpCredits.Text
+                        ep.Director.Value = tb_EpDirector.Text
+                        ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
+                    End If
+                Next
+                WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
+                Episode.UpdateTreenode()
+            End If
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim TVShowNFOContent As String = ""
+            If Button47.Text = "Default" Then
+                WorkingTvShow.SortOrder.Value = "dvd"
+                Button47.Text = "DVD"
+            Else
+                WorkingTvShow.SortOrder.Value = "Default"
+                Button47.Text = "Default"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+
+            Dim TVShowNFOContent As String = ""
+            If Button45.Text = "TVDB" Then
+                If WorkingTvShow.ImdbId.Value<>"" Then
+                    WorkingTvShow.TvShowActorSource.Value = "imdb"
+                    Button45.Text = "IMDB"
+                Else
+                    MsgBox("No IMDB ID allocated to this Show!")
+                End If
+            Else
+                WorkingTvShow.TvShowActorSource.Value = "tvdb"
+                Button45.Text = "TVDB"
+            End If
+            WorkingTvShow.Save()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button46_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button46.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim TVShowNFOContent As String = ""
+            If Button46.Text = "TVDB" Then
+                WorkingTvShow.EpisodeActorSource.Value = "imdb"
+                Button46.Text = "IMDB"
+            Else
+                WorkingTvShow.EpisodeActorSource.Value = "tvdb"
+                Button46.Text = "TVDB"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvActor_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.MouseHover
+        Try
+            cbTvActor.Focus()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub cbTvActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActor.SelectedIndexChanged
+        Try
+            If Not actorflag Then
+                actorflag = True
+                cbTvActorRole.SelectedIndex = cbTvActor.SelectedIndex 
+                Call tv_ActorDisplay()
+                cbTvActor.Focus()
+            Else
+                actorflag = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvActorRole_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.MouseHover
+        Try
+            cbTvActorRole.Focus()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvActorRole_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbTvActorRole.SelectedIndexChanged
+        Try
+            If Not actorflag Then 
+                actorflag = True
+                cbTvActor.SelectedIndex = cbTvActorRole.SelectedIndex
+                Call tv_ActorRoleDisplay()
+                cbTvActorRole.Focus()
+            Else
+                actorflag = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PictureBox6_DoubleClick(sender As System.Object, e As System.EventArgs) Handles PictureBox6.DoubleClick
+        ZoomActorPictureBox(PictureBox6)
+    End Sub
+
+    Private Sub Button_TV_State_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TV_State.Click
+        Try
+            Dim Btn As Button = sender
+            If TypeOf Btn.Tag Is Media_Companion.TvShow Then
+                Dim TempShow As Media_Companion.TvShow = Btn.Tag
+                Select Case TempShow.State
+                    Case Media_Companion.ShowState.Locked
+                        TempShow.State = Media_Companion.ShowState.Open
+                    Case Media_Companion.ShowState.Open
+                        TempShow.State = Media_Companion.ShowState.Locked
+                    Case Media_Companion.ShowState.Error
+                    Case Media_Companion.ShowState.Unverified
+                        TempShow.State = Media_Companion.ShowState.Open
+                        tb_Sh_Ep_Title.BackColor = Color.White
+                End Select
+                If TempShow.State = Media_Companion.ShowState.Locked Then
+                    Button_TV_State.Text = "Locked"
+                    Button_TV_State.BackColor = Color.Red
+                ElseIf TempShow.State = Media_Companion.ShowState.Open Then
+                    Button_TV_State.Text = "Open"
+                    Button_TV_State.BackColor = Color.LawnGreen
+                ElseIf TempShow.State = Media_Companion.ShowState.Unverified Then
+                    Button_TV_State.Text = "Un-Verified"
+                    Button_TV_State.BackColor = Color.Yellow
+                Else
+                    Button_TV_State.Text = "Error"
+                    Button_TV_State.BackColor = Color.Gray
+                End If
+                TempShow.UpdateTreenode()   'update the treenode so we can see the state change
+                TempShow.Save()             'save the nfo immediately (you don't have to press save button)
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub btnTvSearchNew_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvSearchNew.Click
         Try
@@ -20661,11 +19459,6 @@ End Sub
 
         End Try
     End Sub
-
-    
-
-#End Region  'Tv Browser Form functions
-    
 
 #Region "Tv PictureBoxes"
     Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
@@ -20767,8 +19560,1091 @@ End Sub
             End Try
 
     End Sub
-#End Region 'Tv PictureBoxes
+#End Region 'Tv PictureBoxes    
+
+#End Region  'Tv Browser Form functions
+ 
+#Region "Tv Screenshot Form"
+
+    Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tv_EpThumbScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbScreenShot.Click
+        Try
+            TvEpThumbScreenShot
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox35.Leave
+        If TextBox35.Text = "" Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            TextBox35.Focus()
+        ElseIf Convert.ToInt32(TextBox35.Text) = 0 Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            TextBox35.Focus()
+        End If
+    End Sub
+
+    Private Sub tv_EpThumbRescrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbRescrape.Click
+        Try
+            TvEpThumbRescrape
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region
+
+#Region "Tv Fanart Form"
+
+    Private Sub rbTvFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbTvFanart.CheckedChanged, rbTvFanart1.CheckedChanged, rbTvFanart2.CheckedChanged, rbTvFanart3.CheckedChanged, rbTvFanart4.CheckedChanged
+        Tv_FanartDisplay()
+    End Sub
+
+    Private Sub Button35_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button35.MouseDown
+        Try
+            'up
+            If PictureBox10.Image Is Nothing Then Exit Sub
+            thumbedItsMade = True
+            Button40.Visible = True
+            btnTvFanartSaveCropped.Visible = True
+            cropString = "top"
+            Timer4.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button36_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button36.MouseDown
+        Try
+            'down
+            If PictureBox10.Image Is Nothing Then Exit Sub
+            thumbedItsMade = True
+            Button40.Visible = True
+            btnTvFanartSaveCropped.Visible = True
+            cropString = "bottom"
+            Timer4.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button38_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button38.MouseDown
+        Try
+            If PictureBox10.Image Is Nothing Then Exit Sub
+            thumbedItsMade = True
+            Button40.Visible = True
+            btnTvFanartSaveCropped.Visible = True
+            cropString = "left"
+            Timer4.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try 'left
+    End Sub
+
+    Private Sub Button37_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button37.MouseDown
+        Try
+            'right
+            If PictureBox10.Image Is Nothing Then Exit Sub
+            thumbedItsMade = True
+            Button40.Visible = True
+            btnTvFanartSaveCropped.Visible = True
+            cropString = "right"
+            Timer4.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Timer4_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer4.Tick
+        Try
+            If cropString = "top" Then Call tv_FanartCropTop()
+            If cropString = "bottom" Then Call tv_FanartCropBottom()
+            If cropString = "left" Then Call tv_FanartCropLeft()
+            If cropString = "right" Then Call tv_FanartCropRight()
+            Label58.Text = PictureBox10.Image.Height.ToString
+            Label59.Text = PictureBox10.Image.Width.ToString
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Button35_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button35.MouseUp
+        Try
+            Timer4.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button36_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button36.MouseUp
+        Try
+            Timer4.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button38_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button38.MouseUp
+        Try
+            Timer4.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button37_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button37.MouseUp
+        Try
+            Timer4.Enabled = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button40_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button40.Click
+        Try
+            PictureBox10.Image = PictureBox11.Image
+            Label58.Text = PictureBox10.Image.Height.ToString
+            Label59.Text = PictureBox10.Image.Width.ToString
+            Button40.Visible = False
+            btnTvFanartSaveCropped.Visible = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnTvFanartSaveCropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSaveCropped.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Try
+                Dim stream As New System.IO.MemoryStream
+                PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
+                PictureBox11.Image = PictureBox10.Image
+                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                    tv_PictureBoxLeft.Image = PictureBox11.Image    '2check
+                End If
+                Label58.Text = PictureBox10.Image.Height.ToString
+                Label59.Text = PictureBox10.Image.Width.ToString
+                Button40.Visible = False
+                btnTvFanartSaveCropped.Visible = False
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnTvFanartUrl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartUrl.Click
+        Try
+            Dim t As New frmImageBrowseOrUrl 
+            t.Location = Me.PointToScreen(New Point(btnTvFanartUrl.Left-480, btnTvFanartUrl.Top + btnTvFanartUrl.Height))
+            t.ShowDialog()
+            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
+                t.Dispose()
+                Exit Sub
+            End If
+            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
+            t.Dispose()
+            t = Nothing
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+            Dim eh As Boolean = Preferences.savefanart
+            Preferences.savefanart = True 
+            Movie.SaveFanartImageToCacheAndPath(PathOrUrl, savepath)
+            Preferences.savefanart = eh
+            Dim exists As Boolean = System.IO.File.Exists(savepath)
+            If exists = True Then
+
+                util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
+
+                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
+
+                End If
+
+            End If
+            Label59.Text = PictureBox10.Image.Width
+            Label58.Text = PictureBox10.Image.Height
+
+
+        Catch ex As Exception
+            MsgBox("Unable To Download Image")
+        End Try
+        
+    End Sub
+
+#End Region
+
+#Region "Tv Poster Form"
+
+    Private Sub btnTvPosterSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveBig.Click
+        Call TvPosterSave(btnTvPosterSaveBig.Tag)
+    End Sub
+
+    Private Sub btnTvPosterSaveSmall_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveSmall.Click ' disabled
+        'Try
+        '    'savesmall
+        '    Dim postname As String = ""
+        '    Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        '    Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+        '    For Each Control In Panel16.Controls
+        '        If Control.name.indexof("postercheckbox") <> -1 Then
+        '            Dim rb As RadioButton = Control
+        '            If rb.Checked = True Then
+        '                postname = Control.name.replace("postercheckbox", "poster")
+        '                Exit For
+        '            End If
+        '        End If
+        '    Next
+        '    If postname <> "" Then
+        '        For Each Control In Panel16.Controls
+        '            If Control.name = postname Then
+        '                Try
+        '                    '                           Dim path As String = ""
+        '                    Dim picBox As PictureBox = Control
+
+        '                    If ComboBox2.Text.ToLower = "main image" Then
+
+        '                        If Preferences.EdenEnabled Then
+        '                            If rbTVposter.Checked Then
+        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                                PictureBox12.Image = picBox.Image
+        '                            End If
+        '                        End If
+
+        '                        If Preferences.FrodoEnabled Then
+        '                            If rbTVbanner.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
+        '                            Else
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
+        '                            End If
+        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                            PictureBox12.Image = picBox.Image
+        '                        End If
+
+        '                        '                                If Preferences.XBMC_version = 0 Then
+        '                        '                                    path = workingposterpath
+        '                        '                                ElseIf Preferences.XBMC_version = 2 Then
+        '                        '                                    If rbTVbanner.Checked = True Then
+        '                        '                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
+        '                        '                                    ElseIf rbTVposter.Checked = True Then
+        '                        '                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
+        '                        '                                    End If
+        '                        '                                End If
+
+        '                    ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
+
+        '                        Dim temp As String = ComboBox2.Text.ToLower
+        '                        temp = temp.Replace(" ", "")
+
+        '                        If Preferences.EdenEnabled Then
+        '                            If rbTVposter.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
+        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                                PictureBox12.Image = picBox.Image
+        '                            End If
+        '                        End If
+
+        '                        If Preferences.FrodoEnabled Then
+        '                            If rbTVbanner.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
+        '                            Else
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
+        '                            End If
+        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                            PictureBox12.Image = picBox.Image
+        '                        End If
+
+        '                        'If Preferences.XBMC_version = 0 Then
+        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
+        '                        'ElseIf Preferences.XBMC_version = 2 Then
+        '                        '    If rbTVbanner.Checked = True Then
+        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
+        '                        '    ElseIf rbTVposter.Checked = True Then
+        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
+        '                        '    End If
+        '                        'End If
+
+        '                    ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
+
+        '                        If Preferences.EdenEnabled Then
+        '                            If rbTVposter.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
+        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                                PictureBox12.Image = picBox.Image
+        '                            End If
+        '                        End If
+
+        '                        If Preferences.FrodoEnabled Then
+        '                            If rbTVbanner.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
+        '                            Else
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
+        '                            End If
+        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                            PictureBox12.Image = picBox.Image
+        '                        End If
+
+        '                        'If Preferences.XBMC_version = 0 Then
+        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
+        '                        'ElseIf Preferences.XBMC_version = 2 Then
+        '                        '    If rbTVbanner.Checked = True Then
+        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
+        '                        '    ElseIf rbTVposter.Checked = True Then
+        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
+        '                        '    End If
+        '                        'End If
+
+        '                    ElseIf ComboBox2.Text.ToLower = "specials" Then
+
+        '                        If Preferences.EdenEnabled Then
+        '                            If rbTVposter.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
+        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                                PictureBox12.Image = picBox.Image
+        '                            End If
+        '                        End If
+
+        '                        If Preferences.FrodoEnabled Then
+        '                            If rbTVbanner.Checked Then
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
+        '                            Else
+        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
+        '                            End If
+        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
+        '                            PictureBox12.Image = picBox.Image
+        '                        End If
+
+        '                        'If Preferences.XBMC_version = 0 Then
+        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
+        '                        'ElseIf Preferences.XBMC_version = 2 Then
+        '                        '    If rbTVbanner.Checked = True Then
+        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
+        '                        '    ElseIf rbTVposter.Checked = True Then
+        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
+        '                        '    End If
+        '                        'End If
+        '                    End If
+        '                    'Dim newpicbox As PictureBox = Control
+        '                    'newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
+        '                    If combostart = ComboBox2.SelectedItem Then
+        '                        If rbTVbanner.Checked = True Then
+        '                            tv_PictureBoxBottom.Image = PictureBox13.Image
+        '                        Else
+        '                            tv_PictureBoxRight.Image = PictureBox13.Image
+        '                        End If
+        '                    End If
+        '                    'PictureBox12.Image = newpicbox.Image
+
+        '                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+
+        '                    '                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+        '                    ''                                tv_PictureBoxRight.ImageLocation = path
+        '                    '                                tv_PictureBoxRight.ImageLocation = workingposterpath
+        '                    '                                tv_PictureBoxRight.Load()
+        '                    '                            End If
+
+
+
+        '                    If rbTVbanner.Checked Then
+        '                        tv_PictureBoxBottom.ImageLocation = workingposterpath
+        '                        tv_PictureBoxBottom.Load()
+        '                    End If
+        '                    If rbTVposter.Checked Then
+        '                        tv_PictureBoxRight.ImageLocation = workingposterpath
+        '                        tv_PictureBoxRight.Load()
+        '                    End If
+
+
+
+        '                    'workingposterpath = path
+        '                Catch ex As Exception
+        '                    MsgBox(ex.ToString)
+        '                End Try
+        '            End If
+        '        Next
+        '    End If
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
+
+    End Sub
+
+    Private Sub Button52_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button52.Click
+        Try
+            'tvdb all
+            tvdbmode = True
+            usedlist.Clear()
+            btnTvPosterSaveBig.Visible = False
+            If tvdbposterlist.Count = 0 Then
+                Call tv_TvdbThumbsGet()
+            End If
+            For Each poster In tvdbposterlist
+                If rbTVbanner.Enabled = False Then
+                    If poster.BannerType <> "fanart" And poster.BannerType <> "series" Then
+                        usedlist.Add(poster)
+                    End If
+                Else
+                    If rbTVposter.Checked = False And poster.BannerType = "series" Then
+                        usedlist.Add(poster)
+                    ElseIf rbTVposter.Checked = True And poster.BannerType <> "fanart" Then
+                        If poster.BannerType <> "series" Then usedlist.Add(poster)
+                    End If
+
+                End If
+            Next
+            Call tv_PosterPanelPopulate()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button53_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button53.Click
+        Try
+            'tvdb specific
+            tvdbmode = True
+            usedlist.Clear()
+            btnTvPosterSaveBig.Visible = False
+            If tvdbposterlist.Count = 0 Then
+                Call tv_TvdbThumbsGet()
+            End If
+
+            Dim tempseason As String = ""
+            If ComboBox2.SelectedItem.indexof("Season ") <> -1 Then
+                tempseason = ComboBox2.SelectedItem.replace("Season ", "")
+            End If
+            If tempseason.IndexOf("0") = 0 And tempseason.Length > 1 Then
+                tempseason = tempseason.Substring(1, tempseason.Length - 1)
+            End If
+            If ComboBox2.SelectedItem.indexof("Specials") <> -1 Then
+                tempseason = "0"
+            End If
+            If ComboBox2.SelectedItem.indexof("Main Image") <> -1 And rbTVposter.Checked = True Then
+                tempseason = "poster"
+            ElseIf ComboBox2.SelectedItem.indexof("Main Image") <> -1 And rbTVposter.Checked = False Then
+                tempseason = "series"
+            End If
+            If tempseason = "poster" Or tempseason = "series" Then
+                For Each poster In tvdbposterlist
+                    If poster.BannerType = "poster" And rbTVposter.Checked = True Then
+                        If poster.BannerType <> "fanart" Then usedlist.Add(poster)
+                    End If
+                    If poster.BannerType = "series" And rbTVposter.Checked = False Then
+                        If poster.BannerType <> "fanart" Then usedlist.Add(poster)
+                    End If
+                Next
+            Else
+                For Each poster In tvdbposterlist
+                    If poster.Season = tempseason Then
+                        If rbTVbanner.Checked = True Then
+                            If poster.Resolution = "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "poster" Then 
+                                usedlist.Add(poster)
+                            End If
+                        End If
+                        If rbTVposter.Checked = True Then
+                            If poster.Resolution <> "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "banner" Then
+                                usedlist.Add(poster)
+                            End If
+                        End If
+                    End If
+                Next
+            End If
+            Call tv_PosterPanelPopulate()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button54_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button54.Click
+        Try
+            tvposterpage += 1
+            btnTvPosterSaveBig.Visible = False
+            If usedlist.Count < 10 * tvposterpage Then
+                Button54.Enabled = False
+            End If
+            Call tv_PosterSelectionDisplay()
+            Button55.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button55_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button55.Click
+        Try
+            tvposterpage -= 1
+            btnTvPosterSaveBig.Visible = False
+            If tvposterpage = 1 Then
+                Button55.Enabled = False
+            End If
+            Call tv_PosterSelectionDisplay()
+            Button54.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button58_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button58.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            If WorkingTvShow.ImdbId = Nothing Then
+                MsgBox("No IMDB ID is available for this movie, cant scrape posters")
+                Exit Sub
+            End If
+            If WorkingTvShow.ImdbId.Value = "" Then
+                MsgBox("No IMDB ID is available for this movie, cant scrape posters")
+                Exit Sub
+            End If
+            Dim ok As Boolean = False
+            If WorkingTvShow.ImdbId.Value.ToLower.IndexOf("tt") = 0 Then
+                Dim tempstring As String = WorkingTvShow.ImdbId.Value.ToLower.Substring(2, WorkingTvShow.ImdbId.Value.Length - 2)
+                If IsNumeric(tempstring) Then
+                    ok = True
+                End If
+            End If
+            If IsNumeric(WorkingTvShow.ImdbId) And WorkingTvShow.ImdbId.Value.Length = 7 Then
+                WorkingTvShow.ImdbId.Value = "tt" & WorkingTvShow.ImdbId.Value
+                ok = True
+            End If
+            If ok = False Then
+                MsgBox("IMDB ID seems to be an invalid format, can't scrape posters")
+                Exit Sub
+            End If
+            tvdbmode = False
+            usedlist.Clear()
+            If imdbposterlist.Count <= 0 Then
+                Dim newobject2 As New imdb_thumbs.Class1
+                Dim posters(,) As String = newobject2.getimdbposters(WorkingTvShow.ImdbId.Value)
+                For f = 0 To UBound(posters)
+                    If posters(f, 0) <> Nothing Then
+                        Dim individualposter As New TvBanners
+                        individualposter.SmallUrl = posters(f, 0)
+                        individualposter.Url = posters(f, 0)
+                        imdbposterlist.Add(individualposter)
+                    End If
+                Next
+            End If
+            For Each po In imdbposterlist
+                usedlist.Add(po)
+            Next
+            usedlist.Reverse()
+            Call tv_PosterPanelPopulate()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button59_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button59.Click
+        Try
+            Dim t As New frmImageBrowseOrUrl 
+            t.Location = Me.PointToScreen(New Point(Button59.Left-480, Groupbox23.Top + GroupBox23.Height))
+            t.ShowDialog()
+            If t.DialogResult = Windows.Forms.DialogResult.Cancel or t.tb_PathorUrl.Text = "" Then
+                t.Dispose()
+                Exit Sub
+            End If
+            Dim PathOrUrl As String = t.tb_PathorUrl.Text 
+            t.Dispose()
+            t = Nothing
+            Try
+                Dim MyWebClient As New System.Net.WebClient
+                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(PathOrUrl)
+                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+
+                PictureBox13.Image = New System.Drawing.Bitmap(ImageStream)
+                Call TvPosterSave(PathOrUrl)
+            Catch ex As Exception
+                MsgBox(ex.ToString)
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
+        BannerAndPosterViewer()
+    End Sub
+
+    Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
+        BannerAndPosterViewer()
+    End Sub
+
+#End Region
+
+#Region "Tv Show Selector Form"
+
+    Private Sub TextBox26_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox26.KeyDown
+        Try
+            If e.KeyCode = Keys.Enter Then
+                Call tv_ShowListLoad()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub Button30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button30.Click
+        Try
+            Call tv_ShowListLoad()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub ListBox3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox3.SelectedIndexChanged
+        util_ImageLoad(PictureBox9, listOfShows(ListBox3.SelectedIndex).showbanner, Utilities.DefaultBannerPath)
+    End Sub
+
+    Private Sub ListBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
+        Try
+            Call util_LanguageCheck()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
+        Try
+            If RadioButton8.Checked = True Then
+                Preferences.postertype = "banner"
+            Else
+                Preferences.postertype = "poster"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
+        Try
+            If RadioButton9.Checked = True Then
+                Preferences.postertype = "poster"
+            Else
+                Preferences.postertype = "banner"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton16.CheckedChanged
+        Try
+            If RadioButton16.Checked = True Then
+                Preferences.seasonall = "wide"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton17.CheckedChanged
+        Try
+            If RadioButton17.Checked = True Then
+                Preferences.seasonall = "poster"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RadioButton18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton18.CheckedChanged
+        Try
+            If RadioButton18.Checked = True Then
+                Preferences.seasonall = "none"
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvChgShowDLSeason_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLSeason.CheckedChanged
+        Try
+            If cbTvChgShowDLSeason.Checked = True Then
+                Preferences.downloadtvseasonthumbs = True
+            Else
+                Preferences.downloadtvseasonthumbs = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvChgShowDLFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanart.CheckedChanged
+        Try
+            If cbTvChgShowDLFanart.Checked = True Then
+                Preferences.tvfanart = True
+            Else
+                Preferences.tvfanart = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvChgShowDLPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLPoster.CheckedChanged
+        Try
+            If cbTvChgShowDLPoster.Checked = True Then
+                Preferences.tvposter = True
+            Else
+                Preferences.tvposter = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnTvShowSelectorScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShowSelectorScrape.Click
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
+                MsgBox("No show is selected")
+                Exit Sub
+            End If
+            Dim tempstring As String = ""
+            If Label55.Text.IndexOf("is not available in") <> -1 Then
+                MsgBox("Please select a language that is available for this show")
+                Exit Sub
+            End If
+            Dim messbox As frmMessageBox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+
+            Dim LanCode As String
+            If ListBox1.SelectedIndex = -1 Then
+                LanCode = Preferences.TvdbLanguageCode
+            Else
+                LanCode = languageList(ListBox1.SelectedIndex).Abbreviation.Value
+            End If
+            If Preferences.tvshow_useXBMC_Scraper = True Then
+
+                Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(ListBox3.SelectedIndex).showid, LanCode, WorkingTvShow.NfoFilePath)
+                If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
+                Call tv_ShowLoad(WorkingTvShow)
+                TvTreeview.Refresh()
+                messbox.Close()
+                TabControl3.SelectedIndex = 0
+            Else
+                Cache.TvCache.Remove(WorkingTvShow)
+                newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
+                Dim args As TvdbArgs = New TvdbArgs(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
+                bckgrnd_tvshowscraper.RunWorkerAsync(args)
+                While bckgrnd_tvshowscraper.IsBusy
+                    Application.DoEvents()
+                End While
+                TabControl3.SelectedIndex = 0
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region
+
+#Region "TV TVDB/IMDB Form"
+
+    Private Sub btn_TvTVDb_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvTVDb.Click
+        Dim url As String
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        If Show.TvdbId.Value.Contains("tt") Then
+            MsgBox("Invalid Tvdb ID" & vbCrLf & "Unable to load Show's TVDB page")
+            Exit Sub
+        End If
+        Dim TvdbId As Integer = Show.TvdbId.value
+        url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
+        Try
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
+            WebBrowser4.Navigate(url)
+        Catch
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
+            WebBrowser4.Navigate(url)
+
+        End Try
+    End Sub
+
+    Private Sub btn_TvIMDB_Click( sender As System.Object,  e As System.EventArgs) Handles btn_TvIMDB.Click
+        Dim url As String
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
+        Try
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
+            WebBrowser4.Navigate(url)
+        Catch
+            WebBrowser4.Stop()
+            WebBrowser4.ScriptErrorsSuppressed = True
+            WebBrowser4.Navigate(url)
+
+        End Try
+    End Sub
     
+#End Region
+
+#Region "Tv Folders Form"
+
+    Private Sub btn_TvFoldersRootAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootAdd.Click
+        Try
+            If TextBox39.Text = Nothing Then
+                Exit Sub
+            End If
+            If TextBox39.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = TextBox39.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In ListBox5.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    ListBox5.Items.Add(tempstring)
+                    TextBox39.Text = ""
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        ListBox5.Items.Add(tempstring)
+                        TextBox39.Text = ""
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub btn_TvFoldersRootBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootBrowse.Click
+        Try
+            'browse for root tv folder
+            Dim allok As Boolean = True
+            Dim cancelregex As Boolean = False
+            Dim newtvshow As Boolean = False
+            Dim theFolderBrowser As New FolderBrowserDialog
+            Dim strfolder As String
+            Dim tempstring3 As String
+            Dim tempint As Integer = 0
+            Dim tempint2 As Integer = 0
+            theFolderBrowser.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
+            theFolderBrowser.ShowNewFolderButton = True
+            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+            theFolderBrowser.SelectedPath = Preferences.lastpath
+            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                strfolder = (theFolderBrowser.SelectedPath)
+                Preferences.lastpath = strfolder
+                'Try
+                allok = True
+                For Each item As Object In ListBox5.Items
+                    If strfolder = item.ToString Then allok = False
+                Next
+                Dim hasseason As Boolean = False
+                If allok = True Then
+                    For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
+                        Dim M As Match
+                        tempstring3 = strfolder2.ToLower
+                        M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
+                        If M.Success = True Then
+                            hasseason = True
+                            Exit For
+                        End If
+                    Next
+                    If hasseason = True Then
+                        tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                        If tempint = DialogResult.Yes Then
+                            ListBox5.Items.Add(strfolder)
+                        ElseIf tempint = DialogResult.No Then
+                            tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                            If tempint2 = DialogResult.Yes Then
+                                Dim test As Boolean = True
+                                For Each folder In ListBox6.Items
+                                    If folder = strfolder Then
+                                        test = False
+                                        MsgBox("Folder not added, Already exists")
+                                        Exit For
+                                    End If
+                                Next
+                                If test = True Then
+                                    ListBox6.Items.Add(strfolder)
+                                End If
+                            End If
+                        End If
+                    Else
+                        ListBox5.Items.Add(strfolder)
+                    End If
+                Else
+                    MsgBox("Root already exists")
+                End If
+                'Catch ex As Exception
+                '    MsgBox("error")
+                'End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub btn_TvFoldersRootRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootRemove.Click
+        Try
+            While ListBox5.SelectedItems.Count > 0
+                ListBox5.Items.Remove(ListBox5.SelectedItems(0))
+            End While
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub bnt_TvChkFolderList_Click( sender As System.Object,  e As System.EventArgs) Handles bnt_TvChkFolderList.Click
+        Try
+            Call tv_Showremovedfromlist()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub btn_TvFoldersAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAdd.Click
+        Try
+            If TextBox40.Text = Nothing Then
+                Exit Sub
+            End If
+            If TextBox40.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = TextBox40.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In ListBox6.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    ListBox6.Items.Add(tempstring)
+                    TextBox40.Text = ""
+                    newTvFolders.Add(tempstring)
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        ListBox6.Items.Add(tempstring)
+                        TextBox40.Text = ""
+                        newTvFolders.Add(tempstring)
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub btn_TvFoldersAddFromRoot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAddFromRoot.Click
+        Try
+            tv_ShowFind()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_TvFoldersBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersBrowse.Click
+        Try
+            Dim allok As Boolean = True
+            Dim theFolderBrowser As New FolderBrowserDialog
+            Dim thefoldernames As String
+            theFolderBrowser.Description = "Please Select TV Folder to Add to DB"
+            theFolderBrowser.ShowNewFolderButton = True
+            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+            theFolderBrowser.SelectedPath = Preferences.lastpath
+            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (theFolderBrowser.SelectedPath)
+                For Each item As Object In ListBox6.Items
+                    If thefoldernames.ToString = item.ToString Then allok = False
+                Next
+                Preferences.lastpath = thefoldernames
+                If allok = True Then
+                    ListBox6.Items.Add(thefoldernames)
+                    newTvFolders.Add(thefoldernames)
+                Else
+                    MsgBox("        Folder Already Exists", MsgBoxStyle.OkOnly)
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_TvFoldersRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRemove.Click
+        Try
+            Dim Folder As String
+            While ListBox6.SelectedItems.Count > 0
+                Folder = ListBox6.SelectedItems(0)
+
+                For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
+                    If Item.FolderPath.Trim("\") = Folder.Trim("\") Then
+                        TvTreeview.Nodes.Remove(Item.ShowNode)
+                        Cache.TvCache.Remove(Item)
+                        Exit For
+                    End If
+                Next
+                ListBox6.Items.Remove(ListBox6.SelectedItems(0))
+            End While
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_TvFoldersUndo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersUndo.Click
+        Try
+            'newTvFolders.Clear()
+            'Call setuptvfolders()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
+        Try
+            tv_ShowScrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region
+
 
     Sub BckWrkCheckNewVersion_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkCheckNewVersion.DoWork
 
@@ -20798,8 +20674,6 @@ End Sub
         End If
     End Sub
 
-
-    
 
 #Region "ToolStrip Menus"
 
