@@ -150,7 +150,7 @@ Public Class DownloadCache
                 End If
 
                 Try
-                    Dim webReq As HttpWebRequest = WebRequest.Create(URL)
+                    Dim webReq As HttpWebRequest = DirectCast(WebRequest.Create(URL), HttpWebRequest)
                     webReq.AllowAutoRedirect = True
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
 
