@@ -140,6 +140,7 @@ Public Class Form1
     Public generalprefschanged As Boolean = False
     Public movieprefschanged As Boolean = False
     Public tvprefschanged As Boolean = False
+    Public tvfolderschanged As Boolean = False
     Public cleanfilenameprefchanged As Boolean = False
     Public videosourceprefchanged As Boolean = False
     Public scraperLog As String = ""
@@ -4711,7 +4712,7 @@ Public Class Form1
             ElseIf tab = "TV Preferences" Then
                 Call tv_PreferencesSetup()
                 Exit Sub
-            ElseIf tab = "Folders" Then
+            ElseIf tab.Tolower = "folders" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 TabControl3.SelectedIndex = tvCurrentTabIndex
                 Call tv_FoldersSetup()
@@ -4782,9 +4783,6 @@ Public Class Form1
                 If TextBox35.Text = "" Then
                     TextBox35.Text = Preferences.ScrShtDelay
                 End If
-            ElseIf tab.ToLower = "folders" Then
-                tvCurrentTabIndex = TabControl3.SelectedIndex
-                Call tv_FoldersSetup()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -8093,8 +8091,15 @@ Public Class Form1
 
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
         Try
-            tv_FoldersSetup()
-            tv_ShowFind()
+            'tv_FoldersSetup()
+            tv_ShowFind(Preferences.tvRootFolders, False)
+            If newTvFolders.Count > 0 Then
+                For Each item In newTvFolders
+                    Preferences.tvFolders.Add(item)
+                Next
+                Preferences.tvFolders.Sort()
+                Preferences.SaveConfig()
+            End If
             tv_ShowScrape()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -8170,33 +8175,22 @@ Public Class Form1
 
     End Sub
 
-    Public Sub tv_ShowFind()
+    Public Sub tv_ShowFind(ByVal rootfolders As List(Of String), Optional ByVal skiplistboxchk As Boolean = True)
         Dim Folders As List(Of String)
-        For Each folder In ListBox5.Items
+        newTvFolders.Clear()
+        For Each folder In rootfolders 'ListBox5.Items
             Folders = Utilities.EnumerateFolders(folder, 0)
             For Each strfolder2 As String In Folders
-                If Not ListBox6.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
-                    ListBox6.Items.Add(strfolder2)
-                    newTvFolders.Add(strfolder2)
+                If Not Preferences.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then  'Not ListBox6.Items.Contains(strfolder2)
+                    If Not skiplistboxchk AndAlso Not ListBox6.Items.Contains(strfolder2) Then
+                        newTvFolders.Add(strfolder2)
+                    End If
                 End If
             Next
         Next
     End Sub
 
     Public Sub tv_ShowScrape()
-        tvFolders.Clear()
-        For Each item In ListBox6.Items
-            'If Not newTvFolders.Contains(item) Then
-            tvFolders.Add(item)
-            'End If
-        Next
-        tvRootFolders.Clear()
-        For Each item In ListBox5.Items
-            tvRootFolders.Add(item)
-        Next
-
-        Preferences.SaveConfig()
-
         If Not bckgrnd_tvshowscraper.IsBusy Then
             If newTvFolders.Count > 0 Then
                 ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
@@ -8204,24 +8198,6 @@ Public Class Form1
             End If
             bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
         End If
-
-        ''Call updatetree()
-        'If newTvFolders.Count = 0 Then
-        '    'MsgBox("Changes Saved")
-        '    If Not bckgrnd_tvshowscraper.IsBusy Then
-        '        ' if this is not here, the tree view does not update correctly if the shows were removed.
-        '        ' Required so .RunWorkerCompleted is called to update cache and Treeview.
-        '        bckgrnd_tvshowscraper.RunWorkerAsync()
-        '    End If
-        'Else
-        '    'MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
-        '    If Not bckgrnd_tvshowscraper.IsBusy Then
-        '        ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
-        '        ToolStripStatusLabel5.Visible = True
-        '        bckgrnd_tvshowscraper.RunWorkerAsync()
-        '    End If
-        'End If
-        'Me.Focus()
     End Sub
 
     Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.Click
@@ -19888,11 +19864,13 @@ End Sub
                 If f.Exists Then
                     ListBox5.Items.Add(tempstring)
                     TextBox39.Text = ""
+                    tvfolderschanged = True
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
                         ListBox5.Items.Add(tempstring)
                         TextBox39.Text = ""
+                        tvfolderschanged = True
                     End If
                 End If
             End If
@@ -19920,13 +19898,8 @@ End Sub
             If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 strfolder = (theFolderBrowser.SelectedPath)
                 Preferences.lastpath = strfolder
-                'Try
-                allok = True
-                For Each item As Object In ListBox5.Items
-                    If strfolder = item.ToString Then allok = False
-                Next
                 Dim hasseason As Boolean = False
-                If allok = True Then
+                If Not ListBox5.Items.Contains(strfolder) Then
                     For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
                         Dim M As Match
                         tempstring3 = strfolder2.ToLower
@@ -19940,24 +19913,21 @@ End Sub
                         tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                         If tempint = DialogResult.Yes Then
                             ListBox5.Items.Add(strfolder)
+                            tvfolderschanged = True
                         ElseIf tempint = DialogResult.No Then
                             tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                             If tempint2 = DialogResult.Yes Then
-                                Dim test As Boolean = True
-                                For Each folder In ListBox6.Items
-                                    If folder = strfolder Then
-                                        test = False
-                                        MsgBox("Folder not added, Already exists")
-                                        Exit For
-                                    End If
-                                Next
-                                If test = True Then
+                                If Not ListBox6.Items.Contains(strfolder) Then
                                     ListBox6.Items.Add(strfolder)
+                                    tvfolderschanged = True
+                                Else
+                                    MsgBox("Folder not added, Already exists")
                                 End If
                             End If
                         End If
                     Else
                         ListBox5.Items.Add(strfolder)
+                        tvfolderschanged = True
                     End If
                 Else
                     MsgBox("Root already exists")
@@ -19976,6 +19946,7 @@ End Sub
         Try
             While ListBox5.SelectedItems.Count > 0
                 ListBox5.Items.Remove(ListBox5.SelectedItems(0))
+                tvfolderschanged = True
             End While
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19984,7 +19955,7 @@ End Sub
 
     Private Sub bnt_TvChkFolderList_Click(sender As System.Object, e As System.EventArgs) Handles bnt_TvChkFolderList.Click
         Try
-            Call tv_Showremovedfromlist()
+            tvfolderschanged = tv_Showremovedfromlist(, True)
         Catch ex As Exception
 
         End Try
@@ -20018,12 +19989,14 @@ End Sub
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
                     ListBox6.Items.Add(tempstring)
+                    tvfolderschanged = True
                     TextBox40.Text = ""
                     newTvFolders.Add(tempstring)
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
                         ListBox6.Items.Add(tempstring)
+                        tvfolderschanged = True
                         TextBox40.Text = ""
                         newTvFolders.Add(tempstring)
                     End If
@@ -20037,7 +20010,13 @@ End Sub
 
     Private Sub btn_TvFoldersAddFromRoot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAddFromRoot.Click
         Try
-            tv_ShowFind()
+            tv_ShowFind(ListBox5.items.Cast(Of String).ToList, False)
+            If newTvFolders.Count > 0 Then
+                tvfolderschanged = True
+                For Each item In newTvFolders
+                    ListBox6.Items.Add(item)
+                Next
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20061,6 +20040,7 @@ End Sub
                 If allok = True Then
                     ListBox6.Items.Add(thefoldernames)
                     newTvFolders.Add(thefoldernames)
+                    tvfolderschanged = True
                 Else
                     MsgBox("        Folder Already Exists", MsgBoxStyle.OkOnly)
                 End If
@@ -20074,6 +20054,7 @@ End Sub
         Try
             Dim Folder As String
             While ListBox6.SelectedItems.Count > 0
+                tvfolderschanged = True
                 Folder = ListBox6.SelectedItems(0)
 
                 For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -20092,8 +20073,9 @@ End Sub
 
     Private Sub btn_TvFoldersUndo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersUndo.Click
         Try
-            'newTvFolders.Clear()
+            newTvFolders.Clear()
             'Call setuptvfolders()
+            tvfolderschanged = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20101,6 +20083,22 @@ End Sub
 
     Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
         Try
+            Preferences.tvRootFolders.Clear()
+            For Each item In ListBox5.Items
+                Preferences.tvRootFolders.Add(item)
+            Next
+            newTvFolders.Clear()
+            Dim tmplist As New List(Of String)
+            tmplist.AddRange(Preferences.tvFolders)
+            Preferences.tvFolders.Clear()
+            For Each item In ListBox6.Items
+                Preferences.tvFolders.Add(item)
+                If Not tmplist.Contains(item) Then
+                    newTvFolders.Add(item)
+                End If
+            Next
+            tvfolderschanged = False
+            Preferences.SaveConfig()
             tv_ShowScrape()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

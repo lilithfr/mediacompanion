@@ -1239,7 +1239,7 @@ Partial Public Class Form1
             Next
             mymsg = mymsg + vbCrLf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbCrLf
             If MsgBox(mymsg, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-                Call tv_Showremovedfromlist(nofolder)
+                tv_Showremovedfromlist(nofolder)
             End If
         End If
         tv_Filter()
@@ -4217,12 +4217,11 @@ Partial Public Class Form1
 
     End Sub
 
-    Public Sub tv_Showremovedfromlist(Optional ByVal nofolder As List(Of String) = Nothing)
+    Public Function tv_Showremovedfromlist(Optional ByVal nofolder As List(Of String) = Nothing, Optional ByVal lstboxscan As Boolean = False) As Boolean
         Dim remfolder As New List(Of String)
+        Dim status As Boolean = False
         If IsNothing(nofolder) Then
-            Dim myfolders As List(Of String) = Preferences.tvFolders
-            'remfolder.Clear()
-            For Each item In myfolders
+            For Each item In Preferences.tvFolders
                 If Not IO.Directory.Exists(item) Then
                     remfolder.Add(item)
                 End If
@@ -4230,28 +4229,30 @@ Partial Public Class Form1
         End If
         If IsNothing(nofolder) AndAlso (IsNothing(remfolder) Or remfolder.Count <= 0) Then
             MsgBox("No Folders Missing or removed")
-            Exit Sub
+            Return False
         End If
-
-        'Dim folder As String
         If IsNothing(nofolder) And Not IsNothing(remfolder) Then nofolder = remfolder
         If nofolder.Count > 0 Then
             For Each folder In nofolder
-                For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    If Item.FolderPath.Trim("\") = folder Then
-                        'TvTreeview.Nodes.Remove(Item.ShowNode)
-                        'Cache.TvCache.Remove(Item)
-                        Exit For
-                    End If
-                Next
-                ListBox6.Items.Remove(folder)
-                tvFolders.Remove(folder)
+                If lstboxscan Then
+                    For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
+                        If Item.FolderPath.Trim("\") = folder Then
+                            TvTreeview.Nodes.Remove(Item.ShowNode)
+                            Cache.TvCache.Remove(Item)
+                            Exit For
+                        End If
+                    Next
+                    ListBox6.Items.Remove(folder)
+                    status = True
+                Else
+                    tvFolders.Remove(folder)
+                End If
             Next
-            tv_CacheRefresh()
-            'tv_ShowScrape()
+            If Not lstboxscan Then tv_CacheRefresh()
             MsgBox((nofolder.Count).ToString + " folder/s removed")
         End If
-    End Sub
+        Return status
+    End Function
 
 #Region "Tv Watched/Unwatched Routines"
     Private Sub Tv_MarkAsWatched()
