@@ -12814,21 +12814,20 @@ End Sub
 
         ComboBox8.SelectedIndex                     = Preferences.TvdbActorScrape
         ComboBox_tv_EpisodeRename.SelectedIndex     = If(Preferences.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Preferences.tvrename, 0)
-
-        CheckBox17.CheckState                       = If(Preferences.disabletvlogs, CheckState.Unchecked, CheckState.Checked)
-
-        CheckBox20.CheckState                       = If(Preferences.enabletvhdtags, CheckState.Checked, CheckState.Unchecked)
-        CheckBox_tv_EpisodeRenameCase.CheckState    = If(Preferences.eprenamelowercase, CheckState.Checked, CheckState.Unchecked)
-        CheckBox_tv_EpisodeRenameAuto.CheckState    = If(Preferences.autorenameepisodes, CheckState.Checked, CheckState.Unchecked)
-        CheckBox36.CheckState                       = If(Preferences.autoepisodescreenshot, CheckState.Checked, CheckState.Unchecked)
-        CheckBox35.CheckState                       = If(Preferences.tvshowautoquick, CheckState.Checked, CheckState.Unchecked)
-        CheckBox34.CheckState                       = If(Preferences.copytvactorthumbs, CheckState.Checked, CheckState.Unchecked)
-        CheckBox14.CheckState                       = If(Preferences.tvposter, CheckState.Checked, CheckState.Unchecked)
-        CheckBox10.CheckState                       = If(Preferences.tvfanart, CheckState.Checked, CheckState.Unchecked)
-        cb_TvFolderJpg.CheckState                   = If(Preferences.tvfolderjpg, CheckState.Checked, CheckState.Unchecked)
-        CheckBox15.CheckState                       = If(Preferences.downloadtvseasonthumbs, CheckState.Checked, CheckState.Unchecked)
-        CheckBox_Use_XBMC_TVDB_Scraper.CheckState   = If(Preferences.tvshow_useXBMC_Scraper, CheckState.Checked, CheckState.Unchecked)
-        cbTvMissingSpecials.CheckState              = If(Preferences.ignoreMissingSpecials, CheckState.Checked, CheckState.Unchecked)
+        CheckBox17                      .Checked    = Preferences.disabletvlogs
+        CheckBox20                      .Checked    = Preferences.enabletvhdtags
+        CheckBox_tv_EpisodeRenameCase   .Checked    = Preferences.eprenamelowercase
+        CheckBox_tv_EpisodeRenameAuto   .Checked    = Preferences.autorenameepisodes
+        CheckBox36                      .Checked    = Preferences.autoepisodescreenshot
+        CheckBox35                      .Checked    = Preferences.tvshowautoquick
+        CheckBox34                      .Checked    = Preferences.copytvactorthumbs
+        CheckBox14                      .Checked    = Preferences.tvposter
+        CheckBox10                      .Checked    = Preferences.tvfanart
+        cb_TvFolderJpg                  .Checked    = Preferences.tvfolderjpg
+        cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
+        CheckBox15                      .Checked    = Preferences.downloadtvseasonthumbs
+        CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
+        cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
         AutoScrnShtDelay.Text = ScrShtDelay
 
         Select Case Preferences.seasonall
@@ -12887,62 +12886,55 @@ End Sub
         cbDisableNotMatchingRenamePattern.Checked   = Preferences.DisableNotMatchingRenamePattern
         cbMovieList_ShowColWatched  .Checked        = Preferences.MovieList_ShowColWatched
         nudMovieScraper_MaxStudios  .Text           = Preferences.MovieScraper_MaxStudios
-
         nudActorsFilterMinFilms     .Text           = Preferences.ActorsFilterMinFilms
         nudMaxActorsInFilter        .Text           = Preferences.MaxActorsInFilter
         cbMovieFilters_Actors_Order .SelectedIndex  = Preferences.MovieFilters_Actors_Order
-
-        nudDirectorsFilterMinFilms     .Text           = Preferences.DirectorsFilterMinFilms
-        nudMaxDirectorsInFilter        .Text           = Preferences.MaxDirectorsInFilter
-        cbMovieFilters_Directors_Order .SelectedIndex  = Preferences.MovieFilters_Directors_Order
-
+        nudDirectorsFilterMinFilms   .Text          = Preferences.DirectorsFilterMinFilms
+        nudMaxDirectorsInFilter      .Text          = Preferences.MaxDirectorsInFilter
+        cbMovieFilters_Directors_Order.SelectedIndex  = Preferences.MovieFilters_Directors_Order
         cbMissingMovie              .Checked        = Preferences.incmissingmovies 
         nudSetsFilterMinFilms       .Text           = Preferences.SetsFilterMinFilms
         nudMaxSetsInFilter          .Text           = Preferences.MaxSetsInFilter
         cbMovieFilters_Sets_Order   .SelectedIndex  = Preferences.MovieFilters_Sets_Order
         chkbOriginal_Title          .Checked        = Preferences.Original_Title
-        RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False )       
+        RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False ) 
+        cbNoAltTitle                .Checked        = Preferences.NoAltTitle
+        cbXtraFrodoUrls             .Checked        = Preferences.XtraFrodoUrls
+        CheckBox16                  .Checked        = Preferences.disablelogfiles
+        cbDlTrailerDuringScrape     .Checked        = Preferences.DownloadTrailerDuringScrape
+        cbMovieTrailerUrl           .Checked        = Preferences.gettrailer
+        cbMoviePosterScrape         .Checked        = Preferences.scrapemovieposters
+        cbMovFanartScrape           .Checked        = Preferences.savefanart
+        cbMovieUseFolderNames       .Checked        = Preferences.usefoldernames
+        cbMovXtraThumbs             .Checked        = Preferences.movxtrathumb
+        cbMovXtraFanart             .Checked        = Preferences.movxtrafanart
+        cbDlXtraFanart              .Checked        = Preferences.dlxtrafanart
+        cbMovieAllInFolders         .Checked        = Preferences.allfolders
+        cbMovCreateFolderjpg        .Checked        = Preferences.createfolderjpg
+        cbMovCreateFanartjpg        .Checked        = Preferences.createfanartjpg
+        cbMovRootFolderCheck        .Checked        = Preferences.movrootfoldercheck
+        cbMovieBasicSave            .Checked        = Preferences.basicsavemode
+        cbxNameMode                 .Checked        = Preferences.namemode
+        cbxCleanFilenameIgnorePart  .Checked        = Preferences.movieignorepart
+        ScrapeFullCertCheckBox      .Checked        = Preferences.scrapefullcert
+        cbMovieRenameEnable         .Checked        = Preferences.MovieRenameEnable
+        cbMovFolderRename           .Checked        = Preferences.MovFolderRename
+        cbMovSetIgnArticle          .Checked        = Preferences.MovSetIgnArticle
+        cbMovSortIgnArticle         .Checked        = Preferences.MovSortIgnArticle
+        cbMovTitleIgnArticle        .Checked        = Preferences.MovTitleIgnArticle
+        cbMovTitleCase              .Checked        = Preferences.MovTitleCase
+        cbRenameUnderscore          .Checked        = Preferences.MovRenameUnderscore
+        CheckBox_ShowDateOnMovieList.Checked        = Preferences.showsortdate
+        cbImdbgetTMDBActor          .Checked        = Preferences.TmdbActorsImdbScrape
+        cbXbmcTmdbRename            .Checked        = Preferences.XbmcTmdbRenameMovie
+        cb_XbmcTmdbMissingFromImdb  .Checked        = Preferences.XbmcTmdbMissingFromImdb
+        cbXbmcTmdbActorDL           .Checked        = Preferences.XbmcTmdbActorDL
+        saveactorchkbx              .Checked        = Preferences.actorsave
+        cb_LocalActorSaveAlpha      .Checked        = Preferences.actorsavealpha
 
-        cbNoAltTitle.CheckState                 = If(Preferences.NoAltTitle,CheckState.Checked, CheckState.Unchecked)
-        cbXtraFrodoUrls.CheckState              = If(Preferences.XtraFrodoUrls, CheckState.Unchecked, CheckState.Checked)
-        CheckBox16.CheckState                   = If(Preferences.disablelogfiles, CheckState.Unchecked, CheckState.Checked)
-
-        cbDlTrailerDuringScrape.CheckState      = If(Preferences.DownloadTrailerDuringScrape, CheckState.Checked, CheckState.Unchecked)
-        cbMovieTrailerUrl.CheckState            = If(Preferences.gettrailer, CheckState.Checked, CheckState.Unchecked)
-        cbMoviePosterScrape.CheckState          = If(Preferences.scrapemovieposters, CheckState.Checked, CheckState.Unchecked)
-        cbMovFanartScrape.CheckState            = If(Preferences.savefanart, CheckState.Checked, CheckState.Unchecked)
-        cbMovieUseFolderNames.CheckState        = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
-        cbMovXtraThumbs.CheckState              = If(Preferences.movxtrathumb, CheckState.Checked, CheckState.Unchecked)
-        cbMovXtraFanart.CheckState              = If(Preferences.movxtrafanart, CheckState.Checked, CheckState.Unchecked)
-        cbDlXtraFanart.CheckState               = If(Preferences.dlxtrafanart, CheckState.Checked, CheckState.Unchecked)
-        cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
-        cbMovCreateFolderjpg.CheckState         = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
-        cbMovCreateFanartjpg.CheckState         = If(Preferences.createfanartjpg, CheckState.Checked, CheckState.Unchecked )
-        cbMovRootFolderCheck.CheckState         = If(Preferences.movrootfoldercheck, CheckState.Checked, CheckState.Unchecked)
-        cbMovieBasicSave.CheckState             = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
-        cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
-        cbxCleanFilenameIgnorePart.CheckState   = If(Preferences.movieignorepart, CheckState.Checked, CheckState.Unchecked)
-        ScrapeFullCertCheckBox.CheckState       = If(Preferences.scrapefullcert, CheckState.Checked, CheckState.Unchecked)
-        cbMovieRenameEnable.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
-        cbMovFolderRename.CheckState            = If(Preferences.MovFolderRename, CheckState.Checked, CheckState.Unchecked)
-        cbMovSetIgnArticle.CheckState           = If(Preferences.MovSetIgnArticle, CheckState.Checked, CheckState.Unchecked) 
-        cbMovSortIgnArticle.CheckState           = If(Preferences.MovSortIgnArticle, CheckState.Checked, CheckState.Unchecked) 
-        cbMovTitleIgnArticle.CheckState         = If(Preferences.MovTitleIgnArticle, CheckState.Checked, CheckState.Unchecked)
-        cbMovTitleCase.CheckState               = If(Preferences.MovTitleCase, CheckState.Checked, CheckState.Unchecked)
-        cbRenameUnderscore.CheckState           = If(Preferences.MovRenameUnderscore, CheckState.Checked, CheckState.Unchecked)
-        CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
-        cbImdbgetTMDBActor.CheckState           = If(Preferences.TmdbActorsImdbScrape, CheckState.Checked, CheckState.Unchecked)
-        cbXbmcTmdbRename.CheckState             = If(Preferences.XbmcTmdbRenameMovie, CheckState.Checked, CheckState.Unchecked)
-        cb_XbmcTmdbMissingFromImdb.CheckState   = If(Preferences.XbmcTmdbMissingFromImdb, CheckState.Checked, CheckState.Unchecked)
-        cbXbmcTmdbActorDL.CheckState            = If(Preferences.XbmcTmdbActorDL, CheckState.Checked, CheckState.Unchecked)
- 
-        saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
-        cb_LocalActorSaveAlpha.CheckState       = If(Preferences.actorsavealpha, CheckState.Checked, CheckState.Unchecked)
-        'saveactorchkbx.CheckState = CheckState.Unchecked
-
-        localactorpath.Enabled                  = Preferences.actorsave
-        xbmcactorpath.Enabled                   = Preferences.actorsave
-        Button77.Enabled                        = Preferences.actorsave
+        localactorpath              .Enabled        = Preferences.actorsave
+        xbmcactorpath               .Enabled        = Preferences.actorsave
+        Button77                    .Enabled        = Preferences.actorsave
 
         If Not Preferences.usefoldernames and Not Preferences.allfolders then
             cbMovCreateFolderjpg.Enabled = False
@@ -12952,8 +12944,8 @@ End Sub
             Preferences.fanartjpg=False
             Preferences.posterjpg=False
         Else
-            cbMovieFanartInFolders.CheckState        = If(Preferences.fanartjpg, CheckState.Checked, CheckState.Unchecked)
-            cbMoviePosterInFolder.CheckState    = If(Preferences.posterjpg, CheckState.Checked, CheckState.Unchecked)
+            cbMovieFanartInFolders  .Checked    = Preferences.fanartjpg
+            cbMoviePosterInFolder   .Checked    = Preferences.posterjpg
         End If
 
         Select Case Preferences.maxactors
@@ -14145,136 +14137,69 @@ End Sub
 
 'TvShow Auto Scrape Options
     Private Sub CheckBox14_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox14.CheckedChanged
-        Try
-            If CheckBox14.CheckState = CheckState.Checked Then
-                Preferences.tvposter = True
-            Else
-                Preferences.tvposter = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+         Preferences.tvposter = CheckBox14.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBox10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox10.CheckedChanged
-        Try
-            If CheckBox10.CheckState = CheckState.Checked Then
-                Preferences.tvfanart = True
-            Else
-                Preferences.tvfanart = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.tvfanart = CheckBox10.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBox15_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox15.CheckedChanged
-        Try
-            If CheckBox15.CheckState = CheckState.Checked Then
-                Preferences.downloadtvseasonthumbs = True
-            Else
-                Preferences.downloadtvseasonthumbs = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.downloadtvseasonthumbs = CheckBox15.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDlTvXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTvXtraFanart.CheckedChanged
-        Try
-            If cbDlTvXtraFanart.CheckState = CheckState.Checked Then
-                Preferences.dlTVxtrafanart = True
-            Else
-                Preferences.dlTVxtrafanart = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.dlTVxtrafanart = cbDlTvXtraFanart.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton41_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton41.CheckedChanged
-        Try
-            'none
-            If RadioButton41.Checked = True Then
-                Preferences.seasonall = "none"
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If RadioButton41.Checked = True Then Preferences.seasonall = "none"
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton40_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton40.CheckedChanged
-        Try
-            'poster
-            If RadioButton40.Checked = True Then
-                Preferences.seasonall = "poster"
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If RadioButton40.Checked = True Then Preferences.seasonall = "poster"
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton39_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton39.CheckedChanged
-        Try
-            'banner
-            If RadioButton39.Checked = True Then
-                Preferences.seasonall = "wide"
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If RadioButton39.Checked = True Then Preferences.seasonall = "wide"
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub posterbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles posterbtn.CheckedChanged
-        Try
-            If posterbtn.Checked = True Then
-                Preferences.postertype = "poster"
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If posterbtn.Checked = True Then Preferences.postertype = "poster"
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub bannerbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bannerbtn.CheckedChanged
-        Try
-            If bannerbtn.Checked = True Then
-                Preferences.postertype = "banner"
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If bannerbtn.Checked = True Then Preferences.postertype = "banner"
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_TvFolderJpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvFolderJpg.CheckedChanged
-        Try
-            If cb_TvFolderJpg.CheckState = CheckState.Checked Then
-                Preferences.tvfolderjpg = True
-            Else
-                Preferences.tvfolderjpg = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.tvfolderjpg = cb_TvFolderJpg.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbSeasonFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbSeasonFolderjpg.CheckedChanged
+        Preferences.seasonfolderjpg = cbSeasonFolderjpg.checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
 'End Of - TvShow Auto Scrape Options

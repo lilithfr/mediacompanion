@@ -311,6 +311,7 @@ Public Class Preferences
     Public Shared tvposter As Boolean
     Public Shared tvfanart As Boolean
     Public Shared tvfolderjpg As Boolean
+    Public Shared seasonfolderjpg As Boolean
     Public Shared downloadtvseasonthumbs As Boolean
     Public Shared enabletvhdtags As Boolean
     Public Shared disabletvlogs As Boolean
@@ -584,6 +585,7 @@ Public Class Preferences
         tvfanart = True
         tvposter = True
         tvfolderjpg = False
+        seasonfolderjpg = False
         postertype = "poster"
         downloadtvseasonthumbs = True
         TvdbLanguage = "English"
@@ -887,7 +889,7 @@ Public Class Preferences
         'Movie Prefs ------------------------------------------------------------
         root.AppendChild(doc, "DownloadTrailerDuringScrape",        DownloadTrailerDuringScrape)        'cbDlTrailerDuringScrape
         root.AppendChild(doc, "gettrailer",                         gettrailer)                         'CheckBox11
-        root.AppendChild(doc, "ignoretrailers", ignoretrailers)                     'set from frmOptions - obsolete
+        root.AppendChild(doc, "ignoretrailers",                     ignoretrailers)                     'set from frmOptions - obsolete
         root.AppendChild(doc, "moviescraper",                       moviescraper)                       'set from frmOptions - obsolete
         root.AppendChild(doc, "nfoposterscraper",                   nfoposterscraper)                   'IMPA_chk,mpdb_chk,tmdb_chk,imdb_chk
         root.AppendChild(doc, "alwaysuseimdbid",                    alwaysuseimdbid)                    'set from frmOptions - obsolete
@@ -969,8 +971,8 @@ Public Class Preferences
         root.AppendChild(doc, "MaxActorsInFilter",                  MaxActorsInFilter)                  'nudMaxActorsInFilter
         root.AppendChild(doc, "MovieFilters_Actors_Order",          MovieFilters_Actors_Order)          'cbMovieFilters_Actors_Order
 
-        root.AppendChild(doc, "DirectorsFilterMinFilms",               DirectorsFilterMinFilms)               'nudDirectorsFilterMinFilms
-        root.AppendChild(doc, "MaxDirectorsInFilter",                  MaxDirectorsInFilter)                  'nudMaxDirectorsInFilter
+        root.AppendChild(doc, "DirectorsFilterMinFilms",            DirectorsFilterMinFilms)            'nudDirectorsFilterMinFilms
+        root.AppendChild(doc, "MaxDirectorsInFilter",               MaxDirectorsInFilter)               'nudMaxDirectorsInFilter
         root.AppendChild(doc, "MovieFilters_Directors_Order",       MovieFilters_Directors_Order)       'cbMovieFilters_Directors_Order
 
         root.AppendChild(doc, "SetsFilterMinFilms",                 SetsFilterMinFilms)                 'nudSetsFilterMinFilms
@@ -979,7 +981,7 @@ Public Class Preferences
         root.AppendChild(doc, "Original_Title",                     Original_Title         )            'chkbOriginal_Title
         root.AppendChild(doc, "UseMultipleThreads",                 UseMultipleThreads     )            'cbUseMultipleThreads
 
-        root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority.ToArray    )             'Button61,Button73
+        root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority.ToArray)         'Button61,Button73
         root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
         root.AppendChildList(doc, "movseplst",                      MovSepLst.ToArray)                  'lb_MovSepLst
@@ -995,6 +997,7 @@ Public Class Preferences
         root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
         root.AppendChild(doc, "downloadtvfanart",       tvfanart)               'CheckBox10
         root.AppendChild(doc, "tvfolderjpg",            tvfolderjpg)            'cb_TvFolderJpg
+        root.AppendChild(doc, "seasonfolderjpg",        seasonfolderjpg)        'cbseasonfolderjpg
         root.AppendChild(doc, "downloadtvposter",       tvposter)               'CheckBox14
         root.AppendChild(doc, "downloadtvseasonthumbs", downloadtvseasonthumbs) 'CheckBox15
         root.AppendChild(doc, "hdtvtags",               enabletvhdtags)         'CheckBox20
@@ -1282,7 +1285,8 @@ Public Class Preferences
                     Case "usetransparency"                      : usetransparency = thisresult.InnerXml
                     Case "transparencyvalue"                    : transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
                     Case "downloadtvfanart"                     : tvfanart = thisresult.InnerXml
-                    Case "tvfolderjpg"                          : tvfolderjpg = thisresult.InnerXml 
+                    Case "tvfolderjpg"                          : tvfolderjpg = thisresult.InnerXml
+                    Case "seasonfolderjpg"                      : seasonfolderjpg = thisresult.InnerXml 
                     Case "roundminutes"                         : roundminutes = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml
