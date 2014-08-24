@@ -3515,14 +3515,18 @@ Partial Public Class Form1
                             If IO.File.Exists(seasonXXposterpath) And frodo And eden And isposter = "poster" Then
                                 success = Utilities.SafeCopyFile(seasonXXposterpath, seasonXXposterpath.Replace("-poster.jpg", ".tbn"), overwriteimage)
                             End If
-                            If f > 0 AndAlso Preferences.seasonfolderjpg Then
-                                Dim seasonfolder As String = currentshowpath & "season"
-                                Dim TrueSeasonFolder As String = ""
-                                If Directory.Exists(seasonfolder & "0" & f.ToString) Then TrueSeasonFolder = seasonfolder & "0" & f.ToString
-                                If TrueSeasonFolder = "" AndAlso Directory.Exists(seasonfolder & " 0" & f.ToString) Then TrueSeasonFolder = seasonfolder & " 0" & f.ToString
-                                If TrueSeasonFolder = "" AndAlso Directory.Exists(seasonfolder & f.ToString) Then TrueSeasonFolder = seasonfolder & f.ToString
-                                If TrueSeasonFolder = "" AndAlso Directory.Exists(seasonfolder & " " & f.ToString) Then TrueSeasonFolder = seasonfolder & " " & f.ToString
-                                If TrueSeasonFolder <> "" AndAlso File.Exists(seasonXXposterpath) Then Utilities.SafeCopyFile(seasonXXposterpath, TrueSeasonFolder & "\folder.jpg")
+                            If Preferences.seasonfolderjpg AndAlso currentshow.Episodes.Count > 0 Then
+                                For Each ep In currentshow.Episodes
+                                    If ep.Season.Value = f Then
+                                        If ep.FolderPath <> currentshowpath Then
+                                            Dim TrueSeasonFolder As String = ep.FolderPath & "folder.jpg"
+                                            If Not File.Exists(TrueSeasonFolder) AndAlso File.Exists(seasonXXposterpath) Then
+                                                Utilities.SafeCopyFile(seasonXXposterpath, TrueSeasonFolder)
+                                                Exit For
+                                            End If
+                                        End If
+                                    End If
+                                Next
                             End If
                         End If
                     End If
