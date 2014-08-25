@@ -594,6 +594,14 @@ Public Class Form1
                     TabLevel1.SelectedIndex = Preferences.startuptab
                 'End If
 
+                If Preferences.startuptab = 0 Then
+                    If Not MoviesFiltersResizeCalled Then
+                        MoviesFiltersResizeCalled = True
+                        Preferences.movie_filters.SetMovieFiltersVisibility
+                        UpdateMovieFiltersPanel
+                    End If
+                End If
+
 
                 SplitContainer1.IsSplitterFixed = False
                 SplitContainer2.IsSplitterFixed = False
@@ -5243,7 +5251,7 @@ Public Class Form1
             TabPage15.Text = "Search for new Episodes"
             TabPage15.ToolTipText = "Searches folders for new episodes"
 
-            If Not Preferences.disabletvlogs Then
+            If Preferences.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -5934,7 +5942,7 @@ Public Class Form1
             Next
             Call Tv_CacheSave()
             messbox.Close()
-            If Not Preferences.disabletvlogs Then
+            If Preferences.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(renamelog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -12899,7 +12907,7 @@ End Sub
         chkbOriginal_Title          .Checked        = Preferences.Original_Title
         RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False ) 
         cbNoAltTitle                .Checked        = Preferences.NoAltTitle
-        cbXtraFrodoUrls             .Checked        = Preferences.XtraFrodoUrls
+        cbXtraFrodoUrls             .Checked        = Not Preferences.XtraFrodoUrls
         CheckBox16                  .Checked        = Not Preferences.disablelogfiles
         cbDlTrailerDuringScrape     .Checked        = Preferences.DownloadTrailerDuringScrape
         cbMovieTrailerUrl           .Checked        = Preferences.gettrailer
@@ -15663,12 +15671,14 @@ End Sub
     End Sub
 
     Private Sub cbXtraFrodoUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXtraFrodoUrls.CheckedChanged
+        
         Try
-            If cbXtraFrodoUrls.CheckState = CheckState.Checked Then
-                Preferences.XtraFrodoUrls = False
-            Else
-                Preferences.XtraFrodoUrls = True
-            End If
+            Preferences.XtraFrodoUrls = Not cbXtraFrodoUrls.Checked 
+            'If cbXtraFrodoUrls.CheckState = CheckState.Checked Then
+            '    Preferences.XtraFrodoUrls = False
+            'Else
+            '    Preferences.XtraFrodoUrls = True
+            'End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
