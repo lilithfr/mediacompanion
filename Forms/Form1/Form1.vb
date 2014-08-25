@@ -5243,7 +5243,7 @@ Public Class Form1
             TabPage15.Text = "Search for new Episodes"
             TabPage15.ToolTipText = "Searches folders for new episodes"
 
-            If Preferences.disabletvlogs = False Then
+            If Not Preferences.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -5934,7 +5934,7 @@ Public Class Form1
             Next
             Call Tv_CacheSave()
             messbox.Close()
-            If Preferences.disabletvlogs = False Then
+            If Not Preferences.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(renamelog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -12900,7 +12900,7 @@ End Sub
         RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False ) 
         cbNoAltTitle                .Checked        = Preferences.NoAltTitle
         cbXtraFrodoUrls             .Checked        = Preferences.XtraFrodoUrls
-        CheckBox16                  .Checked        = Preferences.disablelogfiles
+        CheckBox16                  .Checked        = Not Preferences.disablelogfiles
         cbDlTrailerDuringScrape     .Checked        = Preferences.DownloadTrailerDuringScrape
         cbMovieTrailerUrl           .Checked        = Preferences.gettrailer
         cbMoviePosterScrape         .Checked        = Preferences.scrapemovieposters
@@ -14289,11 +14289,12 @@ End Sub
 
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
         Try
-            If CheckBox17.CheckState = CheckState.Checked Then
-                Preferences.disabletvlogs = False
-            Else
-                Preferences.disabletvlogs = True
-            End If
+            Preferences.disabletvlogs = CheckBox17.Checked 
+            'If CheckBox17.CheckState = CheckState.Checked Then
+            '    Preferences.disabletvlogs = True
+            'Else
+            '    Preferences.disabletvlogs = False
+            'End If
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
