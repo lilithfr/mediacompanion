@@ -670,11 +670,11 @@ Public Class Form1
             'Parameters to display the movie grid at startup
             Select Case Preferences.moviedefaultlist
                 Case 0
-                    RadioButtonTitleAndYear.Checked = True
+                    rbTitleAndYear.Checked = True
                 Case 1
-                    RadioButtonFileName.Checked = True
+                    rbFileName.Checked = True
                 Case 2
-                    RadioButtonFolder.Checked = True
+                    rbFolder.Checked = True
             End Select
 
             Try
@@ -868,7 +868,7 @@ Public Class Form1
         Catch ex As Exception
             Dim paramInfo As String = ""
             Try
-                paramInfo = "PictureBoxFanArt.Width:" & PictureBoxFanArt.Width.ToString & " PictureBoxFanArt.Height: " & PictureBoxFanArt.Height.ToString & " Rating:" & ratingtxt.Text
+                paramInfo = "PbMovieFanArt.Width:" & PbMovieFanArt.Width.ToString & " PbMovieFanArt.Height: " & PbMovieFanArt.Height.ToString & " Rating:" & ratingtxt.Text
             Catch ex2 As Exception
                 ExceptionHandler.LogError(ex2)
             End Try
@@ -1185,11 +1185,11 @@ Public Class Form1
         Dim pic1ratio As Decimal
         Dim pic2ratio As Decimal
         Try
-            If Not IsNothing(PictureBoxFanart.Image) Then
-                Dim pic1ImSzW = PictureBoxFanArt.Image.Size.Width        'original picture sizes
-                Dim pic1ImszH = PictureBoxFanArt.Image.Size.Height
-                Dim pic2ImSzW = moviethumb.Image.Size.Width
-                Dim pic2ImszH = moviethumb.Image.Size.Height
+            If Not IsNothing(PbMovieFanArt.Image) Then
+                Dim pic1ImSzW = PbMovieFanArt.Image.Size.Width        'original picture sizes
+                Dim pic1ImszH = PbMovieFanArt.Image.Size.Height
+                Dim pic2ImSzW = PbMoviePoster.Image.Size.Width
+                Dim pic2ImszH = PbMoviePoster.Image.Size.Height
                 pic1ratio = pic1ImSzW / pic1ImszH
                 pic2ratio = pic2ImSzW / pic2ImszH
                 Dim width As Integer = SplitContainer2.Size.Width
@@ -1746,13 +1746,13 @@ Public Class Form1
                         End If
                     End If
 
-                    util_ImageLoad(moviethumb, workingposter, Utilities.DefaultPosterPath)
+                    util_ImageLoad(PbMoviePoster, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
                     'util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                     util_ImageLoad(PictureBoxAssignedMoviePoster, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
                     lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-                    Label18.Visible = False
+                    lblMovPosterPages.Visible = False
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Dim workingfanart As String = workingMovieDetails.fileinfo.fanartpath
@@ -1768,21 +1768,21 @@ Public Class Form1
                         End If
                     End If
 
-                    util_ImageLoad(PictureBoxFanArt, workingfanart, Utilities.DefaultFanartPath)
-                    'Rating1.PictureInit = PictureBoxFanArt.Image
+                    util_ImageLoad(PbMovieFanArt, workingfanart, Utilities.DefaultFanartPath)
+                    'Rating1.PictureInit = PbMovieFanArt.Image
 
                 End If
 
                 If Yield(yieldIng) Then Return
 
                 If Convert.ToInt32(workingMovieDetails.fullmoviebody.playcount) > 0 Then
-                    ButtonWatched.Text = "&Watched"
-                    ButtonWatched.BackColor = Color.LawnGreen
-                    ButtonWatched.Refresh()
+                    btnMovWatched.Text = "&Watched"
+                    btnMovWatched.BackColor = Color.LawnGreen
+                    btnMovWatched.Refresh()
                 Else
-                    ButtonWatched.Text = "Un&watched"
-                    ButtonWatched.BackColor = Color.Red
-                    ButtonWatched.Refresh()
+                    btnMovWatched.Text = "Un&watched"
+                    btnMovWatched.BackColor = Color.Red
+                    btnMovWatched.Refresh()
                 End If
 
                 cbMovieDisplay_Actor.Items.Clear()
@@ -1832,7 +1832,7 @@ Public Class Form1
                 mov_SplitContainerAutoPosition
 
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
-                movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
+                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
 
             End If
         Else
@@ -1848,9 +1848,9 @@ Public Class Form1
             'posterThumbedItsMade = False
             cbMoviePosterSaveLoRes.Enabled = False
             btnPosterTabs_SaveImage.Enabled = False
-            Button9.Visible = False
-            Button10.Visible = False
-            Label18.Visible = False
+            btnMovPosterNext.Visible = False
+            btnMovPosterPrev.Visible = False
+            lblMovPosterPages.Visible = False
             titletxt.Text = ""
             TextBox3.Text = ""
             outlinetxt.Text = ""
@@ -1872,11 +1872,11 @@ Public Class Form1
             votestxt.Text = ""
             top250txt.Text = ""
             certtxt.Text = ""
-            PictureBoxFanArt.Image = Nothing
+            PbMovieFanArt.Image = Nothing
             PictureBox2.Image = Nothing
-            moviethumb.Image = Nothing
-            Label16.Text = ""
-            Label17.Text = ""
+            PbMoviePoster.Image = Nothing
+            lblMovFanartWidth.Text = ""
+            lblMovFanartHeight.Text = ""
             PictureBoxAssignedMoviePoster.Image = Nothing
             lblCurrentLoadedPoster.Text = ""
             TextBox34.Text = ""
@@ -2507,7 +2507,7 @@ Public Class Form1
         txt_titlesearch.BackColor = Color.White
         TextBox1.BackColor = Color.White
 
-        RadioButtonTitleAndYear.Checked = True
+        rbTitleAndYear.Checked = True
 
         cbFilterGeneral.SelectedIndex = 0
 
@@ -2828,9 +2828,9 @@ Public Class Form1
             t.ShowDialog()
             Try
                 If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-                    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                    util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                 Else
-                    PictureBoxFanArt.Image = Nothing
+                    PbMovieFanArt.Image = Nothing
                 End If
 
             Catch ex As Exception
@@ -3133,8 +3133,8 @@ Public Class Form1
         votestxt.Text = ""
         top250txt.Text = ""
         certtxt.Text = ""
-        PictureBoxFanArt.Image = Nothing
-        moviethumb.Image = Nothing
+        PbMovieFanArt.Image = Nothing
+        PbMoviePoster.Image = Nothing
         roletxt.Text = ""
         PictureBoxActor.Image = Nothing
         btnPlayMovie.Enabled = False
@@ -3242,8 +3242,8 @@ Public Class Form1
             done = True
         Else
             outlinetxt.Text = ""
-            PictureBoxFanArt.Image = Nothing
-            moviethumb.Image = Nothing
+            PbMovieFanArt.Image = Nothing
+            PbMoviePoster.Image = Nothing
             roletxt.Text = ""
             PictureBoxActor.Image = Nothing
             SplitContainer2.Visible = False
@@ -3276,17 +3276,17 @@ Public Class Form1
                 Next
             Next
             If add = False Then
-                ButtonWatched.Text = ""
-                ButtonWatched.BackColor = Color.Gray
+                btnMovWatched.Text = ""
+                btnMovWatched.BackColor = Color.Gray
             Else
                 If watched = "1" Then
-                    ButtonWatched.Text = "&Watched"
-                    ButtonWatched.BackColor = Color.LawnGreen
-                    ButtonWatched.Refresh()
+                    btnMovWatched.Text = "&Watched"
+                    btnMovWatched.BackColor = Color.LawnGreen
+                    btnMovWatched.Refresh()
                 Else
-                    ButtonWatched.Text = "Un&watched"
-                    ButtonWatched.BackColor = Color.Red
-                    ButtonWatched.Refresh()
+                    btnMovWatched.Text = "Un&watched"
+                    btnMovWatched.BackColor = Color.Red
+                    btnMovWatched.Refresh()
                 End If
             End If
         End If
@@ -3738,7 +3738,7 @@ Public Class Form1
     End Sub
 
     Private Sub mov_FanartLoad()
-        RadioButtonFanart.Checked = True
+        rbMovFanart.Checked = True
         Dim isfanartpath As String = workingMovieDetails.fileinfo.fanartpath
         Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath = "", "", workingMovieDetails.fileinfo.videotspath + "fanart.jpg")
 
@@ -3749,28 +3749,28 @@ Public Class Form1
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
                     PictureBox2.Image = Image2 'moviethumb - 3
-                    Label16.Text = PictureBox2.Image.Width
-                    Label17.Text = PictureBox2.Image.Height
+                    lblMovFanartWidth.Text = PictureBox2.Image.Width
+                    lblMovFanartHeight.Text = PictureBox2.Image.Height
                 ElseIf IO.File.Exists(isfanartpath) Then
                     Dim OriginalImage As New Bitmap(isfanartpath)
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
                     PictureBox2.Image = Image2 'moviethumb - 3
-                    Label16.Text = PictureBox2.Image.Width
-                    Label17.Text = PictureBox2.Image.Height
+                    lblMovFanartWidth.Text = PictureBox2.Image.Width
+                    lblMovFanartHeight.Text = PictureBox2.Image.Height
                 Else
                     Dim OriginalImage As New Bitmap(Utilities.DefaultBannerPath)
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
                     PictureBox2.Image = Image2 'moviethumb - 3
-                    Label16.Text = PictureBox2.Image.Width
-                    Label17.Text = PictureBox2.Image.Height
+                    lblMovFanartWidth.Text = PictureBox2.Image.Width
+                    lblMovFanartHeight.Text = PictureBox2.Image.Height
                 End If
 
                 If Not IO.File.Exists(isfanartpath) And Not IO.File.Exists(isvideotspath) Then
                     PictureBox2.ImageLocation = Utilities.DefaultFanartPath 'moviethumb - 3
-                    Label16.Text = ""
-                    Label17.Text = ""
+                    lblMovFanartWidth.Text = ""
+                    lblMovFanartHeight.Text = ""
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -4073,7 +4073,7 @@ Public Class Form1
                     Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
                     Dim xtra As Boolean = False
                     Dim extrfanart As Boolean = False
-                    If RadioButtonThumb1.Checked Or RadioButtonThumb2.Checked Or RadioButtonThumb3.Checked Or RadioButtonThumb4.Checked Then xtra = True
+                    If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Then xtra = True
 
                     Preferences.savefanart = True
 
@@ -4108,9 +4108,9 @@ Public Class Form1
                         End If
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
-                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                         Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
-                        movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
+                        movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -4126,8 +4126,8 @@ Public Class Form1
                         Preferences.savefanart = issavefanart
                     End If
 
-                    Label16.Text = PictureBox2.Image.Width
-                    Label17.Text = PictureBox2.Image.Height
+                    lblMovFanartWidth.Text = PictureBox2.Image.Width
+                    lblMovFanartHeight.Text = PictureBox2.Image.Height
 
                     UpdateMissingFanart()
 
@@ -4404,28 +4404,28 @@ Public Class Form1
 
             'Label7.Visible = True
             If pageCount > 1 Then
-                Button9.Visible = True
-                Button10.Visible = True
+                btnMovPosterNext.Visible = True
+                btnMovPosterPrev.Visible = True
                 If posterArray.Count >= 10 Then
-                    Label18.Text = "Displaying 1 to 10 of " & posterArray.Count.ToString & " Images"
+                    lblMovPosterPages.Text = "Displaying 1 to 10 of " & posterArray.Count.ToString & " Images"
                 Else
-                    Label18.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
+                    lblMovPosterPages.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
                 End If
-                Label18.Visible = True
+                lblMovPosterPages.Visible = True
                 Me.Refresh()
                 Application.DoEvents()
                 currentPage = 1
-                Button10.Enabled = False
-                Button9.Enabled = True
+                btnMovPosterPrev.Enabled = False
+                btnMovPosterNext.Enabled = True
             Else
-                Button10.Visible = False
-                Button9.Visible = False
+                btnMovPosterPrev.Visible = False
+                btnMovPosterNext.Visible = False
                 If posterArray.Count >= 10 Then
-                    Label18.Text = "Displaying 1 to " & 10 & " of " & posterArray.Count.ToString & " Images"
+                    lblMovPosterPages.Text = "Displaying 1 to " & 10 & " of " & posterArray.Count.ToString & " Images"
                 Else
-                    Label18.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
+                    lblMovPosterPages.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
                 End If
-                Label18.Visible = True
+                lblMovPosterPages.Visible = True
                 Me.Refresh()
                 Application.DoEvents()
             End If
@@ -4523,8 +4523,8 @@ Public Class Form1
             Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
         If itemcounter = 0 Then
-            Button9.Visible = False
-            Button10.Visible = False
+            btnMovPosterNext.Visible = False
+            btnMovPosterPrev.Visible = False
             Dim mainlabel2 As Label
             mainlabel2 = New Label
             With mainlabel2
@@ -4535,7 +4535,7 @@ Public Class Form1
                 .Text = "No Posters Were Found For This Movie"
 
             End With
-            Label18.Text = "0 of 0 Images"
+            lblMovPosterPages.Text = "0 of 0 Images"
             Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
         messbox.Close()
@@ -9921,7 +9921,7 @@ End Sub
                 '        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                 '    End If
                 'Next
-                util_ImageLoad(PictureBoxFanArt, paths(0), Utilities.DefaultFanartPath)
+                util_ImageLoad(PbMovieFanArt, paths(0), Utilities.DefaultFanartPath)
                 util_ImageLoad(PictureBox2, paths(0), Utilities.DefaultFanartPath)
             End If
         Catch ex As Exception
@@ -10050,7 +10050,7 @@ End Sub
                     Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True)
                     If Not aok Then Throw New Exception()
                     util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
-                    util_ImageLoad(moviethumb, PostPaths(0), Utilities.DefaultPosterPath)
+                    util_ImageLoad(PbMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
                     Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0))
                     updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
 
@@ -11516,19 +11516,19 @@ End Sub
             Try
                 Dim fanartpath = workingMovieDetails.fileinfo.fanartpath
                 Dim xtra As Boolean = False
-                If RadioButtonThumb1.Checked Or RadioButtonThumb2.Checked Or RadioButtonThumb3.Checked Or RadioButtonThumb4.Checked Then
+                If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Then
                     fanartpath = mov_FanartORExtrathumbPath()
                     If Preferences.movxtrafanart And Not Preferences.movxtrathumb Then fanartpath = fanartpath.Replace("extrathumbs\thumb", "extrafanart\fanart")
                 End If
 
                 If IO.File.Exists(fanartpath) Then
                     util_ImageLoad(PictureBox2, fanartpath, Utilities.DefaultFanartPath)
-                    Label16.Text = PictureBox2.Image.Width
-                    Label17.Text = PictureBox2.Image.Height
+                    lblMovFanartWidth.Text = PictureBox2.Image.Width
+                    lblMovFanartHeight.Text = PictureBox2.Image.Height
                 Else
                     util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
-                    Label16.Text = ""
-                    Label17.Text = ""
+                    lblMovFanartWidth.Text = ""
+                    lblMovFanartHeight.Text = ""
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -11540,11 +11540,11 @@ End Sub
 
     Private Function mov_FanartORExtrathumbPath() As String
         Dim fanarttype As String = ""
-        If RadioButtonFanart.Checked Then fanarttype = "Fanart"
-        If RadioButtonThumb1.Checked Then fanarttype = "Thumb1"
-        If RadioButtonThumb2.Checked Then fanarttype = "Thumb2"
-        If RadioButtonThumb3.Checked Then fanarttype = "Thumb3"
-        If RadioButtonThumb4.Checked Then fanarttype = "Thumb4"
+        If rbMovFanart.Checked Then fanarttype = "Fanart"
+        If rbMovThumb1.Checked Then fanarttype = "Thumb1"
+        If rbMovThumb2.Checked Then fanarttype = "Thumb2"
+        If rbMovThumb3.Checked Then fanarttype = "Thumb3"
+        If rbMovThumb4.Checked Then fanarttype = "Thumb4"
         Dim fanartpath As String = ""
         Select Case fanarttype
             Case "Fanart"
@@ -11908,9 +11908,9 @@ End Sub
     Sub HandleMovieList_DisplayChange(DisplayField As String)
         Mc.clsGridViewMovie.GridFieldToDisplay1 = DisplayField
 
-        If RadioButtonTitleAndYear.Checked Then Preferences.moviedefaultlist = 0
-        If RadioButtonFileName    .Checked Then Preferences.moviedefaultlist = 1
-        If RadioButtonFolder      .Checked Then Preferences.moviedefaultlist = 2
+        If rbTitleAndYear.Checked Then Preferences.moviedefaultlist = 0
+        If rbFileName    .Checked Then Preferences.moviedefaultlist = 1
+        If rbFolder      .Checked Then Preferences.moviedefaultlist = 2
 
         Mc.clsGridViewMovie.GridviewMovieDesign(Me)
         If MainFormLoadedStatus Then
@@ -12399,9 +12399,9 @@ End Sub
             Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
             If CurrentTab = "movies" Then
                 mov_DisplayFanart()
-                util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
-                movieGraphicInfo.OverlayInfo(PictureBoxFanArt, ratingtxt.Text, video_flags)
+                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
             ElseIf CurrentTab = "tv shows" Then
                 TvTreeview_AfterSelect_Do()
             End If
@@ -12727,19 +12727,16 @@ End Sub
         Label130.Font = newFont
         Label130.Text = Preferences.font
 
-        chkbx_disablecache.Checked          = Not Preferences.startupCache
-
-        cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.UnChecked, CheckState.checked)
-        cbDisplayLocalActor.CheckState      = If(Preferences.LocalActorImage, Checkstate.Checked, CheckState.Unchecked)
-
-        CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
-        cb_IgnoreThe.CheckState             = If(Preferences.ignorearticle, CheckState.Checked, CheckState.Unchecked)
-        cb_IgnoreA.CheckState               = If(Preferences.ignoreAarticle, CheckState.Checked, CheckState.Unchecked)
-        cb_IgnoreAn.CheckState              = If(Preferences.ignoreAn, CheckState.Checked, CheckState.Unchecked)
-        cb_SorttitleIgnoreArticles.CheckState = If(Preferences.sorttitleignorearticle, CheckState.Checked, CheckState.Unchecked)
-        CheckBox38.CheckState               = If(Preferences.intruntime, CheckState.Checked, CheckState.Unchecked)
-        CheckBox33.CheckState               = If(Preferences.actorseasy, CheckState.Checked, CheckState.Unchecked)
-
+        chkbx_disablecache          .Checked    = Not Preferences.startupCache
+        cbOverwriteArtwork          .Checked    = Not Preferences.overwritethumbs
+        cbDisplayLocalActor         .Checked    = Preferences.LocalActorImage
+        CheckBoxRenameNFOtoINFO     .Checked    = Preferences.renamenfofiles
+        cb_IgnoreThe                .Checked    = Preferences.ignorearticle
+        cb_IgnoreA                  .Checked    = Preferences.ignoreAarticle
+        cb_IgnoreAn                 .Checked    = Preferences.ignoreAn
+        cb_SorttitleIgnoreArticles  .Checked    = Preferences.sorttitleignorearticle
+        CheckBox38                  .Checked    = Preferences.intruntime
+        CheckBox33                  .Checked    = Preferences.actorseasy
         txtbx_minrarsize            .Text       = Preferences.rarsize.ToString
         cbExternalbrowser           .Checked    = Preferences.externalbrowser
         btnFindBrowser              .Enabled    = cbExternalbrowser.Checked
@@ -12788,7 +12785,6 @@ End Sub
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
         cbShowLogOnError      .Checked = Preferences.ShowLogOnError
         cbUseMultipleThreads  .Checked = Preferences.UseMultipleThreads
-   '    tbMkvMergeGuiPath     .Text    = Preferences.MkvMergeGuiPath
 
         Preferences.ExcludeFolders.PopTextBox(tbExcludeFolders)
 
@@ -15138,7 +15134,7 @@ End Sub
 
     End Sub
 
-    Private Sub btn_MovTmbPriorityReset_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityReset.Click
+    Private Sub btn_MovPosterPriorityReset_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityReset.Click
         Preferences.resetmovthumblist()
         If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Count Then
             lbPosterSourcePriorities.Items.Clear()
@@ -16251,11 +16247,11 @@ End Sub
 
 #Region "Movie Browser Tab"
 
-    Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bnt_movSearchNew.Click
+    Private Sub btnMovSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovSearchNew.Click
         SearchForNew()
     End Sub
 
-    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click, bnt_movRefreshAll.Click
+    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click, btnMovRefreshAll.Click
         mov_RebuildMovieCaches()
     End Sub
 
@@ -16264,15 +16260,15 @@ End Sub
         LabelCountFilter.Focus()
     End Sub
 
-    Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
+    Private Sub rbFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbFileName.CheckedChanged
         HandleMovieList_DisplayChange("FileName")
     End Sub
 
-    Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
+    Private Sub rbTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTitleAndYear.CheckedChanged
         HandleMovieList_DisplayChange("TitleAndYear")
     End Sub
 
-    Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
+    Private Sub rbFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbFolder.CheckedChanged
         HandleMovieList_DisplayChange("Folder")
     End Sub
 
@@ -16295,7 +16291,7 @@ End Sub
         DisplayMovie()
     End Sub
 
-    Private Sub ButtonResetFilters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonResetFilters.Click
+    Private Sub btnResetFilters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnResetFilters.Click
         resetallfilters()
     End Sub
 
@@ -16326,7 +16322,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ButtonSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSave.Click
+    Private Sub btnMovSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovSave.Click
         Try
             Call mov_SaveQuick()
 
@@ -16335,7 +16331,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ButtonRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRescrapeMovie.Click
+    Private Sub btnMovRescrapeRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovRescrape.Click
         mov_Rescrape()
     End Sub
 
@@ -16463,7 +16459,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub PictureBoxFanArt_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBoxFanArt.MouseUp, PictureBoxFanArt.Click
+    Private Sub PbMovieFanArt_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PbMovieFanArt.MouseUp, PbMovieFanArt.Click
         Try
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 RescrapePToolStripMenuItem.Visible = False
@@ -16496,7 +16492,7 @@ End Sub
 
     End Sub
 
-    Private Sub PictureBoxFanArt_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBoxFanArt.DoubleClick
+    Private Sub PbMovieFanArt_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PbMovieFanArt.DoubleClick
 
         Try
             Try
@@ -16519,7 +16515,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub moviethumb_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moviethumb.DoubleClick
+    Private Sub PbMoviePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PbMoviePoster.DoubleClick
         Try
             Try
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
@@ -16542,7 +16538,7 @@ End Sub
 
     End Sub
 
-    Private Sub moviethumb_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles moviethumb.MouseUp
+    Private Sub PbMoviePoster_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PbMoviePoster.MouseUp
         Try
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 RescrapePToolStripMenuItem.Visible = False
@@ -16694,18 +16690,18 @@ End Sub
         mov_Play("Movie")
     End Sub
 
-    Private Sub ButtonWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonWatched.Click
+    Private Sub btnMovWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovWatched.Click
         Try
             If DataGridViewMovies.SelectedRows.Count = 1 Then
-                If ButtonWatched.Text = "&Watched" Then
-                    ButtonWatched.Text = "Un&watched"
-                    ButtonWatched.BackColor = Color.Red
-                    ButtonWatched.Refresh()
+                If btnMovWatched.Text = "&Watched" Then
+                    btnMovWatched.Text = "Un&watched"
+                    btnMovWatched.BackColor = Color.Red
+                    btnMovWatched.Refresh()
                     workingMovieDetails.fullmoviebody.playcount = "0"
                 Else
-                    ButtonWatched.Text = "&Watched"
-                    ButtonWatched.BackColor = Color.LawnGreen
-                    ButtonWatched.Refresh()
+                    btnMovWatched.Text = "&Watched"
+                    btnMovWatched.BackColor = Color.LawnGreen
+                    btnMovWatched.Refresh()
                     workingMovieDetails.fullmoviebody.playcount = "1"
                 End If
                 Call mov_SaveQuick()
@@ -16714,20 +16710,20 @@ End Sub
                 mess.Show()
                 mess.Refresh()
                 Dim watched As String = ""
-                If ButtonWatched.Text = "&Watched" Then
-                    ButtonWatched.Text = "Un&watched"
-                    ButtonWatched.BackColor = Color.Red
-                    ButtonWatched.Refresh()
+                If btnMovWatched.Text = "&Watched" Then
+                    btnMovWatched.Text = "Un&watched"
+                    btnMovWatched.BackColor = Color.Red
+                    btnMovWatched.Refresh()
                     watched = "0"
-                ElseIf ButtonWatched.Text = "Un&watched" Then
-                    ButtonWatched.Text = "&Watched"
-                    ButtonWatched.BackColor = Color.LawnGreen
-                    ButtonWatched.Refresh()
+                ElseIf btnMovWatched.Text = "Un&watched" Then
+                    btnMovWatched.Text = "&Watched"
+                    btnMovWatched.BackColor = Color.LawnGreen
+                    btnMovWatched.Refresh()
                     watched = "1"
-                ElseIf ButtonWatched.Text = "" Then
-                    ButtonWatched.Text = "&Watched"
-                    ButtonWatched.BackColor = Color.LawnGreen
-                    ButtonWatched.Refresh()
+                ElseIf btnMovWatched.Text = "" Then
+                    btnMovWatched.Text = "&Watched"
+                    btnMovWatched.BackColor = Color.LawnGreen
+                    btnMovWatched.Refresh()
                     watched = "1"
                 End If
                 For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
@@ -16883,24 +16879,24 @@ End Sub
             util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
             btnresetimage.Enabled = False
             btnSaveCropped.Enabled = False
-            Label16.Text = PictureBox2.Image.Width
-            Label17.Text = PictureBox2.Image.Height
+            lblMovFanartWidth.Text = PictureBox2.Image.Width
+            lblMovFanartHeight.Text = PictureBox2.Image.Height
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCropped.Click
+    Private Sub btnSaveCropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCropped.Click
         Try
             thumbedItsMade = False
             Try
                 Dim stream As New System.IO.MemoryStream
                 Utilities.SaveImage(PictureBox2.Image, mov_FanartORExtrathumbPath)
-                Label16.Text = PictureBox2.Image.Width
-                Label17.Text = PictureBox2.Image.Height
-                If RadioButtonFanart.Checked Then ' i.e. this is a fanart task rather than an extrathumb task
-                    PictureBoxFanArt.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
-                    '                Rating1.PictureInit = PictureBoxFanArt.Image
+                lblMovFanartWidth.Text = PictureBox2.Image.Width
+                lblMovFanartHeight.Text = PictureBox2.Image.Height
+                If rbMovFanart.Checked Then ' i.e. this is a fanart task rather than an extrathumb task
+                    PbMovieFanArt.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
+                    '                Rating1.PictureInit = PbMovieFanArt.Image
                     For Each paths In Preferences.offlinefolders
                         If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                             Dim mediapath As String
@@ -16921,10 +16917,10 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btnMovFanartUrlorBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartUrlorBrowse.Click
         Try
             Dim t As New frmImageBrowseOrUrl
-            t.Location = Me.PointToScreen(New Point(Button1.Left - 460, Button1.Top + 30))
+            t.Location = Me.PointToScreen(New Point(btnMovFanartUrlorBrowse.Left - 460, btnMovFanartUrlorBrowse.Top + 30))
             t.ShowDialog()
             If t.DialogResult = Windows.Forms.DialogResult.Cancel Or t.tb_PathorUrl.Text = "" Then
                 t.Dispose()
@@ -16950,7 +16946,7 @@ End Sub
 
                 util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
 
-                util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
                 mov_SplitContainerAutoPosition()
             End If
@@ -16975,30 +16971,30 @@ End Sub
 
         If AssignClipboardImage(PictureBox2) Then
             btnSaveCropped.Enabled = True
-            Label16.Text = PictureBox2.Image.Width
-            Label17.Text = PictureBox2.Image.Height
+            lblMovFanartWidth.Text = PictureBox2.Image.Width
+            lblMovFanartHeight.Text = PictureBox2.Image.Height
         End If
 
     End Sub
 
-    Private Sub RadioButtonFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonFanart.CheckedChanged
-        If RadioButtonFanart.Checked Then mov_DisplayFanart()
+    Private Sub rbMovFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovFanart.CheckedChanged
+        If rbMovFanart.Checked Then mov_DisplayFanart()
     End Sub
 
-    Private Sub RadioButtonThumb1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb1.CheckedChanged
-        If RadioButtonThumb1.Checked Then mov_DisplayFanart()
+    Private Sub rbMovThumb1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovThumb1.CheckedChanged
+        If rbMovThumb1.Checked Then mov_DisplayFanart()
     End Sub
 
-    Private Sub RadioButtonThumb2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb2.CheckedChanged
-        If RadioButtonThumb2.Checked Then mov_DisplayFanart()
+    Private Sub rbMovThumb2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovThumb2.CheckedChanged
+        If rbMovThumb2.Checked Then mov_DisplayFanart()
     End Sub
 
-    Private Sub RadioButtonThumb3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb3.CheckedChanged
-        If RadioButtonThumb3.Checked Then mov_DisplayFanart()
+    Private Sub rbMovThumb3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovThumb3.CheckedChanged
+        If rbMovThumb3.Checked Then mov_DisplayFanart()
     End Sub
 
-    Private Sub RadioButtonThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb4.CheckedChanged
-        If RadioButtonThumb4.Checked Then mov_DisplayFanart()
+    Private Sub rbMovThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovThumb4.CheckedChanged
+        If rbMovThumb4.Checked Then mov_DisplayFanart()
     End Sub
 
     Private Sub BtnSearchGoogleFanart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSearchGoogleFanart.Click
@@ -17059,7 +17055,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button17.Click
+    Private Sub btn_IMDB_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_IMDB_posters.Click
         Try
             If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") Then
                 MsgBox("No IMDB ID" & vbCrLf & "Searching IMDB for Posters halted")
@@ -17091,7 +17087,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
+    Private Sub btnMovPosterNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterNext.Click
         Try
             For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
                 panelAvailableMoviePosters.Controls.RemoveAt(i)
@@ -17103,9 +17099,9 @@ End Sub
             messbox.Refresh()
             currentPage += 1
             If currentPage = pageCount Then
-                Button9.Enabled = False
+                btnMovPosterNext.Enabled = False
             End If
-            Button10.Enabled = True
+            btnMovPosterPrev.Enabled = True
             Dim tempint As Integer = (currentPage * (10) + 1) - 10
             Dim tempint2 As Integer = currentPage * 10
             If tempint2 > posterArray.Count Then
@@ -17115,7 +17111,7 @@ End Sub
             For f = tempint - 1 To tempint2 - 1
                 names.Add(posterArray(f).ldUrl)
             Next
-            Label18.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
+            lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
             Dim location As Integer = 0
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
@@ -17193,7 +17189,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button10.Click
+    Private Sub btnMovPosterPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterPrev.Click
         Try
             For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
                 panelAvailableMoviePosters.Controls.RemoveAt(i)
@@ -17205,9 +17201,9 @@ End Sub
             messbox.Refresh()
             currentPage -= 1
             If currentPage = 1 Then
-                Button10.Enabled = False
+                btnMovPosterPrev.Enabled = False
             End If
-            Button9.Enabled = True
+            btnMovPosterNext.Enabled = True
             Dim tempint As Integer = (currentPage * (10) + 1) - 10
             Dim tempint2 As Integer = currentPage * 10
             If tempint2 > posterArray.Count Then
@@ -17217,7 +17213,7 @@ End Sub
             For f = tempint - 1 To tempint2 - 1
                 names.Add(posterArray(f).ldUrl)
             Next
-            Label18.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
+            lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
             Dim location As Integer = 0
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
@@ -17471,7 +17467,7 @@ End Sub
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
                 updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
                 util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
-                util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
+                util_ImageLoad(PbMoviePoster, Paths(0), Utilities.DefaultPosterPath)
                 lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                 lblCurrentLoadedPoster.Refresh()
 
@@ -17489,7 +17485,7 @@ End Sub
         messbox.Close()
     End Sub
 
-    Private Sub Button20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button20.Click
+    Private Sub btnMovPosterURLorBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterURLorBrowse.Click
         Try
             Dim t As New frmImageBrowseOrUrl
             t.Location = Me.PointToScreen(New Point(gbMoviePosterSelection.Left + 10, gbMoviePosterSelection.Top + gbMoviePosterSelection.Height))
@@ -17515,7 +17511,7 @@ End Sub
                     tempstring = Paths(0).Replace(IO.Path.GetFileName(Paths(0)), "folder.jpg")
                     PictureBoxAssignedMoviePoster.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
                 End If
-                util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
+                util_ImageLoad(PbMoviePoster, Paths(0), Utilities.DefaultPosterPath)
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
                 updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
             Catch ex As Exception
@@ -17535,7 +17531,7 @@ End Sub
 
     Private Sub btnMoviePosterResetImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePosterResetImage.Click
         Try
-            PictureBoxAssignedMoviePoster.Image = moviethumb.Image
+            PictureBoxAssignedMoviePoster.Image = PbMoviePoster.Image
             btnMoviePosterResetImage.Enabled = False
             btnMoviePosterSaveCroppedImage.Enabled = False
             lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
@@ -17557,7 +17553,7 @@ End Sub
                 Next
                 bitmap3.Dispose()
                 GC.Collect()
-                util_ImageLoad(moviethumb, posterpath, Utilities.DefaultPosterPath) '.Image = bmp4
+                util_ImageLoad(PbMoviePoster, posterpath, Utilities.DefaultPosterPath) '.Image = bmp4
                 btnMoviePosterResetImage.Enabled = False
                 btnMoviePosterSaveCroppedImage.Enabled = False
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.posterpath)

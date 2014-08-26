@@ -1167,7 +1167,7 @@ Public Class frmCoverArt
                                 '    posterpath=frodopath
                                 'End If
                                 Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
-                                Form1.util_ImageLoad(Form1.moviethumb, posterpath, Utilities.DefaultPosterPath)
+                                Form1.util_ImageLoad(Form1.PbMoviePoster, posterpath, Utilities.DefaultPosterPath)
                                 Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
                                 'Form2.moviethumb.Image = b1.Image
                                 'Form1.moviethumb.Image = b1.Image
@@ -1268,7 +1268,7 @@ Public Class frmCoverArt
                                 '    posterpath=frodopath
                                 'End If
                                 Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
-                                Form1.util_ImageLoad(Form1.moviethumb, posterpath, Utilities.DefaultPosterPath)
+                                Form1.util_ImageLoad(Form1.PbMoviePoster, posterpath, Utilities.DefaultPosterPath)
                                 Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
                                 'Form2.moviethumb.Image = b1.Image
                                 'Form1.moviethumb.Image = b1.Image
@@ -1357,7 +1357,7 @@ Public Class frmCoverArt
                 mainposter.Image = New System.Drawing.Bitmap(ImageStream)
                 mainposter.Image.Save(posterpath)
                 Form2.moviethumb.Image = mainposter.Image
-                Form1.moviethumb.Image = mainposter.Image
+                Form1.PbMoviePoster.Image = mainposter.Image
             Catch ex As Exception
                 MsgBox("Unable To Download Image")
             End Try

@@ -394,7 +394,7 @@ Public Class Form2
     Private Sub btnresetimage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnresetimage.Click
         Try
             thumbeditsmade = False
-            moviethumb.Image = Form1.moviethumb.Image
+            moviethumb.Image = Form1.PbMoviePoster.Image
             btnresetimage.Enabled = False
             btnSaveCropped.Enabled = False
         Catch ex As Exception
@@ -409,7 +409,7 @@ Public Class Form2
             tempstring = Form1.workingMovieDetails.fileinfo.posterpath
             Dim stream As New System.IO.MemoryStream
             moviethumb.Image.Save(tempstring, System.Drawing.Imaging.ImageFormat.Jpeg)
-            Form1.moviethumb.Image = moviethumb.Image
+            Form1.PbMoviePoster.Image = moviethumb.Image
             btnresetimage.Enabled = False
             btnSaveCropped.Enabled = False
         Catch ex As Exception
