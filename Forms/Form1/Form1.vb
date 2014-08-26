@@ -13082,14 +13082,7 @@ End Sub
             If generalprefschanged = True Then
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
-                    Preferences.SaveConfig()
-
-                    If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
-                    '    oMovies.LoadMovieCache
-                    '    UpdateFilteredList
-                        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-                    End If
-                    
+                    btnGeneralPrefsSaveChanges.PerformClick 
                     MsgBox("Changes Saved")
                 Else
                     Me.util_ConfigLoad(True)
@@ -13112,80 +13105,56 @@ End Sub
     End Sub
 
     Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
-        Try
-            Preferences.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
+        Preferences.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
 
-            Preferences.SaveConfig()
+        Preferences.SaveConfig()
 
-            If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
-            '    oMovies.LoadMovieCache
-            '    UpdateFilteredList
-                Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            End If
+        If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        End If
 
-            generalprefschanged = False
-            btnGeneralPrefsSaveChanges.Enabled = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        generalprefschanged = False
+        btnGeneralPrefsSaveChanges.Enabled = False
     End Sub
 
 #Region "General"
 
     Private Sub RadioButton38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton38.CheckedChanged
-        Try
-            If RadioButton38.Checked = True Then
-                Preferences.videomode = 1
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If RadioButton38.Checked = True Then
+            Preferences.videomode = 1
+        End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton37_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton37.CheckedChanged
-        Try
-            If RadioButton37.Checked = True Then
-                Preferences.videomode = 2
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If RadioButton37.Checked = True Then
+            Preferences.videomode = 2
+        End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton36_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton36.CheckedChanged
-        Try
-            If RadioButton36.Checked = True Then
-                Preferences.videomode = 4
-                btn_custommediaplayer.Enabled = True
-                Label121.Visible = True
-                If Preferences.selectedvideoplayer <> Nothing Then
-                    If Preferences.selectedvideoplayer <> "" Then
-                        Label121.Text = Preferences.selectedvideoplayer
-                    Else
-                        Label121.Text = ""
-                    End If
+        If RadioButton36.Checked = True Then
+            Preferences.videomode = 4
+            btn_custommediaplayer.Enabled = True
+            Label121.Visible = True
+            If Preferences.selectedvideoplayer <> Nothing Then
+                If Preferences.selectedvideoplayer <> "" Then
+                    Label121.Text = Preferences.selectedvideoplayer
                 Else
                     Label121.Text = ""
                 End If
             Else
-                Label121.Visible = False
-                btn_custommediaplayer.Enabled = False
+                Label121.Text = ""
             End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Else
+            Label121.Visible = False
+            btn_custommediaplayer.Enabled = False
+        End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub btn_custommediaplayer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_custommediaplayer.Click
@@ -13249,19 +13218,11 @@ End Sub
     End Sub
 
     Private Sub CheckBox33_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox33.CheckedChanged
-        Try
-            If CheckBox33.Checked = True Then
-                Preferences.actorseasy = True
-            Else
-                Preferences.actorseasy = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.actorseasy = CheckBox33.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub Button96_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button96.Click
@@ -13313,30 +13274,30 @@ End Sub
     End Sub
 
     Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_pre.CheckedChanged
-        If rbXBMCv_pre.Checked Then
-            Preferences.XBMC_version = 0
-        End If
         If prefsload = False Then
+            If rbXBMCv_pre.Checked Then
+                Preferences.XBMC_version = 0
+            End If
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
-        If rbXBMCv_post.Checked Then
-            Preferences.XBMC_version = 2
-        End If
         If prefsload = False Then
+            If rbXBMCv_post.Checked Then
+                Preferences.XBMC_version = 2
+            End If
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
-        If rbXBMCv_both.Checked Then
-            Preferences.XBMC_version = 1
-        End If
         If prefsload = False Then
+            If rbXBMCv_both.Checked Then
+                Preferences.XBMC_version = 1
+            End If
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
@@ -13386,113 +13347,60 @@ End Sub
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
-        Try
-            If CheckBox38.Checked = True Then
-                Preferences.intruntime = True
-            Else
-                Preferences.intruntime = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.intruntime = CheckBox38.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cb_IgnoreThe_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreThe.CheckedChanged
-        Try
-            If cb_IgnoreThe.CheckState = CheckState.Checked Then
-                Preferences.ignorearticle = True
-            Else
-                Preferences.ignorearticle = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.ignorearticle = cb_IgnoreThe.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cb_IgnoreA_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreA.CheckedChanged
-        Try
-            If cb_IgnoreA.CheckState = CheckState.Checked Then
-                Preferences.ignoreAarticle = True
-            Else
-                Preferences.ignoreAarticle = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.ignoreAarticle = cb_IgnoreA.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreAn.CheckedChanged
-        Try
-            If cb_IgnoreAn.CheckState = CheckState.Checked Then
-                Preferences.ignoreAn = True
-            Else
-                Preferences.ignoreAn = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.ignoreAn = cb_IgnoreAn.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
-        Try
-            If cb_SorttitleIgnoreArticles.CheckState = CheckState.Checked Then
-                Preferences.sorttitleignorearticle = True
-            Else
-                Preferences.sorttitleignorearticle = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
-        Try
-            If cbOverwriteArtwork.CheckState = CheckState.Checked Then
-                Preferences.overwritethumbs = False
-            Else
-                Preferences.overwritethumbs = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
         If prefsload = False Then
+            Preferences.overwritethumbs = Not cbOverwriteArtwork.Checked
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
-        Try
-            Preferences.externalbrowser = cbExternalbrowser.Checked
-            btnFindBrowser.Enabled      = cbExternalbrowser.Checked
-
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.externalbrowser = cbExternalbrowser.Checked
+        btnFindBrowser.Enabled      = cbExternalbrowser.Checked
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) Handles btnFindBrowser.Click
@@ -13515,16 +13423,11 @@ End Sub
     End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
-        Try
+        If prefsload = False Then
             Preferences.startupCache = Not chkbx_disablecache.Checked
-
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
@@ -13548,19 +13451,11 @@ End Sub
     End Sub
 
     Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
-        Try
-            If cbDisplayLocalActor.Checked = True Then
-                Preferences.LocalActorImage = True
-            Else
-                Preferences.LocalActorImage = False
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-
-        End Try
+        If prefsload = False Then
+            Preferences.LocalActorImage = cbDisplayLocalActor.Checked = True
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
@@ -13574,27 +13469,19 @@ End Sub
     End Sub
 
     Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
-        Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
         If prefsload = False Then
+            Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
-        Try
-            If CheckBoxRenameNFOtoINFO.Checked = False Then
-                Preferences.renamenfofiles = False
-            Else
-                Preferences.renamenfofiles = True
-            End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload = False Then
+            Preferences.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
@@ -13627,33 +13514,21 @@ End Sub
                 Dim tempstring2 As String = applicationPath & "\Settings\"
                 Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
                 Dim actorcachepath As String = tempstring2 & "actorcache" & f.ToString & ".xml"
+                Dim directorcachepath As String = tempstring2 & "directorcache" & f.ToString & ".xml"
                 Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".xml"
                 Dim moviecachepath As String = tempstring2 & "moviecache" & f.ToString & ".xml"
                 Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
                 Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
                 Dim musicvideocachepath As String = tempstring2 & "musicvideocache" & f.ToString & ".xml"
                 Dim ok As Boolean = True
-                If IO.File.Exists(configpath) Then
-                    ok = False
-                End If
-                If IO.File.Exists(actorcachepath) Then
-                    ok = False
-                End If
-                If IO.File.Exists(filterspath) Then
-                    ok = False
-                End If
-                If IO.File.Exists(moviecachepath) Then
-                    ok = False
-                End If
-                If IO.File.Exists(regexpath) Then
-                    ok = False
-                End If
-                If IO.File.Exists(tvcachepath) Then
-                    ok = False
-                End If
-                If IO.File.Exists(musicvideocachepath) Then
-                    ok = False
-                End If
+                If File.Exists(configpath) Then ok = False
+                If File.Exists(actorcachepath) Then ok = False
+                If File.Exists(directorcachepath) Then ok = False
+                If File.Exists(filterspath) Then ok = False
+                If File.Exists(moviecachepath) Then ok = False
+                If File.Exists(regexpath) Then ok = False
+                If File.Exists(tvcachepath) Then ok = False
+                If File.Exists(musicvideocachepath) Then ok = False
                 If ok = True Then
                     tempint = f
                     Exit For
@@ -13695,34 +13570,14 @@ End Sub
             profiletoadd.ProfileName = TextBox42.Text
             profileStruct.ProfileList.Add(profiletoadd)
 
-            If System.IO.File.Exists(moviecachetocopy) = True Then
-                System.IO.File.Copy(moviecachetocopy, profiletoadd.MovieCache)
-            End If
-
-            If System.IO.File.Exists(musicvideocachetocopy) = True Then
-                System.IO.File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
-            End If
-
-            If System.IO.File.Exists(actorcachetocopy) = True Then
-                System.IO.File.Copy(actorcachetocopy, profiletoadd.ActorCache)
-            End If
-
-            If System.IO.File.Exists(directorcachetocopy) = True Then
-                System.IO.File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
-            End If
-
-            If System.IO.File.Exists(tvcachetocopy) = True Then
-                System.IO.File.Copy(tvcachetocopy, profiletoadd.TvCache)
-            End If
-            If System.IO.File.Exists(configtocopy) = True Then
-                System.IO.File.Copy(configtocopy, profiletoadd.Config)
-            End If
-            If System.IO.File.Exists(filterstocopy) = True Then
-                System.IO.File.Copy(filterstocopy, profiletoadd.Filters)
-            End If
-            If System.IO.File.Exists(regextocopy) = True Then
-                System.IO.File.Copy(regextocopy, profiletoadd.RegExList)
-            End If
+            If File.Exists(moviecachetocopy) = True Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
+            If File.Exists(musicvideocachetocopy) = True Then File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
+            If File.Exists(actorcachetocopy) = True Then File.Copy(actorcachetocopy, profiletoadd.ActorCache)
+            If File.Exists(directorcachetocopy) = True Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
+            If File.Exists(tvcachetocopy) = True Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
+            If File.Exists(configtocopy) = True Then File.Copy(configtocopy, profiletoadd.Config)
+            If File.Exists(filterstocopy) = True Then File.Copy(filterstocopy, profiletoadd.Filters)
+            If File.Exists(regextocopy) = True Then File.Copy(regextocopy, profiletoadd.RegExList)
             ListBox13.Items.Add(TextBox42.Text)
             Call util_ProfileSave()
             done = True
@@ -13782,56 +13637,52 @@ End Sub
             If tempint = DialogResult.Yes Then
                 Dim tempint2 As Integer = 0
                 For f = 0 To profileStruct.ProfileList.Count - 1
-
                     If profileStruct.profilelist(f).ProfileName = ListBox13.SelectedItem Then
                         tempint2 = f
-
                         Try
-                            IO.File.Delete(profileStruct.profilelist(f).ActorCache)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-
-                        Try
-                            IO.File.Delete(profileStruct.profilelist(f).DirectorCache)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-
-                        Try
-                            IO.File.Delete(profileStruct.profilelist(f).Config)
+                            File.Delete(profileStruct.profilelist(f).ActorCache)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                         End Try
                         Try
-                            IO.File.Delete(profileStruct.profilelist(f).Filters)
+                            File.Delete(profileStruct.profilelist(f).DirectorCache)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                         End Try
                         Try
-                            IO.File.Delete(profileStruct.profilelist(f).MovieCache)
+                            File.Delete(profileStruct.profilelist(f).Config)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                         End Try
                         Try
-                            IO.File.Delete(profileStruct.profilelist(f).RegExList)
+                            File.Delete(profileStruct.profilelist(f).Filters)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                         End Try
                         Try
-                            IO.File.Delete(profileStruct.profilelist(f).TvCache)
+                            File.Delete(profileStruct.profilelist(f).MovieCache)
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                        End Try
+                        Try
+                            File.Delete(profileStruct.profilelist(f).RegExList)
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                        End Try
+                        Try
+                            File.Delete(profileStruct.profilelist(f).TvCache)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -13881,7 +13732,6 @@ End Sub
                 Preferences.commandlist.Add(newcom)
                 ListBox16.Items.Add(newcom.title)
                 ListBox17.Items.Add(newcom.command)
-                'ToolsToolStripMenuItem.DropDownItems.Clear()
                 Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
                 For i = x-1 To MCToolsCommands Step -1
                     ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
@@ -13931,7 +13781,6 @@ End Sub
                 Next
                 ListBox16.Items.Clear()
                 ListBox17.Items.Clear()
-                'ToolsToolStripMenuItem.DropDownItems.Clear()
                 Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
                 For i = x-1 To MCToolsCommands Step -1
                     ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
