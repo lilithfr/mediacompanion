@@ -12742,6 +12742,8 @@ End Sub
         btnFindBrowser              .Enabled    = cbExternalbrowser.Checked
         tbaltnfoeditor              .Text       = Preferences.altnfoeditor 
         cbCheckForNewVersion        .Checked    = Preferences.CheckForNewVersion
+        cbDisplayRatingOverlay      .Checked    = Preferences.DisplayRatingOverlay
+        cbDisplayMediaInfoOverlay   .Checked    = Preferences.DisplayMediainfoOverlay 
 
         If Preferences.videomode = 1 Then
             RadioButton38.Checked = True
@@ -13475,6 +13477,22 @@ End Sub
     Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
         If prefsload = False Then
             Preferences.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
+    End Sub
+
+    Private Sub cbDisplayRatingOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayRatingOverlay.CheckedChanged
+        If prefsload = False Then
+            Preferences.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
+    End Sub
+
+    Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
+        If prefsload = False Then
+            Preferences.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If

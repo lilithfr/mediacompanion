@@ -140,6 +140,8 @@ Public Class Preferences
     Public Shared XBMC_version As Byte
     Public Shared ShowMovieGridToolTip As Boolean = False
     Public Shared ShowLogOnError As Boolean = True
+    Public Shared DisplayRatingOverlay As Boolean
+    Public Shared DisplayMediainfoOverlay As Boolean
     Public Shared font As String
     Private Shared _MkvMergeGuiPath As String
 
@@ -503,6 +505,8 @@ Public Class Preferences
         formheight = "600"
         formwidth = "800"
         disablelogfiles = False
+        DisplayRatingOverlay = True
+        DisplayMediainfoOverlay = True
         incmissingmovies = False
         startupCache = True
         rarsize = 8
@@ -933,6 +937,8 @@ Public Class Preferences
         root.AppendChild(doc, "NoAltTitle",                         NoAltTitle)                         'cbNoAltTitle
         root.AppendChild(doc, "XtraFrodoUrls",                      XtraFrodoUrls)                      'cbXtraFrodoUrls
         root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
+        root.AppendChild(doc, "DisplayRatingOverlay",               DisplayRatingOverlay)               'cbDisplayRatingOverlay
+        root.AppendChild(doc, "DisplayMediainfoOverlay",            DisplayMediainfoOverlay)            'cbDisplayMediainfoOverlay
         root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'CheckBox13
         root.AppendChild(doc, "fanartjpg",                          fanartjpg)                          'cbMovieFanartInFolders
@@ -1309,6 +1315,8 @@ Public Class Preferences
                     Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 
                     Case "XtraFrodoUrls"                        : XtraFrodoUrls = thisresult.InnerXml
                     Case "disablelogs"                          : disablelogfiles = thisresult.InnerXml
+                    Case "DisplayRatingOverlay"                 : DisplayRatingOverlay = thisresult.InnerXml
+                    Case "DisplayMediainfoOverlay"              : DisplayMediainfoOverlay = thisresult.InnerXml
                     Case "incmissingmovies"                     : incmissingmovies = thisresult.InnerText
                     Case "disabletvlogs"                        : disabletvlogs = thisresult.InnerXml
                     Case "folderjpg"                            : createfolderjpg = thisresult.InnerXml
