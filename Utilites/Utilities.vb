@@ -123,11 +123,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared tvScraperLog As String = ""
 
-    Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String)
+    Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String, Optional ByVal altnfoeditor As String = "")
         Try
             Dim npapp As String = "notepad"    'Tweaked to use Notepad++ if installed.
             Dim np As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\notepad++\notepad++.exe"
             If File.Exists(np) Then npapp = "notepad++"
+            If altnfoeditor <> "" AndAlso File.Exists(altnfoeditor) Then npapp = altnfoeditor 
             Dim thePSI As New System.Diagnostics.ProcessStartInfo(npapp)
             thePSI.Arguments = """" & nfopath & """"
             System.Diagnostics.Process.Start(thePSI)

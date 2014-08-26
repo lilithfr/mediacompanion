@@ -131,6 +131,7 @@ Public Class Preferences
     Public Shared selectedvideoplayer As String
     Public Shared externalbrowser As Boolean
     Public Shared selectedBrowser As String
+    Public Shared altnfoeditor As String
     Public Shared ignorearticle As Boolean
     Public Shared ignoreAarticle As Boolean
     Public Shared ignoreAn As Boolean 
@@ -230,6 +231,7 @@ Public Class Preferences
     Public Shared MovSortIgnArticle As Boolean
     Public Shared MovTitleIgnArticle As Boolean
     Public Shared MovTitleCase As Boolean
+    Public Shared ExcludeMpaaRated As Boolean
     Public Shared MovieImdbGenreRegEx As String
     Public Shared showsortdate As Boolean
     Public Shared TMDbSelectedLanguageName As String = "English - US"
@@ -495,6 +497,7 @@ Public Class Preferences
         sorttitleignorearticle = False
         externalbrowser = False
         selectedBrowser = ""
+        altnfoeditor = ""
         backgroundcolour = "Silver"
         forgroundcolour = "#D3D9DC"
         formheight = "600"
@@ -567,6 +570,7 @@ Public Class Preferences
         MovSortIgnArticle = False
         MovTitleIgnArticle = False
         MovTitleCase = False
+        ExcludeMpaaRated = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
         MovFiltLastSize = 384
@@ -851,6 +855,7 @@ Public Class Preferences
         root.AppendChild(doc, "selectedvideoplayer",    selectedvideoplayer)    'btn_custommediaplayer
         root.AppendChild(doc, "externalbrowser",        externalbrowser)        'CheckBox12
         root.AppendChild(doc, "selectedBrowser",        selectedBrowser)        'btnFindBrowser
+        root.AppendChild(doc, "altnfoeditor",           altnfoeditor)           'btnaltnfoeditor
         root.AppendChild(doc, "ignorearticle",          ignorearticle)          'cb_IgnoreThe
         root.AppendChild(doc, "ignoreAarticle",         ignoreAarticle)         'cb_IgnoreA
         root.AppendChild(doc, "ignoreAn",               ignoreAn)               'cb_IgnoreAn
@@ -952,6 +957,7 @@ Public Class Preferences
         root.AppendChild(doc, "MovSortIgnArticle",                  MovSortIgnArticle)                  'cbMovSortIgnArticle
         root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
         root.AppendChild(doc, "MovTitleCase",                       MovTitleCase)                       'cbMovTitleCase
+        root.AppendChild(doc, "ExcludeMpaaRated",                   ExcludeMpaaRated)                   'cbExcludeMpaaRated
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
         root.AppendChild(doc, "moviePreferredHDTrailerResolution",  moviePreferredTrailerResolution)    'cbPreferredTrailerResolution
         root.AppendChild(doc, "GetMovieSetFromTMDb",                GetMovieSetFromTMDb)                'cbGetMovieSetFromTMDb
@@ -1319,6 +1325,7 @@ Public Class Preferences
                     Case "alwaysuseimdbid"                      : alwaysuseimdbid = thisresult.InnerXml
                     Case "externalbrowser"                      : externalbrowser = thisresult.InnerXml
                     Case "selectedBrowser"                      : selectedBrowser = thisresult.InnerXml
+                    Case "altnfoeditor"                         : altnfoeditor = thisresult.InnerXml
                     Case "tvrename"                             : tvrename = Convert.ToInt32(thisresult.InnerText)
                     Case "tvshowrefreshlog"                     : tvshowrefreshlog = thisresult.InnerXml
                     Case "autorenameepisodes"                   : autorenameepisodes = thisresult.InnerXml
@@ -1336,7 +1343,8 @@ Public Class Preferences
                     Case "MovSetIgnArticle"                     : MovSetIgnArticle = thisresult.InnerXml 
                     Case "MovSortIgnArticle"                    : MovSortIgnArticle = thisresult.InnerXml 
                     Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml
-                    Case "MovTitleCase"                         : MovTitleCase = thisresult.InnerXml 
+                    Case "MovTitleCase"                         : MovTitleCase = thisresult.InnerXml
+                    Case "ExcludeMpaaRated"                     : ExcludeMpaaRated = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml
                     Case "moviePreferredHDTrailerResolution"    : moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()

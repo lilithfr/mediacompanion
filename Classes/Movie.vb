@@ -1067,8 +1067,11 @@ Public Class Movie
                 End If
             End If
         End If
-        If _scrapedMovie.fullmoviebody.mpaa <> "" AndAlso Not _scrapedMovie.fullmoviebody.mpaa.ToLower.Contains("rated") Then
-            _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
+        If Not Preferences.ExcludeMpaaRated Then
+            Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
+            If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
+                _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
+            End If
         End If
 
     End Sub
@@ -1393,12 +1396,12 @@ Public Class Movie
             Next
             If done = True Then Exit For
         Next
-        'If Preferences.movies_useXBMC_Scraper Then
-        '    tmdb.Imdb = If(_possibleImdb.Contains("tt"), _possibleImdb, _scrapedMovie.fullmoviebody.imdbid)
-        '    Dim _mpaa = tmdb.Certification 
-        '    If Not _mpaa.ToLower.Contains("rated") Then _mpaa = "Rated " & _mpaa
-        '    _scrapedMovie.fullmoviebody.mpaa = _mpaa 
-        'End If
+        If Not Preferences.ExcludeMpaaRated Then
+            Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
+            If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
+                _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
+            End If
+        End If
         If Not Preferences.MusicVidScrape Then
             If Rescrape Then
                 _scrapedMovie.fullmoviebody.source = _previousCache.source

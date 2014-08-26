@@ -2794,7 +2794,7 @@ Public Class Form1
 
     Private Sub Mov_OpenFileToolStripMenuItem2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripViewNfo.Click
         Try
-            Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename)
+            Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -11381,11 +11381,11 @@ End Sub
         Try
             If TvTreeview.SelectedNode Is Nothing Then Exit Sub
             If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvShow).NfoFilePath)
+                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvShow).NfoFilePath, Preferences.altnfoeditor)
             ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
                 MsgBox("A Season NFO is invalid so it can't be shown")
             ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).NfoFilePath)
+                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).NfoFilePath, Preferences.altnfoeditor)
             Else
                 MsgBox("None")
             End If
@@ -11850,7 +11850,7 @@ End Sub
 
     Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
         Try
-            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename)
+            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -12727,7 +12727,6 @@ End Sub
         Label130.Font = newFont
         Label130.Text = Preferences.font
 
-'        chkbx_disablecache.CheckState      = If(Preferences.startupCache, CheckState.Checked, CheckState.Unchecked)
         chkbx_disablecache.Checked          = Not Preferences.startupCache
 
         cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.UnChecked, CheckState.checked)
@@ -12741,11 +12740,11 @@ End Sub
         CheckBox38.CheckState               = If(Preferences.intruntime, CheckState.Checked, CheckState.Unchecked)
         CheckBox33.CheckState               = If(Preferences.actorseasy, CheckState.Checked, CheckState.Unchecked)
 
-        txtbx_minrarsize.Text               = Preferences.rarsize.ToString
-        cbExternalbrowser.Checked           = Preferences.externalbrowser
-        btnFindBrowser.Enabled              = cbExternalbrowser.Checked
-
-        cbCheckForNewVersion.Checked        = Preferences.CheckForNewVersion
+        txtbx_minrarsize            .Text       = Preferences.rarsize.ToString
+        cbExternalbrowser           .Checked    = Preferences.externalbrowser
+        btnFindBrowser              .Enabled    = cbExternalbrowser.Checked
+        tbaltnfoeditor              .Text       = Preferences.altnfoeditor 
+        cbCheckForNewVersion        .Checked    = Preferences.CheckForNewVersion
 
         If Preferences.videomode = 1 Then
             RadioButton38.Checked = True
@@ -12931,6 +12930,7 @@ End Sub
         cbMovSortIgnArticle         .Checked        = Preferences.MovSortIgnArticle
         cbMovTitleIgnArticle        .Checked        = Preferences.MovTitleIgnArticle
         cbMovTitleCase              .Checked        = Preferences.MovTitleCase
+        cbExcludeMpaaRated          .Checked        = Preferences.ExcludeMpaaRated
         cbRenameUnderscore          .Checked        = Preferences.MovRenameUnderscore
         CheckBox_ShowDateOnMovieList.Checked        = Preferences.showsortdate
         cbImdbgetTMDBActor          .Checked        = Preferences.TmdbActorsImdbScrape
@@ -13361,6 +13361,28 @@ End Sub
 
     Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles llMkvMergeGuiPath.Click
         OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
+    End Sub
+
+    Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) Handles lblaltnfoeditorclear.Click
+        tbaltnfoeditor.Text = ""
+        Preferences.altnfoeditor = ""
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub btnaltnfoeditor_Click( sender As Object,  e As EventArgs) Handles btnaltnfoeditor.Click
+        Dim ofd As New OpenFileDialog
+        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+        ofd.Filter           = "Executable Files|*.exe"
+        ofd.Title            = "Locate Alternative nfo viewer-editor"
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then 
+            Preferences.altnfoeditor = ofd.FileName
+            tbaltnfoeditor.Text = Preferences.altnfoeditor 
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
+        End If
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
@@ -15643,17 +15665,15 @@ End Sub
     End Sub
 
     Private Sub cbMovTitleCase_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleCase.CheckedChanged
-        Try
-            If cbMovTitleCase.CheckState = CheckState.Checked Then
-                Preferences.MovTitleCase = True
-            Else
-                Preferences.MovTitleCase = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.MovTitleCase = cbMovTitleCase.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
+        Preferences.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbNoAltTitle.CheckedChanged
@@ -18329,7 +18349,6 @@ End Sub
 
 #End Region   'Controls for Movie Folders tab
 
-
 #Region "Tv Browser Form"
 
     Private Sub TvTreeview_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.DoubleClick
@@ -18748,7 +18767,7 @@ End Sub
                 actorflag = True
                 cbTvActorRole.SelectedIndex = cbTvActor.SelectedIndex
                 Call tv_ActorDisplay()
-                cbTvActor.Focus()
+                'cbTvActor.Focus()
             Else
                 actorflag = False
             End If
@@ -18771,7 +18790,7 @@ End Sub
                 actorflag = True
                 cbTvActor.SelectedIndex = cbTvActorRole.SelectedIndex
                 Call tv_ActorRoleDisplay()
-                cbTvActorRole.Focus()
+                'cbTvActorRole.Focus()
             Else
                 actorflag = False
             End If
