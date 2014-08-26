@@ -8114,74 +8114,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
-        Try
-            'Dim allok As Boolean = True
-            'If TabPage23.Text <> "Folders" Then
-            '    Exit Sub
-            'End If
-            'If tvFolders.Count <> ListBox6.Items.Count Then allok = False
-            'If tvRootFolders.Count <> ListBox5.Items.Count Then allok = False
-            'If allok = True Then
-            '    Dim templist As New List(Of String)
-            '    templist.Clear()
-            '    For Each item In ListBox5.Items
-            '        templist.Add(item)
-            '    Next
-            '    For Each item In tvRootFolders
-            '        If Not templist.Contains(item) Then
-            '            allok = False
-            '            Exit For
-            '        End If
-            '    Next
-            'End If
-            'If allok = True Then
-            '    Dim templist As New List(Of String)
-            '    templist.Clear()
-            '    For Each item In ListBox6.Items
-            '        templist.Add(item)
-            '    Next
-            '    For Each item In tvFolders
-            '        If Not templist.Contains(item) Then
-            '            allok = False
-            '            Exit For
-            '        End If
-            '    Next
-            'End If
-            'If allok = False Then
-            '    Dim tempint As Integer = MessageBox.Show("There appears to be unsaved changes to your folderlists," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            '    If tempint = DialogResult.Yes Then
-            '        tvFolders.Clear()
-            '        For Each item In ListBox6.Items
-            '            If Not newTvFolders.Contains(item) Then
-            '                tvFolders.Add(item)
-            '            End If
-            '        Next
-            '        tvRootFolders.Clear()
-            '        For Each item In ListBox5.Items
-            '            tvRootFolders.Add(item)
-            '        Next
-            '        Dim save As New Preferences
-            '        Call save.saveconfig()
-            '        Call updatetree()
-            '        If newTvFolders.Count = 0 Then
-            '            MsgBox("Changes Saved")
-            '        Else
-            '            MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
-            '            If Not bckgrnd_tvshowscraper.IsBusy Then
-            '                bckgrnd_tvshowscraper.RunWorkerAsync()
-            '            End If
-            '        End If
-            '    Else
-            '        Dim load As New Preferences
-            '        Call load.loadconfig()
-            '    End If
-            'End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
+    
 
     Public Sub tv_ShowFind(ByVal rootfolders As List(Of String), Optional ByVal skiplistboxchk As Boolean = True)
         Dim Folders As List(Of String)
@@ -8359,6 +8292,7 @@ Public Class Form1
                     workingProfile.config = prof.config
                     workingProfile.filters = prof.filters
                     workingProfile.moviecache = prof.moviecache
+                    workingProfile.MusicVideoCache = prof.MusicVideoCache 
                     workingProfile.profilename = prof.profilename
                     workingProfile.regexlist = prof.regexlist
                     workingProfile.tvcache = prof.tvcache
@@ -13683,6 +13617,13 @@ End Sub
                         End Try
                         Try
                             File.Delete(profileStruct.profilelist(f).MovieCache)
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                        End Try
+                        Try
+                            File.Delete(profileStruct.profilelist(f).MusicVideoCache)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -19652,6 +19593,27 @@ End Sub
 #End Region
 
 #Region "Tv Folders Form"
+
+    'Private Sub TabPage23_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Enter
+    '    tvfolderschanged = False
+    'End Sub
+
+    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
+        Try
+            If tvfolderschanged Then
+                Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
+                If save = DialogResult.Yes Then
+                    btn_TvFoldersSave.PerformClick()
+                Else
+                    btn_TvFoldersUndo.PerformClick()
+                End If
+                tvfolderschanged = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
 
     Private Sub btn_TvFoldersRootAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootAdd.Click
         Try
