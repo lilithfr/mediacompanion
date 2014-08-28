@@ -32,7 +32,7 @@ Public Class MovieRegExs
     Public Const REGEX_TR                  = "<tr.*?>(.*?)</tr>"
     Public Const REGEX_ACTOR_NO_IMAGE      = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_ACTOR_WITH_IMAGE    = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
-    Public Const REGEX_IMDB_KEYWORD             = "ttkw_kw_[0-9]*"" >(?<keyword>.*?)<\/a"
+    Public Const REGEX_IMDB_KEYWORD        = "ttkw_kw_[0-9]*"">(?<keyword>.*?)<\/a"
 End Class
 
 
@@ -1741,7 +1741,7 @@ Public Class Classimdb
                             Exit For
                         End If
                         If webpage(g).IndexOf("<td><a href=") <>-1 Then
-                            wbpage &= webpage(g).TrimStart 
+                            wbpage &= webpage(g).TrimStart & webpage(g+1)
                         End If
                     Next
                 End If
@@ -1765,7 +1765,7 @@ Public Class Classimdb
         Return keywd
     End Function
 
-    Public Function GetTmdbkeywords(ByVal ID As Integer, ByVal keylimit As Integer) As List(Of String)
+    Public Function GetTmdbkeywords(ByVal ID As String, ByVal keylimit As Integer) As List(Of String)
         Dim keywd As New List(Of String)
         Try
             Dim url As String = String.Format("http://api.themoviedb.org/3/movie/{0}/keywords?api_key=57983e31fb435df4df77afb854740ea9&language={1}", Id, TMDb.LanguageCodes(0))
