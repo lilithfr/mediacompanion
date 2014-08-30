@@ -10422,12 +10422,12 @@ End Sub
                                                 editshow.Premiered.Value = thisresult.InnerText
                                             End If
                                         Case "genre"
-                                            Dim newstring As String
-                                            newstring = thisresult.InnerText
-                                            newstring = newstring.TrimEnd("|")
-                                            newstring = newstring.TrimStart("|")
-                                            newstring = newstring.Replace("|", " / ")
                                             If tvBatchList.shGenre = True Then
+                                                Dim newstring As String
+                                                newstring = thisresult.InnerText
+                                                newstring = newstring.TrimEnd("|")
+                                                newstring = newstring.TrimStart("|")
+                                                newstring = newstring.Replace("|", " / ")
                                                 editshow.Genre.Value = newstring
                                             End If
                                         Case "imdbid"
