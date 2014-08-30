@@ -36,6 +36,8 @@ Public Class RescrapeList
     Property Convert_To_Frodo    As Boolean
     Property EmptyMainTags       As Boolean
     Property TagsFromKeywords    As Boolean
+    Property SetWatched          As Boolean
+    Property ClearWatched        As Boolean
 
     Sub New
     End Sub

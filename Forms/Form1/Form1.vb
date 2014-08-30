@@ -12602,6 +12602,15 @@ End Sub
         Call mov_ScrapeSpecific("tmdb_set_name")
     End Sub
 
+    Private Sub tsmiSetWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiSetWatched.Click
+        Call mov_ScrapeSpecific("SetWatched")
+    End Sub
+
+    Private Sub tsmiClearWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiClearWatched.Click
+        Call mov_ScrapeSpecific("ClearWatched")
+    End Sub
+
+
     Private Sub tsmiDlTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiDlTrailer.Click
         Call mov_ScrapeSpecific("Download_Trailer")
     End Sub

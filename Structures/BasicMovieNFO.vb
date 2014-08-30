@@ -66,4 +66,13 @@ Public Structure str_BasicMovieNFO
         album = ""
         artist = ""
     End Sub
+
+    Sub ClearWatched()
+        playcount = "0"
+    End Sub 
+
+    Sub SetWatched()
+        playcount = "1"
+    End Sub 
+
 End Structure

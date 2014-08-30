@@ -2883,6 +2883,10 @@ Public Class Movie
 
         If rl.Convert_To_Frodo Then ConvertToFrodo()
 
+        If rl.SetWatched       Then _scrapedMovie.fullmoviebody.SetWatched  ()
+        If rl.ClearWatched     Then _scrapedMovie.fullmoviebody.ClearWatched()
+
+
         AssignMovieToCache()
         '		AssignMovieToAddMissingData
         HandleOfflineFile()             ' Do we need this?
@@ -3789,5 +3793,6 @@ Public Class Movie
             End If
         End If
     End Sub
+
 
 End Class
