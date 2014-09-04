@@ -1050,33 +1050,6 @@ Public Class Movies
     End Sub
 
 
-    Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
-        Dim i=0
-        Dim NfoFileList As New List(Of String)
-        
-        For Each item In NfoFilenames
-            If IO.File.Exists(item) Then
-                NfoFileList.Add(item)
-            Else
-                ReportProgress("Could Not find " & item & vbCrLf & "Please Refresh All Movies before running Batch Rescraper Wizard" )
-            End If
-        Next
-
-        If NfoFilenames.count <> NfoFileList.count Then NfoFilenames = NfoFileList
-        For Each item In NfoFilenames
-            i += 1
-            PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-            Dim movie = New Movie(Me,item)
-            AddMovieEventHandlers   ( movie )
-            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " [" & movie.Title & "] ")
-            movie.Scraped=False
-            movie.RescrapeSpecific  ( rl    )
-            RemoveMovieEventHandlers( movie )
-            If Cancelled then Exit For
-        Next
-        SaveCaches
-    End Sub
-
     Sub RescrapeAll( NfoFilenames As List(Of String) )
         Dim i=0
         ReportProgress(,"!!! Rescraping all data for:" & vbCrLf & vbCrLf )
@@ -1107,9 +1080,33 @@ Public Class Movies
         SaveCaches
     End Sub
 
-    Function CapsFirstLetter(words As String)
-        Return Form1.MyCulture.TextInfo.ToTitleCase(words)
-    End Function
+
+    Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
+        Dim i=0
+        Dim NfoFileList As New List(Of String)
+        
+        For Each item In NfoFilenames
+            If IO.File.Exists(item) Then
+                NfoFileList.Add(item)
+            Else
+                ReportProgress("Could Not find " & item & vbCrLf & "Please Refresh All Movies before running Batch Rescraper Wizard" )
+            End If
+        Next
+
+        If NfoFilenames.count <> NfoFileList.count Then NfoFilenames = NfoFileList
+        For Each item In NfoFilenames
+            i += 1
+            PercentDone = CalcPercentDone(i,NfoFilenames.Count)
+            Dim movie = New Movie(Me,item)
+            AddMovieEventHandlers   ( movie )
+            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " [" & movie.Title & "] ")
+            movie.Scraped=False
+            movie.RescrapeSpecific  ( rl    )
+            RemoveMovieEventHandlers( movie )
+            If Cancelled then Exit For
+        Next
+        SaveCaches
+    End Sub
 
 
     Sub RescrapeMovie(NfoFilename as String, Optional ByVal tmdbid As String = "")
@@ -1136,6 +1133,11 @@ Public Class Movies
         movie.Scrape(imdbid)
         RemoveMovieEventHandlers( movie )
     End Sub
+
+
+    Function CapsFirstLetter(words As String)
+        Return Form1.MyCulture.TextInfo.ToTitleCase(words)
+    End Function
 
     Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
         Try

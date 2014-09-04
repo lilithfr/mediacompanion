@@ -71,9 +71,9 @@ Partial Class frmMessageBox
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button1.Location = New System.Drawing.Point(31, 58)
+        Me.Button1.Location = New System.Drawing.Point(31, 54)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(75, 27)
         Me.Button1.TabIndex = 4
         Me.Button1.Tag = ""
         Me.Button1.Text = "TVDb"
@@ -82,9 +82,9 @@ Partial Class frmMessageBox
         'Button2
         '
         Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button2.Location = New System.Drawing.Point(222, 58)
+        Me.Button2.Location = New System.Drawing.Point(222, 54)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.Size = New System.Drawing.Size(75, 27)
         Me.Button2.TabIndex = 5
         Me.Button2.Text = "IMDB"
         Me.Button2.UseVisualStyleBackColor = true
@@ -93,7 +93,7 @@ Partial Class frmMessageBox
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(330, 75)
+        Me.ClientSize = New System.Drawing.Size(340, 81)
         Me.ControlBox = false
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)

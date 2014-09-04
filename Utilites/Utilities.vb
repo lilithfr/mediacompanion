@@ -2921,7 +2921,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return Extn
     End Function
 
-   Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
+    Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
       Dim size As Long          = 0
       Dim di   As DirectoryInfo = New DirectoryInfo(DirPath)
       Try
@@ -2937,6 +2937,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
       Catch
          Return -1
       End Try
+    End Function
+
+    Public Shared Function GetTmdbLanguage(ByVal xbmctmdb As String) As List(Of String)
+        Dim AvailableLanguages As XDocument = XDocument.Load(applicationPath & "\classes\tmdb_languages.xml")
+        Dim q = From x In AvailableLanguages.Descendants("language")
+                            Select value   = x.Attribute("value").Value, 
+                                   attName = x.Attribute("name" ).Value
+                            Where attName = xbmctmdb 
+
+        Return q.Single().value.Split(",").ToList
     End Function
 
 End Class

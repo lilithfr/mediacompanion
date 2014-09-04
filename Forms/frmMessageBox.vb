@@ -2,18 +2,32 @@
 Public Class frmMessageBox
 
     Public Property Cancelled As Boolean
+    Public Property btn1site As String
 
     Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "", Optional ByVal Btn1 As String = "", Optional ByVal Btn2 as String = "")
         InitializeComponent()
         If Btn1 = "" Then 
             Button1.Visible = False
-        Else 
+        ElseIf Btn1 = "1" Then
+            btn1site = "tvdb"
+            Button1.Text = ""
+            Button1.BackgroundImageLayout = ImageLayout.Stretch
+            Button1.BackgroundImage = My.Resources.TVDB_sm  
+            Button1.Visible = True
+        ElseIf Btn1 = "2" Then
+            btn1site = "tmdb"
+            Button1.Text = ""
+            Button1.BackgroundImageLayout = ImageLayout.Stretch
+            Button1.BackgroundImage = My.Resources.TMDB_Icon
             Button1.Visible = True
         End If
 
         If Btn2 = "" Then 
             Button2.Visible = False
-        Else 
+        Else
+            Button2.Text = ""
+            Button2.BackgroundImageLayout = ImageLayout.Stretch
+            Button2.BackgroundImage = My.Resources.imdb1 
             Button2.Visible = True
         End If
 
@@ -105,7 +119,7 @@ Public Class frmMessageBox
 
     Private Sub Button1_Click( sender As System.Object,  e As System.EventArgs) Handles Button1.Click
         Try
-            Preferences.TvInfoSite = "tvdb"
+            Preferences.WebSite = btn1site
             Me.Close()
         Catch ex As Exception
 
@@ -115,7 +129,7 @@ Public Class frmMessageBox
 
     Private Sub Button2_Click( sender As System.Object,  e As System.EventArgs) Handles Button2.Click
         Try
-            Preferences.TvInfoSite = "imdb"
+            Preferences.WebSite = "imdb"
             Me.Close()
         Catch ex As Exception
 

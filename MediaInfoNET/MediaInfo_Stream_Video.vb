@@ -189,13 +189,18 @@ Public Class MediaInfo_Stream_Video
 
     Public ReadOnly Property AspectRatio() As Double
         Get
+            Dim i As Double = 0
             Dim value As String = Nothing
-            If Properties.TryGetValue("Aspect Ratio", value) Then
-                If value IsNot Nothing Then
-
-                    Dim i As Double = 0
+            If Properties.TryGetValue("Display aspect ratio", value) Then
+                If value IsNot Nothing AndAlso value.contains(":") Then
+                    Dim s() As String = value.Split(":")
+                    If s(0) <> "" Then 
+                        Double.TryParse(s(0), i)
+                    End If
+                    'Return i
                 End If
             End If
+            Return i
         End Get
     End Property
 

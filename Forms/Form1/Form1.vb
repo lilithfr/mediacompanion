@@ -2641,22 +2641,6 @@ Public Class Form1
 
         RunBackgroundMovieScrape("RescrapeDisplayedMovie")
 
-        'If Not Preferences.movies_useXBMC_Scraper Then
-        '    RunBackgroundMovieScrape("RescrapeDisplayedMovie")
-        '    Exit Sub
-        'End If
-        'Dim i As Integer = DataGridViewMovies.CurrentRow.Index 
-        'messbox = New frmMessageBox("", "", "The Selected Movie is being Rescraped....")
-        'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        'messbox.Show()
-        'messbox.Refresh()
-        'Application.DoEvents()
-
-        'novaThread = New Thread(New ThreadStart(AddressOf mov_ReScrapingStartTemp))
-        'novaThread.SetApartmentState(ApartmentState.STA)
-        'novaThread.Start()
-
-        'UpdateFilteredList()
     End Sub
 
     Private Sub mov_SaveQuick()
@@ -2664,15 +2648,11 @@ Public Class Form1
         If DataGridViewMovies.SelectedRows.Count = 0 Then Return
 
         If DataGridViewMovies.SelectedRows.Count = 1 Then
-
             Dim movie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-
             movie.ScrapedMovie.fullmoviebody.title = titletxt.Text.Replace(" (" & workingMovieDetails.fullmoviebody.year & ")", "")
-
             If movie.ScrapedMovie.fullmoviebody.originaltitle = Nothing Or movie.ScrapedMovie.fullmoviebody.originaltitle = "" Then
                 movie.ScrapedMovie.fullmoviebody.originaltitle = movie.ScrapedMovie.fullmoviebody.title
             End If
-
             movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
             movie.ScrapedMovie.fullmoviebody.playcount = workingMovieDetails.fullmoviebody.playcount
             movie.ScrapedMovie.fullmoviebody.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
@@ -2699,12 +2679,9 @@ Public Class Form1
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
             movie.SaveNFO()
-            'movie.UpdateMovieCache()
-
             UpdateFilteredList()
         Else
             Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
-
             mess.TextBox3.Text = "Press ESC to cancel"
             mess.TopMost = True
             mess.Show()
@@ -2714,23 +2691,14 @@ Public Class Form1
             If Not ISNothing(DataGridViewMovies.CurrentRow) Then
                 Dim i As Integer = DataGridViewMovies.CurrentRow.Index
                 Startfullpathandfilename = DataGridViewMovies.Item(0, i).Value.ToString
-
                 mess.Cancelled = False
-
                 Dim pos As Integer = 0
-
                 Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
-                  
-
                 For Each nfo As String In NfosToSave
-
                     Dim movie As Movie = oMovies.LoadMovie(nfo)
-
                     If IsNothing(movie) Then Continue For
-
                     pos += 1
                     mess.TextBox2.Text = pos.ToString + " of " + NfosToSave.Count.ToString
-
                     If directortxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
                     If creditstxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
                     If genretxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
@@ -2746,16 +2714,13 @@ Public Class Form1
                     If ratingtxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
                     If votestxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
                     If top250txt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
-
                     If Not cbMovieDisplay_MovieSet.SelectedIndex = 0 Then 'cbMovieDisplay_MovieSet.SelectedItem = "-None-"
                         movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                     End If
-                    
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
                     If TabControl2.SelectedTab.Name = "TabPage9" Then
                         movie.ScrapedMovie.fullmoviebody.tag = NewTagList
                     End If
-
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
                     movie.SaveNFO()
@@ -3204,6 +3169,7 @@ Public Class Form1
             End If
             titletxt.Visible = True
             TextBoxMutisave.Visible = False
+            btnMovRescrape.Visible = True
             SplitContainer2.Visible = True
             Label128.Visible = False
             Label75.Visible = True
@@ -3251,6 +3217,7 @@ Public Class Form1
             Label75.Visible = False
             TextBox34.Visible = False
             TextBoxMutisave.Visible = True
+            btnMovRescrape.Visible = False
             Label128.Visible = True
             cbMovieDisplay_MovieSet.Items.Insert(0, "")
             cbMovieDisplay_MovieSet.SelectedIndex = 0
@@ -3455,20 +3422,15 @@ Public Class Form1
     Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
         mov_ToolStripPlayTrailer.Visible = True
 
-        'Try
-        'Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
-        'If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
         If e.Button = MouseButtons.Right Then
-            Dim multistelect As Boolean = False
+            Dim multiselect As Boolean = False
             'If more than one movie is selected, check if right-click is on the selection.
-            'If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
             If DataGridViewMovies.SelectedRows.Count > 1 Then
-                multistelect = True
+                multiselect = True
             End If
             'Otherwise, bring up the context menu for a single movie
 
-
-            If multistelect = True Then
+            If multiselect = True Then
                 mov_ToolStripMovieName.BackColor = Color.Orange
                 mov_ToolStripMovieName.Text = "Multisave Mode"
                 mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
@@ -3476,20 +3438,10 @@ Public Class Form1
             Else
 
                 Try
-                    'MovieListComboBox.SelectedItems.Clear()
-                    'MovieListComboBox.SelectedIndex = ptIndex
                     'update context menu with movie name & also if we show the 'Play Trailer' menu item
                     mov_ToolStripMovieName.BackColor = Color.Honeydew
                     mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(NFO_INDEX+4).Value.ToString & "'"
                     mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-
-                    'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
-
-                    'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)) Then
-
-                    'Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
-
-                    'mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
 
                     Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
 
@@ -3498,9 +3450,6 @@ Public Class Form1
                 End Try
             End If
         End If
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
     End Sub
 
 #End Region ' DataGridViewMovies  Events
@@ -3588,23 +3537,38 @@ Public Class Form1
         End If
 
         If tab = "" Then
-            If workingMovieDetails.fullmoviebody.imdbid <> Nothing Then
+            If workingMovieDetails.fullmoviebody.imdbid <> Nothing OrElse workingMovieDetails.fullmoviebody.tmdbid <> "" Then
+                Dim weburl As String = ""
+                Dim TMDB As String = workingMovieDetails.fullmoviebody.tmdbid 
+                Dim IMDB As String = workingMovieDetails.fullmoviebody.imdbid
+                Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Preferences.TMDbSelectedLanguageName)
+                If (IMDB <> "" And IMDB <> "0") AndAlso TMDB <> "" Then
+                    Dim t As New frmMessageBox("Please Select","your preferred site","","2","1")
+                    t.ShowDialog()
+                    If Preferences.WebSite = "tmdb" Then
+                        weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
+                    Else
+                        weburl = "http://www.imdb.com/title/" & IMDB & "/"
+                    End If
+                ElseIf (IMDB <> "" And IMDB <> "0") AndAlso TMDB = "" Then
+                    weburl = "http://www.imdb.com/title/" & IMDB & "/"
+                ElseIf IMDB = "0" AndAlso TMDB <> "" Then
+                    weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
+                End If
+
                 If Preferences.externalbrowser = True Then
                     Me.TabControl2.SelectedIndex = currentTabIndex
-                    tempstring = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
 
                     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
-                    OpenUrl(tempstring)
+                    OpenUrl(weburl)
                 Else
 
-                    Dim url As String = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
-
                     Try
-                        If WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> url Then
+                        If WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> weburl Then
                             WebBrowser2.Stop()
                             WebBrowser2.ScriptErrorsSuppressed = True
 
-                            WebBrowser2.Navigate(url)
+                            WebBrowser2.Navigate(weburl)
                             WebBrowser2.Refresh()
                             currentTabIndex = TabControl2.SelectedIndex
                         End If
@@ -3612,13 +3576,13 @@ Public Class Form1
                         WebBrowser2.Stop()
                         WebBrowser2.ScriptErrorsSuppressed = True
 
-                        WebBrowser2.Navigate(url)
+                        WebBrowser2.Navigate(weburl)
                         WebBrowser2.Refresh()
                         currentTabIndex = TabControl2.SelectedIndex
                     End Try
                 End If
             Else
-                MsgBox("No IMDB ID is available for this movie")
+                MsgBox("No IMDB or TMDB ID is available for this movie")
             End If
 
         ElseIf tab = "Main Browser" Then
@@ -4756,7 +4720,7 @@ Public Class Form1
                         Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                         Dim t As New frmMessageBox("Please Select","your preferred site","","1","1")
                         t.ShowDialog()
-                        If Preferences.TvInfoSite = "tvdb" Then
+                        If Preferences.WebSite = "tvdb" Then
                             tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                         Else
                             tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
@@ -11543,7 +11507,7 @@ End Sub
         Return actorthumb
     End Function
 
-    Private Sub RescrapeAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripRescrapeAll.Click
+    Private Sub mov_ToolStripRescrapeAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripRescrapeAll.Click
         mov_RescrapeAllSelected()
     End Sub
 
@@ -16299,7 +16263,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub btnMovRescrapeRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovRescrape.Click
+    Private Sub btnMovRescrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovRescrape.Click
         mov_Rescrape()
     End Sub
 
@@ -16371,26 +16335,15 @@ End Sub
     Private Sub titletxt_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles titletxt.Leave
         Try
             Try
-
-                '   TextBox34.Text = titletxt.Text
-                'For Each item In workingmoviedetails.alternativetitles
-                '    If item = currenttitle Then
-                '        workingmoviedetails.alternativetitles.Remove(item)
-                '        workingmoviedetails.alternativetitles.Add(titletxt.Text)
-                '        Exit For
-                '    End If
-                'Next
                 If titletxt.Text.IndexOf(workingMovieDetails.fullmoviebody.year) = -1 Then
                     Dim tempstring As String = titletxt.Text
                     titletxt.Items.Clear()
-                    'titletxt.Items.Add(tempstring & " (" & workingmoviedetails.fullmoviebody.year & ")")
                     For Each item In workingMovieDetails.alternativetitles
                         If item <> currenttitle Then
                             titletxt.Items.Add(item)
                         End If
                     Next
                     titletxt.Text = tempstring & " (" & workingMovieDetails.fullmoviebody.year & ")"
-                    'titletxt.SelectedIndex = -1
                 End If
                 processnow = True
             Catch ex As Exception

@@ -46,7 +46,7 @@ Public Class Preferences
     Public Shared workingProfile As New ListOfProfiles
     Public Shared commandlist As New List(Of str_ListOfCommands)
     Public Shared configpath As String
-    Public Shared TvInfoSite As String = "tvdb"
+    Public Shared WebSite As String = "tvdb"
     Public Shared DoneAMov As Boolean = False
     Public Shared MusicVidScrape As Boolean = False
     Public Shared DlMissingEpData As Boolean = False
@@ -1976,12 +1976,29 @@ Public Class Preferences
             workingfiledetails.filedetails_video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)  'tempmediainfo
 
             Try
-                Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
-                If Not DisplayAspectRatio = "" Then
-                    workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio).ToString("F2")
+                Dim tmp As Double = aviFile.Video(0).AspectRatio 
+                If tmp <> 0 Then
+                    workingfiledetails.filedetails_video.Aspect.Value = tmp.ToString("F2")
+                Else
+                    Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
+                    If Not DisplayAspectRatio = "" Then
+                        workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio).ToString("F2")
+                    End If
                 End If
             Catch ex As Exception
-                workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
+                Try
+                    If workingfiledetails.filedetails_video.Width.Value <> "" AndAlso workingfiledetails.filedetails_video.Height.Value <> "" Then
+                        Dim Aspect As Double = 0
+                        Dim wi As Double = Convert.ToDouble(aviFile.Video(0).Width)
+                        Dim he As Double = Convert.ToDouble(aviFile.Video(0).Height)
+                        Aspect = wi/he
+                        workingfiledetails.filedetails_video.Aspect.Value = Aspect.ToString("F2")
+                    Else
+                        workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
+                    End If
+                Catch exc As Exception
+                    workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
+                End Try
             End Try
 
             'Try
