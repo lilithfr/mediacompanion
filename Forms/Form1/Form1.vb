@@ -24,7 +24,7 @@ Public Class Form1
     Const NFO_INDEX As Integer = 5
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
-    Public Const MCToolsCommands As Integer = 2          ' increment when adding MC functions to ToolsToolStripMenuItem
+    Public Const MCToolsCommands As Integer = 3          ' increment when adding MC functions to ToolsToolStripMenuItem
 
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
@@ -1144,17 +1144,18 @@ Public Class Form1
         End Try
     End Sub
 
-    Sub CleanCacheFolder
+    Sub CleanCacheFolder(Optional ByVal All As Boolean = False)
         Dim cachefolder As String = applicationPath & "\cache\"
         Dim Files As New IO.DirectoryInfo(cachefolder)
         Dim FileList() = Files.GetFiles().OrderByDescending(Function(f) f.LastWriteTime).ToArray
-        Dim i As Integer = FileList.Count-1 
+        Dim limit As Integer = If(All, 0, 99)
+        Dim i As Integer = FileList.Count
         Try
-            If i > 99 Then
-                Do Until i = 99
+            If i > limit Then
+                Do Until i = limit
+                    i-=1
                     Dim filepath As String = FileList(i).FullName
                     Utilities.SafeDeleteFile(filepath)
-                    i-=1
                 Loop
             End If
         Catch
@@ -20721,6 +20722,12 @@ End Sub
         fixCreateDate.Width = w
         fixCreateDate.Height = h
         fixCreateDate.ShowDialog()
+    End Sub
+
+    Private Sub EmptyCacheFolderToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles EmptyCacheFolderToolStripMenuItem.Click
+        If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+            CleanCacheFolder(True)
+        End If
     End Sub
 
 #Region "Functions"
