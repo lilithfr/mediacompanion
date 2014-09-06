@@ -10270,12 +10270,6 @@ End Sub
                 tvBatchList.doEpisodeBody = False
                 tvBatchList.doEpisodeMediaTags = False
 
-                ' doshowbody As Boolean
-                'Dim doshowart As Boolean
-                'Dim doshowactors As Boolean
-                'Dim doepisodebody As Boolean
-                'Dim doepisodeart As Boolean
-                'Dim doepisodeactors As Boolean
                 Dim displaywizard As New tv_batch_wizard
                 displaywizard.Bounds = screen.AllScreens(CurrentScreen).Bounds
                 displaywizard.StartPosition = FormStartPosition.Manual
@@ -10337,9 +10331,22 @@ End Sub
                 If tvBatchList.RewriteAllNFOs Then
                     If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
                         Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                        For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
+                            progresstext = "Rewriting nfo's of Show: " & Cache.TvCache.Shows(f).Title.Value & ", Episode: " & Cache.TvCache.Shows(f).Episodes.Count - g & " of " & Cache.TvCache.Shows(f).Episodes.Count & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
+                            If done > 0 Then
+                                progress = (100 / showprocesscount) * done
+                            Else
+                                progress = 0
+                            End If
+                            tvbckrescrapewizard.ReportProgress(progress, progresstext)
+                            Dim listofepisodes As New List(Of TvEpisode)
+                            listofepisodes.Clear()
+                            listofepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
+                            WorkingWithNfoFiles.ep_NfoSave(listofepisodes, listofepisodes(0).NfoFilePath)
+                        Next
                     End If
                     Continue For
-                    tvBatchList.RewriteAllNFOs = False
+                    'tvBatchList.RewriteAllNFOs = False
                 End If
 
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open OrElse Cache.TvCache.Shows(f).State = -1 OrElse tvBatchList.includeLocked = True Then
