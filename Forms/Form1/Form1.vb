@@ -10481,12 +10481,11 @@ End Sub
                                         Dim episodeno As String = Cache.TvCache.Shows(f).Episodes(g).Episode.Value
                                         'its an episode
                                         Dim episodescreenurl As String = ""
-                                        'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                                         Dim episodescraper As New TVDBScraper
                                         If sortorder = "" Then sortorder = "default"
                                         If language = "" Then language = "en"
                                         If actorsource = "" Then actorsource = "tvdb"
-                                        Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language)
+                                        Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language, True)
 
                                         If tempepisode.Contains("ERROR") Then
                                             Dim chunkSize As Integer = 40
@@ -10501,11 +10500,8 @@ End Sub
                                                 End If
                                                 finalString += tempepisode.Substring(i * chunkSize, chunkSize2) & vbCrLf
                                             Next
-                                            'MsgBox("tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value, MsgBoxStyle.OkOnly, "tvdb ERROR!")
                                             progresstext = "tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                                             tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                                            'MsgBox("TVDB reported the following error" & vbCrLf & finalString, MsgBoxStyle.OkOnly, "ERROR!")
-
                                             Continue For
                                         End If
 
