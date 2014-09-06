@@ -281,7 +281,6 @@ Public Class Form1
                 End If
             End If
 
-            'TasksList.DataSource = Common.Tasks
 
             ForegroundWorkTimer.Interval = 500
 #If Not Debug Then
@@ -570,29 +569,12 @@ Public Class Form1
                     End If
                 End If
 
-                'If Preferences.startuptab = 0 Then
-                '    SplitContainer1.SplitterDistance = Preferences.splt1
-                '    SplitContainer2.SplitterDistance = Preferences.splt2
-                '    SplitContainer5.SplitterDistance = Preferences.splt5
-                '    TabLevel1.SelectedIndex = 1
-                '    SplitContainer3.SplitterDistance = Preferences.splt3
-                '    SplitContainer4.SplitterDistance = Preferences.splt4
-                '    TabLevel1.SelectedIndex = 0
-                'ElseIf Preferences.startuptab = 1 Then
-                '    SplitContainer1.SplitterDistance = Preferences.splt1
-                '    SplitContainer2.SplitterDistance = Preferences.splt2
-                '    SplitContainer5.SplitterDistance = Preferences.splt5
-                '    TabLevel1.SelectedIndex = 1
-                '    SplitContainer3.SplitterDistance = Preferences.splt3
-                '    SplitContainer4.SplitterDistance = Preferences.splt4
-                'ElseIf Preferences.startuptab > 1 Then
-                    SplitContainer1.SplitterDistance = Preferences.splt1
-                    SplitContainer2.SplitterDistance = Preferences.splt2
-                    SplitContainer5.SplitterDistance = Preferences.splt5
-                    SplitContainer3.SplitterDistance = Preferences.splt3
-                    SplitContainer4.SplitterDistance = Preferences.splt4
-                    TabLevel1.SelectedIndex = Preferences.startuptab
-                'End If
+                SplitContainer1.SplitterDistance = Preferences.splt1
+                SplitContainer2.SplitterDistance = Preferences.splt2
+                SplitContainer5.SplitterDistance = Preferences.splt5
+                SplitContainer3.SplitterDistance = Preferences.splt3
+                SplitContainer4.SplitterDistance = Preferences.splt4
+                TabLevel1.SelectedIndex = Preferences.startuptab
 
                 If Preferences.startuptab = 0 Then
                     If Not MoviesFiltersResizeCalled Then
@@ -654,6 +636,9 @@ Public Class Form1
 
                 Call util_CommandListLoad()
                 startup = False
+
+                CleanCacheFolder()  'Limit cachefolder to max 100 files.  Cleaned on startup and shutdown.
+
                 frmSplash.Close()
 
                 'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
@@ -750,6 +735,7 @@ Public Class Form1
         Try
             Me.Dispose()
             Me.Finalize()
+            CleanCacheFolder()  'Limit cachefolder to max 100 files.  Cleaned on startup and shutdown.
             If cbClearCache.Checked = True Then ClearCacheFolder() ' delete cache folder if option selected.
             If cbClearMissingFolder.Checked = True Then ClearMissingFolder() ' delete missing folder if option selected.
             End
@@ -1155,6 +1141,23 @@ Public Class Form1
             
         Catch ex As Exception
 
+        End Try
+    End Sub
+
+    Sub CleanCacheFolder
+        Dim cachefolder As String = applicationPath & "\cache\"
+        Dim Files As New IO.DirectoryInfo(cachefolder)
+        Dim FileList() = Files.GetFiles().OrderByDescending(Function(f) f.LastWriteTime).ToArray
+        Dim i As Integer = FileList.Count-1 
+        Try
+            If i > 99 Then
+                Do Until i = 99
+                    Dim filepath As String = FileList(i).FullName
+                    Utilities.SafeDeleteFile(filepath)
+                    i-=1
+                Loop
+            End If
+        Catch
         End Try
     End Sub
 
