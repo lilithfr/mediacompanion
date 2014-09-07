@@ -692,8 +692,8 @@ Public Class Form1
 
             oMovies.Bw = BckWrkScnMovies
 
-            frmXBMC_Progress.Bounds = screen.AllScreens(CurrentScreen).Bounds
-            frmXBMC_Progress.StartPosition = FormStartPosition.Manual
+            ' frmXBMC_Progress.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            ' frmXBMC_Progress.StartPosition = FormStartPosition.Manual
 
             AddHandler XBMC_Link_ErrorLog_Timer.Elapsed, AddressOf XBMC_Controller_Log_TO_Timer_Elapsed
             Ini_Timer(XBMC_Link_ErrorLog_Timer, 3000)
