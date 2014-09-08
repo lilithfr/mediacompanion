@@ -38,6 +38,7 @@ Public Class RescrapeList
     Property TagsFromKeywords    As Boolean
     Property SetWatched          As Boolean
     Property ClearWatched        As Boolean
+    Property FromTMDB            As Boolean
 
     Sub New
     End Sub
@@ -71,6 +72,7 @@ Public Class RescrapeList
             For Each propInfo in propInfos
 
                 If Not propInfo.CanWrite Then Continue For
+                If propInfo.Name = "FromTMDB" Then Continue For
 
                 Dim value As Boolean = propInfo.GetValue(Me,Nothing)
 

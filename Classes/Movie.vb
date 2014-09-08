@@ -1350,19 +1350,6 @@ Public Class Movie
 
         If Preferences.sorttitleignorearticle AndAlso Not Preferences.MusicVidScrape Then                              'add ignored articles to end of
             Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.
-            ''If Preferences.ignorearticle Then                                 'But only on Scraping or Rescrape Specific
-            'If titletext.ToLower.IndexOf("the ") = 0 Then
-            '    titletext = titletext.Substring(4, titletext.Length - 4) & ", The"
-            'End If
-            ''End If
-            ''If Preferences.ignoreAarticle Then
-            'If titletext.ToLower.IndexOf("a ") = 0 Then
-            '    titletext = titletext.Substring(2, titletext.Length - 2) & ", A"
-            'End If
-            'If titletext.ToLower.IndexOf("an ") = 0 Then
-            '    titletext = titletext.Substring(3, titletext.Length - 3) & ", An"
-            'End If
-            ''End If
             _scrapedMovie.fullmoviebody.sortorder = Preferences.RemoveIgnoredArticles(titletext)
         Else
             _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title               'Sort order defaults to title
@@ -2720,6 +2707,17 @@ Public Class Movie
                 ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
                 AssignScrapedMovie(_rescrapedMovie)
             End If
+            
+            If Preferences.movies_useXBMC_Scraper OrElse rl.FromTMDB Then
+                Dim useID As String = If(_scrapedMovie.fullmoviebody.tmdbid <> "", _scrapedMovie.fullmoviebody.tmdbid, _scrapedMovie.fullmoviebody.imdbid)
+                _imdbBody = TmdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, useID)
+                If ImdbBody.ToLower = "error" Then   'Failed...
+                    ReportProgress(MSG_ERROR,"!!! - ERROR! - Rescrape TMDB body with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & useID & """" & vbCrLf )
+                Else
+                    ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
+                    AssignScrapedMovie(_rescrapedMovie)
+                End If
+            End If
         
             UpdateProperty( _rescrapedMovie.fullmoviebody.credits  , _scrapedMovie.fullmoviebody.credits  , rl.credits   , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.director , _scrapedMovie.fullmoviebody.director , rl.director  , rl.EmptyMainTags)  
@@ -2737,7 +2735,7 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.votes    , _scrapedMovie.fullmoviebody.votes    , rl.votes     , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.country  , _scrapedMovie.fullmoviebody.country  , rl.country   , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      , rl.EmptyMainTags)  
-            UpdateProperty(_rescrapedMovie.fullmoviebody.title     , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
+            UpdateProperty( _rescrapedMovie.fullmoviebody.title    , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
 
             If rl.title 
                 If Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
@@ -2787,9 +2785,7 @@ Public Class Movie
                 Else
                     _triedUrls.Clear()
                     GetTrailerUrlAlreadyRun = False
-
                     Dim more As Boolean = Not File.Exists(ActualTrailerPath)
-
                     While more
                         If Not rl.trailer AndAlso rl.Download_Trailer AndAlso _scrapedMovie.fullmoviebody.trailer = "" Then
                             ReportProgress("No Trailer URL Present", "Download of Trailer skipped as no url pre-scraped")
@@ -3780,7 +3776,7 @@ Public Class Movie
             Dim keywords As New List(Of String)
             If Preferences.movies_useXBMC_Scraper Then
                 If tmdbid <> "" Then
-                    keywords = _imdbScraper.GetTmdbkeywords(tmdbid , Preferences.keywordlimit) 'if given by rescrape specific
+                    keywords =  tmdb.Keywords  '_imdbScraper.GetTmdbkeywords(tmdbid , Preferences.keywordlimit) 'if given by rescrape specific
                 Else
                     keywords = _imdbScraper.GetTmdbkeywords(_possibleImdb , Preferences.keywordlimit) 'if during initial movie scrape
                 End If

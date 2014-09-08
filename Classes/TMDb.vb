@@ -45,11 +45,11 @@ Public Class TMDb
 
     Public Property ValidBackDrops As New List(Of WatTmdb.V3.Backdrop)
     Public Property ValidPosters   As New List(Of WatTmdb.V3.Poster  )
+    Public Property ValidKeyWords  As WatTmdb.V3.TmdbMovieKeywords
     Public Property MaxGenres      As Integer = Media_Companion.Preferences.maxmoviegenre
 
 
     #End Region 'Read-write properties
-
 
     #Region "Read-only Properties"
 
@@ -63,6 +63,7 @@ Public Class TMDb
     Private _mc_posters             As New List(Of str_ListOfPosters)
     Private _mc_backdrops           As New List(Of str_ListOfPosters)
     Private _thumbs                 As New List(Of String)
+    Private _keywords               As New List(Of String)
     Private _alternateTitles        As WatTmdb.V3.TmdbMovieAlternateTitles
     Private _mcAlternateTitles      As New List(Of String)
     Private _cast                   As WatTmdb.V3.TmdbMovieCast
@@ -303,19 +304,16 @@ Public Class TMDb
     '    End If
     'End Sub
 
-
     Function GetMovieReleases As Boolean
         _releases = _api.GetMovieReleases(_movie.id)
         Return Not IsNothing(_releases)
     End Function
-
 
     Private Sub FetchReleases
         If IsNothing(_releases) then
             If Not (new RetryHandler(AddressOf GetMovieReleases)).Execute Then Throw New Exception(TMDB_EXC_MSG)
         End If
     End Sub
-
 
     'Public ReadOnly Property AlternateTitles As List(Of String)
     '    Get
@@ -350,12 +348,10 @@ Public Class TMDb
     '    End Get 
     'End Property
 
-
     Function GetMovieAlternateTitles As Boolean
         _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
         Return Not IsNothing(_alternateTitles)
     End Function
-
 
     Public ReadOnly Property AlternateTitles As List(Of String)
         Get
@@ -373,8 +369,6 @@ Public Class TMDb
             Return _mcAlternateTitles
         End Get 
     End Property
-
-
 
     'Public ReadOnly Property AlternateTitles As List(Of String)
     '    Get
@@ -473,6 +467,14 @@ Public Class TMDb
             Return _trailers
         End Get 
     End Property
+
+    Public ReadOnly Property Keywords As List(Of String)
+        Get
+            Fetch
+            Return _keywords 
+        End Get
+    End Property
+
     #End Region  'Read-only properties
 
     'Called during deserialisation
@@ -483,14 +485,12 @@ Public Class TMDb
     '    _trailers    = New WatTmdb.V3.TmdbMovieTrailers
     'End Sub
 
-
     Sub new( Optional imdb As String=Nothing )
         _api         = New WatTmdb.V3.Tmdb(Key)
         AssignConfig_images_base_url
         Languages    = LanguageCodes
         _imdb        = imdb
     End Sub
-
 
     Public Shared Sub DeleteConfigFile
         Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
@@ -499,7 +499,6 @@ Public Class TMDb
             fi.Delete
         End If
     End Sub
-
 
     'Private Sub AssignConfig_images_base_url
 
@@ -567,14 +566,10 @@ Public Class TMDb
     '    End Try
     'End Sub
 
-
-
     Function GetConfiguration As Boolean
         _config_images_base_url = _api.GetConfiguration().images.base_url
         Return Not IsNothing(_config_images_base_url)
     End Function
-
-
 
     Private Sub AssignConfig_images_base_url
 
@@ -627,8 +622,6 @@ Public Class TMDb
             Throw New Exception("AssignConfig_images_base_url failed")
         End Try
     End Sub
-
-
 
     'Public Sub JsonSerialize(Of T)(sFileName As String, ByVal obj As T )
 
@@ -728,6 +721,10 @@ Public Class TMDb
         Return Not IsNothing(_trailers)
     End Function
 
+    Function GetMovieKeywords As Boolean
+        ValidKeyWords = _api.GetMovieKeywords(_movie.id)
+        Return Not IsNothing(_keywords)
+    End Function
 
     Private Sub Fetch
         Try
@@ -740,6 +737,7 @@ Public Class TMDb
                 rhs.Add(New RetryHandler(AddressOf GetMovieBy))
                 rhs.Add(New RetryHandler(AddressOf GetMovieImages))
                 rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
+                rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
 
                 If Not Utilities.UrlIsValid("www.themoviedb.org") Then
                     Throw New Exception("TMDB is offline")
@@ -762,14 +760,13 @@ Public Class TMDb
                 AssignMC_Backdrops()
                 AssignFrodoExtraPosterThumbs()
                 AssignFrodoExtraFanartThumbs()
+                AssignKeywords()
             End If
         Catch ex As Exception
             Throw New Exception (ex.Message)
         End Try
 
     End Sub
-
-
 
     Private Sub AssignFrodoExtraPosterThumbs
 
@@ -782,19 +779,23 @@ Public Class TMDb
         'Next
     End Sub
 
-
     Private Sub AssignFrodoExtraFanartThumbs
         For Each item In ValidBackDrops
             _frodoFanartThumbs.Thumbs.Add(New FrodoFanartThumb( LdBackDropPath+item.file_path ,HdPath+item.file_path))
         Next
     End Sub
 
+    Private Sub AssignKeywords
+        'Dim q = From b In ValidKeyWords.keywords Where b.ToString <> ""
+        For Each keywd In ValidKeyWords.keywords
+            _keywords.Add(keywd.ToString)
+        Next
+    End Sub
 
     Private Sub FixUpMovieImages
         FixUpMovieBackDrops
         FixUpMoviePosters
     End Sub
-
 
     Private Sub FixUpMovieBackDrops
         For Each item In _movieImages.backdrops
@@ -804,7 +805,6 @@ Public Class TMDb
         Next
     End Sub
 
-
     Private Sub FixUpMoviePosters
         For Each item In _movieImages.posters
             If IsNothing(item.iso_639_1) then
@@ -812,7 +812,6 @@ Public Class TMDb
             End If
         Next
     End Sub
-
 
     '
     'Builds a filtered by language, ordered by preferred language list of back drops
@@ -846,7 +845,6 @@ Public Class TMDb
         Next
     End Sub
 
-
     Private Sub AssignMC_Posters
         For each item In ValidPosters
             Dim mc_poster As New str_ListOfPosters(True)
@@ -857,7 +855,6 @@ Public Class TMDb
             _mc_posters.Add(mc_poster)
         Next
     End Sub
-
 
     Private Sub AssignMC_Backdrops
         For Each item In ValidBackDrops
@@ -875,13 +872,11 @@ Public Class TMDb
         Next
     End Sub
     
-
     Private Sub AssignMC_Thumbs   
         For Each item In ValidBackDrops
             _thumbs.Add( HdPath + item.file_path )
         Next
     End Sub
-
 
     Function SelectBackDrop( width As Integer ) As WatTmdb.V3.Backdrop
         Fetch
@@ -902,7 +897,6 @@ Public Class TMDb
         Return q.First
     End Function
 
-
     Function GetBackDropUrl( Optional resolution As Resolution=Resolution.FullHD ) As String
         Fetch
         Dim BackDrop As WatTmdb.V3.Backdrop = SelectBackDrop( CInt(resolution) )
@@ -918,7 +912,6 @@ Public Class TMDb
         End if
     End Function
 
-
     Function SaveBackDrop( destination As String, Optional resolution As Resolution=Resolution.FullHD ) As Boolean
         Dim url As String=GetBackDropUrl(resolution)
 
@@ -932,7 +925,6 @@ Public Class TMDb
  
         Return True
     End Function
-
 
     Function GetTrailerUrl(FailedUrls As List(Of String), Optional resolution As String="1080" ) As String
         Fetch
@@ -949,7 +941,6 @@ Public Class TMDb
 
         Return q.First.source
     End Function
-
 
     Shared Sub LoadLanguages(ByRef cb As ComboBox)
         cb.Items.Clear

@@ -20726,7 +20726,12 @@ End Sub
 
     Private Sub EmptyCacheFolderToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles EmptyCacheFolderToolStripMenuItem.Click
         If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+            Dim mess As New frmMessageBox("Emptying Cache Folder", , "   Please Wait.   ")
+            mess.Show()
+            mess.Refresh()
+            Application.DoEvents()
             CleanCacheFolder(True)
+            mess.Close()
         End If
     End Sub
 

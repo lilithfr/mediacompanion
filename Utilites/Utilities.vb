@@ -875,8 +875,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             For i = 0 to relformat.Length -1
                 Dim p As Integer = title.IndexOf(relformat(i), 0, StringComparison.CurrentCultureIgnoreCase)
                 If p > -1 Then
-                    Dim s As String = title.Substring(p, relformat(i).Length)
-                    cleanfilename = title.Replace(s, "")
+                    Dim rl As Integer = relformat(i).length
+                    If p+rl <> cleanfilename.Length Then
+                        Dim t As String = title.chars(p+rl)
+                        If t = " " Then
+                            Dim s As String = title.Substring(p, relformat(i).Length)
+                            cleanfilename = title.Replace(s, "")
+                        End If
+                    Else
+                        Dim s As String = title.Substring(p, relformat(i).Length)
+                        cleanfilename = title.Replace(s, "")
+                    End If
+                    'Dim s As String = title.Substring(p, relformat(i).Length)
+                    'cleanfilename = title.Replace(s, "")
                 End If
             Next
         Catch ex As Exception

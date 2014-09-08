@@ -132,6 +132,10 @@
         Form1.rescrapeList.year = CheckBox20.checked
     End Sub
 
+    Private Sub cbFromTMDB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFromTMDB.CheckedChanged
+        Form1.rescrapeList.FromTMDB = cbFromTMDB.checked
+    End Sub
+
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
