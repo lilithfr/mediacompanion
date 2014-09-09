@@ -2767,7 +2767,7 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
         End If
 
-        If Not Preferences.movies_useXBMC_Scraper AndAlso rl.TagsFromKeywords Then
+        If rl.TagsFromKeywords AndAlso Not rl.FromTMDB Then
             GetKeyWords
         End If
 
@@ -2811,13 +2811,17 @@ Public Class Movie
 
             If Cancelled() Then Exit Sub
 
-            If rl.TagsFromKeywords AndAlso Preferences.movies_useXBMC_Scraper Then
+            If rl.TagsFromKeywords AndAlso (Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then
                 GetKeyWords(tmdb.Movie.id)
             End If
 
             If rl.Frodo_Poster_Thumbs Then GetFrodoPosterThumbs()
 
+            If Cancelled() Then Exit Sub
+
             If rl.Frodo_Fanart_Thumbs Then GetFrodoFanartThumbs()
+
+            If Cancelled() Then Exit Sub
 
             'Clears the existing poster urls and adds the rescraped ones directly into _scrapedMovie
             If rl.posterurls Then
@@ -2833,7 +2837,11 @@ Public Class Movie
 
             If rl.missingfanart Then DownloadFanart()
 
+            If Cancelled() Then Exit Sub
+
             If rl.dlxtraart Then DownloadExtraFanart()
+
+            If Cancelled() Then Exit Sub
 
             If rl.tmdb_set_name Then
                 Try

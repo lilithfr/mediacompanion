@@ -723,7 +723,7 @@ Public Class TMDb
 
     Function GetMovieKeywords As Boolean
         ValidKeyWords = _api.GetMovieKeywords(_movie.id)
-        Return Not IsNothing(_keywords)
+        Return Not IsNothing(ValidKeyWords)
     End Function
 
     Private Sub Fetch
@@ -786,7 +786,6 @@ Public Class TMDb
     End Sub
 
     Private Sub AssignKeywords
-        'Dim q = From b In ValidKeyWords.keywords Where b.ToString <> ""
         For Each keywd In ValidKeyWords.keywords
             _keywords.Add(keywd.ToString)
         Next
