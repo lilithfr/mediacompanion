@@ -6801,81 +6801,6 @@ Public Class Form1
             maxcount += 1
         End While      
 
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
-        'If filteredList.Count / maxcount > 159 Then
-        '    maxcount += 1
-        'End If
         Try
             'Panel17.AutoScroll = False
             For Each pic In pictureList
@@ -6889,7 +6814,7 @@ Public Class Form1
                     With pic
                         Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
                         .Location = New Point(locx, locy - vscrollPos)
-                        .ContextMenuStrip = ContextMenuStrip3
+                        .ContextMenuStrip = MovieWallContextMenu
                     End With
                     locx += 150
                     count += 1
@@ -6998,7 +6923,7 @@ Public Class Form1
                 .Visible = True
                 .BorderStyle = BorderStyle.None
                 .WaitOnLoad = True
-                .ContextMenuStrip = ContextMenuStrip3
+                .ContextMenuStrip = MovieWallContextMenu
                 AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
                 AddHandler bigPictureBox.DoubleClick, AddressOf mov_WallClicked
                 If count = maxcount Then
@@ -7028,25 +6953,18 @@ Public Class Form1
     End Sub
 
     Private Sub mov_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
-
         Dim item As Windows.Forms.PictureBox = sender
-        'Dim picbox As PictureBox = item.SourceControl
         Dim tempstring As String = item.Tag
         For f = 0 To DataGridViewMovies.RowCount - 1
-            'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
             If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
-                'MovieListComboBox.SelectedItems.Clear()
-                'MovieListComboBox.SelectedIndex = f
                 DataGridViewMovies.ClearSelection()
                 DataGridViewMovies.Rows(f).Selected = True
-
                 Application.DoEvents()
                 currentTabIndex = 0
                 Me.TabControl2.SelectedIndex = 0
                 Exit For
             End If
         Next
-
     End Sub
 
     Private Function util_TextWrap(ByVal text As String, ByVal linelength As Integer)
@@ -7110,10 +7028,20 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub MovieWallContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovieWallContextMenu.Opening
+        Dim tempstring As String = ClickedControl
+        If tempstring <> Nothing Then
+            Dim trailerpath As String = GetTrailerPath(tempstring)
+            If IO.File.Exists(trailerpath) Then
+                tsmiWallPlayTrailer.Enabled = True
+            Else
+                tsmiWallPlayTrailer.Enabled = False
+            End If
+        End If
+    End Sub
+
     Private Sub PlayMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem.Click
         Try
-            'Dim item As Windows.Forms.ToolStripMenuItem = sender
-            ''Dim picbox As PictureBox = item.SourceControl
             Dim tempstring As String = ClickedControl
             If tempstring = Nothing Then
                 Exit Sub
@@ -7492,9 +7420,7 @@ Public Class Form1
                 Exit Sub
             End If
 
-
             tempstring = applicationPath & "\settings\temp.m3u"
-
 
             Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
 
@@ -7502,8 +7428,6 @@ Public Class Form1
                 If part <> Nothing Then file.WriteLine(part)
             Next
             file.Close()
-
-
 
             If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
             If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
@@ -7527,12 +7451,8 @@ Public Class Form1
     Private Sub EditMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMovieToolStripMenuItem1.Click
         Try
             Dim tempstring As String = ClickedControl
-            'Dim picbox As PictureBox = item.SourceControl
             For f = 0 To DataGridViewMovies.RowCount - 1
-                'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
-                    'MovieListComboBox.SelectedItems.Clear()
-                    'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
                     DisplayMovie()
@@ -7594,7 +7514,34 @@ Public Class Form1
 
     End Sub
 
-    
+    Private Sub tsmiWallPlayTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiWallPlayTrailer.Click
+        Try
+            Dim tempstring As String = ClickedControl
+            If tempstring <> Nothing Then
+                Dim trailerpath As String = GetTrailerPath(tempstring)
+                If IO.File.Exists(trailerpath) Then
+                    Dim trailerstring = applicationPath & "\settings\temp.m3u"
+                    Dim file = IO.File.CreateText(trailerstring)
+                    file.WriteLine(trailerpath)
+                    file.Close()
+                    If Preferences.videomode = 1 Then Call util_VideoMode1(trailerstring)
+                    If Preferences.videomode = 2 Or Preferences.videomode = 3 Then Call util_VideoMode2(trailerstring)
+                    If Preferences.videomode >= 4 Then
+                        If Preferences.selectedvideoplayer <> Nothing Then
+                            Call util_VideoMode4(trailerstring)
+                        Else
+                            Call util_VideoMode1(trailerstring)
+                        End If
+                    End If
+                Else
+                    MsgBox("No downloaded trailer present")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
 
 #Region "Media Info Export"
     Dim exportMovieInfo As Boolean = False  'these are used to allow only a single execution of media export functions
@@ -11310,7 +11257,7 @@ End Sub
 
     End Sub
 
-    Private Sub ContextMenuStrip1_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
+    Private Sub MovieContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovieContextMenu.Opening
         Try
             'If (MovieListComboBox.SelectedItems.Count = 0) Then
             If DataGridViewMovies.SelectedRows.Count = 0 Then
@@ -11327,7 +11274,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ContextMenuStrip2_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip2.Opening
+    Private Sub TVContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles TVContextMenu.Opening
         Try
             If (TvTreeview.SelectedNode Is Nothing) Then
                 e.Cancel = True
@@ -12430,185 +12377,180 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
-    
+    End Sub                 'trailer
     Private Sub RenameFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
         mov_ScrapeSpecific("rename_files")
-    End Sub
+    End Sub              'rename files
     Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
         Try
             Call mov_ScrapeSpecific("title")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'title
     Private Sub ToolStripMenuItem4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem4.Click
         Try
             Call mov_ScrapeSpecific("plot")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'plot
     Private Sub ToolStripMenuItem5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem5.Click
         Try
             Call mov_ScrapeSpecific("tagline")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'tagline
     Private Sub ToolStripMenuItem6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem6.Click
         Try
             Call mov_ScrapeSpecific("director")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'director
     Private Sub ToolStripMenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem7.Click
         Try
             Call mov_ScrapeSpecific("credits")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'Credits
     Private Sub ToolStripMenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem8.Click
         Try
             Call mov_ScrapeSpecific("mpaa")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'mpaa
     Private Sub ToolStripMenuItem9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem9.Click
         Try
             Call mov_ScrapeSpecific("genre")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub        'genre
     Private Sub ToolStripMenuItem10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem10.Click
         Try
             Call mov_ScrapeSpecific("outline")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'outline
     Private Sub ToolStripMenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem12.Click
         Try
             Call mov_ScrapeSpecific("runtime")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'runtime
     Private Sub ToolStripMenuItem13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem13.Click
         Try
             Call mov_ScrapeSpecific("runtime_file")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'runtime file
     Private Sub ToolStripMenuItem14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem14.Click
         Try
             Call mov_ScrapeSpecific("studio")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'studio
     Private Sub ToolStripMenuItem15_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem15.Click
         Try
             Call mov_ScrapeSpecific("actors")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'actors
     Private Sub ToolStripMenuItem16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem16.Click
         Try
             Call mov_ScrapeSpecific("missingfanart")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'missingfanart
     Private Sub ToolStripMenuItem17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem17.Click
         Try
             Call mov_ScrapeSpecific("missingposters")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'missingposters
     Private Sub ToolStripMenuItem18_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem18.Click
         Try
             Call mov_ScrapeSpecific("mediatags")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'mediatags
     Private Sub ToolStripMenuItem19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem19.Click
         Try
             Call mov_ScrapeSpecific("rating")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'rating
     Private Sub ToolStripMenuItem20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem20.Click
         Try
             Call mov_ScrapeSpecific("votes")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'votes
     Private Sub ToolStripMenuItem21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem21.Click
         Try
             Call mov_ScrapeSpecific("stars")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub      'stars
     Private Sub YearToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles YearToolStripMenuItem.Click
         Try
             Call mov_ScrapeSpecific("year")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
-
+    End Sub  'year
+    Private Sub tsmiRescrapeKeyWords_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeKeyWords.Click
+        Try
+            Call mov_ScrapeSpecific("TagsFromKeywords")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub    'TagsFromKeywords
     Private Sub tsmiTMDbSetName_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbSetName.Click
         Call mov_ScrapeSpecific("tmdb_set_name")
-    End Sub
-
+    End Sub                         'tmdb set name
     Private Sub tsmiSetWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiSetWatched.Click
         Call mov_ScrapeSpecific("SetWatched")
-    End Sub
-
+    End Sub                           'set watched
     Private Sub tsmiClearWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiClearWatched.Click
         Call mov_ScrapeSpecific("ClearWatched")
-    End Sub
-
-
+    End Sub                       'clear watched
     Private Sub tsmiDlTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiDlTrailer.Click
         Call mov_ScrapeSpecific("Download_Trailer")
-    End Sub
-
+    End Sub                  'Download Trailer
     Private Sub tsmiRescrapeCountry_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeCountry.Click
         mov_ScrapeSpecific("country")
-    End Sub
-
+    End Sub                               'country
     Private Sub tsmiRescrapeTop250_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeTop250.Click
         mov_ScrapeSpecific("top250")
-    End Sub
-
+    End Sub                                 'top250
     Private Sub tsmiRescrapePremiered_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePremiered.Click
         mov_ScrapeSpecific("Premiered")
-    End Sub
-
+    End Sub                           'premiered
     Private Sub tsmiRescrapePosterUrls_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePosterUrls.Click
         mov_ScrapeSpecific("PosterUrls")
-    End Sub
-
+    End Sub                         'poster urls
     Private Sub tsmiRescrapeFrodo_Poster_Thumbs_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Poster_Thumbs.Click
         mov_ScrapeSpecific("Frodo_Poster_Thumbs")
-    End Sub
-
+    End Sub       'Frodo poster thumbs
     Private Sub tsmiRescrapeFrodo_Fanart_Thumbs_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Fanart_Thumbs.Click
         mov_ScrapeSpecific("Frodo_Fanart_Thumbs")
-    End Sub
+    End Sub       'Frodo fanart thumbs
 
 #End Region  'ToolStripmenu Movie Rescrape Specific
 
