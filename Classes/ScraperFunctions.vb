@@ -187,7 +187,7 @@ Public Class ScraperFunctions
             Dim thumburl As String = "na"
             Dim temp As String = posterimdbid
             temp = temp.Replace("tt", "")
-            Dim fanarturl As String = "http://www.movieposterdb.com/movie/" & temp
+            Dim fanarturl As String = "http://www.movieposterdb.com/movie/" & temp & "/"
 
 
             Dim apple2(4000) As String
@@ -230,7 +230,7 @@ Public Class ScraperFunctions
             If allok = True Then
                 allok = False
                 For f = 2 To fanartlinecount
-                    If apple2(f).IndexOf("<img src=""http://www.movieposterdb.com/posters/") <> -1 Then
+                    If apple2(f).IndexOf("<img  src=""http://www.movieposterdb.com/posters/") <> -1 Then
                         first = apple2(f).IndexOf("http")
                         last = apple2(f).IndexOf("jpg")
                         thumburl = apple2(f).Substring(first, (last + 3) - first)
