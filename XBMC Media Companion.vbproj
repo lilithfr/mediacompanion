@@ -89,10 +89,6 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="class_mpdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Assets\class_mpdb_thumbs.dll</HintPath>
-    </Reference>
     <Reference Include="imdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Scraper dll sources\imdb_thumbs\imdb_thumbs\bin\Debug\imdb_thumbs.dll</HintPath>
@@ -891,9 +887,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\RefreshAll.png" />
-    <None Include="Assets\class_mpdb_thumbs.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Content Include="Assets\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1473,6 +1466,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="class_mpdb_thumbs\class_mpdb_thumbs.vbproj">
+      <Project>{c81962cc-64c7-4677-b87c-ef20d3b88da2}</Project>
+      <Name>class_mpdb_thumbs</Name>
+    </ProjectReference>
     <ProjectReference Include="Common\Common.vbproj">
       <Project>{A3624371-E7E4-4E55-8E64-4460E758D39E}</Project>
       <Name>Common</Name>
