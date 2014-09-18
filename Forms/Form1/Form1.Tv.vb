@@ -1157,7 +1157,6 @@ Partial Public Class Form1
                 Else
                     Cache.TvCache.Remove(episode)
                 End If
-
             Next
             For Each showitem In Cache.TvCache.Shows
                 fulltvshowlist.Add(showitem)
@@ -1180,8 +1179,7 @@ Partial Public Class Form1
         For Each tvfolder In FolderList
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
-            If Not (Directory.Exists(tvfolder)) Then 'Temporary fix to skip any removed directory. Final fix should be capable of removing info from preferences file
-                'MessageBox.Show(String.Format("{0} could not found and will be skipped.", tvfolder), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            If Not (Directory.Exists(tvfolder)) Then 
                 nofolder.Add(tvfolder)
                 Continue For
             End If
@@ -1199,25 +1197,26 @@ Partial Public Class Form1
                 ep.ShowId.Value = newtvshownfo.TvdbId.Value
                 fullepisodelist.Add(ep)
             Next
-
-
-            'If Preferences.displayMissingEpisodes Then
-            '    Try
-            '        Tv_EpisodesMissingLoad(newtvshownfo)
-            '    Catch
-            '    End Try
-            'End If
-
         Next
+
+        If nofolder.Count > 0 Then
+            Dim mymsg As String
+            mymsg = (nofolder.Count).ToString + " folder/s missing:" + vbCrLf + vbCrLf
+            For Each item In nofolder
+                mymsg = mymsg + item + vbCrLf
+            Next
+            mymsg = mymsg + vbCrLf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbCrLf
+            If MsgBox(mymsg, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                tv_Showremovedfromlist(nofolder)
+            End If
+        End If
+
         frmSplash2.Label2.Visible = False
 
         frmSplash2.Label1.Text = "Saving Cache..."
         Windows.Forms.Application.DoEvents()
-
-       
-
-
         Tv_RefreshCacheSave(fulltvshowlist, fullepisodelist)    'save the cache file
+
         frmSplash2.Label1.Text = "Loading Cache..."
         Windows.Forms.Application.DoEvents()
         tv_CacheLoad()    'reload the cache file to update the treeview
@@ -1231,17 +1230,6 @@ Partial Public Class Form1
             tv_IMDbID_warned = True
         End If
 
-        If nofolder.Count > 0 Then
-            Dim mymsg As String
-            mymsg = (nofolder.Count).ToString + " folder/s missing:" + vbCrLf + vbCrLf
-            For Each item In nofolder
-                mymsg = mymsg + item + vbCrLf
-            Next
-            mymsg = mymsg + vbCrLf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbCrLf
-            If MsgBox(mymsg, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-                tv_Showremovedfromlist(nofolder)
-            End If
-        End If
         tv_Filter()
     End Sub
 
@@ -4263,7 +4251,7 @@ Partial Public Class Form1
                     tvFolders.Remove(folder)
                 End If
             Next
-            If Not lstboxscan Then tv_CacheRefresh()
+            'If Not lstboxscan Then tv_CacheRefresh()
             MsgBox((nofolder.Count).ToString + " folder/s removed")
         End If
         Return status
