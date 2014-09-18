@@ -637,6 +637,9 @@ Public Class Form1
                 Call util_CommandListLoad()
                 startup = False
 
+                frmSplash.Label3.Text = "Status :- Cleaning Cache folder."
+                frmSplash.Label3.Refresh()
+
                 CleanCacheFolder()  'Limit cachefolder to max 100 files.  Cleaned on startup and shutdown.
 
                 frmSplash.Close()
@@ -1146,20 +1149,22 @@ Public Class Form1
 
     Sub CleanCacheFolder(Optional ByVal All As Boolean = False)
         Dim cachefolder As String = applicationPath & "\cache\"
-        Dim Files As New IO.DirectoryInfo(cachefolder)
-        Dim FileList() = Files.GetFiles().OrderByDescending(Function(f) f.LastWriteTime).ToArray
-        Dim limit As Integer = If(All, 0, 99)
-        Dim i As Integer = FileList.Count
-        Try
-            If i > limit Then
-                Do Until i = limit
-                    i-=1
-                    Dim filepath As String = FileList(i).FullName
-                    Utilities.SafeDeleteFile(filepath)
-                Loop
-            End If
-        Catch
-        End Try
+        If IO.Directory.Exists(cacheFolder) Then
+            Dim Files As New IO.DirectoryInfo(cachefolder)
+            Dim FileList() = Files.GetFiles().OrderByDescending(Function(f) f.LastWriteTime).ToArray
+            Dim limit As Integer = If(All, 0, 99)
+            Dim i As Integer = FileList.Count
+            Try
+                If i > limit Then
+                    Do Until i = limit
+                        i-=1
+                        Dim filepath As String = FileList(i).FullName
+                        Utilities.SafeDeleteFile(filepath)
+                    Loop
+                End If
+            Catch
+            End Try
+        End If
     End Sub
 
     Sub ClearMissingFolder()
