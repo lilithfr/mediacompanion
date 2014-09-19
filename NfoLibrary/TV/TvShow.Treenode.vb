@@ -6,7 +6,7 @@ Partial Public Class TvShow
 
     Public Sub UpdateTreenode()
         Me.ShowNode.Tag = Me
-        Me.ShowNode.Text = Me.Title.Value
+        Me.ShowNode.Text = Preferences.RemoveIgnoredArticles(Me.Title.Value)
         
         Select Case Me.State
             Case Media_Companion.ShowState.Open
