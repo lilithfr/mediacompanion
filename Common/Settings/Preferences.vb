@@ -527,7 +527,7 @@ Public Class Preferences
         splt6 = 230
         tvbannersplit = 0
         showsortdate = False
-        XBMC_version = 0
+        XBMC_version = 2
         'Proxy settings
         prxyEnabled = False
         prxyIp = "127.0.0.1"

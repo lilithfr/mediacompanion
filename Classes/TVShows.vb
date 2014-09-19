@@ -84,7 +84,9 @@ Public Class TVShows
                 Dim filenama As String = IO.Path.GetFileNameWithoutExtension(path)
                 Dim fils As IO.FileInfo() = di.GetFiles(filenama & ".*")
                 For Each fiNext In fils
-                    If Not listtorename.Contains(fiNext.FullName) Then
+                    Dim extn As String = Utilities.GetExtension(fiNext.FullName)
+                    Dim tmpname As String = fiNext.FullName.Replace(extn, extn.ToLower)
+                    If Not listtorename.Contains(fiNext.FullName) AndAlso Not listtorename.Contains(tmpname) Then
                         listtorename.Add(fiNext.FullName)
                     End If
                 Next
