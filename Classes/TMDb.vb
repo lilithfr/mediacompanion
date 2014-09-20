@@ -786,6 +786,7 @@ Public Class TMDb
     End Sub
 
     Private Sub AssignKeywords
+        If IsNothing(ValidKeyWords.keywords) Then Exit Sub
         For Each keywd In ValidKeyWords.keywords
             _keywords.Add(keywd.ToString)
         Next

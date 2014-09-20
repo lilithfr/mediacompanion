@@ -17236,6 +17236,7 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+    
 
     Private Sub btn_IMPA_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_IMPA_posters.Click
         Try
@@ -20743,6 +20744,66 @@ End Sub
             url = "http://images.google.com/images?q=" & title & search
         End If
         OpenUrl(url)
+    End Sub
+
+    Public Sub GetFanartTvArt()
+        Dim Fanarttvlist As New FanartTvList
+        Try
+            If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") AndAlso workingMoviedetails.fullmoviebody.tmdbid = ""Then
+                MsgBox("No IMDB or TMDB ID" & vbCrLf & "Searching Fanart.Tv halted")
+                Exit Sub
+            End If
+            messbox = New frmMessageBox("Please wait,", "", "Gathering image data")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            Me.Refresh()
+            messbox.Refresh()
+            Call mov_PosterInitialise()
+            Dim newobject As New FanartTv
+            Dim id As String = ""
+            If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") AndAlso workingMovieDetails.fullmoviebody.tmdbid <> "" Then
+                id = workingMovieDetails.fullmoviebody.tmdbid
+            Else
+                id = workingMovieDetails.fullmoviebody.imdbid
+            End If
+            
+            newobject.ID = workingMovieDetails.fullmoviebody.imdbid
+            Fanarttvlist = newobject.Fanarttvresults
+
+            
+            Try
+                
+                
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+                Thread.Sleep(1)
+            End Try
+            Dim thumbstring As New XmlDocument
+            Try
+                'thumbstring.LoadXml(testthumbs)
+                'For Each thisresult In thumbstring("totalthumbs")
+                '    Select Case thisresult.Name
+                '        Case "thumb"
+                '            Dim newposters As New str_ListOfPosters(SetDefaults)
+                '            newposters.hdUrl = thisresult.InnerText
+                '            newposters.ldUrl = thisresult.InnerText
+                '            posterArray.Add(newposters)
+                '            newposters.ldUrl = Nothing
+                '            newposters.hdUrl = Nothing
+                '    End Select
+                'Next
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
+            messbox.Close()
+            Call mov_PosterSelectionDisplay()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 End Class

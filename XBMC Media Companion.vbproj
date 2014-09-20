@@ -154,9 +154,11 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\FanartTvList.vb" />
     <Compile Include="Classes\MVComboList.vb" />
     <Compile Include="Classes\Music_Video_Class.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
+    <Compile Include="Classes\FanartTv.vb" />
     <Compile Include="Classes\TvdbArgs.vb" />
     <Compile Include="Classes\UserRect.vb" />
     <Compile Include="Classes\WikipediaMusivVideoScraper.vb" />
@@ -275,6 +277,7 @@
     </Compile>
     <Compile Include="Structures\BasicHomeMovie.vb" />
     <Compile Include="Structures\FanartList.vb" />
+    <Compile Include="Structures\Fanarttv.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
@@ -1466,6 +1469,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="class_fanart_tv\class_fanart_tv.vbproj">
+      <Project>{fab3d04d-396a-4252-89d1-f5d351b4faca}</Project>
+      <Name>class_fanart_tv</Name>
+    </ProjectReference>
     <ProjectReference Include="class_mpdb_thumbs\class_mpdb_thumbs.vbproj">
       <Project>{c81962cc-64c7-4677-b87c-ef20d3b88da2}</Project>
       <Name>class_mpdb_thumbs</Name>
