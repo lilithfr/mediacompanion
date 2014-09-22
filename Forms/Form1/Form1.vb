@@ -4167,7 +4167,7 @@ Public Class Form1
 
             If row.MissingFanart Then 
                 btnNextMissingFanart.Enabled = True
-                btnNextMissingFanart.Tag = i-1          'Filtered list gets updated after save, hence next index gets docked one.
+                btnNextMissingFanart.Tag = i  
                 Return
             End If
 
