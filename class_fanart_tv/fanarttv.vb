@@ -5,14 +5,20 @@ Imports System.Xml
 
 
 Public Class Fanarttv
-    Public Function get_fanart_list(ByVal ID As String)
+    Public Function get_fanart_list(ByVal ID As String, Optional ByVal s As String = "movie")
         Monitor.Enter(Me)
         Try
             Dim fanartlinecount As Integer = 0
             Dim apple2(10000)
             Dim fanarttvxml As String
-            Dim fanarturl2 As String
-            fanarturl2 = String.Format("http://webservice.fanart.tv/v3/movies/{0}?api_key=ed4b784f97227358b31ca4dd966a04f1", ID)
+            Dim fanarturl2 As String = ""
+            If s = "movie" Then
+                fanarturl2 = String.Format("http://webservice.fanart.tv/v3/movies/{0}?api_key=ed4b784f97227358b31ca4dd966a04f1", ID)
+            ElseIf s = "tv" Then
+                fanarturl2 = String.Format("http://webservice.fanart.tv/v3/tv/{0}?api_key=ed4b784f97227358b31ca4dd966a04f1", ID)
+            ElseIf s <> "movie" and s <> "tv" Then
+                Return Nothing
+            End If
 
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl2)
@@ -36,7 +42,7 @@ Public Class Fanarttv
             
             Return JsonToXml(fanarttvxml) 
         Catch ex As Exception
-            Return "Error"
+            Return Nothing
         Finally
             Monitor.Exit(Me)
         End Try

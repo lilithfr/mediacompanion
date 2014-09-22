@@ -20746,13 +20746,10 @@ End Sub
         OpenUrl(url)
     End Sub
 
-    Public Sub GetFanartTvArt()
-        Dim Fanarttvlist As New FanartTvList
+    Public Sub GetFanartTvArt(ByVal ID As String, ByVal src As String)
+        Dim FanarttvMovielist As New FanartTvMovieList
+        Dim FanarttvTvList As New FanartTvTvList 
         Try
-            If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") AndAlso workingMoviedetails.fullmoviebody.tmdbid = ""Then
-                MsgBox("No IMDB or TMDB ID" & vbCrLf & "Searching Fanart.Tv halted")
-                Exit Sub
-            End If
             messbox = New frmMessageBox("Please wait,", "", "Gathering image data")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
@@ -20760,15 +20757,14 @@ End Sub
             messbox.Refresh()
             Call mov_PosterInitialise()
             Dim newobject As New FanartTv
-            Dim id As String = ""
-            If Not workingMovieDetails.fullmoviebody.imdbid.Contains("tt") AndAlso workingMovieDetails.fullmoviebody.tmdbid <> "" Then
-                id = workingMovieDetails.fullmoviebody.tmdbid
-            Else
-                id = workingMovieDetails.fullmoviebody.imdbid
+            newobject.ID = ID
+            newobject.src = src   '"movie" or "tv"
+            If src = "movie" Then
+                FanarttvMovielist = newobject.FanarttvMovieresults
+            ElseIf src = "tv" Then
+                FanarttvTvList = Nothing
             End If
             
-            newobject.ID = workingMovieDetails.fullmoviebody.imdbid
-            Fanarttvlist = newobject.Fanarttvresults
 
             
             Try
