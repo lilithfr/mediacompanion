@@ -8063,11 +8063,22 @@ Public Class Form1
 
     Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.Click
         Try
-            If cbImdbgetTMDBActor.CheckState = CheckState.Checked Then
-                Preferences.TmdbActorsImdbScrape = True
-            Else 
-                Preferences.TmdbActorsImdbScrape = False
-            End If
+            Preferences.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked 
+            'If cbImdbgetTMDBActor.CheckState = CheckState.Checked Then
+            '    Preferences.TmdbActorsImdbScrape = True
+            'Else 
+            '    Preferences.TmdbActorsImdbScrape = False
+            'End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbPrimaryPlot.Click
+        Try
+            Preferences.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -12793,6 +12804,7 @@ End Sub
         cbRenameUnderscore          .Checked        = Preferences.MovRenameUnderscore
         CheckBox_ShowDateOnMovieList.Checked        = Preferences.showsortdate
         cbImdbgetTMDBActor          .Checked        = Preferences.TmdbActorsImdbScrape
+        cbImdbPrimaryPlot           .Checked        = Preferences.ImdbPrimaryPlot
         cbXbmcTmdbRename            .Checked        = Preferences.XbmcTmdbRenameMovie
         cb_XbmcTmdbMissingFromImdb  .Checked        = Preferences.XbmcTmdbMissingFromImdb
         cbXbmcTmdbActorDL           .Checked        = Preferences.XbmcTmdbActorDL

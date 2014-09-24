@@ -1170,6 +1170,7 @@ Public Class Classimdb
                             biggest = f
                         End If
                     Next
+                    If Preferences.ImdbPrimaryPlot Then biggest = 1    'If selected only use Primary Plot.
                     If plots(biggest) <> Nothing Then
                         movienfoarray = plots(biggest).StripTagsLeaveContent
                         movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
