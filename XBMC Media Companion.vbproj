@@ -464,6 +464,12 @@
     <Compile Include="UserControls\ucMusicVideo.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ucFanartTv.Designer.vb">
+      <DependentUpon>ucFanartTv.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucFanartTv.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmConfigureTableColumns.resx">
@@ -595,6 +601,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucMusicVideo.resx">
       <DependentUpon>ucMusicVideo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucFanartTv.resx">
+      <DependentUpon>ucFanartTv.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
