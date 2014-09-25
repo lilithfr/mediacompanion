@@ -57,6 +57,9 @@ Public Class Profiles
                                     Case "filters"
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.Filters = applicationPath & s 'result.innertext
+                                    Case "genres"
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.Filters = applicationPath & s 'result.innertext
                                     Case "tvcache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.TvCache = applicationPath & s 'result.innertext

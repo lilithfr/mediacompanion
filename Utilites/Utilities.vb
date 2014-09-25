@@ -2960,4 +2960,30 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return q.Single().value.Split(",").ToList
     End Function
 
+    Public Shared Function loadGenre() As List(Of String)
+        Dim Genrelist As New List(Of String)
+        Dim genrepath As String = applicationPath & "\classes\genre.txt"
+        If File.Exists(genrepath) Then
+            Dim line As String = String.Empty
+            Try
+                Dim userConfig As StreamReader = File.OpenText(genrepath)
+                Do
+                    Try
+                        line = userConfig.ReadLine
+                        If line <> Nothing Then
+                            Dim regexMatch As Match
+                            regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+                            If regexMatch.Success = False Then
+                                Genrelist.Add(line.Trim)
+                            End If
+                        End If
+                    Catch ex As Exception
+                    End Try
+                Loop Until line = Nothing
+            Catch ex As Exception
+            End Try
+        End If
+        Return Genrelist
+    End Function
+
 End Class

@@ -127,6 +127,7 @@ Public Class Form1
     Public mediaInfoExp As New MediaInfoExport
     Shared Public langarray(300, 3) As String
     Public screen As Screen
+    Public Shared genrelist As New List(Of String)
 
     'Replace the list of structure by a list of objects
 
@@ -375,6 +376,8 @@ Public Class Form1
             Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
             generalprefschanged = False
 
+            GenreMasterLoad()
+
             tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
             Dim hg As New IO.DirectoryInfo(tempstring)
             If hg.Exists Then
@@ -401,6 +404,7 @@ Public Class Form1
                 currentprofile.TvCache = tempstring & "tvcache.xml"
                 currentprofile.MusicVideoCache = tempstring & "musicvideocache.xml"
                 currentprofile.Filters = tempstring & "filters.txt"
+                currentprofile.Genres = tempstring & "genres.txt"
                 currentprofile.MovieCache = tempstring & "moviecache.xml"
                 currentprofile.ProfileName = "Default"
                 profileStruct.ProfileList.Add(currentprofile)
@@ -419,7 +423,7 @@ Public Class Form1
             'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             'TabControl2.TabPages.Remove(Me.tpFanartTv)   'Hide during construction.
             PreferencesToolStripMenuItem.Visible = False
-
+            
             Call util_ProfilesLoad()
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = profileStruct.StartupProfile Then
@@ -430,6 +434,7 @@ Public Class Form1
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.RegExList = prof.RegExList
                     workingProfile.Filters = prof.Filters
+                    workingProfile.Genres = prof.Genres 
                     workingProfile.TvCache = prof.TvCache
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.MusicVideoCache = prof.MusicVideoCache
@@ -677,6 +682,7 @@ Public Class Form1
             Else
                 Mc.clsGridViewMovie.GridSort = "Asc"
             End If
+            genretxt.ShortcutsEnabled = False
 
             MainFormLoadedStatus = True
 
@@ -1379,36 +1385,73 @@ Public Class Form1
 
     End Sub
 
+    Private Sub util_FilterLoad()
+        'If File.Exists(workingProfile.filters) Or Preferences.startupCache = False Then
+
+        '    Dim line As String = String.Empty
+        '    CheckedListBox2.Items.Clear()
+
+        '    Try
+        '        Dim userConfig As StreamReader = File.OpenText(workingProfile.filters)
+
+        '        Do
+        '            Try
+        '                line = userConfig.ReadLine
+
+        '                If line <> Nothing Then
+        '                    Dim regexMatch As Match
+        '                    regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+
+        '                    If regexMatch.Success = False Then
+        '                        CheckedListBox2.Items.Add(line)
+        '                    End If
+        '                End If
+
+        '            Catch ex As Exception
+        '                MessageBox.Show(ex.Message)
+        '            End Try
+        '        Loop Until line = Nothing
+        '    Catch ex As Exception
+        '        MessageBox.Show(ex.Message)
+        '    End Try
+        'End If
+    End Sub
+
+    Private Sub GenreMasterLoad()
+        genrelist = Utilities.loadGenre
+
+    End Sub
+
     Private Sub util_GenreLoad()
-        If File.Exists(workingProfile.filters) Or Preferences.startupCache = False Then
+        'If File.Exists(workingProfile.filters) Or Preferences.startupCache = False Then
 
-            Dim line As String = String.Empty
-            CheckedListBox2.Items.Clear()
+        '    Dim line As String = String.Empty
+        '    CheckedListBox2.Items.Clear()
 
-            Try
-                Dim userConfig As StreamReader = File.OpenText(workingProfile.filters)
+        '    Try
+        '        Dim userConfig As StreamReader = File.OpenText(workingProfile.filters)
 
-                Do
-                    Try
-                        line = userConfig.ReadLine
+        '        Do
+        '            Try
+        '                line = userConfig.ReadLine
 
-                        If line <> Nothing Then
-                            Dim regexMatch As Match
-                            regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+        '                If line <> Nothing Then
+        '                    Dim regexMatch As Match
+        '                    regexMatch = Regex.Match(line, "<([\d]{2,3})>")
 
-                            If regexMatch.Success = False Then
-                                CheckedListBox2.Items.Add(line)
-                            End If
-                        End If
+        '                    If regexMatch.Success = False Then
+        '                        CheckedListBox2.Items.Add(line)
+        '                    End If
+        '                End If
 
-                    Catch ex As Exception
-                        MessageBox.Show(ex.Message)
-                    End Try
-                Loop Until line = Nothing
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-            End Try
-        End If
+        '            Catch ex As Exception
+        '                MessageBox.Show(ex.Message)
+        '            End Try
+        '        Loop Until line = Nothing
+        '    Catch ex As Exception
+        '        MessageBox.Show(ex.Message)
+        '    End Try
+        'End If
     End Sub
 
     Private Sub util_PrefsLoad()
@@ -1457,7 +1500,6 @@ Public Class Form1
                                         Case "directorcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.DirectorCache = applicationPath & s
-
                                         Case "config"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.Config = applicationPath & s
@@ -1472,6 +1514,14 @@ Public Class Form1
                                         Case "filters"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.Filters = applicationPath & s
+                                        Case "genres"
+                                            Dim s As String = ""
+                                            If result.innertext = "" Then 
+                                                s = "\settings\genres.txt"  'incase missing from existing profile.xml
+                                            Else
+                                                s = result.innertext.ToString.Substring(t)
+                                            End If
+                                            currentprofile.Genres = applicationPath & s
                                         Case "tvcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.TvCache = applicationPath & s
@@ -1572,6 +1622,10 @@ Public Class Form1
 
             childchild = doc.CreateElement("filters")
             childchild.InnerText = prof.Filters.Replace(applicationPath, "")
+            child.AppendChild(childchild)
+
+            childchild = doc.CreateElement("genres")
+            childchild.InnerText = prof.Genres.Replace(applicationPath, "")
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("tvcache")
@@ -3113,6 +3167,15 @@ Public Class Form1
         roletxt.Text = ""
         PictureBoxActor.Image = Nothing
         btnPlayMovie.Enabled = False
+    End Sub
+
+    Public Sub genretxt_MouseClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles genretxt.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            Dim frm As New frmGenreSelect 
+            frm.Init()
+            frm.ShowDialog()
+            'MessageBox.Show("This is an example of how to capture the right click of a textbox.", Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 
     Public Sub DisplayMovie(Optional yielding As Boolean = False)
@@ -6851,10 +6914,6 @@ Public Class Form1
 
        
         If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
-        If cbSort.SelectedIndex <> cbSortHidden.SelectedIndex Then cbSortHidden.SelectedIndex = cbSort.SelectedIndex : check = False
-        If btnreverse.CheckState <> CheckBox9.CheckState Then CheckBox9.CheckState = btnreverse.CheckState : check = False
-        If TextBox1.Text <> TextBox37.Text Then TextBox37.Text = cbMoviePosterSaveLoRes.Text : check = False
-        If txt_titlesearch.Text <> TextBox36.Text Then TextBox36.Text = txt_titlesearch.Text : check = False
         If check = True Then Return
 
         maxcount = Convert.ToInt32((TabPage22.Width - 50) / 150)
@@ -8223,6 +8282,7 @@ Public Class Form1
                     workingProfile.DirectorCache = prof.DirectorCache
                     workingProfile.config = prof.config
                     workingProfile.filters = prof.filters
+                    workingProfile.Genres = prof.Genres 
                     workingProfile.moviecache = prof.moviecache
                     workingProfile.MusicVideoCache = prof.MusicVideoCache 
                     workingProfile.profilename = prof.profilename
@@ -8272,6 +8332,10 @@ Public Class Form1
         End If
 
         If IO.File.Exists(workingProfile.filters) Then
+            Call util_FilterLoad()
+        End If
+
+        If IO.File.Exists(workingProfile.Genres) Then
             Call util_GenreLoad()
         End If
 
@@ -10954,7 +11018,14 @@ End Sub
         End If
 
         If IO.File.Exists(workingProfile.filters) Then
-            loadinginfo = "Status :- Loading Genrelist"
+            loadinginfo = "Status :- Loading Filterlist"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call util_FilterLoad()
+        End If
+
+        If IO.File.Exists(workingProfile.Genres) Then
+            loadinginfo = "Status :- Loading Genre List"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
             Call util_GenreLoad()
@@ -13403,7 +13474,8 @@ End Sub
                 Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
                 Dim actorcachepath As String = tempstring2 & "actorcache" & f.ToString & ".xml"
                 Dim directorcachepath As String = tempstring2 & "directorcache" & f.ToString & ".xml"
-                Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".xml"
+                Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".txt"
+                Dim genrespath As String = tempstring2 & "genres" & f.ToString & ".txt"
                 Dim moviecachepath As String = tempstring2 & "moviecache" & f.ToString & ".xml"
                 Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
                 Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
@@ -13413,6 +13485,7 @@ End Sub
                 If File.Exists(actorcachepath) Then ok = False
                 If File.Exists(directorcachepath) Then ok = False
                 If File.Exists(filterspath) Then ok = False
+                If File.Exists(genrespath) Then ok = False
                 If File.Exists(moviecachepath) Then ok = False
                 If File.Exists(regexpath) Then ok = False
                 If File.Exists(tvcachepath) Then ok = False
@@ -13432,6 +13505,7 @@ End Sub
             Dim tvcachetocopy As String = String.Empty
             Dim configtocopy As String = String.Empty
             Dim filterstocopy As String = String.Empty
+            Dim genrestocopy As String = String.Empty
             Dim regextocopy As String = String.Empty
             For Each profs In profileStruct.ProfileList
                 If profs.ProfileName = profileStruct.DefaultProfile Then
@@ -13442,6 +13516,7 @@ End Sub
                     tvcachetocopy = profs.TvCache
                     configtocopy = profs.Config
                     filterstocopy = profs.Filters
+                    genrestocopy = profs.Genres 
                     regextocopy = profs.RegExList
                 End If
             Next
@@ -13450,7 +13525,8 @@ End Sub
             profiletoadd.ActorCache = tempstring & "actorcache" & tempint.ToString & ".xml"
             profiletoadd.DirectorCache = tempstring & "directorcache" & tempint.ToString & ".xml"
             profiletoadd.Config = tempstring & "config" & tempint.ToString & ".xml"
-            profiletoadd.Filters = tempstring & "filters" & tempint.ToString & ".xml"
+            profiletoadd.Filters = tempstring & "filters" & tempint.ToString & ".txt"
+            profiletoadd.Genres = tempstring & "genres" & tempint.ToString & ".txt"
             profiletoadd.MovieCache = tempstring & "moviecache" & tempint.ToString & ".xml"
             profiletoadd.RegExList = tempstring & "regex" & tempint.ToString & ".xml"
             profiletoadd.TvCache = tempstring & "tvcache" & tempint.ToString & ".xml"
@@ -13458,14 +13534,15 @@ End Sub
             profiletoadd.ProfileName = TextBox42.Text
             profileStruct.ProfileList.Add(profiletoadd)
 
-            If File.Exists(moviecachetocopy) = True Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
-            If File.Exists(musicvideocachetocopy) = True Then File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
-            If File.Exists(actorcachetocopy) = True Then File.Copy(actorcachetocopy, profiletoadd.ActorCache)
-            If File.Exists(directorcachetocopy) = True Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
-            If File.Exists(tvcachetocopy) = True Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
-            If File.Exists(configtocopy) = True Then File.Copy(configtocopy, profiletoadd.Config)
-            If File.Exists(filterstocopy) = True Then File.Copy(filterstocopy, profiletoadd.Filters)
-            If File.Exists(regextocopy) = True Then File.Copy(regextocopy, profiletoadd.RegExList)
+            If File.Exists(moviecachetocopy)        Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
+            If File.Exists(musicvideocachetocopy)   Then File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
+            If File.Exists(actorcachetocopy)        Then File.Copy(actorcachetocopy, profiletoadd.ActorCache)
+            If File.Exists(directorcachetocopy)     Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
+            If File.Exists(tvcachetocopy)           Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
+            If File.Exists(configtocopy)            Then File.Copy(configtocopy, profiletoadd.Config)
+            If File.Exists(filterstocopy)           Then File.Copy(filterstocopy, profiletoadd.Filters)
+            If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
+            If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
             ListBox13.Items.Add(TextBox42.Text)
             Call util_ProfileSave()
             done = True
@@ -13550,6 +13627,13 @@ End Sub
                         End Try
                         Try
                             File.Delete(profileStruct.profilelist(f).Filters)
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                        End Try
+                        Try
+                            File.Delete(profileStruct.profilelist(f).Genres)
                         Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
