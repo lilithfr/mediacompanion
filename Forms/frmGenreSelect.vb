@@ -5,6 +5,19 @@ Imports System.Windows.Forms
 Public Class frmGenreSelect
     Property FilterSpace     As Integer = 30
     Property chkbxlst As New List(Of String)
+    Dim _selectgenres As New List (Of String)
+
+    Public Property SelectedGenres As List(Of String)
+        Get
+            Return _selectgenres 
+        End Get
+        Set
+            _selectgenres.Clear
+            If Value.Count > 0 Then
+                _selectgenres = Value
+            End If
+        End Set
+    End Property
 
     Public Sub Init()
         PopCheckListBox
@@ -12,51 +25,45 @@ Public Class frmGenreSelect
 
     Sub PopCheckListBox
         clbColumnsSelect.Items.Clear
+        Dim chkd As Boolean
         Dim i   As Integer=0
         For Each genre In Form1.Genrelist
+            chkd = False
             chkbxlst.Add(genre)
             Dim lbl As New Label
-           ' Dim tempdata() As String
-            'tempdata = column.Split("|")
             lbl.text = genre
             clbColumnsSelect.Items.Add(lbl.Text)
-            'clbColumnsSelect.SetItemChecked(i,Boolean.Parse(tempdata(3)))
-            'If tempdata(0) = "title" or tempdata(0) = "year" Then
-            '    clbColumnsSelect.SetItemCheckState(i, CheckState.Indeterminate)
-            'End If 
+            For Each g In _selectgenres
+                If g.ToLower = genre.ToLower Then
+                    chkd = True
+                    Exit For
+                End If
+            Next
+            clbColumnsSelect.SetItemChecked(i, chkd)
             i += 1
         Next
     End Sub
 
     Private Sub btnDone_Click( sender As Object,  e As EventArgs) Handles btnDone.Click
-        ConfigureFilters
+        RetrieveSelected
+        Me.DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 
-    Private Sub ConfigureFilters
-        'Dim show    As Boolean
-        'Dim item    As String
-        'Preferences.tableview.Clear()
-        'For i=0 to clbColumnsSelect.Items.Count-1
-        '    item        = clbColumnsSelect.Items(i)
-        '    show        = clbColumnsSelect.GetItemChecked(i)
-        '    Dim newdata As String = String.Empty
-        '    For Each col In tablecolumns
-        '        Dim tempdata() As String = col.Split("|")
-        '        If tempdata(0) = item Then
-        '            newdata = String.Format("{0}|{1}|{2}|{3}", tempdata(0), tempdata(1), tempdata(2), show.ToString.ToLower)
-        '            Exit For
-        '        End If
-        '    Next
-        '    Preferences.tableview.Add(newdata)
-        'Next
+    Private Sub btnCancel_Click( sender As Object,  e As EventArgs) Handles btnCancel.Click
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel 
     End Sub
 
-    'Set Title and Year as not able to unselect.
-    Private Sub clbColumnsSelect_MouseUp(sender As Object, e As MouseEventArgs) Handles clbColumnsSelect.MouseUp
-        clbColumnsSelect.SetItemChecked(0, True)
-        clbColumnsSelect.SetItemCheckState(0, CheckState.Indeterminate)
-        clbColumnsSelect.SetItemChecked(1,True)
-        clbColumnsSelect.SetItemCheckState(1, CheckState.Indeterminate)
+    Private Sub RetrieveSelected
+        Dim listof As New List(Of String)
+        Dim show As Boolean
+        Dim item As String
+        listof.Clear()
+        For i = 0 to clbColumnsSelect.Items.Count-1
+            item = clbColumnsSelect.Items(i)
+            show = clbColumnsSelect.GetItemChecked(i)
+            If show Then listof.Add(item)
+        Next
+        SelectedGenres = listof
     End Sub
 
 End Class

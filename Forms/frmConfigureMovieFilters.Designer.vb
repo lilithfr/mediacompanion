@@ -26,6 +26,7 @@ Partial Class frmConfigureMovieFilters
         Me.clbMovieFilters = New System.Windows.Forms.CheckedListBox()
         Me.lblInfo = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout
         Me.SuspendLayout
         '
@@ -70,12 +71,25 @@ Partial Class frmConfigureMovieFilters
         Me.Panel1.Size = New System.Drawing.Size(192, 42)
         Me.Panel1.TabIndex = 11
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = true
+        Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Label1.Location = New System.Drawing.Point(12, 343)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Padding = New System.Windows.Forms.Padding(4)
+        Me.Label1.Size = New System.Drawing.Size(112, 23)
+        Me.Label1.TabIndex = 12
+        Me.Label1.Text = "Check/UnCheck All"
+        '
         'frmConfigureMovieFilters
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DarkSeaGreen
         Me.ClientSize = New System.Drawing.Size(213, 378)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.clbMovieFilters)
         Me.Controls.Add(Me.btnDone)
@@ -86,10 +100,12 @@ Partial Class frmConfigureMovieFilters
         Me.Panel1.ResumeLayout(false)
         Me.Panel1.PerformLayout
         Me.ResumeLayout(false)
+        Me.PerformLayout
 
 End Sub
     Friend WithEvents btnDone As System.Windows.Forms.Button
     Friend WithEvents clbMovieFilters As System.Windows.Forms.CheckedListBox
     Friend WithEvents lblInfo As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class

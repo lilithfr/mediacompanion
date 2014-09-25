@@ -420,8 +420,8 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
-            'TabControl2.TabPages.Remove(Me.tpFanartTv)   'Hide during construction.
+            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            TabControl2.TabPages.Remove(Me.tpFanartTv)   'Hide during construction.
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
@@ -489,10 +489,10 @@ Public Class Form1
 
             CheckForIllegalCrossThreadCalls = False
 
-            Try
-                SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
-            Catch
-            End Try
+            'Try
+            '    SplitContainer9.SplitterDistance = SplitContainer9.Height - 61      'Tv Folder Horizontal Split as this keeps moving in designer.
+            'Catch
+            'End Try
 
             Try
                 If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
@@ -1419,39 +1419,47 @@ Public Class Form1
 
     Private Sub GenreMasterLoad()
         genrelist = Utilities.loadGenre
-
     End Sub
 
     Private Sub util_GenreLoad()
-        'If File.Exists(workingProfile.filters) Or Preferences.startupCache = False Then
-
-        '    Dim line As String = String.Empty
-        '    CheckedListBox2.Items.Clear()
-
-        '    Try
-        '        Dim userConfig As StreamReader = File.OpenText(workingProfile.filters)
-
-        '        Do
-        '            Try
-        '                line = userConfig.ReadLine
-
-        '                If line <> Nothing Then
-        '                    Dim regexMatch As Match
-        '                    regexMatch = Regex.Match(line, "<([\d]{2,3})>")
-
-        '                    If regexMatch.Success = False Then
-        '                        CheckedListBox2.Items.Add(line)
-        '                    End If
-        '                End If
-
-        '            Catch ex As Exception
-        '                MessageBox.Show(ex.Message)
-        '            End Try
-        '        Loop Until line = Nothing
-        '    Catch ex As Exception
-        '        MessageBox.Show(ex.Message)
-        '    End Try
-        'End If
+        If File.Exists(workingProfile.Genres) Or Not Preferences.startupCache Then
+            Dim line As String = String.Empty
+            Dim listof As New List(Of String)
+            listof.Clear()
+            Try
+                Dim userConfig As StreamReader = File.OpenText(workingProfile.Genres)
+                Do
+                    Try
+                        line = userConfig.ReadLine
+                        If line <> Nothing Then
+                            Dim regexMatch As Match
+                            regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+                            If regexMatch.Success = False Then
+                                listof.Add(line.trim)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message)
+                    End Try
+                Loop Until line = Nothing
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+            End Try
+            If listof.Count > 0 Then
+                Dim add As Boolean
+                For Each i In listof
+                    add = True
+                    For Each it In genrelist
+                        If it.ToLower = i.ToLower Then
+                            add = False
+                            Exit For
+                        End If
+                    Next
+                    If add then genrelist.Add(i)
+                Next
+                genrelist.Sort()
+            End If
+        End If
     End Sub
 
     Private Sub util_PrefsLoad()
@@ -3171,10 +3179,33 @@ Public Class Form1
 
     Public Sub genretxt_MouseClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles genretxt.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Right Then
-            Dim frm As New frmGenreSelect 
-            frm.Init()
-            frm.ShowDialog()
-            'MessageBox.Show("This is an example of how to capture the right click of a textbox.", Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Try
+                Dim item() As String = workingMovieDetails.fullmoviebody.genre.Split("/")
+                Dim genre As String = ""
+                Dim listof As New List(Of String)
+                listof.Clear()
+                For Each i In item
+                    listof.Add(i.Trim)
+                Next
+                Dim frm As New frmGenreSelect 
+                frm.SelectedGenres = listof
+                frm.Init()
+                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                    listof.Clear()
+                    listof.AddRange(frm.SelectedGenres)
+                    For each g In listof
+                        If genre = "" Then
+                            genre = g
+                        Else
+                            genre += " / " & g
+                        End If
+                    Next
+                    workingMovieDetails.fullmoviebody.genre = genre
+                    genretxt.Text = genre
+                    Call mov_SaveQuick()
+                End If
+            Catch
+            End Try
         End If
     End Sub
 

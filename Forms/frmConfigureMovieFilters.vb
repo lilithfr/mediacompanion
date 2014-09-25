@@ -6,6 +6,7 @@ Public Class frmConfigureMovieFilters
 
     Property FilterSpace     As Integer = 30
     Property FilterContainer As Panel
+    Dim chked As Boolean = True
 
     Public Sub Init(container As Panel)
         FilterContainer = container
@@ -30,6 +31,18 @@ Public Class frmConfigureMovieFilters
         Next
     End Sub
 
+    Private Sub btnchkunchk_Click( sender As Object,  e As EventArgs) Handles Label1.Click
+        Try
+            chked = Not chked
+            For i=clbMovieFilters.Items.Count-1 To 0 Step -1
+                If clbMovieFilters.Items(i) <> "General" Then
+                    clbMovieFilters.SetItemChecked(i, chked)
+                End If
+            Next
+        Catch
+
+        End Try
+    End Sub
 
     Private Sub btnDone_Click( sender As Object,  e As EventArgs) Handles btnDone.Click
         ConfigureFilters
