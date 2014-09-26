@@ -10,6 +10,7 @@ Public Class FanartTvMovieList
     Public moviebanner         As List(Of str_fanarttvart)
     Public moviethumb          As List(Of str_fanarttvart)
     Public movieposter         As List(Of str_fanarttvart)
+    Public dataloaded          As Boolean
 
     Sub New
         Init
@@ -25,6 +26,7 @@ Public Class FanartTvMovieList
         moviebanner         = New List(Of str_fanarttvart)
         moviethumb          = New List(Of str_fanarttvart)
         movieposter         = New List(Of str_fanarttvart)
+        dataloaded          = False
     End Sub
 End Class
 
@@ -40,6 +42,7 @@ Public Class FanartTvTvList
     Public tvbanner             As List(Of str_fanarttvart)
     Public seasonthumb          As List(Of str_fanarttvart)
     Public tvposter             As List(Of str_fanarttvart)
+    Public dataloaded          As Boolean
 
     Sub New
         Init
@@ -57,5 +60,6 @@ Public Class FanartTvTvList
         tvbanner            = New List(Of str_fanarttvart)
         seasonthumb         = New List(Of str_fanarttvart)
         tvposter            = New List(Of str_fanarttvart)
+        dataloaded          = False
     End Sub
 End Class

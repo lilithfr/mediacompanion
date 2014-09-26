@@ -421,7 +421,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
-            TabControl2.TabPages.Remove(Me.tpFanartTv)   'Hide during construction.
+            'TabControl2.TabPages.Remove(Me.tpFanartTv)   'Hide during construction.
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
@@ -3742,6 +3742,8 @@ Public Class Form1
                         End If
                     Next
                 Next
+            ElseIf tab.ToLower = "fanart.tv"
+                UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
             ElseIf tab.ToLower = "movie preferences" Then
                 Call mov_PreferencesSetup()
 
@@ -4607,6 +4609,10 @@ Public Class Form1
             Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
         messbox.Close()
+    End Sub
+
+    Sub tpfanartpg_leave() Handles tpFanartTv.Leave
+
     End Sub
 
     Private Sub mov_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)

@@ -9,8 +9,10 @@ Public Class FanartTv
     
     #Region "Read-write Properties"
 
-    Public Property ID As String
-    Public Property src As String
+    Public Property ID      As String
+    Public Property src     As String
+    Dim gotdata             As Boolean = False
+
     Private Property _data               As XmlDocument 
     Private Property hdmovieclearart     As New List(Of str_fanarttvart)
     Private Property hdmovielogo         As New List(Of str_fanarttvart)
@@ -81,12 +83,14 @@ Public Class FanartTv
                 For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(FANARTTV_EXC_MSG)
                 Next
-                If src = "movie" Then
-                    Assignmovieartwork()
-                    Allocatemovielists()
-                ElseIf src = "tv" Then
-                    Assigntvartwork()
-                    Allocatetvlists()
+                If CheckResults() Then
+                    If src = "movie" Then
+                        Assignmovieartwork()
+                        Allocatemovielists()
+                    ElseIf src = "tv" Then
+                        Assigntvartwork()
+                        Allocatetvlists()
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -100,6 +104,11 @@ Public Class FanartTv
         Return Not IsNothing(_data)
     End Function
 
+    Function CheckResults() As Boolean
+        Return Not _data.FirstChild.Name = "error"
+        'Return False
+    End Function
+
     Private Sub Allocatemovielists()
         _fanartmovielist.hdmovieclearart.AddRange(hdmovieclearart)
         _fanartmovielist.hdmovielogo.AddRange(hdmovielogo)
@@ -110,6 +119,7 @@ Public Class FanartTv
         _fanartmovielist.moviebanner.AddRange(moviebanner)
         _fanartmovielist.moviethumb.AddRange(moviethumb)
         _fanartmovielist.movieposter.AddRange(movieposter)
+        _fanartmovielist.dataloaded = gotdata
     End Sub
 
     Private Sub Allocatetvlists()
@@ -124,9 +134,11 @@ Public Class FanartTv
         _fanarttvlist.tvbanner.AddRange(tvbanner)
         _fanarttvlist.seasonthumb.AddRange(seasonthumb)
         _fanarttvlist.tvposter.AddRange(tvposter)
+        _fanarttvlist.dataloaded = gotdata
     End Sub
 
     Private Sub Assignmovieartwork()
+        Dim newdata As Boolean = False
         Dim thisresult As XmlNode = Nothing
         Dim tempid As String = ""
         For Each thisresult In _data("Document")
@@ -149,6 +161,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         hdmovclearart.url = detail3.InnerText
                                                         hdmovclearart.urlpreview = hdmovclearart.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         hdmovclearart.lang = detail3.InnerText
                                                     Case "likes"
@@ -172,6 +185,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -195,6 +209,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -218,6 +233,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -241,6 +257,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -264,6 +281,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -287,6 +305,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -310,6 +329,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -333,6 +353,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -346,9 +367,11 @@ Public Class FanartTv
                     Next
             End Select
         Next
+        gotdata = newdata
     End Sub
 
     Private Sub Assigntvartwork()
+        Dim newdata As Boolean = False
         Dim thisresult As XmlNode = Nothing
         Dim tempid As String = ""
         For Each thisresult In _data("Document")
@@ -371,6 +394,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -394,6 +418,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -417,6 +442,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -440,6 +466,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -463,6 +490,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -486,6 +514,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -509,6 +538,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -532,6 +562,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -555,6 +586,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -578,6 +610,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -601,6 +634,7 @@ Public Class FanartTv
                                                     Case "url"
                                                         artwork.url = detail3.InnerText
                                                         artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
                                                     Case "lang"
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
@@ -614,5 +648,6 @@ Public Class FanartTv
                     Next
             End Select
         Next
+        gotdata = newdata
     End Sub
 End Class

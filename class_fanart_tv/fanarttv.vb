@@ -8,8 +8,6 @@ Public Class Fanarttv
     Public Function get_fanart_list(ByVal ID As String, Optional ByVal s As String = "movie")
         Monitor.Enter(Me)
         Try
-            Dim fanartlinecount As Integer = 0
-            Dim apple2(10000)
             Dim fanarttvxml As String
             Dim fanarturl2 As String = ""
             If s = "movie" Then
@@ -19,7 +17,6 @@ Public Class Fanarttv
             ElseIf s <> "movie" and s <> "tv" Then
                 Return Nothing
             End If
-
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl2)
             Dim myProxy2 As New WebProxy("myproxy", 80)
@@ -27,21 +24,17 @@ Public Class Fanarttv
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)
-            'Dim sLine2 As String = ""
-            'fanartlinecount = 0
-
-            'Do While Not sLine2 Is Nothing
-            '    fanartlinecount += 1
-            '    sLine2 = objReader2.ReadLine
-            '    apple2(fanartlinecount) = sLine2
-            'Loop
-            'fanartlinecount -= 1
-
             fanarttvxml = objReader2.ReadToEnd
             objReader2.Close()
-            
             Return JsonToXml(fanarttvxml) 
         Catch ex As Exception
+            If ex.Message.Contains("(404) Not Found") Then
+                Dim retdoc As New XmlDocument
+                Dim rtnode As XmlElement
+                rtnode = retdoc.CreateElement("error")
+                retdoc.AppendChild(rtnode)
+                Return retdoc
+            End If
             Return Nothing
         Finally
             Monitor.Exit(Me)
