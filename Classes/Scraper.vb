@@ -1741,7 +1741,7 @@ Public Class Classimdb
                             f = webpage.Count-1
                             Exit For
                         End If
-                        If webpage(g).IndexOf("<td><a href=") <>-1 Then
+                        If webpage(g).IndexOf("<a href=""/keyword") <>-1 Then
                             wbpage &= webpage(g).TrimStart & webpage(g+1)
                         End If
                     Next

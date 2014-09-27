@@ -872,7 +872,8 @@ Partial Public Class Form1
                 Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
             End If
 
-            tb_Sh_Ep_Title.Text = Utilities.ReplaceNothing(Episode.ShowObj.Title.Value, "?") & " - S" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.SeasonObj.SeasonNumber), 2) & "E" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.Episode.Value), 2) & " - '" & Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
+            'tb_Sh_Ep_Title.Text = Utilities.ReplaceNothing(Episode.ShowObj.Title.Value, "?") & " - S" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.SeasonObj.SeasonNumber), 2) & "E" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.Episode.Value), 2) & " - '" & Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
+            tb_Sh_Ep_Title.Text ="'" &  Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
             tb_EpRating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
             tb_EpPlot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
             tb_EpDirector.Text = Utilities.ReplaceNothing(Episode.Director.Value)
@@ -895,27 +896,14 @@ Partial Public Class Form1
             epdetails += ", @ " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
             lb_EpDetails.Items.Add(epdetails)
             
-            'tb_EpDetails.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
-            'tb_EpDetails.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
-            'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
-            'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
-
             If Episode.Details.StreamDetails.Audio.Count > 0 Then
                 epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
                 lb_EpDetails.Items.Add(epdetails)
                 epdetails = Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
                 epdetails += ", " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
                 lb_EpDetails.Items.Add(epdetails)
-                'tb_EpDetails.Text += "      Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
-                'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-                'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
             End If
 
-            'For Each actor In Episode.ListActors
-            '    If actor.actorname <> Nothing Then
-            '        ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
-            '    End If
-            'Next
             If ComboBox5.Items.Count = 0 Then
                 For Each actor In Episode.ListActors
                     If actor.actorname <> Nothing Then
@@ -994,19 +982,13 @@ Partial Public Class Form1
                     epdetails = " :- " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Codec.Value, "?")
                     epdetails += ", @ " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Bitrate.Value, "?")
                     lb_EpDetails.Items.Add(epdetails)
-                    'tb_EpDetails.Text = "Video: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Height.Value, "?")
-                    'tb_EpDetails.Text += " (" & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
-                    'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Codec.Value, "?")
-                    'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Bitrate.Value, "?")
+
                     If Ep.Details.StreamDetails.Audio.Count > 0 Then
                         epdetails = "Audio: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Codec.Value, "?")
                         lb_EpDetails.Items.Add(epdetails)
                         epdetails = Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
                         epdetails += ", " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
                         lb_EpDetails.Items.Add(epdetails)
-                        'tb_EpDetails.Text += "      Audio: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Codec.Value, "?")
-                        'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-                        'tb_EpDetails.Text += " " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
                     End If
 
                     Dim video_flags = GetMultiEpMediaFlags(Ep)
@@ -1026,20 +1008,9 @@ Partial Public Class Form1
             cbTvSource.Items.Add("")
             For Each mset In Preferences.releaseformat
                 cbTvSource.Items.Add(mset)
- '              cbFilterSource.Items.Add(mset)
             Next
 
             cbTvSource.SelectedIndex = 0
-            'If IsNothing(workingMovieDetails) = False Then
-            '    If workingMovieDetails.fullmoviebody.source <> "" Then
-            '        For te = 0 To cbTvSource.Items.Count - 1
-            '            If cbTvSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
-            '                cbTvSource.SelectedIndex = te
-            '                Exit For
-            '            End If
-            '        Next
-            '    End If
-            'End If
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex

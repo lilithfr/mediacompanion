@@ -1,4 +1,6 @@
-﻿Public Class ucFanartTv
+﻿Imports System.Linq
+
+Public Class ucFanartTv
     Dim WithEvents tvposterpicboxes As PictureBox
     Dim WithEvents tvpostercheckboxes As RadioButton
     Dim WithEvents tvposterlabels As Label
@@ -8,6 +10,13 @@
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_FanartList)
     Public workingMovDetails As New FullMovieDetails
+    Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
+    Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Logo", "Movie Art", "Background", "Movie Disc", 
+                                          "Movie Banner", "Movie Thumb", "Movie Poster"}
+    Public tvFriendlyname() As String = {"HiDef Tv Logo", "HiDef ClearArt", "Clear Logo", "Clear Art", "Tv Poster", "Tv Thumb", 
+                                         "Tv Banner", "Show Background", "Season Poster", "Season Thumb",  "Character Art"}
+
+    Public arttype(10,1) As String
 
 
     Public Sub ucFanartTv_Refresh(ByVal moviedetails As FullMovieDetails)
@@ -28,10 +37,9 @@
         End If
         If nodata Then Exit Sub
         GetFanartTvArt(ID)
-        ConfirmIfResults()
+        If Not ConfirmIfResults() Then Exit Sub
+        LoadResults()
     End Sub
-
-
 
     Public Sub GetFanartTvArt(ByVal ID As String)
         Try
@@ -51,15 +59,38 @@
         End Try
     End Sub
 
-    Public Sub ConfirmIfResults()
+    Public Function ConfirmIfResults() As Boolean
+        Dim ok As Boolean = True
         If Not FanarttvMovielist.dataloaded Then
             MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & workingMovDetails.fullmoviebody.title)
+            ok = False
         End If
-    End Sub
+        Return ok
+    End Function
 
     Public Sub noID()
         MsgBox(" Selected Movie contains no" & vbCrLf & "     IMDB or TMDB ID" & vbCrLf & "Unable to get Fanart TV Data") 
         nodata = True
+    End Sub
+
+    Private Sub LoadResults()
+        'Dim fieldnames() = FanarttvMovielist.GetType().GetFields().Select(f => f.Name).ToList()
+        'Dim fieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
+        arttypeload()
+
+    End Sub
+
+    Sub arttypeload()
+        Dim i = MovfieldNames.Count-2
+        Dim j = movFriendlyname.Count
+
+        lblftvgroups.Items.Clear()
+        For x = 0 to i
+            'Dim tally As Integer = CallByName(FanarttvMovielist, MovfieldNames(x), CallType.Get)
+            lblftvgroups.Items.Add(movFriendlyname(x) & ": (" & "1" & ")")
+        Next
+
+
     End Sub
 
     Private Sub PanelPopulate()

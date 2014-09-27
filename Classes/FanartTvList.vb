@@ -32,16 +32,16 @@ End Class
 
 Public Class FanartTvTvList
     Public hdtvlogo             As List(Of str_fanarttvart)
+    Public hdclearart           As List(Of str_fanarttvart)
     Public clearlogo            As List(Of str_fanarttvart)
     Public clearart             As List(Of str_fanarttvart)
-    Public tvthumb              As List(Of str_fanarttvart)
-    Public characterart         As List(Of str_fanarttvart)
-    Public hdclearart           As List(Of str_fanarttvart)
-    Public seasonposter         As List(Of str_fanarttvart)
-    Public showbackground       As List(Of str_fanarttvart)
-    Public tvbanner             As List(Of str_fanarttvart)
-    Public seasonthumb          As List(Of str_fanarttvart)
     Public tvposter             As List(Of str_fanarttvart)
+    Public tvthumb              As List(Of str_fanarttvart)
+    Public tvbanner             As List(Of str_fanarttvart)
+    Public showbackground       As List(Of str_fanarttvart)
+    Public seasonposter         As List(Of str_fanarttvart)
+    Public seasonthumb          As List(Of str_fanarttvart)
+    Public characterart         As List(Of str_fanarttvart)
     Public dataloaded          As Boolean
 
     Sub New
@@ -50,16 +50,16 @@ Public Class FanartTvTvList
 
     Public Sub Init
         hdtvlogo            = New List(Of str_fanarttvart)
+        hdclearart          = New List(Of str_fanarttvart)
         clearlogo           = New List(Of str_fanarttvart)
         clearart            = New List(Of str_fanarttvart)
-        tvthumb             = New List(Of str_fanarttvart)
-        characterart        = New List(Of str_fanarttvart)
-        hdclearart          = New List(Of str_fanarttvart)
-        seasonposter        = New List(Of str_fanarttvart)
-        showbackground      = New List(Of str_fanarttvart)
-        tvbanner            = New List(Of str_fanarttvart)
-        seasonthumb         = New List(Of str_fanarttvart)
         tvposter            = New List(Of str_fanarttvart)
+        tvthumb             = New List(Of str_fanarttvart)
+        tvbanner            = New List(Of str_fanarttvart)
+        showbackground      = New List(Of str_fanarttvart)
+        seasonposter        = New List(Of str_fanarttvart)
+        seasonthumb         = New List(Of str_fanarttvart)
+        characterart        = New List(Of str_fanarttvart)
         dataloaded          = False
     End Sub
 End Class

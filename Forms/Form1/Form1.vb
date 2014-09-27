@@ -24,7 +24,7 @@ Public Class Form1
     Const NFO_INDEX As Integer = 5
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
-    Public Const MCToolsCommands As Integer = 3          ' increment when adding MC functions to ToolsToolStripMenuItem
+    Public Const MCToolsCommands As Integer = 4          ' increment when adding MC functions to ToolsToolStripMenuItem
 
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
@@ -1418,6 +1418,7 @@ Public Class Form1
     End Sub
 
     Private Sub GenreMasterLoad()
+        genrelist.Clear()
         genrelist = Utilities.loadGenre
     End Sub
 
@@ -20815,6 +20816,11 @@ End Sub
             CleanCacheFolder(True)
             mess.Close()
         End If
+    End Sub
+
+    Private Sub RefreshGenreListboxToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles RefreshGenreListboxToolStripMenuItem.Click
+        GenreMasterLoad()
+        util_GenreLoad()
     End Sub
 
 #Region "Functions"
