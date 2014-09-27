@@ -24,7 +24,7 @@ Public Class frmGenreSelect
     End Sub
 
     Sub PopCheckListBox
-        clbColumnsSelect.Items.Clear
+        clbGenreSelect.Items.Clear
         Dim chkd As Boolean
         Dim i   As Integer=0
         For Each genre In Form1.Genrelist
@@ -32,14 +32,14 @@ Public Class frmGenreSelect
             chkbxlst.Add(genre)
             Dim lbl As New Label
             lbl.text = genre
-            clbColumnsSelect.Items.Add(lbl.Text)
+            clbGenreSelect.Items.Add(lbl.Text)
             For Each g In _selectgenres
                 If g.ToLower = genre.ToLower Then
                     chkd = True
                     Exit For
                 End If
             Next
-            clbColumnsSelect.SetItemChecked(i, chkd)
+            clbGenreSelect.SetItemChecked(i, chkd)
             i += 1
         Next
     End Sub
@@ -58,9 +58,9 @@ Public Class frmGenreSelect
         Dim show As Boolean
         Dim item As String
         listof.Clear()
-        For i = 0 to clbColumnsSelect.Items.Count-1
-            item = clbColumnsSelect.Items(i)
-            show = clbColumnsSelect.GetItemChecked(i)
+        For i = 0 to clbGenreSelect.Items.Count-1
+            item = clbGenreSelect.Items(i)
+            show = clbGenreSelect.GetItemChecked(i)
             If show Then listof.Add(item)
         Next
         SelectedGenres = listof

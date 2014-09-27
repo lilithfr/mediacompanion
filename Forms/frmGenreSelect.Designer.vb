@@ -23,7 +23,7 @@ Partial Class frmGenreSelect
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.btnDone = New System.Windows.Forms.Button()
-        Me.clbColumnsSelect = New System.Windows.Forms.CheckedListBox()
+        Me.clbGenreSelect = New System.Windows.Forms.CheckedListBox()
         Me.lblInfo = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnCancel = New System.Windows.Forms.Button()
@@ -32,23 +32,24 @@ Partial Class frmGenreSelect
         '
         'btnDone
         '
+        Me.btnDone.BackColor = System.Drawing.Color.Gainsboro
         Me.btnDone.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.btnDone.Location = New System.Drawing.Point(129, 343)
         Me.btnDone.Name = "btnDone"
         Me.btnDone.Size = New System.Drawing.Size(49, 23)
         Me.btnDone.TabIndex = 6
         Me.btnDone.Text = "Done"
-        Me.btnDone.UseVisualStyleBackColor = true
+        Me.btnDone.UseVisualStyleBackColor = false
         '
-        'clbColumnsSelect
+        'clbGenreSelect
         '
-        Me.clbColumnsSelect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.clbColumnsSelect.CheckOnClick = true
-        Me.clbColumnsSelect.FormattingEnabled = true
-        Me.clbColumnsSelect.Location = New System.Drawing.Point(10, 12)
-        Me.clbColumnsSelect.Name = "clbColumnsSelect"
-        Me.clbColumnsSelect.Size = New System.Drawing.Size(191, 257)
-        Me.clbColumnsSelect.TabIndex = 9
+        Me.clbGenreSelect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.clbGenreSelect.CheckOnClick = true
+        Me.clbGenreSelect.FormattingEnabled = true
+        Me.clbGenreSelect.Location = New System.Drawing.Point(10, 12)
+        Me.clbGenreSelect.Name = "clbGenreSelect"
+        Me.clbGenreSelect.Size = New System.Drawing.Size(191, 257)
+        Me.clbGenreSelect.TabIndex = 9
         '
         'lblInfo
         '
@@ -63,7 +64,7 @@ Partial Class frmGenreSelect
         '
         'Panel1
         '
-        Me.Panel1.BackColor = System.Drawing.SystemColors.Info
+        Me.Panel1.BackColor = System.Drawing.Color.Gainsboro
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.lblInfo)
         Me.Panel1.Location = New System.Drawing.Point(9, 295)
@@ -73,35 +74,36 @@ Partial Class frmGenreSelect
         '
         'btnCancel
         '
+        Me.btnCancel.BackColor = System.Drawing.Color.Gainsboro
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.btnCancel.Location = New System.Drawing.Point(31, 343)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(49, 23)
         Me.btnCancel.TabIndex = 12
         Me.btnCancel.Text = "Cancel"
-        Me.btnCancel.UseVisualStyleBackColor = true
+        Me.btnCancel.UseVisualStyleBackColor = false
         '
         'frmGenreSelect
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.DarkSeaGreen
+        Me.BackColor = System.Drawing.Color.SteelBlue
         Me.ClientSize = New System.Drawing.Size(213, 378)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.clbColumnsSelect)
+        Me.Controls.Add(Me.clbGenreSelect)
         Me.Controls.Add(Me.btnDone)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "frmGenreSelect"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Configure Table Columns"
+        Me.Text = "Genre Selectable List"
         Me.Panel1.ResumeLayout(false)
         Me.Panel1.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
     Friend WithEvents btnDone As System.Windows.Forms.Button
-    Friend WithEvents clbColumnsSelect As System.Windows.Forms.CheckedListBox
+    Friend WithEvents clbGenreSelect As System.Windows.Forms.CheckedListBox
     Friend WithEvents lblInfo As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents btnCancel As System.Windows.Forms.Button
