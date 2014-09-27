@@ -30,21 +30,6 @@ End Class
 Public Class TVShows
 
     Public Shared Function episodeRename(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
-        'If Preferences.ignorearticle = True Then
-        '    If showtitle.ToLower.IndexOf("the ") = 0 Then
-        '        showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
-        '    End If
-        'End If
-        'If Preferences.ignoreAarticle Then
-        '    If showtitle.ToLower.IndexOf("a ") = 0 Then
-        '        showtitle = showtitle.Substring(2, showtitle.Length - 2) & ", A"
-        '    End If
-        'End If
-        'If Preferences.ignoreAn Then
-        '    If showtitle.ToLower.IndexOf("an ") = 0 Then
-        '        showtitle = showtitle.Substring(3, showtitle.Length - 3) & ", An"
-        '    End If
-        'End If
         showtitle = Preferences.RemoveIgnoredArticles(showtitle)
         Dim returnpath As String = "false"
 
@@ -73,6 +58,7 @@ Public Class TVShows
                 newfilename = newfilename.Replace(":", "")
                 newfilename = newfilename.Replace("""", "")
                 newfilename = newfilename.Replace("*", "")
+                newfilename = newfilename.Replace("|", "-")
                 Dim listtorename As New List(Of String)
                 listtorename.Clear()
                 Dim done As String = ""
