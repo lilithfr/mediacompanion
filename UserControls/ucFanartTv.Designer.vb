@@ -28,6 +28,7 @@ Partial Class ucFanartTv
         Me.lblftvgroups = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.lblnoart = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
@@ -53,9 +54,10 @@ Partial Class ucFanartTv
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.lblnoart)
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel2)
         Me.SplitContainer1.Size = New System.Drawing.Size(1008, 598)
-        Me.SplitContainer1.SplitterDistance = 360
+        Me.SplitContainer1.SplitterDistance = 320
         Me.SplitContainer1.TabIndex = 0
         '
         'TableLayoutPanel1
@@ -63,7 +65,7 @@ Partial Class ucFanartTv
         Me.TableLayoutPanel1.ColumnCount = 3
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 6!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel1.Controls.Add(Me.lblTitle, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.lblftvgroups, 1, 3)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -73,9 +75,9 @@ Partial Class ucFanartTv
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 389!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 305!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(356, 594)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(316, 594)
         Me.TableLayoutPanel1.TabIndex = 2
         '
         'lblTitle
@@ -86,7 +88,7 @@ Partial Class ucFanartTv
         Me.lblTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblTitle.Location = New System.Drawing.Point(9, 15)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(327, 42)
+        Me.lblTitle.Size = New System.Drawing.Size(296, 42)
         Me.lblTitle.TabIndex = 0
         '
         'lblftvgroups
@@ -99,13 +101,13 @@ Partial Class ucFanartTv
         Me.lblftvgroups.ItemHeight = 16
         Me.lblftvgroups.Location = New System.Drawing.Point(9, 85)
         Me.lblftvgroups.Name = "lblftvgroups"
-        Me.lblftvgroups.Size = New System.Drawing.Size(327, 372)
+        Me.lblftvgroups.Size = New System.Drawing.Size(296, 292)
         Me.lblftvgroups.TabIndex = 1
         '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 5
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 18!))
@@ -121,7 +123,7 @@ Partial Class ucFanartTv
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(640, 594)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(680, 594)
         Me.TableLayoutPanel2.TabIndex = 2
         '
         'Panel1
@@ -129,19 +131,32 @@ Partial Class ucFanartTv
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
             Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Panel1.AutoScroll = true
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TableLayoutPanel2.SetColumnSpan(Me.Panel1, 3)
-        Me.Panel1.Location = New System.Drawing.Point(13, 11)
+        Me.Panel1.Location = New System.Drawing.Point(11, 11)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(616, 508)
+        Me.Panel1.Size = New System.Drawing.Size(658, 508)
         Me.Panel1.TabIndex = 0
+        '
+        'lblnoart
+        '
+        Me.lblnoart.AutoSize = true
+        Me.lblnoart.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblnoart.Font = New System.Drawing.Font("Microsoft Sans Serif", 20!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblnoart.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.lblnoart.Location = New System.Drawing.Point(120, 250)
+        Me.lblnoart.Name = "lblnoart"
+        Me.lblnoart.Size = New System.Drawing.Size(303, 33)
+        Me.lblnoart.TabIndex = 0
+        Me.lblnoart.Text = "No Artwork to display."
         '
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button1.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button1.Location = New System.Drawing.Point(487, 539)
+        Me.Button1.Location = New System.Drawing.Point(527, 539)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(124, 34)
         Me.Button1.TabIndex = 1
@@ -159,6 +174,7 @@ Partial Class ucFanartTv
         Me.Size = New System.Drawing.Size(1020, 610)
         Me.SplitContainer1.Panel1.ResumeLayout(false)
         Me.SplitContainer1.Panel2.ResumeLayout(false)
+        Me.SplitContainer1.Panel2.PerformLayout
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
         Me.SplitContainer1.ResumeLayout(false)
         Me.TableLayoutPanel1.ResumeLayout(false)
@@ -173,5 +189,6 @@ End Sub
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents lblnoart As System.Windows.Forms.Label
 
 End Class
