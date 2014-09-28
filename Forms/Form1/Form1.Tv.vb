@@ -1323,33 +1323,30 @@ Partial Public Class Form1
                     NewEpisode.NfoFilePath = fs_info.FullName
                     Dim IsValid = ep_NfoValidate(NewEpisode.NfoFilePath)
                     If IsValid Then
-                        Dim multiep As Boolean = TestForMultiepisode(NewEpisode.NfoFilePath)
-                        If multiep = False Then
-                            NewEpisode.Load()
-                            'Fix for episodes missing showid
-                            If NewEpisode.ShowId.Value <> newtvshownfo.TvdbId.value AndAlso newtvshownfo.TvdbId.Value <> "" Then
-                                NewEpisode.ShowId.Value = newtvshownfo.TvdbId.Value
-                                NewEpisode.Save()   'If new ShowID stored, resave episode nfo.
-                            End If
-                            'remove missingepisode nfo if exists in missing folder.
-                            Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & NewEpisode.Season.Value & "." & NewEpisode.Episode.Value & ".nfo"
-                            If IO.File.Exists(missingNfoPath) Then
-                                Utilities.SafeDeleteFile(missingNfoPath)
-                            End If
-                            episodelist.Add(NewEpisode)
-                        Else
+                        'Dim multiep As Boolean = TestForMultiepisode(NewEpisode.NfoFilePath)
+                        'If multiep = False Then
+                        '    NewEpisode.Load()
+                        '    'Fix for episodes missing showid
+                        '    If NewEpisode.ShowId.Value <> newtvshownfo.TvdbId.value AndAlso newtvshownfo.TvdbId.Value <> "" Then
+                        '        NewEpisode.ShowId.Value = newtvshownfo.TvdbId.Value
+                        '        NewEpisode.Save()   'If new ShowID stored, resave episode nfo.
+                        '    End If
+                        '    'remove missingepisode nfo if exists in missing folder.
+                        '    Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & NewEpisode.Season.Value & "." & NewEpisode.Episode.Value & ".nfo"
+                        '    If IO.File.Exists(missingNfoPath) Then
+                        '        Utilities.SafeDeleteFile(missingNfoPath)
+                        '    End If
+                        '    episodelist.Add(NewEpisode)
+                        'Else
                             Dim loader As New Media_Companion.Utilities
                             Dim multiepisodelist As New List(Of TvEpisode)
                             Dim need2resave As Boolean = False
                             multiepisodelist = ep_NfoLoad(NewEpisode.NfoFilePath)
                             For Each Ep In multiepisodelist
-                                Ep.ShowObj = newtvshownfo
-                                'Fix for episodes missing showid
                                 If Ep.ShowId.Value <> newtvshownfo.TvdbId.Value AndAlso newtvshownfo.TvdbId.Value <> "" Then
-                                    Ep.ShowId.Value = newtvshownfo.TvdbId.Value
                                     need2resave = True
                                 End If
-                                'remove missingepisode nfo if exists in missing folder.
+                                Ep.ShowObj = newtvshownfo
                                 Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
                                 If IO.File.Exists(missingNfoPath) Then
                                     Utilities.SafeDeleteFile(missingNfoPath)
@@ -1357,7 +1354,7 @@ Partial Public Class Form1
                                 episodelist.Add(Ep)
                             Next
                             If need2resave Then ep_NfoSave(multiepisodelist, NewEpisode.NfoFilePath)    'If new ShowID stored, resave episode nfo.
-                        End If
+                        'End If
                     End If
                 End If
             Next fs_info
@@ -2282,6 +2279,7 @@ Partial Public Class Form1
         newepisode.NfoFilePath = WorkingEpisode.NfoFilePath
         newepisode.Season.Value = WorkingEpisode.Season.Value
         newepisode.Episode.Value = WorkingEpisode.Episode.Value
+        newepisode.ShowId.Value = WorkingTvShow.TvdbId.Value
 
         Dim episodescraper As New TVDBScraper
         If sortorder = "" Then sortorder = "default"
