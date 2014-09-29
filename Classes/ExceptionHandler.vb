@@ -25,20 +25,32 @@ Friend NotInheritable Class ExceptionHandler
             Try
                 Dim ofrmExcept As New frmExceptions
                 ofrmExcept.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
-                ofrmExcept.StartPosition = FormStartPosition.Manual
+                ofrmExcept.StartPosition = FormStartPosition.Manual-1
                 
                 ofrmExcept.txtExceptionTrace.Text = msg
                 ofrmExcept.ShowDialog()
             Catch ex1 As Exception
                 Dim log As New EventLog
                 Dim source As String = "MediaCompanion"
-                If Not EventLog.SourceExists(source) Then
-                    EventLog.CreateEventSource(source, source)
-                End If
-                log.Source = source
-                log.EnableRaisingEvents = True
-                log.WriteEntry(ex1.ToString, EventLogEntryType.Error)
-                log.WriteEntry(msg, EventLogEntryType.Error)
+                'Try
+                    If Not EventLog.SourceExists(source) Then
+                        EventLog.CreateEventSource(source, source)
+                    End If
+                    log.Source = source
+                    log.EnableRaisingEvents = True
+                    log.WriteEntry(ex1.ToString, EventLogEntryType.Error)
+                    log.WriteEntry(msg, EventLogEntryType.Error)
+                'Catch ex2 As Exception
+                '    MsgBox(ex1.ToString & vbCrLf & ex2.ToString)
+                '    If ex2.ToString.Contains("some or all event logs") Then
+                '        Dim mymsg As String = ""
+                '        mymsg += "Please find ""mcEvent.vb"" Script in"
+                '        mymsg += vbcrlf & "Media Companion's ""Asset"" folder"
+                '        mymsg += vbcrlf & "and ""Run As Administrator"" to register"
+                '        mymsg += vbcrlf & "Media Companion to your EventLog"
+                '        MsgBox(mymsg)
+                '    End If
+                'End Try
             End Try
         End If
     End Sub

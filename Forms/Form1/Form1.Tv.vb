@@ -1319,9 +1319,10 @@ Partial Public Class Form1
             For Each fs_info As System.IO.FileInfo In fs_infos
                 'Application.DoEvents()
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
-                    Dim NewEpisode As New TvEpisode
-                    NewEpisode.NfoFilePath = fs_info.FullName
-                    Dim IsValid = ep_NfoValidate(NewEpisode.NfoFilePath)
+                    Dim EpNfoPath As String = fs_info.FullName 
+                    'Dim NewEpisode As New TvEpisode
+                    'NewEpisode.NfoFilePath = fs_info.FullName
+                    Dim IsValid = ep_NfoValidate(EpNfoPath)
                     If IsValid Then
                         'Dim multiep As Boolean = TestForMultiepisode(NewEpisode.NfoFilePath)
                         'If multiep = False Then
@@ -1338,10 +1339,10 @@ Partial Public Class Form1
                         '    End If
                         '    episodelist.Add(NewEpisode)
                         'Else
-                            Dim loader As New Media_Companion.Utilities
+                            'Dim loader As New Media_Companion.Utilities
                             Dim multiepisodelist As New List(Of TvEpisode)
                             Dim need2resave As Boolean = False
-                            multiepisodelist = ep_NfoLoad(NewEpisode.NfoFilePath)
+                            multiepisodelist = ep_NfoLoad(EpNfoPath)
                             For Each Ep In multiepisodelist
                                 If Ep.ShowId.Value <> newtvshownfo.TvdbId.Value AndAlso newtvshownfo.TvdbId.Value <> "" Then
                                     need2resave = True
@@ -1353,7 +1354,7 @@ Partial Public Class Form1
                                 End If
                                 episodelist.Add(Ep)
                             Next
-                            If need2resave Then ep_NfoSave(multiepisodelist, NewEpisode.NfoFilePath)    'If new ShowID stored, resave episode nfo.
+                            If need2resave Then ep_NfoSave(multiepisodelist, EpNfoPath)    'If new ShowID stored, resave episode nfo.
                         'End If
                     End If
                 End If

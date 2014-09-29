@@ -5,7 +5,7 @@ Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.Runtime.InteropServices
-
+Imports Microsoft.Win32
 Imports Media_Companion.Preferences
 Imports System.Xml
 Imports System.Reflection
@@ -254,6 +254,7 @@ Public Class Form1
         PictureBoxAssignedMoviePoster.AllowDrop = True
         AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
         Try
+            AddRegKey()
             Preferences.movie_filters.FilterPanel = SplitContainer5.Panel2
 
             Label73.Text = ""
@@ -1679,6 +1680,38 @@ Public Class Form1
         For Each com In Preferences.commandlist
             ToolsToolStripMenuItem.DropDownItems.Add(com.title)
         Next
+    End Sub
+
+    Sub AddRegKey()
+        Dim eventLogName As String = "MediaCompanion"
+        Dim sourceName As String = "MediaCompanion"
+        Dim eventLog As EventLog
+        eventLog = New EventLog()
+        eventLog.Log = eventLogName
+        eventLog.Source = sourceName
+
+        ' Check whether registry key for source exists
+        Dim keyName As String = "SYSTEM\CurrentControlSet\Services\EventLog\" & eventLogName & "\" & sourceName
+        Dim rkEventSource As RegistryKey = Registry.LocalMachine.OpenSubKey(keyName)
+
+        ' Check whether keys exists
+        If rkEventSource Is Nothing Then
+	        ' Key doesnt exist. Create key which represents source
+	        Dim Proc As New Process()
+	        Dim ProcStartInfo As New ProcessStartInfo("Reg.exe")
+	        ProcStartInfo.Arguments = "add HKLM\" & keyName
+	        ProcStartInfo.UseShellExecute = True
+	        ProcStartInfo.Verb = "runas"
+	        Proc.StartInfo = ProcStartInfo
+	        Proc.Start()
+        End If
+
+        Try
+	        eventLog.WriteEntry("With key.... :)")
+        Catch
+
+	        Debug.Print("failed to write key")
+        End Try
     End Sub
 
     Private Sub mov_ActorRebuild()
