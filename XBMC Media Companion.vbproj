@@ -647,6 +647,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\new2.png" />
+    <Content Include="Assets\mcEventLog.exe" />
     <Content Include="Classes\genre.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

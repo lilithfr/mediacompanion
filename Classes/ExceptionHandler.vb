@@ -24,15 +24,20 @@ Friend NotInheritable Class ExceptionHandler
 
             Try
                 Dim ofrmExcept As New frmExceptions
-                ofrmExcept.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
-                ofrmExcept.StartPosition = FormStartPosition.Manual-1
-                
+                Dim scrn As Integer = 0
+                Try         'Try to get screen from Form1
+                    scrn = Form1.CurrentScreen
+                Catch
+                    scrn = 0    'But Form1 not fully loaded, default to main screen.
+                End Try
+                ofrmExcept.Bounds = Screen.AllScreens(scrn).Bounds
+                ofrmExcept.StartPosition = FormStartPosition.Manual
                 ofrmExcept.txtExceptionTrace.Text = msg
                 ofrmExcept.ShowDialog()
             Catch ex1 As Exception
                 Dim log As New EventLog
                 Dim source As String = "MediaCompanion"
-                'Try
+                Try
                     If Not EventLog.SourceExists(source) Then
                         EventLog.CreateEventSource(source, source)
                     End If
@@ -40,17 +45,17 @@ Friend NotInheritable Class ExceptionHandler
                     log.EnableRaisingEvents = True
                     log.WriteEntry(ex1.ToString, EventLogEntryType.Error)
                     log.WriteEntry(msg, EventLogEntryType.Error)
-                'Catch ex2 As Exception
-                '    MsgBox(ex1.ToString & vbCrLf & ex2.ToString)
-                '    If ex2.ToString.Contains("some or all event logs") Then
-                '        Dim mymsg As String = ""
-                '        mymsg += "Please find ""mcEvent.vb"" Script in"
-                '        mymsg += vbcrlf & "Media Companion's ""Asset"" folder"
-                '        mymsg += vbcrlf & "and ""Run As Administrator"" to register"
-                '        mymsg += vbcrlf & "Media Companion to your EventLog"
-                '        MsgBox(mymsg)
-                '    End If
-                'End Try
+                Catch ex2 As Exception
+                    MsgBox(ex1.ToString & vbCrLf & ex2.ToString)
+                    If ex2.ToString.Contains("some or all event logs") Then
+                        Dim mymsg As String = ""
+                        mymsg +=          "Please find ""mcEventlog.exe"" in"
+                        mymsg += vbcrlf & "Media Companion's ""Asset"" folder"
+                        mymsg += vbcrlf & "and ""Run As Administrator"" to register"
+                        mymsg += vbcrlf & "Media Companion to your EventLog"
+                        MsgBox(mymsg)
+                    End If
+                End Try
             End Try
         End If
     End Sub
