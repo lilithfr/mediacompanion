@@ -109,7 +109,7 @@ Public Class ucFanartTv
                 usedlist = FanarttvMovielist.moviedisc
                 arttype = "square"
             Case "6"
-                usedlist = FanarttvMovielist.moviebackground
+                usedlist = FanarttvMovielist.moviebanner 
                 arttype = "wide"
             Case "7"
                 usedlist = FanarttvMovielist.moviethumb
@@ -133,9 +133,14 @@ Public Class ucFanartTv
     End Sub
 
     Private Sub PanelSelectionDisplay()
+        ''Movie Image Preview sizes as follows:
+        ''200  x  37     Banner
+        ''200  x  77     HDLogo & movielogo
+        ''200  x  112    Background, HDClearArt & Clearart, and moviethumb
+        ''200  x  200    moviedisc
+        ''200  x  285    movieposter
 
         PanelClear()
-
         If usedlist.Count = 0 Then
             lblnoart.Visible = True
             Exit Sub
@@ -143,8 +148,10 @@ Public Class ucFanartTv
             lblnoart.Visible = false
         End If
         Panel1.VerticalScroll.Visible = True 
-
         Dim location As Integer = 2
+        Dim pbwidth As Integer = 300
+        Dim pwheight As Integer = 204
+        Dim colwidth As Integer = 20
         Dim columncount = 0
         Dim locHeight = 5
         Dim locOffset = 240  '197
