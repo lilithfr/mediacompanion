@@ -59,6 +59,7 @@ Public Class TMDb
     Private _movieImages            As WatTmdb.V3.TmdbMovieImages
     Private _trailers               As WatTmdb.V3.TmdbMovieTrailers
     Private _releases               As WatTmdb.V3.TmdbMovieReleases
+    Private _genrelist              As WatTmdb.V3.TmdbGenre 
     
     Private _mc_posters             As New List(Of str_ListOfPosters)
     Private _mc_backdrops           As New List(Of str_ListOfPosters)
@@ -145,6 +146,18 @@ Public Class TMDb
             Catch
             End Try
             Return alist
+        End Get
+    End Property
+
+    Public ReadOnly Property Genrelist As List(Of String)
+        Get
+            Fetch
+            FetchGenreList
+            Dim genres As New List(Of String)
+            For Each g In _genrelist.genres 
+                genres.Add(g.ToString)
+            Next
+            Return genres
         End Get
     End Property
 
@@ -279,8 +292,16 @@ Public Class TMDb
         End If
     End Sub
 
+    Function GetGenreList As Boolean
+        _genrelist = _api.GetGenreList(LookupLanguages.Item(0))
+        Return Not IsNothing(_genrelist)
+    End Function
 
-
+    Private Sub FetchGenreList
+        If IsNothing(_genrelist) Then
+            If Not (New RetryHandler(AddressOf GetGenreList)).Execute Then Throw New Exception(TMDB_EXC_MSG)
+        End If
+    End Sub
 
     'Private Sub FetchReleases
     '    If IsNothing(_releases) then
