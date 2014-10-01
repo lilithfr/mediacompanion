@@ -281,7 +281,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function DownloadTextFiles(ByVal StartURL As String, Optional ByVal ForceDownload As Boolean = False) As String
         Dim data As String = ""
-        Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(StartURL, "", ForceDownload, strValue:=data)
+        Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(StartURL, "", ForceDownload,,, strValue:=data)
         Return data
         'Return DownloadCache.DownloadFileToString(StartURL)
     End Function
@@ -2645,6 +2645,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Return False
         End Try
 
+    End Function
+
+    Public Shared Function Download2Cache(ByVal url As String) As String     'Returns cachefilename if successful
+        Try
+            Dim cachefilenameandpath As String = ""
+            Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(url, "cache", False, 0, True, strValue:=cachefilenameandpath)
+            Return cachefilenameandpath 
+        Catch ex As Exception
+            Return ""
+        End Try
     End Function
 
     Public Shared Function GetResourceStream(ByVal resfile As String) As Stream

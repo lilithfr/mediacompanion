@@ -104,6 +104,7 @@ Public Class DownloadCache
     Public Shared Function DownloadFileAndCache(ByVal URL As String, Optional ByVal Path As String = "", _
                                           Optional ByVal ForceDownload As Boolean = False, _
                                           Optional ByVal resizeFanart As Integer = 0, _
+                                          Optional ByVal retcachename As Boolean = False, _
                                           Optional ByRef strValue As String = "") As Boolean
 
         Dim CacheFileName As String = ""
@@ -116,7 +117,11 @@ Public Class DownloadCache
             If String.IsNullOrEmpty(Path) Then
                 strValue = IO.File.ReadAllText(CachePath)
             Else
-                Utilities.copyImage(CachePath, Path, resizeFanart)
+                If Not retcachename Then
+                    Utilities.copyImage(CachePath, Path, resizeFanart)
+                Else
+                    strValue = CachePath 
+                End If
             End If
         End If
 

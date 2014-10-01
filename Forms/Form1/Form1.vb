@@ -686,6 +686,7 @@ Public Class Form1
             genretxt.ShortcutsEnabled = False
 
             MainFormLoadedStatus = True
+            UcFanartTv1.Form1MainFormLoadedStatus = True
 
             ResetFilters()
 
@@ -2454,7 +2455,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Public Sub util_ZoomImage(ByVal file As Bitmap)
+    Public Sub util_ZoomImage(ByVal file As Bitmap, Optional ByVal cachefile As String = "")
         bigPanel = New Panel
         With bigPanel
             .Width = Me.Width
@@ -2471,12 +2472,15 @@ Public Class Form1
             .Height = bigPanel.Height
             .SizeMode = PictureBoxSizeMode.Zoom
             '.Image = sender.image
-            .Image = file
+            If cachefile = "" Then
+                .Image = file
+            End If
             .Visible = True
             .BorderStyle = BorderStyle.Fixed3D
             AddHandler bigPictureBox.DoubleClick, AddressOf util_PicBoxClose
             .Dock = DockStyle.Fill
         End With
+        If Not cachefile = "" Then util_ImageLoad(bigPictureBox, cachefile, Utilities.DefaultPosterPath)
 
         'Dim sizex As Integer = bigpicbox.Width
         'Dim sizey As Integer = bigpicbox.Height

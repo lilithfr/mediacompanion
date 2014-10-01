@@ -1,19 +1,26 @@
 ﻿Imports System.Linq
+Imports System.Drawing
+Imports Media_Companion
+
 
 Public Class ucFanartTv
-    Dim WithEvents tvposterpicboxes As PictureBox
-    Dim WithEvents tvpostercheckboxes As RadioButton
+    Dim WithEvents artposterpicboxes As PictureBox
+    Dim WithEvents artcheckboxes As RadioButton
     Dim WithEvents tvposterlabels As Label
     Dim WithEvents tvreslabel As Label
     Dim nodata As Boolean = False
-    Dim arttype As String = ""
+    Public Dim Form1MainFormLoadedStatus As Boolean = False
+    Dim artheight As Integer = 37
+    Dim artwidth As Integer = 200
+    Dim artType As String = ""
+    Dim picratio As Decimal = 1.5
     Dim FanarttvMovielist As New FanartTvMovieList
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_fanarttvart)
     Public workingMovDetails As New FullMovieDetails
     Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
-    Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Logo", "Movie Art", "Background", "Movie Disc", 
-                                          "Movie Banner", "Movie Thumb", "Movie Poster"}
+    Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
+                                          "Movie Disc", "Movie Banner", "Landscape"}
     Public tvFriendlyname() As String = {"HiDef Tv Logo", "HiDef ClearArt", "Clear Logo", "Clear Art", "Tv Poster", "Tv Thumb", 
                                          "Tv Banner", "Show Background", "Season Poster", "Season Thumb",  "Character Art"}
 
@@ -39,7 +46,7 @@ Public Class ucFanartTv
         If nodata Then Exit Sub
         GetFanartTvArt(ID)
         If Not ConfirmIfResults() Then Exit Sub
-        arttypeload()
+        artheightload()
     End Sub
 
     Public Sub GetFanartTvArt(ByVal ID As String)
@@ -74,17 +81,19 @@ Public Class ucFanartTv
         nodata = True
     End Sub
     
-    Sub arttypeload()
+    Sub artheightload()
+        Dim Tabsgl As String = vbTab
+        Dim Tabdbl As String = vbTab & vbTab
         lblftvgroups.Items.Clear()
-        lblftvgroups.Items.Add(movFriendlyname(0) & ":" & vbTab & "( " & FanarttvMovielist.hdmovieclearart.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(1) & ":" & vbTab & "( " & FanarttvMovielist.hdmovielogo.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(2) & ":" & vbTab & "( " & FanarttvMovielist.movielogo.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(3) & ":" & vbTab & vbTab & "( " & FanarttvMovielist.movieart.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(4) & ":" & vbTab & "( " & FanarttvMovielist.moviebackground.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(5) & ":" & vbTab & "( " & FanarttvMovielist.moviedisc.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(6) & ":" & vbTab & "( " & FanarttvMovielist.moviebanner.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(7) & ":" & vbTab & "( " & FanarttvMovielist.moviethumb.count & " )")
-        lblftvgroups.Items.Add(movFriendlyname(8) & ":" & vbTab & "( " & FanarttvMovielist.movieposter.count & " )")
+        lblftvgroups.Items.Add(movFriendlyname(0) & ":" & Tabsgl & "( " & FanarttvMovielist.hdmovieclearart.count   & " )")
+        lblftvgroups.Items.Add(movFriendlyname(1) & ":" & Tabsgl & "( " & FanarttvMovielist.hdmovielogo.count       & " )")
+        lblftvgroups.Items.Add(movFriendlyname(2) & ":" & Tabsgl & "( " & FanarttvMovielist.movieart.count          & " )")
+        lblftvgroups.Items.Add(movFriendlyname(3) & ":" & Tabsgl & "( " & FanarttvMovielist.movielogo.count         & " )")
+        lblftvgroups.Items.Add(movFriendlyname(4) & ":" & Tabsgl & "( " & FanarttvMovielist.movieposter.count       & " )")
+        lblftvgroups.Items.Add(movFriendlyname(5) & ":" & Tabsgl & "( " & FanarttvMovielist.moviebackground.count   & " )")
+        lblftvgroups.Items.Add(movFriendlyname(6) & ":" & Tabsgl & "( " & FanarttvMovielist.moviedisc.count         & " )")
+        lblftvgroups.Items.Add(movFriendlyname(7) & ":" & Tabsgl & "( " & FanarttvMovielist.moviebanner.count       & " )")
+        lblftvgroups.Items.Add(movFriendlyname(8) & ":" & Tabsgl & "( " & FanarttvMovielist.moviethumb.count        & " )")
     End Sub
 
     Private Sub lblftvgroups_click(ByVal Sender As Object, e As EventArgs) Handles lblftvgroups.MouseDown 
@@ -92,31 +101,40 @@ Public Class ucFanartTv
         Select Case indx
             Case "0"
                 usedlist = FanarttvMovielist.hdmovieclearart
-                arttype = "wide"
+                artheight = 112
+                artType = "clearart"
             Case "1"
                 usedlist = FanarttvMovielist.hdmovielogo
-                arttype = "wide"
+                artheight = 77
+                artType = "logo"
             Case "2"
-                usedlist = FanarttvMovielist.movielogo
-                arttype = "wide"
-            Case "3"
                 usedlist = FanarttvMovielist.movieart
-                arttype = "wide"
+                artheight = 112
+                artType = "clearart"
+            Case "3"
+                usedlist = FanarttvMovielist.movielogo
+                artheight = 77
+                artType = "logo"
             Case "4"
-                usedlist = FanarttvMovielist.moviebackground
-                arttype = "wide"
-            Case "5"
-                usedlist = FanarttvMovielist.moviedisc
-                arttype = "square"
-            Case "6"
-                usedlist = FanarttvMovielist.moviebanner 
-                arttype = "wide"
-            Case "7"
-                usedlist = FanarttvMovielist.moviethumb
-                arttype = "wide"
-            Case "8"
                 usedlist = FanarttvMovielist.movieposter
-                arttype = "high"
+                artheight = 285
+                artType = "poster"
+            Case "5"
+                usedlist = FanarttvMovielist.moviebackground
+                artheight = 112
+                artType = "fanart"
+            Case "6"
+                usedlist = FanarttvMovielist.moviedisc
+                artheight = 200
+                artType = "disc"
+            Case "7"
+                usedlist = FanarttvMovielist.moviebanner 
+                artheight = 37
+                artType = "banner"
+            Case "8"
+                usedlist = FanarttvMovielist.moviethumb
+                artheight = 112
+                artType = "landscape"
         End Select
         PanelPopulate()
     End Sub
@@ -148,125 +166,61 @@ Public Class ucFanartTv
             lblnoart.Visible = false
         End If
         Panel1.VerticalScroll.Visible = True 
-        Dim location As Integer = 2
-        Dim pbwidth As Integer = 300
-        Dim pwheight As Integer = 204
-        Dim colwidth As Integer = 20
-        Dim columncount = 0
-        Dim locHeight = 5
-        Dim locOffset = 240  '197
-        Dim itemcounter As Integer = 0
-        Dim tempboolean As Boolean = True
-        If arttype = "high" Or arttype = "square" Then
-            For each item In usedlist
-                tvposterpicboxes() = New PictureBox()
-                With tvposterpicboxes
-                    .Location = New Point(location, locHeight)
-                    .Width = 150
-                    .Height = 204
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = item.urlpreview   'usedlist(f).SmallUrl
-                    .Tag = item.url 
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "poster" & itemcounter.ToString
-                    'AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
-                    'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
-                End With
-
-                tvpostercheckboxes() = New RadioButton()
-                With tvpostercheckboxes
-                    .Location = New Point(location + 65, locHeight + 208) '166
-                    .Name = "postercheckbox" & itemcounter.ToString
-                    .SendToBack()
-                    .Text = " "
-                    AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
-                End With
-
-                itemcounter += 1
-
-                Me.Panel1.Controls.Add(tvposterpicboxes())
-                Me.Panel1.Controls.Add(tvpostercheckboxes())
-                Me.Refresh()
-                Application.DoEvents()
-                location += 156 '120
-                columncount += 1
-                If columncount = 4 Then
-                    location = 2
-                    columncount = 0
-                    locHeight += locOffset 
-                End If
-            Next
-        ElseIf arttype = "banner" Then
-            For each item In usedlist
-                tvposterpicboxes() = New PictureBox()
-                With tvposterpicboxes
-                    .Location = New Point(0, location)
-                    .Width = 600
-                    .Height = 114
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = item.urlpreview 
-                    .Tag = item.url
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "poster" & itemcounter.ToString
-                    'AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
-                    'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
-                End With
-
-                tvpostercheckboxes() = New RadioButton()
-                With tvpostercheckboxes
-                    .Location = New Point(290, location + 110)
-                    .Name = "postercheckbox" & itemcounter.ToString
-                    .SendToBack()
-                    .Text = " "
-                    AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
-                End With
-                itemcounter += 1
-                location += 140
-
-                Me.Panel1.Controls.Add(tvposterpicboxes())
-                Me.Panel1.Controls.Add(tvpostercheckboxes())
-            Next
-        ElseIf arttype = "wide" Then
-            For each item In usedlist
-                tvposterpicboxes() = New PictureBox()
-                With tvposterpicboxes
-                    .Location = New Point(0, location)
-                    .Width = 600
-                    .Height = 114
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = item.urlpreview 
-                    .Tag = item.url
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "poster" & itemcounter.ToString
-                    'AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
-                    'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
-                End With
-
-                tvpostercheckboxes() = New RadioButton()
-                With tvpostercheckboxes
-                    .Location = New Point(290, location + 110)
-                    .Name = "postercheckbox" & itemcounter.ToString
-                    .SendToBack()
-                    .Text = " "
-                    AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
-                End With
-                itemcounter += 1
-                location += 140
-
-                Me.Panel1.Controls.Add(tvposterpicboxes())
-                Me.Panel1.Controls.Add(tvpostercheckboxes())
-            Next
-        End If
         
-        ''Me.Refresh()
+        Dim xlocation As Integer = 2
+        Dim locHeight = 5
+        Dim colwidth As Integer = 20
+        Dim colcount As Integer = 0
+        Dim panelw As Integer = Panel1.Width
+        Dim pbwidth As Integer = Math.Ceiling(artwidth * picratio)
+        Dim pbheight As Integer = Math.Ceiling(artheight  * picratio)
+        Dim imgchkbx As Integer = Math.Floor(pbwidth / 2)
+        Dim colmax As Integer = Math.Floor(panelw/pbwidth)
+        Dim xspace As Integer = Math.Floor((panelw - ((xlocation+pbwidth)*colmax)) / colmax)
+        Dim ylocOffset = (locHeight + pbheight + 36)
+        Dim itemcounter As Integer = 0
+        For each item In usedlist
+            artposterpicboxes() = New PictureBox()
+            With artposterpicboxes
+                .Location = New Point(xlocation, locHeight)
+                .Width = pbwidth 
+                .Height = pbheight
+                .SizeMode = PictureBoxSizeMode.Zoom
+                .ImageLocation = item.urlpreview         'Preview Image url
+                .Tag = item.url                          'Full Image url
+                .Visible = True
+                .BorderStyle = BorderStyle.Fixed3D
+                .Name = "poster" & itemcounter.ToString
+                AddHandler artposterpicboxes.DoubleClick, AddressOf PosterDoubleClick
+            End With
+            artcheckboxes() = New RadioButton()
+            With artcheckboxes
+                .Location = New Point(xlocation + imgchkbx, locHeight + pbheight + 4)
+                .Name = "imgcheckbox" & itemcounter.ToString
+                .SendToBack()
+                .Text = " "
+                .Tag = item.url
+                AddHandler artcheckboxes.CheckedChanged, AddressOf artPosterRadioChanged
+            End With
+            itemcounter += 1
+            Me.Panel1.Controls.Add(artposterpicboxes())
+            Me.Panel1.Controls.Add(artcheckboxes())
+            Me.Refresh()
+            Application.DoEvents()
+            xlocation += xspace + pbwidth 
+            colcount += 1
+            If colcount = colmax Then
+                xlocation = 2
+                colcount = 0
+                locHeight += ylocOffset 
+            End If
+        Next
         Application.DoEvents()
         Me.Refresh()
+        EnableFanartScrolling()
     End Sub
 
-    Private Sub tv_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
+    Private Sub artPosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
 
         'PictureBox13.Image = Nothing
         'Dim tempstring As String = sender.name
@@ -335,6 +289,36 @@ Public Class ucFanartTv
        ' End If
     End Sub
 
+    Private Sub PosterDoubleClick(ByVal sender As Object, ByVal e As EventArgs)
+        Dim tempstring As String = sender.name.replace("poster", "imgcheckbox")
+        
+
+        For Each Control In Panel1.Controls
+            If Control.name = tempstring Then
+                Dim rb As RadioButton = Control
+                rb.Checked = True
+            End If
+        Next
+        Dim messbox As New frmMessageBox("Please wait,", "", "Downloading Full Res Image")
+        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        messbox.Show()
+        Me.Refresh()
+        messbox.Refresh()
+        Dim cachefile As String = Utilities.Download2Cache(sender.Tag.ToString)
+        Form1.util_ZoomImage(Nothing, cachefile)
+        messbox.Close()
+    End Sub
+
+    Sub EnableFanartScrolling()
+        Try
+            Dim rb As RadioButton = Panel1.Controls("imgcheckbox0")
+
+            rb.Select()                       'Causes RadioButtons checked state to toggle
+            rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
+        Catch
+        End Try
+    End Sub
+
     Private Sub Button1_Click( sender As Object,  e As EventArgs) Handles Button1.Click
             If nodata Then Exit Sub
     End Sub
@@ -356,4 +340,9 @@ Public Class ucFanartTv
         End Try
     End Sub
 
+    Private Sub panel_resize() Handles MyBase.resize
+        If Not Form1MainFormLoadedStatus Then Exit Sub
+        PanelSelectionDisplay()
+
+    End Sub
 End Class
