@@ -38,6 +38,7 @@ Public Class RescrapeList
     Property TagsFromKeywords    As Boolean
     Property SetWatched          As Boolean
     Property ClearWatched        As Boolean
+    Property ArtFromFanartTv     As Boolean
     Property FromTMDB            As Boolean
 
     Sub New

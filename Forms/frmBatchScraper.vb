@@ -207,6 +207,10 @@
         Form1.rescrapeList.dlxtraart = cbXtraFanart.Checked 
     End Sub
 
+    Private Sub cbFanartTv_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbFanartTv.CheckedChanged
+        Form1.rescrapeList.ArtFromFanartTv = cbFanartTv.Checked 
+    End Sub
+
     Private Sub cbDlTrailer_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTrailer.CheckedChanged
         Form1.rescrapeList.Download_Trailer = cbDlTrailer.Checked 
     End Sub

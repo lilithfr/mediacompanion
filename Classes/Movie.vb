@@ -2802,7 +2802,7 @@ Public Class Movie
 
     Function NeedTMDb(rl As RescrapeList)
         Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or
-               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors
+               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors or rl.ArtFromFanartTv 
     End Function
 
     Function RescrapeBody(rl As RescrapeList)
@@ -2967,6 +2967,10 @@ Public Class Movie
             If Cancelled() Then Exit Sub
 
             If rl.dlxtraart Then DownloadExtraFanart()
+
+            If Cancelled() Then Exit Sub
+
+            If rl.ArtFromFanartTv Then DownloadFromFanartTv()
 
             If Cancelled() Then Exit Sub
 
