@@ -1804,6 +1804,12 @@ Public Class Preferences
 
     End Function
 
+    Public Shared Function GetFanartTvMoviePath(ByVal FullPath As String, Optional ByVal MovFilePath As String = "") As String
+        Dim fanartTvPath As String = FullPath
+
+        Return fanartTvPath 
+    End Function
+
     Public Shared Function GetActorThumbPath(Optional ByVal location As String = "")
         Dim actualpath As String = ""
         Try

@@ -304,12 +304,7 @@ Public Class ucFanartTv
             Me.Refresh()
             messbox.Refresh()
             Try
-                Dim savepath As String = Nothing
-                savepath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
-                If isroot Then
-                    savepath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
-                End If
-                savepath &= artType 
+                Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
                 Dim success As Boolean = Utilities.DownloadFile(selectedimageurl, savepath)
                 DisplayExistingArt()
             Catch

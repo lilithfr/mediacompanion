@@ -1975,8 +1975,8 @@ Public Class Movie
     End Sub
 
     Sub DownloadFromFanartTv()
-        If Preferences.MovFanartTvscrape AndAlso (Preferences.allfolders Or Preferences.usefoldernames) Then
-            DoDownloadExtraFanart()
+        If Preferences.MovFanartTvscrape Then   'AndAlso (Preferences.allfolders Or Preferences.usefoldernames) 
+            DoDownloadFromFanartTv()
         Else
             ReportProgress(, "Scraping from Fanart.Tv, not selected" & vbCrLf)
             Exit Sub
@@ -1987,7 +1987,115 @@ Public Class Movie
         Try
             Dim fcount As Integer = 0
             If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
-
+                Dim clearartLD As String = Nothing : Dim logoLD As String = Nothing: Dim clearart As String = Nothing : Dim logo As String = Nothing
+                Dim poster As String = Nothing : Dim fanart As String = Nothing 
+                Dim disc As String = Nothing : Dim banner As String = Nothing : Dim landscape As String = Nothing
+                Dim lang As New List(Of String)
+                Try
+                    lang.Add(TMDb.LanguageCodes(0))
+                Catch
+                End Try
+                lang.Add("en")
+                If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
+                    _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
+                End If
+                Dim DestPath As String = Path.GetDirectoryName(NfoPathAndFilename) & "\"   'Preferences.GetFanartTvMoviePath(NfoPathAndFilename, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                Dim ID = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, If(_scrapedMovie.fullmoviebody.tmdbid<>"", _scrapedMovie.fullmoviebody.tmdbid,""))
+                If ID = "" Then
+                    ReportProgress(,"!!! Abort Fanart,Tv artwork, no IMDB or TMDBID Found" &vbCrLf)
+                    Exit Sub
+                End If
+                Dim newobj As New FanartTv
+                newobj.ID = ID
+                newobj.src = "movie"
+                Dim FanarttvMovielist As New FanartTvMovieList
+                FanarttvMovielist = newobj.FanarttvMovieresults
+                For Each lan In lang
+                    If IsNothing(clearart) Then
+                        For Each Art In FanarttvMovielist.hdmovieclearart
+                            If Art.lang = lan Then 
+                                clearart = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(clearartLD) Then
+                        For Each Art In FanarttvMovielist.movieart
+                            If Art.lang = lan Then
+                                clearartLD = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(logo) Then
+                        For Each Art In FanarttvMovielist.hdmovielogo 
+                            If Art.lang = lan Then
+                                logo = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(logoLD) Then
+                        For Each Art In FanarttvMovielist.movielogo 
+                            If Art.lang = lan Then
+                                logoLD = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(poster) Then
+                        For Each Art In FanarttvMovielist.movieposter
+                            If Art.lang = lan Then
+                                poster = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(fanart) Then
+                        For Each Art In FanarttvMovielist.moviebackground 
+                            If Art.lang = lan Then
+                                fanart = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(disc) Then
+                        For Each Art In FanarttvMovielist.moviedisc 
+                            If Art.lang = lan Then
+                                disc = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(banner) Then
+                        For Each Art In FanarttvMovielist.moviebanner
+                            If Art.lang = lan Then
+                                banner = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If IsNothing(landscape) Then
+                        For Each Art In FanarttvMovielist.moviethumb 
+                            If Art.lang = lan Then
+                                landscape = Art.url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                Next
+                If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
+                If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold 
+                Utilities.DownloadFile(clearart, DestPath & "clearart.png")
+                Utilities.DownloadFile(logo, DestPath & "logo.png")
+                Utilities.DownloadFile(poster, DestPath & "poster.jpg")
+                Utilities.DownloadFile(fanart, DestPath & "fanart.jpg")
+                Utilities.DownloadFile(disc, DestPath & "disc.jpg")
+                Utilities.DownloadFile(banner, DestPath & "banner.jpg")
+                Utilities.DownloadFile(landscape, DestPath & "landscape.jpg")
+                ReportProgress(MSG_OK, "!!! Artwork from Fanart.Tv Downloaded OK" & vbCrLf)
+            Else
+                ReportProgress(, "!!! Artwork from Fanart.Tv bypassed as Movie is in Root Folder." & vbCrLf & "Artwork Downloaded requires Movies to be in separate folders." & vbCrLf)
             End If
 
         Catch ex As Exception
