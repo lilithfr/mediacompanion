@@ -286,6 +286,8 @@ Public Class FanartTv
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
                                                         artwork.likes = detail3.InnerText.ToInt
+                                                    Case "disc_type"
+                                                        artwork.disctype = detail3.InnerText
                                                 End Select
                                             Next
                                             moviedisc.Add(artwork)

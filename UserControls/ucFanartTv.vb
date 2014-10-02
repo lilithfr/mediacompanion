@@ -10,10 +10,11 @@ Public Class ucFanartTv
     Dim WithEvents tvreslabel As Label
     Dim nodata As Boolean = False
     Public Dim Form1MainFormLoadedStatus As Boolean = False
+    Dim isroot As Boolean
     Dim artheight As Integer = 37
     Dim artwidth As Integer = 200
     Dim artType As String = ""
-    Dim picratio As Decimal = 1.5
+    Dim selectedimageurl As String = Nothing
     Dim FanarttvMovielist As New FanartTvMovieList
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_fanarttvart)
@@ -26,12 +27,15 @@ Public Class ucFanartTv
 
 
     Public Sub ucFanartTv_Refresh(ByVal moviedetails As FullMovieDetails)
+        nodata = False
+        isroot = Preferences.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
         If workingMovDetails.fullmoviebody.title <> moviedetails.fullmoviebody.title Then
             workingMovDetails = Form1.workingMovieDetails
         Else
             Exit Sub
         End If
         Dim ID As String = ""
+        pbexists.Image = Nothing
         lblftvgroups.Items.clear
         PanelClear()
         Me.lblTitle.Text = workingMovDetails.fullmoviebody.title 
@@ -40,9 +44,9 @@ Public Class ucFanartTv
         ElseIf workingMovDetails.fullmoviebody.tmdbid <> "" Then
             ID = workingMovDetails.fullmoviebody.tmdbid
         Else
-            nodata = True
             Call noID
         End If
+        If isroot Then RootFolderMovie()
         If nodata Then Exit Sub
         GetFanartTvArt(ID)
         If Not ConfirmIfResults() Then Exit Sub
@@ -80,6 +84,13 @@ Public Class ucFanartTv
         MsgBox(" Selected Movie contains no" & vbCrLf & "     IMDB or TMDB ID" & vbCrLf & "Unable to get Fanart TV Data") 
         nodata = True
     End Sub
+
+    Private Sub RootFolderMovie()
+        MsgBox("  Selected Movie is in the Root Folder!" & vbCrLf & "Unable to save artwork from" & vbCrLf & _
+               "Fanart.Tv, to the root folder" & vbCrLf & "Suggest rename movie to folder to be" & vbCrLf & _
+               "compatible with ""Artwork Downloader""")
+        nodata = True
+    End Sub
     
     Sub artheightload()
         Dim Tabsgl As String = vbTab
@@ -102,39 +113,39 @@ Public Class ucFanartTv
             Case "0"
                 usedlist = FanarttvMovielist.hdmovieclearart
                 artheight = 112
-                artType = "clearart"
+                artType = "clearart.png"
             Case "1"
                 usedlist = FanarttvMovielist.hdmovielogo
                 artheight = 77
-                artType = "logo"
+                artType = "logo.png"
             Case "2"
                 usedlist = FanarttvMovielist.movieart
                 artheight = 112
-                artType = "clearart"
+                artType = "clearart.png"
             Case "3"
                 usedlist = FanarttvMovielist.movielogo
                 artheight = 77
-                artType = "logo"
+                artType = "logo.png"
             Case "4"
                 usedlist = FanarttvMovielist.movieposter
                 artheight = 285
-                artType = "poster"
+                artType = "poster.jpg"
             Case "5"
                 usedlist = FanarttvMovielist.moviebackground
                 artheight = 112
-                artType = "fanart"
+                artType = "fanart.jpg"
             Case "6"
                 usedlist = FanarttvMovielist.moviedisc
                 artheight = 200
-                artType = "disc"
+                artType = "disc.png"
             Case "7"
                 usedlist = FanarttvMovielist.moviebanner 
                 artheight = 37
-                artType = "banner"
+                artType = "banner.jpg"
             Case "8"
                 usedlist = FanarttvMovielist.moviethumb
                 artheight = 112
-                artType = "landscape"
+                artType = "landscape.jpg"
         End Select
         PanelPopulate()
     End Sub
@@ -166,8 +177,7 @@ Public Class ucFanartTv
             lblnoart.Visible = false
         End If
         Panel1.VerticalScroll.Visible = True 
-        
-        Dim xlocation As Integer = 2
+        Dim picratio As Decimal = 1.25
         Dim locHeight = 5
         Dim colwidth As Integer = 20
         Dim colcount As Integer = 0
@@ -176,7 +186,9 @@ Public Class ucFanartTv
         Dim pbheight As Integer = Math.Ceiling(artheight  * picratio)
         Dim imgchkbx As Integer = Math.Floor(pbwidth / 2)
         Dim colmax As Integer = Math.Floor(panelw/pbwidth)
-        Dim xspace As Integer = Math.Floor((panelw - ((xlocation+pbwidth)*colmax)) / colmax)
+        Dim xspace As Integer = Math.Floor((panelw - (pbwidth * colmax)) / (colmax+1))
+        Dim xstart As Integer = xspace - 10
+        Dim xlocation As Integer = xstart
         Dim ylocOffset = (locHeight + pbheight + 36)
         Dim itemcounter As Integer = 0
         For each item In usedlist
@@ -210,89 +222,41 @@ Public Class ucFanartTv
             xlocation += xspace + pbwidth 
             colcount += 1
             If colcount = colmax Then
-                xlocation = 2
+                xlocation = xstart
                 colcount = 0
                 locHeight += ylocOffset 
             End If
         Next
         Application.DoEvents()
         Me.Refresh()
+        Button1.Visible = False
         EnableFanartScrolling()
+        selectedimageurl = Nothing
+        DisplayExistingArt()
     End Sub
 
     Private Sub artPosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
-
-        'PictureBox13.Image = Nothing
-        'Dim tempstring As String = sender.name
-        'Dim tempint As Integer = 0
-        'Dim tempstring2 As String = tempstring
-        'Dim allok As Boolean = False
-        'tempstring = tempstring.Replace("postercheckbox", "")
-        'tempint = Convert.ToDecimal(tempstring)
-        ''For Each button As Control In Me.Panel8.Controls
-        ''    If button.Name.IndexOf("postercheckbox") <> -1 Then
-        ''        Dim b1 As RadioButton = CType(button, RadioButton)
-        ''        If b1.Checked = True Then
-        ''            allok = True
-        ''            Exit For
-        ''        End If
-        ''    End If
-        ''Next
-
-        'Dim hires(1)
-        'Dim lores(1)
-        'lores(0) = ""
-        'hires(0) = ""
-        'lores(1) = ""
-        'hires(1) = ""
-        'For Each cont As Control In Me.Panel16.Controls()
-        '    If cont.Name.Replace("poster", "") = tempint.ToString Then
-        '        Dim picbox As PictureBox = cont
-        '        lores(0) = "Save Image (" & picbox.Image.Width & " x " & picbox.Image.Height & ")"
-        '        lores(1) = picbox.Name
-        '        If tvdbmode = True Then
-        '            For Each poster In usedlist
-        '                If poster.smallUrl = picbox.ImageLocation Then
-        '                    If IsNumeric(poster.resolution.Replace("x", "")) Then
-        '                        hires(0) = "Save Image (" & poster.resolution & ")"
-        '                        hires(0) = hires(0).replace("x", " x ")
-        '                    Else
-        '                        hires(0) = "Save Image (Hi-Res)"
-        '                    End If
-        '                    hires(1) = poster.url
-        '                    Exit For
-        '                End If
-        '            Next
-        '            allok = True
-        '            Exit For
-        '        Else
-        '            allok = True
-        '        End If
-        '    End If
-        'Next
-
-        'If allok = True Then
-        '    'Button57.Visible = True
-        '    'Button57.Tag = lores(1)
-        '    'Button57.Text = lores(0)
-        '    If tvdbmode = True Then
-        '        btnTvPosterSaveBig.Text = hires(0)
-        '        btnTvPosterSaveBig.Visible = True
-        '        btnTvPosterSaveBig.Tag = hires(1)
-        '    Else
-        '        btnTvPosterSaveBig.Visible = False
-        '    End If
-
-        'Else
-        '    btnTvPosterSaveBig.Visible = False
-            'Button57.Visible = False
-       ' End If
+        Dim tempstring As String = sender.name
+        Dim tempint As Integer = 0
+        Dim tempstring2 As String = tempstring
+        Dim allok As Boolean = False
+        tempstring = tempstring.Replace("imgcheckbox", "")
+        tempint = Convert.ToDecimal(tempstring)
+        For each button as control in Panel1.controls
+            If button.name.indexof("imgcheckbox") <> -1 Then
+                Dim b1 As radiobutton = CType(button, radiobutton)
+                If b1.Checked = True Then
+                    allok = True
+                    selectedimageurl = b1.tag
+                    Exit For
+                End if
+            End if
+        Next
+        Button1.Visible = allok
     End Sub
 
     Private Sub PosterDoubleClick(ByVal sender As Object, ByVal e As EventArgs)
         Dim tempstring As String = sender.name.replace("poster", "imgcheckbox")
-        
-
         For Each Control In Panel1.Controls
             If Control.name = tempstring Then
                 Dim rb As RadioButton = Control
@@ -314,27 +278,50 @@ Public Class ucFanartTv
             Dim rb As RadioButton = Panel1.Controls("imgcheckbox0")
 
             rb.Select()                       'Causes RadioButtons checked state to toggle
-            rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
+            rb.Checked =  False  'Not rb.Checked     'Undo unwanted checked state toggling
         Catch
         End Try
     End Sub
 
+    Private Sub DisplayExistingArt()
+        Dim LoadPath As String = Nothing
+        LoadPath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
+        If isroot Then
+            LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
+        End If
+        LoadPath &= artType
+        If IO.File.Exists(LoadPath) Then
+            Form1.util_ImageLoad(pbexists, LoadPath, "")
+        End If
+    End Sub
+
     Private Sub Button1_Click( sender As Object,  e As EventArgs) Handles Button1.Click
-            If nodata Then Exit Sub
+        If nodata Then Exit Sub
+        If Not IsNothing(selectedimageurl) Then
+            messbox = New frmMessageBox("Please wait,", "Downloading new image", "and saving")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            Me.Refresh()
+            messbox.Refresh()
+            Try
+                Dim savepath As String = Nothing
+                savepath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
+                If isroot Then
+                    savepath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
+                End If
+                savepath &= artType 
+                Dim success As Boolean = Utilities.DownloadFile(selectedimageurl, savepath)
+                DisplayExistingArt()
+            Catch
+            End Try
+            messbox.Close()
+        End If
     End Sub
 
     Private Sub panel_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles panel1.MouseWheel
         Try
-            'If TabControl2.SelectedIndex = 1 Then
-                Dim mouseDelta As Integer = e.Delta / 120
-                'Try
-                    panel1.AutoScrollPosition = New Point(0, panel1.VerticalScroll.Value - (mouseDelta * 30))
-'                Catch ex As Exception
-'#If SilentErrorScream Then
-'                Throw ex
-'#End If
-'                End Try
-'            End If
+            Dim mouseDelta As Integer = e.Delta / 120
+            panel1.AutoScrollPosition = New Point(0, panel1.VerticalScroll.Value - (mouseDelta * 30))
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -343,6 +330,6 @@ Public Class ucFanartTv
     Private Sub panel_resize() Handles MyBase.resize
         If Not Form1MainFormLoadedStatus Then Exit Sub
         PanelSelectionDisplay()
-
     End Sub
+
 End Class

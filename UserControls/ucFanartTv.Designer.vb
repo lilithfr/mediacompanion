@@ -26,12 +26,12 @@ Partial Class ucFanartTv
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.pbexists = New System.Windows.Forms.PictureBox()
         Me.lblftvgroups = New System.Windows.Forms.ListBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.lblnoart = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.lblTitle = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -94,6 +94,7 @@ Partial Class ucFanartTv
         Me.pbexists.Location = New System.Drawing.Point(9, 295)
         Me.pbexists.Name = "pbexists"
         Me.pbexists.Size = New System.Drawing.Size(293, 288)
+        Me.pbexists.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbexists.TabIndex = 2
         Me.pbexists.TabStop = false
         '
@@ -109,6 +110,17 @@ Partial Class ucFanartTv
         Me.lblftvgroups.Name = "lblftvgroups"
         Me.lblftvgroups.Size = New System.Drawing.Size(252, 224)
         Me.lblftvgroups.TabIndex = 1
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Label1.Location = New System.Drawing.Point(9, 267)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(123, 17)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "Existing Artwork"
         '
         'lblnoart
         '
@@ -182,17 +194,6 @@ Partial Class ucFanartTv
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.Size = New System.Drawing.Size(658, 38)
         Me.lblTitle.TabIndex = 2
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = true
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label1.Location = New System.Drawing.Point(9, 267)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(123, 17)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Existing Artwork"
         '
         'ucFanartTv
         '

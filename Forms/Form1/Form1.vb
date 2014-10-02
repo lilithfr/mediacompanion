@@ -2465,13 +2465,11 @@ Public Class Form1
         End With
 
         bigPictureBox = New PictureBox()
-
         With bigPictureBox
             .Location = New Point(0, 0)
             .Width = bigPanel.Width
             .Height = bigPanel.Height
             .SizeMode = PictureBoxSizeMode.Zoom
-            '.Image = sender.image
             If cachefile = "" Then
                 .Image = file
             End If
@@ -2489,21 +2487,18 @@ Public Class Form1
         bigpanellabel = New Label
         With bigpanellabel
             .Location = New Point(20, 200)
-            .Width = 150
-            .Height = 50
+            .Width = 170
+            .Height = 75
             .Visible = True
-            .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
-            '   .BringToFront()
+            .Text = "Double Click Image To Return To Browser"
+            .Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold)
         End With
 
         Me.bigPanel.Controls.Add(bigpanellabel)
         bigpanellabel.BringToFront()
         Application.DoEvents()
 
-
-
         If Not bigPictureBox.Image Is Nothing And bigPictureBox.Image.Width > 20 Then
-
             Dim sizey As Integer = bigPictureBox.Image.Height
             Dim sizex As Integer = bigPictureBox.Image.Width
             Dim tempstring As String
@@ -2511,7 +2506,7 @@ Public Class Form1
             Dim resolutionlbl As New Label
             With resolutionlbl
                 .Location = New Point(20, 450)
-                .Width = 300
+                .Width = 200
                 .Text = tempstring
                 .BackColor = Color.Transparent
             End With
@@ -2525,60 +2520,59 @@ Public Class Form1
             'bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
         End If
 
-
         Me.Controls.Add(bigPanel)
         bigPanel.BringToFront()
         Me.bigPanel.Controls.Add(bigPictureBox)
         Me.Refresh()
     End Sub
 
-    Private Sub bigpicbox_LoadCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs) Handles bigPictureBox.LoadCompleted
-        Try
-            Dim bigpanellabel As Label
-            bigpanellabel = New Label
-            Dim resolutionlbl As Label
-            With bigpanellabel
-                .Location = New Point(20, 200)
-                .Width = 150
-                .Height = 50
-                .Visible = True
-                .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
-                '   .BringToFront()
-            End With
+    'Private Sub bigpicbox_LoadCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs) Handles bigPictureBox.LoadCompleted
+    '    Try
+    '        Dim bigpanellabel As Label
+    '        bigpanellabel = New Label
+    '        Dim resolutionlbl As Label
+    '        With bigpanellabel
+    '            .Location = New Point(20, 200)
+    '            .Width = 150
+    '            .Height = 50
+    '            .Visible = True
+    '            .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
+    '            '   .BringToFront()
+    '        End With
 
-            Me.bigPanel.Controls.Add(bigpanellabel)
-            bigpanellabel.BringToFront()
-            Application.DoEvents()
+    '        Me.bigPanel.Controls.Add(bigpanellabel)
+    '        bigpanellabel.BringToFront()
+    '        Application.DoEvents()
 
 
 
-            If Not bigPictureBox.Image Is Nothing And bigPictureBox.Image.Width > 20 Then
+    '        If Not bigPictureBox.Image Is Nothing And bigPictureBox.Image.Width > 20 Then
 
-                Dim sizey As Integer = bigPictureBox.Image.Height
-                Dim sizex As Integer = bigPictureBox.Image.Width
-                Dim tempstring As String
-                tempstring = "Full Image Resolution :- " & sizex.ToString & " x " & sizey.ToString
-                resolutionlbl = New Label
-                With resolutionlbl
-                    .Location = New Point(20, 450)
-                    .Width = 180
-                    .Text = tempstring
-                    .BackColor = Color.Transparent
-                End With
+    '            Dim sizey As Integer = bigPictureBox.Image.Height
+    '            Dim sizex As Integer = bigPictureBox.Image.Width
+    '            Dim tempstring As String
+    '            tempstring = "Full Image Resolution :- " & sizex.ToString & " x " & sizey.ToString
+    '            resolutionlbl = New Label
+    '            With resolutionlbl
+    '                .Location = New Point(20, 450)
+    '                .Width = 180
+    '                .Text = tempstring
+    '                .BackColor = Color.Transparent
+    '            End With
 
-                Me.bigPanel.Controls.Add(resolutionlbl)
-                resolutionlbl.BringToFront()
-                Me.Refresh()
-                Application.DoEvents()
-                Dim tempstring2 As String = resolutionlbl.Text
-            Else
-                'bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    '            Me.bigPanel.Controls.Add(resolutionlbl)
+    '            resolutionlbl.BringToFront()
+    '            Me.Refresh()
+    '            Application.DoEvents()
+    '            Dim tempstring2 As String = resolutionlbl.Text
+    '        Else
+    '            'bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
 
-    End Sub
+    'End Sub
 
     Private Sub util_PicBoxClose()
         Me.Controls.Remove(bigPanel)
@@ -4492,14 +4486,11 @@ Public Class Form1
 
             If posterArray.Count > Preferences.maximumthumbs Then
                 Dim tempmaxthumbs As Integer = posterArray.Count
-
                 Do Until tempmaxthumbs < 1
                     pageCount += 1
                     tempmaxthumbs -= Preferences.maximumthumbs
                 Loop
             End If
-
-
             If posterArray.Count > 10 Then
                 For f = 0 To Preferences.maximumthumbs - 1
                     names.Add(posterArray(f).ldUrl)
@@ -4572,7 +4563,6 @@ Public Class Form1
 
                         itemcounter += 1
 
-
                         Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
                         Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     End If
@@ -4602,7 +4592,6 @@ Public Class Form1
                         End With
 
                         itemcounter += 1
-
 
                         Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
                         Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
@@ -4641,18 +4630,13 @@ Public Class Form1
                 .Height = 100
                 .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
                 .Text = "No Posters Were Found For This Movie"
-
             End With
             lblMovPosterPages.Text = "0 of 0 Images"
             Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
         messbox.Close()
     End Sub
-
-    Sub tpfanartpg_leave() Handles tpFanartTv.Leave
-
-    End Sub
-
+    
     Private Sub mov_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
         Dim tempstring As String = sender.name
         Dim tempint As Integer = 0
@@ -4676,7 +4660,6 @@ Public Class Form1
             cbMoviePosterSaveLoRes.Enabled = False
             btnPosterTabs_SaveImage.Enabled = False
         End If
-
     End Sub
 
     Private Sub util_ImageRes(ByVal sender As Object, ByVal e As EventArgs)
@@ -4697,8 +4680,6 @@ Public Class Form1
         Me.Refresh()
         Application.DoEvents()
     End Sub
-
-    
 
     Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
         Try
@@ -6687,10 +6668,10 @@ Public Class Form1
                 Dim picbox As PictureBox = cont
                 lores(0) = "Save Image (" & picbox.Image.Width & " x " & picbox.Image.Height & ")"
                 lores(1) = picbox.Name
-                If tvdbmode = True Then
+                'If tvdbmode = True Then
                     For Each poster In usedlist
                         If poster.smallUrl = picbox.ImageLocation Then
-                            If IsNumeric(poster.resolution.Replace("x", "")) Then
+                            If Not IsNothing(poster.Resolution) AndAlso IsNumeric(poster.resolution.Replace("x", "")) Then
                                 hires(0) = "Save Image (" & poster.resolution & ")"
                                 hires(0) = hires(0).replace("x", " x ")
                             Else
@@ -6702,9 +6683,10 @@ Public Class Form1
                     Next
                     allok = True
                     Exit For
-                Else
-                    allok = True
-                End If
+                'Else
+                '    allok = True
+                '    Exit For
+                'End If
             End If
         Next
 
@@ -6712,13 +6694,13 @@ Public Class Form1
             'Button57.Visible = True
             'Button57.Tag = lores(1)
             'Button57.Text = lores(0)
-            If tvdbmode = True Then
+            'If tvdbmode = True Then
                 btnTvPosterSaveBig.Text = hires(0)
                 btnTvPosterSaveBig.Visible = True
                 btnTvPosterSaveBig.Tag = hires(1)
-            Else
-                btnTvPosterSaveBig.Visible = False
-            End If
+            'Else
+            '    btnTvPosterSaveBig.Visible = False
+            'End If
 
         Else
             btnTvPosterSaveBig.Visible = False
@@ -12929,6 +12911,7 @@ End Sub
         cbMovieTrailerUrl           .Checked        = Preferences.gettrailer
         cbMoviePosterScrape         .Checked        = Preferences.scrapemovieposters
         cbMovFanartScrape           .Checked        = Preferences.savefanart
+        cbMovFanartTvScrape         .Checked        = Preferences.MovFanartTvscrape 
         cbMovieUseFolderNames       .Checked        = Preferences.usefoldernames
         cbMovXtraThumbs             .Checked        = Preferences.movxtrathumb
         cbMovXtraFanart             .Checked        = Preferences.movxtrafanart
@@ -15113,6 +15096,20 @@ End Sub
                 Preferences.savefanart = True
             Else
                 Preferences.savefanart = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovFanartTvScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartTvScrape.CheckedChanged
+        Try
+            If cbMovFanartTvScrape.CheckState = CheckState.Checked Then
+                Preferences.MovFanartTvscrape = True
+            Else
+                Preferences.MovFanartTvscrape = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -19384,6 +19381,7 @@ End Sub
 
     Private Sub Button58_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button58.Click
         Try
+            btnTvPosterSaveBig.Visible = False
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             If WorkingTvShow.ImdbId = Nothing Then
                 MsgBox("No IMDB ID is available for this movie, cant scrape posters")

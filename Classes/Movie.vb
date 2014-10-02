@@ -786,6 +786,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFromFanartTv        , "Fanart.Tv Downlad"         ) )  'Download images from Fanart.Tv site
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
@@ -1919,9 +1920,6 @@ Public Class Movie
         Else
             DoDownloadFanart()
         End If
-
-
-
     End Sub
 
     Sub DoDownloadFanart()
@@ -1974,6 +1972,27 @@ Public Class Movie
             End Try
 
         End If
+    End Sub
+
+    Sub DownloadFromFanartTv()
+        If Preferences.MovFanartTvscrape AndAlso (Preferences.allfolders Or Preferences.usefoldernames) Then
+            DoDownloadExtraFanart()
+        Else
+            ReportProgress(, "Scraping from Fanart.Tv, not selected" & vbCrLf)
+            Exit Sub
+        End If
+    End Sub
+
+    Sub DoDownloadFromFanartTv()
+        Try
+            Dim fcount As Integer = 0
+            If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
+
+            End If
+
+        Catch ex As Exception
+            ReportProgress(MSG_ERROR, "!!! Problem downloading from Fanart.Tv" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+        End Try
     End Sub
 
     Sub DownloadExtraFanart()
