@@ -786,7 +786,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFromFanartTv        , "Fanart.Tv Downlad"         ) )  'Download images from Fanart.Tv site
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFromFanartTv        , "Fanart.Tv download"        ) )  'Download images from Fanart.Tv site
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
@@ -1974,8 +1974,8 @@ Public Class Movie
         End If
     End Sub
 
-    Sub DownloadFromFanartTv()
-        If Preferences.MovFanartTvscrape Then   'AndAlso (Preferences.allfolders Or Preferences.usefoldernames) 
+    Sub DownloadFromFanartTv(Optional rescrapelist As Boolean = False)
+        If Preferences.MovFanartTvscrape OrElse rescrapelist Then   'AndAlso (Preferences.allfolders Or Preferences.usefoldernames) 
             DoDownloadFromFanartTv()
         Else
             ReportProgress(, "Scraping from Fanart.Tv, not selected" & vbCrLf)
@@ -2970,7 +2970,7 @@ Public Class Movie
 
             If Cancelled() Then Exit Sub
 
-            If rl.ArtFromFanartTv Then DownloadFromFanartTv()
+            If rl.ArtFromFanartTv Then DownloadFromFanartTv(True)
 
             If Cancelled() Then Exit Sub
 

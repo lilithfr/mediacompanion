@@ -45,6 +45,7 @@ Partial Class frmBatchScraper
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cbFanartTv = New System.Windows.Forms.CheckBox()
         Me.cbXtraFanart = New System.Windows.Forms.CheckBox()
         Me.CheckBox18 = New System.Windows.Forms.CheckBox()
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
@@ -63,7 +64,6 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.cb_ScrapeEmptyTags = New System.Windows.Forms.CheckBox()
         Me.cbFromTMDB = New System.Windows.Forms.CheckBox()
-        Me.cbFanartTv = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -309,6 +309,16 @@ Partial Class frmBatchScraper
         Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Fanart && Posters"
         '
+        'cbFanartTv
+        '
+        Me.cbFanartTv.AutoSize = true
+        Me.cbFanartTv.Location = New System.Drawing.Point(6, 87)
+        Me.cbFanartTv.Name = "cbFanartTv"
+        Me.cbFanartTv.Size = New System.Drawing.Size(354, 17)
+        Me.cbFanartTv.TabIndex = 44
+        Me.cbFanartTv.Text = "Attempt to Download artwork from Fanart.Tv if Moviews are in Folders"
+        Me.cbFanartTv.UseVisualStyleBackColor = true
+        '
         'cbXtraFanart
         '
         Me.cbXtraFanart.AutoSize = true
@@ -509,21 +519,11 @@ Partial Class frmBatchScraper
         Me.cbFromTMDB.Text = "Scrape main tags from TMDB (excluding those tags exclusive to IMDB)"
         Me.cbFromTMDB.UseVisualStyleBackColor = true
         '
-        'cbFanartTv
-        '
-        Me.cbFanartTv.AutoSize = true
-        Me.cbFanartTv.Location = New System.Drawing.Point(6, 87)
-        Me.cbFanartTv.Name = "cbFanartTv"
-        Me.cbFanartTv.Size = New System.Drawing.Size(354, 17)
-        Me.cbFanartTv.TabIndex = 44
-        Me.cbFanartTv.Text = "Attempt to Download artwork from Fanart.Tv if Moviews are in Folders"
-        Me.cbFanartTv.UseVisualStyleBackColor = true
-        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(485, 463)
+        Me.ClientSize = New System.Drawing.Size(485, 466)
         Me.ControlBox = false
         Me.Controls.Add(Me.cbFromTMDB)
         Me.Controls.Add(Me.cb_ScrapeEmptyTags)
@@ -534,10 +534,11 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.gbOther)
         Me.Controls.Add(Me.Label1)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(493, 490)
+        Me.MaximumSize = New System.Drawing.Size(493, 500)
         Me.MinimizeBox = false
-        Me.MinimumSize = New System.Drawing.Size(493, 490)
+        Me.MinimumSize = New System.Drawing.Size(493, 500)
         Me.Name = "frmBatchScraper"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Batch Update Wizard"
         Me.GroupBox1.ResumeLayout(false)
         Me.GroupBox1.PerformLayout

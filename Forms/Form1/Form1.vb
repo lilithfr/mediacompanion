@@ -12696,7 +12696,9 @@ End Sub
     Private Sub tsmiRescrapeFrodo_Fanart_Thumbs_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Fanart_Thumbs.Click
         mov_ScrapeSpecific("Frodo_Fanart_Thumbs")
     End Sub       'Frodo fanart thumbs
-
+    Private Sub tsmiRescrapeFanartTv_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFanartTv.Click
+        mov_ScrapeSpecific("ArtFromFanartTv")
+    End Sub       'Frodo fanart thumbs
 #End Region  'ToolStripmenu Movie Rescrape Specific
 
     
