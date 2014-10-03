@@ -2550,7 +2550,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Else
                 Utilities.EnsureFolderExists(path)
             End If
-            image.Save(path, Imaging.ImageFormat.Jpeg)
+            If path.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase) Then
+                image.Save(path,Imaging.ImageFormat.Png)
+            Else
+                image.Save(path, Imaging.ImageFormat.Jpeg)
+            End If
+            
             SaveImage = True
         Catch ex As Exception
             SaveImage = False
@@ -2640,6 +2645,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function DownloadFile(ByVal URL As String, ByVal Path As String) As Boolean
         Try
             Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, True)
+            Return returnstate
+        Catch ex As Exception
+            Return False
+        End Try
+
+    End Function
+
+    Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String) As Boolean
+        Try
+            Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, False)  'If image already in cache, why re-download it.
             Return returnstate
         Catch ex As Exception
             Return False

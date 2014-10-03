@@ -34,7 +34,7 @@ Public Class DownloadCache
         IfNotValidImage_Delete(CachePath)
 
         'Resize cache image only if need to
-        CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
+        'CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
         Utilities.EnsureFolderExists(Path)
         File.Copy(CachePath, Path, True)
@@ -110,10 +110,7 @@ Public Class DownloadCache
         Dim CacheFileName As String = ""
         Dim returnCode As Boolean = SaveImageToCache(URL, Path, ForceDownload, CacheFileName)
         If returnCode Then
-            'Dim CacheFileName As String = GetCacheFileName(URL)
             Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
-
-
             If String.IsNullOrEmpty(Path) Then
                 strValue = IO.File.ReadAllText(CachePath)
             Else
@@ -124,7 +121,6 @@ Public Class DownloadCache
                 End If
             End If
         End If
-
         DownloadFileAndCache = returnCode
         Return returncode
     End Function
@@ -165,9 +161,6 @@ Public Class DownloadCache
                             If String.IsNullOrEmpty(Path) Then
                                 IO.File.WriteAllText(CachePath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
                             Else
-                                'If (File.Exists(CachePath)) Then
-                                'File.Delete(CachePath)
-                                'End If
                                 Utilities.SafeDeleteFile(CachePath)
 
                                 Using fileStream As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.Write)
@@ -195,10 +188,7 @@ Public Class DownloadCache
                     End Using
                     returnCode = False
                 End Try
-
             End If
-
-
         Catch ex As Exception
             MsgBox(ex.Message.ToString & vbCrLf & "URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
             returnCode = False
