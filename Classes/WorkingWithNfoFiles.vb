@@ -3303,7 +3303,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             child = doc.CreateElement("runtime")
-            If homemovietosave.fullmoviebody.runtime <> Nothing Then
+            If homemovietosave.fullmoviebody.runtime <> Nothing AndAlso homemovietosave.fullmoviebody.runtime <> "0" Then
                 Dim minutes As String = homemovietosave.fullmoviebody.runtime
                 minutes = minutes.Replace("minutes", "")
                 minutes = minutes.Replace("mins", "")
@@ -3315,21 +3315,21 @@ Public Class WorkingWithNfoFiles
                 '        minutes = tempstring
                 '    End If
                 'End If
-
-                Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
-                    minutes = minutes.Substring(1, minutes.Length - 1)
-                Loop
-                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
-                    minutes = "0" & minutes
-                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
-                    minutes = "00" & minutes
-                End If
-                If Preferences.intruntime = False And IsNumeric(minutes) Then
-                    minutes = minutes & " min"
-                End If
-
-                minutes = homemovietosave.fullmoviebody.runtime
-
+                Try
+                    Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+                        minutes = minutes.Substring(1, minutes.Length - 1)
+                    Loop
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                        minutes = "0" & minutes
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                        minutes = "00" & minutes
+                    End If
+                    If Preferences.intruntime = False And IsNumeric(minutes) Then
+                        minutes = minutes & " min"
+                    End If
+                Catch
+                    minutes = homemovietosave.fullmoviebody.runtime
+                End Try
                 child.InnerText = minutes
             Else
                 child.InnerText = homemovietosave.fullmoviebody.runtime
