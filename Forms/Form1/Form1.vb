@@ -2022,7 +2022,7 @@ Public Class Form1
             If File.Exists(MovPath & "logo.png") Then FanTvArtList.Items.Add("Logo") : confirmedpresent = True
             If File.Exists(MovPath & "banner.jpg") Then FanTvArtList.Items.Add("Banner") : confirmedpresent = True
             If File.Exists(MovPath & "landscape.jpg") Then FanTvArtList.Items.Add("Landscape") : confirmedpresent = True
-            If File.Exists(MovPath & "disc.jpg") Then FanTvArtList.Items.Add("Disc") : confirmedpresent = True
+            If File.Exists(MovPath & "disc.png") Then FanTvArtList.Items.Add("Disc") : confirmedpresent = True
             If File.Exists(MovPath & "poster.jpg") Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
             If File.Exists(MovPath & "fanart.jpg") Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
         End If
@@ -2033,7 +2033,7 @@ Public Class Form1
         Dim item As String = FanTvArtList.SelectedItem.ToString.ToLower
         If Not String.IsNullOrEmpty(item) Then
             Dim imagepath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename)
-            Dim suffix As String = If((item = "clearart" or item = "logo"),".png", ".jpg")
+            Dim suffix As String = If((item = "clearart" or item = "logo" or item = "disc"),".png", ".jpg")
             imagepath &= "\" & item & suffix
             ftvArtPicBox.Visible = True
             util_ImageLoad(ftvArtPicBox, imagepath, "")

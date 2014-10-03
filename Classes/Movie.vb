@@ -2090,7 +2090,7 @@ Public Class Movie
                 Utilities.DownloadFile(logo, DestPath & "logo.png")
                 Utilities.DownloadFile(poster, DestPath & "poster.jpg")
                 Utilities.DownloadFile(fanart, DestPath & "fanart.jpg")
-                Utilities.DownloadFile(disc, DestPath & "disc.jpg")
+                Utilities.DownloadFile(disc, DestPath & "disc.png")
                 Utilities.DownloadFile(banner, DestPath & "banner.jpg")
                 Utilities.DownloadFile(landscape, DestPath & "landscape.jpg")
                 ReportProgress(MSG_OK, "!!! Artwork from Fanart.Tv Downloaded OK" & vbCrLf)

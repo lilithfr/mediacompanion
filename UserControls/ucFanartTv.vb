@@ -197,6 +197,7 @@ Public Class ucFanartTv
                 .Location = New Point(xlocation, locHeight)
                 .Width = pbwidth 
                 .Height = pbheight
+                .BackColor = Color.Transparent 
                 .SizeMode = PictureBoxSizeMode.Zoom
                 .ImageLocation = item.urlpreview         'Preview Image url
                 .Tag = item.url                          'Full Image url
@@ -292,6 +293,8 @@ Public Class ucFanartTv
         LoadPath &= artType
         If IO.File.Exists(LoadPath) Then
             Form1.util_ImageLoad(pbexists, LoadPath, "")
+        Else
+            pbexists.Image = Nothing
         End If
     End Sub
 
