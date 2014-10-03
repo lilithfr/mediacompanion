@@ -156,7 +156,7 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAs
-        DQAAAk1TRnQBSQFMAgEBBwEAAXABZAFwAWQBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DQAAAk1TRnQBSQFMAgEBBwEAAagBZAGoAWQBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -1612,17 +1612,6 @@ is still saved, as it should be.</value>
         L5ts/8NNEoGLhQBkhhsPMYBLD5IDWOVxi+/hZ/gd/C4eg8dKq75Mftlk+/+RSaSVhACrOFZzEBt5ApAc
         gIeAW3wPP5NWfDzmV171/5//5/8FivmRo6RpYfIAAAAASUVORK5CYII=
 </value>
-  </data>
-  <data name="Label128.Text" xml:space="preserve">
-    <value>
-
-Using multisave mode it is possible to edit multiple movies at the same time.
-
-This can be any editable field including sets, and clicking the save button will
-                          save the new details to all selected movies.
-
-If you do not wish to edit a field then leave it blank, only fields that contain
-                                             text will be changed.</value>
   </data>
   <data name="btnMovieDisplay_ActorFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3831,6 +3820,17 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
         AAAAAAAACw==
 </value>
   </data>
+  <data name="Label128.Text" xml:space="preserve">
+    <value>
+
+Using multisave mode it is possible to edit multiple movies at the same time.
+
+This can be any editable field including sets, and clicking the save button will
+                          save the new details to all selected movies.
+
+If you do not wish to edit a field then leave it blank, only fields that contain
+                                             text will be changed.</value>
+  </data>
   <data name="cbMovCreateFolderjpg.ToolTip" xml:space="preserve">
     <value>Enabling this option will allow Media Companion to save the Poster as folder.jpg.
 This will allow XBMC to display the poster when browsing movies in file mode.
@@ -3952,7 +3952,7 @@ Media Companion will keep these it the Title, and in the Foldername.</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAHEARkBxAEZASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        CwAAAk1TRnQBSQFMAwEBAAH8ARkB/AEZASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
         AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
         AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
         AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE

@@ -1940,7 +1940,8 @@ Public Class Form1
 
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                 movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
-
+                FanTvArtList.Items.Clear()
+                Panel6.Visible = CheckforExtraArt()
             End If
         Else
             cbMovieDisplay_Actor.Items.Clear()
@@ -1992,7 +1993,8 @@ Public Class Form1
 
             roletxt.Text = ""
             PictureBoxActor.Image = Nothing
-
+            Panel6.Visible = False
+            FanTvArtList.Items.Clear()
             btnPlayMovie.Enabled = False
 
             Me.Refresh()
@@ -2010,6 +2012,38 @@ Public Class Form1
         If Yield(yieldIng) Then Return
 
         'mov_SplitContainerAutoPosition()
+    End Sub
+
+    Public Function CheckforExtraArt() As Boolean
+        Dim confirmedpresent As Boolean = False
+        If Not Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename) Then
+            Dim MovPath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename) & "\"
+            If File.Exists(MovPath & "clearart.png") Then FanTvArtList.Items.Add("ClearArt") : confirmedpresent = True
+            If File.Exists(MovPath & "logo.png") Then FanTvArtList.Items.Add("Logo") : confirmedpresent = True
+            If File.Exists(MovPath & "banner.jpg") Then FanTvArtList.Items.Add("Banner") : confirmedpresent = True
+            If File.Exists(MovPath & "landscape.jpg") Then FanTvArtList.Items.Add("Landscape") : confirmedpresent = True
+            If File.Exists(MovPath & "disc.jpg") Then FanTvArtList.Items.Add("Disc") : confirmedpresent = True
+            If File.Exists(MovPath & "poster.jpg") Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
+            If File.Exists(MovPath & "fanart.jpg") Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
+        End If
+        Return confirmedpresent 
+    End Function
+
+    Private Sub FanTvArtList_Mouse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FanTvArtList.MouseDown
+        Dim item As String = FanTvArtList.SelectedItem.ToString.ToLower
+        If Not String.IsNullOrEmpty(item) Then
+            Dim imagepath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename)
+            Dim suffix As String = If((item = "clearart" or item = "logo"),".png", ".jpg")
+            imagepath &= "\" & item & suffix
+            ftvArtPicBox.Visible = True
+            util_ImageLoad(ftvArtPicBox, imagepath, "")
+        End If
+    End Sub
+
+    Private Sub FanTvArtList_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FanTvArtList.MouseLeave
+        FanTvArtList.ClearSelected()
+        ftvArtPicBox.Image = Nothing
+        ftvArtPicBox.Visible = False
     End Sub
 
     Private Sub HandleTrailerBtn(ByVal fmd As FullMovieDetails)
@@ -3353,6 +3387,8 @@ Public Class Form1
             Label75.Visible = False
             TextBox34.Visible = False
             TextBoxMutisave.Visible = True
+            Panel6.Visible = False
+            FanTvArtList.Items.Clear()
             btnMovRescrape.Visible = False
             Label128.Visible = True
             cbMovieDisplay_MovieSet.Items.Insert(0, "")
