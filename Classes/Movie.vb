@@ -2238,6 +2238,12 @@ Public Class Movie
         DeleteFolder(NfoPath & "extrathumbs")
     End Sub
 
+    Sub DeleteFanarTvFiles
+        For Each filetype In Utilities.fanarttvfiles
+            DeleteFile(NfoPath & filetype)
+        Next
+    End Sub
+
     Sub DeleteTrailer
         DeleteFile(ActualTrailerPath)
     End Sub
@@ -2313,11 +2319,11 @@ Public Class Movie
 
         Dim missingdata As Byte = 0
 
-        If Not File.Exists(FanartPath) Then
+        If Preferences.CheckmissingFanart(NfoPathPrefName) Then 'Not File.Exists(FanartPath) Then
             missingdata += 1
         End If
 
-        If Not File.Exists(PosterPath) Then
+        If Preferences.CheckmissingPoster(NfoPathPrefName) Then 'Not File.Exists(PosterPath) Then
             missingdata += 2
         End If
 

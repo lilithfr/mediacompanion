@@ -1718,6 +1718,19 @@ Public Class Preferences
         Return lst
     End Function
 
+    Public Shared Function CheckmissingPoster(ByVal FullPath As String) As Boolean  'Return True if any missing Posters
+        Dim videotsrootpath As String = ""
+        If IO.Path.GetFileName(FullPath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(FullPath).ToLower = "index.nfo" Then
+            videotsrootpath = Utilities.RootVideoTsFolder(FullPath)
+        End If
+        Dim posterlist As New List(Of String)
+        posterlist = GetFanartPaths(FullPath, videotsrootpath)
+        For Each item In posterlist
+            If Not IO.File.Exists(item) Then CheckmissingPoster = True
+        Next
+        Return CheckmissingPoster 
+    End Function
+
     Public Shared Function GetFanartPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
         Dim lst = New List(Of String)
         Dim path As String = FullPath
@@ -1778,6 +1791,18 @@ Public Class Preferences
             Return lst
     End Function
 
+    Public Shared Function CheckmissingFanart(ByVal FullPath As String) As Boolean  'Return True if any missing Fanart
+        Dim videotsrootpath As String = ""
+        If IO.Path.GetFileName(FullPath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(FullPath).ToLower = "index.nfo" Then
+            videotsrootpath = Utilities.RootVideoTsFolder(FullPath)
+        End If
+        Dim fanartlist As New List(Of String)
+        fanartlist = GetFanartPaths(FullPath, videotsrootpath)
+        For Each item In fanartlist
+            If Not IO.File.Exists(item) Then CheckmissingFanart = True
+        Next
+        Return CheckmissingFanart 
+    End Function
 
     Public Shared Function GetFanartPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = "") As String
         Dim fanartPath As String = FullPath

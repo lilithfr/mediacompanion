@@ -1756,6 +1756,7 @@ Public Class Movies
             Dim isRoot As Boolean = Preferences.GetRootFolderCheck(nfoPathAndFilename)
             If Not isRoot Then
                 aMovie.DeleteExtraFiles()
+                aMovie.DeleteFanarTvFiles()
             End If
             Return True
         Catch ex As Exception

@@ -24,6 +24,10 @@ Public Class Utilities
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".rmvb", ".ogm",
                                                  ".ts", ".m2ts", ".flv", ".webm" }
 
+    'movie Fanart.Tv file list
+    Public Shared ReadOnly fanarttvfiles As String() = {"clearart.png", "logo.png", "disc.png", "banner.jpg",
+                                                        "landscape.jpg", "fanart.jpg", "poster.jpg"}
+
     'files that support main movie file, ie. art, subtitles, and trailers
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
                                                                 "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm"}
@@ -317,7 +321,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetCodecCommonName(ByVal codec As String) As String
-        If codec.ToLower.Contains("div") Then codec = "divx"
+        If codec.ToLower.Contains("div") or codec.ToLower.Contains("dx50")Then codec = "divx"
         Return codec
     End Function
 
@@ -433,7 +437,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If basicsave Then
             typeOfFile.Add(pathOnly & Regex.Replace("movie" & fileType, "movie-", ""))              'special case where using folder-per-movie
         End If
-        If fanartjpg Then
+        If fanartjpg or fileType.Contains("fanart") Then
             typeOfFile.Add(pathOnly & "fanart.jpg")
         End If
         If posterjpg Then
