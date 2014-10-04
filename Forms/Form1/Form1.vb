@@ -687,6 +687,7 @@ Public Class Form1
 
             MainFormLoadedStatus = True
             UcFanartTv1.Form1MainFormLoadedStatus = True
+            UcFanartTvTv1.Form1MainFormLoadedStatus = True
 
             ResetFilters()
 
@@ -4909,6 +4910,8 @@ Public Class Form1
             ElseIf tab.ToLower = "fanart" Then
                 Call tv_Fanart_Load()
                 tvCurrentTabIndex = TabControl3.SelectedIndex
+            ElseIf tab.ToLower = "fanart.tv" Then
+                UcFanartTvTv1.ucFanartTv_Refresh(tv_ShowSelectedCurrently())
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 If Preferences.EdenEnabled Then

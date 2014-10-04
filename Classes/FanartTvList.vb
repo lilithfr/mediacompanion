@@ -40,9 +40,10 @@ Public Class FanartTvTvList
     Public tvbanner             As List(Of str_fanarttvart)
     Public showbackground       As List(Of str_fanarttvart)
     Public seasonposter         As List(Of str_fanarttvart)
+    Public seasonbanner         As List(Of str_fanarttvart)
     Public seasonthumb          As List(Of str_fanarttvart)
     Public characterart         As List(Of str_fanarttvart)
-    Public dataloaded          As Boolean
+    Public dataloaded           As Boolean
 
     Sub New
         Init
@@ -58,6 +59,7 @@ Public Class FanartTvTvList
         tvbanner            = New List(Of str_fanarttvart)
         showbackground      = New List(Of str_fanarttvart)
         seasonposter        = New List(Of str_fanarttvart)
+        seasonbanner        = New List(Of str_fanarttvart)
         seasonthumb         = New List(Of str_fanarttvart)
         characterart        = New List(Of str_fanarttvart)
         dataloaded          = False

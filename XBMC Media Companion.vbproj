@@ -446,6 +446,12 @@
     <Compile Include="UserControls\TooltipGridViewMovies.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ucFanartTvTv.Designer.vb">
+      <DependentUpon>ucFanartTvTv.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucFanartTvTv.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\ucGenPref_XbmcLink.Designer.vb">
       <DependentUpon>ucGenPref_XbmcLink.vb</DependentUpon>
     </Compile>
@@ -601,6 +607,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\TooltipGridViewMovies.resx">
       <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucFanartTvTv.resx">
+      <DependentUpon>ucFanartTvTv.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucGenPref_Proxy.resx">
       <DependentUpon>ucGenPref_Proxy.vb</DependentUpon>

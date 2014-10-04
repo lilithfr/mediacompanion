@@ -1,9 +1,6 @@
 ﻿Imports System.Linq
-Imports System.Drawing
-Imports Media_Companion
 
-
-Public Class ucFanartTv
+Public Class ucFanartTvTv
     Dim WithEvents artposterpicboxes As PictureBox
     Dim WithEvents artcheckboxes As RadioButton
     Dim WithEvents tvposterlabels As Label
@@ -15,22 +12,22 @@ Public Class ucFanartTv
     Dim artwidth As Integer = 200
     Dim artType As String = ""
     Dim selectedimageurl As String = Nothing
-    Dim FanarttvMovielist As New FanartTvMovieList
+    Dim FanarttvTvlist As New FanartTvTvList 
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_fanarttvart)
-    Public workingMovDetails As New FullMovieDetails
+    Public WorkingShow As New TvShow
     Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
-    Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
-                                          "Movie Disc", "Movie Banner", "Landscape"}
-    Public tvFriendlyname() As String = {"HiDef Tv Logo", "HiDef ClearArt", "Clear Logo", "Clear Art", "Tv Poster", "Tv Thumb", 
-                                         "Tv Banner", "Show Background", "Season Poster", "Season Thumb",  "Character Art"}
+    'Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
+    '                                      "Movie Disc", "Movie Banner", "Landscape"}
+    Public tvFriendlyname() As String = {"HiDef ClearArt", "HiDef Tv Logo",  "Clear Art", "Clear Logo",  "Tv Poster", "Tv Thumb", 
+                                         "Tv Banner", "Season Poster", "Season Banner", "Season Thumb", "Show Background", "Character Art"}
 
 
-    Public Sub ucFanartTv_Refresh(ByVal moviedetails As FullMovieDetails)
+    Public Sub ucFanartTv_Refresh(ByVal ThisTvShow As TvShow)
         nodata = False
-        isroot = Preferences.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
-        If workingMovDetails.fullmoviebody.title <> moviedetails.fullmoviebody.title Then
-            workingMovDetails = Form1.workingMovieDetails
+        'isroot = Preferences.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
+        If WorkingShow.Title.Value <> ThisTvShow.Title.Value Then
+            WorkingShow = ThisTvShow
         Else
             Exit Sub
         End If
@@ -38,15 +35,12 @@ Public Class ucFanartTv
         pbexists.Image = Nothing
         lblftvgroups.Items.clear
         PanelClear()
-        Me.lblTitle.Text = workingMovDetails.fullmoviebody.title 
-        If workingMovDetails.fullmoviebody.imdbid.Contains("tt") Then
-            ID = workingMovDetails.fullmoviebody.imdbid
-        ElseIf workingMovDetails.fullmoviebody.tmdbid <> "" Then
-            ID = workingMovDetails.fullmoviebody.tmdbid
-        Else
+        Me.lblTitle.Text = " Tv Show :-  " & WorkingShow.Title.value
+        ID = WorkingShow.TvdbId.Value
+        If String.IsNullOrEmpty(ID) Then
             Call noID
         End If
-        If isroot Then RootFolderMovie()
+        'If isroot Then RootFolderMovie()
         If nodata Then Exit Sub
         GetFanartTvArt(ID)
         If Not ConfirmIfResults() Then Exit Sub
@@ -62,9 +56,8 @@ Public Class ucFanartTv
             messbox.Refresh()
             Dim newobject As New FanartTv
             newobject.ID = ID
-            newobject.src = "movie"
-            FanarttvMovielist = newobject.FanarttvMovieresults
-
+            newobject.src = "tv"
+            FanarttvTvlist = newobject.FanarttvTvresults
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         Finally
@@ -74,80 +67,93 @@ Public Class ucFanartTv
 
     Public Function ConfirmIfResults() As Boolean
         Dim ok As Boolean = True
-        If Not FanarttvMovielist.dataloaded Then
-            MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & workingMovDetails.fullmoviebody.title)
+        If Not FanarttvTvlist.dataloaded Then
+            MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & WorkingShow.title.Value)
             ok = False
         End If
         Return ok
     End Function
 
     Public Sub noID()
-        MsgBox(" Selected Movie contains no" & vbCrLf & "     IMDB or TMDB ID" & vbCrLf & "Unable to get Fanart TV Data") 
+        MsgBox(" Selected Show contains no" & vbCrLf & "     IMDB or TVDB ID" & vbCrLf & "Unable to get Fanart.TV Data") 
         nodata = True
     End Sub
-
-    Private Sub RootFolderMovie()
-        MsgBox("  Selected Movie is in the Root Folder!" & vbCrLf & "Unable to save artwork from" & vbCrLf & _
-               "Fanart.Tv, to the root folder" & vbCrLf & "Suggest rename movie to folder to be" & vbCrLf & _
-               "compatible with ""Artwork Downloader""")
-        nodata = True
-    End Sub
-    
+        
     Sub artheightload()
         Dim Tabsgl As String = vbTab
         Dim Tabdbl As String = vbTab & vbTab
         lblftvgroups.Items.Clear()
-        lblftvgroups.Items.Add(movFriendlyname(0) & ":" & Tabsgl & "( " & FanarttvMovielist.hdmovieclearart.count   & " )")
-        lblftvgroups.Items.Add(movFriendlyname(1) & ":" & Tabsgl & "( " & FanarttvMovielist.hdmovielogo.count       & " )")
-        lblftvgroups.Items.Add(movFriendlyname(2) & ":" & Tabsgl & "( " & FanarttvMovielist.movieart.count          & " )")
-        lblftvgroups.Items.Add(movFriendlyname(3) & ":" & Tabsgl & "( " & FanarttvMovielist.movielogo.count         & " )")
-        lblftvgroups.Items.Add(movFriendlyname(4) & ":" & Tabsgl & "( " & FanarttvMovielist.movieposter.count       & " )")
-        lblftvgroups.Items.Add(movFriendlyname(5) & ":" & Tabsgl & "( " & FanarttvMovielist.moviebackground.count   & " )")
-        lblftvgroups.Items.Add(movFriendlyname(6) & ":" & Tabsgl & "( " & FanarttvMovielist.moviedisc.count         & " )")
-        lblftvgroups.Items.Add(movFriendlyname(7) & ":" & Tabsgl & "( " & FanarttvMovielist.moviebanner.count       & " )")
-        lblftvgroups.Items.Add(movFriendlyname(8) & ":" & Tabsgl & "( " & FanarttvMovielist.moviethumb.count        & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(0)  & ":" & Tabsgl & "( " & FanarttvTvlist.hdclearart.count       & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(1)  & ":" & Tabsgl & "( " & FanarttvTvlist.hdtvlogo.count         & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(2)  & ":" & Tabdbl & "( " & FanarttvTvlist.clearart.count         & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(3)  & ":" & Tabsgl & "( " & FanarttvTvlist.clearlogo.count        & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(4)  & ":" & Tabsgl & "( " & FanarttvTvlist.tvposter.count         & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(5)  & ":" & Tabsgl & "( " & FanarttvTvlist.tvthumb.count          & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(6)  & ":" & Tabsgl & "( " & FanarttvTvlist.tvbanner.count         & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(7)  & ":" & Tabsgl & "( " & FanarttvTvlist.seasonposter.count     & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(8)  & ":" & Tabsgl & "( " & FanarttvTvlist.seasonbanner.count     & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(9)  & ":" & Tabsgl & "( " & FanarttvTvlist.seasonthumb.count      & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(10) & ":" & Tabsgl & "( " & FanarttvTvlist.showbackground.count   & " )")
+        lblftvgroups.Items.Add(tvFriendlyname(11) & ":" & Tabsgl & "( " & FanarttvTvlist.characterart.count     & " )")
     End Sub
 
     Private Sub lblftvgroups_click(ByVal Sender As Object, e As EventArgs) Handles lblftvgroups.MouseDown 
         Dim indx As Integer = lblftvgroups.SelectedIndex
         Select Case indx
             Case "0"
-                usedlist = FanarttvMovielist.hdmovieclearart
+                usedlist = FanarttvTvlist.hdclearart
                 artheight = 112
                 artType = "clearart.png"
             Case "1"
-                usedlist = FanarttvMovielist.hdmovielogo
+                usedlist = FanarttvTvlist.hdtvlogo
                 artheight = 77
                 artType = "logo.png"
             Case "2"
-                usedlist = FanarttvMovielist.movieart
+                usedlist = FanarttvTvlist.clearlogo 
                 artheight = 112
                 artType = "clearart.png"
             Case "3"
-                usedlist = FanarttvMovielist.movielogo
+                usedlist = FanarttvTvlist.clearlogo
                 artheight = 77
                 artType = "logo.png"
             Case "4"
-                usedlist = FanarttvMovielist.movieposter
+                usedlist = FanarttvTvlist.tvposter 
                 artheight = 285
                 artType = "poster.jpg"
             Case "5"
-                usedlist = FanarttvMovielist.moviebackground
-                artheight = 112
-                artType = "fanart.jpg"
-            Case "6"
-                usedlist = FanarttvMovielist.moviedisc
-                artheight = 200
-                artType = "disc.png"
-            Case "7"
-                usedlist = FanarttvMovielist.moviebanner 
-                artheight = 37
-                artType = "banner.jpg"
-            Case "8"
-                usedlist = FanarttvMovielist.moviethumb
+                usedlist = FanarttvTvlist.tvthumb 
                 artheight = 112
                 artType = "landscape.jpg"
+            Case "6"
+                usedlist = FanarttvTvlist.tvbanner 
+                artheight = 37
+                artType = "banner.jpg"
+            Case "7"
+                usedlist = FanarttvTvlist.seasonposter 
+                artheight = 285
+                artType = "season-poster.jpg"
+            Case "8"
+                usedlist = FanarttvTvlist.seasonbanner  
+                artheight = 112
+                artType = "season-banner.jpg"
+            Case "9"
+                usedlist = FanarttvTvlist.seasonthumb 
+                artheight = 112
+                artType = "season-landscape.jpg"
+            Case "10"
+                usedlist = FanarttvTvlist.showbackground  
+                artheight = 112
+                artType = "fanart.jpg"
+            Case "11"
+                usedlist = FanarttvTvlist.characterart  
+                artheight = 200
+                artType = "character.png"
         End Select
+        If artType.Contains("season-") Then
+            Label1.Text = "Exiting Season art not displayable"
+        Else
+            Label1.Text = "Existing Artwork"
+        End If
         PanelPopulate()
     End Sub
 
@@ -163,12 +169,12 @@ Public Class ucFanartTv
     End Sub
 
     Private Sub PanelSelectionDisplay()
-        ''Movie Image Preview sizes as follows:
-        ''200  x  37     Banner
-        ''200  x  77     HDLogo & movielogo
-        ''200  x  112    Background, HDClearArt & Clearart, and moviethumb
-        ''200  x  200    moviedisc
-        ''200  x  285    movieposter
+        ''TV Image Preview sizes as follows:
+        ''200  x  37     TV Banner
+        ''200  x  77     HD Logo & Tv logo
+        ''200  x  112    ShowBackground, HDClearArt & Clearart, Seasonthumb & Tv Thumb (landscape)
+        ''200  x  200    CharacterArt
+        ''200  x  285    Tv Poster & Season Poster
 
         PanelClear()
         If usedlist.Count = 0 Then
@@ -287,10 +293,7 @@ Public Class ucFanartTv
 
     Private Sub DisplayExistingArt()
         Dim LoadPath As String = Nothing
-        LoadPath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
-        If isroot Then
-            LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
-        End If
+        LoadPath = WorkingShow.FolderPath
         LoadPath &= artType
         If IO.File.Exists(LoadPath) Then
             Form1.util_ImageLoad(pbexists, LoadPath, "")
@@ -302,14 +305,51 @@ Public Class ucFanartTv
     Private Sub Button1_Click( sender As Object,  e As EventArgs) Handles Button1.Click
         If nodata Then Exit Sub
         If Not IsNothing(selectedimageurl) Then
+            Dim savepaths As New List(Of String)
+            Dim savepath As String = ""
             messbox = New frmMessageBox("Please wait,", "Downloading new image", "and saving")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
+            
+            If artType.Contains("season") Then
+                Dim seasonno As String = ""
+                For Each item In usedlist
+                    If selectedimageurl = item.url Then
+                        seasonno = item.season
+                        Exit For
+                    End If
+                Next
+                If seasonno <> "" Then
+                    If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                    If seasonno = "00" Then
+                        seasonno = "-specials"
+                    End If
+                    savepath = WorkingShow.FolderPath & artType.Replace("season", "season" & seasonno)
+                    If Preferences.FrodoEnabled Then savepaths.Add(savepath)
+                    If Preferences.EdenEnabled AndAlso artType.contains("-poster.jpg") Then
+                        savepath = savepath.Replace("-poster.jpg", ".tbn")
+                        savepaths.Add(savepath)
+                    End If
+                End If
+            Else
+                If artType = "poster.jpg" Or artType = "fanart.jpg" or artType = "banner.jpg" Then
+                    savepaths.Add(WorkingShow.FolderPath & artType)
+                    If Preferences.FrodoEnabled Then
+                        savepaths.Add(WorkingShow.FolderPath & "season-all-" & artType)
+                    End If
+                    If Preferences.EdenEnabled Then
+                        If artType = "poster.jpg" Then
+                            savepaths.Add(WorkingShow.FolderPath & "folder.jpg")
+                            savepaths.Add(WorkingShow.FolderPath & "season-all.tbn")
+                        End If
+                    End If
+                End If
+            End If
             Try
-                Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
-                Dim success As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
+                Dim success As Boolean = False
+                success = DownloadCache.SaveImageToCacheAndPaths(selectedimageurl, savepaths, False)
                 DisplayExistingArt()
             Catch
             End Try

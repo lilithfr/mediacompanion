@@ -5,6 +5,7 @@ Public Structure str_fanarttvart
     Dim lang As String
     Dim likes As Integer
     Dim disctype As String
+    Dim season As String
     Sub New(SetDefaults As Boolean)
         id = ""
         url = ""
@@ -12,6 +13,7 @@ Public Structure str_fanarttvart
         lang = ""
         likes = 0
         disctype = ""
+        season = ""
     End Sub
 End Structure
 

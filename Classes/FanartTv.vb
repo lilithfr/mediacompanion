@@ -35,6 +35,7 @@ Public Class FanartTv
     Private Property tvbanner            As New List(Of str_fanarttvart)
     Private Property seasonthumb         As New List(Of str_fanarttvart)
     Private Property tvposter            As New List(Of str_fanarttvart)
+    Private Property seasonbanner        As New List(Of str_fanarttvart)
 
     Private _fanartmovielist             As New FanartTvMovieList
     Private _fanarttvlist                As New FanartTvTvList
@@ -545,6 +546,8 @@ Public Class FanartTv
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
                                                         artwork.likes = detail3.InnerText.ToInt
+                                                    Case "season"
+                                                        artwork.season = detail3.InnerText 
                                                 End Select
                                             Next
                                             seasonposter.Add(artwork)
@@ -569,6 +572,8 @@ Public Class FanartTv
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
                                                         artwork.likes = detail3.InnerText.ToInt
+                                                    Case "season"
+                                                        artwork.season = detail3.InnerText 
                                                 End Select
                                             Next
                                             showbackground.Add(artwork)
@@ -617,6 +622,8 @@ Public Class FanartTv
                                                         artwork.lang = detail3.InnerText
                                                     Case "likes"
                                                         artwork.likes = detail3.InnerText.ToInt
+                                                    Case "season"
+                                                        artwork.season = detail3.InnerText 
                                                 End Select
                                             Next
                                             seasonthumb.Add(artwork)
@@ -644,6 +651,32 @@ Public Class FanartTv
                                                 End Select
                                             Next
                                             tvposter.Add(artwork)
+                                    End Select
+                                Next
+                            Case "seasonbanner"
+                                Dim detail2 As XmlNode = Nothing
+                                For Each detail2 in detail1.ChildNodes 
+                                    Select Case detail2.Name
+                                        Case "Element"
+                                            Dim artwork As New str_fanarttvart
+                                            Dim detail3 As XmlNode = Nothing
+                                            For each detail3 In detail2.ChildNodes
+                                                Select Case detail3.Name
+                                                    Case "id"
+                                                        artwork.id = detail3.InnerText
+                                                    Case "url"
+                                                        artwork.url = detail3.InnerText
+                                                        artwork.urlpreview = artwork.url.Replace("tv/fanart/", "tv/preview/")
+                                                        newdata = True
+                                                    Case "lang"
+                                                        artwork.lang = detail3.InnerText
+                                                    Case "likes"
+                                                        artwork.likes = detail3.InnerText.ToInt
+                                                    Case "season"
+                                                        artwork.season = detail3.InnerText 
+                                                End Select
+                                            Next
+                                            seasonbanner.Add(artwork)
                                     End Select
                                 Next
                         End Select
