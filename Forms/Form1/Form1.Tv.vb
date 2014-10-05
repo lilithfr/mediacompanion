@@ -4160,7 +4160,34 @@ Partial Public Class Form1
 
     End Sub
 
+    Private Sub TvFanartTvArt (ByVal ThisShow As TvShow)
+        Dim clearartLD As String = Nothing : Dim logoLD As String = Nothing: Dim clearart As String = Nothing : Dim logo As String = Nothing
+        Dim poster As String = Nothing : Dim fanart As String = Nothing : Dim banner As String = Nothing
+        Dim currentshowpath As String = ThisShow.FolderPath
+        Dim aok As Boolean = True
+        Dim ID As String = ThisShow.TvdbId.Value
+        Dim TvFanartlist As New FanartTvTvList
+        Dim newobj As New FanartTv
+        newobj.ID = ID
+        newobj.src = "tv"
+        Try
+            TvFanartlist = newobj.FanarttvTvresults
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+            aok = False
+        End Try
+        If Not aok Then Exit Sub
+        Dim lang As New List(Of String)
+        lang.Add(Preferences.TvdbLanguageCode)
+        If Not lang.Contains("en") Then
+            lang.Add("en")
+        End If
+        
+
+    End Sub
+
 #End Region
+
     'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
     '    Try
     '        For Each Task In TaskCache.Tasks

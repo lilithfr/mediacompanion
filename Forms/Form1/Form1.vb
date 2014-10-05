@@ -5080,9 +5080,10 @@ Public Class Form1
                 RadioButton8.Checked = True
             End If
 
-            cbTvChgShowDLFanart.CheckState      = If(Preferences.tvfanart, CheckState.Checked, CheckState.Unchecked)
-            cbTvChgShowDLPoster.CheckState      = If(Preferences.tvposter, CheckState.Checked, CheckState.Unchecked)
-            cbTvChgShowDLSeason.CheckState      = If(Preferences.downloadtvseasonthumbs, CheckState.Checked, CheckState.Unchecked)
+            cbTvChgShowDLFanart         .Checked    = Preferences.tvfanart
+            cbTvChgShowDLPoster         .Checked    = Preferences.tvposter
+            cbTvChgShowDLSeason         .Checked    = Preferences.downloadtvseasonthumbs
+            cbTvChgShowDLFanartTvArt    .Checked    = Preferences.TvDlFanartTvArt 
             
             If Preferences.tvshow_useXBMC_Scraper = True Then
                 GroupBox2.Enabled = False
@@ -12897,11 +12898,12 @@ End Sub
         CheckBox36                      .Checked    = Preferences.autoepisodescreenshot
         CheckBox35                      .Checked    = Preferences.tvshowautoquick
         CheckBox34                      .Checked    = Preferences.copytvactorthumbs
-        CheckBox14                      .Checked    = Preferences.tvposter
-        CheckBox10                      .Checked    = Preferences.tvfanart
+        cbTvDlPosterArt                 .Checked    = Preferences.tvposter
+        cbTvDlFanart                    .Checked    = Preferences.tvfanart
         cb_TvFolderJpg                  .Checked    = Preferences.tvfolderjpg
         cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
-        CheckBox15                      .Checked    = Preferences.downloadtvseasonthumbs
+        cbTvDlSeasonArt                 .Checked    = Preferences.downloadtvseasonthumbs
+        cbTvDlFanartTvArt               .Checked    = Preferences.TvDlFanartTvArt 
         CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
         cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
         AutoScrnShtDelay.Text = ScrShtDelay
@@ -14130,26 +14132,32 @@ End Sub
     End Sub
 
 'TvShow Auto Scrape Options
-    Private Sub CheckBox14_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox14.CheckedChanged
-         Preferences.tvposter = CheckBox14.Checked
+    Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlPosterArt.CheckedChanged
+         Preferences.tvposter = cbTvDlPosterArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub CheckBox10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox10.CheckedChanged
-        Preferences.tvfanart = CheckBox10.Checked
+    Private Sub cbTvDlFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanart.CheckedChanged
+        Preferences.tvfanart = cbTvDlFanart.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub CheckBox15_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox15.CheckedChanged
-        Preferences.downloadtvseasonthumbs = CheckBox15.Checked
+    Private Sub cbTvDlSeasonArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlSeasonArt.CheckedChanged
+        Preferences.downloadtvseasonthumbs = cbTvDlSeasonArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub cbDlTvXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTvXtraFanart.CheckedChanged
-        Preferences.dlTVxtrafanart = cbDlTvXtraFanart.Checked
+    Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTvDlXtraFanart.CheckedChanged
+        Preferences.dlTVxtrafanart = cbTvDlXtraFanart.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbTvDlFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanartTvArt.CheckedChanged
+        Preferences.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -19653,6 +19661,18 @@ End Sub
                 Preferences.tvfanart = True
             Else
                 Preferences.tvfanart = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvChgShowDLFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanartTvArt.CheckedChanged
+        Try
+            If cbTvChgShowDLFanartTvArt.Checked = True Then
+                Preferences.TvDlFanartTvArt = True
+            Else
+                Preferences.TvDlFanartTvArt = False
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
