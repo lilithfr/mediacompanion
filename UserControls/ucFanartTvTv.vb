@@ -281,6 +281,13 @@ Public Class ucFanartTvTv
         messbox.Close()
     End Sub
 
+    Private Sub pbexists_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles pbexists.DoubleClick 
+        If Not IsNothing(pbexists.Image) Then
+            Dim loadpath As String = WorkingShow.FolderPath & artType
+            Form1.util_ZoomImage(Nothing, loadpath)
+        End If
+    End Sub
+
     Sub EnableFanartScrolling()
         Try
             Dim rb As RadioButton = Panel1.Controls("imgcheckbox0")
@@ -346,10 +353,11 @@ Public Class ucFanartTvTv
                         End If
                     End If
                 End If
+                If artType = "character.png" Then savepaths.Add(WorkingShow.FolderPath & "character.png")
             End If
             Try
                 Dim success As Boolean = False
-                success = DownloadCache.SaveImageToCacheAndPaths(selectedimageurl, savepaths, False)
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(selectedimageurl, savepaths, False)
                 DisplayExistingArt()
             Catch
             End Try

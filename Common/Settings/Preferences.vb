@@ -684,7 +684,7 @@ Public Class Preferences
         certificatepriority(32) = "Greece"
         certificatepriority(33) = "Austria"
         maximagecount = 10
-        ReDim releaseformat(12)
+        ReDim releaseformat(14)
         releaseformat(0) = "Cam"
         releaseformat(1) = "Telesync"
         releaseformat(2) = "Workprint"
@@ -694,10 +694,12 @@ Public Class Preferences
         releaseformat(6) = "R5"
         releaseformat(7) = "DVD-Rip"
         releaseformat(8) = "DVD-R"
-        releaseformat(9) = "HDTV"
-        releaseformat(10) = "VODRip"
-        releaseformat(11) = "BRRip"
-        releaseformat(12) = "BDRip"
+        releaseformat(9) = "DVD"
+        releaseformat(10) = "HDTV"
+        releaseformat(11) = "VODRip"
+        releaseformat(12) = "BRRip"
+        releaseformat(13) = "BDRip"
+        releaseformat(14) = "Bluray"
 
         movieFolders.Clear()
         tvFolders.Clear()

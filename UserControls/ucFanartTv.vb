@@ -288,14 +288,21 @@ Public Class ucFanartTv
     Private Sub DisplayExistingArt()
         Dim LoadPath As String = Nothing
         LoadPath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
-        If isroot Then
-            LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
-        End If
+        'If isroot Then
+        '    LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
+        'End If
         LoadPath &= artType
         If IO.File.Exists(LoadPath) Then
             Form1.util_ImageLoad(pbexists, LoadPath, "")
         Else
             pbexists.Image = Nothing
+        End If
+    End Sub
+
+    Private Sub pbexists_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles pbexists.DoubleClick 
+        If Not IsNothing(pbexists.Image) Then
+            Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
+            Form1.util_ZoomImage(Nothing, loadpath)
         End If
     End Sub
 

@@ -54,6 +54,7 @@ Partial Class tv_batch_wizard
         Me.btn_TvBatchCancel = New System.Windows.Forms.Button()
         Me.btnTvBatchStart = New System.Windows.Forms.Button()
         Me.cbincludeLocked = New System.Windows.Forms.CheckBox()
+        Me.cbshFanartTv = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -84,12 +85,13 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(416, 359)
-        Me.SplitContainer1.SplitterDistance = 197
+        Me.SplitContainer1.Size = New System.Drawing.Size(416, 366)
+        Me.SplitContainer1.SplitterDistance = 214
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cbshFanartTv)
         Me.GroupBox1.Controls.Add(Me.cbshXtraFanart)
         Me.GroupBox1.Controls.Add(Me.cbshSeason)
         Me.GroupBox1.Controls.Add(Me.cbshFanart)
@@ -104,7 +106,7 @@ Partial Class tv_batch_wizard
         Me.GroupBox1.Controls.Add(Me.cbshYear)
         Me.GroupBox1.Location = New System.Drawing.Point(11, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(364, 162)
+        Me.GroupBox1.Size = New System.Drawing.Size(364, 184)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Tags to Rescrape"
@@ -385,8 +387,8 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
-        Me.SplitContainer2.Size = New System.Drawing.Size(416, 417)
-        Me.SplitContainer2.SplitterDistance = 359
+        Me.SplitContainer2.Size = New System.Drawing.Size(416, 426)
+        Me.SplitContainer2.SplitterDistance = 366
         Me.SplitContainer2.TabIndex = 1
         '
         'cbRewiteAllNfo
@@ -428,17 +430,28 @@ Partial Class tv_batch_wizard
         Me.cbincludeLocked.Text = "Include locked shows"
         Me.cbincludeLocked.UseVisualStyleBackColor = true
         '
+        'cbshFanartTv
+        '
+        Me.cbshFanartTv.AutoSize = true
+        Me.cbshFanartTv.Location = New System.Drawing.Point(7, 159)
+        Me.cbshFanartTv.Name = "cbshFanartTv"
+        Me.cbshFanartTv.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cbshFanartTv.Size = New System.Drawing.Size(256, 17)
+        Me.cbshFanartTv.TabIndex = 12
+        Me.cbshFanartTv.Text = "Search and Download missing art from Fanart.Tv"
+        Me.cbshFanartTv.UseVisualStyleBackColor = true
+        '
         'tv_batch_wizard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_TvBatchCancel
-        Me.ClientSize = New System.Drawing.Size(416, 417)
+        Me.ClientSize = New System.Drawing.Size(416, 426)
         Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(424, 444)
-        Me.MinimumSize = New System.Drawing.Size(424, 444)
+        Me.MaximumSize = New System.Drawing.Size(424, 460)
+        Me.MinimumSize = New System.Drawing.Size(424, 460)
         Me.Name = "tv_batch_wizard"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "TV Batch Wizard"
@@ -492,4 +505,5 @@ End Sub
     Friend WithEvents cbRewiteAllNfo As System.Windows.Forms.CheckBox
     Friend WithEvents cbshSeason As System.Windows.Forms.CheckBox
     Friend WithEvents cbshXtraFanart As System.Windows.Forms.CheckBox
+    Friend WithEvents cbshFanartTv As System.Windows.Forms.CheckBox
 End Class

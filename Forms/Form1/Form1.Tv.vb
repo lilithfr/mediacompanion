@@ -4166,6 +4166,7 @@ Partial Public Class Form1
     Private Sub TvFanartTvArt (ByVal ThisShow As TvShow, ByVal Overwrite As Boolean)
         Dim clearartLD As String = Nothing : Dim logoLD As String = Nothing: Dim clearart As String = Nothing : Dim logo As String = Nothing
         Dim poster As String = Nothing : Dim fanart As String = Nothing : Dim banner As String = Nothing : Dim landscape As String = Nothing
+        Dim character As String = Nothing
         Dim currentshowpath As String = ThisShow.FolderPath
         Dim DestImg As String = ""
         Dim aok As Boolean = True
@@ -4253,6 +4254,14 @@ Partial Public Class Form1
                     End If
                 Next
             End If
+            If IsNothing(character) Then
+                For Each Art In TvFanartlist.characterart   
+                    If Art.lang = lan Then
+                        character = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
         Next
         If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
         If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold
@@ -4260,6 +4269,8 @@ Partial Public Class Form1
         If Not IsNothing(clearart) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(clearart, DestImg)
             DestImg = currentshowpath & "logo.png"
         If Not IsNothing(logo) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(logo, DestImg)
+        DestImg = currentshowpath & "character.png"
+        If Not IsNothing(character) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(character, DestImg)
         If Not IsNothing(poster) Then
             Dim destpaths As New List(Of String)
             If frodo Then

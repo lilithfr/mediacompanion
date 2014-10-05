@@ -10402,6 +10402,8 @@ End Sub
                 tvBatchList.shGenre = False
                 tvBatchList.shPosters = False
                 tvBatchList.shSeason = False
+                tvBatchList.shXtraFanart = False
+                tvBatchList.shFanartTvArt = False
                 tvBatchList.shMpaa = False
                 tvBatchList.shPlot = False
                 tvBatchList.shRating = False
@@ -10599,7 +10601,10 @@ End Sub
                         Dim showlist2 As New XmlDocument
                         Dim artdone As Boolean = False
                         If tvBatchList.doShowArt = True Then
-                            TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart)
+                            If tvBatchList.shFanart orElse tvBatchList.shPosters OrElse tvBatchList.shSeason OrElse tvBatchList.shXtraFanart Then
+                                TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart)
+                            End If
+                            If tvBatchList.shFanartTvArt Then TvFanartTvArt(Cache.TvCache.Shows(f), Preferences.overwritethumbs)
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
