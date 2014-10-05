@@ -425,7 +425,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
-            TabControl3.TabPages.Remove(Me.tvtpfanarttv)    'Hide TvFanart Tab while Work-In Progress
+            'TabControl3.TabPages.Remove(Me.tvtpfanarttv)    'Hide TvFanart Tab while Work-In Progress
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()

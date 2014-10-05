@@ -1535,6 +1535,8 @@ Partial Public Class Form1
 
                         TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart)
 
+                        If Preferences.TvDlFanartTvArt Then TvFanartTvArt(NewShow, False)
+
                         If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                             NewShow.EpisodeActorSource.Value = "tvdb"
                         Else
@@ -2599,7 +2601,7 @@ Partial Public Class Form1
             If Not episode.Thumbnail.FileName = Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
                 Dim url As String = episode.Thumbnail.FileName
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                    downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs)
+                    downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, , ,Preferences.overwritethumbs)
                 End If
                 If downloadok Then result = "!!! Episode Thumb downloaded"
             Else
@@ -3794,6 +3796,7 @@ Partial Public Class Form1
         Application.DoEvents()
         Try
             TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
+            If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
@@ -4160,11 +4163,14 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub TvFanartTvArt (ByVal ThisShow As TvShow)
+    Private Sub TvFanartTvArt (ByVal ThisShow As TvShow, ByVal Overwrite As Boolean)
         Dim clearartLD As String = Nothing : Dim logoLD As String = Nothing: Dim clearart As String = Nothing : Dim logo As String = Nothing
-        Dim poster As String = Nothing : Dim fanart As String = Nothing : Dim banner As String = Nothing
+        Dim poster As String = Nothing : Dim fanart As String = Nothing : Dim banner As String = Nothing : Dim landscape As String = Nothing
         Dim currentshowpath As String = ThisShow.FolderPath
+        Dim DestImg As String = ""
         Dim aok As Boolean = True
+        Dim frodo As Boolean = Preferences.FrodoEnabled
+        Dim eden As Boolean = Preferences.EdenEnabled 
         Dim ID As String = ThisShow.TvdbId.Value
         Dim TvFanartlist As New FanartTvTvList
         Dim newobj As New FanartTv
@@ -4182,8 +4188,235 @@ Partial Public Class Form1
         If Not lang.Contains("en") Then
             lang.Add("en")
         End If
-        
+        For Each lan In lang
+            If IsNothing(clearart) Then
+                For Each Art In TvFanartlist.hdclearart 
+                    If Art.lang = lan Then 
+                        clearart = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(clearartLD) Then
+                For Each Art In TvFanartlist.clearart 
+                    If Art.lang = lan Then
+                        clearartLD = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(logo) Then
+                For Each Art In TvFanartlist.hdtvlogo
+                    If Art.lang = lan Then
+                        logo = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(logoLD) Then
+                For Each Art In TvFanartlist.clearlogo
+                    If Art.lang = lan Then
+                        logoLD = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(poster) Then
+                For Each Art In TvFanartlist.tvposter 
+                    If Art.lang = lan Then
+                        poster = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(fanart) Then
+                For Each Art In TvFanartlist.showbackground  
+                    If Art.lang = lan Then
+                        fanart = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(banner) Then
+                For Each Art In TvFanartlist.tvbanner 
+                    If Art.lang = lan Then
+                        banner = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+            If IsNothing(landscape) Then
+                For Each Art In TvFanartlist.tvthumb  
+                    If Art.lang = lan Then
+                        landscape = Art.url
+                        Exit For
+                    End If
+                Next
+            End If
+        Next
+        If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
+        If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold
+            DestImg = currentshowpath & "clearart.png"
+        If Not IsNothing(clearart) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(clearart, DestImg)
+            DestImg = currentshowpath & "logo.png"
+        If Not IsNothing(logo) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(logo, DestImg)
+        If Not IsNothing(poster) Then
+            Dim destpaths As New List(Of String)
+            If frodo Then
+                destpaths.Add(currentshowpath & "poster.jpg")
+                destpaths.Add(currentshowpath & "season-all-poster.jpg")
+                If Preferences.tvfolderjpg Then destpaths.Add(currentshowpath & "folder.jpg")
+            End If
+            If eden then
+                destpaths.Add(currentshowpath & "poster.jpg")
+                destpaths.Add(currentshowpath & "season-all.tbn")
+            End If
+            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(poster, destpaths, False, , , Overwrite)
+        End If
+        If Not IsNothing(fanart) Then
+            Dim Destpaths As New List(Of String)
+            If frodo Then
+                Destpaths.Add(currentshowpath & "fanart.jpg")
+                Destpaths.Add(currentshowpath & "season-all-fanart.jpg")
+            End If
+            If eden Then Destpaths.Add(currentshowpath & "fanart.jpg")
+            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(fanart, Destpaths, False, , , Overwrite)
+        End If
+        DestImg = currentshowpath & "landscape.jpg"
+        If Not IsNothing(landscape) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(landscape, DestImg)
+        DestImg = currentshowpath & "banner.jpg"
+        If Not IsNothing(banner) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then
+            Utilities.DownloadFile(landscape, DestImg)
+            If frodo Then
+                DestImg = currentshowpath & "season-all-banner.jpg"
+                If Overwrite OrElse Not File.Exists(DestImg) Then Utilities.DownloadFile(landscape, DestImg)
+            End If
+        End If
 
+        Dim firstseason As Integer = 1
+        Dim lastseason As Integer = -1
+        For Each item In TvFanartlist.seasonposter
+            Dim itemseason As Integer = item.season.ToInt
+            If itemseason > lastseason Then lastseason = itemseason
+            If itemseason < firstseason Then firstseason = itemseason
+        Next
+        If lastseason >= firstseason Then
+            For i = firstseason to lastseason 
+                Dim savepaths As New List(Of String)
+                Dim seasonurl As String = Nothing
+                For Each lan In lang
+                    For Each item In TvFanartlist.seasonposter
+                        If item.lang = lan AndAlso item.season = i.ToString Then
+                            seasonurl = item.url
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonurl) Then Exit for
+                Next
+                If Not IsNothing(seasonurl) Then
+                    Dim seasonno As String = i.ToString
+                    If seasonno <> "" Then
+                        If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                        If seasonno = "00" Then
+                            seasonno = "-specials"
+                        End If
+                        destimg = currentshowpath &  "season" & seasonno & "-poster.jpg"
+                        If Preferences.FrodoEnabled Then savepaths.Add(destimg)
+                        If Preferences.EdenEnabled Then
+                            destimg = destimg.Replace("-poster.jpg", ".tbn")
+                            savepaths.Add(destimg)
+                        End If
+                        If Preferences.seasonfolderjpg AndAlso ThisShow.Episodes.Count > 0 Then
+                            For Each ep In ThisShow.Episodes
+                                Dim TrueSeasonFolder As String = Nothing
+                                Dim folder As Boolean = False
+                                If ep.Season.Value = i Then
+                                    If ep.FolderPath <> currentshowpath Then
+                                        TrueSeasonFolder = ep.FolderPath & "folder.jpg"
+                                        If Not savepaths.Contains(TrueSeasonFolder) Then
+                                            savepaths.Add(TrueSeasonFolder)
+                                            folder = True
+                                        End If
+                                    End If
+                                End If
+                                If folder Then Exit For
+                            Next
+                        End If
+                    End If
+                End If
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
+            Next
+        End If
+
+        firstseason = 1
+        lastseason = -1
+        For Each item In TvFanartlist.seasonbanner 
+            Dim itemseason As Integer = item.season.ToInt
+            If itemseason > lastseason Then lastseason = itemseason
+            If itemseason < firstseason Then firstseason = itemseason
+        Next
+        If lastseason >= firstseason AndAlso frodo Then
+            For i = firstseason to lastseason 
+                Dim savepaths As New List(Of String)
+                Dim seasonurl As String = Nothing
+                For Each lan In lang
+                    For Each item In TvFanartlist.seasonbanner
+                        If item.lang = lan AndAlso item.season = i.ToString Then
+                            seasonurl = item.url
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonurl) Then Exit for
+                Next
+                If Not IsNothing(seasonurl) Then
+                    Dim seasonno As String = i.ToString
+                    If seasonno <> "" Then
+                        If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                        If seasonno = "00" Then
+                            seasonno = "-specials"
+                        End If
+                        destimg = currentshowpath &  "season" & seasonno & "-banner.jpg"
+                        If Preferences.FrodoEnabled Then savepaths.Add(destimg)
+                    End If
+                End If
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
+            Next
+        End If
+
+        firstseason = 1
+        lastseason = -1
+        For Each item In TvFanartlist.seasonthumb  
+            Dim itemseason As Integer = item.season.ToInt
+            If itemseason > lastseason Then lastseason = itemseason
+            If itemseason < firstseason Then firstseason = itemseason
+        Next
+        If lastseason >= firstseason AndAlso frodo Then
+            For i = firstseason to lastseason 
+                Dim savepaths As New List(Of String)
+                Dim seasonurl As String = Nothing
+                For Each lan In lang
+                    For Each item In TvFanartlist.seasonthumb
+                        If item.lang = lan AndAlso item.season = i.ToString Then
+                            seasonurl = item.url
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonurl) Then Exit for
+                Next
+                If Not IsNothing(seasonurl) Then
+                    Dim seasonno As String = i.ToString
+                    If seasonno <> "" Then
+                        If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                        If seasonno = "00" Then
+                            seasonno = "-specials"
+                        End If
+                        destimg = currentshowpath &  "season" & seasonno & "-landscape.jpg"
+                        If Preferences.FrodoEnabled Then savepaths.Add(destimg)
+                    End If
+                End If
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
+            Next
+        End If
     End Sub
 
 #End Region
