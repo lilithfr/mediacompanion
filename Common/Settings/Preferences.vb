@@ -143,6 +143,7 @@ Public Class Preferences
     Public Shared DisplayRatingOverlay As Boolean
     Public Shared DisplayMediainfoOverlay As Boolean
     Public Shared font As String
+    Public Shared MultiMonitoEnabled As Boolean
     Private Shared _MkvMergeGuiPath As String
 
     Shared Property MkvMergeGuiPath As String
@@ -529,6 +530,7 @@ Public Class Preferences
         splt6 = 230
         tvbannersplit = 0
         showsortdate = False
+        MultiMonitoEnabled = False
         XBMC_version = 2
         'Proxy settings
         prxyEnabled = False

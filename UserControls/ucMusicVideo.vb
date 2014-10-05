@@ -1242,8 +1242,10 @@ Public Class ucMusicVideo
         Form1.cropMode = "mvscreenshot"
         Try
             Dim t As New frmMovPosterCrop
-            t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
+            If Preferences.MultiMonitoEnabled Then
+                t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+            End If
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

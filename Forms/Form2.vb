@@ -241,12 +241,14 @@ Public Class Form2
     Private Sub btnAltPosterBrowser_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAltPosterBrowser.Click
         Try
             Dim t As New frmCoverArt()
-            Dim w As Integer = t.Width
-            Dim h As Integer = t.Height
-            t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
-            t.Width = w
-            t.Height = h
+            If Preferences.MultiMonitoEnabled Then
+                Dim w As Integer = t.Width
+                Dim h As Integer = t.Height
+                t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+                t.Width = w
+                t.Height = h
+            End If
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -545,12 +547,14 @@ Public Class Form2
     Private Sub btnfanart_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnfanart.Click
         Try
             Dim t As New frmMovieFanart
-            Dim w As Integer = t.Width
-            Dim h As Integer = t.Height
-            t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
-            t.Width = w
-            t.Height = h
+            If Preferences.MultiMonitoEnabled Then
+                Dim w As Integer = t.Width
+                Dim h As Integer = t.Height
+                t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+                t.Width = w
+                t.Height = h
+            End If
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

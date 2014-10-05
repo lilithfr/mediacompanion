@@ -30,8 +30,10 @@ Friend NotInheritable Class ExceptionHandler
                 Catch
                     scrn = 0    'But Form1 not fully loaded, default to main screen.
                 End Try
-                ofrmExcept.Bounds = Screen.AllScreens(scrn).Bounds
-                ofrmExcept.StartPosition = FormStartPosition.Manual
+                If Form1.multimonitor Then
+                    ofrmExcept.Bounds = Screen.AllScreens(scrn).Bounds
+                    ofrmExcept.StartPosition = FormStartPosition.Manual
+                End If
                 ofrmExcept.txtExceptionTrace.Text = msg
                 ofrmExcept.ShowDialog()
             Catch ex1 As Exception

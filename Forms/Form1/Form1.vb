@@ -179,6 +179,7 @@ Public Class Form1
     Dim profileStruct As New Profiles
     Dim frmSplash As New frmSplashscreen
     Dim frmSplash2 As New frmProgressScreen
+    Public Shared multimonitor As Boolean = False
     Dim progressmode As Boolean
     Dim overItem As String
     Dim scrapeAndQuit  As Boolean = False
@@ -340,11 +341,13 @@ Public Class Form1
                 Me.WindowState = FormWindowState.Minimized
             Else
                 Dim scrn As Integer = splashscreenread()
-                frmSplash.Bounds = screen.AllScreens(scrn).Bounds
-                frmSplash.StartPosition = FormStartPosition.Manual
-                Dim x As Integer = screen.AllScreens(scrn).Bounds.X
-                frmSplash.Location = New Point(x + 250, 250)
-                frmSplash.TopMost = True
+                If multimonitor Then
+                    frmSplash.Bounds = screen.AllScreens(scrn).Bounds
+                    frmSplash.StartPosition = FormStartPosition.Manual
+                    Dim x As Integer = screen.AllScreens(scrn).Bounds.X
+                    frmSplash.Location = New Point(x + 250, 250)
+                    frmSplash.TopMost = True
+                End If
                 frmSplash.Show()
                 frmSplash.Label3.Text = "Status :- Initialising Program"
                 frmSplash.Label3.Refresh()
@@ -422,7 +425,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
-            'TabControl2.TabPages.Remove(Me.tpFanartTv)   'Hide during construction.
+            TabControl3.TabPages.Remove(Me.tvtpfanarttv)    'Hide TvFanart Tab while Work-In Progress
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
@@ -521,10 +524,16 @@ Public Class Form1
 
             If Not (scrapeAndQuit Or refreshAndQuit) Then
                 Me.Visible = True
-
-                Dim scrn As Integer = If(NumOfScreens > 0, Preferences.preferredscreen, 0)
-                Dim intX As Integer = screen.AllScreens(scrn).Bounds.X + screen.AllScreens(scrn).Bounds.Width
-                Dim intY As Integer = screen.AllScreens(scrn).Bounds.Height
+                Dim intX As Integer
+                Dim intY As Integer
+                If Preferences.MultiMonitoEnabled Then
+                    Dim scrn As Integer = If(NumOfScreens > 0, Preferences.preferredscreen, 0)
+                    intX = screen.AllScreens(scrn).Bounds.X + screen.AllScreens(scrn).Bounds.Width
+                    intY = screen.AllScreens(scrn).Bounds.Height
+                Else
+                    intX = Screen.PrimaryScreen.Bounds.Width
+                    intY = Screen.PrimaryScreen.Bounds.Height
+                End If
                 SplitContainer1.IsSplitterFixed = True
                 SplitContainer2.IsSplitterFixed = True
                 SplitContainer3.IsSplitterFixed = True
@@ -1098,10 +1107,13 @@ Public Class Form1
             Try
                 Dim document As XDocument = XDocument.Load(checkpath)
                 Dim sc = From t In document.Descendants("screen") Select t.Value
+                Dim mten = From t In document.Descendants("MultiEnabled") Select t.Value
+                multimonitor = Convert.ToBoolean(mten.First())
                 scrn = sc.First().ToInt
                 If scrn > NumOfScreens Then scrn = 0
             Catch
                 scrn = 0
+                multimonitor = False
             End Try
         End If
         Return scrn
@@ -1116,6 +1128,9 @@ Public Class Form1
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
         root = doc.CreateElement("root")
+        child = doc.CreateElement("MultiEnabled")
+        child.InnerXml = Preferences.MultiMonitoEnabled
+        root.AppendChild(child)
         child = doc.CreateElement("screen")
         child.InnerText = CurrentScreen.ToString
         root.AppendChild(child)
@@ -2908,12 +2923,14 @@ Public Class Form1
     Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripPosterBrowserAlt.Click
         Try
             Dim t As New frmCoverArt
-            Dim w As Integer = t.Width
-            Dim h As Integer = t.Height
-            t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
-            t.Width = w
-            t.Height = h
+            If Preferences.MultiMonitoEnabled Then
+                Dim w As Integer = t.Width
+                Dim h As Integer = t.Height
+                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+                t.Width = w
+                t.Height = h
+            End If
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -2923,12 +2940,14 @@ Public Class Form1
     Private Sub mov_ToolStripFanartBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripFanartBrowserAlt.Click
         Try
             Dim t As New frmMovieFanart
-            Dim w As Integer = t.Width
-            Dim h As Integer = t.Height
-            t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
-            t.Width = w
-            t.Height = h
+            If Preferences.MultiMonitoEnabled Then
+                Dim w As Integer = t.Width
+                Dim h As Integer = t.Height
+                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+                t.Width = w
+                t.Height = h
+            End If
             t.ShowDialog()
             Try
                 If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
@@ -10241,8 +10260,10 @@ End Sub
     Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click 
         Try
             Dim t As New frmOptions
-            t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
+            If Preferences.MultiMonitoEnabled Then
+                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+            End If
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -10399,8 +10420,10 @@ End Sub
                 tvBatchList.doEpisodeMediaTags = False
 
                 Dim displaywizard As New tv_batch_wizard
-                displaywizard.Bounds = screen.AllScreens(CurrentScreen).Bounds
-                displaywizard.StartPosition = FormStartPosition.Manual
+                If Preferences.MultiMonitoEnabled Then
+                    displaywizard.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                    displaywizard.StartPosition = FormStartPosition.Manual
+                End If
                 displaywizard.ShowDialog()
 
                 If tvBatchList.activate = True Then
@@ -10865,8 +10888,10 @@ End Sub
                 '    If drivespace > totalfilesize Then
                 '        'My.Computer.FileSystem.CopyFile("C:\UserFiles\TestFiles\testFile.txt", "C:\UserFiles\TestFiles2\NewFile.txt", FileIO.UIOption.AllDialogs, FileIO.UICancelOption.DoNothing)
                 Dim frm As New frmCopyProgress
-                frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
-                frm.StartPosition = FormStartPosition.Manual
+                If Preferences.MultiMonitoEnabled Then
+                    frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                    frm.StartPosition = FormStartPosition.Manual
+                End If
                 frm.ShowDialog()
                 '    End If
                 'End If
@@ -11061,6 +11086,7 @@ End Sub
     
     Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )
         Preferences.LoadConfig()
+        Preferences.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
 
         'MovieListComboBox.Items.Clear()
         DataGridViewMovies.DataSource = Nothing
@@ -11612,8 +11638,10 @@ End Sub
     Private Sub ShowBigMovieText()
 
         Dim frm As New frmBigMovieText
-        frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
-        frm.StartPosition = FormStartPosition.Manual
+        If Preferences.MultiMonitoEnabled Then
+            frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            frm.StartPosition = FormStartPosition.Manual
+        End If
         frm.ShowDialog(
                         titletxt.Text,
                         directortxt.Text,
@@ -12786,6 +12814,7 @@ End Sub
         cbCheckForNewVersion        .Checked    = Preferences.CheckForNewVersion
         cbDisplayRatingOverlay      .Checked    = Preferences.DisplayRatingOverlay
         cbDisplayMediaInfoOverlay   .Checked    = Preferences.DisplayMediainfoOverlay 
+        cbMultiMonitorEnable        .Checked    = Preferences.MultiMonitoEnabled 
 
         If Preferences.videomode = 1 Then
             RadioButton38.Checked = True
@@ -13537,6 +13566,14 @@ End Sub
     Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
         If prefsload = False Then
             Preferences.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
+    End Sub
+
+    Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMultiMonitorEnable.CheckedChanged
+        If prefsload = False Then
+            Preferences.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
@@ -17666,8 +17703,10 @@ End Sub
         Try
             cropMode = "movieposter"
             Dim t As New frmMovPosterCrop
-            t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-            t.StartPosition = FormStartPosition.Manual
+            If Preferences.MultiMonitoEnabled Then
+                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+            End If
             t.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -18462,8 +18501,10 @@ End Sub
     Private Sub ShowBigTvEpisodeText()
 
         Dim frm As New frmBigTvEpisodeText
-        frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
-        frm.StartPosition = FormStartPosition.Manual
+        If Preferences.MultiMonitoEnabled Then
+            frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            frm.StartPosition = FormStartPosition.Manual
+        End If
         frm.ShowDialog(
                         tb_Sh_Ep_Title.Text,
                         tb_EpDirector.Text,
@@ -20874,12 +20915,14 @@ End Sub
 
     Private Sub FixNFOCreateDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FixNFOCreateDateToolStripMenuItem.Click
         Dim fixCreateDate As New frmCreateDateFix
-        Dim w As Integer = fixCreateDate.Width
-        Dim h As Integer = fixCreateDate.Height
-        fixCreateDate.Bounds = screen.AllScreens(CurrentScreen).Bounds
-        fixCreateDate.StartPosition = FormStartPosition.Manual
-        fixCreateDate.Width = w
-        fixCreateDate.Height = h
+        If Preferences.MultiMonitoEnabled Then
+            Dim w As Integer = fixCreateDate.Width
+            Dim h As Integer = fixCreateDate.Height
+            fixCreateDate.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            fixCreateDate.StartPosition = FormStartPosition.Manual
+            fixCreateDate.Width = w
+            fixCreateDate.Height = h
+        End If
         fixCreateDate.ShowDialog()
     End Sub
 
