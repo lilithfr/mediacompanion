@@ -462,14 +462,9 @@ Partial Public Class Form1
             tb_ShPlot.Text = "Unable to find folder: " & Show.FolderPath
             tb_Sh_Ep_Title.Text = "Unable to find folder: " & Show.FolderPath
         Else
-
-
-
             If TabControl3.TabPages(1).Text = "Screenshot" Then
                 TabControl3.TabPages.RemoveAt(1)
             End If
-
-
 
             'load tvshow.nfo
             ListBox3.Items.Clear()
@@ -559,11 +554,6 @@ Partial Public Class Form1
                 End If
             End If
 
-            'If Show.EpisodeActorSource.Value = "imdb" Then
-            '    Button46.Text = "IMDB"
-            'ElseIf Show.EpisodeActorSource.Value = "tvdb" Then
-            '    Button46.Text = "TVDB"
-            'End If
             Button46.Text = Show.EpisodeActorSource.Value.ToUpper
             If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
                 If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
@@ -573,19 +563,8 @@ Partial Public Class Form1
                 End If
             End If
 
-            'If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
-            '    If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
-            '        Show.TvShowActorSource.Value = "tvdb"
-            '    Else
-            '        Show.TvShowActorSource.Value = "imdb"
-            '    End If
-            'End If
-
-            'If Show.TvShowActorSource.Value = "imdb" Then
-            '    Button45.Text = "IMDB"
-            'ElseIf Show.TvShowActorSource.Value = "tvdb" Then
-            '    Button45.Text = "TVDB"
-            'End If
+            tvFanlistbox.Items.Clear()
+            Panel7.Visible = TvCheckforExtraArt(Show.FolderPath)
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             Call tv_ActorsLoad(Show.ListActors)
         End If
@@ -673,11 +652,41 @@ Partial Public Class Form1
         End Try
     End Sub
 
+    Public Function TvCheckforExtraArt(ByVal Showpath As String) As Boolean
+        Dim confirmedpresent As Boolean = False
+        If Directory.Exists(Showpath) Then
+            If File.Exists(Showpath & "clearart.png") Then tvFanlistbox.Items.Add("ClearArt") : confirmedpresent = True
+            If File.Exists(Showpath & "logo.png") Then tvFanlistbox.Items.Add("Logo") : confirmedpresent = True
+            If File.Exists(Showpath & "landscape.jpg") Then tvFanlistbox.Items.Add("Landscape") : confirmedpresent = True
+            If File.Exists(Showpath & "character.png") Then tvFanlistbox.Items.Add("Character") : confirmedpresent = True
+        End If
+        Return confirmedpresent 
+    End Function
+
+    Private Sub tvFanlistbox_Mouse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tvFanlistbox.MouseDown
+        Dim item As String = tvFanlistbox.SelectedItem.ToString.ToLower
+        If Not String.IsNullOrEmpty(item) Then
+            Dim tmpsh As TvShow = tv_ShowSelectedCurrently()
+            Dim imagepath As String = tmpsh.FolderPath 
+            Dim suffix As String = If((item = "clearart" or item = "logo" or item = "character"),".png", ".jpg")
+            imagepath &= item & suffix
+            pbtvfanarttv.Visible = True
+            util_ImageLoad(pbtvfanarttv, imagepath, "")
+        End If
+    End Sub
+
+    Private Sub tvFanlistbox_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tvFanlistbox.MouseLeave
+        tvFanlistbox.ClearSelected()
+        pbtvfanarttv.Image = Nothing
+        pbtvfanarttv.Visible = False
+    End Sub
+
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
         'If SelectedSeason.ShowObj.IsCache Then
         SelectedSeason.ShowObj.ListActors.Clear()
         SelectedSeason.ShowObj.Load()
         'End If
+        Panel7.Visible = False
         Dim Show As Media_Companion.TvShow
         If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
             Show = SelectedSeason.SeasonNode.Parent.Tag
@@ -837,7 +846,7 @@ Partial Public Class Form1
     End Function
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
-
+        Panel7.Visible = False
         'test for multiepisodenfo
         Dim multiepisode As Boolean = TestForMultiepisode(Episode.NfoFilePath)
 
