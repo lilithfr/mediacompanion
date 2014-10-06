@@ -722,6 +722,7 @@ Public Class Classimdb
 
             If s="" Then  
                 s=Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
+                s = s.Replace("&amp;", "&")
             End If
 
             Return s
