@@ -563,8 +563,9 @@ Partial Public Class Form1
                 End If
             End If
 
-            tvFanlistbox.Items.Clear()
-            Panel7.Visible = TvCheckforExtraArt(Show.FolderPath)
+            'tvFanlistbox.Items.Clear()
+            'Panel7.Visible = TvCheckforExtraArt(Show.FolderPath)
+            TvPanel7Update(Show.FolderPath)
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             Call tv_ActorsLoad(Show.ListActors)
         End If
@@ -696,15 +697,36 @@ Partial Public Class Form1
         Return confirmedpresent 
     End Function
 
-    Private Sub tvFanlistbox_Mouse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tvFanlistbox.MouseDown
-        Dim item As String = tvFanlistbox.SelectedItem.ToString.ToLower
+    Public Sub TvPanel7Update(ByVal TvShPath As String)
+        tvFanlistbox.Items.Clear()
+        Panel7.Visible = TvCheckforExtraArt(TvShPath)
+    End Sub
+
+    Private Sub tvFanlistbox_Mouse(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvFanlistbox.MouseDown
+        Dim imagepath As String = Nothing
+        Dim item As String = Nothing
+        If e.button = Windows.Forms.MouseButtons.Right Then
+            Dim index As Integer = tvFanlistbox.IndexFromPoint(New Point(e.X, e.Y))
+            If index >= 0 Then tvFanlistbox.SelectedItem = tvFanlistbox.Items(index)
+        End If
+        If IsNothing(tvFanlistbox.SelectedItem) Then Exit Sub
+        item = tvFanlistbox.SelectedItem.ToString.ToLower
         If Not String.IsNullOrEmpty(item) Then
-            Dim tmpsh As TvShow = tv_ShowSelectedCurrently()
-            Dim imagepath As String = tmpsh.FolderPath 
-            Dim suffix As String = If((item = "clearart" or item = "logo" or item = "character"),".png", ".jpg")
-            imagepath &= item & suffix
+                Dim tmpsh As TvShow = tv_ShowSelectedCurrently()
+                imagepath = tmpsh.FolderPath 
+                Dim suffix As String = If((item = "clearart" or item = "logo" or item = "character"),".png", ".jpg")
+                imagepath &= item & suffix
+        End If
+        If e.Button = Windows.Forms.MouseButtons.Left Then 
             pbtvfanarttv.Visible = True
-            util_ImageLoad(pbtvfanarttv, imagepath, "")
+            If Not IsNothing(imagepath) Then util_ImageLoad(pbtvfanarttv, imagepath, "")
+        ElseIf e.button = Windows.Forms.MouseButtons.Right Then
+            Dim tempint = MessageBox.show("Do you wish to delete this image from" & vbCrLf & "this Tv Show?", "Fanart.Tv Artwork Delete", MessageBoxButtons.YesNoCancel)
+            If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
+            If tempint = Windows.Forms.DialogResult.Yes Then
+                Utilities.SafeDeleteFile(imagepath)
+                TvPanel7Update(tv_ShowSelectedCurrently.FolderPath)
+            End If
         End If
     End Sub
 
@@ -713,6 +735,8 @@ Partial Public Class Form1
         pbtvfanarttv.Image = Nothing
         pbtvfanarttv.Visible = False
     End Sub
+
+    
 
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
         'If SelectedSeason.ShowObj.IsCache Then

@@ -288,6 +288,20 @@ Public Class ucFanartTvTv
         End If
     End Sub
 
+    Private Sub pbexists_MouseDown(sender As Object, e As MouseEventArgs) Handles pbexists.MouseDown
+        If e.button = Windows.Forms.MouseButtons.Right Then
+            If IsNothing(pbexists.Image) Then Exit Sub
+            Dim tempint = MessageBox.show("Do you wish to delete this image from" & vbCrLf & "this Movie?", "Fanart.Tv Artwork Delete", MessageBoxButtons.YesNoCancel)
+            If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
+            If tempint = Windows.Forms.DialogResult.Yes Then
+                Dim loadpath As String = WorkingShow.FolderPath & artType
+                pbexists.Image = Nothing
+                Utilities.SafeDeleteFile(loadpath)
+                Form1.TvPanel7Update(WorkingShow.FolderPath)
+            End If
+        End If
+    End Sub
+
     Sub EnableFanartScrolling()
         Try
             Dim rb As RadioButton = Panel1.Controls("imgcheckbox0")
@@ -353,7 +367,7 @@ Public Class ucFanartTvTv
                         End If
                     End If
                 End If
-                If artType = "character.png" Then savepaths.Add(WorkingShow.FolderPath & "character.png")
+                savepaths.Add(WorkingShow.FolderPath & artType)
             End If
             Try
                 Dim success As Boolean = False
@@ -362,6 +376,7 @@ Public Class ucFanartTvTv
             Catch
             End Try
             messbox.Close()
+            Form1.TvPanel7Update(WorkingShow.FolderPath)
         End If
     End Sub
 
@@ -379,4 +394,5 @@ Public Class ucFanartTvTv
         PanelSelectionDisplay()
     End Sub
 
+    
 End Class

@@ -1956,8 +1956,9 @@ Public Class Form1
 
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
                 movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
-                FanTvArtList.Items.Clear()
-                Panel6.Visible = CheckforExtraArt()
+                'FanTvArtList.Items.Clear()
+                'Panel6.Visible = CheckforExtraArt()
+                MovPanel6Update()
             End If
         Else
             cbMovieDisplay_Actor.Items.Clear()
@@ -2045,14 +2046,35 @@ Public Class Form1
         Return confirmedpresent 
     End Function
 
-    Private Sub FanTvArtList_Mouse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FanTvArtList.MouseDown
-        Dim item As String = FanTvArtList.SelectedItem.ToString.ToLower
+    Public Sub MovPanel6Update()
+        FanTvArtList.Items.Clear()
+        Panel6.Visible = CheckforExtraArt()
+    End Sub
+
+    Private Sub FanTvArtList_Mouse(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles FanTvArtList.MouseDown
+        Dim imagepath As String = Nothing
+        Dim item As String = Nothing
+        If e.button = Windows.Forms.MouseButtons.Right Then
+            Dim index As Integer = FanTvArtList.IndexFromPoint(New Point(e.X, e.Y))
+            If index >= 0 Then FanTvArtList.SelectedItem = FanTvArtList.Items(index)
+        End If
+        If IsNothing(FanTvArtList.SelectedItem) Then Exit Sub
+        item = FanTvArtList.SelectedItem.ToString.ToLower
         If Not String.IsNullOrEmpty(item) Then
-            Dim imagepath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename)
+            imagepath = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim suffix As String = If((item = "clearart" or item = "logo" or item = "disc"),".png", ".jpg")
             imagepath &= "\" & item & suffix
+        End If
+        If e.Button = Windows.Forms.MouseButtons.Left Then
             ftvArtPicBox.Visible = True
-            util_ImageLoad(ftvArtPicBox, imagepath, "")
+            If Not IsNothing(imagepath) Then util_ImageLoad(ftvArtPicBox, imagepath, "")
+        ElseIf e.button = Windows.Forms.MouseButtons.Right Then
+            Dim tempint = MessageBox.show("Do you wish to delete this image from" & vbCrLf & "this Movie?", "Fanart.Tv Artwork Delete", MessageBoxButtons.YesNoCancel)
+            If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
+            If tempint = Windows.Forms.DialogResult.Yes Then
+                Utilities.SafeDeleteFile(imagepath)
+                MovPanel6Update()
+            End If
         End If
     End Sub
 
@@ -6966,7 +6988,7 @@ Public Class Form1
         End Try
 
     End Sub
-
+    
     Private Sub RefreshMovieNfoFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMovieNfoFilesToolStripMenuItem.Click
         Try
             Call util_BatchUpdate()

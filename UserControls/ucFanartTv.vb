@@ -306,6 +306,20 @@ Public Class ucFanartTv
         End If
     End Sub
 
+    Private Sub pbexists_MouseDown(sender As Object, e As MouseEventArgs) Handles pbexists.MouseDown
+        If e.button = Windows.Forms.MouseButtons.Right Then
+            If IsNothing(pbexists.Image) Then Exit Sub
+            Dim tempint = MessageBox.show("Do you wish to delete this image from" & vbCrLf & "this Movie?", "Fanart.Tv Artwork Delete", MessageBoxButtons.YesNoCancel)
+            If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
+            If tempint = Windows.Forms.DialogResult.Yes Then
+                Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
+                pbexists.Image = Nothing
+                Utilities.SafeDeleteFile(loadpath)
+                Form1.MovPanel6Update()
+            End If
+        End If
+    End Sub
+
     Private Sub Button1_Click( sender As Object,  e As EventArgs) Handles Button1.Click
         If nodata Then Exit Sub
         If Not IsNothing(selectedimageurl) Then
