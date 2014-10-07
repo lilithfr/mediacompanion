@@ -741,8 +741,10 @@ Public Class Preferences
         engineend.Add("&as_sitesearch=www.imdb.com")
         enginefront.Add("http://www.bing.com/search?q=")
         engineend.Add("+movie+site%3Aimdb.com")
-        enginefront.Add("http://search.yahoo.com/search?p=")
-        engineend.Add("+movie+site%3Aimdb.com")
+        enginefront.Add("http://www.ask.com/web?qsrc=1&o=0&l=dir&q=")
+        engineend.Add("&qo=serpSearchTopBox")
+        'enginefront.Add("http://search.yahoo.com/search?p=")    'Yahoo isn't allowing searching. 
+        'engineend.Add("+movie+site%3Aimdb.com")
     End Sub
     Public Shared Sub SaveConfig()
         
