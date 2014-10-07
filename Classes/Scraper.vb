@@ -203,10 +203,10 @@ Public Class Classimdb
                 Catch
                 End Try
             Next
-            'Dim webPg As String = ""
-            'For I = 1 to urllinecount
-            '    webPg += websource(I).ToString
-            'Next
+            Dim webPg As String = ""
+            For I = 1 to urllinecount
+                webPg += websource(I).ToString & vbcrlf
+            Next
             GOT_IMDBID = ""
             Dim popular(1000) As String
             Dim atpopular As Boolean = False
@@ -233,7 +233,7 @@ Public Class Classimdb
                     End If
                 End If
                 If movieyear <> "" Then
-                    If websource(f).IndexOf("Media from") <> -1 Then
+                    If websource(f).IndexOf("><img src=") <> -1 Then
                         If websource(f).IndexOf("&#34;") = -1 Then
                             If websource(f).IndexOf(movieyear) <> -1 Then
                                 Dim first As Integer
@@ -251,7 +251,7 @@ Public Class Classimdb
                     End If
                 End If
             Next
-            If movieyear <> Nothing Then
+            If movieyear <> Nothing AndAlso GOT_IMDBID = "" Then
                 If yearcounter = 1 And GOT_IMDBID = "" Then
                     Dim onlyid As String = websource(year(yearcounter)).Substring(0, websource(year(yearcounter)).IndexOf(movieyear) + 6)
                     Dim first As Integer
@@ -307,7 +307,7 @@ Public Class Classimdb
                         End If
                     End If
                 End If
-            ElseIf movieyear = Nothing Then
+            ElseIf GOT_IMDBID = "" AndAlso movieyear = Nothing Then
                 Dim exactmatch As Boolean = False
                 Dim popularmatch As Boolean = False
 
