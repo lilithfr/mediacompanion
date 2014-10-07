@@ -571,6 +571,39 @@ Partial Public Class Form1
         Panel9.Visible = False
     End Sub
 
+    Private Sub tb_ShGenre_MouseDown(sender As Object, e As MouseEventArgs) Handles tb_ShGenre.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            Try
+                Dim thisshow As TvShow = tv_ShowSelectedCurrently 
+                Dim item() As String = thisshow.Genre.Value.Split("/")
+                Dim genre As String = ""
+                Dim listof As New List(Of String)
+                listof.Clear()
+                For Each i In item
+                    listof.Add(i.Trim)
+                Next
+                Dim frm As New frmGenreSelect 
+                frm.SelectedGenres = listof
+                frm.Init()
+                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                    listof.Clear()
+                    listof.AddRange(frm.SelectedGenres)
+                    For each g In listof
+                        If genre = "" Then
+                            genre = g
+                        Else
+                            genre += " / " & g
+                        End If
+                    Next
+                    thisshow.Genre.Value = genre
+                    tb_ShGenre.Text = genre
+                    thisshow.Save()
+                End If
+            Catch
+            End Try
+        End If
+    End Sub
+
     Public Sub tv_ActorsLoad(ByVal listActors As Media_Companion.ActorList)
         cbTvActor.Items.Clear()
         cbTvActorRole.Items.Clear()
@@ -2128,10 +2161,6 @@ Partial Public Class Form1
                                                     End If
                                                 Next
 
-
-
-
-
                                                 If tempactorlist.Count > 0 Then
                                                     Preferences.tvScraperLog &= "Actors scraped from IMDB OK" & vbCrLf
                                                     progresstext &= "OK."
@@ -2164,7 +2193,6 @@ Partial Public Class Form1
                                 If imdbid = "" Then
                                     Preferences.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show:  " & showtitle & vbCrLf
                                 End If
-
 
                                 If Preferences.enablehdtags = True Then
                                     progresstext &= " : HD Tags..."
@@ -2232,6 +2260,10 @@ Partial Public Class Form1
                             Dim Seasonxx As String = Shows.FolderPath + "Season" + (If(episodearray(0).Season.Value < 10, "0" + episodearray(0).Season.Value, episodearray(0).Season.Value)) + (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
                             If Not IO.File.Exists(Seasonxx) Then
                                 TvGetArtwork(Shows, False, False, True, False)
+                            Else
+                                If Preferences.seasonfolderjpg AndAlso Shows.FolderPath <> episodearray(0).FolderPath AndAlso (Not File.Exists(episodearray(0).FolderPath & "folder.jpg")) Then
+                                    Utilities.SafeCopyFile(Seasonxx, (episodearray(0).FolderPath & "folder.jpg"))
+                                End If
                             End If
                         End If
                         For Each ept In episodearray
@@ -3998,8 +4030,6 @@ Partial Public Class Form1
         End Try
     End Sub
 
-
-
     Private Sub TvScrapePosterBanner(ByVal postertype As String)
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -4014,11 +4044,20 @@ Partial Public Class Form1
             Dim mainimages As Boolean = TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow
             Dim posterpath As String = ""
             Dim seasonno As String = ""
+            Dim seasonpath As String = ""
             If Not mainimages Then
                 seasonno = tv_SeasonSelectedCurrently.ToString
                 seasonno = seasonno.ToLower.Replace("season ", "")
                 Dim tmp As Integer = seasonno.ToInt
                 seasonno = tmp.ToString
+                If Preferences.seasonfolderjpg Then
+                    For Each ep As TvEpisode In WorkingTvShow.Episodes
+                        If ep.Season.Value = seasonno Then
+                            seasonpath = ep.FolderPath.Replace(WorkingTvShow.FolderPath, "")
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
             Dim language As String = WorkingTvShow.Language.Value
             Dim eden As Boolean = Preferences.EdenEnabled
@@ -4131,6 +4170,9 @@ Partial Public Class Form1
                 Else
                     If seasonno.ToInt < 10 Then seasonno = "0" & seasonno
                     If postertype = "poster" Then
+                        If Preferences.seasonfolderjpg AndAlso seasonpath <> "" Then
+                            imagepath.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
+                        End If
                         If eden Then
                             imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
                         End If
@@ -4169,7 +4211,14 @@ Partial Public Class Form1
     End Sub
 
     Private Sub TvSelectPosterBanner(ByVal poster As Boolean)
-
+        Dim IsOfType As String = "banner"
+        Dim tpindex As Integer = 2
+        If Not poster Then IsOfType = "poster"
+        If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then tpindex = 3
+        RemoveHandler TabControl3.SelectedIndexChanged, AddressOf TabControl3_SelectedIndexChanged
+        TabControl3.SelectTab(tpindex)
+        AddHandler TabControl3.SelectedIndexChanged, AddressOf TabControl3_SelectedIndexChanged
+        tv_PosterSetup(IsOfType)
     End Sub
 
     Private Sub TvFanartTvArt (ByVal ThisShow As TvShow, ByVal Overwrite As Boolean)
@@ -4606,6 +4655,5 @@ Partial Public Class Form1
         End Try
         Return flags
     End Function
-
 
 End Class

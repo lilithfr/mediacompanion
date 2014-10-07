@@ -6225,7 +6225,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub tv_PosterSetup()
+    Private Sub tv_PosterSetup(Optional ByVal IsOfType As String = "")
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingSeason As TvSeason = tv_SeasonSelectedCurrently()
@@ -6283,6 +6283,7 @@ Public Class Form1
             For i=0 to ComboBox2.Items.Count
                 ComboBox2.SelectedIndex = i
                 If ComboBox2.text = ThisSeason Then
+                    If IsOfType = "banner" Then rbTVbanner.Checked = True
                     Exit For
                 End If
             Next
@@ -6828,6 +6829,18 @@ Public Class Form1
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg"))
                         frodo = 1
                     End If
+                End If
+                If Preferences.seasonfolderjpg Then
+                    temp = temp.Replace("season", "")
+                    Dim seasonno As Integer = temp.ToInt
+                    Dim seasonpath As String = Nothing
+                    For Each ep As TvEpisode In WorkingTvShow.Episodes
+                        If ep.Season.Value = seasonno Then
+                            seasonpath = ep.FolderPath.Replace(WorkingTvShow.FolderPath, "")
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonpath) Then imagePaths.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
                 If Preferences.EdenEnabled Then
