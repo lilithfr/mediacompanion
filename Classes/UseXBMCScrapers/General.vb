@@ -934,7 +934,7 @@ Module General
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
-        If Preferences.downloadtvseasonthumbs = True Then
+        If Preferences.tvdlseasonthumbs = True Then
             Try
                 For Each m_node In m_nodelist
                     For Each NodeChild In m_node.ChildNodes
@@ -960,7 +960,7 @@ Module General
             End Try
         End If
         Dim myWebClient As New System.Net.WebClient()
-        If Preferences.tvposter = True Then
+        If Preferences.tvdlposter = True Then
             If Preferences.postertype = "banner" Then
                 Dim ImageFilename As String = Path & "\folder.jpg"
                 If ArtforDownload(0) <> Nothing Then
@@ -973,7 +973,7 @@ Module General
                 End If
             End If
         End If
-        If Preferences.tvfanart = True Then
+        If Preferences.tvdlfanart = True Then
             Dim ImageFilename As String = Path & "\fanart.jpg"
             If ArtforDownload(2) <> Nothing Then
 
@@ -1002,7 +1002,7 @@ Module General
             End If
         End If
 
-        If Preferences.downloadtvseasonthumbs = True Then
+        If Preferences.tvdlseasonthumbs = True Then
             For n As Integer = 0 To SeasonPosters.Length - 1
                 Dim SeasonTemp As String = ""
                 If n <= 9 Then

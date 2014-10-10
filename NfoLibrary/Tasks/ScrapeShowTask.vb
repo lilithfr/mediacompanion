@@ -333,8 +333,8 @@ Namespace Tasks
                 End If
 
                 Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(Me.Show.TvdbId.Value, True)
-                If Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none" Then
-                    If Preferences.downloadtvseasonthumbs = True Then
+                If Preferences.tvdlfanart = True OrElse Preferences.tvdlposter = True OrElse Preferences.seasonall <> "none" Then
+                    If Preferences.tvdlseasonthumbs = True Then
                         For f = 0 To ArtList.Items.SeasonMax
                             Dim seasonposter As String = ""
                             For Each Image In ArtList.Items
@@ -378,7 +378,7 @@ Namespace Tasks
                         Next
                     End If
 
-                    If Preferences.tvfanart = True Then
+                    If Preferences.tvdlfanart = True Then
                         Dim fanartposter As String
                         fanartposter = ""
                         'If CheckBox7.CheckState = CheckState.Checked Then
@@ -422,7 +422,7 @@ Namespace Tasks
 
 
                     Dim seasonallpath As String = ""
-                    If Preferences.tvposter = True Then
+                    If Preferences.tvdlposter = True Then
                         Dim posterurlpath As String = ""
 
                         If Preferences.postertype = "poster" Then 'poster

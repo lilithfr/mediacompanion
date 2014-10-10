@@ -189,13 +189,13 @@ Public Class frmOptions
                 ListBox5.Items.Add(Preferences.certificatepriority(f))
             Next
 
-            If Preferences.tvfanart = True Then
+            If Preferences.tvdlfanart = True Then
                 CheckBox9.CheckState = CheckState.Checked
             Else
                 CheckBox9.CheckState = CheckState.Unchecked
             End If
 
-            If Preferences.tvposter = True Then
+            If Preferences.tvdlposter = True Then
                 CheckBox8.CheckState = CheckState.Checked
             Else
                 CheckBox8.CheckState = CheckState.Unchecked
@@ -205,7 +205,7 @@ Public Class frmOptions
 
 
 
-            If Preferences.downloadtvseasonthumbs = True Then
+            If Preferences.tvdlseasonthumbs = True Then
                 CheckBox7.CheckState = CheckState.Checked
             Else
                 CheckBox7.CheckState = CheckState.Unchecked

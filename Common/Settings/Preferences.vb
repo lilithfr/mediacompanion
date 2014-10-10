@@ -56,6 +56,12 @@ Public Class Preferences
     Public Shared engineend As New List(Of String)
     Public Shared proxysettings As New List(Of String)
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
+    
+    Public Shared TvChgShowDlPoster As Boolean = False
+    Public Shared TvChgShowDlFanart As Boolean = False
+    Public Shared TvChgShowDlSeasonthumbs As Boolean = False
+    Public Shared TvChgShowDlFanartTvArt As Boolean = False
+    Public Shared TvChgShowOverwriteImgs As Boolean = False
 
     Public Shared ReadOnly Property EdenEnabled As Boolean
         Get
@@ -196,8 +202,6 @@ Public Class Preferences
     Public Shared movxtrathumb As Boolean
     Public Shared movxtrafanart As Boolean
     Public Shared dlxtrafanart As Boolean
-    Public Shared dlTVxtrafanart As Boolean
-    Public Shared TvDlFanartTvArt As Boolean
     Public Shared allfolders As Boolean
     Public Shared actorsave As Boolean
     Public Shared actorsavepath As String
@@ -316,11 +320,13 @@ Public Class Preferences
     Public Shared displayMissingEpisodes As Boolean = False
     Public Shared ignoreMissingSpecials As Boolean = False
     Public Shared sortorder As String
-    Public Shared tvposter As Boolean
-    Public Shared tvfanart As Boolean
+    Public Shared tvdlposter As Boolean
+    Public Shared tvdlfanart As Boolean
+    Public Shared tvdlseasonthumbs As Boolean
+    Public Shared TvDlFanartTvArt As Boolean
+    Public Shared dlTVxtrafanart As Boolean
     Public Shared tvfolderjpg As Boolean
     Public Shared seasonfolderjpg As Boolean
-    Public Shared downloadtvseasonthumbs As Boolean
     Public Shared enabletvhdtags As Boolean
     Public Shared disabletvlogs As Boolean
     Public Shared postertype As String
@@ -556,8 +562,6 @@ Public Class Preferences
         movxtrafanart = True
         movxtrathumb = False
         dlxtrafanart = False
-        dlTVxtrafanart = False
-        TvDlFanartTvArt = False
         allfolders = False
         'ReDim moviethumbpriority(3)
         maxmoviegenre = 99
@@ -597,12 +601,14 @@ Public Class Preferences
         tvshowrefreshlog = False
         seasonall = "none"
         tvrename = 0
-        tvfanart = True
-        tvposter = True
+        tvdlfanart = True
+        tvdlposter = True
+        tvdlseasonthumbs = True
+        TvDlFanartTvArt = False
+        dlTVxtrafanart = False
         tvfolderjpg = False
         seasonfolderjpg = False
         postertype = "poster"
-        downloadtvseasonthumbs = True
         TvdbLanguage = "English"
         TvdbLanguageCode = "en"
         sortorder = "default"
@@ -933,8 +939,6 @@ Public Class Preferences
         root.AppendChild(doc, "movxtrathumb",                       movxtrathumb)                       'cbMovXtraThumb
         root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
         root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
-        root.AppendChild(doc, "dlTVxtrafanart",                     dlTVxtrafanart)                     'cbDlTVxtrafanart
-        root.AppendChild(doc, "TvDlFanartTvArt",                    TvDlFanartTvArt)                    'cbTvDlFanartTvArt
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
         root.AppendChild(doc, "actorsavepath",                      actorsavepath)                      'localactorpath
@@ -1022,11 +1026,13 @@ Public Class Preferences
         root.AppendChild(doc, "copytvactorthumbs",      copytvactorthumbs)      'CheckBox34
         root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42
         root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
-        root.AppendChild(doc, "downloadtvfanart",       tvfanart)               'CheckBox10
         root.AppendChild(doc, "tvfolderjpg",            tvfolderjpg)            'cb_TvFolderJpg
         root.AppendChild(doc, "seasonfolderjpg",        seasonfolderjpg)        'cbseasonfolderjpg
-        root.AppendChild(doc, "downloadtvposter",       tvposter)               'CheckBox14
-        root.AppendChild(doc, "downloadtvseasonthumbs", downloadtvseasonthumbs) 'CheckBox15
+        root.AppendChild(doc, "downloadtvfanart",       tvdlfanart)             'cbTvDlFanart
+        root.AppendChild(doc, "downloadtvposter",       tvdlposter)             'cbTvDlPosterArt
+        root.AppendChild(doc, "downloadtvseasonthumbs", tvdlseasonthumbs)       'cbTvDlSeasonArt
+        root.AppendChild(doc, "TvDlFanartTvArt",        TvDlFanartTvArt)        'cbTvDlFanartTvArt
+        root.AppendChild(doc, "dlTVxtrafanart",         dlTVxtrafanart)         'cbDlTVxtrafanart
         root.AppendChild(doc, "hdtvtags",               enabletvhdtags)         'CheckBox20
         root.AppendChild(doc, "disabletvlogs",          disabletvlogs)          'CheckBox17
         root.AppendChild(doc, "postertype",             postertype)             'posterbtn
@@ -1313,7 +1319,7 @@ Public Class Preferences
                     Case "tvdbactorscrape"                      : TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
                     Case "usetransparency"                      : usetransparency = thisresult.InnerXml
                     Case "transparencyvalue"                    : transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
-                    Case "downloadtvfanart"                     : tvfanart = thisresult.InnerXml
+                    Case "downloadtvfanart"                     : tvdlfanart = thisresult.InnerXml
                     Case "tvfolderjpg"                          : tvfolderjpg = thisresult.InnerXml
                     Case "seasonfolderjpg"                      : seasonfolderjpg = thisresult.InnerXml 
                     Case "roundminutes"                         : roundminutes = thisresult.InnerXml
@@ -1324,8 +1330,8 @@ Public Class Preferences
                     Case "sorttitleignorearticle"               : sorttitleignorearticle = thisresult.InnerXml
                     Case "TVShowUseXBMCScraper"                 : tvshow_useXBMC_Scraper = thisresult.InnerXml
                     Case "moviesUseXBMCScraper"                 : movies_useXBMC_Scraper = thisresult.InnerXml
-                    Case "downloadtvposter"                     : tvposter = thisresult.InnerXml
-                    Case "downloadtvseasonthumbs"               : downloadtvseasonthumbs = thisresult.InnerXml
+                    Case "downloadtvposter"                     : tvdlposter = thisresult.InnerXml
+                    Case "downloadtvseasonthumbs"               : tvdlseasonthumbs = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
@@ -2025,7 +2031,7 @@ Public Class Preferences
             workingfiledetails.filedetails_video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)  'tempmediainfo
 
             Try
-                Dim tmp As Double = aviFile.Video(0).AspectRatio 
+                Dim tmp As Double = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).AspectRatio)
                 If tmp <> 0 Then
                     workingfiledetails.filedetails_video.Aspect.Value = tmp.ToString("F2")
                 Else

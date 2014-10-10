@@ -5102,9 +5102,9 @@ Public Class Form1
                 RadioButton8.Checked = True
             End If
 
-            cbTvChgShowDLFanart         .Checked    = Preferences.tvfanart
-            cbTvChgShowDLPoster         .Checked    = Preferences.tvposter
-            cbTvChgShowDLSeason         .Checked    = Preferences.downloadtvseasonthumbs
+            cbTvChgShowDLFanart         .Checked    = Preferences.tvdlfanart
+            cbTvChgShowDLPoster         .Checked    = Preferences.tvdlposter
+            cbTvChgShowDLSeason         .Checked    = Preferences.tvdlseasonthumbs
             cbTvChgShowDLFanartTvArt    .Checked    = Preferences.TvDlFanartTvArt 
             
             If Preferences.tvshow_useXBMC_Scraper = True Then
@@ -12938,12 +12938,12 @@ End Sub
         CheckBox36                      .Checked    = Preferences.autoepisodescreenshot
         CheckBox35                      .Checked    = Preferences.tvshowautoquick
         CheckBox34                      .Checked    = Preferences.copytvactorthumbs
-        cbTvDlPosterArt                 .Checked    = Preferences.tvposter
-        cbTvDlFanart                    .Checked    = Preferences.tvfanart
+        cbTvDlPosterArt                 .Checked    = Preferences.tvdlposter
+        cbTvDlFanart                    .Checked    = Preferences.tvdlfanart
+        cbTvDlSeasonArt                 .Checked    = Preferences.tvdlseasonthumbs
+        cbTvDlFanartTvArt               .Checked    = Preferences.TvDlFanartTvArt
         cb_TvFolderJpg                  .Checked    = Preferences.tvfolderjpg
         cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
-        cbTvDlSeasonArt                 .Checked    = Preferences.downloadtvseasonthumbs
-        cbTvDlFanartTvArt               .Checked    = Preferences.TvDlFanartTvArt 
         CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
         cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
         AutoScrnShtDelay.Text = ScrShtDelay
@@ -14173,19 +14173,19 @@ End Sub
 
 'TvShow Auto Scrape Options
     Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlPosterArt.CheckedChanged
-         Preferences.tvposter = cbTvDlPosterArt.Checked
+         Preferences.tvdlposter = cbTvDlPosterArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanart.CheckedChanged
-        Preferences.tvfanart = cbTvDlFanart.Checked
+        Preferences.tvdlfanart = cbTvDlFanart.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlSeasonArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlSeasonArt.CheckedChanged
-        Preferences.downloadtvseasonthumbs = cbTvDlSeasonArt.Checked
+        Preferences.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -19685,11 +19685,15 @@ End Sub
 
     Private Sub cbTvChgShowDLSeason_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLSeason.CheckedChanged
         Try
-            If cbTvChgShowDLSeason.Checked = True Then
-                Preferences.downloadtvseasonthumbs = True
-            Else
-                Preferences.downloadtvseasonthumbs = False
-            End If
+            Preferences.TvChgShowDlSeasonthumbs = cbTvChgShowDLSeason.Checked 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbTvChgShowOverwriteImgs_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowOverwriteImgs.CheckedChanged
+        Try
+            Preferences.TvChgShowOverwriteImgs = cbTvChgShowOverwriteImgs.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19697,11 +19701,7 @@ End Sub
 
     Private Sub cbTvChgShowDLFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanart.CheckedChanged
         Try
-            If cbTvChgShowDLFanart.Checked = True Then
-                Preferences.tvfanart = True
-            Else
-                Preferences.tvfanart = False
-            End If
+            Preferences.TvChgShowDlFanart = cbTvChgShowDLFanart.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19709,11 +19709,7 @@ End Sub
 
     Private Sub cbTvChgShowDLFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanartTvArt.CheckedChanged
         Try
-            If cbTvChgShowDLFanartTvArt.Checked = True Then
-                Preferences.TvDlFanartTvArt = True
-            Else
-                Preferences.TvDlFanartTvArt = False
-            End If
+            Preferences.TvChgShowDlFanartTvArt = cbTvChgShowDLFanartTvArt.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19721,11 +19717,7 @@ End Sub
 
     Private Sub cbTvChgShowDLPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLPoster.CheckedChanged
         Try
-            If cbTvChgShowDLPoster.Checked = True Then
-                Preferences.tvposter = True
-            Else
-                Preferences.tvposter = False
-            End If
+            Preferences.TvChgShowDlPoster = cbTvChgShowDLPoster.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19772,9 +19764,16 @@ End Sub
                     Application.DoEvents()
                 End While
                 TabControl3.SelectedIndex = 0
+
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        Finally
+            Preferences.TvChgShowDlFanart = False
+            Preferences.TvChgShowDlFanartTvArt = False
+            Preferences.TvChgShowDlPoster = False
+            Preferences.TvChgShowDlSeasonthumbs = False
+            Preferences.TvChgShowOverwriteImgs = False
         End Try
     End Sub
 
