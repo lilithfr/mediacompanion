@@ -2650,6 +2650,7 @@ Public Class Form1
         Me.Controls.Remove(bigPanel)
         bigPanel = Nothing
         Me.Controls.Remove(bigPictureBox)
+        bigPictureBox.Image = Nothing
         bigPictureBox = Nothing
         Me.ControlBox = True
         MenuStrip1.Enabled = True
@@ -6264,10 +6265,6 @@ Public Class Form1
         tvobjects.Clear()
         TextBox31.Text = WorkingTvShow.Title.Value
         Label72.Text = ""
-        'If IO.File.Exists(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")) Then
-        '    Dim bmp As New Bitmap(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg"))
-        '    PictureBox12.Image = bmp
-        'End If
         For i = Panel16.Controls.Count - 1 To 0 Step -1
             Panel16.Controls.RemoveAt(i)
         Next
@@ -11870,18 +11867,7 @@ End Sub
             TabControl1.SelectedIndex = homeTabIndex
             Call rebuildHomeMovies()
         ElseIf tab = "screenshot" Then
-            If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
-                Try
-                    Dim bitmap2 As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
-                    Dim bitmap3 As New Bitmap(bitmap2)
-                    bitmap2.Dispose()
-                    PictureBox5.Image = bitmap3
-                Catch
-                    PictureBox5.Image = Nothing
-                End Try
-            Else
-                PictureBox5.Image = Nothing
-            End If
+            util_ImageLoad(PictureBox5, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
             homeTabIndex = TabControl1.SelectedIndex
         Else
             homeTabIndex = TabControl1.SelectedIndex
@@ -17610,31 +17596,10 @@ End Sub
                 Return
             End If
             Try
-                Dim i1 As New PictureBox
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = tempstring2
-                    Catch
-                        .ImageLocation = backup
-                    End Try
-                End With
-                If Not i1.Image Is Nothing Then
-                    If i1.Image.Width < 20 Then
-                        i1.ImageLocation = backup
-                    End If
-                End If
                 util_ImageLoad(PictureBoxAssignedMoviePoster, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
                 Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
-                For Each pth As String In Paths
-                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                Next
-                i1.Dispose()
-                If Preferences.createfolderjpg = True Then
-                    tempstring = workingMovieDetails.fileinfo.posterpath
-                    tempstring = tempstring.Replace(IO.Path.GetFileName(tempstring), "folder.jpg")
-                    i1.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
-                End If
+                Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(tempstring2, Paths, False, , ,True)
+
                 Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
                 updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
                 util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
@@ -19205,195 +19170,6 @@ End Sub
 
     Private Sub btnTvPosterSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveBig.Click
         Call TvPosterSave(btnTvPosterSaveBig.Tag)
-    End Sub
-
-    Private Sub btnTvPosterSaveSmall_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveSmall.Click ' disabled
-        'Try
-        '    'savesmall
-        '    Dim postname As String = ""
-        '    Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        '    Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
-        '    For Each Control In Panel16.Controls
-        '        If Control.name.indexof("postercheckbox") <> -1 Then
-        '            Dim rb As RadioButton = Control
-        '            If rb.Checked = True Then
-        '                postname = Control.name.replace("postercheckbox", "poster")
-        '                Exit For
-        '            End If
-        '        End If
-        '    Next
-        '    If postname <> "" Then
-        '        For Each Control In Panel16.Controls
-        '            If Control.name = postname Then
-        '                Try
-        '                    '                           Dim path As String = ""
-        '                    Dim picBox As PictureBox = Control
-
-        '                    If ComboBox2.Text.ToLower = "main image" Then
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        '                                If Preferences.XBMC_version = 0 Then
-        '                        '                                    path = workingposterpath
-        '                        '                                ElseIf Preferences.XBMC_version = 2 Then
-        '                        '                                    If rbTVbanner.Checked = True Then
-        '                        '                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
-        '                        '                                    ElseIf rbTVposter.Checked = True Then
-        '                        '                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
-        '                        '                                    End If
-        '                        '                                End If
-
-        '                    ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
-
-        '                        Dim temp As String = ComboBox2.Text.ToLower
-        '                        temp = temp.Replace(" ", "")
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        'If Preferences.XBMC_version = 0 Then
-        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
-        '                        'ElseIf Preferences.XBMC_version = 2 Then
-        '                        '    If rbTVbanner.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
-        '                        '    ElseIf rbTVposter.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
-        '                        '    End If
-        '                        'End If
-
-        '                    ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        'If Preferences.XBMC_version = 0 Then
-        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
-        '                        'ElseIf Preferences.XBMC_version = 2 Then
-        '                        '    If rbTVbanner.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
-        '                        '    ElseIf rbTVposter.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
-        '                        '    End If
-        '                        'End If
-
-        '                    ElseIf ComboBox2.Text.ToLower = "specials" Then
-
-        '                        If Preferences.EdenEnabled Then
-        '                            If rbTVposter.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
-        '                                Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                                PictureBox12.Image = picBox.Image
-        '                            End If
-        '                        End If
-
-        '                        If Preferences.FrodoEnabled Then
-        '                            If rbTVbanner.Checked Then
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
-        '                            Else
-        '                                workingposterpath = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
-        '                            End If
-        '                            Utilities.SaveImageNoDispose(picBox.Image, workingposterpath)
-        '                            PictureBox12.Image = picBox.Image
-        '                        End If
-
-        '                        'If Preferences.XBMC_version = 0 Then
-        '                        '    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
-        '                        'ElseIf Preferences.XBMC_version = 2 Then
-        '                        '    If rbTVbanner.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
-        '                        '    ElseIf rbTVposter.Checked = True Then
-        '                        '        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
-        '                        '    End If
-        '                        'End If
-        '                    End If
-        '                    'Dim newpicbox As PictureBox = Control
-        '                    'newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
-        '                    If combostart = ComboBox2.SelectedItem Then
-        '                        If rbTVbanner.Checked = True Then
-        '                            tv_PictureBoxBottom.Image = PictureBox13.Image
-        '                        Else
-        '                            tv_PictureBoxRight.Image = PictureBox13.Image
-        '                        End If
-        '                    End If
-        '                    'PictureBox12.Image = newpicbox.Image
-
-        '                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-
-        '                    '                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-        '                    ''                                tv_PictureBoxRight.ImageLocation = path
-        '                    '                                tv_PictureBoxRight.ImageLocation = workingposterpath
-        '                    '                                tv_PictureBoxRight.Load()
-        '                    '                            End If
-
-
-
-        '                    If rbTVbanner.Checked Then
-        '                        tv_PictureBoxBottom.ImageLocation = workingposterpath
-        '                        tv_PictureBoxBottom.Load()
-        '                    End If
-        '                    If rbTVposter.Checked Then
-        '                        tv_PictureBoxRight.ImageLocation = workingposterpath
-        '                        tv_PictureBoxRight.Load()
-        '                    End If
-
-
-
-        '                    'workingposterpath = path
-        '                Catch ex As Exception
-        '                    MsgBox(ex.ToString)
-        '                End Try
-        '            End If
-        '        Next
-        '    End If
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
-
     End Sub
 
     Private Sub Button52_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button52.Click
