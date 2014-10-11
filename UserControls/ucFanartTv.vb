@@ -331,6 +331,10 @@ Public Class ucFanartTv
             Try
                 Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
                 Dim success As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
+                If Preferences.posterjpg AndAlso Preferences.createfolderjpg AndAlso artType.Contains("poster.jpg") Then
+                    savepath = savepath.Replace(artType, "folder.jpg")
+                    Dim asuccess As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
+                End If
                 DisplayExistingArt()
             Catch
             End Try

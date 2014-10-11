@@ -1264,7 +1264,7 @@ Module Module1
         Dim url As String = alleps(0).thumb
         Dim ok As Boolean = False
         If Not url = Nothing AndAlso url <> "http://www.thetvdb.com/banners/" Then  ' And Not edenart And Not frodoart Then
-            ok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True)
+            ok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, 0, 0, True)
             If ok Then
                 ConsoleOrLog("Thumbnail downloaded successfully")
             Else

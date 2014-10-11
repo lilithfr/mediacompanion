@@ -1976,14 +1976,14 @@ Public Class Movie
 
     Sub DownloadFromFanartTv(Optional rescrapelist As Boolean = False)
         If Preferences.MovFanartTvscrape OrElse rescrapelist Then   'AndAlso (Preferences.allfolders Or Preferences.usefoldernames) 
-            DoDownloadFromFanartTv()
+            DoDownloadFromFanartTv(rescrapelist)
         Else
             ReportProgress(, "Scraping from Fanart.Tv, not selected" & vbCrLf)
             Exit Sub
         End If
     End Sub
 
-    Sub DoDownloadFromFanartTv()
+    Sub DoDownloadFromFanartTv(Optional isRescrapelist As Boolean = False)
         Try
             Dim fcount As Integer = 0
             If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
@@ -1996,6 +1996,7 @@ Public Class Movie
                 Catch
                 End Try
                 lang.Add("en")
+                Dim Overwrite As Boolean = If(isRescrapelist, Preferences.overwritethumbs, True)
                 If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
                     _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
                 End If
@@ -2086,13 +2087,22 @@ Public Class Movie
                 Next
                 If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
                 If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold 
-                Utilities.DownloadFile(clearart, DestPath & "clearart.png")
-                Utilities.DownloadFile(logo, DestPath & "logo.png")
-                Utilities.DownloadFile(poster, DestPath & "poster.jpg")
-                Utilities.DownloadFile(fanart, DestPath & "fanart.jpg")
-                Utilities.DownloadFile(disc, DestPath & "disc.png")
-                Utilities.DownloadFile(banner, DestPath & "banner.jpg")
-                Utilities.DownloadFile(landscape, DestPath & "landscape.jpg")
+                Utilities.DownloadImage(clearart, DestPath & "clearart.png", Overwrite)
+                Utilities.DownloadImage(logo, DestPath & "logo.png", Overwrite)
+                'Utilities.DownloadFile(poster, DestPath & "poster.jpg")
+                'Utilities.DownloadFile(fanart, DestPath & "fanart.jpg")
+                Utilities.DownloadImage(disc, DestPath & "disc.png", Overwrite)
+                Utilities.DownloadImage(banner, DestPath & "banner.jpg", Overwrite)
+                Utilities.DownloadImage(landscape, DestPath & "landscape.jpg", Overwrite)
+                'Fanart
+                Dim fanartpaths As List(Of String) = Preferences.GetfanartPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                If Not fanartpaths.Contains(DestPath & "fanart.jpg") Then fanartpaths.Add(DestPath & "fanart.jpg")
+                DownloadCache.SaveImageToCacheAndPaths(fanart, fanartpaths, False, 0, 0, Overwrite)
+                'Poster
+                Dim posterpaths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                If Not posterpaths.Contains(DestPath & "poster.jpg") Then posterpaths.Add(DestPath & "poster.jpg")
+                DownloadCache.SaveImageToCacheAndPaths(poster, posterpaths, False, 0, 0, Overwrite)
+
                 ReportProgress(MSG_OK, "!!! Artwork from Fanart.Tv Downloaded OK" & vbCrLf)
             Else
                 ReportProgress(, "!!! Artwork from Fanart.Tv bypassed as Movie is in Root Folder." & vbCrLf & "Artwork Downloaded requires Movies to be in separate folders." & vbCrLf)

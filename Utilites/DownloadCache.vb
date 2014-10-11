@@ -25,20 +25,23 @@ Public Class DownloadCache
     End Function
 
     Public Shared Function SaveImageToCacheAndPath(ByVal URL As String, Path As String, Optional ByVal ForceDownload As Boolean = False, _
-                                           Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0) As Boolean
+                                           Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0, _
+                                           Optional ByVal Overwrite As Boolean = True) As Boolean
         Dim CacheFileName As String = ""
         If Not SaveImageToCache(URL, Path, ForceDownload, CacheFileName) Then Return False
 
         Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
 
-        IfNotValidImage_Delete(CachePath)
+        If IfNotValidImage_Delete(CachePath) Then
 
-        'Resize cache image only if need to
-        'CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
+            'Resize cache image only if need to
+            If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
-        Utilities.EnsureFolderExists(Path)
-        File.Copy(CachePath, Path, True)
-
+            Utilities.EnsureFolderExists(Path)
+            File.Copy(CachePath, Path, Overwrite)
+        Else
+            Return False
+        End If
         Return True
     End Function
 
@@ -51,32 +54,38 @@ Public Class DownloadCache
 
         Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
 
-        IfNotValidImage_Delete(CachePath)
+        If IfNotValidImage_Delete(CachePath) Then
 
+            'Resize cache image only if need to
+            If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
-        'Resize cache image only if need to
-        If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
-
-        For Each path In Paths
-            Utilities.EnsureFolderExists(path)
-            File.Copy(CachePath, path, True)
-        Next
+            For Each path In Paths
+                Utilities.EnsureFolderExists(path)
+                If Overwrite OrElse Not File.Exists(path) Then File.Copy(CachePath, path, Overwrite)
+            Next
+        Else
+            Return False
+        End If
 
         Return True
     End Function
 
-    Public Shared Sub IfNotValidImage_Delete(filename As String)
+    Public Shared Function IfNotValidImage_Delete(filename As String) As Boolean
+        Dim ok As Boolean = True
         Try
             Dim testImage = new Drawing.Bitmap(filename)
             testImage.Dispose()
         Catch ex As Exception
             Try
                 File.Delete(filename)
+                ok = False
             Catch 
+                ok = False
             End Try
             Throw 
         End Try
-    End Sub
+        Return ok
+    End Function
 
     Public Shared Sub CopyAndDownSizeImage(ByVal src As String, ByVal dest As String, Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0)
         Try

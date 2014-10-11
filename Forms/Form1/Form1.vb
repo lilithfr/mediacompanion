@@ -1846,8 +1846,7 @@ Public Class Form1
                 If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
 
-                    If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
-                    Else
+                    If Not File.Exists(workingMovieDetails.fileinfo.posterpath) Then
                         If IO.File.Exists(workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fanartpath), "folder.jpg")) Then
                             workingMovieDetails.fileinfo.posterpath = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                         End If
@@ -2040,8 +2039,9 @@ Public Class Form1
             If File.Exists(MovPath & "banner.jpg") Then FanTvArtList.Items.Add("Banner") : confirmedpresent = True
             If File.Exists(MovPath & "landscape.jpg") Then FanTvArtList.Items.Add("Landscape") : confirmedpresent = True
             If File.Exists(MovPath & "disc.png") Then FanTvArtList.Items.Add("Disc") : confirmedpresent = True
-            If File.Exists(MovPath & "poster.jpg") Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
-            If File.Exists(MovPath & "fanart.jpg") Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
+            If File.Exists(MovPath & "poster.jpg") AndAlso Not Preferences.posterjpg Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
+            If File.Exists(MovPath & "fanart.jpg") AndAlso Not Preferences.fanartjpg Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
+            If File.Exists(MovPath & "folder.jpg") Then FanTvArtList.Items.Add("Folder") : confirmedpresent = True
         End If
         Return confirmedpresent 
     End Function

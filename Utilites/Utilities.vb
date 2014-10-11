@@ -433,7 +433,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim returnCode As Boolean = False
         Dim typeOfFile As New List(Of String)
         typeOfFile.Add(pathOnly & GetStackName(fullPath) & fileType)                             'multi-part string removed
-        typeOfFile.Add(pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType)      'match filename sans extension
+        
         If basicsave Then
             typeOfFile.Add(pathOnly & Regex.Replace("movie" & fileType, "movie-", ""))              'special case where using folder-per-movie
         End If
@@ -443,6 +443,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If posterjpg Then
             typeOfFile.Add(pathOnly & "poster.jpg")
         End If
+        typeOfFile.Add(pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType)      'match filename sans extension
         For Each file As String In typeOfFile
             If IO.File.Exists(file) Then
                 returnCode = True
@@ -2656,7 +2657,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     End Function
 
-    Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String) As Boolean
+    Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String, Optional Overwrite As Boolean = True) As Boolean
         Try
             Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, False)  'If image already in cache, why re-download it.
             Return returnstate
