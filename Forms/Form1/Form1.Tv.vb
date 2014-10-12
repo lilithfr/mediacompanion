@@ -510,6 +510,7 @@ Partial Public Class Form1
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultTvFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
 
             Panel9.Visible = False
+            Panel8.Visible = False
             lbl_sorttitle.Visible = True
             TextBox_Sorttitle.Visible = True
 
@@ -570,6 +571,7 @@ Partial Public Class Form1
             Call tv_ActorsLoad(Show.ListActors)
         End If
         Panel9.Visible = False
+        Panel8.Visible = False
     End Sub
 
     Private Sub tb_ShGenre_MouseDown(sender As Object, e As MouseEventArgs) Handles tb_ShGenre.MouseDown
@@ -778,6 +780,7 @@ Partial Public Class Form1
         tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
         tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
         Panel9.Visible = False
+        Panel8.Visible = False
         lbl_sorttitle.Visible = True
         TextBox_Sorttitle.Visible = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
@@ -849,6 +852,9 @@ Partial Public Class Form1
             End If
         End If
         Panel9.Visible = True
+        Panel8.Visible = True
+        cmbxEpActor.Items.Clear()
+        tbEpRole.Text = ""
 
         Dim Show As TvShow = tv_ShowSelectedCurrently()
         Dim season As Integer = SelectedEpisode.Season.Value
@@ -926,12 +932,15 @@ Partial Public Class Form1
             lb_EpDetails.Items.Clear()
             lb_EpDetails.Items.Add("Details")
 
-            ComboBox5.Items.Clear()
+            cmbxEpActor.Items.Clear()
             tb_EpFilename.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
             tb_EpPath.Text = Utilities.ReplaceNothing(Episode.FolderPath)
             If Not IO.File.Exists(Episode.NfoFilePath) Then
                 tb_Sh_Ep_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
                 Panel9.Visible = True
+                Panel8.Visible = True
+                cmbxEpActor.Items.Clear()
+                tbEpRole.Text = ""
                 Episode.EpisodeNode.BackColor = Color.Red
                 Exit Sub
             Else
@@ -970,15 +979,25 @@ Partial Public Class Form1
                 lb_EpDetails.Items.Add(epdetails)
             End If
 
-            If ComboBox5.Items.Count = 0 Then
+            'If cmbxEpActor.Items.Count = 0 Then
+            Dim aActor As Boolean = False
                 For Each actor In Episode.ListActors
-                    If actor.actorname <> Nothing Then
-                        ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
+                    If Not String.IsNullOrEmpty(actor.actorname) Then
+                        cmbxEpActor.Items.Add(Utilities.ReplaceNothing(actor.actorname))
+                        'cmbxEpActor.SelectedIndex = 0
+                        aActor = True
                     End If
                 Next
+            If aActor Then
+                cmbxEpActor.SelectedIndex = 0
             Else
-                ComboBox5.SelectedIndex = 0
+                cmbxEpActor.Items.Clear()
+                cmbxEpActor.Items.Add("")
+                cmbxEpActor.SelectedIndex = 0
             End If
+            'Else
+            '    cmbxEpActor.SelectedIndex = 0
+            'End If
 
             'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
             ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
@@ -1065,6 +1084,7 @@ Partial Public Class Form1
             Next
         End If
         Panel9.Visible = True
+        Panel8.Visible = True
 
     End Sub
 

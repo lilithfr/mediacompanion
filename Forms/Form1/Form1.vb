@@ -1964,8 +1964,7 @@ Public Class Form1
             PictureBoxActor.CancelAsync()
             PictureBoxActor.Image = Nothing
             PictureBoxActor.Refresh()
-            ComboBox5.Text = ""
-
+            
             btnMoviePosterSaveCroppedImage.Enabled = False
             btnMoviePosterResetImage.Enabled = False
             thumbedItsMade = False
@@ -4760,7 +4759,7 @@ Public Class Form1
         Application.DoEvents()
     End Sub
 
-    Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
+    Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmbxEpActor.SelectedIndexChanged
         Try
             Dim Episode As Media_Companion.TvEpisode
             If TvTreeview.SelectedNode IsNot Nothing Then
@@ -4773,31 +4772,31 @@ Public Class Form1
                 Exit Sub
             End If
 
-            PictureBox8.Image = Nothing
-            PictureBox8.Visible = True
+            pbEpActorImage.Image = Nothing
+            pbEpActorImage.Visible = True
             For Each actor In Episode.ListActors
-                If actor.actorname = ComboBox5.Text Then
-                    TextBox25.Text = actor.actorrole
-                    PictureBox8.ImageLocation = Utilities.DefaultActorPath
+                If actor.actorname = cmbxEpActor.Text Then
+                    tbEpRole.Text = actor.actorrole
+                    'pbEpActorImage.ImageLocation = Utilities.DefaultActorPath
 
-                    Dim temppath As String = Episode.NfoFilePath.Replace(IO.Path.GetFileName(Episode.NfoFilePath), "")
-                    Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
+                    Dim temppath As String = Episode.ShowObj.FolderPath   'Episode.NfoFilePath.Replace(IO.Path.GetFileName(Episode.NfoFilePath), "")
+                    Dim tempname As String = actor.actorname.Replace(" ", "_") & If(Preferences.FrodoEnabled, ".jpg", ".tbn")
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
-                        util_ImageLoad(PictureBox8, temppath, Utilities.DefaultActorPath)
+                        util_ImageLoad(pbEpActorImage, temppath, Utilities.DefaultActorPath)
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         If actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb) Then
-                            util_ImageLoad(PictureBox8, actor.actorthumb, Utilities.DefaultActorPath)
+                            util_ImageLoad(pbEpActorImage, actor.actorthumb, Utilities.DefaultActorPath)
                         Else
-                            util_ImageLoad(PictureBox8, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
+                            util_ImageLoad(pbEpActorImage, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
                         End If
                     Else
-                        util_ImageLoad(PictureBox8, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
+                        util_ImageLoad(pbEpActorImage, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
                     End If
-                    PictureBox8.SizeMode = PictureBoxSizeMode.Zoom
-                    PictureBox8.Load()
+                    pbEpActorImage.SizeMode = PictureBoxSizeMode.Zoom
+                    'pbEpActorImage.Load()
                 End If
             Next
         Catch ex As Exception
@@ -8651,9 +8650,9 @@ Public Class Form1
                     'titletxt.Font = newFont
                     'setsTxt.Font = newFont
                     cbMovieDisplay_MovieSet.Font = newFont
-                    ComboBox5.Font = newFont
+                    cmbxEpActor.Font = newFont
                     TvTreeview.Font = newFont
-                    TextBox25.Font = newFont
+                    tbEpRole.Font = newFont
                     tb_EpDirector.Font = newFont
                     tb_EpCredits.Font = newFont
                     tb_EpPlot.Font = newFont
