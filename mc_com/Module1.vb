@@ -281,7 +281,31 @@ Module Module1
                     ConsoleOrLog("Starting Media Info Export")
                     ConsoleOrLog("")
                     Dim mediaInfoExp As New MediaInfoExport
-                    Dim mediaCollection As Object = oMovies.MovieCache  'fullMovieList
+                    Dim setMovies = New SortedList(Of String, Media_Companion.ComboList)
+                    Dim key As String = String.Empty
+                    For Each movie In oMovies.MovieCache
+	                    Select Case Preferences.moviesortorder
+		                    Case 0
+			                    key = String.Format("{0}{1}{2}", movie.title, movie.year, movie.id)
+		                    Case 1
+			                    key = String.Format("{0}{1}{2}", movie.year, movie.title, movie.id)
+		                    Case 2
+			                    key = String.Format("{0}{1}{2}", movie.filedate, movie.title, movie.id)
+		                    Case 3
+			                    key = String.Format("{0}{1}{2}", movie.runtime, movie.title, movie.id)
+		                    Case 4
+			                    key = String.Format("{0}{1}{2}", movie.rating, movie.title, movie.id)
+		                    Case 5
+			                    key = String.Format("{0}{1}{2}", movie.sortorder, movie.year, movie.id)
+		                    Case 6
+			                    key = String.Format("{0}{1}{2}", movie.createdate, movie.title, movie.id)
+		                    Case 7
+			                    key = String.Format("{0}{1}{2}", movie.Votes, movie.title, movie.id)
+	                    End Select
+	                    setMovies.Add(key, movie)
+                    Next
+                    Dim mediaCollection As Object = If(Preferences.movieinvertorder, setMovies.Values.ToList, setMovies.Values.Reverse.ToList)
+                    'Dim mediaCollection As Object = oMovies.MovieCache  'fullMovieList
                     Call mediaInfoExp.addTemplates()
                     Dim templateType As MediaInfoExport.mediaType
                     If mediaInfoExp.setTemplate(arg.argu, templateType) AndAlso templateType = MediaInfoExport.mediaType.Movie Then
