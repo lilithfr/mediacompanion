@@ -1367,18 +1367,23 @@ Partial Public Class Form1
 
     Private Sub bckgrnd_tvshowscraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bckgrnd_tvshowscraper.ProgressChanged
         Try
-            Dim NewShow As TvShow = e.UserState
-            ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
-            ToolStripStatusLabel5.Visible = True
+            If e.ProgressPercentage = 0 Then
+                ToolStripStatusLabel5.Text = e.UserState
+                ToolStripStatusLabel5.Visible = True
+            Else
+                Dim NewShow As TvShow = e.UserState
+                ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
+                ToolStripStatusLabel5.Visible = True
 
-            realTvPaths.Add(NewShow.FolderPath)
-            TvTreeview.Nodes.Add(NewShow.ShowNode)
-            NewShow.UpdateTreenode()
+                realTvPaths.Add(NewShow.FolderPath)
+                TvTreeview.Nodes.Add(NewShow.ShowNode)
+                NewShow.UpdateTreenode()
 
-            TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
-            TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
-            Me.BringToFront()
-            Me.Activate()
+                TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+                TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+                Me.BringToFront()
+                Me.Activate()
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -1390,13 +1395,18 @@ Partial Public Class Form1
             Dim searchTVDbID As String = If(IsNothing(args), "", args.tvdbid)
             Dim searchLanguage As String = If(IsNothing(args), Preferences.TvdbLanguageCode, args.lang)
             Dim haveTVDbID As Boolean = Not String.IsNullOrEmpty(searchTVDbID)
-
+            Dim success As Boolean = False
+            Dim i As Integer = 0
+            Dim x As String = newTvFolders.Count.ToString
             Do While newTvFolders.Count > 0
+                tvprogresstxt = ""
+                i += 1
                 Dim NewShow As New TvShow
                 NewShow.NfoFilePath = IO.Path.Combine(newTvFolders(0), "tvshow.nfo")
                 NewShow.TvdbId.Value = searchTVDbID
                 NewShow.State = Media_Companion.ShowState.Unverified
-
+                tvprogresstxt &= "Scraping Show " & i.ToString & " of " & x & " : "
+                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                 If Not haveTVDbID And NewShow.FileContainsReadableXml Then
                     NewShow.Load()
                 Else
@@ -1430,25 +1440,52 @@ Partial Public Class Form1
                             MsgBox("Please adjust the TV Show title and try again", _
                                    MsgBoxStyle.OkOnly, _
                                    String.Format("'{0}' - No Show Returned", NewShow.Title.Value))
-                            bckgrnd_tvshowscraper.ReportProgress(0, NewShow)
+                            bckgrnd_tvshowscraper.ReportProgress(1, NewShow)
                             newTvFolders.RemoveAt(0)
                             Continue Do
                         End If
-
+                        tvprogresstxt &= "Show Title: " & SeriesInfo.Series(0).SeriesName.Value & " "
+                        bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                         NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
                         NewShow.Language.Value = searchLanguage
 
+                        tvprogresstxt &= " - Getting Actors"
+                        bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                         If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
-                            TvGetActorTvdb(NewShow)
+                            success = TvGetActorTvdb(NewShow)
                         End If
 
                         If (Preferences.TvdbActorScrape = 1 Or Preferences.TvdbActorScrape = 2) And NewShow.ImdbId.Value <> Nothing Then
-                            TvGetActorImdb(NewShow)
+                            success = TvGetActorImdb(NewShow)
+                        End If
+                        If success Then 
+                            tvprogresstxt &= ": -OK!"
+                        Else
+                            tvprogresstxt &= ": -error!!"
                         End If
 
-                        TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                        If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                            tvprogresstxt &= " - Getting TVDB artwork"
+                            bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                        End If
+                        success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                        If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                            If success Then 
+                                tvprogresstxt &= ": OK!"
+                            Else
+                                tvprogresstxt &= ": error!!"
+                            End If
+                        End If
 
-                        If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanart Then TvFanartTvArt(NewShow, False)
+                        
+                        If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanart Then 
+                            tvprogresstxt &= " - Getting FanartTv Artwork"
+                            bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                            TvFanartTvArt(NewShow, False)
+                        End If
+
+                        tvprogresstxt &= " - Completed. Saving Show."
+                        bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
 
                         If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                             NewShow.EpisodeActorSource.Value = "tvdb"
@@ -1474,7 +1511,7 @@ Partial Public Class Form1
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))
                 End If
-                bckgrnd_tvshowscraper.ReportProgress(0, NewShow)
+                bckgrnd_tvshowscraper.ReportProgress(1, NewShow)
                 newTvFolders.RemoveAt(0)
             Loop
 
@@ -3464,7 +3501,7 @@ Partial Public Class Form1
     End Function
 
     Private Function TvGetActorTvdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
-        Dim success As Boolean = False
+        Dim success As Boolean = True
         Dim tvdbstuff As New TVDBScraper
         'Dim lan As New str_PossibleShowList(SetDefaults)
         'NewShow.ListActors.Clear()
@@ -3540,7 +3577,7 @@ Partial Public Class Form1
     Private Function TvGetActorImdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
         Dim imdbscraper As New Classimdb
         'NewShow.ListActors.Clear()
-        Dim success As Boolean = False
+        Dim success As Boolean = True
         Dim actmax As Integer = Preferences.maxactors
         Dim actcount As Integer = 0
         Dim actorstring As New XmlDocument

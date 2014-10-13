@@ -164,6 +164,7 @@ Public Class Form1
     Dim WithEvents tvFanartCheckBoxes As RadioButton
     Dim WithEvents resolutionLabels As Label
     Dim newTvFolders As New List(Of String)
+    Dim tvprogresstxt As String = ""
     Dim maximised As Boolean = False
     Public imdbCounter As Integer = 0
     Dim tootip5 As New ToolTip
