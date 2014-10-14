@@ -19467,6 +19467,7 @@ End Sub
                 messbox.Close()
                 TabControl3.SelectedIndex = 0
             Else
+                If Preferences.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
                 Cache.TvCache.Remove(WorkingTvShow)
                 newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
                 Dim args As TvdbArgs = New TvdbArgs(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
@@ -19475,7 +19476,7 @@ End Sub
                     Application.DoEvents()
                 End While
                 TabControl3.SelectedIndex = 0
-
+                messbox.Close()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

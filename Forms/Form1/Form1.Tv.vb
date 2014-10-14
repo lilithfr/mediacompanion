@@ -1477,8 +1477,7 @@ Partial Public Class Form1
                             End If
                         End If
 
-                        
-                        If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanart Then 
+                        If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
                             tvprogresstxt &= " - Getting FanartTv Artwork"
                             bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                             TvFanartTvArt(NewShow, False)
@@ -3649,7 +3648,7 @@ Partial Public Class Form1
         Return success
     End Function
 
-    Private Sub TvDeleteShowArt(ByRef NewShow As Media_Companion.TvShow)
+    Private Sub TvDeleteShowArt(ByVal NewShow As Media_Companion.TvShow)
         Try
             Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
             If IO.Directory.Exists(workingpath & ".actors") Then
@@ -3660,6 +3659,28 @@ Partial Public Class Form1
             Next
             For Each filepath In Directory.GetFiles(workingpath, "*.tbn", SearchOption.TopDirectoryOnly)
                 File.Delete(filepath)
+            Next
+            For Each filepath In Directory.GetFiles(workingpath, "*.png", SearchOption.TopDirectoryOnly)
+                File.Delete(filepath)
+            Next
+            Dim seasonfolderpath As String = ""
+            For Each ep As Media_Companion.TvEpisode In NewShow.Episodes
+                seasonfolderpath = ep.FolderPath
+                If File.Exists(seasonfolderpath & "folder.jpg") Then Utilities.SafeDeleteFile(seasonfolderpath & "folder.jpg")
+            Next
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TvDeleteEpisodeNfoAndArt(ByVal NewShow As Media_Companion.TvShow)
+        Try
+            For Each ep As Media_Companion.TvEpisode In NewShow.Episodes
+                Dim eppath As String = ep.NfoFilePath.Replace(".nfo", "")
+                If File.Exists(eppath & "-fanart.jpg") Then Utilities.SafeDeleteFile(eppath & "-fanart.jpg")
+                If File.Exists(eppath & ".tbn") Then Utilities.SafeDeleteFile(eppath & ".tbn")
+                If File.Exists(ep.FolderPath & "folder.jpg") Then Utilities.SafeDeleteFile(ep.FolderPath & "folder.jpg")
+                If File.Exists(ep.NfoFilePath) Then Utilities.SafeDeleteFile(ep.NfoFilePath)
             Next
         Catch ex As Exception
 
