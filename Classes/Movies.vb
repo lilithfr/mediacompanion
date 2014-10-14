@@ -798,7 +798,7 @@ Public Class Movies
     Public Function FindCachedMovie(fullpathandfilename As String) As ComboList
 
         Dim q = From m In _movieCache Where m.fullpathandfilename=fullpathandfilename
-
+        If q.Count = 0 Then Return Nothing
         Return q.Single
     End Function
 

@@ -25,7 +25,7 @@
 							<img src="<<createimage:175>>" height="175">
 						</td>
 						<td valign="top">
-							<font size="5"><b><<nfo:title:47>></b></font>
+							<font size="5"><b><<title:47>></b></font>
 							<br><br>
 							<b>Stars:</b> <<stars>>
 							<br>

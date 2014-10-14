@@ -284,6 +284,12 @@ Module Module1
                     Dim setMovies = New SortedList(Of String, Media_Companion.ComboList)
                     Dim key As String = String.Empty
                     For Each movie In oMovies.MovieCache
+                        Dim title As String = Preferences.RemoveIgnoredArticles(movie.title)
+                        movie.title = title
+                        If Preferences.sorttitleignorearticle Then
+                            Dim sorttitle As String = Preferences.RemoveIgnoredArticles(movie.sortorder)
+                            movie.sortorder = sorttitle
+                        End If
 	                    Select Case Preferences.moviesortorder
 		                    Case 0
 			                    key = String.Format("{0}{1}{2}", movie.title, movie.year, movie.id)
@@ -304,7 +310,7 @@ Module Module1
 	                    End Select
 	                    setMovies.Add(key, movie)
                     Next
-                    Dim mediaCollection As Object = If(Preferences.movieinvertorder, setMovies.Values.ToList, setMovies.Values.Reverse.ToList)
+                    Dim mediaCollection As Object = If(Preferences.movieinvertorder, setMovies.Values.Reverse.ToList, setMovies.Values.ToList)
                     'Dim mediaCollection As Object = oMovies.MovieCache  'fullMovieList
                     Call mediaInfoExp.addTemplates()
                     Dim templateType As MediaInfoExport.mediaType

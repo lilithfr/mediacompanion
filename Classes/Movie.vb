@@ -3110,7 +3110,10 @@ Public Class Movie
 
     Sub UpdateActorCacheFromEmpty
         If Actors.Count = 0 Then Exit Sub
-        _parent._tmpActorDb.AddRange(Actors)
+        Try
+            _parent._tmpActorDb.AddRange(Actors)
+        Catch
+        End Try
     End Sub
 
     Sub UpdateDirectorCacheFromEmpty
