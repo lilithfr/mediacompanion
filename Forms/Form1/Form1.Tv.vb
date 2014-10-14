@@ -4335,18 +4335,37 @@ Partial Public Class Form1
 
     Public Function tv_Showremovedfromlist(Optional ByVal nofolder As List(Of String) = Nothing, Optional ByVal lstboxscan As Boolean = False) As Boolean
         Dim remfolder As New List(Of String)
+        Dim notvshownfo As New List(Of String)
         Dim status As Boolean = False
         If IsNothing(nofolder) Then
             For Each item In Preferences.tvFolders
                 If Not IO.Directory.Exists(item) Then
                     remfolder.Add(item)
+                Else
+                    Dim tvnfopath As String = item & "\tvshow.nfo"
+                    If Not File.Exists(tvnfopath) Then
+                        notvshownfo.Add(item)
+                    End If
                 End If
             Next
         End If
-        If IsNothing(nofolder) AndAlso (IsNothing(remfolder) Or remfolder.Count <= 0) Then
+        If notvshownfo.Count > 0 Then
+            Dim notvshmsg As String = "Folders found that did not contain a tvshow.nfo file" & vbCrLf & "Do you wish to also remove these folders?" & vbCrLf
+            For Each fo In notvshownfo
+                notvshmsg &= fo & vbcrlf
+            Next
+            Dim x = MsgBox(notvshmsg, MsgBoxStyle.YesNo)
+            If x = MsgBoxResult.Yes Then 
+                remfolder.AddRange(notvshownfo)
+            Else
+                notvshownfo.Clear()
+            End If
+        End If
+        If IsNothing(nofolder) AndAlso (IsNothing(remfolder) Or remfolder.Count <= 0) AndAlso notvshownfo.Count = 0 Then
             MsgBox("No Folders Missing or removed")
             Return False
         End If
+
         If IsNothing(nofolder) And Not IsNothing(remfolder) Then nofolder = remfolder
         If nofolder.Count > 0 Then
             For Each folder In nofolder
