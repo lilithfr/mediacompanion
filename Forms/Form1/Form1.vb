@@ -11372,27 +11372,15 @@ End Sub
         End Try
     End Sub
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
-        'Try
         tv_Rescrape()
-        'Catch ex As Exception
-        ' ExceptionHandler.LogError(ex)
-        ' End Try
     End Sub
     Private Sub WatchedShowOrEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_WatchedShowOrEpisode.Click
-        'Try
         Tv_MarkAsWatched()
-        'Catch ex As Exception
-        ' ExceptionHandler.LogError(ex)
-        ' End Try
     End Sub
-    Private Sub UnWatchedShowOrEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_UnWatchedShowOrEpisode.Click
-        'Try
+    Private Sub Tv_TreeViewContext_UnWatchedShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_UnWatchedShowOrEpisode.Click
         Tv_MarkAsUnWatched()
-        'Catch ex As Exception
-        ' ExceptionHandler.LogError(ex)
-        ' End Try
     End Sub
-    Private Sub PlayEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
+    Private Sub Tv_TreeViewContext_Play_Episode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
         Try
             Dim tempstring As String = DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
 
@@ -11415,7 +11403,7 @@ End Sub
     End Sub
 
     
-    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
+    Private Sub Tv_TreeViewContext_ViewNfo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
         Try
             If TvTreeview.SelectedNode Is Nothing Then Exit Sub
             If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
@@ -11432,6 +11420,66 @@ End Sub
         End Try
 
         Debug.Print(Me.Controls.Count)
+    End Sub
+
+    Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowNfoArt.Click
+        Try
+            Dim Show As TvShow = tv_ShowSelectedCurrently()
+           ' tv_MissingArtDownload(tv_ShowSelectedCurrently)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowEpNfoArt.Click
+        Try
+            Dim Show As TvShow = tv_ShowSelectedCurrently()
+            'tv_MissingArtDownload(tv_ShowSelectedCurrently)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelEpNfoArt.Click
+        Try
+            Dim Tester As Boolean = True
+            If Tester Then Exit Sub
+            Dim Show As TvShow = tv_ShowSelectedCurrently()
+            Dim season As TvSeason = tv_SeasonSelectedCurrently()
+            For Each episode In Show.Episodes
+                If IsNothing(season) OrElse episode.Season.Value = season.SeasonNumber.ToString Then
+                    If episode.FolderPath <> Show.FolderPath AndAlso File.Exists(episode.FolderPath & "folder.jpg") Then 
+                        Utilities.SafeDeleteFile(episode.FolderPath & "folder.jpg")
+                    End If
+                    Dim eppath As String = episode.NfoFilePath
+                    Utilities.SafeDeleteFile(eppath)
+                    Utilities.SafeDeleteFile(eppath.Replace(".nfo", ".tbn"))
+                    Utilities.SafeDeleteFile(eppath.Replace(".nfo", "-thumb.jpg"))
+                    Cache.TvCache.Remove(episode)
+                    TvTreeview.Nodes.Remove(episode.EpisodeNode)
+                End If
+            Next
+            If IsNothing(season) Then
+                For Each seas In Show.seasons
+                    'TvTreeview.Nodes.Remove()
+
+
+                Next
+            Else
+                TvTreeview.Nodes.Remove(season.SeasonNode)
+            End If
+            
+            Tv_CacheSave()
+            TvTreeviewRebuild()
+            Show.UpdateTreenode()
+            'TvTreeview.Update()
+            'tv_MissingArtDownload(tv_ShowSelectedCurrently)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
     Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click

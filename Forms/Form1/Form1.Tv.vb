@@ -143,6 +143,19 @@ Partial Public Class Form1
         End Try
     End Sub
 
+    Private Sub TvTreeviewRebuild()
+        TvTreeview.Nodes.Clear()              'clear the treeview of old data
+        ''Dirty work around until TvShows is repalced with TvCache.Shows universally
+        For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
+            'TvShow.UpdateTreenode()
+            TvTreeview.Nodes.Add(TvShow.ShowNode)
+            TvShow.UpdateTreenode()
+        Next
+        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+        TvTreeview.Sort()
+    End Sub
+
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
         '                                                  'called from tv_treeview mouseup event where we check for a right click
         If TvTreeview.SelectedNode Is Nothing Then Return

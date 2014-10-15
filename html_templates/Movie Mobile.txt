@@ -25,11 +25,11 @@
 							<img src="<<createimage:175>>" height="175">
 						</td>
 						<td valign="top">
-							<font size="5"><b><<title:47>></b></font>
+							<font size="5"><b><<title>></b></font>
 							<br><br>
 							<b>Stars:</b> <<stars>>
 							<br>
-							<b>Genre:</b> <<nfo:genre:37>>
+							<b>Genre:</b> <<moviegenre>>
 						</td>
 					</tr>
 				</table>
