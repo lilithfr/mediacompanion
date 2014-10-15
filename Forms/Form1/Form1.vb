@@ -11423,32 +11423,43 @@ End Sub
     End Sub
 
     Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowNfoArt.Click
-        Try
-            Dim Show As TvShow = tv_ShowSelectedCurrently()
-           ' tv_MissingArtDownload(tv_ShowSelectedCurrently)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
+        'TvDelShowNfoArt()
     End Sub
 
     Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowEpNfoArt.Click
-        Try
-            Dim Show As TvShow = tv_ShowSelectedCurrently()
-            'tv_MissingArtDownload(tv_ShowSelectedCurrently)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
+        'TvDelShowNfoArt(True)
+        'TvDelEpNfoAst(True)
     End Sub
 
     Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelEpNfoArt.Click
+        TvDelEpNfoAst()
+    End Sub
+
+    Private Sub TvDelShowNfoArt(Optional ByVal Ignore As Boolean = False)
         Try
-            Dim Tester As Boolean = True
-            If Tester Then Exit Sub
+            Dim Show As TvShow = tv_ShowSelectedCurrently()
+            
+            Tv_CacheSave()
+            TvTreeviewRebuild()
+            Show.UpdateTreenode()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub TvDelEpNfoAst(Optional ByVal Ignore As Boolean = False)
+        Try
+            If Ignore AndAlso MsgBox("Warning, This operation will delete all Episode nfo's and artwork", MsgBoxStyle.OkCancel) = MsgBoxResult.Cancel Then Exit Sub
+            Dim TheseEpisodes As New List(Of Media_Companion.TvEpisode)
             Dim Show As TvShow = tv_ShowSelectedCurrently()
             Dim season As TvSeason = tv_SeasonSelectedCurrently()
-            For Each episode In Show.Episodes
+            Dim ep As TvEpisode = ep_SelectedCurrently()
+            If Not IsNothing(ep) Then
+                TheseEpisodes.Add(ep)
+            Else
+                TheseEpisodes.AddRange(Show.Episodes)
+            End If
+            For Each episode In TheseEpisodes
                 If IsNothing(season) OrElse episode.Season.Value = season.SeasonNumber.ToString Then
                     If episode.FolderPath <> Show.FolderPath AndAlso File.Exists(episode.FolderPath & "folder.jpg") Then 
                         Utilities.SafeDeleteFile(episode.FolderPath & "folder.jpg")
@@ -11459,27 +11470,27 @@ End Sub
                     Utilities.SafeDeleteFile(eppath.Replace(".nfo", "-thumb.jpg"))
                     Cache.TvCache.Remove(episode)
                     TvTreeview.Nodes.Remove(episode.EpisodeNode)
+                    If Not IsNothing(season) Then season.Episodes.Remove(episode)
                 End If
             Next
-            If IsNothing(season) Then
-                For Each seas In Show.seasons
-                    'TvTreeview.Nodes.Remove()
-
-
+            Dim listofnodes As New List(Of TreeNode)
+            For Each n As TreeNode  In TvTreeview.Nodes
+                listofnodes.Add(n)
+                For Each chn As TreeNode in n.nodes
+                    listofnodes.Add(chn)
                 Next
-            Else
-                TvTreeview.Nodes.Remove(season.SeasonNode)
-            End If
-            
+            Next
+            For Each n In listofnodes
+                If n.FullPath.Contains(Show.Title.Value) AndAlso n.FullPath.ToLower.Contains("season") AndAlso n.GetNodeCount(False) = 0 Then
+                    TvTreeview.Nodes.Remove(n)
+                End If
+            Next
             Tv_CacheSave()
             TvTreeviewRebuild()
             Show.UpdateTreenode()
-            'TvTreeview.Update()
-            'tv_MissingArtDownload(tv_ShowSelectedCurrently)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
     End Sub
 
     Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
