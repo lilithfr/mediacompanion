@@ -5255,7 +5255,11 @@ Public Class Form1
             Try
                 tvshow.Load(nfopath)
             Catch ex As Exception
-                validated = False
+                If ex.Message.ToLower.Contains("multiple root elements") Then
+                    validated = chkxbmcmultinfo(nfopath)
+                Else
+                    validated = False
+                End If
             End Try
             If validated = True Then
                 Try
@@ -5290,6 +5294,29 @@ Public Class Form1
             End If
             Return validated
         End If
+        Return False
+    End Function
+
+    Private Function chkxbmcmultinfo(ByVal xmlpath As String) As Boolean
+        Try
+            Dim testxml() As String = File.ReadAllLines(xmlpath)
+            Dim first As Boolean = True
+            Dim finalxml As String = ""
+            For Each line In testxml
+                If line.Contains("<episodedetails>") AndAlso first Then
+                    finalxml &= "<multiepisodenfo>"
+                End If
+                finalxml &= line
+                If line.Contains("</episodedetails>") Then first = False
+            Next
+            finalxml &= "</multiepisodenfo>"
+            Dim Finaldoc As New XmlDocument
+            Finaldoc.LoadXml(finalxml)
+            Finaldoc.Save(xmlpath)
+            Return ep_NfoValidate(xmlpath)
+        Catch 
+            Return False
+        End Try
         Return False
     End Function
 
