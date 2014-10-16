@@ -296,8 +296,6 @@ Public Class WorkingWithNfoFiles
                             sp = sp.Replace("<streamdetails><fileinfo>", "<fileinfo><streamdetails>")
                             sp = sp.Replace("</fileinfo></streamdetails>", "</streamdetails></fileinfo>")
                             thisresult.InnerXml = sp
-                        'thisresult.InnerXml = thisresult.InnerXml.Replace("<streamdetails><fileinfo>","<fileinfo><streamdetails>")
-                        'thisresult.InnerXml = thisresult.InnerXml.Replace("</fileinfo></streamdetails>","</streamdetails></fileinfo>")
                         Catch
                         End Try
                     End If

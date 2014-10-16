@@ -1092,6 +1092,17 @@ Partial Public Class Form1
             episodelist = loadepisodes(newtvshownfo, episodelist)
             For Each ep In episodelist
                 ep.ShowId.Value = newtvshownfo.TvdbId.Value
+                If Preferences.displayMissingEpisodes Then
+                    For i = 0 to fullepisodelist.Count-1        'check to remove missing episode if valid episode now exists.
+                        Dim fulep = fullepisodelist.Item(i)
+                        If fulep.Season.Value = ep.Season.Value Then
+                            If fulep.Episode.Value = ep.Episode.Value Then
+                                fullepisodelist.RemoveAt(i)
+                                Exit For
+                            End If
+                        End If
+                    Next
+                End If
                 fullepisodelist.Add(ep)
             Next
         Next
@@ -1801,7 +1812,8 @@ Partial Public Class Form1
                         Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
-                    If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
+                    'If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
+                    If episodearray(0).FolderPath.Contains(Shows.FolderPath) Then
                         If Shows.ImdbId.Value Is Nothing Then
                             Shows.Load()
                         End If
@@ -2189,7 +2201,7 @@ Partial Public Class Form1
                         For Each ept In episodearray
                             Dim list = Shows.MissingEpisodes
                             For j = list.Count - 1 To 0 Step -1
-                                If list(j).Title = ept.Title Then
+                                If list(j).Title.Value = ept.Title.Value Then
                                     'not sure this has a point.  missingepisodes is a linq list
                                     list.RemoveAt(j)
                                     Exit For
@@ -3663,19 +3675,19 @@ Partial Public Class Form1
 
     Private Sub TvDeleteShowArt(ByVal NewShow As Media_Companion.TvShow)
         Try
-            Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
-            If IO.Directory.Exists(workingpath & ".actors") Then
-                IO.Directory.Delete(workingpath & ".actors", True)                 ' Delete .actor folder as it is re-created when required.
-            End If
-            For Each filepath In Directory.GetFiles(workingpath, "*.jpg", SearchOption.TopDirectoryOnly)
-                File.Delete(filepath)
+            Dim workingpath As String = NewShow.FolderPath 
+            
+            If Directory.Exists(workingpath & ".actors") Then Directory.Delete(workingpath & ".actors", True)
+            
+            If Directory.Exists(workingpath & "extrafanart") Then Directory.Delete(workingpath & "extrafanart", True)
+
+            Dim artextn() As String = "*.jpg:*.tbn:*.png".Split(":")
+            For Each arttype In artextn
+                For Each filepath In Directory.GetFiles(workingpath, arttype, SearchOption.TopDirectoryOnly)
+                    File.Delete(filepath)
+                Next
             Next
-            For Each filepath In Directory.GetFiles(workingpath, "*.tbn", SearchOption.TopDirectoryOnly)
-                File.Delete(filepath)
-            Next
-            For Each filepath In Directory.GetFiles(workingpath, "*.png", SearchOption.TopDirectoryOnly)
-                File.Delete(filepath)
-            Next
+
             Dim seasonfolderpath As String = ""
             For Each ep As Media_Companion.TvEpisode In NewShow.Episodes
                 seasonfolderpath = ep.FolderPath
