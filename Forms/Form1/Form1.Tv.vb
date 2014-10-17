@@ -1095,7 +1095,7 @@ Partial Public Class Form1
                 If Preferences.displayMissingEpisodes Then
                     For i = 0 to fullepisodelist.Count-1        'check to remove missing episode if valid episode now exists.
                         Dim fulep = fullepisodelist.Item(i)
-                        If fulep.Season.Value = ep.Season.Value Then
+                        If fulep.ShowObj.Title.Value = ep.ShowObj.Title.Value AndAlso fulep.Season.Value = ep.Season.Value Then
                             If fulep.Episode.Value = ep.Episode.Value Then
                                 fullepisodelist.RemoveAt(i)
                                 Exit For
