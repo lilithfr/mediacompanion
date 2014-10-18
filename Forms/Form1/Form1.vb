@@ -256,7 +256,7 @@ Public Class Form1
         PictureBoxAssignedMoviePoster.AllowDrop = True
         AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
         Try
-            AddRegKey()
+            'AddRegKey()    'disabled as user's were receiving UAC messages.
             Preferences.movie_filters.FilterPanel = SplitContainer5.Panel2
 
             Label73.Text = ""
