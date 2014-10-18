@@ -181,6 +181,20 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.Source.Value = thisresult.InnerText 
                             Case "showid"
                                 newtvepisode.ShowId.Value = thisresult.InnerText 
+                            Case "actor"
+                                Dim actordetail As XmlNode = Nothing
+                                Dim newactor As New str_MovieActors(SetDefaults)
+                                For Each actordetail In thisresult.ChildNodes
+                                    Select Case actordetail.Name
+                                        Case "name"
+                                            newactor.actorname = actordetail.InnerText
+                                        Case "role"
+                                            newactor.actorrole = actordetail.InnerText
+                                        Case "thumb"
+                                            newactor.actorthumb = actordetail.InnerText
+                                    End Select
+                                Next
+                                newtvepisode.ListActors.Add(newactor)
                             Case "fileinfo"
                                 Dim detail2 As XmlNode = Nothing
                                 For Each detail2 In thisresult.ChildNodes
@@ -335,7 +349,21 @@ Public Class WorkingWithNfoFiles
                                         Case "videosource"
                                             anotherepisode.Source.Value = thisresult.ChildNodes(f).InnerText 
                                         Case "showid"
-                                            anotherepisode.ShowId.Value = thisresult.ChildNodes(f).InnerText 
+                                            anotherepisode.ShowId.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "actor"
+                                            Dim actordetail As XmlNode = Nothing
+                                            Dim newactor As New str_MovieActors(SetDefaults)
+                                            For Each actordetail In thisresult.ChildNodes
+                                                Select Case actordetail.Name
+                                                    Case "name"
+                                                        newactor.actorname = actordetail.InnerText
+                                                    Case "role"
+                                                        newactor.actorrole = actordetail.InnerText
+                                                    Case "thumb"
+                                                        newactor.actorthumb = actordetail.InnerText
+                                                End Select
+                                            Next
+                                            anotherepisode.ListActors.Add(newactor)
                                         Case "fileinfo"
                                             Dim detail2 As XmlNode = Nothing
                                             For Each detail2 In thisresult.ChildNodes(f)
