@@ -8,7 +8,7 @@ Public Class Actor
     Public Property Name As New ProtoProperty(Me, "name")
     Public Property Role As New ProtoProperty(Me, "role")
     Public Property Thumb As New ProtoProperty(Me, "thumb")
-    Public Property ActorId As New ProtoProperty(Me, "actorid")
+    Public Property Id As New ProtoProperty(Me, "actorid")
     Public Property Source As New ProtoProperty(Me, "source")
 
     Public Property actorname As String
@@ -29,7 +29,6 @@ Public Class Actor
         End Set
     End Property
 
-
     Public Property actorthumb As String
         Get
             Return Me.Thumb.Value
@@ -39,7 +38,14 @@ Public Class Actor
         End Set
     End Property
 
-
+    Public Property actorid As String
+        Get
+            Return Me.ID.Value
+        End Get
+        Set(ByVal value As String)
+            Me.Thumb.Value = value
+        End Set
+    End Property
 
     Public Sub New()
         MyBase.New(Nothing, Nothing)

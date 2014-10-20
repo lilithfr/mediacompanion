@@ -215,7 +215,7 @@ Public Class Form2
                     Exit sub
                 End If
             Next
-            newactor.ActorId.value = ""
+            newactor.ID.value = ""
             newactor.actorname = tb_ActorAdd.Text
             newactor.actorrole = tb_RoleAdd.Text
             newactor.actorthumb = ""

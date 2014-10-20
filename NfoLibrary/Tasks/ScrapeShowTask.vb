@@ -199,7 +199,7 @@ Namespace Tasks
                     End If
 
                     Dim NewAct As New Media_Companion.Actor
-                    NewAct.ActorId = Act.Id
+                    NewAct.actorid = Act.Id.Value
                     NewAct.actorname = Act.Name.Value
                     NewAct.actorrole = Act.Role.Value
                     NewAct.actorthumb = Act.Image.Value

@@ -10482,7 +10482,8 @@ End Sub
                 showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
                     If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
-                        Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                        'Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                        Call nfoFunction.tvshow_NfoSave(nfoFunction.tv_NfoLoad(Cache.TvCache.Shows(f).NfoFilePath), True)
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
                             progresstext = "Rewriting nfo's of Show: " & Cache.TvCache.Shows(f).Title.Value & ", Episode: " & Cache.TvCache.Shows(f).Episodes.Count - g & " of " & Cache.TvCache.Shows(f).Episodes.Count & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                             If done > 0 Then
@@ -10588,7 +10589,8 @@ End Sub
                                 Throw ex
 #End If
                             End Try
-                            Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, editshow, True)
+                            'Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, editshow, True)
+                            Call nfoFunction.tvshow_NfoSave(editshow, True)
 
                             'editshow.IsCache = True          'this doesn't stick so I had to remove the test in show.load
 
@@ -18716,7 +18718,7 @@ End Sub
                 Show.Genre.Value = tb_ShGenre.Text
                 Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
 
-                Show.Save()
+                nfoFunction.tvshow_NfoSave(Show, True)   'Show.Save()
                 Show.UpdateTreenode()
             Else
                 Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
@@ -18883,7 +18885,8 @@ End Sub
                     Button_TV_State.BackColor = Color.Gray
                 End If
                 TempShow.UpdateTreenode()   'update the treenode so we can see the state change
-                TempShow.Save()             'save the nfo immediately (you don't have to press save button)
+                nfoFunction.tvshow_NfoSave(TempShow, True)
+                'TempShow.Save()             'save the nfo immediately (you don't have to press save button)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

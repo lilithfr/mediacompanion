@@ -1468,6 +1468,7 @@ Public Class Preferences
     End Function
 
     Public Shared Function RemoveIgnoredArticles(ByVal s As String) As String
+        If String.IsNullOrEmpty(s) Then Return s
         If ignorearticle AndAlso s.ToLower.IndexOf("the ") = 0 Then 
             s = s.Substring(4, s.Length - 4) & ", The"
         End If

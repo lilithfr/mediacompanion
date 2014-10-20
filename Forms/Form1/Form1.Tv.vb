@@ -2,25 +2,13 @@
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Text
-'Imports System.Threading
-'Imports Media_Companion.ScraperFunctions
 Imports Media_Companion.WorkingWithNfoFiles
 Imports System.Xml
 Imports Media_Companion
 Imports Media_Companion.Preferences
 
-'Imports System.Reflection
-'Imports System.Windows.Forms
-'Imports System.ComponentModel
 
 Partial Public Class Form1
-    'Public TvCache As New TvCache
-
-    'Public TvShows As New List(Of TvShow)
-    'Public workingTvShow As New TvShow
-    'Public workingEpisode As New List(Of TvEpisode)
-    'Public tempWorkingTvShow As New TvShow
-    'Public tempWorkingEpisode As New TvEpisode
     Dim newEpisodeList As New List(Of TvEpisode)
     Dim languageList As New List(Of Tvdb.Language)
     Dim listOfShows As New List(Of str_PossibleShowList)
@@ -494,7 +482,7 @@ Partial Public Class Form1
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorname = cbTvActor.Text Then
-                    Dim temppath As String = Preferences.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ActorId.Value)
+                    Dim temppath As String = Preferences.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ID.Value)
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
                     ElseIf (Not Preferences.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
@@ -523,7 +511,7 @@ Partial Public Class Form1
         Else
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorrole = cbTvActorRole.Text Then
-                    Dim temppath As String = Preferences.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ActorId.Value)
+                    Dim temppath As String = Preferences.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ID.Value)
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
                     ElseIf (Not Preferences.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then

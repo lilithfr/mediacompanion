@@ -22,33 +22,33 @@ Public Class TvShow
     Public Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
 
     Public Property Title As New ProtoProperty(Me, "title", CacheMode:=CacheMode.Both)
-    Public Property SortTitle As New ProtoProperty(Me, "sorttitle")  'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
+    Public Property SortTitle As New ProtoProperty(Me, "sorttitle")                 'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
     Public Property Rating As New ProtoProperty(Me, "rating")
     Public Property Year As New ProtoProperty(Me, "year")
-    Public Property Top250 As New ProtoProperty(Me, "top250")
+    Public Property Top250 As New ProtoProperty(Me, "top250")                       'from XBMC created tvshow.nfo
 
-    Public Property Season As New ProtoProperty(Me, "season") 'I can't see what use this is, it's included incase someone figures it out - Perhaps a deault for show that don't include one?
-    Public Property EpisodeCount As New ProtoProperty(Me, "episode")
-    Public Property DisplaySeason As New ProtoProperty(Me, "displayseason") 'Can't figure this one out either 
-    Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode") 'Or this one
-    Public Property Votes As New ProtoProperty(Me, "votes")
+    Public Property Season As New ProtoProperty(Me, "season")                       'from XBMC created tvshow.nfo
+    Public Property EpisodeCount As New ProtoProperty(Me, "episode")                'from XBMC created tvshow.nfo
+    Public Property DisplaySeason As New ProtoProperty(Me, "displayseason")         'from XBMC created tvshow.nfo
+    Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode")       'from XBMC created tvshow.nfo
+    Public Property Votes As New ProtoProperty(Me, "votes")                         'from XBMC created tvshow.nfo
     Public Property Plot As New ProtoProperty(Me, "plot")
-    Public Property Outline As New ProtoProperty(Me, "outline") 'Same as plot?
-    Public Property TagLine As New ProtoProperty(Me, "tagline")
+    Public Property Outline As New ProtoProperty(Me, "outline")                     'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property TagLine As New ProtoProperty(Me, "tagline")                     'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property Runtime As New ProtoProperty(Me, "runtime")
     Public Property Mpaa As New ProtoProperty(Me, "mpaa")
-    Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")
+    Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")               'obsolete
     Public Property Genre As New ProtoProperty(Me, "genre")
     Public Property Credits As New ProtoProperty(Me, "credits")
-    Public Property [Set] As New ProtoProperty(Me, "set") 'No clue what this does, not sure if it's a hold over from movies or if show sets are possible (mini-series, spin-offs extra)
+    Public Property [Set] As New ProtoProperty(Me, "set")                           'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property Director As New ProtoProperty(Me, "director")
     Public Property Premiered As New ProtoProperty(Me, "premiered")
-    Public Property Status As New ProtoProperty(Me, "status") 'No clue what this does
-    Public Property Code As New ProtoProperty(Me, "code") 'No clue what this does
+    Public Property Status As New ProtoProperty(Me, "status")                       'No clue what this does
+    Public Property Code As New ProtoProperty(Me, "code")                           'No clue what this does
     Public Property Aired As New ProtoProperty(Me, "aired") '
     Public Property Studio As New ProtoProperty(Me, "studio")
-    Public Property Trailer As New ProtoProperty(Me, "trailer") 'Also possible hold over from movies
-    Public Property Artist As New ProtoProperty(Me, "Artist") 'Possible hold over from Music?
+    Public Property Trailer As New ProtoProperty(Me, "trailer")                     'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property Artist As New ProtoProperty(Me, "Artist")                       'Possible hold over from Music?
 
     Public Property EpisodeGuideUrl As New ProtoProperty(Me, "episodeguide")
     Public Property Url As New ProtoProperty(EpisodeGuideUrl, "url")
@@ -64,7 +64,7 @@ Public Class TvShow
 
     'Media Companion Specific
 
-    Public Property ImdbId As New ProtoProperty(Me, "imdbid", CacheMode:=CacheMode.Both) 'XBMC doesn't seem to use this.
+    Public Property ImdbId As New ProtoProperty(Me, "imdbid", CacheMode:=CacheMode.Both) 'MC uses to locate artwork on IMDB & PosterDB sites
     Public Property SortOrder As New ProtoProperty(Me, "sortorder", CacheMode:=CacheMode.Both)
     Public Property Language As New ProtoProperty(Me, "language", CacheMode:=CacheMode.Both)
     Public Property TvShowActorSource As New ProtoProperty(Me, "tvshowactorsource")

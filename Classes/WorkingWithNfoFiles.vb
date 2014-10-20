@@ -802,6 +802,224 @@ Public Class WorkingWithNfoFiles
         
         Show.Save(Path)
     End Sub
+
+    Public Sub tvshow_NfoSave(ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+
+        Monitor.Enter(Me)
+        Dim stage As Integer = 1
+        Try
+            Dim filenameandpath As String = tvshowtosave.NfoFilePath
+
+            If tvshowtosave Is Nothing Then Exit Sub
+            If IO.File.Exists(filenameandpath) AndAlso Not overwrite Then Exit Sub
+            Dim doc As New XmlDocument
+            Dim root As XmlElement
+            Dim child As XmlElement
+            Dim actorchild As XmlElement
+            root = doc.CreateElement("tvshow")
+            Dim thumbnailstring As String = ""
+            stage = 2
+            Dim thispref As XmlNode = Nothing
+            Dim xmlproc As XmlDeclaration
+
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+            doc.AppendChild(xmlproc)
+
+            stage = 3
+            child = doc.CreateElement("id")
+            child.InnerText = tvshowtosave.tvdbid.Value
+            root.AppendChild(child)
+
+            stage = 4
+            child = doc.CreateElement("state")
+            child.InnerText = tvshowtosave.State 
+            root.AppendChild(child)
+
+            stage = 5
+            child = doc.CreateElement("title")
+            child.InnerText = tvshowtosave.title.Value
+            root.AppendChild(child)
+                             
+            child = doc.CreateElement("showtitle")
+            child.InnerText = tvshowtosave.title.Value
+            root.AppendChild(child)
+
+            stage = 6
+            child = doc.CreateElement("mpaa")
+            child.InnerText = tvshowtosave.mpaa.Value
+            root.AppendChild(child)
+
+            stage = 7
+            child = doc.CreateElement("plot")
+            child.InnerText = tvshowtosave.plot.Value
+            root.AppendChild(child)
+
+            stage = 8
+            child = doc.CreateElement("imdbid")
+            child.InnerText = tvshowtosave.imdbid.Value
+            root.AppendChild(child)
+
+            stage = 9
+            child = doc.CreateElement("runtime")
+            If tvshowtosave.runtime.Value <> Nothing Then
+                Dim minutes As String = tvshowtosave.runtime.Value
+                minutes = minutes.Replace("minutes", "")
+                minutes = minutes.Replace("mins", "")
+                minutes = minutes.Replace("min", "")
+                minutes = minutes.Replace(" ", "")
+                Try
+                    Do While minutes.IndexOf("0") = 0
+                        minutes = minutes.Substring(1, minutes.Length - 1)
+                    Loop
+                    If minutes = "" Then minutes = "00"
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                        minutes = "0" & minutes & " min"
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                        minutes = "00" & minutes & " min"
+                    Else
+                        minutes = tvshowtosave.runtime.Value
+                    End If
+                Catch
+                    minutes = "00"
+                End Try
+                child.InnerText = minutes
+            Else
+                child.InnerText = tvshowtosave.runtime.Value
+            End If
+            root.AppendChild(child)
+
+            stage = 10
+            child = doc.CreateElement("rating")
+            child.InnerText = tvshowtosave.rating.Value
+            root.AppendChild(child)
+
+            stage = 11
+            child = doc.CreateElement("year")
+            child.InnerText = tvshowtosave.year.Value
+            root.AppendChild(child)
+
+            stage = 12
+            child = doc.CreateElement("premiered")
+            child.InnerText = tvshowtosave.premiered.Value
+            root.AppendChild(child)
+
+            stage = 13
+            child = doc.CreateElement("studio")
+            child.InnerText = tvshowtosave.studio.Value
+            root.AppendChild(child)
+
+            stage = 14
+            child = doc.CreateElement("genre")
+            child.InnerText = tvshowtosave.genre.Value
+            root.AppendChild(child)
+
+            child = doc.CreateElement("episodeguide")
+            Dim childchild As XmlElement
+            childchild = doc.CreateElement("url")
+            Dim tempppp As String = tvshowtosave.tvdbid.value & ".xml"
+            Dim Attr As XmlAttribute
+            Attr = doc.CreateAttribute("cache")
+            Attr.Value = tempppp
+            childchild.Attributes.Append(Attr)
+            If Not IsNothing(tvshowtosave.episodeguideurl) Then ' <> Nothing Then
+                'If tvshowtosave.episodeguideurl.Node.Value <> "" Then
+                '    childchild.InnerText = tvshowtosave.episodeguideurl.Node.value
+                '    child.AppendChild(childchild)
+                'Else
+                    '"http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
+                    If tvshowtosave.tvdbid.Value <> Nothing Then
+                        If IsNumeric(tvshowtosave.tvdbid.Value) Then
+                            If tvshowtosave.language.Value <> Nothing Then
+                                If tvshowtosave.language.Value <> "" Then
+                                    childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid.Value & "/all/" & tvshowtosave.language.Value & ".zip"
+                                    child.AppendChild(childchild)
+                                Else
+                                    childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid.Value & "/all/en.zip"
+                                    child.AppendChild(childchild)
+                                End If
+                            Else
+                                childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid.Value & "/all/en.zip"
+                                child.AppendChild(childchild)
+                            End If
+                        End If
+                    End If
+                'End If
+                root.AppendChild(child)
+            End If
+
+            stage = 15
+            child = doc.CreateElement("language")
+            child.InnerText = tvshowtosave.language.Value
+            root.AppendChild(child)
+
+            stage = 16
+            For Each thumbnail In tvshowtosave.posters
+
+                child = doc.CreateElement("thumb")
+                child.InnerText = thumbnail
+                root.AppendChild(child)
+            Next
+
+            stage = 17
+            For Each thumbnail In tvshowtosave.fanart
+                child = doc.CreateElement("fanart")
+                child.InnerText = thumbnail
+                root.AppendChild(child)
+            Next
+
+            stage = 18
+            For each act As Actor In tvshowtosave.ListActors
+                child = doc.CreateElement("actor")
+                actorchild = doc.CreateElement("actorid")
+                actorchild.InnerText = act.actorid 
+                child.AppendChild(actorchild)
+                actorchild = doc.CreateElement("name")
+                actorchild.InnerText = act.actorname
+                child.AppendChild(actorchild)
+                actorchild = doc.CreateElement("role")
+                actorchild.InnerText = act.actorrole
+                child.AppendChild(actorchild)
+                'actorchild = = doc.CreateElement("order")
+                'actorchild.InnerText = act.order.Value
+                'child.AppendChild(actorchild)
+                If act.actorthumb <> Nothing Then
+                    If act.actorthumb <> "" Then
+                        actorchild = doc.CreateElement("thumb")
+                        actorchild.InnerText = act.actorthumb
+                        child.AppendChild(actorchild)
+                    End If
+                End If
+                root.AppendChild(child)
+            Next
+            
+            stage = 19
+            child = doc.CreateElement("episodeactorsource")
+            child.InnerText = tvshowtosave.episodeactorsource.Value
+            root.AppendChild(child)
+            child = doc.CreateElement("tvshowactorsource")
+            child.InnerText = tvshowtosave.tvshowactorsource.Value
+            root.AppendChild(child)
+
+            stage = 20
+            child = doc.CreateElement("sortorder")
+            child.InnerText = tvshowtosave.sortorder.Value
+            root.AppendChild(child)
+
+            doc.AppendChild(root)
+
+            stage = 34
+            Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            stage = 35
+            doc.WriteTo(output)
+            output.Close()
+        Catch ex As Exception
+            MsgBox("Error Encountered at stage " & stage.ToString & vbCrLf & vbCrLf & ex.ToString)
+        Finally
+            Monitor.Exit(Me)
+        End Try
+    End Sub
+
 #End Region
 
 #Region " Obsolete "
