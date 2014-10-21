@@ -66,29 +66,7 @@ Public Class WorkingWithNfoFiles
 
     '  All Tv Load/Save Routines
 #Region " Tv Routines "
-    Public Function tv_NfoLoad(ByVal path As String) As TvShow
-
-        Dim newtvshow As New TvShow
-        If Not IO.File.Exists(path) Then
-            'Form1.tvrebuildlog(path & ", does not appear to exist")
-            newtvshow.Title.Value = Utilities.GetLastFolder(path)
-            newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
-            newtvshow.NfoFilePath = path
-            newtvshow.Year.Value = "0000"
-            newtvshow.TvdbId.Value = ""
-            newtvshow.Status.Value = "missing"
-            newtvshow.State = Media_Companion.ShowState.Locked
-            Return newtvshow
-            Exit Function
-        Else
-            newtvshow.NfoFilePath = path
-            newtvshow.Load()
-        End If
-        Return newtvshow
-
-
-    End Function
-
+    
     Public Shared Function ep_NfoLoad(ByVal path As String)
         'Try
         Dim episodelist As New List(Of TvEpisode)
@@ -797,13 +775,67 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
+    Public Function tv_NfoLoad(ByVal path As String) As TvShow
+        Dim newtvshow As New TvShow
+        If Not IO.File.Exists(path) Then
+            newtvshow.Title.Value = Utilities.GetLastFolder(path)
+            newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+            newtvshow.NfoFilePath = path
+            newtvshow.Year.Value = "0000"
+            newtvshow.TvdbId.Value = ""
+            newtvshow.Status.Value = "missing"
+            newtvshow.State = Media_Companion.ShowState.Locked
+            Return newtvshow
+            Exit Function
+        Else
+            newtvshow.NfoFilePath = path
+            newtvshow.Load()
+        End If
+        Return newtvshow
+    End Function
+
     Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
         If IO.File.Exists(Path) And Not overwrite Then Exit Sub
         
         Show.Save(Path)
     End Sub
 
-    Public Sub tvshow_NfoSave(ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+    Public Function tv_NfoLoadCheck(ByVal Path As String) As Boolean
+        'Check if XBMC nfo and correct some entries before loading into Media Companion.
+        Dim aok As Boolean = True
+        Try
+            Dim thistvshow As New XmlDocument
+            thistvshow.Load(Path)
+            Dim nodeToFind As XmlNode
+		    Dim root As XmlElement = thistvshow.DocumentElement
+
+		    ' Selects all the title elements that have an attribute named lang
+		    nodeToFind = root.SelectSingleNode("epbookmark")
+            If nodeToFind IsNot Nothing Then aok = False
+            'For Each thisresult As XmlNode In thistvshow("tvshow")
+            '    Try
+            '        Select Case thisresult.Name
+            '            Case "epbookmark"
+            '                aok = False
+            '        End Select
+            '    Catch
+            '        aok = False
+            '    End Try
+            'Next
+            If Not aok Then 
+                Dim tempshow As New TvShow
+                tempshow = tvshow_NfoLoad(Path)
+                tvshow_NfoSave(tempshow, True, "0")
+                aok = True
+            End If
+        Catch ex As Exception
+            aok = False
+        End Try
+        Return aok
+    End Function
+
+
+    Public Sub tvshow_NfoSave(ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal lock As String = "")
 
         Monitor.Enter(Me)
         Dim stage As Integer = 1
@@ -832,7 +864,11 @@ Public Class WorkingWithNfoFiles
 
             stage = 4
             child = doc.CreateElement("state")
-            child.InnerText = tvshowtosave.State 
+            If lock = "" Then
+                child.InnerText = tvshowtosave.State 
+            Else
+                child.InnerText = Media_Companion.ShowState.Open
+            End If
             root.AppendChild(child)
 
             stage = 5
@@ -989,6 +1025,9 @@ Public Class WorkingWithNfoFiles
                         child.AppendChild(actorchild)
                     End If
                 End If
+                actorchild = doc.CreateElement("order")
+                actorchild.InnerText = act.order
+                child.AppendChild(actorchild)
                 root.AppendChild(child)
             Next
             
@@ -1020,6 +1059,126 @@ Public Class WorkingWithNfoFiles
         End Try
     End Sub
 
+    Public Function tvshow_NfoLoad(ByVal path As String)
+        Try
+            Dim newtvshow As New TvShow
+            Dim tvshow As New XmlDocument
+            Try
+                tvshow.Load(path)
+            Catch ex As Exception
+                Return blanktvshow(path)
+                Exit Function
+            End Try
+            newtvshow.State = Media_Companion.ShowState.Unverified 
+            Dim thisresult As XmlNode = Nothing
+            Dim tempid As String = ""
+            For Each thisresult In tvshow("tvshow")
+                Try
+                    Select Case thisresult.Name
+                        Case "title"
+                            Dim tempstring As String = ""
+                            tempstring = thisresult.InnerText
+                            ' Ignore Article here??
+                            newtvshow.Title.Value = tempstring
+                        Case "episodeguideurl"
+                            tempid = thisresult.InnerText
+                        Case "id"
+                            newtvshow.TvdbId.Value = thisresult.InnerText
+                        Case "imdbid"
+                            newtvshow.ImdbId.Value = thisresult.InnerText
+                        Case "mpaa"
+                            newtvshow.Mpaa.Value = thisresult.InnerText
+                        Case "plot"
+                            newtvshow.Plot.Value = thisresult.InnerText
+                        Case "runtime"
+                            newtvshow.Runtime.Value = thisresult.InnerText
+                        Case "rating"
+                            Dim tmpstr As String = thisresult.InnerText
+                            If tmpstr.IndexOf("/10") <> -1 Then tmpstr.Replace("/10", "")
+                            If tmpstr.IndexOf(" ") <> -1 Then tmpstr.Replace(" ", "")
+                            newtvshow.Rating.Value = tmpstr
+                        Case "year"
+                            newtvshow.Year.Value = thisresult.InnerText
+                        Case "premiered"
+                            newtvshow.Premiered.Value = thisresult.InnerText
+                        Case "studio"
+                            newtvshow.Studio.Value = thisresult.InnerText
+                        Case "genre"
+                            If newtvshow.genre.Value = Nothing Then                     'genres in nfo's may be individual elements if from XBMC nfo,
+                                newtvshow.genre.Value = thisresult.InnerText       'in MC cache they are one string seperated by " / "
+                            Else
+                                newtvshow.genre.Value = newtvshow.genre.Value & " / " & thisresult.InnerText
+                            End If
+                            'newtvshow.Genre.Value = thisresult.InnerText
+                        Case "language"
+                            newtvshow.Language.Value = thisresult.InnerText
+                        Case "state"
+                            newtvshow.State = thisresult.InnerText
+                        Case "episodeactorsource"
+                            newtvshow.EpisodeActorSource.Value = thisresult.InnerText
+                        Case "tvshowactorsource"
+                            newtvshow.TvShowActorSource.Value = thisresult.InnerText
+                        Case "sortorder"
+                            newtvshow.SortOrder.Value = thisresult.InnerText
+                        Case "actor"
+                            Dim newactor As New str_MovieActors(SetDefaults)
+                            Dim detail As XmlNode = Nothing
+                            For Each detail In thisresult.ChildNodes
+                                Select Case detail.Name
+                                    Case "id"
+                                        newactor.actorid = detail.InnerText
+                                    Case "name"
+                                        newactor.actorname = detail.InnerText
+                                    Case "role"
+                                        newactor.actorrole = detail.InnerText
+                                    Case "thumb"
+                                        newactor.actorthumb = detail.InnerText
+                                    Case "order"
+                                        newactor.order = detail.InnerText 
+                                End Select
+                            Next
+                            newtvshow.listactors.Add(newactor)
+                    End Select
+                Catch ex As Exception
+                    MsgBox(ex.ToString)
+                End Try
+            Next
+            
+            newtvshow.NfoFilePath = path
+
+            Dim filecreation As IO.FileInfo = New IO.FileInfo(path)
+            Dim myDate As Date = filecreation.LastWriteTime
+
+            If newtvshow.tvdbid = Nothing Then newtvshow.TvdbId.Value = ""
+            If newtvshow.ImdbId.Value = Nothing Then newtvshow.ImdbId.Value = "0"
+            If newtvshow.genre = Nothing Then newtvshow.Genre.Value = ""
+            If newtvshow.rating = Nothing Then newtvshow.Rating.Value = ""
+            If newtvshow.Mpaa.Value = Nothing Then newtvshow.Mpaa.Value = "na"
+            If newtvshow.Studio.Value = Nothing Then newtvshow.Studio.Value = "-"
+            If newtvshow.Runtime.Value = Nothing Then newtvshow.Runtime.Value = "0"
+            If String.IsNullOrEmpty(newtvshow.Year.Value) AndAlso Not newtvshow.Premiered.Value = Nothing Then
+                Dim tmp As String = newtvshow.Premiered.Value.Substring(0,4)
+                newtvshow.Year.Value = tmp
+            ElseIf String.IsNullOrEmpty(newtvshow.Year.Value) Then
+                newtvshow.Year.Value = "0000"
+            End If
+            Return newtvshow
+        Catch
+        End Try
+        Return "Error"
+    End Function
+
+    Public Function blanktvshow(ByVal path As String) As TvShow
+        blanktvshow = New TvShow
+        blanktvshow.Title.Value = Utilities.GetLastFolder(path)
+        'blanktvshow.Year.Value = blanktvshow.Title.Value & " (0000)"
+        blanktvshow.NfoFilePath = path
+        blanktvshow.Year.Value = "0000"
+        blanktvshow.TvdbId.Value = ""
+        blanktvshow.Status.Value = "missing"
+        blanktvshow.State = Media_Companion.ShowState.Locked
+        Return blanktvshow
+    End Function
 #End Region
 
 #Region " Obsolete "
@@ -2361,6 +2520,8 @@ Public Class WorkingWithNfoFiles
                                         newactor.actorrole = detail.InnerText
                                     Case "thumb"
                                         newactor.actorthumb = detail.InnerText
+                                    Case "order"
+                                        newactor.order = detail.InnerText
                                 End Select
                             Next
                             newmovie.listactors.Add(newactor)
@@ -3080,6 +3241,9 @@ Public Class WorkingWithNfoFiles
                         child.AppendChild(actorchild)
                         actorchild = doc.CreateElement("thumb")
                         actorchild.InnerText = movietosave.listactors(f).actorthumb
+                        child.AppendChild(actorchild)
+                        actorchild = doc.CreateElement("order")
+                        actorchild.InnerText = movietosave.listactors(f).order
                         child.AppendChild(actorchild)
                         root.AppendChild(child)
                     Next

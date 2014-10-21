@@ -9,6 +9,7 @@ Public Class Actor
     Public Property Role As New ProtoProperty(Me, "role")
     Public Property Thumb As New ProtoProperty(Me, "thumb")
     Public Property Id As New ProtoProperty(Me, "actorid")
+    Public Property SortOrder As New ProtoProperty(Me, "order")
     Public Property Source As New ProtoProperty(Me, "source")
 
     Public Property actorname As String
@@ -43,7 +44,16 @@ Public Class Actor
             Return Me.ID.Value
         End Get
         Set(ByVal value As String)
-            Me.Thumb.Value = value
+            Me.ID.Value = value
+        End Set
+    End Property
+
+    Public Property order As String
+        Get
+            Return Me.SortOrder.Value
+        End Get
+        Set(ByVal value As String)
+            Me.SortOrder.Value = value
         End Set
     End Property
 

@@ -247,6 +247,7 @@ Public Class TVDBScraper
             Else
                 actor.actorthumb = ""
             End If
+            actor.order = Mc.SortOrder.Value
             'actor.actorthumb = Mc.Image.Value
             results.Add(actor)
         Next

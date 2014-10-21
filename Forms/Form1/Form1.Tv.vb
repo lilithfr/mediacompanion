@@ -1420,7 +1420,12 @@ Partial Public Class Form1
                 tvprogresstxt &= "Scraping Show " & i.ToString & " of " & x & " : "
                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                 If Not haveTVDbID And NewShow.FileContainsReadableXml Then
-                    NewShow.Load()
+                    Dim validcheck As Boolean = nfoFunction.tv_NfoLoadCheck(NewShow.NfoFilePath)
+                    If validcheck Then
+                        NewShow.Load()
+                    End If
+                    'NewShow = nfoFunction.tvshow_NfoLoad(NewShow.NfoFilePath)
+                    'NewShow.Load()
                 Else
                     If haveTVDbID Then
                         NewShow.State = Media_Companion.ShowState.Open

@@ -6,12 +6,14 @@ Public Structure str_MovieActors
     Public actorrole As String
     Public actorthumb As String
     Public actorid As String
+    Public order As String
 
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         actorname = ""
         actorrole = ""
         actorthumb = ""
         actorid = ""
+        order = ""
     End Sub
 
     Shared Widening Operator CType(ByVal Input As Media_Companion.Actor) As str_MovieActors
@@ -20,6 +22,7 @@ Public Structure str_MovieActors
         Temp.actorname = Input.Name.Value
         Temp.actorrole = Input.Role.Value
         Temp.actorthumb = Input.Thumb.Value
+        Temp.order = Input.SortOrder.Value
         Return Temp
     End Operator
 
@@ -29,6 +32,7 @@ Public Structure str_MovieActors
         Temp.Name.Value = Input.actorname
         Temp.Role.Value = Input.actorrole
         Temp.Thumb.Value = Input.actorthumb
+        Temp.SortOrder.Value = Input.order
         Return Temp
     End Operator
 
@@ -127,7 +131,7 @@ Public Structure str_MovieActors
             actorid    = m.Groups("actorid").ToString
         Catch
         End Try
-
+            order       = "0"
         Return actorname<>""
     End Function
 
