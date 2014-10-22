@@ -10277,11 +10277,17 @@ End Sub
                 If Preferences.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
                     RefreshMissingEpisodesToolStripMenuItem.Enabled = False
                     RadioButton29.Checked = True
+                    RadioButton44.Enabled = False
+                    RadioButton53.Enabled = False
+                    RefreshMissingEpisodesToolStripMenuItem.ToolTipText = Nothing
                     tv_CacheRefresh 
                     'tv_Filter()
                     Return
                 End If
                 RefreshMissingEpisodesToolStripMenuItem.Enabled = True
+                RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Preferences.lastrefreshmissingdate
+                RadioButton44.Enabled = True
+                RadioButton53.Enabled = True
                 'Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
                 'If answer = MsgBoxResult.Yes 
                     'Preferences.DlMissingEpData = True
@@ -10301,6 +10307,7 @@ End Sub
 
     Private Sub RefreshMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMissingEpisodesToolStripMenuItem.Click
         Preferences.DlMissingEpData = True
+        Preferences.lastrefreshmissingdate = DateTime.Now.ToString("yyyy-MM-dd")
         tv_EpisodesMissingClean
         tv_EpisodesMissingLoad(True)
         
@@ -10321,7 +10328,7 @@ End Sub
 
     End Sub
 
-    Private Sub MissingepisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ShowMissEps.Click
+    Private Sub Tv_TreeViewContext_ShowMissEps_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ShowMissEps.Click
         Try
             Dim Show As TvShow = tv_ShowSelectedCurrently()
 
@@ -11119,7 +11126,12 @@ End Sub
         Me.tb_MovieRenameEnable.Text = Preferences.MovieRenameTemplate
         Me.tb_MovFolderRename.Text = Preferences.MovFolderRenameTemplate 
         Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
-        Me.RefreshMissingEpisodesToolStripMenuItem.Enabled = Preferences.displayMissingEpisodes 
+        Me.RefreshMissingEpisodesToolStripMenuItem.Enabled = Preferences.displayMissingEpisodes
+        If Preferences.displayMissingEpisodes Then 
+            Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Preferences.lastrefreshmissingdate 
+        End If
+        Me.RadioButton44.Enabled = Preferences.displayMissingEpisodes
+        Me.RadioButton53.Enabled = Preferences.displayMissingEpisodes 
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart

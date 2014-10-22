@@ -341,6 +341,7 @@ Public Class Preferences
     Public Shared autorenameepisodes As Boolean
     Public Shared TvdbLanguage As String = "English"
     Public Shared TvdbLanguageCode As String = "en"
+    Public Shared lastrefreshmissingdate As String
 
     '(Unsure)
     Public Shared maximagecount As Integer
@@ -611,6 +612,7 @@ Public Class Preferences
         postertype = "poster"
         TvdbLanguage = "English"
         TvdbLanguageCode = "en"
+        lastrefreshmissingdate = ""   'DateTime.Now.ToString("yyyy-MM-dd")
         sortorder = "default"
         TvdbActorScrape = 0
         OfflineDVDTitle = "Please Load '%T' Media To Play..."
@@ -1044,6 +1046,7 @@ Public Class Preferences
         root.AppendChild(doc, "TVShowUseXBMCScraper",   tvshow_useXBMC_Scraper) 'CheckBox_Use_XBMC_TVDB_Scraper
         root.AppendChild(doc, "autorenameepisodes",     autorenameepisodes)     'CheckBox_tv_EpisodeRenameAuto
         root.AppendChild(doc, "ScrShtDelay",            ScrShtDelay)            'AutoScrShtDelay
+        root.AppendChild(doc, "lastrefreshmissingdate", lastrefreshmissingdate)
 
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
@@ -1333,6 +1336,7 @@ Public Class Preferences
                     Case "downloadtvposter"                     : tvdlposter = thisresult.InnerXml
                     Case "downloadtvseasonthumbs"               : tvdlseasonthumbs = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
+                    Case "lastrefreshmissingdate"               : lastrefreshmissingdate = thisresult.InnerText 
                     Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
                     Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 
