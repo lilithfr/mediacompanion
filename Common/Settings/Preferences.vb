@@ -236,6 +236,7 @@ Public Class Preferences
     Public Shared MovieRenameTemplate As String
     Public Shared MovFolderRename As Boolean
     Public Shared MovFolderRenameTemplate As String
+    Public Shared MovNewFolderInRootFolder As String
     Public Shared MovRenameUnderscore As Boolean
     Public Shared MovSetIgnArticle As Boolean
     Public Shared MovSortIgnArticle As Boolean
@@ -577,7 +578,7 @@ Public Class Preferences
         MovSepLst.Add("Extended-Edition")
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
-        MovieManualRename = False
+        MovieManualRename = True
         MovieRenameEnable = False
         MovieRenameTemplate = "%T (%Y)"
         MovFolderRename = False
@@ -588,6 +589,7 @@ Public Class Preferences
         MovTitleCase = False
         ExcludeMpaaRated = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
+        MovNewFolderInRootFolder = False
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
         MovFiltLastSize = 384
 
@@ -979,6 +981,7 @@ Public Class Preferences
         root.AppendChild(doc, "movierenametemplate",                MovieRenameTemplate)                'tb_MovieRenameEnable
         root.AppendChild(doc, "MovFolderRename",                    MovFolderRename)                    'cbMovFolderRename
         root.AppendChild(doc, "MovFolderRenameTemplate",            MovFolderRenameTemplate)            'tb_MovFolderRename
+        root.AppendChild(doc, "MovNewFolderInRootFolder",           MovNewFolderInRootFolder)           'cbMovNewFolderInRootFolder
         root.AppendChild(doc, "MovRenameUnderscore",                MovRenameUnderscore)                'cbRenameUnderscore
         root.AppendChild(doc, "MovSetIgnArticle",                   MovSetIgnArticle)                   'cbMovSetIgnArticle
         root.AppendChild(doc, "MovSortIgnArticle",                  MovSortIgnArticle)                  'cbMovSortIgnArticle
@@ -1375,6 +1378,7 @@ Public Class Preferences
                     Case "movierenametemplate"                  : MovieRenameTemplate = thisresult.InnerText
                     Case "MovFolderRename"                      : MovFolderRename = thisresult.InnerText 
                     Case "MovFolderRenameTemplate"              : MovFolderRenameTemplate = thisresult.InnerText 
+                    Case "MovNewFolderInRootFolder"             : MovNewFolderInRootFolder = thisresult.InnerXml 
                     Case "MovRenameUnderscore"                  : MovRenameUnderscore = thisresult.InnerText 
                     Case "MovSetIgnArticle"                     : MovSetIgnArticle = thisresult.InnerXml 
                     Case "MovSortIgnArticle"                    : MovSortIgnArticle = thisresult.InnerXml 

@@ -3106,8 +3106,6 @@ Public Class Movie
         _parent.DirectorDb.RemoveAll(Function(c) c.MovieId = MovieId)
     End Sub
 
-
-
     Sub UpdateActorCacheFromEmpty
         If Actors.Count = 0 Then Exit Sub
         Try
@@ -3172,7 +3170,6 @@ Public Class Movie
         _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = key)
     End Sub
   
-  
     Shared Function SaveFanartImageToCacheAndPaths(url As String, paths As List(Of String))
 
         If Not Preferences.savefanart Then Return False
@@ -3182,7 +3179,6 @@ Public Class Movie
         Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs, point.X, point.Y)
     End Function
 
-  
     Shared Function SaveFanartImageToCacheAndPath(url As String, path As String)
 
         If Not Preferences.savefanart Then Return False
@@ -3202,7 +3198,6 @@ Public Class Movie
         Return DownloadCache.SaveImageToCacheAndPath(url, path, True, , height  )
     End Function
 
-
     Shared Function SavePosterImageToCacheAndPath(url As String, path As String) As Boolean
 
         Dim height = GetHeightResolution(Preferences.PosterResolutionSI)
@@ -3210,13 +3205,12 @@ Public Class Movie
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
     End Function
 
-        Shared Function SavePosterImageToCacheAndPaths(url As String, paths As List(Of String)) As Boolean
+    Shared Function SavePosterImageToCacheAndPaths(url As String, paths As List(Of String)) As Boolean
 
         Dim Height = GetHeightResolution(Preferences.PosterResolutionSI)
 
         Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs, , height)
     End Function
-
 
     Sub SavePosterToPosterWallCache
         If File.Exists(PosterPath) Then
@@ -3234,16 +3228,6 @@ Public Class Movie
                 Utilities.SafeDeleteFile(PosterPath     )
                 Utilities.SafeDeleteFile(PosterCachePath)
             End Try
-            'Try
-            '    For Each poster As PictureBox In Form1.TabPage22.Controls
-            '        If poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename Then
-            '            poster.ImageLocation = posterpath
-            '            poster.Load()
-            '            poster.Tag = _scrapedMovie.fileinfo.fullpathandfilename
-            '        End If
-            '    Next
-            'Catch
-            'End Try
         End If
     End Sub
 
@@ -3461,6 +3445,7 @@ Public Class Movie
         Dim isFirstPart     = True
         Dim nextStackPart   = ""
         Dim stackdesignator = ""
+        Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)
 
         
         'Get current root folder
@@ -3503,8 +3488,13 @@ Public Class Movie
         FilePath = FilePath.Replace("BDMV\","")             'If BD BDMV folder, step back one folder so we copy folder as well.
         Dim checkfolder As String = currentroot
         If newpatharr.Count = 1 And Not inrootfolder Then                       'If only one folder in new folder pattern,
-            Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
-            checkfolder = FilePath.Replace((lastfolder & "\"), newpatharr(0))   'movie is in root folder already
+            If Preferences.MovNewFolderInRootFolder Then
+                checkfolder &= "\" & newpatharr(0)
+            Else
+                'Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
+                checkfolder = FilePath.Replace((lastfolder & "\"), newpatharr(0))   'movie is in root folder already
+            End If
+            
         Else
             For Each folder In newpatharr
                 checkfolder &= "\" & folder

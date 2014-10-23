@@ -13038,6 +13038,7 @@ End Sub
     End Sub
 
     Private Sub mov_PreferencesSetup()
+        prefsload = True
         displayRuntimeScraper = True
         If Preferences.enablehdtags = True Then
             CheckBox19.CheckState = CheckState.Checked
@@ -13101,6 +13102,7 @@ End Sub
         cbxCleanFilenameIgnorePart  .Checked        = Preferences.movieignorepart
         ScrapeFullCertCheckBox      .Checked        = Preferences.scrapefullcert
         cbMovieRenameEnable         .Checked        = Preferences.MovieRenameEnable
+        cbMovNewFolderInRootFolder  .Checked        = Preferences.MovNewFolderInRootFolder
         cbMovFolderRename           .Checked        = Preferences.MovFolderRename
         cbMovSetIgnArticle          .Checked        = Preferences.MovSetIgnArticle
         cbMovSortIgnArticle         .Checked        = Preferences.MovSortIgnArticle
@@ -13209,6 +13211,7 @@ End Sub
 
         TMDbControlsIni()
 
+        prefsload = False
         movieprefschanged = False
         btnMoviePrefSaveChanges.Enabled = False
     End Sub
@@ -13346,10 +13349,9 @@ End Sub
                 Label121.Visible = True
                 Label121.Text = Preferences.selectedvideoplayer
             End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            If prefsload Then Exit Sub
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13388,18 +13390,16 @@ End Sub
             Preferences.rarsize = 8
             txtbx_minrarsize.Text = "8"
         End If
-        If prefsload = False Then
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBox33_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox33.CheckedChanged
-        If prefsload = False Then
-            Preferences.actorseasy = CheckBox33.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.actorseasy = CheckBox33.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub Button96_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button96.Click
@@ -13417,10 +13417,8 @@ End Sub
 
                 Label130.Font = newFont
                 Label130.Text = fontString
-                If prefsload = False Then
-                    generalprefschanged = True
-                    btnGeneralPrefsSaveChanges.Enabled = True
-                End If
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -13440,10 +13438,8 @@ End Sub
 
             Label130.Font = newFont
             Label130.Text = "Times New Roman, 9pt"
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13451,33 +13447,30 @@ End Sub
     End Sub
 
     Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_pre.CheckedChanged
-        If prefsload = False Then
-            If rbXBMCv_pre.Checked Then
-                Preferences.XBMC_version = 0
-            End If
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
+        If prefsload Then Exit Sub
+        If rbXBMCv_pre.Checked Then
+            Preferences.XBMC_version = 0
         End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
-        If prefsload = False Then
-            If rbXBMCv_post.Checked Then
-                Preferences.XBMC_version = 2
-            End If
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
+        If prefsload Then Exit Sub
+        If rbXBMCv_post.Checked Then
+            Preferences.XBMC_version = 2
         End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
-        If prefsload = False Then
-            If rbXBMCv_both.Checked Then
-                Preferences.XBMC_version = 1
-            End If
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
+        If prefsload Then Exit Sub
+        If rbXBMCv_both.Checked Then
+            Preferences.XBMC_version = 1
         End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles btnMkvMergeGuiPath.Click
@@ -13490,10 +13483,8 @@ End Sub
 
         If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Preferences.MkvMergeGuiPath = ofd.FileName
 
-        If prefsload = False Then
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
         
     End Sub
 
@@ -13516,68 +13507,59 @@ End Sub
         If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then 
             Preferences.altnfoeditor = ofd.FileName
             tbaltnfoeditor.Text = Preferences.altnfoeditor 
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
-        If prefsload = False Then
-            Preferences.intruntime = CheckBox38.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.intruntime = CheckBox38.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_IgnoreThe_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreThe.CheckedChanged
-        If prefsload = False Then
-            Preferences.ignorearticle = cb_IgnoreThe.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.ignorearticle = cb_IgnoreThe.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_IgnoreA_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreA.CheckedChanged
-        If prefsload = False Then
-            Preferences.ignoreAarticle = cb_IgnoreA.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.ignoreAarticle = cb_IgnoreA.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreAn.CheckedChanged
-        If prefsload = False Then
-            Preferences.ignoreAn = cb_IgnoreAn.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.ignoreAn = cb_IgnoreAn.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
-        If prefsload = False Then
-            Preferences.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
-        If prefsload = False Then
-            Preferences.overwritethumbs = Not cbOverwriteArtwork.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.overwritethumbs = Not cbOverwriteArtwork.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.externalbrowser = cbExternalbrowser.Checked
         btnFindBrowser.Enabled      = cbExternalbrowser.Checked
-        If prefsload = False Then
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) Handles btnFindBrowser.Click
@@ -13590,103 +13572,92 @@ End Sub
             If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 Preferences.selectedBrowser = filebrowser.FileName
             End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            If prefsload Then Exit Sub
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
-        If prefsload = False Then
-            Preferences.startupCache = Not chkbx_disablecache.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.startupCache = Not chkbx_disablecache.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
         If MainFormLoadedStatus Then
             Preferences.UseMultipleThreads = cbUseMultipleThreads.Checked
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            If prefsload Then Exit Sub
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) Handles cbCheckForNewVersion.CheckedChanged
         If MainFormLoadedStatus Then
             Preferences.CheckForNewVersion = cbCheckForNewVersion.Checked
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            If prefsload Then Exit Sub
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
-        If prefsload = False Then
-            Preferences.LocalActorImage = cbDisplayLocalActor.Checked = True
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.LocalActorImage = cbDisplayLocalActor.Checked = True
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
         If MainFormLoadedStatus Then
             Preferences.ShowLogOnError = cbShowLogOnError.Checked
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            If prefsload Then Exit Sub
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
     Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
-        If prefsload = False Then
-            Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
-        If prefsload = False Then
-            Preferences.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDisplayRatingOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayRatingOverlay.CheckedChanged
-        If prefsload = False Then
-            Preferences.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
-        If prefsload = False Then
-            Preferences.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMultiMonitorEnable.CheckedChanged
-        If prefsload = False Then
-            Preferences.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
+        If prefsload Then Exit Sub
+        Preferences.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
-        
+        If prefsload Then Exit Sub
         If Preferences.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
@@ -13947,23 +13918,22 @@ End Sub
                     End If
                 Next
                 If allgood Then
-                Dim newcom As New str_ListOfCommands(SetDefaults)
-                newcom.command = TextBox43.Text
-                newcom.title = TextBox41.Text
-                Preferences.commandlist.Add(newcom)
-                ListBox16.Items.Add(newcom.title)
-                ListBox17.Items.Add(newcom.command)
-                Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
-                For i = x-1 To MCToolsCommands Step -1
-                    ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
-                Next
-                For Each com In Preferences.commandlist
-                    ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-                Next
-                If prefsload = False Then
+                    Dim newcom As New str_ListOfCommands(SetDefaults)
+                    newcom.command = TextBox43.Text
+                    newcom.title = TextBox41.Text
+                    Preferences.commandlist.Add(newcom)
+                    ListBox16.Items.Add(newcom.title)
+                    ListBox17.Items.Add(newcom.command)
+                    Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
+                    For i = x-1 To MCToolsCommands Step -1
+                        ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+                    Next
+                    For Each com In Preferences.commandlist
+                        ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+                    Next
+                    If prefsload Then Exit Sub
                     generalprefschanged = True
                     btnGeneralPrefsSaveChanges.Enabled = True
-                End If
                 Else
                     MsgBox("Title already exists in list")
                 End If
@@ -14014,10 +13984,9 @@ End Sub
             Else
                 MsgBox("Nothing selected to remove")
             End If
-            If prefsload = False Then
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
+            If prefsload Then Exit Sub
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15185,18 +15154,20 @@ End Sub
         End Try
     End Sub
 
-    Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
-        Try
-            If cbXbmcTmdbActorDL.CheckState = CheckState.Checked Then
-                Preferences.XbmcTmdbActorDL = True
-            Else
-                Preferences.XbmcTmdbActorDL = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch
+    
+    Private Sub cbMovNewFolderInRootFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovNewFolderInRootFolder.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked
+            
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
 
-        End Try
+    Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 'End of "Choose Default Scraper"
 
@@ -15248,79 +15219,47 @@ End Sub
 
 'Other Options
     Private Sub cbGetMovieSetFromTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbGetMovieSetFromTMDb.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles chkbOriginal_Title.CheckedChanged
-        If MainFormLoadedStatus Then
-            Try
-                Preferences.Original_Title = chkbOriginal_Title.Checked
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If prefsload Then Exit Sub
+        Preferences.Original_Title = chkbOriginal_Title.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
 'Scraping Options
     Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMoviePosterScrape.CheckedChanged
-        Try
-            If cbMoviePosterScrape.CheckState = CheckState.Checked Then
-                Preferences.scrapemovieposters = True
-            Else
-                Preferences.scrapemovieposters = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Preferences.scrapemovieposters = cbMoviePosterScrape.checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMovFanartScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartScrape.CheckedChanged
-        Try
-            If cbMovFanartScrape.CheckState = CheckState.Checked Then
-                Preferences.savefanart = True
-            Else
-                Preferences.savefanart = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Preferences.savefanart = cbMovFanartScrape.Checked
+
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMovFanartTvScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartTvScrape.CheckedChanged
-        Try
-            If cbMovFanartTvScrape.CheckState = CheckState.Checked Then
-                Preferences.MovFanartTvscrape = True
-            Else
-                Preferences.MovFanartTvscrape = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Preferences.MovFanartTvscrape = cbMovFanartTvScrape.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlXtraFanart.CheckedChanged
-        Try
-            If cbDlXtraFanart.CheckState = CheckState.Checked Then
-                Preferences.dlxtrafanart = True
-            Else
-                Preferences.dlxtrafanart = False
-            End If
-
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-
-        End Try
+        If prefsload Then Exit Sub
+        Preferences.dlxtrafanart = cbDlXtraFanart.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
 'Movie Scraper Poster Priority
