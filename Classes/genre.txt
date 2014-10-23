@@ -2,6 +2,7 @@ Action
 Adventure
 Animation
 Biography
+Children
 Comedy
 Crime
 Disaster
@@ -14,25 +15,37 @@ Fan Film
 Fantasy
 Film
 Film Noir
+Food
 Foreign
+Game Show
 History
 Holiday
+Home and Garden
 Horror
 Indie
+Mini-Series
 Music
 Musical
 Mystery
 Neo-noir
+News
+Reality
 Road Movie
 Romance
 Science
 Science Fiction
+Science-Fiction
 Sci-Fi
 Short
+Soap
+Special Interest
 Sport
 Sporting Event
 Sports
 Sports Film
 Suspense
-TV Movie
+Talk Show
 Thriller
+Travel
+TV Movie
+Western
