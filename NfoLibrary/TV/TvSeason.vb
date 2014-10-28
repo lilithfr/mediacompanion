@@ -60,6 +60,7 @@ Public Class TvSeason
     Public Property Poster As New ProtoXML.ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "seasonX" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")}
 
     Public Property Episodes As New List(Of TvEpisode)
+    Public Property Playcount As New ProtoXML.ProtoProperty(Me, "playcount")
 
     Private _Visible As Boolean
     Public Property Visible As Boolean

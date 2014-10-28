@@ -11417,10 +11417,10 @@ End Sub
         tv_Rescrape()
     End Sub
     Private Sub WatchedShowOrEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_WatchedShowOrEpisode.Click
-        Tv_MarkAsWatched()
+        Tv_MarkAs_Watched_UnWatched("1")
     End Sub
     Private Sub Tv_TreeViewContext_UnWatchedShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_UnWatchedShowOrEpisode.Click
-        Tv_MarkAsUnWatched()
+        Tv_MarkAs_Watched_UnWatched("0")
     End Sub
     Private Sub Tv_TreeViewContext_Play_Episode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
         Try
@@ -18503,15 +18503,27 @@ End Sub
             If multi = False Then
                 util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
                 WorkingEpisode.Save()
+                WorkingEpisode.UpdateTreenode()
             Else
                 Dim episodelist As New List(Of TvEpisode)
                 episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                Dim First As Boolean = True
                 Dim done As String = ""
                 For Each ep In episodelist
-                    util_EpisodeSetWatched(ep.PlayCount.Value, True)
+                    If First Then done = ep.PlayCount.Value
+                    Dim toggled As String = done
+                    util_EpisodeSetWatched(toggled, True)
+                    ep.PlayCount.Value = toggled
+                    ep.UpdateTreenode()
+                    First = False
                 Next
                 WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
+                'WorkingEpisode.Load()
+                'WorkingEpisode.UpdateTreenode()
             End If
+            Dim ThisSeason As TvSeason = tv_SeasonSelectedCurrently()
+            ThisSeason.UpdateTreenode()
+            tv_ShowSelectedCurrently.UpdateTreenode()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

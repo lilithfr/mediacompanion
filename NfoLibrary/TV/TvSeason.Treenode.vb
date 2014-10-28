@@ -29,9 +29,38 @@ Partial Public Class TvSeason
                     
                     SeasonNode.SelectedImageKey = "missing.png"
                 Else
-                    SeasonNode.SelectedImageKey = "blank"
+                    Me.Playcount.Value = "1"
+                    For Each ep In ShowObj.Episodes 
+                        If ep.Season.Value = Me.SeasonNumber AndAlso ep.PlayCount.Value = "0" Then
+                            Me.Playcount.Value = "0"
+                            Exit For
+                        End If
+                    Next
+                    If Me.Playcount.Value = "1" Then
+                        SeasonNode.ImageKey = "watched"
+                        SeasonNode.SelectedImageKey = "watched"
+                    Else
+                        SeasonNode.ImageKey = "blank"
+                        SeasonNode.SelectedImageKey = "blank"
+                    End If
+                    
                 End If
                 Me.ShowObj.ShowNode.Nodes.Add(Me.SeasonNode)
+            End If
+        Else
+            Me.Playcount.Value = "1"
+            For Each ep In ShowObj.Episodes 
+                If ep.Season.Value = Me.SeasonNumber AndAlso ep.PlayCount.Value = "0" Then
+                    Me.Playcount.Value = "0"
+                    Exit For
+                End If
+            Next
+            If Me.Playcount.Value = "1" Then
+                SeasonNode.ImageKey = "watched"
+                SeasonNode.SelectedImageKey = "watched"
+            Else
+                SeasonNode.ImageKey = "blank"
+                SeasonNode.SelectedImageKey = "blank"
             End If
         End If
     End Sub

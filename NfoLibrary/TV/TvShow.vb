@@ -38,6 +38,7 @@ Public Class TvShow
     Public Property Runtime As New ProtoProperty(Me, "runtime")
     Public Property Mpaa As New ProtoProperty(Me, "mpaa")
     Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")               'obsolete
+    Public Property Playcount As New ProtoProperty(Me, "playcount", "1", CacheMode:= CacheMode.Both)
     Public Property Genre As New ProtoProperty(Me, "genre")
     Public Property Credits As New ProtoProperty(Me, "credits")
     Public Property [Set] As New ProtoProperty(Me, "set")                           'XBMC uses same nfo structure for movie as for tvshow nfo file

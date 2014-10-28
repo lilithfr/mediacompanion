@@ -409,6 +409,7 @@ Partial Public Class Form1
             TvPanel7Update(Show.FolderPath)
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             Call tv_ActorsLoad(Show.ListActors)
+            Show.UpdateTreenode()
         End If
         Panel9.Visible = False
         Panel8.Visible = False
@@ -670,6 +671,7 @@ Partial Public Class Form1
         If Show.NfoFilePath <> Nothing Then util_ImageLoad(tv_PictureBoxLeft, Show.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
 
         Call tv_ActorsLoad(Show.ListActors)
+        Show.UpdateTreenode()
     End Sub
 
     Public Sub tv_EpisodeSelected(ByRef SelectedEpisode As Media_Companion.TvEpisode)
@@ -1176,6 +1178,10 @@ Partial Public Class Form1
 
             childchild = document.CreateElement("imdbid")
             childchild.InnerText = item.ImdbId.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("playcount")
+            childchild.InnerText = item.Playcount.Value
             child.AppendChild(childchild)
 
             root.AppendChild(child)
@@ -4437,7 +4443,7 @@ Partial Public Class Form1
     End Function
 
 #Region "Tv Watched/Unwatched Routines"
-    Private Sub Tv_MarkAsWatched()
+    Private Sub Tv_MarkAs_Watched_UnWatched(ByVal toggle As String)
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
@@ -4445,51 +4451,94 @@ Partial Public Class Form1
         If WorkingTvShow Is Nothing Then Exit Sub
 
         If Not IsNothing(WorkingEpisode) Then
-            WorkingEpisode.Load()
-            WorkingEpisode.PlayCount.Value = 1
-            WorkingEpisode.Save()
+            Dim multi As Boolean = TestForMultiepisode(WorkingEpisode.NfoFilePath)
+            If Not multi Then
+                WorkingEpisode.Load()
+                WorkingEpisode.PlayCount.Value = toggle
+                WorkingEpisode.Save()
+                WorkingEpisode.UpdateTreenode()
+            Else
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                For Each epis In episodelist
+                    epis.PlayCount.Value = toggle
+                Next
+                WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
+                WorkingEpisode.Load
+                WorkingEpisode.UpdateTreenode()
+            End If
         ElseIf Not IsNothing(WorkingTvSeason) Then
             For Each ep In WorkingTvSeason.Episodes
-                ep.Load()
-                ep.PlayCount.Value = 1
-                ep.Save()
+                Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
+                If Not multi Then
+                    ep.Load()
+                    ep.PlayCount.Value = toggle
+                    ep.Save()
+                    ep.UpdateTreenode()
+                Else
+                    Dim episodelist As New List(Of TvEpisode)
+                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
+                    For Each epis In episodelist
+                        epis.PlayCount.Value = toggle
+                    Next
+                    WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
+                    ep.Load
+                    ep.UpdateTreenode()
+                End If
             Next
+            WorkingTvSeason.UpdateTreenode()
         ElseIf Not IsNothing(WorkingTvShow) Then
             For Each ep In WorkingTvShow.Episodes
-                ep.Load()
-                ep.PlayCount.Value = 1
-                ep.Save()
+                Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
+                If Not multi Then
+                    ep.Load()
+                    ep.PlayCount.Value = toggle
+                    ep.Save()
+                    ep.UpdateTreenode()
+                Else
+                    Dim episodelist As New List(Of TvEpisode)
+                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
+                    For Each epis In episodelist
+                        epis.PlayCount.Value = toggle
+                    Next
+                    WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
+                    ep.Load
+                    ep.UpdateTreenode()
+                End If
             Next
+          For Each seas In WorkingTvShow.Seasons.keys  
+                WorkingTvShow.Seasons(seas).UpdateTreenode()
+          Next
         End If
-
+        WorkingTvShow.UpdateTreenode()
     End Sub
 
-    Private Sub Tv_MarkAsUnWatched()
-        If TvTreeview.SelectedNode Is Nothing Then Return
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        If WorkingTvShow Is Nothing Then Exit Sub
+    'Private Sub Tv_MarkAsUnWatched()
+    '    If TvTreeview.SelectedNode Is Nothing Then Return
+    '    Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+    '    Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
+    '    Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+    '    If WorkingTvShow Is Nothing Then Exit Sub
 
-        If Not IsNothing(WorkingEpisode) Then
-            WorkingEpisode.Load()
-            WorkingEpisode.PlayCount.Value = 0
-            WorkingEpisode.Save()
-        ElseIf Not IsNothing(WorkingTvSeason) Then
-            For Each ep In WorkingTvSeason.Episodes
-                ep.Load()
-                ep.PlayCount.Value = 0
-                ep.Save()
-            Next
-        ElseIf Not IsNothing(WorkingTvShow) Then
-            For Each ep In WorkingTvShow.Episodes
-                ep.Load()
-                ep.PlayCount.Value = 0
-                ep.Save()
-            Next
-        End If
+    '    If Not IsNothing(WorkingEpisode) Then
+    '        WorkingEpisode.Load()
+    '        WorkingEpisode.PlayCount.Value = 0
+    '        WorkingEpisode.Save()
+    '    ElseIf Not IsNothing(WorkingTvSeason) Then
+    '        For Each ep In WorkingTvSeason.Episodes
+    '            ep.Load()
+    '            ep.PlayCount.Value = 0
+    '            ep.Save()
+    '        Next
+    '    ElseIf Not IsNothing(WorkingTvShow) Then
+    '        For Each ep In WorkingTvShow.Episodes
+    '            ep.Load()
+    '            ep.PlayCount.Value = 0
+    '            ep.Save()
+    '        Next
+    '    End If
 
-    End Sub
+    'End Sub
 
     Public Shared Sub util_EpisodeSetWatched(ByRef playcount As String, Optional ByVal toggle As Boolean = False)
         Dim watched As Boolean = False
