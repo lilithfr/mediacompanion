@@ -446,6 +446,8 @@ Public Class TVDBScraper
                                     episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
                                 Case "Rating"
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "id"
+                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
                                 Case "filename"
                                     episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
                             End Select

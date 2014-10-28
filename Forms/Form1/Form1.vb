@@ -7933,6 +7933,10 @@ Public Class Form1
                                     episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
                                 Case "Rating"
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "id"
+                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
+                                Case "seriesid"
+                                    episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
                                 Case "filename"
                                     episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
                             End Select
@@ -10708,6 +10712,10 @@ End Sub
                                                             listofnewepisodes(h).Rating.Value = thisresult.InnerText
                                                         End If
                                                         Cache.TvCache.Shows(f).Episodes(g).Rating.Value = thisresult.InnerText
+                                                    Case "uniqueid"
+                                                        listofnewepisodes(h).UniqueId.Value = thisresult.InnerText
+                                                    Case "showid"
+                                                        listofnewepisodes(h).ShowId.Value = thisresult.InnerText 
                                                     Case "thumb"
                                                         If tvBatchList.doEpisodeArt = True Then
                                                             progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epScreenshot).Replace("!!! ","")

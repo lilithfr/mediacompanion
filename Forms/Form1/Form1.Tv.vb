@@ -1949,6 +1949,10 @@ Partial Public Class Form1
                                             singleepisode.Credits.Value = newstring
                                         Case "rating"
                                             singleepisode.Rating.Value = thisresult.InnerText
+                                        Case "uniqueid"
+                                            singleepisode.UniqueId.Value = thisresult.InnerText
+                                        Case "showid"
+                                            singleepisode.ShowId.Value = thisresult.InnerText
                                         Case "thumb"
                                             singleepisode.Thumbnail.FileName = thisresult.InnerText
                                         Case "actor"
@@ -4562,7 +4566,7 @@ Partial Public Class Form1
         Dim flags As New Dictionary(Of String, String)
         Try
             If thisep.Details.StreamDetails.Audio.Count > 0 Then
-                flags.Add("channels", If(thisep.Details.StreamDetails.Audio(0).Channels.Value > -1, thisep.Details.StreamDetails.Audio(0).Channels.Value, ""))
+                flags.Add("channels", If(thisep.Details.StreamDetails.Audio(0).Channels.Value <> "" AndAlso thisep.Details.StreamDetails.Audio(0).Channels.Value > -1, thisep.Details.StreamDetails.Audio(0).Channels.Value, ""))
                 flags.Add("audio", thisep.Details.StreamDetails.Audio(0).Codec.Value)
             Else
                 flags.Add("channels", "")
