@@ -89,7 +89,7 @@ Public Class TvEpisode
     Public Property TagLine As New ProtoProperty(Me, "tagline")
     Public Property Runtime As New ProtoProperty(Me, "runtime")
     Public Property MpaaCert As New ProtoProperty(Me, "mpaa")
-    Public Property PlayCount As New ProtoProperty(Me, "playcount")
+    Public Property PlayCount As New ProtoProperty(Me, "playcount", CacheMode:=CacheMode.Both)
     Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")
 
     Public Property Credits As New ProtoProperty(Me, "credits")
@@ -105,6 +105,7 @@ Public Class TvEpisode
                                                                                           'time cache is loaded.
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
+    Public Property UniqueId As New ProtoProperty(Me, "uniqueid", CacheMode:=CacheMode.Both)
     Public Property ShowId As New ProtoProperty(Me, "ShowId", CacheMode:=CacheMode.Both)
 
     'TODO: Should be a list, used for multiple episodes per file
@@ -136,6 +137,7 @@ Public Class TvEpisode
         Me.TvdbId.Value = TvdbEpisode.Id.Value
         Me.ImdbId.Value = TvdbEpisode.ImdbId.Value
         Me.Title.Value = TvdbEpisode.EpisodeName.Value
+        Me.UniqueId.Value = TvdbEpisode.Id.Value
         Me.Rating.Value = TvdbEpisode.Rating.Value
         Me.Plot.Value = TvdbEpisode.Overview.Value
         Me.Director.Value = TvdbEpisode.Director.Value

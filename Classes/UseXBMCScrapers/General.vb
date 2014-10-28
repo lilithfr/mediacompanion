@@ -1108,6 +1108,8 @@ Module General
             TempXMLEpisode.Season.Value = String.Empty
             TempXMLEpisode.Thumbnail.FileName = String.Empty
             TempXMLEpisode.Title.Value = String.Empty
+            TempXMLEpisode.ShowId.Value = String.Empty 
+            TempXMLEpisode.UniqueId.Value = String.Empty 
             TempXMLEpisode.ListActors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
@@ -1139,6 +1141,8 @@ Module General
                         TempXMLEpisode.Season.Value = NodeChild.InnerText
                     Case "episode"
                         TempXMLEpisode.Episode.Value = NodeChild.InnerText
+                    Case "uniqueid"
+                        TempXMLEpisode.UniqueId.Value = NodeChild.InnerText 
                     Case "actor"
                         Dim newActor As New Media_Companion.Actor
                         For Each Nodechild1 In NodeChild.ChildNodes

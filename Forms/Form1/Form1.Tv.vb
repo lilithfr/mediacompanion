@@ -1185,15 +1185,9 @@ Partial Public Class Form1
             child = document.CreateElement("episodedetails")
             child.SetAttribute("NfoPath", item.NfoFilePath)
 
-            If item.IsMissing = True Then
-                childchild = document.CreateElement("missing")
-                childchild.InnerText = "true"
-                child.AppendChild(childchild)
-            Else
-                childchild = document.CreateElement("missing")
-                childchild.InnerText = "false"
-                child.AppendChild(childchild)
-            End If
+            childchild = document.CreateElement("missing")
+            childchild.InnerText = item.IsMissing
+            child.AppendChild(childchild)
 
             childchild = document.CreateElement("title")
             childchild.InnerText = item.Title.Value
@@ -1215,6 +1209,18 @@ Partial Public Class Form1
             childchild.InnerText = item.ShowId.Value
             child.AppendChild(childchild)
 
+            childchild = document.CreateElement("uniqueid")
+            childchild.InnerText = item.UniqueId.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("epextn")
+            childchild.InnerText = item.EpExtn.Value
+            child.AppendChild(childchild)
+
+            childchild = document.CreateElement("playcount")
+            childchild.InnerText = item.PlayCount.Value
+            child.AppendChild(childchild)
+
             root.AppendChild(child)
 
         Next
@@ -1226,8 +1232,6 @@ Partial Public Class Form1
 
         document.WriteTo(output)
         output.Close()
-
-
     End Sub
 
 
@@ -4508,8 +4512,13 @@ Partial Public Class Form1
         Dim thisep As TvEpisode = ep_SelectedCurrently()
         Dim flags As New Dictionary(Of String, String)
         Try
-            flags.Add("channels", If(thisep.Details.StreamDetails.Audio.Count = 0, "", thisep.Details.StreamDetails.Audio(0).Channels.Value))
-            flags.Add("audio", If(thisep.Details.StreamDetails.Audio.Count = 0, "", thisep.Details.StreamDetails.Audio(0).Codec.Value))
+            If thisep.Details.StreamDetails.Audio.Count > 0 Then
+                flags.Add("channels", If(thisep.Details.StreamDetails.Audio(0).Channels.Value > -1, thisep.Details.StreamDetails.Audio(0).Channels.Value, ""))
+                flags.Add("audio", thisep.Details.StreamDetails.Audio(0).Codec.Value)
+            Else
+                flags.Add("channels", "")
+                flags.Add("audio", "")
+            End If
             flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
             flags.Add("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace)
             flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))
@@ -4522,8 +4531,13 @@ Partial Public Class Form1
 
         Dim flags As New Dictionary(Of String, String)
         Try
-            flags.Add("channels", If(thisep.Details.StreamDetails.Audio.Count = -1, "", thisep.Details.StreamDetails.Audio(0).Channels.Value))
-            flags.Add("audio", If(thisep.Details.StreamDetails.Audio.Count = -1, "", thisep.Details.StreamDetails.Audio(0).Codec.Value))
+            If thisep.Details.StreamDetails.Audio.Count > 0 Then
+                flags.Add("channels", If(thisep.Details.StreamDetails.Audio(0).Channels.Value > -1, thisep.Details.StreamDetails.Audio(0).Channels.Value, ""))
+                flags.Add("audio", thisep.Details.StreamDetails.Audio(0).Codec.Value)
+            Else
+                flags.Add("channels", "")
+                flags.Add("audio", "")
+            End If
             flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
             flags.Add("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace)
             flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))

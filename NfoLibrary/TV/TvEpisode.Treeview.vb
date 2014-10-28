@@ -72,9 +72,12 @@ Partial Public Class TvEpisode
             EpisodeNode.ForeColor = Drawing.Color.Red
         End If
 
-        If Me.IsAltered Then
-            EpisodeNode.ImageKey = "edit"
-            EpisodeNode.SelectedImageKey = "edit"
+        'If Me.IsAltered Then
+        '    EpisodeNode.ImageKey = "edit"
+        '    EpisodeNode.SelectedImageKey = "edit"
+        If Me.PlayCount.Value <> "0" Then
+            EpisodeNode.ImageKey = "watched"
+            EpisodeNode.SelectedImageKey = "watched"
         Else
             EpisodeNode.ImageKey = "blank"
             EpisodeNode.SelectedImageKey = "blank"
