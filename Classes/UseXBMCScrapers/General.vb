@@ -1027,7 +1027,7 @@ Module General
         Return True
     End Function
 
-    Public Function InsertFileEpisodeInformationTags(ByVal Entrada() As String, ByVal Filename As String) As String
+    Public Function InsertFileEpisodeInformationTags(ByVal Entrada() As String, ByVal Filename As String, ByVal TVDBId As String) As String
         Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
         Dim FileInfoString As String = ""
         Dim TempString As String = ""
@@ -1143,6 +1143,8 @@ Module General
                         TempXMLEpisode.Episode.Value = NodeChild.InnerText
                     Case "uniqueid"
                         TempXMLEpisode.UniqueId.Value = NodeChild.InnerText 
+                    Case "seriesid"
+                        TempXMLEpisode.ShowId.Value = NodeChild.InnerText
                     Case "actor"
                         Dim newActor As New Media_Companion.Actor
                         For Each Nodechild1 In NodeChild.ChildNodes
@@ -1188,6 +1190,7 @@ Module General
                 For Each NodeChild In m_node.ChildNodes
                     If (NodeChild.Name.ToLower = "setting") Then
                         If NodeChild.Attributes.Count > 0 Then
+                            If NodeChild.Attributes.ItemOf("type").Value = "sep" Then Continue For
                             Try
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "dvdorder"
@@ -1250,6 +1253,7 @@ Module General
                 For Each NodeChild In m_node.ChildNodes
                     If (NodeChild.Name.ToLower = "setting") Then
                         If NodeChild.Attributes.Count > 0 Then
+                            If NodeChild.Attributes.ItemOf("type").Value = "sep" Then Continue For
                             Try
                                 If KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
 
@@ -1289,6 +1293,7 @@ Module General
             TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
             TempXMLEpisode.Season.Value = EpisodeArray(n).Season.Value
             TempXMLEpisode.MediaExtension = EpisodeArray(n).MediaExtension
+            TempXMLEpisode.ShowId.Value = TVDBId 
             TempXMLEpisode.PlayCount.Value = "0"
             ParametersForScraper(1) = TVDBId
             ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
@@ -1317,7 +1322,7 @@ Module General
         Next
 
 
-        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath)
+        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath, TVDBId)
         episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
         If episodeInformation(0).Thumbnail.FileName <> Nothing Then
             Dim myWebClient As New System.Net.WebClient()

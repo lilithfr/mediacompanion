@@ -659,6 +659,7 @@
     <None Include="Assets\mcEventLog.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\Notes for MC.txt" />
     <Content Include="Classes\genre.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
