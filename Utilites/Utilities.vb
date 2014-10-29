@@ -283,9 +283,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return False
     End Function
 
-    Public Shared Function DownloadTextFiles(ByVal StartURL As String, Optional ByVal ForceDownload As Boolean = False) As String
+    Public Shared Function DownloadTextFiles(ByVal StartURL As String, Optional ByVal ForceDownload As Boolean = False, Optional path As String = "") As String
         Dim data As String = ""
-        Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(StartURL, "", ForceDownload,,, strValue:=data)
+        Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(StartURL, path, ForceDownload,,, strValue:=data)
         Return data
         'Return DownloadCache.DownloadFileToString(StartURL)
     End Function

@@ -135,6 +135,17 @@ Public Class DownloadCache
         Return returncode
     End Function
 
+    Public Shared Function DownloadFile(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal Force As Boolean = True) As Boolean
+        Dim CacheFileName As String = ""
+        Dim returnCode As Boolean = SaveImageToCache(URL, "", Force, CacheFileName)
+        CacheFileName = IO.Path.Combine(CacheFolder, CacheFileName)
+        If File.Exists( CacheFileName) Then
+            Utilities.SafeCopyFile(CacheFileName, Path)
+            Utilities.SafeDeleteFile(CacheFileName)
+        End If
+        Return returnCode 
+    End Function
+
     Public Shared Function SaveImageToCache(ByVal URL As String, ByVal Path As String, ByVal ForceDownload As Boolean, ByRef CacheFileName As String) As Boolean
         Dim returnCode As Boolean = True
         Dim CachePath As String = ""

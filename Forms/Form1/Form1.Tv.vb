@@ -2992,6 +2992,7 @@ Partial Public Class Form1
 
     Private Sub tv_EpisodesMissingFind(ByVal ShowList As List(Of TvShow))
         Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
+        
         Utilities.EnsureFolderExists(missingeppath)
         For Each item In ShowList
 
@@ -3011,9 +3012,11 @@ Partial Public Class Form1
                     If sortorder = "" Then
                         sortorder = "default"
                     End If
-                    Dim xmlfile As String
-
-                    xmlfile = Utilities.DownloadTextFiles(url, Preferences.DlMissingEpData)
+                    Dim xmlfile As String = ""
+                    Dim seriesxmlpath As String = SeriesPath & item.TvdbId.Value & ".xml"
+                    Dim aok As Boolean = DownloadCache.DownloadFile(url, seriesxmlpath, True)
+                    If aok Then xmlfile = IO.File.ReadAllText(seriesxmlpath)
+                    'xmlfile = Utilities.DownloadTextFiles(url, Preferences.DlMissingEpData, seriesxmlpath)
                     If xmlfile = "" Then
                         MsgBox("Error retrieving data from show" & vbCrLf & "--   " & item.Title.Value.ToString & "   --", )
                         Continue For
