@@ -71,17 +71,17 @@ Partial Public Class TvShow
         UpdateTreenode()
     End Sub
 
-    Public Overloads Sub Load(ByVal SearchForEpisodesAsWell As Boolean)
-        Me.Load()
-        If SearchForEpisodesAsWell Then
-            SearchForEpisodesInFolder()
-        End If
-    End Sub
+    'Public Overloads Sub Load(ByVal SearchForEpisodesAsWell As Boolean)
+    '    Me.Load()
+    '    If SearchForEpisodesAsWell Then
+    '        SearchForEpisodesInFolder()
+    '    End If
+    'End Sub
 
-    Public Overloads Sub Load(ByVal Path As String, ByVal SearchForEpisodesAsWell As Boolean)
-        Me.Load(Path)
-        If SearchForEpisodesAsWell Then
-            SearchForEpisodesInFolder()
-        End If
-    End Sub
+    'Public Overloads Sub Load(ByVal Path As String, ByVal SearchForEpisodesAsWell As Boolean)
+    '    Me.Load(Path)
+    '    If SearchForEpisodesAsWell Then
+    '        SearchForEpisodesInFolder()
+    '    End If
+    'End Sub
 End Class

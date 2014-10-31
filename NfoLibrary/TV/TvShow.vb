@@ -248,12 +248,8 @@ Public Class TvShow
 
 
     Public Sub SearchForEpisodesInFolder()
-
-
-
         Dim newlist As New List(Of String)
         newlist.Clear()
-
         newlist = Utilities.EnumerateFolders(Me.FolderPath, 6) 'TODO: Restore loging functions
 
         newlist.Insert(0, Me.FolderPath)

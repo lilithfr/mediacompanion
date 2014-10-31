@@ -4995,7 +4995,7 @@ Public Class Form1
         For Each sh As TvShow In Cache.TvCache.Shows
             Dim shload As New TvShow 
             shload.NfoFilePath = sh.NfoFilePath 
-            shload.Load(False)
+            shload.Load()       '(False)
             availableshows.Add(shload)
         Next
         messbox.Close()
@@ -10524,10 +10524,11 @@ End Sub
                     Dim editshow As New TvShow
                     editshow = nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath)
                     If tvBatchList.doShowActors Then
-                        Dim lstact As Integer = editshow.ListActors.Count
-                        For i = lstact-1 to 0 Step -1
-                            editshow.ListActors.RemoveAt(i)
-                        Next
+                        'Dim lstact As Integer = editshow.ListActors.Count
+                        'For i = lstact-1 to 0 Step -1
+                        '    editshow.ListActors.RemoveAt(i)
+                        'Next
+                        editshow.ListActors.Clear()
                     End If
                     'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                     Dim tvdbstuff As New TVDBScraper
@@ -10591,6 +10592,13 @@ End Sub
                                     End Select
                                 Next
                                 If tvBatchList.doShowActors = True Then
+                                    If editshow.TvShowActorSource.Value = Nothing Then 
+                                        If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
+                                            editshow.TvShowActorSource.Value = "tvdb"
+                                        Else
+                                            editshow.TvShowActorSource.Value = "imdb"
+                                        End If
+                                    End If
                                     If editshow.TvShowActorSource.Value = "tvdb" Then TvGetActorTvdb(editshow)
                                     If editshow.TvShowActorSource.Value = "imdb" Then TvGetActorImdb(editshow)
                                 End If
@@ -19873,6 +19881,7 @@ End Sub
     Private Sub btn_TvFoldersRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRemove.Click
         Try
             Dim Folder As String
+            Dim cachechanged As Boolean = False
             While ListBox6.SelectedItems.Count > 0
                 tvfolderschanged = True
                 Folder = ListBox6.SelectedItems(0)
@@ -19880,12 +19889,17 @@ End Sub
                 For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
                     If Item.FolderPath.Trim("\") = Folder.Trim("\") Then
                         TvTreeview.Nodes.Remove(Item.ShowNode)
+                        For Each ep As TvEpisode In Item.Episodes
+                            Cache.TvCache.Remove(ep)
+                        Next
                         Cache.TvCache.Remove(Item)
+                        cachechanged = True
                         Exit For
                     End If
                 Next
                 ListBox6.Items.Remove(ListBox6.SelectedItems(0))
             End While
+            If cachechanged Then Tv_CacheSave()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

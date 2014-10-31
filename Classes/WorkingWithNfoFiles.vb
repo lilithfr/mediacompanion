@@ -1087,7 +1087,7 @@ Public Class WorkingWithNfoFiles
                             tempstring = thisresult.InnerText
                             ' Ignore Article here??
                             newtvshow.Title.Value = tempstring
-                        Case "episodeguideurl"
+                        Case "episodeguide"
                             tempid = thisresult.InnerText
                         Case "id"
                             newtvshow.TvdbId.Value = thisresult.InnerText
@@ -1169,6 +1169,27 @@ Public Class WorkingWithNfoFiles
             ElseIf String.IsNullOrEmpty(newtvshow.Year.Value) Then
                 newtvshow.Year.Value = "0000"
             End If
+            If newtvshow.TvShowActorSource.Value = Nothing Then
+                If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
+                    newtvshow.TvShowActorSource.Value = "tvdb"
+                Else
+                    newtvshow.TvShowActorSource.Value = "imdb"
+                End If
+            End If
+            If newtvshow.EpisodeActorSource.Value = Nothing Then
+                If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
+                    newtvshow.EpisodeActorSource.Value = "tvdb"
+                Else
+                    newtvshow.EpisodeActorSource.Value = "imdb"
+                End If
+            End If
+            'If tempid <> "" Then
+            '    Dim i As Integer = tempid.LastIndexOf("/")
+            '    tempid = tempid.Substring((i+1), (tempid.length-i))
+            '    tempid = tempid.Replace(".zip", "")
+            '    newtvshow.Language.Value = tempid
+            'End If
+
             Return newtvshow
         Catch
         End Try

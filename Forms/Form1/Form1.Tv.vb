@@ -1076,7 +1076,7 @@ Partial Public Class Form1
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
 
-            newtvshownfo.Load(False)
+            newtvshownfo.Load()      '(False)
             fulltvshowlist.Add(newtvshownfo)
             Dim episodelist As New List(Of TvEpisode)
             episodelist = loadepisodes(newtvshownfo, episodelist)
@@ -1246,55 +1246,27 @@ Partial Public Class Form1
         Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
         Dim newlist As New List(Of String)
         newlist.Clear()
-
         newlist = Utilities.EnumerateFolders(newtvshownfo.FolderPath) 'TODO: Restore loging functions
-
         newlist.Add(newtvshownfo.FolderPath)
-
         For Each folder In newlist
             Dim dir_info As New System.IO.DirectoryInfo(folder)
-
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
             For Each fs_info As System.IO.FileInfo In fs_infos
                 'Application.DoEvents()
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
-                    Dim EpNfoPath As String = fs_info.FullName 
-                    'Dim NewEpisode As New TvEpisode
-                    'NewEpisode.NfoFilePath = fs_info.FullName
-                    Dim IsValid = ep_NfoValidate(EpNfoPath)
-                    If IsValid Then
-                        'Dim multiep As Boolean = TestForMultiepisode(NewEpisode.NfoFilePath)
-                        'If multiep = False Then
-                        '    NewEpisode.Load()
-                        '    'Fix for episodes missing showid
-                        '    If NewEpisode.ShowId.Value <> newtvshownfo.TvdbId.value AndAlso newtvshownfo.TvdbId.Value <> "" Then
-                        '        NewEpisode.ShowId.Value = newtvshownfo.TvdbId.Value
-                        '        NewEpisode.Save()   'If new ShowID stored, resave episode nfo.
-                        '    End If
-                        '    'remove missingepisode nfo if exists in missing folder.
-                        '    Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & NewEpisode.Season.Value & "." & NewEpisode.Episode.Value & ".nfo"
-                        '    If IO.File.Exists(missingNfoPath) Then
-                        '        Utilities.SafeDeleteFile(missingNfoPath)
-                        '    End If
-                        '    episodelist.Add(NewEpisode)
-                        'Else
-                            'Dim loader As New Media_Companion.Utilities
-                            Dim multiepisodelist As New List(Of TvEpisode)
-                            Dim need2resave As Boolean = False
-                            multiepisodelist = ep_NfoLoad(EpNfoPath)
-                            For Each Ep In multiepisodelist
-                                If Ep.ShowId.Value <> newtvshownfo.TvdbId.Value AndAlso newtvshownfo.TvdbId.Value <> "" Then
-                                    need2resave = True
-                                End If
-                                Ep.ShowObj = newtvshownfo
-                                Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
-                                If IO.File.Exists(missingNfoPath) Then
-                                    Utilities.SafeDeleteFile(missingNfoPath)
-                                End If
-                                episodelist.Add(Ep)
-                            Next
-                            If need2resave Then ep_NfoSave(multiepisodelist, EpNfoPath)    'If new ShowID stored, resave episode nfo.
-                        'End If
+                    Dim EpNfoPath As String = fs_info.FullName
+                    If ep_NfoValidate(EpNfoPath) Then
+                        Dim multiepisodelist As New List(Of TvEpisode)
+                        Dim need2resave As Boolean = False
+                        multiepisodelist = ep_NfoLoad(EpNfoPath)
+                        For Each Ep In multiepisodelist
+                            If Ep.ShowId.Value <> newtvshownfo.TvdbId.Value AndAlso newtvshownfo.TvdbId.Value <> "" Then need2resave = True
+                            Ep.ShowObj = newtvshownfo
+                            Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
+                            If IO.File.Exists(missingNfoPath) Then Utilities.SafeDeleteFile(missingNfoPath)
+                            episodelist.Add(Ep)
+                        Next
+                        If need2resave Then ep_NfoSave(multiepisodelist, EpNfoPath)    'If new ShowID stored, resave episode nfo.
                     End If
                 End If
             Next fs_info
@@ -1536,7 +1508,12 @@ Partial Public Class Form1
 
                 Cache.TvCache.Add(NewShow)
                 If Not NewShow.FailedLoad Then   'If show fails to scrape, do not add episodes to cache.
-                    NewShow.SearchForEpisodesInFolder()
+                    Dim episodelist As New List(Of TvEpisode)
+                    episodelist = loadepisodes(NewShow, episodelist)
+                    For Each ep In episodelist
+                        NewShow.AddEpisode(ep)
+                    Next
+                    'NewShow.SearchForEpisodesInFolder()
                 End If
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))
