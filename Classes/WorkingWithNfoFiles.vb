@@ -819,16 +819,6 @@ Public Class WorkingWithNfoFiles
 		    ' Selects all the title elements that have an attribute named lang
 		    nodeToFind = root.SelectSingleNode("epbookmark")
             If nodeToFind IsNot Nothing Then aok = False
-            'For Each thisresult As XmlNode In thistvshow("tvshow")
-            '    Try
-            '        Select Case thisresult.Name
-            '            Case "epbookmark"
-            '                aok = False
-            '        End Select
-            '    Catch
-            '        aok = False
-            '    End Try
-            'Next
             If Not aok Then 
                 Dim tempshow As New TvShow
                 tempshow = tvshow_NfoLoad(Path)
@@ -1183,12 +1173,13 @@ Public Class WorkingWithNfoFiles
                     newtvshow.EpisodeActorSource.Value = "imdb"
                 End If
             End If
-            'If tempid <> "" Then
-            '    Dim i As Integer = tempid.LastIndexOf("/")
-            '    tempid = tempid.Substring((i+1), (tempid.length-i))
-            '    tempid = tempid.Replace(".zip", "")
-            '    newtvshow.Language.Value = tempid
-            'End If
+            If tempid <> "" Then
+                Dim i As Integer = tempid.LastIndexOf("/")+1
+                tempid = tempid.Substring(i, (tempid.length-i))
+                tempid = tempid.Replace(".zip", "")
+                newtvshow.Language.Value = tempid
+            End If
+            If newtvshow.SortOrder.Value = Nothing Then newtvshow.SortOrder.Value = Preferences.sortorder 
 
             Return newtvshow
         Catch

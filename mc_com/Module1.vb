@@ -590,6 +590,7 @@ Module Module1
                 eps.title = getfilename(eps.episodepath)
                 eps.rating = "0"
                 eps.playcount = "0"
+                eps.uniqueid = ""
                 eps.genre = "Unknown Episode Season and/or Episode Number"
                 eps.filedetails = get_hdtags(eps.mediaextension)
                 episodearray.Add(eps)
@@ -713,19 +714,21 @@ Module Module1
                                             Case "director"
                                                 Dim newstring As String
                                                 newstring = thisresult.InnerText
-                                                newstring = newstring.TrimEnd("|")
-                                                newstring = newstring.TrimStart("|")
+                                                'newstring = newstring.TrimEnd("|")
+                                                'newstring = newstring.TrimStart("|")
                                                 newstring = newstring.Replace("|", " / ")
                                                 singleepisode.director = newstring
                                             Case "credits"
                                                 Dim newstring As String
                                                 newstring = thisresult.InnerText
-                                                newstring = newstring.TrimEnd("|")
-                                                newstring = newstring.TrimStart("|")
+                                                'newstring = newstring.TrimEnd("|")
+                                                'newstring = newstring.TrimStart("|")
                                                 newstring = newstring.Replace("|", " / ")
                                                 singleepisode.credits = newstring
                                             Case "rating"
                                                 singleepisode.rating = thisresult.InnerText
+                                            Case "uniqueid"
+                                                singleepisode.uniqueid = thisresult.InnerText 
                                             Case "thumb"
                                                 singleepisode.thumb = thisresult.InnerText
                                             Case "actor"
@@ -1207,6 +1210,10 @@ Module Module1
             xmlEpisodechild.InnerText = ep.rating
             xmlEpisode.AppendChild(xmlEpisodechild)
 
+            xmlEpisodechild = doc.CreateElement("uniqueid")
+            xmlEpisodechild.InnerText = ep.uniqueid
+            xmlEpisode.AppendChild(xmlEpisodechild)
+
             xmlEpisodechild = doc.CreateElement("runtime")
             xmlEpisodechild.InnerText = ep.runtime
             xmlEpisode.AppendChild(xmlEpisodechild)
@@ -1286,7 +1293,9 @@ Module Module1
                     newwp.missing = "False"
                     newwp.aired = ep.aired
                     newwp.showid = Shows.id
-                    newwp.extension = ep.extension 
+                    newwp.uniqueid = ep.uniqueid 
+                    newwp.extension = ep.extension
+                    newwp.playcount = ep.playcount 
                     Shows.allepisodes.Add(newwp)
                 Next
             End If
@@ -1451,6 +1460,8 @@ Module Module1
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
+                                    Case "playcount"
+                                        newtvshow.playcount = detail.InnerText
                                     Case "state"
                                         newtvshow.locked = detail.InnerText
                                     Case "title"
@@ -1471,6 +1482,7 @@ Module Module1
                                         newtvshow.fullpath = detail.InnerText
                                 End Select
                             Next
+                            If newtvshow.playcount = Nothing Then newtvshow.playcount = "0"
                             basictvlist.Add(newtvshow)
                         End If
                     End If
@@ -1493,10 +1505,14 @@ Module Module1
                                     newepisode.episodeno = episodenew.InnerText
                                 Case "showid"
                                     newepisode.showid = episodenew.InnerText
+                                Case "uniqueid"
+                                    newepisode.uniqueid = episodenew.InnerText
                                 Case "aired"
                                     newepisode.aired = episodenew.InnerText
                                 Case "missing"
-                                    newepisode.missing = episodenew.innertext
+                                    newepisode.missing = episodenew.InnerText
+                                Case "playcount"
+                                    newepisode.playcount = episodenew.InnerText
                                 Case "epextn"
                                     newepisode.extension = episodenew.InnerText
                             End Select
@@ -1524,6 +1540,8 @@ Module Module1
                             show.locked = thisresult.InnerText
                     End Select
                 Next
+                If show.playcount = Nothing Then show.playcount = "0"
+
             End If
             For Each ep In unsortedepisodelist
                 If ep.showid = show.id Then
@@ -1550,7 +1568,7 @@ Module Module1
         For Each item In basictvlist
             child = document.CreateElement("tvshow")
             child.SetAttribute("NfoPath", item.fullpath)
-
+            childchild = document.CreateElement("playcount")          : childchild.InnerText = item.playcount           : child.AppendChild(childchild)
             childchild = document.CreateElement("state")              : childchild.InnerText = item.locked              : child.AppendChild(childchild)
             childchild = document.CreateElement("title")              : childchild.InnerText = item.title               : child.AppendChild(childchild)
             childchild = document.CreateElement("id")                 : childchild.InnerText = item.id                  : child.AppendChild(childchild)
@@ -1561,19 +1579,21 @@ Module Module1
             root.AppendChild(child)
         Next
         For Each item In basictvlist 
-        For Each episode In item.allepisodes
-            child = document.CreateElement("episodedetails")
-            child.SetAttribute("NfoPath", episode.episodepath)
+            For Each episode In item.allepisodes
+                child = document.CreateElement("episodedetails")
+                child.SetAttribute("NfoPath", episode.episodepath)
 
-            childchild = document.CreateElement("missing") : childchild.InnerText = episode.missing.ToString.ToLower : child.AppendChild(childchild)
-            childchild = document.CreateElement("title")    : childchild.InnerText = episode.Title      : child.AppendChild(childchild)
-            childchild = document.CreateElement("season")   : childchild.InnerText = episode.seasonno   : child.AppendChild(childchild)
-            childchild = document.CreateElement("episode")  : childchild.InnerText = episode.episodeno  : child.AppendChild(childchild)
-            childchild = document.CreateElement("aired")    : childchild.InnerText = episode.Aired      : child.AppendChild(childchild)
-            childchild = document.CreateElement("showid")   : childchild.InnerText = episode.showid     : child.AppendChild(childchild)
-            childchild = document.CreateElement("epextn")   : childchild.InnerText = episode.extension  : child.AppendChild(childchild)
-            root.AppendChild(child)
-        Next
+                childchild = document.CreateElement("missing")      : childchild.InnerText = episode.missing.ToString.ToLower   : child.AppendChild(childchild)
+                childchild = document.CreateElement("title")        : childchild.InnerText = episode.Title                      : child.AppendChild(childchild)
+                childchild = document.CreateElement("season")       : childchild.InnerText = episode.seasonno                   : child.AppendChild(childchild)
+                childchild = document.CreateElement("episode")      : childchild.InnerText = episode.episodeno                  : child.AppendChild(childchild)
+                childchild = document.CreateElement("aired")        : childchild.InnerText = episode.Aired                      : child.AppendChild(childchild)
+                childchild = document.CreateElement("showid")       : childchild.InnerText = episode.showid                     : child.AppendChild(childchild)
+                childchild = document.CreateElement("uniqueid")     : childchild.InnerText = episode.uniqueid                   : child.AppendChild(childchild)
+                childchild = document.CreateElement("epextn")       : childchild.InnerText = episode.extension                  : child.AppendChild(childchild)
+                childchild = document.CreateElement("playcount")    : childchild.InnerText = episode.playcount                  : child.AppendChild(childchild)
+                root.AppendChild(child)
+            Next
         Next
         document.AppendChild(root)
         Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
@@ -3311,6 +3331,7 @@ Public Class basictvshownfo
     Public episodeactorsource As String
     Public locked As String
     Public imdbid As String
+    Public playcount As String
     Public allepisodes As New List(Of episodeinfo)
 End Class
 
@@ -3325,6 +3346,7 @@ Public Class episodeinfo
     Public rating As String
     Public seasonno As String
     Public episodeno As String
+    Public uniqueid As String
     Public plot As String
     Public runtime As String
     Public fanartpath As String
@@ -3843,42 +3865,52 @@ Public Class tvdbscraper
                                 Case "FirstAired"
                                     episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
                                 Case "GuestStars"
-                                    Dim tempstring As String = mirrorselection.InnerXml
-                                    Try
-                                        tempstring = tempstring.TrimStart("|")
-                                        tempstring = tempstring.TrimEnd("|")
-                                        Dim tvtempstring2 As String
-                                        Dim tvtempint As Integer
-                                        Dim a() As String
-                                        Dim j As Integer
-                                        tvtempstring2 = ""
-                                        a = tempstring.Split("|")
-                                        tvtempint = a.GetUpperBound(0)
-                                        tvtempstring2 = a(0)
-                                        If tvtempint >= 0 Then
-                                            For j = 0 To tvtempint
-                                                Try
-                                                    episodestring = episodestring & "<actor>" & "<name>" & a(j) & "</name></actor>"
-                                                Catch
-                                                End Try
-                                            Next
+                                    Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
+                                    For Each guest In gueststars
+                                        If Not String.IsNullOrEmpty(guest) Then
+                                            episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
                                         End If
-                                    Catch
-                                    End Try
+                                    Next
+                                    'Dim tempstring As String = mirrorselection.InnerXml
+                                    'Try
+                                    '    tempstring = tempstring.TrimStart("|")
+                                    '    tempstring = tempstring.TrimEnd("|")
+                                    '    Dim tvtempstring2 As String
+                                    '    Dim tvtempint As Integer
+                                    '    Dim a() As String
+                                    '    Dim j As Integer
+                                    '    tvtempstring2 = ""
+                                    '    a = tempstring.Split("|")
+                                    '    tvtempint = a.GetUpperBound(0)
+                                    '    tvtempstring2 = a(0)
+                                    '    If tvtempint >= 0 Then
+                                    '        For j = 0 To tvtempint
+                                    '            Try
+                                    '                episodestring = episodestring & "<actor>" & "<name>" & a(j) & "</name></actor>"
+                                    '            Catch
+                                    '            End Try
+                                    '        Next
+                                    '    End If
+                                    'Catch
+                                    'End Try
                                 Case "Director"
                                     Dim tempstring As String = mirrorselection.InnerXml
-                                    tempstring = tempstring.TrimStart("|")
-                                    tempstring = tempstring.TrimEnd("|")
+                                    'tempstring = tempstring.TrimStart("|")
+                                    tempstring = tempstring.Trim("|")
                                     episodestring = episodestring & "<director>" & tempstring & "</director>"
                                 Case "Writer"
                                     Dim tempstring As String = mirrorselection.InnerXml
-                                    tempstring = tempstring.TrimStart("|")
-                                    tempstring = tempstring.TrimEnd("|")
+                                    'tempstring = tempstring.TrimStart("|")
+                                    tempstring = tempstring.Trim("|")
                                     episodestring = episodestring & "<credits>" & tempstring & "</credits>"
                                 Case "Overview"
                                     episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
                                 Case "Rating"
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "id"
+                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
+                                Case "seriesid"
+                                    episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
                                 Case "filename"
                                     episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
                             End Select
