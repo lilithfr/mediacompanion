@@ -128,7 +128,6 @@ Public Class Form1
     Shared Public langarray(300, 3) As String
     Public screen As Screen
     Public Shared genrelist As New List(Of String)
-    Public Shared SeriesPath As String = ""
 
     'Replace the list of structure by a list of objects
 
@@ -383,8 +382,7 @@ Public Class Form1
             generalprefschanged = False
 
             GenreMasterLoad()
-            SeriesPath = IO.Path.Combine(applicationPath, "SeriesXml") & "\"
-            Utilities.EnsureFolderExists(SeriesPath)
+
             tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
             Dim hg As New IO.DirectoryInfo(tempstring)
             If hg.Exists Then
