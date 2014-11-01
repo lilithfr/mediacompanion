@@ -2041,7 +2041,7 @@ Public Class Preferences
 
             Try
                 Dim tmp As Double = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).AspectRatio)
-                If tmp <> 0 Then
+                If tmp <> 0 AndAlso tmp < 4 Then
                     workingfiledetails.filedetails_video.Aspect.Value = tmp.ToString("F2")
                 Else
                     Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
