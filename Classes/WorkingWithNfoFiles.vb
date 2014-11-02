@@ -3100,15 +3100,21 @@ Public Class WorkingWithNfoFiles
                         minutes = minutes.Replace("min", "")
                         minutes = minutes.Replace(" ", "")
                         Try
-                            Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
-                                minutes = minutes.Substring(1, minutes.Length - 1)
-                            Loop
-                            If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
-                                minutes = "0" & minutes
-                            ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
-                                minutes = "00" & minutes
+                            If Convert.ToInt32(minutes) > 0 Then
+                                Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+                                    minutes = minutes.Substring(1, minutes.Length - 1)
+                                Loop
+                                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                                    minutes = "0" & minutes
+                                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                                    minutes = "00" & minutes
+                                End If
                             End If
                             If Preferences.intruntime = False And IsNumeric(minutes) Then
+                                If minutes = "0" AndAlso Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.DurationInSeconds.Value) Then
+                                    Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
+                                    If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
+                                End If
                                 minutes = minutes & " min"
                             End If
                         Catch ex As Exception

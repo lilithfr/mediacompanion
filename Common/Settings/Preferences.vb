@@ -2084,7 +2084,12 @@ Public Class Preferences
                     workingfiledetails.filedetails_video.FormatInfo.Value = workingfiledetails.filedetails_video.Codec.Value
                     workingfiledetails.filedetails_video.Codec.Value = tempmediainfo.ToLower
                 Else 
-                    workingfiledetails.filedetails_video.FormatInfo.Value = tempmediainfo 
+                    If tempmediainfo.ToLower.Contains("mp4v") OrElse tempmediainfo.ToLower.Contains("20") Then
+                        workingfiledetails.filedetails_video.FormatInfo.Value = "mp4v" 
+                    Else
+                        workingfiledetails.filedetails_video.FormatInfo.Value = tempmediainfo 
+                    End If
+                    
                 End If
             
             'Dim fs(100) As String
