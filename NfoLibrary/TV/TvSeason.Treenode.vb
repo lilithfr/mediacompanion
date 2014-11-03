@@ -31,7 +31,7 @@ Partial Public Class TvSeason
                 Else
                     Me.Playcount.Value = "1"
                     For Each ep In ShowObj.Episodes 
-                        If ep.Season.Value = Me.SeasonNumber AndAlso ep.PlayCount.Value = "0" Then
+                        If ep.Season.Value = Me.SeasonNumber.ToString AndAlso ep.PlayCount.Value = "0" Then
                             Me.Playcount.Value = "0"
                             Exit For
                         End If
@@ -50,7 +50,7 @@ Partial Public Class TvSeason
         Else
             Me.Playcount.Value = "1"
             For Each ep In ShowObj.Episodes 
-                If ep.Season.Value = Me.SeasonNumber AndAlso ep.PlayCount.Value = "0" Then
+                If ep.Season.Value = Me.SeasonNumber.ToString AndAlso ep.PlayCount.Value = "0" Then
                     Me.Playcount.Value = "0"
                     Exit For
                 End If

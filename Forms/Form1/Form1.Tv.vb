@@ -4450,6 +4450,7 @@ Partial Public Class Form1
             End If
         ElseIf Not IsNothing(WorkingTvSeason) Then
             For Each ep In WorkingTvSeason.Episodes
+                If ep.IsMissing Then Continue For
                 Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
                 If Not multi Then
                     ep.Load()
@@ -4470,6 +4471,7 @@ Partial Public Class Form1
             WorkingTvSeason.UpdateTreenode()
         ElseIf Not IsNothing(WorkingTvShow) Then
             For Each ep In WorkingTvShow.Episodes
+                If ep.IsMissing Then Continue For
                 Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
                 If Not multi Then
                     ep.Load()
