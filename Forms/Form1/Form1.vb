@@ -1156,8 +1156,8 @@ Public Class Form1
         For Each movie As ComboList In oMovies.MovieCache
             _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
         Next
-
-        oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
+        RunBackgroundMovieScrape("BatchRescrape")
+        'oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
 
     End Sub
 

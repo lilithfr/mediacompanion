@@ -526,9 +526,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
-            Dim extn As String = IO.Path.GetExtension(tempfilename)
-            For f = 0 To VideoExtensions.Length - 1
-                Dim isfilename As String = tempfilename.Replace(extn, VideoExtensions(f))
+            Dim tempname As String = tempfilename.Replace(IO.Path.GetExtension(tempfilename), "")
+            'Dim extn As String = IO.Path.GetExtension(tempfilename)
+            For Each extn In VideoExtensions 
+            'For f = 0 To VideoExtensions.Length - 1
+                Dim isfilename As String = tempname & extn
+               ' Dim isfilename As String = tempfilename.Replace(extn, VideoExtensions(f))
                 If IO.File.Exists(isfilename) Then
                     actualpathandfilename = isfilename
                     Exit For
@@ -537,16 +540,17 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
-            If tempfilename.IndexOf("movie.nfo") = -1 Then
+            If tempfilename.IndexOf("movie.nfo") > -1 Then '= -1 Then
                 Dim possiblemovies(1000) As String
                 Dim possiblemoviescount As Integer = 0
-                For f = 0 To 23
-                    Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
-                    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
+                Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
+                Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                For Each videoextn In VideoExtensions
+                'For f = 0 To 23
+                    Dim pattern As String = "*" & videoextn
 
-                    Dim pattern As String = "*" & VideoExtensions(f)
-
-                    If strict and Not path.Contains("movie.nfo") Then pattern = IO.Path.GetFileNameWithoutExtension(path) & "*" & VideoExtensions(f)
+                    If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
 
                     Try
                         Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)

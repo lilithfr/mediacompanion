@@ -486,9 +486,11 @@ Public Class Movie
         Get
             If Rescrape Then Return ActualNfoPathAndFilename
 
-            If Preferences.basicsavemode  Then Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "movie.nfo")
-
-            Return nfopathandfilename
+            If Preferences.basicsavemode Then
+                Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "movie.nfo")
+            Else
+                Return nfopathandfilename
+            End If
         End Get 
     End Property
 
