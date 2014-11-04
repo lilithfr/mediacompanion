@@ -38,6 +38,9 @@ Public Class Utilities
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
 
+    'common separators in filenames ie. dash, underscore, fullstop, and space
+    Public Shared ReadOnly separators() As String = {"", "-", "_", ".", " "}
+
     'keywords commonly used to indicate stacked files
     Public Shared ReadOnly cleanMultipart() As String = {"part", "pt", "cd", "dvd", "disk", "disc"}
 
@@ -146,71 +149,69 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         'Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
-    Public Shared Function FileCompare(ByVal file1 As String, ByVal file2 As String) As Boolean
-        Dim file1byte As Integer
-        Dim file2byte As Integer
-        Dim fs1 As FileStream
-        Dim fs2 As FileStream
+    'Public Shared Function FileCompare(ByVal file1 As String, ByVal file2 As String) As Boolean
+    '    Dim file1byte As Integer
+    '    Dim file2byte As Integer
+    '    Dim fs1 As FileStream
+    '    Dim fs2 As FileStream
 
-        ' Determine if the same file was referenced two times.
-        If (file1 = file2) Then
-            ' Return 0 to indicate that the files are the same.
-            Return True
-        End If
+    '    ' Determine if the same file was referenced two times.
+    '    If (file1 = file2) Then
+    '        ' Return 0 to indicate that the files are the same.
+    '        Return True
+    '    End If
 
-        ' Open the two files.
-        fs1 = New FileStream(file1, FileMode.Open)
-        fs2 = New FileStream(file2, FileMode.Open)
+    '    ' Open the two files.
+    '    fs1 = New FileStream(file1, FileMode.Open)
+    '    fs2 = New FileStream(file2, FileMode.Open)
 
-        ' Check the file sizes. If they are not the same, the files
-        ' are not equal.
-        If (fs1.Length <> fs2.Length) Then
-            ' Close the file
-            fs1.Close()
-            fs2.Close()
+    '    ' Check the file sizes. If they are not the same, the files
+    '    ' are not equal.
+    '    If (fs1.Length <> fs2.Length) Then
+    '        ' Close the file
+    '        fs1.Close()
+    '        fs2.Close()
 
-            ' Return a non-zero value to indicate that the files are different.
-            Return False
-        End If
+    '        ' Return a non-zero value to indicate that the files are different.
+    '        Return False
+    '    End If
 
-        ' Read and compare a byte from each file until either a
-        ' non-matching set of bytes is found or until the end of
-        ' file1 is reached.
-        Do
-            ' Read one byte from each file.
-            file1byte = fs1.ReadByte()
-            file2byte = fs2.ReadByte()
-        Loop While ((file1byte = file2byte) And (file1byte <> -1))
+    '    ' Read and compare a byte from each file until either a
+    '    ' non-matching set of bytes is found or until the end of
+    '    ' file1 is reached.
+    '    Do
+    '        ' Read one byte from each file.
+    '        file1byte = fs1.ReadByte()
+    '        file2byte = fs2.ReadByte()
+    '    Loop While ((file1byte = file2byte) And (file1byte <> -1))
 
-        ' Close the files.
-        fs1.Close()
-        fs2.Close()
+    '    ' Close the files.
+    '    fs1.Close()
+    '    fs2.Close()
 
-        ' Return the success of the comparison. "file1byte" is
-        ' equal to "file2byte" at this point only if the files are 
-        ' the same.
-        Return ((file1byte - file2byte) = 0)
-    End Function
+    '    ' Return the success of the comparison. "file1byte" is
+    '    ' equal to "file2byte" at this point only if the files are 
+    '    ' the same.
+    '    Return ((file1byte - file2byte) = 0)
+    'End Function
 
-    Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
-        'returns free space in MB, formatted to two decimal places
-        'e.g., msgbox("Free Space on C: "& GetFreeSpace("C:\") & "MB")
+    'Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
+    '    'returns free space in MB, formatted to two decimal places
+    '    'e.g., msgbox("Free Space on C: "& GetFreeSpace("C:\") & "MB")
 
-        Dim lBytesTotal, lFreeBytes, lFreeBytesAvailable As Long
+    '    Dim lBytesTotal, lFreeBytes, lFreeBytesAvailable As Long
 
-        Dim iAns As Long
+    '    Dim iAns As Long
 
-        iAns = GetDiskFreeSpaceEx(Drive, lFreeBytesAvailable, _
-             lBytesTotal, lFreeBytes)
-        If iAns > 0 Then
+    '    iAns = GetDiskFreeSpaceEx(Drive, lFreeBytesAvailable, _
+    '         lBytesTotal, lFreeBytes)
+    '    If iAns > 0 Then
 
-            Return lFreeBytes
-        Else
-            Throw New Exception("Invalid or unreadable drive")
-        End If
-
-
-    End Function
+    '        Return lFreeBytes
+    '    Else
+    '        Throw New Exception("Invalid or unreadable drive")
+    '    End If
+    'End Function
 
     Public Shared Function UrlIsValid(ByVal url As String) As Boolean
         
@@ -420,14 +421,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return stackName
     End Function
 
-    'Public Shared Function GetTrailerName(ByVal path As String)
-    '    Dim ext As String = IO.Path.GetExtension(path)
-    '    Dim length As Integer = Strings.Len(path)
-    '    Dim lengthext As Integer = Strings.Len(ext)
-    '    Dim TrailerPath As String = Strings.Left(path, length - lengthext) & "-trailer.flv"
-    '    Return TrailerPath
-    'End Function
-
     Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String, Optional ByVal basicsave As Boolean = False, Optional ByVal fanartjpg As Boolean = False, Optional ByVal posterjpg As Boolean = False) As Boolean
         Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"
         Dim returnCode As Boolean = False
@@ -527,34 +520,26 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         If actualpathandfilename = "" Then
             Dim tempname As String = tempfilename.Replace(IO.Path.GetExtension(tempfilename), "")
-            'Dim extn As String = IO.Path.GetExtension(tempfilename)
-            For Each extn In VideoExtensions 
-            'For f = 0 To VideoExtensions.Length - 1
-                Dim isfilename As String = tempname & extn
-               ' Dim isfilename As String = tempfilename.Replace(extn, VideoExtensions(f))
-                If IO.File.Exists(isfilename) Then
-                    actualpathandfilename = isfilename
+            For Each extn In VideoExtensions
+                If IO.File.Exists(tempname & extn) Then
+                    actualpathandfilename = tempname & extn
                     Exit For
                 End If
             Next
         End If
 
         If actualpathandfilename = "" Then
-            If tempfilename.IndexOf("movie.nfo") > -1 Then '= -1 Then
+            If tempfilename.IndexOf("movie.nfo") > -1 Then
                 Dim possiblemovies(1000) As String
                 Dim possiblemoviescount As Integer = 0
                 Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
                 Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
                 For Each videoextn In VideoExtensions
-                'For f = 0 To 23
                     Dim pattern As String = "*" & videoextn
-
                     If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
-
                     Try
                         Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
-
                         For Each fs_info As IO.FileInfo In fs_infos
                             'Application.DoEvents()
                             If IO.File.Exists(fs_info.FullName) Then
@@ -567,7 +552,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                         Next
                     Catch
                     End Try
-
                 Next
                 If possiblemoviescount = 1 Then
                     actualpathandfilename = possiblemovies(possiblemoviescount)
@@ -605,10 +589,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             actualpathandfilename = "none"
         End If
 
-
         Return actualpathandfilename
 
-        Return "Error"
+        'Return "Error"
     End Function
 
     Public Shared Function GetTvEpExtension(ByVal epnfopath As String) As String
@@ -895,8 +878,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                         Dim s As String = title.Substring(p, relformat(i).Length)
                         cleanfilename = title.Replace(s, "")
                     End If
-                    'Dim s As String = title.Substring(p, relformat(i).Length)
-                    'cleanfilename = title.Replace(s, "")
                 End If
             Next
         Catch ex As Exception
@@ -907,7 +888,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetMediaList(ByVal pathandfilename As String)
-
         Try
             Dim tempstring As String = pathandfilename
             Dim playlist As New List(Of String)
@@ -915,371 +895,27 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 playlist.Add(tempstring)
             End If
             tempstring = tempstring.ToLower
-            If tempstring.IndexOf("cd1") <> -1 Then
-                tempstring = tempstring.Replace("cd1", "cd2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd2", "cd3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd3", "cd4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd4", "cd5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd_1") <> -1 Then
-                tempstring = tempstring.Replace("cd_1", "cd_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_2", "cd_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_3", "cd_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_4", "cd_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd 1") <> -1 Then
-                tempstring = tempstring.Replace("cd 1", "cd 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 2", "cd 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 3", "cd 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 4", "cd 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd.1") <> -1 Then
-                tempstring = tempstring.Replace("cd.1", "cd.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.2", "cd.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.3", "cd.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.4", "cd.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd1") <> -1 Then
-                tempstring = tempstring.Replace("dvd1", "dvd2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd2", "dvd3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd3", "dvd4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd4", "dvd5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd_1") <> -1 Then
-                tempstring = tempstring.Replace("dvd_1", "dvd_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_2", "dvd_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_3", "dvd_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_4", "dvd_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd 1") <> -1 Then
-                tempstring = tempstring.Replace("dvd 1", "dvd 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 2", "dvd 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 3", "dvd 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 4", "dvd 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd.1") <> -1 Then
-                tempstring = tempstring.Replace("dvd.1", "dvd.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.2", "dvd.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.3", "dvd.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.4", "dvd.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part1") <> -1 Then
-                tempstring = tempstring.Replace("part1", "part2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part2", "part3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part3", "part4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part4", "part5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part_1") <> -1 Then
-                tempstring = tempstring.Replace("part_1", "part_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_2", "part_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_3", "part_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_4", "part_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part 1") <> -1 Then
-                tempstring = tempstring.Replace("part 1", "part 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 2", "part 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 3", "part 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 4", "part 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part.1") <> -1 Then
-                tempstring = tempstring.Replace("part.1", "part.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.2", "part.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.3", "part.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.4", "part.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk1") <> -1 Then
-                tempstring = tempstring.Replace("disk1", "disk2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk2", "disk3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk3", "disk4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk4", "disk5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk_1") <> -1 Then
-                tempstring = tempstring.Replace("disk_1", "disk_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_2", "disk_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_3", "disk_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_4", "disk_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk 1") <> -1 Then
-                tempstring = tempstring.Replace("disk 1", "disk 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 2", "disk 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 3", "disk 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 4", "disk 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk.1") <> -1 Then
-                tempstring = tempstring.Replace("disk.1", "disk.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.2", "disk.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.3", "disk.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.4", "disk.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt1") <> -1 Then
-                tempstring = tempstring.Replace("pt1", "pt2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt2", "pt3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt3", "pt4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt4", "pt5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt_1") <> -1 Then
-                tempstring = tempstring.Replace("pt_1", "pt_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_2", "pt_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_3", "pt_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_4", "pt_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt 1") <> -1 Then
-                tempstring = tempstring.Replace("pt 1", "pt 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 2", "pt 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 3", "pt 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 4", "pt 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt.1") <> -1 Then
-                tempstring = tempstring.Replace("pt.1", "pt.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.2", "pt.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.3", "pt.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.4", "pt.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
+            Dim gotit As Boolean = False
+            Dim partindex As String = ""
+            Dim partindex2 As String = ""
+            For Each part In cleanMultipart
+                For Each sep In separators
+                    For i = 1 to 8
+                        partindex = part & sep & i.ToString
+                        If tempstring.IndexOf(partindex) = -1 Then Exit For
+                        partindex2 = part & sep & (i+1).ToString
+                        tempstring = tempstring.Replace(partindex, partindex2)
+                        If IO.File.Exists(tempstring) Then
+                            playlist.Add(tempstring)
+                            gotit = True
+                        End If
+                    Next
+                    If gotit Then Exit For
+                Next
+                If gotit Then Exit For
+            Next
             Return playlist
         Catch
-
-        Finally
-
         End Try
         Return "Error"
     End Function
@@ -1369,28 +1005,28 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "0"
     End Function
 
-    Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
-        Dim intCounter As Integer = 0
-        Dim lstStringFolders As New List(Of String)
-        For Each SourceFolder In SourcePaths
-            lstStringFolders.Add(SourceFolder)
-        Next
-        Do Until intCounter = lstStringFolders.Count
-            Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
-            For Each foundDirectory In workingFolder.GetDirectories
-                If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden And _
-                    Not (foundDirectory.Attributes And IO.FileAttributes.System) = IO.FileAttributes.System Then
-                    If ValidMovieDir(foundDirectory.FullName) Then
-                        lstStringFolders.Add(foundDirectory.FullName)
-                    End If
-                End If
-            Next
-            intCounter += 1
-        Loop
-        'sorts the folders so that related folders (parent/child) are together
-        lstStringFolders.Sort()
-        Return lstStringFolders
-    End Function
+    'Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
+    '    Dim intCounter As Integer = 0
+    '    Dim lstStringFolders As New List(Of String)
+    '    For Each SourceFolder In SourcePaths
+    '        lstStringFolders.Add(SourceFolder)
+    '    Next
+    '    Do Until intCounter = lstStringFolders.Count
+    '        Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
+    '        For Each foundDirectory In workingFolder.GetDirectories
+    '            If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden And _
+    '                Not (foundDirectory.Attributes And IO.FileAttributes.System) = IO.FileAttributes.System Then
+    '                If ValidMovieDir(foundDirectory.FullName) Then
+    '                    lstStringFolders.Add(foundDirectory.FullName)
+    '                End If
+    '            End If
+    '        Next
+    '        intCounter += 1
+    '    Loop
+    '    'sorts the folders so that related folders (parent/child) are together
+    '    lstStringFolders.Sort()
+    '    Return lstStringFolders
+    'End Function
 
     Public Shared Function GetLangCode(ByVal strLang As String) As String
         Try
@@ -2381,28 +2017,28 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "Error"
     End Function
 
-    Public Shared Function SaveText(ByVal text As String, ByVal path As String) As Boolean
+    'Public Shared Function SaveText(ByVal text As String, ByVal path As String) As Boolean
 
-        Try
-            Dim file As IO.StreamWriter = IO.File.CreateText(path)
-            Try
-                file.Write(text, False, Encoding.UTF8)
-                file.Close()
-                Return True
-            Catch ex As Exception
-                file.Close()
-                Try
-                    IO.File.Delete(path)
-                Catch
-                End Try
-                Return False
-            End Try
-        Catch ex As Exception
-        Finally
+    '    Try
+    '        Dim file As IO.StreamWriter = IO.File.CreateText(path)
+    '        Try
+    '            file.Write(text, False, Encoding.UTF8)
+    '            file.Close()
+    '            Return True
+    '        Catch ex As Exception
+    '            file.Close()
+    '            Try
+    '                IO.File.Delete(path)
+    '            Catch
+    '            End Try
+    '            Return False
+    '        End Try
+    '    Catch ex As Exception
+    '    Finally
 
-        End Try
-        Return False
-    End Function
+    '    End Try
+    '    Return False
+    'End Function
 
     Public Shared Function DeleteFile(ByVal path As String) As Boolean
 
@@ -2418,37 +2054,37 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-    Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
+    'Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
 
-        Dim listoflines As New List(Of String)
-        Try
-            If Not IO.File.Exists(path) Then
-                listoflines.Add("nofile")
-                Return listoflines
-            Else
-                Dim lines As IO.StreamReader = IO.File.OpenText(path)
-                Dim line As String
-                Do
-                    line = lines.ReadLine
-                    If Not line Is Nothing Then
-                        listoflines.Add(line)
-                    Else
-                        Exit Do
-                    End If
-                Loop Until line = Nothing
-                Return listoflines
-            End If
-        Catch
-            If listoflines.Count > 0 Then
-                Return listoflines
-            Else
-                listoflines.Add("Error")
-                Return listoflines
-            End If
-        Finally
+    '    Dim listoflines As New List(Of String)
+    '    Try
+    '        If Not IO.File.Exists(path) Then
+    '            listoflines.Add("nofile")
+    '            Return listoflines
+    '        Else
+    '            Dim lines As IO.StreamReader = IO.File.OpenText(path)
+    '            Dim line As String
+    '            Do
+    '                line = lines.ReadLine
+    '                If Not line Is Nothing Then
+    '                    listoflines.Add(line)
+    '                Else
+    '                    Exit Do
+    '                End If
+    '            Loop Until line = Nothing
+    '            Return listoflines
+    '        End If
+    '    Catch
+    '        If listoflines.Count > 0 Then
+    '            Return listoflines
+    '        Else
+    '            listoflines.Add("Error")
+    '            Return listoflines
+    '        End If
+    '    Finally
 
-        End Try
-    End Function
+    '    End Try
+    'End Function
 
     Public Shared Function LoadFullText(ByVal path As String) As String
 
@@ -2474,32 +2110,32 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-    Public Shared Function SaveXml(ByVal path As String, ByVal xmldoc As XmlDocument) As Boolean
+    'Public Shared Function SaveXml(ByVal path As String, ByVal xmldoc As XmlDocument) As Boolean
 
-        Try
-            Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-            Try
-                output.Formatting = Formatting.Indented
-                xmldoc.WriteTo(output)
-                output.Close()
-                Return True
-            Catch ex As Exception
-                Try
-                    output.Close()
-                    Try
-                        IO.File.Delete(path)
-                    Catch
-                    End Try
-                Catch
-                End Try
-                Return False
-            End Try
-        Catch ex As Exception
-            Return False
-        Finally
+    '    Try
+    '        Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
+    '        Try
+    '            output.Formatting = Formatting.Indented
+    '            xmldoc.WriteTo(output)
+    '            output.Close()
+    '            Return True
+    '        Catch ex As Exception
+    '            Try
+    '                output.Close()
+    '                Try
+    '                    IO.File.Delete(path)
+    '                Catch
+    '                End Try
+    '            Catch
+    '            End Try
+    '            Return False
+    '        End Try
+    '    Catch ex As Exception
+    '        Return False
+    '    Finally
 
-        End Try
-    End Function
+    '    End Try
+    'End Function
 
     Public Shared Function createImage(ByVal origImage As String, ByVal sizeLimit As Integer, ByVal target As String, Optional ByVal picType As String = "poster")
 
@@ -2573,21 +2209,21 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-    Public Shared Function SaveImageNoDispose(ByVal image As Bitmap, ByVal path As String) As Boolean
-        Try
-            If File.Exists(path) Then
-                File.Delete(path)
-            Else
-                Utilities.EnsureFolderExists(path)
-            End If
+    'Public Shared Function SaveImageNoDispose(ByVal image As Bitmap, ByVal path As String) As Boolean
+    '    Try
+    '        If File.Exists(path) Then
+    '            File.Delete(path)
+    '        Else
+    '            Utilities.EnsureFolderExists(path)
+    '        End If
 
-            image.Save(path, Imaging.ImageFormat.Jpeg)
+    '        image.Save(path, Imaging.ImageFormat.Jpeg)
 
-            Return True
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
+    '        Return True
+    '    Catch ex As Exception
+    '        Return False
+    '    End Try
+    'End Function
 
     Public Shared Function ResizeImage(ByVal bm_source As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_dest As New Bitmap(width, height)
@@ -2618,15 +2254,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-    Public Shared Function LoadImage(ByVal path As String, ByVal width As Integer, ByVal height As Integer) As Bitmap
-        Try
-            Using img As Bitmap = New Bitmap(path)
-                Return Utilities.ResizeImage(img, width, height)
-            End Using
-        Catch
-            Return Nothing
-        End Try
-    End Function
+    'Public Shared Function LoadImage(ByVal path As String, ByVal width As Integer, ByVal height As Integer) As Bitmap
+    '    Try
+    '        Using img As Bitmap = New Bitmap(path)
+    '            Return Utilities.ResizeImage(img, width, height)
+    '        End Using
+    '    Catch
+    '        Return Nothing
+    '    End Try
+    'End Function
 
     Public Shared Sub copyImage(ByVal src As String, ByVal dest As String, Optional ByVal resizeFanart As Integer = 0)
         Try
@@ -2681,10 +2317,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-    Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
-        Dim asm As Assembly = Assembly.GetExecutingAssembly
-        Return asm.GetManifestResourceStream(resfile)
-    End Function
+    'Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
+    '    Dim asm As Assembly = Assembly.GetExecutingAssembly
+    '    Return asm.GetManifestResourceStream(resfile)
+    'End Function
 
     Public Shared Function EnsureFolderExists(ByVal Path As String) As Boolean
         Dim Parts As String() = Split(IO.Path.GetDirectoryName(Path), "\")
@@ -2707,13 +2343,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return True
     End Function
 
-    Public Shared Function GetFileNameFromURL(ByVal URL As String) As String
-        Try
-            Return URL.Substring(URL.LastIndexOf("/") + 1)
-        Catch ex As Exception
-            Return URL
-        End Try
-    End Function
+    'Public Shared Function GetFileNameFromURL(ByVal URL As String) As String
+    '    Try
+    '        Return URL.Substring(URL.LastIndexOf("/") + 1)
+    '    Catch ex As Exception
+    '        Return URL
+    '    End Try
+    'End Function
+
     Public Shared Function GetFileNameFromPath(ByVal ispath As String) As String
         Try
             Return ispath.Substring(ispath.LastIndexOf("\") + 1)
@@ -2726,9 +2363,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return ComputeHashValue(StrToByteArray(Input))
     End Function
 
-    Public Shared Function ComputeHashValueToString(ByVal Input As String) As String
-        Return ByteArrayToStr(ComputeHashValue(StrToByteArray(Input)))
-    End Function
+    'Public Shared Function ComputeHashValueToString(ByVal Input As String) As String
+    '    Return ByteArrayToStr(ComputeHashValue(StrToByteArray(Input)))
+    'End Function
 
     Public Shared Function ComputeHashValue(ByVal data() As Byte) As Byte()
         Dim hashAlg As SHA1 = SHA1.Create()
@@ -2741,12 +2378,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return encoding.GetBytes(str)
     End Function
 
-    Public Shared Function ByteArrayToStr(dBytes As Byte()) As String
-        Dim str As String
-        Dim enc As New System.Text.ASCIIEncoding()
-        str = enc.GetString(dBytes)
-        Return str
-    End Function
+    'Public Shared Function ByteArrayToStr(dBytes As Byte()) As String
+    '    Dim str As String
+    '    Dim enc As New System.Text.ASCIIEncoding()
+    '    str = enc.GetString(dBytes)
+    '    Return str
+    'End Function
 
     Public Shared Function EscapeSpecialCharacters(s As String) As String
         s = s.Replace("(", "\(")

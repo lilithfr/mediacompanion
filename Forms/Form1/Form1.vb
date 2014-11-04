@@ -3196,7 +3196,6 @@ Public Class Form1
                 End If
                 playlist = Utilities.GetMediaList(tempstring)
             Case "Trailer"
-                'Dim TrailerPath As String = Utilities.GetTrailerName(tempstring)
                 Dim movie = oMovies.LoadMovie(tempstring)
                 If movie.TrailerExists Then playlist.Add(movie.ActualTrailerPath)
             Case "HomeMovie"
@@ -3204,6 +3203,18 @@ Public Class Form1
                 tempstring = Utilities.GetFileName(tempstring)
                 playlist = Utilities.GetMediaList(tempstring)
         End Select
+
+        If playlist.Count <= 0 Then
+            MsgBox("No Media File Found For This nfo")
+            Exit Sub
+        End If
+
+        LaunchPlayList(playlist)
+        
+    End Sub
+
+    Private Sub LaunchPlayList(ByVal plist As List(Of String))
+        Dim tempstring = applicationPath & "\settings\temp.m3u"
         frmSplash2.Text = "Playing Movie..."
         frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
         frmSplash2.Label1.Visible = True
@@ -3212,16 +3223,9 @@ Public Class Form1
         frmSplash2.Show()
         Application.DoEvents()
 
-        If playlist.Count <= 0 Then
-            MsgBox("No Media File Found For This nfo")
-            Exit Sub
-        End If
-
-        tempstring = applicationPath & "\settings\temp.m3u"
-
         Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
 
-        For Each part In playlist
+        For Each part In plist
             If part <> Nothing Then file.WriteLine(part)
         Next
         file.Close()
@@ -7228,399 +7232,17 @@ Public Class Form1
             If tempstring = "" Then
                 Exit Sub
             End If
-            Dim playlist As New List(Of String)
             tempstring = Utilities.GetFileName(tempstring)
-            If IO.File.Exists(tempstring) Then
-                playlist.Add(tempstring)
-            End If
-            If tempstring.IndexOf("cd1") <> -1 Then
-                tempstring = tempstring.Replace("cd1", "cd2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd2", "cd3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd3", "cd4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd4", "cd5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd_1") <> -1 Then
-                tempstring = tempstring.Replace("cd_1", "cd_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_2", "cd_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_3", "cd_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd_4", "cd_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd 1") <> -1 Then
-                tempstring = tempstring.Replace("cd 1", "cd 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 2", "cd 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 3", "cd 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd 4", "cd 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("cd.1") <> -1 Then
-                tempstring = tempstring.Replace("cd.1", "cd.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.2", "cd.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.3", "cd.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("cd.4", "cd.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd1") <> -1 Then
-                tempstring = tempstring.Replace("dvd1", "dvd2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd2", "dvd3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd3", "dvd4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd4", "dvd5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd_1") <> -1 Then
-                tempstring = tempstring.Replace("dvd_1", "dvd_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_2", "dvd_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_3", "dvd_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd_4", "dvd_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd 1") <> -1 Then
-                tempstring = tempstring.Replace("dvd 1", "dvd 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 2", "dvd 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 3", "dvd 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd 4", "dvd 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("dvd.1") <> -1 Then
-                tempstring = tempstring.Replace("dvd.1", "dvd.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.2", "dvd.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.3", "dvd.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("dvd.4", "dvd.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part1") <> -1 Then
-                tempstring = tempstring.Replace("part1", "part2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part2", "part3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part3", "part4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part4", "part5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part_1") <> -1 Then
-                tempstring = tempstring.Replace("part_1", "part_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_2", "part_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_3", "part_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part_4", "part_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part 1") <> -1 Then
-                tempstring = tempstring.Replace("part 1", "part 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 2", "part 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 3", "part 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part 4", "part 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part.1") <> -1 Then
-                tempstring = tempstring.Replace("part.1", "part.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.2", "part.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.3", "part.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("part.4", "part.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk1") <> -1 Then
-                tempstring = tempstring.Replace("disk1", "disk2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk2", "disk3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk3", "disk4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk4", "disk5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk_1") <> -1 Then
-                tempstring = tempstring.Replace("disk_1", "disk_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_2", "disk_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_3", "disk_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk_4", "disk_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk 1") <> -1 Then
-                tempstring = tempstring.Replace("disk 1", "disk 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 2", "disk 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 3", "disk 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk 4", "disk 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("disk.1") <> -1 Then
-                tempstring = tempstring.Replace("disk.1", "disk.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.2", "disk.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.3", "disk.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("disk.4", "disk.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("part1") <> -1 Then
-                tempstring = tempstring.Replace("pt1", "pt2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt2", "pt3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt3", "pt4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt4", "pt5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt_1") <> -1 Then
-                tempstring = tempstring.Replace("pt_1", "pt_2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_2", "pt_3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_3", "pt_4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt_4", "pt_5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt 1") <> -1 Then
-                tempstring = tempstring.Replace("pt 1", "pt 2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 2", "pt 3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 3", "pt 4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt 4", "pt 5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-            If tempstring.IndexOf("pt.1") <> -1 Then
-                tempstring = tempstring.Replace("pt.1", "pt.2")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.2", "pt.3")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.3", "pt.4")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-                tempstring = tempstring.Replace("pt.4", "pt.5")
-                If IO.File.Exists(tempstring) Then
-                    playlist.Add(tempstring)
-                End If
-            End If
-
+            Dim playlist As New List(Of String)
+            playlist = Utilities.GetMediaList(tempstring)
+            
             If playlist.Count <= 0 Then
                 MsgBox("No Media File Found For This nfo")
                 Exit Sub
             End If
 
-            tempstring = applicationPath & "\settings\temp.m3u"
+            LaunchPlayList(playlist)
 
-            Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
-
-            For Each part In playlist
-                If part <> Nothing Then file.WriteLine(part)
-            Next
-            file.Close()
-
-            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Preferences.videomode = 3 Then
-                Preferences.videomode = 2
-                Call util_VideoMode2(tempstring)
-            End If
-            If Preferences.videomode >= 4 Then
-                If Preferences.selectedvideoplayer <> Nothing Then
-                    Call util_VideoMode4(tempstring)
-                Else
-                    Call util_VideoMode1(tempstring)
-                End If
-            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

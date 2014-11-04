@@ -3233,29 +3233,29 @@ Public Class Movie
         End If
     End Sub
 
-    Sub LoadPosterFromPosterCache(picBox As PictureBox)
+    'Sub LoadPosterFromPosterCache(picBox As PictureBox)
 
-        If Not File.Exists(PosterCachePath) Then SavePosterToPosterWallCache
+    '    If Not File.Exists(PosterCachePath) Then SavePosterToPosterWallCache
 
-        picBox.Tag = Nothing
+    '    picBox.Tag = Nothing
 
-        If File.Exists(PosterCachePath) Then
-            Try
-                picBox.Image = Utilities.LoadImage(PosterCachePath)
-                picBox.Tag = PosterPath
-            Catch
-                'Invalid file
-                Utilities.SafeDeleteFile(PosterPath     )
-                Utilities.SafeDeleteFile(PosterCachePath)
-            End Try
-        Else
-            Try
-                picBox.Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
-            Catch
-            End Try
-        End If
+    '    If File.Exists(PosterCachePath) Then
+    '        Try
+    '            picBox.Image = Utilities.LoadImage(PosterCachePath)
+    '            picBox.Tag = PosterPath
+    '        Catch
+    '            'Invalid file
+    '            Utilities.SafeDeleteFile(PosterPath     )
+    '            Utilities.SafeDeleteFile(PosterCachePath)
+    '        End Try
+    '    Else
+    '        Try
+    '            picBox.Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
+    '        Catch
+    '        End Try
+    '    End If
 
-    End Sub
+    'End Sub
 
 
     Function GetActorFileName( actorName As String) As String
