@@ -1086,7 +1086,7 @@ Public Class Movie
             _scrapedMovie = WorkingWithNfoFiles.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
         End If
         
-        _nfoPathAndFilename=ActualNfoPathAndFilename
+        _nfoPathAndFilename = ActualNfoPathAndFilename
         Scraped=True
         Try
             If Not Preferences.MusicVidScrape Then
@@ -1146,7 +1146,8 @@ Public Class Movie
         '    ucMusicVideo.MVCacheAdd(_scrapedMovie)
         '    Exit Sub
         'End If
-        _movieCache.fullpathandfilename = NfoPathPrefName
+        _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
+        _actualNfoPathAndFilename    = NfoPathPrefName 
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director 
