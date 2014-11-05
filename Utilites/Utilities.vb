@@ -542,13 +542,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                         Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
                         For Each fs_info As IO.FileInfo In fs_infos
                             'Application.DoEvents()
-                            If IO.File.Exists(fs_info.FullName) Then
+                            'If IO.File.Exists(fs_info.FullName) Then
+                                If videoextn = ".rar" Then
+                                    If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
+                                End If
                                 tempstring = fs_info.FullName.ToLower
                                 If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
                                     possiblemoviescount += 1
                                     possiblemovies(possiblemoviescount) = fs_info.FullName
                                 End If
-                            End If
+                            'End If
                         Next
                     Catch
                     End Try

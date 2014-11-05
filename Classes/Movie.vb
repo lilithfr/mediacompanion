@@ -717,10 +717,14 @@ Public Class Movie
             If fileInfo.Name.ToString.ToLower <> "index.bdmv" Then Return False
         End If
 
-        If fileInfo.Extension = "ttt" Then
+        If fileInfo.Extension = ".ttt" Then
             Return False
         End If
-
+        If fileInfo.Extension = ".rar" Then
+            Dim SizeOfFile As Integer = FileLen(fileInfo.FullName)
+            Dim tempint2 = Convert.ToInt32(Preferences.rarsize) * 1048576
+            If SizeOfFile < tempint2 Then Return False
+        End If
         Dim movieStackName As String = fileInfo.FullName
         Dim firstPart      As Boolean
 

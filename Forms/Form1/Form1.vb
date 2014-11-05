@@ -9084,7 +9084,7 @@ Public Class Form1
                 End Try
 
                 Try
-                    oCachedMovie.director = gridrow.Cells("director").Value
+                    'oCachedMovie.director = gridrow.Cells("director").Value
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -9209,8 +9209,8 @@ Public Class Form1
                 End If
                 changed = True
             End If
-            If mov_TableEditDGV.Columns("set").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("set").Value <> "UnChanged" Then
-                row.cells("set").value = mov_TableEditDGV.Rows(0).Cells("set").Value : changed = True
+            If mov_TableEditDGV.Columns("set").Visible AndAlso (IsDBNull(mov_TableEditDGV.Rows(0).Cells("set").Value) OrElse mov_TableEditDGV.Rows(0).Cells("set").Value <> "UnChanged") Then
+                row.cells("set").value = If(IsDBNull(mov_TableEditDGV.Rows(0).Cells("set").Value), Nothing, mov_TableEditDGV.Rows(0).Cells("set").Value) : changed = True
             End If
         Next
         DataDirty = changed
