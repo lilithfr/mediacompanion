@@ -3833,7 +3833,6 @@ Partial Public Class Form1
                             If frodo Then
                                 tempstring = tempstring.Replace(".tbn", "-thumb.jpg")
                                 Utilities.SafeCopyFile(cachename, tempstring, True)
-                                IO.File.Delete(tempstring)
                             End If
 
                             util_ImageLoad(PictureBox14, tempstring, Utilities.DefaultTvFanartPath)

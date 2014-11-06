@@ -659,6 +659,7 @@
     <None Include="Assets\mcEventLog.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\Notes for MC.txt" />
     <Content Include="Assets\scrapers\metadata.tvdb.com\Notes for MC.txt" />
     <Content Include="Classes\genre.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1242,6 +1243,7 @@
     </Content>
     <Content Include="Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Assets\scrapers\metadata.imdb.com\addon.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

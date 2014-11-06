@@ -534,9 +534,11 @@ Public Class ScraperQuery
          Dim tagName As String = e.Name.LocalName
 
          Select Case tagName
-            Case "genre", "credits", "director", "actor"
+            Case "genre", "credits", "director", "actor", "country", "studio"
                If (outputElement.Elements(tagName).Count > 0) Then
-                  outputElement.Elements(tagName).Last.AddAfterSelf(e)
+                  If Not outputElement.LastNode.ToString = e.ToString  Then
+                     outputElement.Elements(tagName).Last.AddAfterSelf(e)
+                  End If
                Else
                   outputElement.LastNode.AddAfterSelf(e)
                End If

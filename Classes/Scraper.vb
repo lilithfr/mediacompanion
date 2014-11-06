@@ -1382,6 +1382,10 @@ Public Class Classimdb
             FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
             FinalScrapResult = FinalScrapResult.Replace("details>","movie>")
             FinalScrapResult = FinalScrapResult.Replace("</genre>" & vbcrlf & "  <genre>", " / ")
+            FinalScrapResult = FinalScrapResult.Replace("</studio>" & vbcrlf & "  <studio>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</country>" & vbcrlf & "  <country>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</credits>" & vbcrlf & "  <credits>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</director>" & vbcrlf & "  <director>", " / ")
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
             Dim SeparateMovie As String = Utilities.checktitle(title, Preferences.MovSepLst)
             If SeparateMovie <> "" Then
