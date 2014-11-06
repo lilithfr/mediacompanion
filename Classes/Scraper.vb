@@ -934,7 +934,10 @@ Public Class Classimdb
 
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
-            
+                Dim test As String = ""
+                For Each wp In webpage
+                    test += wp & vbcrlf
+                Next
 
                 totalinfo.AppendTag( "genre"     , Genres      )
                 totalinfo.AppendTag( "director"  , Directors   )
@@ -1123,9 +1126,10 @@ Public Class Classimdb
                                     movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                                     movienfoarray = encodespecialchrs(movienfoarray)
                                     tempstring = tempstring & "<country>" & movienfoarray & "</country>" & vbCrLf
-                                    Exit For
+                                    'Exit For
                                 End If
                             Next
+                            tempstring = tempstring.Replace("</country>" & vbCrLf & "<country>", ", ")
                             totalinfo = totalinfo & tempstring
                         Catch
                             totalinfo = totalinfo & "<country>scraper error</country>" & vbCrLf
