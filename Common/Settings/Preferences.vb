@@ -228,8 +228,10 @@ Public Class Preferences
     Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
     Public Shared XbmcTmdbRenameMovie As Boolean
     Public Shared XbmcTmdbMissingFromImdb As Boolean
-    Public Shared XbmcTmdbMissingTop250FromImdb As Boolean
-    Public Shared XbmcTmdbMissingVotesFromImdb As Boolean
+    Public Shared XbmcTmdbTop250FromImdb As Boolean
+    Public Shared XbmcTmdbVotesFromImdb As Boolean
+    Public Shared XbmcTmdbCertFromImdb As Boolean
+    Public Shared XbmcTmdbStarsFromImdb As Boolean
     Public Shared XbmcTmdbActorDL As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared OfflineDVDTitle As String
@@ -557,8 +559,10 @@ Public Class Preferences
         XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
         XbmcTmdbMissingFromImdb = False
-        XbmcTmdbMissingTop250FromImdb = False
-        XbmcTmdbMissingVotesFromImdb = False
+        XbmcTmdbTop250FromImdb = False
+        XbmcTmdbVotesFromImdb = False
+        XbmcTmdbCertFromImdb = False
+        XbmcTmdbStarsFromImdb = False
         XbmcTmdbActorDL = False
         moviedefaultlist = 0
         moviesortorder = 0
@@ -977,8 +981,10 @@ Public Class Preferences
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
         root.AppendChild(doc, "XbmcTmdbMissingFromImdb",            XbmcTmdbMissingFromImdb)            'cbXbmcTmdbMissingFromImdb
-        root.AppendChild(doc, "XbmcTmdbMissingTop250FromImdb",      XbmcTmdbMissingTop250FromImdb)      'cbXbmcTmdbMissingTop250FromImdb
-        root.AppendChild(doc, "XbmcTmdbMissingVotesFromImdb",       XbmcTmdbMissingVotesFromImdb)       'cbXbmcTmdbImdbVotes
+        root.AppendChild(doc, "XbmcTmdbTop250FromImdb",             XbmcTmdbTop250FromImdb)             'cbXbmcTmdbMissingTop250FromImdb
+        root.AppendChild(doc, "XbmcTmdbVotesFromImdb",              XbmcTmdbVotesFromImdb)              'cbXbmcTmdbImdbVotes
+        root.AppendChild(doc, "XbmcTmdbCertFromImdb",               XbmcTmdbCertFromImdb)               'cbXbmcTmdbCertFromImdb
+        root.AppendChild(doc, "XbmcTmdbStarsFromImdb",              XbmcTmdbStarsFromImdb)              'cbXbmcTmdbStarsFromImdb
         root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
@@ -1259,8 +1265,10 @@ Public Class Preferences
                     'Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText    -  locked at "tmdb"
                     Case "XbmcTmdbRenameMovie"                  : XbmcTmdbRenameMovie = thisresult.InnerText 
                     Case "XbmcTmdbMissingFromImdb"              : XbmcTmdbMissingFromImdb = thisresult.InnerText
-                    Case "XbmcTmdbMissingTop250FromImdb"        : XbmcTmdbMissingTop250FromImdb = thisresult.InnerText 
-                    Case "XbmcTmdbMissingVotesFromImdb"         : XbmcTmdbMissingVotesFromImdb = thisresult.InnerText 
+                    Case "XbmcTmdbTop250FromImdb"               : XbmcTmdbTop250FromImdb = thisresult.InnerText 
+                    Case "XbmcTmdbVotesFromImdb"                : XbmcTmdbVotesFromImdb = thisresult.InnerText
+                    Case "XbmcTmdbCertFromImdb"                 : XbmcTmdbCertFromImdb = thisresult.InnerText 
+                    Case "XbmcTmdbStarsFromImdb"                : XbmcTmdbStarsFromImdb = thisresult.InnerText
                     Case "XbmcTmdbActorDL"                      : XbmcTmdbActorDL = thisresult.InnerText
                     Case "seasonall"                            : seasonall = thisresult.InnerText
                     Case "splitcontainer1"                      : splt1 = Convert.ToInt32(thisresult.InnerText)

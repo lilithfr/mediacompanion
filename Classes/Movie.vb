@@ -1029,7 +1029,7 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.mpaa        = tmdb.Certification
             _scrapedMovie.fullmoviebody.premiered   = tmdb.releasedate
             _scrapedMovie.fullmoviebody.votes       = tmdb.Movie.vote_count
-            If Preferences.XbmcTmdbMissingFromImdb OrElse Preferences.XbmcTmdbMissingVotesFromImdb OrElse Preferences.XbmcTmdbMissingTop250FromImdb Then
+            If Preferences.XbmcTmdbMissingFromImdb OrElse Preferences.XbmcTmdbVotesFromImdb OrElse Preferences.XbmcTmdbTop250FromImdb OrElse Preferences.XbmcTmdbStarsFromImdb OrElse Preferences.XbmcTmdbCertFromImdb Then
                 Scraped  = True
                 _rescrapedMovie = New FullMovieDetails
                 _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
@@ -1044,27 +1044,23 @@ Public Class Movie
                 For Each thisresult In thumbstring("movie")
                     Select Case thisresult.Name
                         Case "stars"
-                            If Preferences.XbmcTmdbMissingFromImdb AndAlso _scrapedMovie.fullmoviebody.stars = "" Then
+                            If Preferences.XbmcTmdbStarsFromImdb AndAlso _scrapedMovie.fullmoviebody.stars = "" Then
                                 _scrapedMovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
                             End If
                         Case "outline"
                             If Preferences.XbmcTmdbMissingFromImdb Then _scrapedMovie.fullmoviebody.outline = thisresult.InnerText
                         Case "mpaa"
-                            If Preferences.XbmcTmdbMissingFromImdb Then mpaatmp = thisresult.InnerText
+                            If Preferences.XbmcTmdbCertFromImdb Then mpaatmp = thisresult.InnerText
                         Case "cert"
-                            If Preferences.XbmcTmdbMissingFromImdb Then _certificates.Add(thisresult.InnerText)
+                            If Preferences.XbmcTmdbCertFromImdb Then _certificates.Add(thisresult.InnerText)
                         Case "votes"
-                            If Preferences.XbmcTmdbMissingVotesFromImdb Then
-                                _scrapedMovie.fullmoviebody.votes = thisresult.InnerText
-                            End If
+                            If Preferences.XbmcTmdbVotesFromImdb Then _scrapedMovie.fullmoviebody.votes = thisresult.InnerText
                         Case "top250"
-                            If Preferences.XbmcTmdbMissingTop250FromImdb Then
-                                _scrapedMovie.fullmoviebody.top250 = thisresult.InnerText
-                            End If
+                            If Preferences.XbmcTmdbTop250FromImdb Then _scrapedMovie.fullmoviebody.top250 = thisresult.InnerText
                     End Select
                 Next
 
-                If Preferences.XbmcTmdbMissingFromImdb AndAlso _scrapedMovie.fullmoviebody.mpaa = "" Then
+                If Preferences.XbmcTmdbCertFromImdb AndAlso _scrapedMovie.fullmoviebody.mpaa = "" Then
                     _scrapedMovie.fullmoviebody.mpaa = mpaatmp 
                     ' Assign certificate
                     If _scrapedMovie.fullmoviebody.mpaa <> "" Then
