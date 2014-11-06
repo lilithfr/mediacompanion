@@ -661,8 +661,7 @@ Public Class Form1
 
                 frmSplash.Close()
 
-                'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
-                GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+                'the following code aligns the 2 groupboxes ontop of each other which cannot be done in the GUI
                 GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
 
                 'ToolStrip1.Enabled = True
@@ -10747,9 +10746,9 @@ End Sub
         Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
         Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
 
-        Me.RadioButton51.Enabled = Preferences.movies_useXBMC_Scraper
-        Me.RadioButton52.Enabled = Preferences.movies_useXBMC_Scraper
-        Me.RadioButton51.Checked = CBool(Preferences.whatXBMCScraperIMBD)
+        'Me.RadioButton51.Enabled = Preferences.movies_useXBMC_Scraper
+        'Me.RadioButton52.Enabled = Preferences.movies_useXBMC_Scraper
+        'Me.RadioButton51.Checked = CBool(Preferences.whatXBMCScraperIMBD)
 
         Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
@@ -10776,7 +10775,7 @@ End Sub
         Me.cbxNameMode.Checked = Preferences.namemode
         lblNameMode.Text = createNameModeText()
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename), tv_RegexScraper)
-        Read_XBMC_IMDB_Scraper_Config()
+        'Read_XBMC_IMDB_Scraper_Config()
 
         '----------------------------------------------------------
 
@@ -12718,7 +12717,7 @@ End Sub
         nudMaxSetsInFilter          .Text           = Preferences.MaxSetsInFilter
         cbMovieFilters_Sets_Order   .SelectedIndex  = Preferences.MovieFilters_Sets_Order
         chkbOriginal_Title          .Checked        = Preferences.Original_Title
-        RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False ) 
+        'RadioButton52               .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False ) 
         cbNoAltTitle                .Checked        = Preferences.NoAltTitle
         cbXtraFrodoUrls             .Checked        = Not Preferences.XtraFrodoUrls
         CheckBox16                  .Checked        = Not Preferences.disablelogfiles
@@ -12752,7 +12751,9 @@ End Sub
         cbImdbgetTMDBActor          .Checked        = Preferences.TmdbActorsImdbScrape
         cbImdbPrimaryPlot           .Checked        = Preferences.ImdbPrimaryPlot
         cbXbmcTmdbRename            .Checked        = Preferences.XbmcTmdbRenameMovie
-        cb_XbmcTmdbMissingFromImdb  .Checked        = Preferences.XbmcTmdbMissingFromImdb
+        cbXbmcTmdbMissingFromImdb   .Checked        = Preferences.XbmcTmdbMissingFromImdb
+        cbXbmcTmdbMissingTop250FromImdb.Checked     = Preferences.XbmcTmdbMissingTop250FromImdb 
+        cbXbmcTmdbImdbVotes         .Checked        = Preferences.XbmcTmdbMissingVotesFromImdb 
         cbXbmcTmdbActorDL           .Checked        = Preferences.XbmcTmdbActorDL
         saveactorchkbx              .Checked        = Preferences.actorsave
         cb_LocalActorSaveAlpha      .Checked        = Preferences.actorsavealpha
@@ -14496,35 +14497,35 @@ End Sub
                 Preferences.movies_useXBMC_Scraper = True
                 GroupBox_MovieIMDBMirror.Enabled = False
                 GroupBox_MovieIMDBMirror.Visible = False
-                GroupBox_IMDB_Scraper_Preferences.Enabled = True
-                GroupBox_IMDB_Scraper_Preferences.Visible = True
-                GroupBox_IMDB_Scraper_Preferences.BringToFront()
-                RadioButton51.Enabled = False    'Hidden IMDB option for XBMC Scrapers as XBMC IMDB Scraper is broken.
-                RadioButton52.Enabled = True
-                If Preferences.XBMC_Scraper = "imdb" Then
-                    RadioButton51.Checked = True
-                    GroupBox_IMDB_Scraper_Preferences.Enabled = True
-                    GroupBox_IMDB_Scraper_Preferences.Visible = True
-                    GroupBox_IMDB_Scraper_Preferences.BringToFront()
-                    GroupBox_TMDB_Scraper_Preferences.Enabled = False
-                    GroupBox_TMDB_Scraper_Preferences.Visible = False
-                    GroupBox_TMDB_Scraper_Preferences.SendToBack()
-                ElseIf Preferences.XBMC_Scraper = "tmdb" Then
-                    RadioButton52.Checked = True
-                    GroupBox_IMDB_Scraper_Preferences.Enabled = False
-                    GroupBox_IMDB_Scraper_Preferences.Visible = False
-                    GroupBox_IMDB_Scraper_Preferences.SendToBack()
+                'GroupBox_IMDB_Scraper_Preferences.Enabled = True
+                'GroupBox_IMDB_Scraper_Preferences.Visible = True
+                'GroupBox_IMDB_Scraper_Preferences.BringToFront()
+                'RadioButton51.Enabled = False    'Hidden IMDB option for XBMC Scrapers as XBMC IMDB Scraper is broken.
+                'RadioButton52.Enabled = True
+                'If Preferences.XBMC_Scraper = "imdb" Then
+                '    RadioButton51.Checked = True
+                '    GroupBox_IMDB_Scraper_Preferences.Enabled = True
+                '    GroupBox_IMDB_Scraper_Preferences.Visible = True
+                '    GroupBox_IMDB_Scraper_Preferences.BringToFront()
+                '    GroupBox_TMDB_Scraper_Preferences.Enabled = False
+                '    GroupBox_TMDB_Scraper_Preferences.Visible = False
+                '    GroupBox_TMDB_Scraper_Preferences.SendToBack()
+                'ElseIf Preferences.XBMC_Scraper = "tmdb" Then
+                '    RadioButton52.Checked = True
+                    'GroupBox_IMDB_Scraper_Preferences.Enabled = False
+                    'GroupBox_IMDB_Scraper_Preferences.Visible = False
+                    'GroupBox_IMDB_Scraper_Preferences.SendToBack()
                     GroupBox_TMDB_Scraper_Preferences.Enabled = True
                     GroupBox_TMDB_Scraper_Preferences.Visible = True
                     GroupBox_TMDB_Scraper_Preferences.BringToFront()
-                End If
+                'End If
             Else
                 Preferences.movies_useXBMC_Scraper = False
                 GroupBox_MovieIMDBMirror.Enabled = True
                 GroupBox_MovieIMDBMirror.Visible = True
                 GroupBox_MovieIMDBMirror.BringToFront()
-                RadioButton51.Enabled = False
-                RadioButton52.Enabled = False
+                'RadioButton51.Enabled = False
+                'RadioButton52.Enabled = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14563,147 +14564,147 @@ End Sub
     '    End Try
     'End Sub
 
-    Private Sub RadioButton52_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton52.CheckedChanged
-        Try
-            If RadioButton52.Checked = True Then
-                Preferences.XBMC_Scraper = "tmdb"
-                Read_XBMC_TMDB_Scraper_Config()
-                GroupBox_IMDB_Scraper_Preferences.Enabled = False
-                GroupBox_IMDB_Scraper_Preferences.Visible = False
-                GroupBox_IMDB_Scraper_Preferences.SendToBack()
-                GroupBox_TMDB_Scraper_Preferences.Enabled = True
-                GroupBox_TMDB_Scraper_Preferences.Visible = True
-                GroupBox_TMDB_Scraper_Preferences.BringToFront()
-            Else
-                Preferences.XBMC_Scraper = "imdb"
-                GroupBox_IMDB_Scraper_Preferences.Enabled = True
-                GroupBox_IMDB_Scraper_Preferences.Visible = True
-                GroupBox_IMDB_Scraper_Preferences.BringToFront()
-                GroupBox_TMDB_Scraper_Preferences.Enabled = False
-                GroupBox_TMDB_Scraper_Preferences.Visible = False
-                GroupBox_TMDB_Scraper_Preferences.SendToBack()
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub RadioButton52_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton52.CheckedChanged
+    '    Try
+    '        If RadioButton52.Checked = True Then
+    '            Preferences.XBMC_Scraper = "tmdb"
+    '            Read_XBMC_TMDB_Scraper_Config()
+    '            GroupBox_IMDB_Scraper_Preferences.Enabled = False
+    '            GroupBox_IMDB_Scraper_Preferences.Visible = False
+    '            GroupBox_IMDB_Scraper_Preferences.SendToBack()
+    '            GroupBox_TMDB_Scraper_Preferences.Enabled = True
+    '            GroupBox_TMDB_Scraper_Preferences.Visible = True
+    '            GroupBox_TMDB_Scraper_Preferences.BringToFront()
+    '        Else
+    '            Preferences.XBMC_Scraper = "imdb"
+    '            GroupBox_IMDB_Scraper_Preferences.Enabled = True
+    '            GroupBox_IMDB_Scraper_Preferences.Visible = True
+    '            GroupBox_IMDB_Scraper_Preferences.BringToFront()
+    '            GroupBox_TMDB_Scraper_Preferences.Enabled = False
+    '            GroupBox_TMDB_Scraper_Preferences.Visible = False
+    '            GroupBox_TMDB_Scraper_Preferences.SendToBack()
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
 'XBMC Scraper Preferences - IMDB
-    Private Sub CheckBox_XBMC_Scraper_IMDB_FullCredits_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_IMDB_FullCredits.CheckedChanged
-        Try
-            If CheckBox_XBMC_Scraper_IMDB_FullCredits.Checked = True Then
-                Save_XBMC_IMDB_Scraper_Config("fullcredits", "true")
-            Else
-                Save_XBMC_IMDB_Scraper_Config("fullcredits", "false")
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_XBMC_Scraper_IMDB_FullCredits_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_XBMC_IMDB_FullCredits.CheckedChanged
+    '    Try
+    '        If cb_XBMC_IMDB_FullCredits.Checked = True Then
+    '            Save_XBMC_IMDB_Scraper_Config("fullcredits", "true")
+    '        Else
+    '            Save_XBMC_IMDB_Scraper_Config("fullcredits", "false")
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_IMDB_Fanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_IMDB_Fanart.CheckedChanged
-        Try
-            If CheckBox_XBMC_Scraper_IMDB_Fanart.Checked = True Then
-                Save_XBMC_IMDB_Scraper_Config("fanart", "true")
-            Else
-                Save_XBMC_IMDB_Scraper_Config("fanart", "false")
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_XBMC_Scraper_IMDB_Fanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_XBMC_IMDB_Fanart.CheckedChanged
+    '    Try
+    '        If cb_XBMC_IMDB_Fanart.Checked = True Then
+    '            Save_XBMC_IMDB_Scraper_Config("fanart", "true")
+    '        Else
+    '            Save_XBMC_IMDB_Scraper_Config("fanart", "false")
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.CheckedChanged
-        Try
-            If CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Checked = True Then
-                Save_XBMC_IMDB_Scraper_Config("tmdbthumbs", "true")
-            Else
-                Save_XBMC_IMDB_Scraper_Config("tmdbthumbs", "false")
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_XBMC_IMDB_Posters_MovieDB.CheckedChanged
+    '    Try
+    '        If cb_XBMC_IMDB_Posters_MovieDB.Checked = True Then
+    '            Save_XBMC_IMDB_Scraper_Config("tmdbthumbs", "true")
+    '        Else
+    '            Save_XBMC_IMDB_Scraper_Config("tmdbthumbs", "false")
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.CheckedChanged
-        Try
-            If CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Checked = True Then
-                Save_XBMC_IMDB_Scraper_Config("impawards", "true")
-            Else
-                Save_XBMC_IMDB_Scraper_Config("impawards", "false")
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_XBMC_IMDB_Posters_IMPAwards.CheckedChanged
+    '    Try
+    '        If cb_XBMC_IMDB_Posters_IMPAwards.Checked = True Then
+    '            Save_XBMC_IMDB_Scraper_Config("impawards", "true")
+    '        Else
+    '            Save_XBMC_IMDB_Scraper_Config("impawards", "false")
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.CheckedChanged
-        Try
-            If CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Checked = True Then
-                Save_XBMC_IMDB_Scraper_Config("movieposterdb", "true")
-            Else
-                Save_XBMC_IMDB_Scraper_Config("movieposterdb", "false")
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_XBMC_IMDB_Posters_MoviePosterDB.CheckedChanged
+    '    Try
+    '        If cb_XBMC_IMDB_Posters_MoviePosterDB.Checked = True Then
+    '            Save_XBMC_IMDB_Scraper_Config("movieposterdb", "true")
+    '        Else
+    '            Save_XBMC_IMDB_Scraper_Config("movieposterdb", "false")
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ComboBox_IMDB_HD_Trailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_HD_Trailer.SelectedIndexChanged
-        Try
-            Save_XBMC_IMDB_Scraper_Config("trailerq", ComboBox_IMDB_HD_Trailer.Text)
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ComboBox_IMDB_HD_Trailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbx_IMDB_HD_Trailer.SelectedIndexChanged
+    '    Try
+    '        Save_XBMC_IMDB_Scraper_Config("trailerq", cmbx_IMDB_HD_Trailer.Text)
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_IMDB_Trailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_IMDB_Trailer.CheckedChanged
-        Try
-            If CheckBox_XBMC_Scraper_IMDB_Trailer.Checked = True Then
-                Save_XBMC_IMDB_Scraper_Config("imdbtrailer", "true")
-            Else
-                Save_XBMC_IMDB_Scraper_Config("imdbtrailer", "false")
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_XBMC_Scraper_IMDB_Trailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_XBMC_IMDB_Trailer.CheckedChanged
+    '    Try
+    '        If cb_XBMC_IMDB_Trailer.Checked = True Then
+    '            Save_XBMC_IMDB_Scraper_Config("imdbtrailer", "true")
+    '        Else
+    '            Save_XBMC_IMDB_Scraper_Config("imdbtrailer", "false")
+    '        End If
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ComboBox_IMDB_Poster_Actor_Size_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_Poster_Actor_Size.SelectedIndexChanged
-        Try
-            Save_XBMC_IMDB_Scraper_Config("imdbscale", ComboBox_IMDB_Poster_Actor_Size.Text)
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ComboBox_IMDB_Poster_Actor_Size_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbx_IMDB_Poster_Actor_Size.SelectedIndexChanged
+    '    Try
+    '        Save_XBMC_IMDB_Scraper_Config("imdbscale", cmbx_IMDB_Poster_Actor_Size.Text)
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ComboBox_IMDB_Title_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_Title_Language.SelectedIndexChanged
-        Try
-            Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ComboBox_IMDB_Title_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbx_IMDB_Title_Language.SelectedIndexChanged
+    '    Try
+    '        Save_XBMC_IMDB_Scraper_Config("akatitles", cmbx_IMDB_Title_Language.Text)
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
 'XBMC Scraper Preferences - TMDB
     Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbFanart.CheckedChanged
@@ -14721,9 +14722,9 @@ End Sub
         End Try
     End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_TMDB_IMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TMDB_IMDBRatings.CheckedChanged
+    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged
         Try
-            If CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Checked = True Then
+            If cbXbmcTmdbIMDBRatings.Checked = True Then
                 Save_XBMC_TMDB_Scraper_Config("ratings", "IMDb")
             Else
                 Save_XBMC_TMDB_Scraper_Config("ratings", "TMDb")
@@ -14736,13 +14737,9 @@ End Sub
         End Try
     End Sub
 
-    Private Sub cb_XbmcTmdbMissingFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_XbmcTmdbMissingFromImdb.CheckedChanged
+    Private Sub cbXbmcTmdbMissingFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbMissingFromImdb.CheckedChanged
         Try
-            If cb_XbmcTmdbMissingFromImdb.CheckState = CheckState.Checked Then
-                Preferences.XbmcTmdbMissingFromImdb = True
-            Else
-                Preferences.XbmcTmdbMissingFromImdb = False
-            End If
+            Preferences.XbmcTmdbMissingFromImdb = cbXbmcTmdbMissingFromImdb.Checked 
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch
@@ -14750,9 +14747,29 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ComboBox_TMDB_HD_Trailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_TMDB_HD_Trailer.SelectedIndexChanged
+    Private Sub cbXbmcTmdbMissingTop250FromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbMissingTop250FromImdb.CheckedChanged
         Try
-            Save_XBMC_TMDB_Scraper_Config("trailerq", ComboBox_TMDB_HD_Trailer.Text)
+            Preferences.XbmcTmdbMissingTop250FromImdb = cbXbmcTmdbMissingTop250FromImdb.Checked 
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch
+            
+        End Try
+    End Sub
+
+    Private Sub cbXbmcTmdbImdbVotes_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbImdbVotes.CheckedChanged
+        Try
+            Preferences.XbmcTmdbMissingVotesFromImdb = cbXbmcTmdbImdbVotes.Checked 
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch
+            
+        End Try
+    End Sub
+
+    Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbHDTrailer.SelectedIndexChanged
+        Try
+            Save_XBMC_TMDB_Scraper_Config("trailerq", cmbxXbmcTmdbHDTrailer.Text)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14761,9 +14778,9 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ComboBox_TMDB_Title_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_TMDB_Title_Language.SelectedIndexChanged
+    Private Sub cmbxXbmcTmdbTitleLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbTitleLanguage.SelectedIndexChanged
         Try
-            Save_XBMC_TMDB_Scraper_Config("language", ComboBox_TMDB_Title_Language.Text)
+            Save_XBMC_TMDB_Scraper_Config("language", cmbxXbmcTmdbTitleLanguage.Text)
             mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
@@ -14788,11 +14805,9 @@ End Sub
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch
-            
         End Try
     End Sub
 
-    
     Private Sub cbMovNewFolderInRootFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovNewFolderInRootFolder.CheckedChanged
         If prefsload Then Exit Sub
         Preferences.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked

@@ -546,173 +546,173 @@ Module General
         Return TempString
     End Function
 
-    Public Sub Read_XBMC_IMDB_Scraper_Config()
-        Dim m_xmld As XmlDocument
-        Dim m_nodelist As XmlNodeList
-        Dim m_node As XmlNode
+    'Public Sub Read_XBMC_IMDB_Scraper_Config()
+    '    Dim m_xmld As XmlDocument
+    '    Dim m_nodelist As XmlNodeList
+    '    Dim m_node As XmlNode
 
-        m_xmld = New XmlDocument()
-        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
-        m_nodelist = m_xmld.SelectNodes("/settings")
-        Dim NodeChild As XmlNode
-        Dim MoviePosterURL As String = ""
-        Dim MovieFanartURL As String = ""
-        Dim SeasonPosters(0) As String
-        Dim Seasonall As String = Nothing
+    '    m_xmld = New XmlDocument()
+    '    m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+    '    m_nodelist = m_xmld.SelectNodes("/settings")
+    '    Dim NodeChild As XmlNode
+    '    Dim MoviePosterURL As String = ""
+    '    Dim MovieFanartURL As String = ""
+    '    Dim SeasonPosters(0) As String
+    '    Dim Seasonall As String = Nothing
 
-        If Form1.ComboBox_IMDB_HD_Trailer.Items.Count > 0 Then Form1.ComboBox_IMDB_HD_Trailer.Items.Clear()
-        If Form1.ComboBox_IMDB_Poster_Actor_Size.Items.Count > 0 Then Form1.ComboBox_IMDB_Poster_Actor_Size.Items.Clear()
-        If Form1.ComboBox_IMDB_Title_Language.Items.Count > 0 Then Form1.ComboBox_IMDB_Title_Language.Items.Clear()
-        Try
-            For Each m_node In m_nodelist
-                For Each NodeChild In m_node.ChildNodes
-                    If (NodeChild.Name.ToLower = "setting") Then
-                        If NodeChild.Attributes.Count > 0 AndAlso NodeChild.Attributes.ItemOf("id") IsNot Nothing Then
-                            Try
-                                Select Case NodeChild.Attributes("id").Value.ToLower
-                                    Case "tmdbthumbs"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Checked = Test
-                                    Case "impawards"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Checked = Test
-                                    Case "movieposterdb"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Checked = Test
-                                    Case "fanart"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_IMDB_Fanart.Checked = Test
-                                    Case "trailerq"
-                                        Dim Test As String = NodeChild.Attributes("default").Value
-                                        Dim AllValues As String = NodeChild.Attributes("values").Value
-                                        Dim GetOut As Boolean = False
-                                        Do
-                                            Dim Position As Integer = AllValues.LastIndexOf("|")
-                                            Dim TempValue As String = ""
-                                            If Position = -1 Then
-                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
-                                                GetOut = True
-                                            Else
-                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
-                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
-                                            End If
-                                            Form1.ComboBox_IMDB_HD_Trailer.Items.Add(TempValue)
-                                        Loop Until GetOut = True
-                                        Form1.ComboBox_IMDB_HD_Trailer.Text = Test
-                                    Case "imdbtrailer"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_IMDB_Trailer.Checked = Test
-                                    Case "akatitles"
-                                        Dim Test As String = NodeChild.Attributes("default").Value
-                                        Dim AllValues As String = NodeChild.Attributes("values").Value
-                                        Dim GetOut As Boolean = False
-                                        Do
-                                            Dim Position As Integer = AllValues.LastIndexOf("|")
-                                            Dim TempValue As String = ""
-                                            If Position = -1 Then
-                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
-                                                GetOut = True
-                                            Else
-                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
-                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
-                                            End If
-                                            Form1.ComboBox_IMDB_Title_Language.Items.Add(TempValue)
-                                        Loop Until GetOut = True
-                                        Form1.ComboBox_IMDB_Title_Language.Text = Test
-                                    Case "fullcredits"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_IMDB_FullCredits.Checked = Test
-                                    Case "imdbscale"
-                                        Dim Test As String = NodeChild.Attributes("default").Value
-                                        Dim AllValues As String = NodeChild.Attributes("values").Value
-                                        Dim GetOut As Boolean = False
-                                        Do
-                                            Dim Position As Integer = AllValues.LastIndexOf("|")
-                                            Dim TempValue As String = ""
-                                            If Position = -1 Then
-                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
-                                                GetOut = True
-                                            Else
-                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
-                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
-                                            End If
-                                            Form1.ComboBox_IMDB_Poster_Actor_Size.Items.Add(TempValue)
-                                        Loop Until GetOut = True
-                                        Form1.ComboBox_IMDB_Poster_Actor_Size.Text = Test
+    '    If Form1.cmbx_IMDB_HD_Trailer.Items.Count > 0 Then Form1.cmbx_IMDB_HD_Trailer.Items.Clear()
+    '    If Form1.cmbx_IMDB_Poster_Actor_Size.Items.Count > 0 Then Form1.cmbx_IMDB_Poster_Actor_Size.Items.Clear()
+    '    If Form1.cmbx_IMDB_Title_Language.Items.Count > 0 Then Form1.cmbx_IMDB_Title_Language.Items.Clear()
+    '    Try
+    '        For Each m_node In m_nodelist
+    '            For Each NodeChild In m_node.ChildNodes
+    '                If (NodeChild.Name.ToLower = "setting") Then
+    '                    If NodeChild.Attributes.Count > 0 AndAlso NodeChild.Attributes.ItemOf("id") IsNot Nothing Then
+    '                        Try
+    '                            Select Case NodeChild.Attributes("id").Value.ToLower
+    '                                Case "tmdbthumbs"
+    '                                    Dim Test As Boolean = NodeChild.Attributes("default").Value
+    '                                    Form1.cb_XBMC_IMDB_Posters_MovieDB.Checked = Test
+    '                                Case "impawards"
+    '                                    Dim Test As Boolean = NodeChild.Attributes("default").Value
+    '                                    Form1.cb_XBMC_IMDB_Posters_IMPAwards.Checked = Test
+    '                                Case "movieposterdb"
+    '                                    Dim Test As Boolean = NodeChild.Attributes("default").Value
+    '                                    Form1.cb_XBMC_IMDB_Posters_MoviePosterDB.Checked = Test
+    '                                Case "fanart"
+    '                                    Dim Test As Boolean = NodeChild.Attributes("default").Value
+    '                                    Form1.cb_XBMC_IMDB_Fanart.Checked = Test
+    '                                Case "trailerq"
+    '                                    Dim Test As String = NodeChild.Attributes("default").Value
+    '                                    Dim AllValues As String = NodeChild.Attributes("values").Value
+    '                                    Dim GetOut As Boolean = False
+    '                                    Do
+    '                                        Dim Position As Integer = AllValues.LastIndexOf("|")
+    '                                        Dim TempValue As String = ""
+    '                                        If Position = -1 Then
+    '                                            TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+    '                                            GetOut = True
+    '                                        Else
+    '                                            TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+    '                                            AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+    '                                        End If
+    '                                        Form1.cmbx_IMDB_HD_Trailer.Items.Add(TempValue)
+    '                                    Loop Until GetOut = True
+    '                                    Form1.cmbx_IMDB_HD_Trailer.Text = Test
+    '                                Case "imdbtrailer"
+    '                                    Dim Test As Boolean = NodeChild.Attributes("default").Value
+    '                                    Form1.cb_XBMC_IMDB_Trailer.Checked = Test
+    '                                Case "akatitles"
+    '                                    Dim Test As String = NodeChild.Attributes("default").Value
+    '                                    Dim AllValues As String = NodeChild.Attributes("values").Value
+    '                                    Dim GetOut As Boolean = False
+    '                                    Do
+    '                                        Dim Position As Integer = AllValues.LastIndexOf("|")
+    '                                        Dim TempValue As String = ""
+    '                                        If Position = -1 Then
+    '                                            TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+    '                                            GetOut = True
+    '                                        Else
+    '                                            TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+    '                                            AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+    '                                        End If
+    '                                        Form1.cmbx_IMDB_Title_Language.Items.Add(TempValue)
+    '                                    Loop Until GetOut = True
+    '                                    Form1.cmbx_IMDB_Title_Language.Text = Test
+    '                                Case "fullcredits"
+    '                                    Dim Test As Boolean = NodeChild.Attributes("default").Value
+    '                                    Form1.cb_XBMC_IMDB_FullCredits.Checked = Test
+    '                                Case "imdbscale"
+    '                                    Dim Test As String = NodeChild.Attributes("default").Value
+    '                                    Dim AllValues As String = NodeChild.Attributes("values").Value
+    '                                    Dim GetOut As Boolean = False
+    '                                    Do
+    '                                        Dim Position As Integer = AllValues.LastIndexOf("|")
+    '                                        Dim TempValue As String = ""
+    '                                        If Position = -1 Then
+    '                                            TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+    '                                            GetOut = True
+    '                                        Else
+    '                                            TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+    '                                            AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+    '                                        End If
+    '                                        Form1.cmbx_IMDB_Poster_Actor_Size.Items.Add(TempValue)
+    '                                    Loop Until GetOut = True
+    '                                    Form1.cmbx_IMDB_Poster_Actor_Size.Text = Test
 
-                                End Select
-                            Catch
-                                'empty node
-                            End Try
-                        End If
-                    End If
-                Next
-            Next
-        Catch
-        End Try
-    End Sub
+    '                            End Select
+    '                        Catch
+    '                            'empty node
+    '                        End Try
+    '                    End If
+    '                End If
+    '            Next
+    '        Next
+    '    Catch
+    '    End Try
+    'End Sub
 
-    Public Sub Save_XBMC_IMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String)
-        Dim m_xmld As XmlDocument
-        Dim m_nodelist As XmlNodeList
-        Dim m_node As XmlNode
+    'Public Sub Save_XBMC_IMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String)
+    '    Dim m_xmld As XmlDocument
+    '    Dim m_nodelist As XmlNodeList
+    '    Dim m_node As XmlNode
 
-        m_xmld = New XmlDocument()
-        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
-        m_nodelist = m_xmld.SelectNodes("/settings")
-        Dim NodeChild As XmlNode
-        Dim MoviePosterURL As String = ""
-        Dim MovieFanartURL As String = ""
-        Dim SeasonPosters(0) As String
-        Dim Seasonall As String = Nothing
+    '    m_xmld = New XmlDocument()
+    '    m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+    '    m_nodelist = m_xmld.SelectNodes("/settings")
+    '    Dim NodeChild As XmlNode
+    '    Dim MoviePosterURL As String = ""
+    '    Dim MovieFanartURL As String = ""
+    '    Dim SeasonPosters(0) As String
+    '    Dim Seasonall As String = Nothing
 
-        Try
-            For Each m_node In m_nodelist
-                For Each NodeChild In m_node.ChildNodes
-                    If (NodeChild.Name.ToLower = "setting") Then
-                        If NodeChild.Attributes.Count > 0 Then
-                            Try
-                                If NodeChild.Attributes.ItemOf("id") IsNot Nothing AndAlso KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
-                                    Select Case KeyToBeChanged
-                                        Case "tmdbthumbs"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "impawards"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "movieposterdb"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "fanart"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "trailerq"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "imdbtrailer"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "akatitles"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "fullcredits"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                        Case "imdbscale"
-                                            NodeChild.Attributes("default").Value = ChangeValue
-                                    End Select
-                                End If
-                            Catch
-                                'empty node
-                            End Try
-                        End If
-                    End If
-                Next
-            Next
-        Catch
-        End Try
+    '    Try
+    '        For Each m_node In m_nodelist
+    '            For Each NodeChild In m_node.ChildNodes
+    '                If (NodeChild.Name.ToLower = "setting") Then
+    '                    If NodeChild.Attributes.Count > 0 Then
+    '                        Try
+    '                            If NodeChild.Attributes.ItemOf("id") IsNot Nothing AndAlso KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
+    '                                Select Case KeyToBeChanged
+    '                                    Case "tmdbthumbs"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "impawards"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "movieposterdb"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "fanart"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "trailerq"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "imdbtrailer"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "akatitles"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "fullcredits"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                    Case "imdbscale"
+    '                                        NodeChild.Attributes("default").Value = ChangeValue
+    '                                End Select
+    '                            End If
+    '                        Catch
+    '                            'empty node
+    '                        End Try
+    '                    End If
+    '                End If
+    '            Next
+    '        Next
+    '    Catch
+    '    End Try
 
-        For i=0 to 10
-            Try
-                m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
-                Return
-            Catch
-                Thread.Sleep(200)
-            End Try
-        Next
-    End Sub
+    '    For i=0 to 10
+    '        Try
+    '            m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+    '            Return
+    '        Catch
+    '            Thread.Sleep(200)
+    '        End Try
+    '    Next
+    'End Sub
 
     Public Sub Read_XBMC_TMDB_Scraper_Config()
         Dim m_xmld As XmlDocument
@@ -728,8 +728,8 @@ Module General
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
-        If Form1.ComboBox_TMDB_HD_Trailer.Items.Count > 0 Then Form1.ComboBox_TMDB_HD_Trailer.Items.Clear()
-        If Form1.ComboBox_TMDB_Title_Language.Items.Count > 0 Then Form1.ComboBox_TMDB_Title_Language.Items.Clear()
+        If Form1.cmbxXbmcTmdbHDTrailer.Items.Count > 0 Then Form1.cmbxXbmcTmdbHDTrailer.Items.Clear()
+        If Form1.cmbxXbmcTmdbTitleLanguage.Items.Count > 0 Then Form1.cmbxXbmcTmdbTitleLanguage.Items.Clear()
         Try
             For Each m_node In m_nodelist
                 For Each NodeChild In m_node.ChildNodes
@@ -754,9 +754,9 @@ Module General
                                                 TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
                                                 AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
                                             End If
-                                            Form1.ComboBox_TMDB_HD_Trailer.Items.Add(TempValue)
+                                            Form1.cmbxXbmcTmdbHDTrailer.Items.Add(TempValue)
                                         Loop Until GetOut = True
-                                        Form1.ComboBox_TMDB_HD_Trailer.Text = Test
+                                        Form1.cmbxXbmcTmdbHDTrailer.Text = Test
                                     Case "language"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -771,12 +771,12 @@ Module General
                                                 TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
                                                 AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
                                             End If
-                                            Form1.ComboBox_TMDB_Title_Language.Items.Add(TempValue)
+                                            Form1.cmbxXbmcTmdbTitleLanguage.Items.Add(TempValue)
                                         Loop Until GetOut = True
-                                        Form1.ComboBox_TMDB_Title_Language.Text = Test
+                                        Form1.cmbxXbmcTmdbTitleLanguage.Text = Test
                                     Case "ratings"
                                         Dim Test As String = NodeChild.Attributes("default").Value
-                                        Form1.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Checked = If(Test.ToLower = "imdb", True, False)
+                                        Form1.cbXbmcTmdbIMDBRatings.Checked = If(Test.ToLower = "imdb", True, False)
                                 End Select
                             Catch
                                 'empty node
