@@ -4,6 +4,7 @@ Public Class Renamer
     Const SetDefaults = True
 
     Private Structure str_renameTemplate
+        'Episode Renaming
         Dim previous As String
         Dim prefix As String
         Dim showTitleCase As String
@@ -16,6 +17,17 @@ Public Class Renamer
         Dim seasChar As String
         Dim epChar As String
         Dim suffix As String
+
+        'Season Renaming
+        Dim Se_previous As String
+        Dim Se_prefix As String
+        Dim Se_showTitleCase As String
+        Dim Se_seasonTitleCase As String
+        Dim Se_sepShowTitle As String
+        Dim Se_sepPreSeas As String
+        Dim Se_sepPostSeas As String
+        Dim Se_seasNoLen As Integer
+        Dim Se_seasChar As String
 
         Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
             previous = ""
@@ -30,6 +42,15 @@ Public Class Renamer
             seasChar = ""
             epChar = ""
             suffix = ""
+            Se_previous = ""
+            Se_prefix = ""
+            Se_showTitleCase = ""
+            Se_seasonTitleCase = ""
+            Se_sepShowTitle = ""
+            Se_sepPreSeas = ""
+            Se_sepPostSeas = ""
+            Se_seasNoLen = 0
+            Se_seasChar = ""
         End Sub
     End Structure
 
@@ -176,5 +197,76 @@ Public Class Renamer
             rename.epChar = rename.epChar.ToUpper()
         End If
     End Sub
+
+    'Public Shared Function setSeasonRenamePref(ByVal strSeasonRenamePref As String) As Boolean
+    '    If String.Equals(strSeasonRenamePref, rename.Se_previous) Then Return True
+    '    Dim strSeasonRenameWorking As String = strSeasonRenamePref.ToLower
+    '    Dim posShow As Integer = strSeasonRenameWorking.IndexOf("show")
+    '    Dim posShowTitle As Integer = If(posShow <> -1, strSeasonRenameWorking.IndexOf("title"), -1)
+    '    Dim posSeason As Integer = strSeasonRenameWorking.IndexOf("Season")
+    '    'Dim posEpisodeTitle As Integer = If(posEpisode <> -1, strSeasonRenameWorking.IndexOf("title", posEpisode), -1)
+    '    Dim posExt As Integer = strSeasonRenameWorking.IndexOf("xx")
+
+    '    'Check for correct syntax for show and episode titles
+    '    Dim test4ShowTitle As Match = Regex.Match(strSeasonRenameWorking, "show.?title")
+    '    If Not test4ShowTitle.Success Then posShow = -1
+    '    Dim test4EpTitle As Match = Regex.Match(strSeasonRenameWorking, "episode.?title")
+    '    If Not test4EpTitle.Success Then posEpisode = -1
+
+    '    Dim DoWeReturn As Boolean = True  'added result holder of test since m.sucess may still contain nothing if there are no regexp in Form1.tv_RegexScraper
+
+    '    Dim M As Match = Nothing        'm.success is readonly so cannot be set to false in advance....
+
+    '    For Each regexp In tvRegexScraper
+    '        M = Regex.Match(strRenameWorking, regexp)           'm.sucess is true or false now....
+    '        If M.Success = True Then
+    '            DoWeReturn = False 'added result change
+    '            Exit For
+    '        End If
+    '    Next
+
+    '    If DoWeReturn Then Return False 'If Not M.Sucess then Return false     'If For Loop did not loop at all then M.Success still contains 'nothing' and we get an exception
+
+    '    rename.previous = strSeasonRenamePref
+    '    rename.prefix = If(posShow > 0, strSeasonRenamePref.Substring(0, posShow), If(posShow < 0 And M.Index > 0, strSeasonRenamePref.Substring(0, M.Index), ""))
+    '    rename.sepShowTitle = If(posShow <> -1 And posShowTitle <> -1, strSeasonRenamePref.Substring(posShow + 4, posShowTitle - (posShow + 4)), "")
+    '    rename.sepEpisodeTitle = If(posEpisode <> -1, strSeasonRenamePref.Substring(posEpisode + 7, posEpisodeTitle - (posEpisode + 7)), "")
+    '    rename.sepPreSeasEp = If(posShowTitle <> -1, strSeasonRenamePref.Substring(posShowTitle + 5, M.Index - (posShowTitle + 5)), "")
+    '    rename.sepPostSeasEp = If(posEpisode <> -1, strSeasonRenamePref.Substring(M.Index + M.Length, posEpisode - (M.Index + M.Length)), "")
+    '    rename.seasNoLen = M.Groups(1).Length
+    '    rename.seasChar = strSeasonRenameWorking.Substring(M.Index, M.Groups(1).Index - M.Index)
+    '    rename.epChar = strSeasonRenameWorking.Substring(M.Groups(1).Index + M.Groups(1).Length, M.Groups(2).Index - (M.Groups(1).Index + M.Groups(1).Length))
+    '    rename.suffix = If(posExt <> -1, strSeasonRenamePref.Substring(If(posEpisodeTitle <> -1, posEpisodeTitle + 5, M.Index + M.Length), posExt - If(posEpisodeTitle <> -1, posEpisodeTitle + 5, M.Index + M.Length)), "")
+
+    '    applySeasonEpisodeCase()
+
+    '    rename.showTitleCase = ""
+    '    If posShow <> -1 Then
+    '        If Char.IsLower(strRenamePref.Chars(posShow)) Then
+    '            rename.showTitleCase = "LC"                                 'LC = lowercase
+    '        ElseIf Char.IsUpper(strRenamePref.Chars(posShow + 1)) Then
+    '            rename.showTitleCase = "UC"                                 'UC = uppercase
+    '        ElseIf Char.IsLower(strRenamePref.Chars(posShowTitle)) Then
+    '            rename.showTitleCase = "FL"                                 'FL = first letter
+    '        Else
+    '            rename.showTitleCase = "SC"                                 'SC = sentence case
+    '        End If
+    '    End If
+
+    '    rename.episodeTitleCase = ""
+    '    If posEpisode <> -1 Then
+    '        If Char.IsLower(strRenamePref.Chars(posEpisode)) Then
+    '            rename.episodeTitleCase = "LC"
+    '        ElseIf Char.IsUpper(strRenamePref.Chars(posEpisode + 1)) Then
+    '            rename.episodeTitleCase = "UC"
+    '        ElseIf Char.IsLower(strRenamePref.Chars(posEpisodeTitle)) Then
+    '            rename.episodeTitleCase = "FL"
+    '        Else
+    '            rename.episodeTitleCase = "SC"
+    '        End If
+    '    End If
+
+    '    Return True
+    'End Function
 
 End Class
