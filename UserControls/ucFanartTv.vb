@@ -271,7 +271,7 @@ Public Class ucFanartTv
         Me.Refresh()
         messbox.Refresh()
         Dim cachefile As String = Utilities.Download2Cache(sender.Tag.ToString)
-        Form1.util_ZoomImage(Nothing, cachefile)
+        Form1.util_ZoomImage(cachefile)
         messbox.Close()
     End Sub
 
@@ -302,7 +302,7 @@ Public Class ucFanartTv
     Private Sub pbexists_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles pbexists.DoubleClick 
         If Not IsNothing(pbexists.Image) Then
             Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
-            Form1.util_ZoomImage(Nothing, loadpath)
+            Form1.util_ZoomImage(loadpath)
         End If
     End Sub
 

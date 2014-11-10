@@ -1326,12 +1326,10 @@ Public Class ucMusicVideo
     
     Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
         Try
-            If Not PcBxPoster.Image Is Nothing Then
+            If Not PcBxPoster.Tag Is Nothing Then
                 Form1.ControlBox = False
                 Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PcBxPoster.Image)
-                Call Form1.util_ZoomImage(newimage)
+                Call Form1.util_ZoomImage(PcBxPoster.Tag.ToString)
             Else
                 MsgBox("No Image Available To Zoom")
             End If
@@ -1342,12 +1340,10 @@ Public Class ucMusicVideo
 
     Private Sub pcBxSinglePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxSinglePoster.DoubleClick
         Try
-            If Not pcBxSinglePoster.Image Is Nothing Then
+            If Not pcBxSinglePoster.Tag Is Nothing Then
                 Form1.ControlBox = False
                 Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(pcBxSinglePoster.Image)
-                Call Form1.util_ZoomImage(newimage)
+                Call Form1.util_ZoomImage(pcBxSinglePoster.Tag.ToString)
             Else
                 MsgBox("No Image Available To Zoom")
             End If
@@ -1358,12 +1354,10 @@ Public Class ucMusicVideo
 
     Private Sub pcBxScreenshot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxScreenshot.DoubleClick
         Try
-            If Not pcBxScreenshot.Image Is Nothing Then
+            If Not pcBxScreenshot.Tag Is Nothing Then
                 Form1.ControlBox = False
                 Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(pcBxScreenshot.Image)
-                Call Form1.util_ZoomImage(newimage)
+                Call Form1.util_ZoomImage(pcBxScreenshot.Tag.ToString)
             Else
                 MsgBox("No Image Available To Zoom")
             End If
@@ -1374,12 +1368,10 @@ Public Class ucMusicVideo
 
     Private Sub PcBxMusicVideoScreenShot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxMusicVideoScreenShot.DoubleClick
         Try
-            If Not PcBxMusicVideoScreenShot.Image Is Nothing Then
+            If Not PcBxMusicVideoScreenShot.Tag Is Nothing Then
                 Form1.ControlBox = False
                 Form1.MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PcBxMusicVideoScreenShot.Image)
-                Call Form1.util_ZoomImage(newimage)
+                Call Form1.util_ZoomImage(PcBxMusicVideoScreenShot.Tag.ToString)
             Else
                 MsgBox("No Image Available To Zoom")
             End If

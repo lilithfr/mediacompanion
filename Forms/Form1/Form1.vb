@@ -425,7 +425,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             'TabControl3.TabPages.Remove(Me.tvtpfanarttv)    'Hide TvFanart Tab while Work-In Progress
             PreferencesToolStripMenuItem.Visible = False
             
@@ -2527,7 +2527,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Public Sub util_ZoomImage(ByVal file As Bitmap, Optional ByVal cachefile As String = "")
+    Public Sub util_ZoomImage(ByVal file As String)
         bigPanel = New Panel
         With bigPanel
             .Width = Me.Width
@@ -2542,15 +2542,12 @@ Public Class Form1
             .Width = bigPanel.Width
             .Height = bigPanel.Height
             .SizeMode = PictureBoxSizeMode.Zoom
-            If cachefile = "" Then
-                .Image = file
-            End If
             .Visible = True
             .BorderStyle = BorderStyle.Fixed3D
             AddHandler bigPictureBox.DoubleClick, AddressOf util_PicBoxClose
             .Dock = DockStyle.Fill
         End With
-        If Not cachefile = "" Then util_ImageLoad(bigPictureBox, cachefile, Utilities.DefaultPosterPath)
+        util_ImageLoad(bigPictureBox, file, Utilities.DefaultPosterPath)
 
         'Dim sizex As Integer = bigpicbox.Width
         'Dim sizey As Integer = bigpicbox.Height
@@ -2588,8 +2585,6 @@ Public Class Form1
             Me.Refresh()
             Application.DoEvents()
             Dim tempstring2 As String = resolutionlbl.Text
-        Else
-            'bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
         End If
 
         Me.Controls.Add(bigPanel)
@@ -4626,76 +4621,48 @@ Public Class Form1
                 Application.DoEvents()
             End If
             Dim tempboolean As Boolean = True
-            Dim location As Integer = 0
+            Dim locationX As Integer = 0
+            Dim locationY As Integer = 0
 
             For Each item As String In names
+                Dim item2 As String = Utilities.Download2Cache(item)
                 Try
-                    If tempboolean = True Then
-                        posterPicBoxes() = New PictureBox()
-                        With posterPicBoxes
-                            'Try
-                            .WaitOnLoad = True
-                            .Location = New Point(location, 0)
-                            .Width = 123
-                            .Height = 168
-                            .SizeMode = PictureBoxSizeMode.Zoom
-                            .ImageLocation = item
-                            .Visible = True
-                            .BorderStyle = BorderStyle.Fixed3D
-                            .Name = "poster" & itemcounter.ToString
-                            AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                            AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                            '            Catch
-                            'End Try
-                        End With
+                    posterPicBoxes() = New PictureBox()
+                    With posterPicBoxes
+                        .WaitOnLoad = True
+                        .Location = New Point(locationX, locationY)
+                        .Width = 123
+                        .Height = 168
+                        .SizeMode = PictureBoxSizeMode.Zoom
+                        .Visible = True
+                        .BorderStyle = BorderStyle.Fixed3D
+                        .Name = "poster" & itemcounter.ToString
+                        AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
+                        AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
+                    End With
+                    util_ImageLoad(posterPicBoxes, item2, "")
 
-                        posterCheckBoxes() = New RadioButton()
-                        With posterCheckBoxes
-                            .Location = New Point(location + 50, 166) '179
-                            .Name = "postercheckbox" & itemcounter.ToString
-                            .SendToBack()
-                            .Text = " "
-                            AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                        End With
+                    posterCheckBoxes() = New RadioButton()
+                    With posterCheckBoxes
+                        .Location = New Point(locationX + 50, locationY + 166) '179
+                        .Name = "postercheckbox" & itemcounter.ToString
+                        .SendToBack()
+                        .Text = " "
+                        AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
+                    End With
 
-                        itemcounter += 1
+                    itemcounter += 1
 
-                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                    End If
-                    If tempboolean = False Then
-                        posterPicBoxes() = New PictureBox()
-                        With posterPicBoxes
-                            .WaitOnLoad = True
-                            .Location = New Point(location, 192) '210
-                            .Width = 123
-                            .Height = 168
-                            .SizeMode = PictureBoxSizeMode.Zoom
-                            .ImageLocation = item
-                            .Visible = True
-                            .BorderStyle = BorderStyle.Fixed3D
-                            .Name = "poster" & itemcounter.ToString
-                            AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                            AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                        End With
-
-                        posterCheckBoxes() = New RadioButton()
-                        With posterCheckBoxes
-                            .Location = New Point(location + 50, 358) '389
-                            .Name = "postercheckbox" & itemcounter.ToString
-                            .SendToBack()
-                            .Text = " "
-                            AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                        End With
-
-                        itemcounter += 1
-
-                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                    End If
+                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     Me.Refresh()
                     Application.DoEvents()
-                    If tempboolean = False Then location += 120
+                    If tempboolean = True Then
+                        locationY = 192
+                    Else
+                        locationX += 120
+                        locationY = 0
+                    End If
                     tempboolean = Not tempboolean
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -5547,9 +5514,7 @@ Public Class Form1
                 If IO.File.Exists(imageLocation) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
-                    'ToolStrip1.Enabled = False
-                    Dim newimage As New Bitmap(imageLocation)
-                    Call util_ZoomImage(newimage)
+                    Call util_ZoomImage(imageLocation)
                 End If
             End If
         Catch ex As Exception
@@ -6817,7 +6782,7 @@ Public Class Form1
         Me.Refresh()
         messbox.Refresh()
         Dim cachefile As String = Utilities.Download2Cache(sender.Tag.ToString)
-        Call util_ZoomImage(Nothing, cachefile)
+        Call util_ZoomImage(cachefile)
         messbox.Close()
     End Sub
 
@@ -7273,14 +7238,16 @@ Public Class Form1
             Dim tempstring As String = ClickedControl
             If tempstring <> Nothing Then
                 Try
-                    If IO.File.Exists(Preferences.GetPosterPath(tempstring)) Then
+                    Dim Temp2 As String = Preferences.GetPosterPath(tempstring)
+                    If IO.File.Exists(Temp2) Then
                         Me.ControlBox = False
                         MenuStrip1.Enabled = False
                         'ToolStrip1.Enabled = False
-                        Dim newimage As New Bitmap(Preferences.GetPosterPath(tempstring))
-                        Dim newimage2 As New Bitmap(newimage)
-                        newimage.Dispose()
-                        Call util_ZoomImage(newimage2)
+                        'Dim newimage As New Bitmap(Preferences.GetPosterPath(tempstring))
+                        'Dim newimage2 As New Bitmap(newimage)
+                        'newimage.Dispose()
+                        'Call util_ZoomImage(newimage2)
+                        util_ZoomImage(Temp2)
                     Else
                         MsgBox("Cant find file:-" & vbCrLf & Preferences.GetPosterPath(tempstring))
                     End If
@@ -11515,12 +11482,15 @@ End Sub
         MenuStrip1.Enabled = False
 
         Try
-            util_ZoomImage(New Bitmap(pictureBox.Tag.ToString))
+            'util_ZoomImage(New Bitmap(pictureBox.Tag.ToString))
+            util_ZoomImage(pictureBox.Tag.ToString)
         Catch
             Dim wc As New WebClient()
             Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.Tag)
             Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-            util_ZoomImage(New Bitmap(ImageStream))
+            Dim cachefile As String = Utilities.Download2Cache(pictureBox.Tag.ToString)
+            'util_ZoomImage(New Bitmap(ImageStream))
+            util_ZoomImage(cachefile)
         End Try
 
     End Sub
@@ -11669,9 +11639,9 @@ End Sub
                     If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
                         Me.ControlBox = False
                         MenuStrip1.Enabled = False
-                        Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
-                            util_ZoomImage(newimage)
-                        End Using
+                        'Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
+                            util_ZoomImage(WorkingHomeMovie.fileinfo.fanartpath)
+                        'End Using
                     End If
                 End If
             Catch ex As Exception
@@ -16141,9 +16111,9 @@ End Sub
                     If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                         Me.ControlBox = False
                         MenuStrip1.Enabled = False
-                        Using newimage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
-                            util_ZoomImage(newimage)
-                        End Using
+                        'Using newimage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
+                            util_ZoomImage(workingMovieDetails.fileinfo.fanartpath)
+                        'End Using
                     End If
                 End If
             Catch ex As Exception
@@ -16163,9 +16133,10 @@ End Sub
                     If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
                         Me.ControlBox = False
                         MenuStrip1.Enabled = False
-                        Using newimage As New Bitmap(workingMovieDetails.fileinfo.posterpath)
-                            util_ZoomImage(newimage)
-                        End Using
+                        'Using newimage As New Bitmap(workingMovieDetails.fileinfo.posterpath)
+                            'util_ZoomImage(newimage)
+                            util_ZoomImage(workingMovieDetails.fileinfo.posterpath)
+                        'End Using
                     End If
                 End If
             Catch ex As Exception
@@ -16406,12 +16377,12 @@ End Sub
 
     Private Sub PictureBox2_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox2.DoubleClick
         Try
-            If Not PictureBox2.Image Is Nothing Then
+            If Not PictureBox2.Tag Is Nothing Then
                 Me.ControlBox = False
                 MenuStrip1.Enabled = False
                 'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PictureBox2.Image)
-                Call util_ZoomImage(newimage)
+                'Dim newimage As New Bitmap(PictureBox2.Image)
+                Call util_ZoomImage(PictureBox2.Tag.ToString)
             Else
                 MsgBox("No Image Available To Zoom")
             End If
@@ -16659,10 +16630,10 @@ End Sub
 
     Private Sub PictureBoxAssignedMoviePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxAssignedMoviePoster.DoubleClick
         Try
-            If Not PictureBoxAssignedMoviePoster.Image Is Nothing Then
+            If Not PictureBoxAssignedMoviePoster.Tag Is Nothing Then
                 Me.ControlBox = False
                 MenuStrip1.Enabled = False
-                Call util_ZoomImage(PictureBoxAssignedMoviePoster.Image)
+                Call util_ZoomImage(PictureBoxAssignedMoviePoster.Tag.ToString)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -16753,68 +16724,47 @@ End Sub
                 names.Add(posterArray(f).ldUrl)
             Next
             lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
-            Dim location As Integer = 0
+            Dim locationX As Integer = 0
+            Dim locationY As Integer = 0
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
             For Each item As String In names
+                Dim item2 As String = Utilities.Download2Cache(item)
                 Try
-                    If tempboolean = True Then
-                        posterPicBoxes() = New PictureBox()
-                        With posterPicBoxes
-                            .WaitOnLoad = True
-                            .Location = New Point(location, 0)
-                            .Width = 123
-                            .Height = 168
-                            .SizeMode = PictureBoxSizeMode.Zoom
-                            .ImageLocation = item
-                            .Visible = True
-                            .BorderStyle = BorderStyle.Fixed3D
-                            .Name = "poster" & itemcounter.ToString
-                            AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                            AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                        End With
-                        posterCheckBoxes() = New RadioButton()
-                        With posterCheckBoxes
-                            .Location = New Point(location + 50, 166)
-                            .Name = "postercheckbox" & itemcounter.ToString
-                            .SendToBack()
-                            .Text = " "
-                            AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                        End With
-                        itemcounter += 1
-                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                    End If
-                    If tempboolean = False Then
-                        posterPicBoxes() = New PictureBox()
-                        With posterPicBoxes
-                            .WaitOnLoad = True
-                            .Location = New Point(location, 192)
-                            .Width = 123
-                            .Height = 168
-                            .SizeMode = PictureBoxSizeMode.Zoom
-                            .ImageLocation = item
-                            .Visible = True
-                            .BorderStyle = BorderStyle.Fixed3D
-                            .Name = "poster" & itemcounter.ToString
-                            AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                            AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                        End With
-                        posterCheckBoxes() = New RadioButton()
-                        With posterCheckBoxes
-                            .Location = New Point(location + 50, 358)
-                            .Name = "postercheckbox" & itemcounter.ToString
-                            .SendToBack()
-                            .Text = " "
-                            AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                        End With
-                        itemcounter += 1
-                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                    End If
+                    posterPicBoxes() = New PictureBox()
+                    With posterPicBoxes
+                        .WaitOnLoad = True
+                        .Location = New Point(locationX, locationY)
+                        .Width = 123
+                        .Height = 168
+                        .SizeMode = PictureBoxSizeMode.Zoom
+                        .Visible = True
+                        .BorderStyle = BorderStyle.Fixed3D
+                        .Name = "poster" & itemcounter.ToString
+                        AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
+                        AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
+                    End With
+                    util_ImageLoad(posterPicBoxes, item2, "")
+
+                    posterCheckBoxes() = New RadioButton()
+                    With posterCheckBoxes
+                        .Location = New Point(locationX + 50, locationY +166)
+                        .Name = "postercheckbox" & itemcounter.ToString
+                        .SendToBack()
+                        .Text = " "
+                        AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
+                    End With
+                    itemcounter += 1
+                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     Me.Refresh()
                     Application.DoEvents()
-                    If tempboolean = False Then location += 120
+                    If tempboolean = True Then
+                        locationY = 192
+                    Else
+                        locationX += 120
+                        locationY = 0
+                    End If
                     tempboolean = Not tempboolean
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -16855,67 +16805,46 @@ End Sub
                 names.Add(posterArray(f).ldUrl)
             Next
             lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
-            Dim location As Integer = 0
+            Dim locationX As Integer = 0
+            Dim locationY As Integer = 0
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
             For Each item As String In names
-                If tempboolean = True Then
-                    posterPicBoxes() = New PictureBox()
-                    With posterPicBoxes
-                        .WaitOnLoad = True
-                        .Location = New Point(location, 0)
-                        .Width = 123
-                        .Height = 168
-                        .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = item
-                        .Visible = True
-                        .BorderStyle = BorderStyle.Fixed3D
-                        .Name = "poster" & itemcounter.ToString
-                        AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                        AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                    End With
-                    posterCheckBoxes() = New RadioButton()
-                    With posterCheckBoxes
-                        .Location = New Point(location + 50, 166)
-                        .Name = "postercheckbox" & itemcounter.ToString
-                        .SendToBack()
-                        .Text = " "
-                        AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                    End With
-                    itemcounter += 1
-                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                End If
-                If tempboolean = False Then
-                    posterPicBoxes() = New PictureBox()
-                    With posterPicBoxes
-                        .WaitOnLoad = True
-                        .Location = New Point(location, 192)
-                        .Width = 123
-                        .Height = 168
-                        .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = item
-                        .Visible = True
-                        .BorderStyle = BorderStyle.Fixed3D
-                        .Name = "poster" & itemcounter.ToString
-                        AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                        AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                    End With
-                    posterCheckBoxes() = New RadioButton()
-                    With posterCheckBoxes
-                        .Location = New Point(location + 50, 358)
-                        .Name = "postercheckbox" & itemcounter.ToString
-                        .SendToBack()
-                        .Text = " "
-                        AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                    End With
-                    itemcounter += 1
-                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                End If
+                Dim item2 As String = Utilities.Download2Cache(item)
+                posterPicBoxes() = New PictureBox()
+                With posterPicBoxes
+                    .WaitOnLoad = True
+                    .Location = New Point(locationX, locationY)
+                    .Width = 123
+                    .Height = 168
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "poster" & itemcounter.ToString
+                    AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
+                    AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
+                End With
+                util_ImageLoad(posterPicBoxes, item2, "")
+
+                posterCheckBoxes() = New RadioButton()
+                With posterCheckBoxes
+                    .Location = New Point(locationX + 50, locationY + 166)
+                    .Name = "postercheckbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
+                End With
+                itemcounter += 1
+                Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                 Me.Refresh()
                 Application.DoEvents()
-                If tempboolean = False Then location += 120
+                If tempboolean = True Then
+                    locationY = 192
+                Else
+                    locationX += 120
+                    locationY = 0
+                End If
                 tempboolean = Not tempboolean
             Next
             messbox.Close()
@@ -16935,7 +16864,7 @@ End Sub
             messbox.Refresh()
             Call mov_PosterInitialise()
             Try
-                Dim tmdb As New TMDb  '(workingMovieDetails.fullmoviebody.imdbid)
+                Dim tmdb As New TMDb
                 tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
                 tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
                 posterArray.AddRange(tmdb.MC_Posters)

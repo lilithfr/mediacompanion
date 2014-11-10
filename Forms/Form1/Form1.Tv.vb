@@ -945,7 +945,11 @@ Partial Public Class Form1
             'PicBox.Load()
             'Return True
         ElseIf File.Exists(ImagePath) Then
-            PathToUse = ImagePath
+            'If (New IO.FileInfo(ImagePath)).Length = 0 Then
+            '    File.Delete(ImagePath)
+            'Else
+                PathToUse = ImagePath
+            'End If
         End If
 
         Try
