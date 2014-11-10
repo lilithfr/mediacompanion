@@ -6595,110 +6595,84 @@ Public Class Form1
             tempint2 = usedlist.Count
         End If
 
-        Dim location As Integer = 0
+        Dim locationX As Integer = 0
+        Dim locationY As Integer = 0
         Dim itemcounter As Integer = 0
         Dim tempboolean As Boolean = True
         'If CheckBox8.Checked = True Or CheckBox8.Visible = False Then
         If rbTVposter.Checked = True Or rbTVbanner.Enabled = False Then
             For f = tempint - 1 To tempint2 - 1
-                If tempboolean = True Then
-                    tvposterpicboxes() = New PictureBox()
-                    With tvposterpicboxes
-                        .Location = New Point(location, 0)
-                        .Width = 123
-                        .Height = 168
-                        .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = usedlist(f).SmallUrl
-                        .Tag = usedlist(f).Url
-                        .Visible = True
-                        .BorderStyle = BorderStyle.Fixed3D
-                        .Name = "poster" & itemcounter.ToString
-                        AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
-                        'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
-                    End With
+                Dim item As String = Utilities.Download2Cache(usedlist(f).SmallUrl)
+                tvposterpicboxes() = New PictureBox()
+                With tvposterpicboxes
+                    .Location = New Point(locationX, locationY)
+                    .Width = 123
+                    .Height = 168
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .Tag = usedlist(f).Url
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "poster" & itemcounter.ToString
+                    AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
+                    'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
+                End With
+                util_ImageLoad(tvposterpicboxes, item, "")
 
-                    tvpostercheckboxes() = New RadioButton()
-                    With tvpostercheckboxes
-                        .Location = New Point(location + 50, 166) '179
-                        .Name = "postercheckbox" & itemcounter.ToString
-                        .SendToBack()
-                        .Text = " "
-                        AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
-                    End With
+                tvpostercheckboxes() = New RadioButton()
+                With tvpostercheckboxes
+                    .Location = New Point(locationX + 50, locationY + 166) '179
+                    .Name = "postercheckbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
+                End With
 
-                    itemcounter += 1
-
-
-                    Me.Panel16.Controls.Add(tvposterpicboxes())
-                    Me.Panel16.Controls.Add(tvpostercheckboxes())
-                End If
-                If tempboolean = False Then
-                    tvposterpicboxes() = New PictureBox()
-                    With tvposterpicboxes
-                        .Location = New Point(location, 192) '210
-                        .Width = 123
-                        .Height = 168
-                        .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = usedlist(f).SmallUrl
-                        .Tag = usedlist(f).Url
-                        .Visible = True
-                        .BorderStyle = BorderStyle.Fixed3D
-                        .Name = "poster" & itemcounter.ToString
-                        AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
-                    End With
-
-                    tvpostercheckboxes() = New RadioButton()
-                    With tvpostercheckboxes
-                        .Location = New Point(location + 50, 358) '389
-                        .Name = "postercheckbox" & itemcounter.ToString
-                        .SendToBack()
-                        .Text = " "
-                        AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
-                    End With
-
-                    itemcounter += 1
+                itemcounter += 1
 
 
-                    Me.Panel16.Controls.Add(tvposterpicboxes())
-                    Me.Panel16.Controls.Add(tvpostercheckboxes())
-                End If
+                Me.Panel16.Controls.Add(tvposterpicboxes())
+                Me.Panel16.Controls.Add(tvpostercheckboxes())
                 Me.Refresh()
                 Application.DoEvents()
-                If tempboolean = False Then location += 120
+                If tempboolean = True Then
+                    locationY = 192
+                Else
+                    locationX += 120
+                    locationY = 0
+                End If
                 tempboolean = Not tempboolean
             Next
         Else
             For f = tempint - 1 To tempint2 - 1
-                If tempboolean = True Then
-                    tvposterpicboxes() = New PictureBox()
-                    With tvposterpicboxes
-                        .Location = New Point(0, location)
-                        .Width = 600
-                        .Height = 114
-                        .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = usedlist(f).SmallUrl
-                        .Tag = usedlist(f).Url
-                        .Visible = True
-                        .BorderStyle = BorderStyle.Fixed3D
-                        .Name = "poster" & itemcounter.ToString
-                        AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
-                        'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
-                    End With
+                Dim item As String = Utilities.Download2Cache(usedlist(f).SmallUrl)
+                tvposterpicboxes() = New PictureBox()
+                With tvposterpicboxes
+                    .Location = New Point(0, locationY)
+                    .Width = 600
+                    .Height = 114
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .Tag = usedlist(f).Url
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "poster" & itemcounter.ToString
+                    AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
+                    'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
+                End With
+                util_ImageLoad(tvposterpicboxes, item, "")
 
-                    tvpostercheckboxes() = New RadioButton()
-                    With tvpostercheckboxes
-                        .Location = New Point(290, location + 110)
-                        .Name = "postercheckbox" & itemcounter.ToString
-                        .SendToBack()
-                        .Text = " "
-                        AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
-                    End With
-                    itemcounter += 1
-                    location += 140
+                tvpostercheckboxes() = New RadioButton()
+                With tvpostercheckboxes
+                    .Location = New Point(290, locationY + 110)
+                    .Name = "postercheckbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
+                End With
+                itemcounter += 1
+                locationY += 140
 
-                    Me.Panel16.Controls.Add(tvposterpicboxes())
-                    Me.Panel16.Controls.Add(tvpostercheckboxes())
-                End If
+                Me.Panel16.Controls.Add(tvposterpicboxes())
+                Me.Panel16.Controls.Add(tvpostercheckboxes())
             Next
         End If
         
@@ -18686,7 +18660,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button54_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button54.Click
+    Private Sub Button54_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button54.Click  'TV Poster Page Next
         Try
             tvposterpage += 1
             btnTvPosterSaveBig.Visible = False
@@ -18700,7 +18674,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button55_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button55.Click
+    Private Sub Button55_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button55.Click  'TV Poster Page Prev
         Try
             tvposterpage -= 1
             btnTvPosterSaveBig.Visible = False
