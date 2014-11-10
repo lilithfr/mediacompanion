@@ -193,6 +193,7 @@ Public Class ucFanartTv
         Dim ylocOffset = (locHeight + pbheight + 36)
         Dim itemcounter As Integer = 0
         For each item In usedlist
+            Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
             artposterpicboxes() = New PictureBox()
             With artposterpicboxes
                 .Location = New Point(xlocation, locHeight)
@@ -200,13 +201,15 @@ Public Class ucFanartTv
                 .Height = pbheight
                 .BackColor = Color.Transparent 
                 .SizeMode = PictureBoxSizeMode.Zoom
-                .ImageLocation = item.urlpreview         'Preview Image url
+                '.ImageLocation = item.urlpreview         'Preview Image url
                 .Tag = item.url                          'Full Image url
                 .Visible = True
                 .BorderStyle = BorderStyle.Fixed3D
                 .Name = "poster" & itemcounter.ToString
                 AddHandler artposterpicboxes.DoubleClick, AddressOf PosterDoubleClick
             End With
+            Form1.util_ImageLoad(artposterpicboxes, item2, "")
+
             artcheckboxes() = New RadioButton()
             With artcheckboxes
                 .Location = New Point(xlocation + imgchkbx, locHeight + pbheight + 4)
