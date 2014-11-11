@@ -4933,6 +4933,9 @@ Public Class Form1
                             WebBrowser4.Navigate(url)
                         End Try
                     End If
+                ElseIf String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso String.IsNullOrEmpty(Show.ImdbId.Value) Then
+                    TabControl3.SelectedIndex = 0
+                    MsgBox("No TVDB or IMDB ID present for selected Show" & vbCrLf & "Use Tv Show Selector Tab, to select" & vbCrLf & "correct show")
                 End If
             ElseIf tab.ToLower = "fanart" Then
                 Call tv_Fanart_Load()
@@ -18963,6 +18966,10 @@ End Sub
             MsgBox("Invalid Tvdb ID" & vbCrLf & "Unable to load Show's TVDB page")
             Exit Sub
         End If
+        If String.IsNullOrEmpty(Show.TvdbId.Value) Then
+            MsgBox("Selected Show has no Tvdb ID" & vbCrLf & "Unable to load Show's TVDB page")
+            Exit Sub
+        End If
         Dim TvdbId As Integer = Show.TvdbId.Value
         url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
         Try
@@ -18980,6 +18987,10 @@ End Sub
     Private Sub btn_TvIMDB_Click(sender As System.Object, e As System.EventArgs) Handles btn_TvIMDB.Click
         Dim url As String
         Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        If String.IsNullOrEmpty(Show.ImdbId.Value) Then
+            MsgBox("Selected Show has no IMDB ID" & vbCrLf & "Unable to load Show's IMDB page")
+            Exit Sub
+        End If
         url = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
         Try
             WebBrowser4.Stop()
