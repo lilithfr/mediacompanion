@@ -662,7 +662,7 @@ Partial Public Class Form1
             End If
         Else                                'Season01 & up
             tvpbright = SelectedSeason.Poster.Path
-            If Preferences.FrodoEnabled Then tvpbbottom = SelectedSeason.Poster.Path.Replace("-poster.jpg", "-banner.jpg")
+            If Preferences.FrodoEnabled Then tvpbbottom = SelectedSeason.Banner.Path
         End If
 
         util_ImageLoad(tv_PictureBoxRight, tvpbright, Utilities.DefaultTvPosterPath)
@@ -842,7 +842,7 @@ Partial Public Class Form1
             If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
                 util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultTvPosterPath)
                 If Preferences.FrodoEnabled Then
-                    util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultTvBannerPath)
+                    util_ImageLoad(tv_PictureBoxBottom, Season.Banner.Path, Utilities.DefaultTvBannerPath)
                 End If
             End If
 
@@ -880,13 +880,29 @@ Partial Public Class Form1
                     If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
                         tvpbright = Season.Poster.Path 
                         If Preferences.FrodoEnabled Then
-                            tvpbbottom = Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg")
+                            tvpbbottom = Season.Banner.Path
                         End If
                     End If
 
                     util_ImageLoad(tv_PictureBoxLeft, tvpbleft, Utilities.DefaultTvFanartPath)
                     util_ImageLoad(tv_PictureBoxRight, tvpbright, Utilities.DefaultTvPosterPath)
                     util_ImageLoad(tv_PictureBoxBottom, tvpbbottom, Utilities.DefaultTvBannerPath)
+
+                    Dim aActor As Boolean = False
+                        For Each actor In Ep.ListActors
+                            If Not String.IsNullOrEmpty(actor.actorname) Then
+                                cmbxEpActor.Items.Add(Utilities.ReplaceNothing(actor.actorname))
+                                'cmbxEpActor.SelectedIndex = 0
+                                aActor = True
+                            End If
+                        Next
+                    If aActor Then
+                        cmbxEpActor.SelectedIndex = 0
+                    Else
+                        cmbxEpActor.Items.Clear()
+                        cmbxEpActor.Items.Add("")
+                        cmbxEpActor.SelectedIndex = 0
+                    End If
 
                     Dim epdetails As String = ""
                     epdetails += "Video: " & Utilities.ReplaceNothing(Ep.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
@@ -2770,6 +2786,10 @@ Partial Public Class Form1
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If episode.IsMissing Then
+                            episode.Visible = False
+                            Continue For
+                        End If
                         edenart = episode.Thumbnail.Path
                         frodoart = episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg")
                         If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) Then
@@ -2852,7 +2872,7 @@ Partial Public Class Form1
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     edenpost = Season.Poster.Path
                     frodopost = Season.Poster.Path.Replace(".tbn", "-poster.jpg")
-                    frodobann = Season.Poster.Path.Replace(".tbn", "-banner.jpg")
+                    frodobann = Season.Banner.Path 
                     'If Season.Poster.Exists Then
                     If ((eden And frodo) AndAlso (IO.File.Exists(edenpost) And (IO.File.Exists(frodopost) AndAlso IO.File.Exists(frodobann)))) Or ((eden And Not frodo) AndAlso IO.File.Exists(edenpost)) Or ((frodo And Not eden) AndAlso (IO.File.Exists(frodopost) Or IO.File.Exists(frodobann))) Then
                         Season.Visible = False

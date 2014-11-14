@@ -15,6 +15,7 @@ Public Class TvSeason
         Set(value As TvShow)
             _ShowObj = value
             Me.Poster.FolderPath = _ShowObj.FolderPath
+            Me.Banner.FolderPath = _ShowObj.FolderPath 
         End Set
     End Property
 
@@ -33,10 +34,13 @@ Public Class TvSeason
             Select Case value
                 Case -1                  'case -1 is unknown season
                     Me.Poster.FileName = "season-specials" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
+                    Me.Banner.FileName = "season-specials-banner.jpg"
                 Case 0                   'case 0 is specials
                     Me.Poster.FileName = "season-specials" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
+                    Me.Banner.FileName = "season-specials-banner.jpg"
                 Case Else                'all other are normal seasons 
                     Me.Poster.FileName = "season" & Media_Companion.Utilities.PadNumber(value, 2) & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
+                    Me.Banner.FileName = "season" & Media_Companion.Utilities.PadNumber(value, 2) & "-banner.jpg"
             End Select
             
             _SeasonNumber = value
@@ -58,6 +62,7 @@ Public Class TvSeason
 
     Public Property ShowId As New ProtoXML.ProtoProperty(Me, "ShowId")
     Public Property Poster As New ProtoXML.ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "seasonX" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")}
+    Public Property Banner As New ProtoXML.ProtoImage(Me, "banner", Utilities.DefaultBannerPath) With {.FileName = "seasonX" & "-banner.jpg"}
 
     Public Property Episodes As New List(Of TvEpisode)
     Public Property Playcount As New ProtoXML.ProtoProperty(Me, "playcount")

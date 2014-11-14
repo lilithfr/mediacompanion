@@ -75,7 +75,7 @@ Partial Public Class TvEpisode
         'If Me.IsAltered Then
         '    EpisodeNode.ImageKey = "edit"
         '    EpisodeNode.SelectedImageKey = "edit"
-        If Me.PlayCount.Value <> "0" Then
+        If Me.PlayCount.Value <> "0" AndAlso Me.PlayCount.Value <> "" Then
             EpisodeNode.ImageKey = "watched"
             EpisodeNode.SelectedImageKey = "watched"
         Else

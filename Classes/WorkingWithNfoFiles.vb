@@ -172,6 +172,8 @@ Public Class WorkingWithNfoFiles
                                             newactor.actorname = actordetail.InnerText
                                         Case "role"
                                             newactor.actorrole = actordetail.InnerText
+                                        Case "order"
+                                            newactor.order = actordetail.InnerText 
                                         Case "thumb"
                                             newactor.actorthumb = actordetail.InnerText
                                     End Select
@@ -339,7 +341,7 @@ Public Class WorkingWithNfoFiles
                                         Case "actor"
                                             Dim actordetail As XmlNode = Nothing
                                             Dim newactor As New str_MovieActors(SetDefaults)
-                                            For Each actordetail In thisresult.ChildNodes
+                                            For Each actordetail In thisresult.ChildNodes(f)
                                                 Select Case actordetail.Name
                                                     Case "name"
                                                         newactor.actorname = actordetail.InnerText
@@ -347,6 +349,8 @@ Public Class WorkingWithNfoFiles
                                                         newactor.actorrole = actordetail.InnerText
                                                     Case "thumb"
                                                         newactor.actorthumb = actordetail.InnerText
+                                                    Case "order"
+                                                        newactor.order = actordetail.Innertext
                                                 End Select
                                             Next
                                             anotherepisode.ListActors.Add(newactor)
