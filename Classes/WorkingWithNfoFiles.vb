@@ -161,6 +161,8 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.ShowId.Value = thisresult.InnerText 
                             Case "uniqueid"
                                 newtvepisode.UniqueId.Value = thisresult.InnerText
+                            Case "epbookmark"
+                                newtvepisode.EpBookmark.Value = thisresult.InnerText 
                             Case "actor"
                                 Dim actordetail As XmlNode = Nothing
                                 Dim newactor As New str_MovieActors(SetDefaults)
@@ -331,7 +333,9 @@ Public Class WorkingWithNfoFiles
                                         Case "showid"
                                             anotherepisode.ShowId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "uniqueid"
-                                            anotherepisode.UniqueId.Value = thisresult.ChildNodes(f).innerText
+                                            anotherepisode.UniqueId.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "epbookmark"
+                                            anotherepisode.EpBookmark.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"
                                             Dim actordetail As XmlNode = Nothing
                                             Dim newactor As New str_MovieActors(SetDefaults)
@@ -696,6 +700,10 @@ Public Class WorkingWithNfoFiles
             
             xmlEpisodechild = document.CreateElement("uniqueid")
             xmlEpisodechild.InnerText = ep.UniqueId.Value
+            xmlEpisode.AppendChild(xmlEpisodechild)
+
+            xmlEpisodechild = document.CreateElement("epbookmark")
+            xmlEpisodechild.InnerText = ep.EpBookmark.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
                                    
             xmlEpisodechild = document.CreateElement("videosource")
