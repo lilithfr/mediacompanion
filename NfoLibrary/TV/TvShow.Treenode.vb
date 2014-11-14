@@ -7,7 +7,7 @@ Partial Public Class TvShow
     Public Sub UpdateTreenode()
         Me.ShowNode.Tag = Me
         Me.ShowNode.Text = Preferences.RemoveIgnoredArticles(Me.Title.Value)
-        
+        Dim locked As Boolean = False
         Select Case Me.State
             Case Media_Companion.ShowState.Open
                 ShowNode.ImageKey = "blank"
@@ -15,6 +15,7 @@ Partial Public Class TvShow
             Case Media_Companion.ShowState.Locked
                 ShowNode.ImageKey = "padlock"
                 ShowNode.SelectedImageKey = "padlock"
+                locked = True
             Case Media_Companion.ShowState.Unverified
                 ShowNode.ImageKey = "qmark"
                 ShowNode.SelectedImageKey = "qmark"
@@ -40,7 +41,10 @@ Partial Public Class TvShow
             End If
         Next
         If Me.Episodes.Count = 0 Then Me.Playcount.Value = "0"
-        If Me.Playcount.Value = "1" Then
+        If Me.Playcount.Value = "1" AndAlso locked Then
+            ShowNode.ImageKey = "lockwatched"
+            ShowNode.SelectedImageKey = "lockwatched"
+        ElseIf Me.Playcount.Value = "1" AndAlso Not locked Then
             ShowNode.ImageKey = "watched"
             ShowNode.SelectedImageKey = "watched"
         End If
