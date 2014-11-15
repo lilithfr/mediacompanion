@@ -151,6 +151,29 @@ Public Class TvEpisode
         Me.UpdateTreenode()
     End Sub
 
+    Public Sub AbsorbTvEpisode(ByRef TvEp As TvEpisode)
+        Me.TvdbId.Value = TvEp.Id.Value
+        Me.ImdbId.Value = TvEp.ImdbId.Value
+        Me.Title.Value = TvEp.Title.Value
+        Me.UniqueId.Value = TvEp.Id.Value
+        Me.Rating.Value = TvEp.Rating.Value
+        Me.Plot.Value = TvEp.Plot.Value
+        Me.Director.Value = TvEp.Director.Value
+        Me.Credits.Value = TvEp.Credits.Value
+        Me.MpaaCert.Value = TvEp.MpaaCert.Value
+        Me.Season.Value = TvEp.Season.Value
+        Me.Episode.Value = TvEp.Episode.Value
+        Me.Source.Value = TvEp.Source.Value
+        Me.Aired.Value = TvEp.Aired.Value ' Phyonics - Fix for issue #208
+        Me.ListActors = TvEp.ListActors
+        Me.Details.StreamDetails = TvEp.Details.StreamDetails 
+        Me.EpBookmark.Value = TvEp.EpBookmark.Value 
+        Me.PlayCount.Value = TvEp.PlayCount.Value
+        Me.Runtime.Value = TvEp.Runtime.Value
+        Me.Source.Value = TvEp.Source.Value 
+        Me.UpdateTreenode()
+    End Sub
+
     Public Property IsMissing As Boolean
         Get
             Missing.SurpressAlters = True

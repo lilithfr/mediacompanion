@@ -4744,7 +4744,7 @@ Public Class Form1
         Application.DoEvents()
     End Sub
 
-    Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmbxEpActor.SelectedIndexChanged
+    Private Sub cmbxEpActor_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmbxEpActor.SelectedIndexChanged
         Try
             Dim Episode As Media_Companion.TvEpisode
             If TvTreeview.SelectedNode IsNot Nothing Then
