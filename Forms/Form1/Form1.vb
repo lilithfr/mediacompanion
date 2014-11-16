@@ -6626,12 +6626,11 @@ Public Class Form1
                     .Name = "postercheckbox" & itemcounter.ToString
                     .SendToBack()
                     .Text = " "
+                    .Tag = usedlist(f).Url
                     AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
                 End With
 
                 itemcounter += 1
-
-
                 Me.Panel16.Controls.Add(tvposterpicboxes())
                 Me.Panel16.Controls.Add(tvpostercheckboxes())
                 Me.Refresh()
@@ -6668,6 +6667,7 @@ Public Class Form1
                     .Name = "postercheckbox" & itemcounter.ToString
                     .SendToBack()
                     .Text = " "
+                    .Tag = usedlist(f).Url
                     AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
                 End With
                 itemcounter += 1
@@ -6678,7 +6678,6 @@ Public Class Form1
             Next
         End If
         
-        'Me.Refresh()
         Application.DoEvents()
         If rbTVbanner.Checked AndAlso Me.Panel16.Controls.Count > 0 Then EnableTvBannerScrolling
         Me.Refresh()
@@ -6703,43 +6702,29 @@ Public Class Form1
                 Dim picbox As PictureBox = cont
                 lores(0) = "Save Image (" & picbox.Image.Width & " x " & picbox.Image.Height & ")"
                 lores(1) = picbox.Name
-                'If tvdbmode = True Then
-                    For Each poster In usedlist
-                        If poster.smallUrl = picbox.ImageLocation Then
-                            If Not IsNothing(poster.Resolution) AndAlso IsNumeric(poster.resolution.Replace("x", "")) Then
-                                hires(0) = "Save Image (" & poster.resolution & ")"
-                                hires(0) = hires(0).replace("x", " x ")
-                            Else
-                                hires(0) = "Save Image (Hi-Res)"
-                            End If
-                            hires(1) = poster.url
-                            Exit For
+                For Each poster In usedlist
+                    If poster.smallUrl = sender.tag Then
+                        If Not IsNothing(poster.Resolution) AndAlso IsNumeric(poster.resolution.Replace("x", "")) Then
+                            hires(0) = "Save Image (" & poster.resolution & ")"
+                            hires(0) = hires(0).replace("x", " x ")
+                        Else
+                            hires(0) = "Save Image (Hi-Res)"
                         End If
-                    Next
-                    allok = True
-                    Exit For
-                'Else
-                '    allok = True
-                '    Exit For
-                'End If
+                        hires(1) = poster.url
+                        Exit For
+                    End If
+                Next
+                allok = True
+                Exit For
             End If
         Next
 
         If allok = True Then
-            'Button57.Visible = True
-            'Button57.Tag = lores(1)
-            'Button57.Text = lores(0)
-            'If tvdbmode = True Then
-                btnTvPosterSaveBig.Text = hires(0)
-                btnTvPosterSaveBig.Visible = True
-                btnTvPosterSaveBig.Tag = hires(1)
-            'Else
-            '    btnTvPosterSaveBig.Visible = False
-            'End If
-
+            btnTvPosterSaveBig.Text = hires(0)
+            btnTvPosterSaveBig.Visible = True
+            btnTvPosterSaveBig.Tag = hires(1)
         Else
             btnTvPosterSaveBig.Visible = False
-            'Button57.Visible = False
         End If
     End Sub
 
