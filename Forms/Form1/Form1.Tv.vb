@@ -881,7 +881,10 @@ Partial Public Class Form1
                 PathToUse = ImagePath
             'End If
         End If
-
+        If PathToUse = "" Then
+            PicBox.Image = Nothing
+            Exit Function 
+        End If
         Try
             Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
                 fs.CopyTo(ms)

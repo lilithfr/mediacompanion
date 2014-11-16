@@ -1822,7 +1822,7 @@ Public Class Form1
                         tagtxt.Text &= t & ", "
                     Next
                 End If
-                votestxt.Text = workingMovieDetails.fullmoviebody.votes
+                votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes).ToString("N0")
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
                 top250txt.Text = workingMovieDetails.fullmoviebody.top250
                 If Preferences.movieRuntimeDisplay = "file" Then
@@ -6467,7 +6467,7 @@ Public Class Form1
                     End If
                 End If
             End If
-            util_ImageLoad(PictureBox12, PresentImage, "")
+            util_ImageLoad(PictureBox12, PresentImage, If(rbTVbanner.Checked, Utilities.DefaultTvBannerPath, Utilities.DefaultTvPosterPath))
             If rbTVbanner.Checked = True Then
                 Label73.Text = "Current Banner - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
