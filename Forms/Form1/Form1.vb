@@ -5161,6 +5161,7 @@ Public Class Form1
                     Else
                         Label55.BackColor = Color.Transparent
                         Label55.Text = ListBox3.SelectedItem.ToString & " is available in " & ListBox1.SelectedItem.ToString
+                        Label55.Font = New Font(Label55.Font, FontStyle.Bold)
                     End If
                 End If
             Next
@@ -10058,6 +10059,7 @@ End Sub
                             WorkingWithNfoFiles.ep_NfoSave(listofepisodes, listofepisodes(0).NfoFilePath)
                         Next
                     End If
+                    If singleshow Then Exit For
                     Continue For
                     'tvBatchList.RewriteAllNFOs = False
                 End If
@@ -10347,10 +10349,11 @@ End Sub
                         Next
                     End If
                     done += 1
+                    If singleshow Then Exit For
                 End If
-                If singleshow Then Exit For
+                
             Next
-
+            singleshow = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
