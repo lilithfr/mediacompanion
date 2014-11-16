@@ -6531,6 +6531,7 @@ Public Class Form1
         tvposterpage = 1
         If usedlist.Count <= 0 Then
             Label72.Text = "Displaying 0 of 0 Images"
+            Label72.Visible = True
             Button54.Visible = False
             Button55.Visible = False
             Call tv_PosterPanelClear()
@@ -14431,6 +14432,7 @@ End Sub
         Try
             If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
                 Preferences.movies_useXBMC_Scraper = True
+                Read_XBMC_TMDB_Scraper_Config()
                 GroupBox_MovieIMDBMirror.Enabled = False
                 GroupBox_MovieIMDBMirror.Visible = False
                 GroupBox_TMDB_Scraper_Preferences.Enabled = True

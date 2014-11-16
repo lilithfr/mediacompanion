@@ -529,63 +529,57 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
-            If tempfilename.IndexOf("movie.nfo") > -1 Then
-                Dim possiblemovies(1000) As String
-                Dim possiblemoviescount As Integer = 0
-                Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
-                Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
-                Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                For Each videoextn In VideoExtensions
-                    Dim pattern As String = "*" & videoextn
-                    If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
-                    Try
-                        Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
-                        For Each fs_info As IO.FileInfo In fs_infos
-                            'Application.DoEvents()
-                            'If IO.File.Exists(fs_info.FullName) Then
-                                If videoextn = ".rar" Then
-                                    If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
-                                End If
-                                tempstring = fs_info.FullName.ToLower
-                                If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
-                                    possiblemoviescount += 1
-                                    possiblemovies(possiblemoviescount) = fs_info.FullName
-                                End If
-                            'End If
-                        Next
-                    Catch
-                    End Try
-                Next
-                If possiblemoviescount = 1 Then
-                    actualpathandfilename = possiblemovies(possiblemoviescount)
-                ElseIf possiblemoviescount > 1 Then
-                    Dim multistrings(6) As String
-                    multistrings(0) = "cd"
-                    multistrings(1) = "dvd"
-                    multistrings(2) = "part"
-                    multistrings(3) = "pt"
-                    multistrings(4) = "disk"
-                    multistrings(5) = "disc"
-                    Dim types(5) As String
-                    types(0) = ""
-                    types(1) = "-"
-                    types(2) = "_"
-                    types(3) = " "
-                    types(4) = "."
-                    Dim workingstring As String
-                    For f = 0 To 5
-                        For g = 0 To 4
-                            For h = 1 To possiblemoviescount
-                                workingstring = multistrings(f) & types(g) & "1"
-                                Dim workingtitle As String = possiblemovies(h).ToLower
-                                If workingtitle.IndexOf(workingstring) <> -1 Then
-                                    actualpathandfilename = possiblemovies(h)
-                                End If
-                            Next
-                        Next
+            'If tempfilename.IndexOf("movie.nfo") > -1 Then
+            Dim possiblemovies As New List(Of String)
+            'Dim possiblemovies(1000) As String
+            'Dim possiblemoviescount As Integer = 0
+            Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
+            Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
+            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+            For Each videoextn In VideoExtensions
+                Dim pattern As String = "*" & videoextn
+                If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
+                Try
+                    Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
+                    For Each fs_info As IO.FileInfo In fs_infos
+                        'Application.DoEvents()
+                        'If IO.File.Exists(fs_info.FullName) Then
+                            If videoextn = ".rar" Then
+                                If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
+                            End If
+                            tempstring = fs_info.FullName.ToLower
+                            If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
+                                'possiblemoviescount += 1
+                                possiblemovies.Add(fs_info.FullName)
+                                'possiblemovies(possiblemoviescount) = fs_info.FullName
+                            End If
+                        'End If
                     Next
-                End If
+                Catch
+                End Try
+            Next
+            If possiblemovies.Count = 1 Then  'possiblemoviescount = 1 Then
+                actualpathandfilename = possiblemovies(0)  'possiblemovies(possiblemoviescount)
+            ElseIf possiblemovies.Count > 1 Then  'possiblemoviescount > 1 Then
+                Dim success As Boolean = False
+                Dim workingstring As String
+                For Each multi In cleanMultipart
+                    For Each sep In separators
+                        For Each possiblemov In possiblemovies  'For h = 1 To possiblemoviescount
+                            workingstring = multi & sep & "1"
+                            Dim workingtitle As String = possiblemov.ToLower   'possiblemovies(h).ToLower
+                            If workingtitle.IndexOf(workingstring) <> -1 Then
+                                actualpathandfilename = possiblemov  'possiblemovies(h)
+                                success = True
+                                Exit For
+                            End If
+                        Next
+                        If success Then Exit For
+                    Next
+                    If success Then Exit For
+                Next
             End If
+            'End If
         End If
 
         If actualpathandfilename = "" Then
