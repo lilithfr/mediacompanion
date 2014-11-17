@@ -347,6 +347,7 @@ Public Class Preferences
     Public Shared TvdbLanguage As String = "English"
     Public Shared TvdbLanguageCode As String = "en"
     Public Shared lastrefreshmissingdate As String
+    Public Shared excludefromshowfoldername As String
 
     '(Unsure)
     Public Shared maximagecount As Integer
@@ -631,6 +632,7 @@ Public Class Preferences
         displayMissingEpisodes = False
         ignoreMissingSpecials = False
         ScrShtDelay = 10
+        excludefromshowfoldername = "[ended]"
 
         'Unknown - need to be sorted/named better
         eprenamelowercase = False
@@ -1062,6 +1064,7 @@ Public Class Preferences
         root.AppendChild(doc, "autorenameepisodes",     autorenameepisodes)     'CheckBox_tv_EpisodeRenameAuto
         root.AppendChild(doc, "ScrShtDelay",            ScrShtDelay)            'AutoScrShtDelay
         root.AppendChild(doc, "lastrefreshmissingdate", lastrefreshmissingdate)
+        root.AppendChild(doc, "excludefromshowfoldername", excludefromshowfoldername)
 
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
@@ -1356,6 +1359,7 @@ Public Class Preferences
                     Case "downloadtvseasonthumbs"               : tvdlseasonthumbs = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "lastrefreshmissingdate"               : lastrefreshmissingdate = thisresult.InnerText 
+                    Case "excludefromshowfoldername"            : excludefromshowfoldername = thisresult.InnerText 
                     Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
                     Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 

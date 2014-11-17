@@ -1355,6 +1355,12 @@ Partial Public Class Form1
                     Else
                         'Resolve show name from folder
                         Dim FolderName As String = Utilities.GetLastFolder(newTvFolders(0) & "\")
+                        If FolderName.ToLower.Contains(excludefromshowfoldername.ToLower) Then
+                            Dim indx As Integer = FolderName.ToLower.IndexOf(excludefromshowfoldername.ToLower)
+                            Dim excludearticle As String = FolderName.Substring(indx-1, excludefromshowfoldername.Length+1)
+                            FolderName = FolderName.Replace(excludearticle, "")
+                        End If
+                        FolderName = FolderName.Replace(excludefromshowfoldername, "")
                         Dim M As Match
                         M = Regex.Match(FolderName, "\s*[\(\{\[](?<date>[\d]{4})[\)\}\]]")
                         If M.Success = True Then
