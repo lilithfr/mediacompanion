@@ -1822,7 +1822,12 @@ Public Class Form1
                         tagtxt.Text &= t & ", "
                     Next
                 End If
-                votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes).ToString("N0")
+                'Catch exception thrown when votes is an empty string
+                Try
+                    votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes).ToString("N0")
+                Catch
+                    votestxt.Text = workingMovieDetails.fullmoviebody.votes
+                End Try
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
                 top250txt.Text = workingMovieDetails.fullmoviebody.top250
                 If Preferences.movieRuntimeDisplay = "file" Then
