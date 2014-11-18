@@ -1176,7 +1176,7 @@ Public Class Movie
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle
         _movieCache.sortorder           = _scrapedMovie.fullmoviebody.sortorder
         _movieCache.runtime             = _scrapedMovie.fullmoviebody.runtime
-        _movieCache.Votes               = _scrapedMovie.fullmoviebody.votes.ToInt
+        _movieCache.Votes               = _scrapedMovie.fullmoviebody.votes.Replace(".","").ToInt
         _movieCache.outline             = _scrapedMovie.fullmoviebody.outline
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.year                = _scrapedMovie.fullmoviebody.year.ToInt

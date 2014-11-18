@@ -1824,7 +1824,7 @@ Public Class Form1
                 End If
                 'Catch exception thrown when votes is an empty string
                 Try
-                    votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes).ToString("N0")
+                    votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes.Replace(".",",")).ToString("N0")
                 Catch
                     votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 End Try
