@@ -283,6 +283,7 @@ Public Class WorkingWithNfoFiles
                 If newtvepisode.TvdbId = Nothing Then newtvepisode.TvdbId.Value = ""
                 'If newtvepisode.status = Nothing Then newtvepisode.status = ""
                 If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
+                If String.IsNullOrEmpty(newtvepisode.PlayCount.Value) Then newtvepisode.PlayCount.Value = "0"
                 episodelist.Add(newtvepisode)
             ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
                 Dim temp As String = tvshow.DocumentElement.Name
@@ -464,6 +465,7 @@ Public Class WorkingWithNfoFiles
                                 If anotherepisode.TvdbId = Nothing Then anotherepisode.TvdbId.Value = ""
                                 'If anotherepisode.status = Nothing Then anotherepisode.status = ""
                                 If anotherepisode.Rating = Nothing Then anotherepisode.Rating.Value = ""
+                                If String.IsNullOrEmpty(anotherepisode.PlayCount.Value) Then anotherepisode.PlayCount.Value = "0"
                                 episodelist.Add(anotherepisode)
                             Catch ex As Exception
                                 MsgBox(ex.ToString)

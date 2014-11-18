@@ -3903,10 +3903,18 @@ Public Class Form1
             If path <> "" Then
                 tempstring = path
                 Try
-                    Call Shell("explorer /select," & """" & tempstring & """", AppWinStyle.NormalFocus) 'this shows the item as selected provided as tempstring i.e. a folder or a file (.nfo)
+                    If Not tempstring.ToLower.Contains("nfo") Then
+                        errors = "Trying to open Folder :- " & tempstring
+                        action = "Command - ""Call Shell(""explorer """ & tempstring & ", AppWinStyle.NormalFocus)"""
+                        Call Shell("explorer " & """" & tempstring & """", AppWinStyle.NormalFocus) 'opens the selected folder showing contents, no focus on any file.
+                    Else
+                        errors = "Trying to open Folder :- " & tempstring
+                        action = "Command - ""Call Shell(""explorer /select,""" & tempstring & ", AppWinStyle.NormalFocus)"""
+                        Call Shell("explorer /select," & """" & tempstring & """", AppWinStyle.NormalFocus) 'this shows the item as selected provided as tempstring i.e. a folder or a file (.nfo)
+                    End If
                     'Process.Start(pathtxt.Text)
-                    errors = "Trying to open Folder :- " & tempstring
-                    action = "Command - ""Call Shell(""explorer /select,""" & tempstring & ", AppWinStyle.NormalFocus)"""
+                    'errors = "Trying to open Folder :- " & tempstring
+                    'action = "Command - ""Call Shell(""explorer /select,""" & tempstring & ", AppWinStyle.NormalFocus)"""
                 Catch ex As Exception
                     MsgBox("Can't open folder :- " & path)
                     Call util_ErrorLog(action, errors)
@@ -5474,11 +5482,21 @@ Public Class Form1
     Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_OpenFolder.Click
         Try
             If Not TvTreeview.SelectedNode Is Nothing Then
+                Dim Path As String = Nothing 
                 Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
-                If Not WorkingTvShow.NfoFilePath Is Nothing And Not WorkingTvShow.NfoFilePath = "" Then
-                    Call util_OpenFolder(WorkingTvShow.NfoFilePath) 'we send the path of the tvshow.nfo, that way in explorer it will be highlighted in the folder
+                Dim WorkingTvEpisode As TvEpisode = ep_SelectedCurrently()
+                Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
+                If Not IsNothing(WorkingTvEpisode) Then
+                    Path = WorkingTvEpisode.NfoFilePath
+                ElseIf Not IsNothing(WorkingTvSeason) AndAlso Not IsNothing(WorkingTvSeason.FolderPath) Then
+                    Path = WorkingTvSeason.FolderPath 
+                ElseIf Not WorkingTvShow.NfoFilePath Is Nothing And Not WorkingTvShow.NfoFilePath = "" Then
+                    Path = WorkingTvShow.NfoFilePath  'Call util_OpenFolder(WorkingTvShow.NfoFilePath) 'we send the path of the tvshow.nfo, that way in explorer it will be highlighted in the folder
                 Else
                     MsgBox("There is no show selected to open")
+                End If
+                If Not IsNothing(Path) Then
+                    Call util_OpenFolder(Path)
                 End If
             Else
                 MsgBox("There is no show selected to open")
