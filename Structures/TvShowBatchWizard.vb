@@ -73,4 +73,42 @@ Public Structure str_TvShowBatchWizard
         doEpisodeActors = False
         doEpisodeMediaTags = False
     End Sub
+
+    Sub Reset()
+        RewriteAllNFOs = False
+        shYear = False
+        shRating = False
+        shPlot = False
+        shRuntime = False
+        shMpaa = False
+        shGenre = False
+        shStudio = False
+        shActor = False
+        shPosters = False
+        shFanart = False
+        shSeason = False
+        shXtraFanart = False
+        shFanartTvArt = False
+        epStreamDetails = False
+        epAired = False
+        epPlot = False
+        epDirector = False
+        epCredits = False
+        epRating = False
+        epRuntime = False
+        epActor = False
+        epScreenshot = False
+        epCreateScreenshot = False
+        includeLocked = False
+        activate = False
+        doEpisodes = False
+        doShows = False
+        doShowBody = False
+        doShowArt = False
+        doShowActors = False
+        doEpisodeBody = False
+        doEpisodeArt = False
+        doEpisodeActors = False
+        doEpisodeMediaTags = False
+    End Sub
 End Structure

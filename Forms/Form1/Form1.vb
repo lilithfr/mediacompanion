@@ -9970,40 +9970,7 @@ End Sub
     Private Sub TV_BatchRescrapeWizardToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TV_BatchRescrapeWizardToolStripMenuItem.Click
         Try
             If Not tvbckrescrapewizard.IsBusy Then
-                tvBatchList.epActor = False
-                tvBatchList.epAired = False
-                tvBatchList.epCredits = False
-                tvBatchList.epDirector = False
-                tvBatchList.epPlot = False
-                tvBatchList.epRating = False
-                tvBatchList.epRuntime = False
-                tvBatchList.epScreenshot = False
-                tvBatchList.epStreamDetails = False
-                tvBatchList.epCreateScreenshot = False
-                tvBatchList.shActor = False
-                tvBatchList.shFanart = False
-                tvBatchList.shGenre = False
-                tvBatchList.shPosters = False
-                tvBatchList.shSeason = False
-                tvBatchList.shXtraFanart = False
-                tvBatchList.shFanartTvArt = False
-                tvBatchList.shMpaa = False
-                tvBatchList.shPlot = False
-                tvBatchList.shRating = False
-                tvBatchList.shRuntime = False
-                tvBatchList.shStudio = False
-                tvBatchList.shYear = False
-                tvBatchList.includeLocked = False
-                tvBatchList.activate = False
-                tvBatchList.doShows = False
-                tvBatchList.doEpisodes = False
-                tvBatchList.doShowArt = False
-                tvBatchList.doShowActors = False
-                tvBatchList.doShowBody = False
-                tvBatchList.doEpisodeArt = False
-                tvBatchList.doEpisodeActors = False
-                tvBatchList.doEpisodeBody = False
-                tvBatchList.doEpisodeMediaTags = False
+                tvBatchList.Reset()
 
                 Dim displaywizard As New tv_batch_wizard
                 If Preferences.MultiMonitoEnabled Then
