@@ -210,7 +210,7 @@ Partial Public Class Form1
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - S" & Utilities.PadNumber(ep_SelectedCurrently.Season.Value, 2) & "E" & Utilities.PadNumber(ep_SelectedCurrently.Episode.Value, 2) & " '" & ep_SelectedCurrently.Title.Value & "'"
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
-            Tv_TreeViewContext_Play_Episode.Enabled = True
+            Tv_TreeViewContext_Play_Episode.Enabled = Not DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).Ismissing
             Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Episode"
             Tv_TreeViewContext_WatchedShowOrEpisode.Text = "Mark Episode as Watched"
@@ -218,14 +218,14 @@ Partial Public Class Form1
 
             Tv_TreeViewContext_OpenFolder.Enabled = True
             Tv_TreeViewContext_ViewNfo.Enabled = True
-            Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = Not DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).Ismissing
             Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_RescrapeWizard.Enabled = False
             Tv_TreeViewContext_FindMissArt.Enabled = False
             Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
-            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_RenameEp.Enabled = Not DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).Ismissing
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
 
@@ -2161,6 +2161,10 @@ Partial Public Class Form1
     Sub tv_Rescrape_Episode(ByRef WorkingTvShow, ByRef WorkingEpisode)
         Dim tempint As Integer = 0
         Dim tempstring As String = ""
+        If WorkingEpisode.IsMissing Then
+            MsgBox("This is a Missing Episode, and can not be rescraped!")
+            Exit Sub
+        End If
         If Utilities.GetTvEpExtension(WorkingEpisode.NfoFilePath) = "error" Then
             tempint = MessageBox.Show("Video file for this episode does not exist." & vbCrLf & "Please Delete this episode's nfo, and refresh the Show for the selected episode.", "Warning", MessageBoxButtons.OK , MessageBoxIcon.Warning)
             Exit Sub
@@ -3665,6 +3669,7 @@ Partial Public Class Form1
     Private Sub TvEpThumbScreenShot()
         Try
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            If WorkingEpisode.IsMissing Then Exit Sub
             If TextBox35.Text = "" Then TextBox35.Text = Preferences.ScrShtDelay
             If IsNumeric(TextBox35.Text) Then
                 Dim paths As New List(Of String)
@@ -3720,6 +3725,7 @@ Partial Public Class Form1
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            If WorkingEpisode.IsMissing Then Exit Sub
             Dim messbox As frmMessageBox = New frmMessageBox("Checking TVDB for screenshot", "", "Please Wait")
             Dim episodescraper As New TVDBScraper
             Dim id As String = WorkingTvShow.TvdbId.Value

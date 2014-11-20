@@ -5486,7 +5486,7 @@ Public Class Form1
                 Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
                 Dim WorkingTvEpisode As TvEpisode = ep_SelectedCurrently()
                 Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
-                If Not IsNothing(WorkingTvEpisode) Then
+                If Not IsNothing(WorkingTvEpisode) AndAlso Not WorkingTvEpisode.IsMissing Then
                     Path = WorkingTvEpisode.NfoFilePath
                 ElseIf Not IsNothing(WorkingTvSeason) AndAlso Not IsNothing(WorkingTvSeason.FolderPath) Then
                     Path = WorkingTvSeason.FolderPath 
@@ -5949,7 +5949,7 @@ Public Class Form1
             nfofilestorename.Clear()
             Dim donelist As New List(Of String)
             donelist.Clear()
-            If TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
+            If TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
                 If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
                     'individual episode
                     tempint = MessageBox.Show("Using this option will rename the selected episode" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -5967,7 +5967,7 @@ Public Class Form1
                     End If
                     Dim childnode As TreeNode
                     For Each childnode In TvTreeview.SelectedNode.Nodes
-                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("Missing: ") <> 0 Then
+                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("\missing\") = -1 Then
                             nfofilestorename.Add(childnode.Name)
                         End If
                     Next
@@ -5981,12 +5981,15 @@ Public Class Form1
                     Dim childchildnode As TreeNode
                     For Each childnode In TvTreeview.SelectedNode.Nodes
                         For Each childchildnode In childnode.Nodes
-                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("Missing: ") <> 0 Then
+                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("\missing\") = -1 Then
                                 nfofilestorename.Add(childchildnode.Name)
                             End If
                         Next
                     Next
                 End If
+            Else
+                MsgBox("This is a Missing Episode, and can not be renamed!")
+                Exit Sub
             End If
 
             Dim messbox As New frmMessageBox("Renaming episodes,", "", "   Please Wait")
@@ -6180,14 +6183,14 @@ Public Class Form1
             nfofilestorename.Clear()
             Dim donelist As New List(Of String)
             donelist.Clear()
-            If TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
+            If TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
                 If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
                     'individual episode
                     'tempint = MessageBox.Show("This option will Rescrape Media tags for the selected episode" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                     'If tempint = DialogResult.No Then
                     '    Exit Sub
                     'End If
-                    If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
+                    If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
                         nfofilestorename.Add(TvTreeview.SelectedNode.Name)
                     End If
                 ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
@@ -6198,7 +6201,7 @@ Public Class Form1
                     End If
                     Dim childnode As TreeNode
                     For Each childnode In TvTreeview.SelectedNode.Nodes
-                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("Missing: ") <> 0 Then
+                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("\missing\") = -1 Then
                             nfofilestorename.Add(childnode.Name)
                         End If
                     Next
@@ -6212,7 +6215,7 @@ Public Class Form1
                     Dim childchildnode As TreeNode
                     For Each childnode In TvTreeview.SelectedNode.Nodes
                         For Each childchildnode In childnode.Nodes
-                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("Missing: ") <> 0 Then
+                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("\missing\") = -1 Then
                                 nfofilestorename.Add(childchildnode.Name)
                             End If
                         Next
@@ -10018,7 +10021,7 @@ End Sub
             For f = shcachecount - 1 To 0 Step -1
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open Or Cache.TvCache.Shows(f).State = -1 Or tvBatchList.includeLocked = True Then
                     If tvBatchList.doEpisodes = True Then
-                        showprocesscount += Cache.TvCache.Shows(f).Episodes.Count
+                        showprocesscount += (Cache.TvCache.Shows(f).Episodes.Count - Cache.TvCache.Shows(f).MissingEpisodes.Count)
                         showprocesscount += 1
                         progcount += 1
                     Else
@@ -10037,11 +10040,16 @@ End Sub
                         'Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
                         Call nfoFunction.tvshow_NfoSave(nfoFunction.tv_NfoLoad(Cache.TvCache.Shows(f).NfoFilePath), True)
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
-                            progresstext = "Rewriting nfo's of Show: " & Cache.TvCache.Shows(f).Title.Value & ", Episode: " & Cache.TvCache.Shows(f).Episodes.Count - g & " of " & Cache.TvCache.Shows(f).Episodes.Count & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
+                            Dim epcount As Integer = Cache.TvCache.Shows(f).Episodes.Count
+                            progresstext = "Rewriting nfo's of Show: " & Cache.TvCache.Shows(f).Title.Value & ", Episode: " & epcount - g & " of " & epcount & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                             If done > 0 Then
                                 progress = (100 / showprocesscount) * done
                             Else
                                 progress = 0
+                            End If
+                            If Cache.TvCache.Shows(f).Episodes(g).IsMissing Then
+                                progresstext &= "Skip Missing episode"
+                                Continue For
                             End If
                             tvbckrescrapewizard.ReportProgress(progress, progresstext)
                             Dim listofepisodes As New List(Of TvEpisode)
@@ -10169,13 +10177,13 @@ End Sub
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
-
-                        'progresstext = "Working on Episodes: " & basictvlist(f).title
-                        'tvbckrescrapewizard.ReportProgress(999999, progresstext)
-
+                        Dim i As Integer = Cache.TvCache.Shows(f).Episodes.Count - Cache.TvCache.Shows(f).MissingEpisodes.count
+                        Dim TotalEpisodes As Integer = i
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
-                            progresstext = "Working on Show: " & Cache.TvCache.Shows(f).Title.Value & " Episode: " & Cache.TvCache.Shows(f).Episodes.Count - g & " of " & Cache.TvCache.Shows(f).Episodes.Count & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
-                            'progresstext = "Working on " & basictvlist(f).title & ", Episode: " & basictvlist(f).allepisodes(g).Season.value & "x" & basictvlist(f).allepisodes(g).episodeno
+                            If Cache.TvCache.Shows(f).Episodes(g).IsMissing Then Continue For
+                            
+                            progresstext = "Working on Show: " & Cache.TvCache.Shows(f).Title.Value & " Episode: " & i & " of " & TotalEpisodes & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
+                            
                             If done > 0 Then
                                 progress = (100 / showprocesscount) * done
                             Else
@@ -10337,6 +10345,7 @@ End Sub
                                 Next
                             End If
                             done += 1
+                            i = i - 1
                         Next
                     End If
                     done += 1
@@ -10983,8 +10992,9 @@ End Sub
     End Sub
     Private Sub Tv_TreeViewContext_Play_Episode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
         Try
-            Dim tempstring As String = DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
-
+            Dim ep As TvEpisode = ep_SelectedCurrently()
+            If ep.IsMissing Then Exit Sub
+            Dim tempstring As String = ep.VideoFilePath     'DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
             If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
             If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
             If Preferences.videomode = 3 Then
@@ -11024,7 +11034,8 @@ End Sub
     End Sub
 
     Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowNfoArt.Click
-        TvDelShowNfoArt()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently()
+        TvDelShowNfoArt(Sh)
     End Sub
 
     Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowEpNfoArt.Click
@@ -11035,15 +11046,21 @@ End Sub
         msgstring &= vbCrLf & "Are your sure you wish to continue?"
         Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's and artwork")
         If x = MsgBoxResult.Cancel Then Exit Sub
-        TvDelEpNfoAst(True)
-        TvDelShowNfoArt(True)
+        Dim Sh As TvShow = tv_ShowSelectedCurrently()
+        Dim seas As TvSeason = tv_SeasonSelectedCurrently()
+        Dim ep As TvEpisode = ep_SelectedCurrently()
+        TvDelEpNfoAst(Sh, seas, ep, True)
+        TvDelShowNfoArt(Sh, True)
     End Sub
 
     Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelEpNfoArt.Click
-        TvDelEpNfoAst()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently()
+        Dim seas As TvSeason = tv_SeasonSelectedCurrently()
+        Dim ep As TvEpisode = ep_SelectedCurrently()
+        TvDelEpNfoAst(Sh, seas, ep)
     End Sub
 
-    Private Sub TvDelShowNfoArt(Optional ByVal Ignore As Boolean = False)
+    Private Sub TvDelShowNfoArt(Show As TvShow, Optional ByVal Ignore As Boolean = False)
         Try
             If Not Ignore Then
                 Dim msgstring As String = "Warning:  This will Remove the selected Tv Show's nfo and artwork"
@@ -11054,7 +11071,7 @@ End Sub
                 Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show's nfo's and artwork")
                 If x = MsgBoxResult.Cancel Then Exit Sub
             End If
-            Dim Show As TvShow = tv_ShowSelectedCurrently()
+            'Dim Show As TvShow = tv_ShowSelectedCurrently()
             TvDeleteShowArt(show)
             Dim showpath As String = Show.FolderPath 
             Utilities.SafeDeleteFile(showpath & "tvshow.nfo")
@@ -11071,7 +11088,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub TvDelEpNfoAst(Optional ByVal Ignore As Boolean = False)
+    Private Sub TvDelEpNfoAst(Show As TvShow, season As TvSeason, ep As TvEpisode, Optional ByVal Ignore As Boolean = False)
         Try
             If Not Ignore Then 
                 Dim msgstring As String = "Warning, This operation will delete all Episode nfo's and artwork"
@@ -11081,10 +11098,10 @@ End Sub
             End If
 
             Dim TheseEpisodes As New List(Of Media_Companion.TvEpisode)
-            Dim Show As TvShow = tv_ShowSelectedCurrently()
-            Dim season As TvSeason = tv_SeasonSelectedCurrently()
-            Dim ep As TvEpisode = ep_SelectedCurrently()
-            Dim IsMissing As Boolean = False
+            'Dim Show As TvShow = tv_ShowSelectedCurrently()
+            'Dim season As TvSeason = tv_SeasonSelectedCurrently()
+            'Dim ep As TvEpisode = ep_SelectedCurrently()
+            'Dim IsMissing As Boolean = False
             If Not IsNothing(ep) Then
                 For Each epis In season.Episodes
                     If epis.NfoFilePath = ep.NfoFilePath Then TheseEpisodes.Add(epis)
@@ -11095,17 +11112,15 @@ End Sub
 
             For Each episode In TheseEpisodes
                 If IsNothing(season) OrElse episode.Season.Value = season.SeasonNumber.ToString Then
-                    If episode.IsMissing Then 
-                        IsMissing = True
-                        Continue For
-                    End If
-                    If episode.FolderPath <> Show.FolderPath AndAlso File.Exists(episode.FolderPath & "folder.jpg") Then 
-                        Utilities.SafeDeleteFile(episode.FolderPath & "folder.jpg")
-                    End If
-                    Dim eppath As String = episode.NfoFilePath
-                    Utilities.SafeDeleteFile(eppath)
-                    Utilities.SafeDeleteFile(eppath.Replace(".nfo", ".tbn"))
-                    Utilities.SafeDeleteFile(eppath.Replace(".nfo", "-thumb.jpg"))
+                    If Not episode.IsMissing Then
+                        If episode.FolderPath <> Show.FolderPath AndAlso File.Exists(episode.FolderPath & "folder.jpg") Then 
+                            Utilities.SafeDeleteFile(episode.FolderPath & "folder.jpg")
+                        End If
+                        Dim eppath As String = episode.NfoFilePath
+                        Utilities.SafeDeleteFile(eppath)
+                        Utilities.SafeDeleteFile(eppath.Replace(".nfo", ".tbn"))
+                        Utilities.SafeDeleteFile(eppath.Replace(".nfo", "-thumb.jpg"))
+                    End If 
                     Cache.TvCache.Remove(episode)
                     TvTreeview.Nodes.Remove(episode.EpisodeNode)
                     If Not IsNothing(season) Then season.Episodes.Remove(episode)
