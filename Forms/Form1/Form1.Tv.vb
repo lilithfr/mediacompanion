@@ -1380,7 +1380,7 @@ Partial Public Class Form1
 
                     If Not String.IsNullOrEmpty(searchTVDbID) Then
                         Dim tvdbstuff As New TVDBScraper
-                        Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(searchTVDbID, searchLanguage, True)
+                        Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(searchTVDbID, searchLanguage, True, SeriesXmlPath)
                         searchTVDbID = ""
                         If SeriesInfo.FailedLoad Then
                             MsgBox("Please adjust the TV Show title and try again", _
@@ -2939,20 +2939,15 @@ Partial Public Class Form1
                     If sortorder = "" Then
                         sortorder = "default"
                     End If
-                    Dim xmlfile As String
+                    Dim xmlfile As String = SeriesXmlPath & showid & ".xml"
                     Dim SeriesInfo As New Tvdb.ShowData
-                    If Not File.Exists(ShowXmlPath & showid & ".xml") Then
-                        xmlfile = Utilities.DownloadTextFiles(url, Preferences.DlMissingEpData)
-                        If xmlfile = "" Then
+                    If Not File.Exists(SeriesXmlPath & showid & ".xml") OrElse Preferences.DlMissingEpData Then
+                        If Not DownloadCache.Savexmltopath(url, SeriesXmlPath, showid & ".xml", True) Then
                             MsgBox("Error retrieving data from show" & vbCrLf & "--   " & item.Title.Value.ToString & "   --", )
                             Continue For
                         End If
-                        SeriesInfo.LoadXml(xmlfile)
-                    Else
-                        xmlfile = ShowXmlPath & showid & ".xml"
-                        SeriesInfo.Load(xmlfile)
                     End If
-                    
+                    SeriesInfo.Load(xmlfile)
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                         If Preferences.ignoreMissingSpecials AndAlso NewEpisode.SeasonNumber.Value = "0" Then

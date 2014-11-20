@@ -201,10 +201,12 @@ Public Class TVDBScraper
         End Try
     End Function
 
-    Public Function GetShow(ByVal TvdbId As String, ByVal Language As String, ByVal ReturnSeries As Boolean) As Tvdb.ShowData
+    Public Function GetShow(ByVal TvdbId As String, ByVal Language As String, ByVal ReturnSeries As Boolean, ByVal SeriesXmlPath As String) As Tvdb.ShowData
         If Not ReturnSeries Then Return Nothing
 
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & Language & ".xml"
+        Dim mirrorsurl2 As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & "/all/" & Language & ".xml"
+        Dim success As Boolean = DownloadCache.Savexmltopath(mirrorsurl2, SeriesXmlPath, TvdbId & ".xml", True)
         Dim xmlfile As String
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
         Dim showlist As New Tvdb.ShowData

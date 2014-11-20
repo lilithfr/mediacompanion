@@ -206,6 +206,43 @@ Public Class DownloadCache
         Return returnCode
     End Function
 
+    Public Shared Function Savexmltopath(ByVal URL As String, ByVal Path As String, ByVal filename As String, ByVal ForceDownload As Boolean) As Boolean
+        Dim returnCode As Boolean = True
+        Dim Fullpath As String = Path & filename
+        Try
+            Utilities.EnsureFolderExists(Path)
+            If URL = "" Then Return False
+            If Not File.Exists(Fullpath) OrElse ForceDownload Then
+                If ForceDownload AndAlso File.Exists(Fullpath) Then
+                    File.Delete(Fullpath)
+                End If
+                Try
+                    Dim webReq As HttpWebRequest = DirectCast(WebRequest.Create(URL), HttpWebRequest)
+                    webReq.AllowAutoRedirect = True
+                    webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
+                    Using webResp As HttpWebResponse = webReq.GetResponse()
+                        Using responseStreamData As Stream = webResp.GetResponseStream()
+                            IO.File.WriteAllText(Fullpath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
+                        End Using
+                    End Using
+                Catch ex As WebException
+                    If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
+                    Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
+                        Using errorRespStream As Stream = errorResp.GetResponseStream()
+                            Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
+                            returnCode = False
+                        End Using
+                    End Using
+                    returnCode = False
+                End Try
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message.ToString & vbCrLf & "URL string =" & URL & vbCrLf & "Filename = " & filename & vbCrLf & "path = " & Path)
+            returnCode = False
+        End Try
+        Return returnCode
+    End Function
+
 End Class
 
 

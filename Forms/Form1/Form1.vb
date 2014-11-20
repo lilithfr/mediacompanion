@@ -120,7 +120,7 @@ Public Class Form1
     Public tv_RegexScraper As New List(Of String)
     Public tv_RegexRename As New List(Of String)
     Public MissingNfoPath As String 
-    Public ShowXmlPath As String
+    Public SeriesXmlPath As String
     Public dList As New List(Of String)
     Public scraperFunction2 As New ScraperFunctions
     Public globalThreadStop As Boolean = False
@@ -275,7 +275,7 @@ Public Class Form1
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
             MissingNfoPath = IO.Path.Combine(Utilities.applicationPath, "missing\")
-            ShowXmlPath = IO.Path.Combine(Utilities.applicationPath, "showxml\")
+            SeriesXmlPath = IO.Path.Combine(Utilities.applicationPath, "SeriesXml\")
             If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
                 Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
                 If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
