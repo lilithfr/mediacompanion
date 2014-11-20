@@ -2919,8 +2919,8 @@ Partial Public Class Form1
     End Sub
 
     Private Sub tv_EpisodesMissingFind(ByVal ShowList As List(Of TvShow))
-        Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
-        Utilities.EnsureFolderExists(missingeppath)
+        'Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
+        Utilities.EnsureFolderExists(MissingNfoPath)
         For Each item In ShowList
 
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
@@ -2940,18 +2940,23 @@ Partial Public Class Form1
                         sortorder = "default"
                     End If
                     Dim xmlfile As String
-
-                    xmlfile = Utilities.DownloadTextFiles(url, Preferences.DlMissingEpData)
-                    If xmlfile = "" Then
-                        MsgBox("Error retrieving data from show" & vbCrLf & "--   " & item.Title.Value.ToString & "   --", )
-                        Continue For
-                    End If
                     Dim SeriesInfo As New Tvdb.ShowData
-                    SeriesInfo.LoadXml(xmlfile)
+                    If Not File.Exists(ShowXmlPath & showid & ".xml") Then
+                        xmlfile = Utilities.DownloadTextFiles(url, Preferences.DlMissingEpData)
+                        If xmlfile = "" Then
+                            MsgBox("Error retrieving data from show" & vbCrLf & "--   " & item.Title.Value.ToString & "   --", )
+                            Continue For
+                        End If
+                        SeriesInfo.LoadXml(xmlfile)
+                    Else
+                        xmlfile = ShowXmlPath & showid & ".xml"
+                        SeriesInfo.Load(xmlfile)
+                    End If
+                    
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                         If Preferences.ignoreMissingSpecials AndAlso NewEpisode.SeasonNumber.Value = "0" Then
-                            Dim missingspecialnfo As String = missingeppath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
+                            Dim missingspecialnfo As String = MissingNfoPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
                             If IO.File.Exists(missingspecialnfo) Then
                                 Utilities.SafeDeleteFile(missingspecialnfo)
                             End If
@@ -2962,7 +2967,7 @@ Partial Public Class Form1
                         'NewEpisode.EpisodeNumber.Value = Utilities.PadNumber(NewEpisode.EpisodeNumber.Value,2)
                         If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
-                            MissingEpisode.NfoFilePath = missingeppath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
+                            MissingEpisode.NfoFilePath = MissingNfoPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
                             If Not IO.File.Exists(MissingEpisode.NfoFilePath) Then
                                 MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
                                 MissingEpisode.IsMissing = True
@@ -2987,14 +2992,14 @@ Partial Public Class Form1
     Public Function tv_EpisodesMissingUpdate(ByRef newEpList As List(Of TvEpisode)) As Boolean
         Dim Removed As Boolean = False
         Try
-            Dim missingPath = IO.Path.Combine(Preferences.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+            'Dim missingPath = IO.Path.Combine(Preferences.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
             
             Dim Ep2Remove As New TvEpisode 
             For Each Ep In newEpList
                 If IO.File.Exists(Ep.NfoFilePath) Then
-                    Dim missingNfoPath As String = missingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
-                    If IO.File.Exists(missingNfoPath) Then
-                        IO.File.Delete(missingNfoPath)
+                    Dim missingEpNfoPath As String = MissingNfoPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
+                    If IO.File.Exists(missingEpNfoPath) Then
+                        IO.File.Delete(missingEpNfoPath)
                         For Each epis As TvEpisode In Cache.TvCache.Episodes 
                             If epis.TvdbId.Value = Ep.TvdbId.Value Then
                                 If epis.Season.Value = Ep.Season.Value AndAlso epis.Episode.Value = Ep.Episode.Value AndAlso epis.IsMissing = True Then
@@ -3014,8 +3019,8 @@ Partial Public Class Form1
     End Function
 
     Public Sub tv_EpisodesMissingClean()
-        Dim missingnfopath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
-        Dim dir_info As New IO.DirectoryInfo(missingnfopath)
+        'Dim missingnfopath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
+        Dim dir_info As New IO.DirectoryInfo(MissingNfoPath)
         For Each File in dir_info.GetFiles(".nfo")
             If IO.File.Exists(File.Fullname) Then
                 Try

@@ -140,8 +140,8 @@ Public Class TvEpisode
         Me.UniqueId.Value = TvdbEpisode.Id.Value
         Me.Rating.Value = TvdbEpisode.Rating.Value
         Me.Plot.Value = TvdbEpisode.Overview.Value
-        Me.Director.Value = TvdbEpisode.Director.Value
-        Me.Credits.Value = TvdbEpisode.Credits.Value
+        Me.Director.Value = cleanvalue(TvdbEpisode.Director.Value)
+        Me.Credits.Value = cleanvalue(TvdbEpisode.Credits.Value)
         Me.MpaaCert.Value = TvdbEpisode.ProductionCode.Value
         Me.Season.Value = TvdbEpisode.SeasonNumber.Value
         Me.Episode.Value = TvdbEpisode.EpisodeNumber.Value
@@ -158,8 +158,8 @@ Public Class TvEpisode
         Me.UniqueId.Value = TvEp.Id.Value
         Me.Rating.Value = TvEp.Rating.Value
         Me.Plot.Value = TvEp.Plot.Value
-        Me.Director.Value = TvEp.Director.Value
-        Me.Credits.Value = TvEp.Credits.Value
+        Me.Director.Value = cleanvalue(TvEp.Director.Value)
+        Me.Credits.Value = cleanvalue(TvEp.Credits.Value)
         Me.MpaaCert.Value = TvEp.MpaaCert.Value
         Me.Season.Value = TvEp.Season.Value
         Me.Episode.Value = TvEp.Episode.Value
@@ -414,6 +414,13 @@ Public Class TvEpisode
         Return Me.Title.Value
     End Function
 
-
+    Public Function cleanvalue(s As String) As String
+        If Not String.IsNullOrEmpty(s) Then
+            s = s.TrimEnd("|")
+            s = s.TrimStart("|")
+            s = s.Replace("|", " / ")
+        End If
+        Return s
+    End Function
 End Class
 

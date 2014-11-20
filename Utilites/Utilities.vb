@@ -113,18 +113,18 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Return _ApplicationPath
         End Get
         Set(value As String)
-            _ApplicationPath = value
-            DefaultPosterPath = IO.Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
-            DefaultBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
-            DefaultFanartPath = IO.Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
-            DefaultTvPosterPath = IO.Path.Combine(_ApplicationPath, "Resources\default_tvposter.jpg")
-            DefaultTvBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\default_tvbanner.jpg")
-            DefaultTvFanartPath = IO.Path.Combine(_ApplicationPath, "Resources\default_tvfanart.jpg")
-            DefaultPreFrodoBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\prefrodo_banner.jpg")
-            DefaultOfflineArtPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
-            DefaultActorPath = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
-            DefaultScreenShotPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
-            DownloadCache.CacheFolder = IO.Path.Combine(_ApplicationPath, "cache\")
+            _ApplicationPath            = value
+            DefaultPosterPath           = IO.Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
+            DefaultBannerPath           = IO.Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
+            DefaultFanartPath           = IO.Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
+            DefaultTvPosterPath         = IO.Path.Combine(_ApplicationPath, "Resources\default_tvposter.jpg")
+            DefaultTvBannerPath         = IO.Path.Combine(_ApplicationPath, "Resources\default_tvbanner.jpg")
+            DefaultTvFanartPath         = IO.Path.Combine(_ApplicationPath, "Resources\default_tvfanart.jpg")
+            DefaultPreFrodoBannerPath   = IO.Path.Combine(_ApplicationPath, "Resources\prefrodo_banner.jpg")
+            DefaultOfflineArtPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
+            DefaultActorPath            = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
+            DefaultScreenShotPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
+            DownloadCache.CacheFolder   = IO.Path.Combine(_ApplicationPath, "cache\")
         End Set
     End Property
 

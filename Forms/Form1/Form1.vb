@@ -119,6 +119,8 @@ Public Class Form1
     Public startup As Boolean = True
     Public tv_RegexScraper As New List(Of String)
     Public tv_RegexRename As New List(Of String)
+    Public MissingNfoPath As String 
+    Public ShowXmlPath As String
     Public dList As New List(Of String)
     Public scraperFunction2 As New ScraperFunctions
     Public globalThreadStop As Boolean = False
@@ -272,6 +274,8 @@ Public Class Form1
 
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
+            MissingNfoPath = IO.Path.Combine(Utilities.applicationPath, "missing\")
+            ShowXmlPath = IO.Path.Combine(Utilities.applicationPath, "showxml\")
             If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
                 Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
                 If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
@@ -378,7 +382,7 @@ Public Class Form1
             CheckForIllegalCrossThreadCalls = False
 
             Preferences.maximised = False
-            Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
+            Preferences.SetUpPreferences()  'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
             generalprefschanged = False
 
             GenreMasterLoad()
@@ -756,7 +760,7 @@ Public Class Form1
         Try
             Me.Dispose()
             Me.Finalize()
-            CleanCacheFolder()  'Limit cachefolder to max 100 files.  Cleaned on startup and shutdown.
+            CleanCacheFolder()  'Limit cachefolder to max 200 files.  Cleaned on startup and shutdown.
             If cbClearCache.Checked = True Then ClearCacheFolder() ' delete cache folder if option selected.
             If cbClearMissingFolder.Checked = True Then ClearMissingFolder() ' delete missing folder if option selected.
             End
@@ -1176,7 +1180,7 @@ Public Class Form1
         If IO.Directory.Exists(cacheFolder) Then
             Dim Files As New IO.DirectoryInfo(cachefolder)
             Dim FileList() = Files.GetFiles().OrderByDescending(Function(f) f.LastWriteTime).ToArray
-            Dim limit As Integer = If(All, 0, 99)
+            Dim limit As Integer = If(All, 0, 199)
             Dim i As Integer = FileList.Count
             Try
                 If i > limit Then
