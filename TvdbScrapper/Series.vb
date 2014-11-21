@@ -22,7 +22,7 @@ Namespace Tvdb
         Public Property Network As New ProtoProperty(Me, "Network")
         Public Property Overview As New ProtoProperty(Me, "Overview")
         Public Property Rating As New ProtoProperty(Me, "Rating")
-        Public Property RunTimeWithCommercials As New ProtoProperty(Me, "Runtime")
+        Public Property RunTime As New ProtoProperty(Me, "Runtime")
         Public Property SeriesID As New ProtoProperty(Me, "SeriesID")
         Public Property SeriesName As New ProtoProperty(Me, "SeriesName")
         Public Property Status As New ProtoProperty(Me, "Status")

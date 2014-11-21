@@ -10078,73 +10078,43 @@ End Sub
                     Dim editshow As New TvShow
                     editshow = nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath)
                     If tvBatchList.doShowActors Then
-                        'Dim lstact As Integer = editshow.ListActors.Count
-                        'For i = lstact-1 to 0 Step -1
-                        '    editshow.ListActors.RemoveAt(i)
-                        'Next
                         editshow.ListActors.Clear()
                     End If
-                    'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
+                    
                     Dim tvdbstuff As New TVDBScraper
+                    Dim tvseriesdata As New Tvdb.ShowData 
+                    Dim language As String = editshow.Language.Value
+                    If language = "" Then language = "en"
+                    tvseriesdata = tvdbstuff.GetShow(editshow.TvdbId.Value, language, SeriesXmlPath)
+                    If tvseriesdata.FailedLoad Then
+                        progresstext &= "Failed to load xml data"
+                        tvbckrescrapewizard.ReportProgress(progress, progresstext)
+                        Continue For
+                    End If
                     If tvBatchList.doShows = True Then
                         If tvBatchList.doShowBody = True Or tvBatchList.doShowActors = True Then
-                            Dim language As String = editshow.Language.Value
-                            If language = "" Then language = "en"
-
-                            Dim tvshowxmlstring As String = tvdbstuff.GetShow(editshow.TvdbId.Value, language)
                             Try
-                                Dim actorlist As New List(Of str_MovieActors)
-                                actorlist.Clear()
-                                Dim showlist As New XmlDocument
-                                showlist.LoadXml(tvshowxmlstring)
-                                Dim thisresult As XmlNode = Nothing
-                                Dim maxcount As Integer = 0
-                                For Each thisresult In showlist("fulltvshow")
-                                    Select Case thisresult.Name
-                                        Case "title"
-                                            'thisresult.InnerText
-                                        Case "mpaa"
-                                            If tvBatchList.shMpaa = True Then
-                                                editshow.Mpaa.Value = thisresult.InnerText
-                                            End If
-                                        Case "premiered"
-                                            If tvBatchList.shYear = True Then
-                                                editshow.Premiered.Value = thisresult.InnerText
-                                            End If
-                                        Case "genre"
-                                            If tvBatchList.shGenre = True Then
-                                                Dim newstring As String
-                                                newstring = thisresult.InnerText
-                                                newstring = newstring.TrimEnd("|")
-                                                newstring = newstring.TrimStart("|")
-                                                newstring = newstring.Replace("|", " / ")
-                                                editshow.Genre.Value = newstring
-                                            End If
-                                        Case "imdbid"
+                                editshow.ImdbId.Value = tvseriesdata.Series(0).ImdbId.Value 
+                                If tvBatchList.shMpaa Then editshow.Mpaa.Value = tvseriesdata.Series(0).ContentRating.Value
+                                If tvBatchList.shYear Then editshow.Premiered.Value =  tvseriesdata.Series(0).FirstAired.Value
+                                If tvBatchList.shGenre Then
+                                    Dim newstring As String
+                                    newstring = tvseriesdata.Series(0).Genre.Value 
+                                    newstring = newstring.TrimEnd("|")
+                                    newstring = newstring.TrimStart("|")
+                                    newstring = newstring.Replace("|", " / ")
+                                    editshow.Genre.Value = newstring
+                                End If
+                                If tvBatchList.shStudio Then editshow.Studio.Value = tvseriesdata.Series(0).Network.Value
+                                If tvBatchList.shPlot Then editshow.Plot.Value = tvseriesdata.Series(0).Overview.Value
+                                If tvBatchList.shRating Then editshow.Rating.Value = tvseriesdata.Series(0).Rating.Value 
+                                If tvBatchList.shRuntime Then editshow.Runtime.Value =  tvseriesdata.Series(0).RunTime.Value
+                                Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & editshow.TvdbId.Value & "/all/" & language & ".zip"
+                                    editshow.EpisodeGuideUrl.Value = ""
+                                    editshow.Url.Value = episodeguideurl
+                                    editshow.Url.Node.SetAttributeValue("cache", editshow.TvdbId.Value)
+                                    editshow.Url.AttachToParentNode(editshow.EpisodeGuideUrl.Node)
 
-                                        Case "studio"
-                                            If tvBatchList.shStudio = True Then
-                                                editshow.Studio.Value = thisresult.InnerText
-                                            End If
-                                        Case "plot"
-                                            If tvBatchList.shPlot = True Then
-                                                editshow.Plot.Value = thisresult.InnerText
-                                            End If
-                                        Case "rating"
-                                            If tvBatchList.shRating = True Then
-                                                editshow.Rating.Value = thisresult.InnerText
-                                            End If
-                                        Case "runtime"
-                                            If tvBatchList.shRuntime = True Then
-                                                editshow.Runtime.Value = thisresult.InnerText
-                                            End If
-                                        Case "episodeguideurl"
-                                            editshow.EpisodeGuideUrl.Value = ""
-                                            editshow.Url.Value = thisresult.InnerText
-                                            editshow.Url.Node.SetAttributeValue("cache", editshow.TvdbId.Value)
-                                            editshow.Url.AttachToParentNode(editshow.EpisodeGuideUrl.Node)
-                                    End Select
-                                Next
                                 If tvBatchList.doShowActors = True Then
                                     If editshow.TvShowActorSource.Value = Nothing Then 
                                         If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
@@ -10162,7 +10132,6 @@ End Sub
                                 Throw ex
 #End If
                             End Try
-                            'Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, editshow, True)
                             Call nfoFunction.tvshow_NfoSave(editshow, True)
 
                             'editshow.IsCache = True          'this doesn't stick so I had to remove the test in show.load
@@ -10194,7 +10163,35 @@ End Sub
                                 progress = 0
                             End If
                             tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                            If tvBatchList.doEpisodeBody = True Or (tvBatchList.doEpisodeActors = True And Cache.TvCache.Shows(f).EpisodeActorSource.Value <> "") Or (tvBatchList.doEpisodeArt = True) Then
+                            Dim actorsource As String = Cache.TvCache.Shows(f).EpisodeActorSource.Value
+                            If actorsource = "" Then actorsource = "tvdb"
+                            Dim Episodedata As New Tvdb.Episode
+                            Dim epfound As Boolean = False
+                            For Each NewEpisode As Tvdb.Episode In tvseriesdata.Episodes
+                                If NewEpisode.SeasonNumber.Value = Cache.TvCache.Shows(f).Episodes(g).Season.Value
+                                    If NewEpisode.EpisodeNumber.Value = Cache.TvCache.Shows(f).Episodes(g).Episode.Value
+                                        Episodedata = NewEpisode 
+                                        epfound = True
+                                        Exit For
+                                    End If
+                                End If
+                            Next
+                            If Not epfound Then
+                                Dim epattempt2 As Boolean = False
+                                Dim sortorder As String = Cache.TvCache.Shows(f).SortOrder.Value
+                                If sortorder = "" Then sortorder = "default"
+                                Dim tvdbid As String = Cache.TvCache.Shows(f).TvdbId.Value
+                                Dim imdbid As String = Cache.TvCache.Shows(f).ImdbId.Value
+                                Dim seasonno As String = Cache.TvCache.Shows(f).Episodes(g).Season.Value
+                                Dim episodeno As String = Cache.TvCache.Shows(f).Episodes(g).Episode.Value
+                                Episodedata = tvdbstuff.getepisodefromxml(tvdbid, sortorder, seasonno, episodeno, language, True)
+                                If Episodedata.FailedLoad Then
+                                    progresstext = "tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
+                                    tvbckrescrapewizard.ReportProgress(progress, progresstext)
+                                    Continue For
+                                End If
+                            End If
+                            If tvBatchList.doEpisodeBody Or (tvBatchList.doEpisodeActors And Cache.TvCache.Shows(f).EpisodeActorSource.Value <> "") Or (tvBatchList.doEpisodeArt) Then
                                 Dim listofnewepisodes As New List(Of TvEpisode)
                                 listofnewepisodes.Clear()
                                 listofnewepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)   'Generic(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
@@ -10202,113 +10199,37 @@ End Sub
                                     If listofnewepisodes(h).Season.Value = Cache.TvCache.Shows(f).Episodes(g).Season.Value And listofnewepisodes(h).Episode.Value = Cache.TvCache.Shows(f).Episodes(g).Episode.Value Then
                                         Dim newactors As New List(Of str_MovieActors)
                                         newactors.Clear()
-                                        Dim sortorder As String = Cache.TvCache.Shows(f).SortOrder.Value
-                                        Dim language As String = Cache.TvCache.Shows(f).Language.Value
-                                        Dim actorsource As String = Cache.TvCache.Shows(f).EpisodeActorSource.Value
-                                        Dim tvdbid As String = Cache.TvCache.Shows(f).TvdbId.Value
-                                        Dim imdbid As String = Cache.TvCache.Shows(f).ImdbId.Value
-                                        Dim seasonno As String = Cache.TvCache.Shows(f).Episodes(g).Season.Value
-                                        Dim episodeno As String = Cache.TvCache.Shows(f).Episodes(g).Episode.Value
+                                        
                                         'its an episode
                                         Dim episodescreenurl As String = ""
-                                        Dim episodescraper As New TVDBScraper
-                                        If sortorder = "" Then sortorder = "default"
-                                        If language = "" Then language = "en"
-                                        If actorsource = "" Then actorsource = "tvdb"
-                                        Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language, True)
-
-                                        If tempepisode.Contains("ERROR") Then
-                                            Dim chunkSize As Integer = 40
-                                            Dim chunkSize2 As Integer = 1
-                                            Dim loops As Integer = Math.Round(tempepisode.Length / chunkSize)
-                                            Dim finalString As String = ""
-                                            For i = 0 To loops
-                                                If i * chunkSize + chunkSize > tempepisode.Length Then
-                                                    chunkSize2 = tempepisode.Length - i * chunkSize
-                                                Else
-                                                    chunkSize2 = chunkSize
-                                                End If
-                                                finalString += tempepisode.Substring(i * chunkSize, chunkSize2) & vbCrLf
-                                            Next
-                                            progresstext = "tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
-                                            tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                                            Continue For
-                                        End If
-
-                                        Dim scrapedepisode As New XmlDocument
                                         Try
-                                            scrapedepisode.LoadXml(tempepisode)
-                                            Dim thisresult As XmlNode = Nothing
-                                            For Each thisresult In scrapedepisode("episodedetails")
-                                                Select Case thisresult.Name
-                                                    Case "title"
-                                                        'listofnewepisodes(h).title = thisresult.InnerText
-                                                    Case "premiered"
-                                                        If tvBatchList.epAired = True Then
-                                                            listofnewepisodes(h).Aired.Value = thisresult.InnerText
-                                                        End If
-                                                    Case "plot"
-                                                        If tvBatchList.epPlot = True Then
-                                                            listofnewepisodes(h).Plot.Value = thisresult.InnerText
-                                                        End If
-                                                    Case "director"
-                                                        If tvBatchList.epDirector = True Then
-                                                            Dim tempstring As String = ""
-                                                            tempstring = thisresult.InnerText
-                                                            tempstring = tempstring.TrimStart("|")
-                                                            tempstring = tempstring.TrimEnd("|")
-                                                            tempstring = tempstring.Replace("|", " / ")
-                                                            listofnewepisodes(h).Director.Value = tempstring
-                                                        End If
-                                                    Case "credits"
-                                                        Dim tempstring As String = ""
-                                                        If tvBatchList.epCredits = True Then
-                                                            tempstring = thisresult.InnerText
-                                                            tempstring = tempstring.TrimStart("|")
-                                                            tempstring = tempstring.TrimEnd("|")
-                                                            tempstring = tempstring.Replace("|", " / ")
-                                                            listofnewepisodes(h).Credits.Value = tempstring
-                                                        End If
-                                                    Case "rating"
-                                                        If tvBatchList.epRating = True Then
-                                                            listofnewepisodes(h).Rating.Value = thisresult.InnerText
-                                                        End If
-                                                        Cache.TvCache.Shows(f).Episodes(g).Rating.Value = thisresult.InnerText
-                                                    Case "uniqueid"
-                                                        listofnewepisodes(h).UniqueId.Value = thisresult.InnerText
-                                                    Case "showid"
-                                                        listofnewepisodes(h).ShowId.Value = thisresult.InnerText 
-                                                    Case "thumb"
-                                                        If tvBatchList.doEpisodeArt = True Then
-                                                            progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epScreenshot).Replace("!!! ","")
-                                                        End If
-                                                    Case "actor"
-                                                            If tvBatchList.epActor = True And Preferences.episodeacrorsource = "tvdb" Then
-                                                                Dim actors As XmlNode = Nothing
-                                                                For Each actorl In thisresult.ChildNodes
-                                                                    Select Case actorl.name
-                                                                        Case "name"
-                                                                            Dim newactor As New str_MovieActors(SetDefaults)
-                                                                            newactor.actorname = actorl.innertext
-                                                                            newactors.Add(newactor)
-                                                                    End Select
-                                                                Next
-                                                            End If
-                                                End Select
-                                            Next
-                                            'newepisode.playcount = "0"
-                                            If Preferences.episodeacrorsource = "tvdb" And tvBatchList.epActor = True And newactors.Count > 0 Then
+                                            If tvBatchList.epAired Then listofnewepisodes(h).Aired.Value = Episodedata.FirstAired.Value
+                                            If tvBatchList.epPlot Then listofnewepisodes(h).Plot.Value = Episodedata.Overview.Value
+                                            If tvBatchList.epDirector Then listofnewepisodes(h).Director.Value = Utilities.Cleanbraced(Episodedata.Director.Value)
+                                            If tvBatchList.epCredits Then listofnewepisodes(h).Credits.Value = Utilities.Cleanbraced(Episodedata.Writer.Value)
+                                            If tvBatchList.epRating Then listofnewepisodes(h).Rating.Value = Episodedata.Rating.Value
+                                            listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
+                                            listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
+                                            If tvBatchList.epActor Then
+                                                If actorsource = "tvdb" Then
                                                 listofnewepisodes(h).ListActors.Clear()
-                                                For Each act In newactors
-                                                    listofnewepisodes(h).ListActors.Add(act)
+                                                Dim tempstr As String = Episodedata.GuestStars.Value 
+                                                tempstr = tempstr.TrimStart("|")
+                                                tempstr = tempstr.TrimEnd("|")
+                                                Dim Tmp() As String
+                                                Tmp = tempstr.Split("|")
+                                                For Each act In Tmp
+                                                    Dim newactor As New str_MovieActors
+                                                    newactor.actorname = act
+                                                    listofnewepisodes(h).ListActors.Add(newactor)
                                                 Next
-                                            End If
-                                            If Cache.TvCache.Shows(f).EpisodeActorSource.Value = "imdb" And tvBatchList.epActor = True Then
-                                                Dim ac As New actors
-                                                Dim actorlist As New List(Of str_MovieActors)
-                                                actorlist = ac.EpisodeGetImdbActors(Cache.TvCache.Shows(f).ImdbId.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
-                                                If Preferences.actorseasy = True Then
-                                                    ac.savelocalactors(listofnewepisodes(h).VideoFilePath, actorlist, Cache.TvCache.Shows(f).NfoFilePath, True)
+                                                ElseIf actorsource = "imdb" Then
+                                                    Dim ac As New actors
+                                                    Dim actorlist As New List(Of str_MovieActors)
+                                                    actorlist = ac.EpisodeGetImdbActors(Cache.TvCache.Shows(f).ImdbId.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
+                                                    If Preferences.actorseasy = True Then
+                                                        ac.savelocalactors(listofnewepisodes(h).VideoFilePath, actorlist, Cache.TvCache.Shows(f).NfoFilePath, True)
+                                                    End If
                                                 End If
                                             End If
                                         Catch ex As Exception
@@ -16192,7 +16113,7 @@ End Sub
                     If actor.actorthumb <> Nothing Then 'And Not Preferences.LocalActorImage Then
                         Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
-                            If Preferences.LocalActorImage AndAlso Not actorthumbpath.IndexOf("http") = 0 Then
+                            If Not Preferences.LocalActorImage AndAlso actorthumbpath.IndexOf("http") = 0 Then
                                 If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
                                     util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
                                 End If

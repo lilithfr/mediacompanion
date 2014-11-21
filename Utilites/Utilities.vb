@@ -952,6 +952,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function cleanruntime(ByVal runtime As String) As String
         Try
+            If IsNothing(runtime) Then Return runtime
             Dim tempstring As String = runtime
             Dim hours As Integer = 0
             Dim minutes As Integer = 0
@@ -1000,6 +1001,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         End Try
         Return "0"
+    End Function
+
+    Public Shared Function Cleanbraced(ByVal s As String) As String
+        If Not String.IsNullOrEmpty(s) Then
+            s = s.TrimStart("|")
+            s = s.TrimEnd("|")
+            s = s.Replace("|", " / ")
+        End If
+        Return s
     End Function
 
     'Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)

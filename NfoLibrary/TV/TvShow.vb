@@ -235,7 +235,7 @@ Public Class TvShow
         tmp = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
         Me.Plot.Value = tmp 'Series.Overview.Value.Replace(vbCr, "")
         Me.Title.Value = If(Not String.IsNullOrEmpty(Series.SeriesName.Value), Series.SeriesName.Value, Me.Title.Value) 'not set up in ScrapeShowTask.vb
-        Me.Runtime.Value = Series.RunTimeWithCommercials.Value
+        Me.Runtime.Value = Series.RunTime.Value
         Me.Rating.Value = Series.Rating.Value
         Me.Premiered.Value = Series.FirstAired.Value
         Me.Studio.Value = Series.Network.Value

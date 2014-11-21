@@ -10,6 +10,7 @@ Public Class actors
         Monitor.Enter(Me)
         Try
             tempactorlist.Clear()
+            Dim Testpg As String = ""
             Try
                 Dim url As String
                 url = "http://www.imdb.com/title/" & imbdID & "/episodes"
@@ -26,12 +27,13 @@ Public Class actors
                     Dim objReader As New StreamReader(objStream)
                     Dim tvdbsLine As String = ""
                     tvfblinecount = 0
-
+                    
                     Do While Not tvdbsLine Is Nothing
                         tvfblinecount += 1
                         tvdbsLine = objReader.ReadLine
                         If Not tvdbsLine Is Nothing Then
                             tvdbwebsource(tvfblinecount) = tvdbsLine
+                            Testpg &= tvdbwebsource(tvfblinecount) & vbcrlf
                         End If
                     Loop
                     objReader.Close()

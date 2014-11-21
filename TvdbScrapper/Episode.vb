@@ -57,6 +57,8 @@ Namespace Tvdb
         Public Property SeriesId As New ProtoProperty(Me, "seriesid")
         '<videosource>bdrip</videosource>
         Public Property Source As New ProtoProperty(Me, "videosource")
+        'Media Companion confirm load success
+        Public Property FailedLoad As Boolean
 
         Public ReadOnly Property ScreenShotUrl As String
             Get

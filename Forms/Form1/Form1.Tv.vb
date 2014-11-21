@@ -1380,7 +1380,7 @@ Partial Public Class Form1
 
                     If Not String.IsNullOrEmpty(searchTVDbID) Then
                         Dim tvdbstuff As New TVDBScraper
-                        Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(searchTVDbID, searchLanguage, True, SeriesXmlPath)
+                        Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(searchTVDbID, searchLanguage, SeriesXmlPath)
                         searchTVDbID = ""
                         If SeriesInfo.FailedLoad Then
                             MsgBox("Please adjust the TV Show title and try again", _
