@@ -48,7 +48,7 @@ Namespace Tvdb
         '<airsbefore_season></airsbefore_season>
         Public Property AirsBeforeSeason As New ProtoProperty(Me, "airsbefore_season")
         '<filename>episodes/80348-332179.jpg</filename>
-        Private Property FileName As New ProtoProperty(Me, "filename")
+        Public Property ThumbNail As New ProtoProperty(Me, "filename")
         '<lastupdated>1201292806</lastupdated>
         Public Property LastUpdated As New ProtoProperty(Me, "lastupdate")
         '<seasonid>27985</seasonid>
@@ -62,7 +62,7 @@ Namespace Tvdb
 
         Public ReadOnly Property ScreenShotUrl As String
             Get
-                Return "http://thetvdb.com/banners/_cache/" & Me.FileName.Value
+                Return "http://thetvdb.com/banners/_cache/" & Me.ThumbNail.Value
             End Get
         End Property
 

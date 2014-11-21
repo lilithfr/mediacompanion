@@ -10150,11 +10150,11 @@ End Sub
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
-                        Dim i As Integer = Cache.TvCache.Shows(f).Episodes.Count - Cache.TvCache.Shows(f).MissingEpisodes.count
-                        Dim TotalEpisodes As Integer = i
+                        Dim i As Integer = 0
+                        Dim TotalEpisodes As Integer = Cache.TvCache.Shows(f).Episodes.Count - Cache.TvCache.Shows(f).MissingEpisodes.count
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
                             If Cache.TvCache.Shows(f).Episodes(g).IsMissing Then Continue For
-                            
+                            i +=  1
                             progresstext = "Working on Show: " & Cache.TvCache.Shows(f).Title.Value & " Episode: " & i & " of " & TotalEpisodes & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                             
                             If done > 0 Then
@@ -10170,7 +10170,8 @@ End Sub
                             For Each NewEpisode As Tvdb.Episode In tvseriesdata.Episodes
                                 If NewEpisode.SeasonNumber.Value = Cache.TvCache.Shows(f).Episodes(g).Season.Value
                                     If NewEpisode.EpisodeNumber.Value = Cache.TvCache.Shows(f).Episodes(g).Episode.Value
-                                        Episodedata = NewEpisode 
+                                        Episodedata = NewEpisode
+                                        Episodedata.ThumbNail.Value = "http://www.thetvdb.com/banners/" & NewEpisode.ThumbNail.value
                                         epfound = True
                                         Exit For
                                     End If
@@ -10232,6 +10233,10 @@ End Sub
                                                     End If
                                                 End If
                                             End If
+                                            If tvBatchList.doEpisodeArt = True Then
+                                                listofnewepisodes(h).Thumbnail.FileName = Episodedata.ThumbNail.Value
+                                                progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epScreenshot).Replace("!!! ","")
+                                            End If
                                         Catch ex As Exception
 #If SilentErrorScream Then
                                             Throw ex
@@ -10270,7 +10275,6 @@ End Sub
                                 Next
                             End If
                             done += 1
-                            i = i - 1
                         Next
                     End If
                     done += 1

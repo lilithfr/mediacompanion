@@ -505,7 +505,7 @@ Public Class TVDBScraper
                                 Case "id"
                                     thisepisode.id.Value = thisresult2.InnerXml
                                 Case "filename"
-                                    'thisepisode.Thumbnail = episodestring & "<thumb>http://www.thetvdb.com/banners/" & thisresult2.InnerXml & "</thumb>"
+                                    thisepisode.ThumbNail.Value = "http://www.thetvdb.com/banners/" & thisresult2.InnerXml
                             End Select
                         Next
                 End Select
