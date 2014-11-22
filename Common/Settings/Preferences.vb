@@ -585,6 +585,8 @@ Public Class Preferences
         MovSepLst.Add("3D")
         MovSepLst.Add("Directors-Cut")
         MovSepLst.Add("Extended-Edition")
+        MovSepLst.Add("Theatrical-Version")
+        MovSepLst.Add("Unrated-Version")
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
         MovieManualRename = True
@@ -742,6 +744,8 @@ Public Class Preferences
         MovSepLst.Add("3D")
         MovSepLst.Add("Directors-Cut")
         MovSepLst.Add("Extended-Edition")
+        MovSepLst.Add("Theatrical-Version")
+        MovSepLst.Add("Unrated-Version")
     End Sub
 
     Public Shared Sub Proxyreload()

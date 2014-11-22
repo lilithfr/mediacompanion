@@ -15750,6 +15750,16 @@ End Sub
         'videosourceprefchanged = True
     End Sub
 
+    Private Sub btn_MovSepReset_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepReset.Click
+        Preferences.ResetMovSepLst()
+        lb_MovSepLst.Items.Clear()
+        For Each it In MovSepLst
+            lb_MovSepLst.Items.Add(it)
+        Next
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
 #End Region 'Movie Preferences -> Advanced2 Tab
 
 #End Region   'Movie Preferences Tab
@@ -19019,7 +19029,7 @@ End Sub
                 If Not ListBox5.Items.Contains(strfolder) Then
                     For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
                         Dim M As Match
-                        tempstring3 = strfolder2.ToLower
+                        tempstring3 = strfolder2.ToLower.Replace(strfolder.ToLower,"")
                         M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
                         If M.Success = True Then
                             hasseason = True
