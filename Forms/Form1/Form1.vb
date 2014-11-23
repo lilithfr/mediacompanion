@@ -3174,8 +3174,8 @@ Public Class Form1
     Public Function GetTrailerPath(ByVal s As String)
         Dim FileName As String = ""
 
-        For Each extension In "mp4,flv,webm".Split(",")
-            FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer." & extension)
+        For Each extension In Utilities.TrailerExtensions  '"mp4,flv,webm".Split(",")
+            FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer" & extension)
 
             If File.Exists(FileName) Then Return FileName
         Next
