@@ -184,6 +184,8 @@ Partial Public Class Form1
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
+            tsmiTvDelShowNfoArt.Enabled = True
+            tsmiTvDelShowEpNfoArt.Enabled = True
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - " & tv_SeasonSelectedCurrently.SeasonLabel
@@ -206,6 +208,8 @@ Partial Public Class Form1
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
+            tsmiTvDelShowNfoArt.Enabled = False
+            tsmiTvDelShowEpNfoArt.Enabled = False
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - S" & Utilities.PadNumber(ep_SelectedCurrently.Season.Value, 2) & "E" & Utilities.PadNumber(ep_SelectedCurrently.Episode.Value, 2) & " '" & ep_SelectedCurrently.Title.Value & "'"
@@ -228,6 +232,8 @@ Partial Public Class Form1
             Tv_TreeViewContext_RenameEp.Enabled = Not DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).Ismissing
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
+            tsmiTvDelShowNfoArt.Enabled = False
+            tsmiTvDelShowEpNfoArt.Enabled = False
 
         Else
             MsgBox("None")
