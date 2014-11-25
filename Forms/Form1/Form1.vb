@@ -700,6 +700,7 @@ Public Class Form1
             MainFormLoadedStatus = True
             UcFanartTv1.Form1MainFormLoadedStatus = True
             UcFanartTvTv1.Form1MainFormLoadedStatus = True
+            ReloadMovieCacheToolStripMenuItem.Visible = False
 
             ResetFilters()
 
@@ -1827,11 +1828,11 @@ Public Class Form1
                     Next
                 End If
                 'Catch exception thrown when votes is an empty string
-                Try
+                If workingMovieDetails.fullmoviebody.votes <> "" Then
                     votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes.Replace(".",",")).ToString("N0")
-                Catch
+                Else
                     votestxt.Text = workingMovieDetails.fullmoviebody.votes
-                End Try
+                End If
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
                 top250txt.Text = workingMovieDetails.fullmoviebody.top250
                 If Preferences.movieRuntimeDisplay = "file" Then
