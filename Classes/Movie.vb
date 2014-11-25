@@ -136,8 +136,9 @@ Public Class Movie
            If _nfoPathAndFilename = "" Then
                 Dim movieStackName = mediapathandfilename
                 Dim firstPart As Boolean
+                Dim i As Integer = mediapathandfilename.LastIndexOf(Extension)
 
-                _nfoPathAndFilename = mediapathandfilename.Replace(Extension, ".nfo")
+                _nfoPathAndFilename = mediapathandfilename.Substring(0, i) & ".nfo"    'Replace(Extension, ".nfo")
 
                 If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
                     If Preferences.namemode <> "1" Then
@@ -270,7 +271,8 @@ Public Class Movie
         Get
             Dim pos As Integer=0
             Try
-                Dim BaseName = mediapathandfilename.Replace(Extension,"")
+                
+                Dim BaseName = mediapathandfilename.Substring(0, mediapathandfilename.LastIndexOf(Extension))              'Replace(Extension,"")
 
                 pos = 1
 
@@ -2600,7 +2602,7 @@ Public Class Movie
         Dim nextStackPart As String = ""
         Dim stackdesignator As String = ""
         Dim newextension As String = IO.Path.GetExtension(mediaFile)
-        Dim subName1 As String = mediafile.Replace(newextension,"")
+        Dim subName1 As String = mediaFile.Substring(0, mediaFile.LastIndexOf(newextension))         'Replace(newextension,"")
         Dim subName As String = subName1
         Dim newfilename As String = UserDefinedBaseFileName
         Dim targetMovieFile As String = ""
@@ -2692,8 +2694,8 @@ Public Class Movie
                 'Next
 
                     For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
-                        If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile)) Then
-                            File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile), targetMovieFile & anciliaryFile)
+                        If File.Exists(subName1 & anciliaryFile) Then
+                            File.Move(subName1 & anciliaryFile, targetMovieFile & anciliaryFile)
                             log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
                         End If
                     Next
@@ -3298,7 +3300,7 @@ Public Class Movie
         Dim isSubFirstPart      = True
         Dim newextension        = IO.Path.GetExtension(mediaFile)
         Dim newfilename         = UserDefinedBaseFileName
-        Dim subName1 As String  = mediafile.Replace(newextension,"")
+        Dim subName1 As String  = mediaFile.Substring(0, mediaFile.LastIndexOf(newextension))  'Replace(newextension,"")
         Dim subName As String   = subName1
         Dim subextn As List(Of String) = Utilities.ListSubtitleFilesExtensions(subName)
         Dim subStackList As New List(Of String)
@@ -3642,7 +3644,7 @@ Public Class Movie
         'Get stack name
         Utilities.isMultiPartMedia(stackName, False, , stackDesignator)
 
-        testName = mediapathandfilename.Replace(IO.Path.GetExtension(mediapathandfilename), anciliaryFile)
+        testName = mediapathandfilename.Substring(0, mediapathandfilename.LastIndexOf(Extension)) & anciliaryFile  'Replace(IO.Path.GetExtension(mediapathandfilename), anciliaryFile)
         If File.Exists(testName) Then Return testName
  
         testName = NfoPathAndFilename.Replace(".nfo", anciliaryFile)
@@ -3924,7 +3926,7 @@ Public Class Movie
 
                 If IO.Path.GetExtension(s).ToUpper=".TBN" Then Utilities.SafeDeleteFile(s)
             Else 
-                IO.File.Move(ActualPosterPath,NfoPathPrefName.Replace(IO.Path.GetExtension(NfoPathPrefName), "-poster.jpg"))
+                IO.File.Move(ActualPosterPath,NfoPathPrefName.Substring(0, NfoPathPrefName.LastIndexOf(IO.Path.GetExtension(NfoPathPrefName))) & "-poster.jpg")
             End If 
         Catch ex As Exception
             Dim x = ex
