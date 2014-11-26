@@ -575,7 +575,11 @@ Public Class Form2
             workingmovieedit = newmovie
             PictureBox1.Image = Nothing
             workingmovieedit.filedetails = currentfiledetails
-            runtimetxt.Text = Math.Round(workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value/60).ToString & "min" 
+            If Not String.IsNullOrEmpty(workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value) Then
+                runtimetxt.Text = Math.Round(workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value/60).ToString & "min" 
+            Else
+                runtimetxt.Text = ""
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
