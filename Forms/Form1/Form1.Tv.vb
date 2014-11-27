@@ -1416,24 +1416,50 @@ Partial Public Class Form1
                             tvprogresstxt &= ": -error!!"
                         End If
 
-                        If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
-                            tvprogresstxt &= " - Getting TVDB artwork"
-                            bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                        End If
-                        success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
-                        If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
-                            If success Then 
-                                tvprogresstxt &= ": OK!"
-                            Else
-                                tvprogresstxt &= ": error!!"
+                        If Preferences.TvFanartTvFirst Then
+                            If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
+                                tvprogresstxt &= " - Getting FanartTv Artwork"
+                                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                                TvFanartTvArt(NewShow, False)
+                            End If
+                            If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                                tvprogresstxt &= " - Getting TVDB artwork"
+                                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                            End If
+                            success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                            If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                                If success Then 
+                                    tvprogresstxt &= ": OK!"
+                                Else
+                                    tvprogresstxt &= ": error!!"
+                                End If
+                            End If
+                            If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
+                                tvprogresstxt &= " - Getting FanartTv Artwork"
+                                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                                TvFanartTvArt(NewShow, False)
+                            End If
+                        Else
+                            If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                                tvprogresstxt &= " - Getting TVDB artwork"
+                                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                            End If
+                            success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                            If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                                If success Then 
+                                    tvprogresstxt &= ": OK!"
+                                Else
+                                    tvprogresstxt &= ": error!!"
+                                End If
+                            End If
+                            If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
+                                tvprogresstxt &= " - Getting FanartTv Artwork"
+                                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                                TvFanartTvArt(NewShow, False)
                             End If
                         End If
 
-                        If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
-                            tvprogresstxt &= " - Getting FanartTv Artwork"
-                            bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                            TvFanartTvArt(NewShow, False)
-                        End If
+                        
 
                         tvprogresstxt &= " - Completed. Saving Show."
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
@@ -3663,8 +3689,13 @@ Partial Public Class Form1
         messbox.Refresh()
         Application.DoEvents()
         Try
-            TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
-            If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
+            If Preferences.TvFanartTvFirst Then
+                If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
+                TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
+            Else
+                TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
+                If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
+            End If
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)

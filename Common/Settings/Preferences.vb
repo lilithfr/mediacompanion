@@ -329,6 +329,7 @@ Public Class Preferences
     Public Shared tvdlfanart As Boolean
     Public Shared tvdlseasonthumbs As Boolean
     Public Shared TvDlFanartTvArt As Boolean
+    Public Shared TvFanartTvFirst As Boolean
     Public Shared dlTVxtrafanart As Boolean
     Public Shared tvfolderjpg As Boolean
     Public Shared seasonfolderjpg As Boolean
@@ -619,6 +620,7 @@ Public Class Preferences
         tvdlposter = True
         tvdlseasonthumbs = True
         TvDlFanartTvArt = False
+        TvFanartTvFirst = False
         dlTVxtrafanart = False
         tvfolderjpg = False
         seasonfolderjpg = False
@@ -1055,6 +1057,7 @@ Public Class Preferences
         root.AppendChild(doc, "downloadtvposter",       tvdlposter)             'cbTvDlPosterArt
         root.AppendChild(doc, "downloadtvseasonthumbs", tvdlseasonthumbs)       'cbTvDlSeasonArt
         root.AppendChild(doc, "TvDlFanartTvArt",        TvDlFanartTvArt)        'cbTvDlFanartTvArt
+        root.AppendChild(doc, "TvFanartTvFirst",        TvFanartTvFirst)        'cbTvFanartTvFirst
         root.AppendChild(doc, "dlTVxtrafanart",         dlTVxtrafanart)         'cbDlTVxtrafanart
         root.AppendChild(doc, "hdtvtags",               enabletvhdtags)         'CheckBox20
         root.AppendChild(doc, "disabletvlogs",          disabletvlogs)          'CheckBox17
@@ -1339,6 +1342,7 @@ Public Class Preferences
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
                     Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
                     Case "TvDlFanartTvArt"                      : TvDlFanartTvArt = thisresult.InnerXml 
+                    Case "TvFanartTvFirst"                      : TvFanartTvFirst = thisresult.InnerXml 
                     Case "allfolders"                           : allfolders = thisresult.InnerXml
                     Case "createfolderjpg"                      : createfolderjpg = thisresult.InnerXml
                     Case "createfanartjpg"                      : createfanartjpg = thisresult.InnerXml 

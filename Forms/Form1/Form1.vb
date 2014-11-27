@@ -2496,10 +2496,6 @@ Public Class Form1
                 busy = True
                 bckgroundscanepisodes.CancelAsync()
             End If
-            'If bckrescrapewizard.IsBusy Then
-            '    busy = True
-            '    bckrescrapewizard.CancelAsync()
-            'End If
             If BckWrkScnMovies.IsBusy Then
                 busy = True
                 BckWrkScnMovies.CancelAsync()
@@ -2518,7 +2514,6 @@ Public Class Form1
                 messbox.Visible = True
             End If
             Do Until busy = False
-                'Not bckrescrapewizard.IsBusy And 
                 If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy Then
                     busy = False
                     Exit Do
@@ -12513,6 +12508,7 @@ End Sub
         cbTvDlFanart                    .Checked    = Preferences.tvdlfanart
         cbTvDlSeasonArt                 .Checked    = Preferences.tvdlseasonthumbs
         cbTvDlFanartTvArt               .Checked    = Preferences.TvDlFanartTvArt
+        cbTvFanartTvFirst               .Checked    = Preferences.TvFanartTvFirst
         cb_TvFolderJpg                  .Checked    = Preferences.tvfolderjpg
         cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
         CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
@@ -13744,7 +13740,13 @@ End Sub
         Preferences.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    End Sub   'TvFanartTvFirst
+
+    Private Sub cbTvFanartTvFirst_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvFanartTvFirst.CheckedChanged
+        Preferences.TvFanartTvFirst = cbTvFanartTvFirst.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
+    End Sub   'TvFanartTvFirst
 
     Private Sub RadioButton41_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton41.CheckedChanged
         If RadioButton41.Checked = True Then Preferences.seasonall = "none"
