@@ -17993,11 +17993,11 @@ End Sub
                 Show.UpdateTreenode()
             Else
                 Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
-                Do While trueseason.Substring(0, 1) = "0"
+                Do While trueseason.Substring(0, 1) = "0" AndAlso trueseason.Length <> 1
                     trueseason = trueseason.Substring(1, trueseason.Length - 1)
                 Loop
                 Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
-                Do While trueepisode.Substring(0, 1) = "0"
+                Do While trueepisode.Substring(0, 1) = "0" AndAlso trueepisode.Length <> 1
                     trueepisode = trueepisode.Substring(1, trueepisode.Length - 1)
                 Loop
                 Dim episodelist As New List(Of TvEpisode)
