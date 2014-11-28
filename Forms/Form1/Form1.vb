@@ -10142,7 +10142,7 @@ End Sub
                             If tvBatchList.shFanart orElse tvBatchList.shPosters OrElse tvBatchList.shSeason OrElse tvBatchList.shXtraFanart Then
                                 TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart)
                             End If
-                            If tvBatchList.shFanartTvArt Then TvFanartTvArt(Cache.TvCache.Shows(f), Preferences.overwritethumbs)
+                            If tvBatchList.shFanartTvArt Then TvFanartTvArt(Cache.TvCache.Shows(f), False) 'We're only looking for missing art from Fanart.Tv
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
