@@ -149,7 +149,15 @@
 
     ReadOnly Property FilesRenamable As Boolean
         Get
-            Return Not Preferences.usefoldernames And Not Preferences.basicsavemode And Preferences.MovieManualRename
+            If Preferences.basicsavemode OrElse Not Preferences.MovieManualRename Then Return False
+            If Preferences.usefoldernames Then
+                Dim tempint As Integer = MessageBox.Show("You currently have 'UseFolderName' Selected" & vbCrLf & "Are you sure you wish to Rename this Movie file" & vbCrLf & "Folder Renaming will still commence", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If tempint = DialogResult.No Then
+                    Return False
+                Else 
+                    Return True
+                End If
+            End If
         End Get
     End Property
 
@@ -161,7 +169,7 @@
 
     'Disabled controls don't show tool tips (friggin' MS poo), so need to filter invalid changes 
     Private Sub cbRenameFiles_CheckedChanged( sender As Object,  e As EventArgs) Handles cbRenameFiles.CheckedChanged
-        If FilesRenamable Then
+        If cbRenameFiles.Checked AndAlso FilesRenamable Then
             Form1.rescrapeList.Rename_Files = cbRenameFiles.Checked
         Else
             cbRenameFiles.Checked = False

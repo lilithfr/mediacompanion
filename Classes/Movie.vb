@@ -3318,7 +3318,7 @@ Public Class Movie
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
         Try
-            If Not Preferences.usefoldernames AndAlso Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not NfoPathAndFilename.ToLower.Contains("bdmv") AndAlso Not Preferences.basicsavemode Then
+            If Not NfoPathAndFilename.ToLower.Contains("video_ts") AndAlso Not NfoPathAndFilename.ToLower.Contains("bdmv") AndAlso Not Preferences.basicsavemode Then
                 targetMovieFile = newpath & newfilename
                 targetNfoFile   = targetMovieFile
 
