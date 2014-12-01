@@ -7829,7 +7829,7 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Sub 
 
     Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbPrimaryPlot.Click
         Try
@@ -12615,6 +12615,7 @@ End Sub
         cbRenameUnderscore                  .Checked        = Preferences.MovRenameUnderscore
         CheckBox_ShowDateOnMovieList        .Checked        = Preferences.showsortdate
         cbImdbgetTMDBActor                  .Checked        = Preferences.TmdbActorsImdbScrape
+        'cbTMDBPreferredCertCountry          .Checked        = Preferences.TMDBPreferredCertCountry
         cbImdbPrimaryPlot                   .Checked        = Preferences.ImdbPrimaryPlot
         cbXbmcTmdbRename                    .Checked        = Preferences.XbmcTmdbRenameMovie
         cbXbmcTmdbOutlineFromImdb           .Checked        = Preferences.XbmcTmdbMissingFromImdb
@@ -14471,6 +14472,18 @@ End Sub
             Save_XBMC_TMDB_Scraper_Config("language", cmbxXbmcTmdbTitleLanguage.Text)
             mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             'Read_XBMC_TMDB_Scraper_Config()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cmbxTMDBPreferredCertCountry_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxTMDBPreferredCertCountry.SelectedIndexChanged
+        If prefsload Then Exit Sub
+        Try     'tmdbcertcountry
+            Preferences.TMDBPreferredCertCountry = cmbxTMDBPreferredCertCountry.Text
+            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", cmbxTMDBPreferredCertCountry.Text)
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception

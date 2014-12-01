@@ -252,6 +252,7 @@ Public Class Preferences
     Public Shared TMDbSelectedLanguageName As String = "English - US"
     Public Shared TMDbUseCustomLanguage As Boolean = False
     Public Shared TMDbCustomLanguageValue As String = ""
+    Public Shared TMDBPreferredCertCountry As String = ""
     Public Shared GetMovieSetFromTMDb As Boolean = True
     Public Shared ActorResolutionSI As Integer = 2     ' Height  768           SI = Selected Index
     Public Shared PosterResolutionSI As Integer = 9     ' Height  1080  
@@ -557,6 +558,7 @@ Public Class Preferences
         'Movies
         movies_useXBMC_Scraper = False
         TmdbActorsImdbScrape = False
+        TMDBPreferredCertCountry = "us"
         ImdbPrimaryPlot = False
         XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
@@ -985,6 +987,7 @@ Public Class Preferences
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
         root.AppendChild(doc, "TmdbActorsImdbScrape",               TmdbActorsImdbScrape)               'cbImdbgetTMDBActor 
+        root.AppendChild(doc, "TMDBPreferredCertCountry",           TMDBPreferredCertCountry)           'cmbxTMDBPreferredCertCountry
         root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot  
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
@@ -1271,6 +1274,7 @@ Public Class Preferences
                     '    End If
 
                     Case "TmdbActorsImdbScrape"                 : TmdbActorsImdbScrape = thisresult.InnerXml 
+                    Case "TMDBPreferredCertCountry"             : TMDBPreferredCertCountry = thisresult.InnerText 
                     Case "ImdbPrimaryPlot"                      : ImdbPrimaryPlot = thisresult.InnerXml 
                     'Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText    -  locked at "tmdb"
                     Case "XbmcTmdbRenameMovie"                  : XbmcTmdbRenameMovie = thisresult.InnerText 

@@ -730,6 +730,7 @@ Module General
 
         If Form1.cmbxXbmcTmdbHDTrailer.Items.Count > 0 Then Form1.cmbxXbmcTmdbHDTrailer.Items.Clear()
         If Form1.cmbxXbmcTmdbTitleLanguage.Items.Count > 0 Then Form1.cmbxXbmcTmdbTitleLanguage.Items.Clear()
+        If Form1.cmbxTMDBPreferredCertCountry.Items.Count > 0 Then Form1.cmbxTMDBPreferredCertCountry.Items.Clear()
         Try
             For Each m_node In m_nodelist
                 For Each NodeChild In m_node.ChildNodes
@@ -743,40 +744,30 @@ Module General
                                     Case "trailerq"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
-                                        Dim GetOut As Boolean = False
-                                        Do
-                                            Dim Position As Integer = AllValues.LastIndexOf("|")
-                                            Dim TempValue As String = ""
-                                            If Position = -1 Then
-                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
-                                                GetOut = True
-                                            Else
-                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
-                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
-                                            End If
-                                            Form1.cmbxXbmcTmdbHDTrailer.Items.Add(TempValue)
-                                        Loop Until GetOut = True
+                                        Dim splitvalues() As String = AllValues.Split("|")
+                                        For Each thisvalue In splitvalues
+                                            Form1.cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
+                                        Next
                                         Form1.cmbxXbmcTmdbHDTrailer.Text = Test
                                     Case "language"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
-                                        Dim GetOut As Boolean = False
-                                        Do
-                                            Dim Position As Integer = AllValues.LastIndexOf("|")
-                                            Dim TempValue As String = ""
-                                            If Position = -1 Then
-                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
-                                                GetOut = True
-                                            Else
-                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
-                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
-                                            End If
-                                            Form1.cmbxXbmcTmdbTitleLanguage.Items.Add(TempValue)
-                                        Loop Until GetOut = True
+                                        Dim splitvalues() As String = AllValues.Split("|")
+                                        For Each thisvalue In splitvalues
+                                            Form1.cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
+                                        Next
                                         Form1.cmbxXbmcTmdbTitleLanguage.Text = Test
                                     Case "ratings"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Form1.cbXbmcTmdbIMDBRatings.Checked = If(Test.ToLower = "imdb", True, False)
+                                    Case "tmdbcertcountry"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim splitvalues() As String = AllValues.Split("|")
+                                        For Each thisvalue In splitvalues
+                                            Form1.cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
+                                        Next
+                                        Form1.cmbxTMDBPreferredCertCountry.Text = Preferences.TMDBPreferredCertCountry
                                 End Select
                             Catch
                                 'empty node
@@ -819,6 +810,8 @@ Module General
                                         Case "trailerq"
                                             NodeChild.Attributes("default").Value = ChangeValue
                                         Case "language"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "tmdbcertcountry"
                                             NodeChild.Attributes("default").Value = ChangeValue
                                     End Select
                                 End If
