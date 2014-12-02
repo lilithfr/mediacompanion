@@ -33,9 +33,13 @@ Module Module1
     Dim logfile As String = "mc_com.log"
     Dim logstr As New List(Of String)
     Dim WithEvents scraper As New BackgroundWorker
-    Dim oMovies As New Movies(scraper)
+    Dim WithEvents oMovies As New Movies(scraper)
     Dim EnvExit As Integer = 0
     Dim DoneAEp As Boolean = False
+    Dim ShowTrailerDownloadProgess As Boolean = False
+    Dim FileDownloadSize As Integer = -1
+    Dim CursorLeft As Integer
+    Dim CursorTop  As Integer
     Private Declare Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
     Private Declare Function ShowWindow Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal nCmdShow As Int32) As Int32
     
@@ -109,7 +113,10 @@ Module Module1
                 ElseIf arguments(f) = "-c" Then
                     Dim arg As New arguments
                     arg.switch = arguments(f)
-                    listofargs.Add(arg)
+                    listofargs.Add(arg) 
+                'Show trailer download progress               
+                ElseIf arguments(f) = "-d" Then
+                    ShowTrailerDownloadProgess = True
                 End If
             Next
         End If
@@ -133,6 +140,7 @@ Module Module1
             ConsoleOrLog("-v to run with no Console window. All information will be written")
             ConsoleOrLog("    to a log file in Media Companion's folder.  Log is overwritten")
             ConsoleOrLog("    each run of mc_com.exe")
+            ConsoleOrLog("-d Shows trailer download progress to console. Ignored if -v specified.")
             ConsoleOrLog("")
             ConsoleOrLog("Example")
             ConsoleOrLog("mc_com.exe -m -e -p billy -x basiclist C:\Movielist\testfile.html")
@@ -3308,6 +3316,24 @@ Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.Co
         End If
         Thread.Sleep(1)
 End Sub
+
+Private Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
+    FileDownloadSize = iFileSize
+    If ShowTrailerDownloadProgess and visible Then
+        Console.Write("Trailer download progress ")
+        CursorLeft = Console.CursorLeft
+        CursorTop  = Console.CursorTop
+    End If
+End Sub
+
+
+Private Sub FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long) Handles oMovies.AmountDownloadedChanged
+    If ShowTrailerDownloadProgess and visible and FileDownloadSize>-1 Then
+        Console.SetCursorPosition(CursorLeft,CursorTop)
+        Console.Write("{0:0.0%}",iTotalBytesRead/FileDownloadSize)
+    End If
+End Sub
+
 
 Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles scraper.RunWorkerCompleted
      
