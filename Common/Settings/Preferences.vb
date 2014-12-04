@@ -247,6 +247,7 @@ Public Class Preferences
     Public Shared MovTitleIgnArticle As Boolean
     Public Shared MovTitleCase As Boolean
     Public Shared ExcludeMpaaRated As Boolean
+    Public Shared MovThousSeparator As Boolean
     Public Shared MovieImdbGenreRegEx As String
     Public Shared showsortdate As Boolean
     Public Shared TMDbSelectedLanguageName As String = "English - US"
@@ -602,6 +603,7 @@ Public Class Preferences
         MovTitleIgnArticle = False
         MovTitleCase = False
         ExcludeMpaaRated = False
+        MovThousSeparator = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
         MovNewFolderInRootFolder = False
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
@@ -1011,6 +1013,7 @@ Public Class Preferences
         root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
         root.AppendChild(doc, "MovTitleCase",                       MovTitleCase)                       'cbMovTitleCase
         root.AppendChild(doc, "ExcludeMpaaRated",                   ExcludeMpaaRated)                   'cbExcludeMpaaRated
+        root.AppendChild(doc, "MovThousSeparator",                  MovThousSeparator)                  'cbMovThousSeparator
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
         root.AppendChild(doc, "moviePreferredHDTrailerResolution",  moviePreferredTrailerResolution)    'cbPreferredTrailerResolution
         root.AppendChild(doc, "GetMovieSetFromTMDb",                GetMovieSetFromTMDb)                'cbGetMovieSetFromTMDb
@@ -1417,6 +1420,7 @@ Public Class Preferences
                     Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml
                     Case "MovTitleCase"                         : MovTitleCase = thisresult.InnerXml
                     Case "ExcludeMpaaRated"                     : ExcludeMpaaRated = thisresult.InnerXml 
+                    Case "MovThousSeparator"                    : MovThousSeparator = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml
                     Case "moviePreferredHDTrailerResolution"    : moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()

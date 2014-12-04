@@ -2250,7 +2250,12 @@ Public Class WorkingWithNfoFiles
                             Case "createdate"
                                 newmovie.createdate = thisresult.InnerText
                             Case "votes"
-                                newmovie.Votes = thisresult.InnerText.ToInt
+                                Dim vote As String = thisresult.InnerText
+                                If Not String.IsNullOrEmpty(vote) Then
+                                    vote = vote.Replace(",", "")
+                                    newmovie.Votes = vote.toint
+                                End If
+                                'newmovie.Votes = thisresult.InnerText.ToInt
 
                             Case "mpaa"    'aka Certificate
                                 newmovie.Certificate = thisresult.InnerText
@@ -2447,7 +2452,9 @@ Public Class WorkingWithNfoFiles
                         Case "sorttitle"
                             newmovie.fullmoviebody.sortorder = thisresult.InnerText
                         Case "votes"
-                            newmovie.fullmoviebody.votes = thisresult.InnerText
+                            Dim vote As String = thisresult.InnerText
+                            If Not String.IsNullOrEmpty(vote) Then vote = vote.Replace(",", "")
+                            newmovie.fullmoviebody.votes = vote  'thisresult.InnerText
                         Case "country"
                             newmovie.fullmoviebody.country = thisresult.InnerText
                         Case "outline"
@@ -3035,7 +3042,21 @@ Public Class WorkingWithNfoFiles
                 Try
                     child = doc.CreateElement("votes")
                     Dim votes As String = movietosave.fullmoviebody.votes
-                    If Not String.IsNullOrEmpty(votes) then votes = votes.Replace(",", "")
+                    If Not String.IsNullOrEmpty(votes) then
+                        If Not Preferences.MovThousSeparator Then
+                            votes = votes.Replace(",", "")
+                        Else
+                            If Not votes.Contains(",") Then
+                                If votes.Length > 3 Then
+                                    votes = votes.Insert(votes.Length-3, ",")
+                                End If
+                                If votes.Length > 7 Then
+                                    votes = votes.Insert(votes.Length-7, ",")
+                                End If
+                            End If
+                        End If
+                    End If
+                    
                     child.InnerText = votes   'movietosave.fullmoviebody.votes
                     root.AppendChild(child)
                 Catch
@@ -3114,7 +3135,7 @@ Public Class WorkingWithNfoFiles
                         minutes = minutes.Replace("min", "")
                         minutes = minutes.Replace(" ", "")
                         Try
-                            If Convert.ToInt32(minutes) > 0 Then
+                            If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
                                 Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                                     minutes = minutes.Substring(1, minutes.Length - 1)
                                 Loop

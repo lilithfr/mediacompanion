@@ -12612,6 +12612,7 @@ End Sub
         cbMovTitleIgnArticle                .Checked        = Preferences.MovTitleIgnArticle
         cbMovTitleCase                      .Checked        = Preferences.MovTitleCase
         cbExcludeMpaaRated                  .Checked        = Preferences.ExcludeMpaaRated
+        cbMovThousSeparator                 .Checked        = Preferences.MovThousSeparator
         cbRenameUnderscore                  .Checked        = Preferences.MovRenameUnderscore
         CheckBox_ShowDateOnMovieList        .Checked        = Preferences.showsortdate
         cbImdbgetTMDBActor                  .Checked        = Preferences.TmdbActorsImdbScrape
@@ -15055,6 +15056,12 @@ End Sub
 
     Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
         Preferences.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbMovThousSeparator_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovThousSeparator.CheckedChanged
+        Preferences.MovThousSeparator = cbMovThousSeparator.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
