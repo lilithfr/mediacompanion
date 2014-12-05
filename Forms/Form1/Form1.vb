@@ -4237,11 +4237,6 @@ Public Class Form1
 
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
 
-            'Me.Refresh
-            'messbox.Refresh
-            'Me.Refresh
-            'Application.DoEvents
-
             Dim tempstring As String = String.Empty
             Dim tempint As Integer = 0
             Dim tempstring2 As String = String.Empty
@@ -4256,61 +4251,33 @@ Public Class Form1
                         tempstring = b1.Name
                         tempstring = tempstring.Replace("moviefanartcheckbox", "")
                         tempint = Convert.ToDecimal(tempstring)
-
                         If hd Then
                             tempstring2 = fanartArray(tempint).hdUrl
                         Else
                             tempstring2 = fanartArray(tempint).ldUrl
                         End If
-
                         allok = True
                         Exit For
                     End If
                 End If
             Next
-
             If Not allok Then
                 MsgBox("No Fanart Is Selected")
             Else
                 Try
                     Panel1.Controls.Remove(Label1)
-
                     Dim issavefanart As Boolean = Preferences.savefanart
                     Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
                     Dim xtra As Boolean = False
                     Dim extrfanart As Boolean = False
-                    If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Then xtra = True
-
+                    If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Or rbMovThumb5.Checked Then xtra = True
                     Preferences.savefanart = True
-
-                    If xtra AndAlso Preferences.movxtrafanart Then extrfanart = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath.Replace("extrathumbs\thumb", "extrafanart\fanart"))
                     If xtra AndAlso Preferences.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath)
-
 
                     If xtra OrElse Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath) Then
                         If Not xtra Then
                             Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
                             Movie.SaveFanartImageToCacheAndPaths(tempstring2, paths)
-                            'If Preferences.FrodoEnabled And workingMovieDetails.fileinfo.videotspath <> "" Then
-                            '    Dim OldFanartPath As String = FanartOrExtraPath
-                            '    FanartOrExtraPath = workingMovieDetails.fileinfo.videotspath + "fanart.jpg"
-                            '    If IO.File.Exists(FanartOrExtraPath) Then
-                            '        Utilities.SafeDeleteFile(FanartOrExtraPath)
-                            '    End If
-                            '    workingMovieDetails.fileinfo.fanartpath = FanartOrExtraPath
-                            '    IO.File.Copy(OldFanartPath, FanartOrExtraPath)
-                            '    GC.Collect()
-                            '    If Not Preferences.EdenEnabled Then
-                            '        Utilities.SafeDeleteFile(OldFanartPath)
-                            '    Else
-                            '        Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-                            '        If Not IO.File.Exists(edenart) Or OldFanartPath <> edenart Then
-                            '            Utilities.SafeCopyFile(OldFanartPath, edenart, True)
-                            '            GC.Collect()
-                            '            Utilities.SafeDeleteFile(OldFanartPath)
-                            '        End If
-                            '    End If
-                            'End If
                         End If
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
@@ -4343,7 +4310,6 @@ Public Class Form1
                     MsgBox(ex.Message)
                 End Try
             End If
-
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         Finally
@@ -11191,13 +11157,7 @@ End Sub
 
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
             Try
-                Dim fanartpath = workingMovieDetails.fileinfo.fanartpath
-                Dim xtra As Boolean = False
-                If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Then
-                    fanartpath = mov_FanartORExtrathumbPath()
-                    If Preferences.movxtrafanart And Not Preferences.movxtrathumb Then fanartpath = fanartpath.Replace("extrathumbs\thumb", "extrafanart\fanart")
-                End If
-
+                Dim fanartpath = mov_FanartORExtrathumbPath()
                 If IO.File.Exists(fanartpath) Then
                     util_ImageLoad(PictureBox2, fanartpath, Utilities.DefaultFanartPath)
                     lblMovFanartWidth.Text = PictureBox2.Image.Width
@@ -11217,25 +11177,18 @@ End Sub
 
     Private Function mov_FanartORExtrathumbPath() As String
         Dim fanarttype As String = ""
-        If rbMovFanart.Checked Then fanarttype = "Fanart"
-        If rbMovThumb1.Checked Then fanarttype = "Thumb1"
-        If rbMovThumb2.Checked Then fanarttype = "Thumb2"
-        If rbMovThumb3.Checked Then fanarttype = "Thumb3"
-        If rbMovThumb4.Checked Then fanarttype = "Thumb4"
-        Dim fanartpath As String = ""
-        Select Case fanarttype
-            Case "Fanart"
-                fanartpath = workingMovieDetails.fileinfo.fanartpath
-            Case "Thumb1"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb1.jpg"
-            Case "Thumb2"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb2.jpg"
-            Case "Thumb3"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb3.jpg"
-            Case "Thumb4"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb4.jpg"
-        End Select
-        Return fanartpath
+        For Each rb As RadioButton In GroupBoxFanartExtrathumbs.Controls
+            If rb.Checked Then
+                fanarttype = rb.Text.ToLower
+                Exit For
+            End If
+        Next
+        Dim workingfanartpath As String = workingMovieDetails.fileinfo.fanartpath
+        If fanarttype = "fanart" Then
+            Return workingfanartpath
+        Else
+            Return Strings.Left(workingfanartpath, workingfanartpath.LastIndexOf("\")) & "\extrathumbs\" & fanarttype & ".jpg"
+        End If
     End Function
 
     Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
@@ -12643,6 +12596,9 @@ End Sub
             cbMovieFanartInFolders  .Checked    = Preferences.fanartjpg
             cbMoviePosterInFolder   .Checked    = Preferences.posterjpg
         End If
+
+        cmbxMovXtraFanartQty.SelectedIndex = cmbxMovXtraFanartQty.FindStringExact(Preferences.movxtrafanartqty.ToString)
+
 
         Select Case Preferences.maxactors
             Case 9999
@@ -14612,7 +14568,21 @@ End Sub
 
     Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlXtraFanart.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.dlxtrafanart = cbDlXtraFanart.Checked
+        If cbDlXtraFanart.Checked Then
+            If Not Preferences.allfolders AndAlso Not Preferences.usefoldernames Then
+                MsgBox("Please select ""Use Foldername"" or ""Movies in Separate Folders""")
+                cbDlXtraFanart.Checked = False
+            Else
+                If Not Preferences.movxtrafanart AndAlso Not Preferences.movxtrathumb Then
+                    MsgBox("Please select ""Allow save ExtraThumbs"" And/Or ""Allow save ExtraFanart""")
+                    cbDlXtraFanart.Checked = False
+                Else 
+                    Preferences.dlxtrafanart = True
+                End If
+            End If
+        Else
+            Preferences.dlxtrafanart = False
+        End If
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14703,18 +14673,17 @@ End Sub
     End Sub
 
 'Movie's in folders
-    Private Sub cbMovXtraThumbs_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraThumbs.CheckedChanged 
+    Private Sub cbMovXtraThumbs_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraThumbs.CheckedChanged
+        If prefsload Then Exit Sub
         Try
-            If cbMovXtraThumbs.CheckState = CheckState.Checked Then
+            If cbMovXtraThumbs.Checked Then
                 Preferences.movxtrathumb = True
             Else
-                If cbMovXtraFanart.CheckState = CheckState.Unchecked Then
-                    cbMovXtraThumbs.CheckState = CheckState.Checked
-                    Preferences.movxtrathumb = True
-                    MsgBox("Either Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
-                Else
-                    Preferences.movxtrathumb = False
+                If Not cbMovXtraFanart.Checked Then
+                    cbDlXtraFanart.Checked = False
+                    MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
                 End If
+                Preferences.movxtrathumb = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14723,24 +14692,31 @@ End Sub
         End Try
     End Sub
 
-    Private Sub cbMovXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraFanart.CheckedChanged 
+    Private Sub cbMovXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraFanart.CheckedChanged
+        If prefsload Then Exit Sub
         Try
-            If cbMovXtraFanart.CheckState = CheckState.Checked Then
+            If cbMovXtraFanart.Checked Then
                 Preferences.movxtrafanart = True
             Else
-                If cbMovXtraThumbs.CheckState = CheckState.Unchecked Then
-                    cbMovXtraFanart.CheckState = CheckState.Checked
-                    Preferences.movxtrafanart = True
-                    MsgBox("Either Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
-                Else
-                    Preferences.movxtrafanart = False
+                If Not cbMovXtraThumbs.Checked Then
+                    cbDlXtraFanart.Checked = False
+                    MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
                 End If
+                Preferences.movxtrafanart = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cmbxMovXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMovXtraFanartQty.SelectedIndexChanged
+        If prefsload Then Exit Sub
+        Dim newvalue As String = cmbxMovXtraFanartQty.SelectedItem
+        Preferences.movxtrafanartqty = newvalue.toint
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMoviePosterInFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMoviePosterInFolder.CheckedChanged 
@@ -16540,6 +16516,10 @@ End Sub
 
     Private Sub rbMovThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovThumb4.CheckedChanged
         If rbMovThumb4.Checked Then mov_DisplayFanart()
+    End Sub
+
+    Private Sub rbMovThumb5_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbMovThumb5.CheckedChanged
+        If rbMovThumb5.Checked Then mov_DisplayFanart()
     End Sub
 
     Private Sub BtnSearchGoogleFanart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSearchGoogleFanart.Click
@@ -20211,5 +20191,6 @@ End Sub
         End If
         OpenUrl(url)
     End Sub
+    
     
 End Class

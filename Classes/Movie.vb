@@ -2132,7 +2132,6 @@ Public Class Movie
             DoDownloadExtraFanart()
         Else
             ReportProgress(, "Scraping Extra Fanart-Thumbs not selected" & vbCrLf)
-            Exit Sub
         End If
     End Sub
 
@@ -2141,11 +2140,11 @@ Public Class Movie
             Dim fcount As Integer = 0
             If Not Preferences.GetRootFolderCheck(ActualNfoPathAndFilename) Then
                 Dim fanartarray As New List(Of str_ListOfPosters)
-                Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\fanart"
+                Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\"
                 Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumbs\thumb"
                 Dim xf As Boolean = Preferences.movxtrafanart
                 Dim xt As Boolean = Preferences.movxtrathumb
-                If xf Then Directory.CreateDirectory(xfanart.Replace("\fanart", ""))
+                If xf Then Directory.CreateDirectory(xfanart)
                 If xt Then Directory.CreateDirectory(xthumb.Replace("\thumb", ""))
                 Dim owrite As Boolean = Preferences.overwritethumbs
                 Dim tmpUrl As String = ""
@@ -2154,17 +2153,19 @@ Public Class Movie
                 fanartarray.AddRange(tmdb.Fanart)
                 fcount = fanartarray.Count
                 If fcount > 1 Then
-                    Dim x As Integer = If(fcount > 4, 4, fcount)
-                    For i = 1 To x
+                    'Dim x As Integer = If(fcount > 4, 4, fcount)
+                    Dim i As Integer = 1
+                    Do
                         xtraart.Clear()
                         tmpUrl = fanartarray(i).hdUrl
                         If Utilities.UrlIsValid(tmpUrl) Then
                             If xf Then
-                                If Not (IO.File.Exists((xfanart & i.ToString & ".jpg")) AndAlso Not owrite) Then
-                                    xtraart.Add((xfanart & i.ToString & ".jpg"))
+                                Dim fanartfilename As String = tmpUrl.Substring(tmpUrl.LastIndexOf("/")+1, (tmpUrl.Length - tmpUrl.LastIndexOf("/")-1))
+                                If Not (IO.File.Exists(xfanart & fanartfilename) AndAlso Not owrite) Then
+                                    xtraart.Add(xfanart & fanartfilename)
                                 End If
                             End If
-                            If xt Then
+                            If xt AndAlso i < 6 Then
                                 If Not (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then
                                     xtraart.Add((xthumb & i.ToString & ".jpg"))
                                 End If
@@ -2173,20 +2174,20 @@ Public Class Movie
                                 SaveFanartImageToCacheAndPaths(tmpUrl, xtraart)
                             End If
                         End If
-                        If i = fanartarray.Count - 1 Then Exit For
-                    Next
+                        i += 1
+                    Loop Until i = (Preferences.movxtrafanartqty+1) or i > fcount-1
                 End If
             Else
-                ReportProgress(MSG_OK, "!!! Extra Fanart not downloaded as movie is in Root Folder." & vbCrLf)
+                ReportProgress(MSG_OK, "!!! ExtraFanart\ExtraThumbs not downloaded as movie is in Root Folder." & vbCrLf)
                 Exit Sub
             End If
             If fcount > 1 Then
-                ReportProgress(MSG_OK, "!!! Extra Fanart Downloaded OK" & vbCrLf)
+                ReportProgress(MSG_OK, "!!! ExtraFanart\ExtraThumbs Downloaded OK" & vbCrLf)
             Else
-                ReportProgress(MSG_OK, "!!! Insufficient Fanart to download as Extrafanart" & vbCrLf)
+                ReportProgress(MSG_OK, "!!! Insufficient Fanart to download as ExtraFanart\ExtraThumbs" & vbCrLf)
             End If
         Catch ex As Exception
-            ReportProgress(MSG_ERROR, "!!! Problem Saving Extra Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+            ReportProgress(MSG_ERROR, "!!! Problem Saving ExtraFanart or ExtraThumbs" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
         End Try
     End Sub
 

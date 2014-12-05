@@ -201,6 +201,7 @@ Public Class Preferences
     Public Shared usefoldernames As Boolean
     Public Shared movxtrathumb As Boolean
     Public Shared movxtrafanart As Boolean
+    Public Shared movxtrafanartqty As Integer
     Public Shared dlxtrafanart As Boolean
     Public Shared allfolders As Boolean
     Public Shared actorsave As Boolean
@@ -575,6 +576,7 @@ Public Class Preferences
         imdbmirror = "http://www.imdb.com/"
         usefoldernames = False
         movxtrafanart = True
+        movxtrafanartqty = 0
         movxtrathumb = False
         dlxtrafanart = False
         allfolders = False
@@ -962,6 +964,7 @@ Public Class Preferences
         root.AppendChild(doc, "usefoldernames",                     usefoldernames)                     'chkbx_usefoldernames
         root.AppendChild(doc, "movxtrathumb",                       movxtrathumb)                       'cbMovXtraThumb
         root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
+        root.AppendChild(doc, "movxtrafanartqty",                   movxtrafanartqty)                   'cbMovXtraFanartQty
         root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
@@ -1346,6 +1349,7 @@ Public Class Preferences
                     Case "usefoldernames"                       : usefoldernames = thisresult.InnerXml
                     Case "movxtrathumb"                         : movxtrathumb = thisresult.InnerXml
                     Case "movxtrafanart"                        : movxtrafanart = thisresult.InnerXml
+                    Case "movxtrafanartqty"                     : movxtrafanartqty = thisresult.InnerXml 
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
                     Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
                     Case "TvDlFanartTvArt"                      : TvDlFanartTvArt = thisresult.InnerXml 
