@@ -3334,6 +3334,12 @@ Private Sub FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long) 
     End If
 End Sub
 
+Private Sub FileDownload_FileDownloadComplete() Handles oMovies.FileDownloadComplete
+    If ShowTrailerDownloadProgess and visible Then
+        Console.WriteLine("")
+        Console.WriteLine("")
+    End If
+End Sub
 
 Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles scraper.RunWorkerCompleted
      
