@@ -1049,70 +1049,11 @@ Public Class Classimdb
                                 movienfoarray = "scraper error"
                             End If
                             movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<votes>" & movienfoarray & "</votes>" & vbCrLf
+                            totalinfo = totalinfo & "<votes>" & movienfoarray.Replace(".", "") & "</votes>" & vbCrLf
                         Catch
                             totalinfo = totalinfo & "<votes>scraper error</votes>" & vbCrLf
                         End Try
                     End If
-
-                    'outline
-                    ''If webpage(f).IndexOf("<p>") <> -1 Then
-'                    If totalinfo.IndexOf("<outline>") = -1 Then
-'                        If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
-'                            Try
-'                                movienfoarray = ""
-'                                Dim endofoutline = f
-'                                For endofoutline = (f) To webpage.Count - 2
-'                                    movienfoarray = movienfoarray & webpage(endofoutline)
-'                                    If webpage(endofoutline).IndexOf("</p>") <> -1 Then
-'                                        Exit For
-'                                    End If
-'                                Next
-'                                If movienfoarray.Length > 0 Then
-
-''                                   Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
-'                                    Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(</p)")
-'                                    If M.Success = True Then
-'                                        movienfoarray = M.Groups(1).Value.StripTagsLeaveContent.Replace("See full summary »","").Trim
-'                                    Else
-'                                        movienfoarray = "scraper error"
-'                                    End If
-'                           '        movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-'                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-'                                    movienfoarray = encodespecialchrs(movienfoarray)
-'                                    totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
-'                                Else
-'                                    totalinfo = totalinfo & "<outline>scaper error: possible format change</outline>" & vbCrLf
-'                                End If
-'                            Catch
-'                                totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
-'                            End Try
-
-'                            If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-'                        End If
-'                    End If
-
-
-
-                    ''studio
-                    'If webpage(f).IndexOf("<h4 class=""inline"">Production") <> -1 Then
-                    '    Try
-                    '        movienfoarray = ""
-                    '        For g = 1 To 5
-                    '            If webpage(f + g).IndexOf("<a") <> -1 Then
-                    '                movienfoarray = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
-                    '                Exit For
-                    '            End If
-                    '        Next
-                    '        movienfoarray = movienfoarray.Trim()
-                    '        movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                    '        movienfoarray = encodespecialchrs(movienfoarray)
-                    '        totalinfo = totalinfo & "<studio>" & movienfoarray & "</studio>" & vbCrLf
-                    '        'Exit For
-                    '    Catch
-                    '        totalinfo = totalinfo & "<studio>scraper error</studio>" & vbCrLf
-                    '    End Try
-                    'End If
 
                     'country
                     If webpage(f).IndexOf("class=""inline"">Countr") <> -1 Then

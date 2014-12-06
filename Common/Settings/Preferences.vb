@@ -724,12 +724,11 @@ Public Class Preferences
         releaseformat(6) = "R5"
         releaseformat(7) = "DVD-Rip"
         releaseformat(8) = "DVD-R"
-        releaseformat(9) = "DVD"
-        releaseformat(10) = "HDTV"
-        releaseformat(11) = "VODRip"
-        releaseformat(12) = "BRRip"
-        releaseformat(13) = "BDRip"
-        releaseformat(14) = "Bluray"
+        releaseformat(9) = "HDTV"
+        releaseformat(10) = "VODRip"
+        releaseformat(11) = "BRRip"
+        releaseformat(12) = "BDRip"
+        releaseformat(13) = "Bluray"
 
         movieFolders.Clear()
         tvFolders.Clear()
@@ -754,6 +753,8 @@ Public Class Preferences
         MovSepLst.Add("Extended-Edition")
         MovSepLst.Add("Theatrical-Version")
         MovSepLst.Add("Unrated-Version")
+        MovSepLst.Add("DVD")
+        MovSepLst.Add("Bluray")
     End Sub
 
     Public Shared Sub Proxyreload()

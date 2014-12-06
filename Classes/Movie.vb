@@ -2865,7 +2865,9 @@ Public Class Movie
                 ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
                 AssignScrapedMovie(_rescrapedMovie)
             End If
-            
+            Dim IMDB_Votes As String = _rescrapedMovie.fullmoviebody.votes
+            Dim IMDB_Mpaa As String = _rescrapedMovie.fullmoviebody.mpaa
+
             If Preferences.movies_useXBMC_Scraper OrElse rl.FromTMDB Then
                 Dim useID As String = If(_scrapedMovie.fullmoviebody.tmdbid <> "", _scrapedMovie.fullmoviebody.tmdbid, _scrapedMovie.fullmoviebody.imdbid)
                 _imdbBody = TmdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, useID)
@@ -2894,6 +2896,11 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.country  , _scrapedMovie.fullmoviebody.country  , rl.country   , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.title    , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
+
+            If Preferences.movies_useXBMC_Scraper Then
+                If Preferences.XbmcTmdbVotesFromImdb Then UpdateProperty(IMDB_Votes, _scrapedMovie.fullmoviebody.votes, rl.votes, rl.EmptyMainTags)
+                If Preferences.XbmcTmdbCertFromImdb Then UpdateProperty(IMDB_Mpaa, _scrapedMovie.fullmoviebody.mpaa, rl.mpaa, rl.EmptyMainTags)
+            End If
 
             If rl.title 
                 If Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
