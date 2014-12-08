@@ -1,6 +1,7 @@
 ﻿Imports System.Net
 Imports System.IO
 Imports System.Linq
+Imports System.Xml 
 
 
 Public Class frmCoverArt
@@ -11,7 +12,7 @@ Public Class frmCoverArt
     Dim WithEvents reslabel As Label
     Dim resolutionlbl As Label
     Dim panel2 As New Panel
-    Dim posterurls(1000, 1) As String
+    Dim posterurls(, ) As String
     Dim posterpath As String
     Dim WithEvents mainposter As New PictureBox
     Dim WithEvents bigpicbox As PictureBox
@@ -26,6 +27,7 @@ Public Class frmCoverArt
     Dim folderjpgpath As String
     Dim imdbid As String = Form1.workingMovieDetails.fullmoviebody.imdbid
     Dim tmdbid As String = Form1.workingMovieDetails.fullmoviebody.tmdbid
+    Dim movietitle As String =  Form1.workingMovieDetails.fullmoviebody.title
     Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
     Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
     Dim applicationPath As String = Preferences.applicationPath
@@ -33,8 +35,6 @@ Public Class frmCoverArt
     Private Sub frmCoverArt_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.KeyCode = Keys.Escape Then Me.Close()
     End Sub
-
-
 
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
@@ -164,7 +164,6 @@ Public Class frmCoverArt
 
     End Sub
 
-
     Private Sub zoomimage(ByVal sender As Object, ByVal e As EventArgs)
         Try
             Dim tempstring As String = sender.name
@@ -274,456 +273,73 @@ Public Class frmCoverArt
 
     Private Sub btnSourceMPDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceMPDB.Click
         Try
-            Call initialise()
-
-            Dim fanarturl As String
-            Dim fanartlinecount As Integer = 0
-            Dim allok As Boolean = True
-            Dim apple2(10000)
-            Dim first As Integer
-            Dim last As Integer
-
-            fanarturl = URLs.MoviePosterDBMovie
-            Dim temp As String = tmdbid
-            fanarturl = fanarturl & temp.Replace("tt", "")
-
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
-
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
-            fanartlinecount -= 1
-
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<title>MoviePosterDB.com - Internet Movie Poster DataBase</title>") <> -1 Then
-                    allok = False
-                End If
-            Next
-
-            If allok = True Then
-                For f = 1 To fanartlinecount
-                    If apple2(f).IndexOf("<img src=" & URLs.MoviePosterDBPoster) <> -1 Then
-                        count = count + 1
-                        first = apple2(f).IndexOf("http")
-                        last = apple2(f).IndexOf("jpg")
-                        posterurls(count, 0) = apple2(f).Substring(first, (last + 3) - first)
-                        If posterurls(count, 0).IndexOf("t_") <> -1 Then
-                            posterurls(count, 0) = posterurls(count, 0).Replace("t_", "l_")
-                        End If
-                        If posterurls(count, 0).IndexOf("s_") <> -1 Then
-                            posterurls(count, 0) = posterurls(count, 0).Replace("s_", "l_")
-                        End If
-                    End If
-                Next
-
-                Dim group(1000) As String
-                Dim groupcount As Integer = 0
-                For f = 1 To fanartlinecount
-                    If apple2(f) <> Nothing Then
-                        If apple2(f).IndexOf(URLs.MoviePosterDBGroup) <> -1 Then
-                            If apple2(f).IndexOf("http") <> -1 And apple2(f).IndexOf(""">") <> -1 Then
-                                groupcount = groupcount + 1
-                                first = apple2(f).IndexOf("http")
-                                last = apple2(f).IndexOf(""">")
-                                group(groupcount) = apple2(f).Substring(first, last - first)
-                            End If
-                        End If
-                    End If
-                Next
-
-                If groupcount > 0 Then
-                    For g = 1 To groupcount
-                        fanarturl = group(g)
-
-                        Dim wrGETURL3 As WebRequest
-                        wrGETURL3 = WebRequest.Create(fanarturl)
-                        Dim myProxy3 As New WebProxy("myproxy", 80)
-                        myProxy3.BypassProxyOnLocal = True
-                        ReDim apple2(10000)
-                        Dim objStream3 As Stream
-                        objStream3 = wrGETURL3.GetResponse.GetResponseStream()
-                        Dim objReader3 As New StreamReader(objStream3)
-                        Dim sLine3 As String = ""
-                        fanartlinecount = 0
-                        fanartlinecount = 0
-                        Do While Not sLine3 Is Nothing
-                            fanartlinecount += 1
-                            sLine3 = objReader3.ReadLine
-                            apple2(fanartlinecount) = sLine3
-                        Loop
-                        fanartlinecount -= 1
-
-                        For f = 1 To fanartlinecount
-                            If apple2(f) <> Nothing Then
-                                If apple2(f).IndexOf("<img src=" & URLs.MoviePosterDBPoster) <> -1 Then
-                                    count = count + 1
-                                    first = apple2(f).IndexOf("http")
-                                    last = apple2(f).IndexOf("jpg")
-                                    posterurls(count, 0) = apple2(f).Substring(first, (last + 3) - first)
-                                    If posterurls(count, 0).IndexOf("t_") <> -1 Then
-                                        posterurls(count, 0) = posterurls(count, 0).Replace("t_", "l_")
-                                    End If
-                                    If posterurls(count, 0).IndexOf("s_") <> -1 Then
-                                        posterurls(count, 0) = posterurls(count, 0).Replace("s_", "l_")
-                                    End If
-                                End If
-                            End If
-                        Next
-                    Next
-                End If
-            Else
-
+            If Not imdbid.Contains("tt") Then
+                MsgBox("No IMDB ID" & vbCrLf & "Searching Movie Poster DB halted")
+                Exit Sub
             End If
-
-            For f = 1 To count
-                posterurls(f, 1) = posterurls(f, 0)
-            Next
+            Dim messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            Me.Refresh()
+            messbox.Refresh()
+            Call initialise()
+            Dim newobject As New class_mpdb_thumbs.Class1
+            Dim testthumbs As String = String.Empty
+            Try
+                testthumbs = newobject.get_mpdb_thumbs(imdbid)
+                testthumbs = "<totalthumbs>" & testthumbs & "</totalthumbs>"
+            Catch ex As Exception
+                'Thread.Sleep(1)
+            End Try
+            Dim thumbstring As New XmlDocument
+            Try
+                thumbstring.LoadXml(testthumbs)
+                count = 0
+                For Each thisresult In thumbstring("totalthumbs")
+                    Select Case thisresult.Name
+                        Case "thumb"
+                            posterurls(count,0) = thisresult.InnerText
+                            posterurls(count,1) = thisresult.InnerText
+                            count += 1
+                    End Select
+                Next
+            Catch ex As Exception
+            End Try
+            messbox.Close()
             Call displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
     End Sub
 
     Private Sub btnSourceIMDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceIMDB.Click
         Try
             Call initialise()
-            Dim fanarturl As String
-            Dim fanartlinecount As Integer = 0
-            Dim allok As Boolean = True
-            Dim apple2(10000)
-
-            fanarturl = URLs.IMDBMediaIndexPoster(tmdbid)
-
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
-
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
-            fanartlinecount -= 1
-
-            Dim totalpages As Integer
-            Dim tempint As Integer
-            Dim reached As Boolean = False
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
-                    apple2(f) = apple2(f).Replace("<a href=""?page=", "")
-                    apple2(f) = apple2(f).Substring(0, 1)
-                    tempint = Convert.ToString(apple2(f))
-                    If tempint > totalpages Then totalpages = tempint
-                End If
-                If apple2(f).IndexOf("<div class=""media_index_thumb_list""") <> -1 Then
-                    reached = True
-                End If
-                If reached = True Then
-                    If apple2(f).IndexOf("</div>") <> -1 Then
-                        reached = False
-                        Exit For
-                    End If
-                    If apple2(f).IndexOf("src=""http://") <> -1 Then
-                        apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src="""), apple2(f).Length - apple2(f).IndexOf("src="""))
-                        apple2(f).TrimStart()
-                        apple2(f) = apple2(f).Replace("src=""", "")
-                        count = count + 1
-                        posterurls(count, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1"))
-                    End If
-                End If
-            Next
-            'For g = 2 To totalpages
-            '    fanarturl = URLs.IMDBMediaIndexPage(tmdbid, g)
-            '    ReDim apple2(10000)
-            '    Dim wrGETURL As WebRequest
-            '    wrGETURL = WebRequest.Create(fanarturl)
-            '    Dim myProxy As New WebProxy("myproxy", 80)
-            '    myProxy.BypassProxyOnLocal = True
-            '    Dim objStream As Stream
-            '    objStream = wrGETURL.GetResponse.GetResponseStream()
-            '    Dim objReader As New StreamReader(objStream)
-            '    Dim sLine As String = ""
-            '    fanartlinecount = 0
-
-            '    Do While Not sLine Is Nothing
-            '        fanartlinecount += 1
-            '        sLine = objReader.ReadLine
-            '        apple2(fanartlinecount) = sLine
-            '    Loop
-            '    fanartlinecount -= 1
-
-            '    For f = 1 To fanartlinecount
-            '        If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-            '            reached = True
-            '        End If
-            '        If reached = True Then
-            '            If apple2(f).IndexOf("</div>") <> -1 Then
-            '                reached = False
-            '                Exit For
-            '            End If
-            '            If apple2(f).IndexOf("src=""http://") <> -1 Then
-            '                apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
-            '                apple2(f).TrimStart()
-            '                apple2(f) = apple2(f).Replace("src=""", "")
-            '                count = count + 1
-            '                posterurls(count, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
-            '            End If
-            '        End If
-            '    Next
-            'Next
-            Dim imdbcounter As Integer = 0
-            For f = count To 1 Step -1
-                imdbcounter += 1
-                posterurls(imdbcounter, 1) = posterurls(f, 0) & "._V1_SX1000_SY1000_.jpg" '".jpg"  '"_V1._SX1000_SY1000_.jpg"
-            Next
-            For f = 1 To count
-                posterurls(f, 0) = posterurls(f, 1)
-            Next
-
+            Dim newobject2 As New imdb_thumbs.Class1
+            posterurls = newobject2.getimdbposters(imdbid)
+            count = UBound(posterurls)
             Call displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
-
     End Sub
 
     Private Sub btnSourceIMPA_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceIMPA.Click
         Try
+            
+            Dim messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            Me.Refresh()
+            messbox.Refresh()
             Call initialise()
-
-            Dim fanarturl As String
-            Dim fanartlinecount As Integer = 0
-            Dim allok As Boolean = True
-            Dim apple2(10000)
-
-
-            fanarturl = URLs.GoogleFanArt
-
-            title = title.ToLower
-            title = title.Replace(" ", "+")
-            title = title.Replace("&", "%26")
-            title = title.Replace("À", "%c0")
-            title = title.Replace("Á", "%c1")
-            title = title.Replace("Â", "%c2")
-            title = title.Replace("Ã", "%c3")
-            title = title.Replace("Ä", "%c4")
-            title = title.Replace("Å", "%c5")
-            title = title.Replace("Æ", "%c6")
-            title = title.Replace("Ç", "%c7")
-            title = title.Replace("È", "%c8")
-            title = title.Replace("É", "%c9")
-            title = title.Replace("Ê", "%ca")
-            title = title.Replace("Ë", "%cb")
-            title = title.Replace("Ì", "%cc")
-            title = title.Replace("Í", "%cd")
-            title = title.Replace("Î", "%ce")
-            title = title.Replace("Ï", "%cf")
-            title = title.Replace("Ð", "%d0")
-            title = title.Replace("Ñ", "%d1")
-            title = title.Replace("Ò", "%d2")
-            title = title.Replace("Ó", "%d3")
-            title = title.Replace("Ô", "%d4")
-            title = title.Replace("Õ", "%d5")
-            title = title.Replace("Ö", "%d6")
-            title = title.Replace("Ø", "%d8")
-            title = title.Replace("Ù", "%d9")
-            title = title.Replace("Ú", "%da")
-            title = title.Replace("Û", "%db")
-            title = title.Replace("Ü", "%dc")
-            title = title.Replace("Ý", "%dd")
-            title = title.Replace("Þ", "%de")
-            title = title.Replace("ß", "%df")
-            title = title.Replace("à", "%e0")
-            title = title.Replace("á", "%e1")
-            title = title.Replace("â", "%e2")
-            title = title.Replace("ã", "%e3")
-            title = title.Replace("ä", "%e4")
-            title = title.Replace("å", "%e5")
-            title = title.Replace("æ", "%e6")
-            title = title.Replace("ç", "%e7")
-            title = title.Replace("è", "%e8")
-            title = title.Replace("é", "%e9")
-            title = title.Replace("ê", "%ea")
-            title = title.Replace("ë", "%eb")
-            title = title.Replace("ì", "%ec")
-            title = title.Replace("í", "%ed")
-            title = title.Replace("î", "%ee")
-            title = title.Replace("ï", "%ef")
-            title = title.Replace("ð", "%f0")
-            title = title.Replace("ñ", "%f1")
-            title = title.Replace("ò", "%f2")
-            title = title.Replace("ó", "%f3")
-            title = title.Replace("ô", "%f4")
-            title = title.Replace("õ", "%f5")
-            title = title.Replace("ö", "%f6")
-            title = title.Replace("÷", "%f7")
-            title = title.Replace("ø", "%f8")
-            title = title.Replace("ù", "%f9")
-            title = title.Replace("ú", "%fa")
-            title = title.Replace("û", "%fb")
-            title = title.Replace("ü", "%fc")
-            title = title.Replace("ý", "%fd")
-            title = title.Replace("þ", "%fe")
-            title = title.Replace("ÿ", "%ff")
-            title = title.Replace(" ", "+")
-            title = title.Replace("&", "%26")
-            fanarturl = fanarturl & title & "+" & movieyear
-            fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-            ReDim apple2(10000)
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
-
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
-            fanartlinecount -= 1
-
-            For f = 1 To fanartlinecount
-                If apple2(f).indexof("http://www.impawards.com/") <> -1 Then
-                    Dim first As Integer = apple2(f).indexof("http://www.impawards.com/")
-                    apple2(f) = apple2(f).substring(first, apple2(f).length - first)
-                    fanarturl = apple2(f).substring(0, apple2(f).indexof("html") + 4)
-                End If
-            Next
-
-
-
-            Dim tempint As Integer
-            Dim tempstring As String
-            tempstring = fanarturl.Replace("http://", "")
-            tempint = tempstring.LastIndexOf("/")
-            If tempint - 5 = tempstring.IndexOf("/") Then
-                allok = True
-            Else
-                'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
-                fanarturl = "http://www.google.com/custom?hl=en&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
-                fanarturl = fanarturl & title
-                fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-                ReDim apple2(3000)
-                fanartlinecount = 0
-                Dim wrGETURL4 As WebRequest
-                wrGETURL4 = WebRequest.Create(fanarturl)
-                Dim myProxy4 As New WebProxy("myproxy", 80)
-                myProxy4.BypassProxyOnLocal = True
-                Dim objStream4 As Stream
-                objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-                Dim objReader4 As New StreamReader(objStream4)
-                Dim sLine4 As String = ""
-                fanartlinecount = 0
-
-                Do While Not sLine4 Is Nothing
-                    fanartlinecount += 1
-                    sLine4 = objReader4.ReadLine
-                    apple2(fanartlinecount) = sLine4
-                Loop
-                fanartlinecount -= 1
-                Dim first As Integer
-                For g = 1 To fanartlinecount
-                    If apple2(g).IndexOf("http://www.impawards.com/") <> -1 Then
-                        first = apple2(g).IndexOf("http://www.impawards.com/")
-                        apple2(g) = apple2(g).Substring(first, apple2(g).Length - first)
-                        fanarturl = apple2(g).Substring(0, apple2(g).IndexOf("html") + 4)
-                        tempstring = fanarturl
-                        tempstring = tempstring.Replace("http://", "")
-                        tempint = tempstring.LastIndexOf("/")
-                        If tempint - 5 = tempstring.IndexOf("/") Then
-                            allok = True
-                        Else
-                            allok = False
-                        End If
-                    End If
-                Next
-            End If
-
-            If fanarturl.IndexOf("art_machine") = -1 And allok = True Then
-                count = 1
-                ReDim apple2(10000)
-                fanartlinecount = 0
-                Dim wrGETURL As WebRequest
-                wrGETURL = WebRequest.Create(fanarturl)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy2.BypassProxyOnLocal = True
-                Dim objStream As Stream
-                objStream = wrGETURL.GetResponse.GetResponseStream()
-                Dim objReader As New StreamReader(objStream)
-                Dim sLine As String = ""
-                fanartlinecount = -1
-                Dim vertest As Boolean = False
-                Do While Not sLine Is Nothing
-                    fanartlinecount += 1
-                    sLine = objReader.ReadLine
-                    apple2(fanartlinecount) = sLine
-                Loop
-                fanartlinecount -= 1
-                Dim highest As Integer = 0
-                Dim version As Boolean = False
-                For f = 1 To fanartlinecount
-                    If apple2(f).indexof("ver") <> -1 Then
-                        For g = 1 To 50
-                            Dim tempstring2 As String = "ver" & g.ToString & "."
-                            If apple2(f).IndexOf(tempstring2) <> -1 Then
-                                If g = 1 Then
-                                    version = True
-                                End If
-                                If g > highest Then
-                                    highest = g
-                                End If
-                            End If
-                        Next
-                    End If
-                Next
-                Dim tempstring3 As String
-                Dim tempstring4 As String
-                tempstring3 = fanarturl.Substring(0, fanarturl.LastIndexOf("/") + 1)
-                tempstring4 = fanarturl.Substring(fanarturl.LastIndexOf("/") + 1, fanarturl.Length - fanarturl.LastIndexOf("/") - 1)
-                fanarturl = tempstring3 & "posters/" & tempstring4
-                fanarturl = fanarturl.Replace(".html", "")
-                If fanarturl.IndexOf("_ver") <> -1 Then
-                    fanarturl = fanarturl.Substring(0, fanarturl.IndexOf("_ver"))
-                End If
-
-                If highest > count Then count = highest
-                If version = True Then
-                    posterurls(1, 1) = fanarturl & "_ver1.jpg"
-                    posterurls(1, 0) = fanarturl & "_ver1_xlg.jpg"
-                Else
-                    posterurls(1, 1) = fanarturl & ".jpg"
-                    posterurls(1, 0) = fanarturl & "_xlg.jpg"
-                End If
-
-                For f = 2 To count
-                    posterurls(f, 1) = fanarturl & "_ver" & f.ToString & ".jpg"
-                    posterurls(f, 0) = fanarturl & "_ver" & f.ToString & "_xlg.jpg"
-                Next
-            End If
-
+            Dim newobject2 As New IMPA.getimpaposters
+            Try
+                posterurls = newobject2.getimpaafulllist(movietitle, movieyear)
+                count = UBound(posterurls)
+            Catch ex As Exception
+            End Try
+            messbox.Close()
             Call displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -777,8 +393,6 @@ Public Class frmCoverArt
         End Try
 
     End Sub
-
-
 
     Private Sub mainposter_BackgroundImageChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles mainposter.BackgroundImageChanged
         Try
@@ -1000,7 +614,7 @@ Public Class frmCoverArt
                     names.Add(posterurls(f, 1))
                 Next
             Else
-                For f = 1 To count
+                For f = 0 To count-1
                     names.Add(posterurls(f, 1))
                 Next
             End If
@@ -1120,7 +734,6 @@ Public Class frmCoverArt
         count = 0
         pagecount = 0
     End Sub
-
 
     Private Sub btnSaveSmall_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveSmall.Click
         Try
@@ -1317,9 +930,6 @@ Public Class frmCoverArt
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-
-
 
     Private Sub coverart_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
         Try
