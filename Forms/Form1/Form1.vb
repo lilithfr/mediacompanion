@@ -20069,19 +20069,43 @@ End Sub
 
 #End Region   'Movie Filter code
 
-    Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails) As Dictionary(Of String, String)
-        Dim flags As New Dictionary(Of String, String)
+    Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails) As List(Of KeyValuePair(Of String, String))
+        Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
-            Dim AudCh As String = Vidfiledetails.filedetails_audio(0).Channels.Value
-            flags.Add("channels", If((AudCh = "" Or AudCh = "-1"), "0", AudCh.Substring(0, 1)))
-            flags.Add("audio", Vidfiledetails.filedetails_audio(0).Codec.Value)
-            flags.Add("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value))
-            flags.Add("codec", Utilities.GetCodecCommonName(Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace))
-            flags.Add("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString))
+            If Vidfiledetails.filedetails_audio.Count>0 Then
+
+                Dim defaultAudioTrack = (From x In Vidfiledetails.filedetails_audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+
+                If IsNothing(defaultAudioTrack) Then
+                    defaultAudioTrack = Vidfiledetails.filedetails_audio(0)
+                End If
+
+
+                For Each track In Vidfiledetails.filedetails_audio
+                    flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
+                    flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value) )               
+                Next
+            End If
+
+            flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value)))
+            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)))
+            flags.Add(New KeyValuePair(Of String, string)("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString)))
         Catch
         End Try
         Return flags
 
+    End Function
+
+    Private Shared Function GetNotDefaultStr(dflt)
+        If dflt Then
+            Return ""
+        End If
+        
+        Return "_notdefault"
+    End Function
+
+    Private Shared Function GetNumAudioTracks(AudCh)
+        Return If((AudCh = "" Or AudCh = "-1"), "0", AudCh.Substring(0, 1))
     End Function
 
     Private Sub TabPage18_Enter(sender As Object, e As EventArgs) Handles TabPage18.Enter

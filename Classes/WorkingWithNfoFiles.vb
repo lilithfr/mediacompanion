@@ -226,6 +226,8 @@ Public Class WorkingWithNfoFiles
                                                             Select Case audiodetails.Name
                                                                 Case "language"
                                                                     audio.Language.Value = audiodetails.InnerText
+                                                                Case "DefaultTrack"
+                                                                    audio.DefaultTrack.Value = audiodetails.InnerText
                                                                 Case "codec"
                                                                     audio.Codec.Value = audiodetails.InnerText
                                                                 Case "channels"
@@ -407,6 +409,8 @@ Public Class WorkingWithNfoFiles
                                                                         Select Case audiodetails.Name
                                                                             Case "language"
                                                                                 audio2.Language.Value = audiodetails.InnerText
+                                                                            Case "DefaultTrack"
+                                                                                audio2.DefaultTrack.Value = audiodetails.InnerText
                                                                             Case "codec"
                                                                                 audio2.Codec.Value = audiodetails.InnerText
                                                                             Case "channels"
@@ -610,6 +614,13 @@ Public Class WorkingWithNfoFiles
                                 If aud.Language.Value <> "" Then
                                     xmlStreamDetailsTypeChild = document.CreateElement("language")
                                     xmlStreamDetailsTypeChild.InnerText = aud.Language.Value
+                                    xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
+                                End If
+                            End If
+                            If aud.DefaultTrack <> Nothing Then
+                                If aud.DefaultTrack.Value <> "" Then
+                                    xmlStreamDetailsTypeChild = document.CreateElement("DefaultTrack")
+                                    xmlStreamDetailsTypeChild.InnerText = aud.DefaultTrack.Value
                                     xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                                 End If
                             End If
@@ -2614,6 +2625,8 @@ Public Class WorkingWithNfoFiles
                                                         Select Case audiodetails.Name
                                                             Case "language"
                                                                 audio.Language.Value = audiodetails.InnerText
+                                                            Case "DefaultTrack"
+                                                                audio.DefaultTrack.Value = audiodetails.InnerText
                                                             Case "codec"
                                                                 audio.Codec.Value = audiodetails.InnerText
                                                             Case "channels"
@@ -2888,6 +2901,18 @@ Public Class WorkingWithNfoFiles
                                 End If
                             Catch
                             End Try
+
+                            Try
+                                If item.DefaultTrack.Value <> Nothing Then
+                                    If item.DefaultTrack.Value <> "" Then
+                                        filedetailschildchild = doc.CreateElement("DefaultTrack")
+                                        filedetailschildchild.InnerText = item.DefaultTrack.Value
+                                        filedetailschild.AppendChild(filedetailschildchild)
+                                    End If
+                                End If
+                            Catch
+                            End Try
+
                             Try
                                 If item.Codec.Value <> Nothing Then
                                     If item.Codec.Value <> "" Then

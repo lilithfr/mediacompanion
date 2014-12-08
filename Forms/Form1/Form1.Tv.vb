@@ -6,7 +6,7 @@ Imports Media_Companion.WorkingWithNfoFiles
 Imports System.Xml
 Imports Media_Companion
 Imports Media_Companion.Preferences
-
+Imports System.Linq
 
 Partial Public Class Form1
     Dim newEpisodeList As New List(Of TvEpisode)
@@ -4529,39 +4529,66 @@ Partial Public Class Form1
 
 #End Region
 
-    Private Function GetEpMediaFlags() As Dictionary(Of String, String)
+    Private Function GetEpMediaFlags() As List(Of KeyValuePair(Of String, String))
         Dim thisep As TvEpisode = ep_SelectedCurrently()
-        Dim flags As New Dictionary(Of String, String)
+        Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
             If thisep.Details.StreamDetails.Audio.Count > 0 Then
-                flags.Add("channels", If(thisep.Details.StreamDetails.Audio(0).Channels.Value <> "" AndAlso thisep.Details.StreamDetails.Audio(0).Channels.Value > -1, thisep.Details.StreamDetails.Audio(0).Channels.Value, ""))
-                flags.Add("audio", thisep.Details.StreamDetails.Audio(0).Codec.Value)
-            Else
-                flags.Add("channels", "")
-                flags.Add("audio", "")
-            End If
-            flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
-            flags.Add("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace)
-            flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))
 
+                Dim defaultAudioTrack = (From x In thisep.Details.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+
+                If IsNothing(defaultAudioTrack) Then
+                    defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
+                End If
+
+                For Each track In thisep.Details.StreamDetails.Audio
+                    flags.Add(New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value) ))
+                    flags.Add(New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value))
+                Next
+            Else
+                flags.Add(New KeyValuePair(Of String, string)("channels", ""))
+                flags.Add(New KeyValuePair(Of String, string)("audio", ""))
+            End If
+
+            flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
+            flags.Add(New KeyValuePair(Of String, string)("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
         Catch
         End Try
         Return flags
-    End Function
-    Private Function GetMultiEpMediaFlags(ByVal thisep As TvEpisode) As Dictionary(Of String, String)
 
-        Dim flags As New Dictionary(Of String, String)
+    End Function
+
+
+
+
+    Private Function GetMultiEpMediaFlags(ByVal thisep As TvEpisode) As List(Of KeyValuePair(Of String, String))
+
+        Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
             If thisep.Details.StreamDetails.Audio.Count > 0 Then
-                flags.Add("channels", If(thisep.Details.StreamDetails.Audio(0).Channels.Value > -1, thisep.Details.StreamDetails.Audio(0).Channels.Value, ""))
-                flags.Add("audio", thisep.Details.StreamDetails.Audio(0).Codec.Value)
+                
+                Dim AudCh As String 
+                Dim defaultAudioTrack = (From x In thisep.Details.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+
+                If IsNothing(defaultAudioTrack) Then
+                    defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
+                End If
+
+                For Each track In thisep.Details.StreamDetails.Audio
+                    AudCh = track.Channels.Value
+
+                    flags.Add(New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
+                    flags.Add(New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value))
+                Next
+ 
             Else
-                flags.Add("channels", "")
-                flags.Add("audio", "")
+                flags.Add(New KeyValuePair(Of String, string)("channels", ""))
+                flags.Add(New KeyValuePair(Of String, string)("audio", ""))
             End If
-            flags.Add("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value))
-            flags.Add("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace)
-            flags.Add("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString))
+            flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
+            flags.Add(New KeyValuePair(Of String, string)("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
         Catch
         End Try
         Return flags

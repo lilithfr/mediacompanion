@@ -2028,6 +2028,8 @@ Public Class Preferences
                                                 audio.Bitrate.Value = result.InnerText
                                             Case "Language"
                                                 audio.Language.Value = result.InnerText
+                                            Case "Default"
+                                                audio.DefaultTrack.Value = result.InnerText
                                         End Select
                                     Next
                                     If audio.Codec.Value = "TrueHD / AC-3" Then audio.Codec.Value = "truehd"
@@ -2236,6 +2238,9 @@ Public Class Preferences
                         tmpaud1 = MI.Get_ (StreamKind.Audio, curAS, "BitRate_Maximum/String")
                         If tmpaud1 <> "" Then audio.Bitrate.Value = tmpaud1
                     End If
+
+                    audio.DefaultTrack.Value = MI.Get_(StreamKind.Audio, curAS, "Default")
+
                     workingfiledetails.filedetails_audio.Add(audio)
                     curAS += 1
                 End While

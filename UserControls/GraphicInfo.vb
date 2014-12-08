@@ -2,7 +2,7 @@
 
 Public Class GraphicInfo
 
-    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As Dictionary(Of String, String))
+    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)))
         'OVERLAY RATING STARS
         Dim iRating As Single
 
@@ -38,23 +38,24 @@ Public Class GraphicInfo
             Dim xPos As Integer = padding * fanartRatio
             Dim yPos As Integer = (fanartHeight - (32 + padding)) * fanartRatio
 
-            Dim keyFlags As New List(Of String)(flags.Keys)
-            For Each str As String In keyFlags
+            For Each item In flags
                 Try
-                    If Not String.IsNullOrEmpty(flags.Item(str)) Then    'Catch any empty values for selected flags
-                    Dim flagName As String = String.Format("media_{0}_{1}.png", str, flags.Item(str))
-                    Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
-                    Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
-                    Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
-                    Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
-                    Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
-                    grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
-                    xPos += (bmFlag.Width + padding) * fanartRatio
+                    If Not String.IsNullOrEmpty(item.Value) Then    'Catch any empty values for selected flags
+
+                        Dim flagName As String = String.Format("media_{0}_{1}.png", item.Key, item.Value )
+                        Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
+                        Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
+                        Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
+                        Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
+                        Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
+                        grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
+                        xPos += (bmFlag.Width + padding) * fanartRatio
                     End If
                 Catch ex As Exception
                     'If the derived filname doesn't exist, we'll just ignore it (this will happen if aspect comes back as empty string).
                 End Try
             Next
+
         End If
 
         picbxFanart.Image = bmFanart
