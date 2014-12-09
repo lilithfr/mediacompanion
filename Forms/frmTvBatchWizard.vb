@@ -84,6 +84,10 @@
                 Form1.tvBatchList.doEpisodes = True
                 Form1.tvBatchList.doEpisodeMediaTags = True
             End If
+            If cbepTitle.Checked Then
+                Form1.tvBatchList.doEpisodes = True
+                Form1.tvBatchList.doEpisodeBody = True
+            End If
             If cbepScreenshot.Checked Then
                 Form1.tvBatchList.doEpisodes = True
                 Form1.tvBatchList.doEpisodeArt = True
@@ -275,6 +279,14 @@
         Try
             'runtime
             Form1.tvBatchList.epRuntime = cbepRuntime.Checked 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    Private Sub cbepTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepTitle.CheckedChanged
+        Try
+            'Episode Title
+            Form1.tvBatchList.epTitle = cbepTitle.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

@@ -24,6 +24,7 @@ Partial Class tv_batch_wizard
     Private Sub InitializeComponent()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cbshFanartTv = New System.Windows.Forms.CheckBox()
         Me.cbshXtraFanart = New System.Windows.Forms.CheckBox()
         Me.cbshSeason = New System.Windows.Forms.CheckBox()
         Me.cbshFanart = New System.Windows.Forms.CheckBox()
@@ -54,7 +55,8 @@ Partial Class tv_batch_wizard
         Me.btn_TvBatchCancel = New System.Windows.Forms.Button()
         Me.btnTvBatchStart = New System.Windows.Forms.Button()
         Me.cbincludeLocked = New System.Windows.Forms.CheckBox()
-        Me.cbshFanartTv = New System.Windows.Forms.CheckBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cbepTitle = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -65,6 +67,7 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel1.SuspendLayout
         Me.SplitContainer2.Panel2.SuspendLayout
         Me.SplitContainer2.SuspendLayout
+        Me.GroupBox3.SuspendLayout
         Me.SuspendLayout
         '
         'SplitContainer1
@@ -85,17 +88,14 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(416, 366)
-        Me.SplitContainer1.SplitterDistance = 214
+        Me.SplitContainer1.Size = New System.Drawing.Size(416, 372)
+        Me.SplitContainer1.SplitterDistance = 207
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.GroupBox3)
         Me.GroupBox1.Controls.Add(Me.cbshFanartTv)
-        Me.GroupBox1.Controls.Add(Me.cbshXtraFanart)
-        Me.GroupBox1.Controls.Add(Me.cbshSeason)
-        Me.GroupBox1.Controls.Add(Me.cbshFanart)
-        Me.GroupBox1.Controls.Add(Me.cbshPosters)
         Me.GroupBox1.Controls.Add(Me.cbshActor)
         Me.GroupBox1.Controls.Add(Me.cbshStudio)
         Me.GroupBox1.Controls.Add(Me.cbshGenre)
@@ -106,49 +106,60 @@ Partial Class tv_batch_wizard
         Me.GroupBox1.Controls.Add(Me.cbshYear)
         Me.GroupBox1.Location = New System.Drawing.Point(11, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(364, 184)
+        Me.GroupBox1.Size = New System.Drawing.Size(373, 178)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Tags to Rescrape"
         '
+        'cbshFanartTv
+        '
+        Me.cbshFanartTv.AutoSize = true
+        Me.cbshFanartTv.Location = New System.Drawing.Point(7, 149)
+        Me.cbshFanartTv.Name = "cbshFanartTv"
+        Me.cbshFanartTv.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cbshFanartTv.Size = New System.Drawing.Size(198, 17)
+        Me.cbshFanartTv.TabIndex = 12
+        Me.cbshFanartTv.Text = "Download missing art from Fanart.Tv"
+        Me.cbshFanartTv.UseVisualStyleBackColor = true
+        '
         'cbshXtraFanart
         '
         Me.cbshXtraFanart.AutoSize = true
-        Me.cbshXtraFanart.Location = New System.Drawing.Point(7, 136)
+        Me.cbshXtraFanart.Location = New System.Drawing.Point(6, 42)
         Me.cbshXtraFanart.Name = "cbshXtraFanart"
-        Me.cbshXtraFanart.Size = New System.Drawing.Size(300, 17)
+        Me.cbshXtraFanart.Size = New System.Drawing.Size(139, 17)
         Me.cbshXtraFanart.TabIndex = 11
-        Me.cbshXtraFanart.Text = "Search for and Download missing Extra Fanart, if available"
+        Me.cbshXtraFanart.Text = "Extra Fanart, if available"
         Me.cbshXtraFanart.UseVisualStyleBackColor = true
         '
         'cbshSeason
         '
         Me.cbshSeason.AutoSize = true
-        Me.cbshSeason.Location = New System.Drawing.Point(7, 90)
+        Me.cbshSeason.Location = New System.Drawing.Point(98, 19)
         Me.cbshSeason.Name = "cbshSeason"
-        Me.cbshSeason.Size = New System.Drawing.Size(274, 17)
+        Me.cbshSeason.Size = New System.Drawing.Size(77, 17)
         Me.cbshSeason.TabIndex = 10
-        Me.cbshSeason.Text = "Search and download missing Season art if available"
+        Me.cbshSeason.Text = "Season art"
         Me.cbshSeason.UseVisualStyleBackColor = true
         '
         'cbshFanart
         '
         Me.cbshFanart.AutoSize = true
-        Me.cbshFanart.Location = New System.Drawing.Point(7, 113)
+        Me.cbshFanart.Location = New System.Drawing.Point(191, 19)
         Me.cbshFanart.Name = "cbshFanart"
-        Me.cbshFanart.Size = New System.Drawing.Size(265, 17)
+        Me.cbshFanart.Size = New System.Drawing.Size(56, 17)
         Me.cbshFanart.TabIndex = 9
-        Me.cbshFanart.Text = "Search for and download missing fanart if available"
+        Me.cbshFanart.Text = "Fanart"
         Me.cbshFanart.UseVisualStyleBackColor = true
         '
         'cbshPosters
         '
         Me.cbshPosters.AutoSize = true
-        Me.cbshPosters.Location = New System.Drawing.Point(7, 67)
+        Me.cbshPosters.Location = New System.Drawing.Point(7, 19)
         Me.cbshPosters.Name = "cbshPosters"
-        Me.cbshPosters.Size = New System.Drawing.Size(277, 17)
+        Me.cbshPosters.Size = New System.Drawing.Size(66, 17)
         Me.cbshPosters.TabIndex = 8
-        Me.cbshPosters.Text = "Search for and download missing poster/s if available"
+        Me.cbshPosters.Text = "Poster/s"
         Me.cbshPosters.UseVisualStyleBackColor = true
         '
         'cbshActor
@@ -242,6 +253,7 @@ Partial Class tv_batch_wizard
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.cbepTitle)
         Me.GroupBox2.Controls.Add(Me.cbepStreamDetails)
         Me.GroupBox2.Controls.Add(Me.cbepCreateScreenshot)
         Me.GroupBox2.Controls.Add(Me.cbepScreenshot)
@@ -252,9 +264,9 @@ Partial Class tv_batch_wizard
         Me.GroupBox2.Controls.Add(Me.cbepRating)
         Me.GroupBox2.Controls.Add(Me.cbepAired)
         Me.GroupBox2.Controls.Add(Me.cbepPlot)
-        Me.GroupBox2.Location = New System.Drawing.Point(11, 29)
+        Me.GroupBox2.Location = New System.Drawing.Point(11, 19)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(364, 109)
+        Me.GroupBox2.Size = New System.Drawing.Size(364, 137)
         Me.GroupBox2.TabIndex = 1
         Me.GroupBox2.TabStop = false
         Me.GroupBox2.Text = "Select Tags to Rescrape"
@@ -273,7 +285,7 @@ Partial Class tv_batch_wizard
         '
         Me.cbepCreateScreenshot.AutoSize = true
         Me.cbepCreateScreenshot.Enabled = false
-        Me.cbepCreateScreenshot.Location = New System.Drawing.Point(6, 90)
+        Me.cbepCreateScreenshot.Location = New System.Drawing.Point(6, 114)
         Me.cbepCreateScreenshot.Name = "cbepCreateScreenshot"
         Me.cbepCreateScreenshot.Size = New System.Drawing.Size(265, 17)
         Me.cbepCreateScreenshot.TabIndex = 8
@@ -283,7 +295,7 @@ Partial Class tv_batch_wizard
         'cbepScreenshot
         '
         Me.cbepScreenshot.AutoSize = true
-        Me.cbepScreenshot.Location = New System.Drawing.Point(6, 67)
+        Me.cbepScreenshot.Location = New System.Drawing.Point(6, 91)
         Me.cbepScreenshot.Name = "cbepScreenshot"
         Me.cbepScreenshot.Size = New System.Drawing.Size(220, 17)
         Me.cbepScreenshot.TabIndex = 7
@@ -387,8 +399,8 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
-        Me.SplitContainer2.Size = New System.Drawing.Size(416, 426)
-        Me.SplitContainer2.SplitterDistance = 366
+        Me.SplitContainer2.Size = New System.Drawing.Size(416, 433)
+        Me.SplitContainer2.SplitterDistance = 372
         Me.SplitContainer2.TabIndex = 1
         '
         'cbRewiteAllNfo
@@ -430,23 +442,35 @@ Partial Class tv_batch_wizard
         Me.cbincludeLocked.Text = "Include locked shows"
         Me.cbincludeLocked.UseVisualStyleBackColor = true
         '
-        'cbshFanartTv
+        'GroupBox3
         '
-        Me.cbshFanartTv.AutoSize = true
-        Me.cbshFanartTv.Location = New System.Drawing.Point(7, 159)
-        Me.cbshFanartTv.Name = "cbshFanartTv"
-        Me.cbshFanartTv.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cbshFanartTv.Size = New System.Drawing.Size(256, 17)
-        Me.cbshFanartTv.TabIndex = 12
-        Me.cbshFanartTv.Text = "Search and Download missing art from Fanart.Tv"
-        Me.cbshFanartTv.UseVisualStyleBackColor = true
+        Me.GroupBox3.Controls.Add(Me.cbshPosters)
+        Me.GroupBox3.Controls.Add(Me.cbshSeason)
+        Me.GroupBox3.Controls.Add(Me.cbshXtraFanart)
+        Me.GroupBox3.Controls.Add(Me.cbshFanart)
+        Me.GroupBox3.Location = New System.Drawing.Point(8, 72)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(340, 66)
+        Me.GroupBox3.TabIndex = 13
+        Me.GroupBox3.TabStop = false
+        Me.GroupBox3.Text = "Download Missing artwork..."
+        '
+        'cbepTitle
+        '
+        Me.cbepTitle.AutoSize = true
+        Me.cbepTitle.Location = New System.Drawing.Point(6, 68)
+        Me.cbepTitle.Name = "cbepTitle"
+        Me.cbepTitle.Size = New System.Drawing.Size(87, 17)
+        Me.cbepTitle.TabIndex = 10
+        Me.cbepTitle.Text = "Episode Title"
+        Me.cbepTitle.UseVisualStyleBackColor = true
         '
         'tv_batch_wizard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_TvBatchCancel
-        Me.ClientSize = New System.Drawing.Size(416, 426)
+        Me.ClientSize = New System.Drawing.Size(416, 433)
         Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
         Me.KeyPreview = true
@@ -470,6 +494,8 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.PerformLayout
         CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
         Me.SplitContainer2.ResumeLayout(false)
+        Me.GroupBox3.ResumeLayout(false)
+        Me.GroupBox3.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -506,4 +532,6 @@ End Sub
     Friend WithEvents cbshSeason As System.Windows.Forms.CheckBox
     Friend WithEvents cbshXtraFanart As System.Windows.Forms.CheckBox
     Friend WithEvents cbshFanartTv As System.Windows.Forms.CheckBox
+    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
+    Friend WithEvents cbepTitle As System.Windows.Forms.CheckBox
 End Class

@@ -10175,6 +10175,7 @@ End Sub
                                             If tvBatchList.epDirector Then listofnewepisodes(h).Director.Value = Utilities.Cleanbraced(Episodedata.Director.Value)
                                             If tvBatchList.epCredits Then listofnewepisodes(h).Credits.Value = Utilities.Cleanbraced(Episodedata.Writer.Value)
                                             If tvBatchList.epRating Then listofnewepisodes(h).Rating.Value = Episodedata.Rating.Value
+                                            If tvBatchList.epTitle Then listofnewepisodes(h).Title.Value = Episodedata.EpisodeName.Value
                                             listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
                                             listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
                                             If tvBatchList.epActor Then
