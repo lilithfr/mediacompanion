@@ -12427,6 +12427,7 @@ End Sub
     End Sub
 
     Private Sub tv_PreferencesSetup()
+        prefsload = True
         ComboBox_tv_EpisodeRename.Items.Clear()
         For Each Regex In tv_RegexRename
             ComboBox_tv_EpisodeRename.Items.Add(Regex)
@@ -12488,7 +12489,7 @@ End Sub
         Else
             bannerbtn.Checked = True
         End If
-
+        prefsload = False
         tvprefschanged = False
         btnTVPrefSaveChanges.Enabled = False
     End Sub
@@ -13505,6 +13506,7 @@ End Sub
 
 'XBMC TVDB Scraper options
     Private Sub RadioButton_XBMC_Scraper_TVDB_DVDOrder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton_XBMC_Scraper_TVDB_DVDOrder.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If RadioButton_XBMC_Scraper_TVDB_DVDOrder.Checked = True Then
                 Save_XBMC_TVDB_Scraper_Config("dvdorder", "true")
@@ -13522,6 +13524,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox_XBMC_Scraper_TVDB_Fanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TVDB_Fanart.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox_XBMC_Scraper_TVDB_Fanart.Checked = True Then
                 Save_XBMC_TVDB_Scraper_Config("fanart", "true")
@@ -13537,6 +13540,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox_XBMC_Scraper_TVDB_Posters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TVDB_Posters.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox_XBMC_Scraper_TVDB_Posters.Checked = True Then
                 Save_XBMC_TVDB_Scraper_Config("posters", "true")
@@ -13552,6 +13556,7 @@ End Sub
     End Sub
 
     Private Sub ComboBox_TVDB_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_TVDB_Language.SelectedIndexChanged
+        If prefsload Then Exit Sub
         Try
             Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
             'Read_XBMC_TVDB_Scraper_Config()
@@ -13583,6 +13588,7 @@ End Sub
     End Sub
 
     Private Sub ListBox12_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox12.SelectedIndexChanged
+        If prefsload Then Exit Sub
         Try
             For Each lan In languageList
                 If lan.Language.Value = ListBox12.SelectedItem Then
@@ -13599,6 +13605,7 @@ End Sub
     End Sub
 
     Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton42.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If RadioButton42.Checked = True Then
                 Preferences.sortorder = "dvd"
@@ -13627,6 +13634,7 @@ End Sub
     'End Sub
 
     Private Sub CheckBox34_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox34.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox34.Checked = True Then
                 Preferences.copytvactorthumbs = True
@@ -13671,78 +13679,91 @@ End Sub
 
 'TvShow Auto Scrape Options
     Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlPosterArt.CheckedChanged
-         Preferences.tvdlposter = cbTvDlPosterArt.Checked
+        If prefsload Then Exit Sub
+        Preferences.tvdlposter = cbTvDlPosterArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanart.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.tvdlfanart = cbTvDlFanart.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlSeasonArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlSeasonArt.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTvDlXtraFanart.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.dlTVxtrafanart = cbTvDlXtraFanart.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanartTvArt.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub   'TvFanartTvFirst
 
     Private Sub cbTvFanartTvFirst_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvFanartTvFirst.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.TvFanartTvFirst = cbTvFanartTvFirst.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub   'TvFanartTvFirst
 
     Private Sub RadioButton41_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton41.CheckedChanged
+        If prefsload Then Exit Sub
         If RadioButton41.Checked = True Then Preferences.seasonall = "none"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton40_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton40.CheckedChanged
+        If prefsload Then Exit Sub
         If RadioButton40.Checked = True Then Preferences.seasonall = "poster"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton39_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton39.CheckedChanged
+        If prefsload Then Exit Sub
         If RadioButton39.Checked = True Then Preferences.seasonall = "wide"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub posterbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles posterbtn.CheckedChanged
+        If prefsload Then Exit Sub
         If posterbtn.Checked = True Then Preferences.postertype = "poster"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub bannerbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bannerbtn.CheckedChanged
+        If prefsload Then Exit Sub
         If bannerbtn.Checked = True Then Preferences.postertype = "banner"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_TvFolderJpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvFolderJpg.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.tvfolderjpg = cb_TvFolderJpg.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbSeasonFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbSeasonFolderjpg.CheckedChanged
+        If prefsload Then Exit Sub
         Preferences.seasonfolderjpg = cbSeasonFolderjpg.checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
@@ -13751,6 +13772,7 @@ End Sub
 'End Of - TvShow Auto Scrape Options
 
     Private Sub CheckBox35_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox35.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox35.CheckState = CheckState.Checked Then
                 Preferences.tvshowautoquick = True
@@ -13765,6 +13787,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox20.CheckState = CheckState.Checked Then
                 Preferences.enabletvhdtags = True
@@ -13779,6 +13802,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox36_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox36.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox36.CheckState = CheckState.Checked Then
                 Preferences.autoepisodescreenshot = True
@@ -13820,6 +13844,7 @@ End Sub
     End Sub
 
     Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AutoScrnShtDelay.TextChanged
+        If prefsload Then Exit Sub
         If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
             Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
         Else
@@ -13834,21 +13859,14 @@ End Sub
     End Sub
 
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
-        Try
-            Preferences.disabletvlogs = CheckBox17.Checked 
-            'If CheckBox17.CheckState = CheckState.Checked Then
-            '    Preferences.disabletvlogs = True
-            'Else
-            '    Preferences.disabletvlogs = False
-            'End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Preferences.disabletvlogs = CheckBox17.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub ComboBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox8.SelectedIndexChanged
+        If prefsload Then Exit Sub
         Try
             Preferences.TvdbActorScrape = ComboBox8.SelectedIndex.ToString
             tvprefschanged = True
@@ -13859,6 +13877,7 @@ End Sub
     End Sub
 
     Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
+        If prefsload Then Exit Sub
         Try
             If Renamer.setRenamePref(tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), tv_RegexScraper) Then
                 Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
@@ -13873,6 +13892,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox_tv_EpisodeRenameAuto_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameAuto.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Checked Then
                 Preferences.autorenameepisodes = True
@@ -13887,6 +13907,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox_tv_EpisodeRenameCase_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameCase.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked Then
                 Preferences.eprenamelowercase = True
@@ -13902,6 +13923,7 @@ End Sub
     End Sub
 
     Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
+        If prefsload Then Exit Sub
         Try
             If cbTvMissingSpecials.CheckState = CheckState.Checked Then
                 Preferences.ignoreMissingSpecials = True
