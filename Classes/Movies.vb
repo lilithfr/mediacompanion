@@ -1124,7 +1124,7 @@ Public Class Movies
         If Preferences.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then  'AndAlso tmdbid <> "" 
             imdbid = tmdbid
         End If
-        movie.DeleteScrapedFiles(True)
+        movie.DeleteScrapedFiles(False)
 
         movie.ScrapedMovie.Init
 
