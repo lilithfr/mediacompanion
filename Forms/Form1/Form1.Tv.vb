@@ -4541,7 +4541,9 @@ Partial Public Class Form1
                     defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
                 End If
 
-                For Each track In thisep.Details.StreamDetails.Audio
+                Dim tracks = If(Preferences.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=defaultAudioTrack)
+
+                For Each track In tracks
                     flags.Add(New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value) ))
                     flags.Add(New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value))
                 Next
@@ -4575,7 +4577,9 @@ Partial Public Class Form1
                     defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
                 End If
 
-                For Each track In thisep.Details.StreamDetails.Audio
+                Dim tracks = If(Preferences.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=defaultAudioTrack)
+
+                For Each track In tracks
                     AudCh = track.Channels.Value
 
                     flags.Add(New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))

@@ -150,6 +150,7 @@ Public Class Preferences
     Public Shared DisplayMediainfoOverlay As Boolean
     Public Shared font As String
     Public Shared MultiMonitoEnabled As Boolean
+    Public Shared ShowAllAudioTracks As Boolean = True
     Private Shared _MkvMergeGuiPath As String
 
     Shared Property MkvMergeGuiPath As String
@@ -549,6 +550,7 @@ Public Class Preferences
         tvbannersplit = 0
         showsortdate = False
         MultiMonitoEnabled = False
+        ShowAllAudioTracks = True
         XBMC_version = 2
         'Proxy settings
         prxyEnabled = False
@@ -920,6 +922,8 @@ Public Class Preferences
         root.AppendChild(doc, "prxyPort"             ,  prxyPort             )  'tbMkvMergeGuiPath
         root.AppendChild(doc, "prxyUsername"         ,  prxyUsername         )  'tbMkvMergeGuiPath
         root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "ShowAllAudioTracks"   ,  ShowAllAudioTracks   )  'cbShowAllAudioTracks
+        
 
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1489,9 +1493,8 @@ Public Class Preferences
                     Case "XBMC_MC_MovieFolderMappings"          : XBMC_MC_MovieFolderMappings.Load(thisresult)
                     Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
 
-
-
                     Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters = thisresult.InnerXml 
+                    Case "ShowAllAudioTracks"                   : ShowAllAudioTracks    = thisresult.InnerXml 
 
                     Case Else : Dim x = thisresult
                 End Select

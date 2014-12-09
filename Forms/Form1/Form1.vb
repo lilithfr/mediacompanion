@@ -12418,6 +12418,7 @@ End Sub
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
         cbShowLogOnError      .Checked = Preferences.ShowLogOnError
         cbUseMultipleThreads  .Checked = Preferences.UseMultipleThreads
+        cbShowAllAudioTracks  .Checked = Preferences.ShowAllAudioTracks
 
         Preferences.ExcludeFolders.PopTextBox(tbExcludeFolders)
 
@@ -13122,13 +13123,19 @@ End Sub
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
+    Private Sub cbShowAllAudioTracks_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbShowAllAudioTracks.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
+    End Sub
+
     Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
         If prefsload Then Exit Sub
         If Preferences.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
-
     End Sub
 
     Private Sub tbExcludeFolders_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbExcludeFolders.TextChanged
@@ -20102,8 +20109,9 @@ End Sub
                     defaultAudioTrack = Vidfiledetails.filedetails_audio(0)
                 End If
 
+                Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=defaultAudioTrack)
 
-                For Each track In Vidfiledetails.filedetails_audio
+                For Each track In tracks
                     flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
                     flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value) )               
                 Next
