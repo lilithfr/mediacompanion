@@ -17332,7 +17332,7 @@ End Sub
             RunBackgroundMovieScrape("ChangeMovie")
         ElseIf MovieSearchEngine = "tmdb" Then
             Dim mat As String = WebBrowser1.Url.ToString
-            mat = mat.Replace("http://www.themoviedb.org/movie/", "")
+            mat = mat.Replace("https://www.themoviedb.org/movie/", "")
             Dim urlsplit As String()
             urlsplit = Split(mat, "-")
             If Integer.TryParse(urlsplit(0), Nothing) Then
