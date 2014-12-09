@@ -5155,6 +5155,10 @@ Public Class Form1
         Call tv_CacheRefresh()
     End Sub
 
+    Private Sub Tv_tsmi_CheckDuplicateEpisodes_Click(sender As Object, e As EventArgs) Handles Tv_tsmi_CheckDuplicateEpisodes.Click
+        Tv_CacheCheckDuplicates()
+    End Sub
+
     Private Sub ReloadShowCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadShowCacheToolStripMenuItem.Click
         Try
             If IO.File.Exists(workingProfile.tvcache) Then
@@ -20245,6 +20249,5 @@ End Sub
         End If
         OpenUrl(url)
     End Sub
-    
     
 End Class

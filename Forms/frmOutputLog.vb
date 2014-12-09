@@ -3,6 +3,7 @@ Imports System.Text
 
 Public Class frmoutputlog
     Public output As String = ""
+    Public FullViewOverride As Boolean = False
     Private Sub frmoutputlog_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         'Commented out by AnotherPhil as already done [after search for new movies] and if left causes endless processing...
         'Try
@@ -17,7 +18,7 @@ Public Class frmoutputlog
         End If
     End Sub
 
-    Public Sub New(ByVal displaystring As String, Optional ByVal forceoverride As Boolean = False)
+    Public Sub New(ByVal displaystring As String, Optional ByVal forceoverride As Boolean = False, Optional ByVal FullView As Boolean = False)
 
         InitializeComponent()
         Try
@@ -25,6 +26,7 @@ Public Class frmoutputlog
                 Me.Close()
             End If
             output = displaystring
+            FullViewOverride = fullview
 
 
         Catch ex As Exception
@@ -98,7 +100,7 @@ Public Class frmoutputlog
             ElseIf line.Contains("!!! ") Then 
                 builder.Append(Strings.Right(line, Strings.Len(line) - 4)).AppendLine
 
-            ElseIf Preferences.logview=0            '0 = Full log view -> Append details
+            ElseIf (Preferences.logview=0 OrElse FullViewOverride) Then          '0 = Full log view -> Append details
                 builder.Append(line).AppendLine
             End If
         Next

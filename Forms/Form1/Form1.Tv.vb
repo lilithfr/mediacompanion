@@ -1304,6 +1304,47 @@ Partial Public Class Form1
             MsgBox("Please Enter a Search Term")
         End If
     End Sub
+
+    Private Sub Tv_CacheCheckDuplicates()
+        Dim progress As String = ""  '"Duplicates Found in:" & vbCrLf & vbcrlf
+        Dim Showfound As String = ""
+        Dim Episodesfound As String = ""
+        Dim Count As Integer = 0
+        Dim lasttestedseason As String = ""
+        Dim lasttestedepisode As String = ""
+        For Each it In Cache.TvCache.Episodes
+            Dim Thisseason As String = it.Season.Value
+            Dim Thisepisode As String = it.Episode.Value
+            If Thisseason = lasttestedseason AndAlso Thisepisode = lasttestedepisode Then Continue For
+            Dim testShow As String = it.ShowId.Value
+            Showfound = it.ShowObj.Title.Value
+            For Each testep In Cache.TvCache.Episodes
+                If testep.ShowId.Value = testShow Then
+                    If testep.Season.Value = Thisseason Then
+                        If testep.Episode.Value = Thisepisode Then
+                            Count += 1
+                            Episodesfound &= testep.NfoFilePath & vbcrlf
+                        End If
+                    End If
+                End If
+            Next
+            If Count > 1 Then
+                progress &= "Duplicates Found in:" & vbCrLf & vbcrlf
+                progress &= Showfound & vbCrLf & Episodesfound & vbCrLf & vbcrlf
+            End If
+            Count = 0
+            Showfound = ""
+            Episodesfound = ""
+            lasttestedseason = Thisseason
+            lasttestedepisode = Thisepisode 
+        Next
+        If Not progress = "" Then
+            Dim MyFormObject As New frmoutputlog(progress, True, True)
+            MyFormObject.ShowDialog()
+        Else
+            MsgBox ("No Duplicates found")
+        End If
+    End Sub
 #End Region
 
     Private Sub bckgrnd_tvshowscraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bckgrnd_tvshowscraper.ProgressChanged
