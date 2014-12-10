@@ -852,7 +852,7 @@ Public Class Classimdb
 
         Dim totalinfo As String = ""
         Dim webcounter As Integer
-
+        
         Try
             Dim first As Integer
             Dim tempstring As String
@@ -1748,5 +1748,57 @@ Public Class Classimdb
             Return keywd
         End Try
         Return keywd
+    End Function
+
+    Public Function GetImdbPlots(ByVal imdbid As String) As List(Of String)
+        Dim plotresults As New List(Of String)
+        Dim Tempstring As String = ""
+        Dim tempint As Integer = 0
+        Dim movienfoarray As String = String.Empty
+        Dim webpage As New List(Of String)
+        Try
+            tempstring = Preferences.imdbmirror & "title/" & imdbid & "/plotsummary"
+            Dim plots(20) As String
+            webpage.Clear()
+            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            tempint = 0
+            Dim doo As Boolean = False
+            For Each line In webpage
+                If doo = True Then
+                    plots(tempint) = line
+                    doo = False
+                End If
+                If line.IndexOf("<p class=""plotSummary"">") <> -1 Then
+                    tempint = tempint + 1
+                    doo = True
+                End If
+            Next
+            For Each item In plots
+                If IsNothing(item) Then Continue For
+                Dim PlotString As String = item.StripTagsLeaveContent
+                PlotString = Regex.Replace(PlotString, "<.*?>", "").Trim
+                PlotString = Utilities.cleanSpecChars(PlotString)
+                PlotString = encodespecialchrs(PlotString)
+                plotresults.Add(PlotString)
+            Next
+            'Dim sizes(tempint) As Integer
+            'Dim biggest As Integer = 1
+            'For f = 1 To tempint
+            '    If plots(f).Length > plots(biggest).Length Then
+            '        biggest = f
+            '    End If
+            'Next
+            'If Preferences.ImdbPrimaryPlot Then biggest = 1    'If selected only use Primary Plot.
+            'If plots(biggest) <> Nothing Then
+            '    movienfoarray = plots(biggest).StripTagsLeaveContent
+            '    movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+            '    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+            '    movienfoarray = encodespecialchrs(movienfoarray)
+            '    'totalinfo &= "<plot>" & movienfoarray & "</plot>"
+            'End If
+        Catch
+            
+        End Try
+        Return plotresults
     End Function
 End Class

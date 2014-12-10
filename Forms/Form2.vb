@@ -626,4 +626,14 @@ Public Class Form2
         editsmade = True
     End Sub
 
+    Private Sub btnSelectAPlot_Click( sender As Object,  e As EventArgs) Handles btnSelectAPlot.Click
+        Dim _imdbScraper As New Classimdb
+        Dim ListofPlots As New List(Of String)
+        ListofPlots = _imdbScraper.GetImdbPlots(workingmovieedit.fullmoviebody.imdbid)
+        If ListofPlots.Count < 2 Then 
+            MsgBox("No Extra Plots found for this movie", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
+    End Sub
 End Class

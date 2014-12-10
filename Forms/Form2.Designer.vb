@@ -109,6 +109,7 @@ Partial Class Form2
         Me.Label23 = New System.Windows.Forms.Label()
         Me.PremieredDatePicker = New System.Windows.Forms.DateTimePicker()
         Me.btnWatched = New System.Windows.Forms.Button()
+        Me.btnSelectAPlot = New System.Windows.Forms.Button()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).BeginInit
@@ -959,9 +960,19 @@ Partial Class Form2
         Me.btnWatched.Text = "UnWatched"
         Me.btnWatched.UseVisualStyleBackColor = true
         '
+        'btnSelectAPlot
+        '
+        Me.btnSelectAPlot.Location = New System.Drawing.Point(19, 393)
+        Me.btnSelectAPlot.Name = "btnSelectAPlot"
+        Me.btnSelectAPlot.Size = New System.Drawing.Size(75, 23)
+        Me.btnSelectAPlot.TabIndex = 134
+        Me.btnSelectAPlot.Text = "Select a Plot"
+        Me.btnSelectAPlot.UseVisualStyleBackColor = true
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.btnSelectAPlot)
         Me.Controls.Add(Me.btnWatched)
         Me.Controls.Add(Me.PremieredDatePicker)
         Me.Controls.Add(Me.Label23)
@@ -1140,4 +1151,5 @@ End Sub
     Friend WithEvents Label23 As System.Windows.Forms.Label
     Friend WithEvents PremieredDatePicker As System.Windows.Forms.DateTimePicker
     Friend WithEvents btnWatched As System.Windows.Forms.Button
+    Friend WithEvents btnSelectAPlot As System.Windows.Forms.Button
 End Class
