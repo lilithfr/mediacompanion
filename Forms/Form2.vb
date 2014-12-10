@@ -627,13 +627,35 @@ Public Class Form2
     End Sub
 
     Private Sub btnSelectAPlot_Click( sender As Object,  e As EventArgs) Handles btnSelectAPlot.Click
-        Dim _imdbScraper As New Classimdb
+        Dim mess As New frmMessageBox("Gathering plots", , "     Please Wait.     ")
+        mess.Show()
+        mess.Refresh()
         Dim ListofPlots As New List(Of String)
+        Dim _imdbScraper As New Classimdb
+        Dim tmdb As New TMDB
+        tmdb.Imdb = workingmovieedit.fullmoviebody.imdbid
+        tmdb.TmdbId = workingmovieedit.fullmoviebody.tmdbid
+        Dim tmdbplot As String = Nothing
+        Try
+            tmdbplot = tmdb.Movie.overview
+        Catch 
+            tmdbplot = Nothing
+        End Try
         ListofPlots = _imdbScraper.GetImdbPlots(workingmovieedit.fullmoviebody.imdbid)
+        If Not IsNothing(tmdbplot) AndAlso tmdbplot <> "" Then ListofPlots.Add(tmdbplot)
+        mess.Close()
         If ListofPlots.Count < 2 Then 
             MsgBox("No Extra Plots found for this movie", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
-
+        Dim plotfrm As New frmmovieplotlist(ListofPlots)
+        plotfrm.ShowDialog
+        If plotfrm.DialogResult = Windows.Forms.DialogResult.Cancel Then
+            plotfrm.Dispose()
+            Exit Sub
+        End If
+        Dim plotselected As Integer = plotfrm.cmbxplotnumber.SelectedIndex
+        plotfrm.Dispose()
+        plottxt.Text = ListofPlots(plotselected)
     End Sub
 End Class
