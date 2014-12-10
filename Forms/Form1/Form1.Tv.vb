@@ -1312,31 +1312,50 @@ Partial Public Class Form1
         Dim Count As Integer = 0
         Dim lasttestedseason As String = ""
         Dim lasttestedepisode As String = ""
-        For Each it In Cache.TvCache.Episodes
-            Dim Thisseason As String = it.Season.Value
-            Dim Thisepisode As String = it.Episode.Value
-            If Thisseason = lasttestedseason AndAlso Thisepisode = lasttestedepisode Then Continue For
-            Dim testShow As String = it.ShowId.Value
-            Showfound = it.ShowObj.Title.Value
-            For Each testep In Cache.TvCache.Episodes
-                If testep.ShowId.Value = testShow Then
-                    If testep.Season.Value = Thisseason Then
-                        If testep.Episode.Value = Thisepisode Then
-                            Count += 1
-                            Episodesfound &= testep.NfoFilePath & vbcrlf
+        For Each sh In Cache.TvCache.shows
+            If Not String.IsNullOrEmpty(sh.TvdbId.Value) Then
+                Dim unique As Integer = 0
+                Dim shid As Integer = 0
+                Showfound = sh.Title.Value
+                For Each episo In sh.episodes
+                    If String.IsNullOrEmpty(episo.ShowId.Value) Then shid +=1
+                    If String.IsNullOrEmpty(episo.UniqueId.Value) Then unique +=1
+                    If Not String.IsNullOrEmpty(episo.ShowId.Value) Then
+                        Dim Thisseason As String = episo.Season.Value
+                        Dim Thisepisode As String = episo.Episode.Value
+                        If Thisseason = lasttestedseason AndAlso Thisepisode = lasttestedepisode Then Continue For
+                        Dim testShow As String = episo.ShowId.Value
+                        For Each testep In sh.episodes
+                            If Not String.IsNullOrEmpty(testep.ShowId.Value) AndAlso testep.ShowId.Value = testShow Then
+                                If testep.Season.Value = Thisseason Then
+                                    If testep.Episode.Value = Thisepisode Then
+                                        Count += 1
+                                        Episodesfound &= testep.NfoFilePath & vbcrlf
+                                    End If
+                                End If
+                            End If
+                        Next
+                        If Count > 1 Then
+                            progress &= "Duplicates Found in:" & vbCrLf & vbcrlf
+                            progress &= Showfound & vbCrLf & Episodesfound & vbCrLf & vbcrlf
                         End If
+                        Count = 0
+                    
+                        Episodesfound = ""
+                        lasttestedseason = Thisseason
+                        lasttestedepisode = Thisepisode
                     End If
+                Next
+                If shid > 0 Then
+                    progress &= "Show:- " & sh.Title.Value & vbCrLf & "contains: - """ & shid & """  episodes without valid Tvdb Id!" & vbcrlf & vbcrlf
                 End If
-            Next
-            If Count > 1 Then
-                progress &= "Duplicates Found in:" & vbCrLf & vbcrlf
-                progress &= Showfound & vbCrLf & Episodesfound & vbCrLf & vbcrlf
+                If unique > 0 Then
+                    progress &= "Show:- " & sh.Title.Value & vbCrLf & "contains: - """ & unique & """  episodes without valid <uniqueid> Tag!" & vbcrlf & vbcrlf
+                End If
+            Else
+                progress &= "Show:- " & sh.Title.Value & vbCrLf & "does not have a TVDB ID.  Skipped for checking Duplicates" & vbcrlf & vbcrlf
             End If
-            Count = 0
             Showfound = ""
-            Episodesfound = ""
-            lasttestedseason = Thisseason
-            lasttestedepisode = Thisepisode 
         Next
         If Not progress = "" Then
             Dim MyFormObject As New frmoutputlog(progress, True, True)
