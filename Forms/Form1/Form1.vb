@@ -16099,7 +16099,15 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Label27_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbl_movRuntime.MouseDown 
+    Private Sub btnMovSelectPlot_Click(sender As Object, e As EventArgs) Handles btnMovSelectPlot.Click
+        Dim newplot As String = GetlistofPlots()
+        If Not IsNothing(newplot) Then
+            plottxt.Text = newplot
+            Call mov_SaveQuick()
+        End If
+    End Sub
+
+    Private Sub lbl_movRuntime_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbl_movRuntime.MouseDown 
         If e.Button = Windows.Forms.MouseButtons.Left Then
             If runtimetxt.Enabled = True Then
                 displayRuntimeScraper = False
@@ -20230,7 +20238,37 @@ End Sub
         OpenUrl(url)
     End Sub
     
-    'Private Sub rcmenu_Opening(sender As Object, e As CancelEventArgs) Handles rcmenu.Opening
+    Public Function GetlistofPlots() As String
+        Dim mess As New frmMessageBox("Gathering plots", , "     Please Wait.     ")
+        mess.Show()
+        mess.Refresh()
+        Dim ListofPlots As New List(Of String)
+        Dim _imdbScraper As New Classimdb
+        Dim tmdb As New TMDB
+        tmdb.Imdb = workingMovieDetails.fullmoviebody.imdbid
+        tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
+        Dim tmdbplot As String = Nothing
+        Try
+            tmdbplot = tmdb.Movie.overview
+        Catch 
+            tmdbplot = Nothing
+        End Try
+        ListofPlots = _imdbScraper.GetImdbPlots(workingMovieDetails.fullmoviebody.imdbid)
+        If Not IsNothing(tmdbplot) AndAlso tmdbplot <> "" Then ListofPlots.Add(tmdbplot)
+        mess.Close()
+        If ListofPlots.Count < 2 Then 
+            MsgBox("No Extra Plots found for this movie", MsgBoxStyle.Exclamation)
+            Return Nothing
+        End If
+        Dim plotfrm As New frmmovieplotlist(ListofPlots)
+        plotfrm.ShowDialog
+        If plotfrm.DialogResult = Windows.Forms.DialogResult.Cancel Then
+            plotfrm.Dispose()
+            Return Nothing
+        End If
+        Dim plotselected As Integer = plotfrm.cmbxplotnumber.SelectedIndex
+        plotfrm.Dispose()
+        Return ListofPlots(plotselected)
+    End Function
 
-    'End Sub
 End Class

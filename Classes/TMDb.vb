@@ -877,8 +877,10 @@ Public Class TMDb
         For each item In ValidPosters
             Dim mc_poster As New str_ListOfPosters(True)
 
-            mc_poster.hdUrl = HdPath       + item.file_path
-            mc_poster.ldUrl = LdPosterPath + item.file_path
+            mc_poster.hdUrl     = HdPath       + item.file_path
+            mc_poster.hdheight  = item.height
+            mc_poster.hdwidth   = item.width 
+            mc_poster.ldUrl     = LdPosterPath + item.file_path
 
             _mc_posters.Add(mc_poster)
         Next

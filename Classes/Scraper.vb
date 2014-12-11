@@ -1778,24 +1778,8 @@ Public Class Classimdb
                 Dim PlotString As String = item.StripTagsLeaveContent
                 PlotString = Regex.Replace(PlotString, "<.*?>", "").Trim
                 PlotString = Utilities.cleanSpecChars(PlotString)
-                PlotString = encodespecialchrs(PlotString)
                 plotresults.Add(PlotString)
             Next
-            'Dim sizes(tempint) As Integer
-            'Dim biggest As Integer = 1
-            'For f = 1 To tempint
-            '    If plots(f).Length > plots(biggest).Length Then
-            '        biggest = f
-            '    End If
-            'Next
-            'If Preferences.ImdbPrimaryPlot Then biggest = 1    'If selected only use Primary Plot.
-            'If plots(biggest) <> Nothing Then
-            '    movienfoarray = plots(biggest).StripTagsLeaveContent
-            '    movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-            '    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-            '    movienfoarray = encodespecialchrs(movienfoarray)
-            '    'totalinfo &= "<plot>" & movienfoarray & "</plot>"
-            'End If
         Catch
             
         End Try
