@@ -5728,7 +5728,7 @@ Public Class Form1
         Preferences.savefanart =true
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            Label2.Text = "Please Wait, Trying to Download Fanart"
+            lbl_movVotes.Text = "Please Wait, Trying to Download Fanart"
             Me.Refresh()
             Application.DoEvents()
 
@@ -12149,154 +12149,70 @@ End Sub
 #Region "ToolStripmenu Movie Rescrape Specific"
 
     Private Sub ToolStripMenuItem1_Click_1(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem1.Click
-        Try
-            Call mov_ScrapeSpecific("trailer")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("trailer")
     End Sub                 'trailer
     Private Sub RenameFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
         mov_ScrapeSpecific("rename_files")
     End Sub              'rename files
     Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
-        Try
-            Call mov_ScrapeSpecific("title")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("title")
     End Sub        'title
     Private Sub ToolStripMenuItem4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem4.Click
-        Try
-            Call mov_ScrapeSpecific("plot")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("plot")
     End Sub        'plot
     Private Sub ToolStripMenuItem5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem5.Click
-        Try
-            Call mov_ScrapeSpecific("tagline")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("tagline")
     End Sub        'tagline
     Private Sub ToolStripMenuItem6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem6.Click
-        Try
-            Call mov_ScrapeSpecific("director")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("director")
     End Sub        'director
     Private Sub ToolStripMenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem7.Click
-        Try
-            Call mov_ScrapeSpecific("credits")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("credits")
     End Sub        'Credits
     Private Sub ToolStripMenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem8.Click
-        Try
-            Call mov_ScrapeSpecific("mpaa")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("mpaa")
     End Sub        'mpaa
     Private Sub ToolStripMenuItem9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem9.Click
-        Try
-            Call mov_ScrapeSpecific("genre")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("genre")
     End Sub        'genre
     Private Sub ToolStripMenuItem10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem10.Click
-        Try
-            Call mov_ScrapeSpecific("outline")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("outline")
     End Sub      'outline
     Private Sub ToolStripMenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem12.Click
-        Try
-            Call mov_ScrapeSpecific("runtime")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("runtime")
     End Sub      'runtime
     Private Sub ToolStripMenuItem13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem13.Click
-        Try
-            Call mov_ScrapeSpecific("runtime_file")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("runtime_file")
     End Sub      'runtime file
     Private Sub ToolStripMenuItem14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem14.Click
-        Try
-            Call mov_ScrapeSpecific("studio")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("studio")
     End Sub      'studio
     Private Sub ToolStripMenuItem15_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem15.Click
-        Try
-            Call mov_ScrapeSpecific("actors")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("actors")
     End Sub      'actors
     Private Sub ToolStripMenuItem16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem16.Click
-        Try
-            Call mov_ScrapeSpecific("missingfanart")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("missingfanart")
     End Sub      'missingfanart
     Private Sub ToolStripMenuItem17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem17.Click
-        Try
-            Call mov_ScrapeSpecific("missingposters")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("missingposters")
     End Sub      'missingposters
     Private Sub ToolStripMenuItem18_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem18.Click
-        Try
-            Call mov_ScrapeSpecific("mediatags")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("mediatags")
     End Sub      'mediatags
     Private Sub ToolStripMenuItem19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem19.Click
-        Try
-            Call mov_ScrapeSpecific("rating")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("rating")
     End Sub      'rating
     Private Sub ToolStripMenuItem20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem20.Click
-        Try
-            Call mov_ScrapeSpecific("votes")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("votes")
     End Sub      'votes
     Private Sub ToolStripMenuItem21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem21.Click
-        Try
-            Call mov_ScrapeSpecific("stars")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("stars")
     End Sub      'stars
     Private Sub YearToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles YearToolStripMenuItem.Click
-        Try
-            Call mov_ScrapeSpecific("year")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("year")
     End Sub  'year
     Private Sub tsmiRescrapeKeyWords_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeKeyWords.Click
-        Try
-            Call mov_ScrapeSpecific("TagsFromKeywords")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call mov_ScrapeSpecific("TagsFromKeywords")
     End Sub    'TagsFromKeywords
     Private Sub tsmiTMDbSetName_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbSetName.Click
         Call mov_ScrapeSpecific("tmdb_set_name")
@@ -16183,17 +16099,15 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Label27_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label27.Click
-        Try
+    Private Sub Label27_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbl_movRuntime.MouseDown 
+        If e.Button = Windows.Forms.MouseButtons.Left Then
             If runtimetxt.Enabled = True Then
                 displayRuntimeScraper = False
             Else
                 displayRuntimeScraper = True
             End If
             Call mov_SwitchRuntime()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        End If
     End Sub
 
     Private Sub btnMovieDisplay_SetFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_SetFilter.Click
@@ -16312,6 +16226,71 @@ End Sub
 
     Private Sub PictureBoxActor_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxActor.DoubleClick
         ZoomActorPictureBox(PictureBoxActor)
+    End Sub
+
+    Private Sub rcmenuOption(x, y)
+        ' x is equal to the menu item title that was clicked
+        ' Create case stament for that to call the correct xmlinteraction passing in y
+        Select Case x
+            Case "Premiered"
+                mov_ScrapeSpecific("Premiered")
+            Case "Cert"
+                Call mov_ScrapeSpecific("mpaa")
+            Case "Plot"
+                Call mov_ScrapeSpecific("plot")
+            Case "Outline"
+                Call mov_ScrapeSpecific("outline")
+            Case "Tagline"
+                Call mov_ScrapeSpecific("tagline")
+            Case "Genre"
+                Call mov_ScrapeSpecific("genre")
+            Case "Rating"
+                Call mov_ScrapeSpecific("rating")
+            Case "Runtime"
+                Call mov_ScrapeSpecific("runtime")
+            Case "Set"
+                Call mov_ScrapeSpecific("tmdb_set_name")
+            Case "Actors"
+                Call mov_ScrapeSpecific("actors")
+            Case "Stars"
+                Call mov_ScrapeSpecific("stars")
+            Case "Director"
+                Call mov_ScrapeSpecific("director")
+            Case "Credits"
+                Call mov_ScrapeSpecific("credits")
+            Case "Studio"
+                Call mov_ScrapeSpecific("studio")
+            Case "Country"
+                Call mov_ScrapeSpecific("country")
+            Case "Tag(s)"
+                Call mov_ScrapeSpecific("TagsFromKeywords")
+            Case "Top 250"
+                Call mov_ScrapeSpecific("top250")
+            Case "Votes"
+                Call mov_ScrapeSpecific("votes")
+        End Select
+    End Sub
+
+    Private Sub rcmenu_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles rcmenu.ItemClicked
+        Dim contextMenu = DirectCast(sender, ContextMenuStrip)
+        Dim label = DirectCast(contextMenu.SourceControl, Label)
+        Dim var As String = label.Text
+        Dim toolStripItem = e.ClickedItem
+        Dim var2 As String = toolStripItem.Text
+        rcmenuOption(var, var2)
+    End Sub
+
+    Private Sub rcmenuClicked(ByVal sender As System.Object, ByVal e As CancelEventArgs) Handles rcmenu.Opening
+        ' Get the Label clicked from the SourceControl property of the clicked ContextMenuStrip.
+        rcmenu.Items.Clear()
+        Dim contextMenu = DirectCast(sender, ContextMenuStrip)
+        Dim label = DirectCast(contextMenu.SourceControl, Label)
+        Dim var2 As String = label.Text
+            contextMenu.Items.Add("Rescrape " & var2)
+        ' Get the clicked menu strip and update its Text to the Label's Text.
+        'Dim toolStripItem = e.ClickedItem
+        'Dim var As String = toolStripItem.Text
+        'rcmenuOption(var, var2)
     End Sub
 
 #End Region
@@ -20251,4 +20230,7 @@ End Sub
         OpenUrl(url)
     End Sub
     
+    'Private Sub rcmenu_Opening(sender As Object, e As CancelEventArgs) Handles rcmenu.Opening
+
+    'End Sub
 End Class
