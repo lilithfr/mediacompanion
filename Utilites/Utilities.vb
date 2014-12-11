@@ -82,6 +82,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property RARsize As Integer
 
     Private Shared _ApplicationPath As String
+    Private Shared _LanguageLibrary As Array
 
     Public Shared Function GetFrameworkVersions() As List(Of String)
         Dim installedFrameworks As New List(Of String)
@@ -128,7 +129,21 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Set
     End Property
 
+    Public Shared ReadOnly Property languagelibrary As Array
+        Get
+            If IsNothing(_LanguageLibrary) Then
+                langlibraryload()
+            End If
+            Return _LanguageLibrary 
+        End Get
+    End Property
+
     Public Shared tvScraperLog As String = ""
+
+    Private Shared Sub langlibraryload()
+        Dim libraryfile As String = IO.Path.Combine(_ApplicationPath, "Assets\LangList.csv")
+
+    End Sub
 
     Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String, Optional ByVal altnfoeditor As String = "")
         Try

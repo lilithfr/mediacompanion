@@ -61,7 +61,7 @@ Georgian,ka,geo
 Georgian,ka,kat
 German,de,ger
 German,de,deu
-Greek, Modern,el,gre
+Greek Modern,el,gre
 Greek,el,ell
 Guarani,gn,grn
 Gujarati,gu,guj
@@ -124,9 +124,10 @@ Marshallese,mh,mah
 Moldavian,mo,mol
 Mongolian,mn,mon
 Nauru,na,nau
-Navaho, Navajo,nv,nav
-Ndebele, North,nd,nde
-Ndebele, South,nr,nbl
+Navaho,nv,nav
+Navajo,nv,nav
+Ndebele North,nd,nde
+Ndebele South,nr,nbl
 Ndonga,ng,ndo
 Nepali,ne,nep
 Northern Sami,se,sme
@@ -169,7 +170,7 @@ Slovak,sk,slo
 Slovak,sk,slk
 Slovenian,sl,slv
 Somali,so,som
-Sotho, Southern,st,sot
+Sotho Southern,st,sot
 Spanish,es,spa
 Castilian,es,spa
 Sundanese,su,sun
