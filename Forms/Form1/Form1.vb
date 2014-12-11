@@ -6147,6 +6147,7 @@ Public Class Form1
 
     Private Sub Tv_TreeViewContext_RescrapeMediaTags_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeMediaTags.Click
         Try
+            Dim tmp As Integer = Utilities.languagelibrary.count
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim tempint As Integer = 0
             Dim nfofilestorename As New List(Of String)

@@ -82,7 +82,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property RARsize As Integer
 
     Private Shared _ApplicationPath As String
-    Private Shared _LanguageLibrary As Array
+    Private Shared _LanguageLibrary As New List(Of langlib)
 
     Public Shared Function GetFrameworkVersions() As List(Of String)
         Dim installedFrameworks As New List(Of String)
@@ -129,9 +129,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Set
     End Property
 
-    Public Shared ReadOnly Property languagelibrary As Array
+    Public Shared ReadOnly Property languagelibrary As List(Of langlib)
         Get
-            If IsNothing(_LanguageLibrary) Then
+            If IsNothing(_LanguageLibrary) OrElse _LanguageLibrary.Count < 1 Then
                 langlibraryload()
             End If
             Return _LanguageLibrary 
@@ -142,7 +142,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Private Shared Sub langlibraryload()
         Dim libraryfile As String = IO.Path.Combine(_ApplicationPath, "Assets\LangList.csv")
-
+        Dim libline As New langlib
+        Dim lst As New List(Of String)
+        lst = LoadTextLines(libraryfile)
+        For Each item In lst
+            Dim splt() As String = item.Split(",")
+            libline.language    = splt(0)
+            libline.lang2       = splt(1)
+            libline.lang3       = splt(2)
+            _LanguageLibrary.Add(libline)
+        Next
     End Sub
 
     Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String, Optional ByVal altnfoeditor As String = "")
@@ -2076,37 +2085,37 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
-    'Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
+    Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
 
-    '    Dim listoflines As New List(Of String)
-    '    Try
-    '        If Not IO.File.Exists(path) Then
-    '            listoflines.Add("nofile")
-    '            Return listoflines
-    '        Else
-    '            Dim lines As IO.StreamReader = IO.File.OpenText(path)
-    '            Dim line As String
-    '            Do
-    '                line = lines.ReadLine
-    '                If Not line Is Nothing Then
-    '                    listoflines.Add(line)
-    '                Else
-    '                    Exit Do
-    '                End If
-    '            Loop Until line = Nothing
-    '            Return listoflines
-    '        End If
-    '    Catch
-    '        If listoflines.Count > 0 Then
-    '            Return listoflines
-    '        Else
-    '            listoflines.Add("Error")
-    '            Return listoflines
-    '        End If
-    '    Finally
+        Dim listoflines As New List(Of String)
+        Try
+            If Not IO.File.Exists(path) Then
+                listoflines.Add("nofile")
+                Return listoflines
+            Else
+                Dim lines As IO.StreamReader = IO.File.OpenText(path)
+                Dim line As String
+                Do
+                    line = lines.ReadLine
+                    If Not line Is Nothing Then
+                        listoflines.Add(line)
+                    Else
+                        Exit Do
+                    End If
+                Loop Until line = Nothing
+                Return listoflines
+            End If
+        Catch
+            If listoflines.Count > 0 Then
+                Return listoflines
+            Else
+                listoflines.Add("Error")
+                Return listoflines
+            End If
+        Finally
 
-    '    End Try
-    'End Function
+        End Try
+    End Function
 
     Public Shared Function LoadFullText(ByVal path As String) As String
 
@@ -2678,5 +2687,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
         Return Genrelist
     End Function
+
+End Class
+
+Public Class langlib
+    Public language  As String
+    Public lang2     As String
+    Public lang3     As String
+
+    Sub New
+        Init
+    End Sub
+
+    Public Sub Init
+        language    = ""
+        lang2       = ""
+        lang3       = ""
+    End Sub
 
 End Class
