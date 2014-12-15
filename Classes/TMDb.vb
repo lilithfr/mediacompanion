@@ -84,8 +84,7 @@ Public Class TMDb
             End If
         End Get
     End Property
-
-
+    
     Shared Public ReadOnly Property AvailableLanguages As XDocument
         Get
             Return XDocument.Load(LanguagesFile)
@@ -109,8 +108,6 @@ Public Class TMDb
             Return _config_images_base_url
         End Get 
     End Property
-
-
 
     Public ReadOnly Property FrodoPosterThumbs As List(Of FrodoPosterThumb)
         Get
@@ -218,8 +215,7 @@ Public Class TMDb
             Return ""
         End Get 
     End Property
-
-
+    
 
     Public ReadOnly Property Director As String
         Get
@@ -234,8 +230,7 @@ Public Class TMDb
             Return ""
         End Get 
     End Property
-
-
+    
     Public ReadOnly Property Certification As String
         Get
             Fetch
@@ -262,37 +257,11 @@ Public Class TMDb
         End Get 
     End Property
 
-
-    'Private Sub FetchCast
-    '    If IsNothing(_cast) then
-    '        Dim tries=0
-    '        Dim ok=False
-
-    '        While tries<3 And Not ok
-    '            Try
-    '                _cast = _api.GetMovieCast(_movie.id)
-    '            Catch
-    '                Threading.Thread.Sleep(500)
-    '                tries &= 1
-    '                Continue While
-    '            End Try
-    '            ok=True
-    '        End While
-
-    '        If Not ok Then
-    '            Throw New Exception("TMDb is unavailale!")
-    '        End If
-    '    End If
-    'End Sub
-
-
-
     Function GetMovieCast As Boolean
         _cast = _api.GetMovieCast(_movie.id)
         Return Not IsNothing(_cast)
     End Function
-
-
+    
     Private Sub FetchCast
         If IsNothing(_cast) then
             If Not (new RetryHandler(AddressOf GetMovieCast)).Execute Then Throw New Exception(TMDB_EXC_MSG)
@@ -309,29 +278,7 @@ Public Class TMDb
             If Not (New RetryHandler(AddressOf GetGenreList)).Execute Then Throw New Exception(TMDB_EXC_MSG)
         End If
     End Sub
-
-    'Private Sub FetchReleases
-    '    If IsNothing(_releases) then
-    '        Dim tries=0
-    '        Dim ok=False
-
-    '        While tries<3 And Not ok
-    '            Try
-    '               _releases = _api.GetMovieReleases(_movie.id)
-    '            Catch
-    '                Threading.Thread.Sleep(500)
-    '                tries &= 1
-    '                Continue While
-    '            End Try
-    '            ok=True
-    '        End While
-
-    '        If Not ok Then
-    '            Throw New Exception(TMDB_EXC_MSG)
-    '        End If
-    '    End If
-    'End Sub
-
+    
     Function GetMovieReleases As Boolean
         _releases = _api.GetMovieReleases(_movie.id)
         Return Not IsNothing(_releases)
@@ -342,40 +289,7 @@ Public Class TMDb
             If Not (new RetryHandler(AddressOf GetMovieReleases)).Execute Then Throw New Exception(TMDB_EXC_MSG)
         End If
     End Sub
-
-    'Public ReadOnly Property AlternateTitles As List(Of String)
-    '    Get
-    '        Fetch
-    '        If IsNothing(_alternateTitles) then 
-
-    '            Dim tries=0
-    '            Dim ok=False
-
-    '            While tries<3 And Not ok
-    '                Try
-    '                   _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
-    '                Catch
-    '                    Threading.Thread.Sleep(500)
-    '                    tries &= 1
-    '                    Continue While
-    '                End Try
-    '                ok=True
-    '            End While
-
-    '            If Not ok Then
-    '                Throw New Exception(TMDB_EXC_MSG)
-    '            End If
-
-
-    '            For Each item In _alternateTitles.titles
-    '                _mcAlternateTitles.Add(item.title)
-    '            Next
-    '        End If
-
-    '        Return _mcAlternateTitles
-    '    End Get 
-    'End Property
-
+    
     Function GetMovieAlternateTitles As Boolean
         _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
         Return Not IsNothing(_alternateTitles)
@@ -397,40 +311,7 @@ Public Class TMDb
             Return _mcAlternateTitles
         End Get 
     End Property
-
-    'Public ReadOnly Property AlternateTitles As List(Of String)
-    '    Get
-    '        Fetch
-    '        If IsNothing(_alternateTitles) then 
-
-    '            Dim tries=0
-    '            Dim ok=False
-
-    '            While tries<3 And Not ok
-    '                Try
-    '                   _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
-    '                Catch
-    '                    Threading.Thread.Sleep(500)
-    '                    tries &= 1
-    '                    Continue While
-    '                End Try
-    '                ok=True
-    '            End While
-
-    '            If Not ok Then
-    '                Throw New Exception(TMDB_EXC_MSG)
-    '            End If
-
-
-    '            For Each item In _alternateTitles.titles
-    '                _mcAlternateTitles.Add(item.title)
-    '            Next
-    '        End If
-
-    '        Return _mcAlternateTitles
-    '    End Get 
-    'End Property
-
+    
     Public ReadOnly Property MovieImages As WatTmdb.V3.TmdbMovieImages
         Get
             Fetch
@@ -505,14 +386,6 @@ Public Class TMDb
 
     #End Region  'Read-only properties
 
-    'Called during deserialisation
-    'Sub new()
-    '    _api         = New WatTmdb.V3.Tmdb
-    ''   _config      = New WatTmdb.V3.TmdbConfiguration  
-    '    _movieImages = New WatTmdb.V3.TmdbMovieImages
-    '    _trailers    = New WatTmdb.V3.TmdbMovieTrailers
-    'End Sub
-
     Sub new( Optional imdb As String=Nothing )
         _api         = New WatTmdb.V3.Tmdb(Key)
         AssignConfig_images_base_url
@@ -527,73 +400,7 @@ Public Class TMDb
             fi.Delete
         End If
     End Sub
-
-    'Private Sub AssignConfig_images_base_url
-
-    '    Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
-
-    '    Dim expired As Boolean = True
-     
-
-    '    _config_images_base_url = Nothing
-
-
-    '    Try
-    '        If fi.Exists then
-    '            expired = (DateTime.Now-fi.LastWriteTime).TotalDays>TMDbConfigFileMaxAgeInDays
-
-    '            If Not expired then
-    '                _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
-    '                Return  
-    '            End If
-    '        End If
-    '    Catch
-    '    End Try
- 
-
-    '    Dim tries As Integer=0
-
-
-    '    While tries<3
-    '        Try
-    '            _config_images_base_url = _api.GetConfiguration().images.base_url
-
-    '            If fi.Exists then fi.Delete
-
-    '            File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
-    '            Return
-    '        Catch
-    '            System.Threading.Thread.Sleep(500)
-    '            tries += 1
-    '        End Try
-    '    End While
-        
-
-    '    If Not IsNothing(_config_images_base_url) Then Return
-        
-
-    '    'Fallback on expired file
-    '    Try
-    '        If fi.Exists Then
-    '            _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
-    '        End If
-    '        Return
-    '    Catch
-    '    End Try
-
-
-    '    'If all else fails -> Write a default one
-    '    Try
-    '        _config_images_base_url = "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/"
-
-    '        If fi.Exists then fi.Delete
-
-    '        File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
-    '    Catch
-    '        Throw New Exception("AssignConfig_images_base_url failed")
-    '    End Try
-    'End Sub
-
+    
     Function GetConfiguration As Boolean
         _config_images_base_url = _api.GetConfiguration().images.base_url
         Return Not IsNothing(_config_images_base_url)
@@ -650,76 +457,7 @@ Public Class TMDb
             Throw New Exception("AssignConfig_images_base_url failed")
         End Try
     End Sub
-
-    'Public Sub JsonSerialize(Of T)(sFileName As String, ByVal obj As T )
-
-    '    Dim json As String = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented)
-
-    '    File.WriteAllText(sFileName, json)
-    'End Sub
-
-    'Public Function JsonDeserialize(Of T)(sFileName As String) As T
-
-    '    Dim json As String = File.ReadAllText(sFileName)
-
-    '    Return JsonConvert.DeserializeObject(Of T)(json)
-    'End Function
-
-
-    'Private Sub Fetch
-    '    If _movie.id=0 and Not __Serialising and Not _fetched then
-    '        _fetched     = True
-
-    '        Dim tries=0
-    '        Dim ok=False
-
-    '        While tries<3 And Not ok
-    '            Try
-    '                _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
-    '            Catch
-    '                Threading.Thread.Sleep(500)
-    '                tries &= 1
-    '                Continue While
-    '            End Try
-
-    '            If IsNothing(_movie) Then
-    '                Threading.Thread.Sleep(500)
-    '                tries &= 1
-    '                Continue While
-    '            End If
-
-    '            Try
-    '                _movieImages = _api.GetMovieImages  (_movie.id)
-    '            Catch
-    '            End Try
-    '            Try
-    '                _trailers    = _api.GetMovieTrailers(_movie.id)
-    '            Catch
-    '            End Try
-    '            ok = True
-    '        End While
-            
-    '        If Not ok Then
-    '            Throw New Exception(TMDB_EXC_MSG)
-    '        End If
-            
-    '        'If movie isn't found -> Create empty child objects
-    '        If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
-    '        If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
-    '        If IsNothing(_trailers.youtube     ) then _trailers.youtube      = New List(Of WatTmdb.V3.Youtube )
-
-    '        FixUpMovieImages
-
-    '        AssignValidBackDrops
-    '        AssignValidPosters
-    '        AssignMC_Posters
-    '        AssignMC_Thumbs
-    '        AssignMC_Backdrops
-    '        AssignFrodoExtraPosterThumbs
-    '        AssignFrodoExtraFanartThumbs
-    '    End If
-    'End Sub
-
+    
     Function GetMovieBy As Boolean
         If Imdb <> "" Then
             Return GetMovieByIMDB
@@ -801,10 +539,6 @@ Public Class TMDb
         For Each item In ValidPosters
             _frodoPosterThumbs.Add(New FrodoPosterThumb("poster",HdPath+item.file_path))
         Next
-
-        'For Each item In ValidBackDrops
-        '    _frodoThumbs.Add(New Thumb("thumb",HdPath+item.file_path))
-        'Next
     End Sub
 
     Private Sub AssignFrodoExtraFanartThumbs
@@ -841,9 +575,6 @@ Public Class TMDb
         Next
     End Sub
 
-    '
-    'Builds a filtered by language, ordered by preferred language list of back drops
-    '
     Private Sub AssignValidBackDrops
         For Each language In _lookupLanguages                                                                                           '_lookupLanguages are already in preferred language order
             Dim lang = language
@@ -857,9 +588,6 @@ Public Class TMDb
         Next
     End Sub
 
-    '
-    'Builds a filtered by language, ordered by preferred language list of posters
-    '
     Private Sub AssignValidPosters
         For Each language In _lookupLanguages                                                         'Already in preferred language order
             Dim lang = language

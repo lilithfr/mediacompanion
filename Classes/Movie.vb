@@ -2024,7 +2024,11 @@ Public Class Movie
                 newobj.ID = ID
                 newobj.src = "movie"
                 Dim FanarttvMovielist As New FanartTvMovieList
-                FanarttvMovielist = newobj.FanarttvMovieresults
+                Try
+                    FanarttvMovielist = newobj.FanarttvMovieresults
+                Catch ex As Exception
+                    Throw New Exception(ex.Message)
+                End Try
                 For Each lan In lang
                     If IsNothing(clearart) Then
                         For Each Art In FanarttvMovielist.hdmovieclearart

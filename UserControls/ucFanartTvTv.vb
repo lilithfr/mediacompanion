@@ -13,6 +13,7 @@ Public Class ucFanartTvTv
     Dim artType As String = ""
     Dim selectedimageurl As String = Nothing
     Dim FanarttvTvlist As New FanartTvTvList 
+    Dim exmsg As String = Nothing
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_fanarttvart)
     Public WorkingShow As New TvShow
@@ -59,19 +60,24 @@ Public Class ucFanartTvTv
             newobject.src = "tv"
             FanarttvTvlist = newobject.FanarttvTvresults
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            exmsg = ex.Message 
+            'ExceptionHandler.LogError(ex)
         Finally
             messbox.Close()
         End Try
     End Sub
 
     Public Function ConfirmIfResults() As Boolean
-        Dim ok As Boolean = True
-        If Not FanarttvTvlist.dataloaded Then
-            MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & WorkingShow.title.Value)
-            ok = False
+        If Not exmsg = Nothing Then
+            MsgBox(exmsg)
+            exmsg = Nothing
+            Return False
         End If
-        Return ok
+        If Not FanarttvTvlist.dataloaded Then
+            MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for Series:  " & WorkingShow.title.Value)
+            Return False
+        End If
+        Return True
     End Function
 
     Public Sub noID()

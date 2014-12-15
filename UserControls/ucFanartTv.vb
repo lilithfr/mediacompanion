@@ -15,6 +15,7 @@ Public Class ucFanartTv
     Dim artwidth As Integer = 200
     Dim artType As String = ""
     Dim selectedimageurl As String = Nothing
+    Dim exmsg As String = Nothing
     Dim FanarttvMovielist As New FanartTvMovieList
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_fanarttvart)
@@ -66,19 +67,24 @@ Public Class ucFanartTv
             FanarttvMovielist = newobject.FanarttvMovieresults
 
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            exmsg = ex.Message 
+            'ExceptionHandler.LogError(ex)
         Finally
             messbox.Close()
         End Try
     End Sub
 
     Public Function ConfirmIfResults() As Boolean
-        Dim ok As Boolean = True
+        If Not exmsg = Nothing Then
+            MsgBox(exmsg)
+            exmsg = Nothing
+            Return False
+        End If
         If Not FanarttvMovielist.dataloaded Then
             MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & workingMovDetails.fullmoviebody.title)
-            ok = False
+            Return False
         End If
-        Return ok
+        Return True
     End Function
 
     Public Sub noID()
