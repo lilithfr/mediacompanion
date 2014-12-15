@@ -131,6 +131,52 @@ Partial Public Class Form1
         End Try
     End Sub
 
+    Private Sub TvTreeview_DragDrop(sender As Object, e As DragEventArgs) Handles TvTreeview.DragDrop
+        Dim files() As String
+        files = e.Data.GetData(DataFormats.FileDrop)
+        For f = 0 To UBound(files)
+            If IO.Directory.Exists(files(f)) Then
+                If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
+                If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
+                Dim di As New IO.DirectoryInfo(files(f))
+                If Preferences.tvFolders.Contains(files(f)) Then Continue For
+                Dim skip As Boolean = False
+                For Each item In droppedItems
+                    If item = files(f) Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                If Not skip Then droppedItems.Add(files(f))
+            End If
+        Next
+        If droppedItems.Count < 1 Then Exit Sub
+        Dim droppedmsg As String = "You have dropped the following folders onto TV," &vbCrLf & "Are you sure you wish to add these as TvShows?" & vbCrLf
+        For Each item In droppedItems
+            droppedmsg &= item & vbcrlf
+        Next
+        Dim x = MsgBox(droppedmsg, MsgBoxStyle.YesNo)
+        If x = MsgBoxResult.No Then 
+            droppedItems.Clear()
+            Exit Sub
+        End If
+        For Each item In droppedItems
+            Preferences.tvFolders.add(item)
+            newTvFolders.Add(item)
+        Next
+        droppedItems.Clear()
+        Preferences.SaveConfig()
+        tv_ShowScrape()
+    End Sub
+
+    Private Sub TvTreeview_DragEnter(sender As Object, e As DragEventArgs) Handles TvTreeview.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub TvTreeviewRebuild()
         TvTreeview.Nodes.Clear()              'clear the treeview of old data
         ''Dirty work around until TvShows is repalced with TvCache.Shows universally
@@ -4657,5 +4703,5 @@ Partial Public Class Form1
         End Try
         Return flags
     End Function
-
+        
 End Class

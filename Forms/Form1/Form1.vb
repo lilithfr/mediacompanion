@@ -19084,9 +19084,6 @@ End Sub
                 Else
                     MsgBox("Root already exists")
                 End If
-                'Catch ex As Exception
-                '    MsgBox("error")
-                'End Try
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19258,6 +19255,40 @@ End Sub
             tvfolderschanged = False
             Preferences.SaveConfig()
             tv_ShowScrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+        
+    Private Sub ListBox6_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox6.DragDrop
+        Dim files() As String
+        files = e.Data.GetData(DataFormats.FileDrop)
+        For f = 0 To UBound(files)
+            If IO.Directory.Exists(files(f)) Then
+                If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
+                If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
+                Dim di As New IO.DirectoryInfo(files(f))
+                If ListBox6.Items.Contains(files(f)) Then Continue For
+                Dim skip As Boolean = False
+                For Each item In droppedItems
+                    If item = files(f) Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                If Not skip Then droppedItems.Add(files(f))
+            End If
+        Next
+        If droppedItems.Count < 1 Then Exit Sub
+        For Each item In droppedItems
+            ListBox6.Items.Add(item)
+            tvfolderschanged = True
+        Next
+    End Sub
+
+    Private Sub ListBox6_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox6.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20271,5 +20302,7 @@ End Sub
         plotfrm.Dispose()
         Return ListofPlots(plotselected)
     End Function
+
+    
 
 End Class
