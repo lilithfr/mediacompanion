@@ -3057,10 +3057,8 @@ Partial Public Class Form1
     End Sub
 
     Private Sub tv_EpisodesMissingFind(ByVal ShowList As List(Of TvShow))
-        'Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
         Utilities.EnsureFolderExists(MissingNfoPath)
         For Each item In ShowList
-
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
             If item.State = Media_Companion.ShowState.Open Then
                 Dim showid As String = item.TvdbId.Value
@@ -3096,12 +3094,10 @@ Partial Public Class Form1
                             Continue For
                         End If
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
-                        'NewEpisode.SeasonNumber.Value = Utilities.PadNumber(NewEpisode.SeasonNumber.Value,2)
-                        'NewEpisode.EpisodeNumber.Value = Utilities.PadNumber(NewEpisode.EpisodeNumber.Value,2)
                         If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
                             MissingEpisode.NfoFilePath = MissingNfoPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
-                            If Not IO.File.Exists(MissingEpisode.NfoFilePath) Then
+                            If Not IO.File.Exists(MissingEpisode.NfoFilePath) OrElse Preferences.DlMissingEpData Then
                                 MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
                                 MissingEpisode.IsMissing = True
                                 MissingEpisode.IsCache = True
@@ -3114,12 +3110,10 @@ Partial Public Class Form1
                             Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
                         End If
                     Next
-
                 End If
             End If
         Next
         Tv_CacheSave()
-
     End Sub
 
     Public Function tv_EpisodesMissingUpdate(ByRef newEpList As List(Of TvEpisode)) As Boolean

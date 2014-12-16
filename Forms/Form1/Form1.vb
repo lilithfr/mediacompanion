@@ -5533,7 +5533,6 @@ Public Class Form1
             End If
         Else
             util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
-
         End If
         Try
             Label58.Text = PictureBox10.Image.Height.ToString
@@ -5562,10 +5561,7 @@ Public Class Form1
             Dim objReader As New StreamReader(objStream)
             Dim sLine As String = ""
             fanartlinecount = 0
-
             sLine = objReader.ReadToEnd
-
-
             Dim bannerslist As New XmlDocument
             'Try
             Dim bannerlist As String = "<banners>"
@@ -5574,7 +5570,6 @@ Public Class Form1
             objReader.Close()
             objStream.Close()
             For Each thisresult In bannerslist("Banners")
-
                 Select Case thisresult.Name
                     Case "Banner"
                         Dim fanart As New str_FanartList(SetDefaults)
@@ -5595,63 +5590,51 @@ Public Class Form1
                         End If
                 End Select
             Next
-
-
-
-
-
         Catch ex As WebException
             MsgBox("TVDB appears to be down at the moment, please try again later")
         End Try
 
-
-
         If listOfTvFanarts.Count > 0 Then
-
-
-
-
-
             Dim location As Integer = 0
             Dim itemcounter As Integer = 0
             For f = 0 To listOfTvFanarts.Count - 1
                 tvFanartBoxes() = New PictureBox()
-
+                Dim item As String = Utilities.Download2Cache(listOfTvFanarts(f).smallUrl)
+                
                 With tvFanartBoxes
                     .Location = New Point(0, location)
                     If listOfTvFanarts.Count > 2 Then
-                        .Width = 405
-                        .Height = 245
+                        .Width = 400
+                        .Height = 225
                     Else
                         .Width = 415
                         .Height = 250
                     End If
                     .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = listOfTvFanarts(f).smallUrl
+                    '.ImageLocation = listOfTvFanarts(f).smallUrl
                     .Visible = True
                     .BorderStyle = BorderStyle.Fixed3D
                     .Name = "tvfanart" & f.ToString
                     AddHandler tvFanartBoxes.DoubleClick, AddressOf util_ZoomImage2
                 End With
+                util_ImageLoad(tvFanartBoxes, item, "")
 
                 tvFanartCheckBoxes() = New RadioButton()
                 With tvFanartCheckBoxes
                     .BringToFront()
-                    .Location = New Point(199, location + 245)
+                    .Location = New Point(199, location + 225)
                     .Name = "checkbox" & itemcounter.ToString
                 End With
 
                 resolutionLabels() = New Label
                 With resolutionLabels
                     .BringToFront()
-                    .Location = New Point(10, location + 245)
+                    .Location = New Point(10, location + 225)
                     .Name = listOfTvFanarts(f).resolution
                     .Text = listOfTvFanarts(f).resolution
                 End With
-
                 itemcounter += 1
-                location += 270
-
+                location += 250
                 Me.Panel13.Controls.Add(tvFanartBoxes())
                 Me.Panel13.Controls.Add(tvFanartCheckBoxes())
                 Me.Panel13.Controls.Add(resolutionLabels())
@@ -5671,13 +5654,8 @@ Public Class Form1
             End With
             Me.Panel13.Controls.Add(mainlabel2)
         End If
-
         System.Windows.Forms.Cursor.Current = Cursors.Default
         messbox.Close()
-        'Catch ex As Exception
-
-        'End Try
-
     End Sub
 
         'Set focus on the first checkbox to enable mouse wheel scrolling 
@@ -5695,7 +5673,6 @@ Public Class Form1
         Try
             Panel16.Focus()
             'Dim rb As RadioButton = Panel16.Controls("postercheckbox0")
-
             'rb.Select
             'rb.Checked = Not rb.Checked
         Catch
@@ -5723,128 +5700,7 @@ Public Class Form1
         End If
 
     End Sub
-
-    Private Sub btnTvFanartSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSave.Click
-        Dim issavefanart As Boolean = Preferences.savefanart
-        Preferences.savefanart =true
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-            lbl_movVotes.Text = "Please Wait, Trying to Download Fanart"
-            Me.Refresh()
-            Application.DoEvents()
-
-            Dim miscvar As String = String.Empty
-            Dim miscint As Integer = 0
-            Dim miscvar2 As String = String.Empty
-            Dim allok As Boolean = False
-            For Each button As Control In Me.Panel13.Controls
-                If button.Name.IndexOf("checkbox") <> -1 Then
-                    Dim b1 As RadioButton = CType(button, RadioButton)
-                    If b1.Checked = True Then
-                        miscvar = b1.Name
-                        miscvar = miscvar.Replace("checkbox", "")
-                        miscint = Convert.ToDecimal(miscvar)
-                        miscvar2 = listOfTvFanarts(miscint).bigUrl
-                        allok = True
-                        Exit For
-                    End If
-                End If
-            Next
-            If allok = False Then
-                MsgBox("No Fanart Is Selected")
-            Else
-                Try
-                    'Panel1.Controls.Remove(Label1)
-                    'Dim buffer(4000000) As Byte
-                    'Dim size As Integer = 0
-                    'Dim bytesRead As Integer = 0
-
-                    'Dim fanartthumburl As String = miscvar2
-                    'Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
-                    'Dim res As HttpWebResponse = req.GetResponse()
-                    'Dim contents As Stream = res.GetResponseStream()
-                    'Dim bmp As New Bitmap(contents)
-                    Dim FanartOrExtra As String = Tv_FanartORExtrathumbPath 
-                    Dim xtra As Boolean = False
-                    If rbTvFanart1.Checked or rbTvFanart2.Checked or rbTvFanart3.Checked or rbTvFanart4.Checked Then xtra = True
-                    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", FanartOrExtra)
-
-                    'Dim bytesToRead As Integer = CInt(buffer.Length)
-
-                    'While bytesToRead > 0
-                    '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '    If size = 0 Then Exit While
-                    '    bytesToRead -= size
-                    '    bytesRead += size
-                    'End While
-                    'If Preferences.resizefanart = 1 Then
-                    '    Try
-                    '        Dim tempbitmap As Bitmap = bmp
-                    '        tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
-                    '    Catch ex As Exception
-                    '        miscvar = ex.Message.ToString
-                    '    End Try
-                    'ElseIf Preferences.resizefanart = 2 Then
-                    '    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(1280, 720)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                    '        Dim tempbitmap As Bitmap = bm_dest
-                    '        tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
-                    '    Else
-                    '        Thread.Sleep(30)
-                    '        bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-                    '    End If
-                    'ElseIf Preferences.resizefanart = 3 Then
-                    '    If bmp.Width > 960 Or bmp.Height > 540 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(960, 540)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                    '        Dim tempbitmap As Bitmap = bm_dest
-                    '        tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
-                    '    Else
-                    '        Thread.Sleep(30)
-                    '        bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-                    '    End If
-                    'End If
-                    'Dim exists As Boolean = System.IO.File.Exists(savepath)
-
-                    If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) Then
-                        Try
-                            util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
-                            If Not xtra Then
-                                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
-                                End If
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                    Else
-                        PictureBox10.Image = Nothing
-                    End If
-                    If Not xtra AndAlso Preferences.FrodoEnabled Then 
-                        Utilities.SafeCopyFile(savepath,savepath.Replace("fanart.jpg","season-all-fanart.jpg"),True)
-                    End If
-                Catch ex As WebException
-                    MsgBox(ex.Message)
-                End Try
-
-            End If
-            Preferences.savefanart = issavefanart
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-            Preferences.savefanart=issavefanart
-        End Try
-
-    End Sub
-
+    
     Private Function Tv_FanartORExtrathumbPath() As String
         Dim fanartpath As String = ""
         If rbTvFanart.Checked Then fanartpath = "fanart.jpg" : Return fanartpath
@@ -18347,6 +18203,70 @@ End Sub
 #End Region
 
 #Region "Tv Fanart Form"
+
+    Private Sub btnTvFanartSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSave.Click
+        Dim issavefanart As Boolean = Preferences.savefanart
+        Preferences.savefanart =true
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            lbl_movVotes.Text = "Please Wait, Trying to Download Fanart"
+            Me.Refresh()
+            Application.DoEvents()
+            Dim miscvar As String = String.Empty
+            Dim miscint As Integer = 0
+            Dim miscvar2 As String = String.Empty
+            Dim allok As Boolean = False
+            For Each button As Control In Me.Panel13.Controls
+                If button.Name.IndexOf("checkbox") <> -1 Then
+                    Dim b1 As RadioButton = CType(button, RadioButton)
+                    If b1.Checked = True Then
+                        miscvar = b1.Name
+                        miscvar = miscvar.Replace("checkbox", "")
+                        miscint = Convert.ToDecimal(miscvar)
+                        miscvar2 = listOfTvFanarts(miscint).bigUrl
+                        allok = True
+                        Exit For
+                    End If
+                End If
+            Next
+            If allok = False Then
+                MsgBox("No Fanart Is Selected")
+            Else
+                Try
+                    Dim FanartOrExtra As String = Tv_FanartORExtrathumbPath 
+                    Dim xtra As Boolean = False
+                    If rbTvFanart1.Checked or rbTvFanart2.Checked or rbTvFanart3.Checked or rbTvFanart4.Checked Then xtra = True
+                    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", FanartOrExtra)
+
+                    If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) Then
+                        Try
+                            util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
+                            If Not xtra Then
+                                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
+                                End If
+                            End If
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
+                        End Try
+                    Else
+                        PictureBox10.Image = Nothing
+                    End If
+                    If Not xtra AndAlso Preferences.FrodoEnabled Then 
+                        Utilities.SafeCopyFile(savepath,savepath.Replace("fanart.jpg","season-all-fanart.jpg"),True)
+                    End If
+                Catch ex As WebException
+                    MsgBox(ex.Message)
+                End Try
+            End If
+            Preferences.savefanart = issavefanart
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+            Preferences.savefanart=issavefanart
+        End Try
+    End Sub
 
     Private Sub rbTvFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbTvFanart.CheckedChanged, rbTvFanart1.CheckedChanged, rbTvFanart2.CheckedChanged, rbTvFanart3.CheckedChanged, rbTvFanart4.CheckedChanged
         Tv_FanartDisplay()
