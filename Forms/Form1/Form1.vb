@@ -5693,10 +5693,11 @@ Public Class Form1
 
     Sub EnableTvBannerScrolling
         Try
-            Dim rb As RadioButton = Panel16.Controls("postercheckbox0")
+            Panel16.Focus()
+            'Dim rb As RadioButton = Panel16.Controls("postercheckbox0")
 
-            rb.Select
-            rb.Checked = Not rb.Checked
+            'rb.Select
+            'rb.Checked = Not rb.Checked
         Catch
         End Try
     End Sub
@@ -6327,7 +6328,7 @@ Public Class Form1
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             rbTVposter.Enabled = True
             rbTVbanner.Enabled = True
-            Button53.Enabled = True
+            btnTvPosterTVDBSpecific.Enabled = True
             Dim eden As Boolean = Preferences.EdenEnabled
             Dim frodo As Boolean = Preferences.FrodoEnabled
             Dim edenpath As String =""
@@ -6383,7 +6384,7 @@ Public Class Form1
 
 
             ElseIf tempstring = "Season All" Then
-                Button53.Enabled = False
+                btnTvPosterTVDBSpecific.Enabled = False
                 If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
                     edenpath = path
@@ -6529,15 +6530,15 @@ Public Class Form1
         If usedlist.Count <= 0 Then
             Label72.Text = "Displaying 0 of 0 Images"
             Label72.Visible = True
-            Button54.Visible = False
-            Button55.Visible = False
+            btnTvPosterNext.Visible = False
+            btnTvPosterPrev.Visible = False
             Call tv_PosterPanelClear()
             Exit Sub
         End If
         If Not rbTVbanner.Checked Then
             If usedlist.Count > Preferences.maximumthumbs Then
-                Button54.Visible = True
-                Button55.Visible = True
+                btnTvPosterNext.Visible = True
+                btnTvPosterPrev.Visible = True
                 If usedlist.Count >= Preferences.maximumthumbs Then
                     Label72.Text = "Displaying 1 to 10 of " & usedlist.Count.ToString & " Images"
                 Else
@@ -6546,11 +6547,11 @@ Public Class Form1
                 Label72.Visible = True
                 Me.Refresh()
                 Application.DoEvents()
-                Button55.Enabled = False
-                Button54.Enabled = True
+                btnTvPosterPrev.Enabled = False
+                btnTvPosterNext.Enabled = True
             Else
-                Button54.Visible = False
-                Button55.Visible = False
+                btnTvPosterNext.Visible = False
+                btnTvPosterPrev.Visible = False
                 If posterArray.Count >= Preferences.maximumthumbs Then
                     Label72.Text = "Displaying 1 to " & Preferences.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
                 Else
@@ -6561,8 +6562,8 @@ Public Class Form1
                 Application.DoEvents()
             End If
         Else
-            Button54.Visible = False
-            Button55.Visible = False
+            btnTvPosterNext.Visible = False
+            btnTvPosterPrev.Visible = False
             Label72.Text = "Displaying 1 to " & usedlist.Count.ToString
         End If
         Call tv_PosterSelectionDisplay()
@@ -18536,7 +18537,7 @@ End Sub
         Call TvPosterSave(btnTvPosterSaveBig.Tag)
     End Sub
 
-    Private Sub Button52_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button52.Click
+    Private Sub btnTvPosterTVDBAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterTVDBAll.Click
         Try
             'tvdb all
             tvdbmode = True
@@ -18565,7 +18566,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button53_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button53.Click
+    Private Sub btnTvPosterTVDBSpecific_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterTVDBSpecific.Click
         Try
             'tvdb specific
             tvdbmode = True
@@ -18621,35 +18622,35 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button54_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button54.Click  'TV Poster Page Next
+    Private Sub btnTvPosterNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterNext.Click  'TV Poster Page Next
         Try
             tvposterpage += 1
             btnTvPosterSaveBig.Visible = False
             If usedlist.Count < 10 * tvposterpage Then
-                Button54.Enabled = False
+                btnTvPosterNext.Enabled = False
             End If
             Call tv_PosterSelectionDisplay()
-            Button55.Enabled = True
+            btnTvPosterPrev.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub Button55_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button55.Click  'TV Poster Page Prev
+    Private Sub btnTvPosterPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterPrev.Click  'TV Poster Page Prev
         Try
             tvposterpage -= 1
             btnTvPosterSaveBig.Visible = False
             If tvposterpage = 1 Then
-                Button55.Enabled = False
+                btnTvPosterPrev.Enabled = False
             End If
             Call tv_PosterSelectionDisplay()
-            Button54.Enabled = True
+            btnTvPosterNext.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub Button58_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button58.Click
+    Private Sub btnTvPosterIMDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterIMDB.Click
         Try
             btnTvPosterSaveBig.Visible = False
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -18700,10 +18701,10 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button59_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button59.Click
+    Private Sub btnTvPosterUrlBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterUrlBrowse.Click
         Try
             Dim t As New frmImageBrowseOrUrl
-            t.Location = Me.PointToScreen(New Point(Button59.Left - 480, GroupBox23.Top + GroupBox23.Height))
+            t.Location = Me.PointToScreen(New Point(btnTvPosterUrlBrowse.Left - 480, GroupBox23.Top + GroupBox23.Height))
             t.ShowDialog()
             If t.DialogResult = Windows.Forms.DialogResult.Cancel Or t.tb_PathorUrl.Text = "" Then
                 t.Dispose()
@@ -18723,10 +18724,12 @@ End Sub
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
+        btnTvPosterSaveBig.Visible = False
         BannerAndPosterViewer()
     End Sub
 
     Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
+        btnTvPosterSaveBig.Visible = False
         BannerAndPosterViewer()
     End Sub
 
