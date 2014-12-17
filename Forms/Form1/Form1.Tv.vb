@@ -1111,7 +1111,7 @@ Partial Public Class Form1
         frmSplash2.Label1.Text = "Loading Cache..."
         Windows.Forms.Application.DoEvents()
         tv_CacheLoad()    'reload the cache file to update the treeview
-        If Preferences.fixnfoid Then CheckBox_fixNFOid.CheckState = CheckState.Unchecked
+        If Preferences.fixnfoid Then cbTv_fixNFOid.CheckState = CheckState.Unchecked
         Me.Enabled = True
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
@@ -2655,10 +2655,22 @@ Partial Public Class Form1
             End If
             If Not downloadok AndAlso doScreenShot Then
                 downloadok = Utilities.CreateScreenShot(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay, Preferences.overwritethumbs)
-                If downloadok AndAlso paths.Count > 1 Then
-                    File.Copy(paths(0), paths(1), Preferences.overwritethumbs)
+                If downloadok Then
+                    If Preferences.tvscrnshtTVDBResize Then 
+                        Dim imagearr() As Integer = GetAspect(episode)
+                        If Not imagearr(0) = 0 Then
+                            DownloadCache.CopyAndDownSizeImage(paths(0), paths(0), imagearr(0), imagearr(1))
+                        End If
+                    End If
+                    If downloadok AndAlso paths.Count > 1 Then
+                        File.Copy(paths(0), paths(1), Preferences.overwritethumbs)
+                    End If
                 End If
-                If downloadok Then result = "!!! No Episode thumb to download, Screenshot saved"
+                If downloadok Then 
+                    result = "!!! No Episode thumb to download, Screenshot saved"
+                Else
+                    result = "!!! No Episode thumb to download, Screenshot Could not be saved!""
+                End If
             End If
         ElseIf paths.Count = 0 Then
             result = "!!! Episode Thumb(s) already exist and are not set to overwrite"
@@ -3805,6 +3817,7 @@ Partial Public Class Form1
 
     Private Sub TvEpThumbScreenShot()
         Try
+            Dim aok As Boolean = True
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
             If WorkingEpisode.IsMissing Then Exit Sub
             If TextBox35.Text = "" Then TextBox35.Text = Preferences.ScrShtDelay
@@ -3824,29 +3837,38 @@ Partial Public Class Form1
                     messbox.Refresh()
                     Application.DoEvents()
 
-                    Utilities.CreateScreenShot(tempstring2, paths(0), seconds, True)
-                    If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
+                    aok = Utilities.CreateScreenShot(tempstring2, paths(0), seconds, True)
+                    If aok Then
+                        If Preferences.tvscrnshtTVDBResize Then 
+                            Dim imagearr() As Integer = GetAspect(WorkingEpisode)
+                            If Not imagearr(0) = 0 Then
+                                DownloadCache.CopyAndDownSizeImage(paths(0), paths(0), imagearr(0), imagearr(1))
+                            End If
+                        End If
+                        If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
 
-                    If File.Exists(paths(0)) Then
-                        util_ImageLoad(PictureBox14, paths(0), Utilities.DefaultTvFanartPath)
-                        util_ImageLoad(tv_PictureBoxLeft, paths(0), Utilities.DefaultTvFanartPath)
-                        Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
-                        If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
-                            Dim episodelist As New List(Of TvEpisode)
-                            episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-                            For Each Ep In episodelist
-                                If Ep.Season.Value = WorkingEpisode.Season.Value And Ep.Episode.Value = WorkingEpisode.Episode.value Then
-                                    Dim video_flags = GetMultiEpMediaFlags(ep)
-                                    movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-                                End If
-                            Next
-                        Else
-                            Dim video_flags = GetEpMediaFlags()
-                            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                        If File.Exists(paths(0)) Then
+                            util_ImageLoad(PictureBox14, paths(0), Utilities.DefaultTvFanartPath)
+                            util_ImageLoad(tv_PictureBoxLeft, paths(0), Utilities.DefaultTvFanartPath)
+                            Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
+                            If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
+                                Dim episodelist As New List(Of TvEpisode)
+                                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                                For Each Ep In episodelist
+                                    If Ep.Season.Value = WorkingEpisode.Season.Value And Ep.Episode.Value = WorkingEpisode.Episode.value Then
+                                        Dim video_flags = GetMultiEpMediaFlags(ep)
+                                        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                                    End If
+                                Next
+                            Else
+                                Dim video_flags = GetEpMediaFlags()
+                                movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                            End If
                         End If
                     End If
                 End If
                 messbox.Close()
+                If Not aok Then MsgBox("Could not create ScreenShot")
             Else
                 MsgBox("Please enter a numerical value into the textbox")
                 TextBox34.Focus()
@@ -4661,9 +4683,6 @@ Partial Public Class Form1
 
     End Function
 
-
-
-
     Private Function GetMultiEpMediaFlags(ByVal thisep As TvEpisode) As List(Of KeyValuePair(Of String, String))
 
         Dim flags As New List(Of KeyValuePair(Of String, String))
@@ -4696,6 +4715,24 @@ Partial Public Class Form1
         Catch
         End Try
         Return flags
+    End Function
+
+    Private Function GetAspect(ep As TvEpisode)
+        Dim thisarray(2) As Integer
+        thisarray(0) = 400
+        thisarray(1) = 225
+        Try
+            'Dim epasp As String = ep.Details.StreamDetails.Video.Aspect.Value 
+            Dim epw As Integer = ep.Details.StreamDetails.Video.Width.Value.ToInt
+            Dim eph As Integer= ep.Details.StreamDetails.Video.Height.Value.ToInt
+            Dim ThisAsp As Double = epw/eph
+            If ThisAsp < 1.37 Then  'aspect greater than Industry Standard of 1.37:1 is classed as WideScreen
+                thisarray(1) = 300
+            End If
+        Catch
+            thisarray(0) = 0
+        End Try
+        Return thisarray
     End Function
         
 End Class

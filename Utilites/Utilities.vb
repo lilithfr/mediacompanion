@@ -289,9 +289,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 Return False
             End Try
             If IO.File.Exists(FullPathAndFilename) Then
+                Dim myProcess As Process = New Process
                 Try
                     Dim seconds As Integer = sec
-                    Dim myProcess As Process = New Process
+                    
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
                     myProcess.StartInfo.FileName = Utilities.applicationPath & "\Assets\ffmpeg.exe"
@@ -299,9 +300,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
                     myProcess.WaitForExit()
-                    Return True
+                    If File.Exists(SavePath) Then
+                        Return True
+                    End If
                 Catch ex As Exception
                     Throw ex
+                Finally
+                    myProcess.Close()
                 End Try
             End If
         End If

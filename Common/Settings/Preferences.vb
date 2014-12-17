@@ -347,6 +347,7 @@ Public Class Preferences
     Public Shared eprenamelowercase As Boolean
     Public Shared tvshowrefreshlog As Boolean
     Public Shared autoepisodescreenshot As Boolean
+    Public Shared tvscrnshtTVDBResize As Boolean
     Public Shared tvshow_useXBMC_Scraper As Boolean
     Public Shared autorenameepisodes As Boolean
     Public Shared TvdbLanguage As String = "English"
@@ -618,6 +619,7 @@ Public Class Preferences
         tvshow_useXBMC_Scraper = False
         autorenameepisodes = False
         autoepisodescreenshot = False
+        tvscrnshtTVDBResize = False
         tvshowautoquick = False
         copytvactorthumbs = True
         enabletvhdtags = True
@@ -1061,7 +1063,7 @@ Public Class Preferences
 
 
         'TV Prefs ------------------------------------------------------------
-        root.AppendChild(doc, "tvshowautoquick",        tvshowautoquick)        'CheckBox35
+        root.AppendChild(doc, "tvshowautoquick",        tvshowautoquick)        'cbTvQuickAddShow
         root.AppendChild(doc, "copytvactorthumbs",      copytvactorthumbs)      'CheckBox34
         root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42
         root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
@@ -1080,7 +1082,8 @@ Public Class Preferences
         root.AppendChild(doc, "tvrename",               tvrename)               'ComboBox_tv_EpisodeRename
         root.AppendChild(doc, "eprenamelowercase",      eprenamelowercase)      'CheckBox_tv_EpisodeRenameCase
         root.AppendChild(doc, "tvshowrefreshlog",       tvshowrefreshlog)       'set from frmOptions - obsolete
-        root.AppendChild(doc, "autoepisodescreenshot",  autoepisodescreenshot)  'CheckBox36
+        root.AppendChild(doc, "autoepisodescreenshot",  autoepisodescreenshot)  'cbTvAutoScreenShot
+        root.AppendChild(doc, "tvscrnshtTVDBResize",    tvscrnshtTVDBResize)    'cbTvScrnShtTVDBResize
         root.AppendChild(doc, "TVShowUseXBMCScraper",   tvshow_useXBMC_Scraper) 'CheckBox_Use_XBMC_TVDB_Scraper
         root.AppendChild(doc, "autorenameepisodes",     autorenameepisodes)     'CheckBox_tv_EpisodeRenameAuto
         root.AppendChild(doc, "ScrShtDelay",            ScrShtDelay)            'AutoScrShtDelay
@@ -1373,6 +1376,7 @@ Public Class Preferences
                     Case "seasonfolderjpg"                      : seasonfolderjpg = thisresult.InnerXml 
                     Case "roundminutes"                         : roundminutes = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
+                    Case "tvscrnshtTVDBResize"                  : tvscrnshtTVDBResize = thisresult.InnerXml 
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml
                     Case "ignoreAarticle"                       : ignoreAarticle = thisresult.InnerXml
                     Case "ignoreAn"                             : ignoreAn = thisresult.InnerXml 

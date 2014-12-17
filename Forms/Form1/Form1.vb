@@ -12235,8 +12235,9 @@ End Sub
         CheckBox20                      .Checked    = Preferences.enabletvhdtags
         CheckBox_tv_EpisodeRenameCase   .Checked    = Preferences.eprenamelowercase
         CheckBox_tv_EpisodeRenameAuto   .Checked    = Preferences.autorenameepisodes
-        CheckBox36                      .Checked    = Preferences.autoepisodescreenshot
-        CheckBox35                      .Checked    = Preferences.tvshowautoquick
+        cbTvAutoScreenShot              .Checked    = Preferences.autoepisodescreenshot
+        cbTvScrShtTVDBResize            .Checked    = Preferences.tvscrnshtTVDBResize 
+        cbTvQuickAddShow                .Checked    = Preferences.tvshowautoquick
         CheckBox34                      .Checked    = Preferences.copytvactorthumbs
         cbTvDlPosterArt                 .Checked    = Preferences.tvdlposter
         cbTvDlFanart                    .Checked    = Preferences.tvdlfanart
@@ -13557,49 +13558,32 @@ End Sub
 
 'End Of - TvShow Auto Scrape Options
 
-    Private Sub CheckBox35_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox35.CheckedChanged
+    Private Sub cbTvQuickAddShow_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvQuickAddShow.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If CheckBox35.CheckState = CheckState.Checked Then
-                Preferences.tvshowautoquick = True
-            Else
-                Preferences.tvshowautoquick = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.tvshowautoquick =cbTvQuickAddShow.Checked 
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If CheckBox20.CheckState = CheckState.Checked Then
-                Preferences.enabletvhdtags = True
-            Else
-                Preferences.enabletvhdtags = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.enabletvhdtags =CheckBox20.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub CheckBox36_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox36.CheckedChanged
+    Private Sub cbTvAutoScreenShot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvAutoScreenShot.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If CheckBox36.CheckState = CheckState.Checked Then
-                Preferences.autoepisodescreenshot = True
-            Else
-                Preferences.autoepisodescreenshot = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.autoepisodescreenshot = cbTvAutoScreenShot.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbTvScrShtTVDBResize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvScrShtTVDBResize.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.tvscrnshtTVDBResize = cbTvScrShtTVDBResize.checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) Handles AutoScrnShtDelay.KeyPress
@@ -13679,17 +13663,9 @@ End Sub
 
     Private Sub CheckBox_tv_EpisodeRenameAuto_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameAuto.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Checked Then
-                Preferences.autorenameepisodes = True
-            Else
-                Preferences.autorenameepisodes = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.autorenameepisodes = CheckBox_tv_EpisodeRenameAuto.Checked 
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBox_tv_EpisodeRenameCase_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameCase.CheckedChanged
@@ -13710,31 +13686,14 @@ End Sub
 
     Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If cbTvMissingSpecials.CheckState = CheckState.Checked Then
-                Preferences.ignoreMissingSpecials = True
-            Else
-                Preferences.ignoreMissingSpecials = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub CheckBox_fixNFOid_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_fixNFOid.CheckedChanged
-        Try
-            If CheckBox_fixNFOid.CheckState = CheckState.Checked Then
-                Preferences.fixnfoid = True
-            Else
-                Preferences.fixnfoid = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub cbTv_fixNFOid_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbTv_fixNFOid.CheckedChanged
+        Preferences.fixnfoid =cbTv_fixNFOid.Checked 
     End Sub
-
 
 #End Region   'TV Preferences -> General/Scraper Tab
 
