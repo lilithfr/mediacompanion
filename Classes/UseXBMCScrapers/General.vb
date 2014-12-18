@@ -1033,8 +1033,9 @@ Module General
             If WorkingFileDetails.filedetails_video.Aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.Aspect.Value & "</aspect>" & vbLf
             If WorkingFileDetails.filedetails_video.Codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.Codec.Value & "</codec>" & vbLf
             If WorkingFileDetails.filedetails_video.FormatInfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.FormatInfo.Value & "</format>" & vbLf
-            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<durationinseconds>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</durationinseconds>" & vbLf
-            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value).ToString
+            'If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<durationinseconds>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</durationinseconds>" & vbLf
+            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<durationinseconds>" & WorkingFileDetails.filedetails_video.DurationInSeconds.Value & "</durationinseconds>" & vbLf
+            'If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value).ToString
             If WorkingFileDetails.filedetails_video.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.Bitrate.Value & "</bitrate>" & vbLf
             If WorkingFileDetails.filedetails_video.BitrateMode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.BitrateMode.Value & "</bitratemode>" & vbLf
             If WorkingFileDetails.filedetails_video.BitrateMax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.BitrateMax.Value & "</bitratemax>" & vbLf
@@ -1104,6 +1105,7 @@ Module General
             TempXMLEpisode.ShowId.Value = String.Empty 
             TempXMLEpisode.UniqueId.Value = String.Empty 
             TempXMLEpisode.ListActors.Clear()
+            TempXMLEpisode.Details.StreamDetails.Audio.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
@@ -1154,8 +1156,91 @@ Module General
                         If newActor.Name.Value <> Nothing And newActor.Name.Value.Length > 1 Then
                             TempXMLEpisode.ListActors.Add(newActor)
                         End If
+                    Case "fileinfo"
+                        Dim detail2 As XmlNode = Nothing
+                        For Each detail2 In Nodechild.ChildNodes
+                            Select Case detail2.Name
+                                Case "streamdetails"
+                                    Dim detail As XmlNode = Nothing
+                                    For Each detail In detail2.ChildNodes
+                                        Select Case detail.Name
+                                            Case "video"
+                                                Dim videodetails As XmlNode = Nothing
+                                                For Each videodetails In detail.ChildNodes
+                                                    Select Case videodetails.Name
+                                                        Case "width"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
+                                                        Case "height"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
+                                                        Case "aspect"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
+                                                        Case "codec"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                                        Case "formatinfo"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                        Case "durationinseconds"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+                                                        Case "bitrate"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                                        Case "bitratemode"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+                                                        Case "bitratemax"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+                                                        Case "container"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
+                                                        Case "codecid"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+                                                        Case "codecidinfo"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+                                                        Case "scantype"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                                                        Case "format"
+                                                            TempXMLEpisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText 
+                                                    End Select
+                                                Next
+                                            Case "audio"
+                                                Dim audiodetails As XmlNode = Nothing
+                                                Dim audio As New AudioDetails
+                                                For Each audiodetails In detail.ChildNodes
+                                                    Select Case audiodetails.Name
+                                                        Case "language"
+                                                            audio.Language.Value = audiodetails.InnerText
+                                                        Case "DefaultTrack"
+                                                            audio.DefaultTrack.Value = audiodetails.InnerText
+                                                        Case "codec"
+                                                            audio.Codec.Value = audiodetails.InnerText
+                                                        Case "channels"
+                                                            audio.Channels.Value = audiodetails.InnerText
+                                                        Case "bitrate"
+                                                            audio.Bitrate.Value = audiodetails.InnerText
+                                                    End Select
+                                                Next
+                                                TempXMLEpisode.Details.StreamDetails.Audio.Add(audio)
+                                            Case "subtitle"
+                                                Dim subsdetails As XmlNode = Nothing
+                                                For Each subsdetails In detail.ChildNodes
+                                                    Select Case subsdetails.Name
+                                                        Case "language"
+                                                            Dim sublang As New SubtitleDetails
+                                                            sublang.Language.Value = subsdetails.InnerText
+                                                            TempXMLEpisode.Details.StreamDetails.Subtitles.Add(sublang)
+                                                    End Select
+                                                Next
+                                        End Select
+                                    Next
+                                    'newtvepisode.Details = newfilenfo
+                            End Select
+                        Next
                 End Select
             Next
+            If Not TempXMLEpisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                Dim tempstring = TempXMLEpisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                If Preferences.intruntime Then
+                    TempXMLEpisode.Runtime.Value = Math.Round(tempstring / 60).ToString
+                Else
+                    TempXMLEpisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                End If
+            End If
             episodeXMLinformation.Add(TempXMLEpisode)
         Next
         Dim Teste As New List(Of TvEpisode)

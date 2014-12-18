@@ -22,9 +22,7 @@ Partial Public Class Form1
 
 #Region "Tv Treeview Routines"
     Public Sub tv_ViewReset()
-        'RenameTVShowsToolStripMenuItem.Enabled = False
         Button_Save_TvShow_Episode.Enabled = True
-        'RenameTVShowsToolStripMenuItem.Visible = False
         Tv_TreeViewContext_RefreshShow.Enabled = False
         Tv_TreeViewContext_RefreshShow.Visible = False
         Tv_TreeViewContext_ShowMissEps.Enabled = False
@@ -78,8 +76,6 @@ Partial Public Class Form1
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
 
-
-
         tb_Sh_Ep_Title.Text = ""
         tb_ShPremiered.Text = ""
         tb_ShGenre.Text = ""
@@ -94,8 +90,6 @@ Partial Public Class Form1
         tb_ShPlot.Text = ""
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
-
-
 
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
@@ -200,15 +194,7 @@ Partial Public Class Form1
 
         'now we set the items that have variable text in the context menu using the 'show' text set above
         Tv_TreeViewContext_ShowTitle.BackColor = Color.Honeydew                'SK - same color as the refresh tv show splash - comments required to see if it works or not....
-
-
-        'Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
-        'Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
-        'Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
-        'Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & showtitle & """"
-
-        'now we display what we need to display depending on what type of node we have selected
-
+        
         If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "'"
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
@@ -328,11 +314,8 @@ Partial Public Class Form1
 
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
-        'If Show.IsCache Then    'disabled this test, iscache=true  would not stick when doing batch wizard......
-        'Dim Show As New Media_Companion.TvShow
         Show.ListActors.Clear()
         Show.Load()
-        'End If
         
         'Fix episodeguide tag
         Dim lang As String = Show.EpisodeGuideUrl.Value
@@ -416,7 +399,6 @@ Partial Public Class Form1
             If Show.State = ShowState.Unverified Then tb_Sh_Ep_Title.BackColor = Color.Yellow
             If Show.State = ShowState.Error Then tb_Sh_Ep_Title.BackColor = Color.Red
 
-
             tb_ShPremiered.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
             tb_ShGenre.Text = Utilities.ReplaceNothing(Show.Genre.Value)
             tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
@@ -456,8 +438,6 @@ Partial Public Class Form1
                 End If
             End If
 
-            'tvFanlistbox.Items.Clear()
-            'Panel7.Visible = TvCheckforExtraArt(Show.FolderPath)
             TvPanel7Update(Show.FolderPath)
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             Call tv_ActorsLoad(Show.ListActors)
@@ -631,13 +611,9 @@ Partial Public Class Form1
         pbtvfanarttv.Visible = False
     End Sub
 
-    
-
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
-        'If SelectedSeason.ShowObj.IsCache Then
         SelectedSeason.ShowObj.ListActors.Clear()
         SelectedSeason.ShowObj.Load()
-        'End If
         Panel7.Visible = False
         Dim Show As Media_Companion.TvShow
         If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
@@ -662,7 +638,6 @@ Partial Public Class Form1
         If Show.State = ShowState.Unverified Then tb_Sh_Ep_Title.BackColor = Color.Yellow
         If Show.State = ShowState.Error Then tb_Sh_Ep_Title.BackColor = Color.Red
 
-
         tb_ShPremiered.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
         tb_ShGenre.Text = Utilities.ReplaceNothing(Show.Genre.Value)
         tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
@@ -683,14 +658,12 @@ Partial Public Class Form1
         Tv_TreeViewContext_RenameEp.Enabled = True
         Tv_TreeViewContext_RenameEp.Visible = True
 
-
         'MsgBox("Season")
         Dim season As String = SelectedSeason.SeasonLabel
         Dim trueseason As Integer = SelectedSeason.SeasonNumber
         Dim PaddedSeason As String = Utilities.PadNumber(SelectedSeason.SeasonNumber, 2)
         Dim tvpbright As String = Utilities.DefaultTvPosterPath 
         Dim tvpbbottom As String = Utilities.DefaultTvBannerPath 
-
         If trueseason = -1 Then
             If SelectedSeason.Poster.Image IsNot Nothing Then
                 tvpbright = SelectedSeason.Poster.Path 
@@ -770,10 +743,8 @@ Partial Public Class Form1
         Try
             Dim firstline As String = ""
             If IO.File.Exists(path) Then
-
                 Dim listText As New List(Of String)
                 Dim objLine As String = ""
-
                 Using objReader As StreamReader = New StreamReader(path)
                     Do
                         objLine = objReader.ReadLine()
@@ -923,15 +894,8 @@ Partial Public Class Form1
         If Utilities.UrlIsValid(ImagePath) Then
             cachename = Utilities.Download2Cache(ImagePath)
             If cachename <> "" Then PathToUse = cachename
-            'PicBox.ImageLocation = ImagePath
-            'PicBox.Load()
-            'Return True
         ElseIf File.Exists(ImagePath) Then
-            'If (New IO.FileInfo(ImagePath)).Length = 0 Then
-            '    File.Delete(ImagePath)
-            'Else
-                PathToUse = ImagePath
-            'End If
+            PathToUse = ImagePath
         End If
         If PathToUse = "" Then
             PicBox.Image = Nothing
@@ -943,16 +907,13 @@ Partial Public Class Form1
                 ms.Seek(0, System.IO.SeekOrigin.Begin)
                 PicBox.Image = Image.FromStream(ms)
             End Using
-            'PicBox.ImageLocation = PathToUse
             PicBox.Tag = PathToUse
         Catch
             'Image is invalid e.g. not downloaded correctly -> Delete it
             Try
                 File.Delete(PathToUse)
             Catch
-                'Return util_ImageLoad(PicBox, DefaultPic, DefaultPic)
             End Try
-            'Return util_ImageLoad(PicBox, ImagePath, DefaultPic)
 
             Try
                 Using fs As New System.IO.FileStream(DefaultPic, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
@@ -990,8 +951,6 @@ Partial Public Class Form1
 
     Private Sub tv_CacheRefreshSelected(ByVal Show As TvShow)
         tv_CacheRefresh(Show)
-        'MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
-        'we need to utilise the already created code for cache rebuild but be able to send to it a single TV show to clear & rebuild....
     End Sub
 
     Public Function Tv_CacheSave() As Boolean
@@ -1054,7 +1013,7 @@ Partial Public Class Form1
 
         For Each tvfolder In FolderList
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
-            frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
+            frmSplash2.ProgressBar1.Value = prgCount
             If Not (Directory.Exists(tvfolder)) Then 
                 nofolder.Add(tvfolder)
                 Continue For
@@ -1065,7 +1024,7 @@ Partial Public Class Form1
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
 
-            newtvshownfo.Load()      '(False)
+            newtvshownfo.Load() 
             fulltvshowlist.Add(newtvshownfo)
             Dim episodelist As New List(Of TvEpisode)
             episodelist = loadepisodes(newtvshownfo, episodelist)
@@ -1123,8 +1082,6 @@ Partial Public Class Form1
 
         tv_Filter()
     End Sub
-
-
 
     Private Sub Tv_RefreshCacheSave(ByVal tvshowlist As List(Of TvShow), ByVal episodeelist As List(Of TvEpisode))
         Dim tvcachepath As String = Preferences.workingProfile.TvCache
@@ -1217,19 +1174,13 @@ Partial Public Class Form1
             child.AppendChild(childchild)
 
             root.AppendChild(child)
-
         Next
-
         document.AppendChild(root)
-
         Dim output As New XmlTextWriter(tvcachepath, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
-
         document.WriteTo(output)
         output.Close()
     End Sub
-
-
 
     Private Function loadepisodes(ByVal newtvshownfo As TvShow, ByRef episodelist As List(Of TvEpisode))
         Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
@@ -1241,7 +1192,6 @@ Partial Public Class Form1
             Dim dir_info As New System.IO.DirectoryInfo(folder)
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
             For Each fs_info As System.IO.FileInfo In fs_infos
-                'Application.DoEvents()
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
                     Dim EpNfoPath As String = fs_info.FullName
                     If ep_NfoValidate(EpNfoPath) Then
@@ -1272,7 +1222,6 @@ Partial Public Class Form1
             Me.Refresh()
             messbox.Refresh()
 
-            'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim tvdbstuff As New TVDBScraper
             Dim mirror As List(Of String) = tvdbstuff.getmirrors()
             Dim showslist As String = tvdbstuff.findshows(TextBox26.Text, mirror(0))
@@ -1286,7 +1235,6 @@ Partial Public Class Form1
             If showslist <> "none" Then
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(showslist)
-
                 For Each thisresult As XmlNode In showlist("allshows")
                     Select Case thisresult.Name
                         Case "show"
@@ -1325,9 +1273,6 @@ Partial Public Class Form1
                 lan.showtitle = "Adjust the TV Shows Title & search again"
                 lan.showbanner = Nothing
                 listOfShows.Add(lan)
-
-
-
             End If
             ListBox3.Items.Clear()
             For Each item In listOfShows
@@ -1338,7 +1283,6 @@ Partial Public Class Form1
             If listOfShows(0).showbanner <> Nothing Then
                 Try
                     util_ImageLoad(PictureBox9, listOfShows(0).showbanner, Utilities.DefaultTvBannerPath)
-
                 Catch ex As Exception
                     PictureBox9.Image = Nothing
                 End Try
@@ -1386,7 +1330,6 @@ Partial Public Class Form1
                             progress &= Showfound & vbCrLf & Episodesfound & vbCrLf & vbcrlf
                         End If
                         Count = 0
-                    
                         Episodesfound = ""
                         lasttestedseason = Thisseason
                         lasttestedepisode = Thisepisode
@@ -1459,8 +1402,6 @@ Partial Public Class Form1
                     If validcheck Then
                         NewShow.Load()
                     End If
-                    'NewShow = nfoFunction.tvshow_NfoLoad(NewShow.NfoFilePath)
-                    'NewShow.Load()
                 Else
                     If haveTVDbID Then
                         NewShow.State = Media_Companion.ShowState.Open
@@ -1565,8 +1506,6 @@ Partial Public Class Form1
                             End If
                         End If
 
-                        
-
                         tvprogresstxt &= " - Completed. Saving Show."
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
 
@@ -1594,7 +1533,6 @@ Partial Public Class Form1
                     For Each ep In episodelist
                         NewShow.AddEpisode(ep)
                     Next
-                    'NewShow.SearchForEpisodesInFolder()
                 End If
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))
@@ -1602,7 +1540,6 @@ Partial Public Class Form1
                 bckgrnd_tvshowscraper.ReportProgress(1, NewShow)
                 newTvFolders.RemoveAt(0)
             Loop
-
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -1708,17 +1645,13 @@ Partial Public Class Form1
 
         Dim S As String = ""
         For Each newepisode In newEpisodeList
-
             S = ""
-
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                 Exit Sub
             End If
             Dim episode As New TvEpisode
-
             For Each Regexs In tv_RegexScraper
-
                 S = newepisode.VideoFilePath '.ToLower
                 S = S.Replace("x264", "")
                 S = S.Replace("720p", "")
@@ -1760,13 +1693,9 @@ Partial Public Class Form1
         Dim epscount As Integer = 0
         For Each eps In newEpisodeList
             epscount += 1
-
             Preferences.tvScraperLog &= "!!! With File : " & eps.VideoFilePath & vbCrLf
             Preferences.tvScraperLog &= "!!! Detected  : Season : " & eps.Season.Value & " Episode : " & eps.Episode.Value & vbCrLf
-
-            If eps.Season.Value <> "-1" And eps.Episode.Value <> "-1" Then
-                
-            Else
+            If eps.Season.Value = "-1" And eps.Episode.Value = "-1" Then
                 Preferences.tvScraperLog &= "!!! WARNING: Can't extract Season and Episode details from this filename, file not added!" & vbCrLf
                 Preferences.tvScraperLog &= "!!!" & vbCrLf
                 Continue For    'if we can't get season or episode then skip to next episode
@@ -1780,17 +1709,14 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                 Exit Sub
             End If
-
             Dim WhichScraper As String = ""
             If Preferences.tvshow_useXBMC_Scraper = True Then
                 WhichScraper = "XBMC TVDB"
             Else
                 WhichScraper = "MC TVDB"
             End If
-
             progresstext = String.Concat("ESC to Cancel : Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
-
             Dim removal As String = ""
             If eps.Season.Value = "-1" Or eps.Episode.Value = "-1" Then
                 eps.Title.Value = Utilities.GetFileName(eps.VideoFilePath)
@@ -1801,17 +1727,14 @@ Partial Public Class Form1
                 episodearray.Add(eps)
                 savepath = episodearray(0).NfoFilePath
             Else
-
                 Dim temppath As String = eps.NfoFilePath
                 'check for multiepisode files
                 Dim M2 As Match
                 Dim epcount As Integer = 0
-
                 Dim allepisodes(100) As Integer
                 S = eps.Thumbnail.FileName
                 eps.Thumbnail.FileName = ""
                 Do
-                    'S = temppath '.ToLower
                     '<tvregex>[Ss]([\d]{1,2}).?[Ee]([\d]{3})</tvregex>
                     M2 = Regex.Match(S, "(([EeXx])([\d]{1,4}))")
                     If M2.Success = True Then
@@ -1883,7 +1806,6 @@ Partial Public Class Form1
                 End If
 
                 For Each singleepisode In episodearray
-
                     If bckgroundscanepisodes.CancellationPending Then
                         Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                         Exit Sub
@@ -1901,7 +1823,6 @@ Partial Public Class Form1
                             Loop
                         End If
                     End If
-                    
                     Dim episodescraper As New TVDBScraper
                     If sortorder = "" Then sortorder = "default"
                     Dim tempsortorder As String = sortorder
@@ -1921,7 +1842,6 @@ Partial Public Class Form1
                                 Preferences.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
                             End If
                         End If
-
                         If Utilities.UrlIsValid(episodeurl) Then
                             If Preferences.tvshow_useXBMC_Scraper = True Then
                                 Dim FinalResult As String = ""
@@ -1937,7 +1857,6 @@ Partial Public Class Form1
                                 End If
                                 Exit For
                             End If
-
                             Dim tempepisode As String = ep_Get(tvdbid, tempsortorder, singleepisode.Season.Value, singleepisode.Episode.Value, language)
                             scrapedok = True
                             If tempepisode = Nothing Or tempepisode = "Error" Then
@@ -1951,10 +1870,8 @@ Partial Public Class Form1
                                 progresstext &= "OK."
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                 Dim scrapedepisode As New XmlDocument
-
                                 Preferences.tvScraperLog &= "Scraping body of episode: " & singleepisode.Episode.Value & vbCrLf
                                 scrapedepisode.LoadXml(tempepisode)
-
                                 For Each thisresult As XmlNode In scrapedepisode("episodedetails")
                                     Select Case thisresult.Name
                                         Case "title"
@@ -2121,7 +2038,6 @@ Partial Public Class Form1
                                                         Exit Sub
                                                     End If
                                                 Next
-
                                                 If tempactorlist.Count > 0 Then
                                                     Preferences.tvScraperLog &= "Actors scraped from IMDB OK" & vbCrLf
                                                     progresstext &= "OK."
@@ -2150,7 +2066,6 @@ Partial Public Class Form1
                                 If imdbid = "" Then
                                     Preferences.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show:  " & showtitle & vbCrLf
                                 End If
-
                                 If Preferences.enablehdtags = True Then
                                     progresstext &= " : HD Tags..."
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
@@ -2160,7 +2075,6 @@ Partial Public Class Form1
                                         For Each audioStream In fileStreamDetails.filedetails_audio
                                             singleepisode.Details.StreamDetails.Audio.Add(audioStream)
                                         Next
-
                                         If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
                                             tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
                                             If Preferences.intruntime Then
