@@ -1546,7 +1546,6 @@ Partial Public Class Form1
     End Sub
 
     Private Sub TV_EpisodeScraper(ByVal ListOfShows As List(Of TvShow), ByVal manual As Boolean)
-        Dim stage As Integer = 0
         Try
             Dim tempstring As String = ""
             Dim tempint As Integer
@@ -1572,7 +1571,6 @@ Partial Public Class Form1
             Else
                 Preferences.tvScraperLog &= "---Using MC TVDB Scraper---" & vbCrLf
             End If
-            stage = 1
             progresstext = String.Concat("Scanning TV Folders For New Episodes...")
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
@@ -1613,7 +1611,7 @@ Partial Public Class Form1
                     ShowsLocked += 1
                 End If
             Next
-            stage = 2
+            
             scraperLog = scraperLog & vbCrLf
             Dim mediacounter As Integer = newEpisodeList.Count
             newtvfolders.Sort()
@@ -1632,7 +1630,7 @@ Partial Public Class Form1
                 tempint = newEpisodeList.Count - mediacounter
                 mediacounter = newEpisodeList.Count
             Next g
-            stage = 3
+            
             'report so far
             Preferences.tvScraperLog &= "!!! Scanned """ & ShowsScanned.ToString & """ Shows." & vbCrLf 
             If ShowsLocked > 0 Then Preferences.tvScraperLog &= "!!! Skipped """ & ShowsLocked.ToString & " Locked Shows." & vbCrLf
@@ -1644,7 +1642,7 @@ Partial Public Class Form1
             Else
                 Preferences.tvScraperLog &= "!!! """ & newEpisodeList.Count.ToString & """ Episodes found." & vbCrLf & vbCrLf 
             End If
-            stage = 4
+            
             Dim S As String = ""
             For Each newepisode In newEpisodeList
                 S = ""
@@ -1690,7 +1688,6 @@ Partial Public Class Form1
                 If newepisode.Episode.Value = Nothing Then newepisode.Episode.Value = "-1"
             Next
             Dim savepath As String = ""
-            stage = 5
             Dim scrapedok As Boolean
             Dim epscount As Integer = 0
             For Each eps In newEpisodeList
@@ -1717,7 +1714,6 @@ Partial Public Class Form1
                 Else
                     WhichScraper = "MC TVDB"
                 End If
-                stage = 6
                 progresstext = String.Concat("ESC to Cancel : Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 Dim removal As String = ""
@@ -1730,7 +1726,6 @@ Partial Public Class Form1
                     episodearray.Add(eps)
                     savepath = episodearray(0).NfoFilePath
                 Else
-                    stage = 7
                     Dim temppath As String = eps.NfoFilePath
                     'check for multiepisode files
                     Dim M2 As Match
@@ -1768,7 +1763,7 @@ Partial Public Class Form1
                             Exit Sub
                         End If
                     Loop Until M2.Success = False
-                    stage = 8
+                    
                     Dim language As String = ""
                     Dim sortorder As String = ""
                     Dim tvdbid As String = ""
@@ -1798,7 +1793,7 @@ Partial Public Class Form1
                             actorsource = Shows.EpisodeActorSource.Value
                         End If
                     Next
-                    stage = 9
+                    
                     If episodearray.Count > 1 Then
                         For I = 1 To episodearray.Count - 1
                             episodearray(I).MakeSecondaryTo(episodearray(0))
@@ -1810,12 +1805,13 @@ Partial Public Class Form1
                         Next
                         Preferences.tvScraperLog &= vbCrLf
                     End If
-                    stage = 10
+                    
                     For Each singleepisode In episodearray
                         If bckgroundscanepisodes.CancellationPending Then
                             Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                             Exit Sub
                         End If
+                        'MsgBox("Mark 1.: Season: " & singleepisode.Season.Value & ", Episode: " & singleepisode.Episode.Value)
                         If singleepisode.Season.Value.Length > 0 Or singleepisode.Season.Value.IndexOf("0") = 0 Then
                             Do Until singleepisode.Season.Value.IndexOf("0") <> 0 Or singleepisode.Season.Value.Length = 1
                                 singleepisode.Season.Value = singleepisode.Season.Value.Substring(1, singleepisode.Season.Value.Length - 1)
@@ -1829,7 +1825,8 @@ Partial Public Class Form1
                                 Loop
                             End If
                         End If
-                        stage = 11
+                        'MsgBox("Mark 2.: Season: " & singleepisode.Season.Value & ", Episode: " & singleepisode.Episode.Value)
+                        
                         Dim episodescraper As New TVDBScraper
                         If sortorder = "" Then sortorder = "default"
                         Dim tempsortorder As String = sortorder
@@ -1840,6 +1837,7 @@ Partial Public Class Form1
                             progresstext &= " - Scraping..."
                             bckgroundscanepisodes.ReportProgress(progress, progresstext)
                             Dim episodeurl As String = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
+                            'MsgBox("Mark 3.: Episode URL: " & episodeurl)
                             If Not Utilities.UrlIsValid(episodeurl) Then
                                 If sortorder.ToLower = "dvd" Then
                                     tempsortorder = "default"
@@ -1849,12 +1847,11 @@ Partial Public Class Form1
                                     Preferences.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
                                 End If
                             End If
-                            stage = 12
+                            
                             If Utilities.UrlIsValid(episodeurl) Then
                                 If Preferences.tvshow_useXBMC_Scraper = True Then
                                     Dim FinalResult As String = ""
                                     episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
-                                    stage = 13
                                     If episodearray.Count >= 1 Then
                                         For x As Integer = 0 To episodearray.Count - 1
                                             Preferences.tvScraperLog &= "Scraping body of episode: " & episodearray(x).Episode.Value & " - OK" & vbCrLf
@@ -1866,7 +1863,6 @@ Partial Public Class Form1
                                     End If
                                     Exit For
                                 End If
-                                stage = 14
                                 Dim tempepisode As String = ep_Get(tvdbid, tempsortorder, singleepisode.Season.Value, singleepisode.Episode.Value, language)
                                 scrapedok = True
                                 If tempepisode = Nothing Or tempepisode = "Error" Then
@@ -2108,7 +2104,7 @@ Partial Public Class Form1
                         End If
                     Next
                 End If
-                stage = 16
+                
                 If savepath <> "" And scrapedok = True Then
                     If bckgroundscanepisodes.CancellationPending Then
                         Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
@@ -2124,11 +2120,11 @@ Partial Public Class Form1
                         Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
-                    stage = 17
+                    
                     For Each Shows In Cache.TvCache.Shows
                         If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
-                            If episodearray(0).Episode.Value = 1 Then
-                                Dim Seasonxx As String = Shows.FolderPath + "Season" + (If(episodearray(0).Season.Value < 10, "0" + episodearray(0).Season.Value, episodearray(0).Season.Value)) + (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
+                            If episodearray(0).Episode.Value.ToInt = 1 Then
+                                Dim Seasonxx As String = Shows.FolderPath + "Season" + (If(episodearray(0).Season.Value.ToInt < 10, "0" + episodearray(0).Season.Value, episodearray(0).Season.Value)) + (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
                                 If Not IO.File.Exists(Seasonxx) Then
                                     TvGetArtwork(Shows, False, False, True, False)
                                 Else
@@ -2137,7 +2133,6 @@ Partial Public Class Form1
                                     End If
                                 End If
                             End If
-                            stage = 18
                             For Each ept In episodearray
                                 Dim list = Shows.MissingEpisodes
                                 For j = list.Count - 1 To 0 Step -1
@@ -2148,7 +2143,6 @@ Partial Public Class Form1
                                     End If
                                 Next
                             Next
-                            stage = 19
                             For Each ep In episodearray
                                 Dim newwp As New TvEpisode
                                 newwp = ep                      'added this kline becuase plot + others were not being dispolay after a new ep was found
@@ -2162,12 +2156,10 @@ Partial Public Class Form1
                 End If
                 Preferences.tvScraperLog &= "!!!" & vbCrLf
             Next
-            stage = 20
             'newEpisodeList 
             tv_EpisodesMissingUpdate(newEpisodeList)
             bckgroundscanepisodes.ReportProgress(0, progresstext)
         Catch ex As Exception
-            MsgBox("error at stage: " & stage.ToString)
             ExceptionHandler.LogError(ex)
         End Try
     End Sub

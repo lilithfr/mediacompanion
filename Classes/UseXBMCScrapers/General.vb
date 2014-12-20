@@ -1363,53 +1363,65 @@ Module General
     Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of TvEpisode), ByVal Language As String) As List(Of TvEpisode)
         episodeInformation.Clear()
         Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
-
-        For n As Integer = 0 To EpisodeArray.Count - 1
-            EpisodeArray(n).Season.Value = CInt(EpisodeArray(n).Season.Value)
-            EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
-            TempXMLEpisode.NfoFilePath = EpisodeArray(n).VideoFilePath.Substring(0, EpisodeArray(n).VideoFilePath.LastIndexOf(".")) & ".nfo"
-            TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
-            TempXMLEpisode.Season.Value = EpisodeArray(n).Season.Value
-            TempXMLEpisode.MediaExtension = EpisodeArray(n).MediaExtension
-            TempXMLEpisode.ShowId.Value = TVDBId 
-            TempXMLEpisode.PlayCount.Value = "0"
-            ParametersForScraper(1) = TVDBId
-            ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
-            ParametersForScraper(4) = Nothing
-            Try
-                For x As Integer = 0 To 20
-                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
-                    'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
-                    If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
-                        Exit For
-                    Else
-                        If x = 20 Then
-                            episodeInformation.Clear()
-                            Return episodeInformation
-                            Exit Function
+        Try
+            For n As Integer = 0 To EpisodeArray.Count - 1
+                'MsgBox("Mark 4.: Season: " & EpisodeArray(n).Season.Value & ", Episode: " & EpisodeArray(n).Episode.Value)
+                EpisodeArray(n).Season.Value = CInt(EpisodeArray(n).Season.Value)
+                EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
+                TempXMLEpisode.NfoFilePath = EpisodeArray(n).VideoFilePath.Substring(0, EpisodeArray(n).VideoFilePath.LastIndexOf(".")) & ".nfo"
+                TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
+                TempXMLEpisode.Season.Value = EpisodeArray(n).Season.Value
+                TempXMLEpisode.MediaExtension = EpisodeArray(n).MediaExtension
+                TempXMLEpisode.ShowId.Value = TVDBId 
+                TempXMLEpisode.PlayCount.Value = "0"
+                ParametersForScraper(1) = TVDBId
+                ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
+                ParametersForScraper(4) = Nothing
+                'MsgBox("Mark 5.: Season: " & TempXMLEpisode.Season.Value & ", Episode: " & TempXMLEpisode.Episode.Value)
+                Try
+                    For x As Integer = 0 To 20
+                        ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
+                        'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
+                        If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
+                            Exit For
+                        Else
+                            If x = 20 Then
+                                episodeInformation.Clear()
+                                Return episodeInformation
+                                Exit Function
+                            End If
                         End If
-                    End If
-                Next
-                EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
-            Catch
-                episodeInformation.Clear()
-                Return episodeInformation
-                Exit Function
-                'não achou o episodio
-            End Try
-        Next
-
-
-        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath, TVDBId)
-        episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
-        If episodeInformation(0).Thumbnail.FileName <> Nothing Then
-            Dim myWebClient As New System.Net.WebClient()
-            Dim ImageFilename As String = EpisodeArray(0).VideoFilePath.Substring(0, EpisodeArray(0).VideoFilePath.LastIndexOf(".")) & ".tbn"
-            myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
-        End If
-        'Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.NfoFilePath, FinalScrapResult)
-        ' HueyHQ 09 MAR 2012 - need to do something similar for TV episodes, CreateMovieNfo() was causing an error
-        Return episodeInformation
+                    Next
+                    EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
+                Catch
+                    episodeInformation.Clear()
+                    Return episodeInformation
+                    Exit Function
+                    'não achou o episodio
+                End Try
+            Next
+        Catch
+            episodeInformation.Clear()
+            Return episodeInformation
+            Exit Function
+        End Try
+        Try
+            FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath, TVDBId)
+            'MsgBox("Mark 6:" & vbCrLf & FinalScrapResult)
+            episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
+            If episodeInformation(0).Thumbnail.FileName <> Nothing Then
+                Dim myWebClient As New System.Net.WebClient()
+                Dim ImageFilename As String = EpisodeArray(0).VideoFilePath.Substring(0, EpisodeArray(0).VideoFilePath.LastIndexOf(".")) & ".tbn"
+                myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
+            End If
+            'Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.NfoFilePath, FinalScrapResult)
+            ' HueyHQ 09 MAR 2012 - need to do something similar for TV episodes, CreateMovieNfo() was causing an error
+            Return episodeInformation
+        Catch
+            episodeInformation.Clear()
+            Return episodeInformation
+            Exit Function
+        End Try
     End Function
 
     Public Function XBMCScrape_TVShow_General_Info(ByVal Scraper As String, ByVal TVShowid As String, ByVal Language As String, ByVal Path As String) As String

@@ -200,6 +200,8 @@ Public Class TvShow
         If String.IsNullOrEmpty(xmlfile) Then
             Exit Sub
         End If
+        'clean html tags from xml data
+        xmlfile = xmlfile.Replace("<br>", "")
 
         Dim ReturnData As New Tvdb.ShowData
 
