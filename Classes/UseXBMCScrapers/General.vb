@@ -1365,7 +1365,6 @@ Module General
         Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
         Try
             For n As Integer = 0 To EpisodeArray.Count - 1
-                'MsgBox("Mark 4.: Season: " & EpisodeArray(n).Season.Value & ", Episode: " & EpisodeArray(n).Episode.Value)
                 EpisodeArray(n).Season.Value = CInt(EpisodeArray(n).Season.Value)
                 EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
                 TempXMLEpisode.NfoFilePath = EpisodeArray(n).VideoFilePath.Substring(0, EpisodeArray(n).VideoFilePath.LastIndexOf(".")) & ".nfo"
@@ -1377,7 +1376,6 @@ Module General
                 ParametersForScraper(1) = TVDBId
                 ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
                 ParametersForScraper(4) = Nothing
-                'MsgBox("Mark 1.: Season: " & TempXMLEpisode.Season.Value & ", Episode: " & TempXMLEpisode.Episode.Value)
                 Try
                     For x As Integer = 0 To 20
                         ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
@@ -1393,16 +1391,16 @@ Module General
                         End If
                     Next
                     EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
-                    'MsgBox("Mark 2:" & vbCrLf & EpisodeInfoContent(n))
-                    'Some users are getting nfo's without season number or episode numbers
-                    'this is a quick fix
+                    
+                    'Code below is to counter no Absolute order information from TVDB, where
+                    'the Season and Episode tags would be scraped empty.
                     If EpisodeInfoContent(n).Contains("<season></season>") Then
                         EpisodeInfoContent(n) = EpisodeInfoContent(n).Replace("<season></season>", "<season>" & EpisodeArray(n).Season.Value & "</season>")
                     End If
                     If EpisodeInfoContent(n).Contains("<episode></episode>") Then
                         EpisodeInfoContent(n) = EpisodeInfoContent(n).Replace("<episode></episode>", "<episode>" & EpisodeArray(n).Episode.Value & "</episode>")
                     End If
-                    'MsgBox("Mark 3:" & vbCrLf & EpisodeInfoContent(n))
+                    'End Fix
                 Catch
                     episodeInformation.Clear()
                     Return episodeInformation
@@ -1417,7 +1415,6 @@ Module General
         End Try
         Try
             FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath, TVDBId)
-            'MsgBox("Mark 6:" & vbCrLf & FinalScrapResult)
             episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
             If episodeInformation(0).Thumbnail.FileName <> Nothing Then
                 Dim myWebClient As New System.Net.WebClient()

@@ -1811,7 +1811,6 @@ Partial Public Class Form1
                             Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                             Exit Sub
                         End If
-                        'MsgBox("Mark 1.: Season: " & singleepisode.Season.Value & ", Episode: " & singleepisode.Episode.Value)
                         If singleepisode.Season.Value.Length > 0 Or singleepisode.Season.Value.IndexOf("0") = 0 Then
                             Do Until singleepisode.Season.Value.IndexOf("0") <> 0 Or singleepisode.Season.Value.Length = 1
                                 singleepisode.Season.Value = singleepisode.Season.Value.Substring(1, singleepisode.Season.Value.Length - 1)
@@ -1825,7 +1824,6 @@ Partial Public Class Form1
                                 Loop
                             End If
                         End If
-                        'MsgBox("Mark 2.: Season: " & singleepisode.Season.Value & ", Episode: " & singleepisode.Episode.Value)
                         
                         Dim episodescraper As New TVDBScraper
                         If sortorder = "" Then sortorder = "default"
@@ -1837,7 +1835,6 @@ Partial Public Class Form1
                             progresstext &= " - Scraping..."
                             bckgroundscanepisodes.ReportProgress(progress, progresstext)
                             Dim episodeurl As String = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
-                            'MsgBox("Mark 3.: Episode URL: " & episodeurl)
                             If Not Utilities.UrlIsValid(episodeurl) Then
                                 If sortorder.ToLower = "dvd" Then
                                     tempsortorder = "default"
