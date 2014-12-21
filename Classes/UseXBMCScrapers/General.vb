@@ -1377,7 +1377,7 @@ Module General
                 ParametersForScraper(1) = TVDBId
                 ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
                 ParametersForScraper(4) = Nothing
-                'MsgBox("Mark 5.: Season: " & TempXMLEpisode.Season.Value & ", Episode: " & TempXMLEpisode.Episode.Value)
+                'MsgBox("Mark 1.: Season: " & TempXMLEpisode.Season.Value & ", Episode: " & TempXMLEpisode.Episode.Value)
                 Try
                     For x As Integer = 0 To 20
                         ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
@@ -1393,6 +1393,16 @@ Module General
                         End If
                     Next
                     EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
+                    'MsgBox("Mark 2:" & vbCrLf & EpisodeInfoContent(n))
+                    'Some users are getting nfo's without season number or episode numbers
+                    'this is a quick fix
+                    If EpisodeInfoContent(n).Contains("<season></season>") Then
+                        EpisodeInfoContent(n) = EpisodeInfoContent(n).Replace("<season></season>", "<season>" & EpisodeArray(n).Season.Value & "</season>")
+                    End If
+                    If EpisodeInfoContent(n).Contains("<episode></episode>") Then
+                        EpisodeInfoContent(n) = EpisodeInfoContent(n).Replace("<episode></episode>", "<episode>" & EpisodeArray(n).Episode.Value & "</episode>")
+                    End If
+                    'MsgBox("Mark 3:" & vbCrLf & EpisodeInfoContent(n))
                 Catch
                     episodeInformation.Clear()
                     Return episodeInformation
