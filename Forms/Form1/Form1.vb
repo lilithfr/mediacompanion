@@ -5293,9 +5293,12 @@ Public Class Form1
                 If ep_NfoValidate(filename_nfo) = False And Preferences.renamenfofiles = True Then
                     Dim movefilename As String = filename_nfo.Replace(IO.Path.GetExtension(filename_nfo), ".info")
                     Try
+                        If File.Exists(movefilename) Then
+                            Utilities.SafeDeleteFile(movefilename)
+                        End If
                         IO.File.Move(filename_nfo, movefilename)
                     Catch ex As Exception
-
+                        Utilities.SafeDeleteFile(movefilename)
                     End Try
                 End If
             End If
