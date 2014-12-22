@@ -76,6 +76,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultOfflineArtPath As String
     Public Shared Property DefaultActorPath As String
     Public Shared Property DefaultScreenShotPath As String
+    Public Shared Property CacheFolderPath As String
 
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
@@ -125,7 +126,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             DefaultOfflineArtPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
             DefaultActorPath            = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
             DefaultScreenShotPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
-            DownloadCache.CacheFolder   = IO.Path.Combine(_ApplicationPath, "cache\")
+            CacheFolderPath             = IO.Path.Combine(_ApplicationPath, "cache\")
+            DownloadCache.CacheFolder   = CacheFolderPath
         End Set
     End Property
 
@@ -278,6 +280,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             input = "0" & input
         Loop
         Return input
+    End Function
+    Public Shared Function CreateScrnShotResize(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer) As String
+        Dim cachename As String = GetCRC32(SavePath) & ".jpg"
+        Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename)
+        If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
+            Return CachePath 
+        End If
+        Return ""
     End Function
 
     Public Shared Function CreateScreenShot(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As Boolean

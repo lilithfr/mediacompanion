@@ -2519,7 +2519,19 @@ Partial Public Class Form1
                 result = "!!! No thumbnail to download"
             End If
             If Not downloadok AndAlso doScreenShot Then
-                downloadok = Utilities.CreateScreenShot(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay, Preferences.overwritethumbs)
+                If Preferences.tvscrnshtTVDBResize Then
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotResize(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay)
+                    If Not cachepathandfilename = "" Then
+                        Dim imagearr() As Integer = GetAspect(episode)
+                        If Not imagearr(0) = 0 Then
+                            DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
+                        End If
+                        downloadok = True
+                    End If
+                End If
+                If Not downloadok Then
+                    downloadok = Utilities.CreateScreenShot(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay, Preferences.overwritethumbs)
+                End If
                 If downloadok Then
                     If Preferences.tvscrnshtTVDBResize Then 
                         Dim imagearr() As Integer = GetAspect(episode)
@@ -3682,7 +3694,7 @@ Partial Public Class Form1
 
     Private Sub TvEpThumbScreenShot()
         Try
-            Dim aok As Boolean = True
+            Dim aok As Boolean = False
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
             If WorkingEpisode.IsMissing Then Exit Sub
             If TextBox35.Text = "" Then TextBox35.Text = Preferences.ScrShtDelay
@@ -3701,15 +3713,21 @@ Partial Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-
-                    aok = Utilities.CreateScreenShot(tempstring2, paths(0), seconds, True)
-                    If aok Then
-                        If Preferences.tvscrnshtTVDBResize Then 
+                    If Preferences.tvscrnshtTVDBResize Then 
+                        Dim cachepathandfilename As String = Utilities.CreateScrnShotResize(tempstring2, paths(0), Preferences.ScrShtDelay)
+                        If Not cachepathandfilename = "" Then
                             Dim imagearr() As Integer = GetAspect(WorkingEpisode)
                             If Not imagearr(0) = 0 Then
-                                DownloadCache.CopyAndDownSizeImage(paths(0), paths(0), imagearr(0), imagearr(1))
+                                DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
                             End If
+                            aok = True
                         End If
+                    End If
+                    If Not aok Then
+                        aok = Utilities.CreateScreenShot(tempstring2, paths(0), seconds, True)
+                    End If
+                    If aok Then
+                        
                         If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
 
                         If File.Exists(paths(0)) Then
