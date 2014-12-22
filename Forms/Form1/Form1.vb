@@ -11385,6 +11385,8 @@ End Sub
                 RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml") '  applicationPath & "\settings\profile.xml"
             Case = "regex" 
                 RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml"
+            Case "export"
+                frm_ExportTabSetup()
             Case "movies"
                 If Not MoviesFiltersResizeCalled Then
                     MoviesFiltersResizeCalled = True
