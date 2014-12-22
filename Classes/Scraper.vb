@@ -33,6 +33,7 @@ Public Class MovieRegExs
     Public Const REGEX_ACTOR_NO_IMAGE      = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_ACTOR_WITH_IMAGE    = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_IMDB_KEYWORD        = "ttkw_kw_[0-9]*"">(?<keyword>.*?)<\/a"
+    Public Const REGEX_IMDB_TRAILER        = "<h2><a href=""/video/imdb/vi(.*?)/"
 End Class
 
 
@@ -1518,49 +1519,27 @@ Public Class Classimdb
             tempstring = imdbmirror & "title/" & imdbid & "/trailers"
             webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
             For f = 0 To webpage.Count - 1
-                If webpage(f).IndexOf("/screenplay/") <> -1 Then
-                    first = webpage(f).IndexOf("")
-                    Dim S As String = webpage(f)
+                If webpage(f).Contains("<h2><a href=""/video/imdb") Then
+                    Dim s As String = webpage(f)
                     Dim M As Match
-                    M = Regex.Match(S, "\d{12}")
-                    If M.Success = True Then
-                        tempstring = imdbmirror & "rg/VIDEO_TITLE/GALLERY/video/screenplay/vi" & M.Value & "/player"
-                    Else
-                        M = Regex.Match(S, "\d{11}")
-                        If M.Success = True Then
-                            tempstring = imdbmirror & "rg/VIDEO_TITLE/GALLERY/video/screenplay/vi" & M.Value & "/player"
-                        Else
-                            M = Regex.Match(S, "\d{10}")
-                            If M.Success = True Then
-                                tempstring = imdbmirror & "rg/VIDEO_TITLE/GALLERY/video/screenplay/vi" & M.Value & "/player"
-                            Else
-                                M = Regex.Match(S, "\d{9}")
-                                If M.Success = True Then
-                                    tempstring = imdbmirror & "rg/VIDEO_TITLE/GALLERY/video/screenplay/vi" & M.Value & "/player"
-                                Else
-                                    M = Regex.Match(S, "\d{8}")
-                                    If M.Success = True Then
-                                        tempstring = imdbmirror & "rg/VIDEO_TITLE/GALLERY/video/screenplay/vi" & M.Value & "/player"
-                                    Else
-                                        M = Regex.Match(S, "\d{7}")
-                                        If M.Success = True Then
-                                            tempstring = imdbmirror & "rg/VIDEO_TITLE/GALLERY/video/screenplay/vi" & M.Value & "/player"
-                                        End If
-                                    End If
-                                End If
-                            End If
-                        End If
+                    M = Regex.Match(s, MovieRegExs.REGEX_IMDB_TRAILER, RegexOptions.Singleline)
+                    If M.Success Then
+                        Dim t As String = M.Groups(1).Value
+                        tempstring = imdbmirror & "video/imdb/vi" & t &"/"
+                        allok = True
+                        Exit For
                     End If
-                    webpage(f) = webpage(f).Substring(webpage(f).IndexOf("screenplay-") + 11, 12)
-
-                    allok = True
-                    Exit For
                 End If
             Next
+            
             If allok = True Then
                 allok = False
                 webpage.Clear()
                 webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                Dim htmlpg As String = ""
+                For Each wp In webpage
+                    htmlpg += wp & vbcrlf
+                Next
                 For f = 0 To webpage.Count - 1
                     If webpage(f).IndexOf("www.totaleclips.com") <> -1 Then
                         first = webpage(f).IndexOf("www.totaleclips.com")
