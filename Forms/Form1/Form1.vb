@@ -3334,6 +3334,7 @@ Public Class Form1
         Try
             If selectedRows.Count = 1 Then
                 If LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString Then Return
+                LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString
             Else
                 LastMovieDisplayed = ""
             End If
@@ -3570,7 +3571,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
+    Private Sub DataGridViewMovies_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyDown
         DisplayMovie(True)
     End Sub
 
@@ -15598,7 +15599,7 @@ End Sub
         resetallfilters()
     End Sub
 
-    Private Sub txt_titlesearch_KeyUp(ByVal sender As Object, ByVal e As Object) Handles txt_titlesearch.KeyUp, txt_titlesearch.ModifiedChanged
+    Private Sub txt_titlesearch_KeyDown(ByVal sender As Object, ByVal e As Object) Handles txt_titlesearch.KeyDown, txt_titlesearch.ModifiedChanged
         Try
             If filterOverride = False Then
 
