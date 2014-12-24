@@ -3571,7 +3571,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub DataGridViewMovies_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyDown
+    Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
         DisplayMovie(True)
     End Sub
 
