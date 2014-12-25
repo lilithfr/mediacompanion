@@ -129,9 +129,10 @@ Public Class TMDb
             FetchCast
             Dim alist As New List(Of str_MovieActors)
             Try
-                Dim x = _cast.cast.Count-1
+                Dim x = _cast.cast.Count
                 If x < 1 Then Return alist
                 For i = 0 to Preferences.maxactors-1
+                    If x = i Then Exit For
                     Dim newact As New str_MovieActors
                     newact.actorid      = _cast.cast(i).id
                     newact.actorname    = _cast.cast(i).name
@@ -139,7 +140,7 @@ Public Class TMDb
                     newact.actorthumb   = If(_cast.cast(i).profile_path = Nothing, "", "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path)
                     newact.order        = _cast.cast(i).order
                     alist.Add(newact)
-                    If x = i Then Exit For
+                    
                 Next
             Catch
             End Try
