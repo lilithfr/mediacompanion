@@ -7259,6 +7259,7 @@ Public Class Form1
             Dim Season As TvSeason
             Dim Episode As TvEpisode
             Dim ShowList As New List(Of TvShow)
+            Dim selectednode As Integer = TvTreeview.SelectedNode.Index
             If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
                 ShowList.Add(TvTreeview.SelectedNode.Tag)
             ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
@@ -7289,6 +7290,10 @@ Public Class Form1
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
                 MsgBox("The missing episode search cannot be performed" & vbCrLf & "    while the episode scraper is running")
             End If
+            Do Until Not bckgroundscanepisodes.IsBusy
+                Application.DoEvents()
+            Loop
+            TvTreeview.SelectedNode = TvTreeview.Nodes(selectednode)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9729,12 +9734,14 @@ End Sub
     Private Sub RefreshThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RefreshShow.Click
         Try
             Dim Show As TvShow = tv_ShowSelectedCurrently()
+            Dim selectednode As Integer = TvTreeview.SelectedNode.Index
 
             If Show IsNot Nothing Then
                 Call tv_CacheRefreshSelected(Show)
             Else
                 MsgBox("No Show Selected")
             End If
+            TvTreeview.SelectedNode = TvTreeview.Nodes(selectednode)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
