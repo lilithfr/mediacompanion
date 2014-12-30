@@ -2519,31 +2519,17 @@ Partial Public Class Form1
                 result = "!!! No thumbnail to download"
             End If
             If Not downloadok AndAlso doScreenShot Then
-                If Preferences.tvscrnshtTVDBResize Then
-                    Dim cachepathandfilename As String = Utilities.CreateScrnShotResize(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay)
-                    If Not cachepathandfilename = "" Then
-                        Dim imagearr() As Integer = GetAspect(episode)
-                        If Not imagearr(0) = 0 Then
-                            DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
-                        End If
-                        downloadok = True
+                Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay)
+                If Not cachepathandfilename = "" Then
+                    Dim imagearr() As Integer = GetAspect(episode)
+                    If Preferences.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then
+                        DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
+                    Else
+                        File.Copy(cachepathandfilename, paths(0), Preferences.overwritethumbs)
                     End If
-                End If
-                If Not downloadok Then
-                    downloadok = Utilities.CreateScreenShot(episode.VideoFilePath, paths(0), Preferences.ScrShtDelay, Preferences.overwritethumbs)
-                End If
-                If downloadok Then
-                    If Preferences.tvscrnshtTVDBResize Then 
-                        Dim imagearr() As Integer = GetAspect(episode)
-                        If Not imagearr(0) = 0 Then
-                            DownloadCache.CopyAndDownSizeImage(paths(0), paths(0), imagearr(0), imagearr(1))
-                        End If
-                    End If
-                    If downloadok AndAlso paths.Count > 1 Then
+                    If paths.Count > 1 Then
                         File.Copy(paths(0), paths(1), Preferences.overwritethumbs)
-                    End If
-                End If
-                If downloadok Then 
+                    End If 
                     result = "!!! No Episode thumb to download, Screenshot saved"
                 Else
                     result = "!!! No Episode thumb to download, Screenshot Could not be saved!""
@@ -3713,21 +3699,16 @@ Partial Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    If Preferences.tvscrnshtTVDBResize Then 
-                        Dim cachepathandfilename As String = Utilities.CreateScrnShotResize(tempstring2, paths(0), Preferences.ScrShtDelay)
-                        If Not cachepathandfilename = "" Then
-                            Dim imagearr() As Integer = GetAspect(WorkingEpisode)
-                            If Not imagearr(0) = 0 Then
-                                DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
-                            End If
-                            aok = True
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), Preferences.ScrShtDelay)
+                    If cachepathandfilename <> "" Then
+                        aok = True
+                        Dim imagearr() As Integer = GetAspect(WorkingEpisode)
+                        If Preferences.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then 
+                            DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
+                        Else
+                            File.Copy(cachepathandfilename, paths(0))
                         End If
-                    End If
-                    If Not aok Then
-                        aok = Utilities.CreateScreenShot(tempstring2, paths(0), seconds, True)
-                    End If
-                    If aok Then
-                        
+
                         If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
 
                         If File.Exists(paths(0)) Then

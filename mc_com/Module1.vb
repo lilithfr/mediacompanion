@@ -1272,7 +1272,7 @@ Module Module1
 
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        Dim aok As Boolean = True
+        Dim aok As Boolean = False
         Dim paths As New List(Of String)
         If eden Then paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
         If frodo Then paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
@@ -1287,18 +1287,16 @@ Module Module1
         End If
         If Not aok AndAlso Preferences.autoepisodescreenshot Then
             ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Episode file")
-            aok = Utilities.CreateScreenShot(alleps(0).mediaextension, paths(0), Preferences.ScrShtDelay)
-            If aok Then 
-                If Preferences.tvscrnshtTVDBResize Then
-                    Dim imagearr() As Integer = GetAspect(alleps(0))
-                    If Not imagearr(0) = 0 Then
-                        DownloadCache.CopyAndDownSizeImage(paths(0), paths(0), imagearr(0), imagearr(1))
-                    End If
+            Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(alleps(0).mediaextension, paths(0), Preferences.ScrShtDelay)
+            If Not cachepathandfilename = "" Then
+                Dim imagearr() As Integer = GetAspect(alleps(0))
+                If Preferences.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then
+                    DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
+                Else
+                    File.Copy(cachepathandfilename, paths(0))
                 End If
-                If paths.Count > 1 Then
-                    File.Copy(paths(0), paths(1))
-                    ConsoleOrLog("Screenshot Saved O.K.")
-                End If
+                If paths.Count > 1 Then File.Copy(paths(0), paths(1))
+                ConsoleOrLog("Screenshot Saved O.K.")
             Else
                 ConsoleOrLog("Screenshot save Failed!")
             End If

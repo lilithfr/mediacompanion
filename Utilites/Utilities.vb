@@ -281,7 +281,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Loop
         Return input
     End Function
-    Public Shared Function CreateScrnShotResize(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer) As String
+    Public Shared Function CreateScrnShotToCache(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer) As String
         Dim cachename As String = GetCRC32(SavePath) & ".jpg"
         Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename)
         If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
