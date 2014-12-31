@@ -3152,14 +3152,17 @@ Public Class Form1
 
             If DataGridViewMovies.SelectedRows.Count > 1 Then   'run batch wizard on multiple selected movies
                 For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-                    _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value.ToString)
+                    Dim fullpath As String = row.Cells("fullpathandfilename").Value.ToString
+                    If Not File.Exists(fullpath) Then Continue For
+                    _rescrapeList.FullPathAndFilenames.Add(fullpath)
                 Next
             Else                                                 'Otherwise run batch wizard on all movies.
                 For Each row As DataGridViewRow In DataGridViewMovies.Rows
 
                     Dim m As Data_GridViewMovie = row.DataBoundItem
-
-                    _rescrapeList.FullPathAndFilenames.Add(m.fullpathandfilename)
+                    Dim fullpath As String = m.fullpathandfilename.ToString
+                    If Not File.Exists(fullpath) Then Continue For
+                    _rescrapeList.FullPathAndFilenames.Add(fullpath)
                 Next
             End If
 
@@ -9334,7 +9337,9 @@ End Sub
         _rescrapeList.FullPathAndFilenames.Clear
 
         For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-            _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value.ToString)
+            Dim fullpath As String = row.Cells("fullpathandfilename").Value.ToString
+            If Not File.Exists(fullpath) Then Continue For
+            _rescrapeList.FullPathAndFilenames.Add(fullpath)
         Next
 
         RunBackgroundMovieScrape("RescrapeSpecific")
@@ -11124,7 +11129,9 @@ End Sub
         _rescrapeList.Field = Nothing
         _rescrapeList.FullPathAndFilenames.Clear()
         For Each row In DataGridViewMovies.SelectedRows
-            _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value)
+            Dim fullpath As String = row.Cells("fullpathandfilename").Value.ToString
+            If Not File.Exists(fullpath) Then Continue For
+            _rescrapeList.FullPathAndFilenames.Add(fullpath)
         Next
         RunBackgroundMovieScrape("RescrapeAll")
     End Sub
