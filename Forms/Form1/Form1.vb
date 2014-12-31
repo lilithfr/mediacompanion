@@ -2871,6 +2871,7 @@ Public Class Form1
                 Dim pos As Integer = 0
                 Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
                 For Each nfo As String In NfosToSave
+                    If Not File.Exists(nfo) Then Continue For
                     Dim movie As Movie = oMovies.LoadMovie(nfo)
                     If IsNothing(movie) Then Continue For
                     pos += 1
