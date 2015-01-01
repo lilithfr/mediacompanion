@@ -385,9 +385,14 @@ Public Class Movie
 
     ReadOnly Property Actors As List(Of ActorDatabase)
         Get
-            Dim q = From actor In _scrapedMovie.listactors Select New ActorDatabase(actor.actorname,_scrapedMovie.fullmoviebody.imdbid)
+            Dim x As New List(Of ActorDatabase )
+            Try
+                Dim q = From actor In _scrapedMovie.listactors Select New ActorDatabase(actor.actorname,_scrapedMovie.fullmoviebody.imdbid)
 
-            Return q.ToList
+                Return q.ToList
+            Catch
+                Return x
+            End Try
         End Get
     End Property
 
