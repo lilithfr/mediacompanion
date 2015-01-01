@@ -115,7 +115,7 @@ Public Class ucFanartTvTv
                 artheight = 77
                 artType = "logo.png"
             Case "2"
-                usedlist = FanarttvTvlist.clearlogo 
+                usedlist = FanarttvTvlist.clearart  
                 artheight = 112
                 artType = "clearart.png"
             Case "3"
