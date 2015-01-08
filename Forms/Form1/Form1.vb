@@ -9984,6 +9984,7 @@ End Sub
                         Dim showlist2 As New XmlDocument
                         Dim artdone As Boolean = False
                         If tvBatchList.doShowArt = True Then
+                            If tvBatchList.shDelArtwork Then TvDeleteShowArt(Cache.TvCache.Shows(f), False)
                             If tvBatchList.shFanart orElse tvBatchList.shPosters OrElse tvBatchList.shSeason OrElse tvBatchList.shXtraFanart Then
                                 TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart)
                             End If

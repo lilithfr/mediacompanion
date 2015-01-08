@@ -14,6 +14,7 @@ Public Structure str_TvShowBatchWizard
     Dim shSeason As Boolean
     Dim shXtraFanart As Boolean
     Dim shFanartTvArt As Boolean
+    Dim shDelArtwork As Boolean
     Dim epStreamDetails As Boolean
     Dim epAired As Boolean
     Dim epPlot As Boolean
@@ -52,6 +53,7 @@ Public Structure str_TvShowBatchWizard
         shSeason = False
         shXtraFanart = False
         shFanartTvArt = False
+        shDelArtwork = False
         epStreamDetails = False
         epAired = False
         epPlot = False
@@ -91,6 +93,7 @@ Public Structure str_TvShowBatchWizard
         shSeason = False
         shXtraFanart = False
         shFanartTvArt = False
+        shDelArtwork = False
         epStreamDetails = False
         epAired = False
         epPlot = False

@@ -226,6 +226,16 @@
         End Try
     End Sub
 
+    Private Sub cbshDelArtwork_CheckedChanged( sender As Object,  e As EventArgs) Handles cbshDelArtwork.CheckedChanged
+        If cbshDelArtwork.Checked = True Then
+            cbshPosters.Checked = True
+            cbshSeason.Checked = True
+            cbshFanart.Checked = True
+        End If
+        Form1.tvBatchList.shDelArtwork = cbshDelArtwork.Checked
+        Label3.Visible = cbshDelArtwork.Checked
+    End Sub
+
     'episode settings
     Private Sub cbepPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepPlot.CheckedChanged
         Try
@@ -372,4 +382,5 @@
         If               e.KeyCode = Keys.Escape Then btn_TvBatchCancel.PerformClick 
     End Sub
 
+    
 End Class

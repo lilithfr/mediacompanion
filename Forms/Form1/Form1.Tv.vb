@@ -3619,11 +3619,11 @@ Partial Public Class Form1
         Return success
     End Function
 
-    Private Sub TvDeleteShowArt(ByVal NewShow As Media_Companion.TvShow)
+    Private Sub TvDeleteShowArt(ByVal NewShow As Media_Companion.TvShow, Optional ByVal NotActors As Boolean = True)
         Try
             Dim workingpath As String = NewShow.FolderPath 
             
-            If Directory.Exists(workingpath & ".actors") Then Directory.Delete(workingpath & ".actors", True)
+            If NotActors AndAlso Directory.Exists(workingpath & ".actors") Then Directory.Delete(workingpath & ".actors", True)
             
             If Directory.Exists(workingpath & "extrafanart") Then Directory.Delete(workingpath & "extrafanart", True)
 
