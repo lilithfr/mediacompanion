@@ -1153,7 +1153,7 @@ Public Class Form1
 
         rescrapeList.ResetFields()
         rescrapeList.mediatags = True
-        rescrapeList.Rename_Files = True
+        'rescrapeList.Rename_Files = True
 
         _rescrapeList.FullPathAndFilenames.Clear()
         For Each movie As ComboList In oMovies.MovieCache

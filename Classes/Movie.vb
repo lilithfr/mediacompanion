@@ -3522,7 +3522,9 @@ Public Class Movie
             If Preferences.MovNewFolderInRootFolder Then
                 checkfolder &= "\" & newpatharr(0)
             Else
-                'Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
+                If lastfolder.ToLower.Contains("video_ts") OrElse lastfolder.ToLower.Contains("bdmv") Then
+                    lastfolder = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
+                End If
                 checkfolder = FilePath.Replace((lastfolder & "\"), newpatharr(0))   'movie is in root folder already
             End If
             
