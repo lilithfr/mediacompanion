@@ -3420,7 +3420,7 @@ Public Class WorkingWithNfoFiles
                                 newmovie.fullmoviebody.plot = thisresult.InnerText
                             Case "playcount"
                                 newmovie.fullmoviebody.playcount = thisresult.InnerText
-                            Case "sortorder"
+                            Case "sorttitle"
                                 newmovie.fullmoviebody.sortorder = thisresult.InnerText
                             Case "runtime"
                                 newmovie.fullmoviebody.runtime = thisresult.InnerText
