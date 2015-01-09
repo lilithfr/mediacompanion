@@ -3699,7 +3699,7 @@ Partial Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), Preferences.ScrShtDelay)
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds)
                     If cachepathandfilename <> "" Then
                         aok = True
                         Dim imagearr() As Integer = GetAspect(WorkingEpisode)
@@ -4586,7 +4586,9 @@ Partial Public Class Form1
         thisarray(0) = 400
         thisarray(1) = 225
         Try
-            'Dim epasp As String = ep.Details.StreamDetails.Video.Aspect.Value 
+            If ep.Details.StreamDetails.Video.Width.Value is Nothing Then
+                ep.GetFileDetails 
+            End If
             Dim epw As Integer = ep.Details.StreamDetails.Video.Width.Value.ToInt
             Dim eph As Integer= ep.Details.StreamDetails.Video.Height.Value.ToInt
             Dim ThisAsp As Double = epw/eph
