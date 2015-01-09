@@ -335,6 +335,7 @@ Public Class Preferences
     Public Shared TvDlFanartTvArt As Boolean
     Public Shared TvFanartTvFirst As Boolean
     Public Shared dlTVxtrafanart As Boolean
+    Public Shared TvXtraFanartQty As Integer
     Public Shared tvfolderjpg As Boolean
     Public Shared seasonfolderjpg As Boolean
     Public Shared enabletvhdtags As Boolean
@@ -632,6 +633,7 @@ Public Class Preferences
         TvDlFanartTvArt = False
         TvFanartTvFirst = False
         dlTVxtrafanart = False
+        TvXtraFanartQty = 0
         tvfolderjpg = False
         seasonfolderjpg = False
         postertype = "poster"
@@ -1075,6 +1077,7 @@ Public Class Preferences
         root.AppendChild(doc, "TvDlFanartTvArt",        TvDlFanartTvArt)        'cbTvDlFanartTvArt
         root.AppendChild(doc, "TvFanartTvFirst",        TvFanartTvFirst)        'cbTvFanartTvFirst
         root.AppendChild(doc, "dlTVxtrafanart",         dlTVxtrafanart)         'cbDlTVxtrafanart
+        root.AppendChild(doc, "TvXtraFanartQty",        TvXtraFanartQty)        'cmbxTvXtraFanartQty
         root.AppendChild(doc, "hdtvtags",               enabletvhdtags)         'CheckBox20
         root.AppendChild(doc, "disabletvlogs",          disabletvlogs)          'CheckBox17
         root.AppendChild(doc, "postertype",             postertype)             'posterbtn
@@ -1360,6 +1363,7 @@ Public Class Preferences
                     Case "movxtrafanartqty"                     : movxtrafanartqty = thisresult.InnerXml 
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
                     Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
+                    Case "TvXtraFanartQty"                      : TvXtraFanartQty = thisresult.InnerXml 
                     Case "TvDlFanartTvArt"                      : TvDlFanartTvArt = thisresult.InnerXml 
                     Case "TvFanartTvFirst"                      : TvFanartTvFirst = thisresult.InnerXml 
                     Case "allfolders"                           : allfolders = thisresult.InnerXml

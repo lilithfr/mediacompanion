@@ -5528,7 +5528,6 @@ Public Class Form1
 
     Private Sub tv_Fanart_Load()
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        rbTvFanart.Checked = CheckState.Checked
         Me.Panel13.Controls.Clear()
         listOfTvFanarts.Clear()
         btnTvFanartResetImage.Visible = False
@@ -5688,37 +5687,19 @@ Public Class Form1
     End Sub
 
     Private Sub Tv_FanartDisplay()
-        Dim fanartorextrapath As String = Tv_FanartORExtrathumbPath
-        Dim xtra As Boolean = False
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         If IsNothing(WorkingTvShow) Then Exit Sub
-        If rbTvFanart1.Checked or rbTvFanart2.Checked or rbTvFanart3.Checked or rbTvFanart4.Checked Then xtra = True
-        If Not xtra Then
-            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                If Not tv_PictureBoxLeft.Image Is Nothing Then
-                    util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
-                Else
-                    PictureBox10.Image = Nothing
-                End If
-            Else
+        If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+            If Not tv_PictureBoxLeft.Image Is Nothing Then
                 util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
+            Else
+                PictureBox10.Image = Nothing
             End If
         Else
-            util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & fanartorextrapath, Utilities.DefaultTvFanartPath)
+            util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
         End If
-
     End Sub
     
-    Private Function Tv_FanartORExtrathumbPath() As String
-        Dim fanartpath As String = ""
-        If rbTvFanart.Checked Then fanartpath = "fanart.jpg" : Return fanartpath
-        If rbTvFanart1.Checked Then fanartpath = "extrafanart\fanart1.jpg" : Return fanartpath
-        If rbTvFanart2.Checked Then fanartpath = "extrafanart\fanart2.jpg" : Return fanartpath
-        If rbTvFanart3.Checked Then fanartpath = "extrafanart\fanart3.jpg" : Return fanartpath
-        If rbTvFanart4.Checked Then fanartpath = "extrafanart\fanart4.jpg" : Return fanartpath
-        Return fanartpath
-    End Function
-
     Private Sub tv_FanartCropTop()
         Dim imagewidth As Integer = PictureBox10.Image.Width
         Dim imageheight As Integer = PictureBox10.Image.Height
@@ -12271,6 +12252,7 @@ End Sub
         CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
         cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
         AutoScrnShtDelay.Text = ScrShtDelay
+        cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Preferences.TvXtraFanartQty.ToString)
 
         Select Case Preferences.seasonall
             Case "none"
@@ -13511,6 +13493,14 @@ End Sub
     Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTvDlXtraFanart.CheckedChanged
         If prefsload Then Exit Sub
         Preferences.dlTVxtrafanart = cbTvDlXtraFanart.Checked
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cmbxTvXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxTvXtraFanartQty.SelectedIndexChanged
+        If prefsload Then Exit Sub
+        Dim newvalue As String = cmbxTvXtraFanartQty.SelectedItem
+        Preferences.TvXtraFanartQty = newvalue.toint
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -18220,18 +18210,13 @@ End Sub
                 MsgBox("No Fanart Is Selected")
             Else
                 Try
-                    Dim FanartOrExtra As String = Tv_FanartORExtrathumbPath 
-                    Dim xtra As Boolean = False
-                    If rbTvFanart1.Checked or rbTvFanart2.Checked or rbTvFanart3.Checked or rbTvFanart4.Checked Then xtra = True
-                    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", FanartOrExtra)
+                    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
 
                     If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) Then
                         Try
                             util_ImageLoad(PictureBox10, savepath, Utilities.DefaultTvFanartPath)
-                            If Not xtra Then
-                                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                                    util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
-                                End If
+                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                                util_ImageLoad(tv_PictureBoxLeft, savepath, Utilities.DefaultTvFanartPath)
                             End If
                         Catch ex As Exception
 #If SilentErrorScream Then
@@ -18241,7 +18226,7 @@ End Sub
                     Else
                         PictureBox10.Image = Nothing
                     End If
-                    If Not xtra AndAlso Preferences.FrodoEnabled Then 
+                    If Preferences.FrodoEnabled Then 
                         Utilities.SafeCopyFile(savepath,savepath.Replace("fanart.jpg","season-all-fanart.jpg"),True)
                     End If
                 Catch ex As WebException
@@ -18255,7 +18240,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub rbTvFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbTvFanart.CheckedChanged, rbTvFanart1.CheckedChanged, rbTvFanart2.CheckedChanged, rbTvFanart3.CheckedChanged, rbTvFanart4.CheckedChanged
+    Private Sub rbTvFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) 
         Tv_FanartDisplay()
     End Sub
 

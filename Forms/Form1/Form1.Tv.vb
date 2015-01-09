@@ -3452,13 +3452,13 @@ Partial Public Class Form1
                     For Each Image In artlist
                         If (Image.Language = lang Or lang = "") AndAlso Image.BannerType = "fanart" Then
                             fanartposter.Add(Image.Url)
-                            If fanartposter.Count = 5 Then Exit For
+                            'If fanartposter.Count = 5 Then Exit For
                         End If
                     Next
-                    If fanartposter.Count = 5 Then Exit For
+                    'If fanartposter.Count = 5 Then Exit For
                 Next
                 If fanartposter.Count > 0 Then
-                    For x = 1 To 4
+                    For x = 1 To Preferences.TvXtraFanartQty
                         If x = fanartposter.Count Then Exit For
                         success = Utilities.DownloadFile(fanartposter(x), (xfanart & x & ".jpg"))
                     Next
