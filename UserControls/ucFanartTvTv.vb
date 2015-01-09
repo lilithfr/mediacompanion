@@ -352,6 +352,7 @@ Public Class ucFanartTvTv
                     End If
                 Next
                 If seasonno <> "" Then
+                    Dim epseason As String = seasonno
                     If seasonno.Length = 1 Then seasonno = "0" & seasonno
                     If seasonno = "00" Then
                         seasonno = "-specials"
@@ -361,6 +362,22 @@ Public Class ucFanartTvTv
                     If Preferences.EdenEnabled AndAlso artType.contains("-poster.jpg") Then
                         savepath = savepath.Replace("-poster.jpg", ".tbn")
                         savepaths.Add(savepath)
+                    End If
+                    If Preferences.seasonfolderjpg AndAlso WorkingShow.Episodes.Count > 0 Then
+                        For Each ep In WorkingShow.Episodes
+                            Dim TrueSeasonFolder As String = Nothing
+                            Dim folder As Boolean = False
+                            If ep.Season.Value = epseason Then
+                                If ep.FolderPath <> WorkingShow.FolderPath Then
+                                    TrueSeasonFolder = ep.FolderPath & "folder.jpg"
+                                    If Not savepaths.Contains(TrueSeasonFolder) Then
+                                        savepaths.Add(TrueSeasonFolder)
+                                        folder = True
+                                    End If
+                                End If
+                            End If
+                            If folder Then Exit For
+                        Next
                     End If
                 End If
             Else
