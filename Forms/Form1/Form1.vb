@@ -18142,6 +18142,12 @@ End Sub
         End Try
 
     End Sub
+
+    Private Sub _tv_SplitContainer_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles _tv_SplitContainer.SplitterMoved
+        If Not MainFormLoadedStatus Then Exit Sub
+        Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
+    End Sub
+    
 #End Region 'Tv PictureBoxes    
 
 #End Region  'Tv Browser Form functions
@@ -20209,4 +20215,5 @@ End Sub
 
     
 
+    
 End Class
