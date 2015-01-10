@@ -3364,7 +3364,7 @@ Public Class Form1
             mov_ToolStripOpenFolder.Visible = False
             mov_ToolStripViewNfo.Visible = False
             ToolStripSeparator17.Visible = False
-            ToolStripSeparator5.Visible = False
+            ToolStripSeparator24.Visible = False
             'ToolStripSeparator4.Visible = False
             mov_ToolStripFanartBrowserAlt.Visible = False
             mov_ToolStripPosterBrowserAlt.Visible = False
@@ -3379,7 +3379,7 @@ Public Class Form1
             mov_ToolStripOpenFolder.Visible = True
             mov_ToolStripViewNfo.Visible = True
             ToolStripSeparator17.Visible = True
-            ToolStripSeparator5.Visible = True
+            ToolStripSeparator24.Visible = True
             ToolStripSeparator4.Visible = True
             mov_ToolStripFanartBrowserAlt.Visible = True
             mov_ToolStripPosterBrowserAlt.Visible = True
