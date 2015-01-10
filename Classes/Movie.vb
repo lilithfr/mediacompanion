@@ -1867,7 +1867,7 @@ Public Class Movie
         If Not Preferences.scrapemovieposters then
             Exit Sub
         End If
-
+        If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
         DoDownloadPoster
     End Sub
  
@@ -1952,6 +1952,8 @@ Public Class Movie
             ReportProgress(, "Fanart scraping not enabled" & vbCrLf)
             Exit Sub
         End If
+        If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
+
         If Preferences.MusicVidScrape Then
             ucMusicVideo.createScreenshot(mediapathandfilename, , True)
         Else
@@ -2012,6 +2014,7 @@ Public Class Movie
     End Sub
 
     Sub DownloadFromFanartTv(Optional rescrapelist As Boolean = False)
+        If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
         If Preferences.MovFanartTvscrape OrElse rescrapelist Then   'AndAlso (Preferences.allfolders Or Preferences.usefoldernames) 
             DoDownloadFromFanartTv(rescrapelist)
         Else
@@ -2155,6 +2158,7 @@ Public Class Movie
     End Sub
 
     Sub DownloadExtraFanart()
+        If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
         If Preferences.dlxtrafanart AndAlso (Preferences.allfolders Or Preferences.usefoldernames) Then
             DoDownloadExtraFanart()
         Else
@@ -2228,9 +2232,10 @@ Public Class Movie
                 RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
                 If incTrailer Then DeleteTrailer
             End If
-            
-            DeletePoster
-            DeleteFanart
+            If Not Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then
+                DeletePoster
+                DeleteFanart
+            End If
 
             DeleteNFO
         Catch ex As Exception

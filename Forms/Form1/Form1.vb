@@ -11676,7 +11676,7 @@ End Sub
         ScraperStatusStrip.Visible = False
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
-        
+        Preferences.MovieChangeMovie = False
         If Not Preferences.MusicVidScrape Then DisplayLogFile()  ' no need to display log after music video scraping.
         Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
     End Sub
@@ -17148,6 +17148,7 @@ End Sub
             If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
+            Preferences.MovieChangeMovie = True
             RunBackgroundMovieScrape("ChangeMovie")
         ElseIf MovieSearchEngine = "tmdb" Then
             Dim mat As String = WebBrowser1.Url.ToString
@@ -17163,6 +17164,7 @@ End Sub
             If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
+            Preferences.MovieChangeMovie = True
             RunBackgroundMovieScrape("ChangeMovie")
         End If
 
@@ -17191,6 +17193,10 @@ End Sub
             mov_ChangeMovieSetup(MovieSearchEngine)
         Catch
         End Try
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles CheckBox2.CheckedChanged
+        Preferences.MovieChangeKeepExistingArt =  Not CheckBox2.Checked
     End Sub
 
 #End Region
