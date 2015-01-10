@@ -1510,83 +1510,27 @@ Public Class Movie
         TrailerUrl = ""
         _youTubeTrailer = Nothing
         
-
-        If Preferences.moviePreferredTrailerResolution.ToUpper()<>"SD" And Not GetTrailerUrlAlreadyRun Then
-            Try
-                GetTrailerUrlAlreadyRun = True
-                TrailerUrl = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, title)
-            Catch ex As Exception
-                Dim paramInfo As String = ""
-            
-                Try
-                    paramInfo = "Title: [" & title & "]"
-                Catch ex2 As Exception
-                    ExceptionHandler.LogError(ex2)
-                End Try
-
-                ExceptionHandler.LogError(ex,paramInfo)                
-            End Try
-        End If
-
-
-        'Try YouTube for HD and SD...
-        '
-        Try
-            If TrailerUrl = "" AndAlso Not IsNothing(tmdb.Trailers) AndAlso tmdb.Trailers.youtube.Count > 0 then
-
-                Dim tryAgain = True
-
-                While tryAgain
-                    TrailerUrl = tmdb.GetTrailerUrl(_triedUrls, Preferences.moviePreferredTrailerResolution)
-                    If TrailerUrl <> "" then
-                        Try
-                            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl)
-
-                            If yts.AvailableVideoFormat.Length>0 Then
-
-                                _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
-
-                                If Not IsNothing(_youTubeTrailer) Then
-                                    TrailerUrl = "plugin://plugin.video.youtube/?action=play_video&videoid=" & TrailerUrl   '_youTubeTrailer.VideoUrl
-                                    tryAgain = False
-                                End If
-                            Else
-                                TrailerUrl = ""
-                            End If
-                        Catch       'Timed out...
-                        End Try
-                    Else
-                        tryAgain = False
-                    End If
-                End While
+        If Preferences.movies_useXBMC_Scraper Then 
+            If Preferences.XbmcTmdbHDTrailer.ToLower <> "no" Then
+                If TrailerUrl = "" Then TrailerUrl = TrailerHDTrailer(title)
             End If
-        Catch
-        End Try
-
-
-        If TrailerUrl = "" Then
-            Dim Ids As List(Of String) = GetYouTubeIds()
-
-            For Each Id In Ids
-
-                Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+Id)
-
-                If yts.AvailableVideoFormat.Length>0 Then
-                    _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
-
-                    If Not IsNothing(_youTubeTrailer) Then
-                        TrailerUrl = "plugin://plugin.video.youtube/?action=play_video&videoid=" & Id   '_youTubeTrailer.VideoUrl '
-                        Exit For
-                    End If
-                End If
-            Next
+        Else
+            'Try HDTrailers.Net
+            If TrailerUrl = "" Then TrailerUrl = TrailerHDTrailer(title)
         End If
-
-
+        
+        'Try TMDB Youtube Trailer
+        If TrailerUrl = "" Then TrailerUrl = TrailerTMDBYouTube()
+        
+        'Try YouTube for HD and SD...
+        If TrailerUrl = "" Then TrailerUrl = TrailerYouTube()
+        
+        'Try IMDB last Resort.
         If TrailerUrl = "" And Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.imdbid) Then
             TrailerUrl = _imdbScraper.gettrailerurl(imdb, Preferences.imdbmirror)
         End If
 
+        'Report status
         If TrailerUrl = "" Then
             ReportProgress("-None found ","No trailer URL found" & vbCrLf)
         ElseIf TrailerUrl.Contains("plugin://plugin") Then
@@ -1602,6 +1546,80 @@ Public Class Movie
         Return TrailerUrl
     End Function
 
+    Function TrailerHDTrailer(ByVal title As String) As String
+        Dim TrailerUrl2 As String = ""
+        If Preferences.moviePreferredTrailerResolution.ToUpper()<>"SD" And Not GetTrailerUrlAlreadyRun Then
+            Try
+                GetTrailerUrlAlreadyRun = True
+                Dim TraRes As String = If(Preferences.movies_useXBMC_Scraper, Preferences.XbmcTmdbHDTrailer.Replace("p",""), Preferences.moviePreferredTrailerResolution)
+                TrailerUrl2 = MC_Scraper_Get_HD_Trailer_URL(TraRes, title)
+            Catch ex As Exception
+                Dim paramInfo As String = ""
+            
+                Try
+                    paramInfo = "Title: [" & title & "]"
+                Catch ex2 As Exception
+                    ExceptionHandler.LogError(ex2)
+                End Try
+
+                ExceptionHandler.LogError(ex,paramInfo)                
+            End Try
+        End If
+        Return TrailerUrl2 
+    End Function
+
+    Function TrailerTMDBYouTube() As String
+        Dim loopcount = 0
+        Dim TrailerUrl2 As String = ""
+        Try
+            If TrailerUrl2 = "" AndAlso Not IsNothing(tmdb.Trailers) AndAlso tmdb.Trailers.youtube.Count > 0 then
+                Dim tryAgain = True
+                While tryAgain
+                    TrailerUrl2 = tmdb.GetTrailerUrl(_triedUrls, Preferences.moviePreferredTrailerResolution)
+                    If TrailerUrl2 <> "" then
+                        Try
+                            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl)
+
+                            If yts.AvailableVideoFormat.Length>0 Then
+
+                                _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+
+                                If Not IsNothing(_youTubeTrailer) Then
+                                    TrailerUrl2 = "plugin://plugin.video.youtube/?action=play_video&videoid=" & TrailerUrl2   '_youTubeTrailer.VideoUrl
+                                    tryAgain = False
+                                End If
+                            Else
+                                TrailerUrl2 = ""
+                            End If
+                        Catch       'Timed out...
+                        End Try
+                    Else
+                        tryAgain = False
+                    End If
+                    If loopcount = 15 Then tryAgain = False
+                    loopcount += 1
+                End While
+            End If
+        Catch
+        End Try
+        Return TrailerUrl2
+    End Function
+
+    Function TrailerYouTube() As String
+        Dim TrailerUrl2 As String = ""
+        Dim Ids As List(Of String) = GetYouTubeIds()
+        For Each Id In Ids
+            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+Id)
+            If yts.AvailableVideoFormat.Length>0 Then
+                _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+                If Not IsNothing(_youTubeTrailer) Then
+                    TrailerUrl2 = "plugin://plugin.video.youtube/?action=play_video&videoid=" & Id   '_youTubeTrailer.VideoUrl '
+                    Exit For
+                End If
+            End If
+        Next
+        Return TrailerUrl2 
+    End Function
 
     Sub GetFrodoPosterThumbs
         _scrapedMovie.frodoPosterThumbs.Clear

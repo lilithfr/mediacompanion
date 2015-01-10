@@ -56,6 +56,7 @@ Public Class Preferences
     Public Shared engineend As New List(Of String)
     Public Shared proxysettings As New List(Of String)
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
+    Public Shared XbmcTmdbHDTrailer As String = "No"
     
     Public Shared TvChgShowDlPoster As Boolean = False
     Public Shared TvChgShowDlFanart As Boolean = False

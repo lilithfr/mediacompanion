@@ -697,6 +697,7 @@ Public Class Form1
             End If
             genretxt.ShortcutsEnabled = False
 
+            Read_XBMC_TMDB_Scraper_Config()
             MainFormLoadedStatus = True
             UcFanartTv1.Form1MainFormLoadedStatus = True
             UcFanartTvTv1.Form1MainFormLoadedStatus = True
@@ -14195,6 +14196,7 @@ End Sub
     Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbHDTrailer.SelectedIndexChanged
         Try
             Save_XBMC_TMDB_Scraper_Config("trailerq", cmbxXbmcTmdbHDTrailer.Text)
+            Preferences.XbmcTmdbHDTrailer = cmbxXbmcTmdbHDTrailer.Text
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
