@@ -2,6 +2,7 @@
 
 Imports System.Net
 Imports System.IO
+Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.Runtime.InteropServices
@@ -24,7 +25,7 @@ Public Class Form1
     Const NFO_INDEX As Integer = 5
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
-    Public Const MCToolsCommands As Integer = 4          ' increment when adding MC functions to ToolsToolStripMenuItem
+    Public Const MCToolsCommands As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem
 
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
@@ -19877,6 +19878,51 @@ End Sub
         Next
     End Sub
 
+    Private Sub FixNFOCreateDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FixNFOCreateDateToolStripMenuItem.Click
+        Dim fixCreateDate As New frmCreateDateFix
+        If Preferences.MultiMonitoEnabled Then
+            Dim w As Integer = fixCreateDate.Width
+            Dim h As Integer = fixCreateDate.Height
+            fixCreateDate.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            fixCreateDate.StartPosition = FormStartPosition.Manual
+            fixCreateDate.Width = w
+            fixCreateDate.Height = h
+        End If
+        fixCreateDate.ShowDialog()
+    End Sub
+
+    Private Sub EmptyCacheFolderToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles EmptyCacheFolderToolStripMenuItem.Click
+        If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+            Dim mess As New frmMessageBox("Emptying Cache Folder", , "   Please Wait.   ")
+            mess.Show()
+            mess.Refresh()
+            Application.DoEvents()
+            CleanCacheFolder(True)
+            mess.Close()
+        End If
+    End Sub
+
+    Private Sub RefreshGenreListboxToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles RefreshGenreListboxToolStripMenuItem.Click
+        GenreMasterLoad()
+        util_GenreLoad()
+    End Sub
+
+    Private Sub ExportLibraryToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles ExportLibraryToolStripMenuItem.Click
+        'Dim res As DialogResult = MsgBox("Are you Sure?" &vbCrLf & "This will export your Movies and TV Series" & vbCrLf & "to a format compatible for you to" & vbCrLf & "Import into XBMC/Kodi.",MsgBoxStyle.OkCancel)
+        'If res = Windows.Forms.DialogResult.Cancel Then Exit Sub
+        'ExportToXbmcdb()
+        Dim frmxport As New frmXbmcExport
+        If Preferences.MultiMonitoEnabled Then
+            Dim w As Integer = frmxport.Width
+            Dim h As Integer = frmxport.Height
+            frmxport.Bounds = screen.AllScreens(CurrentScreen).Bounds
+            frmxport.StartPosition = FormStartPosition.Manual
+            frmxport.Width = w
+            frmxport.Height = h
+        End If
+        frmxport.ShowDialog()
+    End Sub
+
 #End Region 'ToolStrip Menus misc
 
     Sub MkvMergeGuiPath_ChangeHandler()
@@ -20080,36 +20126,7 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-    Private Sub FixNFOCreateDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FixNFOCreateDateToolStripMenuItem.Click
-        Dim fixCreateDate As New frmCreateDateFix
-        If Preferences.MultiMonitoEnabled Then
-            Dim w As Integer = fixCreateDate.Width
-            Dim h As Integer = fixCreateDate.Height
-            fixCreateDate.Bounds = screen.AllScreens(CurrentScreen).Bounds
-            fixCreateDate.StartPosition = FormStartPosition.Manual
-            fixCreateDate.Width = w
-            fixCreateDate.Height = h
-        End If
-        fixCreateDate.ShowDialog()
-    End Sub
-
-    Private Sub EmptyCacheFolderToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles EmptyCacheFolderToolStripMenuItem.Click
-        If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
-            Dim mess As New frmMessageBox("Emptying Cache Folder", , "   Please Wait.   ")
-            mess.Show()
-            mess.Refresh()
-            Application.DoEvents()
-            CleanCacheFolder(True)
-            mess.Close()
-        End If
-    End Sub
-
-    Private Sub RefreshGenreListboxToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles RefreshGenreListboxToolStripMenuItem.Click
-        GenreMasterLoad()
-        util_GenreLoad()
-    End Sub
-
+        
 #Region "Functions"
 
     Private Function AssignClipboardImage(picBox As PictureBox) As Boolean
@@ -20205,8 +20222,66 @@ End Sub
         plotfrm.Dispose()
         Return ListofPlots(plotselected)
     End Function
-
     
+    'Public Sub ExportToXbmcdb()
+    '    Dim outputfolder As String = Nothing
+    '    Dim dialog As New FolderBrowserDialog()
+    '    dialog.RootFolder = Environment.SpecialFolder.Desktop
+    '    dialog.ShowNewFolderButton = True
+    '    dialog.SelectedPath = "C:\"
+    '    dialog.Description = "Select Path to save Exported data""
+    '    If dialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
+    '        outputfolder = dialog.SelectedPath
+    '    End If
+    '    If IsNothing(outputfolder) Then
+    '        MsgBox("No folder selected, export aborted")
+    '        Exit Sub
+    '    End If
+    '    outputfolder = Validatefolder(outputfolder)
+    '    If IsNothing(outputfolder) Then Exit Sub
 
-    
+    '    Dim frmxport As New frmXbmcExport
+    '    If Preferences.MultiMonitoEnabled Then
+    '        Dim w As Integer = frmxport.Width
+    '        Dim h As Integer = frmxport.Height
+    '        frmxport.Bounds = screen.AllScreens(CurrentScreen).Bounds
+    '        frmxport.StartPosition = FormStartPosition.Manual
+    '        frmxport.Width = w
+    '        frmxport.Height = h
+    '    End If
+    '    frmxport.ShowDialog()
+    '    'Tally movies to process
+
+    '    'Tally Tv Series to process
+        
+    'End Sub
+
+    'Public Function Validatefolder(ByVal outputfolder As String) As String
+    '    outputfolder = outputfolder & "\" & "xbmc_videodb_" & DateTime.Now.ToString("yyyy_MM_dd")
+    '    Try 'create new output folder
+    '        If Not Directory.Exists(outputfolder) Then Directory.CreateDirectory(outputfolder)
+    '    Catch
+    '        MsgBox("Unable to create export folder" & vbCrLf & outputfolder & vbCrLf & "Export aborted")
+    '        Return Nothing
+    '    End Try
+    '    'test path is writeable
+    '    Try
+    '        Dim fs As FileStream = File.Create(outputfolder & "\mc_dmmy.txt")
+
+    '        ' Add text to the file. 
+    '        Dim info As Byte() = New UTF8Encoding(True).GetBytes("This is some text in the file.")
+    '        fs.Write(info, 0, info.Length)
+    '        fs.Close()
+    '    Catch
+    '        MsgBox("Unable to create file in folder" &vbCrLf & outputfolder & vbCrLf & "Export Aborted")
+    '        Return Nothing
+    '    End Try
+    '    Try
+    '        File.Delete(outputfolder & "\mc_dmmy.txt")
+    '    Catch 
+    '        MsgBox("Unable to Remove file in folder" &vbCrLf & outputfolder & vbCrLf & "Export Aborted")
+    '        Return Nothing 
+    '    End Try
+    '    Return outputfolder 
+    'End Function
 End Class

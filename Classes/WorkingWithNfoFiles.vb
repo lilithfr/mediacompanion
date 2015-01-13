@@ -2701,6 +2701,10 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
                 newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path, newmovie.fileinfo.filename)
 
+                If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
+                    Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
+                    newmovie.fileinfo.filenameandpath = path.Replace(".nfo", container)
+                End If
                 If newmovie.fullmoviebody.movieset = "" Then
                     newmovie.fullmoviebody.movieset = "-None-"
                 End If
