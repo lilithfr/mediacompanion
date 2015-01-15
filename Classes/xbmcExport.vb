@@ -30,7 +30,7 @@ Public Class xbmcmovies
 End Class
 
 Public Class xbmctvseries
-    Public series As List(Of xbmctv)
+    Public series As xbmctv
     Public episodes As List(Of xbmctv)
 
     Sub New()
@@ -38,7 +38,7 @@ Public Class xbmctvseries
     End Sub
 
     Public Sub init
-        series = New List(Of xbmctv)
+        series = New xbmctv
         episodes = New List(Of xbmctv) 
     End Sub
 End Class

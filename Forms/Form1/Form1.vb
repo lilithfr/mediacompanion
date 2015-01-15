@@ -17263,10 +17263,6 @@ End Sub
             If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (theFolderBrowser.SelectedPath)
                 Preferences.lastpath = thefoldernames
-                For Each item As Object In ListBox2.Items
-                    If thefoldernames.ToString = item.ToString Then allok = False
-                Next
-
                 If allok = True Then
                     ListBox7.Items.Add(thefoldernames)
                     ListBox7.Refresh()
@@ -17274,6 +17270,37 @@ End Sub
                     MsgBox("        Folder Already Exists")
                 End If
             End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub ListBox7_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox7.DragDrop
+        Dim folders() As String
+        droppedItems.Clear()
+        folders = e.Data.GetData(DataFormats.filedrop)
+        For f = 0 To UBound(folders)
+            If Preferences.movieFolders.Contains(folders(f)) Then Continue For
+            If ListBox7.Items.Contains(folders(f)) Then Continue For
+		    Dim skip As Boolean = False
+		    For Each item In droppedItems
+			    If item = folders(f) Then
+				    skip = True
+				    Exit For
+			    End If
+		    Next
+		If Not skip Then droppedItems.Add(folders(f))
+        Next
+        If droppedItems.Count < 1 Then Exit Sub
+        For Each item In droppedItems
+            ListBox7.Items.Add(item)
+        Next
+        ListBox7.Refresh()
+    End Sub
+
+    Private Sub ListBox7_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox7.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20256,32 +20283,4 @@ End Sub
         
     'End Sub
 
-    'Public Function Validatefolder(ByVal outputfolder As String) As String
-    '    outputfolder = outputfolder & "\" & "xbmc_videodb_" & DateTime.Now.ToString("yyyy_MM_dd")
-    '    Try 'create new output folder
-    '        If Not Directory.Exists(outputfolder) Then Directory.CreateDirectory(outputfolder)
-    '    Catch
-    '        MsgBox("Unable to create export folder" & vbCrLf & outputfolder & vbCrLf & "Export aborted")
-    '        Return Nothing
-    '    End Try
-    '    'test path is writeable
-    '    Try
-    '        Dim fs As FileStream = File.Create(outputfolder & "\mc_dmmy.txt")
-
-    '        ' Add text to the file. 
-    '        Dim info As Byte() = New UTF8Encoding(True).GetBytes("This is some text in the file.")
-    '        fs.Write(info, 0, info.Length)
-    '        fs.Close()
-    '    Catch
-    '        MsgBox("Unable to create file in folder" &vbCrLf & outputfolder & vbCrLf & "Export Aborted")
-    '        Return Nothing
-    '    End Try
-    '    Try
-    '        File.Delete(outputfolder & "\mc_dmmy.txt")
-    '    Catch 
-    '        MsgBox("Unable to Remove file in folder" &vbCrLf & outputfolder & vbCrLf & "Export Aborted")
-    '        Return Nothing 
-    '    End Try
-    '    Return outputfolder 
-    'End Function
 End Class

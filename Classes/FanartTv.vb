@@ -135,6 +135,7 @@ Public Class FanartTv
         _fanarttvlist.tvbanner.AddRange(tvbanner)
         _fanarttvlist.seasonthumb.AddRange(seasonthumb)
         _fanarttvlist.tvposter.AddRange(tvposter)
+        _fanarttvlist.seasonbanner.AddRange(seasonbanner)
         _fanarttvlist.dataloaded = gotdata
     End Sub
 

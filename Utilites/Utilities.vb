@@ -254,7 +254,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Try
             Dim web_request As HttpWebRequest = HttpWebRequest.Create(url)
-            web_request.Timeout = 5000
+            web_request.Timeout = 10000
             web_response = DirectCast(web_request.GetResponse(), HttpWebResponse)
             Return True
         Catch ex As Exception
