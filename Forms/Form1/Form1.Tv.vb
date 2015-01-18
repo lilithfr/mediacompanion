@@ -3760,8 +3760,9 @@ Partial Public Class Form1
             Dim frodo As Boolean = Preferences.FrodoEnabled
             If language = Nothing Then language = "en"
             If language = "" Then language = "en"
-            If sortorder = Nothing Then sortorder = "default"
-            If sortorder = "" Then sortorder = "default"
+            If String.IsNullOrEmpty(sortorder) Then sortorder = "default"
+            'If sortorder = Nothing Then sortorder = "default"
+            'If sortorder = "" Then sortorder = "default"
 
 
             If String.IsNullOrEmpty(id) Then

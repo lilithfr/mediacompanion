@@ -6093,6 +6093,90 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub Tv_TreeViewContext_MissingEpThumbs_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_MissingEpThumbs.Click
+        Try
+            Dim tmp As Integer = Utilities.languagelibrary.count
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim tempint As Integer = 0
+            Dim nfofilestorename As New List(Of String)
+            nfofilestorename.Clear()
+            Dim donelist As New List(Of String)
+            donelist.Clear()
+            If TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
+                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                    'Individual episode
+                    If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
+                        nfofilestorename.Add(TvTreeview.SelectedNode.Name)
+                    End If
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+                    'season
+                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected season" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    If tempint = DialogResult.No Then
+                        Exit Sub
+                    End If
+                    Dim childnode As TreeNode
+                    For Each childnode In TvTreeview.SelectedNode.Nodes
+                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("\missing\") = -1 Then
+                            nfofilestorename.Add(childnode.Name)
+                        End If
+                    Next
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
+                    'full show
+                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected show" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    If tempint = DialogResult.No Then
+                        Exit Sub
+                    End If
+                    Dim childnode As TreeNode
+                    Dim childchildnode As TreeNode
+                    For Each childnode In TvTreeview.SelectedNode.Nodes
+                        For Each childchildnode In childnode.Nodes
+                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("\missing\") = -1 Then
+                                nfofilestorename.Add(childchildnode.Name)
+                            End If
+                        Next
+                    Next
+                End If
+            End If
+
+            Dim messbox As New frmMessageBox("Scanning for Missing episode,", "thumbnails, and downloading if available.", "   Please Wait")
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            If nfofilestorename.Count <= 0 Then
+                messbox.Close()
+                Exit Sub
+            End If
+
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled
+
+            For Each nfo In nfofilestorename
+                'Dim Exists As Boolean = False
+                Dim paths As New List(Of String)
+                Dim pathsexist As New List(Of String)
+                If eden Then paths.Add(nfo.Replace("nfo", ".tbn"))
+                If frodo Then paths.Add(nfo.Replace(".nfo", "-thumb.jpg"))
+                For Each Path In paths
+                    If File.Exists(Path) Then
+                        pathsexist.Add(Path)
+                    End If
+                Next
+                If pathsexist.Count > 0
+                    If pathsexist.Count <> paths.Count Then
+                    paths.Remove(pathsexist(0))
+                    File.Copy(pathsexist(0), paths(0))
+                    End If
+                    Continue For
+                End If
+
+            Next
+            messbox.Close()
+            'tv_CacheRefresh(WorkingTvShow)
+        Catch ex As Exception
+            messbox.Close()
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
     Private Sub tv_PosterSetup(Optional ByVal IsOfType As String = "")
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
@@ -9862,7 +9946,7 @@ End Sub
             Dim showsdone As Integer = 0
             Dim showcounter As Integer = 0
             For f = shcachecount - 1 To 0 Step -1
-                showcounter += 1
+                'showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
                     If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
                         'Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
@@ -9892,6 +9976,7 @@ End Sub
                 End If
 
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open OrElse Cache.TvCache.Shows(f).State = -1 OrElse tvBatchList.includeLocked = True Then
+                    showcounter += 1
                     progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount
                     If done > 0 Then
                         progress = (100 / showprocesscount) * done
