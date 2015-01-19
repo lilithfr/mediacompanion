@@ -12332,6 +12332,7 @@ End Sub
         cbTvDlPosterArt                 .Checked    = Preferences.tvdlposter
         cbTvDlFanart                    .Checked    = Preferences.tvdlfanart
         cbTvDlSeasonArt                 .Checked    = Preferences.tvdlseasonthumbs
+        cbTvDlXtraFanart                .Checked    = Preferences.dlTVxtrafanart
         cbTvDlFanartTvArt               .Checked    = Preferences.TvDlFanartTvArt
         cbTvFanartTvFirst               .Checked    = Preferences.TvFanartTvFirst
         cb_TvFolderJpg                  .Checked    = Preferences.tvfolderjpg
