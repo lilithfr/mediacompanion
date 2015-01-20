@@ -6098,43 +6098,29 @@ Public Class Form1
             Dim tmp As Integer = Utilities.languagelibrary.count
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim tempint As Integer = 0
+            Dim seasonnumber As Integer = -1
             Dim nfofilestorename As New List(Of String)
             nfofilestorename.Clear()
             Dim donelist As New List(Of String)
             donelist.Clear()
+            If WorkingTvShow.Episodes.Count = 0 Then
+                MsgBox("No Episodes in this Show")
+                Exit Sub
+            End If
             If TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
-                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-                    'Individual episode
-                    If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
-                        nfofilestorename.Add(TvTreeview.SelectedNode.Name)
-                    End If
-                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
                     'season
-                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected season" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    tempint = MessageBox.Show("Attempt to download missing episode thumbs for the selected season" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                     If tempint = DialogResult.No Then
                         Exit Sub
                     End If
-                    Dim childnode As TreeNode
-                    For Each childnode In TvTreeview.SelectedNode.Nodes
-                        If Not nfofilestorename.Contains(childnode.Name) And childnode.Name.IndexOf("\missing\") = -1 Then
-                            nfofilestorename.Add(childnode.Name)
-                        End If
-                    Next
-                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-                    'full show
-                    tempint = MessageBox.Show("This option will Rescrape Media tags for the selected show" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    Dim Thisseason As TvSeason = TvTreeview.SelectedNode.Tag
+                    seasonnumber = Thisseason.SeasonNumber
+                Else
+                    tempint = MessageBox.Show("Attempt to download missing episode thumbs for the selected Show" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                     If tempint = DialogResult.No Then
                         Exit Sub
                     End If
-                    Dim childnode As TreeNode
-                    Dim childchildnode As TreeNode
-                    For Each childnode In TvTreeview.SelectedNode.Nodes
-                        For Each childchildnode In childnode.Nodes
-                            If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("\missing\") = -1 Then
-                                nfofilestorename.Add(childchildnode.Name)
-                            End If
-                        Next
-                    Next
                 End If
             End If
 
@@ -6142,36 +6128,39 @@ Public Class Form1
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            If nfofilestorename.Count <= 0 Then
-                messbox.Close()
-                Exit Sub
-            End If
 
             Dim eden As Boolean = Preferences.EdenEnabled
             Dim frodo As Boolean = Preferences.FrodoEnabled
-
-            For Each nfo In nfofilestorename
-                'Dim Exists As Boolean = False
-                Dim paths As New List(Of String)
-                Dim pathsexist As New List(Of String)
-                If eden Then paths.Add(nfo.Replace("nfo", ".tbn"))
-                If frodo Then paths.Add(nfo.Replace(".nfo", "-thumb.jpg"))
-                For Each Path In paths
-                    If File.Exists(Path) Then
-                        pathsexist.Add(Path)
-                    End If
-                Next
-                If pathsexist.Count > 0
-                    If pathsexist.Count <> paths.Count Then
-                    paths.Remove(pathsexist(0))
-                    File.Copy(pathsexist(0), paths(0))
-                    End If
-                    Continue For
+            
+            For Each ep As TvEpisode In WorkingTvShow.Episodes
+                If ep.IsMissing Then Continue For
+                If Not seasonnumber = -1 Then
+                    If ep.Season.Value <> seasonnumber.ToString Then Continue For
                 End If
 
             Next
+
+            'For Each nfo In nfofilestorename
+            '    'Dim Exists As Boolean = False
+            '    Dim paths As New List(Of String)
+            '    Dim pathsexist As New List(Of String)
+            '    If eden Then paths.Add(nfo.Replace("nfo", ".tbn"))
+            '    If frodo Then paths.Add(nfo.Replace(".nfo", "-thumb.jpg"))
+            '    For Each Path In paths
+            '        If File.Exists(Path) Then
+            '            pathsexist.Add(Path)
+            '        End If
+            '    Next
+            '    If pathsexist.Count > 0
+            '        If pathsexist.Count <> paths.Count Then
+            '        paths.Remove(pathsexist(0))
+            '        File.Copy(pathsexist(0), paths(0))
+            '        End If
+            '        Continue For
+            '    End If
+
+            'Next
             messbox.Close()
-            'tv_CacheRefresh(WorkingTvShow)
         Catch ex As Exception
             messbox.Close()
             ExceptionHandler.LogError(ex)
