@@ -2520,6 +2520,9 @@ Partial Public Class Form1
             Dim downloadok As Boolean = False
             If Not episode.Thumbnail.FileName = Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
                 Dim url As String = episode.Thumbnail.FileName
+                If Not url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+                    url = episode.Thumbnail.Url 
+                End If
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
                     downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, , ,Preferences.overwritethumbs)
                 End If

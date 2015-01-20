@@ -6124,42 +6124,61 @@ Public Class Form1
                 End If
             End If
 
-            Dim messbox As New frmMessageBox("Scanning for Missing episode,", "thumbnails, and downloading if available.", "   Please Wait")
+            Dim messbox As New frmMessageBox("Scanning for Missing episode thumbnails,", "and downloading if available.", "   Please Wait")
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
 
-            Dim eden As Boolean = Preferences.EdenEnabled
-            Dim frodo As Boolean = Preferences.FrodoEnabled
+            Dim tvdbstuff As New TVDBScraper
+            Dim tvseriesdata As New Tvdb.ShowData 
+            Dim language As String = WorkingTvShow.Language.Value
+            If language = "" Then language = "en"
+            tvseriesdata = tvdbstuff.GetShow(WorkingTvShow.TvdbId.Value, language, SeriesXmlPath)
             
             For Each ep As TvEpisode In WorkingTvShow.Episodes
                 If ep.IsMissing Then Continue For
                 If Not seasonnumber = -1 Then
                     If ep.Season.Value <> seasonnumber.ToString Then Continue For
                 End If
-
+                Dim Episodedata As New Tvdb.Episode
+                Dim epfound As Boolean = False
+                If Not tvseriesdata.FailedLoad Then
+                    For Each NewEpisode As Tvdb.Episode In tvseriesdata.Episodes
+                        If Not String.IsNullOrEmpty(ep.UniqueId.Value) Then
+                            If NewEpisode.Id.Value = ep.UniqueId.Value
+                                epfound = True
+                            End If
+                        ElseIf NewEpisode.SeasonNumber.Value = ep.Season.Value
+                            If NewEpisode.EpisodeNumber.Value = ep.Episode.Value
+                                epfound = True
+                            End If
+                        End If
+                        If epfound Then
+                            Episodedata = NewEpisode
+                            Episodedata.ThumbNail.Value = "http://www.thetvdb.com/banners/" & NewEpisode.ThumbNail.value
+                            Exit For
+                        End If
+                    Next
+                End If
+                If Not epfound Then
+                    Dim sortorder As String = WorkingTvShow.SortOrder.Value
+                    If sortorder = "" Then sortorder = "default"
+                    Dim tvdbid As String = WorkingTvShow.TvdbId.Value
+                    Dim imdbid As String = WorkingTvShow.ImdbId.Value
+                    Dim seasonno As String = ep.Season.Value
+                    Dim episodeno As String = ep.Episode.Value
+                    Episodedata = tvdbstuff.getepisodefromxml(tvdbid, sortorder, seasonno, episodeno, language, True)
+                    If Episodedata.FailedLoad Then
+                        Continue For
+                    End If
+                End If
+                Dim epdata As New TvEpisode 
+                epdata.AbsorbTvdbEpisode(Episodedata)
+                epdata.NfoFilePath = ep.NfoFilePath
+                epdata.VideoFilePath = ep.VideoFilePath 
+                epdata.Thumbnail.Url = Episodedata.ThumbNail.Value 
+                tv_EpisodeFanartGet(epdata, False)
             Next
-
-            'For Each nfo In nfofilestorename
-            '    'Dim Exists As Boolean = False
-            '    Dim paths As New List(Of String)
-            '    Dim pathsexist As New List(Of String)
-            '    If eden Then paths.Add(nfo.Replace("nfo", ".tbn"))
-            '    If frodo Then paths.Add(nfo.Replace(".nfo", "-thumb.jpg"))
-            '    For Each Path In paths
-            '        If File.Exists(Path) Then
-            '            pathsexist.Add(Path)
-            '        End If
-            '    Next
-            '    If pathsexist.Count > 0
-            '        If pathsexist.Count <> paths.Count Then
-            '        paths.Remove(pathsexist(0))
-            '        File.Copy(pathsexist(0), paths(0))
-            '        End If
-            '        Continue For
-            '    End If
-
-            'Next
             messbox.Close()
         Catch ex As Exception
             messbox.Close()
@@ -10077,7 +10096,7 @@ End Sub
                                 End If
                             Next
                             If Not epfound Then
-                                Dim epattempt2 As Boolean = False
+                                'Dim epattempt2 As Boolean = False
                                 Dim sortorder As String = Cache.TvCache.Shows(f).SortOrder.Value
                                 If sortorder = "" Then sortorder = "default"
                                 Dim tvdbid As String = Cache.TvCache.Shows(f).TvdbId.Value
