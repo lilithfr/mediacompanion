@@ -2698,12 +2698,21 @@ Public Class WorkingWithNfoFiles
                 End If
                 newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
-                newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
+                newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
                 newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path, newmovie.fileinfo.filename)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
                     newmovie.fileinfo.filenameandpath = path.Replace(".nfo", container)
+                End If
+                If newmovie.fileinfo.path.ToLower.Contains("video_ts") or newmovie.fileinfo.path.ToLower.Contains("bdmv") Then
+                    If newmovie.fileinfo.path.ToLower.Contains("video_ts") Then
+                        newmovie.fileinfo.basepath = newmovie.fileinfo.path.substring(0, newmovie.fileinfo.path.Length-9)
+                    Else 
+                        newmovie.fileinfo.basepath = newmovie.fileinfo.path.substring(0, newmovie.fileinfo.path.Length-5)
+                    End If
+                Else
+                    newmovie.fileinfo.basepath = newmovie.fileinfo.path
                 End If
                 If newmovie.fullmoviebody.movieset = "" Then
                     newmovie.fullmoviebody.movieset = "-None-"
