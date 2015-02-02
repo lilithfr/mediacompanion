@@ -11327,6 +11327,7 @@ End Sub
     Private Sub Mov_DeleteNfoArtwork()
         If MsgBox(" Are you sure you wish to delete" & vbCrLf & ".nfo, Fanart, Poster and Actors for" & vbCrLf & "Selected Movie(s)?",MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
             Dim movielist As New List(Of String)
+            Preferences.MovieDeleteNfoArtwork = True
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
                 movielist.Add(row.Cells(NFO_INDEX).Value.ToString)
                 oMovies.DeleteScrapedFiles(row.Cells(NFO_INDEX).Value.ToString)
@@ -11334,6 +11335,7 @@ End Sub
 
             'Last remove from dataGridViewMovies and update cache.
             Mov_RemoveMovie()
+            Preferences.MovieDeleteNfoArtwork = False
         Else
             MsgBox(" Deletion of .nfo, artwork and Actors " &vbCrLf & "has been Cancelled")
         End If

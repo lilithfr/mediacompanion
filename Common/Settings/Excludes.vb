@@ -50,6 +50,10 @@ Public Class Excludes
         Next
     End Sub
 
+    Public Sub Clear()
+        Items.Clear()
+    End Sub
+
 
     Public Function GetChild(doc As XmlDocument) As XmlElement
 

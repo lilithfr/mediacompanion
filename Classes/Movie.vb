@@ -361,7 +361,11 @@ Public Class Movie
 
     ReadOnly Property NfoPath As String
         Get
-            Return NfoPath_NoDirectorySeparatorChar & IO.Path.DirectorySeparatorChar
+            Dim result As String = NfoPath_NoDirectorySeparatorChar
+            Dim dirsepchar As String = IO.Path.DirectorySeparatorChar
+            If result.LastIndexOf(dirsepchar) <> result.Length-1 Then result = result & dirsepchar
+            'Return NfoPath_NoDirectorySeparatorChar & IO.Path.DirectorySeparatorChar
+            Return result
         End Get
     End Property
 
@@ -2232,7 +2236,7 @@ Public Class Movie
                 RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
                 If incTrailer Then DeleteTrailer
             End If
-            If Not Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then
+            If Not Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt OrElse Preferences.MovieDeleteNfoArtwork Then
                 DeletePoster
                 DeleteFanart
             End If
@@ -2765,7 +2769,9 @@ Public Class Movie
         For Each rtfold In Preferences.movieFolders
             If FilePath.Contains(rtfold) Then currentroot = rtfold
         Next
-        Dim inrootfolder As Boolean = ((currentroot & "\") = FilePath)
+        If currentroot.LastIndexOf("\") <> currentroot.Length-1 Then currentroot = currentroot & "\"
+
+        Dim inrootfolder As Boolean = (currentroot = FilePath)
         Dim newFolder As String = UserDefinedBaseFolderName
         Dim newpatharr As New List(Of String)
         newpatharr.AddRange(newFolder.Split("\"))
@@ -2793,7 +2799,7 @@ Public Class Movie
         'Check if new path already exists and if not, Create new directory/s
         FilePath = FilePath.Replace("VIDEO_TS\","")             'If DVD VIDEO_TS folder, step back one folder so we copy folder as well.
         FilePath = FilePath.Replace("BDMV\","")             'If BD BDMV folder, step back one folder so we copy folder as well.
-        Dim checkfolder As String = currentroot
+        Dim checkfolder As String = currentroot.Substring(0, currentroot.Length -1)
         If newpatharr.Count = 1 And Not inrootfolder Then                       'If only one folder in new folder pattern,
             Dim lastfolder As String = Utilities.GetLastFolderInPath(FilePath)  'Create in current directory, excluding if
             checkfolder = FilePath.Replace((lastfolder & "\"), newpatharr(0))   'movie is in root folder already
@@ -2802,7 +2808,6 @@ Public Class Movie
                 checkfolder &= "\" & folder
             Next
         End If
-
         If Not Directory.Exists(checkfolder) Then
                 Directory.CreateDirectory(checkfolder)
                 log &= "!!! New path created:- " & checkfolder & vbCrLf 
@@ -2843,8 +2848,7 @@ Public Class Movie
             Else
                 Moviename = stackname  '_movieCache.filename.Replace(".nfo","")
             End If
-            'Dim Moviename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
-            Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
+            Dim di As DirectoryInfo = New DirectoryInfo((currentroot))
             For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*.*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
             Next

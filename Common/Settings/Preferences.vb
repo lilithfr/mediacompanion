@@ -59,6 +59,7 @@ Public Class Preferences
     Public Shared XbmcTmdbHDTrailer As String = "No"
     Public Shared MovieChangeKeepExistingArt As Boolean = True
     Public Shared MovieChangeMovie As Boolean = False
+    Public Shared MovieDeleteNfoArtwork As Boolean = False
     
     Public Shared TvChgShowDlPoster As Boolean = False
     Public Shared TvChgShowDlFanart As Boolean = False
@@ -1157,6 +1158,7 @@ Public Class Preferences
         MVidFolders.Clear()
         movie_filters.Reset()
         engineupdate()
+        ExcludeFolders.Clear()
 
 
         If Not IO.File.Exists(workingProfile.Config) Then
