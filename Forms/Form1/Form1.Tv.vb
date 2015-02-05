@@ -1662,11 +1662,13 @@ Partial Public Class Form1
                 Dim episode As New TvEpisode
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
+                    S = S.Replace("x265", "")
                     S = S.Replace("x264", "")
                     S = S.Replace("720p", "")
                     S = S.Replace("720i", "")
                     S = S.Replace("1080p", "")
                     S = S.Replace("1080i", "")
+                    S = S.Replace("X265", "")
                     S = S.Replace("X264", "")
                     S = S.Replace("720P", "")
                     S = S.Replace("720I", "")
