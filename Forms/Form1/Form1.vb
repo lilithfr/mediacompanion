@@ -20034,6 +20034,11 @@ End Sub
         'Dim res As DialogResult = MsgBox("Are you Sure?" &vbCrLf & "This will export your Movies and TV Series" & vbCrLf & "to a format compatible for you to" & vbCrLf & "Import into XBMC/Kodi.",MsgBoxStyle.OkCancel)
         'If res = Windows.Forms.DialogResult.Cancel Then Exit Sub
         'ExportToXbmcdb()
+        '''
+        MsgBox("This function is not ready yet")
+        Exit Sub
+        '''
+
         Dim frmxport As New frmXbmcExport
         If Preferences.MultiMonitoEnabled Then
             Dim w As Integer = frmxport.Width
