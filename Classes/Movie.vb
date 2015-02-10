@@ -402,11 +402,14 @@ Public Class Movie
 
     ReadOnly Property Director As ActorDatabase
         Get
-            If _scrapedMovie.fullmoviebody.director = "" Then
+            If String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.director) Then
                 Return Nothing
             End If
-
-            Return New ActorDatabase(_scrapedMovie.fullmoviebody.director,_scrapedMovie.fullmoviebody.imdbid)
+            Try
+                Return New ActorDatabase(_scrapedMovie.fullmoviebody.director,_scrapedMovie.fullmoviebody.imdbid)
+            Catch
+                Return Nothing
+            End Try
         End Get
     End Property
 
@@ -2283,7 +2286,7 @@ Public Class Movie
 
     Sub DeletePoster
         DeleteFile(PosterPath)
-        DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
+        If Preferences.createfolderjpg Then DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
         DeleteFile(PosterDVDFrodo)
         DeleteFile(ActualPosterPath)
     End Sub
@@ -3736,8 +3739,8 @@ Public Class Movie
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
                     s = Utilities.cleanFilenameIllegalChars(s)
-                    If Preferences.MovRenameUnderscore Then
-                        s = Utilities.SpacesToUnderscores(s)
+                    If Preferences.MovRenameSpaceCharacter Then
+                        s = Utilities.SpacesToCharacter(s, Preferences.RenameSpaceCharacter)
                     End If
                 End If
             Catch
@@ -3779,8 +3782,8 @@ Public Class Movie
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
                     s = Utilities.cleanFoldernameIllegalChars(s)
-                    If Preferences.MovRenameUnderscore Then
-                        s = Utilities.SpacesToUnderscores(s)
+                    If Preferences.MovRenameSpaceCharacter Then
+                        s = Utilities.SpacesToCharacter(s, Preferences.RenameSpaceCharacter)
                     End If
                 End If
             Catch

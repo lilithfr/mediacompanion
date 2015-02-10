@@ -14,6 +14,7 @@
 	<Resolution name="WXGA+"        aspectRatio="16:10" width="1440" height="900" />
 	<Resolution name="HD+"          aspectRatio="16:9"  width="1600" height="900" />
 	<Resolution name="UXGA"         aspectRatio="4:3"   width="1600" height="1200"/>
+  <Resolution name="QWXGA+"       aspectRatio="16:10" width="2048" height="1280"/>
 	<Resolution name="WSXGA+"       aspectRatio="16:10" width="1680" height="1050"/>
 	<Resolution name="FHD"          aspectRatio="16:9"  width="1920" height="1080"/>
 	<Resolution name="WUXGA"        aspectRatio="16:10" width="1920" height="1200"/>

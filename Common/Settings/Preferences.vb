@@ -247,7 +247,7 @@ Public Class Preferences
     Public Shared MovFolderRename As Boolean
     Public Shared MovFolderRenameTemplate As String
     Public Shared MovNewFolderInRootFolder As String
-    Public Shared MovRenameUnderscore As Boolean
+    Public Shared MovRenameSpaceCharacter As Boolean
     Public Shared MovSetIgnArticle As Boolean
     Public Shared MovSortIgnArticle As Boolean
     Public Shared MovTitleIgnArticle As Boolean
@@ -294,6 +294,7 @@ Public Class Preferences
     Public Shared tablesortorder As String
     Public Shared MovSepLst As New List(Of String)
     Public Shared MovFiltLastSize As Integer
+    Public Shared RenameSpaceCharacter As String
 
     Public Shared Original_Title     As Boolean=False
     Public Shared UseMultipleThreads As Boolean=False
@@ -607,7 +608,7 @@ Public Class Preferences
         MovieRenameEnable = False
         MovieRenameTemplate = "%T (%Y)"
         MovFolderRename = False
-        MovRenameUnderscore = False
+        MovRenameSpaceCharacter = False
         MovSetIgnArticle = False
         MovSortIgnArticle = False
         MovTitleIgnArticle = False
@@ -618,6 +619,7 @@ Public Class Preferences
         MovNewFolderInRootFolder = False
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
         MovFiltLastSize = 384
+        RenameSpaceCharacter = "_"
 
 
         'TV
@@ -985,7 +987,7 @@ Public Class Preferences
         root.AppendChild(doc, "actorsavealpha",                     actorsavealpha)                     'actorsavealpha
         root.AppendChild(doc, "actornetworkpath",                   actornetworkpath)                   'xbmcactorpath
         root.AppendChild(doc, "imdbmirror",                         imdbmirror)                         'ListBox9
-        root.AppendChild(doc, "createfolderjpg",                    createfolderjpg)                    'chkbx_createfolderjpg
+        root.AppendChild(doc, "createfolderjpg",                    createfolderjpg)                    'cbMovCreateFolderjpg
         root.AppendChild(doc, "createfanartjpg",                    createfanartjpg)                    'cbMovCreateFanartjpg
         root.AppendChild(doc, "basicsavemode",                      basicsavemode)                      'chkbx_basicsave
         root.AppendChild(doc, "namemode",                           namemode)                           'cbxNameMode
@@ -1023,7 +1025,7 @@ Public Class Preferences
         root.AppendChild(doc, "MovFolderRename",                    MovFolderRename)                    'cbMovFolderRename
         root.AppendChild(doc, "MovFolderRenameTemplate",            MovFolderRenameTemplate)            'tb_MovFolderRename
         root.AppendChild(doc, "MovNewFolderInRootFolder",           MovNewFolderInRootFolder)           'cbMovNewFolderInRootFolder
-        root.AppendChild(doc, "MovRenameUnderscore",                MovRenameUnderscore)                'cbRenameUnderscore
+        root.AppendChild(doc, "MovRenameUnderscore",                MovRenameSpaceCharacter)            'cbRenameUnderscore
         root.AppendChild(doc, "MovSetIgnArticle",                   MovSetIgnArticle)                   'cbMovSetIgnArticle
         root.AppendChild(doc, "MovSortIgnArticle",                  MovSortIgnArticle)                  'cbMovSortIgnArticle
         root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
@@ -1064,6 +1066,7 @@ Public Class Preferences
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
         root.AppendChildList(doc, "movseplst",                      MovSepLst.ToArray)                  'lb_MovSepLst
         root.AppendChild(doc, "MovFiltLastSize",                    MovFiltLastSize)                    'Preference.MovFiltLastSize
+        root.AppendChild(doc, "RenameSpaceCharacter",               RenameSpaceCharacter)               'Preference.RenameSpaceCharacter
 
         root.AppendChild(movie_filters.GetChild(doc))
 
@@ -1436,7 +1439,7 @@ Public Class Preferences
                     Case "MovFolderRename"                      : MovFolderRename = thisresult.InnerText 
                     Case "MovFolderRenameTemplate"              : MovFolderRenameTemplate = thisresult.InnerText 
                     Case "MovNewFolderInRootFolder"             : MovNewFolderInRootFolder = thisresult.InnerXml 
-                    Case "MovRenameUnderscore"                  : MovRenameUnderscore = thisresult.InnerText 
+                    Case "MovRenameUnderscore"                  : MovRenameSpaceCharacter = thisresult.InnerText 
                     Case "MovSetIgnArticle"                     : MovSetIgnArticle = thisresult.InnerXml 
                     Case "MovSortIgnArticle"                    : MovSortIgnArticle = thisresult.InnerXml 
                     Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml
@@ -1467,6 +1470,7 @@ Public Class Preferences
                     Case "movieinvertorder"                     : movieinvertorder = thisresult.InnerXml
                     Case "MovieScraper_MaxStudios"              : MovieScraper_MaxStudios = thisresult.InnerXml
                     Case "MovFiltLastSize"                      : MovFiltLastSize = thisresult.InnerXml 
+                    Case "RenameSpaceCharacter"                 : RenameSpaceCharacter = thisresult.InnerText
 
                     Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
                     Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml

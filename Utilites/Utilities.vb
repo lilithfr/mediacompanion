@@ -985,8 +985,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return path
     End Function
 
-    Public Shared Function SpacesToUnderscores( ByVal inputText as String) As String
-        Return inputText.Replace(" ","_")
+    Public Shared Function SpacesToCharacter( ByVal inputText as String, ByVal Character As String) As String
+        Return inputText.Replace(" ", Character)
     End Function
 
     Public Shared Function cleanruntime(ByVal runtime As String) As String

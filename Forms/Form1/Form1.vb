@@ -10536,7 +10536,7 @@ End Sub
         Me.cbMovFolderRename.Checked = Preferences.MovFolderRename
         Me.cbMovSetIgnArticle.Checked = Preferences.MovSetIgnArticle 
         Me.cbMovTitleIgnArticle.Checked = Preferences.MovTitleIgnArticle
-        Me.cbRenameUnderscore.Checked = Preferences.MovRenameUnderscore 
+        Me.cbRenameUnderscore.Checked = Preferences.MovRenameSpaceCharacter
         Me.ManualRenameChkbox.Checked = Preferences.MovieManualRename
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
         Me.tb_MovieRenameEnable.Text = Preferences.MovieRenameTemplate
@@ -12450,7 +12450,12 @@ End Sub
         cbMovTitleCase                      .Checked        = Preferences.MovTitleCase
         cbExcludeMpaaRated                  .Checked        = Preferences.ExcludeMpaaRated
         cbMovThousSeparator                 .Checked        = Preferences.MovThousSeparator
-        cbRenameUnderscore                  .Checked        = Preferences.MovRenameUnderscore
+        cbRenameUnderscore                  .Checked        = Preferences.MovRenameSpaceCharacter
+        If Preferences.RenameSpaceCharacter = "_" Then
+            rbRenameUnderscore.Checked = True
+        Else
+            rbRenameFullStop.Checked = True
+        End If
         CheckBox_ShowDateOnMovieList        .Checked        = Preferences.showsortdate
         cbImdbgetTMDBActor                  .Checked        = Preferences.TmdbActorsImdbScrape
         'cbTMDBPreferredCertCountry          .Checked        = Preferences.TMDBPreferredCertCountry
@@ -15169,9 +15174,9 @@ End Sub
     Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
         Try
             If cbRenameUnderscore.CheckState = CheckState.Checked Then
-                Preferences.MovRenameUnderscore = True
+                Preferences.MovRenameSpaceCharacter = True
             Else
-                Preferences.MovRenameUnderscore = False
+                Preferences.MovRenameSpaceCharacter = False
                 'Preferences.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True
@@ -15179,6 +15184,17 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub rbRenameUnderscore_CheckedChanged( sender As Object,  e As EventArgs) Handles rbRenameUnderscore.CheckedChanged
+        If prefsload Then Exit Sub
+        If rbRenameUnderscore.Checked = True Then
+            Preferences.RenameSpaceCharacter = "_"
+        Else
+            Preferences.RenameSpaceCharacter = "."
+        End If
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetIgnArticle.CheckedChanged
