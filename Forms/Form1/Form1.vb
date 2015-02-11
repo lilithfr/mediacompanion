@@ -3226,28 +3226,37 @@ Public Class Form1
         frmSplash2.ProgressBar1.Visible = False
         frmSplash2.Show()
         Application.DoEvents()
-
-        Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
-
-        For Each part In plist
-            If part <> Nothing Then file.WriteLine(part)
-        Next
-        file.Close()
-
-        frmSplash2.Label1.Text = "Launching Player....."
-
-        If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-        If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-        If Preferences.videomode = 3 Then
-            Preferences.videomode = 2
-            Call util_VideoMode2(tempstring)
+        Dim aok As Boolean = False
+        If IO.File.Exists(tempstring) Then
+            aok = Utilities.SafeDeleteFile(tempstring)
         End If
-        If Preferences.videomode >= 4 Then
-            If Preferences.selectedvideoplayer <> Nothing Then
-                Call util_VideoMode4(tempstring)
-            Else
-                Call util_VideoMode1(tempstring)
+        If aok Then
+            'Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
+            Dim file As New StreamWriter(tempstring, False, Encoding.GetEncoding(1252))
+
+            For Each part In plist
+                If part <> Nothing Then file.WriteLine(part)
+            Next
+            file.Close()
+
+            frmSplash2.Label1.Text = "Launching Player....."
+
+            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Preferences.videomode = 3 Then
+                Preferences.videomode = 2
+                Call util_VideoMode2(tempstring)
             End If
+            If Preferences.videomode >= 4 Then
+                If Preferences.selectedvideoplayer <> Nothing Then
+                    Call util_VideoMode4(tempstring)
+                Else
+                    Call util_VideoMode1(tempstring)
+                End If
+            End If
+        Else
+            frmSplash2.Hide()
+            MsgBox("Failed to create playlist")
         End If
 
         frmSplash2.Hide()
