@@ -2483,7 +2483,11 @@ Public Class WorkingWithNfoFiles
                             If Not String.IsNullOrEmpty(vote) Then vote = vote.Replace(",", "")
                             newmovie.fullmoviebody.votes = vote  'thisresult.InnerText
                         Case "country"
-                            newmovie.fullmoviebody.country = thisresult.InnerText
+                            If newmovie.fullmoviebody.country = "" Then
+                                newmovie.fullmoviebody.country = thisresult.InnerText
+                            Else
+                                newmovie.fullmoviebody.country &= ", " & thisresult.InnerText
+                            End If
                         Case "outline"
                             newmovie.fullmoviebody.outline = thisresult.InnerText
                         Case "plot"
@@ -2500,18 +2504,13 @@ Public Class WorkingWithNfoFiles
                         Case "credits"
                             newmovie.fullmoviebody.credits = thisresult.InnerText
                         Case "director"
-                            newmovie.fullmoviebody.director = thisresult.InnerText
+                            If newmovie.fullmoviebody.director = "" Then
+                                newmovie.fullmoviebody.director = thisresult.InnerText
+                            Else
+                                newmovie.fullmoviebody.director = newmovie.fullmoviebody.director & " / " & thisresult.InnerText
+                            End If
                         Case "stars"
                             newmovie.fullmoviebody.stars = thisresult.InnerText
-
-
-                        'Case "thumb"
-                        '    If thisresult.InnerText.IndexOf("&lt;thumbs&gt;") <> -1 Then
-                        '        thumbstring = thisresult.InnerText
-                        '    Else
-                        '        newmovie.listthumbs.Add(thisresult.InnerText)
-                        '    End If
-
 
                         Case "thumb"
                             If thisresult.InnerText.IndexOf("&lt;thumbs&gt;") <> -1 Then
@@ -2532,7 +2531,11 @@ Public Class WorkingWithNfoFiles
                         Case "premiered"
                             newmovie.fullmoviebody.premiered = thisresult.InnerText
                         Case "studio"
-                            newmovie.fullmoviebody.studio = thisresult.InnerText
+                            If newmovie.fullmoviebody.studio = "" Then
+                                newmovie.fullmoviebody.studio = thisresult.InnerText
+                            Else
+                                newmovie.fullmoviebody.studio &= ", " & thisresult.InnerText
+                            End If
                         Case "trailer"
                             newmovie.fullmoviebody.trailer = thisresult.InnerText
                         Case "title"
@@ -3140,9 +3143,17 @@ Public Class WorkingWithNfoFiles
                 Catch
                 End Try
                 Try
-                    child = doc.CreateElement("country")
-                    child.InnerText = movietosave.fullmoviebody.country
-                    root.AppendChild(child)
+                    Dim strArr() As String
+                    strArr = movietosave.fullmoviebody.country.Split(",")
+                    For count = 0 To strArr.Length - 1
+                        child = doc.CreateElement("country")
+                        strArr(count) = strArr(count).Trim
+                        child.InnerText = strArr(count)
+                        root.AppendChild(child)
+                    Next
+                    'child = doc.CreateElement("country")
+                    'child.InnerText = movietosave.fullmoviebody.country
+                    'root.AppendChild(child)
                 Catch
                 End Try
                 stage = 22
@@ -3257,16 +3268,32 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 29
                 Try
-                    child = doc.CreateElement("director")
-                    child.InnerText = movietosave.fullmoviebody.director
-                    root.AppendChild(child)
+                    Dim strArr() As String
+                        strArr = movietosave.fullmoviebody.director.Split("/")
+                        For count = 0 To strArr.Length - 1
+                            child = doc.CreateElement("director")
+                            strArr(count) = strArr(count).Trim
+                            child.InnerText = strArr(count)
+                            root.AppendChild(child)
+                        Next
+                    'child = doc.CreateElement("director")
+                    'child.InnerText = movietosave.fullmoviebody.director
+                    'root.AppendChild(child)
                 Catch
                 End Try
                 stage = 30
                 Try
-                    child = doc.CreateElement("studio")
-                    child.InnerText = movietosave.fullmoviebody.studio
-                    root.AppendChild(child)
+                    Dim strArr() As String
+                    strArr = movietosave.fullmoviebody.studio.Split(",")
+                    For count = 0 To strArr.Length - 1
+                        child = doc.CreateElement("studio")
+                        strArr(count) = strArr(count).Trim
+                        child.InnerText = strArr(count)
+                        root.AppendChild(child)
+                    Next
+                    'child = doc.CreateElement("studio")
+                    'child.InnerText = movietosave.fullmoviebody.studio
+                    'root.AppendChild(child)
                 Catch
                 End Try
                 stage = 31
