@@ -161,6 +161,7 @@ Public Class Renamer
                     Next
                 Case "SC"
                     For i = 0 To formatEpisodeTitle.Length - 1
+                        formatEpisodeTitle(i) = ApostropheCheck(formatEpisodeTitle(i))
                         formatEpisodeTitle(i) = StrConv(formatEpisodeTitle(i), VbStrConv.ProperCase)
                     Next
                 Case "FL"
@@ -197,6 +198,18 @@ Public Class Renamer
             rename.epChar = rename.epChar.ToUpper()
         End If
     End Sub
+
+    Public Shared Function ApostropheCheck(ByVal s As String) As String
+        If s.Contains(Chr(146)) Then
+            Dim chkarr() As String = {"t", "s", "m", "ll", "ve"}
+            For Each ch In chkarr
+                If s.Contains(Chr(146) & ch) Then
+                    s = s.Replace(Chr(146), "'")
+                End If
+            Next
+        End If
+        Return s
+    End Function
 
     'Public Shared Function setSeasonRenamePref(ByVal strSeasonRenamePref As String) As Boolean
     '    If String.Equals(strSeasonRenamePref, rename.Se_previous) Then Return True
