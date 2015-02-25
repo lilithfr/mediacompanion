@@ -8214,7 +8214,8 @@ Public Class Form1
 
 'tabpage events
     Private Sub tpMoviesTable_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Enter
-        mov_TableSetup()
+        MovSetsRepopulate()
+        'mov_TableSetup()
     End Sub
 
     Private Sub tpMoviesTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Leave
@@ -17236,12 +17237,16 @@ End Sub
     End Sub
 
     Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
-        Preferences.moviesets.Clear()
-        Preferences.moviesets.Add("-None-")
+        MovSetsRepopulate()
         ListofMovieSets.Items.Clear()
-        Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
         ListofMovieSets.Items.AddRange(oMovies.MoviesSetsExNone.ToArray)
         pop_cbMovieDisplay_MovieSet()
+    End Sub
+
+    Private Sub MovSetsRepopulate()
+        Preferences.moviesets.Clear()
+        Preferences.moviesets.Add("-None-")
+        Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
     End Sub
 
 #End Region
