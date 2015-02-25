@@ -2561,7 +2561,22 @@ Public Class WorkingWithNfoFiles
                             '    newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & " / " & thisresult.InnerText
                             'End If
                         Case "id"
-                            newmovie.fullmoviebody.imdbid = thisresult.InnerText
+                            Dim myresult As String = thisresult.InnerText
+                            Dim testAttribute as XmlAttribute = CType(thisresult.Attributes.GetNamedItem("moviedb"),  XmlAttribute)
+                            If testAttribute isnot nothing then
+                                If testAttribute.InnerText = "imdb" Then newmovie.fullmoviebody.imdbid = thisresult.InnerText
+                                If testAttribute.InnerText = "tmdb" Then newmovie.fullmoviebody.tmdbid = thisresult.InnerText
+                                If testAttribute.InnerText = "themoviedb" Then newmovie.fullmoviebody.tmdbid = thisresult.InnerText
+                            Else
+                                'Dim myreslen As Integer = myresult.Length
+                                If myresult.StartsWith("tt") Then
+                                    newmovie.fullmoviebody.imdbid = myresult
+                                Else
+                                    newmovie.fullmoviebody.tmdbid = myresult
+                                    myresult = nothing
+                                End If
+                            End If
+                            'newmovie.fullmoviebody.imdbid = myresult    'thisresult.InnerText
                         Case "tmdbid"
                             newmovie.fullmoviebody.tmdbid = thisresult.InnerText 
                         Case "playcount"
