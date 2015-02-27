@@ -2137,22 +2137,26 @@ Public Class Movie
                     End If
                 Next
                 If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
-                If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold 
-                Utilities.DownloadImage(clearart, DestPath & "clearart.png", Overwrite)
-                Utilities.DownloadImage(logo, DestPath & "logo.png", Overwrite)
+                If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logoLD
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlClearArt Then Utilities.DownloadImage(clearart, DestPath & "clearart.png", Overwrite)
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlClearLogo Then Utilities.DownloadImage(logo, DestPath & "logo.png", Overwrite)
                 'Utilities.DownloadFile(poster, DestPath & "poster.jpg")
                 'Utilities.DownloadFile(fanart, DestPath & "fanart.jpg")
-                Utilities.DownloadImage(disc, DestPath & "disc.png", Overwrite)
-                Utilities.DownloadImage(banner, DestPath & "banner.jpg", Overwrite)
-                Utilities.DownloadImage(landscape, DestPath & "landscape.jpg", Overwrite)
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlDisc Then Utilities.DownloadImage(disc, DestPath & "disc.png", Overwrite)
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlBanner Then Utilities.DownloadImage(banner, DestPath & "banner.jpg", Overwrite)
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlLandscape Then Utilities.DownloadImage(landscape, DestPath & "landscape.jpg", Overwrite)
                 'Fanart
-                Dim fanartpaths As List(Of String) = Preferences.GetfanartPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
-                If Not fanartpaths.Contains(DestPath & "fanart.jpg") Then fanartpaths.Add(DestPath & "fanart.jpg")
-                DownloadCache.SaveImageToCacheAndPaths(fanart, fanartpaths, False, 0, 0, Overwrite)
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlFanart Then
+                    Dim fanartpaths As List(Of String) = Preferences.GetfanartPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                    If Not fanartpaths.Contains(DestPath & "fanart.jpg") Then fanartpaths.Add(DestPath & "fanart.jpg")
+                    DownloadCache.SaveImageToCacheAndPaths(fanart, fanartpaths, False, 0, 0, Overwrite)
+                End If
                 'Poster
-                Dim posterpaths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
-                If Not posterpaths.Contains(DestPath & "poster.jpg") Then posterpaths.Add(DestPath & "poster.jpg")
-                DownloadCache.SaveImageToCacheAndPaths(poster, posterpaths, False, 0, 0, Overwrite)
+                If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlPoster Then
+                    Dim posterpaths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                    If Not posterpaths.Contains(DestPath & "poster.jpg") Then posterpaths.Add(DestPath & "poster.jpg")
+                    DownloadCache.SaveImageToCacheAndPaths(poster, posterpaths, False, 0, 0, Overwrite)
+                End If
 
                 ReportProgress(MSG_OK, "!!! Artwork from Fanart.Tv Downloaded OK" & vbCrLf)
             Else

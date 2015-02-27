@@ -23,8 +23,8 @@ Public Class ucFanartTv
     Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
     Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
                                           "Movie Disc", "Movie Banner", "Landscape"}
-    Public tvFriendlyname() As String = {"HiDef Tv Logo", "HiDef ClearArt", "Clear Logo", "Clear Art", "Tv Poster", "Tv Thumb", 
-                                         "Tv Banner", "Show Background", "Season Poster", "Season Thumb",  "Character Art"}
+    'Public tvFriendlyname() As String = {"HiDef Tv Logo", "HiDef ClearArt", "Clear Logo", "Clear Art", "Tv Poster", "Tv Thumb", 
+    '                                     "Tv Banner", "Show Background", "Season Poster", "Season Thumb",  "Character Art"}
 
 
     Public Sub ucFanartTv_Refresh(ByVal moviedetails As FullMovieDetails)

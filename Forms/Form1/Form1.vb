@@ -3331,6 +3331,7 @@ Public Class Form1
                     genretxt.Text = genre
                     Call mov_SaveQuick()
                 End If
+                frm.Dispose()
             Catch
             End Try
         End If
@@ -14457,6 +14458,16 @@ End Sub
         Preferences.MovFanartTvscrape = cbMovFanartTvScrape.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub btnMovFanartTvSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartTvSelect.Click
+        Dim frm As New frmFanartTvArtSelect
+        frm.Init()
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK AndAlso frm.IsChanged Then
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        End If
+        frm.Dispose()
     End Sub
 
     Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlXtraFanart.CheckedChanged

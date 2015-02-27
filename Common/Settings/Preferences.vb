@@ -222,6 +222,13 @@ Public Class Preferences
     Public Shared transparencyvalue As Integer
     Public Shared savefanart As Boolean
     Public Shared MovFanartTvscrape As Boolean   'cbMovFanartTvScrape
+    Public Shared MovFanartTvDlClearArt As Boolean
+    Public Shared MovFanartTvDlClearLogo As Boolean
+    Public Shared MovFanartTvDlPoster As Boolean
+    Public Shared MovFanartTvDlFanart As Boolean
+    Public Shared MovFanartTvDlDisc As Boolean
+    Public Shared MovFanartTvDlBanner As Boolean
+    Public Shared MovFanartTvDlLandscape As Boolean
     Public Shared fanartjpg As Boolean      'Used to create fanart.jpg instead of movie-fanart.jpg
     Public Shared roundminutes As Boolean
     Public Shared moviedefaultlist As Byte
@@ -326,6 +333,11 @@ Public Class Preferences
         Set(value As Integer)
             Utilities.RARsize = value
         End Set
+    End Property
+    Public Shared ReadOnly Property MovFanartTvDlAll As Boolean
+        Get
+            Return MovFanartTvDlBanner AndAlso MovFanartTvDlClearArt AndAlso MovFanartTvDlClearLogo AndAlso MovFanartTvDlDisc AndAlso MovFanartTvDlFanart AndAlso MovFanartTvDlLandscape AndAlso MovFanartTvDlPoster 
+        End Get
     End Property
 
     'Saved TV Prefs
@@ -674,6 +686,13 @@ Public Class Preferences
         enablehdtags = True
         savefanart = True
         MovFanartTvscrape = False
+        MovFanartTvDlClearArt = True
+        MovFanartTvDlClearLogo = True
+        MovFanartTvDlPoster = True
+        MovFanartTvDlFanart = True
+        MovFanartTvDldisc = True
+        MovFanartTvDlBanner = True
+        MovFanartTvDlLandscape = True
         fanartjpg = False
         overwritethumbs = False
         LocalActorImage = True
@@ -1001,6 +1020,13 @@ Public Class Preferences
         root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'cbMovFanartScrape
         root.AppendChild(doc, "movfanarttvscrape",                  MovFanartTvscrape)                  'cbMovFanartTvScrape
+        root.AppendChild(doc, "MovFanartTvDlClearArt",              MovFanartTvDlClearArt)              
+        root.AppendChild(doc, "MovFanartTvDlClearLogo",             MovFanartTvDlClearLogo)
+        root.AppendChild(doc, "MovFanartTvDlPoster",                MovFanartTvDlPoster)
+        root.AppendChild(doc, "MovFanartTvDlFanart",                MovFanartTvDlFanart)
+        root.AppendChild(doc, "MovFanartTvDlDisc",                  MovFanartTvDlDisc)
+        root.AppendChild(doc, "MovFanartTvDlBanner",                MovFanartTvDlBanner)
+        root.AppendChild(doc, "MovFanartTvDlLandscape",             MovFanartTvDlLandscape)
         root.AppendChild(doc, "fanartjpg",                          fanartjpg)                          'cbMovieFanartInFolders
         root.AppendChild(doc, "roundminutes",                       roundminutes)                       'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreparts",                        movieignorepart)                    'cbxCleanFilenameIgnorePart
@@ -1412,6 +1438,13 @@ Public Class Preferences
                     Case "folderjpg"                            : createfolderjpg = thisresult.InnerXml
                     Case "savefanart"                           : savefanart = thisresult.InnerXml
                     Case "movfanarttvscrape"                    : MovFanartTvscrape = thisresult.InnerXml 
+                    Case "MovFanartTvDlClearArt"                : MovFanartTvDlClearArt = thisresult.InnerXml
+                    Case "MovFanartTvDlClearLogo"               : MovFanartTvDlClearLogo = thisresult.InnerXml
+                    Case "MovFanartTvDlPoster"                  : MovFanartTvDlPoster = thisresult.InnerXml
+                    Case "MovFanartTvDlFanart"                  : MovFanartTvDlFanart = thisresult.InnerXml
+                    Case "MovFanartTvDlDisc"                    : MovFanartTvDlDisc = thisresult.InnerXml
+                    Case "MovFanartTvDlBanner"                  : MovFanartTvDlBanner = thisresult.InnerXml
+                    Case "MovFanartTvDlLandscape"               : MovFanartTvDlLandscape = thisresult.InnerXml
                     Case "fanartjpg"                            : fanartjpg = thisresult.InnerXml
                     Case "postertype"                           : postertype = thisresult.InnerXml
 '                   Case "tvactorscrape"                        : TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)

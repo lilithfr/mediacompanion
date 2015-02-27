@@ -200,6 +200,12 @@
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\TVShows.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
+    <Compile Include="Forms\frmFanartTvArtSelect.Designer.vb">
+      <DependentUpon>frmFanartTvArtSelect.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFanartTvArtSelect.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmGenreSelect.Designer.vb">
       <DependentUpon>frmGenreSelect.vb</DependentUpon>
     </Compile>
@@ -497,6 +503,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\frmFanartTvArtSelect.resx">
+      <DependentUpon>frmFanartTvArtSelect.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmGenreSelect.resx">
       <DependentUpon>frmGenreSelect.vb</DependentUpon>
     </EmbeddedResource>
