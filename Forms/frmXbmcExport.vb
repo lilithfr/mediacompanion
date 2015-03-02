@@ -9,6 +9,7 @@ Imports System.Linq
 Public Class frmXbmcExport
     Private MovieList As New List(Of FullMovieDetails)
     Private TVSeries As New List(Of xbmctvseries)
+    Private Pathlist As New List(Of XBMCPaths)
     Dim xbmcexportfolder As String = "\xbmc_videodb_" & DateTime.Now.ToString("yyyy_MM_dd")
     Private OutputFolder As String = Nothing
     Private _outputfolderchecked As Boolean = False
@@ -89,7 +90,7 @@ Public Class frmXbmcExport
 
     Public Sub RunExport()
         ProgressBar1.Value = 0
-        ProgressBar1.Maximum = MovieList.Count + TVSeries.Count + epcount
+        ProgressBar1.Maximum = MovieList.Count ' + TVSeries.Count + epcount
         'SetpathMapping()
         'SetOutputFolders()
 
@@ -104,24 +105,39 @@ Public Class frmXbmcExport
         version = doc.CreateElement("version")
         version.InnerText = "1"
         root.AppendChild(version)
-        Dim child As XmlElement = Nothing
+        
         ''Run Movie Output
         For Each Moviefound In MovieList
             Me.ProgressBar1.Value +=1
             If Not File.Exists(Moviefound.fileinfo.fullpathandfilename) Then Continue For
             Dim currentmovie As New XmlDocument
-            currentmovie = Transposemovie(Moviefound.fileinfo.fullpathandfilename)
-            'currentmovie.Load(Moviefound.fileinfo.fullpathandfilename)
-            'If currentmovie.FirstChild.NodeType = XmlNodeType.XmlDeclaration Then currentmovie.RemoveChild(currentmovie.FirstChild)
-            'child = doc.CreateElement("path")
-            'child.InnerText = Moviefound.fileinfo.path
-            'currentmovie.InsertAfter(child, currentmovie.FirstChild)
-            'Dim oDoc As XMLNode = root.OwnerDocument.ImportNode(currentmovie.DocumentElement, True)
-            'root.AppendChild(oDoc)
+            currentmovie = Transposemovie(Moviefound.fileinfo.fullpathandfilename, Moviefound.fileinfo.path)
+            Dim oDoc As XMLNode = root.OwnerDocument.ImportNode(currentmovie.DocumentElement, True)
+            root.AppendChild(oDoc)
+            Me.ProgressBar1.Refresh()
+        Next
+        For Each ph In Preferences.movieFolders
+            Dim t As New XBMCPaths
+            t.rootpath = ph
+            t.pathsource = "movies"
+            Pathlist.Add(t)
         Next
         doc.AppendChild(root)
         ''Run Tv Output
 
+        Dim xbpaths As New XmlDocument
+        xbpaths = SetPaths()
+        Dim oDoc2 As XMLNode = root.OwnerDocument.ImportNode(xbpaths.DocumentElement, True)
+        root.AppendChild(oDoc2)
+        doc.AppendChild(root)
+        Try
+            Dim output As New XmlTextWriter(OutputFolder & "\videodb.xml", System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            output.Indentation = 4
+            doc.WriteTo(output)
+            output.Close()
+        Catch
+        End Try
 
     End Sub
 
@@ -160,7 +176,7 @@ Public Class frmXbmcExport
         Return outputfolder 
     End Function
 
-    Private Function Transposemovie(ByVal nfopath) As XmlDocument  
+    Private Function Transposemovie(ByVal nfopath As String, ByVal MoviePath As String) As XmlDocument  
         Dim mov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfopath)
         Dim thismovie As New XmlDocument
         Try
@@ -173,93 +189,17 @@ Public Class frmXbmcExport
             Dim anotherchild As XmlElement = Nothing
 
             root = thismovie.CreateElement("movie")
-            stage = 3
-            child = thismovie.CreateElement("fileinfo")
-            anotherchild = thismovie.CreateElement("streamdetails")
-            filedetailschild = thismovie.CreateElement("video")
-            filedetailschildchild = thismovie.CreateElement("width")
-            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Width.Value), "", mov.filedetails.filedetails_video.Width.Value)
-            filedetailschild.AppendChild(filedetailschildchild)
 
-            stage = 4
-            filedetailschildchild = thismovie.CreateElement("height")
-            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Height.Value), "", mov.filedetails.filedetails_video.Height.Value)
-            filedetailschild.AppendChild(filedetailschildchild)
-
-            filedetailschildchild = thismovie.CreateElement("aspect")
-            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Aspect.Value), "", mov.filedetails.filedetails_video.Aspect.Value)
-            filedetailschild.AppendChild(filedetailschildchild)
-
-            stage = 5
-            filedetailschildchild = thismovie.CreateElement("codec")
-            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Codec.Value), "", mov.filedetails.filedetails_video.Codec.Value)
-            filedetailschild.AppendChild(filedetailschildchild)
-
-            stage = 7
-            filedetailschildchild = thismovie.CreateElement("durationinseconds")
-            filedetailschildchild.InnerText = If(mov.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "0", mov.filedetails.filedetails_video.DurationInSeconds.Value)
-            filedetailschild.AppendChild(filedetailschildchild)
-            
-            stage = 15
-                anotherchild.AppendChild(filedetailschild)
-            stage = 16
-            For Each item In mov.filedetails.filedetails_audio
-                filedetailschild = thismovie.CreateElement("audio")
-                filedetailschildchild = thismovie.CreateElement("codec")
-                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(item.Codec.Value), "", item.Codec.Value)
-                filedetailschild.AppendChild(filedetailschildchild)
-
-                filedetailschildchild = thismovie.CreateElement("language")
-                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(item.Language.Value), "", item.Language.Value)
-                filedetailschild.AppendChild(filedetailschildchild)
-
-                filedetailschildchild = thismovie.CreateElement("channels")
-                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(item.Channels.Value), "", item.Channels.Value)
-                filedetailschild.AppendChild(filedetailschildchild)
-                        
-                anotherchild.AppendChild(filedetailschild)
-            Next
-
-            stage = 17
-            filedetailschild = thismovie.CreateElement("subtitle")
-            For Each entry In mov.filedetails.filedetails_subtitles
-                filedetailschildchild = thismovie.CreateElement("language")
-                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(entry.Language.Value), "", entry.Language.Value)
-                filedetailschild.AppendChild(filedetailschildchild)
-            Next
-            anotherchild.AppendChild(filedetailschild)
-
-            stage = 18
-            child.AppendChild(anotherchild) : root.AppendChild(child)
             child = thismovie.CreateElement("title") : child.InnerText = mov.fullmoviebody.title : root.AppendChild(child)
-
             child = thismovie.CreateElement("originaltitle")
             child.InnerText = If(String.IsNullOrEmpty(mov.fullmoviebody.originaltitle), mov.fullmoviebody.title, mov.fullmoviebody.originaltitle)
-            root.AppendChild(child) 
-            
-            If mov.fullmoviebody.movieset <> "-None-" Then
-                Dim strArr() As String
-                strArr = mov.fullmoviebody.movieset.Split("/")
-                For count = 0 To strArr.Length - 1
-                    child = thismovie.CreateElement("set")
-                    strArr(count) = strArr(count).Trim
-                    child.InnerText = strArr(count)
-                    root.AppendChild(child)
-                Next
-            End If
-
-            If String.IsNullOrEmpty(mov.fullmoviebody.sortorder) Then
-                mov.fullmoviebody.sortorder = mov.fullmoviebody.title
-            End If
-            child = thismovie.CreateElement("sorttitle")
-            child.InnerText = mov.fullmoviebody.sortorder
             root.AppendChild(child)
-            stage = 19
-            child = thismovie.CreateElement("year") : child.InnerText = mov.fullmoviebody.year : root.AppendChild(child)
-            stage = 20
-            child = thismovie.CreateElement("premiered") : child.InnerText = mov.fullmoviebody.premiered : root.AppendChild(child)
+            If String.IsNullOrEmpty(mov.fullmoviebody.sortorder) Then mov.fullmoviebody.sortorder = mov.fullmoviebody.title
+            child = thismovie.CreateElement("sorttitle") : child.InnerText = mov.fullmoviebody.sortorder : root.AppendChild(child)
             child = thismovie.CreateElement("rating") : child.InnerText = mov.fullmoviebody.rating.ToRating.ToString("0.0", Form1.MyCulture) : root.AppendChild(child)
-            stage = 21
+            child = thismovie.CreateElement("epbookmark") : child.InnerText = "0.000000" : root.AppendChild(child)
+            child = thismovie.CreateElement("year") : child.InnerText = mov.fullmoviebody.year : root.AppendChild(child)
+            child = thismovie.CreateElement("top250") : child.InnerText = mov.fullmoviebody.top250 : root.AppendChild(child)
             child = thismovie.CreateElement("votes")
             Dim votes As String = mov.fullmoviebody.votes
             If Not String.IsNullOrEmpty(votes) then
@@ -276,15 +216,43 @@ Public Class frmXbmcExport
                     End If
                 End If
             End If
-                    
             child.InnerText = votes : root.AppendChild(child)
-            child = thismovie.CreateElement("top250") : child.InnerText = mov.fullmoviebody.top250 : root.AppendChild(child)
             child = thismovie.CreateElement("outline") : child.InnerText = mov.fullmoviebody.outline : root.AppendChild(child)
             child = thismovie.CreateElement("plot") : child.InnerText = mov.fullmoviebody.plot : root.AppendChild(child)
             child = thismovie.CreateElement("tagline") : child.InnerText = mov.fullmoviebody.tagline : root.AppendChild(child)
-            child = thismovie.CreateElement("country") : child.InnerText = mov.fullmoviebody.country : root.AppendChild(child)
-
-            stage = 22
+            child = thismovie.CreateElement("runtime")
+            If mov.fullmoviebody.runtime <> Nothing Then
+                Dim minutes As String = mov.fullmoviebody.runtime
+                minutes = minutes.Replace("minutes", "")
+                minutes = minutes.Replace("mins", "")
+                minutes = minutes.Replace("min", "")
+                minutes = minutes.Replace(" ", "")
+                Try
+                    If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
+                        Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+                            minutes = minutes.Substring(1, minutes.Length - 1)
+                        Loop
+                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                            minutes = "0" & minutes
+                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                            minutes = "00" & minutes
+                        End If
+                    End If
+                    If Preferences.intruntime = False And IsNumeric(minutes) Then
+                        If minutes = "0" AndAlso Not String.IsNullOrEmpty(mov.filedetails.filedetails_video.DurationInSeconds.Value) Then
+                            Dim seconds As Integer = Convert.ToInt32(mov.filedetails.filedetails_video.DurationInSeconds.Value)
+                            If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
+                        End If
+                        minutes = minutes & " min"
+                    End If
+                Catch ex As Exception
+                    minutes = mov.fullmoviebody.runtime
+                End Try
+                child.InnerText = minutes
+            Else
+                child.InnerText = "0"   'mov.fullmoviebody.runtime
+            End If
+            root.AppendChild(child)
             If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
                 For Each item In mov.frodoPosterThumbs
                     child = thismovie.CreateElement("thumb")
@@ -302,44 +270,16 @@ Public Class frmXbmcExport
                     End Try
                 Next
             End If
-
-            stage = 24
-                child = thismovie.CreateElement("runtime")
-                If mov.fullmoviebody.runtime <> Nothing Then
-                    Dim minutes As String = mov.fullmoviebody.runtime
-                    minutes = minutes.Replace("minutes", "")
-                    minutes = minutes.Replace("mins", "")
-                    minutes = minutes.Replace("min", "")
-                    minutes = minutes.Replace(" ", "")
-                    Try
-                        If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
-                            Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
-                                minutes = minutes.Substring(1, minutes.Length - 1)
-                            Loop
-                            If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
-                                minutes = "0" & minutes
-                            ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
-                                minutes = "00" & minutes
-                            End If
-                        End If
-                        If Preferences.intruntime = False And IsNumeric(minutes) Then
-                            If minutes = "0" AndAlso Not String.IsNullOrEmpty(mov.filedetails.filedetails_video.DurationInSeconds.Value) Then
-                                Dim seconds As Integer = Convert.ToInt32(mov.filedetails.filedetails_video.DurationInSeconds.Value)
-                                If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
-                            End If
-                            minutes = minutes & " min"
-                        End If
-                    Catch ex As Exception
-                        minutes = mov.fullmoviebody.runtime
-                    End Try
-                    child.InnerText = minutes
-                Else
-                    child.InnerText = mov.fullmoviebody.runtime
-                End If
-                root.AppendChild(child)
-            stage = 25
-                child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
-            stage = 26
+            child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
+            child = thismovie.CreateElement("playcount") : child.InnerText = mov.fullmoviebody.playcount : root.AppendChild(child)
+            child = thismovie.CreateElement("lastplayed") : child.InnerText = mov.fullmoviebody.lastplayed : root.AppendChild(child)
+            child = thismovie.CreateElement("path") : child.InnerText = mov.fileinfo.path : root.AppendChild(child)
+            child = thismovie.CreateElement("filenameandpath") : child.InnerText = mov.fileinfo.filenameandpath : root.AppendChild(child)
+            child = thismovie.CreateElement("basepath")
+            Dim basepath As String = GetBasePath(mov)
+            child.InnerText = basepath              'mov.fileinfo.basepath
+            root.AppendChild(child)
+            child = thismovie.CreateElement("id") : child.InnerText = mov.fullmoviebody.imdbid : root.AppendChild(child)
             If mov.fullmoviebody.genre <> "" Then
                 Dim strArr() As String
                 strArr = mov.fullmoviebody.genre.Split("/")
@@ -350,7 +290,21 @@ Public Class frmXbmcExport
                     root.AppendChild(child)
                 Next
             End If
-            stage = 27
+            If mov.fullmoviebody.country <> "" Then
+                Dim strArr() As String
+                strArr = mov.fullmoviebody.country.Split(",")
+                For count = 0 To strArr.Length - 1
+                    child = thismovie.CreateElement("country")
+                    strArr(count) = strArr(count).Trim
+                    child.InnerText = strArr(count)
+                    root.AppendChild(child)
+                Next
+            End If
+            
+            child = thismovie.CreateElement("set")
+            child.InnerText = If(mov.fullmoviebody.movieset = "-None-", "", mov.fullmoviebody.movieset)
+            root.AppendChild(child)
+
             If mov.fullmoviebody.tag.Count <> 0 Then
                 For Each tags In mov.fullmoviebody.tag
                     child = thismovie.CreateElement("tag")
@@ -358,78 +312,193 @@ Public Class frmXbmcExport
                     root.AppendChild(child)
                 Next
             End If
-            stage = 28
             child = thismovie.CreateElement("credits") : child.InnerText = mov.fullmoviebody.credits : root.AppendChild(child)
-            stage = 29
-            child = thismovie.CreateElement("director") : child.InnerText = mov.fullmoviebody.director : root.AppendChild(child)
-            stage = 30
-            child = thismovie.CreateElement("studio") : child.InnerText = mov.fullmoviebody.studio : root.AppendChild(child)
-            stage = 31
+            
+            If mov.fullmoviebody.director <> "" Then
+                Dim strArr() As String
+                strArr = mov.fullmoviebody.director.Split("/")
+                For count = 0 To strArr.Length - 1
+                    child = thismovie.CreateElement("director")
+                    strArr(count) = strArr(count).Trim
+                    child.InnerText = strArr(count)
+                    root.AppendChild(child)
+                Next
+            End If
+
+            If mov.fullmoviebody.studio <> "" Then
+                Dim strArr() As String
+                strArr = mov.fullmoviebody.studio.Split(",")
+                For count = 0 To strArr.Length - 1
+                    child = thismovie.CreateElement("studio")
+                    strArr(count) = strArr(count).Trim
+                    child.InnerText = strArr(count)
+                    root.AppendChild(child)
+                Next
+            End If
             child = thismovie.CreateElement("trailer")
             child.InnerText = If(String.IsNullOrEmpty(mov.fullmoviebody.trailer), "", mov.fullmoviebody.trailer)
             root.AppendChild(child)
-            stage = 32
-            child = thismovie.CreateElement("playcount") : child.InnerText = mov.fullmoviebody.playcount : root.AppendChild(child)
-            stage = 32
-            child = thismovie.CreateElement("lastplayed") : child.InnerText = mov.fullmoviebody.lastplayed : root.AppendChild(child)
-            stage = 33
-                If Not String.IsNullOrEmpty(mov.fullmoviebody.imdbid) Then
-                    child = thismovie.CreateElement("id")
-                    child.InnerText = mov.fullmoviebody.imdbid
-                    root.AppendChild(child)
-                End If
-                If Not String.IsNullOrEmpty(mov.fullmoviebody.tmdbid) Then
-                    child = thismovie.CreateElement("tmdbid")
-                    child.InnerText = mov.fullmoviebody.tmdbid
-                    root.AppendChild(child)
-                End If
-                If Not String.IsNullOrEmpty(mov.fullmoviebody.source) Then
-                    child = thismovie.CreateElement("videosource")
-                    child.InnerText = mov.fullmoviebody.source
-                    root.AppendChild(child)
-                End If
-                child = thismovie.CreateElement("createdate")
-                If String.IsNullOrEmpty(mov.fileinfo.createdate) Then
-                    Dim myDate2 As Date = System.DateTime.Now
-                    Try
-                        child.InnerText = Format(myDate2, Preferences.datePattern).ToString
-                    Catch ex2 As Exception
-                    End Try
-                Else
-                    child.InnerText = mov.fileinfo.createdate
-                End If
+
+            child = thismovie.CreateElement("fileinfo")
+            anotherchild = thismovie.CreateElement("streamdetails")
+            filedetailschild = thismovie.CreateElement("video")
+
+            filedetailschildchild = thismovie.CreateElement("codec")
+            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Codec.Value), "", mov.filedetails.filedetails_video.Codec.Value)
+            filedetailschild.AppendChild(filedetailschildchild)
+
+            filedetailschildchild = thismovie.CreateElement("aspect")
+            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Aspect.Value), "", mov.filedetails.filedetails_video.Aspect.Value)
+            filedetailschild.AppendChild(filedetailschildchild)
+
+            
+            filedetailschildchild = thismovie.CreateElement("width")
+            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Width.Value), "", mov.filedetails.filedetails_video.Width.Value)
+            filedetailschild.AppendChild(filedetailschildchild)
+
+            filedetailschildchild = thismovie.CreateElement("height")
+            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Height.Value), "", mov.filedetails.filedetails_video.Height.Value)
+            filedetailschild.AppendChild(filedetailschildchild)
+
+            filedetailschildchild = thismovie.CreateElement("durationinseconds")
+            filedetailschildchild.InnerText = If(mov.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "0", mov.filedetails.filedetails_video.DurationInSeconds.Value)
+            filedetailschild.AppendChild(filedetailschildchild)
+            anotherchild.AppendChild(filedetailschild)
+
+            For Each item In mov.filedetails.filedetails_audio
+                filedetailschild = thismovie.CreateElement("audio")
+                filedetailschildchild = thismovie.CreateElement("codec")
+                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(item.Codec.Value), "", item.Codec.Value)
+                filedetailschild.AppendChild(filedetailschildchild)
+
+                filedetailschildchild = thismovie.CreateElement("language")
+                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(item.Language.Value), "", item.Language.Value)
+                filedetailschild.AppendChild(filedetailschildchild)
+
+                filedetailschildchild = thismovie.CreateElement("channels")
+                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(item.Channels.Value), "", item.Channels.Value)
+                filedetailschild.AppendChild(filedetailschildchild)
+                        
+                anotherchild.AppendChild(filedetailschild)
+            Next
+
+            filedetailschild = thismovie.CreateElement("subtitle")
+            For Each entry In mov.filedetails.filedetails_subtitles
+                filedetailschildchild = thismovie.CreateElement("language")
+                filedetailschildchild.InnerText = If(String.IsNullOrEmpty(entry.Language.Value), "", entry.Language.Value)
+                filedetailschild.AppendChild(filedetailschildchild)
+            Next
+            anotherchild.AppendChild(filedetailschild)
+
+            stage = 18
+            child.AppendChild(anotherchild)
+            root.AppendChild(child)
+
+            Dim actorstosave As Integer = mov.listactors.Count
+            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+            For f = 0 To actorstosave - 1
+                child = thismovie.CreateElement("actor")
+                actorchild = thismovie.CreateElement("name")
+                actorchild.InnerText = mov.listactors(f).actorname
+                child.AppendChild(actorchild)
+                actorchild = thismovie.CreateElement("role")
+                actorchild.InnerText = mov.listactors(f).actorrole
+                child.AppendChild(actorchild)
+                actorchild = thismovie.CreateElement("order")
+                actorchild.InnerText = mov.listactors(f).order
+                child.AppendChild(actorchild)
+                actorchild = thismovie.CreateElement("thumb")
+                actorchild.InnerText = mov.listactors(f).actorthumb
+                child.AppendChild(actorchild)
                 root.AppendChild(child)
-            stage = 34
-                child = thismovie.CreateElement("stars")
-                child.InnerText = mov.fullmoviebody.stars
-                root.AppendChild(child)
-                Dim actorstosave As Integer = mov.listactors.Count
-                If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
-                For f = 0 To actorstosave - 1
-                    child = thismovie.CreateElement("actor")
-                    actorchild = thismovie.CreateElement("id")
-                    actorchild.InnerText = mov.listactors(f).actorid
-                    child.AppendChild(actorchild)
-                    actorchild = thismovie.CreateElement("name")
-                    actorchild.InnerText = mov.listactors(f).actorname
-                    child.AppendChild(actorchild)
-                    actorchild = thismovie.CreateElement("role")
-                    actorchild.InnerText = mov.listactors(f).actorrole
-                    child.AppendChild(actorchild)
-                    actorchild = thismovie.CreateElement("thumb")
-                    actorchild.InnerText = mov.listactors(f).actorthumb
-                    child.AppendChild(actorchild)
-                    actorchild = thismovie.CreateElement("order")
-                    actorchild.InnerText = mov.listactors(f).order
-                    child.AppendChild(actorchild)
-                    root.AppendChild(child)
-                Next
+            Next
+
+            child = thismovie.CreateElement("resume")
+                anotherchild = thismovie.CreateElement("position")
+                anotherchild.InnerText = "0.000000"
+            child.AppendChild(anotherchild)
+                anotherchild = thismovie.CreateElement("total")
+                anotherchild.InnerText = "0.000000"
+            child.AppendChild(anotherchild)
+            root.AppendChild(child)
+
+            child = thismovie.CreateElement("dateadded")
+            'Dim Datestr As String = FormatDate(mov.fileinfo.createdate)
+            child.InnerText = FormatDate(mov.fileinfo.createdate) : root.AppendChild(child)
+
+            child = thismovie.CreateElement("art")
+                anotherchild = thismovie.CreateElement("fanart")
+                anotherchild.InnerText = mov.fileinfo.fanartpath 
+            child.AppendChild(anotherchild)
+                anotherchild = thismovie.CreateElement("poster")
+                anotherchild.InnerText = mov.fileinfo.posterpath 
+            child.AppendChild(anotherchild)
+            root.AppendChild(child)
+
+            
+            thismovie.AppendChild(root)
         Catch ex As Exception
 
         End Try
         Return thismovie 
     End Function
 
+    Private Function SetPaths() As XmlDocument
+        Dim SetXBPaths As New XmlDocument
+        Try
+            'Dim stage As Integer = 0
+            Dim root As XmlElement = Nothing
+            Dim child As XmlElement = Nothing
+            Dim actorchild As XmlElement = Nothing
+            Dim filedetailschild As XmlElement = Nothing
+            Dim filedetailschildchild As XmlElement = Nothing
+            Dim anotherchild As XmlElement = Nothing
+            root = SetXBPaths.CreateElement("paths")
+            For Each xbpath In Pathlist 
+                child = SetXBPaths.CreateElement("path")
+                anotherchild = SetXBPaths.CreateElement("url")
+                anotherchild.InnerText = xbpath.rootpath & "\"
+                child.AppendChild(anotherchild)
+                anotherchild = SetXBPaths.CreateElement("scanrecursive")
+                Dim scanrec As String = "2147483647"
+                If xbpath.pathsource = "tv" Then scanrec = "0"
+                anotherchild.InnerText = scanrec
+                child.AppendChild(anotherchild)
+                anotherchild = SetXBPaths.CreateElement("usefoldernames")
+                anotherchild.InnerText = "false"
+                child.AppendChild(anotherchild)
+                anotherchild = SetXBPaths.CreateElement("content")
+                anotherchild.InnerText = xbpath.pathsource
+                child.AppendChild(anotherchild)
+                anotherchild = SetXBPaths.CreateElement("scraperpath")
+                anotherchild.InnerText = "metadata.local"
+                child.AppendChild(anotherchild)
+                root.AppendChild(child)
+            Next
+            SetXBPaths.AppendChild(root)
+        Catch ex As Exception
+            
+        End Try
+        Return SetXBPaths
+    End Function
+
+    Private Function Formatdate(ByVal thisdate As String) As String
+        Try
+            Return DateTime.ParseExact(thisdate, Preferences.datePattern, Nothing).ToString(Preferences.DateFormat2)
+        Catch
+            Return "2001-01-01 01:01:00"
+        End Try
+    End Function
+
+    Private Function GetBasePath(ByVal thismov As FullMovieDetails) As String
+        Dim ThisBasePath As String = thismov.fileinfo.fullpathandfilename
+        If IO.Path.GetFileName(ThisBasePath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(ThisBasePath).ToLower = "index.nfo" Then
+            Return Utilities.RootVideoTsFolder(ThisBasePath)
+        Else
+            Return thismov.fileinfo.filenameandpath 
+        End If
+    End Function
+    
     Private Sub frmMediaInfoEdit_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.KeyCode = Keys.Escape Then Me.Close()
     End Sub

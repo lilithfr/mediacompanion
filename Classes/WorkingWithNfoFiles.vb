@@ -773,7 +773,7 @@ Public Class WorkingWithNfoFiles
         Try
             Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
-
+            output.Indentation = 4
             document.WriteTo(output)
             output.Close()
         Catch
@@ -1087,6 +1087,7 @@ Public Class WorkingWithNfoFiles
             stage = 34
             Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
+            output.Indentation = 4
             stage = 35
             doc.WriteTo(output)
             output.Close()
@@ -3410,6 +3411,7 @@ Public Class WorkingWithNfoFiles
                 Try
                     Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
                     output.Formatting = Formatting.Indented
+                    output.Indentation = 4
                     stage = 36
                     doc.WriteTo(output)
                     output.Close()
@@ -3927,6 +3929,7 @@ Public Class WorkingWithNfoFiles
 
             Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
+            output.Indentation = 4
             doc.WriteTo(output)
             output.Close()
 
@@ -4178,6 +4181,7 @@ Public Class WorkingWithNfoFiles
         Try
             Dim output As New XmlTextWriter(nfopath, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
+            output.Indentation = 4
             doc.WriteTo(output)
             output.Close()
         Catch

@@ -286,6 +286,7 @@ Public Class Preferences
 
 
     Public Shared DateFormat As String = "YYYY-MM-DD"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
+    Public Shared DateFormat2 As String = "yyyy-MM-dd HH:mm:ss"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
     Public Shared MovieList_ShowColPlot As Boolean = False
     Public Shared DisableNotMatchingRenamePattern As Boolean = True
     Public Shared MovieList_ShowColWatched As Boolean = False
@@ -1664,9 +1665,9 @@ Public Class Preferences
 
     Public Shared Function GetPosterPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
         Dim posterpath As String = FullPath
-        If Not Utilities.findFileOfType(posterpath, ".tbn", Preferences.basicsavemode) Then
+        If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Preferences.basicsavemode) Then
             'Check Frodo naming convention
-            If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Preferences.basicsavemode) Then
+            If Not Utilities.findFileOfType(posterpath, ".tbn", Preferences.basicsavemode) Then
                 If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
                     posterpath = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                 ElseIf IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg") Then

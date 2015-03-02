@@ -216,7 +216,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_MissingEpThumbs.Enabled = True
             Tv_TreeViewContext_MissingEpThumbs.Visible = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = True
-            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_RenameEp.Enabled = RadioButton29.Checked     'Only show if Treeview set to 'List All'
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
             tsmiTvDelShowNfoArt.Enabled = True
@@ -243,7 +243,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_MissingEpThumbs.Enabled = True
             Tv_TreeViewContext_MissingEpThumbs.Visible = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
-            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_RenameEp.Enabled = RadioButton29.Checked      'Only show if Treeview set to 'List All'
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
             tsmiTvDelShowNfoArt.Enabled = False
