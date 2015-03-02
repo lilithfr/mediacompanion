@@ -166,4 +166,19 @@ Public Class xbmcart
         thumb = ""
     End Sub
 
+    
+End Class
+
+Public Class XBMCPaths
+    Public rootpath As String
+    Public pathsource As String
+
+    Sub New()
+        init()
+    End Sub
+
+    Public Sub init
+        rootpath = ""
+        pathsource = "" 
+    End Sub
 End Class

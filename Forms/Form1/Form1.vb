@@ -3028,12 +3028,9 @@ Public Class Form1
         'Todo: need to update all details after edit.
 
         For f = 0 To filteredList.Count - 1
-            Dim newfullmovie As New ComboList
-            newfullmovie = filteredList(f)
             If filteredList(f).fullpathandfilename = oldmovietitle Then
                 Dim newfullmovie2 As New ComboList
                 newfullmovie2 = filteredList(f)
-                '     newfullmovie2.titleandyear = newmovietitle
                 filteredList.RemoveAt(f)
                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -3052,9 +3049,7 @@ Public Class Form1
                 newfullmovie2.playcount = workingMovieDetails.fullmoviebody.playcount
                 newfullmovie2.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
                 newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating.ToRating
-                '    newfullmovie2.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 newfullmovie2.year = workingMovieDetails.fullmoviebody.year
-
                 filteredList.Add(newfullmovie2)
                 Exit For
             End If
@@ -20076,8 +20071,8 @@ End Sub
         'If res = Windows.Forms.DialogResult.Cancel Then Exit Sub
         'ExportToXbmcdb()
         '''
-        MsgBox("This function is not ready yet")
-        Exit Sub
+        'MsgBox("This function is not ready yet")
+        'Exit Sub
         '''
 
         Dim frmxport As New frmXbmcExport
@@ -20346,7 +20341,7 @@ End Sub
 #End Region
 
     Private Sub GoogleSearch(ByVal search As String)
-        'Open Webpage at Google image search for movietitle&year
+        'Open Webpage at Google image search for movietitle & year
         Dim title As String = workingMovieDetails.fullmoviebody.title
         Dim year As String = workingMovieDetails.fullmoviebody.year
 
