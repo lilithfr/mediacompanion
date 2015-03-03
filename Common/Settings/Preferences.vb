@@ -270,7 +270,7 @@ Public Class Preferences
     Public Shared GetMovieSetFromTMDb As Boolean = True
     Public Shared ActorResolutionSI As Integer = 2     ' Height  768           SI = Selected Index
     Public Shared PosterResolutionSI As Integer = 9     ' Height  1080  
-    Public Shared BackDropResolutionSI As Integer = 15     ' Full HD 1920x1080
+    Public Shared BackDropResolutionSI As Integer = 16     ' Full HD 1920x1080
 
     Public Shared ActorsFilterMinFilms         As Integer =   1
     Public Shared MaxActorsInFilter            As Integer = 500
