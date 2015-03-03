@@ -1848,8 +1848,8 @@ Public Class Form1
                 workingMovieDetails.fileinfo.filename = IO.Path.GetFileName(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.path = IO.Path.GetFullPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.foldername = workingMovie.foldername
-                workingMovieDetails.fileinfo.posterpath = Preferences.GetPosterPath(workingMovie.fullpathandfilename, workingMovie.filename)
-                workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename, workingMovie.ActualNfoFileName) 'filename)
+                'workingMovieDetails.fileinfo.posterpath = Preferences.GetPosterPath(workingMovie.fullpathandfilename, workingMovie.filename)
+                'workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename, workingMovie.ActualNfoFileName) 'filename)
 
                 workingMovieDetails.fileinfo.trailerpath = GetTrailerPath(workingMovieDetails.fileinfo.path)
                 If Yield(yieldIng) Then Return
@@ -1867,17 +1867,17 @@ Public Class Form1
                 If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Dim workingposter As String = workingMovieDetails.fileinfo.posterpath
-                    Dim frodoPath As String
-                    If Preferences.FrodoEnabled Then 
-                        If workingMovieDetails.fileinfo.videotspath<>"" Then
-                            frodoPath = workingMovieDetails.fileinfo.videotspath+"poster.jpg"
-                        Else
-                            frodoPath = workingposter.Replace(".tbn","-poster.jpg")
-                        End If
-                        If File.Exists(frodoPath) Then 
-                            workingposter = frodoPath
-                        End If
-                    End If
+                    'Dim frodoPath As String
+                    'If Preferences.FrodoEnabled Then 
+                    '    If workingMovieDetails.fileinfo.videotspath<>"" Then
+                    '        frodoPath = workingMovieDetails.fileinfo.videotspath+"poster.jpg"
+                    '    Else
+                    '        frodoPath = workingposter.Replace(".tbn","-poster.jpg")
+                    '    End If
+                    '    If File.Exists(frodoPath) Then 
+                    '        workingposter = frodoPath
+                    '    End If
+                    'End If
 
                     util_ImageLoad(PbMoviePoster, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
@@ -1889,17 +1889,17 @@ Public Class Form1
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Dim workingfanart As String = workingMovieDetails.fileinfo.fanartpath
-                    Dim frodoPath As String
-                    If Preferences.FrodoEnabled Then 
-                        If workingMovieDetails.fileinfo.videotspath<>"" Then
-                            frodoPath = workingMovieDetails.fileinfo.videotspath+"fanart.jpg"
-                        Else
-                            frodoPath = workingfanart
-                        End If
-                        If File.Exists(frodoPath) Then 
-                            workingfanart = frodoPath
-                        End If
-                    End If
+                    'Dim frodoPath As String
+                    'If Preferences.FrodoEnabled Then 
+                    '    If workingMovieDetails.fileinfo.videotspath<>"" Then
+                    '        frodoPath = workingMovieDetails.fileinfo.videotspath+"fanart.jpg"
+                    '    Else
+                    '        frodoPath = workingfanart
+                    '    End If
+                    '    If File.Exists(frodoPath) Then 
+                    '        workingfanart = frodoPath
+                    '    End If
+                    'End If
 
                     util_ImageLoad(PbMovieFanArt, workingfanart, Utilities.DefaultFanartPath)
                     'Rating1.PictureInit = PbMovieFanArt.Image

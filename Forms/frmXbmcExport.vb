@@ -12,6 +12,11 @@ Public Class frmXbmcExport
     Private Pathlist As New List(Of XBMCPaths)
     Dim xbmcexportfolder As String = "\xbmc_videodb_" & DateTime.Now.ToString("yyyy_MM_dd")
     Private OutputFolder As String = Nothing
+    Private FullPathOut As String = Nothing
+    Private opActors As String = Nothing
+    Private opMovies As String = Nothing
+    Private opTvshows As String = Nothing
+    Private opMusicvideos As String = Nothing
     Private _outputfolderchecked As Boolean = False
     Private epcount As Integer = 0
     Public Property Bw  As BackgroundWorker = Nothing
@@ -91,8 +96,8 @@ Public Class frmXbmcExport
     Public Sub RunExport()
         ProgressBar1.Value = 0
         ProgressBar1.Maximum = MovieList.Count ' + TVSeries.Count + epcount
-        'SetpathMapping()
-        'SetOutputFolders()
+        SetpathMapping()
+        SetOutputFolders()
 
         ''Create Document
         Dim doc As New XmlDocument
@@ -110,10 +115,13 @@ Public Class frmXbmcExport
         For Each Moviefound In MovieList
             Me.ProgressBar1.Value +=1
             If Not File.Exists(Moviefound.fileinfo.fullpathandfilename) Then Continue For
+            Dim mov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(Moviefound.fileinfo.fullpathandfilename)
             Dim currentmovie As New XmlDocument
-            currentmovie = Transposemovie(Moviefound.fileinfo.fullpathandfilename, Moviefound.fileinfo.path)
+            currentmovie = Transposemovie(mov)
             Dim oDoc As XMLNode = root.OwnerDocument.ImportNode(currentmovie.DocumentElement, True)
             root.AppendChild(oDoc)
+            TransMovArtWork(mov)
+            TransActorImages(mov)
             Me.ProgressBar1.Refresh()
         Next
         For Each ph In Preferences.movieFolders
@@ -131,7 +139,7 @@ Public Class frmXbmcExport
         root.AppendChild(oDoc2)
         doc.AppendChild(root)
         Try
-            Dim output As New XmlTextWriter(OutputFolder & "\videodb.xml", System.Text.Encoding.UTF8)
+            Dim output As New XmlTextWriter(FullPathOut & "\videodb.xml", System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
             output.Indentation = 4
             doc.WriteTo(output)
@@ -140,6 +148,49 @@ Public Class frmXbmcExport
         End Try
 
     End Sub
+
+    Private Sub TransMovArtWork(ByVal mov As FullMovieDetails)
+        Dim filenm As String = Utilities.SpacesToCharacter(mov.fullmoviebody.title & " " & mov.fullmoviebody.year, "_")
+        filenm = filenm.Replace(":", "_")
+        If File.Exists(mov.fileinfo.fanartpath) Then
+            File.Copy(mov.fileinfo.fanartpath, opMovies & "\" & filenm & "-fanart.jpg", True)
+        End If
+        If File.Exists(mov.fileinfo.posterpath) Then
+            File.Copy(mov.fileinfo.posterpath, opMovies & "\" & filenm & "-poster.jpg", True)
+        End If
+    End Sub
+
+    Private Sub TransActorImages(ByVal mov As FullMovieDetails)
+        Try
+            For Each actr In mov.listactors
+                Dim temppath = Preferences.GetActorPath(mov.fileinfo.fullpathandfilename, actr.actorname, actr.actorid)
+                If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
+                    Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
+                    File.Copy(temppath, opActors & "\" & actfilename, True)
+                End If
+            Next
+        Catch
+
+        End Try
+    End Sub
+
+    Private Sub SetOutputFolders()
+        FullPathOut = OutputFolder & xbmcexportfolder
+        If Not Directory.Exists(FullPathOut) Then Directory.CreateDirectory(FullPathOut)
+        opActors = FullPathOut & "\actors"
+        If Not Directory.Exists(opActors) Then Directory.CreateDirectory(opActors)
+        opMovies = FullPathOut & "\movies"
+        If Not Directory.Exists(opMovies) Then Directory.CreateDirectory(opMovies)
+        opTvshows = FullPathOut & "\tvshows"
+        If Not Directory.Exists(opTvshows) Then Directory.CreateDirectory(opTvshows)
+        opMusicvideos = FullPathOut & "\musicvideos"
+        If Not Directory.Exists(opMusicvideos) Then Directory.CreateDirectory(opMusicvideos)
+    End Sub
+
+    Private Sub SetpathMapping()
+
+    End Sub
+
 
     Public Function Validatefolder(ByVal outputfolder As String) As String
         If Not Directory.Exists(outputfolder) Then
@@ -176,8 +227,8 @@ Public Class frmXbmcExport
         Return outputfolder 
     End Function
 
-    Private Function Transposemovie(ByVal nfopath As String, ByVal MoviePath As String) As XmlDocument  
-        Dim mov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfopath)
+    Private Function Transposemovie(ByVal mov As FullMovieDetails) As XmlDocument  
+        'Dim mov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfopath)
         Dim thismovie As New XmlDocument
         Try
             Dim stage As Integer = 0
@@ -191,15 +242,18 @@ Public Class frmXbmcExport
             root = thismovie.CreateElement("movie")
 
             child = thismovie.CreateElement("title") : child.InnerText = mov.fullmoviebody.title : root.AppendChild(child)
+
             child = thismovie.CreateElement("originaltitle")
             child.InnerText = If(String.IsNullOrEmpty(mov.fullmoviebody.originaltitle), mov.fullmoviebody.title, mov.fullmoviebody.originaltitle)
             root.AppendChild(child)
+
             If String.IsNullOrEmpty(mov.fullmoviebody.sortorder) Then mov.fullmoviebody.sortorder = mov.fullmoviebody.title
             child = thismovie.CreateElement("sorttitle") : child.InnerText = mov.fullmoviebody.sortorder : root.AppendChild(child)
             child = thismovie.CreateElement("rating") : child.InnerText = mov.fullmoviebody.rating.ToRating.ToString("0.0", Form1.MyCulture) : root.AppendChild(child)
             child = thismovie.CreateElement("epbookmark") : child.InnerText = "0.000000" : root.AppendChild(child)
             child = thismovie.CreateElement("year") : child.InnerText = mov.fullmoviebody.year : root.AppendChild(child)
             child = thismovie.CreateElement("top250") : child.InnerText = mov.fullmoviebody.top250 : root.AppendChild(child)
+
             child = thismovie.CreateElement("votes")
             Dim votes As String = mov.fullmoviebody.votes
             If Not String.IsNullOrEmpty(votes) then
@@ -217,9 +271,11 @@ Public Class frmXbmcExport
                 End If
             End If
             child.InnerText = votes : root.AppendChild(child)
+
             child = thismovie.CreateElement("outline") : child.InnerText = mov.fullmoviebody.outline : root.AppendChild(child)
             child = thismovie.CreateElement("plot") : child.InnerText = mov.fullmoviebody.plot : root.AppendChild(child)
             child = thismovie.CreateElement("tagline") : child.InnerText = mov.fullmoviebody.tagline : root.AppendChild(child)
+
             child = thismovie.CreateElement("runtime")
             If mov.fullmoviebody.runtime <> Nothing Then
                 Dim minutes As String = mov.fullmoviebody.runtime
@@ -227,32 +283,12 @@ Public Class frmXbmcExport
                 minutes = minutes.Replace("mins", "")
                 minutes = minutes.Replace("min", "")
                 minutes = minutes.Replace(" ", "")
-                Try
-                    If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
-                        Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
-                            minutes = minutes.Substring(1, minutes.Length - 1)
-                        Loop
-                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
-                            minutes = "0" & minutes
-                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
-                            minutes = "00" & minutes
-                        End If
-                    End If
-                    If Preferences.intruntime = False And IsNumeric(minutes) Then
-                        If minutes = "0" AndAlso Not String.IsNullOrEmpty(mov.filedetails.filedetails_video.DurationInSeconds.Value) Then
-                            Dim seconds As Integer = Convert.ToInt32(mov.filedetails.filedetails_video.DurationInSeconds.Value)
-                            If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
-                        End If
-                        minutes = minutes & " min"
-                    End If
-                Catch ex As Exception
-                    minutes = mov.fullmoviebody.runtime
-                End Try
                 child.InnerText = minutes
             Else
-                child.InnerText = "0"   'mov.fullmoviebody.runtime
+                child.InnerText = "0"
             End If
             root.AppendChild(child)
+
             If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
                 For Each item In mov.frodoPosterThumbs
                     child = thismovie.CreateElement("thumb")
@@ -270,16 +306,24 @@ Public Class frmXbmcExport
                     End Try
                 Next
             End If
+
             child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
             child = thismovie.CreateElement("playcount") : child.InnerText = mov.fullmoviebody.playcount : root.AppendChild(child)
             child = thismovie.CreateElement("lastplayed") : child.InnerText = mov.fullmoviebody.lastplayed : root.AppendChild(child)
-            child = thismovie.CreateElement("path") : child.InnerText = mov.fileinfo.path : root.AppendChild(child)
-            child = thismovie.CreateElement("filenameandpath") : child.InnerText = mov.fileinfo.filenameandpath : root.AppendChild(child)
+            child = thismovie.CreateElement("path")
+            child.InnerText = mov.fileinfo.path
+            root.AppendChild(child)
+
+            child = thismovie.CreateElement("filenameandpath")
+            child.InnerText = mov.fileinfo.filenameandpath
+            root.AppendChild(child)
+
             child = thismovie.CreateElement("basepath")
             Dim basepath As String = GetBasePath(mov)
-            child.InnerText = basepath              'mov.fileinfo.basepath
+            child.InnerText = basepath
             root.AppendChild(child)
             child = thismovie.CreateElement("id") : child.InnerText = mov.fullmoviebody.imdbid : root.AppendChild(child)
+
             If mov.fullmoviebody.genre <> "" Then
                 Dim strArr() As String
                 strArr = mov.fullmoviebody.genre.Split("/")
@@ -290,6 +334,7 @@ Public Class frmXbmcExport
                     root.AppendChild(child)
                 Next
             End If
+
             If mov.fullmoviebody.country <> "" Then
                 Dim strArr() As String
                 strArr = mov.fullmoviebody.country.Split(",")
@@ -497,6 +542,10 @@ Public Class frmXbmcExport
         Else
             Return thismov.fileinfo.filenameandpath 
         End If
+    End Function
+
+    Private Function TransposePath(ByVal checkpath As String) As String
+        Return Nothing 
     End Function
     
     Private Sub frmMediaInfoEdit_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown

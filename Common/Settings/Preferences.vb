@@ -1665,6 +1665,10 @@ Public Class Preferences
 
     Public Shared Function GetPosterPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
         Dim posterpath As String = FullPath
+        If Preferences.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo") Then
+            Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
+            If IO.File.Exists(dvdbdpath & "poster.jpg") Then Return dvdbdpath & "poster.jpg"
+        End If
         If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Preferences.basicsavemode) Then
             'Check Frodo naming convention
             If Not Utilities.findFileOfType(posterpath, ".tbn", Preferences.basicsavemode) Then
@@ -1926,6 +1930,10 @@ Public Class Preferences
 
     Public Shared Function GetFanartPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = "") As String
         Dim fanartPath As String = FullPath
+        If Preferences.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo") Then
+            Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
+            If IO.File.Exists(dvdbdpath & "fanart.jpg") Then Return dvdbdpath & "fanart.jpg"
+        End If
         'If MovFilePath = "" Then MovFilePath = Nothing
         'If Not IsNothing(MovFilePath) Then
         'Dim MovPath As String = FullPath.Replace(MovFilePath,"")
