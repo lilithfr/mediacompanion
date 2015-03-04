@@ -1,0 +1,37 @@
+Modification done to tmdb.xml, in metadata.themoviedb.org as follows:
+
+Section:	<ParseTMDBWriters dest="5">
+From:
+			<RegExp input="$$7" output="&lt;credits&gt;\1&lt;/credits&gt;" dest="2">
+				<expression repeat="yes" fixchars="1">&quot;department&quot;:&quot;Writing&quot;,&quot;id&quot;:[0-9]*,&quot;job&quot;:&quot;Writer&quot;,&quot;name&quot;:&quot;([^&quot;]*)&quot;</expression>
+			</RegExp>
+To:
+			<RegExp input="$$7" output="&lt;credits&gt;\1&lt;/credits&gt;" dest="2">
+				<expression repeat="yes" fixchars="1">&quot;department&quot;:&quot;Writing&quot;,&quot;id&quot;:[0-9]*,&quot;job&quot;:&quot;[A-Z,a-z]*&quot;,&quot;name&quot;:&quot;([^&quot;]*)&quot;</expression>
+			</RegExp>
+Why:
+We replace 'Writers' with '[A-Z,a-z]*' to get all writers whether Screenplay, Writer or Character.
+
+Section:	<ParseTMDBStudio dest="5">
+From:
+			<RegExp input="$$7" output="&lt;studio&gt;\1&lt;/studio&gt;" dest="2">
+				<expression trim="1" fixchars="1">&quot;name&quot;:&quot;([^&quot;]*)</expression>
+			</RegExp>
+To:
+			<RegExp input="$$7" output="&lt;studio&gt;\1&lt;/studio&gt;" dest="2">
+				<expression repeat="yes" fixchars="1">&quot;name&quot;:&quot;([^&quot;]*)</expression>
+			</RegExp>
+Why:
+Removed 'trim="1"' and replaced with 'repeat="yes"' to get all studio's like we do from IMDB.
+
+Section:	<ParseTMDBCountry dest="5">
+From:
+			<RegExp input="$$7" output="&lt;country&gt;\1&lt;/country&gt;" dest="2">
+				<expression trim="1" fixchars="1">&quot;name&quot;:&quot;([^&quot;]*)</expression>
+			</RegExp>
+To:
+			<RegExp input="$$7" output="&lt;country&gt;\1&lt;/country&gt;" dest="2">
+				<expression repeat="yes" fixchars="1">&quot;name&quot;:&quot;([^&quot;]*)</expression>
+			</RegExp>
+Why:
+Removed 'trim="1"' and replaced with 'repeat="yes"' to get all countries
