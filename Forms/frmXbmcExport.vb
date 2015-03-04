@@ -10,6 +10,7 @@ Public Class frmXbmcExport
     Private MovieList As New List(Of FullMovieDetails)
     Private TVSeries As New List(Of xbmctvseries)
     Private Pathlist As New List(Of XBMCPaths)
+    Private ExportPathList As New Dictionary(Of String, String)
     Dim xbmcexportfolder As String = "\xbmc_videodb_" & DateTime.Now.ToString("yyyy_MM_dd")
     Private OutputFolder As String = Nothing
     Private FullPathOut As String = Nothing
@@ -20,6 +21,7 @@ Public Class frmXbmcExport
     Private _outputfolderchecked As Boolean = False
     Private epcount As Integer = 0
     Public Property Bw  As BackgroundWorker = Nothing
+    Public nfoFunction As New WorkingWithNfoFiles
 
     Property outputfolderchecked As Boolean
       Get
@@ -95,7 +97,7 @@ Public Class frmXbmcExport
 
     Public Sub RunExport()
         ProgressBar1.Value = 0
-        ProgressBar1.Maximum = MovieList.Count ' + TVSeries.Count + epcount
+        ProgressBar1.Maximum = MovieList.Count + TVSeries.Count + epcount
         SetpathMapping()
         SetOutputFolders()
 
@@ -131,12 +133,34 @@ Public Class frmXbmcExport
             Pathlist.Add(t)
         Next
         doc.AppendChild(root)
+
         ''Run Tv Output
+        For Each sh In TVSeries
+            Me.ProgressBar1.Value +=1
+            If Not File.Exists(sh.series.Filenameandpath) Then Continue For
+            Dim tvsh As TvShow = nfoFunction.tv_NfoLoadFull(sh.series.Filenameandpath)
+            Dim CurrentSh As New XmlDocument
+            CurrentSh = TransposetvShows(tvsh, sh.episodes.count)
+            'TransTvArtwork(tvsh)
+            TransTvActorImages(tvsh.ListActors, sh.series.Filenameandpath)
+            'For Each ep In sh.episodes
+            '    If Not File.Exists(ep.Filenameandpath) Then Continue For
+            '    Dim tvep As TvEpisode = WorkingWithNfoFiles.ep_NfoLoad(ep.Filenameandpath)
+            '    Dim CurrentEp As New XmlDocument
+            '    CurrentEp = TransposeTvEp(tvep)
+            '    'TransTvEpArtwork(tvep)
+            '    Dim oDoc2 As XMLNode = root.OwnerDocument.ImportNode(CurrentEp.DocumentElement, True)
+            '    CurrentSh.AppendChild(oDoc2)
+
+            'Next
+            Dim oDoc As XMLNode = root.OwnerDocument.ImportNode(CurrentSh.DocumentElement, True)
+            root.AppendChild(oDoc)
+        Next
 
         Dim xbpaths As New XmlDocument
         xbpaths = SetPaths()
-        Dim oDoc2 As XMLNode = root.OwnerDocument.ImportNode(xbpaths.DocumentElement, True)
-        root.AppendChild(oDoc2)
+        Dim oDoc3 As XMLNode = root.OwnerDocument.ImportNode(xbpaths.DocumentElement, True)
+        root.AppendChild(oDoc3)
         doc.AppendChild(root)
         Try
             Dim output As New XmlTextWriter(FullPathOut & "\videodb.xml", System.Text.Encoding.UTF8)
@@ -173,6 +197,20 @@ Public Class frmXbmcExport
 
         End Try
     End Sub
+    
+    Private Sub TransTvActorImages(ByVal TvActor As ActorList, ByVal nfopath As String)
+        Try
+            For Each actr In TvActor
+                Dim temppath = Preferences.GetActorPath(nfopath, actr.actorname, actr.actorid)
+                If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
+                    Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
+                    File.Copy(temppath, opActors & "\" & actfilename, True)
+                End If
+            Next
+        Catch
+
+        End Try
+    End Sub
 
     Private Sub SetOutputFolders()
         FullPathOut = OutputFolder & xbmcexportfolder
@@ -188,9 +226,20 @@ Public Class frmXbmcExport
     End Sub
 
     Private Sub SetpathMapping()
-
+        For Each row In MCExportdgv.Rows
+            Dim src As String = row.cells(1).Value
+            Dim xport As String = row.Cells(2).Value
+            If Not (src.EndsWith("\\") OrElse src.EndsWith("//")) AndAlso (src.EndsWith("\") OrElse src.EndsWith("/")) Then
+                src = src.Substring(0, src.Length-2)
+            End If
+            If Not (xport.EndsWith("\\") OrElse xport.EndsWith("//")) AndAlso (xport.EndsWith("\") OrElse xport.EndsWith("/")) Then
+                xport = xport.Substring(0, xport.Length-2)
+            End If
+            If src = xport Then Continue For                         ' no need to convert path if source and export paths are the same.
+            If ExportPathList.ContainsKey(src) Then Continue For
+            ExportPathList.Add(src, row.cells(2).Value)
+        Next
     End Sub
-
 
     Public Function Validatefolder(ByVal outputfolder As String) As String
         If Not Directory.Exists(outputfolder) Then
@@ -227,8 +276,7 @@ Public Class frmXbmcExport
         Return outputfolder 
     End Function
 
-    Private Function Transposemovie(ByVal mov As FullMovieDetails) As XmlDocument  
-        'Dim mov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfopath)
+    Private Function Transposemovie(ByVal mov As FullMovieDetails) As XmlDocument
         Dim thismovie As New XmlDocument
         Try
             Dim stage As Integer = 0
@@ -240,7 +288,6 @@ Public Class frmXbmcExport
             Dim anotherchild As XmlElement = Nothing
 
             root = thismovie.CreateElement("movie")
-
             child = thismovie.CreateElement("title") : child.InnerText = mov.fullmoviebody.title : root.AppendChild(child)
 
             child = thismovie.CreateElement("originaltitle")
@@ -310,18 +357,10 @@ Public Class frmXbmcExport
             child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
             child = thismovie.CreateElement("playcount") : child.InnerText = mov.fullmoviebody.playcount : root.AppendChild(child)
             child = thismovie.CreateElement("lastplayed") : child.InnerText = mov.fullmoviebody.lastplayed : root.AppendChild(child)
-            child = thismovie.CreateElement("path")
-            child.InnerText = mov.fileinfo.path
-            root.AppendChild(child)
-
-            child = thismovie.CreateElement("filenameandpath")
-            child.InnerText = mov.fileinfo.filenameandpath
-            root.AppendChild(child)
-
+            child = thismovie.CreateElement("path") : child.InnerText = TransposePath(mov.fileinfo.path) : root.AppendChild(child)
+            child = thismovie.CreateElement("filenameandpath") : child.InnerText = TransposePath(mov.fileinfo.filenameandpath) : root.AppendChild(child)
             child = thismovie.CreateElement("basepath")
-            Dim basepath As String = GetBasePath(mov)
-            child.InnerText = basepath
-            root.AppendChild(child)
+            Dim basepath As String = GetBasePath(mov) : child.InnerText = TransposePath(basepath) : root.AppendChild(child)
             child = thismovie.CreateElement("id") : child.InnerText = mov.fullmoviebody.imdbid : root.AppendChild(child)
 
             If mov.fullmoviebody.genre <> "" Then
@@ -381,7 +420,7 @@ Public Class frmXbmcExport
                 Next
             End If
             child = thismovie.CreateElement("trailer")
-            child.InnerText = If(String.IsNullOrEmpty(mov.fullmoviebody.trailer), "", mov.fullmoviebody.trailer)
+            child.InnerText = If(String.IsNullOrEmpty(mov.fullmoviebody.trailer), "", If(mov.fullmoviebody.trailer.Contains("http"), mov.fullmoviebody.trailer, TransposePath(mov.fullmoviebody.trailer)))
             root.AppendChild(child)
 
             child = thismovie.CreateElement("fileinfo")
@@ -467,25 +506,69 @@ Public Class frmXbmcExport
             child.AppendChild(anotherchild)
             root.AppendChild(child)
 
-            child = thismovie.CreateElement("dateadded")
-            'Dim Datestr As String = FormatDate(mov.fileinfo.createdate)
-            child.InnerText = FormatDate(mov.fileinfo.createdate) : root.AppendChild(child)
+            child = thismovie.CreateElement("dateadded") : child.InnerText = FormatDate(mov.fileinfo.createdate) : root.AppendChild(child)
 
             child = thismovie.CreateElement("art")
-                anotherchild = thismovie.CreateElement("fanart")
-                anotherchild.InnerText = mov.fileinfo.fanartpath 
+            anotherchild = thismovie.CreateElement("fanart")
+            anotherchild.InnerText = TransposePath(mov.fileinfo.fanartpath)
             child.AppendChild(anotherchild)
-                anotherchild = thismovie.CreateElement("poster")
-                anotherchild.InnerText = mov.fileinfo.posterpath 
+            anotherchild = thismovie.CreateElement("poster")
+            anotherchild.InnerText = TransposePath(mov.fileinfo.posterpath)
             child.AppendChild(anotherchild)
             root.AppendChild(child)
 
-            
             thismovie.AppendChild(root)
         Catch ex As Exception
 
         End Try
         Return thismovie 
+    End Function
+
+    Private Function TransposetvShows(ByVal tvsh As TvShow, ByVal epcount As Integer) As XmlDocument
+        Dim ThisTvShow As New XmlDocument
+        Try
+            Dim stage As Integer = 0
+            Dim root As XmlElement = Nothing
+            Dim child As XmlElement = Nothing
+            Dim actorchild As XmlElement = Nothing
+            Dim filedetailschild As XmlElement = Nothing
+            Dim filedetailschildchild As XmlElement = Nothing
+            Dim anotherchild As XmlElement = Nothing
+            root = ThisTvShow.CreateElement("tvshow")
+            child = ThisTvShow.CreateElement("title") : child.InnerText = tvsh.Title.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("showtitle") : child.InnerText = tvsh.Title.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("rating") : child.InnerText = tvsh.Rating.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("epbookmark") : child.InnerText = "0.000000" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("year") : child.InnerText = tvsh.Year.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("top250") : child.InnerText = tvsh.Top250.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("season") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("episode") : child.InnerText = epcount : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("uniqueid") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("displayseason") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("displayepisode") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("votes") : child.InnerText = tvsh.Votes.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("plot") : child.InnerText = tvsh.Plot.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("tagline") : child.InnerText = tvsh.TagLine.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("runtime") : child.InnerText = tvsh.Runtime.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("mpaa") : child.InnerText = tvsh.Mpaa.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("playcount") : child.InnerText = tvsh.Playcount.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("lastplayed") : child.InnerText = tvsh.LastPlayed.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("file") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("path") : child.InnerText = tvsh.FolderPath : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("filenameandpath") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("basepath") : child.InnerText = tvsh.FolderPath : root.AppendChild(child)
+            'child = ThisTvShow.CreateElement("episodeguide") : child.InnerText = tvsh.Title.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("id") : child.InnerText = tvsh.TvdbId.Value : root.AppendChild(child)
+            ThisTvShow.AppendChild(root)
+        Catch
+        End Try
+        Return ThisTvShow 
+    End Function
+
+    Private Function TransposeTvEp(ByVal tvep As TvEpisode) As XmlDocument
+        Dim ThisTvEp As New XmlDocument
+
+        Return ThisTvEP 
     End Function
 
     Private Function SetPaths() As XmlDocument
@@ -545,7 +628,17 @@ Public Class frmXbmcExport
     End Function
 
     Private Function TransposePath(ByVal checkpath As String) As String
-        Return Nothing 
+        For Each item In ExportPathList
+            If checkpath.Contains(item.Key) Then
+                checkpath = checkpath.Replace(item.Key, item.Value)
+                If item.Value.Contains("/") Then
+                    checkpath = checkpath.Replace("\", "/")
+                ElseIf item.Value.Contains("\") Then
+                    checkpath = checkpath.Replace("/", "\")
+                End If
+            End If
+        Next
+        Return checkpath 
     End Function
     
     Private Sub frmMediaInfoEdit_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown

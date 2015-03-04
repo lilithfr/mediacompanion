@@ -1665,7 +1665,7 @@ Public Class Preferences
 
     Public Shared Function GetPosterPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
         Dim posterpath As String = FullPath
-        If Preferences.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo") Then
+        If Not String.IsNullOrEmpty(MovFilePath) AndAlso (Preferences.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo")) Then
             Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
             If IO.File.Exists(dvdbdpath & "poster.jpg") Then Return dvdbdpath & "poster.jpg"
         End If
