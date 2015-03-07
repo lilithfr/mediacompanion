@@ -2716,7 +2716,7 @@ Public Class Form1
         If cbFilterVotes.Visible Then cbFilterVotes.Values = oMovies.ListVotes
 
         If cbFilterYear.Visible Then 
-            cbFilterYear.Min = If(oMovies.MinYear < 1900, 1900, oMovies.MinYear)
+            cbFilterYear.Min = If(oMovies.MinYear < 1850, 1850, oMovies.MinYear)
             cbFilterYear.Max = oMovies.MaxYear
         End If
     End Sub

@@ -2193,7 +2193,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.title = IO.Path.GetFileName(path)
             '           newmovie.titleandyear = newmovie.title & " (0000)"
                     newmovie.top250 = "0"
-                    newmovie.year = "1900"
+                    newmovie.year = "1850"
 
                     Return newmovie
                 End Try
@@ -2231,7 +2231,7 @@ Public Class WorkingWithNfoFiles
                                 newmovie.director = thisresult.InnerText 
                             Case "year"
                                 Dim ayear As Integer = thisresult.InnerText.ToInt
-                                If ayear = 0 Then ayear = 1900
+                                If ayear = 0 Then ayear = 1850
                                 newmovie.year = ayear   'thisresult.InnerText.ToInt
                             Case "outline"
                                 newmovie.outline = thisresult.InnerText
@@ -2434,7 +2434,7 @@ Public Class WorkingWithNfoFiles
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
                     newmovie.fullmoviebody.title = "Unknown" 'Utilities.CleanFileName(IO.Path.GetFileName(workingMovie.fullpathandfilename))
-                    newmovie.fullmoviebody.year = "1900"
+                    newmovie.fullmoviebody.year = "1850"
                     newmovie.fullmoviebody.top250 = "0"
                     newmovie.fullmoviebody.credits = ""
                     newmovie.fullmoviebody.director = ""
@@ -2546,7 +2546,7 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.originaltitle = thisresult.InnerText
                         Case "year"
                             Dim ayear As String = thisresult.InnerText 
-                            If ayear.ToInt = 0 Then ayear = "1900"
+                            If ayear.ToInt = 0 Then ayear = "1850"
                             newmovie.fullmoviebody.year = ayear  'thisresult.InnerText
                         Case "genre"
                             If newmovie.fullmoviebody.genre = "" Then
