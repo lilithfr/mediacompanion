@@ -1210,13 +1210,13 @@ Public Class Movies
                                 Case "sortorder"            : newmovie.sortorder = detail.InnerText
                                 Case "filedate"
                                     If detail.InnerText.Length <> 14 Then 'i.e. invalid date
-                                        newmovie.filedate = "19000101000000" '01/01/1900 00:00:00
+                                        newmovie.filedate = "18500101000000" '01/01/1850 00:00:00
                                     Else
                                         newmovie.filedate = detail.InnerText
                                     End If
                                 Case "createdate"
                                     If detail.InnerText.Length <> 14 Then 'i.e. invalid date
-                                        newmovie.createdate = "19000101000000" '01/01/1900 00:00:00
+                                        newmovie.createdate = "18500101000000" '01/01/1850 00:00:00
                                     Else
                                         newmovie.createdate = detail.InnerText
                                     End If

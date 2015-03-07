@@ -715,13 +715,13 @@ Public Class ucMusicVideo
                             Case "year" : newMV.year = detail.InnerText
                             Case "filedate"
                                 If detail.InnerText.Length <> 14 Then 'i.e. invalid date
-                                        newMV.filedate = "19000101000000" '01/01/1900 00:00:00
+                                        newMV.filedate = "18500101000000" '01/01/1850 00:00:00
                                     Else
                                         newMV.filedate = detail.InnerText
                                     End If
                             Case "createdate"
                                 If detail.InnerText.Length <> 14 Then 'i.e. invalid date
-                                        newMV.filedate = "19000101000000" '01/01/1900 00:00:00
+                                        newMV.filedate = "18500101000000" '01/01/1850 00:00:00
                                     Else
                                         newMV.filedate = detail.InnerText
                                     End If
