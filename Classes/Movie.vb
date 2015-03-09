@@ -1293,17 +1293,14 @@ Public Class Movie
                 Case "genre"
                     Dim strarr() As String
                     strarr = thisresult.InnerText.Split("/")
-                    For count = 0 To strarr.Length - 1
-                        strarr(count) = strarr(count).Replace(" ", "")
-                    Next
                     If strarr.Length <= Preferences.maxmoviegenre Then
                         _scrapedMovie.fullmoviebody.genre = thisresult.InnerText
                     Else
                         For g = 0 To Preferences.maxmoviegenre - 1
                             If g = 0 Then
-                                _scrapedMovie.fullmoviebody.genre = strarr(g)
+                                _scrapedMovie.fullmoviebody.genre = strarr(g).Trim
                             Else
-                                _scrapedMovie.fullmoviebody.genre += " / " & strarr(g)
+                                _scrapedMovie.fullmoviebody.genre += " / " & strarr(g).Trim
                             End If
                         Next
                     End If
@@ -1326,7 +1323,19 @@ Public Class Movie
                         End Try
                     End If
                 Case "studio"
-                    _scrapedMovie.fullmoviebody.studio = thisresult.InnerText
+                    Dim strarr() As String
+                    strarr = thisresult.InnerText.Split(",")
+                    If strarr.Length <= Preferences.MovieScraper_MaxStudios Then
+                        _scrapedMovie.fullmoviebody.studio = thisresult.InnerText
+                    Else
+                        For g = 0 To Preferences.MovieScraper_MaxStudios - 1
+                            If g = 0 Then
+                                _scrapedMovie.fullmoviebody.studio = strarr(g).Trim
+                            Else
+                                _scrapedMovie.fullmoviebody.studio += ", " & strarr(g).Trim
+                            End If
+                        Next
+                    End If
                 Case "tagline"
                     _scrapedMovie.fullmoviebody.tagline = thisresult.InnerText
                 Case "top250"
