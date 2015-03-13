@@ -7733,7 +7733,9 @@ Public Class Form1
                 ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
                 ToolStripStatusLabel5.Visible = True
             End If
-            bckgrnd_tvshowscraper.RunWorkerAsync() ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
+            Dim selectedLang As String = If(Preferences.tvshow_useXBMC_Scraper, ComboBox_TVDB_Language.Text, Preferences.TvdbLanguageCode)
+            Dim args As TvdbArgs = New TvdbArgs("", selectedLang)
+            bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
         End If
     End Sub
 
