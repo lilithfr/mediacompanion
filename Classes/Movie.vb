@@ -1222,7 +1222,8 @@ Public Class Movie
         _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
         _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
-        _movieCache.movietag = _scrapedMovie.fullmoviebody.tag
+        _movieCache.movietag    = _scrapedMovie.fullmoviebody.tag
+        _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value 
         AssignMovieToAddMissingData
     End Sub
 

@@ -2771,20 +2771,21 @@ Public Class WorkingWithNfoFiles
 
                 root = doc.CreateElement("movie")
                 stage = 3
-                If Preferences.enablehdtags = True Then
-                    Try
-                        child = doc.CreateElement("fileinfo")
-                    Catch
-                    End Try
-                    Try
-                        anotherchild = doc.CreateElement("streamdetails")
-                    Catch ex As Exception
+                
+                Try
+                    child = doc.CreateElement("fileinfo")
+                Catch
+                End Try
+                Try
+                    anotherchild = doc.CreateElement("streamdetails")
+                Catch ex As Exception
 
-                    End Try
-                    Try
-                        filedetailschild = doc.CreateElement("video")
-                    Catch
-                    End Try
+                End Try
+                Try
+                    filedetailschild = doc.CreateElement("video")
+                Catch
+                End Try
+                If Preferences.enablehdtags = True Then
                     Try
                         If movietosave.filedetails.filedetails_video.Width.Value <> Nothing Then
                             If movietosave.filedetails.filedetails_video.Width.Value <> "" Then
@@ -3020,18 +3021,23 @@ Public Class WorkingWithNfoFiles
                             anotherchild.AppendChild(filedetailschild)
                         End If
                     Catch ex As Exception
-
                     End Try
+                Else
                     Try
-                        child.AppendChild(anotherchild)
-                    Catch
-                    End Try
-                    Try
-                        root.AppendChild(child)
+                        Dim container As String = movietosave.filedetails.filedetails_video.Container.Value
+                        filedetailschildchild = doc.CreateElement("container")
+                        filedetailschildchild.InnerText = If(String.IsNullOrEmpty(container), "", container)
+                        filedetailschild.AppendChild(filedetailschildchild)
+                        anotherchild.AppendChild(filedetailschild)
                     Catch
                     End Try
                 End If
-
+                Try
+                    
+                    child.AppendChild(anotherchild)
+                    root.AppendChild(child)
+                Catch
+                End Try
 
 
                 Try

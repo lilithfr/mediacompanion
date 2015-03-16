@@ -1243,6 +1243,7 @@ Public Class Movies
                                     End Try
                                 Case "Resolution"           : newmovie.Resolution = detail.InnerText
                                 Case "VideoCodec"           : newmovie.VideoCodec = detail.InnerText
+                                Case "Container"            : newmovie.Container = detail.InnerText
                                 Case "audio"
                                     Dim audio As New AudioDetails
                                     For Each audiodetails As XmlNode In detail.ChildNodes
@@ -1412,6 +1413,7 @@ Public Class Movies
             child.AppendChild(doc, "votes", movie.Votes)
             child.AppendChild(doc, "Resolution", movie.Resolution)
             child.AppendChild(doc, "VideoCodec", movie.VideoCodec)
+            child.AppendChild(doc, "Container", movie.Container)
 
             '        childchild = doc.CreateElement("audio")
 

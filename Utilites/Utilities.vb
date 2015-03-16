@@ -542,7 +542,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return sort(0).FullName
     End Function
 
-    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = True) As String
+    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = True, Optional VideoExtn As String = Nothing) As String
         Dim tempstring As String
         Dim tempfilename As String = path
         Dim actualpathandfilename As String = ""
@@ -555,6 +555,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If path.ToLower.Contains(".bdmv") Then
             Dim bdlargestfile As String = GetbdMainStream(path)
             actualpathandfilename = bdlargestfile
+        End If
+
+        If actualpathandfilename = "" AndAlso Not String.IsNullOrEmpty(VideoExtn) Then
+            Dim tempname As String = tempfilename.Replace(GetExtension(tempfilename), VideoExtn.Trim("."))
+            If IO.File.Exists(tempname) Then actualpathandfilename = tempname
         End If
 
         If actualpathandfilename = "" Then

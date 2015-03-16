@@ -37,6 +37,7 @@ Public Class ComboList
     Property XbmcMovie            As XbmcMovieForCompare
     Property FrodoPosterExists    As Boolean
     Property PreFrodoPosterExists As Boolean
+    Property Container            As String = ""
 
     Public Property title As String
         Get
@@ -292,6 +293,7 @@ Public Class ComboList
         Me.PreFrodoPosterExists = From.PreFrodoPosterExists
 
         AssignAudio(From.Audio)
+        Me.Container            = From.Container 
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

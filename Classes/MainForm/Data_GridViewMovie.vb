@@ -30,6 +30,7 @@ Public Class Data_GridViewMovie
     Dim _DisplayFileDate   As String
     Dim _DisplayCreateDate As String
     Dim _movietag As String
+    Dim _container As String
 
 
     Property Resolution As Integer = -1
@@ -79,6 +80,7 @@ Public Class Data_GridViewMovie
         FrodoPosterExists = movie.FrodoPosterExists
         PreFrodoPosterExists = movie.PreFrodoPosterExists
         movietag = String.Join(", ", movie.movietag)
+        container = movie.container
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -527,7 +529,7 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property MoviePathAndFileName As String
         Get
-            Return Utilities.GetFileName(fullpathandfilename,True)
+            Return Utilities.GetFileName(fullpathandfilename,True, container)
         End Get
     End Property  
 
@@ -619,5 +621,15 @@ Public Class Data_GridViewMovie
             _movietag = value
         End Set
     End Property
+
+    Public Property container
+        Get
+            Return _container
+        End Get
+        Set(ByVal value)
+            _container = value
+        End Set
+    End Property
+
 
 End Class
