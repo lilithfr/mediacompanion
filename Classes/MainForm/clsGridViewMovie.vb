@@ -104,9 +104,8 @@ Public Class clsGridViewMovie
         'Highlight titles in datagridview with missing video files.
         If Preferences.incmissingmovies Then
             For Each row As DataGridViewRow In dgv.Rows
-                If row.Cells("MoviePathAndFileName").Value = "none" Then
-                    row.DefaultCellStyle.BackColor = Color.Red 
-                
+                If row.Cells("videomissing").Value = True Then
+                    row.DefaultCellStyle.BackColor = Color.Red                
                 End If
             Next
         End If

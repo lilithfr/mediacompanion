@@ -38,6 +38,7 @@ Public Class ComboList
     Property FrodoPosterExists    As Boolean
     Property PreFrodoPosterExists As Boolean
     Property Container            As String = ""
+    Property VideoMissing         As Boolean = False
 
     Public Property title As String
         Get
@@ -103,13 +104,11 @@ Public Class ComboList
         End Get
     End Property
 
-
     Public ReadOnly Property MissingRating As Boolean
         Get
             Return rating=0     '.ToString.Trim=""
         End Get
     End Property  
-
 
     Public ReadOnly Property MissingCertificate As Boolean
         Get
@@ -117,13 +116,11 @@ Public Class ComboList
         End Get
     End Property  
 
-
     Public ReadOnly Property MissingGenre As Boolean
         Get
             Return genre.ToString.Trim=""
         End Get
     End Property  
-
 
     Public ReadOnly Property MissingOutline As Boolean
         Get
@@ -155,13 +152,11 @@ Public Class ComboList
         End Get
     End Property  
 
-
     Public ReadOnly Property MissingVotes As Boolean
         Get
             Return Votes=0          '.ToString.Trim=""
         End Get
     End Property  
-
 
     Public ReadOnly Property MissingYear As Boolean
         Get
@@ -187,13 +182,11 @@ Public Class ComboList
         End Get
     End Property  
 
-
     ReadOnly Property ActualNfoFileNameMatchesDesired As Boolean
         Get
             Return (ActualNfoFileName=DesiredNfoFileName)
         End Get
     End Property
-
 
     '
     ' Returns the Nfo filename based on the user configured rename pattern & name mode (1=include first stack part name e.g CD1)
@@ -217,13 +210,11 @@ Public Class ComboList
         End Get
     End Property
 
-
     'ReadOnly Property FrodoPosterExists As Boolean
     '    Get
     '        Return Preferences.FrodoPosterExists(fullpathandfilename)
     '    End Get
     'End Property
-
 
     ReadOnly Property ActualNfoFileName As String
         Get
@@ -231,15 +222,11 @@ Public Class ComboList
         End Get
     End Property
 
-
     ReadOnly Property PlotEqOutline As Boolean
         Get
             Return (plot=outline)
         End Get
     End Property
-
-
- 
 
     ReadOnly Property UserDefinedFileName As String
         Get
@@ -293,7 +280,8 @@ Public Class ComboList
         Me.PreFrodoPosterExists = From.PreFrodoPosterExists
 
         AssignAudio(From.Audio)
-        Me.Container            = From.Container 
+        Me.Container            = From.Container
+        Me.VideoMissing         = From.VideoMissing
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

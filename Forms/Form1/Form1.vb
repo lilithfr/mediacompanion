@@ -15684,7 +15684,11 @@ End Sub
         SearchForNew()
     End Sub
 
-    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click, btnMovRefreshAll.Click
+    Private Sub btnMovRefreshAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovRefreshAll.Click
+        mov_RebuildMovieCaches()
+    End Sub
+
+    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click
         mov_RebuildMovieCaches()
     End Sub
 

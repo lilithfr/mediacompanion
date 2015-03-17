@@ -31,6 +31,7 @@ Public Class Data_GridViewMovie
     Dim _DisplayCreateDate As String
     Dim _movietag As String
     Dim _container As String
+    Dim _videomissing As Boolean
 
 
     Property Resolution As Integer = -1
@@ -81,6 +82,7 @@ Public Class Data_GridViewMovie
         PreFrodoPosterExists = movie.PreFrodoPosterExists
         movietag = String.Join(", ", movie.movietag)
         container = movie.container
+        videomissing = movie.VideoMissing 
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -631,5 +633,13 @@ Public Class Data_GridViewMovie
         End Set
     End Property
 
+    Public Property videomissing
+        Get
+            Return _videomissing
+        End Get
+        Set(ByVal value)
+            _videomissing = value
+        End Set
+    End Property
 
 End Class

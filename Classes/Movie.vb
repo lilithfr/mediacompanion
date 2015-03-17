@@ -1221,7 +1221,11 @@ Public Class Movie
         _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         _movieCache.movietag    = _scrapedMovie.fullmoviebody.tag
-        _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value 
+        _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value
+        If Preferences.incmissingmovies Then
+            Dim Fileandpath As String = Utilities.GetFileName(_movieCache.fullpathandfilename, , _movieCache.Container)
+            _movieCache.VideoMissing = Not File.Exists(Fileandpath)
+        End If
         AssignMovieToAddMissingData
     End Sub
 
