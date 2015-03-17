@@ -3221,7 +3221,7 @@ Public Class Form1
         frmSplash2.ProgressBar1.Visible = False
         frmSplash2.Show()
         Application.DoEvents()
-        Dim aok As Boolean = False
+        Dim aok As Boolean = True
         If IO.File.Exists(tempstring) Then
             aok = Utilities.SafeDeleteFile(tempstring)
         End If
