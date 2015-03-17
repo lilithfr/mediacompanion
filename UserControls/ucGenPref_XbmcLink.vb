@@ -64,7 +64,7 @@ Public Class ucGenPref_XbmcLink
 
         UpdatePreferences
 
-        Preferences.SaveConfig
+        Preferences.ConfigSave()
         SetEnabledStates
     End Sub
 

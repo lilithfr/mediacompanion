@@ -56,7 +56,7 @@ Public Class Preferences
     Public Shared engineend As New List(Of String)
     Public Shared proxysettings As New List(Of String)
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
-    Public Shared XbmcTmdbHDTrailer As String = "No"
+    'Public Shared XbmcTmdbHDTrailer As String = "No"
     Public Shared MovieChangeKeepExistingArt As Boolean = True
     Public Shared MovieChangeMovie As Boolean = False
     Public Shared MovieDeleteNfoArtwork As Boolean = False
@@ -266,7 +266,7 @@ Public Class Preferences
     Public Shared TMDbSelectedLanguageName As String = "English - US"
     Public Shared TMDbUseCustomLanguage As Boolean = False
     Public Shared TMDbCustomLanguageValue As String = ""
-    Public Shared TMDBPreferredCertCountry As String = ""
+    'Public Shared TMDBPreferredCertCountry As String = ""
     Public Shared GetMovieSetFromTMDb As Boolean = True
     Public Shared ActorResolutionSI As Integer = 2     ' Height  768           SI = Selected Index
     Public Shared PosterResolutionSI As Integer = 9     ' Height  1080  
@@ -306,6 +306,11 @@ Public Class Preferences
 
     Public Shared Original_Title     As Boolean=False
     Public Shared UseMultipleThreads As Boolean=False
+    Public Shared XbmcTmdbScraperFanart As String = Nothing
+    Public Shared XbmcTmdbScraperTrailerQ As String = Nothing
+    Public Shared XbmcTmdbScraperLanguage As String = Nothing
+    Public Shared XbmcTmdbScraperRatings As String = Nothing
+    Public Shared XbmcTmdbScraperCertCountry As String = Nothing
 
     Public Shared movie_filters As MovieFilters = New MovieFilters
 
@@ -582,7 +587,7 @@ Public Class Preferences
         'Movies
         movies_useXBMC_Scraper = False
         TmdbActorsImdbScrape = False
-        TMDBPreferredCertCountry = "us"
+        'TMDBPreferredCertCountry = "us"
         ImdbPrimaryPlot = False
         XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
@@ -811,7 +816,7 @@ Public Class Preferences
         'enginefront.Add("http://search.yahoo.com/search?p=")    'Yahoo isn't allowing searching. 
         'engineend.Add("+movie+site%3Aimdb.com")
     End Sub
-    Public Shared Sub SaveConfig()
+    Public Shared Sub ConfigSave()
         
         Dim tempstring As String = String.Empty
         Dim doc As New XmlDocument
@@ -1034,7 +1039,7 @@ Public Class Preferences
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
         root.AppendChild(doc, "TmdbActorsImdbScrape",               TmdbActorsImdbScrape)               'cbImdbgetTMDBActor 
-        root.AppendChild(doc, "TMDBPreferredCertCountry",           TMDBPreferredCertCountry)           'cmbxTMDBPreferredCertCountry
+        'root.AppendChild(doc, "TMDBPreferredCertCountry",           TMDBPreferredCertCountry)           'cmbxTMDBPreferredCertCountry
         root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot  
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
@@ -1094,6 +1099,11 @@ Public Class Preferences
         root.AppendChildList(doc, "movseplst",                      MovSepLst.ToArray)                  'lb_MovSepLst
         root.AppendChild(doc, "MovFiltLastSize",                    MovFiltLastSize)                    'Preference.MovFiltLastSize
         root.AppendChild(doc, "RenameSpaceCharacter",               RenameSpaceCharacter)               'Preference.RenameSpaceCharacter
+        root.AppendChild(doc, "XbmcTmdbScraperFanart",              XbmcTmdbScraperFanart)              'cbXbmcTmdbFanart
+        root.AppendChild(doc, "XbmcTmdbScraperTrailerQ",            XbmcTmdbScraperTrailerQ)            'cmbxXbmcTmdbHDTrailer
+        root.AppendChild(doc, "XbmcTmdbScraperLanguage",            XbmcTmdbScraperLanguage)            'cmbxXbmcTmdbTitleLanguage
+        root.AppendChild(doc, "XbmcTmdbScraperRatings",             XbmcTmdbScraperRatings)             'cbXbmcTmdbIMDBRatings
+        root.AppendChild(doc, "XbmcTmdbScraperCertCountry",         XbmcTmdbScraperCertCountry)         '
 
         root.AppendChild(movie_filters.GetChild(doc))
 
@@ -1171,7 +1181,7 @@ Public Class Preferences
 
 
 
-    Public Shared Sub LoadConfig()
+    Public Shared Sub ConfigLoad()
         commandlist.Clear()
         moviesets.Clear()
         moviesets.Add("-None-")
@@ -1317,16 +1327,7 @@ Public Class Preferences
                             End If
                         Next
 
-                    'Case "whatXBMCScraper" 'made obsolete and changed to "xbmcscraper", but may be still be present in users config
-                    '    XBMC_Scraper = thisresult.InnerXml
-                    '    If thisresult.InnerXml = "imdb" Then
-                    '        whatXBMCScraperIMBD = True
-                    '    ElseIf thisresult.InnerXml = "tmdb" Then
-                    '        whatXBMCScraperTVDB = True
-                    '    End If
-
-                    Case "TmdbActorsImdbScrape"                 : TmdbActorsImdbScrape = thisresult.InnerXml 
-                    Case "TMDBPreferredCertCountry"             : TMDBPreferredCertCountry = thisresult.InnerText 
+                    Case "TmdbActorsImdbScrape"                 : TmdbActorsImdbScrape = thisresult.InnerXml
                     Case "ImdbPrimaryPlot"                      : ImdbPrimaryPlot = thisresult.InnerXml 
                     'Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText    -  locked at "tmdb"
                     Case "XbmcTmdbRenameMovie"                  : XbmcTmdbRenameMovie = thisresult.InnerText 
@@ -1448,7 +1449,6 @@ Public Class Preferences
                     Case "MovFanartTvDlLandscape"               : MovFanartTvDlLandscape = thisresult.InnerXml
                     Case "fanartjpg"                            : fanartjpg = thisresult.InnerXml
                     Case "postertype"                           : postertype = thisresult.InnerXml
-'                   Case "tvactorscrape"                        : TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
                     Case "videomode"                            : videomode = Convert.ToInt32(thisresult.InnerXml)
                     Case "selectedvideoplayer"                  : selectedvideoplayer = thisresult.InnerXml
                     Case "maximagecount"                        : maximagecount = Convert.ToInt32(thisresult.InnerXml)
@@ -1505,6 +1505,11 @@ Public Class Preferences
                     Case "MovieScraper_MaxStudios"              : MovieScraper_MaxStudios = thisresult.InnerXml
                     Case "MovFiltLastSize"                      : MovFiltLastSize = thisresult.InnerXml 
                     Case "RenameSpaceCharacter"                 : RenameSpaceCharacter = thisresult.InnerText
+                    Case "XbmcTmdbScraperFanart"                : XbmcTmdbScraperFanart = thisresult.InnerText
+                    Case "XbmcTmdbScraperTrailerQ"              : XbmcTmdbScraperTrailerQ = thisresult.InnerText
+                    Case "XbmcTmdbScraperLanguage"              : XbmcTmdbScraperLanguage = thisresult.InnerText
+                    Case "XbmcTmdbScraperRatings"               : XbmcTmdbScraperRatings = thisresult.InnerText
+                    Case "XbmcTmdbScraperCertCountry"           : XbmcTmdbScraperCertCountry = thisresult.InnerText
 
                     Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
                     Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml

@@ -51,7 +51,7 @@ Public Class MediaStubs
                 newfolder = theFolderBrowser.SelectedPath
                 If Preferences.stubofflinefolder(newfolder) Then
                     Preferences.stubfolder = newfolder
-                    Preferences.SaveConfig
+                    Preferences.ConfigSave()
                     tb_Stub_folder.Text = newfolder
                 Else
                     MsgBox ("Folder " & vbCrLf & "[" & newfolder & "]" & vbCrLf & "already in Movie Folder List")
@@ -66,7 +66,7 @@ Public Class MediaStubs
 
     Private Sub btn_StubSetDefaultMessage_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_StubSetDefaultMessage.Click
             Preferences.stubmessage = tb_Stub_Message.Text
-            Preferences.SaveConfig 
+            Preferences.ConfigSave() 
     End Sub
 
     Private Sub btn_StubSaveStub_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_StubSaveStub.Click

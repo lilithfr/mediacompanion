@@ -159,7 +159,7 @@ Partial Public Class Form1
             newTvFolders.Add(item)
         Next
         droppedItems.Clear()
-        Preferences.SaveConfig()
+        Preferences.ConfigSave()
         tv_ShowScrape()
     End Sub
 

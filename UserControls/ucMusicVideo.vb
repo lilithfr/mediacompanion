@@ -1137,7 +1137,7 @@ Public Class ucMusicVideo
                     lstBoxFolders.Items.Add(tempstring)
                     tbFolderPath.Text = ""
                     Preferences.MVidFolders.Add(tempstring)
-                    Preferences.SaveConfig
+                    Preferences.ConfigSave()
                     lstBoxFolders.Refresh()
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -1145,7 +1145,7 @@ Public Class ucMusicVideo
                         lstBoxFolders.Items.Add(tempstring)
                         tbFolderPath.Text = ""
                         Preferences.MVidFolders.Add(tempstring)
-                        Preferences.SaveConfig 
+                        Preferences.ConfigSave() 
                     End If
                 End If
             End If
@@ -1184,7 +1184,7 @@ Public Class ucMusicVideo
                 Preferences.MVidFolders.Remove(lstBoxFolders.SelectedItems(0))
                 lstBoxFolders.Items.Remove(lstBoxFolders.SelectedItems(0))
             End While
-            Preferences.SaveConfig
+            Preferences.ConfigSave()
         Catch
         End Try
     End Sub

@@ -402,10 +402,8 @@ Public Class Movie
 
     ReadOnly Property Director As ActorDatabase
         Get
-            If String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.director) Then
-                Return Nothing
-            End If
             Try
+                If String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.director) Then Return Nothing
                 Return New ActorDatabase(_scrapedMovie.fullmoviebody.director,_scrapedMovie.fullmoviebody.imdbid)
             Catch
                 Return Nothing
@@ -1528,7 +1526,7 @@ Public Class Movie
         _youTubeTrailer = Nothing
         
         If Preferences.movies_useXBMC_Scraper Then 
-            If Preferences.XbmcTmdbHDTrailer.ToLower <> "no" Then
+            If Preferences.XbmcTmdbScraperTrailerQ.ToLower <> "no" Then
                 If TrailerUrl = "" Then TrailerUrl = TrailerHDTrailer(title)
             End If
         Else
@@ -1568,7 +1566,7 @@ Public Class Movie
         If Preferences.moviePreferredTrailerResolution.ToUpper()<>"SD" And Not GetTrailerUrlAlreadyRun Then
             Try
                 GetTrailerUrlAlreadyRun = True
-                Dim TraRes As String = If(Preferences.movies_useXBMC_Scraper, Preferences.XbmcTmdbHDTrailer.Replace("p",""), Preferences.moviePreferredTrailerResolution)
+                Dim TraRes As String = If(Preferences.movies_useXBMC_Scraper, Preferences.XbmcTmdbScraperTrailerQ.Replace("p",""), Preferences.moviePreferredTrailerResolution)
                 TrailerUrl2 = MC_Scraper_Get_HD_Trailer_URL(TraRes, title)
             Catch ex As Exception
                 Dim paramInfo As String = ""

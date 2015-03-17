@@ -740,7 +740,7 @@ Module General
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "fanart"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.cbXbmcTmdbFanart.Checked = Test
+                                        Form1.cbXbmcTmdbFanart.Checked = If(Preferences.XbmcTmdbScraperFanart = Nothing, Test, Convert.ToBoolean(Preferences.XbmcTmdbScraperFanart))
                                     Case "trailerq"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -748,7 +748,7 @@ Module General
                                         For Each thisvalue In splitvalues
                                             Form1.cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
                                         Next
-                                        Form1.cmbxXbmcTmdbHDTrailer.Text = Test
+                                        Form1.cmbxXbmcTmdbHDTrailer.Text = If(Preferences.XbmcTmdbScraperTrailerQ = Nothing, Test, Preferences.XbmcTmdbScraperTrailerQ)
                                     Case "language"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -756,10 +756,11 @@ Module General
                                         For Each thisvalue In splitvalues
                                             Form1.cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
                                         Next
-                                        Form1.cmbxXbmcTmdbTitleLanguage.Text = Test
+                                        Form1.cmbxXbmcTmdbTitleLanguage.Text = If(Preferences.XbmcTmdbScraperLanguage = Nothing, Test, Preferences.XbmcTmdbScraperLanguage)
                                     Case "ratings"
                                         Dim Test As String = NodeChild.Attributes("default").Value
-                                        Form1.cbXbmcTmdbIMDBRatings.Checked = If(Test.ToLower = "imdb", True, False)
+                                        If Preferences.XbmcTmdbScraperRatings = Nothing Then Preferences.XbmcTmdbScraperRatings = Test
+                                        Form1.cbXbmcTmdbIMDBRatings.Checked = If(Preferences.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
                                     Case "tmdbcertcountry"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -767,7 +768,7 @@ Module General
                                         For Each thisvalue In splitvalues
                                             Form1.cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
                                         Next
-                                        Form1.cmbxTMDBPreferredCertCountry.Text = Preferences.TMDBPreferredCertCountry
+                                        Form1.cmbxTMDBPreferredCertCountry.Text = If(Preferences.XbmcTmdbScraperCertCountry = Nothing, Test, Preferences.XbmcTmdbScraperCertCountry)
                                 End Select
                             Catch
                                 'empty node

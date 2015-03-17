@@ -218,7 +218,7 @@ Module Module1
             Environment.Exit(EnvExit)
         End If
         defaultOfflineArt = Path.Combine(Preferences.applicationPath, "Resources\default_offline.jpg")
-        Preferences.LoadConfig
+        Preferences.ConfigLoad()
 
         If domovies Or domediaexport Then
             If File.Exists(Preferences.workingProfile.moviecache) Then

@@ -244,7 +244,7 @@ Public Class TMDb
             Next
 
             For Each country In _releases.countries
-                If country.iso_3166_1.ToLower = Preferences.TMDBPreferredCertCountry Then
+                If country.iso_3166_1.ToLower = Preferences.XbmcTmdbScraperCertCountry Then
                     Return country.certification
                 End If
             Next

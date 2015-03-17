@@ -393,12 +393,12 @@ Public Class Form1
             If hg.Exists Then
                 Preferences.configpath = tempstring & "config.xml"
                 If Not IO.File.Exists(Preferences.configpath) Then
-                    Preferences.SaveConfig()
+                    Preferences.ConfigSave()
                 End If
             Else
                 IO.Directory.CreateDirectory(tempstring)
                 workingProfile.Config = applicationPath & "\Settings\config.xml"
-                Preferences.SaveConfig()
+                Preferences.ConfigSave()
             End If
 
             If Not IO.File.Exists(applicationPath & "\settings\profile.xml") Then
@@ -840,7 +840,7 @@ Public Class Form1
 
             Preferences.startuptab = TabLevel1.SelectedIndex
 
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
             SplashscreenWrite()
             Call util_ProfileSave()
             Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
@@ -1076,7 +1076,7 @@ Public Class Form1
                             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
                         End If
 
-                        Preferences.SaveConfig()
+                        Preferences.ConfigSave()
                     End If
                 Else
                     cbBtnLink.Checked = False
@@ -7702,7 +7702,7 @@ Public Class Form1
                     Preferences.tvFolders.Add(item)
                 Next
                 Preferences.tvFolders.Sort()
-                Preferences.SaveConfig()
+                Preferences.ConfigSave()
             End If
             tv_ShowScrape()
         Catch ex As Exception
@@ -7892,7 +7892,7 @@ Public Class Form1
         Try
             generalprefschanged = False
 
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
 
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = e.ClickedItem.Text Then
@@ -8225,7 +8225,7 @@ Public Class Form1
         Next
         If IsNothing(DataGridView1.SortedColumn) = False Then
             Preferences.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
         End If
 
         If DataDirty Then
@@ -9780,7 +9780,7 @@ End Sub
         Try
             If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
                 Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
-                Preferences.SaveConfig()
+                Preferences.ConfigSave()
                 If Preferences.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
                     RefreshMissingEpisodesToolStripMenuItem.Enabled = False
                     RadioButton29.Checked = True
@@ -10522,20 +10522,15 @@ End Sub
     End Sub
     
     Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )
-        Preferences.LoadConfig()
+        Preferences.ConfigLoad()
         Preferences.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
 
-        'MovieListComboBox.Items.Clear()
         DataGridViewMovies.DataSource = Nothing
 
         Me.GroupBox22.Visible = Not Preferences.tvshow_useXBMC_Scraper
         Me.GroupBox22.SendToBack()
         Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
         Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
-
-        'Me.RadioButton51.Enabled = Preferences.movies_useXBMC_Scraper
-        'Me.RadioButton52.Enabled = Preferences.movies_useXBMC_Scraper
-        'Me.RadioButton51.Checked = CBool(Preferences.whatXBMCScraperIMBD)
 
         Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
@@ -10562,6 +10557,14 @@ End Sub
         Me.cbxNameMode.Checked = Preferences.namemode
         lblNameMode.Text = createNameModeText()
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename), tv_RegexScraper)
+        If Not Preferences.XbmcTmdbScraperRatings = Nothing Then
+            Save_XBMC_TMDB_Scraper_Config("fanart", Preferences.XbmcTmdbScraperFanart)
+            Save_XBMC_TMDB_Scraper_Config("trailerq", Preferences.XbmcTmdbScraperTrailerQ)
+            Save_XBMC_TMDB_Scraper_Config("language", Preferences.XbmcTmdbScraperLanguage)
+            Save_XBMC_TMDB_Scraper_Config("ratings", Preferences.XbmcTmdbScraperRatings)
+            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Preferences.XbmcTmdbScraperCertCountry)
+        End If
+
         'Read_XBMC_IMDB_Scraper_Config()
 
         '----------------------------------------------------------
@@ -10631,22 +10634,6 @@ End Sub
             Next
         End If
 
-        'If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
-        '    loadinginfo = "Status :- Building Actor Database"
-        '    frmSplash.Label3.Text = loadinginfo
-        '    frmSplash.Label3.Refresh()
-        '    Call mov_ActorRebuild()
-        'Else
-        '    loadinginfo = "Status :- Loading Actor Database"
-        '    frmSplash.Label3.Text = loadinginfo
-        '    frmSplash.Label3.Refresh()
-        '    'Dim NovaThread3 = New Thread(New ThreadStart(AddressOf mov_ActorCacheLoad))
-        '    'NovaThread3.SetApartmentState(ApartmentState.STA)
-        '    'NovaThread3.Start()
-        '    oMovies.RebuildActorCache
-        '    'Call loadactorcache()
-        'End If
-        
         cbBtnLink.Checked = Preferences.XBMC_Link
         SetcbBtnLink
         If Preferences.XbmcLinkReady Then
@@ -12649,7 +12636,7 @@ End Sub
     Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
         Preferences.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
 
-        Preferences.SaveConfig()
+        Preferences.ConfigSave()
 
         If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
@@ -13373,7 +13360,7 @@ End Sub
                 If tempint = DialogResult.Yes Then
 
                     Call util_RegexSave()
-                    Preferences.SaveConfig()
+                    Preferences.ConfigSave()
                     MsgBox("Changes Saved")
                 Else
 
@@ -13390,7 +13377,7 @@ End Sub
 
     Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVPrefSaveChanges.Click
         Try
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
             Call util_RegexSave()
             ComboBox_tv_EpisodeRename.Items.Clear()
             For Each Regex In tv_RegexRename
@@ -14175,7 +14162,7 @@ End Sub
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
                     applyAdvancedLists()
-                    Preferences.SaveConfig()
+                    Preferences.ConfigSave()
                 Else
                     util_ConfigLoad(True)
                 End If
@@ -14201,7 +14188,7 @@ End Sub
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
 
             movieprefschanged = False
             btnMoviePrefSaveChanges.Enabled = False
@@ -14241,10 +14228,11 @@ End Sub
     Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbFanart.CheckedChanged
         Try
             If cbXbmcTmdbFanart.Checked = True Then
-                Save_XBMC_TMDB_Scraper_Config("fanart", "true")
+                Preferences.XbmcTmdbScraperFanart = "true"
             Else
-                Save_XBMC_TMDB_Scraper_Config("fanart", "false")
+                Preferences.XbmcTmdbScraperFanart = "false"
             End If
+            Save_XBMC_TMDB_Scraper_Config("fanart", Preferences.XbmcTmdbScraperFanart)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14253,13 +14241,14 @@ End Sub
         End Try
     End Sub
 
-    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged
+    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged, cbXbmcTmdbIMDBRatings.CheckStateChanged 
         Try
             If cbXbmcTmdbIMDBRatings.Checked = True Then
-                Save_XBMC_TMDB_Scraper_Config("ratings", "IMDb")
+                Preferences.XbmcTmdbScraperRatings = "IMDb"
             Else
-                Save_XBMC_TMDB_Scraper_Config("ratings", "TMDb")
+                Preferences.XbmcTmdbScraperRatings = "TMDb"
             End If
+            Save_XBMC_TMDB_Scraper_Config("ratings", Preferences.XbmcTmdbScraperRatings)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14305,8 +14294,8 @@ End Sub
 
     Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbHDTrailer.SelectedIndexChanged
         Try
-            Save_XBMC_TMDB_Scraper_Config("trailerq", cmbxXbmcTmdbHDTrailer.Text)
-            Preferences.XbmcTmdbHDTrailer = cmbxXbmcTmdbHDTrailer.Text
+            Preferences.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
+            Save_XBMC_TMDB_Scraper_Config("trailerq", Preferences.XbmcTmdbScraperTrailerQ)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14317,7 +14306,8 @@ End Sub
 
     Private Sub cmbxXbmcTmdbTitleLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbTitleLanguage.SelectedIndexChanged
         Try
-            Save_XBMC_TMDB_Scraper_Config("language", cmbxXbmcTmdbTitleLanguage.Text)
+            Preferences.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
+            Save_XBMC_TMDB_Scraper_Config("language", Preferences.XbmcTmdbScraperLanguage)
             mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
@@ -14330,8 +14320,8 @@ End Sub
     Private Sub cmbxTMDBPreferredCertCountry_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxTMDBPreferredCertCountry.SelectedIndexChanged
         If prefsload Then Exit Sub
         Try     'tmdbcertcountry
-            Preferences.TMDBPreferredCertCountry = cmbxTMDBPreferredCertCountry.Text
-            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", cmbxTMDBPreferredCertCountry.Text)
+            Preferences.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
+            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Preferences.XbmcTmdbScraperCertCountry)
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -17653,7 +17643,7 @@ End Sub
                 Next
                 If remove = True Then Preferences.offlinefolders.RemoveAt(f)
             Next
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
         End If
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
             Application.DoEvents()
@@ -17671,7 +17661,7 @@ End Sub
                 progressmode = True
             End If
             'Call mov_NfoLoad(folderstoadd, progressmode)
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
             '     messbox.Close 'Where's the open???
         End If
 
@@ -19318,7 +19308,7 @@ End Sub
                 End If
             Next
             tvfolderschanged = False
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
             tv_ShowScrape()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19758,7 +19748,7 @@ End Sub
         For Each item In ListBox19.Items
             Preferences.homemoviefolders.Add(item)
         Next
-        Call SaveConfig()
+        Call ConfigSave()
         Call rebuildHomeMovies()
     End Sub
 
@@ -20105,7 +20095,7 @@ End Sub
 
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
             UpdateMovieFiltersPanel()
-            Preferences.SaveConfig()
+            Preferences.ConfigSave()
             UpdateFilteredList()
         End If
     End Sub

@@ -20,7 +20,7 @@ Public Class ucGenPref_Proxy
 
         UpdatePreferences
 
-        Preferences.SaveConfig
+        Preferences.ConfigSave()
         SetEnabledStates
     End Sub
 
