@@ -6,6 +6,7 @@ Imports System.Drawing.Drawing2D
 Imports System.Windows.Forms
 
 Public Class UserRect
+    Implements IDisposable
 	Private mPictureBox As PictureBox
 	Public rect As Rectangle
 	Public allowDeformingDuringMovement As Boolean = False
@@ -45,11 +46,6 @@ Public Class UserRect
 		Next
 	End Sub
 
-    Public Sub Dispose()
-        
-        mPictureBox.Dispose()
-    End Sub
-
 	Public Sub SetBitmapFile(filename As String)
 		Me.mBmp = New Bitmap(filename)
         frmMovPosterCrop.PicBox.image = Me.mBmp 
@@ -67,35 +63,6 @@ Public Class UserRect
 		AddHandler mPictureBox.Paint, AddressOf mPictureBox_Paint
 	End Sub
     
-    'Public Sub SavePicturebox(s As String)
-    '    'Dim img As Bitmap()
-    '    Dim sx As Integer = rect.X
-    '    Dim sy As Integer = rect.Y
-    '    Dim sw As Integer = rect.Width
-    '    Dim sh As Integer = rect.Height
-    '    Dim rect1 As Rectangle = New Rectangle(sx, sy, sw, sh)
-
-    '    'First we define a rectangle with the help of already calculated points
-
-    '    Dim OriginalImage As Bitmap = New Bitmap(mPictureBox.Image, mPictureBox.Width, mPictureBox.Height)
-
-    '    'Original image
-
-    '    Dim _img As New Bitmap(sw, sh) ' for cropinf image
-    '    Dim g As Graphics = Graphics.FromImage(_img) ' create graphics
-
-    '    g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
-    '    g.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighQuality
-    '    g.CompositingQuality = Drawing2D.CompositingQuality.HighQuality
-
-    '    'set image attributes
-    '    g.DrawImage(OriginalImage, 0, 0, rect, GraphicsUnit.Pixel) 
-    '    mPictureBox.Image = _img
-    '    If Me.mPictureBox.Image IsNot Nothing Then
-    '        Me.mPictureBox.Image.Save(s, System.Drawing.Imaging.ImageFormat.Jpeg)
-    '    End If
-    'End Sub
-
     Public Function GetCropped(ByVal zm As Double) As Bitmap
         
         'Dim zm As Double = frmMovPosterCrop.zm
@@ -319,5 +286,22 @@ Public Class UserRect
 				Return Cursors.[Default]
 		End Select
 	End Function
+
+    Protected Overridable Overloads Sub Dispose(disposing As Boolean)
+
+        If mBmp IsNot Nothing Then
+            mBmp.Dispose()
+            mBmp = Nothing
+        End If
+        If mPictureBox IsNot Nothing Then
+            mPictureBox.Dispose()
+            mPictureBox = Nothing
+        End If
+    End Sub 'Dispose
+
+    Public Overloads Sub Dispose() Implements IDisposable.Dispose
+        Dispose(True)
+        GC.SuppressFinalize(Me)
+    End Sub 'Dispose
 
 End Class

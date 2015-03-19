@@ -1174,10 +1174,10 @@ Public Class Movie
         _movieCache.director            = _scrapedMovie.fullmoviebody.director 
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
         
-        If movRebuildCaches Then 
+        'If movRebuildCaches Then 
             UpdateActorCacheFromEmpty
             UpdateDirectorCacheFromEmpty
-        End If
+        'End If
         
         If Not Preferences.usefoldernames Then
             If _movieCache.filename <> Nothing Then _movieCache.filename = _movieCache.filename.Replace(".nfo", "")

@@ -1869,6 +1869,10 @@ Public Class Movies
 
     Public Sub RebuildMovieCache
         If Preferences.UseMultipleThreads Then
+            _actorDB      .Clear()
+            _directorDb   .Clear()
+            _tmpActorDb   .Clear()
+            _tmpDirectorDb.Clear()
             MT_LoadMovieCacheFromNfos
         Else
             LoadMovieCacheFromNfos
@@ -1879,24 +1883,24 @@ Public Class Movies
 
 
     Public Sub RebuildMoviePeopleCaches()
-        _actorDB      .Clear()
-        _directorDb   .Clear()
-        _tmpActorDb   .Clear()
-        _tmpDirectorDb.Clear()
-        Dim i = 0
+        '_actorDB      .Clear()
+        '_directorDb   .Clear()
+        '_tmpActorDb   .Clear()
+        '_tmpDirectorDb.Clear()
+        'Dim i = 0
 
-        For Each movie In MovieCache
-            i += 1
-            PercentDone = CalcPercentDone(i, MovieCache.Count)
-            ReportProgress("Rebuilding caches " & i & " of " & MovieCache.Count)
+        'For Each movie In MovieCache
+        '    i += 1
+        '    PercentDone = CalcPercentDone(i, MovieCache.Count)
+        '    ReportProgress("Rebuilding caches " & i & " of " & MovieCache.Count)
 
-            Dim m = New Movie(Me,movie.fullpathandfilename)
+        '    Dim m = New Movie(Me,movie.fullpathandfilename)
 
-            m.LoadNFO(False)
-            m.UpdateActorCacheFromEmpty()
-            m.UpdateDirectorCacheFromEmpty()
-            If Cancelled Then Exit Sub
-        Next
+        '    m.LoadNFO(False)
+        '    m.UpdateActorCacheFromEmpty()
+        '    m.UpdateDirectorCacheFromEmpty()
+        '    If Cancelled Then Exit Sub
+        'Next
 
         If Cancelled Then Exit Sub
 

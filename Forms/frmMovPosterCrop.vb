@@ -6,10 +6,10 @@ Imports System.Text
 Imports System.Windows.Forms
 
 Public Class frmMovPosterCrop
+    Implements IDisposable
     Private rect As UserRect
-
     Public img As Bitmap
-    'Dim Public zm As Double = 1
+
     Public Sub New()
         InitializeComponent()
         If Form1.cropMode = "movieposter" Then
@@ -19,12 +19,8 @@ Public Class frmMovPosterCrop
             img = Form1.UcMusicVideo1.pcBxScreenshot.Image
             tb_cropmovtitle.Text = Form1.UcMusicVideo1.txtTitle.Text
         End If
-
-        'Dim img As Bitmap = Form1.PictureBoxAssignedMoviePoster.Image
-
         SizePicBox()
         PicBox.Image = img
-
         rect = New UserRect(New Rectangle(80, 10, 250, 400))
         rect.dodraw = True
         rect.SetPictureBox(Me.PicBox)
@@ -42,8 +38,6 @@ Public Class frmMovPosterCrop
             Form1.UcMusicVideo1.btnCropReset.Enabled = True
             Form1.UcMusicVideo1.pcBxScreenshot.Image = rect.GetCropped(zm)
         End If
-
-
         PicBox.Dispose()
         Me.Close()
     End Sub
@@ -53,7 +47,6 @@ Public Class frmMovPosterCrop
     End Sub
 
     Private Sub SizePicBox()
-        'zm = (img.Height/PicBox.Height)
         Dim newW As Integer = Math.Ceiling(img.Width / (img.Height / PicBox.Height))
         PicBox.Width = newW
         Dim newxpos = Math.Ceiling(245 - (newW / 2))
@@ -61,7 +54,17 @@ Public Class frmMovPosterCrop
     End Sub
 
     Private Sub frmMovPosterCrop_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-
         If e.KeyCode = Keys.Escape Then btn_CropCancel.PerformClick()
     End Sub
+
+    Protected Overridable Overloads Sub Dispose(disposing As Boolean)
+        If img IsNot Nothing Then
+            img.Dispose()
+            img = Nothing
+        End If
+        If rect IsNot Nothing Then
+            rect.Dispose()
+            rect = Nothing
+        End If
+    End Sub 'Dispose
 End Class
