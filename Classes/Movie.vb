@@ -3458,10 +3458,10 @@ Public Class Movie
                     'Else
 
                     End If
-                    'Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn)
-                    Dim changename As String = subStackList(i).Replace(oldname1, newfilename)
+                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn(i))
+                    'Dim changename As String = subStackList(i).Replace(oldname1, newfilename)
                     oldName = subStackList(i)
-                    newName = changename
+                    newName = newpath & changename
                     RenameFile(oldName, newName, log)
                 Next
                     log &= "!!! Subtitle Renamed as:- " & newfilename & vbCrLf 
