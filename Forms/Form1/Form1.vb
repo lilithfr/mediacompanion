@@ -6114,21 +6114,10 @@ Public Class Form1
             End If
             If TvTreeview.SelectedNode.Name.IndexOf("\missing\") = -1 Then
                 If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-                    'season
-                    tempint = MessageBox.Show("Attempt to download missing episode thumbs for the selected season" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                    If tempint = DialogResult.No Then
-                        Exit Sub
-                    End If
                     Dim Thisseason As TvSeason = TvTreeview.SelectedNode.Tag
                     seasonnumber = Thisseason.SeasonNumber
-                Else
-                    tempint = MessageBox.Show("Attempt to download missing episode thumbs for the selected Show" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                    If tempint = DialogResult.No Then
-                        Exit Sub
-                    End If
                 End If
             End If
-
             Dim messbox As New frmMessageBox("Scanning for Missing episode thumbnails,", "and downloading if available.", "   Please Wait")
             messbox.Show()
             messbox.Refresh()
@@ -10551,7 +10540,7 @@ End Sub
         End If
         Me.RadioButton44.Enabled = Preferences.displayMissingEpisodes
         Me.RadioButton53.Enabled = Preferences.displayMissingEpisodes 
-
+        Me.TextBox35.Text = Preferences.ScrShtDelay.ToString 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
         Me.cbxNameMode.Checked = Preferences.namemode
@@ -12344,7 +12333,7 @@ End Sub
         cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
         CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
         cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
-        AutoScrnShtDelay.Text = ScrShtDelay
+        AutoScrnShtDelay                .Text       = ScrShtDelay
         cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Preferences.TvXtraFanartQty.ToString)
 
         Select Case Preferences.seasonall
@@ -13716,7 +13705,7 @@ End Sub
                     AutoScrnShtDelay.Text = "10"
                     Exit Sub
                 End If
-                Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
+                'Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
             Catch ex As Exception
                 ExceptionHandler.LogError(ex)
             End Try
@@ -17434,6 +17423,12 @@ End Sub
         End Try
     End Sub
 
+    Private Sub ListBox7_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox7.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso ListBox7.SelectedItem <> Nothing
+            Call btn_removemoviefolder.PerformClick()
+        End If
+    End Sub
+
     Private Sub btn_removemoviefolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removemoviefolder.Click
         Try
             While ListBox7.SelectedItems.Count > 0
@@ -18309,6 +18304,11 @@ End Sub
 #Region "Tv Screenshot Form"
 
     Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
+        If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
+            If TextBox35.Text <> "" AndAlso Convert.ToInt32(TextBox35.Text) > 0 Then
+                TvEpThumbScreenShot()
+            End If
+        End If
         If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
             e.Handled = True
         End If
@@ -19318,6 +19318,12 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+    Private Sub ListBox5_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox5.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso ListBox5.SelectedItem <> Nothing
+            Call btn_TvFoldersRootRemove.PerformClick()
+        End If
+    End Sub
         
     Private Sub ListBox6_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox6.DragDrop
         Dim files() As String
@@ -19351,6 +19357,12 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub ListBox6_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox6.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso ListBox6.SelectedItem <> Nothing
+            Call btn_TvFoldersRemove.PerformClick()
+        End If
     End Sub
 
 #End Region

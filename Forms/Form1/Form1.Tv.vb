@@ -3720,7 +3720,7 @@ Partial Public Class Form1
                         If Preferences.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then 
                             DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
                         Else
-                            File.Copy(cachepathandfilename, paths(0))
+                            File.Copy(cachepathandfilename, paths(0), True)
                         End If
 
                         If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
