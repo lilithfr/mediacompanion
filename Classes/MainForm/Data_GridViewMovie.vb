@@ -82,7 +82,8 @@ Public Class Data_GridViewMovie
         PreFrodoPosterExists = movie.PreFrodoPosterExists
         movietag = String.Join(", ", movie.movietag)
         container = movie.container
-        videomissing = movie.VideoMissing 
+        videomissing = movie.VideoMissing
+        AssignSubtitleLang(movie.SubLang)
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -91,35 +92,36 @@ Public Class Data_GridViewMovie
     End Sub
 
     Public Function Export() As ComboList
-        Dim convertedMovie As New ComboList With {.fullpathandfilename = Me.fullpathandfilename,
-                                                  .MovieSet = Me.movieset,
-                                                  .filename = Me.filename,
-                                                  .foldername = Me.foldername,
-                                                  .title = Me.title,
-                                                  .originaltitle = Me.originaltitle,
-                                                  .year = Me.year,
-                                                  .filedate = Me.filedate,
-                                                  .id = Me.id,
-                                                  .rating = Me.Rating,
-                                                  .top250 = Me.top250,
-                                                  .genre = Me.genre,
-                                                  .playcount = Me.playcount,
-                                                  .sortorder = Me.SortOrder,
-                                                  .outline = Me.outline,
-                                                  .runtime = Me.runtime,
-                                                  .createdate = Me.createdate,
-                                                  .missingdata1 = Me.missingdata1,
-                                                  .plot = Me.plot.Trim,
-                                                  .source = Me.source,
-                                                  .director = Me.director,
-                                                  .Votes = Me.Votes,
-                                                  .Resolution  = Me.Resolution,
-                                                  .VideoCodec = Me.VideoCodec,
-                                                  .Audio       = Me.Audio,
-                                                  .Premiered   = Me.Premiered,
-                                                  .Certificate = Me.Certificate,
-                                                  .FrodoPosterExists = Me.FrodoPosterExists,
-                                                 .PreFrodoPosterExists = Me.PreFrodoPosterExists
+        Dim convertedMovie As New ComboList With {.fullpathandfilename  = Me.fullpathandfilename,
+                                                  .MovieSet             = Me.movieset,
+                                                  .filename             = Me.filename,
+                                                  .foldername           = Me.foldername,
+                                                  .title                = Me.title,
+                                                  .originaltitle        = Me.originaltitle,
+                                                  .year                 = Me.year,
+                                                  .filedate             = Me.filedate,
+                                                  .id                   = Me.id,
+                                                  .rating               = Me.Rating,
+                                                  .top250               = Me.top250,
+                                                  .genre                = Me.genre,
+                                                  .playcount            = Me.playcount,
+                                                  .sortorder            = Me.SortOrder,
+                                                  .outline              = Me.outline,
+                                                  .runtime              = Me.runtime,
+                                                  .createdate           = Me.createdate,
+                                                  .missingdata1         = Me.missingdata1,
+                                                  .plot                 = Me.plot.Trim,
+                                                  .source               = Me.source,
+                                                  .director             = Me.director,
+                                                  .Votes                = Me.Votes,
+                                                  .Resolution           = Me.Resolution,
+                                                  .VideoCodec           = Me.VideoCodec,
+                                                  .Audio                = Me.Audio,
+                                                  .SubLang              = Me.SubLang,
+                                                  .Premiered            = Me.Premiered,
+                                                  .Certificate          = Me.Certificate,
+                                                  .FrodoPosterExists    = Me.FrodoPosterExists,
+                                                 .PreFrodoPosterExists  = Me.PreFrodoPosterExists
                                                  }
         Return convertedMovie
     End Function
@@ -641,5 +643,12 @@ Public Class Data_GridViewMovie
             _videomissing = value
         End Set
     End Property
+
+    Property SubLang As New List(Of SubtitleDetails)
+
+    Public Sub AssignSubtitleLang(From As List(Of SubtitleDetails))
+        Me.SubLang.Clear
+        Me.SubLang.AddRange(From)
+    End Sub
 
 End Class

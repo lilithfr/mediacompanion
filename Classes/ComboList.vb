@@ -39,6 +39,7 @@ Public Class ComboList
     Property PreFrodoPosterExists As Boolean
     Property Container            As String = ""
     Property VideoMissing         As Boolean = False
+    Property SubLang              As New List(Of SubtitleDetails)
 
     Public Property title As String
         Get
@@ -282,11 +283,17 @@ Public Class ComboList
         AssignAudio(From.Audio)
         Me.Container            = From.Container
         Me.VideoMissing         = From.VideoMissing
+        AssignSubtitleLang(From.SubLang)
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
         Me.Audio.Clear
         Me.Audio.AddRange(From)
+    End Sub
+
+    Public Sub AssignSubtitleLang(From As List(Of SubtitleDetails))
+        Me.SubLang.Clear
+        Me.SubLang.AddRange(From)
     End Sub
 
 End Class

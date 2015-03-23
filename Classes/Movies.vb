@@ -68,7 +68,6 @@ Public Class Movies
         End Set
     End Property
 
-
     Public ReadOnly Property CertificateMappings As CertificateMappings
         Get
             If IsNothing(_certificateMappings) Then
@@ -79,13 +78,11 @@ Public Class Movies
         End Get
     End Property
 
-
     Public ReadOnly Property Data_GridViewMovieCache As List(Of Data_GridViewMovie)
         Get
             Return _data_GridViewMovieCache
         End Get
     End Property
-
 
     Public ReadOnly Property CertificatesFilter As List(Of String)
         Get
@@ -110,7 +107,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property UniqueMovieTitles As List(Of String)
         Get
             Dim q = From x In MovieCache 
@@ -131,8 +127,6 @@ Public Class Movies
 
     Public ReadOnly Property TagFilter As List(Of String)
         Get
-           
-
             Dim q2 = From x In Preferences.movietags
            
             Return q2.AsEnumerable.ToList
@@ -157,7 +151,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property MinVotes As Integer
         Get
             If MovieCache.Count=0 Then Return 0
@@ -176,7 +169,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property MaxVotes As Integer
         Get
             If MovieCache.Count=0 Then Return 0
@@ -186,7 +178,6 @@ Public Class Movies
             Return q
         End Get
     End Property    
-
 
     Public ReadOnly Property MinYear As Integer
         Get
@@ -198,7 +189,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property MaxYear As Integer
         Get
             If MovieCache.Count=0 Then Return 0
@@ -208,8 +198,6 @@ Public Class Movies
             Return q
         End Get
     End Property    
-
-
 
     Public ReadOnly Property GeneralFilters As List(Of String)
         Get
@@ -321,20 +309,17 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property MissingCertificate As String
         Get
             Return "Missing Certificate (" & (From x In MovieCache Where x.MissingCertificate).Count & ")" 
         End Get
     End Property    
 
-
     Public ReadOnly Property MissingFanart As String
         Get
             Return "Missing Fanart (" & (From x In MovieCache Where x.MissingFanart).Count & ")" 
         End Get
     End Property    
-
 
     Public ReadOnly Property MissingTrailer As String
         Get
@@ -348,20 +333,17 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property MissingPoster As String
         Get
             Return "Missing Poster (" & (From x In MovieCache Where x.MissingPoster).Count & ")" 
         End Get
     End Property    
      
-
     Public ReadOnly Property MissingPlot As String
         Get
             Return "Missing Plot (" & (From x In MovieCache Where x.MissingPlot).Count & ")" 
         End Get
     End Property  
-
 
     Public ReadOnly Property MissingRating As String
         Get
@@ -369,20 +351,17 @@ Public Class Movies
         End Get
     End Property  
 
-
     Public ReadOnly Property MissingGenre As String
         Get
             Return "Missing Genre (" & (From x In MovieCache Where x.MissingGenre).Count & ")" 
         End Get
     End Property  
 
-
     Public ReadOnly Property MissingOutline As String
         Get
             Return "Missing Outline (" & (From x In MovieCache Where x.MissingOutline).Count & ")" 
         End Get
     End Property  
-
 
     Public ReadOnly Property MissingRuntime As String
         Get
@@ -414,13 +393,11 @@ Public Class Movies
         End Get
     End Property  
 
-
     Public ReadOnly Property MissingYear As String
         Get
             Return "Missing Year (" & (From x In MovieCache Where x.MissingYear).Count & ")" 
         End Get
     End Property  
-
 
     Public ReadOnly Property MC_Only_Movies As String
         Get
@@ -434,7 +411,6 @@ Public Class Movies
         End Get
     End Property
 
-
     Public ReadOnly Property Duplicates As String
         Get
             Dim total          As Integer = (From x In MovieCache).Count
@@ -446,20 +422,17 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property Watched As String
         Get
             Return "Watched (" & (From x In MovieCache Where x.Watched).Count & ")" 
         End Get
     End Property  
 
-
     Public ReadOnly Property Unwatched As String
         Get
             Return "Unwatched (" & (From x In MovieCache Where Not x.Watched).Count & ")" 
         End Get
     End Property    
-
 
     Public ReadOnly Property ActorsFilter_Preferences As IEnumerable(Of String)
         Get
@@ -479,7 +452,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property DirectorsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In DirectorDb 
@@ -498,8 +470,6 @@ Public Class Movies
         End Get
     End Property    
 
-
-
     Public ReadOnly Property ActorsFilter As List(Of String)
         Get
             Dim r = (From x In ActorsFilter_Preferences).Union(From x In ActorsFilter_Extras) 
@@ -513,7 +483,6 @@ Public Class Movies
             Return r.ToList
         End Get
     End Property    
-
 
     Public ReadOnly Property ActorsFilter_Extras As IEnumerable(Of String)
         Get
@@ -535,8 +504,6 @@ Public Class Movies
         End If
     End Sub
 
-
-
     Public ReadOnly Property DirectorsFilter_Extras As IEnumerable(Of String)
         Get
             Dim q = From x In DirectorDb 
@@ -549,7 +516,6 @@ Public Class Movies
         End Get
     End Property  
 
-
     Property DirectorsFilter_AlsoInclude As New List(Of String)
 
     Sub DirectorsFilter_AddIfMissing(value As String)
@@ -557,7 +523,6 @@ Public Class Movies
             DirectorsFilter_AlsoInclude.Add(value)
         End If
     End Sub
-
 
     Public ReadOnly Property ResolutionFilter As List(Of String)
         Get
@@ -599,7 +564,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property AudioLanguagesFilter As List(Of String)
         Get
             Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
@@ -607,7 +571,6 @@ Public Class Movies
             Return QryMovieCache(leftOuterJoinTable)
         End Get
     End Property    
-
 
     Public ReadOnly Property AudioChannelsFilter As List(Of String)
         Get
@@ -617,7 +580,6 @@ Public Class Movies
         End Get
     End Property    
 
-
     Public ReadOnly Property AudioBitratesFilter As List(Of String)
         Get
             Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Bitrate.Value="","Unknown",a.Bitrate.Value)
@@ -625,7 +587,6 @@ Public Class Movies
             Return QryMovieCache(leftOuterJoinTable)
         End Get
     End Property    
-
 
     Public ReadOnly Property AudioCodecsFilter As List(Of String)
         Get
@@ -636,7 +597,6 @@ Public Class Movies
     End Property    
 
     Private Function QryMovieCache(leftOuterJoinTable As IEnumerable) As List(Of String)
-
         Dim q = From m In MovieCache
                     Group Join 
                         a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
@@ -655,7 +615,6 @@ Public Class Movies
 
         Return q.Cast(Of String)().ToList
     End Function
-
 
     Public ReadOnly Property SetsFilter_Extras As IEnumerable(Of String)
         Get
@@ -726,6 +685,14 @@ Public Class Movies
         End Get
     End Property    
 
+    Public ReadOnly Property SubTitleLangFilter As List(Of String)
+        Get
+            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
+
+            Return QryMovieCache(leftOuterJoinTable)
+        End Get
+    End Property
+
     Private Sub Rebuild_Data_GridViewMovieCache
         _data_GridViewMovieCache.Clear
 
@@ -765,7 +732,6 @@ Public Class Movies
        
     End Sub
 
-
     Sub newMovie_AmountDownloadedChanged(ByVal iNewProgress As Long)
         RaiseEvent AmountDownloadedChanged(iNewProgress)
     End Sub
@@ -796,28 +762,20 @@ Public Class Movies
     End Sub
 
     Public Function FindCachedMovie(fullpathandfilename As String) As ComboList
-
         Dim q = From m In _movieCache Where m.fullpathandfilename=fullpathandfilename
         If q.Count = 0 Then Return Nothing
         Return q.Single
     End Function
 
     Public Function FindData_GridViewCachedMovie(fullpathandfilename As String) As Data_GridViewMovie
-        
         Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename=fullpathandfilename
-        
         Return q.Single        
     End Function
 
-
     Public Function LoadMovie(fullpathandfilename As String, Optional ByVal Cacheupdate As Boolean = True) As Movie
-
         Dim movie = New Movie(Me,fullpathandfilename)
-
         If IsNothing(movie) Then Return Nothing
-        
         movie.LoadNFO(Cacheupdate)
-
         Return movie
     End Function
 
@@ -953,7 +911,6 @@ Public Class Movies
                 #End If
             End Try
         Next
-
         If found > 0 then
             ReportProgress(,String.Format("{0} new movie{1} found in [{2}]", found, If(found=1,"","s"), DirPath) & vbCrLf)
             Preferences.DoneAMov = True
@@ -1022,9 +979,7 @@ Public Class Movies
         RemoveMovieEventHandlers( movie )
     End Sub
 
-
     Sub ChangeMovie(NfoPathAndFilename As String, ChangeMovieId As String, MovieSearchEngine As String)
-
         Dim movie = New Movie(Me,NfoPathAndFilename)
 
         movie.DeleteScrapedFiles(True)
@@ -1038,7 +993,6 @@ Public Class Movies
         RemoveMovieEventHandlers( movie )
     End Sub
 
-
     Sub RescrapeSpecificMovie(fullpathandfilename As String,rl As RescrapeList)
 
         Dim movie = New Movie(Me,fullpathandfilename)
@@ -1048,7 +1002,6 @@ Public Class Movies
         movie.RescrapeSpecific  ( rl    )
         RemoveMovieEventHandlers( movie )
     End Sub
-
 
     Sub RescrapeAll( NfoFilenames As List(Of String) )
         Dim i=0
@@ -1064,22 +1017,18 @@ Public Class Movies
         ReportProgress(,"!!! " & vbCrLf & "!!! Finished")
     End Sub
 
-
     Sub RescrapeSpecific( _rescrapeList As RescrapeSpecificParams )
         Dim rl As new RescrapeList(_rescrapeList.Field)
-
         Dim i=0
         For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
             i += 1
             PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
             ReportProgress("Rescraping '" & Utilities.TitleCase(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             RescrapeSpecificMovie(FullPathAndFilename,rl)
-
             If Cancelled then Exit For
         Next
         SaveCaches
     End Sub
-
 
     Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
         Dim i=0
@@ -1108,9 +1057,7 @@ Public Class Movies
         SaveCaches
     End Sub
 
-
     Sub RescrapeMovie(NfoFilename as String, Optional ByVal tmdbid As String = "")
-
         If Not File.Exists(NfoFilename) Then 
             ReportProgress("NFO not found : [" & NfoFilename & "]  ")
             Return
@@ -1134,7 +1081,6 @@ Public Class Movies
         RemoveMovieEventHandlers( movie )
     End Sub
 
-
     Function CapsFirstLetter(words As String)
         Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
@@ -1148,41 +1094,32 @@ Public Class Movies
         End Try
     End Function
 
-
     Public Function ValidateFile(fileInFo As IO.FileInfo)
-
         If AlreadyAdded(fileInFo.FullName) Then
             ReportProgress(," - Already Added!")
             Return False
         End If
-
         Dim log   = ""
         Dim valid = Movie.IsValidMovieFile(fileInFo, log)
-
         ReportProgress(log)
-
         Return valid
     End Function
-
 
     Public Function AlreadyAdded(fullName as String) As Boolean
         Dim q = From m In NewMovies Where m.nfopathandfilename.ToLower = fullName.ToLower
         Return (q.Count > 0)
     End Function
 
-
     Public Sub LoadCaches
         LoadMovieCache
         LoadPeopleCaches
     End Sub
-
 
     Public Sub SaveCaches
         SaveMovieCache
         SaveActorCache
         SaveDirectorCache
     End Sub
-
 
     Public Sub LoadMovieCache
 
@@ -1200,7 +1137,6 @@ Public Class Movies
                 Select Case thisresult.Name
                     Case "movie"
                         Dim newmovie As New ComboList
-
                         For Each detail In thisresult.ChildNodes
                             Select Case detail.Name
                                 Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
@@ -1263,6 +1199,10 @@ Public Class Movies
                                 Case "Certificate"          : newmovie.Certificate = detail.InnerText
                                 Case "FrodoPosterExists"    : newmovie.FrodoPosterExists = detail.InnerText
                                 Case "PreFrodoPosterExists" : newmovie.PreFrodoPosterExists = detail.InnerText
+                                Case "subtitlelang"
+                                    Dim subtitle As New SubtitleDetails
+                                    subtitle.Language.Value = detail.InnerText
+                                    newmovie.SubLang.Add(subtitle)
                             End Select
                         Next
                         If newmovie.source = Nothing Then
@@ -1274,41 +1214,31 @@ Public Class Movies
                         If newmovie.MovieSet = "" Then
                             newmovie.MovieSet = "-None-"
                         End If
-
                         MovieCache.Add(newmovie)
                 End Select
             Next
         Catch ex As Exception
             MsgBox(ex.ToString)
-
         End Try
         Rebuild_Data_GridViewMovieCache()
     End Sub
 
 
     Public Sub SaveMovieCache
-
         Dim cacheFile As String = Preferences.workingProfile.MovieCache
-
         If File.Exists(cacheFile) Then
             File.Delete(cacheFile)
         End If
-
         Dim doc      As New XmlDocument
         Dim xmlproc  As XmlDeclaration
-
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
-
         Dim root  As XmlElement
         Dim child As XmlElement
-
-        root = doc.CreateElement("movie_cache")
-
         Dim childchild As XmlElement
-
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        
+        root = doc.CreateElement("movie_cache")
         For Each movie In MovieCache
-
             child = doc.CreateElement("movie")
             childchild = doc.CreateElement("filedate")
             childchild.InnerText = movie.filedate
@@ -1415,9 +1345,11 @@ Public Class Movies
             child.AppendChild(doc, "VideoCodec", movie.VideoCodec)
             child.AppendChild(doc, "Container", movie.Container)
 
-            '        childchild = doc.CreateElement("audio")
-
             For Each item In movie.Audio
+                child.AppendChild(item.GetChild(doc))
+            Next
+
+            For Each item In movie.SubLang 
                 child.AppendChild(item.GetChild(doc))
             Next
 
@@ -1437,7 +1369,6 @@ Public Class Movies
         doc.WriteTo(output)
         output.Close()
     End Sub
-
 
     Public Sub LoadMovieCacheFromNfos
         TmpMovieCache.Clear
@@ -1493,7 +1424,6 @@ Public Class Movies
         End If
     End Sub
 
-
     Property TotalNumberOfFolders As Integer
     Property NumberOfFoldersDone  As Integer
     Property BWs As New List(Of BackgroundWorker)
@@ -1536,7 +1466,6 @@ Public Class Movies
 
         While Busy
             Threading.Thread.Sleep(100)
-
             If Cancelled And Not Cancelling Then 
                 Cancelling = True
                 For each item As BackgroundWorker in BWs
@@ -1546,10 +1475,7 @@ Public Class Movies
                     End Try
                 Next
             End If
-            
-
             Busy = False
-
             For Each item As BackgroundWorker in BWs
                 Try
                     Busy = Busy Or item.IsBusy
@@ -1557,7 +1483,6 @@ Public Class Movies
                 Catch
                 End Try
             Next
-
         End While
       
         If Cancelled Then Exit Sub
@@ -1573,7 +1498,6 @@ Public Class Movies
         End If
     End Sub
 
-
     Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
 
         Dim bw     As BackgroundWorker = CType(sender, BackgroundWorker)
@@ -1584,7 +1508,6 @@ Public Class Movies
 
         e.Result = Cache
     End Sub
-
 
     Private Sub bw_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs)
 
@@ -1602,7 +1525,6 @@ Public Class Movies
         End Select
     End Sub
 
-
     Private Sub bw_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
         Threading.Monitor.Enter(Me)
         NumActiveThreads -= 1
@@ -1614,8 +1536,6 @@ Public Class Movies
         TmpMovieCache.AddRange(Cache) 
         Threading.Monitor.Exit(Me)
     End Sub
-
-
 
     Private Sub MT_mov_NfoLoad(bw As BackgroundWorker, folder As String,Cache As List(Of ComboList))
 
@@ -1772,7 +1692,6 @@ Public Class Movies
         LoadDirectorCache()
     End Sub
 
-
     Sub LoadActorCache()
         LoadPersonCache(_actorDb,"actor",Preferences.workingProfile.actorcache)
     End Sub
@@ -1849,8 +1768,6 @@ Public Class Movies
         output.Close()
     End Sub
 
-
-
     Public Sub RebuildCaches
         If Preferences.UseMultipleThreads Then
             movRebuildCaches = False
@@ -1865,7 +1782,6 @@ Public Class Movies
             movRebuildCaches = False
         End If
     End Sub
-
 
     Public Sub RebuildMovieCache
         If Preferences.UseMultipleThreads Then
@@ -2102,13 +2018,6 @@ Public Class Movies
 
     Function ApplyAudioLanguagesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
-        'Dim fi As New FilteredItems(ccb)
-
-        'Dim leftOuterJoinTable = From m In recs From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
-
-        'Return Filter(recs,leftOuterJoinTable, fi)
-
-
         Dim i As Integer = 0
 
         For Each item As CCBoxItem In ccb.Items
@@ -2185,6 +2094,19 @@ Public Class Movies
         Return recs
     End Function
 
+    Function ApplySubtitleLangFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim i As Integer = 0
+        For Each item As CCBoxItem In ccb.Items
+            Dim value As String = item.Name.RemoveAfterMatch
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.SubLang.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+                Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.SubLang.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+            End Select
+            i += 1
+        Next
+        Return recs
+    End Function
+
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
 
         If fi.Include.Count>0 Then
@@ -2223,22 +2145,18 @@ Public Class Movies
     Property Xbmc_DifferentTitles As List(Of String)
 
     Sub Handle_XbmcMcMoviesChanged
-
         For Each m In MovieCache
             Try
                 m.XbmcMovie = XbmcMcMovies(m.MoviePathAndFileName.ToUpper)
             Catch
             End Try
         Next
-
         Xbmc_DifferentTitles = (From x In MovieCache Where Not IsNothing(x.XbmcMovie) AndAlso Not x.XbmcMovie.title=x.title Select x.MoviePathAndFileName).ToList
-
     End Sub
 
     Sub Handle_XbmcOnlyMoviesChanged
         
     End Sub
-
 
 #End Region
 

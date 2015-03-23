@@ -2687,6 +2687,10 @@ Public Class WorkingWithNfoFiles
                                             Dim audio As New AudioDetails
                                             newfilenfo.filedetails_audio.Add(audio)
                                         End If
+                                        If newfilenfo.filedetails_subtitles.Count = 0 Then
+                                            Dim subtitle As New SubtitleDetails
+                                            newfilenfo.filedetails_subtitles.Add(subtitle)
+                                        End If
                                         newmovie.filedetails = newfilenfo
                                 End Select
                             Next

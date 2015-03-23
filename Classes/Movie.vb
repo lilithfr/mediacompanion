@@ -1226,6 +1226,7 @@ Public Class Movie
             Dim Fileandpath As String = Utilities.GetFileName(_movieCache.fullpathandfilename, , _movieCache.Container)
             _movieCache.VideoMissing = Not File.Exists(Fileandpath)
         End If
+        _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.filedetails_subtitles)
         AssignMovieToAddMissingData
     End Sub
 

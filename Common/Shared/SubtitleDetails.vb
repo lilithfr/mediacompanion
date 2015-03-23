@@ -1,10 +1,11 @@
 ﻿Imports ProtoXML
+Imports System.Xml
 
 Public Class SubtitleDetails
     Inherits ProtoPropertyGroup
 
 
-    Public Property Language As New ProtoProperty(Me, "language")
+    Public Property Language As New ProtoProperty(Me, "language", "")
 
     Public Sub New()
         MyBase.New(Nothing, Nothing)
@@ -16,5 +17,14 @@ Public Class SubtitleDetails
 
     Public Overrides Function CreateNew() As ProtoXML.IProtoXChild
         Return New SubtitleDetails
+    End Function
+
+    Public Function GetChild(doc As XmlDocument) As XmlElement
+
+        Dim child = doc.CreateElement("subtitlelang")
+
+        child.AppendChild(Language    .GetChild(doc))
+
+        Return child
     End Function
 End Class
