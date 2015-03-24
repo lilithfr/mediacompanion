@@ -288,9 +288,21 @@ Public Class clsGridViewMovie
         Select Case Form1.cbSort.Text
             Case "A - Z"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.DisplayTitle Ascending            'DisplayTitleAndYear
+                    If GridFieldToDisplay1="FileName" Then
+                        b = From f In b Order By f.filename Ascending
+                    ElseIf GridFieldToDisplay1="Folder" Then
+                        b = From f In b Order By f.foldername Ascending
+                    Else
+                        b = From f In b Order By f.DisplayTitle Ascending            'DisplayTitleAndYear
+                    End If
                 Else
-                    b = From f In b Order By f.DisplayTitle Descending           'DisplayTitleAndYear
+                    If GridFieldToDisplay1="FileName" Then
+                        b = From f In b Order By f.filename Descending
+                    ElseIf GridFieldToDisplay1="Folder" Then
+                        b = From f In b Order By f.foldername Descending
+                    Else
+                        b = From f In b Order By f.DisplayTitle Descending           'DisplayTitleAndYear
+                    End If
                 End If
             Case "Movie Year"
                 If GridSort = "Asc" Then

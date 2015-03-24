@@ -15690,14 +15690,25 @@ End Sub
 
     Private Sub rbFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbFileName.CheckedChanged
         HandleMovieList_DisplayChange("FileName")
+        If Not cbSort.Text = "A - Z" Then
+            cbSort.Text = "A - Z"
+        Else
+            cbsort_SelectedIndexChanged(cbsort, EventArgs.Empty)
+        End If
     End Sub
 
     Private Sub rbTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTitleAndYear.CheckedChanged
         HandleMovieList_DisplayChange("TitleAndYear")
+        cbsort_SelectedIndexChanged(cbsort, EventArgs.Empty)
     End Sub
 
     Private Sub rbFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbFolder.CheckedChanged
         HandleMovieList_DisplayChange("Folder")
+        If Not cbSort.Text = "A - Z" Then
+            cbSort.Text = "A - Z"
+        Else
+            cbsort_SelectedIndexChanged(cbsort, EventArgs.Empty)
+        End If
     End Sub
 
     Private Sub cbSort_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbSort.SelectedIndexChanged
