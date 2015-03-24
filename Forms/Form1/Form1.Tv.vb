@@ -216,7 +216,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_MissingEpThumbs.Enabled = True
             Tv_TreeViewContext_MissingEpThumbs.Visible = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = True
-            Tv_TreeViewContext_RenameEp.Enabled = RadioButton29.Checked     'Only show if Treeview set to 'List All'
+            Tv_TreeViewContext_RenameEp.Enabled = rbTvListAll.Checked     'Only show if Treeview set to 'List All'
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
             tsmiTvDelShowNfoArt.Enabled = True
@@ -243,7 +243,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_MissingEpThumbs.Enabled = True
             Tv_TreeViewContext_MissingEpThumbs.Visible = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
-            Tv_TreeViewContext_RenameEp.Enabled = RadioButton29.Checked      'Only show if Treeview set to 'List All'
+            Tv_TreeViewContext_RenameEp.Enabled = rbTvListAll.Checked      'Only show if Treeview set to 'List All'
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
             tsmiTvDelShowNfoArt.Enabled = False
@@ -2637,20 +2637,17 @@ Partial Public Class Form1
         Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
 
-        If RadioButton29.Checked = True Then butt = "all"
-        If RadioButton30.Checked = True Then butt = "fanart"
-        If RadioButton31.Checked = True Then butt = "posters"
-        If RadioButton32.Checked = True Then butt = "screenshot"
-        If RadioButton44.Checked = True Then butt = "missingeps"
-        If RadioButton53.Checked = True Then butt = "airedmissingeps"
+        If rbTvListAll.Checked = True Then butt = "all"
+        If rbTvMissingFanart.Checked = True Then butt = "fanart"
+        If rbTvMissingPoster.Checked = True Then butt = "posters"
+        If rbTvMissingThumb.Checked = True Then butt = "screenshot"
+        If rbTvMissingEpisodes.Checked = True Then butt = "missingeps"
+        If rbTvMissingAiredEp.Checked = True Then butt = "airedmissingeps"
+        If rbTvDisplayWatched.Checked Then butt = "watched"
+        If rbTvDisplayUnWatched.Checked Then butt = "unwatched"
 
-
-        'If startup = True Then, issue #275
         If startup = True Then butt = "all"
         If butt = "missingeps" Then
-            'If Not startup Then
-            '    MessageBox.Show("Ensure that you have previously selected Display Missing Episodes from the TV Shows menu", "Missing Episodes", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            'End If
             If Preferences.displayMissingEpisodes Then
                 For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                     For Each Season As Media_Companion.TvSeason In item.Seasons.Values
@@ -2658,44 +2655,45 @@ Partial Public Class Form1
                             If Not episode.IsMissing Then
                                 episode.Visible = False
                             Else
-                                ' Phyonics - Fix for issue #208
-                                If String.IsNullOrEmpty(episode.Aired.Value) Then
-                                    ' Change the colour to gray
+                                If String.IsNullOrEmpty(episode.Aired.Value) Then                   ' Change the colour to gray
                                     episode.EpisodeNode.ForeColor = Color.Gray
                                 Else
                                     Try
-                                        ' Is the episode in the future?
-                                        If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                            '  Yes, so change its colour to Red
-                                            episode.EpisodeNode.ForeColor = Color.Red
+                                        If Convert.ToDateTime(episode.Aired.Value) > Now Then       ' Is the episode in the future?
+                                            episode.EpisodeNode.ForeColor = Color.Red               '  Yes, so change its colour to Red
                                         Else
                                             episode.EpisodeNode.ForeColor = Drawing.Color.Blue
                                         End If
                                     Catch ex As Exception
-                                        ' Set the colour to the missing colour
-                                        episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                                        episode.EpisodeNode.ForeColor = Drawing.Color.Blue          ' Set the colour to the missing colour
                                     End Try
                                 End If
-
                                 episode.Visible = True
                                 episode.EpisodeNode.EnsureVisible()
                             End If
                         Next
-                        If Season.VisibleEpisodeCount = 0 Then
-                            Season.Visible = False
-                        Else
-                            Season.Visible = True
-                        End If
+                        Season.Visible = Season.VisibleEpisodeCount > 0
                     Next
-                    If item.VisibleSeasonCount = 0 Then
-                        item.Visible = False
-                    Else
-                        item.Visible = True
-                    End If
+                    item.Visible = item.VisibleSeasonCount > 0
                 Next
             Else
                 MsgBox("Enable Display Missing Episodes")
             End If
+        ElseIf butt.Contains("watched") Then
+            Dim playcount As Integer = If(butt = "watched", 1, 0)
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If episode.PlayCount.Value = playcount Then
+                            episode.Visible = True
+                        Else
+                            episode.Visible = False
+                        End If
+                    Next
+                    Season.Visible = Season.VisibleEpisodeCount > 0
+                Next
+                item.Visible = item.VisibleSeasonCount > 0
+            Next
         ElseIf butt = "airedmissingeps" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
@@ -2703,12 +2701,10 @@ Partial Public Class Form1
                         If Not episode.IsMissing Then
                             episode.Visible = False
                         Else
-                            ' Phyonics - Fix for issue #208
                             If String.IsNullOrEmpty(episode.Aired.Value) Then
                                 episode.Visible = False
                             Else
-                                ' Has the episode been aired yet?
-                                Try
+                                Try     ' Has the episode been aired yet?
                                     If Convert.ToDateTime(episode.Aired.Value) <= Now Then
                                         episode.Visible = True
                                         episode.EpisodeNode.EnsureVisible()
@@ -2716,23 +2712,14 @@ Partial Public Class Form1
                                         episode.Visible = False
                                     End If
                                 Catch ex As Exception
-                                    ' We failed to convert the aired date to a date, therefore don't show the episode
-                                    episode.Visible = False
+                                    episode.Visible = False     ' We failed to convert the aired date to a date, therefore don't show the episode
                                 End Try
                             End If
                         End If
                     Next
-                    If Season.VisibleEpisodeCount = 0 Then
-                        Season.Visible = False
-                    Else
-                        Season.Visible = True
-                    End If
+                    Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                If item.VisibleSeasonCount = 0 Then
-                    item.Visible = False
-                Else
-                    item.Visible = True
-                End If
+                item.Visible = item.VisibleSeasonCount > 0
             Next
         ElseIf butt = "screenshot" Then
             Dim edenart As String = ""
@@ -2755,24 +2742,15 @@ Partial Public Class Form1
                             End If
                         End If
                     Next
-                    If Season.VisibleEpisodeCount = 0 Then
-                        Season.Visible = False
-                    Else
-                        Season.Visible = True
-                    End If
+                    Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                If item.VisibleSeasonCount = 0 Then
-                    item.Visible = False
-                Else
-                    item.Visible = True
-                End If
+                item.Visible = item.VisibleSeasonCount > 0
             Next
         ElseIf butt = "all" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 item.Visible = True
                 Dim containsVisibleSeason As Boolean = False
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                    Dim containsVisibleEpisode As Boolean = False
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
                         If episode.IsMissing AndAlso Not (Preferences.displayMissingEpisodes Or (overrideIsMissing AndAlso episode.ShowObj.ToString = overrideShowIsMissing)) Then
                             episode.Visible = False
@@ -2781,8 +2759,7 @@ Partial Public Class Form1
                             If episode.IsMissing Then
                                 If episode.Aired.Value <> "" Then
                                     If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                        '  Yes, so change its colour to Red
-                                        episode.EpisodeNode.ForeColor = Color.Red
+                                        episode.EpisodeNode.ForeColor = Color.Red           '  Yes, so change its colour to Red
                                     Else
                                         episode.EpisodeNode.ForeColor = Drawing.Color.Blue
                                     End If
@@ -2794,13 +2771,11 @@ Partial Public Class Form1
                                 episode.EpisodeNode.ForeColor = Color.Red
                             End Try
                             episode.Visible = True
-                            containsVisibleEpisode = True
                         End If
                     Next
-                    Season.Visible = containsVisibleEpisode
-                    If containsVisibleEpisode Then containsVisibleSeason = True
+                    Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                item.Visible = containsVisibleSeason
+                item.Visible = item.VisibleSeasonCount > 0
             Next
         ElseIf butt = "fanart" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -2827,7 +2802,6 @@ Partial Public Class Form1
                     edenpost = Season.Poster.Path
                     frodopost = Season.Poster.Path.Replace(".tbn", "-poster.jpg")
                     frodobann = Season.Banner.Path 
-                    'If Season.Poster.Exists Then
                     If ((eden And frodo) AndAlso (IO.File.Exists(edenpost) And (IO.File.Exists(frodopost) AndAlso IO.File.Exists(frodobann)))) Or ((eden And Not frodo) AndAlso IO.File.Exists(edenpost)) Or ((frodo And Not eden) AndAlso (IO.File.Exists(frodopost) Or IO.File.Exists(frodobann))) Then
                         Season.Visible = False
                     Else
@@ -2845,7 +2819,6 @@ Partial Public Class Form1
 
             Next
         End If
-        ' End If
     End Sub
 
 #Region "Tv MissingEpisode Routines"

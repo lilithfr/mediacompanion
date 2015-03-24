@@ -9773,9 +9773,9 @@ End Sub
                 Preferences.ConfigSave()
                 If Preferences.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
                     RefreshMissingEpisodesToolStripMenuItem.Enabled = False
-                    RadioButton29.Checked = True
-                    RadioButton44.Enabled = False
-                    RadioButton53.Enabled = False
+                    rbTvListAll.Checked = True
+                    rbTvMissingEpisodes.Enabled = False
+                    rbTvMissingAiredEp.Enabled = False
                     RefreshMissingEpisodesToolStripMenuItem.ToolTipText = Nothing
                     tv_CacheRefresh 
                     'tv_Filter()
@@ -9783,8 +9783,8 @@ End Sub
                 End If
                 RefreshMissingEpisodesToolStripMenuItem.Enabled = True
                 RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Preferences.lastrefreshmissingdate
-                RadioButton44.Enabled = True
-                RadioButton53.Enabled = True
+                rbTvMissingEpisodes.Enabled = True
+                rbTvMissingAiredEp.Enabled = True
                 'Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
                 'If answer = MsgBoxResult.Yes 
                     'Preferences.DlMissingEpData = True
@@ -10539,8 +10539,8 @@ End Sub
         If Preferences.displayMissingEpisodes Then 
             Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Preferences.lastrefreshmissingdate 
         End If
-        Me.RadioButton44.Enabled = Preferences.displayMissingEpisodes
-        Me.RadioButton53.Enabled = Preferences.displayMissingEpisodes 
+        Me.rbTvMissingEpisodes.Enabled = Preferences.displayMissingEpisodes
+        Me.rbTvMissingAiredEp.Enabled = Preferences.displayMissingEpisodes 
         Me.TextBox35.Text = Preferences.ScrShtDelay.ToString 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
@@ -17767,62 +17767,16 @@ End Sub
 
     End Sub
 
-    Private Sub RadioButton32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton32.CheckedChanged
+    Private Sub rbTvDisplayFiltering_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvDisplayUnWatched.CheckedChanged, 
+                                                                                                                        rbTvDisplayWatched.CheckedChanged,
+                                                                                                                        rbTvMissingAiredEp.CheckedChanged,
+                                                                                                                        rbTvMissingEpisodes.CheckedChanged,
+                                                                                                                        rbTvMissingPoster.CheckedChanged,
+                                                                                                                        rbTvListAll.CheckedChanged,
+                                                                                                                        rbTvMissingFanart.CheckedChanged,
+                                                                                                                        rbTvMissingThumb.CheckedChanged
         Try
-            If RadioButton32.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton30_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton30.CheckedChanged
-        Try
-            If RadioButton30.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton29_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton29.CheckedChanged
-        Try
-            If RadioButton29.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton31_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton31.CheckedChanged
-        Try
-            If RadioButton31.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton44_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton44.CheckedChanged
-        Try
-            If RadioButton44.Checked = True Then
-                Call tv_Filter()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    ' Phyonics - Fix for issue #208
-    Private Sub RadioButton53_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton53.CheckedChanged
-        Try
-            If RadioButton53.Checked = True Then
-                Call tv_Filter()
-            End If
+            Call tv_Filter()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
