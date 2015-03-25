@@ -13,7 +13,6 @@ Imports System.IO.Compression
 Imports Media_Companion
 
 
-
 Module Module1
     Public Const SetDefaults = True
     Dim arguments As New List(Of String)
@@ -42,17 +41,15 @@ Module Module1
     Private Declare Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
     Private Declare Function ShowWindow Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal nCmdShow As Int32) As Int32
     
-
     Dim newepisodetoadd As New episodeinfo
 
-
     Sub Main
-        Dim domovies      As Boolean = False
-        Dim dotvepisodes  As Boolean = False
-        Dim domediaexport As Boolean = False
-        Dim docacheclean  As Boolean = False
+        Dim domovies            As Boolean = False
+        Dim dotvepisodes        As Boolean = False
+        Dim dotvmissingepthumb  As Boolean = False
+        Dim domediaexport       As Boolean = False
+        Dim docacheclean        As Boolean = False
         
-
         For Each arg As String In Environment.GetCommandLineArgs()
             arguments.Add(arg)
         Next
@@ -68,6 +65,10 @@ Module Module1
                     arg.switch = arguments(f)
                     listofargs.Add(arg)
                 ElseIf arguments(f) = "-e" Then
+                    Dim arg As New arguments
+                    arg.switch = arguments(f)
+                    listofargs.Add(arg)
+                ElseIf arguments(f) = "-ex" Then
                     Dim arg As New arguments
                     arg.switch = arguments(f)
                     listofargs.Add(arg)
@@ -135,6 +136,7 @@ Module Module1
             ConsoleOrLog("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath] [-v]")
             ConsoleOrLog("-m to scrape movies")
             ConsoleOrLog("-e to scrape episodes")
+            ConsoleOrLog("-ex to Scan and download missing episodes Thumbnails.")
             ConsoleOrLog("-x [templatename] [outputpath] to export media info list ")
             ConsoleOrLog("-v to run with no Console window. All information will be written")
             ConsoleOrLog("    to a log file in Media Companion's folder.  Log is overwritten")
@@ -162,23 +164,13 @@ Module Module1
             LogStart
         End If
         
-
         For Each arg In listofargs
-            If arg.switch = "-m" Then
-                domovies = True
-            End If
-            If arg.switch = "-e" Then
-                dotvepisodes = True
-            End If
-            If arg.switch = "-p" Then
-                profile = arg.argu
-            End If
-            If arg.switch = "-x" Then
-                domediaexport = True
-            End If
-            If arg.switch = "-c" Then
-                docacheclean = True
-            End If
+            If arg.switch   = "-m"  Then domovies = True
+            If arg.switch   = "-e"  Then dotvepisodes = True
+            If arg.switch   = "-p"  Then profile = arg.argu
+            If arg.switch   = "-x"  Then domediaexport = True
+            If arg.switch   = "-c"  Then docacheclean = True
+            If arg.switch   = "-ex" Then dotvmissingepthumb = True
         Next
 
         Dim done As Boolean = False
@@ -227,7 +219,6 @@ Module Module1
             End If
         End If
 
-
         Try
             ConsoleOrLog("Loading Movie Database caches")
             oMovies.LoadPeopleCaches
@@ -246,7 +237,7 @@ Module Module1
             End If
             ConsoleOrLog("")
         End If
-        If dotvepisodes = True Then
+        If dotvepisodes OrElse dotvmissingepthumb Then
             If IO.File.Exists(Preferences.workingProfile.tvcache) Then
                 ConsoleOrLog("Loading Tv cache")
                 Call tvcacheLoad()
@@ -273,13 +264,18 @@ Module Module1
                 End If
             Next
             If showstoscrapelist.Count > 0 Then
-                Renamer.setRenamePref(Preferences.tv_RegexRename.Item(Preferences.tvrename), Preferences.tv_RegexScraper)
-                Call episodescraper(showstoscrapelist, False)
-                If DoneAEp Then
-                    Call tvcacheClean()
-                    Call tvcacheSave()
-                    EnvExit +=4
+                If Not dotvmissingepthumb Then
+                    Renamer.setRenamePref(Preferences.tv_RegexRename.Item(Preferences.tvrename), Preferences.tv_RegexScraper)
+                    Call episodescraper(showstoscrapelist, False)
+                    If DoneAEp Then
+                        Call tvcacheClean()
+                        Call tvcacheSave()
+                        EnvExit +=4
+                    End If
+                Else
+                    Call MissingEpThumbDL(showstoscrapelist)
                 End If
+                
             End If
         End If
         If domediaexport = True Then
@@ -373,8 +369,7 @@ Module Module1
             Console.WriteLine(str)
         Else
             Using sw As New StreamWriter(logfile, true)
-                sw.WriteLine(str.TrimEnd) ' & vbCrlf)
-                'sw.WriteLine(vbCrLf)
+                sw.WriteLine(str.TrimEnd)
                 sw.Close()
             End Using
         End If
@@ -405,7 +400,6 @@ Module Module1
         ConsoleOrLog("")
         ConsoleOrLog("Starting TV Folder Scan")
 
-
         For Each tvshow In basictvlist
             If tvshow.locked = Nothing Then
                 tvshow.locked = 0
@@ -435,9 +429,7 @@ Module Module1
                 tempstring = "" 'tvfolder
                 Dim hg As New IO.DirectoryInfo(tvfolder)
                 If hg.Exists Then
-'                    ConsoleOrLog("found " & hg.FullName.ToString)
                     newtvfolders.Add(tvfolder)
-
                     Try
                         For Each strfolder As String In My.Computer.FileSystem.GetDirectories(tvfolder)
                             Try
@@ -457,8 +449,6 @@ Module Module1
                                 MsgBox(ex.Message)
                             End Try
                         Next
-
-
                     Catch ex As Exception
                         MsgBox(ex.ToString)
                     End Try
@@ -491,7 +481,6 @@ Module Module1
             S = ""
             newepisodetoadd.episodeno = ""
             newepisodetoadd.episodepath = ""
-            'newepisodetoadd.status = ""
             newepisodetoadd.showid = ""
             newepisodetoadd.playcount = ""
             newepisodetoadd.rating = ""
@@ -658,8 +647,6 @@ Module Module1
                         End If
 
                         If Utilities.UrlIsValid(episodeurl) Then
-
-
                             Dim tempepisode As String = episodescraper.getepisode(tvdbid, tempsortorder, singleepisode.seasonno, singleepisode.episodeno, language)
                             scrapedok = True
                             If tempepisode = Nothing Then
@@ -683,15 +670,11 @@ Module Module1
                                             Case "director"
                                                 Dim newstring As String
                                                 newstring = thisresult.InnerText
-                                                'newstring = newstring.TrimEnd("|")
-                                                'newstring = newstring.TrimStart("|")
                                                 newstring = newstring.Replace("|", " / ")
                                                 singleepisode.director = newstring
                                             Case "credits"
                                                 Dim newstring As String
                                                 newstring = thisresult.InnerText
-                                                'newstring = newstring.TrimEnd("|")
-                                                'newstring = newstring.TrimStart("|")
                                                 newstring = newstring.Replace("|", " / ")
                                                 singleepisode.credits = newstring
                                             Case "rating"
@@ -931,9 +914,7 @@ Module Module1
                     Else
                         ConsoleOrLog("No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB")
                     End If
-
                 Next
-
             End If
 
             If savepath <> "" And scrapedok = True Then
@@ -966,7 +947,6 @@ Module Module1
                                     timetoexit = True
                                     Exit For
                                 End If
-
                             Next
                         End If
                         If timetoexit = True Then Exit For
@@ -1270,37 +1250,8 @@ Module Module1
             End If
         Next
 
-        Dim eden As Boolean = Preferences.EdenEnabled
-        Dim frodo As Boolean = Preferences.FrodoEnabled
-        Dim aok As Boolean = False
-        Dim paths As New List(Of String)
-        If eden Then paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
-        If frodo Then paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
-        Dim url As String = alleps(0).thumb
-        If Not url = Nothing AndAlso url <> "http://www.thetvdb.com/banners/" Then  ' And Not edenart And Not frodoart Then
-            aok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, 0, 0, True)
-            If aok Then
-                ConsoleOrLog("Thumbnail downloaded successfully")
-            Else
-                ConsoleOrLog("Failed to download Thumbnail")
-            End If
-        End If
-        If Not aok AndAlso Preferences.autoepisodescreenshot Then
-            ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Episode file")
-            Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(alleps(0).mediaextension, paths(0), Preferences.ScrShtDelay)
-            If Not cachepathandfilename = "" Then
-                Dim imagearr() As Integer = GetAspect(alleps(0))
-                If Preferences.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then
-                    DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
-                Else
-                    File.Copy(cachepathandfilename, paths(0))
-                End If
-                If paths.Count > 1 Then File.Copy(paths(0), paths(1))
-                ConsoleOrLog("Screenshot Saved O.K.")
-            Else
-                ConsoleOrLog("Screenshot save Failed!")
-            End If
-        End If
+        DlEpThumb(alleps(0), path)
+
     End Sub
 
     Private Sub findnewepisodes(ByVal path As String)
@@ -1413,6 +1364,77 @@ Module Module1
         Next fs_info
 
         fs_infos = Nothing
+    End Sub
+
+    Private Sub DlEpThumb(ByVal thisep As episodeinfo, ByVal path As String)
+        Dim eden As Boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
+        Dim aok As Boolean = False
+        Dim paths As New List(Of String)
+        If eden Then paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
+        If frodo Then paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
+        Dim url As String = thisep.thumb
+        If Not url = Nothing AndAlso url <> "http://www.thetvdb.com/banners/" Then
+            aok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, 0, 0, True)
+            If aok Then
+                ConsoleOrLog("Thumbnail downloaded successfully")
+            Else
+                ConsoleOrLog("Failed to download Thumbnail")
+            End If
+        End If
+        If Not aok AndAlso Preferences.autoepisodescreenshot Then
+            ConsoleOrLog("No Episode Thumb, AutoCreating ScreenShot from Episode file")
+            Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(thisep.mediaextension, paths(0), Preferences.ScrShtDelay)
+            If Not cachepathandfilename = "" Then
+                Dim imagearr() As Integer = GetAspect(thisep)
+                If Preferences.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then
+                    DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
+                Else
+                    File.Copy(cachepathandfilename, paths(0))
+                End If
+                If paths.Count > 1 Then File.Copy(paths(0), paths(1))
+                ConsoleOrLog("Screenshot Saved O.K.")
+            Else
+                ConsoleOrLog("Screenshot save Failed!")
+            End If
+        End If
+    End Sub
+
+    Private Sub MissingEpThumbDL(ByVal listofshowfolders As List(Of String))
+
+        Dim thumbextn As New List(Of String)
+        If Preferences.EdenEnabled Then thumbextn.Add(".tbn")
+        If Preferences.FrodoEnabled Then thumbextn.Add("-thumb.jpg")
+
+        ConsoleOrLog("")
+        ConsoleOrLog("")
+        ConsoleOrLog("Starting Missing Thumbnail Scan" & vbcrlf)
+
+        For Each show In basictvlist
+            If show.locked = True OrElse show.locked > 0 Then Continue For
+            For Each ep In show.allepisodes
+                ep.mediaextension = ep.episodepath.Replace(".nfo", ep.extension)
+                If Not File.Exists(ep.mediaextension) Then
+                    ConsoleOrLog("Video file is missing, please complete a Full Refresh in Media Companion" & vbCrLf)
+                    Continue For
+                End If
+                Dim imagepresent As Boolean = True
+                For each extn In thumbextn
+                    If Not File.Exists(ep.episodepath.Replace(".nfo", extn)) Then imagepresent = False
+                Next
+                If Not imagepresent Then 
+                    If show.id = "" OrElse ep.uniqueid = "" Then 
+                        ConsoleOrLog("Missing Show Id or Episode Id for: " & vbCrLf & ep.episodepath)
+                        ConsoleOrLog(" *** Not able to download Thumbnail for this episode" & vbCrLf)
+                        Continue For
+                    End If
+                    ConsoleOrLog("Missing Thumbnail found for: " & vbCrLf & show.title & " - " & "Season: " & ep.seasonno & ", Episode: " & ep.episodeno & ", Title: " & ep.title)
+                    ep.thumb = String.Format("http://www.thetvdb.com/banners/episodes/{0}/{1}.jpg", show.id, ep.uniqueid)
+                    DlEpThumb(ep, ep.episodepath)
+                    ConsoleOrLog(vbCrLf)
+                End If
+            Next
+        Next
     End Sub
 
     Private Sub tvcacheLoad()
@@ -1633,7 +1655,6 @@ Module Module1
         End If
     End Sub
 
- 
     Public Function getfilename(ByVal path As String)
         'todo getfilename
         Dim monitorobject As New Object
