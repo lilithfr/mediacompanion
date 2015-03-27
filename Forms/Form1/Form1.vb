@@ -416,6 +416,7 @@ Public Class Form1
                 currentprofile.Filters = tempstring & "filters.txt"
                 currentprofile.Genres = tempstring & "genres.txt"
                 currentprofile.MovieCache = tempstring & "moviecache.xml"
+                currentprofile.MovieSetCache = tempstring & "moviesetcache.xml"
                 currentprofile.ProfileName = "Default"
                 profileStruct.ProfileList.Add(currentprofile)
                 profileStruct.WorkingProfileName = "Default"
@@ -447,6 +448,7 @@ Public Class Form1
                     workingProfile.TvCache = prof.TvCache
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.MusicVideoCache = prof.MusicVideoCache
+                    workingProfile.MovieSetCache = prof.MovieSetCache 
                     For Each item In ProfilesToolStripMenuItem.DropDownItems
                         If item.text = workingProfile.ProfileName Then
                             With item
@@ -467,7 +469,13 @@ Public Class Form1
                     If prof.MusicVideoCache = "" Then
                         prof.MusicVideoCache = "\Settings\musicvideocache.xml"
                         If prof.ProfileName = workingProfile.ProfileName Then
-                            workingProfile.MusicVideoCache = tempstring & "\Settings\musicvideocache.xml"
+                            workingProfile.MusicVideoCache = tempstring & "musicvideocache.xml"
+                        End If
+                    End If
+                    If prof.MovieSetCache = "" Then
+                        prof.MovieSetCache = "\Settings\moviesetcache.xml"
+                        If prof.ProfileName = workingProfile.ProfileName Then
+                            workingProfile.MovieSetCache = tempstring & "moviesetcache.xml"
                         End If
                     End If
                 Else
@@ -475,7 +483,13 @@ Public Class Form1
                         prof.MusicVideoCache = "\Settings\musicvideocache" & counter.ToString & ".xml"
                     End If
                     If prof.ProfileName = workingProfile.ProfileName Then
-                        workingProfile.MusicVideoCache = tempstring & "\Settings\musicvideocache" & counter.ToString & ".xml"
+                        workingProfile.MusicVideoCache = tempstring & "musicvideocache" & counter.ToString & ".xml"
+                    End If
+                    If prof.MovieSetCache = "" Then
+                        prof.MovieSetCache = "\Settings\moviesetcache" & counter.ToString & ".xml"
+                    End If
+                    If prof.ProfileName = workingProfile.ProfileName Then
+                        workingProfile.MovieSetCache = tempstring & "moviesetcache" & counter.ToString & ".xml"
                     End If
                 End If
                 counter += 1
@@ -624,7 +638,7 @@ Public Class Form1
                             cbMovieDisplay_MovieSet.Items.Add(mset)
                         Next
                     End If
-                    If Not IsNothing(workingMovieDetails) AndAlso workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
+                    If Not IsNothing(workingMovieDetails) AndAlso workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
                         For Each mset In Preferences.moviesets
                             cbMovieDisplay_MovieSet.Items.Add(mset)
                         Next
@@ -1561,6 +1575,9 @@ Public Class Form1
                                         Case "musicvideocache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.MusicVideoCache = applicationPath & s
+                                        Case "moviesetcache"
+                                            Dim s As String = result.innertext.ToString.Substring(t)
+                                            currentprofile.MovieSetCache = applicationPath & s
                                     End Select
                                 Next
                 profileStruct.ProfileList.Add(currentprofile)
@@ -1628,7 +1645,6 @@ Public Class Form1
         For Each prof In profileStruct.ProfileList
             child = doc.CreateElement("profiledetails")
 
-          
             childchild = doc.CreateElement("actorcache")
             childchild.InnerText = prof.ActorCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
@@ -1664,9 +1680,13 @@ Public Class Form1
             childchild = doc.CreateElement("tvcache")
             childchild.InnerText = prof.TvCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
-            root.AppendChild(child)
+            'root.AppendChild(child)
             childchild = doc.CreateElement("musicvideocache")
             childchild.InnerText = prof.MusicVideoCache.Replace(applicationPath, "")
+            child.AppendChild(childchild)
+
+            childchild = doc.CreateElement("moviesetcache")
+            childchild.InnerText = prof.MovieSetCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
@@ -1938,16 +1958,16 @@ Public Class Form1
 
                 If Yield(yieldIng) Then Return
 
-                If workingMovieDetails.fullmoviebody.movieset<>"-None-" And workingMovieDetails.fullmoviebody.movieset<>"" Then
+                If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" And workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "" Then
                     Dim add As Boolean = True
                     For Each item In Preferences.moviesets
-                        If item = workingMovieDetails.fullmoviebody.movieset Then
+                        If item = workingMovieDetails.fullmoviebody.movieset.MovieSetName Then
                             add = False
                             Exit For
                         End If
                     Next
                     If add Then
-                        Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
+                        Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset.MovieSetName)
                     End If
                 End If
 
@@ -2849,7 +2869,10 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
             movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
-            movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+            If movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) Then
+                movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+                movie.ScrapedMovie.fullmoviebody.movieset.MovieSetId = oMovies.GetMSetId(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+            End If
             movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
             If TabControl2.SelectedTab.Name = "TabPage9" Then
                 movie.ScrapedMovie.fullmoviebody.tag = NewTagList
@@ -2894,7 +2917,8 @@ Public Class Form1
                     If votestxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
                     If top250txt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
                     If Not cbMovieDisplay_MovieSet.SelectedIndex = 0 Then 'cbMovieDisplay_MovieSet.SelectedItem = "-None-"
-                        movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+                        movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+                        movie.ScrapedMovie.fullmoviebody.movieset.MovieSetId = oMovies.GetMSetId(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
                     End If
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
                     If TabControl2.SelectedTab.Name = "TabPage9" Then
@@ -5917,24 +5941,26 @@ Public Class Form1
                             Dim newname As String = items.Replace(filenama, newfilename)
                             'newname = newname.Replace("..", ".")
                             Try
-                                renamelog += "!!! Renaming" & vbCrLf
-                                renamelog += "!!! " & items & vbCrLf & "!!! to " & vbCrLf & "!!! " & newname & vbCrLf
+                                Dim pathsep As String = If(items.Contains("/"), "/", "\")
+                                Dim origpath As String = items.Substring(0, items.LastIndexOf(pathsep)+1)  ', items.Length-(items.LastIndexOf(pathsep)+1))
+                                renamelog += "!!! " & items.Replace(origpath, "") & "  -- to --  " & newname.Replace(origpath, "")
                                 Dim fi As New IO.FileInfo(items)
                                 If Not IO.File.Exists(newname) Then
                                     fi.MoveTo(newname)
                                     If items.ToLower = IO.Path.Combine(tb_EpPath.Text, tb_EpFilename.Text).ToLower Then
                                         tb_EpFilename.Text = IO.Path.GetFileName(fi.FullName)
                                     End If
-                                    renamelog += "!!! Succeeded" & vbCrLf & "!!! " & vbCrLf
+                                    renamelog += "  ---Succeeded" & vbCrLf
                                 Else
-                                    renamelog += "!!! Not Renamed - Same" & vbCrLf & "!!! " & vbCrLf
+                                    renamelog += " --! Not Renamed - Same" & vbCrLf
                                 End If
 
                             Catch ex As Exception
                                 renamelog += "!!! *** Not Succeeded - Please rename all files manually!" & vbCrLf & "!!! Reported Message: " & ex.Message.ToString & vbCrLf
                             End Try
-                            renamelog += "!!! " & vbCrLf
+                            
                         Next
+                        renamelog += "!!! " & vbCrLf
                         renamelog += "!!! Updating Tables" & vbCrLf
                         Try
                             For Each noder2 In TvTreeview.Nodes
@@ -7895,6 +7921,7 @@ Public Class Form1
                     workingProfile.profilename = prof.profilename
                     workingProfile.regexlist = prof.regexlist
                     workingProfile.tvcache = prof.tvcache
+                    workingProfile.MovieSetCache = prof.MovieSetCache 
                     Call util_ProfileSetup()
                 End If
             Next
@@ -8019,12 +8046,12 @@ Public Class Form1
                     cbMovieDisplay_MovieSet.Items.Add(mset)
                 Next
             End If
-            If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
+            If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
                 For Each mset In Preferences.moviesets
                     cbMovieDisplay_MovieSet.Items.Add(mset)
                 Next
                 For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                    If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
+                    If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset.MovieSetName Then
                         cbMovieDisplay_MovieSet.SelectedIndex = te
                         Exit For
                     End If
@@ -11577,6 +11604,7 @@ End Sub
             ScraperErrorDetected = False
 
             BckWrkScnMovies.RunWorkerAsync(action)
+            oMovies.SaveCaches
         Else
             MsgBox("The Movie Scraper is Already Running")
         End If
@@ -12080,9 +12108,9 @@ End Sub
         cbMovieDisplay_MovieSet.SelectedIndex = 0
 
         If previouslySelected=Nothing Then
-            If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
-                If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
-                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset
+            If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> Nothing Then
+                If workingMovieDetails.fullmoviebody.movieset.MovieSetName.IndexOf(" / ") = -1 Then
+                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset.MovieSetName
                 End If
             End If
         Else
@@ -13056,41 +13084,44 @@ End Sub
             Next
             'new profilename
             Dim tempstring As String = applicationPath & "\Settings\"
-            Dim moviecachetocopy As String = String.Empty
-            Dim actorcachetocopy As String = String.Empty
-            Dim musiccachetocopy As String = String.Empty
-            Dim musicvideocachetocopy As String = String.Empty
-            Dim directorcachetocopy As String = String.Empty
-            Dim tvcachetocopy As String = String.Empty
-            Dim configtocopy As String = String.Empty
-            Dim filterstocopy As String = String.Empty
-            Dim genrestocopy As String = String.Empty
-            Dim regextocopy As String = String.Empty
+            Dim moviecachetocopy        As String = String.Empty
+            Dim actorcachetocopy        As String = String.Empty
+            Dim musiccachetocopy        As String = String.Empty
+            Dim musicvideocachetocopy   As String = String.Empty
+            Dim directorcachetocopy     As String = String.Empty
+            Dim tvcachetocopy           As String = String.Empty
+            Dim configtocopy            As String = String.Empty
+            Dim filterstocopy           As String = String.Empty
+            Dim genrestocopy            As String = String.Empty
+            Dim regextocopy             As String = String.Empty
+            Dim moviesetcachetocopy     As String = String.Empty
             For Each profs In profileStruct.ProfileList
                 If profs.ProfileName = profileStruct.DefaultProfile Then
-                    musicvideocachetocopy = profs.MusicVideoCache
-                    moviecachetocopy = profs.MovieCache
-                    actorcachetocopy = profs.ActorCache
-                    directorcachetocopy = profs.DirectorCache
-                    tvcachetocopy = profs.TvCache
-                    configtocopy = profs.Config
-                    filterstocopy = profs.Filters
-                    genrestocopy = profs.Genres 
-                    regextocopy = profs.RegExList
+                    musicvideocachetocopy   = profs.MusicVideoCache
+                    moviecachetocopy        = profs.MovieCache
+                    actorcachetocopy        = profs.ActorCache
+                    directorcachetocopy     = profs.DirectorCache
+                    tvcachetocopy           = profs.TvCache
+                    configtocopy            = profs.Config
+                    filterstocopy           = profs.Filters
+                    genrestocopy            = profs.Genres 
+                    regextocopy             = profs.RegExList
+                    moviesetcachetocopy     = profs.MovieSetCache 
                 End If
             Next
 
             Dim profiletoadd As New ListOfProfiles
-            profiletoadd.ActorCache = tempstring & "actorcache" & tempint.ToString & ".xml"
-            profiletoadd.DirectorCache = tempstring & "directorcache" & tempint.ToString & ".xml"
-            profiletoadd.Config = tempstring & "config" & tempint.ToString & ".xml"
-            profiletoadd.Filters = tempstring & "filters" & tempint.ToString & ".txt"
-            profiletoadd.Genres = tempstring & "genres" & tempint.ToString & ".txt"
-            profiletoadd.MovieCache = tempstring & "moviecache" & tempint.ToString & ".xml"
-            profiletoadd.RegExList = tempstring & "regex" & tempint.ToString & ".xml"
-            profiletoadd.TvCache = tempstring & "tvcache" & tempint.ToString & ".xml"
-            profiletoadd.MusicVideoCache = tempstring & "musicvideocache" & tempint.ToString & ".xml"
-            profiletoadd.ProfileName = TextBox42.Text
+            profiletoadd.ActorCache         = tempstring & "actorcache" & tempint.ToString & ".xml"
+            profiletoadd.DirectorCache      = tempstring & "directorcache" & tempint.ToString & ".xml"
+            profiletoadd.Config             = tempstring & "config" & tempint.ToString & ".xml"
+            profiletoadd.Filters            = tempstring & "filters" & tempint.ToString & ".txt"
+            profiletoadd.Genres             = tempstring & "genres" & tempint.ToString & ".txt"
+            profiletoadd.MovieCache         = tempstring & "moviecache" & tempint.ToString & ".xml"
+            profiletoadd.RegExList          = tempstring & "regex" & tempint.ToString & ".xml"
+            profiletoadd.TvCache            = tempstring & "tvcache" & tempint.ToString & ".xml"
+            profiletoadd.MusicVideoCache    = tempstring & "musicvideocache" & tempint.ToString & ".xml"
+            profiletoadd.MovieSetCache      = tempstring & "moviesetcache" & tempint.ToString & ".xml"
+            profiletoadd.ProfileName        = TextBox42.Text
             profileStruct.ProfileList.Add(profiletoadd)
 
             If File.Exists(moviecachetocopy)        Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
@@ -13102,6 +13133,7 @@ End Sub
             If File.Exists(filterstocopy)           Then File.Copy(filterstocopy, profiletoadd.Filters)
             If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
             If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
+            If File.Exists(moviesetcachetocopy)     Then File.Copy(moviesetcachetocopy, profiletoadd.MovieSetCache)
             ListBox13.Items.Add(TextBox42.Text)
             Call util_ProfileSave()
             done = True
@@ -13222,9 +13254,10 @@ End Sub
                         Try
                             File.Delete(profileStruct.profilelist(f).TvCache)
                         Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
+                        End Try
+                        Try
+                            File.Delete(profileStruct.profilelist(f).MovieSetCache)
+                        Catch ex As Exception
                         End Try
                         Exit For
                     End If
@@ -15715,6 +15748,7 @@ End Sub
         Mc.clsGridViewMovie.GridFieldToDisplay2 = cbSort.Text
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
+        If Not MainFormLoadedStatus Then Exit Sub
         Preferences.moviesortorder = cbSort.SelectedIndex
     End Sub
 
@@ -17220,7 +17254,7 @@ End Sub
                 If ListofMovieSets.SelectedItems(i) <> Nothing And ListofMovieSets.SelectedItems(i) <> "" Then
                     For Each mset In Preferences.moviesets
                         If mset = ListofMovieSets.SelectedItems(i) Then
-                            If workingMovieDetails.fullmoviebody.movieset <> mset Then
+                            If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> mset Then
                                 Preferences.moviesets.Remove(mset)
                             Else
                                 MsgBox("Unable to remove """ & mset & """, it is being used by the selected Movie")
@@ -17988,6 +18022,7 @@ End Sub
                         ep.Credits.Value = tb_EpCredits.Text
                         ep.Director.Value = tb_EpDirector.Text
                         ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
+                        'ep.UpdateTreenode()
                     End If
                 Next
                 WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)

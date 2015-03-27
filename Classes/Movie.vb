@@ -411,6 +411,17 @@ Public Class Movie
         End Get
     End Property
 
+    ReadOnly Property MovieSet As MovieSetDatabase 
+        Get
+            Try
+                If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" Then Return Nothing
+                Return New MovieSetDatabase(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId)
+            Catch
+                Return Nothing
+            End Try
+        End Get
+    End Property
+
     ReadOnly Property MissingLocalActors As Boolean
         Get
             For Each Actor In _scrapedMovie.listactors
@@ -1169,14 +1180,15 @@ Public Class Movie
         'End If
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename    = NfoPathPrefName 
-        _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
+        _movieCache.MovieSet.absorb(scrapedMovie.fullmoviebody.movieset)
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director 
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
         
         'If movRebuildCaches Then 
-            UpdateActorCacheFromEmpty
-            UpdateDirectorCacheFromEmpty
+        UpdateActorCacheFromEmpty
+        UpdateDirectorCacheFromEmpty
+        UpdateMovieSetCacheFromEmpty 
         'End If
         
         If Not Preferences.usefoldernames Then
@@ -1439,9 +1451,10 @@ Public Class Movie
             Else
                 tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
                 tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
-                _scrapedMovie.fullmoviebody.movieset = "-None-"
+                _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
                 If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                    _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+                    _scrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                    _scrapedMovie.fullmoviebody.movieset.MovieSetId = tmdb.Movie.belongs_to_collection.id 
                 End If
             End If
         End If
@@ -3070,9 +3083,10 @@ Public Class Movie
 
             If rl.tmdb_set_name Then
                 Try
-                    _rescrapedMovie.fullmoviebody.movieset = "-None-"
+                    _rescrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                        _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+                        _rescrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                        _rescrapedMovie.fullmoviebody.movieset.MovieSetId = tmdb.Movie.belongs_to_collection.id
                     End If
                     UpdateProperty(_rescrapedMovie.fullmoviebody.movieset, _scrapedMovie.fullmoviebody.movieset, , rl.EmptyMainTags)
                 Catch
@@ -3164,6 +3178,14 @@ Public Class Movie
         End If
     End Sub
 
+    Sub UpdateMovieSetCache
+        RemoveMovieSetFromCache
+
+        If MovieSet.MovieSetName <> "" Or MovieSet.MovieSetName.ToLower <> "-none-" Then
+            _parent.MovieSetDB.Add(MovieSet)
+        End If
+    End Sub
+
     Sub RemoveActorsFromCache
         If Actors.Count = 0 Then Exit Sub
         RemoveActorsFromCache(Actors(0).MovieId)
@@ -3184,6 +3206,16 @@ Public Class Movie
         _parent.DirectorDb.RemoveAll(Function(c) c.MovieId = MovieId)
     End Sub
 
+    Sub RemoveMovieSetFromCache
+        'If MovieSet.count = 0 Then Exit Sub
+        '_parent.MovieSetDB.Remove(MovieSet)
+        RemoveMovieSetFromCache(MovieSet.MovieSetId)
+    End Sub
+
+    Sub RemoveMovieSetFromCache(MovieSetID)
+        _parent.MovieSetDB.RemoveAll(Function(c) c.MovieSetId = MovieSetID)
+    End Sub
+
     Sub UpdateActorCacheFromEmpty
         If Actors.Count = 0 Then Exit Sub
         Try
@@ -3195,6 +3227,12 @@ Public Class Movie
     Sub UpdateDirectorCacheFromEmpty
         If IsNothing(Director) Then Exit Sub
         _parent._tmpDirectorDb.Add(Director)
+    End Sub
+
+    Sub UpdateMovieSetCacheFromEmpty
+        If IsNothing(MovieSet) Then Exit Sub
+        '_parent._tmpMoviesetDb.Clear()
+        _parent._tmpMoviesetDb.Add(MovieSet)
     End Sub
 
     Sub UpdateMovieCache
@@ -3791,7 +3829,7 @@ Public Class Movie
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
                     s = s.Replace("%M", _scrapedMovie.fullmoviebody.mpaa)
                     s = s.Replace("%G", vgenre)
-                    s = s.Replace("%N", If(Preferences.MovSetIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.movieset), _scrapedMovie.fullmoviebody.movieset))
+                    s = s.Replace("%N", If(Preferences.MovSetIgnArticle, Preferences.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.movieset.MovieSetName), _scrapedMovie.fullmoviebody.movieset.MovieSetName))
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
                     s = s.Replace("%O", ach)

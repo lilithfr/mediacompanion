@@ -1208,22 +1208,22 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
             Dim fmb As str_BasicMovieNFO = oMovie.ScrapedMovie.fullmoviebody
 
-            If xbMovie.title                                          <> fmb.title                         Then Return True
-            If xbMovie.year                                           <> fmb.year                          Then Return True
-            If xbMovie.rating.ToString                                <> fmb.rating                        Then Return True
-            If xbMovie.tagline                                        <> fmb.tagline                       Then Return True
-            If xbMovie.plot                                           <> fmb.plot                          Then Return True
-            If xbMovie.plotoutline                                    <> fmb.outline                       Then Return True
-            If xbMovie.originalTitle                                  <> fmb.originalTitle                 Then Return True
-            If xbMovie.playCount                                      <> fmb.playCount                     Then Return True
-            If xbMovie.mpaa                                           <> fmb.mpaa                          Then Return True
-            If xbMovie.imdbnumber                                     <> fmb.imdbid                        Then Return True
-            If (xbMovie.runtime\60).ToString                          <> fmb.runtime .Replace(" min"  ,"") Then Return True
-            If xbMovie.set                                            <> fmb.movieset.Replace("-None-","") Then Return True
-            If xbMovie.top250.ToString                                <> fmb.top250                        Then Return True
-            If xbMovie.votes.ToString                                 <> fmb.votes.Replace(",","")         Then Return True
-            If xbMovie.sorttitle                                      <> fmb.sortorder                     Then Return True
-            If MovieFolderMappings.GetMC_MoviePath(xbMovie.trailer)   <> oMovie.ActualTrailerPath.ToUpper  Then Return True
+            If xbMovie.title                                          <> fmb.title                                      Then Return True
+            If xbMovie.year                                           <> fmb.year                                       Then Return True
+            If xbMovie.rating.ToString                                <> fmb.rating                                     Then Return True
+            If xbMovie.tagline                                        <> fmb.tagline                                    Then Return True
+            If xbMovie.plot                                           <> fmb.plot                                       Then Return True
+            If xbMovie.plotoutline                                    <> fmb.outline                                    Then Return True
+            If xbMovie.originalTitle                                  <> fmb.originalTitle                              Then Return True
+            If xbMovie.playCount                                      <> fmb.playCount                                  Then Return True
+            If xbMovie.mpaa                                           <> fmb.mpaa                                       Then Return True
+            If xbMovie.imdbnumber                                     <> fmb.imdbid                                     Then Return True
+            If (xbMovie.runtime\60).ToString                          <> fmb.runtime .Replace(" min"  ,"")              Then Return True
+            If xbMovie.set                                            <> fmb.movieset.MovieSetName.Replace("-None-","") Then Return True
+            If xbMovie.top250.ToString                                <> fmb.top250                                     Then Return True
+            If xbMovie.votes.ToString                                 <> fmb.votes.Replace(",","")                      Then Return True
+            If xbMovie.sorttitle                                      <> fmb.sortorder                                  Then Return True
+            If MovieFolderMappings.GetMC_MoviePath(xbMovie.trailer)   <> oMovie.ActualTrailerPath.ToUpper               Then Return True
 
 
             'If xbMovie. <> fmb. Then Return True

@@ -10594,7 +10594,7 @@ Partial Class Form1
         Me.tb_EpCredits.Location = New System.Drawing.Point(290, 4)
         Me.tb_EpCredits.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_EpCredits.Name = "tb_EpCredits"
-        Me.tb_EpCredits.ReadOnly = true
+        Me.tb_EpCredits.ReadOnly = false
         Me.tb_EpCredits.Size = New System.Drawing.Size(233, 21)
         Me.tb_EpCredits.TabIndex = 9
         '
@@ -10617,7 +10617,7 @@ Partial Class Form1
         Me.tb_EpDirector.Location = New System.Drawing.Point(86, 4)
         Me.tb_EpDirector.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_EpDirector.Name = "tb_EpDirector"
-        Me.tb_EpDirector.ReadOnly = true
+        Me.tb_EpDirector.ReadOnly = false
         Me.tb_EpDirector.Size = New System.Drawing.Size(150, 21)
         Me.tb_EpDirector.TabIndex = 8
         '

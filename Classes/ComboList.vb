@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Public Class ComboList
 
     Property fullpathandfilename  As String = "" 
-    Property MovieSet             As String = ""
+    'Property MovieSet             As String = ""
     Property filename             As String = ""
     Property foldername           As String = ""
     Property _title               As String = ""
@@ -40,6 +40,7 @@ Public Class ComboList
     Property Container            As String = ""
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
+    Property MovieSet             As New MovieSetDatabase 
 
     Public Property title As String
         Get
@@ -249,7 +250,7 @@ Public Class ComboList
     Public Sub Assign(From As ComboList)
 
         Me.fullpathandfilename  = From.fullpathandfilename
-        Me.MovieSet             = From.MovieSet           
+        'Me.MovieSet             = From.MovieSet           
         Me.filename             = From.filename           
         Me.foldername           = From.foldername         
         Me.title                = From.title
@@ -284,6 +285,7 @@ Public Class ComboList
         Me.Container            = From.Container
         Me.VideoMissing         = From.VideoMissing
         AssignSubtitleLang(From.SubLang)
+        Me.MovieSet.Absorb(From.MovieSet)
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

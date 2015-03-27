@@ -2179,7 +2179,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.id = ""
                     newmovie.tmdbid = ""
                     newmovie.missingdata1 = 0
-                    newmovie.MovieSet = ""
+                    newmovie.MovieSet = New MovieSetDatabase 
                     newmovie.source = ""
                     newmovie.director = ""
                     newmovie.originaltitle = newmovie.title
@@ -2220,11 +2220,13 @@ Public Class WorkingWithNfoFiles
                             Case "originaltitle"
                                 newmovie.originaltitle = thisresult.InnerText
                             Case "set"
-                                If newmovie.MovieSet = "" Then                     'set in nfo's are individual elements - in MC cache they are one string seperated by " / "
-                                    newmovie.MovieSet = thisresult.InnerText
-                                Else
-                                    newmovie.MovieSet = newmovie.MovieSet & " / " & thisresult.InnerText
+                                If newmovie.MovieSet.MovieSetName = "" Then                     'Only one Set per movie.
+                                    newmovie.MovieSet.MovieSetName = thisresult.InnerText
+                                'Else
+                                '    newmovie.MovieSet.MovieSetName = newmovie.MovieSet.MovieSetName & " / " & thisresult.InnerText
                                 End If
+                            Case "setid"
+                                newmovie.MovieSet.MovieSetId = thisresult.InnerText 
                             Case "source"
                                 newmovie.source = thisresult.InnerText
                             Case "diretor"
@@ -2373,7 +2375,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source = Nothing Then newmovie.source = ""
                 If newmovie.director = Nothing Then newmovie.director = ""
-                If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
+                If newmovie.MovieSet.MovieSetName = "" Or newmovie.MovieSet.MovieSetName = Nothing Then newmovie.MovieSet.MovieSetName = "-None-"
                 'If newmovie.tag = Nothing Then newmovie.tag = ""
                 'if there is no entry for originaltitle, then use the current title. this should only come into use
                 'for old movies since new ones will have the originaltitle created when scraped
@@ -2468,11 +2470,13 @@ Public Class WorkingWithNfoFiles
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
-                            If newmovie.fullmoviebody.movieset = "" Then
-                                newmovie.fullmoviebody.movieset = thisresult.InnerText
-                            Else
-                                newmovie.fullmoviebody.movieset = newmovie.fullmoviebody.movieset & " / " & thisresult.InnerText
+                            If newmovie.fullmoviebody.movieset.MovieSetName = "" Then
+                                newmovie.fullmoviebody.movieset.MovieSetName = thisresult.InnerText
+                            'Else
+                                'newmovie.fullmoviebody.movieset.MovieSetName = newmovie.fullmoviebody.movieset.MovieSetName & " / " & thisresult.InnerText
                             End If
+                        Case "setid"
+                            newmovie.fullmoviebody.movieset.MovieSetId = thisresult.InnerText 
                         Case "videosource"
                             newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
@@ -2737,8 +2741,8 @@ Public Class WorkingWithNfoFiles
                 Else
                     newmovie.fileinfo.basepath = newmovie.fileinfo.path
                 End If
-                If newmovie.fullmoviebody.movieset = "" Then
-                    newmovie.fullmoviebody.movieset = "-None-"
+                If newmovie.fullmoviebody.movieset.MovieSetName = "" Then
+                    newmovie.fullmoviebody.movieset.MovieSetName = "-None-"
                 End If
 
                 Return newmovie
@@ -3078,15 +3082,18 @@ Public Class WorkingWithNfoFiles
 
 
                 Try
-                    If movietosave.fullmoviebody.movieset <> "-None-" Then
-                        Dim strArr() As String
-                        strArr = movietosave.fullmoviebody.movieset.Split("/")
-                        For count = 0 To strArr.Length - 1
-                            child = doc.CreateElement("set")
-                            strArr(count) = strArr(count).Trim
-                            child.InnerText = strArr(count)
-                            root.AppendChild(child)
-                        Next
+                    If movietosave.fullmoviebody.movieset.MovieSetName <> "-None-" Then
+                        'Dim strArr() As String
+                        'strArr = movietosave.fullmoviebody.movieset.MovieSetName.Split("/")
+                        'For count = 0 To strArr.Length - 1
+                        child = doc.CreateElement("set")
+                            'strArr(count) = strArr(count).Trim
+                        child.InnerText = movietosave.fullmoviebody.movieset.MovieSetName   'strArr(count)
+                        root.AppendChild(child)
+                       ' Next
+                        child = doc.CreateElement("setid")
+                        child.InnerText = movietosave.fullmoviebody.movieset.MovieSetId
+                        root.AppendChild(child)
                     End If
                 Catch
                 End Try

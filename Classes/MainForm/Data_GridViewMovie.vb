@@ -141,7 +141,7 @@ Public Class Data_GridViewMovie
             Return _movieset
         End Get
         Set(ByVal value)
-            _movieset = value
+            _movieset = value.MovieSetName
         End Set
     End Property
 

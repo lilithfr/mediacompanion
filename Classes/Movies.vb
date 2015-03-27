@@ -29,6 +29,8 @@ Public Class Movies
     Public _tmpActorDb             As New List(Of ActorDatabase)
     Private _directorDb            As New List(Of ActorDatabase)
     Public _tmpDirectorDb          As New List(Of ActorDatabase)
+    Private _moviesetDb            As New List(Of MovieSetDatabase)
+    Public _tmpMoviesetDb          As New List(Of MovieSetDatabase)
     Public Shared movRebuildCaches As Boolean = False
 
     Public Property Bw            As BackgroundWorker = Nothing
@@ -622,9 +624,9 @@ Public Class Movies
                 Group By 
                     x.MovieSet Into NumFilms=Count
                 Where 
-                    SetsFilter_AlsoInclude.Contains(MovieSet)
+                    SetsFilter_AlsoInclude.Contains(MovieSet.MovieSetName)
             
-            Return From x In q Select x.MovieSet & " (" & x.NumFilms.ToString & ")"
+            Return From x In q Select x.MovieSet.MovieSetName & " (" & x.NumFilms.ToString & ")"
         End Get
     End Property    
 
@@ -641,17 +643,17 @@ Public Class Movies
         Get
             Dim q = From x In MovieCache 
                 Group By 
-                    x.MovieSet Into NumFilms=Count
+                    x.MovieSet.MovieSetName Into NumFilms=Count
                 Where 
                     NumFilms>=Preferences.SetsFilterMinFilms 
 
             If Preferences.MovieFilters_Sets_Order=0 Then 
-                q = From x In q Order by x.NumFilms Descending, x.MovieSet Ascending
+                q = From x In q Order by x.NumFilms Descending, x.MovieSetName Ascending
             Else
-                q = From x In q Order by x.MovieSet.Replace("-None-","") Ascending , x.NumFilms Descending
+                q = From x In q Order by x.MovieSetName.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Return From x In q Select x.MovieSet & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxSetsInFilter 
+            Return From x In q Select x.MovieSetName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxSetsInFilter 
         End Get
     End Property    
 
@@ -665,7 +667,7 @@ Public Class Movies
     Public ReadOnly Property MoviesSetsIncNone As List(Of String)
         Get
             Try
-                Dim q = From x In MovieCache Select ms = x.MovieSet.Split(",") Distinct
+                Dim q = From x In MovieCache Select ms = x.MovieSet.MovieSetName.Split(",") Distinct
 
                 Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
             Catch
@@ -712,6 +714,26 @@ Public Class Movies
             Return _directorDb
         End Get
     End Property
+
+    Public ReadOnly Property MovieSetDB As List(Of MovieSetDatabase)
+        Get
+            Return _moviesetDb
+        End Get
+    End Property
+
+    Public Function GetMSetId(mSetName As String) As String
+        For Each mset In MovieSetDB
+            If mset.MovieSetName = mSetName Then
+                Return mset.MovieSetId 
+            End If
+        Next
+        If Not mSetName.ToLower = "-none-" Then
+            Dim newmset As New MovieSetDatabase
+            newmset.MovieSetName = mSetName
+            MovieSetDB.Add(newmset)
+        End If
+        Return ""
+    End Function
 
     Public ReadOnly Property Cancelled As Boolean
         Get
@@ -1113,10 +1135,12 @@ Public Class Movies
     Public Sub LoadCaches
         LoadMovieCache
         LoadPeopleCaches
+        LoadMovieSetCaches
     End Sub
 
     Public Sub SaveCaches
         SaveMovieCache
+        SaveMovieSetCache
         SaveActorCache
         SaveDirectorCache
     End Sub
@@ -1142,7 +1166,8 @@ Public Class Movies
                                 Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
                                 Case "source"               : newmovie.source = detail.InnerText
                                 Case "director"             : newmovie.director = detail.InnerText
-                                Case "set"                  : newmovie.MovieSet = detail.InnerText
+                                Case "set"                  : newmovie.MovieSet.MovieSetName = detail.InnerText
+                                Case "setid"                : newmovie.MovieSet.MovieSetId = detail.InnerText
                                 Case "sortorder"            : newmovie.sortorder = detail.InnerText
                                 Case "filedate"
                                     If detail.InnerText.Length <> 14 Then 'i.e. invalid date
@@ -1208,11 +1233,11 @@ Public Class Movies
                         If newmovie.source = Nothing Then
                             newmovie.source = ""
                         End If
-                        If newmovie.MovieSet = Nothing Then
-                            newmovie.MovieSet = "-None-"
+                        If newmovie.MovieSet.MovieSetName = Nothing Then
+                            newmovie.MovieSet.MovieSetName = "-None-"
                         End If
-                        If newmovie.MovieSet = "" Then
-                            newmovie.MovieSet = "-None-"
+                        If newmovie.MovieSet.MovieSetName = "" Then
+                            newmovie.MovieSet.MovieSetName = "-None-"
                         End If
                         MovieCache.Add(newmovie)
                 End Select
@@ -1240,54 +1265,38 @@ Public Class Movies
         root = doc.CreateElement("movie_cache")
         For Each movie In MovieCache
             child = doc.CreateElement("movie")
-            childchild = doc.CreateElement("filedate")
-            childchild.InnerText = movie.filedate
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("createdate")
-            childchild.InnerText = movie.createdate
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("missingdata1")
-            childchild.InnerText = movie.missingdata1.ToString
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("filename")
-            childchild.InnerText = movie.filename
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("foldername")
-            childchild.InnerText = movie.foldername
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("fullpathandfilename")
-            childchild.InnerText = movie.fullpathandfilename
-            child.AppendChild(childchild)
-            If movie.source <> Nothing And movie.source <> "" Then
-                childchild = doc.CreateElement("source")
-                childchild.InnerText = movie.source
+            childchild = doc.CreateElement("filedate") : childchild.InnerText = movie.filedate : child.AppendChild(childchild)
+            childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
+            childchild = doc.CreateElement("missingdata1") : childchild.InnerText = movie.missingdata1.ToString : child.AppendChild(childchild)
+            childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
+            childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
+            childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
+            childchild = doc.CreateElement("source") :  : childchild.InnerText = If(movie.source = Nothing, "", movie.source) : child.AppendChild(childchild)
+            childchild = doc.CreateElement("director") : childchild.InnerText = movie.director  : child.AppendChild(childchild)
+
+            'If movie.MovieSet.MovieSetName <> Nothing Then
+            If Not String.IsNullOrEmpty(movie.MovieSet.MovieSetName) AndAlso movie.MovieSet.MovieSetName <> "-None-" Then
+                childchild = doc.CreateElement("set")
+                childchild.InnerText = movie.MovieSet.MovieSetName
                 child.AppendChild(childchild)
-            Else
-                childchild = doc.CreateElement("source")
-                childchild.InnerText = ""
+                childchild = doc.CreateElement("setid")
+                childchild.InnerText = movie.MovieSet.MovieSetId 
                 child.AppendChild(childchild)
-            End If
-            childchild = doc.CreateElement("director")
-            childchild.InnerText = movie.director 
-            child.AppendChild(childchild)
-            If movie.MovieSet <> Nothing Then
-                If movie.MovieSet <> "" Or movie.MovieSet <> "-None-" Then
-                    childchild = doc.CreateElement("set")
-                    childchild.InnerText = movie.MovieSet
-                    child.AppendChild(childchild)
-                Else
-                    childchild = doc.CreateElement("set")
-                    childchild.InnerText = ""
-                    child.AppendChild(childchild)
-                End If
             Else
                 childchild = doc.CreateElement("set")
                 childchild.InnerText = ""
                 child.AppendChild(childchild)
+                childchild = doc.CreateElement("setid")
+                childchild.InnerText = ""
+                child.AppendChild(childchild)
             End If
-            childchild = doc.CreateElement("genre")
-            childchild.InnerText = movie.genre
-            child.AppendChild(childchild)
+            'Else
+            '    childchild = doc.CreateElement("set")
+            '    childchild.InnerText = ""
+            '    child.AppendChild(childchild)
+                
+            'End If
+            childchild = doc.CreateElement("genre") : childchild.InnerText = movie.genre : child.AppendChild(childchild)
 
             For Each item In movie.movietag
                 childchild = doc.CreateElement("tag")
@@ -1295,51 +1304,28 @@ Public Class Movies
                 child.AppendChild(childchild)
             Next
 
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = movie.id
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("playcount")
-            childchild.InnerText = movie.playcount
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("rating")
-            childchild.InnerText = movie.rating
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("title")
-            childchild.InnerText = movie.title
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("originaltitle")
-            childchild.InnerText = movie.originaltitle
-            child.AppendChild(childchild)
-            If movie.sortorder = Nothing Then
-                movie.sortorder = movie.title
-            End If
-            If movie.sortorder = "" Then
-                movie.sortorder = movie.title
-            End If
-            childchild = doc.CreateElement("outline")
-            childchild.InnerText = movie.outline
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("plot")
-            If movie.plot.Length() > 100 Then
-                childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
-            Else
-                childchild.InnerText = movie.plot
-            End If
+            childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
+            childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
+            childchild = doc.CreateElement("rating") : childchild.InnerText = movie.rating : child.AppendChild(childchild)
+            childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
+            childchild = doc.CreateElement("originaltitle") : childchild.InnerText = movie.originaltitle : child.AppendChild(childchild)
 
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("sortorder")
-            childchild.InnerText = movie.sortorder
+            'If Not String.IsNullOrEmpty(movie.sortorder) Then movie.sortorder = movie.title
+            childchild = doc.CreateElement("outline") : childchild.InnerText = If(String.IsNullOrEmpty(movie.sortorder), movie.title, movie.outline)
             child.AppendChild(childchild)
 
-            childchild = doc.CreateElement("runtime")
-            childchild.InnerText = movie.runtime
+            childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100)
+            'If movie.plot.Length() > 100 Then
+            '    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
+            'Else
+            '    childchild.InnerText = movie.plot
+            'End If
             child.AppendChild(childchild)
-            childchild = doc.CreateElement("top250")
-            childchild.InnerText = movie.top250
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("year")
-            childchild.InnerText = movie.year
-            child.AppendChild(childchild)
+
+            childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.sortorder : child.AppendChild(childchild)
+            childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
+            childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
+            childchild = doc.CreateElement("year") : childchild.InnerText = movie.year : child.AppendChild(childchild)
             child.AppendChild(doc, "votes", movie.Votes)
             child.AppendChild(doc, "Resolution", movie.Resolution)
             child.AppendChild(doc, "VideoCodec", movie.VideoCodec)
@@ -1374,10 +1360,12 @@ Public Class Movies
         TmpMovieCache.Clear
 
         If movRebuildCaches Then 
-            _actorDb      .Clear 
-            _tmpActorDb   .Clear
-            _directorDb   .Clear 
-            _tmpDirectorDb.Clear
+            _actorDb        .Clear 
+            _tmpActorDb     .Clear
+            _directorDb     .Clear 
+            _tmpDirectorDb  .Clear
+            _moviesetDb     .Clear
+            _tmpMoviesetDb  .Clear
         End If
 
         Dim t As New List(Of String)
@@ -1411,6 +1399,13 @@ Public Class Movies
                 _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
             Next
             SaveDirectorCache()
+
+            Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
+
+            For Each item In q3.Distinct()
+                _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
+            Next
+            SaveMovieSetCache()
 
         End If
 
@@ -1662,8 +1657,8 @@ Public Class Movies
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
-                If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
-                    Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
+                If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
+                    Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
                 End If
                 TmpMovieCache.Add(movie.Cache)
             Catch
@@ -1690,6 +1685,10 @@ Public Class Movies
     Sub LoadPeopleCaches()
         LoadActorCache()
         LoadDirectorCache()
+    End Sub
+
+    Sub LoadMovieSetCaches()
+        LoadMovieSetCache(_moviesetDb, "movieset", Preferences.workingProfile.moviesetcache)
     End Sub
 
     Sub LoadActorCache()
@@ -1725,12 +1724,41 @@ Public Class Movies
         Next
     End Sub
 
+    Sub LoadMovieSetCache(setDb As List(Of MovieSetDatabase),typeName As String,  fileName As String)
+        setDb.Clear()
+        If Not File.Exists(fileName) Then Exit Sub
+        Dim moviesetcache As New XmlDocument
+        moviesetcache.Load(fileName)
+        Dim thisresult As XmlNode = Nothing
+        For Each thisresult In moviesetcache(typeName & "_cache")
+            Select Case thisresult.Name
+                Case typeName
+                    Dim movieset = ""
+                    Dim moviesetId = ""
+                    Dim detail As XmlNode = Nothing
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+                            Case "moviesetname"
+                                movieset = detail.InnerText
+                            Case "id"
+                                moviesetId = detail.InnerText
+                        End Select
+                    Next
+                    setDb.Add(New MovieSetDatabase(movieset, moviesetId))
+            End Select
+        Next
+    End Sub
+
     Sub SaveActorCache()
         SavePersonCache(ActorDb,"actor",Preferences.workingProfile.actorcache)
     End Sub
 
     Sub SaveDirectorCache()
         SavePersonCache(DirectorDb,"director",Preferences.workingProfile.directorCache)
+    End Sub
+
+    Sub SaveMovieSetCache()
+        SaveMovieSetCache(MovieSetDB, "movieset", Preferences.workingProfile.moviesetcache)
     End Sub
 
     Sub SavePersonCache(peopleDb As List(Of ActorDatabase), typeName As String, fileName As String)
@@ -1756,6 +1784,42 @@ Public Class Movies
             child.AppendChild(childchild)
             childchild = doc.CreateElement("id")
             childchild.InnerText = actor.movieid
+            child.AppendChild(childchild)
+            root.AppendChild(child)
+        Next
+
+        doc.AppendChild(root)
+
+        Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
+    End Sub
+
+    Sub SaveMovieSetCache(setDb As List(Of MovieSetDatabase), typeName As String, fileName As String)
+        Dim doc As New XmlDocument
+
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc  As XmlDeclaration
+
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+
+        Dim root  As XmlElement
+        Dim child As XmlElement
+
+        root = doc.CreateElement(typeName & "_cache")
+
+        Dim childchild As XmlElement
+
+        For Each movieset In setDb
+            If movieset.MovieSetName.ToLower = "-none-" Then Continue For
+            child = doc.CreateElement(typeName)
+            childchild = doc.CreateElement("moviesetname")
+            childchild.InnerText = movieset.MovieSetName
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("id")
+            childchild.InnerText = movieset.MovieSetId 
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next

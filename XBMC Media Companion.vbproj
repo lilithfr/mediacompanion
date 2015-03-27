@@ -151,6 +151,7 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
+    <Compile Include="Classes\MovieSetDatabase.vb" />
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />

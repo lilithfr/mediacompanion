@@ -1506,7 +1506,7 @@ Module General
             ' load nfo file to clean
             Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfoFileandPath)
 
-            If fmd.fullmoviebody.movieset = "" Then fmd.fullmoviebody.movieset = "-None-"
+            If fmd.fullmoviebody.movieset.MovieSetName = "" Then fmd.fullmoviebody.movieset.MovieSetName = "-None-"
             If fmd.fullmoviebody.top250  = "" Then fmd.fullmoviebody.top250  ="0"
             If fmd.fullmoviebody.outline = "" Then fmd.fullmoviebody.outline = fmd.fullmoviebody.plot ' Outline lonely 
             fmd.fullmoviebody.outline = fmd.fullmoviebody.outline.Replace("\", "")
