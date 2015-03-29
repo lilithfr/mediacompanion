@@ -415,10 +415,11 @@ Public Class Movies
 
     Public ReadOnly Property Duplicates As String
         Get
-            Dim total          As Integer = (From x In MovieCache).Count
-            Dim total_distinct As Integer = (From x In MovieCache Select x.id).Distinct.Count
+            Dim total           As Integer = (From x In MovieCache).Count
+            Dim total_distinct  As Integer = (From x In MovieCache Where x.id <> "0" Select x.id ).Distinct.Count
+            Dim total_noId      As Integer = (From x In MovieCache Where x.id = "0" Select x.id).Count 
 
-            Dim num_duplicates = total - total_distinct
+            Dim num_duplicates = total - (total_distinct + total_noId)
 
             Return "Duplicates (" & num_duplicates & ")"
         End Get
