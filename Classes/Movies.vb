@@ -1852,8 +1852,10 @@ Public Class Movies
         If Preferences.UseMultipleThreads Then
             _actorDB      .Clear()
             _directorDb   .Clear()
+            _moviesetDb   .Clear()
             _tmpActorDb   .Clear()
             _tmpDirectorDb.Clear()
+            _tmpMoviesetDb.Clear()
             MT_LoadMovieCacheFromNfos
         Else
             LoadMovieCacheFromNfos
@@ -1895,8 +1897,14 @@ Public Class Movies
             _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
         Next
 
+        Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
+        For Each item In q3.Distinct()
+            _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
+        Next
+        
         SaveActorCache()
         SaveDirectorCache()
+        SaveMovieSetCache()
     End Sub
 
     Sub RemoveMovieFromCache(fullpathandfilename)
