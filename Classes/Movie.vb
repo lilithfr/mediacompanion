@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Linq
 Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports System.Threading 
 Imports Media_Companion
 Imports System.Text
 Imports YouTubeFisher
@@ -400,13 +401,15 @@ Public Class Movie
         End Get
     End Property
 
-    ReadOnly Property Director As ActorDatabase
+    ReadOnly Property Director As DirectorDatabase
         Get
+            'Dim x As New List(Of DirectorDatabase)
+            Dim x As New DirectorDatabase 
             Try
                 If String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.director) Then Return Nothing
-                Return New ActorDatabase(_scrapedMovie.fullmoviebody.director,_scrapedMovie.fullmoviebody.imdbid)
+                Return New DirectorDatabase(_scrapedMovie.fullmoviebody.director,_scrapedMovie.fullmoviebody.imdbid)
             Catch
-                Return Nothing
+                Return x
             End Try
         End Get
     End Property
@@ -1178,19 +1181,22 @@ Public Class Movie
         '    ucMusicVideo.MVCacheAdd(_scrapedMovie)
         '    Exit Sub
         'End If
+        Monitor.Enter(Me)
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename    = NfoPathPrefName 
         _movieCache.MovieSet.absorb(scrapedMovie.fullmoviebody.movieset)
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director 
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
+
         
         'If movRebuildCaches Then 
-        UpdateActorCacheFromEmpty
-        UpdateDirectorCacheFromEmpty
-        UpdateMovieSetCacheFromEmpty 
+            UpdateActorCacheFromEmpty
+            UpdateDirectorCacheFromEmpty
+            UpdateMovieSetCacheFromEmpty 
         'End If
         
+
         If Not Preferences.usefoldernames Then
             If _movieCache.filename <> Nothing Then _movieCache.filename = _movieCache.filename.Replace(".nfo", "")
         End If    
@@ -1240,6 +1246,7 @@ Public Class Movie
         End If
         _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.filedetails_subtitles)
         AssignMovieToAddMissingData
+        Monitor.Exit(Me)
     End Sub
 
     Sub AssignMVToCache

@@ -27,8 +27,8 @@ Public Class Movies
     Private _certificateMappings   As CertificateMappings
     Private _actorDb               As New List(Of ActorDatabase)
     Public _tmpActorDb             As New List(Of ActorDatabase)
-    Private _directorDb            As New List(Of ActorDatabase)
-    Public _tmpDirectorDb          As New List(Of ActorDatabase)
+    Private _directorDb            As New List(Of DirectorDatabase)
+    Public _tmpDirectorDb          As New List(Of DirectorDatabase)
     Private _moviesetDb            As New List(Of MovieSetDatabase)
     Public _tmpMoviesetDb          As New List(Of MovieSetDatabase)
     Public Shared movRebuildCaches As Boolean = False
@@ -710,7 +710,7 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property DirectorDb As List(Of ActorDatabase)
+    Public ReadOnly Property DirectorDb As List(Of DirectorDatabase)
         Get
             Return _directorDb
         End Get
@@ -1360,14 +1360,14 @@ Public Class Movies
     Public Sub LoadMovieCacheFromNfos
         TmpMovieCache.Clear
 
-        If movRebuildCaches Then 
+        'If movRebuildCaches Then 
             _actorDb        .Clear 
             _tmpActorDb     .Clear
             _directorDb     .Clear 
             _tmpDirectorDb  .Clear
             _moviesetDb     .Clear
             _tmpMoviesetDb  .Clear
-        End If
+       ' End If
 
         Dim t As New List(Of String)
 
@@ -1385,7 +1385,7 @@ Public Class Movies
             Next
         End If
 
-        If movRebuildCaches Then
+        'If movRebuildCaches Then
             Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
 
             For Each item In q.Distinct()
@@ -1397,7 +1397,7 @@ Public Class Movies
             Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
 
             For Each item In q2.Distinct()
-                _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+                _directorDb.Add(New DirectorDatabase(item.ActorName, item.MovieId))
             Next
             SaveDirectorCache()
 
@@ -1408,7 +1408,7 @@ Public Class Movies
             Next
             SaveMovieSetCache()
 
-        End If
+        'End If
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
@@ -1482,6 +1482,7 @@ Public Class Movies
         End While
       
         If Cancelled Then Exit Sub
+        RebuildMoviePeopleCaches
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
@@ -1725,6 +1726,31 @@ Public Class Movies
         Next
     End Sub
 
+    Sub LoadPersonCache(peopleDb As List(Of DirectorDatabase),typeName As String,  fileName As String)
+        peopleDb.Clear()
+        If Not File.Exists(fileName) Then Exit Sub
+        Dim peopleList As New XmlDocument
+        peopleList.Load(fileName)
+        Dim thisresult As XmlNode = Nothing
+        For Each thisresult In peopleList(typeName & "_cache")
+            Select Case thisresult.Name
+                Case typeName
+                    Dim name = ""
+                    Dim movieId = ""
+                    Dim detail As XmlNode = Nothing
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+                            Case "name"
+                                name = detail.InnerText
+                            Case "id"
+                                movieId = detail.InnerText
+                        End Select
+                    Next
+                    peopleDb.Add(New DirectorDatabase(name, movieId))
+            End Select
+        Next
+    End Sub
+
     Sub LoadMovieSetCache(setDb As List(Of MovieSetDatabase),typeName As String,  fileName As String)
         setDb.Clear()
         If Not File.Exists(fileName) Then Exit Sub
@@ -1797,6 +1823,41 @@ Public Class Movies
         output.Close()
     End Sub
 
+    Sub SavePersonCache(peopleDb As List(Of DirectorDatabase), typeName As String, fileName As String)
+        Dim doc As New XmlDocument
+
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc  As XmlDeclaration
+
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+
+        Dim root  As XmlElement
+        Dim child As XmlElement
+
+        root = doc.CreateElement(typeName & "_cache")
+
+        Dim childchild As XmlElement
+
+        For Each actor In peopleDb
+            child = doc.CreateElement(typeName)
+            childchild = doc.CreateElement("name")
+            childchild.InnerText = actor.actorname
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("id")
+            childchild.InnerText = actor.movieid
+            child.AppendChild(childchild)
+            root.AppendChild(child)
+        Next
+
+        doc.AppendChild(root)
+
+        Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
+    End Sub
+
     Sub SaveMovieSetCache(setDb As List(Of MovieSetDatabase), typeName As String, fileName As String)
         Dim doc As New XmlDocument
 
@@ -1834,18 +1895,20 @@ Public Class Movies
     End Sub
 
     Public Sub RebuildCaches
-        If Preferences.UseMultipleThreads Then
-            movRebuildCaches = False
-        Else
-            movRebuildCaches = True
-        End If
+        'If Preferences.UseMultipleThreads Then
+        '    movRebuildCaches = False
+        'Else
+        '    movRebuildCaches = True
+        'End If
+        movRebuildCaches = Not Preferences.UseMultipleThreads 
         RebuildMovieCache
         If Cancelled Then Exit Sub
-        If Not movRebuildCaches Then
-            RebuildMoviePeopleCaches
-        Else
-            movRebuildCaches = False
-        End If
+        'If Not movRebuildCaches Then
+        '    RebuildMoviePeopleCaches
+        'Else
+        '    movRebuildCaches = False
+        'End If
+        movRebuildCaches = False
     End Sub
 
     Public Sub RebuildMovieCache
@@ -1894,7 +1957,7 @@ Public Class Movies
 
         Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
         For Each item In q2.Distinct()
-            _directorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+            _directorDb.Add(New DirectorDatabase(item.ActorName, item.MovieId))
         Next
 
         Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
@@ -2117,6 +2180,25 @@ Public Class Movies
     End Function
 
     Function ApplyPeopleFilter(PeopleDb As List(Of ActorDatabase), recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+
+        Dim fi As New FilteredItems(ccb)
+
+        If fi.Include.Count>0 Then 
+            Dim MovieIds = (From a In PeopleDb Where fi.Include.Contains(a.ActorName) Select a.MovieId).ToList
+                             
+            recs = recs.Where( Function(x)     MovieIds.Contains(x.id) )
+        End If
+
+        If fi.Exclude.Count>0 Then 
+            Dim MovieIds = (From a In PeopleDb Where fi.Exclude.Contains(a.ActorName) Select a.MovieId).ToList
+                             
+            recs = recs.Where( Function(x) Not MovieIds.Contains(x.id) )
+        End If
+
+        Return recs
+    End Function
+
+    Function ApplyPeopleFilter(PeopleDb As List(Of DirectorDatabase), recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 
         Dim fi As New FilteredItems(ccb)
 

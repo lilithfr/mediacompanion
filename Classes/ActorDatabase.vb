@@ -14,3 +14,19 @@ Public Class ActorDatabase
     End Sub
 
 End Class
+
+Public Class DirectorDatabase
+
+    Property ActorName As String = ""
+    Property MovieId   As String = ""
+
+    Sub New
+
+    End Sub
+
+    Sub New( _actorname As String, _movieid As String)
+        ActorName = _actorname
+        MovieId   = _movieid
+    End Sub
+
+End Class
