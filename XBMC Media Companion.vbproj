@@ -665,9 +665,9 @@
     <Content Include="Assets\LangList.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="media_companion.chm">
+    <Content Include="media_companion.chm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="packages.config" />
     <None Include="TvShow.cd" />
     <None Include="My Project\app.manifest" />

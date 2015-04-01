@@ -1346,136 +1346,139 @@ Public Class Classimdb
         End Try
     End Function
 
-    Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As String
-        Dim webpage As New List(Of String)
-        Dim actors(5000, 3)
-        Dim tempstring As String
-        Dim filterstring As String
-        Dim actorcount As Integer
-        Dim totalinfo As String = "<actorlist>"
+    'Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As String
+    '    Dim webpage As New List(Of String)
+    '    Dim actors(5000, 3)
+    '    Dim tempstring As String
+    '    Dim filterstring As String
+    '    Dim actorcount As Integer
+    '    Dim totalinfo As String = "<actorlist>"
 
-        Try
-            Monitor.Enter(Me)
+    '    Try
+    '        Monitor.Enter(Me)
 
-            tempstring = imdbmirror & "title/" & imdbid & "/fullcredits#cast"
-            webpage.Clear()
-            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+    '        tempstring = imdbmirror & "title/" & imdbid & "/fullcredits#cast"
+    '        webpage.Clear()
+    '        webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+    '        Dim wbpg As String = ""
+    '        For Each wp In webpage
+    '            wbpg +=wp & vbcrlf
+    '        Next
+
+    '        Dim scrapertempint As Integer
+    '        Dim scrapertempstring As String
 
 
-            Dim scrapertempint As Integer
-            Dim scrapertempstring As String
 
-
-
-            For Each line In webpage
-                If line.IndexOf("Cast</a>") <> -1 Then
-                    line = line.Substring(line.IndexOf("Cast</a>"), line.Length - line.IndexOf("Cast</a>"))
-                    If line.IndexOf("<tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>") <> -1 Then
-                        line = line.Replace("</td></tr> <tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>", "</td></tr><tr class")
-                    End If
-                    line = line.Substring(0, line.IndexOf("</table>"))
-                    scrapertempint = 0
-                    scrapertempstring = line
-                    Do Until scrapertempstring.IndexOf("<tr class=""") = -1
+    '        For Each line In webpage
+    '            If line.IndexOf("Cast</a>") <> -1 Then
+    '                line = line.Substring(line.IndexOf("Cast</a>"), line.Length - line.IndexOf("Cast</a>"))
+    '                If line.IndexOf("<tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>") <> -1 Then
+    '                    line = line.Replace("</td></tr> <tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>", "</td></tr><tr class")
+    '                End If
+    '                line = line.Substring(0, line.IndexOf("</table>"))
+    '                scrapertempint = 0
+    '                scrapertempstring = line
+    '                Do Until scrapertempstring.IndexOf("<tr class=""") = -1
                                 
-                        '22Feb12 - AnotherPhil - Bug fix actor scraping
-                        scrapertempstring = Right( scrapertempstring, scrapertempstring.Length - scrapertempstring.IndexOf("<tr class=""") )							
+    '                    '22Feb12 - AnotherPhil - Bug fix actor scraping
+    '                    scrapertempstring = Right( scrapertempstring, scrapertempstring.Length - scrapertempstring.IndexOf("<tr class=""") )							
                             
-                        scrapertempint = scrapertempint + 1
-                        actors(scrapertempint, 0) = scrapertempstring.Substring(0, scrapertempstring.IndexOf("</td></tr>") + 10)
-                        scrapertempstring = scrapertempstring.Replace(actors(scrapertempint, 0), "")
-                        filterstring = actors(scrapertempint, 0)
-                        If filterstring <> actors(scrapertempint, 0) Then actors(scrapertempint, 0) = filterstring
-                        If actors(scrapertempint, 0).IndexOf("other cast") <> -1 Then
-                            actors(scrapertempint, 0) = Nothing
-                            scrapertempint -= 1
-                        End If
-                    Loop
-                    If scrapertempstring <> "" Then
-                        scrapertempint = scrapertempint + 1
-                        actors(scrapertempint, 0) = scrapertempstring
-                    End If
-                    actorcount = scrapertempint
-                    If actorcount > maxactors Then
-                        actorcount = maxactors
-                    End If
-                    For g = 1 To actorcount
-                        Try
-                            actors(g, 3) = actors(g, 0).substring(actors(g, 0).indexof("<a href=""/name/nm") + 15, 9)
-                            If actors(g, 0).IndexOf("http://resume.imdb.com") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://resume.imdb.com", "")
-                            If actors(g, 0).IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
-                            If actors(g, 0).indexof("http://ia.media-imdb.com/images/") <> -1 Then
-                                Dim tempint6 As Integer
-                                Dim tempint7 As Integer
-                                tempint6 = actors(g, 0).indexof("http://ia.media-imdb.com/images/")
-                                tempint7 = actors(g, 0).indexof("._V1._")
-                                actors(g, 2) = actors(g, 0).substring(tempint6, tempint7 - tempint6 + 3)
-                                actors(g, 2) = actors(g, 2) & "._V1._SY400_SX300_.jpg"
-                            End If
+    '                    scrapertempint = scrapertempint + 1
+    '                    actors(scrapertempint, 0) = scrapertempstring.Substring(0, scrapertempstring.IndexOf("</td></tr>") + 10)
+    '                    scrapertempstring = scrapertempstring.Replace(actors(scrapertempint, 0), "")
+    '                    filterstring = actors(scrapertempint, 0)
+    '                    If filterstring <> actors(scrapertempint, 0) Then actors(scrapertempint, 0) = filterstring
+    '                    If actors(scrapertempint, 0).IndexOf("other cast") <> -1 Then
+    '                        actors(scrapertempint, 0) = Nothing
+    '                        scrapertempint -= 1
+    '                    End If
+    '                Loop
+    '                If scrapertempstring <> "" Then
+    '                    scrapertempint = scrapertempint + 1
+    '                    actors(scrapertempint, 0) = scrapertempstring
+    '                End If
+    '                actorcount = scrapertempint
+    '                If actorcount > maxactors Then
+    '                    actorcount = maxactors
+    '                End If
+    '                For g = 1 To actorcount
+    '                    Try
+    '                        actors(g, 3) = actors(g, 0).substring(actors(g, 0).indexof("<a href=""/name/nm") + 15, 9)
+    '                        If actors(g, 0).IndexOf("http://resume.imdb.com") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://resume.imdb.com", "")
+    '                        If actors(g, 0).IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
+    '                        If actors(g, 0).indexof("http://ia.media-imdb.com/images/") <> -1 Then
+    '                            Dim tempint6 As Integer
+    '                            Dim tempint7 As Integer
+    '                            tempint6 = actors(g, 0).indexof("http://ia.media-imdb.com/images/")
+    '                            tempint7 = actors(g, 0).indexof("._V1._")
+    '                            actors(g, 2) = actors(g, 0).substring(tempint6, tempint7 - tempint6 + 3)
+    '                            actors(g, 2) = actors(g, 2) & "._V1._SY400_SX300_.jpg"
+    '                        End If
 
-                            If actors(g, 0).IndexOf("</td></tr></table>") <> -1 Then
-                                scrapertempint = actors(g, 0).IndexOf("</td></tr></table>")
-                                scrapertempstring = actors(g, 0).Substring(scrapertempint, actors(g, 0).Length - scrapertempint)
-                                actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "</td></tr><tr class")
-                            End If
+    '                        If actors(g, 0).IndexOf("</td></tr></table>") <> -1 Then
+    '                            scrapertempint = actors(g, 0).IndexOf("</td></tr></table>")
+    '                            scrapertempstring = actors(g, 0).Substring(scrapertempint, actors(g, 0).Length - scrapertempint)
+    '                            actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "</td></tr><tr class")
+    '                        End If
 
-                            If actors(g, 0).IndexOf("a href=""/character") <> -1 Then
-                                actors(g, 1) = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character") + 19, actors(g, 0).lastIndexOf("</td></tr>") - actors(g, 0).IndexOf("a href=""/character") - 19)
-                                If actors(g, 1).IndexOf("</a>") <> -1 Then
-                                    actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).IndexOf("</a>") - 12)
-                                ElseIf actors(g, 1).IndexOf("</a>") = -1 Then
-                                    actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).Length - 12)
-                                End If
-                                scrapertempstring = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character"), actors(g, 0).Length - actors(g, 0).IndexOf("a href=""/character"))
-                                actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "")
-                                actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
-                                actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
-                            ElseIf actors(g, 0).IndexOf("a href=""/character") = -1 Then
-                                actors(g, 0) = actors(g, 0).substring(0, actors(g, 0).length - 10)
-                                actors(g, 1) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
-                                actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
-                                actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
-                            End If
-                        Catch
-                            Exit For
-                        End Try
-                    Next
-                End If
+    '                        If actors(g, 0).IndexOf("a href=""/character") <> -1 Then
+    '                            actors(g, 1) = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character") + 19, actors(g, 0).lastIndexOf("</td></tr>") - actors(g, 0).IndexOf("a href=""/character") - 19)
+    '                            If actors(g, 1).IndexOf("</a>") <> -1 Then
+    '                                actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).IndexOf("</a>") - 12)
+    '                            ElseIf actors(g, 1).IndexOf("</a>") = -1 Then
+    '                                actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).Length - 12)
+    '                            End If
+    '                            scrapertempstring = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character"), actors(g, 0).Length - actors(g, 0).IndexOf("a href=""/character"))
+    '                            actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "")
+    '                            actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
+    '                            actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
+    '                        ElseIf actors(g, 0).IndexOf("a href=""/character") = -1 Then
+    '                            actors(g, 0) = actors(g, 0).substring(0, actors(g, 0).length - 10)
+    '                            actors(g, 1) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
+    '                            actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
+    '                            actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
+    '                        End If
+    '                    Catch
+    '                        Exit For
+    '                    End Try
+    '                Next
+    '            End If
 
-            Next
-            For f = 1 To actorcount
-                If actors(f, 0) <> Nothing Then
-                    totalinfo = totalinfo & "<actor>" & vbCrLf
-                    actors(f, 0) = Utilities.cleanSpecChars           (actors(f, 0))
-                    actors(f, 0) = Utilities.cleanFilenameIllegalChars(actors(f, 0))
-                    actors(f, 0) = encodespecialchrs(actors(f, 0))
-                    totalinfo = totalinfo & "<name>" & actors(f, 0) & "</name>" & vbCrLf
-                    If actors(f, 1) <> Nothing Then
-                        actors(f, 1) = Utilities.cleanSpecChars(actors(f, 1))
-                        actors(f, 1) = encodespecialchrs(actors(f, 1))
-                        totalinfo = totalinfo & "<role>" & actors(f, 1) & "</role>" & vbCrLf
-                    End If
-                    If actors(f, 2) <> Nothing Then
-                        actors(f, 2) = encodespecialchrs(actors(f, 2))
-                        totalinfo = totalinfo & "<thumb>" & actors(f, 2) & "</thumb>" & vbCrLf
-                    End If
-                    If actors(f, 3) <> Nothing Then
-                        totalinfo = totalinfo & "<actorid>" & actors(f, 3) & "</actorid>" & vbCrLf
-                    End If
-                    totalinfo = totalinfo & "</actor>" & vbCrLf
-                End If
-            Next
-            totalinfo = totalinfo & "</actorlist>"
-            Return totalinfo
-        Catch ex As Exception
+    '        Next
+    '        For f = 1 To actorcount
+    '            If actors(f, 0) <> Nothing Then
+    '                totalinfo = totalinfo & "<actor>" & vbCrLf
+    '                actors(f, 0) = Utilities.cleanSpecChars           (actors(f, 0))
+    '                actors(f, 0) = Utilities.cleanFilenameIllegalChars(actors(f, 0))
+    '                actors(f, 0) = encodespecialchrs(actors(f, 0))
+    '                totalinfo = totalinfo & "<name>" & actors(f, 0) & "</name>" & vbCrLf
+    '                If actors(f, 1) <> Nothing Then
+    '                    actors(f, 1) = Utilities.cleanSpecChars(actors(f, 1))
+    '                    actors(f, 1) = encodespecialchrs(actors(f, 1))
+    '                    totalinfo = totalinfo & "<role>" & actors(f, 1) & "</role>" & vbCrLf
+    '                End If
+    '                If actors(f, 2) <> Nothing Then
+    '                    actors(f, 2) = encodespecialchrs(actors(f, 2))
+    '                    totalinfo = totalinfo & "<thumb>" & actors(f, 2) & "</thumb>" & vbCrLf
+    '                End If
+    '                If actors(f, 3) <> Nothing Then
+    '                    totalinfo = totalinfo & "<actorid>" & actors(f, 3) & "</actorid>" & vbCrLf
+    '                End If
+    '                totalinfo = totalinfo & "</actor>" & vbCrLf
+    '            End If
+    '        Next
+    '        totalinfo = totalinfo & "</actorlist>"
+    '        Return totalinfo
+    '    Catch ex As Exception
 
-        Finally
-            Monitor.Exit(Me)
-        End Try
+    '    Finally
+    '        Monitor.Exit(Me)
+    '    End Try
 
 
-        Return "Error"
-    End Function
+    '    Return "Error"
+    'End Function
 
     Public Function GetImdbActorsList(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors)
 

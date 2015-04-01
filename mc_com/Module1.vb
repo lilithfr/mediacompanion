@@ -161,8 +161,8 @@ Module Module1
         Preferences.applicationPath = AppDomain.CurrentDomain.BaseDirectory
         If Not visible Then 
             ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
-            LogStart
         End If
+        LogStart
         
         For Each arg In listofargs
             If arg.switch   = "-m"  Then domovies = True
@@ -367,12 +367,11 @@ Module Module1
     Public Sub ConsoleOrLog(ByVal str As String)
         If visible Then
             Console.WriteLine(str)
-        Else
-            Using sw As New StreamWriter(logfile, true)
-                sw.WriteLine(str.TrimEnd)
-                sw.Close()
-            End Using
         End If
+        Using sw As New StreamWriter(logfile, true)
+            sw.WriteLine(str.TrimEnd)
+            sw.Close()
+        End Using
     End Sub
 
     Public Sub exitsound
@@ -681,6 +680,8 @@ Module Module1
                                                 singleepisode.rating = thisresult.InnerText
                                             Case "uniqueid"
                                                 singleepisode.uniqueid = thisresult.InnerText 
+                                            Case "imdbid"
+                                                singleepisode.imdbid = thisresult.InnerText 
                                             Case "thumb"
                                                 singleepisode.thumb = thisresult.InnerText
                                             Case "actor"
@@ -702,193 +703,219 @@ Module Module1
 
                                 If actorsource = "imdb" Then
                                     ConsoleOrLog("Scraping actors from IMDB")
-                                    Dim url As String
-                                    url = "http://www.imdb.com/title/" & imdbid & "/episodes"
-                                    Dim tvfblinecount As Integer = 0
-                                    Dim tvdbwebsource(10000)
-                                    tvfblinecount = 0
-                                    Try
-                                        Dim wrGETURL As WebRequest
-                                        wrGETURL = WebRequest.Create(url)
-                                        Dim myProxy As New WebProxy("myproxy", 80)
-                                        myProxy.BypassProxyOnLocal = True
-                                        Dim objStream As Stream
-                                        objStream = wrGETURL.GetResponse.GetResponseStream()
-                                        Dim objReader As New StreamReader(objStream)
-                                        Dim tvdbsLine As String = ""
-                                        tvfblinecount = 0
-
-                                        Do While Not tvdbsLine Is Nothing
-                                            tvfblinecount += 1
-                                            tvdbsLine = objReader.ReadLine
-                                            If Not tvdbsLine Is Nothing Then
-                                                tvdbwebsource(tvfblinecount) = tvdbsLine
-                                            End If
-                                        Loop
-                                        objReader.Close()
-                                        tvfblinecount -= 1
-                                    Catch ex As WebException
-                                        tvdbwebsource(0) = "404"
-                                    End Try
-
-                                    If tvfblinecount <> 0 Then
-                                        Dim tvtempstring As String
-                                        tvtempstring = "Season " & singleepisode.seasonno & ", Episode " & singleepisode.episodeno & ":"
-                                        For g = 1 To tvfblinecount
-                                            If tvdbwebsource(g).indexof(tvtempstring) <> -1 Then
-                                                Dim tvtempint As Integer
-                                                tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
-                                                If tvtempint <> -1 Then
-                                                    tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
-                                                    Dim scraperfunction As New Classimdb
-                                                    Dim actorlist As String = ""
-                                                    actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring)
-                                                    Dim tempactorlist As New List(Of str_MovieActors)
-                                                    Dim thumbstring As New XmlDocument
-                                                    Dim thisresult As XmlNode = Nothing
-                                                    Try
-                                                        thumbstring.LoadXml(actorlist)
-                                                        thisresult = Nothing
-                                                        Dim countactors As Integer = 0
-                                                        For Each thisresult In thumbstring("actorlist")
-                                                            Select Case thisresult.Name
-                                                                Case "actor"
-                                                                    If countactors >= Preferences.maxactors Then
-                                                                        Exit For
-                                                                    End If
-                                                                    countactors += 1
-                                                                    Dim newactor As New str_MovieActors
-                                                                    Dim detail As XmlNode = Nothing
-                                                                    For Each detail In thisresult.ChildNodes
-                                                                        Select Case detail.Name
-                                                                            Case "name"
-                                                                                newactor.actorname = detail.InnerText
-                                                                            Case "role"
-                                                                                newactor.actorrole = detail.InnerText
-                                                                            Case "thumb"
-                                                                                newactor.actorthumb = detail.InnerText
-                                                                            Case "actorid"
-                                                                                If newactor.actorthumb <> Nothing Then
-                                                                                    If Preferences.actorseasy = True And detail.InnerText <> "" Then
-                                                                                        Dim workingpath As String = episodearray(0).episodepath.Replace(IO.Path.GetFileName(episodearray(0).episodepath), "")
-                                                                                        workingpath = workingpath & ".actors\"
-                                                                                        Dim hg As New IO.DirectoryInfo(workingpath)
-                                                                                        Dim destsorted As Boolean = False
-                                                                                        If Not hg.Exists Then
-                                                                                            Try
-                                                                                                IO.Directory.CreateDirectory(workingpath)
-                                                                                                destsorted = True
-                                                                                            Catch ex As Exception
-
-                                                                                            End Try
-                                                                                        Else
-                                                                                            destsorted = True
-                                                                                        End If
-                                                                                        If destsorted = True Then
-                                                                                            Dim filename As String = newactor.actorname.Replace(" ", "_")
-                                                                                            filename = filename & ".tbn"
-                                                                                            Dim tvshowactorpath As String = realshowpath
-                                                                                            tvshowactorpath = tvshowactorpath.Replace(IO.Path.GetFileName(tvshowactorpath), "")
-                                                                                            tvshowactorpath = IO.Path.Combine(tvshowactorpath, ".actors\")
-                                                                                            tvshowactorpath = IO.Path.Combine(tvshowactorpath, filename)
-                                                                                            filename = IO.Path.Combine(workingpath, filename)
-                                                                                            If IO.File.Exists(tvshowactorpath) Then
-                                                                                                Try
-                                                                                                    IO.File.Copy(tvshowactorpath, filename, True)
-                                                                                                Catch
-                                                                                                End Try
-                                                                                            End If
-                                                                                            If Not IO.File.Exists(filename) Then
-                                                                                                Dim buffer(4000000) As Byte
-                                                                                                Dim size As Integer = 0
-                                                                                                Dim bytesRead As Integer = 0
-                                                                                                Dim thumburl As String = newactor.actorthumb
-                                                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                                                Dim res As HttpWebResponse = req.GetResponse()
-                                                                                                Dim contents As Stream = res.GetResponseStream()
-                                                                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                                                While bytesToRead > 0
-                                                                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                                                    If size = 0 Then Exit While
-                                                                                                    bytesToRead -= size
-                                                                                                    bytesRead += size
-                                                                                                End While
-
-                                                                                                Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                                                fstrm.Write(buffer, 0, bytesRead)
-                                                                                                contents.Close()
-                                                                                                fstrm.Close()
-                                                                                            End If
-                                                                                        End If
-                                                                                    End If
-                                                                                    If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
-                                                                                        Dim workingpath As String = ""
-                                                                                        Dim networkpath As String = Preferences.actorsavepath
-                                                                                        Try
-                                                                                            tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                                                                                            Dim hg As New IO.DirectoryInfo(tempstring)
-                                                                                            If Not hg.Exists Then
-                                                                                                IO.Directory.CreateDirectory(tempstring)
-                                                                                            End If
-                                                                                            workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                                            If Not IO.File.Exists(workingpath) Then
-                                                                                                Dim buffer(4000000) As Byte
-                                                                                                Dim size As Integer = 0
-                                                                                                Dim bytesRead As Integer = 0
-                                                                                                Dim thumburl As String = newactor.actorthumb
-                                                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                                                Dim res As HttpWebResponse = req.GetResponse()
-                                                                                                Dim contents As Stream = res.GetResponseStream()
-                                                                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                                                While bytesToRead > 0
-                                                                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                                                    If size = 0 Then Exit While
-                                                                                                    bytesToRead -= size
-                                                                                                    bytesRead += size
-                                                                                                End While
-                                                                                                Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                                                fstrm.Write(buffer, 0, bytesRead)
-                                                                                                contents.Close()
-                                                                                                fstrm.Close()
-                                                                                            End If
-                                                                                            newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                                                                                            If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                                                newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-                                                                                            Else
-                                                                                                newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                                            End If
-                                                                                        Catch
-                                                                                        End Try
-                                                                                    End If
-                                                                                End If
-                                                                        End Select
-                                                                    Next
-                                                                    tempactorlist.Add(newactor)
-                                                            End Select
-                                                        Next
-                                                    Catch ex As Exception
-                                                        ConsoleOrLog("Error scraping episode actors from IMDB, " & ex.Message.ToString)
-                                                    End Try
-
-                                                    If tempactorlist.Count > 0 Then
-                                                        ConsoleOrLog("Actors scraped from IMDB OK")
-                                                        While tempactorlist.Count > Preferences.maxactors
-                                                            tempactorlist.RemoveAt(tempactorlist.Count - 1)
-                                                        End While
-                                                        singleepisode.listactors.Clear()
-                                                        For Each actor In tempactorlist
-                                                            singleepisode.listactors.Add(actor)
-                                                        Next
-                                                        tempactorlist.Clear()
-                                                    Else
-                                                        ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
-                                                    End If
-
-                                                    Exit For
-                                                End If
-                                            End If
-                                        Next
+                                    Dim epid As String = ""
+                                    If singleepisode.imdbid <> "" Then
+                                        epid = singleepisode.imdbid
+                                    Else
+                                        'url = "http://www.imdb.com/title/" & imdbid & "/episodes?season=" & singleepisode.Season.Value
+                                        epid = GetEpImdbId(imdbid, singleepisode.seasonno, singleepisode.episodeno)
                                     End If
+                                    If epid.contains("tt") Then
+                                        Dim scraperfunction As New Classimdb
+                                        Dim tempactorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Preferences.imdbmirror, epid, Preferences.maxactors)
+                                        If tempactorlist.Count > 0 Then
+                                            ConsoleOrLog("Actors scraped from IMDB OK")
+                                            While tempactorlist.Count > Preferences.maxactors
+                                                tempactorlist.RemoveAt(tempactorlist.Count - 1)
+                                            End While
+                                            singleepisode.listactors.Clear()
+                                            For Each actor In tempactorlist
+                                                singleepisode.listactors.Add(actor)
+                                            Next
+                                            tempactorlist.Clear()
+                                        Else
+                                            ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
+                                        End If
+                                    Else
+                                        ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
+                                    End If
+                                    'Dim url As String
+                                    'url = "http://www.imdb.com/title/" & imdbid & "/episodes"
+                                    'Dim tvfblinecount As Integer = 0
+                                    'Dim tvdbwebsource(10000)
+                                    'tvfblinecount = 0
+                                    'Try
+                                    '    Dim wrGETURL As WebRequest
+                                    '    wrGETURL = WebRequest.Create(url)
+                                    '    Dim myProxy As New WebProxy("myproxy", 80)
+                                    '    myProxy.BypassProxyOnLocal = True
+                                    '    Dim objStream As Stream
+                                    '    objStream = wrGETURL.GetResponse.GetResponseStream()
+                                    '    Dim objReader As New StreamReader(objStream)
+                                    '    Dim tvdbsLine As String = ""
+                                    '    tvfblinecount = 0
+
+                                    '    Do While Not tvdbsLine Is Nothing
+                                    '        tvfblinecount += 1
+                                    '        tvdbsLine = objReader.ReadLine
+                                    '        If Not tvdbsLine Is Nothing Then
+                                    '            tvdbwebsource(tvfblinecount) = tvdbsLine
+                                    '        End If
+                                    '    Loop
+                                    '    objReader.Close()
+                                    '    tvfblinecount -= 1
+                                    'Catch ex As WebException
+                                    '    tvdbwebsource(0) = "404"
+                                    'End Try
+
+                                    'If tvfblinecount <> 0 Then
+                                    '    Dim tvtempstring As String
+                                    '    tvtempstring = "Season " & singleepisode.seasonno & ", Episode " & singleepisode.episodeno & ":"
+                                    '    For g = 1 To tvfblinecount
+                                    '        If tvdbwebsource(g).indexof(tvtempstring) <> -1 Then
+                                    '            Dim tvtempint As Integer
+                                    '            tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
+                                    '            If tvtempint <> -1 Then
+                                    '                tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
+                                    '                Dim scraperfunction As New Classimdb
+                                    '                Dim actorlist As String = ""
+                                    '                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring)
+                                    '                Dim tempactorlist As New List(Of str_MovieActors)
+                                    '                Dim thumbstring As New XmlDocument
+                                    '                Dim thisresult As XmlNode = Nothing
+                                    '                Try
+                                    '                    thumbstring.LoadXml(actorlist)
+                                    '                    thisresult = Nothing
+                                    '                    Dim countactors As Integer = 0
+                                    '                    For Each thisresult In thumbstring("actorlist")
+                                    '                        Select Case thisresult.Name
+                                    '                            Case "actor"
+                                    '                                If countactors >= Preferences.maxactors Then
+                                    '                                    Exit For
+                                    '                                End If
+                                    '                                countactors += 1
+                                    '                                Dim newactor As New str_MovieActors
+                                    '                                Dim detail As XmlNode = Nothing
+                                    '                                For Each detail In thisresult.ChildNodes
+                                    '                                    Select Case detail.Name
+                                    '                                        Case "name"
+                                    '                                            newactor.actorname = detail.InnerText
+                                    '                                        Case "role"
+                                    '                                            newactor.actorrole = detail.InnerText
+                                    '                                        Case "thumb"
+                                    '                                            newactor.actorthumb = detail.InnerText
+                                    '                                        Case "actorid"
+                                    '                                            If newactor.actorthumb <> Nothing Then
+                                    '                                                If Preferences.actorseasy = True And detail.InnerText <> "" Then
+                                    '                                                    Dim workingpath As String = episodearray(0).episodepath.Replace(IO.Path.GetFileName(episodearray(0).episodepath), "")
+                                    '                                                    workingpath = workingpath & ".actors\"
+                                    '                                                    Dim hg As New IO.DirectoryInfo(workingpath)
+                                    '                                                    Dim destsorted As Boolean = False
+                                    '                                                    If Not hg.Exists Then
+                                    '                                                        Try
+                                    '                                                            IO.Directory.CreateDirectory(workingpath)
+                                    '                                                            destsorted = True
+                                    '                                                        Catch ex As Exception
+
+                                    '                                                        End Try
+                                    '                                                    Else
+                                    '                                                        destsorted = True
+                                    '                                                    End If
+                                    '                                                    If destsorted = True Then
+                                    '                                                        Dim filename As String = newactor.actorname.Replace(" ", "_")
+                                    '                                                        filename = filename & ".tbn"
+                                    '                                                        Dim tvshowactorpath As String = realshowpath
+                                    '                                                        tvshowactorpath = tvshowactorpath.Replace(IO.Path.GetFileName(tvshowactorpath), "")
+                                    '                                                        tvshowactorpath = IO.Path.Combine(tvshowactorpath, ".actors\")
+                                    '                                                        tvshowactorpath = IO.Path.Combine(tvshowactorpath, filename)
+                                    '                                                        filename = IO.Path.Combine(workingpath, filename)
+                                    '                                                        If IO.File.Exists(tvshowactorpath) Then
+                                    '                                                            Try
+                                    '                                                                IO.File.Copy(tvshowactorpath, filename, True)
+                                    '                                                            Catch
+                                    '                                                            End Try
+                                    '                                                        End If
+                                    '                                                        If Not IO.File.Exists(filename) Then
+                                    '                                                            Dim buffer(4000000) As Byte
+                                    '                                                            Dim size As Integer = 0
+                                    '                                                            Dim bytesRead As Integer = 0
+                                    '                                                            Dim thumburl As String = newactor.actorthumb
+                                    '                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                    '                                                            Dim res As HttpWebResponse = req.GetResponse()
+                                    '                                                            Dim contents As Stream = res.GetResponseStream()
+                                    '                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
+                                    '                                                            While bytesToRead > 0
+                                    '                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
+                                    '                                                                If size = 0 Then Exit While
+                                    '                                                                bytesToRead -= size
+                                    '                                                                bytesRead += size
+                                    '                                                            End While
+
+                                    '                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
+                                    '                                                            fstrm.Write(buffer, 0, bytesRead)
+                                    '                                                            contents.Close()
+                                    '                                                            fstrm.Close()
+                                    '                                                        End If
+                                    '                                                    End If
+                                    '                                                End If
+                                    '                                                If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
+                                    '                                                    Dim workingpath As String = ""
+                                    '                                                    Dim networkpath As String = Preferences.actorsavepath
+                                    '                                                    Try
+                                    '                                                        tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+                                    '                                                        Dim hg As New IO.DirectoryInfo(tempstring)
+                                    '                                                        If Not hg.Exists Then
+                                    '                                                            IO.Directory.CreateDirectory(tempstring)
+                                    '                                                        End If
+                                    '                                                        workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                    '                                                        If Not IO.File.Exists(workingpath) Then
+                                    '                                                            Dim buffer(4000000) As Byte
+                                    '                                                            Dim size As Integer = 0
+                                    '                                                            Dim bytesRead As Integer = 0
+                                    '                                                            Dim thumburl As String = newactor.actorthumb
+                                    '                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                    '                                                            Dim res As HttpWebResponse = req.GetResponse()
+                                    '                                                            Dim contents As Stream = res.GetResponseStream()
+                                    '                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
+                                    '                                                            While bytesToRead > 0
+                                    '                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
+                                    '                                                                If size = 0 Then Exit While
+                                    '                                                                bytesToRead -= size
+                                    '                                                                bytesRead += size
+                                    '                                                            End While
+                                    '                                                            Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                    '                                                            fstrm.Write(buffer, 0, bytesRead)
+                                    '                                                            contents.Close()
+                                    '                                                            fstrm.Close()
+                                    '                                                        End If
+                                    '                                                        newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                                    '                                                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                    '                                                            newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                    '                                                        Else
+                                    '                                                            newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                    '                                                        End If
+                                    '                                                    Catch
+                                    '                                                    End Try
+                                    '                                                End If
+                                    '                                            End If
+                                    '                                    End Select
+                                    '                                Next
+                                    '                                tempactorlist.Add(newactor)
+                                    '                        End Select
+                                    '                    Next
+                                    '                Catch ex As Exception
+                                    '                    ConsoleOrLog("Error scraping episode actors from IMDB, " & ex.Message.ToString)
+                                    '                End Try
+
+                                    '                If tempactorlist.Count > 0 Then
+                                    '                    ConsoleOrLog("Actors scraped from IMDB OK")
+                                    '                    While tempactorlist.Count > Preferences.maxactors
+                                    '                        tempactorlist.RemoveAt(tempactorlist.Count - 1)
+                                    '                    End While
+                                    '                    singleepisode.listactors.Clear()
+                                    '                    For Each actor In tempactorlist
+                                    '                        singleepisode.listactors.Add(actor)
+                                    '                    Next
+                                    '                    tempactorlist.Clear()
+                                    '                Else
+                                    '                    ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
+                                    '                End If
+
+                                    '                Exit For
+                                    '            End If
+                                    '        End If
+                                    '    Next
+                                    'End If
                                 End If
                             End If
 
@@ -1820,6 +1847,28 @@ Module Module1
         Return thisarray
     End Function
 
+    Private Function GetEpImdbId(ByVal ImdbId As String, ByVal SeasonNo As String, ByVal EpisodeNo As String) As String
+        Dim url = "http://www.imdb.com/title/" & ImdbId & "/episodes?season=" & SeasonNo
+        Dim webpage As New List(Of String)
+        Dim s As New Classimdb
+        webpage.Clear()
+        webpage = s.loadwebpage(Preferences.proxysettings, url,False,10)
+        Dim webPg As String = String.Join( "" , webpage.ToArray() )
+        Dim matchstring As String = "<strong><a href=""/title/tt"
+        For f = 0 to webpage.Count -1
+            Dim m As Match = Regex.Match(webpage(f), matchstring)
+            If m.Success AndAlso webpage(f).Contains("ttep_ep"&EpisodeNo) Then
+                Dim tmp As String = webpage(f)
+                Dim n As Match = Regex.Match(tmp, "(tt\d{7})")
+                If n.Success = True Then
+                    url = n.Value
+                    Exit For
+                End If
+            End If
+        Next
+        Return url
+    End Function
+
     Dim MediaFileExtensions As List(Of String) = New List(Of String)
 
     Private Sub InitMediaFileExtensions()
@@ -1940,6 +1989,7 @@ Public Class episodeinfo
     Public seasonno As String
     Public episodeno As String
     Public uniqueid As String
+    Public imdbid As String
     Public plot As String
     Public runtime As String
     Public fanartpath As String
@@ -2471,6 +2521,8 @@ Public Class tvdbscraper
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
                                 Case "id"
                                     episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
+                                Case "IMDB_ID"
+                                    episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
                                 Case "seriesid"
                                     episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
                                 Case "filename"
