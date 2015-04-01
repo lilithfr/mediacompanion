@@ -7446,6 +7446,8 @@ Public Class Form1
                                     episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
                                 Case "Rating"
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "IMDB_ID"
+                                    episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
                                 Case "id"
                                     episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
                                 Case "seriesid"

@@ -1914,6 +1914,8 @@ Partial Public Class Form1
                                                 singleepisode.UniqueId.Value = thisresult.InnerText
                                             Case "showid"
                                                 singleepisode.ShowId.Value = thisresult.InnerText
+                                            Case "imdbid"
+                                                singleepisode.ImdbId.Value = thisresult.InnerText 
                                             Case "thumb"
                                                 singleepisode.Thumbnail.FileName = thisresult.InnerText
                                             Case "actor"
@@ -1946,25 +1948,32 @@ Partial Public Class Form1
                                     progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
-                                    If actorsource = "imdb" And imdbid <> "" And singleepisode.ListActors.Count <> 0 Then
+                                    If actorsource = "imdb" And (imdbid <> "" OrElse singleepisode.ImdbId.Value <> "") Then 'And singleepisode.ListActors.Count <> 0 Then
                                         Preferences.tvScraperLog &= "Scraping actors from IMDB" & vbCrLf
                                         progresstext &= " : Actors..."
                                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                        Dim url As String
-                                        url = "http://www.imdb.com/title/" & imdbid & "/episodes"
-                                        Dim tvdbsLine As String = ""
-                                        tvdbsLine = Utilities.DownloadTextFiles(url)
-                                        If tvdbsLine <> "" Then
-                                            Dim tvtempstring As String
-                                            tvtempstring = "Season " & singleepisode.Season.Value & ", Episode " & singleepisode.Episode.Value & ":"
-                                            If tvdbsLine.IndexOf(tvtempstring) <> -1 Then
-                                                Dim tvtempint As Integer
-                                                tvtempint = tvdbsLine.IndexOf("<a href=""/title/")
-                                                If tvtempint <> -1 Then
-                                                    tvtempstring = tvdbsLine.Substring(tvtempint + 16, 9)
+                                        Dim epid As String = ""
+                                        If singleepisode.ImdbId.Value <> "" Then
+                                            epid = singleepisode.ImdbId.Value 
+                                        Else
+                                            'url = "http://www.imdb.com/title/" & imdbid & "/episodes?season=" & singleepisode.Season.Value
+                                            epid = GetEpImdbId(imdbid, singleepisode.Season.Value, singleepisode.Episode.Value)
+                                        End If
+                                        
+                                        'Dim tvdbsLine As String = ""
+                                        'tvdbsLine = Utilities.DownloadTextFiles(url)
+                                        If epid.contains("tt") Then
+                                            'Dim tvtempstring As String
+                                            ''tvtempstring = "Season " & singleepisode.Season.Value & ", Episode " & singleepisode.Episode.Value & ":"
+                                            'tvtempstring = "S" & singleepisode.Season.Value & ", Ep" & singleepisode.Episode.Value
+                                            'If tvdbsLine.IndexOf(tvtempstring) <> -1 Then
+                                            '    Dim tvtempint As Integer
+                                            '    tvtempint = tvdbsLine.IndexOf("<a href=""/title/")
+                                            '    If tvtempint <> -1 Then
+                                            '        tvtempstring = tvdbsLine.Substring(tvtempint + 16, 9)
                                                     Dim scraperfunction As New Classimdb
                                                     Dim actorlist As String = ""
-                                                    actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, Preferences.maxactors)
+                                                    actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, epid, Preferences.maxactors)
                                                     Dim tempactorlist As New List(Of str_MovieActors)
                                                     Dim thumbstring As New XmlDocument
                                                     thumbstring.LoadXml(actorlist)
@@ -2067,8 +2076,8 @@ Partial Public Class Form1
                                                     Else
                                                         Preferences.tvScraperLog &= "!!! WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
                                                     End If
-                                                End If
-                                            End If
+                                                'End If
+                                            'End If
                                             If bckgroundscanepisodes.CancellationPending Then
                                                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                                                 Exit Sub
@@ -4502,6 +4511,33 @@ Partial Public Class Form1
     End Sub
 
 #End Region
+
+    Private Function GetEpImdbId(ByVal ImdbId As String, ByVal SeasonNo As String, ByVal EpisodeNo As String) As String
+        Dim url = "http://www.imdb.com/title/" & ImdbId & "/episodes?season=" & SeasonNo
+        Dim webpage As New List(Of String)
+        Dim s As New Classimdb
+        webpage.Clear()
+        webpage = s.loadwebpage(Preferences.proxysettings, url,False,10)
+        Dim webPg As String = String.Join( "" , webpage.ToArray() )
+        Dim matchstring As String = "<strong><a href=""/title/tt"  '[0-9]*/?ref_=ttep_ep" &EpisodeNo 
+        'Dim tvdbsLine As String = ""
+        'tvdbsLine = Utilities.DownloadTextFiles(url)
+        For f = 0 to webpage.Count -1
+            Dim m As Match = Regex.Match(webpage(f), matchstring)
+            If m.Success AndAlso webpage(f).Contains("ttep_ep"&EpisodeNo) Then
+                Dim tmp As String = webpage(f)
+                Dim n As Match = Regex.Match(tmp, "(tt\d{7})")
+                If n.Success = True Then
+                    url = n.Value
+                    Exit For
+                End If
+                'tmp = tmp.replace("<strong><a href=""/", "").Trim
+                'url = "http://www.imdb.com/" & tmp
+                'Exit For
+            End If
+        Next
+        Return url
+    End Function
 
     Private Function GetEpMediaFlags() As List(Of KeyValuePair(Of String, String))
         Dim thisep As TvEpisode = ep_SelectedCurrently()
