@@ -1093,54 +1093,55 @@ Module General
         Dim Counter As Integer = 0
 
         For Each m_node In m_nodelist
-            TempXMLEpisode.Aired.Value = String.Empty
-            TempXMLEpisode.Credits.Value = String.Empty
-            TempXMLEpisode.Director.Value = String.Empty
-            TempXMLEpisode.Episode.Value = String.Empty
-            TempXMLEpisode.Genre.Value = String.Empty
-            TempXMLEpisode.Plot.Value = String.Empty
-            TempXMLEpisode.Rating.Value = String.Empty
-            TempXMLEpisode.Season.Value = String.Empty
-            TempXMLEpisode.Thumbnail.FileName = String.Empty
-            TempXMLEpisode.Title.Value = String.Empty
-            TempXMLEpisode.ShowId.Value = String.Empty 
-            TempXMLEpisode.UniqueId.Value = String.Empty 
-            TempXMLEpisode.ListActors.Clear()
-            TempXMLEpisode.Details.StreamDetails.Audio.Clear()
+            Dim TempXMLEpisode1 As New TvEpisode
+            TempXMLEpisode1.Aired.Value = String.Empty
+            TempXMLEpisode1.Credits.Value = String.Empty
+            TempXMLEpisode1.Director.Value = String.Empty
+            TempXMLEpisode1.Episode.Value = String.Empty
+            TempXMLEpisode1.Genre.Value = String.Empty
+            TempXMLEpisode1.Plot.Value = String.Empty
+            TempXMLEpisode1.Rating.Value = String.Empty
+            TempXMLEpisode1.Season.Value = String.Empty
+            TempXMLEpisode1.Thumbnail.FileName = String.Empty
+            TempXMLEpisode1.Title.Value = String.Empty
+            TempXMLEpisode1.ShowId.Value = String.Empty 
+            TempXMLEpisode1.UniqueId.Value = String.Empty 
+            TempXMLEpisode1.ListActors.Clear()
+            TempXMLEpisode1.Details.StreamDetails.Audio.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
-                        TempXMLEpisode.Aired.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Aired.Value = NodeChild.InnerText
                     Case "credits"
-                        If TempXMLEpisode.Credits.Value Is String.Empty Then
-                            TempXMLEpisode.Credits.Value = NodeChild.InnerText
+                        If TempXMLEpisode1.Credits.Value Is String.Empty Then
+                            TempXMLEpisode1.Credits.Value = NodeChild.InnerText
                         Else
-                            TempXMLEpisode.Credits.Value &= " / " & NodeChild.InnerText
+                            TempXMLEpisode1.Credits.Value &= " / " & NodeChild.InnerText
                         End If
                     Case "director"
-                        TempXMLEpisode.Director.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Director.Value = NodeChild.InnerText
                     Case "genre"
-                        If TempXMLEpisode.Genre.Value Is String.Empty Then
-                            TempXMLEpisode.Genre.Value = NodeChild.InnerText
+                        If TempXMLEpisode1.Genre.Value Is String.Empty Then
+                            TempXMLEpisode1.Genre.Value = NodeChild.InnerText
                         Else
-                            TempXMLEpisode.Genre.Value &= " / " & NodeChild.InnerText
+                            TempXMLEpisode1.Genre.Value &= " / " & NodeChild.InnerText
                         End If
                     Case "plot"
-                        TempXMLEpisode.Plot.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Plot.Value = NodeChild.InnerText
                     Case "rating"
-                        TempXMLEpisode.Rating.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Rating.Value = NodeChild.InnerText
                     Case "thumb"
-                        TempXMLEpisode.Thumbnail.FileName = NodeChild.InnerText
+                        TempXMLEpisode1.Thumbnail.FileName = NodeChild.InnerText
                     Case "title"
-                        TempXMLEpisode.Title.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Title.Value = NodeChild.InnerText
                     Case "season"
-                        TempXMLEpisode.Season.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Season.Value = NodeChild.InnerText
                     Case "episode"
-                        TempXMLEpisode.Episode.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Episode.Value = NodeChild.InnerText
                     Case "uniqueid"
-                        TempXMLEpisode.UniqueId.Value = NodeChild.InnerText 
+                        TempXMLEpisode1.UniqueId.Value = NodeChild.InnerText 
                     Case "seriesid"
-                        TempXMLEpisode.ShowId.Value = NodeChild.InnerText
+                        TempXMLEpisode1.ShowId.Value = NodeChild.InnerText
                     Case "actor"
                         Dim newActor As New Media_Companion.Actor
                         For Each Nodechild1 In NodeChild.ChildNodes
@@ -1155,7 +1156,7 @@ Module General
                             End Select
                         Next
                         If newActor.Name.Value <> Nothing And newActor.Name.Value.Length > 1 Then
-                            TempXMLEpisode.ListActors.Add(newActor)
+                            TempXMLEpisode1.ListActors.Add(newActor)
                         End If
                     Case "fileinfo"
                         Dim detail2 As XmlNode = Nothing
@@ -1170,33 +1171,33 @@ Module General
                                                 For Each videodetails In detail.ChildNodes
                                                     Select Case videodetails.Name
                                                         Case "width"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
                                                         Case "height"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
                                                         Case "aspect"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
                                                         Case "codec"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
                                                         Case "formatinfo"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
                                                         Case "durationinseconds"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
                                                         Case "bitrate"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
                                                         Case "bitratemode"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
                                                         Case "bitratemax"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
                                                         Case "container"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
                                                         Case "codecid"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
                                                         Case "codecidinfo"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
                                                         Case "scantype"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
                                                         Case "format"
-                                                            TempXMLEpisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText 
+                                                            TempXMLEpisode1.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText 
                                                     End Select
                                                 Next
                                             Case "audio"
@@ -1216,7 +1217,7 @@ Module General
                                                             audio.Bitrate.Value = audiodetails.InnerText
                                                     End Select
                                                 Next
-                                                TempXMLEpisode.Details.StreamDetails.Audio.Add(audio)
+                                                TempXMLEpisode1.Details.StreamDetails.Audio.Add(audio)
                                             Case "subtitle"
                                                 Dim subsdetails As XmlNode = Nothing
                                                 For Each subsdetails In detail.ChildNodes
@@ -1224,7 +1225,7 @@ Module General
                                                         Case "language"
                                                             Dim sublang As New SubtitleDetails
                                                             sublang.Language.Value = subsdetails.InnerText
-                                                            TempXMLEpisode.Details.StreamDetails.Subtitles.Add(sublang)
+                                                            TempXMLEpisode1.Details.StreamDetails.Subtitles.Add(sublang)
                                                     End Select
                                                 Next
                                         End Select
@@ -1234,15 +1235,15 @@ Module General
                         Next
                 End Select
             Next
-            If Not TempXMLEpisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
-                Dim tempstring = TempXMLEpisode.Details.StreamDetails.Video.DurationInSeconds.Value
+            If Not TempXMLEpisode1.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                Dim tempstring = TempXMLEpisode1.Details.StreamDetails.Video.DurationInSeconds.Value
                 If Preferences.intruntime Then
-                    TempXMLEpisode.Runtime.Value = Math.Round(tempstring / 60).ToString
+                    TempXMLEpisode1.Runtime.Value = Math.Round(tempstring / 60).ToString
                 Else
-                    TempXMLEpisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                    TempXMLEpisode1.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
                 End If
             End If
-            episodeXMLinformation.Add(TempXMLEpisode)
+            episodeXMLinformation.Add(TempXMLEpisode1)
         Next
         Dim Teste As New List(Of TvEpisode)
         Teste = episodeXMLinformation.ConvertAll(New Converter(Of TvEpisode, TvEpisode)(AddressOf NeededConversion))
