@@ -1482,7 +1482,7 @@ Public Class Movies
         End While
       
         If Cancelled Then Exit Sub
-        RebuildMoviePeopleCaches
+        'RebuildMoviePeopleCaches
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
@@ -1789,6 +1789,7 @@ Public Class Movies
     End Sub
 
     Sub SavePersonCache(peopleDb As List(Of ActorDatabase), typeName As String, fileName As String)
+        'Threading.Monitor.Enter(Me)
         Dim doc As New XmlDocument
 
         Dim thispref As XmlNode = Nothing
@@ -1803,7 +1804,7 @@ Public Class Movies
         root = doc.CreateElement(typeName & "_cache")
 
         Dim childchild As XmlElement
-
+        Try
         For Each actor In peopleDb
             child = doc.CreateElement(typeName)
             childchild = doc.CreateElement("name")
@@ -1821,6 +1822,9 @@ Public Class Movies
         output.Formatting = Formatting.Indented
         doc.WriteTo(output)
         output.Close()
+        Catch
+        End Try
+        'Threading.Monitor.Exit(Me)
     End Sub
 
     Sub SavePersonCache(peopleDb As List(Of DirectorDatabase), typeName As String, fileName As String)
@@ -1903,22 +1907,22 @@ Public Class Movies
         movRebuildCaches = Not Preferences.UseMultipleThreads 
         RebuildMovieCache
         If Cancelled Then Exit Sub
-        'If Not movRebuildCaches Then
-        '    RebuildMoviePeopleCaches
-        'Else
-        '    movRebuildCaches = False
-        'End If
+        If Not movRebuildCaches Then
+            RebuildMoviePeopleCaches
+        Else
+            movRebuildCaches = False
+        End If
         movRebuildCaches = False
     End Sub
 
     Public Sub RebuildMovieCache
         If Preferences.UseMultipleThreads Then
-            _actorDB      .Clear()
-            _directorDb   .Clear()
-            _moviesetDb   .Clear()
-            _tmpActorDb   .Clear()
-            _tmpDirectorDb.Clear()
-            _tmpMoviesetDb.Clear()
+            '_actorDB      .Clear()
+            '_directorDb   .Clear()
+            '_moviesetDb   .Clear()
+            '_tmpActorDb   .Clear()
+            '_tmpDirectorDb.Clear()
+            '_tmpMoviesetDb.Clear()
             MT_LoadMovieCacheFromNfos
         Else
             LoadMovieCacheFromNfos
@@ -1929,41 +1933,52 @@ Public Class Movies
 
 
     Public Sub RebuildMoviePeopleCaches()
-        '_actorDB      .Clear()
-        '_directorDb   .Clear()
-        '_tmpActorDb   .Clear()
-        '_tmpDirectorDb.Clear()
-        'Dim i = 0
+        _actorDB      .Clear()
+        _directorDb   .Clear()
+        _moviesetDb   .Clear()
+        _tmpActorDb   .Clear()
+        _tmpDirectorDb.Clear()
+        _tmpMoviesetDb.Clear()
+        Dim i = 0
 
-        'For Each movie In MovieCache
-        '    i += 1
-        '    PercentDone = CalcPercentDone(i, MovieCache.Count)
-        '    ReportProgress("Rebuilding caches " & i & " of " & MovieCache.Count)
+        For Each movie In MovieCache
+            i += 1
+            PercentDone = CalcPercentDone(i, MovieCache.Count)
+            ReportProgress("Rebuilding caches " & i & " of " & MovieCache.Count)
 
-        '    Dim m = New Movie(Me,movie.fullpathandfilename)
+            'Dim m = New Movie(Me,movie.fullpathandfilename)
 
-        '    m.LoadNFO(False)
-        '    m.UpdateActorCacheFromEmpty()
-        '    m.UpdateDirectorCacheFromEmpty()
-        '    If Cancelled Then Exit Sub
-        'Next
+            'm.LoadNFO(False)
+            'm.UpdateActorCacheFromEmpty()
+            'm.UpdateDirectorCacheFromEmpty()
+            For Each act In movie.Actorlist
+                _actorDb.Add(New ActorDatabase(act.actorname, movie.id))
+            Next
+            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(movie.MovieSet)
+            Dim directors() As String = movie.director.Split("/")
+            For Each d In directors
+                _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))
+            Next
+
+            If Cancelled Then Exit Sub
+        Next
 
         If Cancelled Then Exit Sub
 
-        Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
-        For Each item In q.Distinct()
-            _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
-        Next
+        'Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
+        'For Each item In q.Distinct()
+        '    _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+        'Next
 
-        Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
-        For Each item In q2.Distinct()
-            _directorDb.Add(New DirectorDatabase(item.ActorName, item.MovieId))
-        Next
+        'Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
+        'For Each item In q2.Distinct()
+        '    _directorDb.Add(New DirectorDatabase(item.ActorName, item.MovieId))
+        'Next
 
-        Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
-        For Each item In q3.Distinct()
-            _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
-        Next
+        'Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
+        'For Each item In q3.Distinct()
+        '    _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
+        'Next
         
         SaveActorCache()
         SaveDirectorCache()

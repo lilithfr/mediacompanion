@@ -1181,7 +1181,6 @@ Public Class Movie
         '    ucMusicVideo.MVCacheAdd(_scrapedMovie)
         '    Exit Sub
         'End If
-        Monitor.Enter(Me)
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename    = NfoPathPrefName 
         _movieCache.MovieSet.absorb(scrapedMovie.fullmoviebody.movieset)
@@ -1190,11 +1189,11 @@ Public Class Movie
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
 
         
-        'If movRebuildCaches Then 
+        If movRebuildCaches Then 
             UpdateActorCacheFromEmpty
             UpdateDirectorCacheFromEmpty
             UpdateMovieSetCacheFromEmpty 
-        'End If
+        End If
         
 
         If Not Preferences.usefoldernames Then
@@ -1240,13 +1239,13 @@ Public Class Movie
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         _movieCache.movietag    = _scrapedMovie.fullmoviebody.tag
         _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value
+        _movieCache.Actorlist   = _scrapedMovie.listactors 
         If Preferences.incmissingmovies Then
             Dim Fileandpath As String = Utilities.GetFileName(_movieCache.fullpathandfilename, , _movieCache.Container)
             _movieCache.VideoMissing = Not File.Exists(Fileandpath)
         End If
         _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.filedetails_subtitles)
         AssignMovieToAddMissingData
-        Monitor.Exit(Me)
     End Sub
 
     Sub AssignMVToCache
