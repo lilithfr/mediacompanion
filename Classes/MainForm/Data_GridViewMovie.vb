@@ -92,37 +92,37 @@ Public Class Data_GridViewMovie
     End Sub
 
     Public Function Export() As ComboList
-        Dim convertedMovie As New ComboList With {.fullpathandfilename  = Me.fullpathandfilename,
-                                                  .MovieSet             = Me.movieset,
-                                                  .filename             = Me.filename,
-                                                  .foldername           = Me.foldername,
-                                                  .title                = Me.title,
-                                                  .originaltitle        = Me.originaltitle,
-                                                  .year                 = Me.year,
-                                                  .filedate             = Me.filedate,
-                                                  .id                   = Me.id,
-                                                  .rating               = Me.Rating,
-                                                  .top250               = Me.top250,
-                                                  .genre                = Me.genre,
-                                                  .playcount            = Me.playcount,
-                                                  .sortorder            = Me.SortOrder,
-                                                  .outline              = Me.outline,
-                                                  .runtime              = Me.runtime,
-                                                  .createdate           = Me.createdate,
-                                                  .missingdata1         = Me.missingdata1,
-                                                  .plot                 = Me.plot.Trim,
-                                                  .source               = Me.source,
-                                                  .director             = Me.director,
-                                                  .Votes                = Me.Votes,
-                                                  .Resolution           = Me.Resolution,
-                                                  .VideoCodec           = Me.VideoCodec,
-                                                  .Audio                = Me.Audio,
-                                                  .SubLang              = Me.SubLang,
-                                                  .Premiered            = Me.Premiered,
-                                                  .Certificate          = Me.Certificate,
-                                                  .FrodoPosterExists    = Me.FrodoPosterExists,
-                                                 .PreFrodoPosterExists  = Me.PreFrodoPosterExists
-                                                 }
+        Dim convertedMovie As New ComboList
+        convertedMovie.fullpathandfilename  = Me.fullpathandfilename
+        convertedMovie.MovieSet.MovieSetName = Me.movieset
+        convertedMovie.filename             = Me.filename
+        convertedMovie.foldername           = Me.foldername
+        convertedMovie.title                = Me.title
+        convertedMovie.originaltitle        = Me.originaltitle
+        convertedMovie.year                 = Me.year
+        convertedMovie.filedate             = Me.filedate
+        convertedMovie.id                   = Me.id
+        convertedMovie.rating               = Me.Rating
+        convertedMovie.top250               = Me.top250
+        convertedMovie.genre                = Me.genre
+        convertedMovie.playcount            = Me.playcount
+        convertedMovie.sortorder            = Me.SortOrder
+        convertedMovie.outline              = Me.outline
+        convertedMovie.runtime              = Me.runtime
+        convertedMovie.createdate           = Me.createdate
+        convertedMovie.missingdata1         = Me.missingdata1
+        convertedMovie.plot                 = Me.plot.Trim
+        convertedMovie.source               = Me.source
+        convertedMovie.director             = Me.director
+        convertedMovie.Votes                = Me.Votes
+        convertedMovie.Resolution           = Me.Resolution
+        convertedMovie.VideoCodec           = Me.VideoCodec
+        convertedMovie.Audio                = Me.Audio
+        convertedMovie.SubLang              = Me.SubLang
+        convertedMovie.Premiered            = Me.Premiered
+        convertedMovie.Certificate          = Me.Certificate
+        convertedMovie.FrodoPosterExists    = Me.FrodoPosterExists
+        convertedMovie.PreFrodoPosterExists  = Me.PreFrodoPosterExists
         Return convertedMovie
     End Function
 
