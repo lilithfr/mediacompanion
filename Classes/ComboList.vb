@@ -41,6 +41,8 @@ Public Class ComboList
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
     Property MovieSet             As New MovieSetDatabase 
+    Property Actorlist            As New List(Of str_MovieActors)
+    Property DirectorList         As New List(Of DirectorDatabase)
 
     Public Property title As String
         Get
@@ -286,6 +288,8 @@ Public Class ComboList
         Me.VideoMissing         = From.VideoMissing
         AssignSubtitleLang(From.SubLang)
         Me.MovieSet.Absorb(From.MovieSet)
+        Me.Actorlist            = From.Actorlist 
+        Me.DirectorList         = From.DirectorList 
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

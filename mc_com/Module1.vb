@@ -234,6 +234,7 @@ Module Module1
                 oMovies.SaveMovieCache
                 oMovies.SaveActorCache
                 oMovies.SaveDirectorCache
+                oMovies.SaveMovieSetCache 
             End If
             ConsoleOrLog("")
         End If

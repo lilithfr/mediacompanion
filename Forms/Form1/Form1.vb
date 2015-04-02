@@ -11278,6 +11278,9 @@ End Sub
             ScraperErrorDetected = False
 
             BckWrkScnMovies.RunWorkerAsync(action)
+            While BckWrkScnMovies.IsBusy 
+                Application.DoEvents()
+            End While
             oMovies.SaveCaches
         Else
             MsgBox("The Movie Scraper is Already Running")
