@@ -1103,6 +1103,7 @@ Module General
             TempXMLEpisode1.Rating.Value = String.Empty
             TempXMLEpisode1.Season.Value = String.Empty
             TempXMLEpisode1.Thumbnail.FileName = String.Empty
+            TempXMLEpisode1.Thumbnail.Url = String.empty
             TempXMLEpisode1.Title.Value = String.Empty
             TempXMLEpisode1.ShowId.Value = String.Empty 
             TempXMLEpisode1.UniqueId.Value = String.Empty 
@@ -1132,6 +1133,7 @@ Module General
                         TempXMLEpisode1.Rating.Value = NodeChild.InnerText
                     Case "thumb"
                         TempXMLEpisode1.Thumbnail.FileName = NodeChild.InnerText
+                        TempXMLEpisode1.Thumbnail.Url = NodeChild.InnerText 
                     Case "title"
                         TempXMLEpisode1.Title.Value = NodeChild.InnerText
                     Case "season"
@@ -1246,8 +1248,8 @@ Module General
             episodeXMLinformation.Add(TempXMLEpisode1)
         Next
         Dim Teste As New List(Of TvEpisode)
-        Teste = episodeXMLinformation.ConvertAll(New Converter(Of TvEpisode, TvEpisode)(AddressOf NeededConversion))
-        Return Teste
+        'Teste = episodeXMLinformation.ConvertAll(New Converter(Of TvEpisode, TvEpisode)(AddressOf NeededConversion))
+        Return episodeXMLinformation    'Teste
     End Function
 
     Public Sub Read_XBMC_TVDB_Scraper_Config()
@@ -1418,11 +1420,11 @@ Module General
         Try
             FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath, TVDBId)
             episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
-            If episodeInformation(0).Thumbnail.FileName <> Nothing Then
-                Dim myWebClient As New System.Net.WebClient()
-                Dim ImageFilename As String = EpisodeArray(0).VideoFilePath.Substring(0, EpisodeArray(0).VideoFilePath.LastIndexOf(".")) & ".tbn"
-                myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
-            End If
+            'If episodeInformation(0).Thumbnail.FileName <> Nothing Then
+            '    Dim myWebClient As New System.Net.WebClient()
+            '    Dim ImageFilename As String = EpisodeArray(0).VideoFilePath.Substring(0, EpisodeArray(0).VideoFilePath.LastIndexOf(".")) & ".tbn"
+            '    myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
+            'End If
             'Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.NfoFilePath, FinalScrapResult)
             ' HueyHQ 09 MAR 2012 - need to do something similar for TV episodes, CreateMovieNfo() was causing an error
             Return episodeInformation

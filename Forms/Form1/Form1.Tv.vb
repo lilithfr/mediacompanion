@@ -2197,6 +2197,7 @@ Partial Public Class Form1
                                 If Preferences.tvshow_useXBMC_Scraper = True Then
                                     Dim FinalResult As String = ""
                                     episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
+                                    episodearray(0).NfoFilePath = savepath
                                     If episodearray.Count >= 1 Then
                                         For x As Integer = 0 To episodearray.Count - 1
                                             Preferences.tvScraperLog &= "Scraping body of episode: " & episodearray(x).Episode.Value & " - OK" & vbCrLf
