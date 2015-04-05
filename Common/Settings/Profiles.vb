@@ -58,12 +58,6 @@ Public Class Profiles
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.Filters = applicationPath & s 'result.innertext
                                     Case "genres"
-
-                                        'Dim s As String = result.innertext.ToString.Substring(t)
-                                        'currentprofile.Filters = applicationPath & s 'result.innertext
-
-                                        'Copied from Form1.vb(1521) - Above t was -1, hence threw an ArgumentOutOfRangeException
-
                                         Dim s As String = ""
                                         If result.innertext = "" Then 
                                             s = "\settings\genres.txt"  'incase missing from existing profile.xml
@@ -72,10 +66,15 @@ Public Class Profiles
                                         End If
                                         currentprofile.Genres = applicationPath & s
 
-
                                     Case "tvcache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.TvCache = applicationPath & s 'result.innertext
+                                    Case "musicvideocache"
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.MusicVideoCache = applicationPath & s
+                                    Case "moviesetcache"
+                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        currentprofile.MovieSetCache = applicationPath & s
                                 End Select
                             Next
                             ProfileList.Add(currentprofile)
