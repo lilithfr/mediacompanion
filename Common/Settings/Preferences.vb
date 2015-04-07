@@ -766,6 +766,7 @@ Public Class Preferences
         releaseformat(11) = "BRRip"
         releaseformat(12) = "BDRip"
         releaseformat(13) = "Bluray"
+        releaseformat(14) = "DVD"
 
         movieFolders.Clear()
         tvFolders.Clear()
