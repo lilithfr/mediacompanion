@@ -1053,9 +1053,6 @@ Public Class WorkingWithNfoFiles
                 actorchild = doc.CreateElement("role")
                 actorchild.InnerText = act.actorrole
                 child.AppendChild(actorchild)
-                'actorchild = = doc.CreateElement("order")
-                'actorchild.InnerText = act.order.Value
-                'child.AppendChild(actorchild)
                 If act.actorthumb <> Nothing Then
                     If act.actorthumb <> "" Then
                         actorchild = doc.CreateElement("thumb")
@@ -1081,6 +1078,13 @@ Public Class WorkingWithNfoFiles
             child = doc.CreateElement("sortorder")
             child.InnerText = tvshowtosave.sortorder.Value
             root.AppendChild(child)
+
+            stage = 21
+            If tvshowtosave.SortTitle.Value <> "" Then 
+                child = doc.CreateElement("sorttitle")
+                child.InnerText = tvshowtosave.SortTitle.Value
+                root.AppendChild(child)
+            End If
 
             doc.AppendChild(root)
 
@@ -1114,6 +1118,10 @@ Public Class WorkingWithNfoFiles
             For Each thisresult In tvshow("tvshow")
                 Try
                     Select Case thisresult.Name
+                        Case "id"
+                            newtvshow.TvdbId.Value = thisresult.InnerText
+                        Case "state"
+                            newtvshow.State = thisresult.InnerText
                         Case "title"
                             Dim tempstring As String = ""
                             tempstring = thisresult.InnerText
@@ -1121,8 +1129,7 @@ Public Class WorkingWithNfoFiles
                             newtvshow.Title.Value = tempstring
                         Case "episodeguide"
                             tempid = thisresult.InnerText
-                        Case "id"
-                            newtvshow.TvdbId.Value = thisresult.InnerText
+                        
                         Case "imdbid"
                             newtvshow.ImdbId.Value = thisresult.InnerText
                         Case "mpaa"
@@ -1148,17 +1155,16 @@ Public Class WorkingWithNfoFiles
                             Else
                                 newtvshow.genre.Value = newtvshow.genre.Value & " / " & thisresult.InnerText
                             End If
-                            'newtvshow.Genre.Value = thisresult.InnerText
                         Case "language"
                             newtvshow.Language.Value = thisresult.InnerText
-                        Case "state"
-                            newtvshow.State = thisresult.InnerText
                         Case "episodeactorsource"
                             newtvshow.EpisodeActorSource.Value = thisresult.InnerText
                         Case "tvshowactorsource"
                             newtvshow.TvShowActorSource.Value = thisresult.InnerText
                         Case "sortorder"
                             newtvshow.SortOrder.Value = thisresult.InnerText
+                        Case "sorttitle"
+                            newtvshow.SortTitle.Value = thisresult.InnerText 
                         Case "actor"
                             Dim newactor As New str_MovieActors(SetDefaults)
                             Dim detail As XmlNode = Nothing

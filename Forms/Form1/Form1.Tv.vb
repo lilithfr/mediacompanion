@@ -1366,6 +1366,7 @@ Partial Public Class Form1
 
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork
         Try
+            Dim nfoFunction As New WorkingWithNfoFiles
             Dim args As TvdbArgs = e.Argument
             Dim searchTVDbID As String = If(IsNothing(args), "", args.tvdbid)
             Dim searchLanguage As String = If(IsNothing(args), Preferences.TvdbLanguageCode, args.lang)
@@ -1507,7 +1508,8 @@ Partial Public Class Form1
 
                         NewShow.SortOrder.Value = Preferences.sortorder
 
-                        NewShow.Save()
+                        nfoFunction.tvshow_NfoSave(NewShow, True)
+                        'NewShow.Save()
                     End If
                 End If
 
