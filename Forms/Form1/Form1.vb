@@ -9587,7 +9587,8 @@ End Sub
     End Sub
 
     Private Sub mov_PosterGet(ByVal source As String)
-        Try
+        Dim success As Boolean = False
+        Try 
             If workingMovieDetails Is Nothing Then Exit Sub
             Dim messbox As New frmMessageBox("          Please Wait,", "", "Attempting to download Poster from " & source.ToUpper)
             messbox.Show()
@@ -9633,7 +9634,7 @@ End Sub
                     util_ImageLoad(PbMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
                     Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0))
                     updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
-
+                    success = True
                 Catch ex As Exception
                     MsgBox("Error [" & ex.Message & "] occurred while trying to download and save the poster")
                 End Try
@@ -9648,6 +9649,7 @@ End Sub
         Finally
             messbox.Close()
         End Try
+        If success then UpdateMissingPoster()
     End Sub
 
     Public Shared Sub updateposterwall(ByVal path As String, ByVal movie As String)
