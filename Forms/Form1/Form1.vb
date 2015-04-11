@@ -8264,13 +8264,14 @@ Public Class Form1
         Preferences.tableview.Add("id|82|13|false")
         Preferences.tableview.Add("missingdata1|115|14|false")
         Preferences.tableview.Add("fullpathandfilename|300|15|false")
+        Preferences.tableview.Add("createdate|104|16|false")
     End Sub
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tableview.Count < 16 Then
+        If Preferences.tableview.Count < 17 Then
             Call mov_TableViewSetup()
         End If
         tableSets.Clear()
@@ -8339,6 +8340,7 @@ Public Class Form1
             childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
             childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
             childchild = doc.CreateElement("year") : childchild.InnerText = movie.year : child.AppendChild(childchild)
+            childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
             root.AppendChild(child)
         Next
 
@@ -8391,6 +8393,13 @@ Public Class Form1
                                 chi.InnerText = "0"
                             Else
                                 chi.InnerText = Movie.GetMissingDataText( Convert.ToByte(chi.InnerText) )
+                            End If
+                        End If
+                        If chi.Name = "createdate" Then
+                            If chi.InnerText = "" Or Not IsNumeric(chi.InnerText) Then
+                                chi.InnerText = "0"
+                            Else
+                                chi.InnerText = Utilities.DecodeDateTime(chi.InnerText, Preferences.DateFormat)
                             End If
                         End If
                     Next
@@ -8590,7 +8599,17 @@ Public Class Form1
             .ReadOnly = True
         End With
 
-        For f = 0 To 15
+        Dim createdatecolumn As New DataGridViewColumn()
+        With createdatecolumn
+            Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
+            .CellTemplate = oCell
+            .HeaderText = "Date Added"
+            .Name = "createdate"
+            .DataPropertyName = "createdate"
+            .SortMode = DataGridViewColumnSortMode.Automatic
+        End With
+
+        For f = 0 To 16
             For Each col In tableSets
                 If col.index = f Then
                     Select Case col.title
@@ -8672,6 +8691,11 @@ Public Class Form1
                             pathcolumn.Width = col.width
                             pathcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, pathcolumn)
+                            Exit For
+                        Case "createdate"
+                            createdatecolumn.Width = col.width
+                            createdatecolumn.Visible = col.visible
+                            DataGridView1.Columns.Insert(f, createdatecolumn)
                             Exit For
                     End Select
                 End If

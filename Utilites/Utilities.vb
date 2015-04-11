@@ -696,6 +696,27 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return False
     End Function
 
+    Public Shared Function DecodeDateTime(s As String, df As String) As String
+
+        Dim YYYY As String = s.SubString( 0,4)
+        Dim MM   As String = s.SubString( 4,2)
+        Dim DD   As String = s.SubString( 6,2)
+        Dim HH   As String = s.SubString( 8,2)
+        Dim MIN  As String = s.SubString(10,2)
+        Dim SS   As String = s.SubString(12,2)
+
+        Dim x As String = df
+
+        x = x.Replace("YYYY", YYYY)
+        x = x.Replace("MM"  , MM  )
+        x = x.Replace("DD"  , DD  )
+        x = x.Replace("HH"  , HH  )
+        x = x.Replace("MIN" , MIN )
+        x = x.Replace("SS"  , SS  )
+
+        Return x
+    End Function
+
     Public Shared Function EnumerateFolders(ByVal RootPath As String, Optional ByVal MaxLevels As Long = 999) As List(Of String)
         Return EnumerateFolders(RootPath, MaxLevels, 0)
     End Function
