@@ -1854,7 +1854,7 @@ Public Class Preferences
             videotsrootpath = Utilities.RootVideoTsFolder(FullPath)
         End If
         Dim posterlist As New List(Of String)
-        posterlist = GetFanartPaths(FullPath, videotsrootpath)
+        posterlist = GetPosterPaths(FullPath, videotsrootpath)
         For Each item In posterlist
             If Not IO.File.Exists(item) Then CheckmissingPoster = True
         Next
