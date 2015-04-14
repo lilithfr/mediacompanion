@@ -151,6 +151,7 @@ Public Class Form1
     Public NewTagList As New List(Of String)
     Public MovieSearchEngine As String = "imdb"
     Dim mov_TableColumnName As String = ""
+    Dim MovieSetMissingID As Boolean = False
 
     Public cropMode As String = "movieposter"
 
@@ -3874,24 +3875,7 @@ Public Class Form1
             ElseIf tab.ToLower = "wall" Then
                 Call mov_WallSetup()
             ElseIf tab.ToLower = "movie & tag sets" Then
-                ListofMovieSets.Items.Clear()
-                For Each mset In Preferences.moviesets
-                    If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
-                Next
-                TagListBox.Items.Clear()
-                For Each mtag In Preferences.movietags
-                    If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
-                Next
-                CurrentMovieTags.Items.Clear()
-                For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
-                    Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-                    Dim movie As Movie = oMovies.LoadMovie(filepath)
-                    For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
-                        If Not IsNothing(ctag) Then
-                            If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
-                        End If
-                    Next
-                Next
+                Call MovieSetsAndTagsSetup()
             ElseIf tab.ToLower = "fanart.tv"
                 UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
             ElseIf tab.ToLower = "movie preferences" Then
@@ -16785,6 +16769,36 @@ End Sub
 #End Region
 
 #Region "Movie Sets & Tags Tab"
+
+    Private Sub MovieSetsAndTagsSetup()
+        Dim MsetCache As New List(Of MovieSetDatabase)
+        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+        MovieSetMissingID = False
+        ListofMovieSets.Items.Clear()
+        For Each mset In Preferences.moviesets
+            If mset <> "-None-" Then
+                ListofMovieSets.Items.Add(mset)
+                If MsetCache.Count <> 0 Then
+                    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
+                    If q.ToString = "" Then MovieSetMissingID = True
+                End If
+            End If
+        Next
+        TagListBox.Items.Clear()
+        For Each mtag In Preferences.movietags
+            If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
+        Next
+        CurrentMovieTags.Items.Clear()
+        For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+            Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+            Dim movie As Movie = oMovies.LoadMovie(filepath)
+            For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
+                If Not IsNothing(ctag) Then
+                    If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
+                End If
+            Next
+        Next
+    End Sub
 
     'Tag(s) Section
     Private Sub btnMovTagListAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListAdd.Click

@@ -1602,8 +1602,8 @@ Public Class Movies
        
             movie.LoadNFO(False)
 
-            If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.ToString) Then
-                Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.ToString)
+            If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
+                Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
             End If
             Cache.Add(movie.Cache)
         Next
