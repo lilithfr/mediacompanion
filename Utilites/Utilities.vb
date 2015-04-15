@@ -853,8 +853,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Dim currentposition As Integer = filename.Length
         Try
-            '0: remove full stops from filename
+            '0: remove full stops and underscore from filename
             filename = filename.Replace(".", " ")
+            filename = filename.Replace("_", " ")
             '1: check for multipart tags
             Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)[1a]$)")
             If M.Success = True Then
