@@ -718,6 +718,7 @@ Public Class Form1
             UcFanartTv1.Form1MainFormLoadedStatus = True
             UcFanartTvTv1.Form1MainFormLoadedStatus = True
             ReloadMovieCacheToolStripMenuItem.Visible = False
+            ToolStripSeparator9.Visible = False
 
             ResetFilters()
 
@@ -20147,4 +20148,19 @@ End Sub
         
     'End Sub
 
+    Private Sub tsmiMovieSetIdCheck_Click( sender As Object,  e As EventArgs) Handles tsmiMovieSetIdCheck.Click
+        rescrapeList.ResetFields
+        _rescrapeList.FullPathAndFilenames.Clear()
+        For Each movie As ComboList In oMovies.MovieCache
+            If movie.MovieSet.MovieSetName.ToLower <> "-none-" AndAlso movie.MovieSet.MovieSetId = "" Then
+                _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
+            End If
+        Next
+        If _rescrapeList.FullPathAndFilenames.Count = 0 Then Exit Sub
+        rescrapeList.tmdb_set_id = True
+        RunBackgroundMovieScrape("BatchRescrape")
+        'While BckWrkScnMovies.IsBusy
+        '    Application.DoEvents()
+        'End While
+    End Sub
 End Class

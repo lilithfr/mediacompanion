@@ -27,6 +27,7 @@ Public Class RescrapeList
     Property dlxtraart           As Boolean
     Property runtime_file        As Boolean
     Property tmdb_set_name       As Boolean
+    Property tmdb_set_id         As Boolean
     Property Download_Trailer    As Boolean
     Property Rename_Files        As Boolean
     Property Rename_Folders      As Boolean

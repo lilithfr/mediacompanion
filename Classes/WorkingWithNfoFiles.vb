@@ -2476,11 +2476,7 @@ Public Class WorkingWithNfoFiles
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
-                            If newmovie.fullmoviebody.movieset.MovieSetName = "" Then
-                                newmovie.fullmoviebody.movieset.MovieSetName = thisresult.InnerText
-                            'Else
-                                'newmovie.fullmoviebody.movieset.MovieSetName = newmovie.fullmoviebody.movieset.MovieSetName & " / " & thisresult.InnerText
-                            End If
+                            newmovie.fullmoviebody.movieset.MovieSetName = thisresult.InnerText
                         Case "setid"
                             newmovie.fullmoviebody.movieset.MovieSetId = thisresult.InnerText 
                         Case "videosource"

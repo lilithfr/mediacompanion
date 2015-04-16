@@ -2907,7 +2907,7 @@ Public Class Movie
     End Function
 
     Function NeedTMDb(rl As RescrapeList)
-        Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or
+        Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or rl.tmdb_set_id Or
                rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors or rl.ArtFromFanartTv 
     End Function
 
@@ -3087,7 +3087,7 @@ Public Class Movie
 
             If Cancelled() Then Exit Sub
 
-            If rl.tmdb_set_name Then
+            If rl.tmdb_set_name OrElse rl.tmdb_set_id Then
                 Try
                     _rescrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
@@ -3163,6 +3163,7 @@ Public Class Movie
         UpdateActorCache
         UpdateDirectorCache
         UpdateMovieCache
+        UpdateMovieSetCache 
     End Sub
 
     Sub RemoveMovieFromCaches
