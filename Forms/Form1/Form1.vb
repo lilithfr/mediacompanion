@@ -12108,14 +12108,14 @@ End Sub
         cbMovieRuntimeFallbackToFile        .Checked        = Preferences.movieRuntimeFallbackToFile
         tbDateFormat                        .Text           = Preferences.DateFormat
         cbMovieList_ShowColPlot             .Checked        = Preferences.MovieList_ShowColPlot
-        cbDisableNotMatchingRenamePattern   .Checked   = Preferences.DisableNotMatchingRenamePattern
+        cbDisableNotMatchingRenamePattern   .Checked        = Preferences.DisableNotMatchingRenamePattern
         cbMovieList_ShowColWatched          .Checked        = Preferences.MovieList_ShowColWatched
-        nudMovieScraper_MaxStudios          .Text           = Preferences.MovieScraper_MaxStudios
+        cmbxMovieScraper_MaxStudios         .SelectedItem   = Preferences.MovieScraper_MaxStudios.ToString
         nudActorsFilterMinFilms             .Text           = Preferences.ActorsFilterMinFilms
         nudMaxActorsInFilter                .Text           = Preferences.MaxActorsInFilter
         cbMovieFilters_Actors_Order         .SelectedIndex  = Preferences.MovieFilters_Actors_Order
-        nudDirectorsFilterMinFilms          .Text          = Preferences.DirectorsFilterMinFilms
-        nudMaxDirectorsInFilter             .Text          = Preferences.MaxDirectorsInFilter
+        nudDirectorsFilterMinFilms          .Text           = Preferences.DirectorsFilterMinFilms
+        nudMaxDirectorsInFilter             .Text           = Preferences.MaxDirectorsInFilter
         cbMovieFilters_Directors_Order      .SelectedIndex  = Preferences.MovieFilters_Directors_Order
         cbMissingMovie                      .Checked        = Preferences.incmissingmovies 
         nudSetsFilterMinFilms               .Text           = Preferences.SetsFilterMinFilms
@@ -12135,6 +12135,11 @@ End Sub
         cbMovXtraThumbs                     .Checked        = Preferences.movxtrathumb
         cbMovXtraFanart                     .Checked        = Preferences.movxtrafanart
         cbDlXtraFanart                      .Checked        = Preferences.dlxtrafanart
+        cbMovSetArtScrape                   .Checked        = Preferences.dlMovSetArtwork
+        rbMovSetArtSetFolder                .Checked        = Preferences.MovSetArtSetFolder
+        rbMovSetFolder                      .Checked        = Not Preferences.MovSetArtSetFolder 
+        btnMovSetCentralFolderSelect        .Enabled        = Preferences.MovSetArtSetFolder 
+        tbMovSetArtCentralFolder            .Text           = Preferences.MovSetArtCentralFolder 
         cbMovieAllInFolders                 .Checked        = Preferences.allfolders
         cbMovCreateFolderjpg                .Checked        = Preferences.createfolderjpg
         cbMovCreateFanartjpg                .Checked        = Preferences.createfanartjpg
@@ -14109,10 +14114,10 @@ End Sub
         End Try
     End Sub
 
-    Private Sub nudMovieScraper_MaxStudios_ValueChanged( sender As Object,  e As EventArgs) Handles nudMovieScraper_MaxStudios.ValueChanged
+    Private Sub cmbxMovieScraper_MaxStudios_SelectedIndexChanged( sender As Object,  e As EventArgs) Handles cmbxMovieScraper_MaxStudios.SelectedIndexChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieScraper_MaxStudios = nudMovieScraper_MaxStudios.Value
+                Preferences.MovieScraper_MaxStudios = Convert.ToInt32(cmbxMovieScraper_MaxStudios.SelectedItem)  'nudMovieScraper_MaxStudios.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -14136,6 +14141,184 @@ End Sub
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
+'Preferred Language
+    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
+        Preferences.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) Handles cbUseCustomLanguage.Click
+        Preferences.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
+        SetLanguageControlsState()
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
+        Preferences.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub llLanguagesFile_Click(sender As System.Object, e As System.EventArgs) Handles llLanguagesFile.Click
+        System.Diagnostics.Process.Start(TMDb.LanguagesFile)
+    End Sub
+
+'Individual Movie Folder Options
+    Private Sub cbMovieUseFolderNames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieUseFolderNames.CheckedChanged
+        Try
+            If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
+                Preferences.usefoldernames = True
+                cbMovieAllInFolders.Checked = False
+                cbMovCreateFolderjpg.Enabled = True
+                cbMovCreateFanartjpg.Enabled = True
+                cbDlXtraFanart.Enabled = True
+                If Preferences.basicsavemode Then
+                    cbMovieFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Enabled = False
+                Else
+                    cbMovieFanartInFolders.Enabled = True
+                    cbMoviePosterInFolder.Enabled = True
+                End If
+            Else
+                Preferences.usefoldernames = False
+                If Not Preferences.allfolders AndAlso Not Preferences.basicsavemode Then
+                    cbMovCreateFolderjpg.Checked = False
+                    cbMovCreateFolderjpg.Enabled = False
+                    cbMovCreateFanartjpg.Enabled = False
+                    cbMovCreateFanartjpg.Checked = False
+                    cbMovieFanartInFolders.Checked = False
+                    cbMovieFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Checked = False
+                    cbMoviePosterInFolder.Enabled = False
+                    cbDlXtraFanart.Checked = False
+                    cbDlXtraFanart.Enabled = False
+                    'Preferences.createfolderjpg = False
+                ElseIf Not Preferences.allfolders AndAlso Preferences.basicsavemode Then
+                    msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
+                    cbMovieUseFolderNames.Checked = CheckState.Checked
+                End If
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieAllInFolders.CheckedChanged 
+        Try
+            'Preferences.allfolders = cbMovieAllInFolders.Checked
+            If cbMovieAllInFolders.CheckState = CheckState.Checked Then 
+                Preferences.allfolders = True
+                cbMovieUseFolderNames.Checked = False
+                cbMovCreateFolderjpg.Enabled = True
+                cbMovCreateFanartjpg.Enabled = True
+                cbDlXtraFanart.Enabled = True
+                If Preferences.basicsavemode Then
+                    cbMovieFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Enabled = False
+                Else
+                    cbMovieFanartInFolders.Enabled = True
+                    cbMoviePosterInFolder.Enabled = True
+                End If               
+            Else
+                Preferences.allfolders = False
+                If Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode Then
+                    
+                    cbMovCreateFolderjpg.Enabled = False
+                    cbMovCreateFolderjpg.Checked = False
+                    cbMovCreateFanartjpg.Enabled = False
+                    cbMovCreateFanartjpg.Checked = False
+                    cbMovieFanartInFolders.Checked = False
+                    cbMovieFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Checked = False
+                    cbMoviePosterInFolder.Enabled = False
+                    cbDlXtraFanart.Checked = False
+                    cbDlXtraFanart.Enabled = False
+                ElseIf Not Preferences.usefoldernames AndAlso Preferences.basicsavemode Then
+                    msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
+                    cbMovieAllInFolders.Checked = CheckState.Checked
+                End If
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+'Basic Movie
+    Private Sub cbMovieBasicSave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieBasicSave.CheckedChanged 
+        Try
+            If cbMovieBasicSave.CheckState = CheckState.Checked Then
+                If Preferences.usefoldernames or Preferences.allfolders Then
+                    Preferences.basicsavemode = True
+                    cbMovieFanartInFolders.Checked =CheckState.Unchecked
+                    cbMovieFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Checked = CheckState.Unchecked
+                    cbMoviePosterInFolder.Enabled = False
+                Else
+                    If (Not Preferences.usefoldernames AndAlso Not Preferences.allfolders) Then
+                    MsgBox("Either Use Foldername or Movies In Folders" & vbCrLf & "must be selected")
+                    End If
+                    Preferences.basicsavemode = False
+                    cbMovieFanartInFolders.Enabled = True 
+                    cbMoviePosterInFolder.Enabled = True
+                    cbMovieBasicSave.Checked = False
+                End If
+            Else
+                Preferences.basicsavemode = False
+                cbMovieFanartInFolders.Enabled = True 
+                cbMoviePosterInFolder.Enabled = True 
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+'Keywords As Tags
+    Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_keywordasTag.CheckedChanged
+        Try
+            If cb_keywordasTag.CheckState = CheckState.Checked Then
+                Preferences.keywordasTag = True
+                If Preferences.keywordlimit = 0 Then
+                    MsgBox(" Please select a limit above Zero keywords" & vbCrLf & "else no keywords will be stored as Tags")
+                End If
+            Else
+                Preferences.keywordasTag = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub cb_keywordlimit_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_keywordlimit.SelectedIndexChanged
+        Try
+            If IsNumeric(cb_keywordlimit.SelectedItem) Then
+                Preferences.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
+            ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
+                Preferences.keywordlimit = 0
+            Else
+                Preferences.keywordlimit = 999
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+#End Region  'Movie Preferences -> Scraper Tab
+
+#Region "Movie Preferences -> Artwork Tab"
+    
 'Scraping Options
     Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMoviePosterScrape.CheckedChanged
         If prefsload Then Exit Sub
@@ -14390,7 +14573,6 @@ End Sub
         End Try
     End Sub
 
-    
 'Image Resizing
     Private Sub comboActorResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboActorResolutions.SelectedIndexChanged
         Preferences.ActorResolutionSI = comboActorResolutions.SelectedIndex
@@ -14410,182 +14592,27 @@ End Sub
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-
-'Preferred Language
-    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
-        Preferences.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+'Movie Set Artwork
+    Private Sub cbMovSetArtScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetArtScrape.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.dlMovSetArtwork = cbMovSetArtScrape.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) Handles cbUseCustomLanguage.Click
-        Preferences.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
-        SetLanguageControlsState()
+    Private Sub rbMovSetCentralFolder_CheckedChanged( sender As Object,  e As EventArgs) Handles rbMovSetArtSetFolder.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.MovSetArtSetFolder = rbMovSetArtSetFolder.checked
+        btnMovSetCentralFolderSelect.Enabled = rbMovSetArtSetFolder.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
-        Preferences.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
-
-    Private Sub llLanguagesFile_Click(sender As System.Object, e As System.EventArgs) Handles llLanguagesFile.Click
-        System.Diagnostics.Process.Start(TMDb.LanguagesFile)
-    End Sub
-
-'Individual Movie Folder Options
-    Private Sub cbMovieUseFolderNames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieUseFolderNames.CheckedChanged
-        Try
-            If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
-                Preferences.usefoldernames = True
-                cbMovieAllInFolders.Checked = False
-                cbMovCreateFolderjpg.Enabled = True
-                cbMovCreateFanartjpg.Enabled = True
-                cbDlXtraFanart.Enabled = True
-                If Preferences.basicsavemode Then
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Enabled = False
-                Else
-                    cbMovieFanartInFolders.Enabled = True
-                    cbMoviePosterInFolder.Enabled = True
-                End If
-            Else
-                Preferences.usefoldernames = False
-                If Not Preferences.allfolders AndAlso Not Preferences.basicsavemode Then
-                    cbMovCreateFolderjpg.Checked = False
-                    cbMovCreateFolderjpg.Enabled = False
-                    cbMovCreateFanartjpg.Enabled = False
-                    cbMovCreateFanartjpg.Checked = False
-                    cbMovieFanartInFolders.Checked = False
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Checked = False
-                    cbMoviePosterInFolder.Enabled = False
-                    cbDlXtraFanart.Checked = False
-                    cbDlXtraFanart.Enabled = False
-                    'Preferences.createfolderjpg = False
-                ElseIf Not Preferences.allfolders AndAlso Preferences.basicsavemode Then
-                    msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
-                    cbMovieUseFolderNames.Checked = CheckState.Checked
-                End If
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieAllInFolders.CheckedChanged 
-        Try
-            'Preferences.allfolders = cbMovieAllInFolders.Checked
-            If cbMovieAllInFolders.CheckState = CheckState.Checked Then 
-                Preferences.allfolders = True
-                cbMovieUseFolderNames.Checked = False
-                cbMovCreateFolderjpg.Enabled = True
-                cbMovCreateFanartjpg.Enabled = True
-                cbDlXtraFanart.Enabled = True
-                If Preferences.basicsavemode Then
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Enabled = False
-                Else
-                    cbMovieFanartInFolders.Enabled = True
-                    cbMoviePosterInFolder.Enabled = True
-                End If               
-            Else
-                Preferences.allfolders = False
-                If Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode Then
-                    
-                    cbMovCreateFolderjpg.Enabled = False
-                    cbMovCreateFolderjpg.Checked = False
-                    cbMovCreateFanartjpg.Enabled = False
-                    cbMovCreateFanartjpg.Checked = False
-                    cbMovieFanartInFolders.Checked = False
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Checked = False
-                    cbMoviePosterInFolder.Enabled = False
-                    cbDlXtraFanart.Checked = False
-                    cbDlXtraFanart.Enabled = False
-                ElseIf Not Preferences.usefoldernames AndAlso Preferences.basicsavemode Then
-                    msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
-                    cbMovieAllInFolders.Checked = CheckState.Checked
-                End If
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-'Basic Movie
-    Private Sub cbMovieBasicSave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieBasicSave.CheckedChanged 
-        Try
-            If cbMovieBasicSave.CheckState = CheckState.Checked Then
-                If Preferences.usefoldernames or Preferences.allfolders Then
-                    Preferences.basicsavemode = True
-                    cbMovieFanartInFolders.Checked =CheckState.Unchecked
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Checked = CheckState.Unchecked
-                    cbMoviePosterInFolder.Enabled = False
-                Else
-                    If (Not Preferences.usefoldernames AndAlso Not Preferences.allfolders) Then
-                    MsgBox("Either Use Foldername or Movies In Folders" & vbCrLf & "must be selected")
-                    End If
-                    Preferences.basicsavemode = False
-                    cbMovieFanartInFolders.Enabled = True 
-                    cbMoviePosterInFolder.Enabled = True
-                    cbMovieBasicSave.Checked = False
-                End If
-            Else
-                Preferences.basicsavemode = False
-                cbMovieFanartInFolders.Enabled = True 
-                cbMoviePosterInFolder.Enabled = True 
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-'Keywords As Tags
-    Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_keywordasTag.CheckedChanged
-        Try
-            If cb_keywordasTag.CheckState = CheckState.Checked Then
-                Preferences.keywordasTag = True
-                If Preferences.keywordlimit = 0 Then
-                    MsgBox(" Please select a limit above Zero keywords" & vbCrLf & "else no keywords will be stored as Tags")
-                End If
-            Else
-                Preferences.keywordasTag = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-    Private Sub cb_keywordlimit_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_keywordlimit.SelectedIndexChanged
-        Try
-            If IsNumeric(cb_keywordlimit.SelectedItem) Then
-                Preferences.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
-            ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
-                Preferences.keywordlimit = 0
-            Else
-                Preferences.keywordlimit = 999
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub btnMovSetCentralFolderSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovSetCentralFolderSelect.Click
 
     End Sub
 
-#End Region  'Movie Preferences -> Scraper Tab
+#End Region 'Movie Preferences -> Scraper Tab
 
 #Region "Movie Preferences -> General Tab"
 

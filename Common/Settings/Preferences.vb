@@ -208,6 +208,9 @@ Public Class Preferences
     Public Shared movxtrafanart As Boolean
     Public Shared movxtrafanartqty As Integer
     Public Shared dlxtrafanart As Boolean
+    Public Shared dlMovSetArtwork As Boolean
+    Public Shared MovSetArtSetFolder As Boolean
+    Public Shared MovSetArtCentralFolder As String
     Public Shared allfolders As Boolean
     Public Shared actorsave As Boolean
     Public Shared actorsavepath As String
@@ -606,6 +609,9 @@ Public Class Preferences
         movxtrafanartqty = 0
         movxtrathumb = False
         dlxtrafanart = False
+        dlMovSetArtwork = False
+        MovSetArtSetFolder = False
+        MovSetArtCentralFolder = ""
         allfolders = False
         'ReDim moviethumbpriority(3)
         maxmoviegenre = 99
@@ -1007,6 +1013,9 @@ Public Class Preferences
         root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
         root.AppendChild(doc, "movxtrafanartqty",                   movxtrafanartqty)                   'cbMovXtraFanartQty
         root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
+        root.AppendChild(doc, "dlMovSetArtwork",                    dlMovSetArtwork)                    'cbMovSetArtScrape
+        root.AppendChild(doc, "MovSetArtSetFolder",                 MovSetArtSetFolder)                 'rbMovSetFolder
+        root.AppendChild(doc, "MovSetArtCentralFolder",             MovSetArtCentralFolder)             'tbMovSetArtCentralFolder
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
         root.AppendChild(doc, "actorsavepath",                      actorsavepath)                      'localactorpath
@@ -1399,6 +1408,9 @@ Public Class Preferences
                     Case "movxtrafanart"                        : movxtrafanart = thisresult.InnerXml
                     Case "movxtrafanartqty"                     : movxtrafanartqty = thisresult.InnerXml 
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
+                    Case "dlMovSetArtwork"                      : dlMovSetArtwork = thisresult.InnerXml
+                    Case "MovSetArtSetFolder"                   : MovSetArtSetFolder = thisresult.InnerXml 
+                    Case "MovSetArtCentralFolder"               : MovSetArtCentralFolder = thisresult.InnerText  
                     Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
                     Case "TvXtraFanartQty"                      : TvXtraFanartQty = thisresult.InnerXml 
                     Case "TvDlFanartTvArt"                      : TvDlFanartTvArt = thisresult.InnerXml 
