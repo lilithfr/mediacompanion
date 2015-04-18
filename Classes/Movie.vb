@@ -3186,6 +3186,7 @@ Public Class Movie
     End Sub
 
     Sub UpdateMovieSetCache
+        If IsNothing(MovieSet) Then Exit Sub
         RemoveMovieSetFromCache
 
         If MovieSet.MovieSetName <> "" Or MovieSet.MovieSetName.ToLower <> "-none-" Then
@@ -3216,6 +3217,8 @@ Public Class Movie
     Sub RemoveMovieSetFromCache
         'If MovieSet.count = 0 Then Exit Sub
         '_parent.MovieSetDB.Remove(MovieSet)
+
+        If IsNothing(MovieSet) Then Exit Sub
         RemoveMovieSetFromCache(MovieSet.MovieSetId)
     End Sub
 
