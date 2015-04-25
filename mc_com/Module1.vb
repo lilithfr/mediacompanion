@@ -492,11 +492,13 @@ Module Module1
             For Each Regexs In Preferences.tv_RegexScraper
                 S = newepisode.episodepath '.ToLower
                 S = S.Replace("x264", "")
+                S = S.Replace("x265", "")
                 S = S.Replace("720p", "")
                 S = S.Replace("720i", "")
                 S = S.Replace("1080p", "")
                 S = S.Replace("1080i", "")
                 S = S.Replace("X264", "")
+                S = S.Replace("X265", "")
                 S = S.Replace("720P", "")
                 S = S.Replace("720I", "")
                 S = S.Replace("1080P", "")
