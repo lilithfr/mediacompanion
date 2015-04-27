@@ -32,6 +32,7 @@
   <Certificate find="All" replace="12" />
   <Certificate find="Approved" replace="12" />
   <Certificate find="K-11" replace="12" />
+  <Certificate find="K-12" replace="12" />
   <Certificate find="K-13" replace="12" />
   <Certificate find="K-3" replace="12" />
   <Certificate find="Livre" replace="12" />
@@ -47,6 +48,8 @@
   <Certificate find="Rated G" replace="12" />
   <Certificate find="R-13" replace="12" />
   <Certificate find="Rated 12*" replace="12" />
+  <Certificate find="Rated K-12" replace="12" />
+  <Certificate find="Rated A*" replace="12" />
   <Certificate find="Rated TV-PG" replace="12" />
 
 
@@ -64,6 +67,8 @@
   <Certificate find="R-16" replace="15" />
   <Certificate find="R16" replace="15" />
   <Certificate find="Rated MA15+" replace="15" />
+  <Certificate find="Rated M" replace="15" />
+  <Certificate find="Rated MA" replace="15" />
 
 
   <Certificate find="K-18" replace="18" />
@@ -76,6 +81,7 @@
   <Certificate find="Rated AO" replace="18" />
   <Certificate find="Rated X" replace="18" />
   <Certificate find="Rated R *" replace="18" />
+  <Certificate find="Rated  R *" replace="18" />
   <Certificate find="VM18" replace="18" />
 
   <Certificate find="Not Rated" replace="Unrated" />
