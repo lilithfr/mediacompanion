@@ -22,7 +22,7 @@ Imports XBMC.JsonRpc
 Public Class Form1
 
     Const HOME_PAGE            = "http://mediacompanion.codeplex.com"
-    Const NFO_INDEX As Integer = 5
+    Const NFO_INDEX As Integer = 6
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
     Public Const MCToolsCommands As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem
@@ -2735,7 +2735,8 @@ Public Class Form1
         '        cbFilterVotes         .Min = oMovies.MinVotes
         '        cbFilterVotes         .Max = oMovies.MaxVotes
 
-        If cbFilterVotes.Visible Then cbFilterVotes.Values = oMovies.ListVotes
+        If cbFilterVotes     .Visible Then cbFilterVotes     .Values = oMovies.ListVotes
+        If cbFilterFolderSizes.Visible Then cbFilterFolderSizes.Values = oMovies.ListFolderSizes
 
         If cbFilterYear.Visible Then 
             cbFilterYear.Min = If(oMovies.MinYear < 1850, 1850, oMovies.MinYear)
@@ -11229,15 +11230,20 @@ End Sub
         ApplyMovieFilters
     End Sub
 
+    Private Sub cbFilterFolderSizesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterFolderSizes.SelectionChanged
+        ApplyMovieFilters
+    End Sub
+
     Private Sub cbFilterYearChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.SelectionChanged
         ApplyMovieFilters
     End Sub
 
-    Private Sub cbFilterBeginSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.BeginSliding, cbFilterVotes.BeginSliding, cbFilterRating.BeginSliding
+    Private Sub cbFilterBeginSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.BeginSliding, cbFilterVotes.BeginSliding, cbFilterRating.BeginSliding, cbFilterFolderSizes.BeginSliding
         SplitContainer5.Panel2.ContextMenuStrip = Nothing
     End Sub
 
-    Private Sub cbFilterEndSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.EndSliding, cbFilterVotes.EndSliding, cbFilterRating.EndSliding
+
+    Private Sub cbFilterEndSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.EndSliding, cbFilterVotes.EndSliding, cbFilterRating.EndSliding, cbFilterFolderSizes.EndSliding
         SplitContainer5.Panel2.ContextMenuStrip = cmsConfigureMovieFilters
     End Sub
 
@@ -19929,7 +19935,9 @@ End Sub
                                                                         lblFilterResolution.Click, lblFilterAudioCodecs.Click, lblFilterAudioChannels.Click,
                                                                         lblFilterAudioBitrates.Click, lblFilterNumAudioTracks.Click, lblFilterAudioLanguages.Click,
                                                                         lblFilterActor.Click, lblFilterSource.Click, lblFilterTag.Click,
-                                                                        lblFilterDirector.Click, lblFilterVideoCodec.Click, lblFilterSubTitleLang.Click
+                                                                        lblFilterDirector.Click, lblFilterVideoCodec.Click, lblFilterSubTitleLang.Click,
+                                                                        lblFilterFolderSizes.Click
+                                                                        
 
         Dim filter As Object = GetFilterFromLabel(sender)
 

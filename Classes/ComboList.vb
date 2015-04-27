@@ -43,6 +43,7 @@ Public Class ComboList
     Property MovieSet             As New MovieSetDatabase 
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
+    Property FolderSize           As Long = -1
 
     Public Property title As String
         Get
@@ -290,6 +291,7 @@ Public Class ComboList
         Me.MovieSet.Absorb(From.MovieSet)
         Me.Actorlist            = From.Actorlist 
         Me.DirectorList         = From.DirectorList 
+        Me.FolderSize           = From.FolderSize
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

@@ -171,6 +171,15 @@ Public Class Movies
         End Get
     End Property    
 
+
+    Public ReadOnly Property ListFolderSizes As List(Of Integer)
+        Get
+            Dim q = From m In MovieCache Select CInt( m.FolderSize /(1024*1024*1024) )
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property    
+
     Public ReadOnly Property MaxVotes As Integer
         Get
             If MovieCache.Count=0 Then Return 0
@@ -1229,6 +1238,13 @@ Public Class Movies
                                     Dim subtitle As New SubtitleDetails
                                     subtitle.Language.Value = detail.InnerText
                                     newmovie.SubLang.Add(subtitle)
+                                Case "FolderSize"           : 
+                                    Try
+                                        newmovie.FolderSize = detail.InnerText
+                                    Catch
+                                        newmovie.FolderSize = -1
+                                    End Try                                
+
                             End Select
                         Next
                         If newmovie.source = Nothing Then
@@ -1344,7 +1360,7 @@ Public Class Movies
             child.AppendChild(doc, "Certificate", movie.Certificate)
             child.AppendChild(doc, "FrodoPosterExists", movie.FrodoPosterExists)
             child.AppendChild(doc, "PreFrodoPosterExists", movie.PreFrodoPosterExists)
-
+            child.AppendChild(doc, "FolderSize", movie.FolderSize)
             root.AppendChild(child)
         Next
 

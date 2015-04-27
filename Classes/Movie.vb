@@ -1201,6 +1201,10 @@ Public Class Movie
         End If    
 
         _movieCache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
+
+        _movieCache.FolderSize = Utilities.GetFolderSize(NfoPath)
+
+
         _movieCache.title               = _scrapedMovie.fullmoviebody.title
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle
         _movieCache.sortorder           = _scrapedMovie.fullmoviebody.sortorder

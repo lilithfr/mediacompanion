@@ -40,6 +40,7 @@ Public Class Data_GridViewMovie
     Property Premiered As String
     Property FrodoPosterExists As Boolean
     Property PreFrodoPosterExists As Boolean
+    Property FolderSize           As Long = -1
 
     Sub New 
     End Sub
@@ -84,6 +85,7 @@ Public Class Data_GridViewMovie
         container = movie.container
         videomissing = movie.VideoMissing
         AssignSubtitleLang(movie.SubLang)
+        FolderSize = movie.FolderSize
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -122,7 +124,8 @@ Public Class Data_GridViewMovie
         convertedMovie.Premiered            = Me.Premiered
         convertedMovie.Certificate          = Me.Certificate
         convertedMovie.FrodoPosterExists    = Me.FrodoPosterExists
-        convertedMovie.PreFrodoPosterExists  = Me.PreFrodoPosterExists
+        convertedMovie.PreFrodoPosterExists = Me.PreFrodoPosterExists
+        convertedMovie.FolderSize           = Me.FolderSize
         Return convertedMovie
     End Function
 
@@ -527,6 +530,12 @@ Public Class Data_GridViewMovie
     Public ReadOnly Property DisplayRating As String
         Get
             Return _rating.ToString("f1")
+        End Get
+    End Property
+
+    Public ReadOnly Property DisplayFolderSize As Integer
+        Get
+            Return CInt( FolderSize /(1024*1024*1024) )
         End Get
     End Property
 

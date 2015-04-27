@@ -118,14 +118,15 @@ Public Class clsGridViewMovie
             IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
         End If
 
-        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"  ,"File name"                                                               )
-        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"    ,"Folder name"                                                             )
-        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year","Movie year"   ,"Year"    , -20                                           )
-        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"  ,"Date Modified","Modified"                                                )
-        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"    ,"Rating"       ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
-        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"   ,"Runtime"      ,          , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added","Date Added"   ,"Added"                                                   )
-        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"     ,"Votes"        ,          ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
+        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                 )
+        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"    , -20                                           )
+        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                )
+        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
+        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
           
         SetFirstColumnWidth(dgv)
 
@@ -190,6 +191,8 @@ Public Class clsGridViewMovie
             If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
             If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
             If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
+            If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize" ).Width
+
 
             If firstColWidth>0 Then
                 If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"           ).Width = firstColWidth
@@ -267,6 +270,7 @@ Public Class clsGridViewMovie
 
         If Form1.cbFilterRating.Visible Then b = From f In b Where f.Rating >= Form1.cbFilterRating.SelectedMin and f.Rating <= Form1.cbFilterRating.SelectedMax     'Rating
         If Form1.cbFilterVotes .Visible Then b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
+        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where CInt( f.FolderSize /(1024*1024*1024) )  >= Form1.cbFilterFolderSizes.SelectedMin and CInt( f.FolderSize /(1024*1024*1024) )  <= Form1.cbFilterFolderSizes.SelectedMax     'Votes
         If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
        
         If Form1.cbFilterGenre          .Visible Then b = Form1.oMovies.ApplyGenresFilter           ( b , Form1.cbFilterGenre           )
@@ -333,6 +337,12 @@ Public Class clsGridViewMovie
                     b = From f In b Order By f.DisplaySortOrder Ascending
                 Else
                     b = From f In b Order By f.DisplaySortOrder Descending
+                End If
+            Case "Folder Size"
+                If GridSort = "Asc" Then
+                    b = From f In b Order By f.FolderSize Ascending
+                Else
+                    b = From f In b Order By f.FolderSize Descending
                 End If
             Case "Date Added"
                 If GridSort = "Asc" Then
