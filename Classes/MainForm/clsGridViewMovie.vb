@@ -127,6 +127,8 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
         IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
+         
+        dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
         SetFirstColumnWidth(dgv)
 
