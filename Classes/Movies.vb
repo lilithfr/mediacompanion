@@ -172,13 +172,36 @@ Public Class Movies
     End Property    
 
 
-    Public ReadOnly Property ListFolderSizes As List(Of Integer)
+    Public ReadOnly Property ListFolderSizes As List(Of Double)
         Get
-            Dim q = From m In MovieCache Select CInt( m.FolderSize /(1024*1024*1024) )
+'            Dim q = From m In MovieCache Select CInt( m.FolderSize /(1024*1024*1024) )
 
+            Dim q = From m In MovieCache Select m.DisplayFolderSize
+           
             Return q.AsEnumerable.ToList
         End Get
     End Property    
+
+    Public ReadOnly Property MinFolderSize As Double
+        Get
+            If MovieCache.Count=0 Then Return 0
+
+            Dim q = Aggregate m In MovieCache Into Min(m.DisplayFolderSize)
+
+            Return q
+        End Get
+    End Property    
+
+    Public ReadOnly Property MaxFolderSize As Double
+        Get
+            If MovieCache.Count=0 Then Return 0
+
+            Dim q = Aggregate m In MovieCache Into Max(m.DisplayFolderSize)
+
+            Return q
+        End Get
+    End Property    
+
 
     Public ReadOnly Property MaxVotes As Integer
         Get

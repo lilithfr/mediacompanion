@@ -5012,13 +5012,13 @@ Partial Class Form1
         '
         Me.cbFilterFolderSizes.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.cbFilterFolderSizes.Format = "D"
+        Me.cbFilterFolderSizes.Format = "f1"
         Me.cbFilterFolderSizes.InternalSelectedMax = 0R
         Me.cbFilterFolderSizes.InternalSelectedMin = 0R
         Me.cbFilterFolderSizes.Location = New System.Drawing.Point(147, 25447)
         Me.cbFilterFolderSizes.Max = 0R
         Me.cbFilterFolderSizes.Min = 0R
-        Me.cbFilterFolderSizes.Mode = MC_UserControls.SelectionRangeSlider.OperatingMode.Values
+        Me.cbFilterFolderSizes.Mode = MC_UserControls.SelectionRangeSlider.OperatingMode.MinMax
         Me.cbFilterFolderSizes.Name = "cbFilterFolderSize"
         Me.cbFilterFolderSizes.PointedValue = -1R
         Me.cbFilterFolderSizes.SelectedMax = 0R

@@ -270,7 +270,8 @@ Public Class clsGridViewMovie
 
         If Form1.cbFilterRating.Visible Then b = From f In b Where f.Rating >= Form1.cbFilterRating.SelectedMin and f.Rating <= Form1.cbFilterRating.SelectedMax     'Rating
         If Form1.cbFilterVotes .Visible Then b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
-        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where CInt( f.FolderSize /(1024*1024*1024) )  >= Form1.cbFilterFolderSizes.SelectedMin and CInt( f.FolderSize /(1024*1024*1024) )  <= Form1.cbFilterFolderSizes.SelectedMax     'Votes
+'        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where CInt( f.FolderSize /(1024*1024*1024) )  >= Form1.cbFilterFolderSizes.SelectedMin and CInt( f.FolderSize /(1024*1024*1024) )  <= Form1.cbFilterFolderSizes.SelectedMax     'Votes
+        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where f.DisplayFolderSize >= Form1.cbFilterFolderSizes.SelectedMin and f.DisplayFolderSize <= Form1.cbFilterFolderSizes.SelectedMax
         If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
        
         If Form1.cbFilterGenre          .Visible Then b = Form1.oMovies.ApplyGenresFilter           ( b , Form1.cbFilterGenre           )

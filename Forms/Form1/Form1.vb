@@ -2736,8 +2736,12 @@ Public Class Form1
         '        cbFilterVotes         .Max = oMovies.MaxVotes
 
         If cbFilterVotes     .Visible Then cbFilterVotes     .Values = oMovies.ListVotes
-        If cbFilterFolderSizes.Visible Then cbFilterFolderSizes.Values = oMovies.ListFolderSizes
+        'If cbFilterFolderSizes.Visible Then cbFilterFolderSizes.Values = oMovies.ListFolderSizes
 
+        If cbFilterFolderSizes.Visible Then 
+            cbFilterFolderSizes.Min = oMovies.MinFolderSize
+            cbFilterFolderSizes.Max = oMovies.MaxFolderSize
+        End If
         If cbFilterYear.Visible Then 
             cbFilterYear.Min = If(oMovies.MinYear < 1850, 1850, oMovies.MinYear)
             cbFilterYear.Max = oMovies.MaxYear

@@ -45,6 +45,13 @@ Public Class ComboList
     Property DirectorList         As New List(Of DirectorDatabase)
     Property FolderSize           As Long = -1
 
+
+    Public ReadOnly Property DisplayFolderSize As Double
+        Get
+            Return Math.Round( FolderSize/(1024*1024*1024),1 )
+        End Get
+    End Property
+
     Public Property title As String
         Get
             Return _title

@@ -533,12 +533,17 @@ Public Class Data_GridViewMovie
         End Get
     End Property
 
-    Public ReadOnly Property DisplayFolderSize As Integer
+    'Public ReadOnly Property DisplayFolderSize As Integer
+    '    Get
+    '        Return CInt( FolderSize /(1024*1024*1024) )
+    '    End Get
+    'End Property
+
+    Public ReadOnly Property DisplayFolderSize As Double
         Get
-            Return CInt( FolderSize /(1024*1024*1024) )
+            Return Math.Round( FolderSize/(1024*1024*1024),1 )
         End Get
     End Property
-
 
     Public ReadOnly Property MoviePathAndFileName As String
         Get
