@@ -3915,7 +3915,11 @@ Public Class Movie
                 Else If vr2.ToLower = "interlaced" or vr2.ToLower = "mbaff" or vr2.ToLower = "paff" Then
                     vr2 = "I"
                 Else
-                    vr2 = ""
+                    If vr1 <> "" AndAlso vr1.ToInt > 700 Then
+                        vr2 = "P"
+                    Else
+                        vr2 = ""
+                    End If
                 End If
                 vr = vr1 & vr2
             Catch ex As Exception
