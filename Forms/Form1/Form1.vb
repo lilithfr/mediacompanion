@@ -1988,7 +1988,7 @@ Public Class Form1
                 mov_SplitContainerAutoPosition
 
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
-                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
+                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags,workingMovie.DisplayFolderSize)
                 'FanTvArtList.Items.Clear()
                 'Panel6.Visible = CheckforExtraArt()
                 MovPanel6Update()
@@ -3459,6 +3459,7 @@ Public Class Form1
                 workingMovie.title = queryList(0).title
                 workingMovie.top250 = queryList(0).top250
                 workingMovie.year = queryList(0).year
+                workingMovie.FolderSize = queryList(0).FolderSize
                 mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
                 Call mov_FormPopulate(yielding)
             Else

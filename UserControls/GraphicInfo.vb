@@ -2,7 +2,7 @@
 
 Public Class GraphicInfo
 
-    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)))
+    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)),Optional folderSize As Double=-1)
         'OVERLAY RATING STARS
         Dim iRating As Single
 
@@ -41,7 +41,7 @@ Public Class GraphicInfo
             For Each item In flags
                 Try
                     If Not String.IsNullOrEmpty(item.Value) Then    'Catch any empty values for selected flags
-
+                        
                         Dim flagName As String = String.Format("media_{0}_{1}.png", item.Key, item.Value )
                         Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
                         Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
@@ -56,6 +56,36 @@ Public Class GraphicInfo
                 End Try
             Next
 
+            If folderSize > -1 Then
+                Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, "Resources\video_flags\long_blank.png")
+                Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
+                Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
+
+                Dim sFolderSize As String = String.Format("{0:00.0}GB",folderSize)
+
+                Dim offSet   = sFolderSize.Length - 2
+                Dim FontSize = 19
+
+                'create a font to write the values in the bitmap
+                Dim font as new Font("Tahoma", FontSize)
+
+                'origin for the string
+                Dim origin as new PointF(0, offSet)
+
+                'use the bitmap to draw
+                Dim graphic = Graphics.FromImage(bmFlag)
+
+                Dim gradient = 224
+
+                Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
+
+                'draw the string including the value
+                graphic.DrawString(sFolderSize, font, brush, origin)
+
+                Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
+                Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
+                grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
+            End If
         End If
 
         picbxFanart.Image = bmFanart
