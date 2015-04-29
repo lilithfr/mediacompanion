@@ -186,6 +186,7 @@ Partial Class Form1
         Me.tbaltnfoeditor = New System.Windows.Forms.TextBox()
         Me.cbDisplayRatingOverlay = New System.Windows.Forms.CheckBox()
         Me.cbDisplayMediaInfoOverlay = New System.Windows.Forms.CheckBox()
+        Me.cbDisplayMediaInfoFolderSize = New System.Windows.Forms.CheckBox()
         Me.cbMovFanartTvScrape = New System.Windows.Forms.CheckBox()
         Me.rbTvMissingPoster = New System.Windows.Forms.RadioButton()
         Me.cbShowAllAudioTracks = New System.Windows.Forms.CheckBox()
@@ -3216,6 +3217,18 @@ Partial Class Form1
         Me.ToolTip1.SetToolTip(Me.cbDisplayMediaInfoOverlay, "Shows Movie or Episode Media details"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Overlayed over Movie Fanart or Episode Thum"& _ 
         "b.")
         Me.cbDisplayMediaInfoOverlay.UseVisualStyleBackColor = true
+
+
+        Me.cbDisplayMediaInfoFolderSize.AutoSize = true
+        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(444, 525)
+        Me.cbDisplayMediaInfoFolderSize.Name = "cbDisplayMediaInfoFolderSize"
+        Me.cbDisplayMediaInfoFolderSize.Size = New System.Drawing.Size(229, 19)
+        Me.cbDisplayMediaInfoFolderSize.TabIndex = 90
+        Me.cbDisplayMediaInfoFolderSize.Text = "Display Folder Size over Fanart Image"
+        Me.cbDisplayMediaInfoFolderSize.UseVisualStyleBackColor = true
+
+
+
         '
         'cbMovFanartTvScrape
         '
@@ -3248,7 +3261,7 @@ Partial Class Form1
         'cbShowAllAudioTracks
         '
         Me.cbShowAllAudioTracks.AutoSize = true
-        Me.cbShowAllAudioTracks.Location = New System.Drawing.Point(444, 525)
+        Me.cbShowAllAudioTracks.Location = New System.Drawing.Point(444, 552)
         Me.cbShowAllAudioTracks.Name = "cbShowAllAudioTracks"
         Me.cbShowAllAudioTracks.Size = New System.Drawing.Size(262, 19)
         Me.cbShowAllAudioTracks.TabIndex = 92
@@ -14985,6 +14998,7 @@ Partial Class Form1
         Me.TabPage29.Controls.Add(Me.cbShowAllAudioTracks)
         Me.TabPage29.Controls.Add(Me.cbMultiMonitorEnable)
         Me.TabPage29.Controls.Add(Me.cbDisplayMediaInfoOverlay)
+        Me.TabPage29.Controls.Add(Me.cbDisplayMediaInfoFolderSize)
         Me.TabPage29.Controls.Add(Me.cbDisplayRatingOverlay)
         Me.TabPage29.Controls.Add(Me.GroupBox45)
         Me.TabPage29.Controls.Add(Me.cb_IgnoreAn)
@@ -15023,7 +15037,7 @@ Partial Class Form1
         'cbMultiMonitorEnable
         '
         Me.cbMultiMonitorEnable.AutoSize = true
-        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(444, 550)
+        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(444, 577)
         Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
         Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
         Me.cbMultiMonitorEnable.TabIndex = 91
@@ -18359,6 +18373,7 @@ End Sub
     Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents lblaltnfoeditorclear As System.Windows.Forms.Label
     Friend WithEvents cbDisplayMediaInfoOverlay As System.Windows.Forms.CheckBox
+    Friend WithEvents cbDisplayMediaInfoFolderSize As System.Windows.Forms.CheckBox
     Friend WithEvents cbDisplayRatingOverlay As System.Windows.Forms.CheckBox
     Friend WithEvents tsmiSetWatched As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiClearWatched As System.Windows.Forms.ToolStripMenuItem

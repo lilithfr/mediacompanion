@@ -32,12 +32,13 @@ Public Class GraphicInfo
             End If
         End If
 
+        Dim padding As Integer = 2
+        Dim xPos As Integer = padding * fanartRatio
+        Dim yPos As Integer = (fanartHeight - (32 + padding)) * fanartRatio
+
+
         'OVERLAY VIDEO FLAGS
         If Preferences.DisplayMediainfoOverlay Then
-            Dim padding As Integer = 2
-            Dim xPos As Integer = padding * fanartRatio
-            Dim yPos As Integer = (fanartHeight - (32 + padding)) * fanartRatio
-
             For Each item In flags
                 Try
                     If Not String.IsNullOrEmpty(item.Value) Then    'Catch any empty values for selected flags
@@ -55,37 +56,37 @@ Public Class GraphicInfo
                     'If the derived filname doesn't exist, we'll just ignore it (this will happen if aspect comes back as empty string).
                 End Try
             Next
+        End If
 
-            If folderSize > -1 Then
-                Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, "Resources\video_flags\long_blank.png")
-                Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
-                Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
+        If Preferences.DisplayMediaInfoFolderSize And folderSize > -1 Then
+            Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, "Resources\video_flags\long_blank.png")
+            Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
+            Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
 
-                Dim sFolderSize As String = String.Format("{0:00.0}GB",folderSize)
+            Dim sFolderSize As String = String.Format("{0:00.0}GB",folderSize)
 
-                Dim offSet   = sFolderSize.Length - 2
-                Dim FontSize = 19
+            Dim offSet   = sFolderSize.Length - 2
+            Dim FontSize = 19
 
-                'create a font to write the values in the bitmap
-                Dim font as new Font("Tahoma", FontSize)
+            'create a font to write the values in the bitmap
+            Dim font as new Font("Tahoma", FontSize)
 
-                'origin for the string
-                Dim origin as new PointF(0, offSet)
+            'origin for the string
+            Dim origin as new PointF(0, offSet)
 
-                'use the bitmap to draw
-                Dim graphic = Graphics.FromImage(bmFlag)
+            'use the bitmap to draw
+            Dim graphic = Graphics.FromImage(bmFlag)
 
-                Dim gradient = 224
+            Dim gradient = 224
 
-                Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
+            Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
 
-                'draw the string including the value
-                graphic.DrawString(sFolderSize, font, brush, origin)
+            'draw the string including the value
+            graphic.DrawString(sFolderSize, font, brush, origin)
 
-                Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
-                Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
-                grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
-            End If
+            Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
+            Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
+            grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
         End If
 
         picbxFanart.Image = bmFanart

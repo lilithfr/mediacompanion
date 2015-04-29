@@ -11966,6 +11966,7 @@ End Sub
         cbCheckForNewVersion        .Checked    = Preferences.CheckForNewVersion
         cbDisplayRatingOverlay      .Checked    = Preferences.DisplayRatingOverlay
         cbDisplayMediaInfoOverlay   .Checked    = Preferences.DisplayMediainfoOverlay 
+        cbDisplayMediaInfoFolderSize.Checked    = Preferences.DisplayMediaInfoFolderSize
         cbMultiMonitorEnable        .Checked    = Preferences.MultiMonitoEnabled 
 
         If Preferences.videomode = 1 Then
@@ -12717,6 +12718,13 @@ End Sub
     Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
         If prefsload Then Exit Sub
         Preferences.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
+        generalprefschanged = True
+        btnGeneralPrefsSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbDisplayMediaInfoFolderSize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoFolderSize.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.DisplayMediaInfoFolderSize = cbDisplayMediaInfoFolderSize.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
