@@ -66,7 +66,7 @@ Public Class GraphicInfo
             Dim sFolderSize As String = String.Format("{0:00.0}GB",folderSize)
 
             Dim offSet   = sFolderSize.Length - 2
-            Dim FontSize = 19
+            Dim FontSize = 19 - ((offSet-4)*2)
 
             'create a font to write the values in the bitmap
             Dim font as new Font("Tahoma", FontSize)

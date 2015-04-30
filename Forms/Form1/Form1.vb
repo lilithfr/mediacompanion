@@ -4310,7 +4310,7 @@ Public Class Form1
                         mov_DisplayFanart()
                         util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                         Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
-                        movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
+                        movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -11701,7 +11701,7 @@ End Sub
                 mov_DisplayFanart()
                 util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
-                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags)
+                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
             ElseIf CurrentTab = "tv shows" Then
                 TvTreeview_AfterSelect_Do()
             End If
