@@ -169,8 +169,17 @@ Public Class Movies
 
             Return q.AsEnumerable.ToList
         End Get
+    End Property   
+     
+    Public ReadOnly Property ListRuntimes As List(Of Integer)
+        Get
+            Dim q = From m In MovieCache Select m.IntRuntime
+
+            Return q.AsEnumerable.ToList
+        End Get
     End Property    
 
+    
 
     Public ReadOnly Property ListFolderSizes As List(Of Double)
         Get

@@ -131,6 +131,23 @@ Public Class MovieFilters
         Next
     End Sub
 
+
+    Public Sub RemoveInvalidMovieFilters
+        Dim c    As Control
+        Dim item As MovieFilter
+
+        For i=Items.Count-1 To 0 Step -1
+
+            item = Items(i)
+            c    = FilterPanel.Controls(item.Name)
+
+            If IsNothing(c) Then 
+               Items.Remove(item)
+            End If
+        Next
+    End Sub
+
+
     Public Sub PositionMovieFilters
         Dim index       As Integer =  1
         Dim count       As Integer =  0

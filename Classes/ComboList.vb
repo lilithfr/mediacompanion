@@ -92,6 +92,24 @@ Public Class ComboList
         End Get
     End Property
 
+    Private _intRuntime As Integer = -1
+    Private _calculatedRuntime As Boolean = False
+
+    Public ReadOnly Property IntRuntime As Integer
+        Get
+            If Not _calculatedRuntime Then
+                _calculatedRuntime = True
+                Try
+                    _intRuntime = runtime.Replace(" min","")
+                Catch
+                    _intRuntime = 0
+                End Try
+            End If
+
+            Return _intRuntime
+        End Get
+    End Property
+
     Public ReadOnly Property MissingFanart As Boolean
         Get
             Return _missingdata1 And 1

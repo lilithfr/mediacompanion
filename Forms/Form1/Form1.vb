@@ -615,6 +615,7 @@ Public Class Form1
                 If Preferences.startuptab = 0 Then
                     If Not MoviesFiltersResizeCalled Then
                         MoviesFiltersResizeCalled = True
+                        Preferences.movie_filters.RemoveInvalidMovieFilters
                         Preferences.movie_filters.SetMovieFiltersVisibility
                         UpdateMovieFiltersPanel
                     End If
@@ -2736,6 +2737,7 @@ Public Class Form1
         '        cbFilterVotes         .Max = oMovies.MaxVotes
 
         If cbFilterVotes     .Visible Then cbFilterVotes     .Values = oMovies.ListVotes
+        If cbFilterRuntime   .Visible Then cbFilterRuntime   .Values = oMovies.ListRuntimes
         'If cbFilterFolderSizes.Visible Then cbFilterFolderSizes.Values = oMovies.ListFolderSizes
 
         If cbFilterFolderSizes.Visible Then 
@@ -11235,6 +11237,10 @@ End Sub
         ApplyMovieFilters
     End Sub
 
+    Private Sub cbFilterRuntimeChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRuntime.SelectionChanged
+        ApplyMovieFilters
+    End Sub
+
     Private Sub cbFilterFolderSizesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterFolderSizes.SelectionChanged
         ApplyMovieFilters
     End Sub
@@ -11243,12 +11249,12 @@ End Sub
         ApplyMovieFilters
     End Sub
 
-    Private Sub cbFilterBeginSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.BeginSliding, cbFilterVotes.BeginSliding, cbFilterRating.BeginSliding, cbFilterFolderSizes.BeginSliding
+    Private Sub cbFilterBeginSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRuntime.BeginSliding, cbFilterYear.BeginSliding, cbFilterVotes.BeginSliding, cbFilterRating.BeginSliding, cbFilterFolderSizes.BeginSliding
         SplitContainer5.Panel2.ContextMenuStrip = Nothing
     End Sub
 
 
-    Private Sub cbFilterEndSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.EndSliding, cbFilterVotes.EndSliding, cbFilterRating.EndSliding, cbFilterFolderSizes.EndSliding
+    Private Sub cbFilterEndSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRuntime.EndSliding, cbFilterYear.EndSliding, cbFilterVotes.EndSliding, cbFilterRating.EndSliding, cbFilterFolderSizes.EndSliding
         SplitContainer5.Panel2.ContextMenuStrip = cmsConfigureMovieFilters
     End Sub
 
@@ -19949,7 +19955,7 @@ End Sub
                                                                         lblFilterAudioBitrates.Click, lblFilterNumAudioTracks.Click, lblFilterAudioLanguages.Click,
                                                                         lblFilterActor.Click, lblFilterSource.Click, lblFilterTag.Click,
                                                                         lblFilterDirector.Click, lblFilterVideoCodec.Click, lblFilterSubTitleLang.Click,
-                                                                        lblFilterFolderSizes.Click
+                                                                        lblFilterFolderSizes.Click, lblFilterRuntime.Click
                                                                         
 
         Dim filter As Object = GetFilterFromLabel(sender)
