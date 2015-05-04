@@ -348,6 +348,7 @@ Module Module1
         ConsoleOrLog("")
         ConsoleOrLog("Tasks Completed")
         ConsoleOrLog("****************************************************")
+        Writelogfile(logstr)
         If Not visible Then exitsound
         System.Environment.Exit(EnvExit)
     End Sub
@@ -370,10 +371,24 @@ Module Module1
         If visible Then
             Console.WriteLine(str)
         End If
-        Using sw As New StreamWriter(logfile, true)
-            sw.WriteLine(str.TrimEnd)
+        logstr.Add(str)
+        'Using sw As New StreamWriter(logfile, true)
+        '    sw.WriteLine(str.TrimEnd)
+        '    sw.Close()
+        'End Using
+    End Sub
+
+    Public Sub Writelogfile(ByVal log As List(Of String))
+        Try
+            Using sw As New StreamWriter(logfile, true)
+                For Each line In log
+                    sw.WriteLine(line.TrimEnd)
+                Next
+                sw.Close()
+            End Using
+        Catch ex As Exception
             sw.Close()
-        End Using
+        End Try
     End Sub
 
     Public Sub exitsound
@@ -1905,11 +1920,11 @@ Module Module1
 
             Thread.Sleep(200)
         End While
-        If Not visible Then
-            For Each lgstr In logstr
-                ConsoleOrLog(lgstr)
-            Next
-        End If
+        'If Not visible Then
+        '    For Each lgstr In logstr
+        '        ConsoleOrLog(lgstr)
+        '    Next
+        'End If
     End Sub
 
 Private Sub scraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs)  Handles scraper.DoWork
@@ -1921,11 +1936,11 @@ Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.Co
 
     If Not IsNothing(oProgress.Log) Then
             If oProgress.Log.Contains("!!! ") Then
-                If Not visible Then
-                    logstr.Add(oProgress.Log.Replace("!!! ", ""))
-                Else
+                'If Not visible Then
+                '    logstr.Add(oProgress.Log.Replace("!!! ", ""))
+               ' Else
                     ConsoleOrLog(oProgress.Log.Replace("!!! ", ""))
-                End If
+                'End If
             End If
         End If
         Thread.Sleep(1)
