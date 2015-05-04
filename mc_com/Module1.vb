@@ -222,6 +222,7 @@ Module Module1
         Try
             ConsoleOrLog("Loading Movie Database caches")
             oMovies.LoadPeopleCaches
+            oMovies.LoadMovieSetCaches
         Catch
             oMovies.RebuildMoviePeopleCaches
         End Try
