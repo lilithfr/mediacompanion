@@ -152,6 +152,8 @@ Public Class Form1
     Public MovieSearchEngine As String = "imdb"
     Dim mov_TableColumnName As String = ""
     Dim MovieSetMissingID As Boolean = False
+    Dim MovFanartToggle As Boolean = False
+    Dim MovPosterToggle As Boolean = False
 
     Public cropMode As String = "movieposter"
 
@@ -3868,15 +3870,16 @@ Public Class Form1
                 Next
             End If
             GroupBoxFanartExtrathumbs.Enabled = Not isrootfolder 'Or usefoldernames Or allfolders ' Visible 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
+            UpdateMissingFanartNav()
             If Panel2.Controls.Count = 0 Then
                 Call mov_FanartLoad()
             End If
             currentTabIndex = TabControl2.SelectedIndex
-            UpdateMissingFanartNav()
             EnableFanartScrolling()
             ElseIf tab.ToLower = "posters" Then
                 currentTabIndex = TabControl2.SelectedIndex
                 gbMoviePostersAvailable.Refresh()
+                btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
                 UpdateMissingPosterNav()
             ElseIf tab.ToLower = "change movie" Then
                 Call mov_ChangeMovieSetup(MovieSearchEngine)
@@ -3960,6 +3963,8 @@ Public Class Form1
 
     Private Sub mov_FanartLoad()
         rbMovFanart.Checked = True
+        MovFanartToggle = False
+        btnMovFanartToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
         Dim isfanartpath As String = workingMovieDetails.fileinfo.fanartpath
         Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath = "", "", workingMovieDetails.fileinfo.videotspath + "fanart.jpg")
         Dim movfanartpath As String = Utilities.DefaultFanartPath
@@ -4005,32 +4010,36 @@ Public Class Form1
                 '    lblMovFanartHeight.Text = ""
                 'End If
             Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
             End Try
         End If
+        MovFanartDisplay()
+    End Sub
+
+    Public Sub MovFanartDisplay(Optional ByVal SetId As String = "")
 
         Me.Refresh()
   '     Application.DoEvents()
         fanartArray.Clear()
         noFanart = False
-
-
         Dim tmdb As New TMDb '(workingmoviedetails.fullmoviebody.imdbid)
-        tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
-        tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
+        If SetId = "" Then
+            tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+            tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
+        Else
+            tmdb.Imdb = ""
+            tmdb.TmdbId = SetId
+        End If
         fanartArray.AddRange(tmdb.Fanart)
 
         Try
             If fanartArray.Count > 0 Then
-
-
                 Dim location As Integer = 0
                 Dim itemcounter As Integer = 0
                 For Each item In fanartArray
                     fanartBoxes() = New PictureBox()
-
                     With fanartBoxes
                         .Location = New Point(0, location)
                         If fanartArray.Count > 2 Then
@@ -4382,6 +4391,7 @@ Public Class Form1
         End While
 
         lblFanartMissingCount.Text = x & " Missing" 
+        lblFanartMissingCount.Visible = x <> 0
     End Sub
 
     Sub UpdateMissingFanartNextBtn 
@@ -4401,6 +4411,7 @@ Public Class Form1
 
             i = i + 1
         End While
+        btnNextMissingFanart.Visible = btnNextMissingFanart.Enabled 
     End Sub
 
     Sub UpdateMissingFanartPrevBtn
@@ -4420,6 +4431,7 @@ Public Class Form1
 
             i = i - 1
         End While
+        btnPrevMissingFanart.Visible = btnPrevMissingFanart.Enabled 
     End Sub
 
     Sub UpdateMissingPoster
@@ -4458,6 +4470,7 @@ Public Class Form1
         End While
 
         lblPosterMissingCount.Text = x & " Missing" 
+        lblPosterMissingCount.Visible = x <> 0
     End Sub
 
     Sub UpdateMissingPosterNextBtn 
@@ -4477,6 +4490,7 @@ Public Class Form1
 
             i = i + 1
         End While
+        btnNextMissingPoster.Visible = btnNextMissingPoster.Enabled 
     End Sub
 
     Sub UpdateMissingPosterPrevBtn
@@ -4492,6 +4506,7 @@ Public Class Form1
             End If
             i = i - 1
         End While
+        btnPrevMissingPoster.Visible = btnPrevMissingPoster.Enabled 
     End Sub
 
     Private Function util_ImageCrop(ByVal SrcBmp As Bitmap, ByVal NewSize As Size, ByVal StartPoint As Point) As Bitmap
@@ -14625,16 +14640,30 @@ End Sub
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-    Private Sub rbMovSetCentralFolder_CheckedChanged( sender As Object,  e As EventArgs) Handles rbMovSetArtSetFolder.CheckedChanged
+    Private Sub rbMovSetCentralFolder_CheckedChanged( sender As Object,  e As EventArgs) Handles rbMovSetArtSetFolder.CheckedChanged, rbMovSetFolder.CheckedChanged 
         If prefsload Then Exit Sub
         Preferences.MovSetArtSetFolder = rbMovSetArtSetFolder.checked
-        btnMovSetCentralFolderSelect.Enabled = rbMovSetArtSetFolder.Checked 
+        btnMovSetCentralFolderSelect.Enabled = rbMovSetArtSetFolder.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub btnMovSetCentralFolderSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovSetCentralFolderSelect.Click
-
+        Try
+            Dim theFolderBrowser As New FolderBrowserDialog
+            Dim thefoldernames As String
+            theFolderBrowser.Description = "Please Select Folder to Save All Collection Artwork"
+            theFolderBrowser.ShowNewFolderButton = True
+            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+            theFolderBrowser.SelectedPath = Preferences.lastpath
+            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (theFolderBrowser.SelectedPath)
+                tbMovSetArtCentralFolder.Text = thefoldernames
+                Preferences.MovSetArtCentralFolder = thefoldernames
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 #End Region 'Movie Preferences -> Scraper Tab
@@ -15267,6 +15296,7 @@ End Sub
                 Preferences.lastpath = thefoldernames
                 Preferences.actorsavepath = thefoldernames
             End If
+            theFolderBrowser.Dispose()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -16288,6 +16318,19 @@ End Sub
         DisplayMovie()
         UpdateMissingFanartNav()
         mov_FanartLoad()
+    End Sub
+
+    Private Sub btnMovFanartToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartToggle.Click
+        If MovFanartToggle Then
+            btnMovFanartToggle.Text = "Show MovieSet Fanart"
+            btnMovFanartToggle.BackColor = System.Drawing.Color.Lime
+            'MovFanartDisplay()
+        Else
+            btnMovFanartToggle.Text = "Show Movie Fanart"
+            btnMovFanartToggle.BackColor = System.Drawing.Color.Aqua
+            'MovFanartDisplay(workingMovieDetails.fullmoviebody.movieset.MovieSetId)
+        End If
+        MovFanartToggle = Not MovFanartToggle 
     End Sub
 
 #End Region
