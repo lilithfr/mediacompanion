@@ -1104,7 +1104,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function GetLangCode(ByVal strLang As String) As String
         Try
             Select Case strLang.ToLower
-                Case "english"
+                Case "portugues"
+                    Return "por"
+                Case "undefined"
+                    Return ""
+                Case "unknown"
+                    Return ""
+               Case "english","english / english","english (us)"
                     Return "eng"
                 Case "german"
                     Return "deu"

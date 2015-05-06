@@ -352,6 +352,7 @@ Public Class ComboList
     Public Sub AssignAudio(From As List(Of AudioDetails))
         Me.Audio.Clear
         Me.Audio.AddRange(From)
+        Me._assignedDefaultAudioTrack = False
     End Sub
 
     Public Sub AssignSubtitleLang(From As List(Of SubtitleDetails))
