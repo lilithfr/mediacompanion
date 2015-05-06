@@ -1,6 +1,7 @@
 Imports System.IO
 Imports XBMC.JsonRpc
 Imports System.Text.RegularExpressions
+Imports System.Linq
 
 Public Class ComboList
 
@@ -274,6 +275,35 @@ Public Class ComboList
             Return s
         End Get
     End Property
+
+
+    Private _assignedDefaultAudioTrack As Boolean = False
+    Private _defaultAudioTrack As AudioDetails
+
+    Public Property DefaultAudioTrack As AudioDetails
+        Get
+            If Not _assignedDefaultAudioTrack Then
+                _assignedDefaultAudioTrack = True
+
+                If Audio.Count > 0 Then
+                    _defaultAudioTrack = (From x In Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+
+                    If IsNothing(_defaultAudioTrack) Then
+                        _defaultAudioTrack = Audio(0)
+                    End If
+                End If
+            End If
+
+            Return _defaultAudioTrack
+        End Get
+
+        Set
+            _assignedDefaultAudioTrack = True
+            _defaultAudioTrack = Value
+        End Set
+    End Property    
+
+
 
     Public Sub Assign(From As ComboList)
 

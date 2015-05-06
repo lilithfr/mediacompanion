@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text.RegularExpressions
+Imports System.Linq
 
 Public Class Data_GridViewMovie
     Dim _fullpathandfilename As String
@@ -86,6 +87,7 @@ Public Class Data_GridViewMovie
         videomissing = movie.VideoMissing
         AssignSubtitleLang(movie.SubLang)
         FolderSize = movie.FolderSize
+        DefaultAudioTrack = movie.DefaultAudioTrack
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -126,6 +128,8 @@ Public Class Data_GridViewMovie
         convertedMovie.FrodoPosterExists    = Me.FrodoPosterExists
         convertedMovie.PreFrodoPosterExists = Me.PreFrodoPosterExists
         convertedMovie.FolderSize           = Me.FolderSize
+        convertedMovie.DefaultAudioTrack    = Me.DefaultAudioTrack
+
         Return convertedMovie
     End Function
 
@@ -664,5 +668,33 @@ Public Class Data_GridViewMovie
         Me.SubLang.Clear
         Me.SubLang.AddRange(From)
     End Sub
+
+    Private _assignedDefaultAudioTrack As Boolean = False
+    Private _defaultAudioTrack As AudioDetails
+
+    Public Property DefaultAudioTrack As AudioDetails
+        Get
+            If Not _assignedDefaultAudioTrack Then
+                _assignedDefaultAudioTrack = True
+
+                If Audio.Count > 0 Then
+                    _defaultAudioTrack = (From x In Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+
+                    If IsNothing(_defaultAudioTrack) Then
+                        _defaultAudioTrack = Audio(0)
+                    End If
+                End If
+            End If
+
+            Return _defaultAudioTrack
+        End Get
+
+        Set
+            _assignedDefaultAudioTrack = True
+            _defaultAudioTrack = Value
+        End Set
+    End Property    
+
+
 
 End Class
