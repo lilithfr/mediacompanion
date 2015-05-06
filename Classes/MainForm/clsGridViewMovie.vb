@@ -277,22 +277,23 @@ Public Class clsGridViewMovie
 '        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where CInt( f.FolderSize /(1024*1024*1024) )  >= Form1.cbFilterFolderSizes.SelectedMin and CInt( f.FolderSize /(1024*1024*1024) )  <= Form1.cbFilterFolderSizes.SelectedMax     'Votes
         If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where f.DisplayFolderSize >= Form1.cbFilterFolderSizes.SelectedMin and f.DisplayFolderSize <= Form1.cbFilterFolderSizes.SelectedMax
         If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
-       
-        If Form1.cbFilterGenre          .Visible Then b = Form1.oMovies.ApplyGenresFilter           ( b , Form1.cbFilterGenre           )
-        If Form1.cbFilterCertificate    .Visible Then b = Form1.oMovies.ApplyCertificatesFilter     ( b , Form1.cbFilterCertificate     )
-        If Form1.cbFilterSet            .Visible Then b = Form1.oMovies.ApplySetsFilter             ( b , Form1.cbFilterSet             )
-        If Form1.cbFilterResolution     .Visible Then b = Form1.oMovies.ApplyResolutionsFilter      ( b , Form1.cbFilterResolution      )
-        If Form1.cbFilterVideoCodec     .Visible Then b = Form1.oMovies.ApplyVideoCodecFilter       ( b , Form1.cbFilterVideoCodec      )
-        If Form1.cbFilterAudioCodecs    .Visible Then b = Form1.oMovies.ApplyAudioCodecsFilter      ( b , Form1.cbFilterAudioCodecs     )
-        If Form1.cbFilterAudioChannels  .Visible Then b = Form1.oMovies.ApplyAudioChannelsFilter    ( b , Form1.cbFilterAudioChannels   )
-        If Form1.cbFilterAudioBitrates  .Visible Then b = Form1.oMovies.ApplyAudioBitratesFilter    ( b , Form1.cbFilterAudioBitrates   )
-        If Form1.cbFilterNumAudioTracks .Visible Then b = Form1.oMovies.ApplyNumAudioTracksFilter   ( b , Form1.cbFilterNumAudioTracks  )
-        If Form1.cbFilterAudioLanguages .Visible Then b = Form1.oMovies.ApplyAudioLanguagesFilter   ( b , Form1.cbFilterAudioLanguages  )
-        If Form1.cbFilterActor          .Visible Then b = Form1.oMovies.ApplyActorsFilter           ( b , Form1.cbFilterActor           )
-        If Form1.cbFilterDirector       .Visible Then b = Form1.oMovies.ApplyDirectorsFilter        ( b , Form1.cbFilterDirector        )
-        If Form1.cbFilterSource         .Visible Then b = Form1.oMovies.ApplySourcesFilter          ( b , Form1.cbFilterSource          )
-        If Form1.cbFilterTag            .Visible Then b = Form1.oMovies.ApplyTagsFilter             ( b , Form1.cbFilterTag             )
-        If Form1.cbFilterSubTitleLang   .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter     ( b , Form1.cbFilterSubTitleLang    )
+
+        If Form1.cbFilterGenre                 .Visible Then b = Form1.oMovies.ApplyGenresFilter                ( b , Form1.cbFilterGenre                 )
+        If Form1.cbFilterCertificate           .Visible Then b = Form1.oMovies.ApplyCertificatesFilter          ( b , Form1.cbFilterCertificate           )
+        If Form1.cbFilterSet                   .Visible Then b = Form1.oMovies.ApplySetsFilter                  ( b , Form1.cbFilterSet                   )
+        If Form1.cbFilterResolution            .Visible Then b = Form1.oMovies.ApplyResolutionsFilter           ( b , Form1.cbFilterResolution            )
+        If Form1.cbFilterVideoCodec            .Visible Then b = Form1.oMovies.ApplyVideoCodecFilter            ( b , Form1.cbFilterVideoCodec            )
+        If Form1.cbFilterAudioCodecs           .Visible Then b = Form1.oMovies.ApplyAudioCodecsFilter           ( b , Form1.cbFilterAudioCodecs           )
+        If Form1.cbFilterAudioChannels         .Visible Then b = Form1.oMovies.ApplyAudioChannelsFilter         ( b , Form1.cbFilterAudioChannels         )
+        If Form1.cbFilterAudioBitrates         .Visible Then b = Form1.oMovies.ApplyAudioBitratesFilter         ( b , Form1.cbFilterAudioBitrates         )
+        If Form1.cbFilterNumAudioTracks        .Visible Then b = Form1.oMovies.ApplyNumAudioTracksFilter        ( b , Form1.cbFilterNumAudioTracks        )
+        If Form1.cbFilterAudioLanguages        .Visible Then b = Form1.oMovies.ApplyAudioLanguagesFilter        ( b , Form1.cbFilterAudioLanguages        )
+        If Form1.cbFilterAudioDefaultLanguages .Visible Then b = Form1.oMovies.ApplyAudioDefaultLanguagesFilter ( b , Form1.cbFilterAudioDefaultLanguages )
+        If Form1.cbFilterActor                 .Visible Then b = Form1.oMovies.ApplyActorsFilter                ( b , Form1.cbFilterActor                 )
+        If Form1.cbFilterDirector              .Visible Then b = Form1.oMovies.ApplyDirectorsFilter             ( b , Form1.cbFilterDirector              )
+        If Form1.cbFilterSource                .Visible Then b = Form1.oMovies.ApplySourcesFilter               ( b , Form1.cbFilterSource                )
+        If Form1.cbFilterTag                   .Visible Then b = Form1.oMovies.ApplyTagsFilter                  ( b , Form1.cbFilterTag                   )
+        If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )       
  
         Select Case Form1.cbSort.Text
             Case "A - Z"

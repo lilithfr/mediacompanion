@@ -616,6 +616,21 @@ Public Class Movies
         End Get
     End Property    
 
+    Public ReadOnly Property AudioDefaultLanguages As IEnumerable
+        Get
+            Dim result As IEnumerable = From m In MovieCache Select m.fullpathandfilename, field=If(m.DefaultAudioTrack.Language.Value="","Unknown",m.DefaultAudioTrack.Language.Value)
+
+            Return result
+        End Get
+    End Property    
+
+    Public ReadOnly Property AudioDefaultLanguagesFilter As List(Of String)
+        Get
+            Return QryMovieCache(AudioDefaultLanguages)
+        End Get
+    End Property    
+
+
     Public ReadOnly Property AudioChannelsFilter As List(Of String)
         Get
             Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
@@ -2233,6 +2248,22 @@ Public Class Movies
 
         Return recs
     End Function
+
+
+    Function ApplyAudioDefaultLanguagesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+
+        Dim fi As New FilteredItems(ccb,"Unknown","")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.DefaultAudioTrack.Language.Value) )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.DefaultAudioTrack.Language.Value) )
+        End If
+
+        Return recs
+    End Function
+
 
     Function ApplyActorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
         Return ApplyPeopleFilter(ActorDb, recs, ccb)

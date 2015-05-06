@@ -8171,6 +8171,7 @@ Public Class Form1
                     cbFilterSubTitleLang.Font = newFont
                     cbFilterAudioCodecs.Font = newFont
                     cbFilterAudioLanguages.Font = newFont
+                    cbFilterAudioDefaultLanguages.Font = newFont
                     cbFilterAudioBitrates .Font = newFont
                     cbFilterAudioChannels .Font = newFont
                     cbFilterNumAudioTracks.Font = newFont
@@ -11231,7 +11232,8 @@ End Sub
                                                                                                     cbFilterAudioCodecs.TextChanged, cbFilterAudioChannels.TextChanged,
                                                                                                     cbFilterAudioBitrates.TextChanged, cbFilterNumAudioTracks.TextChanged,
                                                                                                     cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged,
-                                                                                                    cbFilterDirector.TextChanged, cbFilterVideoCodec.TextChanged, cbFilterSubTitleLang.TextChanged
+                                                                                                    cbFilterDirector.TextChanged, cbFilterVideoCodec.TextChanged, cbFilterSubTitleLang.TextChanged,
+                                                                                                    cbFilterAudioDefaultLanguages.TextChanged
 
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
@@ -11577,20 +11579,21 @@ End Sub
 
         UpdateMinMaxMovieFilters
 
-        If cbFilterGenre         .Visible Then cbFilterGenre         .UpdateItems( oMovies.GenresFilter         )
-        If cbFilterCertificate   .Visible Then cbFilterCertificate   .UpdateItems( oMovies.CertificatesFilter   )
-        If cbFilterSet           .Visible Then cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
-        If cbFilterTag           .Visible Then cbFilterTag           .UpdateItems( oMovies.TagFilter            )
-        If cbFilterResolution    .Visible Then cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
-        If cbFilterVideoCodec    .Visible Then cbFilterVideoCodec    .UpdateItems( oMovies.VideoCodecFilter     )
-        If cbFilterAudioCodecs   .Visible Then cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
-        If cbFilterAudioChannels .Visible Then cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
-        If cbFilterAudioBitrates .Visible Then cbFilterAudioBitrates .UpdateItems( oMovies.AudioBitratesFilter  )
-        If cbFilterNumAudioTracks.Visible Then cbFilterNumAudioTracks.UpdateItems( oMovies.NumAudioTracksFilter )
-        If cbFilterAudioLanguages.Visible Then cbFilterAudioLanguages.UpdateItems( oMovies.AudioLanguagesFilter )
-        If cbFilterActor         .Visible Then cbFilterActor         .UpdateItems( oMovies.ActorsFilter         )
-        If cbFilterDirector      .Visible Then cbFilterDirector      .UpdateItems( oMovies.DirectorsFilter      )
-        If cbFilterSubTitleLang  .Visible Then cbFilterSubTitleLang  .UpdateItems( oMovies.SubTitleLangFilter   )
+        If cbFilterGenre                .Visible Then cbFilterGenre                .UpdateItems( oMovies.GenresFilter                )
+        If cbFilterCertificate          .Visible Then cbFilterCertificate          .UpdateItems( oMovies.CertificatesFilter          )
+        If cbFilterSet                  .Visible Then cbFilterSet                  .UpdateItems( oMovies.SetsFilter                  )
+        If cbFilterTag                  .Visible Then cbFilterTag                  .UpdateItems( oMovies.TagFilter                   )
+        If cbFilterResolution           .Visible Then cbFilterResolution           .UpdateItems( oMovies.ResolutionFilter            )
+        If cbFilterVideoCodec           .Visible Then cbFilterVideoCodec           .UpdateItems( oMovies.VideoCodecFilter            )
+        If cbFilterAudioCodecs          .Visible Then cbFilterAudioCodecs          .UpdateItems( oMovies.AudioCodecsFilter           )
+        If cbFilterAudioChannels        .Visible Then cbFilterAudioChannels        .UpdateItems( oMovies.AudioChannelsFilter         )
+        If cbFilterAudioBitrates        .Visible Then cbFilterAudioBitrates        .UpdateItems( oMovies.AudioBitratesFilter         )
+        If cbFilterNumAudioTracks       .Visible Then cbFilterNumAudioTracks       .UpdateItems( oMovies.NumAudioTracksFilter        )
+        If cbFilterAudioLanguages       .Visible Then cbFilterAudioLanguages       .UpdateItems( oMovies.AudioLanguagesFilter        )
+        If cbFilterAudioDefaultLanguages.Visible Then cbFilterAudioDefaultLanguages.UpdateItems( oMovies.AudioDefaultLanguagesFilter )
+        If cbFilterActor                .Visible Then cbFilterActor                .UpdateItems( oMovies.ActorsFilter                )
+        If cbFilterDirector             .Visible Then cbFilterDirector             .UpdateItems( oMovies.DirectorsFilter             )
+        If cbFilterSubTitleLang         .Visible Then cbFilterSubTitleLang         .UpdateItems( oMovies.SubTitleLangFilter          )
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -11619,7 +11622,8 @@ End Sub
                                                                                     cbFilterAudioBitrates.OnFormatItem, cbFilterNumAudioTracks.OnFormatItem,
                                                                                     cbFilterAudioLanguages.OnFormatItem, cbFilterActor.OnFormatItem,
                                                                                     cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem,
-                                                                                    cbFilterDirector.OnFormatItem, cbFilterVideoCodec.OnFormatItem, cbFilterSubTitleLang.OnFormatItem 
+                                                                                    cbFilterDirector.OnFormatItem, cbFilterVideoCodec.OnFormatItem, cbFilterSubTitleLang.OnFormatItem,
+                                                                                    cbFilterAudioDefaultLanguages.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -19998,7 +20002,7 @@ End Sub
                                                                         lblFilterAudioBitrates.Click, lblFilterNumAudioTracks.Click, lblFilterAudioLanguages.Click,
                                                                         lblFilterActor.Click, lblFilterSource.Click, lblFilterTag.Click,
                                                                         lblFilterDirector.Click, lblFilterVideoCodec.Click, lblFilterSubTitleLang.Click,
-                                                                        lblFilterFolderSizes.Click, lblFilterRuntime.Click
+                                                                        lblFilterFolderSizes.Click, lblFilterRuntime.Click, lblFilterAudioDefaultLanguages.Click
                                                                         
 
         Dim filter As Object = GetFilterFromLabel(sender)
@@ -20014,7 +20018,7 @@ End Sub
                                                                                        lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
                                                                                        lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
                                                                                        lblFilterActorMode.Click, lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click,
-                                                                                       lblFilterVideoCodecMode.Click, lblFilterSubTitleLangMode.Click
+                                                                                       lblFilterVideoCodecMode.Click, lblFilterSubTitleLangMode.Click, lblFilterAudioDefaultLanguagesMode.Click
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
@@ -20063,21 +20067,28 @@ End Sub
     Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails) As List(Of KeyValuePair(Of String, String))
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
-            If Vidfiledetails.filedetails_audio.Count>0 Then
+            Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=Vidfiledetails.DefaultAudioTrack)
 
-                Dim defaultAudioTrack = (From x In Vidfiledetails.filedetails_audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+            For Each track In tracks
+                flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=Vidfiledetails.DefaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
+                flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=Vidfiledetails.DefaultAudioTrack), track.Codec.Value) )               
+            Next
 
-                If IsNothing(defaultAudioTrack) Then
-                    defaultAudioTrack = Vidfiledetails.filedetails_audio(0)
-                End If
+            'If Vidfiledetails.filedetails_audio.Count>0 Then
 
-                Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=defaultAudioTrack)
+            '    Dim defaultAudioTrack = (From x In Vidfiledetails.filedetails_audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
 
-                For Each track In tracks
-                    flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
-                    flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value) )               
-                Next
-            End If
+            '    If IsNothing(defaultAudioTrack) Then
+            '        defaultAudioTrack = Vidfiledetails.filedetails_audio(0)
+            '    End If
+
+            '    Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=defaultAudioTrack)
+
+            '    For Each track In tracks
+            '        flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
+            '        flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value) )               
+            '    Next
+            'End If
 
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value)))
             flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)))

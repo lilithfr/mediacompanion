@@ -319,7 +319,9 @@ Partial Class Form1
         Me.lblFilterActorMode = New System.Windows.Forms.Label()
         Me.cbFilterActor = New MC_UserControls.TriStateCheckedComboBox()
         Me.lblFilterAudioLanguagesMode = New System.Windows.Forms.Label()
+        Me.lblFilterAudioDefaultLanguagesMode = New System.Windows.Forms.Label()
         Me.cbFilterAudioLanguages = New MC_UserControls.TriStateCheckedComboBox()
+        Me.cbFilterAudioDefaultLanguages = New MC_UserControls.TriStateCheckedComboBox()
         Me.lblFilterNumAudioTracksMode = New System.Windows.Forms.Label()
         Me.cbFilterNumAudioTracks = New MC_UserControls.TriStateCheckedComboBox()
         Me.lblFilterAudioBitratesMode = New System.Windows.Forms.Label()
@@ -350,6 +352,7 @@ Partial Class Form1
         Me.lblFilterAudioBitrates = New System.Windows.Forms.Label()
         Me.lblFilterAudioChannels = New System.Windows.Forms.Label()
         Me.lblFilterAudioLanguages = New System.Windows.Forms.Label()
+        Me.lblFilterAudioDefaultLanguages = New System.Windows.Forms.Label()
         Me.lblFilterAudioCodecs = New System.Windows.Forms.Label()
         Me.lblFilterResolution = New System.Windows.Forms.Label()
         Me.lblFilterGeneral = New System.Windows.Forms.Label()
@@ -4102,7 +4105,9 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterActorMode)
         Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterActor)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioLanguagesMode)
+        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioDefaultLanguagesMode)
         Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioLanguages)
+        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioDefaultLanguages)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterNumAudioTracksMode)
         Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterNumAudioTracks)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioBitratesMode)
@@ -4133,6 +4138,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioBitrates)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioChannels)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioLanguages)
+        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioDefaultLanguages)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioCodecs)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterResolution)
         Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterGeneral)
@@ -4655,6 +4661,25 @@ Partial Class Form1
         Me.lblFilterAudioLanguagesMode.TabIndex = 243
         Me.lblFilterAudioLanguagesMode.Text = "M"
         Me.lblFilterAudioLanguagesMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+
+
+        Me.lblFilterAudioDefaultLanguagesMode.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.lblFilterAudioDefaultLanguagesMode.BackColor = System.Drawing.Color.Gray
+        Me.lblFilterAudioDefaultLanguagesMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblFilterAudioDefaultLanguagesMode.ForeColor = System.Drawing.Color.White
+        Me.lblFilterAudioDefaultLanguagesMode.Location = New System.Drawing.Point(129, 26396)
+        Me.lblFilterAudioDefaultLanguagesMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblFilterAudioDefaultLanguagesMode.Name = "lblFilterAudioDefaultLanguagesMode"
+        Me.lblFilterAudioDefaultLanguagesMode.Size = New System.Drawing.Size(17, 21)
+        Me.lblFilterAudioDefaultLanguagesMode.TabIndex = 243
+        Me.lblFilterAudioDefaultLanguagesMode.Text = "M"
+        Me.lblFilterAudioDefaultLanguagesMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+
+
+
+
+
+
         '
         'cbFilterAudioLanguages
         '
@@ -4676,6 +4701,33 @@ Partial Class Form1
         Me.cbFilterAudioLanguages.TabIndex = 242
         Me.cbFilterAudioLanguages.Tag = "14"
         Me.cbFilterAudioLanguages.ValueSeparator = " "
+
+
+
+        Me.cbFilterAudioDefaultLanguages.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.cbFilterAudioDefaultLanguages.BackColor = System.Drawing.SystemColors.Control
+        Me.cbFilterAudioDefaultLanguages.CheckOnClick = true
+        Me.cbFilterAudioDefaultLanguages.DisplayWhenNothingSelected = "All"
+        Me.cbFilterAudioDefaultLanguages.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable
+        Me.cbFilterAudioDefaultLanguages.DropDownHeight = 1
+        Me.cbFilterAudioDefaultLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbFilterAudioDefaultLanguages.FormattingEnabled = true
+        Me.cbFilterAudioDefaultLanguages.IntegralHeight = false
+        Me.cbFilterAudioDefaultLanguages.Location = New System.Drawing.Point(147, 26396)
+        Me.cbFilterAudioDefaultLanguages.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
+        Me.cbFilterAudioDefaultLanguages.Name = "cbFilterAudioDefaultLanguages"
+        Me.cbFilterAudioDefaultLanguages.QuickSelect = false
+        Me.cbFilterAudioDefaultLanguages.Size = New System.Drawing.Size(0, 22)
+        Me.cbFilterAudioDefaultLanguages.TabIndex = 242
+        Me.cbFilterAudioDefaultLanguages.Tag = "14"
+        Me.cbFilterAudioDefaultLanguages.ValueSeparator = " "
+
+
+
+
+
+
         '
         'lblFilterNumAudioTracksMode
         '
@@ -5176,6 +5228,22 @@ Partial Class Form1
         Me.lblFilterAudioLanguages.TabIndex = 211
         Me.lblFilterAudioLanguages.Text = "Language"
         Me.lblFilterAudioLanguages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+
+
+        Me.lblFilterAudioDefaultLanguages.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.lblFilterAudioDefaultLanguages.BackColor = System.Drawing.Color.Gray
+        Me.lblFilterAudioDefaultLanguages.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblFilterAudioDefaultLanguages.ForeColor = System.Drawing.Color.White
+        Me.lblFilterAudioDefaultLanguages.Location = New System.Drawing.Point(4, 26396)
+        Me.lblFilterAudioDefaultLanguages.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblFilterAudioDefaultLanguages.Name = "lblFilterAudioDefaultLanguages"
+        Me.lblFilterAudioDefaultLanguages.Size = New System.Drawing.Size(124, 21)
+        Me.lblFilterAudioDefaultLanguages.TabIndex = 211
+        Me.lblFilterAudioDefaultLanguages.Text = "Default Language"
+        Me.lblFilterAudioDefaultLanguages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+
+
+
         '
         'lblFilterAudioCodecs
         '
@@ -18173,6 +18241,7 @@ End Sub
     Friend WithEvents lblFilterAudioBitrates As System.Windows.Forms.Label
     Friend WithEvents lblFilterAudioChannels As System.Windows.Forms.Label
     Friend WithEvents lblFilterAudioLanguages As System.Windows.Forms.Label
+    Friend WithEvents lblFilterAudioDefaultLanguages As System.Windows.Forms.Label
     Friend WithEvents lblFilterAudioCodecs As System.Windows.Forms.Label
     Friend WithEvents lblFilterResolution As System.Windows.Forms.Label
     Friend WithEvents lblFilterGeneral As System.Windows.Forms.Label
@@ -18257,7 +18326,9 @@ End Sub
     Friend WithEvents lblFilterNumAudioTracksMode As System.Windows.Forms.Label
     Friend WithEvents cbFilterNumAudioTracks As MC_UserControls.TriStateCheckedComboBox
     Friend WithEvents lblFilterAudioLanguagesMode As System.Windows.Forms.Label
+    Friend WithEvents lblFilterAudioDefaultLanguagesMode As System.Windows.Forms.Label
     Friend WithEvents cbFilterAudioLanguages As MC_UserControls.TriStateCheckedComboBox
+    Friend WithEvents cbFilterAudioDefaultLanguages As MC_UserControls.TriStateCheckedComboBox
     Friend WithEvents lblFilterActorMode As System.Windows.Forms.Label
     Friend WithEvents cbFilterActor As MC_UserControls.TriStateCheckedComboBox
     Friend WithEvents lblFilterSourceMode As System.Windows.Forms.Label
