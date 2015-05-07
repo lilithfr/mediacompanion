@@ -4328,7 +4328,7 @@ Public Class Form1
             Else
                 Try
                     If Not MovFanartToggle Then
-                        Panel1.Controls.Remove(Label1)
+                        'Panel1.Controls.Remove(Label1)
                         Dim issavefanart As Boolean = Preferences.savefanart
                         Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
                         Dim xtra As Boolean = False
@@ -4369,6 +4369,33 @@ Public Class Form1
 
                         XbmcLink_UpdateArtwork
                     Else
+                        Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
+                        'Dim MovSetName As String = workingMovieDetails.fullmoviebody.movieset.MovieSetName
+                        'If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
+                        '    MovSetFanartSavePath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-fanart.jpg"
+                        'Else                                                'or Save to movieset folder if exists.
+                        '    Dim MovPath As String = workingMovieDetails.fileinfo.fullpathandfilename
+                        '    If MovPath.Contains(MovSetName) AndAlso workingMovieDetails.fileinfo.foldername = MovSetName Then
+                        '        MovSetFanartSavePath = MovPath.Replace(workingMovieDetails.fileinfo.filename, "fanart.jpg")
+                        '    ElseIf MovPath.Contains(MovSetName) Then
+                        '        Dim splitpath() = MovPath.Split("\")
+                        '        For Each p In splitpath
+                        '            MovSetFanartSavePath &= p & "\"
+                        '            If p = MovSetName then
+                        '                MovSetFanartSavePath &="fanart.jpg"
+                        '                Exit For
+                        '            End If
+                        '        Next
+                        '    Else
+                        '        MsgBox("While selected movie is in a Collection," & vbCrLf & "the video file is not in a Collection folder." & vbCrLf & "Unable to save fanart - Check your settings")
+                        '    End If
+                        'End If
+                        If MovSetFanartSavePath <> "" Then
+                            Movie.SaveFanartImageToCacheAndPath(tempstring2, MovSetFanartSavePath)
+                            util_ImageLoad(PictureBox2, MovSetFanartSavePath, Utilities.DefaultFanartPath)
+                        Else
+                            MsgBox("!!  Problem formulating correct save location for Fanart" & vbCrLf & "                Please check your settings")
+                        End If
 
                     End If
                     
@@ -16358,11 +16385,13 @@ End Sub
             btnMovFanartToggle.Text = "Show MovieSet Fanart"
             btnMovFanartToggle.BackColor = System.Drawing.Color.Lime
             MovFanartClear()
+            util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
             MovFanartDisplay()
         Else
             btnMovFanartToggle.Text = "Show Movie Fanart"
             btnMovFanartToggle.BackColor = System.Drawing.Color.Aqua
             MovFanartClear()
+            util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.movsetfanartpath, Utilities.DefaultFanartPath)
             MovFanartDisplay(workingMovieDetails.fullmoviebody.movieset.MovieSetId)
         End If
         MovFanartToggle = Not MovFanartToggle 

@@ -2729,6 +2729,8 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
                 newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path, newmovie.fileinfo.filename)
+                newmovie.fileinfo.movsetfanartpath = Preferences.GetMovSetFanartPath(path, newmovie.fileinfo.fullpathandfilename, newmovie.fileinfo.foldername, newmovie.fileinfo.filename, newmovie.fullmoviebody.movieset.MovieSetName)
+                newmovie.fileinfo.movsetposterpath = Preferences.GetMovSetPosterPath(path, newmovie.fileinfo.fullpathandfilename, newmovie.fileinfo.foldername, newmovie.fileinfo.filename, newmovie.fullmoviebody.movieset.MovieSetName)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value

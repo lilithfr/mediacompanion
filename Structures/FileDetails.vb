@@ -11,6 +11,8 @@ Public Structure str_FileDetails
     Dim posterpath As String
     Dim trailerpath As String
     Dim createdate As String
+    Dim movsetfanartpath As String
+    Dim movsetposterpath As String
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         fullpathandfilename = ""
         path = ""
@@ -23,5 +25,7 @@ Public Structure str_FileDetails
         posterpath = ""
         trailerpath = ""
         createdate = ""
+        movsetfanartpath = ""
+        movsetposterpath = ""
     End Sub
 End Structure

@@ -1985,6 +1985,52 @@ Public Class Preferences
         Return fanartTvPath 
     End Function
 
+    Public Shared Function GetMovSetFanartPath(ByVal FullPath As String, ByVal MovPath As String, ByVal foldername As String, ByVal filename As String, ByVal MovSetName As String) As String
+        Dim movsetfanartpath As String = ""
+        If MovSetName = "" Then Return ""
+        If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
+            movsetfanartpath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-fanart.jpg"
+        Else                                                'or Save to movieset folder if exists.
+           ' Dim MovPath As String = workingMovieDetails.fileinfo.fullpathandfilename
+            If MovPath.Contains(MovSetName) AndAlso foldername = MovSetName Then
+                movsetfanartpath = MovPath.Replace(filename, "fanart.jpg")
+            ElseIf MovPath.Contains(MovSetName) Then
+                Dim splitpath() = MovPath.Split("\")
+                For Each p In splitpath
+                    movsetfanartpath &= p & "\"
+                    If p = MovSetName then
+                        movsetfanartpath &="fanart.jpg"
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+        Return movsetfanartpath 
+    End Function
+
+    Public Shared Function GetMovSetPosterPath(ByVal FullPath As String, ByVal MovPath As String, ByVal foldername As String, ByVal filename As String, ByVal MovSetName As String) As String
+        Dim movsetposterpath As String = ""
+        If MovSetName = "" Then Return ""
+        If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
+            movsetposterpath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-folder.jpg"
+        Else                                                'or Save to movieset folder if exists.
+           ' Dim MovPath As String = workingMovieDetails.fileinfo.fullpathandfilename
+            If MovPath.Contains(MovSetName) AndAlso foldername = MovSetName Then
+                movsetposterpath = MovPath.Replace(filename, "folder.jpg")
+            ElseIf MovPath.Contains(MovSetName) Then
+                Dim splitpath() = MovPath.Split("\")
+                For Each p In splitpath
+                    movsetposterpath &= p & "\"
+                    If p = MovSetName then
+                        movsetposterpath &="folder.jpg"
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+        Return movsetposterpath 
+    End Function
+
     Public Shared Function GetActorThumbPath(Optional ByVal location As String = "")
         Dim actualpath As String = ""
         Try
