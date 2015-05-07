@@ -2958,7 +2958,7 @@ Public Class Movie
 
     Function NeedTMDb(rl As RescrapeList)
         Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or rl.tmdb_set_id Or
-               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors or rl.ArtFromFanartTv 
+               rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors or rl.ArtFromFanartTv Or rl.missingmovsetart
     End Function
 
     Function RescrapeBody(rl As RescrapeList)
@@ -3043,9 +3043,7 @@ Public Class Movie
                         titletext = titletext.Substring(3, titletext.Length - 3) & ", An"
                         x = True
                     End If
-                    If x Then 
-                        _scrapedMovie.fullmoviebody.sortorder = titletext
-                    End If
+                    If x Then _scrapedMovie.fullmoviebody.sortorder = titletext
                 Else 
                     _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title
                 End If
@@ -3057,10 +3055,7 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
         End If
 
-        If rl.TagsFromKeywords AndAlso Not rl.FromTMDB Then
-            GetKeyWords
-        End If
-
+        If rl.TagsFromKeywords AndAlso Not rl.FromTMDB Then GetKeyWords()
         If Cancelled() Then Exit Sub
 
         If NeedTMDb(rl) Then
@@ -3098,19 +3093,14 @@ Public Class Movie
                     End While
                 End If
             End If
-
             If Cancelled() Then Exit Sub
 
-            If rl.TagsFromKeywords AndAlso (Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then
-                GetKeyWords(tmdb.Movie.id)
-            End If
+            If rl.TagsFromKeywords AndAlso (Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(tmdb.Movie.id)
 
             If rl.Frodo_Poster_Thumbs Then GetFrodoPosterThumbs()
-
             If Cancelled() Then Exit Sub
 
             If rl.Frodo_Fanart_Thumbs Then GetFrodoFanartThumbs()
-
             If Cancelled() Then Exit Sub
 
             'Clears the existing poster urls and adds the rescraped ones directly into _scrapedMovie
@@ -3118,23 +3108,18 @@ Public Class Movie
                 _scrapedMovie.listthumbs.Clear()
                 GetPosterUrls()
             End If
-
             If Cancelled() Then Exit Sub
 
             If rl.missingposters Then DoDownloadPoster(rl.missingposters)
-
             If Cancelled() Then Exit Sub
 
             If rl.missingfanart Then DownloadFanart()
-
             If Cancelled() Then Exit Sub
 
             If rl.dlxtraart Then DownloadExtraFanart()
-
             If Cancelled() Then Exit Sub
 
             If rl.ArtFromFanartTv Then DownloadFromFanartTv(True)
-
             If Cancelled() Then Exit Sub
 
             If rl.tmdb_set_name OrElse rl.tmdb_set_id Then
@@ -3148,7 +3133,9 @@ Public Class Movie
                 Catch
                 End Try
             End If
+            If Cancelled() Then Exit Sub
 
+            If rl.missingmovsetart AndAlso _scrapedMovie.fullmoviebody.movieset.MovieSetName <> "-None-" Then DoDownloadMovieSetArtwork()
             If Cancelled() Then Exit Sub
 
             If rl.actors Then
@@ -3163,9 +3150,7 @@ Public Class Movie
                     _scrapedMovie.listactors.AddRange(_rescrapedMovie.listactors)
                 End If
             End If
-
         End If
-
         If Cancelled() Then Exit Sub
 
         If rl.runtime_file Or rl.mediatags Or (rl.runtime And ((Preferences.movieRuntimeDisplay = "file") Or (Preferences.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
@@ -3179,12 +3164,10 @@ Public Class Movie
             End If
         End If
 
-
         If rl.Convert_To_Frodo Then ConvertToFrodo()
 
         If rl.SetWatched       Then _scrapedMovie.fullmoviebody.SetWatched  ()
         If rl.ClearWatched     Then _scrapedMovie.fullmoviebody.ClearWatched()
-
 
         AssignMovieToCache()
         '		AssignMovieToAddMissingData
@@ -3193,7 +3176,6 @@ Public Class Movie
 
         If rl.Rename_Files Then
             ReportProgress(, RenameExistingMetaFiles)
-            'SaveNFO
         End If
 
         If rl.Rename_Folders Then ReportProgress(, RenameMovFolder)

@@ -64,6 +64,7 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.cb_ScrapeEmptyTags = New System.Windows.Forms.CheckBox()
         Me.cbFromTMDB = New System.Windows.Forms.CheckBox()
+        Me.cbMovSetArt = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -289,7 +290,7 @@ Partial Class frmBatchScraper
         '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(15, 436)
+        Me.btnCancel.Location = New System.Drawing.Point(15, 458)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 50
@@ -298,13 +299,14 @@ Partial Class frmBatchScraper
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.cbMovSetArt)
         Me.GroupBox3.Controls.Add(Me.cbFanartTv)
         Me.GroupBox3.Controls.Add(Me.cbXtraFanart)
         Me.GroupBox3.Controls.Add(Me.CheckBox18)
         Me.GroupBox3.Controls.Add(Me.CheckBox17)
         Me.GroupBox3.Location = New System.Drawing.Point(14, 296)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(459, 110)
+        Me.GroupBox3.Size = New System.Drawing.Size(459, 132)
         Me.GroupBox3.TabIndex = 0
         Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Fanart && Posters"
@@ -312,7 +314,7 @@ Partial Class frmBatchScraper
         'cbFanartTv
         '
         Me.cbFanartTv.AutoSize = true
-        Me.cbFanartTv.Location = New System.Drawing.Point(6, 87)
+        Me.cbFanartTv.Location = New System.Drawing.Point(7, 86)
         Me.cbFanartTv.Name = "cbFanartTv"
         Me.cbFanartTv.Size = New System.Drawing.Size(354, 17)
         Me.cbFanartTv.TabIndex = 44
@@ -351,7 +353,7 @@ Partial Class frmBatchScraper
         '
         'btnStart
         '
-        Me.btnStart.Location = New System.Drawing.Point(395, 436)
+        Me.btnStart.Location = New System.Drawing.Point(395, 458)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(75, 23)
         Me.btnStart.TabIndex = 60
@@ -512,18 +514,29 @@ Partial Class frmBatchScraper
         Me.cbFromTMDB.AutoSize = true
         Me.cbFromTMDB.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cbFromTMDB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbFromTMDB.Location = New System.Drawing.Point(46, 412)
+        Me.cbFromTMDB.Location = New System.Drawing.Point(46, 434)
         Me.cbFromTMDB.Name = "cbFromTMDB"
         Me.cbFromTMDB.Size = New System.Drawing.Size(427, 17)
         Me.cbFromTMDB.TabIndex = 61
         Me.cbFromTMDB.Text = "Scrape main tags from TMDB (excluding those tags exclusive to IMDB)"
         Me.cbFromTMDB.UseVisualStyleBackColor = true
         '
+        'cbMovSetArt
+        '
+        Me.cbMovSetArt.AutoSize = true
+        Me.cbMovSetArt.Location = New System.Drawing.Point(7, 109)
+        Me.cbMovSetArt.Name = "cbMovSetArt"
+        Me.cbMovSetArt.Size = New System.Drawing.Size(198, 17)
+        Me.cbMovSetArt.TabIndex = 45
+        Me.cbMovSetArt.Text = "Download missing MovieSet Artwork"
+        Me.cbMovSetArt.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.cbMovSetArt.UseVisualStyleBackColor = true
+        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(485, 466)
+        Me.ClientSize = New System.Drawing.Size(485, 493)
         Me.ControlBox = false
         Me.Controls.Add(Me.cbFromTMDB)
         Me.Controls.Add(Me.cb_ScrapeEmptyTags)
@@ -534,9 +547,9 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.gbOther)
         Me.Controls.Add(Me.Label1)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(493, 500)
+        Me.MaximumSize = New System.Drawing.Size(493, 520)
         Me.MinimizeBox = false
-        Me.MinimumSize = New System.Drawing.Size(493, 500)
+        Me.MinimumSize = New System.Drawing.Size(493, 520)
         Me.Name = "frmBatchScraper"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Batch Update Wizard"
@@ -591,4 +604,5 @@ End Sub
     Friend WithEvents cbDlTrailer As System.Windows.Forms.CheckBox
     Friend WithEvents cbFromTMDB As System.Windows.Forms.CheckBox
     Friend WithEvents cbFanartTv As System.Windows.Forms.CheckBox
+    Friend WithEvents cbMovSetArt As System.Windows.Forms.CheckBox
 End Class

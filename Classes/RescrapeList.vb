@@ -24,6 +24,7 @@ Public Class RescrapeList
     Property mediatags           As Boolean
     Property missingposters      As Boolean
     Property missingfanart       As Boolean
+    Property missingmovsetart    As Boolean
     Property dlxtraart           As Boolean
     Property runtime_file        As Boolean
     Property tmdb_set_name       As Boolean
