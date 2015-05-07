@@ -2348,18 +2348,18 @@ Public Class Preferences
                         End Try
                         audio.Codec.Value = tempmediainfo
                     End If
-                    If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "AC3"
-                    If audio.Codec.Value = "TrueHD / AC-3" Then audio.Codec.Value = "TrueHD"
+                    If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "ac3"
+                    If audio.Codec.Value = "TrueHD / AC-3" Then audio.Codec.Value = "truehd"
                     tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                     If audio.Codec.Value = "DTS" Then
                         If tmpaud.ToLower = "dts ma / core" Then
-                            audio.Codec.Value = "DTS-HD MA"
+                            audio.Codec.Value = "dtshd_ma"
                         ElseIf tmpaud.ToLower = "dts hra / core" Then
-                            audio.Codec.Value = "DTS-HD HRA"
+                            audio.Codec.Value = "dtshd_hra"
                         ElseIf tmpaud.ToLower = "dts es" Then
-                            audio.Codec.Value = "DTS"
+                            audio.Codec.Value = "dts"
                         End If
-                        'audio.Codec.Value = audio.Codec.Value.ToLower
+                        audio.Codec.Value = audio.Codec.Value.ToLower
                     End If
                     audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
                     audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
