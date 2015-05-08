@@ -278,7 +278,7 @@ Public Class ComboList
 
 
     Private _assignedDefaultAudioTrack As Boolean = False
-    Private _defaultAudioTrack As AudioDetails
+    Private _defaultAudioTrack As New AudioDetails
 
     Public Property DefaultAudioTrack As AudioDetails
         Get
