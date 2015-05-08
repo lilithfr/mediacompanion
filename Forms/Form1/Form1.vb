@@ -17093,24 +17093,8 @@ End Sub
     'Sets section
 
     Private Sub MovieSetsAndTagsSetup()
-        Dim MsetCache As New List(Of MovieSetDatabase)
-        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
-        MovieSetMissingID = False
-        dgvmovset.Rows.Clear()
-        'ListofMovieSets.Items.Clear()
-        For Each mset In Preferences.moviesets
-            If mset <> "-None-" Then
-                Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
-                Dim msetid As Boolean = False
-                'ListofMovieSets.Items.Add(mset)
-                If MsetCache.Count <> 0 Then
-                    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
-                    If q.ToString <> "" Then msetid = True'MovieSetMissingID = True
-                End If
-                row.CreateCells(dgvmovset, mset, If(msetid, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect))
-                dgvmovset.Rows.Add(row)
-            End If
-        Next
+        MovSetDgvLoad()
+        MovSetArtworkCheck()
         TagListBox.Items.Clear()
         For Each mtag In Preferences.movietags
             If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
@@ -17127,25 +17111,45 @@ End Sub
         Next
     End Sub
 
+    Private Sub MovSetDgvLoad()
+        Dim MsetCache As New List(Of MovieSetDatabase)
+        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+        MovieSetMissingID = False
+        dgvmovset.Rows.Clear()
+        For Each mset In Preferences.moviesets
+            If mset <> "-None-" Then
+                Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
+                Dim msetid As String = ""
+                If MsetCache.Count <> 0 Then
+                    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
+                    If q.ToString <> "" AndAlso q.Count > 0 Then msetid = q.ToString
+                End If
+                row.CreateCells(dgvmovset, mset, If(msetid <> "", Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect))
+                If msetid <> "" then row.Cells(1).Tag = msetid
+                dgvmovset.Rows.Add(row)
+            End If
+        Next
+    End Sub
+
     Private Sub btnMovieSetAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetAdd.Click
         Try
-            'If tbMovSetEntry.Text <> "" Then
-            '    Dim ex As Boolean = False
-            '    For Each mset In Preferences.moviesets
-            '        If mset.ToLower = tbMovSetEntry.Text.ToLower Then
-            '            ex = True
-            '            Exit For
-            '        End If
-            '    Next
-            '    If ex = False Then
-            '        Preferences.moviesets.Add(tbMovSetEntry.Text)
-            '        ListofMovieSets.Items.Add(tbMovSetEntry.Text)
-            '        pop_cbMovieDisplay_MovieSet()
-            '        tbMovSetEntry.Clear()
-            '    Else
-            '        MsgBox("This Movie Set Already Exists")
-            '    End If
-            'End If
+            If tbMovSetEntry.Text <> "" Then
+                Dim ex As Boolean = False
+                For Each mset In Preferences.moviesets
+                    If mset.ToLower = tbMovSetEntry.Text.ToLower Then
+                        ex = True
+                        Exit For
+                    End If
+                Next
+                If ex = False Then
+                    Preferences.moviesets.Add(tbMovSetEntry.Text)
+                    MovSetDgvLoad()
+                    pop_cbMovieDisplay_MovieSet()
+                    tbMovSetEntry.Clear()
+                Else
+                    MsgBox("This Movie Set Already Exists")
+                End If
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17159,45 +17163,71 @@ End Sub
 
     End Sub
 
-    'Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
-    '    Try
-    '        For i = 0 To ListofMovieSets.SelectedItems.Count - 1
-    '            Dim tempboolean As Boolean = False
-    '            If ListofMovieSets.SelectedItems(i) <> Nothing And ListofMovieSets.SelectedItems(i) <> "" Then
-    '                For Each mset In Preferences.moviesets
-    '                    If mset = ListofMovieSets.SelectedItems(i) Then
-    '                        If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> mset Then
-    '                            Preferences.moviesets.Remove(mset)
-    '                        Else
-    '                            MsgBox("Unable to remove """ & mset & """, it is being used by the selected Movie")
-    '                        End If
-    '                        Exit For
-    '                    End If
-    '                Next
-    '            End If
-    '        Next
-    '        ListofMovieSets.Items.Clear()
-    '        For Each mset In Preferences.moviesets
-    '            If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
-    '        Next
-    '        pop_cbMovieDisplay_MovieSet()
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
+    Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
+        Try
+            Dim SelectedMovieSet As String = dgvmovset.SelectedCells(0).Value
+            Preferences.moviesets.Remove(SelectedMovieSet)
+            dgvmovset.Rows.RemoveAt(dgvmovset.CurrentRow.Index)
+            pop_cbMovieDisplay_MovieSet()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
-    'Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
-    '    MovSetsRepopulate()
-    '    ListofMovieSets.Items.Clear()
-    '    ListofMovieSets.Items.AddRange(oMovies.MoviesSetsExNone.ToArray)
-    '    pop_cbMovieDisplay_MovieSet()
-    'End Sub
+    Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
+        MovSetsRepopulate()
+        MovSetDgvLoad()
+        MovSetArtworkCheck()
+        pop_cbMovieDisplay_MovieSet()
+    End Sub
 
     Private Sub MovSetsRepopulate()
         Preferences.moviesets.Clear()
         Preferences.moviesets.Add("-None-")
         Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
     End Sub
+
+    Private Sub MovSetArtworkCheck()
+        For Each row As DataGridViewRow In dgvmovset.Rows
+            Dim mset As String = row.Cells(0).Value
+            For Each mov In oMovies.MovieCache
+                If mov.MovieSet.MovieSetName = mset Then
+                    Dim movsetfanart As String = Preferences.GetMovSetFanartPath(mov.fullpathandfilename, mset)
+                    Dim movsetposter As String = Preferences.GetMovSetPosterPath(mov.fullpathandfilename, mset)
+                    If File.Exists(movsetfanart) Then 
+                        row.Cells(2).Value = Global.Media_Companion.My.Resources.Resources.correct
+                        row.Cells(2).Tag = movsetfanart
+                    Else
+                        row.Cells(2).Value = Global.Media_Companion.My.Resources.Resources.incorrect 
+                        row.Cells(2).Tag = nothing
+                    End If
+                    If File.Exists(movsetposter) Then 
+                        row.Cells(3).Value = Global.Media_Companion.My.Resources.Resources.correct
+                        row.Cells(3).Tag = movsetposter
+                    Else
+                        row.Cells(3).Value = Global.Media_Companion.My.Resources.Resources.incorrect 
+                        row.Cells(3).Tag = nothing
+                    End If
+                    Exit For
+                End If
+            Next
+        Next
+    End Sub
+
+    Private Sub dgvmovset_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles dgvmovset.MouseDoubleClick
+        Dim columnno As Integer = dgvmovset.SelectedCells(0).ColumnIndex
+        If columnno < 2 Then Exit Sub
+        If dgvmovset.SelectedCells(0).Tag <> Nothing Then
+            util_ZoomImage(dgvmovset.SelectedCells(0).Tag.ToString)
+        'Else
+        '    Dim arttype As String = "fanart"
+        '    If columnno = 3 Then arttype = "poster"
+        '    Dim mbx As MsgBoxResult = MsgBox("Do you wish to open the " & arttype & " tab to download missing " & arttype, MsgBoxStyle.YesNo)
+        '    If mbx = MsgBoxResult.No Then Exit Sub
+
+        End If
+    End Sub
+
 
 #End Region
 
