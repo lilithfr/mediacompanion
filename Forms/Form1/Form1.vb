@@ -16960,36 +16960,6 @@ End Sub
 
 #Region "Movie Sets & Tags Tab"
 
-    Private Sub MovieSetsAndTagsSetup()
-        Dim MsetCache As New List(Of MovieSetDatabase)
-        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
-        MovieSetMissingID = False
-        ListofMovieSets.Items.Clear()
-        For Each mset In Preferences.moviesets
-            If mset <> "-None-" Then
-                ListofMovieSets.Items.Add(mset)
-                If MsetCache.Count <> 0 Then
-                    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
-                    If q.ToString = "" Then MovieSetMissingID = True
-                End If
-            End If
-        Next
-        TagListBox.Items.Clear()
-        For Each mtag In Preferences.movietags
-            If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
-        Next
-        CurrentMovieTags.Items.Clear()
-        For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
-            Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-            Dim movie As Movie = oMovies.LoadMovie(filepath)
-            For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
-                If Not IsNothing(ctag) Then
-                    If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
-                End If
-            Next
-        Next
-    End Sub
-
     'Tag(s) Section
     Private Sub btnMovTagListAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListAdd.Click
         Try
@@ -17122,25 +17092,60 @@ End Sub
 
     'Sets section
 
+    Private Sub MovieSetsAndTagsSetup()
+        Dim MsetCache As New List(Of MovieSetDatabase)
+        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+        MovieSetMissingID = False
+        dgvmovset.Rows.Clear()
+        'ListofMovieSets.Items.Clear()
+        For Each mset In Preferences.moviesets
+            If mset <> "-None-" Then
+                Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
+                Dim msetid As Boolean = False
+                'ListofMovieSets.Items.Add(mset)
+                If MsetCache.Count <> 0 Then
+                    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
+                    If q.ToString <> "" Then msetid = True'MovieSetMissingID = True
+                End If
+                row.CreateCells(dgvmovset, mset, If(msetid, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect))
+                dgvmovset.Rows.Add(row)
+            End If
+        Next
+        TagListBox.Items.Clear()
+        For Each mtag In Preferences.movietags
+            If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
+        Next
+        CurrentMovieTags.Items.Clear()
+        For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+            Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+            Dim movie As Movie = oMovies.LoadMovie(filepath)
+            For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
+                If Not IsNothing(ctag) Then
+                    If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
+                End If
+            Next
+        Next
+    End Sub
+
     Private Sub btnMovieSetAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetAdd.Click
         Try
-            If tbMovSetEntry.Text <> "" Then
-                Dim ex As Boolean = False
-                For Each mset In Preferences.moviesets
-                    If mset.ToLower = tbMovSetEntry.Text.ToLower Then
-                        ex = True
-                        Exit For
-                    End If
-                Next
-                If ex = False Then
-                    Preferences.moviesets.Add(tbMovSetEntry.Text)
-                    ListofMovieSets.Items.Add(tbMovSetEntry.Text)
-                    pop_cbMovieDisplay_MovieSet()
-                    tbMovSetEntry.Clear()
-                Else
-                    MsgBox("This Movie Set Already Exists")
-                End If
-            End If
+            'If tbMovSetEntry.Text <> "" Then
+            '    Dim ex As Boolean = False
+            '    For Each mset In Preferences.moviesets
+            '        If mset.ToLower = tbMovSetEntry.Text.ToLower Then
+            '            ex = True
+            '            Exit For
+            '        End If
+            '    Next
+            '    If ex = False Then
+            '        Preferences.moviesets.Add(tbMovSetEntry.Text)
+            '        ListofMovieSets.Items.Add(tbMovSetEntry.Text)
+            '        pop_cbMovieDisplay_MovieSet()
+            '        tbMovSetEntry.Clear()
+            '    Else
+            '        MsgBox("This Movie Set Already Exists")
+            '    End If
+            'End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17154,39 +17159,39 @@ End Sub
 
     End Sub
 
-    Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
-        Try
-            For i = 0 To ListofMovieSets.SelectedItems.Count - 1
-                Dim tempboolean As Boolean = False
-                If ListofMovieSets.SelectedItems(i) <> Nothing And ListofMovieSets.SelectedItems(i) <> "" Then
-                    For Each mset In Preferences.moviesets
-                        If mset = ListofMovieSets.SelectedItems(i) Then
-                            If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> mset Then
-                                Preferences.moviesets.Remove(mset)
-                            Else
-                                MsgBox("Unable to remove """ & mset & """, it is being used by the selected Movie")
-                            End If
-                            Exit For
-                        End If
-                    Next
-                End If
-            Next
-            ListofMovieSets.Items.Clear()
-            For Each mset In Preferences.moviesets
-                If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
-            Next
-            pop_cbMovieDisplay_MovieSet()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
+    '    Try
+    '        For i = 0 To ListofMovieSets.SelectedItems.Count - 1
+    '            Dim tempboolean As Boolean = False
+    '            If ListofMovieSets.SelectedItems(i) <> Nothing And ListofMovieSets.SelectedItems(i) <> "" Then
+    '                For Each mset In Preferences.moviesets
+    '                    If mset = ListofMovieSets.SelectedItems(i) Then
+    '                        If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> mset Then
+    '                            Preferences.moviesets.Remove(mset)
+    '                        Else
+    '                            MsgBox("Unable to remove """ & mset & """, it is being used by the selected Movie")
+    '                        End If
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '        Next
+    '        ListofMovieSets.Items.Clear()
+    '        For Each mset In Preferences.moviesets
+    '            If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
+    '        Next
+    '        pop_cbMovieDisplay_MovieSet()
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
-        MovSetsRepopulate()
-        ListofMovieSets.Items.Clear()
-        ListofMovieSets.Items.AddRange(oMovies.MoviesSetsExNone.ToArray)
-        pop_cbMovieDisplay_MovieSet()
-    End Sub
+    'Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
+    '    MovSetsRepopulate()
+    '    ListofMovieSets.Items.Clear()
+    '    ListofMovieSets.Items.AddRange(oMovies.MoviesSetsExNone.ToArray)
+    '    pop_cbMovieDisplay_MovieSet()
+    'End Sub
 
     Private Sub MovSetsRepopulate()
         Preferences.moviesets.Clear()
