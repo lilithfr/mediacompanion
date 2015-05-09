@@ -2232,19 +2232,28 @@ Public Class Movies
 
     Function ApplyAudioLanguagesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
-        Dim i As Integer = 0
+        'Dim i As Integer = 0
 
-        For Each item As CCBoxItem In ccb.Items
+        'For Each item As CCBoxItem In ccb.Items
 
-            Dim value As String = item.Name.RemoveAfterMatch
+        '    Dim value As String = item.Name.RemoveAfterMatch
 
-            Select ccb.GetItemCheckState(i)
-                Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.Audio.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
-                Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.Audio.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
-            End Select
+        '    Select ccb.GetItemCheckState(i)
+        '        Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.Audio.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+        '        Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.Audio.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+        '    End Select
 
-            i += 1
-        Next
+        '    i += 1
+        'Next
+
+        Dim fi As New FilteredItems(ccb,"Unknown","")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x) x.Languages.Intersect(fi.Include).Any() )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not x.Languages.Intersect(fi.Exclude).Any() )
+        End If
 
         Return recs
     End Function

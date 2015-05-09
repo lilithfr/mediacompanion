@@ -695,6 +695,12 @@ Public Class Data_GridViewMovie
         End Set
     End Property    
 
+    Public ReadOnly Property Languages As List(Of String)
+        Get
+            Dim result = (From x In Audio Select x.Language.Value).ToList
 
+            Return result
+        End Get
+    End Property
 
 End Class
