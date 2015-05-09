@@ -3566,6 +3566,10 @@ Public Class Form1
         Try
             Dim info = DataGridViewMovies.HitTest(e.X, e.Y)
 
+            If info.ColumnX = -1 Then
+                Return
+            End If
+
             If info.Type <> DataGridViewHitTestType.ColumnHeader Then
                 mov_Play("Movie")
             End If
