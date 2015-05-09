@@ -20197,23 +20197,9 @@ End Sub
             For Each track In tracks
                 flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=Vidfiledetails.DefaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
                 flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=Vidfiledetails.DefaultAudioTrack), track.Codec.Value) )               
+                flags.Add( New KeyValuePair(Of String, string)("lang"+GetNotDefaultStr(track=Vidfiledetails.DefaultAudioTrack), track.Language.Value) )               
             Next
 
-            'If Vidfiledetails.filedetails_audio.Count>0 Then
-
-            '    Dim defaultAudioTrack = (From x In Vidfiledetails.filedetails_audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
-
-            '    If IsNothing(defaultAudioTrack) Then
-            '        defaultAudioTrack = Vidfiledetails.filedetails_audio(0)
-            '    End If
-
-            '    Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=defaultAudioTrack)
-
-            '    For Each track In tracks
-            '        flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
-            '        flags.Add( New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value) )               
-            '    Next
-            'End If
 
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value)))
             flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)))
