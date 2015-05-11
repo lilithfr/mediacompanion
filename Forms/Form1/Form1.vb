@@ -2108,6 +2108,7 @@ Public Class Form1
     Private Sub FanTvArtList_Mouse(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles FanTvArtList.MouseDown
         Dim imagepath As String = Nothing
         Dim item As String = Nothing
+        Dim pbheight As Integer = 112
         If e.button = Windows.Forms.MouseButtons.Right Then
             Dim index As Integer = FanTvArtList.IndexFromPoint(New Point(e.X, e.Y))
             If index >= 0 Then FanTvArtList.SelectedItem = FanTvArtList.Items(index)
@@ -2130,7 +2131,26 @@ Public Class Form1
         End If
         If e.Button = Windows.Forms.MouseButtons.Left Then
             ftvArtPicBox.Visible = True
-            If Not IsNothing(imagepath) Then util_ImageLoad(ftvArtPicBox, imagepath, "")
+            If IsNothing(imagepath) Then Exit Sub
+            util_ImageLoad(ftvArtPicBox, imagepath, "")
+            Try
+                Dim panelwidth As Integer = SplitContainer1.Panel2.Width
+                Dim panelheight As Integer = SplitContainer1.Panel2.Height
+                Dim pbw As Integer = Math.Ceiling(panelwidth*.413) 
+                Dim pbh As Integer = Math.Ceiling(PbMovieFanArt.Height*.90)  
+                Dim imgw As Integer = ftvArtPicBox.Image.Width
+                Dim imgh As Integer = ftvArtPicBox.Image.Height 
+                If item.ToLower.Contains("poster") Or item.ToLower.Contains("disc") Then 
+                    ftvArtPicBox.Height = pbh
+                    ftvArtPicBox.Width = Math.Ceiling(pbh/(imgh/imgw))
+                    ftvArtPicBox.Location = New System.Drawing.Point(Math.Ceiling((panelwidth*.4)-(ftvArtPicBox.Width/2)), 45)
+                Else
+                    ftvArtPicBox.Height = Math.Ceiling(pbw*(imgh/imgw))
+                    ftvArtPicBox.Width = pbw
+                    ftvArtPicBox.Location = New System.Drawing.Point(140, Math.Ceiling((panelheight*.3)-(ftvArtPicBox.Height/2)))
+                End If
+            Catch
+            End Try
         ElseIf e.button = Windows.Forms.MouseButtons.Right Then
             Dim tempint = MessageBox.show("Do you wish to delete this image from" & vbCrLf & "this Movie?", "Fanart.Tv Artwork Delete", MessageBoxButtons.YesNoCancel)
             If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
