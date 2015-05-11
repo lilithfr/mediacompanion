@@ -2913,7 +2913,19 @@ Public Class Form1
             End If
             movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
             If TabControl2.SelectedTab.Name = "TabPage9" Then
-                movie.ScrapedMovie.fullmoviebody.tag = NewTagList
+                For Each t In NewTagList
+                    Dim remtag As String = t.Replace("- ","").Replace("+ ","")
+                    If t.Contains("- ") Then
+                        If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+                            movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
+                        End If
+                    ElseIf t.Contains("+ ") Then
+                        If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+                            movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
+                        End If
+                    End If
+                Next
+                'movie.ScrapedMovie.fullmoviebody.tag = NewTagList
             End If
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
@@ -2960,7 +2972,19 @@ Public Class Form1
                     End If
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
                     If TabControl2.SelectedTab.Name = "TabPage9" Then
-                        movie.ScrapedMovie.fullmoviebody.tag = NewTagList
+                        For Each t In NewTagList
+                            Dim remtag As String = t.Replace("- ","").Replace("+ ","")
+                            If t.Contains("- ") Then
+                                If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+                                    movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
+                                End If
+                            ElseIf t.Contains("+ ") Then
+                                If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+                                    movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
+                                End If
+                            End If
+                        Next
+                        'movie.ScrapedMovie.fullmoviebody.tag = NewTagList
                     End If
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
@@ -16967,7 +16991,33 @@ End Sub
 
 #Region "Movie Sets & Tags Tab"
 
-    'Tag(s) Section
+    Private Sub MovieSetsAndTagsSetup()
+        MovSetDgvLoad()
+        MovSetArtworkCheck()
+        TagListBox.Items.Clear()
+        For Each mtag In Preferences.movietags
+            If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
+        Next
+        CurrentMovieTags.Items.Clear()
+        If DataGridViewMovies.SelectedRows.Count > 1 Then
+            lblMovTagMulti1.Visible = True
+            lblMovTagMulti2.Visible = True
+        Else
+            lblMovTagMulti1.Visible = False
+            lblMovTagMulti2.Visible = False
+        End If
+        For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+            Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+            Dim movie As Movie = oMovies.LoadMovie(filepath)
+            For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
+                If Not IsNothing(ctag) Then
+                    If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
+                End If
+            Next
+        Next
+    End Sub
+
+#Region "Tag(s) Section"
     Private Sub btnMovTagListAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListAdd.Click
         Try
             If txtbxMovTagEntry.Text <> "" Then
@@ -17038,33 +17088,40 @@ End Sub
 
     Private Sub btnMovTagAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagAdd.Click
         Try
+            Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
             If TagListBox.SelectedIndex <> -1 Then
                 For Each item In TagListBox.SelectedItems
                     If item = "" Then Exit For
-                    If Not CurrentMovieTags.Items.Contains(item) Then
-                        CurrentMovieTags.Items.Add(item)
+                    If Not CurrentMovieTags.Items.Contains(item) AndAlso Not CurrentMovieTags.Items.Contains("+ " & item) Then
+                        If CurrentMovieTags.Items.Contains("- " & item) Then
+                            Dim i As Integer = CurrentMovieTags.Items.IndexOf("- " & item)
+                            CurrentMovieTags.Items(i) = item
+                        Else
+                            CurrentMovieTags.Items.Add("+ " & item)
+                        End If
                     End If
                 Next
             End If
-        Catch ex As Exception
+        Catch
 
         End Try
     End Sub
 
     Private Sub btnMovTagRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagRemove.Click
         Try
+            Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
             If CurrentMovieTags.SelectedIndex <> -1 Then
-                For Each item In CurrentMovieTags.SelectedItems
-                    If workingMovieDetails.fullmoviebody.tag.Contains(item) Then workingMovieDetails.fullmoviebody.tag.Remove(item)
-                Next
-                CurrentMovieTags.Items.Clear()
-                For Each mtag In workingMovieDetails.fullmoviebody.tag
-                    CurrentMovieTags.Items.Add(mtag)
-                Next
-
-                Call mov_SaveQuick()
+                Dim i As Integer = CurrentMovieTags.SelectedIndex 
+                Dim item As String = CurrentMovieTags.Items(i)
+                If item.Contains("+ ") Then
+                    CurrentMovieTags.Items.RemoveAt(i)
+                    Exit Sub
+                End If
+                If item.Contains("- ") Then Exit Sub
+                item = "- " & item
+                CurrentMovieTags.Items(i) = item
             End If
-        Catch ex As Exception
+        Catch
 
         End Try
     End Sub
@@ -17096,27 +17153,9 @@ End Sub
         End If
 
     End Sub
+#End Region 'Tag(s) Section
 
-    'Sets section
-
-    Private Sub MovieSetsAndTagsSetup()
-        MovSetDgvLoad()
-        MovSetArtworkCheck()
-        TagListBox.Items.Clear()
-        For Each mtag In Preferences.movietags
-            If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
-        Next
-        CurrentMovieTags.Items.Clear()
-        For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
-            Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-            Dim movie As Movie = oMovies.LoadMovie(filepath)
-            For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
-                If Not IsNothing(ctag) Then
-                    If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
-                End If
-            Next
-        Next
-    End Sub
+#Region "Movie Set Routines"    
 
     Private Sub MovSetDgvLoad()
         Dim MsetCache As New List(Of MovieSetDatabase)
@@ -17226,15 +17265,9 @@ End Sub
         If columnno < 2 Then Exit Sub
         If dgvmovset.SelectedCells(0).Tag <> Nothing Then
             util_ZoomImage(dgvmovset.SelectedCells(0).Tag.ToString)
-        'Else
-        '    Dim arttype As String = "fanart"
-        '    If columnno = 3 Then arttype = "poster"
-        '    Dim mbx As MsgBoxResult = MsgBox("Do you wish to open the " & arttype & " tab to download missing " & arttype, MsgBoxStyle.YesNo)
-        '    If mbx = MsgBoxResult.No Then Exit Sub
-
         End If
     End Sub
-
+#End Region 'Movie Set Routines
 
 #End Region
 
