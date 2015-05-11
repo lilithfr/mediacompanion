@@ -1863,8 +1863,11 @@ Public Class Form1
                 imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
                 tagtxt.Text     = ""
                 If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
+                    Dim first As Boolean = True
                     For Each t In workingMovieDetails.fullmoviebody.tag
-                        tagtxt.Text &= t & ", "
+                        If Not first Then tagtxt.Text &= ", "
+                        tagtxt.Text &= t
+                        first = False
                     Next
                 End If
                 'Catch exception thrown when votes is an empty string

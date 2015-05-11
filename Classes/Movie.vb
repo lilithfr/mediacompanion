@@ -3055,7 +3055,7 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
         End If
 
-        If rl.TagsFromKeywords AndAlso Not rl.FromTMDB Then GetKeyWords()
+        If rl.TagsFromKeywords AndAlso (Not Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(True)
         If Cancelled() Then Exit Sub
 
         If NeedTMDb(rl) Then
@@ -3095,7 +3095,7 @@ Public Class Movie
             End If
             If Cancelled() Then Exit Sub
 
-            If rl.TagsFromKeywords AndAlso (Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(tmdb.Movie.id)
+            If rl.TagsFromKeywords AndAlso (Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(True, tmdb.Movie.id)
 
             If rl.Frodo_Poster_Thumbs Then GetFrodoPosterThumbs()
             If Cancelled() Then Exit Sub
@@ -4085,8 +4085,8 @@ Public Class Movie
         End Try
     End Sub
 
-    Sub GetKeyWords(Optional ByVal tmdbid As String = "")
-        If Preferences.keywordasTag AndAlso Preferences.keywordlimit > 0 Then
+    Sub GetKeyWords(Optional ByVal Force As Boolean = False, Optional ByVal tmdbid As String = "")
+        If (Force Or Preferences.keywordasTag) AndAlso Preferences.keywordlimit > 0 Then
             Dim keywords As New List(Of String)
             If Preferences.movies_useXBMC_Scraper Then
                 If tmdbid <> "" Then
@@ -4098,7 +4098,15 @@ Public Class Movie
             Else
                 keywords = _imdbScraper.GetImdbKeyWords(Preferences.keywordlimit, Preferences.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
             End If
-            If keywords.Count > 0 Then
+            If keywords.Count > 0 AndAlso keywords.Count > Preferences.keywordlimit Then
+                _scrapedMovie.fullmoviebody.tag.Clear()
+                Dim i As Integer = 0
+                For Each wd In keywords
+                    i = i + 1
+                    _scrapedMovie.fullmoviebody.tag.Add(wd)
+                    If i = Preferences.keywordlimit Then Exit For
+                Next
+            ElseIf keywords.Count > 0
                 _scrapedMovie.fullmoviebody.tag = keywords
             End If
         End If
