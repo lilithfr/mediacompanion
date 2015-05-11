@@ -17092,10 +17092,13 @@ End Sub
             If TagListBox.SelectedIndex <> -1 Then
                 For Each item In TagListBox.SelectedItems
                     If item = "" Then Exit For
-                    If Not CurrentMovieTags.Items.Contains(item) AndAlso Not CurrentMovieTags.Items.Contains("+ " & item) Then
+                    If Not CurrentMovieTags.Items.Contains("+ " & item) Then
                         If CurrentMovieTags.Items.Contains("- " & item) Then
                             Dim i As Integer = CurrentMovieTags.Items.IndexOf("- " & item)
                             CurrentMovieTags.Items(i) = item
+                        ElseIf CurrentMovieTags.Items.Contains(item) Then
+                            Dim i As Integer = CurrentMovieTags.Items.IndexOf(item)
+                            CurrentMovieTags.Items(i) = "+ " & item
                         Else
                             CurrentMovieTags.Items.Add("+ " & item)
                         End If
