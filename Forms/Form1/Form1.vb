@@ -3593,7 +3593,7 @@ Public Class Form1
         Try
             Dim info = DataGridViewMovies.HitTest(e.X, e.Y)
 
-            If info.ColumnX = -1 Then
+            If info.ColumnX = -1 or IsNumeric(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString) Then
                 Return
             End If
 
