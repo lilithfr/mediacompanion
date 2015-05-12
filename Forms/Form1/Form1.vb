@@ -9032,7 +9032,7 @@ Public Class Form1
 #End If
             End Try
             Try
-                If oCachedMovie.MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
+                If oCachedMovie.MovieSet.MovieSetName <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -9113,7 +9113,19 @@ Public Class Form1
                 End Try
 
                 Try
-                    oCachedMovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
+                    Dim NewSetName As String = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
+                    If NewSetName = "" Then
+                        oCachedMovie.MovieSet.MovieSetName = ""
+                        oCachedMovie.MovieSet.MovieSetId = ""
+                    Else
+                        For Each m In oMovies.MovieSetDB
+                            If m.MovieSetName = NewSetName Then
+                                oCachedMovie.MovieSet.MovieSetName = m.MovieSetName
+                                oCachedMovie.MovieSet.MovieSetId = m.MovieSetId 
+                            End If
+                        Next
+                    End If
+                    'oCachedMovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -9159,12 +9171,13 @@ Public Class Form1
                 'oMovie.ScrapedMovie.fullmoviebody.plot = oCachedMovie.plot
                 oMovie.ScrapedMovie.fullmoviebody.rating = oCachedMovie.rating
                 oMovie.ScrapedMovie.fullmoviebody.source = oCachedMovie.source
-                oMovie.ScrapedMovie.fullmoviebody.movieset = oCachedMovie.MovieSet
+                oMovie.ScrapedMovie.fullmoviebody.movieset.MovieSetName = oCachedMovie.MovieSet.MovieSetName
+                oMovie.ScrapedMovie.fullmoviebody.movieset.MovieSetId = oCachedMovie.MovieSet.MovieSetId 
                 oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
                 Dim checkmpaa = oCachedMovie.Certificate 
-                If checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
+                If Not Preferences.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
                     checkmpaa = "Rated " & checkmpaa
                 End If
                 oMovie.ScrapedMovie.fullmoviebody.mpaa = checkmpaa
