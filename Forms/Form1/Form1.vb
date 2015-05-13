@@ -17210,10 +17210,16 @@ End Sub
             If mset <> "-None-" Then
                 Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
                 Dim msetid As String = ""
-                If MsetCache.Count <> 0 Then
-                    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
-                    If q.ToString <> "" AndAlso q.Count > 0 Then msetid = q.ToString
-                End If
+                For Each movset in MsetCache
+                    If movset.MovieSetName.ToLower = mset.ToLower Then
+                        msetid = movset.MovieSetId
+                        Exit For
+                    End If
+                Next
+                'If MsetCache.Count <> 0 Then
+                '    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
+                '    If q.ToString <> "" AndAlso q.Count > 0 Then msetid = q.ToString
+                'End If
                 row.CreateCells(dgvmovset, mset, If(msetid <> "", Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect))
                 If msetid <> "" then row.Cells(1).Tag = msetid
                 dgvmovset.Rows.Add(row)
