@@ -3126,7 +3126,7 @@ Public Class Movie
                 Try
                     _rescrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                        _rescrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                        If rl.tmdb_set_name Then _rescrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
                         _rescrapedMovie.fullmoviebody.movieset.MovieSetId = tmdb.Movie.belongs_to_collection.id
                     End If
                     UpdateProperty(_rescrapedMovie.fullmoviebody.movieset, _scrapedMovie.fullmoviebody.movieset, , rl.EmptyMainTags)
