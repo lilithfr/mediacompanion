@@ -3169,6 +3169,8 @@ Public Class Movie
         If rl.SetWatched       Then _scrapedMovie.fullmoviebody.SetWatched  ()
         If rl.ClearWatched     Then _scrapedMovie.fullmoviebody.ClearWatched()
 
+        If rl.rebuildnfo Then Fixupnfo
+
         AssignMovieToCache()
         '		AssignMovieToAddMissingData
         HandleOfflineFile()             ' Do we need this?
@@ -4112,5 +4114,35 @@ Public Class Movie
         End If
     End Sub
 
+    Sub Fixupnfo()
+        'If XBMC networkpath changed, update actor thumb path
+        Dim listactors2 As New List(Of str_MovieActors )
+        For Each movactor In _scrapedMovie.listactors
+            If Preferences.actorsave AndAlso movactor.actorid <> "" Then
+                If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
+                    Dim tempstring As String = Preferences.actorsavepath
+                    Dim workingpath As String = ""
+                    If Preferences.actorsavealpha Then
+                        Dim actorfilename As String = movactor.actorname.Replace(" ", "_") & "_" & movactor.actorid & ".jpg"
+                        tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
+                        workingpath = tempstring & actorfilename 
+                    Else
+                        tempstring = tempstring & "\" & movactor.actorid.Substring(movactor.actorid.Length - 2, 2) & "\"
+                        workingpath = tempstring & movactor.actorid & ".jpg"
+                    End If
+                    If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
+                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                            movactor.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("\", "/")
+                        Else
+                            movactor.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("/", "\")
+                        End If
+                    End If
+                End If
+            End If
+            listactors2.Add(movactor)
+        Next
+        _scrapedMovie.listactors.Clear()
+        _scrapedMovie.listactors.AddRange(listactors2)
+    End Sub           'Any code in here to fix up movie nfo's
 
 End Class

@@ -1173,7 +1173,7 @@ Public Class Form1
     Private Sub util_BatchUpdate()
 
         rescrapeList.ResetFields()
-        rescrapeList.mediatags = True
+        rescrapeList.rebuildnfo = True
         'rescrapeList.Rename_Files = True
 
         _rescrapeList.FullPathAndFilenames.Clear()
