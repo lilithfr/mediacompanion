@@ -2030,17 +2030,17 @@ Public Class Preferences
         Dim foldername As String = Utilities.GetLastFolder(MovPath)
         Dim filename As String = IO.Path.GetFileName(MovPath)
         If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
-            movsetposterpath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-folder.jpg"
+            movsetposterpath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-poster.jpg"
         Else                                                'or Save to movieset folder if exists.
            ' Dim MovPath As String = workingMovieDetails.fileinfo.fullpathandfilename
             If MovPath.Contains(MovSetName) AndAlso foldername = MovSetName Then
-                movsetposterpath = MovPath.Replace(filename, "folder.jpg")
+                movsetposterpath = MovPath.Replace(filename, "poster.jpg")
             ElseIf MovPath.Contains(MovSetName) Then
                 Dim splitpath() = MovPath.Split("\")
                 For Each p In splitpath
                     movsetposterpath &= p & "\"
                     If p = MovSetName then
-                        movsetposterpath &="folder.jpg"
+                        movsetposterpath &="poster.jpg"
                         Exit For
                     End If
                 Next
