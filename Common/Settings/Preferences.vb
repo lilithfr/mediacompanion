@@ -2002,6 +2002,7 @@ Public Class Preferences
     Public Shared Function GetMovSetFanartPath(ByVal MovPath As String, ByVal MovSetName As String) As String
         Dim movsetfanartpath As String = ""
         If MovSetName = "" Then Return ""
+        MovSetName = Utilities.cleanFoldernameIllegalChars(MovSetName)
         Dim foldername As String = Utilities.GetLastFolder(MovPath)
         Dim filename As String = IO.Path.GetFileName(MovPath)
         If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
@@ -2027,6 +2028,7 @@ Public Class Preferences
     Public Shared Function GetMovSetPosterPath(ByVal MovPath As String, ByVal MovSetName As String) As String
         Dim movsetposterpath As String = ""
         If MovSetName = "" Then Return ""
+        MovSetName = Utilities.cleanFoldernameIllegalChars(MovSetName)
         Dim foldername As String = Utilities.GetLastFolder(MovPath)
         Dim filename As String = IO.Path.GetFileName(MovPath)
         If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
