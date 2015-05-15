@@ -20,6 +20,7 @@ Public Class ucFanartTv
     Public messbox As New frmMessageBox("blank", "", "")
     Dim usedlist As New List(Of str_fanarttvart)
     Public workingMovDetails As New FullMovieDetails
+    Public MovSetToggle As Boolean = False
     Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
     Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
                                           "Movie Disc", "Movie Banner", "Landscape"}
@@ -32,6 +33,10 @@ Public Class ucFanartTv
         isroot = Preferences.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
         If workingMovDetails.fullmoviebody.title <> moviedetails.fullmoviebody.title Then
             workingMovDetails = Form1.workingMovieDetails
+            MovSetToggle = False
+            lblftvArtMode.Text = "Displaying Movie Artwork"
+            btnMovArtToggle.BackColor = System.Drawing.Color.Lime
+            btnMovArtToggle.Text = "Show Movie Set Artwork"
         Else
             Exit Sub
         End If
@@ -81,7 +86,11 @@ Public Class ucFanartTv
             Return False
         End If
         If Not FanarttvMovielist.dataloaded Then
-            MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & workingMovDetails.fullmoviebody.title)
+            If Not MovSetToggle Then
+                MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & workingMovDetails.fullmoviebody.title)
+            Else
+                MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for MovieSet:  " & workingMovDetails.fullmoviebody.movieset.MovieSetName)
+            End If
             Return False
         End If
         Return True
@@ -297,6 +306,9 @@ Public Class ucFanartTv
     Private Sub DisplayExistingArt()
         Dim LoadPath As String = Nothing
         LoadPath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
+        If MovSetToggle Then
+            LoadPath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", "")
+        End If
         'If isroot Then
         '    LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
         'End If
@@ -338,7 +350,10 @@ Public Class ucFanartTv
             Me.Refresh()
             messbox.Refresh()
             Try
-                Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
+                Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
+                If MovSetToggle Then
+                    savepath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", artType)
+                End If
                 Dim success As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
                 If Preferences.posterjpg AndAlso Preferences.createfolderjpg AndAlso artType.Contains("poster.jpg") Then
                     savepath = savepath.Replace(artType, "folder.jpg")
@@ -365,7 +380,45 @@ Public Class ucFanartTv
         PanelSelectionDisplay()
     End Sub
 
-    Private Sub btnMovArtToggle_Click( sender As Object,  e As EventArgs) Handles btnMovArtToggle.Click
-        lblftvArtMode.Text = "Showing MovieSet Artwork"
+    Public Sub resetloadedart(Optional ByVal ID As String = "", Optional ByVal Title As String= "")
+        pbexists.Image = Nothing
+        lblftvgroups.Items.clear
+        PanelClear()
+        If ID <> "" Then
+            Me.lblTitle.Text = Title
+        Else
+            Me.lblTitle.Text = workingMovDetails.fullmoviebody.title
+            If workingMovDetails.fullmoviebody.imdbid.Contains("tt") Then
+                ID = workingMovDetails.fullmoviebody.imdbid
+            ElseIf workingMovDetails.fullmoviebody.tmdbid <> "" Then
+                ID = workingMovDetails.fullmoviebody.tmdbid
+            Else
+                Call noID
+            End If
+        End If
+        If nodata Then Exit Sub
+        GetFanartTvArt(ID)
+        If Not ConfirmIfResults() Then Exit Sub
+        artheightload()
     End Sub
+
+    Private Sub btnMovArtToggle_Click( sender As Object,  e As EventArgs) Handles btnMovArtToggle.Click
+        If workingMovDetails.fullmoviebody.movieset.MovieSetId = "" Then Exit Sub
+        If MovSetToggle Then
+            lblftvArtMode.Text = "Displaying Movie Artwork"
+            btnMovArtToggle.BackColor = System.Drawing.Color.Lime
+            btnMovArtToggle.Text = "Show Movie Set Artwork"
+        Else
+            lblftvArtMode.Text = "Showing MovieSet Artwork"
+            btnMovArtToggle.BackColor = System.Drawing.Color.Aqua
+            btnMovArtToggle.Text = "Show Movie Artwork"
+        End If
+        MovSetToggle = Not MovSetToggle
+        If MovSetToggle Then
+            resetloadedart(workingMovDetails.fullmoviebody.movieset.MovieSetId, workingMovDetails.fullmoviebody.movieset.MovieSetName)
+        Else
+            resetloadedart()
+        End If
+    End Sub
+
 End Class

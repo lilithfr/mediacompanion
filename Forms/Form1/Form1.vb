@@ -15964,7 +15964,7 @@ End Sub
                         Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
                             If Not Preferences.LocalActorImage AndAlso actorthumbpath.IndexOf("http") = 0 Then
-                                If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
+                                If actorthumbpath.ToLower.IndexOf("http") <> -1 OrElse IO.File.Exists(actorthumbpath) Then
                                     util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
                                 End If
                             Else

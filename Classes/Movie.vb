@@ -3139,7 +3139,7 @@ Public Class Movie
             End If
             If Cancelled() Then Exit Sub
 
-            If rl.missingmovsetart AndAlso _scrapedMovie.fullmoviebody.movieset.MovieSetName <> "-None-" Then DoDownloadMovieSetArtwork()
+            If rl.missingmovsetart AndAlso _scrapedMovie.fullmoviebody.movieset.MovieSetId <> "" Then DoDownloadMovieSetArtwork()
             If Cancelled() Then Exit Sub
 
             If rl.actors Then
