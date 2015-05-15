@@ -365,4 +365,7 @@ Public Class ucFanartTv
         PanelSelectionDisplay()
     End Sub
 
+    Private Sub btnMovArtToggle_Click( sender As Object,  e As EventArgs) Handles btnMovArtToggle.Click
+        lblftvArtMode.Text = "Showing MovieSet Artwork"
+    End Sub
 End Class
