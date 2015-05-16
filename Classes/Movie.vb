@@ -2287,27 +2287,35 @@ Public Class Movie
             _api.CollectionSearch = True
             Dim MsetFanart As New str_ListOfPosters
             Dim MsetPoster As New str_ListOfPosters
-            MsetFanart = _api.Fanart(0)
-            If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) OrElse Preferences.overwritethumbs Then
-                Try
-                    SaveFanartImageToCacheAndPath(MsetFanart.hdUrl, _scrapedMovie.fileinfo.movsetfanartpath)
-                    ReportProgress(MSG_OK, "!!! MovieSet Fanart Downloaded OK" & vbCrLf)
-                Catch ex As Exception
-                    ReportProgress(MSG_ERROR, "!!! Problem Saving MovieSet Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
-                End Try
+            If _api.Fanart.Count > 0 Then
+                MsetFanart = _api.Fanart(0)
+                If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) OrElse Preferences.overwritethumbs Then
+                    Try
+                        SaveFanartImageToCacheAndPath(MsetFanart.hdUrl, _scrapedMovie.fileinfo.movsetfanartpath)
+                        ReportProgress(MSG_OK, "!!! MovieSet Fanart Downloaded OK" & vbCrLf)
+                    Catch ex As Exception
+                        ReportProgress(MSG_ERROR, "!!! Problem Saving MovieSet Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+                    End Try
+                Else
+                    ReportProgress(MSG_OK, "!!! MovieSet Fanart Already Exists" & vbCrLf)
+                End If
             Else
-                ReportProgress(MSG_OK, "!!! MovieSet Fanart Already Exists" & vbCrLf)
+                ReportProgress(MSG_ERROR, "!!! No Fanart available for this MovieSet" & vbCrLf)
             End If
-            MsetPoster = _api.MC_Posters(0)
-            If Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Preferences.overwritethumbs Then
-                Try
-                    SavePosterImageToCacheAndPath(MsetPoster.hdUrl, _scrapedMovie.fileinfo.movsetposterpath)
-                    ReportProgress(MSG_OK, "!!! MovieSet Poster Downloaded OK" & vbCrLf)
-                Catch ex As Exception
-                    ReportProgress(MSG_ERROR, "!!! Problem Saving MovieSet Poster" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
-                End Try
+            If _api.MC_Posters.Count > 0 Then
+                MsetPoster = _api.MC_Posters(0)
+                If Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Preferences.overwritethumbs Then
+                    Try
+                        SavePosterImageToCacheAndPath(MsetPoster.hdUrl, _scrapedMovie.fileinfo.movsetposterpath)
+                        ReportProgress(MSG_OK, "!!! MovieSet Poster Downloaded OK" & vbCrLf)
+                    Catch ex As Exception
+                        ReportProgress(MSG_ERROR, "!!! Problem Saving MovieSet Poster" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+                    End Try
+                Else
+                    ReportProgress(MSG_OK, "!!! MovieSet Poster Already Exists" & vbCrLf)
+                End If
             Else
-                ReportProgress(MSG_OK, "!!! MovieSet Poster Already Exists" & vbCrLf)
+                ReportProgress(MSG_ERROR, "!!! No Poster available for this MovieSet" & vbCrLf)
             End If
             _api = Nothing
         Else
