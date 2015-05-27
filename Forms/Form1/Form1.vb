@@ -7510,7 +7510,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByVal seriesno As String, ByVal episodeno As String, ByVal language As String)
+    Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByVal seasonno As String, ByVal episodeno As String, ByVal language As String)
         Dim episodestring As String = ""
         Dim episodeurl As String = ""
         Dim xmlfile As String
@@ -7518,9 +7518,41 @@ Public Class Form1
         If language.ToLower.IndexOf(".xml") = -1 Then
             language = language & ".xml"
         End If
-        episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
+        'First try seriesxml data
+        'check if present, download if not
+        Dim gotseriesxml As Boolean = False
+        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".xml"
+        Dim xmlfile2 As String = SeriesXmlPath & tvdbid & ".xml"
+        Dim SeriesInfo As New Tvdb.ShowData
+        If Not File.Exists(SeriesXmlPath & tvdbid & ".xml") Then
+            gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
+        Else
+            gotseriesxml = True
+        End If
+        
+        If Not gotseriesxml then
+            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+            xmlfile = Utilities.DownloadTextFiles(episodeurl)
+        Else
+            SeriesInfo.Load(xmlfile2)
+            Dim gotEpxml As Boolean = False
+            'check episode is present in seriesxml file, else, re-download it (update to latest)
+            For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                    Dim somedata As String = "What The??"
+                    xmlfile = NewEpisode.Node.ToString 
+                    xmlfile = "<Data>" & xmlfile & "</Data>"
+                    gotEpxml = True
+                    Exit For
+                End If
+            Next
+            ' Finally, if not in seriesxml file, go old-school
+            If Not gotEpxml Then
+                episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+                xmlfile = Utilities.DownloadTextFiles(episodeurl)
+            End If
+        End If
 
-        xmlfile = Utilities.DownloadTextFiles(episodeurl)
         If xmlfile.Contains("Could not connect") Then Return xmlfile               ' Added check if TVDB is unavailable.
         Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
         If xmlOK Then
