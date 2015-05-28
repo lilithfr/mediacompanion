@@ -7518,6 +7518,7 @@ Public Class Form1
         If language.ToLower.IndexOf(".xml") = -1 Then
             language = language & ".xml"
         End If
+        episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
         'First try seriesxml data
         'check if present, download if not
         Dim gotseriesxml As Boolean = False
@@ -7539,7 +7540,6 @@ Public Class Form1
         End If
         
         If Not gotseriesxml then
-            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
             xmlfile = Utilities.DownloadTextFiles(episodeurl)
         Else
             SeriesInfo.Load(xmlfile2)
@@ -7556,7 +7556,6 @@ Public Class Form1
             Next
             ' Finally, if not in seriesxml file, go old-school
             If Not gotEpxml Then
-                episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
                 xmlfile = Utilities.DownloadTextFiles(episodeurl)
             End If
         End If

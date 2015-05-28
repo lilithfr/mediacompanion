@@ -373,25 +373,69 @@ Public Class TVDBScraper
     'End Function
 
 
-    Public Function getepisode(ByVal tvdbid As String, ByVal sortorder As String, ByVal seriesno As String, ByVal episodeno As String, ByVal language As String, Optional ByVal forcedownload As Boolean = False)
+    Public Function getepisode(ByVal tvdbid As String, ByVal sortorder As String, ByVal seasonno As String, ByVal episodeno As String, ByVal language As String, Optional ByVal forcedownload As Boolean = False)
         Monitor.Enter(Me)
         Dim episodestring As String = ""
         Dim episodeurl As String = ""
         Try
             'http://thetvdb.com/api/6E82FED600783400/series/70726/default/1/1/en.xml
+            Dim SeriesXmlPath As String = Form1.SeriesXmlPath
 
-            Dim xmlfile As String
+            Dim xmlfile As String = Nothing
             If language.ToLower.IndexOf(".xml") = -1 Then
                 language = language & ".xml"
             End If
-            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
+            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
 
-            xmlfile = Utilities.DownloadTextFiles(episodeurl, forcedownload) 'this function has gzip detection in it 
-            Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
+            'xmlfile = Utilities.DownloadTextFiles(episodeurl, forcedownload) 'this function has gzip detection in it 
+            'Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
 
-            Dim episode As New XmlDocument
+            'Dim episode As New XmlDocument
 
-            episode.LoadXml(xmlfile)
+            'episode.LoadXml(xmlfile)
+
+            'First try seriesxml data
+            'check if present, download if not
+            Dim gotseriesxml As Boolean = False
+            Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
+            Dim xmlfile2 As String = SeriesXmlPath & tvdbid & ".xml"
+            Dim SeriesInfo As New Tvdb.ShowData
+            If Not File.Exists(SeriesXmlPath & tvdbid & ".xml") Then
+                gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
+            Else
+                'Check series xml isn't older than two weeks, if so, re-download it.
+                Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2) 
+                Dim datenow As DateTime = Date.Now()
+                Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
+                If dif > 13 Then
+                    gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
+                Else
+                    gotseriesxml = True
+                End If
+            End If
+        
+            If Not gotseriesxml then
+                episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+                xmlfile = Utilities.DownloadTextFiles(episodeurl)
+            Else
+                SeriesInfo.Load(xmlfile2)
+                Dim gotEpxml As Boolean = False
+                'check episode is present in seriesxml file, else, re-download it (update to latest)
+                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                    If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                        Dim somedata As String = "What The??"
+                        xmlfile = NewEpisode.Node.ToString 
+                        xmlfile = "<Data>" & xmlfile & "</Data>"
+                        gotEpxml = True
+                        Exit For
+                    End If
+                Next
+                ' Finally, if not in seriesxml file, go old-school
+                If Not gotEpxml Then
+                    episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+                    xmlfile = Utilities.DownloadTextFiles(episodeurl)
+                End If
+            End If
 
             episodestring = "<episodedetails>"
             episodestring = episodestring & "<url>" & episodeurl & "</url>"
@@ -453,6 +497,10 @@ Public Class TVDBScraper
                                     episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
                                 Case "filename"
                                     episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+                                Case "airsbefore_episode"
+                                    episodestring = episodestring & "<displayepisode>" & mirrorselection.InnerXml & "</displayepisode>"
+                                Case "airsbefore_season"
+                                    episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
                             End Select
                         Next
                 End Select

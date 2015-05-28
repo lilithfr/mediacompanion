@@ -2615,6 +2615,10 @@ Partial Public Class Form1
                         newepisode.Genre.Value = thisresult.InnerText
                     Case "imdbid"
                         newepisode.ImdbId.Value = thisresult.InnerText
+                    Case "displayseason"
+                        newepisode.DisplaySeason.Value = thisresult.InnerXml
+                    Case "displayepisode"
+                        newepisode.DisplayEpisode.Value = thisresult.InnerXml
                     Case "actor"
                         Dim actors As XmlNode = Nothing
                         For Each actorl In thisresult.ChildNodes
