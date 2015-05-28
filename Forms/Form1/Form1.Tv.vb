@@ -2255,7 +2255,11 @@ Partial Public Class Form1
                                             Case "showid"
                                                 singleepisode.ShowId.Value = thisresult.InnerText
                                             Case "imdbid"
-                                                singleepisode.ImdbId.Value = thisresult.InnerText 
+                                                singleepisode.ImdbId.Value = thisresult.InnerText
+                                            Case "displayseason"
+                                                singleepisode.DisplaySeason.Value = thisresult.InnerXml
+                                            Case "displayepisode"
+                                                singleepisode.DisplayEpisode.Value = thisresult.InnerXml 
                                             Case "thumb"
                                                 singleepisode.Thumbnail.FileName = thisresult.InnerText
                                             Case "actor"

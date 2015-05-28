@@ -7513,7 +7513,7 @@ Public Class Form1
     Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByVal seasonno As String, ByVal episodeno As String, ByVal language As String)
         Dim episodestring As String = ""
         Dim episodeurl As String = ""
-        Dim xmlfile As String
+        Dim xmlfile As String = ""
 
         If language.ToLower.IndexOf(".xml") = -1 Then
             language = language & ".xml"
@@ -7521,13 +7521,21 @@ Public Class Form1
         'First try seriesxml data
         'check if present, download if not
         Dim gotseriesxml As Boolean = False
-        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".xml"
+        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
         Dim xmlfile2 As String = SeriesXmlPath & tvdbid & ".xml"
         Dim SeriesInfo As New Tvdb.ShowData
         If Not File.Exists(SeriesXmlPath & tvdbid & ".xml") Then
             gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
         Else
-            gotseriesxml = True
+            'Check series xml isn't older than two weeks, if so, re-download it.
+            Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2) 
+            Dim datenow As DateTime = Date.Now()
+            Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
+            If dif > 13 Then
+                gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
+            Else
+                gotseriesxml = True
+            End If
         End If
         
         If Not gotseriesxml then
@@ -7598,6 +7606,10 @@ Public Class Form1
                                     episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
                                 Case "filename"
                                     episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+                                Case "airsbefore_episode"
+                                    episodestring = episodestring & "<displayepisode>" & mirrorselection.InnerXml & "</displayepisode>"
+                                Case "airsbefore_season"
+                                    episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
                             End Select
                         Next
                 End Select
