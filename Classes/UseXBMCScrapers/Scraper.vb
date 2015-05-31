@@ -316,7 +316,7 @@ Public Class Scraper
          For Each e In settings.<setting>
             If (e.@type = "bool") Then
                mSettings.Add(New ScraperSettingBool(e))
-            ElseIf (e.@type = "labelenum") Then
+            ElseIf (e.@type = "labelenum") Or  (e.@type = "select") Then
                mSettings.Add(New ScraperSettingEnum(e))
             End If
          Next
