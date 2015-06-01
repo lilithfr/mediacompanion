@@ -796,7 +796,7 @@ Partial Public Class Form1
 
         Dim tempstring As String = ""
         lb_EpDetails.Items.Clear()
-        lb_EpDetails.Items.Add("Details")
+        'lb_EpDetails.Items.Add("Details")
 
         cmbxEpActor.Items.Clear()
         tb_EpFilename.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
@@ -825,6 +825,23 @@ Partial Public Class Form1
                 Exit For
             End If
         Next
+        If Episode.Season.Value = "0" Then
+            lbl_airbefore.Visible = True 
+            lbl_airseason.Visible = True
+            lbl_airepisode.Visible = True
+            tb_airepisode.Visible = True
+            tb_airseason.Visible = True
+            tb_airseason.Text = Episode.DisplaySeason.Value
+            tb_airepisode.Text = Episode.DisplayEpisode.Value 
+        Else
+            lbl_airbefore.Visible = False
+            lbl_airseason.Visible = False
+            lbl_airepisode.Visible = False
+            tb_airepisode.Visible = False
+            tb_airseason.Visible = False
+            tb_airepisode.Text = ""
+            tb_airseason.Text = ""
+        End If
 
         util_EpisodeSetWatched(Episode.PlayCount.Value)
 

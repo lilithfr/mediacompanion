@@ -18096,6 +18096,10 @@ End Sub
                         ep.Rating.Value = tb_EpRating.Text
                         ep.Credits.Value = tb_EpCredits.Text
                         ep.Director.Value = tb_EpDirector.Text
+                        If ep.Season.Value = "0" Then
+                            ep.DisplayEpisode.Value = tb_airepisode.Text
+                            ep.DisplaySeason.Value = tb_airseason.Text
+                        End If
                         ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
                         'ep.UpdateTreenode()
                     End If
@@ -18251,6 +18255,18 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub tb_airepisode_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_airepisode.KeyPress
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tb_airseason_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_airseason.KeyPress
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+            e.Handled = True
+        End If
     End Sub
 
     Private Sub btnTvSearchNew_Click(sender As System.Object, e As System.EventArgs) Handles btnTvSearchNew.Click
