@@ -2251,6 +2251,8 @@ Public Class WorkingWithNfoFiles
                                 Else
                                     newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
                                 End If
+                            Case "countries"
+                                newmovie.countries = thisresult.InnerText
                             Case "tag"
                                 newmovie.movietag.Add(thisresult.InnerText)
                                 'If newmovie.tag.add = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "

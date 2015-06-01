@@ -135,6 +135,25 @@ Public Class Movies
         End Get
     End Property
 
+
+    Public ReadOnly Property CountriesFilter As List(Of String)
+        Get
+            Dim q = From x In MovieCache Select ms=x.countries.Split(", ")
+             
+            Dim lst = q.SelectMany(Function(m) m).ToList
+
+            lst.RemoveAll(Function(v) v="" )
+            lst.RemoveAll(Function(v) v=",")
+
+            Dim q2 = From x In lst
+                        Group By x Into Num=Count
+                        Order By x
+                        Select x & " (" & Num.ToString & ")" 
+
+            Return q2.AsEnumerable.ToList
+        End Get
+    End Property    
+
     Public ReadOnly Property GenresFilter As List(Of String)
         Get
             Dim q = From x In MovieCache Select ms=x.genre.Split(" / ")
@@ -1243,6 +1262,7 @@ Public Class Movies
                                 Case "foldername"           : newmovie.foldername = detail.InnerText
                                 Case "fullpathandfilename"  : newmovie.fullpathandfilename = detail.InnerText
                                 Case "genre"                : newmovie.genre = detail.InnerText & newmovie.genre
+                                Case "countries"            : newmovie.countries = detail.InnerText
                                 Case "id"                   : newmovie.id = detail.InnerText
                                 Case "playcount"            : newmovie.playcount = detail.InnerText
                                 Case "rating"               : newmovie.rating = detail.InnerText.ToString.ToRating
@@ -1360,7 +1380,8 @@ Public Class Movies
             '    child.AppendChild(childchild)
                 
             'End If
-            childchild = doc.CreateElement("genre") : childchild.InnerText = movie.genre : child.AppendChild(childchild)
+            childchild = doc.CreateElement("genre"    ) : childchild.InnerText = movie.genre     : child.AppendChild(childchild)
+            childchild = doc.CreateElement("countries") : childchild.InnerText = movie.countries : child.AppendChild(childchild)
 
             For Each item In movie.movietag
                 childchild = doc.CreateElement("tag")
@@ -2122,6 +2143,20 @@ Public Class Movies
 
 #Region "Filters"
 
+    Function ApplyCountiesFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb,"Unknown","")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x) x.countriesList.Intersect(fi.Include).Any() )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not x.countriesList.Intersect(fi.Exclude).Any() )
+        End If
+
+        Return recs
+    End Function
+
+
     Function ApplyGenresFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim i As Integer = 0
 
@@ -2139,6 +2174,7 @@ Public Class Movies
 
         Return recs
     End Function
+
 
     Function ApplyCertificatesFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 

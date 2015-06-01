@@ -63,6 +63,7 @@ Public Class Data_GridViewMovie
         Rating = movie.rating
         top250 = movie.top250
         genre = movie.genre
+        countries = movie.countries
         playcount = movie.playcount
         SortOrder = movie.sortorder
         outline = movie.outline
@@ -109,6 +110,7 @@ Public Class Data_GridViewMovie
         convertedMovie.rating               = Me.Rating
         convertedMovie.top250               = Me.top250
         convertedMovie.genre                = Me.genre
+        convertedMovie.countries            = Me.countries
         convertedMovie.playcount            = Me.playcount
         convertedMovie.sortorder            = Me.SortOrder
         convertedMovie.outline              = Me.outline
@@ -246,6 +248,14 @@ Public Class Data_GridViewMovie
         End Set
     End Property
 
+    Public Property countries As String
+
+    Public ReadOnly Property countriesList As List(Of String)
+        Get
+            Return countries.Split(", ").ToList
+        End Get
+    End Property
+    
     Public Property genre
         Get
             Return _genre

@@ -278,6 +278,7 @@ Public Class clsGridViewMovie
         If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where f.DisplayFolderSize >= Form1.cbFilterFolderSizes.SelectedMin and f.DisplayFolderSize <= Form1.cbFilterFolderSizes.SelectedMax
         If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
 
+        If Form1.cbFilterCountries             .Visible Then b = Form1.oMovies.ApplyCountiesFilter              ( b , Form1.cbFilterCountries             )
         If Form1.cbFilterGenre                 .Visible Then b = Form1.oMovies.ApplyGenresFilter                ( b , Form1.cbFilterGenre                 )
         If Form1.cbFilterCertificate           .Visible Then b = Form1.oMovies.ApplyCertificatesFilter          ( b , Form1.cbFilterCertificate           )
         If Form1.cbFilterSet                   .Visible Then b = Form1.oMovies.ApplySetsFilter                  ( b , Form1.cbFilterSet                   )
