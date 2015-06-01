@@ -772,11 +772,11 @@ Partial Public Class Form1
         Return multiepisode
     End Function
 
-    Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
+    Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode, Optional ByVal epupdate As Boolean = False)
         Panel7.Visible = False
 
         'test if already loaded nfo into treeview, if so, then no need to reload
-        If IsNothing(Episode.Plot.Value) Then
+        If IsNothing(Episode.Plot.Value) OrElse epupdate Then
             'test for multiepisodenfo
             If TestForMultiepisode(Episode.NfoFilePath) Then
                 Dim episodelist As New List(Of TvEpisode)
@@ -3064,7 +3064,7 @@ Partial Public Class Form1
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                        If episode.PlayCount.Value = playcount Then
+                        If episode.PlayCount.Value = playcount.ToString Then
                             episode.Visible = True
                         Else
                             episode.Visible = False

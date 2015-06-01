@@ -18101,7 +18101,8 @@ End Sub
                     End If
                 Next
                 WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
-                Episode.UpdateTreenode()
+                ep_Load(Episode.EpisodeNode.Parent.Tag, Episode, True)
+                'Episode.UpdateTreenode()
             End If
 
         Catch ex As Exception
