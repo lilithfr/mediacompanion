@@ -20,6 +20,7 @@
 	<Resolution name="QWXGA"        aspectRatio="16:9"  width="2048" height="1152"/>
 	<Resolution name="WQHD"         aspectRatio="6:9"   width="2560" height="1440"/>
 	<Resolution name="WQXGA"        aspectRatio="16:10" width="2560" height="1600"/>
-  <Resolution name="QWXGA+"       aspectRatio="16:10" width="2048" height="1280"/>
+	<Resolution name="QWXGA+"       aspectRatio="16:10" width="2048" height="1280"/>
+	<Resolution name="Custom"       aspectRatio="4:6"   width="1000" height="1500"/>
 </Resolutions>
 
