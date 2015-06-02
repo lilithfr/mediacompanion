@@ -19,6 +19,13 @@ Public Class ComboList
     Property top250               As String = 0
     Property genre                As String = ""
     Property countries            As String = ""
+
+    Public ReadOnly Property countriesList As List(Of String)
+        Get
+            Return countries.Split(", ").ToList
+        End Get
+    End Property
+
     Property movietag As New List(Of String)
     Property playcount            As String = ""
     Property lastplayed           As String = ""

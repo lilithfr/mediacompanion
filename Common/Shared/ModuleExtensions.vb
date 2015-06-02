@@ -89,5 +89,11 @@ Public Module ModuleExtensions
         Return New String(input.ToCharArray().Where(Function(c) Not [Char].IsWhiteSpace(c)).ToArray())
     End Function
 
+    Public Const Missing = "Missing"
+
+    <Extension()> _
+    Public Function IfBlankMissing(value As String) As String
+        Return If(value="",Missing,value)
+    End Function
 End Module
 
