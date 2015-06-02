@@ -143,9 +143,9 @@ Public Class Movies
             Dim lst = q.SelectMany(Function(m) m).ToList
 
             Dim q2 = From x In lst
-                        Group By x Into Num=Count
-                        Order By x
-                        Select x.IfBlankMissing & " (" & Num.ToString & ")" 
+                        Group By xx=x.Trim Into Num=Count
+                        Order By xx
+                        Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
 
             Return q2.AsEnumerable.ToList
         End Get
