@@ -13304,6 +13304,7 @@ End Sub
 
     Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVPrefSaveChanges.Click
         Try
+            mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             Preferences.ConfigSave()
             Call util_RegexSave()
             ComboBox_tv_EpisodeRename.Items.Clear()
@@ -13321,10 +13322,10 @@ End Sub
 #Region "General/Scraper"
 
 'XBMC TVDB Scraper options
-    Private Sub RadioButton_XBMC_Scraper_TVDB_DVDOrder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton_XBMC_Scraper_TVDB_DVDOrder.CheckedChanged
+    Private Sub rbXBMCTvdbDVDOrder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbXBMCTvdbDVDOrder.CheckedChanged
         If prefsload Then Exit Sub
         Try
-            If RadioButton_XBMC_Scraper_TVDB_DVDOrder.Checked = True Then
+            If rbXBMCTvdbDVDOrder.Checked = True Then
                 Save_XBMC_TVDB_Scraper_Config("dvdorder", "true")
                 Save_XBMC_TVDB_Scraper_Config("absolutenumber", "false")
             Else
@@ -13339,10 +13340,10 @@ End Sub
         End Try
     End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_TVDB_Fanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TVDB_Fanart.CheckedChanged
+    Private Sub cbXBMCTvdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbFanart.CheckedChanged
         If prefsload Then Exit Sub
         Try
-            If CheckBox_XBMC_Scraper_TVDB_Fanart.Checked = True Then
+            If cbXBMCTvdbFanart.Checked = True Then
                 Save_XBMC_TVDB_Scraper_Config("fanart", "true")
             Else
                 Save_XBMC_TVDB_Scraper_Config("fanart", "false")
@@ -13355,10 +13356,10 @@ End Sub
         End Try
     End Sub
 
-    Private Sub CheckBox_XBMC_Scraper_TVDB_Posters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_XBMC_Scraper_TVDB_Posters.CheckedChanged
+    Private Sub cbXBMCTvdbPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbPosters.CheckedChanged
         If prefsload Then Exit Sub
         Try
-            If CheckBox_XBMC_Scraper_TVDB_Posters.Checked = True Then
+            If cbXBMCTvdbPosters.Checked = True Then
                 Save_XBMC_TVDB_Scraper_Config("posters", "true")
             Else
                 Save_XBMC_TVDB_Scraper_Config("posters", "false")
@@ -13375,6 +13376,40 @@ End Sub
         If prefsload Then Exit Sub
         Try
             Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
+            'Read_XBMC_TVDB_Scraper_Config()
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbXBMCTvdbRatingImdb_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbRatingImdb.CheckedChanged
+        If prefsload Then Exit Sub
+        Try
+            If cbXBMCTvdbRatingImdb.Checked = True Then
+                Save_XBMC_TVDB_Scraper_Config("ratings", "IMDb")
+                cbXBMCTvdbRatingFallback.Enabled = True
+            Else
+                Save_XBMC_TVDB_Scraper_Config("ratings", "TheTVDB")
+                cbXBMCTvdbRatingFallback.Enabled = False
+            End If
+            'Read_XBMC_TVDB_Scraper_Config()
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbXBMCTvdbRatingFallback_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbRatingFallback.CheckedChanged
+        If prefsload Then Exit Sub
+        Try
+            If cbXBMCTvdbRatingFallback.Checked = True Then
+                Save_XBMC_TVDB_Scraper_Config("fallback", "true")
+            Else
+                Save_XBMC_TVDB_Scraper_Config("fallback", "false")
+            End If
             'Read_XBMC_TVDB_Scraper_Config()
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
@@ -14104,7 +14139,7 @@ End Sub
     Private Sub btnMoviePrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try
             applyAdvancedLists()
-
+            mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             For Each row As DataGridViewRow In DataGridViewMovies.Rows
                 Dim m As Data_GridViewMovie = row.DataBoundItem
                 m.ClearStoredCalculatedFields()
@@ -14235,7 +14270,7 @@ End Sub
         Try
             Preferences.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
             Save_XBMC_TMDB_Scraper_Config("language", Preferences.XbmcTmdbScraperLanguage)
-            mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+            'mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
