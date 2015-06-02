@@ -91,7 +91,7 @@ Public Class Movies
             Dim q = From x In MovieCache Select field=CertificateMappings.GetMapping(x.Certificate)
                         Group By field Into Num=Count
                         Order By field
-                        Select If(field="","Missing",field) & " (" & Num.ToString & ")" 
+                        Select field.IfBlankMissing & " (" & Num.ToString & ")" 
 
             Return q.AsEnumerable.ToList
         End Get
@@ -138,17 +138,14 @@ Public Class Movies
 
     Public ReadOnly Property CountriesFilter As List(Of String)
         Get
-            Dim q = From x In MovieCache Select ms=x.countries.Split(", ")
+            Dim q = From x In MovieCache Select ms=x.countriesList
              
             Dim lst = q.SelectMany(Function(m) m).ToList
-
-            lst.RemoveAll(Function(v) v="" )
-            lst.RemoveAll(Function(v) v=",")
 
             Dim q2 = From x In lst
                         Group By x Into Num=Count
                         Order By x
-                        Select x & " (" & Num.ToString & ")" 
+                        Select x.IfBlankMissing & " (" & Num.ToString & ")" 
 
             Return q2.AsEnumerable.ToList
         End Get
@@ -2144,7 +2141,7 @@ Public Class Movies
 #Region "Filters"
 
     Function ApplyCountiesFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
-        Dim fi As New FilteredItems(ccb,"Unknown","")
+        Dim fi As New FilteredItems(ccb,ModuleExtensions.Missing,"")
        
         If fi.Include.Count>0 Then
             recs = recs.Where( Function(x) x.countriesList.Intersect(fi.Include).Any() )
