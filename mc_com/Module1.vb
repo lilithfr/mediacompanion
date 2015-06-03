@@ -964,7 +964,7 @@ Module Module1
             End If
 
             If savepath <> "" And scrapedok = True Then
-                'DlMissingSeasonArt(episodearray(0), language, realshowpath.Replace("tvshow.nfo", ""))
+                DlMissingSeasonArt(episodearray(0), language, realshowpath.Replace("tvshow.nfo", ""))
                 Call addepisode(episodearray, savepath)
                 '9999999
             End If
@@ -1453,11 +1453,10 @@ Module Module1
             Dim thisepseason As String = realshowpath + "Season" + (If(thisep.seasonno.ToInt < 10, "0" + thisep.seasonno, thisep.seasonno)) + (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
             If File.Exists(thisepseason) Then Exit Sub
             Dim success As Boolean = False
-            Dim tvdbstuff As New tvdbscraper
             Dim showlist As New XmlDocument
             Dim eden As Boolean = Preferences.EdenEnabled
             Dim frodo As Boolean = Preferences.FrodoEnabled
-            Dim thumblist As String = tvdbstuff.GetPosterList(thisep.showid)
+            Dim thumblist As String = GetPosterList(thisep.showid)
             Dim overwriteimage As Boolean = If(Preferences.overwritethumbs, True, False)
             Dim doPoster As Boolean = Preferences.tvdlposter
             Dim doFanart As Boolean = Preferences.tvdlfanart
@@ -1579,6 +1578,58 @@ Module Module1
         Catch
         End Try
     End Sub
+
+    Public Function getposterlist(ByVal tvdbid As String)
+        Try
+            Dim mirrors As New List(Of String)
+            Dim xmlfile As String
+            Dim wrGETURL As WebRequest
+            Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
+            wrGETURL = WebRequest.Create(mirrorsurl)
+            Dim myProxy As New WebProxy("myproxy", 80)
+            myProxy.BypassProxyOnLocal = True
+            Dim objStream As Stream
+            objStream = wrGETURL.GetResponse.GetResponseStream()
+            Dim objReader As New StreamReader(objStream)
+            xmlfile = objReader.ReadToEnd
+            Dim bannerslist As New XmlDocument
+            'Try
+            Dim bannerlist As String = "<banners>"
+            bannerslist.LoadXml(xmlfile)
+            Dim thisresult As XmlNode = Nothing
+            For Each thisresult In bannerslist("Banners")
+
+                Select Case thisresult.Name
+                    Case "Banner"
+                        bannerlist = bannerlist & "<banner>"
+                        Dim bannerselection As XmlNode = Nothing
+                        For Each bannerselection In thisresult.ChildNodes
+                            Select Case bannerselection.Name
+                                Case "BannerPath"
+
+                                    bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
+                                Case "BannerType"
+                                    bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
+                                Case "BannerType2"
+                                    bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
+                                Case "Language"
+                                    bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
+                                Case "Season"
+                                    bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
+                                Case ""
+                            End Select
+                        Next
+                        bannerlist = bannerlist & "</banner>"
+                End Select
+            Next
+            bannerlist = bannerlist & "</banners>"
+            Return bannerlist
+        Catch ex As WebException
+            Return ex.ToString
+        Catch EX As Exception
+            Return EX.ToString
+        End Try
+    End Function
 
     Private Sub MissingEpThumbDL(ByVal listofshowfolders As List(Of String))
 
