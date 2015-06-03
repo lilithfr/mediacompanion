@@ -17311,10 +17311,6 @@ End Sub
                         Exit For
                     End If
                 Next
-                'If MsetCache.Count <> 0 Then
-                '    Dim q = From x In MsetCache Where x.MovieSetName = mset Select x.MovieSetId
-                '    If q.ToString <> "" AndAlso q.Count > 0 Then msetid = q.ToString
-                'End If
                 row.CreateCells(dgvmovset, mset, If(msetid <> "", Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect))
                 If msetid <> "" then row.Cells(1).Tag = msetid
                 dgvmovset.Rows.Add(row)
@@ -17423,11 +17419,6 @@ End Sub
         Dim messbox As frmMessageBox = Nothing
         If ColIndexFromMouseDown = 1 Then
             Try
-                'Dim messbox As frmMessageBox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
-                'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                'messbox.Show()
-                'messbox.Refresh()
-
                 Dim NewTMDBID As String = InputBox("Enter TMDB Set ID:" & vbCrLf & "Note: Numerical only!", "TMDB Set ID", "")
                 If Regex.IsMatch(NewTMDBID, "^[0-9]+$") Then
                     messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
@@ -17442,20 +17433,44 @@ End Sub
                         oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
                         Dim found As Boolean = False
                         For Each s As MovieSetDatabase In MsetCache
-                            If s.MovieSetName = MsetName AndAlso s.MovieSetId <> "" AndAlso s.MovieSetId <> NewTMDBID Then
-                                If s.MovieSetId = "" Then
+                            If s.MovieSetName = MsetName Then
+                                If  s.MovieSetId <> NewTMDBID Then
+                                    If s.MovieSetId <> "" Then
+                                        Dim tempint = MsgBox("This Set already has an ID" & vbCrLf & "Are you sure you wish to overwrite?", MessageBoxButtons.YesNoCancel)
+                                        If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then
+                                            Fail = True
+                                            Exit For
+                                        End If
+                                    End If
+                                    s.MovieSetId = NewTMDBID
+                                    oMovies.SaveMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
                                     found = True
                                 End If
                             End If
                         Next
-                        'If Not found then
-                        '    Dim newset As New MovieSetDatabase
-                        '    newset.MovieSetName = MsetName
-                        '    newset.MovieSetId = NewTMDBID
-                        '    MsetCache.Add(newset)
-                        '    oMovies.SaveMovieSetCache()
-                        'End If
-                        Dim Something As String = Nothing
+                        If Not Fail Then
+                            If Not found then
+                                Dim newset As New MovieSetDatabase
+                                newset.MovieSetName = MsetName
+                                newset.MovieSetId = NewTMDBID
+                                MsetCache.Add(newset)
+                                oMovies.SaveMovieSetCache()
+                            End If
+                            If found Then 
+                                dgvmovset.Rows(RowIndexFromMouseDown).Cells(ColIndexFromMouseDown).Value = Global.Media_Companion.My.Resources.Resources.correct
+                                Dim matchedmovies As New List(Of String)
+                                For Each Mov As Combolist In oMovies.MovieCache
+                                    If Mov.MovieSet.MovieSetName = MsetName Then
+                                        Mov.MovieSet.MovieSetId = NewTMDBID
+                                        Dim filepath As String = Mov.fullpathandfilename 
+                                        Dim fmd As New FullMovieDetails
+                                        fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
+                                        fmd.fullmoviebody.movieset.MovieSetId = NewTMDBID
+                                        Movie.SaveNFO(filepath, fmd)
+                                    End If
+                                Next
+                            End If
+                        End If
                     End If
                 Else
                     Fail = True
