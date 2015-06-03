@@ -17414,15 +17414,60 @@ End Sub
     End Sub
 
     Private Sub dgvmovset_MouseDown(sender As Object, e As MouseEventArgs) Handles dgvmovset.MouseDown
+        Dim Fail As Boolean = False
         If Not e.Button = MouseButtons.Right Then Exit Sub
         Dim ColIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).ColumnIndex 
         If ColIndexFromMouseDown < 0 Then Exit Sub
         Dim RowIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).RowIndex
         If RowIndexFromMouseDown < 0 Then Exit Sub
-        Dim dgvmovrow As String = dgvmovset.Columns(ColIndexFromMouseDown).Name
-        If dgvmovrow.ToLower.Contains("tmdb") Then
-            Dim something As String = Nothing
+        Dim messbox As frmMessageBox = Nothing
+        If ColIndexFromMouseDown = 1 Then
+            Try
+                'Dim messbox As frmMessageBox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
+                'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                'messbox.Show()
+                'messbox.Refresh()
+
+                Dim NewTMDBID As String = InputBox("Enter TMDB Set ID:" & vbCrLf & "Note: Numerical only!", "TMDB Set ID", "")
+                If Regex.IsMatch(NewTMDBID, "^[0-9]+$") Then
+                    messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+                    Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
+                    If MsetName = "" Then
+                        Fail = True
+                    Else
+                        Dim MsetCache As New List(Of MovieSetDatabase)
+                        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+                        Dim found As Boolean = False
+                        For Each s As MovieSetDatabase In MsetCache
+                            If s.MovieSetName = MsetName AndAlso s.MovieSetId <> "" AndAlso s.MovieSetId <> NewTMDBID Then
+                                If s.MovieSetId = "" Then
+                                    found = True
+                                End If
+                            End If
+                        Next
+                        'If Not found then
+                        '    Dim newset As New MovieSetDatabase
+                        '    newset.MovieSetName = MsetName
+                        '    newset.MovieSetId = NewTMDBID
+                        '    MsetCache.Add(newset)
+                        '    oMovies.SaveMovieSetCache()
+                        'End If
+                        Dim Something As String = Nothing
+                    End If
+                Else
+                    Fail = True
+                    MsgBox("Invalid ID." & vbCrLf & "Numerical Only!", , "Invalid TMDB Set ID")
+                End If
+            Catch
+ 
+            End Try
         End If
+        messbox.Close()
+        messbox = nothing
+        If Fail Then Exit Sub
     End Sub
 
 #End Region 'Movie Set Routines
