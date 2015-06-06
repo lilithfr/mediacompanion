@@ -3651,31 +3651,15 @@ Partial Public Class Form1
                         If Not IsNothing(mainposter) Then Exit For
                     Next
                     If Not IsNothing(mainposter) Then
-                        Dim mainposterpath As String = ""
-                        If frodo Then
-                            mainposterpath = currentshowpath & "poster.jpg"
-                        ElseIf eden Then
-                            mainposterpath = currentshowpath & "folder.jpg"
-                        End If
-                        If Not IO.File.Exists(mainposterpath) Then
-                            success = Utilities.DownloadFile(mainposter, mainposterpath)
-                        End If
-                        If frodo Then
-                            If isseasonall <> "none" Then
-                                success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"), overwriteimage)
-                            End If
-                            If eden OrElse Preferences.tvfolderjpg Then
-                                If isposter = "poster" Then success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "folder.jpg"), overwriteimage)
-                                If eden AndAlso isseasonall = "poster" Then success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
-                            End If
-                        ElseIf eden And isseasonall <> "none" Then
-                            If isseasonall = "poster" Then
-                                success = Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
-                            End If
-                            If isposter = "banner" Then
-                                success = Utilities.SafeDeleteFile(mainposterpath)
-                            End If
-                        End If
+                        Dim imgpaths As New List(Of String)
+                        'Dim mainposterpath As String = ""
+                        If frodo Then imgpaths.Add(currentshowpath & "poster.jpg")
+                            'mainposterpath = currentshowpath & "poster.jpg"
+                        If eden AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
+                        If frodo AndAlso isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-poster.jpg")
+                        If Preferences.tvfolderjpg AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
+                        If eden AndAlso isseasonall = "poster" Then imgpaths.Add(currentshowpath & "season-all.tbn")
+                        success = DownloadCache.SaveImageToCacheAndPaths(mainposter, imgpaths, False, , ,overwriteimage)
                     End If
                 End If
 
@@ -3692,26 +3676,12 @@ Partial Public Class Form1
                         If Not IsNothing(mainbanner) Then Exit For
                     Next
                     If Not IsNothing(mainbanner) Then
-                        Dim mainbannerpath As String = ""
-                        If frodo Then
-                            mainbannerpath = currentshowpath & "banner.jpg"
-                        ElseIf eden Then
-                            mainbannerpath = currentshowpath & "folder.jpg"
-                        End If
-                        If Not IO.File.Exists(mainbannerpath) Then
-                            success = Utilities.DownloadFile(mainbanner, mainbannerpath)
-                        End If
-                        If frodo Then
-                            If isseasonall <> "none" Then
-                                success = Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"), overwriteimage)
-                            End If
-                            If eden Then
-                                If isposter = "banner" Then success = Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "folder.jpg"), overwriteimage)
-                                If isseasonall = "wide" Then success = Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all.tbn"), overwriteimage)
-                            End If
-                        ElseIf eden And isseasonall <> "none" Then
-                            If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
-                        End If
+                        Dim imgpaths As New List(Of String)
+                        If frodo then imgpaths.Add(currentshowpath & "banner.jpg")
+                        If eden AndAlso isposter = "banner" Then imgpaths.Add(currentshowpath & "folder.jpg")
+                        If frodo AndAlso isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-banner.jpg")
+                        If eden AndAlso isseasonall = "wide" Then imgpaths.Add(currentshowpath & "season-all.tbn")
+                        success = DownloadCache.SaveImageToCacheAndPaths(mainbanner, imgpaths, False, , ,overwriteimage)
                     End If
                 End If
             End If
@@ -3739,31 +3709,23 @@ Partial Public Class Form1
                                 tempstring = f.ToString
                             End If
                             If tempstring = "00" Then tempstring = "-specials"
-                            Dim seasonXXposterpath As String = ""
-                            If frodo Then
-                                seasonXXposterpath = currentshowpath & "season" & tempstring & "-poster.jpg"
-                            ElseIf eden Then
-                                seasonXXposterpath = currentshowpath & "season" & tempstring & ".tbn"
-                            End If
-                            If Not IO.File.Exists(seasonXXposterpath) Then
-                                success = Utilities.DownloadFile(seasonXXposter, seasonXXposterpath)
-                            End If
-                            If IO.File.Exists(seasonXXposterpath) And frodo And eden And isposter = "poster" Then
-                                success = Utilities.SafeCopyFile(seasonXXposterpath, seasonXXposterpath.Replace("-poster.jpg", ".tbn"), overwriteimage)
-                            End If
+                            Dim imgpaths As New List(Of String)
+                            If frodo Then imgpaths.Add(currentshowpath & "season" & tempstring & "-poster.jpg")
+                            If eden Then imgpaths.Add(currentshowpath & "season" & tempstring & ".tbn")
                             If Preferences.seasonfolderjpg AndAlso currentshow.Episodes.Count > 0 Then
                                 For Each ep In currentshow.Episodes
                                     If ep.Season.Value = f Then
                                         If ep.FolderPath <> currentshowpath Then
                                             Dim TrueSeasonFolder As String = ep.FolderPath & "folder.jpg"
-                                            If Not File.Exists(TrueSeasonFolder) AndAlso File.Exists(seasonXXposterpath) Then
-                                                Utilities.SafeCopyFile(seasonXXposterpath, TrueSeasonFolder)
+                                            If Not File.Exists(TrueSeasonFolder) Then
+                                                imgpaths.Add(TrueSeasonFolder)
                                                 Exit For
                                             End If
                                         End If
                                     End If
                                 Next
                             End If
+                            success = DownloadCache.SaveImageToCacheAndPaths(seasonXXposter, imgpaths, False, , ,overwriteimage)
                         End If
                     End If
 
@@ -3787,18 +3749,10 @@ Partial Public Class Form1
                                 tempstring = f.ToString
                             End If
                             If tempstring = "00" Then tempstring = "-specials"
-                            Dim seasonXXbannerpath As String = ""
-                            If frodo Then
-                                seasonXXbannerpath = currentshowpath & "season" & tempstring & "-banner.jpg"
-                            ElseIf eden Then
-                                seasonXXbannerpath = currentshowpath & "season" & tempstring & ".tbn"
-                            End If
-                            If Not IO.File.Exists(seasonXXbannerpath) Then
-                                success = Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
-                            End If
-                            If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
-                                success = Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
-                            End If
+                            Dim imgpaths As New List(Of String)
+                            If frodo Then imgpaths.Add(currentshowpath & "season" & tempstring & "-banner.jpg")
+                            If eden Then imgpaths.Add(currentshowpath & "season" & tempstring & ".tbn")
+                            success = DownloadCache.SaveImageToCacheAndPaths(seasonXXbanner, imgpaths, False, , ,overwriteimage)
                         End If
                     End If
                 Next
@@ -3817,14 +3771,10 @@ Partial Public Class Form1
                     If Not IsNothing(fanartposter) Then Exit For
                 Next
                 If Not IsNothing(fanartposter) Then
-                    Dim fanartposterpath As String = String.Empty
-                    fanartposterpath = currentshowpath & "fanart.jpg"
-                    If Not IO.File.Exists(fanartposterpath) Then
-                        success = Utilities.DownloadFile(fanartposter, fanartposterpath)
-                    End If
-                    If frodo And isseasonall <> "none" Then
-                        success = Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("fanart.jpg", "season-all-fanart.jpg"), overwriteimage)
-                    End If
+                    Dim imgpaths As New List(Of String)
+                    imgpaths.Add(currentshowpath & "fanart.jpg")
+                    If frodo And isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-fanart.jpg")
+                    success = DownloadCache.SaveImageToCacheAndPaths(fanartposter, imgpaths, False, , ,overwriteimage)
                     End If
             End If
 

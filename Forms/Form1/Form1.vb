@@ -14235,7 +14235,7 @@ End Sub
 
     Private Sub cbXbmcTmdbVotesFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbVotesFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbVotesFromImdb = cbXbmcTmdbVotesFromImdb.Checked 
+        Preferences.XbmcTmdbVotesFromImdb = cbXbmcTmdbVotesFromImdb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14249,7 +14249,7 @@ End Sub
 
     Private Sub cbXbmcTmdbCertFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbCertFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked 
+        Preferences.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub

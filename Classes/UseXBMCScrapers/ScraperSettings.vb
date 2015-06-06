@@ -191,3 +191,62 @@ Public Class ScraperSettingEnum
 #End Region
 
 End Class
+
+Public Class ScraperSettingText
+   Inherits ScraperSetting
+
+#Region "Fields"
+   Private mDefault As String
+   Private mValues As List(Of String)
+   Private mCurrentValue As String
+#End Region
+
+#Region "Properties"
+   ''' <summary>
+   ''' Enumeration value converted to string.  (full string of current value is returned)
+   ''' </summary>
+   Public Overrides ReadOnly Property ValueString() As String
+      Get
+         Return Value
+      End Get
+   End Property
+
+   ''' <summary>
+   ''' XBMC-style description for type of setting.  This class returns "bool".
+   ''' </summary>
+   Public Overrides ReadOnly Property SettingType() As String
+      Get
+         Return "labelenum"
+      End Get
+   End Property
+
+   ''' <summary>
+   ''' Current enumeration value.  (full string of current value is returned)
+   ''' </summary>
+   Public Property Value() As String
+      Get
+         Return mCurrentValue
+      End Get
+      Set(ByVal value As String)
+
+         mCurrentValue = value
+      End Set
+   End Property
+#End Region
+
+#Region "Constructors"
+   ''' <summary>
+   ''' Creates a new scraper setting with the given element.
+   ''' </summary>
+   ''' <param name="e">XElement to be used for setting.</param>
+   Sub New(ByVal e As XElement)
+      MyBase.New(e)
+
+      mValues = New List(Of String)
+      mValues.Add(e.@default)
+      Value = e.@default
+
+   End Sub
+#End Region
+
+End Class

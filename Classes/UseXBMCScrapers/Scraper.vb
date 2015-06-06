@@ -318,6 +318,8 @@ Public Class Scraper
                mSettings.Add(New ScraperSettingBool(e))
             ElseIf (e.@type = "labelenum") Or  (e.@type = "select") Then
                mSettings.Add(New ScraperSettingEnum(e))
+            ElseIf (e.@type = "text") Then
+                mSettings.Add(New ScraperSettingText(e))
             End If
          Next
       Next

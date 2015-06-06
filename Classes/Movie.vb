@@ -1053,7 +1053,7 @@ Public Class Movie
         If success AndAlso Preferences.movies_useXBMC_Scraper Then
             tmdb.Imdb                               = _scrapedMovie.fullmoviebody.imdbid 
             tmdb.TmdbId                             = _scrapedMovie.fullmoviebody.tmdbid 
-            _scrapedMovie.fullmoviebody.mpaa        = tmdb.Certification
+            '_scrapedMovie.fullmoviebody.mpaa        = tmdb.Certification
             _scrapedMovie.fullmoviebody.premiered   = tmdb.releasedate
             _scrapedMovie.fullmoviebody.votes       = tmdb.Movie.vote_count
             If Preferences.XbmcTmdbMissingFromImdb OrElse Preferences.XbmcTmdbVotesFromImdb OrElse Preferences.XbmcTmdbTop250FromImdb OrElse Preferences.XbmcTmdbStarsFromImdb OrElse Preferences.XbmcTmdbCertFromImdb Then
@@ -1465,6 +1465,9 @@ Public Class Movie
             Else
                 tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
                 tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
+                If Certificates.Count = 0 Then
+                    _scrapedMovie.fullmoviebody.mpaa = If(Preferences.ExcludeMpaaRated, "", "Rated ") & tmdb.Certification 
+                End If
                 _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
                 If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                     _scrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
