@@ -227,6 +227,8 @@ Public Class Form1
     Dim walllocked As Boolean = False
     Dim maxcount As Integer = 0
     Dim moviecount_bak As Integer = 0
+    Dim lastSort As String = ""
+    Dim lastinvert As String = ""
     Dim displayRuntimeScraper As Boolean = True
     Dim tv_IMDbID_detected As Boolean = False
     Dim tv_IMDbID_warned As Boolean = False
@@ -7026,9 +7028,16 @@ Public Class Form1
         Dim locx As Integer = 0
         Dim locy As Integer = 0
 
-       
-        If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
-        If check = True Then Return
+        If lastSort = "" Then lastSort = Mc.clsGridViewMovie.GridFieldToDisplay2
+        If lastinvert = "" Then lastinvert = Mc.clsGridViewMovie.GridSort 
+        If lastSort <> Mc.clsGridViewMovie.GridFieldToDisplay2 OrElse lastinvert <> Mc.clsGridViewMovie.GridSort Then
+            lastSort = Mc.clsGridViewMovie.GridFieldToDisplay2
+            lastinvert = Mc.clsGridViewMovie.GridSort
+            moviecount_bak = 0
+        End If
+        'If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
+        'If check = True Then Return
+        If moviecount_bak = DataGridViewMovies.RowCount Then Exit Sub
 
         maxcount = Convert.ToInt32((TabPage22.Width - 50) / 150)
 
@@ -7049,7 +7058,7 @@ Public Class Form1
         'Panel17.AutoScroll = False
 
         For Each row As DataGridViewRow In DataGridViewMovies.Rows
-
+            moviecount_bak += 1
             Dim m As Data_GridViewMovie = row.DataBoundItem
 
             bigPictureBox = New PictureBox()
