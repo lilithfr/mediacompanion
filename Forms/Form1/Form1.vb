@@ -379,7 +379,7 @@ Public Class Form1
                     If instance.ProcessName = "Media Companion" Then                            'If instance.ProcessName.IndexOf("Media Companion - V") <> -1 Then          This should limit the match to only Median Companion running not Visual Studio 2010
                         tej = tej + 1
                         If tej >= 2 Then
-                            MsgBox("XBMC Media Companion is already running")
+                            MsgBox("Media Companion is already running")
                             End                         'Close MC since another version of the program is running.
                         End If
                     End If

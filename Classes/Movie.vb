@@ -1629,7 +1629,7 @@ Public Class Movie
                     TrailerUrl2 = tmdb.GetTrailerUrl(_triedUrls, Preferences.moviePreferredTrailerResolution)
                     If TrailerUrl2 <> "" then
                         Try
-                            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl)
+                            Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+TrailerUrl2)
 
                             If yts.AvailableVideoFormat.Length>0 Then
 
