@@ -1,4 +1,4 @@
-Modification done to tmdb.xml, in metadata.themoviedb.org as follows:
+Modification done to tmdb.xml, in metadata.common.themoviedb.org as follows:
 
 Section:	<ParseTMDBWriters dest="5">
 From:
