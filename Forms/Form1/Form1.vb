@@ -6831,7 +6831,7 @@ Public Class Form1
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim workingposterpath = WorkingTvShow.FolderPath & "folder.jpg"
             If ComboBox2.Text.ToLower = "main image" Then
-                If Preferences.EdenEnabled OrElse Preferences.tvfolderjpg Then
+                If (Preferences.EdenEnabled OrElse Preferences.tvfolderjpg) And Not (Preferences.FrodoEnabled AndAlso rbTVbanner.Checked) Then
                     imagePaths.Add(workingposterpath)
                     eden = 1
                 End If

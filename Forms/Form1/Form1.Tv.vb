@@ -3657,7 +3657,7 @@ Partial Public Class Form1
                             'mainposterpath = currentshowpath & "poster.jpg"
                         If eden AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
                         If frodo AndAlso isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-poster.jpg")
-                        If Preferences.tvfolderjpg AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
+                        'If Preferences.tvfolderjpg AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
                         If eden AndAlso isseasonall = "poster" Then imgpaths.Add(currentshowpath & "season-all.tbn")
                         success = DownloadCache.SaveImageToCacheAndPaths(mainposter, imgpaths, False, , ,overwriteimage)
                     End If
@@ -3712,19 +3712,19 @@ Partial Public Class Form1
                             Dim imgpaths As New List(Of String)
                             If frodo Then imgpaths.Add(currentshowpath & "season" & tempstring & "-poster.jpg")
                             If eden Then imgpaths.Add(currentshowpath & "season" & tempstring & ".tbn")
-                            If Preferences.seasonfolderjpg AndAlso currentshow.Episodes.Count > 0 Then
-                                For Each ep In currentshow.Episodes
-                                    If ep.Season.Value = f Then
-                                        If ep.FolderPath <> currentshowpath Then
-                                            Dim TrueSeasonFolder As String = ep.FolderPath & "folder.jpg"
-                                            If Not File.Exists(TrueSeasonFolder) Then
-                                                imgpaths.Add(TrueSeasonFolder)
-                                                Exit For
-                                            End If
-                                        End If
-                                    End If
-                                Next
-                            End If
+                            'If Preferences.seasonfolderjpg AndAlso currentshow.Episodes.Count > 0 Then
+                            '    For Each ep In currentshow.Episodes
+                            '        If ep.Season.Value = f Then
+                            '            If ep.FolderPath <> currentshowpath Then
+                            '                Dim TrueSeasonFolder As String = ep.FolderPath & "folder.jpg"
+                            '                If Not File.Exists(TrueSeasonFolder) Then
+                            '                    imgpaths.Add(TrueSeasonFolder)
+                            '                    Exit For
+                            '                End If
+                            '            End If
+                            '        End If
+                            '    Next
+                            'End If
                             success = DownloadCache.SaveImageToCacheAndPaths(seasonXXposter, imgpaths, False, , ,overwriteimage)
                         End If
                     End If
@@ -4005,11 +4005,34 @@ Partial Public Class Form1
                 TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
                 If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
             End If
+            If Preferences.tvfolderjpg OrElse Preferences.seasonfolderjpg Then
+                TvCheckfolderjpgart(BrokenShow)
+            End If
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
         messbox.Close()
 
+    End Sub
+
+    Private Sub TvCheckfolderjpgart(ByVal ThisShow As TvShow)
+        Dim currentshowpath As String = ThisShow.FolderPath
+        If Preferences.tvfolderjpg Then
+            If File.Exists(currentshowpath & "poster.jpg") And Preferences.FrodoEnabled Then
+                Utilities.SafeCopyFile(currentshowpath & "poster.jpg", currentshowpath & "folder.jpg", False)
+            End If
+        End If
+        Dim I = 1
+        If Preferences.seasonfolderjpg Then
+            For Each Seas In ThisShow.Seasons.Values
+                If Seas.FolderPath <> ThisShow.FolderPath Then
+                    Dim seasonfile As String = Seas.SeasonLabel.ToLower.Replace(" ", "")& "-poster.jpg"
+                    If File.Exists(ThisShow.FolderPath & seasonfile) Then
+                        Utilities.SafeCopyFile(ThisShow.FolderPath & seasonfile, Seas.FolderPath & "folder.jpg", False)
+                    End If
+                End If
+            Next
+        End If
     End Sub
 
     Private Sub TvEpThumbScreenShot()
@@ -4492,7 +4515,7 @@ Partial Public Class Form1
             If frodo Then
                 destpaths.Add(currentshowpath & "poster.jpg")
                 destpaths.Add(currentshowpath & "season-all-poster.jpg")
-                If Preferences.tvfolderjpg Then destpaths.Add(currentshowpath & "folder.jpg")
+                'If Preferences.tvfolderjpg Then destpaths.Add(currentshowpath & "folder.jpg")
             End If
             If eden then
                 destpaths.Add(currentshowpath & "poster.jpg")
@@ -4553,22 +4576,22 @@ Partial Public Class Form1
                             destimg = destimg.Replace("-poster.jpg", ".tbn")
                             savepaths.Add(destimg)
                         End If
-                        If Preferences.seasonfolderjpg AndAlso ThisShow.Episodes.Count > 0 Then
-                            For Each ep In ThisShow.Episodes
-                                Dim TrueSeasonFolder As String = Nothing
-                                Dim folder As Boolean = False
-                                If ep.Season.Value = i Then
-                                    If ep.FolderPath <> currentshowpath Then
-                                        TrueSeasonFolder = ep.FolderPath & "folder.jpg"
-                                        If Not savepaths.Contains(TrueSeasonFolder) Then
-                                            savepaths.Add(TrueSeasonFolder)
-                                            folder = True
-                                        End If
-                                    End If
-                                End If
-                                If folder Then Exit For
-                            Next
-                        End If
+                        'If Preferences.seasonfolderjpg AndAlso ThisShow.Episodes.Count > 0 Then
+                        '    For Each ep In ThisShow.Episodes
+                        '        Dim TrueSeasonFolder As String = Nothing
+                        '        Dim folder As Boolean = False
+                        '        If ep.Season.Value = i Then
+                        '            If ep.FolderPath <> currentshowpath Then
+                        '                TrueSeasonFolder = ep.FolderPath & "folder.jpg"
+                        '                If Not savepaths.Contains(TrueSeasonFolder) Then
+                        '                    savepaths.Add(TrueSeasonFolder)
+                        '                    folder = True
+                        '                End If
+                        '            End If
+                        '        End If
+                        '        If folder Then Exit For
+                        '    Next
+                        'End If
                     End If
                 End If
                 If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
