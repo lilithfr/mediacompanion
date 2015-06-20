@@ -192,6 +192,7 @@ Public Class ucFanartTv
         Else
             lblnoart.Visible = false
         End If
+        DisplayExistingArt()
         Panel1.VerticalScroll.Visible = True 
         Dim picratio As Decimal = 1.25
         Dim locHeight = 5
@@ -252,7 +253,6 @@ Public Class ucFanartTv
         Button1.Visible = False
         EnableFanartScrolling()
         selectedimageurl = Nothing
-        DisplayExistingArt()
     End Sub
 
     Private Sub artPosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
@@ -322,8 +322,8 @@ Public Class ucFanartTv
 
     Private Sub pbexists_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles pbexists.DoubleClick 
         If Not IsNothing(pbexists.Image) Then
-            Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
-            Form1.util_ZoomImage(loadpath)
+            'Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
+            Form1.util_ZoomImage(pbexists.Tag.ToString) 'loadpath)
         End If
     End Sub
 

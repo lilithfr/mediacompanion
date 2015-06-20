@@ -189,6 +189,7 @@ Public Class ucFanartTvTv
         Else
             lblnoart.Visible = false
         End If
+        DisplayExistingArt()
         Panel1.VerticalScroll.Visible = True 
         Dim picratio As Decimal = 1.25
         Dim locHeight = 5
@@ -249,7 +250,6 @@ Public Class ucFanartTvTv
         Button1.Visible = False
         EnableFanartScrolling()
         selectedimageurl = Nothing
-        DisplayExistingArt()
     End Sub
 
     Private Sub artPosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
