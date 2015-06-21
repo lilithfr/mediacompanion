@@ -2662,7 +2662,7 @@ Partial Public Class Form1
             If imdbid <> "" OrElse newepisode.ImdbId.Value <> "" Then
                 tvScraperLog = tvScraperLog & "Scraping actors from IMDB" & vbCrLf
                 Dim epid As String = ""
-                If newepisode.ImdbId.Value.Contains("tt") Then
+                If newepisode.ImdbId.Value <> Nothing AndAlso newepisode.ImdbId.Value.Contains("tt") Then
                     epid = newepisode.ImdbId.Value
                 Else
                     epid = GetEpImdbId(imdbid, newepisode.Season.Value, newepisode.Episode.Value)
@@ -2917,13 +2917,15 @@ Partial Public Class Form1
         If Preferences.FrodoEnabled AndAlso (Preferences.overwritethumbs Or Not File.Exists(fpath)) Then paths.Add(fpath)
         If paths.Count > 0 Then
             Dim downloadok As Boolean = False
-            If Not episode.Thumbnail.FileName = Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
+            If episode.Thumbnail.FileName <> Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
                 Dim url As String = episode.Thumbnail.FileName
                 If Not url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
                     url = episode.Thumbnail.Url 
                 End If
-                If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+                If url <> Nothing AndAlso url.IndexOf("http") = 0 AndAlso url.IndexOf(".jpg") <> -1 Then
                     downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, , ,Preferences.overwritethumbs)
+                Else
+                    result = "!!! No thumbnail to download"
                 End If
                 If downloadok Then result = "!!! Episode Thumb downloaded"
             Else
