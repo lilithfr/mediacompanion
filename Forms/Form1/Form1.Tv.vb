@@ -1508,6 +1508,9 @@ Partial Public Class Form1
                                 TvFanartTvArt(NewShow, Preferences.TvChgShowDlFanartTvArt)
                             End If
                         End If
+                        If Preferences.tvfolderjpg OrElse Preferences.seasonfolderjpg Then
+                            TvCheckfolderjpgart(NewShow)
+                        End If
 
                         tvprogresstxt &= " - Completed. Saving Show."
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)

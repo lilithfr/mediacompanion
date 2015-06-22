@@ -392,6 +392,9 @@ Public Class ucFanartTvTv
                             savepaths.Add(WorkingShow.FolderPath & "season-all.tbn")
                         End If
                     End If
+                    If Preferences.tvfolderjpg AndAlso artType = "poster.jpg" Then
+                        savepaths.Add(WorkingShow.FolderPath & "folder.jpg")
+                    End If
                 End If
                 savepaths.Add(WorkingShow.FolderPath & artType)
             End If
