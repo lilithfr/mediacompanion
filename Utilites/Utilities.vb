@@ -2366,8 +2366,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Sub
 
-    Public Shared Function DownloadFile(ByVal URL As String, ByVal Path As String) As Boolean
+    Public Shared Function DownloadFile(ByVal URL As String, ByVal Path As String, Optional ByVal Force As Boolean = True) As Boolean
         Try
+            If Not Force AndAlso File.Exists(Path) Then Return True   'True as file exists.
             Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, True)
             Return returnstate
         Catch ex As Exception

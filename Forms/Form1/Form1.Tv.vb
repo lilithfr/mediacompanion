@@ -1505,7 +1505,7 @@ Partial Public Class Form1
                             If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
                                 tvprogresstxt &= " - Getting FanartTv Artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                                TvFanartTvArt(NewShow, False)
+                                TvFanartTvArt(NewShow, Preferences.TvChgShowDlFanartTvArt)
                             End If
                         End If
 
@@ -1730,7 +1730,7 @@ Partial Public Class Form1
                         If tvBatchList.doShowArt = True Then
                             If tvBatchList.shDelArtwork Then TvDeleteShowArt(Cache.TvCache.Shows(f), False)
                             If tvBatchList.shFanart orElse tvBatchList.shPosters OrElse tvBatchList.shSeason OrElse tvBatchList.shXtraFanart Then
-                                TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart)
+                                TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart, force:= False)
                             End If
                             If tvBatchList.shFanartTvArt Then TvFanartTvArt(Cache.TvCache.Shows(f), False) 'We're only looking for missing art from Fanart.Tv
                         End If
@@ -3584,7 +3584,7 @@ Partial Public Class Form1
 #End Region
 
 #Region "Tv Artwork, TV Actor & EP Thumbnail Routines"
-    Private Function TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean, Optional ByVal langu As String = "") As Boolean
+    Private Function TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean, Optional ByVal langu As String = "", Optional ByVal force As Boolean = True) As Boolean
         '(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
         Dim success As Boolean = False
         Try
@@ -3595,6 +3595,7 @@ Partial Public Class Form1
             Dim eden As Boolean = Preferences.EdenEnabled
             Dim frodo As Boolean = Preferences.FrodoEnabled
             Dim overwriteimage As Boolean = If(Preferences.overwritethumbs OrElse Preferences.TvChgShowOverwriteImgs, True, False)
+            If Not force then overwriteimage = False    'Over-ride overwrite if we force not to overwrite, ie: missing artwork
             Dim doPoster As Boolean = If(Preferences.tvdlposter OrElse Preferences.TvChgShowDlPoster, True, False)
             Dim doFanart As Boolean = If(Preferences.tvdlfanart OrElse Preferences.TvChgShowDlFanart, True, False)
             Dim doSeason As Boolean = If(Preferences.tvdlseasonthumbs OrElse Preferences.TvChgShowDlSeasonthumbs, True, False)
@@ -3634,9 +3635,8 @@ Partial Public Class Form1
                         artlist.Add(individualposter)
                 End Select
             Next
-            If artlist.Count = 0 Then
-                Exit Function
-            End If
+
+            If artlist.Count = 0 Then Exit Function
 
             'Posters, Main and Season Including Banners
             If shPosters Then
@@ -4002,9 +4002,9 @@ Partial Public Class Form1
         Try
             If Preferences.TvFanartTvFirst Then
                 If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
-                TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
+                TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart, force:= False)
             Else
-                TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart)
+                TvGetArtwork(BrokenShow, True, True, True, Preferences.dlTVxtrafanart, force:= False)
                 If Preferences.TvDlFanartTvArt Then TvFanartTvArt(BrokenShow, False)
             End If
             If Preferences.tvfolderjpg OrElse Preferences.seasonfolderjpg Then
@@ -4020,7 +4020,7 @@ Partial Public Class Form1
     Private Sub TvCheckfolderjpgart(ByVal ThisShow As TvShow)
         Dim currentshowpath As String = ThisShow.FolderPath
         If Preferences.tvfolderjpg Then
-            If File.Exists(currentshowpath & "poster.jpg") And Preferences.FrodoEnabled Then
+            If File.Exists(currentshowpath & "poster.jpg") AndAlso Preferences.FrodoEnabled Then
                 Utilities.SafeCopyFile(currentshowpath & "poster.jpg", currentshowpath & "folder.jpg", False)
             End If
         End If
@@ -4215,8 +4215,6 @@ Partial Public Class Form1
     Private Sub TvScrapePosterBanner(ByVal postertype As String)
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-
-            'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
             Dim messbox As frmMessageBox = New frmMessageBox("Searching TVDB for " & If(postertype = "poster", "Poster", "Banner"), "", "Please Wait")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
@@ -4281,23 +4279,20 @@ Partial Public Class Form1
             If mainimages Then
                 For Each Image In artlist
                     If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = postertype And Image.Season = Nothing Then
-                        posterpath = Image.Url
-                        Exit For
+                        posterpath = Image.Url : Exit For
                     End If
                 Next
                 If posterpath = "" Then
                     For Each Image In artlist
                         If Image.Language = "en" And Image.BannerType = postertype And Image.Season = Nothing Then
-                            posterpath = Image.Url
-                            Exit For
+                            posterpath = Image.Url : Exit For
                         End If
                     Next
                 End If
                 If posterpath = "" Then
                     For Each Image In artlist
                         If Image.BannerType = postertype And Image.Season = Nothing Then
-                            posterpath = Image.Url
-                            Exit For
+                            posterpath = Image.Url : Exit For
                         End If
                     Next
                 End If
@@ -4309,25 +4304,16 @@ Partial Public Class Form1
                     istype = "seasonwide"
                 End If
                 For Each Image In artlist
-                    If Image.Season = seasonno And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = istype Then
-                        posterpath = Image.Url
-                        Exit For
-                    End If
+                    If Image.Season = seasonno And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = istype Then posterpath = Image.Url : Exit For
                 Next
                 If posterpath = "" Then
                     For Each Image In artlist
-                        If Image.Season = seasonno And Image.Language = "en" And Image.Resolution = istype Then
-                            posterpath = Image.Url
-                            Exit For
-                        End If
+                        If Image.Season = seasonno And Image.Language = "en" And Image.Resolution = istype Then posterpath = Image.Url : Exit For
                     Next
                 End If
                 If posterpath = "" Then
                     For Each Image In artlist
-                        If Image.Season = seasonno And Image.Resolution = istype Then
-                            posterpath = Image.Url
-                            Exit For
-                        End If
+                        If Image.Season = seasonno And Image.Resolution = istype Then posterpath = Image.Url : Exit For
                     Next
                 End If
             End If
@@ -4335,39 +4321,21 @@ Partial Public Class Form1
                 Dim imagepath As New List(Of String)
                 If mainimages Then
                     If postertype = "poster" Then
-                        If frodo Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "poster.jpg"))
-                        End If
-                        If eden Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
-                        End If
+                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "poster.jpg"))
+                        If eden Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
                     Else
-                        If frodo Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "banner.jpg"))
-                        End If
-                        If eden And Preferences.postertype = "banner" Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
-                        End If
+                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "banner.jpg"))
+                        If eden And Preferences.postertype = "banner" Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
                     End If
                 Else
                     If seasonno.ToInt < 10 Then seasonno = "0" & seasonno
                     If postertype = "poster" Then
-                        If Preferences.seasonfolderjpg AndAlso seasonpath <> "" Then
-                            imagepath.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
-                        End If
-                        If eden Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
-                        End If
-                        If frodo Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-poster.jpg"))
-                        End If
+                        If Preferences.seasonfolderjpg AndAlso seasonpath <> "" Then imagepath.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
+                        If eden Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
+                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-poster.jpg"))
                     Else
-                        If eden And Preferences.postertype = "banner" Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
-                        End If
-                        If frodo Then
-                            imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-banner.jpg"))
-                        End If
+                        If eden And Preferences.postertype = "banner" Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
+                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-banner.jpg"))
                     End If
                 End If
                 For Each impath In imagepath
@@ -4404,15 +4372,15 @@ Partial Public Class Form1
     End Sub
 
     Private Sub TvFanartTvArt (ByVal ThisShow As TvShow, ByVal force As Boolean)
-        Dim clearartLD As String = Nothing : Dim logoLD As String = Nothing: Dim clearart As String = Nothing : Dim logo As String = Nothing
-        Dim poster As String = Nothing : Dim fanart As String = Nothing : Dim banner As String = Nothing : Dim landscape As String = Nothing
+        Dim clearartLD As String = Nothing  : Dim logoLD As String = Nothing    : Dim clearart As String = Nothing  : Dim logo As String = Nothing
+        Dim poster As String = Nothing      : Dim fanart As String = Nothing    : Dim banner As String = Nothing    : Dim landscape As String = Nothing
         Dim character As String = Nothing
         Dim currentshowpath As String = ThisShow.FolderPath
         Dim DestImg As String = ""
         Dim aok As Boolean = True
         Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim eden As Boolean = Preferences.EdenEnabled 
-        Dim Overwrite As Boolean = If(Preferences.overwritethumbs OrElse force OrElse Preferences.TvChgShowOverwriteImgs, True, False)
+        'Dim Overwrite As Boolean = If(Preferences.overwritethumbs OrElse force OrElse Preferences.TvChgShowOverwriteImgs, True, False)
         Dim ID As String = ThisShow.TvdbId.Value
         Dim TvFanartlist As New FanartTvTvList
         Dim newobj As New FanartTv
@@ -4433,85 +4401,58 @@ Partial Public Class Form1
         For Each lan In lang
             If IsNothing(clearart) Then
                 For Each Art In TvFanartlist.hdclearart 
-                    If Art.lang = lan Then 
-                        clearart = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then clearart = Art.url : Exit For
                 Next
             End If
             If IsNothing(clearartLD) Then
                 For Each Art In TvFanartlist.clearart 
-                    If Art.lang = lan Then
-                        clearartLD = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then clearartLD = Art.url : Exit For
                 Next
             End If
             If IsNothing(logo) Then
                 For Each Art In TvFanartlist.hdtvlogo
-                    If Art.lang = lan Then
-                        logo = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then logo = Art.url : Exit For
                 Next
             End If
             If IsNothing(logoLD) Then
                 For Each Art In TvFanartlist.clearlogo
-                    If Art.lang = lan Then
-                        logoLD = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then logoLD = Art.url : Exit For
                 Next
             End If
             If IsNothing(poster) Then
                 For Each Art In TvFanartlist.tvposter 
-                    If Art.lang = lan Then
-                        poster = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then poster = Art.url : Exit For
                 Next
             End If
             If IsNothing(fanart) Then
                 For Each Art In TvFanartlist.showbackground  
-                    If Art.lang = lan Then
-                        fanart = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then fanart = Art.url : Exit For
                 Next
             End If
             If IsNothing(banner) Then
                 For Each Art In TvFanartlist.tvbanner 
-                    If Art.lang = lan Then
-                        banner = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then banner = Art.url : Exit For
                 Next
             End If
             If IsNothing(landscape) Then
                 For Each Art In TvFanartlist.tvthumb  
-                    If Art.lang = lan Then
-                        landscape = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then landscape = Art.url : Exit For
                 Next
             End If
             If IsNothing(character) Then
                 For Each Art In TvFanartlist.characterart   
-                    If Art.lang = lan Then
-                        character = Art.url
-                        Exit For
-                    End If
+                    If Art.lang = lan Then character = Art.url : Exit For
                 Next
             End If
         Next
         If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
         If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold
             DestImg = currentshowpath & "clearart.png"
-        If Not IsNothing(clearart) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(clearart, DestImg)
+        If Not IsNothing(clearart) Then Utilities.DownloadFile(clearart, DestImg, force)  'AndAlso (force OrElse Not File.Exists(DestImg)) 
             DestImg = currentshowpath & "logo.png"
-        If Not IsNothing(logo) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(logo, DestImg)
+        If Not IsNothing(logo) Then Utilities.DownloadFile(logo, DestImg, force)    'AndAlso (force OrElse Not File.Exists(DestImg)) 
         DestImg = currentshowpath & "character.png"
-        If Not IsNothing(character) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(character, DestImg)
+        If Not IsNothing(character) Then Utilities.DownloadFile(character, DestImg, force)  'AndAlso (force OrElse Not File.Exists(DestImg)) 
         If Not IsNothing(poster) Then
             Dim destpaths As New List(Of String)
             If frodo Then
@@ -4523,7 +4464,7 @@ Partial Public Class Form1
                 destpaths.Add(currentshowpath & "poster.jpg")
                 destpaths.Add(currentshowpath & "season-all.tbn")
             End If
-            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(poster, destpaths, False, , , Overwrite)
+            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(poster, destpaths, False, , , force)
         End If
         If Not IsNothing(fanart) Then
             Dim Destpaths As New List(Of String)
@@ -4532,16 +4473,16 @@ Partial Public Class Form1
                 Destpaths.Add(currentshowpath & "season-all-fanart.jpg")
             End If
             If eden Then Destpaths.Add(currentshowpath & "fanart.jpg")
-            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(fanart, Destpaths, False, , , Overwrite)
+            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(fanart, Destpaths, False, , , force)
         End If
         DestImg = currentshowpath & "landscape.jpg"
-        If Not IsNothing(landscape) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then Utilities.DownloadFile(landscape, DestImg)
+        If Not IsNothing(landscape) Then Utilities.DownloadFile(landscape, DestImg, force)  'AndAlso (force OrElse Not File.Exists(DestImg)) 
         DestImg = currentshowpath & "banner.jpg"
-        If Not IsNothing(banner) AndAlso (Overwrite OrElse Not File.Exists(DestImg)) Then
-            Utilities.DownloadFile(banner, DestImg)
+        If Not IsNothing(banner) Then   'AndAlso (force OrElse Not File.Exists(DestImg)) 
+            Utilities.DownloadFile(banner, DestImg, force)
             If frodo Then
                 DestImg = currentshowpath & "season-all-banner.jpg"
-                If Overwrite OrElse Not File.Exists(DestImg) Then Utilities.DownloadFile(banner, DestImg)
+                Utilities.DownloadFile(banner, DestImg, force)  'If force OrElse Not File.Exists(DestImg) Then 
             End If
         End If
 
@@ -4596,7 +4537,7 @@ Partial Public Class Form1
                         'End If
                     End If
                 End If
-                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , force)
             Next
         End If
 
@@ -4631,7 +4572,7 @@ Partial Public Class Form1
                         If Preferences.FrodoEnabled Then savepaths.Add(destimg)
                     End If
                 End If
-                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , force)
             Next
         End If
 
@@ -4666,7 +4607,7 @@ Partial Public Class Form1
                         If Preferences.FrodoEnabled Then savepaths.Add(destimg)
                     End If
                 End If
-                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , Overwrite)
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , force)
             Next
         End If
     End Sub
