@@ -309,6 +309,13 @@ Partial Public Class Form1
             If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
             Call tv_ShowLoad(WorkingTvShow)
         Else
+            For Each episode In WorkingTvShow.Episodes
+                If Preferences.displayMissingEpisodes AndAlso episode.IsMissing = True Then
+                    Cache.TvCache.Remove(episode)
+                Else
+                    Cache.TvCache.Remove(episode)
+                End If
+            Next
             Cache.TvCache.Remove(WorkingTvShow)
             newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
             Dim args As TvdbArgs = New TvdbArgs(WorkingTvShow.TvdbId.Value, selectedLang)
@@ -1475,27 +1482,27 @@ Partial Public Class Form1
                             If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
                                 tvprogresstxt &= " - Getting TVDB artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                            End If
+                            'End If
                             success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
-                            If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                            'If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
                                 If success Then 
                                     tvprogresstxt &= ": OK!"
                                 Else
                                     tvprogresstxt &= ": error!!"
                                 End If
                             End If
-                            If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
-                                tvprogresstxt &= " - Getting FanartTv Artwork"
-                                bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                                TvFanartTvArt(NewShow, False)
-                            End If
+                            'If Preferences.TvDlFanartTvArt OrElse Preferences.TvChgShowDlFanartTvArt Then 
+                            '    tvprogresstxt &= " - Getting FanartTv Artwork"
+                            '    bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                            '    TvFanartTvArt(NewShow, False)
+                            'End If
                         Else
                             If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
                                 tvprogresstxt &= " - Getting TVDB artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                            End If
-                            success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
-                            If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
+                            'End If
+                                success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                            'If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
                                 If success Then 
                                     tvprogresstxt &= ": OK!"
                                 Else
@@ -1508,9 +1515,9 @@ Partial Public Class Form1
                                 TvFanartTvArt(NewShow, Preferences.TvChgShowDlFanartTvArt)
                             End If
                         End If
-                        If Preferences.tvfolderjpg OrElse Preferences.seasonfolderjpg Then
-                            TvCheckfolderjpgart(NewShow)
-                        End If
+                        'If Preferences.tvfolderjpg OrElse Preferences.seasonfolderjpg Then
+                        '    TvCheckfolderjpgart(NewShow)
+                        'End If
 
                         tvprogresstxt &= " - Completed. Saving Show."
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
@@ -1540,6 +1547,7 @@ Partial Public Class Form1
                     For Each ep In episodelist
                         NewShow.AddEpisode(ep)
                     Next
+                    TvCheckfolderjpgart(NewShow)
                 End If
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))
@@ -4031,7 +4039,7 @@ Partial Public Class Form1
         If Preferences.seasonfolderjpg Then
             For Each Seas In ThisShow.Seasons.Values
                 If Seas.FolderPath <> ThisShow.FolderPath Then
-                    Dim seasonfile As String = Seas.SeasonLabel.ToLower.Replace(" ", "")& "-poster.jpg"
+                    Dim seasonfile As String = Seas.Poster.FileName   '= Seas.SeasonLabel.ToLower.Replace(" ", "")& "-poster.jpg"
                     If File.Exists(ThisShow.FolderPath & seasonfile) Then
                         Utilities.SafeCopyFile(ThisShow.FolderPath & seasonfile, Seas.FolderPath & "folder.jpg", False)
                     End If

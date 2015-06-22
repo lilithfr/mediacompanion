@@ -6933,6 +6933,7 @@ Public Class Form1
                         End If
                         util_ImageLoad(PictureBox12, path, Utilities.DefaultTvPosterPath)
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                        TvCheckfolderjpgart(WorkingTvShow)
                     End If
                 End If
 
