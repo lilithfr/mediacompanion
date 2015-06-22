@@ -16924,7 +16924,7 @@ Partial Class Form1
         '
         Me.EmptyCacheFolderToolStripMenuItem.Name = "EmptyCacheFolderToolStripMenuItem"
         Me.EmptyCacheFolderToolStripMenuItem.Size = New System.Drawing.Size(273, 22)
-        Me.EmptyCacheFolderToolStripMenuItem.Text = "Empty Cache Folder"
+        Me.EmptyCacheFolderToolStripMenuItem.Text = "Empty Cache && Series Folders"
         '
         'RefreshGenreListboxToolStripMenuItem
         '

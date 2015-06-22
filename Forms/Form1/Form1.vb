@@ -1217,6 +1217,13 @@ Public Class Form1
             Catch
             End Try
         End If
+        If IO.Directory.Exists(SeriesXmlPath) Then
+            Dim Files As New IO.DirectoryInfo(SeriesXmlPath)
+            Dim Filelist() = Files.GetFiles()
+            For Each f In Filelist
+                Utilities.SafeDeleteFile(f.FullName)
+            Next
+        End If
     End Sub
 
     Sub ClearMissingFolder()
