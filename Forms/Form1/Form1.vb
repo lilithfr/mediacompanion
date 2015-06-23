@@ -6851,6 +6851,9 @@ Public Class Form1
                         frodo = 1
                     End If
                 End If
+                If Preferences.tvfolderjpg AndAlso rbTVposter.Checked Then
+                    imagePaths.Add(workingposterpath)
+                End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
                 Dim temp As String = ComboBox2.Text.ToLower
                 temp = temp.Replace(" ", "")
@@ -6912,6 +6915,18 @@ Public Class Form1
                         frodo = 1
                     End If
                 End If
+                If Preferences.seasonfolderjpg AndAlso rbTVposter.Checked Then
+                    Dim seasonpath As String = ""
+                    For Each seas In WorkingTvShow.Seasons.Values
+                        If seas.SeasonNumber = 0 Then
+                            seasonpath = seas.FolderPath
+                            Exit For
+                        End If
+                    Next
+                    If seasonpath <> "" Then
+                        imagePaths.Add(seasonpath & "folder.jpg")
+                    End If
+                End If
             End If
 
             Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
@@ -6933,7 +6948,7 @@ Public Class Form1
                         End If
                         util_ImageLoad(PictureBox12, path, Utilities.DefaultTvPosterPath)
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                        TvCheckfolderjpgart(WorkingTvShow)
+                        'TvCheckfolderjpgart(WorkingTvShow)
                     End If
                 End If
 
