@@ -4236,21 +4236,27 @@ Partial Public Class Form1
                 Dim imagepath As New List(Of String)
                 If mainimages Then
                     If postertype = "poster" Then
-                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "poster.jpg"))
-                        If eden Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
+                        If frodo Then imagepath.Add(WorkingTvShow.FolderPath & "poster.jpg")
+                        If eden Then imagepath.Add(WorkingTvShow.FolderPath & "folder.jpg")
                     Else
-                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "banner.jpg"))
-                        If eden And Preferences.postertype = "banner" Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg"))
+                        If frodo Then imagepath.Add(WorkingTvShow.FolderPath & "banner.jpg")
+                        If eden And Preferences.postertype = "banner" Then imagepath.Add(WorkingTvShow.FolderPath & "folder.jpg")
                     End If
                 Else
                     If seasonno.ToInt < 10 Then seasonno = "0" & seasonno
                     If postertype = "poster" Then
-                        If Preferences.seasonfolderjpg AndAlso seasonpath <> "" Then imagepath.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
-                        If eden Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
-                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-poster.jpg"))
+                        If seasonno <> "00" Then
+                            If Preferences.seasonfolderjpg AndAlso seasonpath <> "" Then imagepath.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
+                            If eden Then imagepath.Add(WorkingTvShow.FolderPath & "season" & seasonno & ".tbn")
+                            If frodo Then imagepath.Add(WorkingTvShow.FolderPath & "season" & seasonno & "-poster.jpg")
+                        Else
+                            If Preferences.seasonfolderjpg AndAlso seasonpath <> "" Then imagepath.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
+                            If eden Then imagepath.Add(WorkingTvShow.FolderPath & "season-specials" & ".tbn")
+                            If frodo Then imagepath.Add(WorkingTvShow.FolderPath & "season-specials" & "-poster.jpg")
+                        End If
                     Else
-                        If eden And Preferences.postertype = "banner" Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & ".tbn"))
-                        If frodo Then imagepath.Add(WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season" & seasonno & "-banner.jpg"))
+                        If eden And Preferences.postertype = "banner" Then imagepath.Add(WorkingTvShow.FolderPath & "season" & seasonno & ".tbn")
+                        If frodo Then imagepath.Add(WorkingTvShow.FolderPath & "season" & seasonno & "-banner.jpg")
                     End If
                 End If
                 For Each impath In imagepath
