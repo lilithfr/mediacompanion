@@ -3922,7 +3922,7 @@ Public Class Form1
                 Else
 
                     Try
-                        If WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> weburl Then
+                        If IsNothing(WebBrowser2.Url) OrElse WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> weburl Then
                             WebBrowser2.Stop()
                             WebBrowser2.ScriptErrorsSuppressed = True
 

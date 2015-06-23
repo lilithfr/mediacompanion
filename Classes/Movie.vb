@@ -2278,7 +2278,7 @@ Public Class Movie
     End Sub
 
     Sub DownloadMovieSetArt()
-        If Preferences.dlMovSetArtwork Then
+        If Preferences.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.movieset.MovieSetId <> "" Then
             DoDownloadMovieSetArtwork()
         End If
     End Sub
