@@ -17448,20 +17448,35 @@ End Sub
         If ColIndexFromMouseDown < 0 Then Exit Sub
         Dim RowIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).RowIndex
         If RowIndexFromMouseDown < 0 Then Exit Sub
-        Dim messbox As frmMessageBox = Nothing
+        Dim messbox As frmMessageBox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
         If ColIndexFromMouseDown = 1 Then
             Try
-                Dim NewTMDBID As String = InputBox("Enter TMDB Set ID:" & vbCrLf & "Note: Numerical only!", "TMDB Set ID", "")
+                Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
+                If MsetName = "" Then
+                    MsgBox("", "No Movie Set Title!", "")
+                    Exit Sub
+                End If
+                Dim CurrentTMDbId As String = ""
+                Dim MsetCache As New List(Of MovieSetDatabase)
+                oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+                Dim q = From x In MsetCache Where x.MovieSetName = MsetName Select x.MovieSetId
+                If q.ToString <> Nothing AndAlso q.ToString <> "Enumeration yielded no results" Then
+                    CurrentTMDbId = q(0).ToString 
+                End If
+                Dim iboxmsg As String = "Enter TMDB Set ID:"
+                If CurrentTMDbId <> "" Then iboxmsg = "Replace current TMDB Set ID?:"
+                Dim NewTMDBID As String = InputBox(iboxmsg & vbCrLf & "Note: Numerical only!", "TMDB Set ID", CurrentTMDbId)
+                If NewTMDBID = "" Then Exit Sub
                 If Regex.IsMatch(NewTMDBID, "^[0-9]+$") Then
-                    messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
+                    'messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
-                    If MsetName = "" Then
-                        Fail = True
-                    Else
-                        Dim MsetCache As New List(Of MovieSetDatabase)
+                    'Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
+                    'If MsetName = "" Then
+                    '    Fail = True
+                    'Else
+                        'Dim MsetCache As New List(Of MovieSetDatabase)
                         oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
                         Dim found As Boolean = False
                         For Each s As MovieSetDatabase In MsetCache
@@ -17503,7 +17518,7 @@ End Sub
                                 Next
                             End If
                         End If
-                    End If
+                    'End If
                 Else
                     Fail = True
                     MsgBox("Invalid ID." & vbCrLf & "Numerical Only!", , "Invalid TMDB Set ID")
