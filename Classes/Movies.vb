@@ -138,15 +138,27 @@ Public Class Movies
 
     Public ReadOnly Property CountriesFilter As List(Of String)
         Get
-            Dim q = From x In MovieCache Select ms=x.countriesList
+            'Dim q = From x In MovieCache Select ms=x.countriesList
+             
+            'Dim lst = q.SelectMany(Function(m) m).ToList
+
+            'Dim q2 = From x In lst
+            '            Group By xx=x.Trim Into Num=Count
+            '            Order By xx
+            '            Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
+
+            Dim q = From x In MovieCache Select ms=x.countries.Split(",")
              
             Dim lst = q.SelectMany(Function(m) m).ToList
 
-            Dim q2 = From x In lst
-                        Group By xx=x.Trim Into Num=Count
-                        Order By xx
-                        Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
+            lst.RemoveAll(Function(v) v="" )
+            lst.RemoveAll(Function(v) v=",")
 
+            Dim q2 = From x In lst
+                        Group By x Into Num=Count
+                        Order By x
+                        Select x & " (" & Num.ToString & ")"
+                        
             Return q2.AsEnumerable.ToList
         End Get
     End Property    
@@ -1259,7 +1271,6 @@ Public Class Movies
                                 Case "foldername"           : newmovie.foldername = detail.InnerText
                                 Case "fullpathandfilename"  : newmovie.fullpathandfilename = detail.InnerText
                                 Case "genre"                : newmovie.genre = detail.InnerText & newmovie.genre
-                                Case "countries"            : newmovie.countries = detail.InnerText
                                 Case "id"                   : newmovie.id = detail.InnerText
                                 Case "playcount"            : newmovie.playcount = detail.InnerText
                                 Case "rating"               : newmovie.rating = detail.InnerText.ToString.ToRating
@@ -1276,6 +1287,9 @@ Public Class Movies
                                     Catch
                                         newmovie.Votes = 0
                                     End Try
+                                Case "countries"
+                                    Dim TmpStr As String = detail.InnerText
+                                    newmovie.countries = TmpStr.Replace(", ", ",")
                                 Case "Resolution"           : newmovie.Resolution = detail.InnerText
                                 Case "VideoCodec"           : newmovie.VideoCodec = detail.InnerText
                                 Case "Container"            : newmovie.Container = detail.InnerText

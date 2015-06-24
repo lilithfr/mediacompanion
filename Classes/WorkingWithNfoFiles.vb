@@ -2495,7 +2495,7 @@ Public Class WorkingWithNfoFiles
                             If newmovie.fullmoviebody.country = "" Then
                                 newmovie.fullmoviebody.country = thisresult.InnerText
                             Else
-                                newmovie.fullmoviebody.country &= ", " & thisresult.InnerText
+                                newmovie.fullmoviebody.country &= "," & thisresult.InnerText
                             End If
                         Case "outline"
                             newmovie.fullmoviebody.outline = thisresult.InnerText

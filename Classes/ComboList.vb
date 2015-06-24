@@ -22,7 +22,13 @@ Public Class ComboList
 
     Public ReadOnly Property countriesList As List(Of String)
         Get
-            Return countries.Split(", ").ToList
+            Dim splist() As String = countries.Split(", ")
+            Dim retlist As New List(Of String)
+            For Each t In splist
+                retlist.Add(t.Trim)
+            Next
+            Return retlist
+            'Return countries.Split(", ").ToList
         End Get
     End Property
 
