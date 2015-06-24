@@ -2423,7 +2423,7 @@ Partial Public Class Form1
                                 TvGetArtwork(Shows, False, False, True, False)
                             End If
                             If Preferences.seasonfolderjpg AndAlso Shows.FolderPath <> episodearray(0).FolderPath AndAlso (Not File.Exists(episodearray(0).FolderPath & "folder.jpg")) Then
-                                Utilities.SafeCopyFile(Seasonxx, (episodearray(0).FolderPath & "folder.jpg"))
+                                If File.Exists(Seasonxx) Then Utilities.SafeCopyFile(Seasonxx, (episodearray(0).FolderPath & "folder.jpg"))
                             End If
                             
                             For Each ept In episodearray
