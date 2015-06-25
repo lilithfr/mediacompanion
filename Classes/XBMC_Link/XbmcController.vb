@@ -414,6 +414,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
                                                                                                                                               
         AddTransition( S.Ready                      , E.MC_Movie_Updated        , S.Wf_XBMC_Video_Removed      , AddressOf RemoveVideoThenAdd   )
+        AddTransition( S.Ready                      , E.XBMC_Video_Removed      , S.Ready                      , AddressOf IgnoreNonMcInitiatedEvent )
 
         AddTransition( S.Wf_XBMC_Video_Removed      , E.TimeOut                 , S.Ready                      , AddressOf Retry                )
         AddTransition( S.Wf_XBMC_Video_Removed      , E.Exception               , S.Wf_XBMC_ConnectResult      , AddressOf ConnectAndRetry      )  
@@ -818,6 +819,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Dim msg = New ComboList_EventArgs(data)
 
         ReportProgress(E.MC_Only_Movies,msg)
+    End Sub
+
+    Sub IgnoreNonMcInitiatedEvent(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
+        LogInfo("Ignoring non-MC initiated event")
     End Sub
 
     Sub Ignore(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
