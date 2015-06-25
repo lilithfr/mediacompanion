@@ -60,7 +60,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.lblInfo.Size = New System.Drawing.Size(281, 47)
         Me.lblInfo.TabIndex = 10
         Me.lblInfo.Text = "Map each MC folder to it's equivalent Kodi folder."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"NB Kodi's folder names are ca"& _ 
-    "se sensitive. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"You can find them in your Kodi\userdata\sources.xml file"
+    "se sensitive. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"You can find them in your Kodi\userdata\sources.xml file."
         '
         'Panel1
         '
