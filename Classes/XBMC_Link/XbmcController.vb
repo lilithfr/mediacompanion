@@ -555,7 +555,8 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             Return
         End If
 
-        LogError("UnexpectedEvent", "State : [" + evt.SourceStateID.ToString + "] Missing event handler for : [" + evt.EventID.ToString + "]",evt)
+'       LogError("UnexpectedEvent", "State : [" + evt.SourceStateID.ToString + "] Missing event handler for : [" + evt.EventID.ToString + "]",evt)
+        LogWarning("UnexpectedEvent", "State : [" + evt.SourceStateID.ToString + "] Ignoring : [" + evt.EventID.ToString + "]",evt)
     End Sub
 
     Sub ExceptionThrownHandler(sender As Object, evt As TransitionErrorEventArgs(Of S, E, EventArgs))
