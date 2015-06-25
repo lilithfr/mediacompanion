@@ -42,7 +42,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         '
         Me.btnDone.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btnDone.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnDone.Location = New System.Drawing.Point(250, 198)
+        Me.btnDone.Location = New System.Drawing.Point(250, 260)
         Me.btnDone.Name = "btnDone"
         Me.btnDone.Size = New System.Drawing.Size(49, 23)
         Me.btnDone.TabIndex = 6
@@ -57,9 +57,10 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.lblInfo.ForeColor = System.Drawing.Color.Black
         Me.lblInfo.Location = New System.Drawing.Point(3, 6)
         Me.lblInfo.Name = "lblInfo"
-        Me.lblInfo.Size = New System.Drawing.Size(281, 26)
+        Me.lblInfo.Size = New System.Drawing.Size(281, 47)
         Me.lblInfo.TabIndex = 10
-        Me.lblInfo.Text = "Map each XBMC folder to it's equivalent MC folder"
+        Me.lblInfo.Text = "Map each MC folder to it's equivalent Kodi folder."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"NB Kodi's folder names are ca"& _ 
+    "se sensitive. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"You can find them in your Kodi\userdata\sources.xml file"
         '
         'Panel1
         '
@@ -68,15 +69,15 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.Panel1.BackColor = System.Drawing.SystemColors.Info
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.lblInfo)
-        Me.Panel1.Location = New System.Drawing.Point(10, 150)
+        Me.Panel1.Location = New System.Drawing.Point(10, 195)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(289, 42)
+        Me.Panel1.Size = New System.Drawing.Size(289, 54)
         Me.Panel1.TabIndex = 11
         '
         'btnSame
         '
         Me.btnSame.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnSame.Location = New System.Drawing.Point(10, 198)
+        Me.btnSame.Location = New System.Drawing.Point(10, 260)
         Me.btnSame.Name = "btnSame"
         Me.btnSame.Size = New System.Drawing.Size(49, 23)
         Me.btnSame.TabIndex = 12
@@ -118,13 +119,13 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.dgv.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.dgv.RowHeadersVisible = false
         Me.dgv.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders
-        Me.dgv.Size = New System.Drawing.Size(289, 131)
+        Me.dgv.Size = New System.Drawing.Size(289, 169)
         Me.dgv.TabIndex = 13
         '
         'btnClear
         '
         Me.btnClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnClear.Location = New System.Drawing.Point(65, 198)
+        Me.btnClear.Location = New System.Drawing.Point(65, 260)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(49, 23)
         Me.btnClear.TabIndex = 16
@@ -137,7 +138,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DarkSeaGreen
-        Me.ClientSize = New System.Drawing.Size(311, 231)
+        Me.ClientSize = New System.Drawing.Size(311, 293)
         Me.Controls.Add(Me.btnClear)
         Me.Controls.Add(Me.dgv)
         Me.Controls.Add(Me.btnSame)
@@ -147,7 +148,7 @@ Partial Class frmConfigureXBMC_MC_Folders
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.Name = "frmConfigureXBMC_MC_Folders"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Configure MC <-> XBMC Folder Mappings"
+        Me.Text = "Configure MC <-> Kodi Folder Mappings"
         Me.Panel1.ResumeLayout(false)
         CType(Me.dgv,System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(false)
