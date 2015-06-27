@@ -1215,6 +1215,7 @@ Public Class Movie
         _movieCache.Votes               = _scrapedMovie.fullmoviebody.votes.Replace(".","").ToInt
         _movieCache.outline             = _scrapedMovie.fullmoviebody.outline
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
+        _movieCache.tagline             = _scrapedMovie.fullmoviebody.tagline 
         _movieCache.year                = _scrapedMovie.fullmoviebody.year.ToInt
         _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
         _movieCache.VideoCodec          = _scrapedMovie.filedetails.filedetails_video.Codec.Value 

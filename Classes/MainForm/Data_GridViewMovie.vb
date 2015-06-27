@@ -19,6 +19,7 @@ Public Class Data_GridViewMovie
     Dim _playcount As String
     Dim _sortorder As String
     Dim _outline As String
+    Dim _tagline As String
     Dim _runtime As String
     Dim _createdate As String
     Dim _missingdata1 As Byte
@@ -67,6 +68,7 @@ Public Class Data_GridViewMovie
         playcount = movie.playcount
         SortOrder = movie.sortorder
         outline = movie.outline
+        tagline = movie.tagline
         runtime = movie.runtime
         createdate = movie.createdate
         missingdata1 = movie.missingdata1
@@ -114,6 +116,7 @@ Public Class Data_GridViewMovie
         convertedMovie.playcount            = Me.playcount
         convertedMovie.sortorder            = Me.SortOrder
         convertedMovie.outline              = Me.outline
+        convertedMovie.tagline              = Me.tagline
         convertedMovie.runtime              = Me.runtime
         convertedMovie.createdate           = Me.createdate
         convertedMovie.missingdata1         = Me.missingdata1
@@ -289,6 +292,15 @@ Public Class Data_GridViewMovie
         End Get
         Set(ByVal value)
             _outline = value
+        End Set
+    End Property
+
+    Public Property tagline
+        Get
+            Return _tagline
+        End Get
+        Set(ByVal value)
+            _tagline = value
         End Set
     End Property
 
@@ -499,13 +511,17 @@ Public Class Data_GridViewMovie
         End Get
     End Property  
 
-
     Public ReadOnly Property MissingOutline As Boolean
         Get
             Return outline.ToString.Trim=""
         End Get
     End Property  
 
+    Public ReadOnly Property MissingTagline As Boolean
+        Get
+            Return tagline.ToString.Trim=""
+        End Get
+    End Property
 
     Public ReadOnly Property MissingRuntime As Boolean
         Get

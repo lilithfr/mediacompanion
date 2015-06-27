@@ -37,6 +37,7 @@ Public Class ComboList
     Property lastplayed           As String = ""
     Property sortorder            As String = ""
     Property outline              As String = ""
+    Property tagline              As String = ""
     Property runtime              As String = ""
     Property createdate           As String = ""
     Property missingdata1         As Byte   = 0
@@ -171,7 +172,13 @@ Public Class ComboList
         Get
             Return outline.ToString.Trim=""
         End Get
-    End Property  
+    End Property
+
+    Public ReadOnly Property MissingTagLine As Boolean
+        Get
+            Return tagline.ToString.Trim=""
+        End Get
+    End Property 
 
     Public ReadOnly Property MissingIMDBId As Boolean
         Get
@@ -339,7 +346,8 @@ Public Class ComboList
         Me.playcount            = From.playcount 
         Me.lastplayed           = From.lastplayed  
         Me.sortorder            = From.sortorder          
-        Me.outline              = From.outline            
+        Me.outline              = From.outline 
+        Me.tagline              = From.tagline   
         Me.runtime              = From.runtime            
         Me.createdate           = From.createdate         
         Me.missingdata1         = From.missingdata1       

@@ -242,6 +242,7 @@ Public Class clsGridViewMovie
                 Case "Missing Trailer"             : b = From f In b Where f.MissingTrailer
                 Case "Missing Local Actors"        : b = From f In b Where f.MissingLocalActors
                 Case "Missing Plot"                : b = From f In b Where f.MissingPlot
+                Case "Missing Tagline"             : b = From f In b Where f.MissingTagline
                 Case "Missing Genre"               : b = From f In b Where f.MissingGenre
                 Case "Missing Outline"             : b = From f In b Where f.MissingOutline
                 Case "Missing Rating"              : b = From f In b Where f.MissingRating

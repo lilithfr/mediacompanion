@@ -2190,6 +2190,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.director = ""
                     newmovie.originaltitle = newmovie.title
                     newmovie.outline = ""
+                    newmovie.tagline = ""
                     newmovie.playcount = "0"
                     newmovie.lastplayed = ""
                     newmovie.plot = ""
@@ -2245,6 +2246,8 @@ Public Class WorkingWithNfoFiles
                                 newmovie.outline = thisresult.InnerText
                             Case "plot"
                                 newmovie.plot = thisresult.InnerText
+                            Case "tagline"
+                                newmovie.tagline = thisresult.InnerText 
                             Case "genre"
                                 If newmovie.genre = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
                                     newmovie.genre = thisresult.InnerText

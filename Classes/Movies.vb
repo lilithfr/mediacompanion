@@ -286,6 +286,7 @@ Public Class Movies
             lst.Add( MissingGenre             )
             lst.Add( MissingLocalActors       )
             lst.Add( MissingOutline           )
+            lst.Add( MissingTagline           )
             lst.Add( MissingPlot              )
             lst.Add( MissingPoster            )
             lst.Add( PreFrodoPosterOnly       )
@@ -432,7 +433,13 @@ Public Class Movies
         Get
             Return "Missing Outline (" & (From x In MovieCache Where x.MissingOutline).Count & ")" 
         End Get
-    End Property  
+    End Property
+
+    Public ReadOnly Property MissingTagline As String
+        Get
+            Return "Missing Tagline (" & (From x In MovieCache Where x.MissingTagLine).Count & ")" 
+        End Get
+    End Property
 
     Public ReadOnly Property MissingRuntime As String
         Get
@@ -1280,6 +1287,7 @@ Public Class Movies
                                 Case "year"                 : newmovie.year = detail.InnerText
                                 Case "outline"              : newmovie.outline = detail.InnerText
                                 Case "plot"                 : newmovie.plot = detail.InnerText
+                                Case "tagline"              : newmovie.tagline = detail.InnerText
                                 Case "runtime"              : newmovie.runtime = detail.InnerText
                                 Case "votes"
                                     Try
@@ -1411,6 +1419,7 @@ Public Class Movies
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100)
+            childchild = doc.CreateElement("tagline") : childchild.InnerText = movie.tagline : child.AppendChild(childchild)
             'If movie.plot.Length() > 100 Then
             '    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
             'Else
