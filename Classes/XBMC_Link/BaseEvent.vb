@@ -53,6 +53,6 @@
             Me.E       = Evt.E
             Me.Args    = Evt.Args
             Me.Ts      = DateTime.Now
-            Me.Retries = Retries
+            Me.Retries = Evt.Retries
         End Sub
 End Class
