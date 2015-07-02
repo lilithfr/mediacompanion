@@ -740,6 +740,9 @@ Public Class Classimdb
         Get
             Try
                 Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_TAGLINE, RegexOptions.Singleline).Groups(1).Value.Trim
+                If s.Contains("</div>") Then
+                    s = s.Substring(0, s.IndexOf("</div>"))
+                End If
                 Return Utilities.cleanSpecChars(encodespecialchrs(s))
             Catch ex As Exception
                 Return ""
