@@ -709,7 +709,8 @@ Public Class Classimdb
             If p <> "" Then
                 s = Regex.Replace(s, "</?a.*?>", String.Empty)
             End If
-            Return Utilities.CleanInvalidXmlChars(s.Trim())
+            'Return Utilities.CleanInvalidXmlChars(s.Trim())
+            Return Utilities.cleanSpecChars(encodespecialchrs(s.Trim()))
         End Get
     End Property
 
@@ -1472,16 +1473,8 @@ Public Class Classimdb
         Monitor.Enter(Me)
         Try
             Dim IMDbUrl As String = Preferences.imdbmirror & "title/" & IMDbId
-            'Dim first As Integer
-            Dim actorcount As Integer = 0
-            'Dim last As Integer
-            'Dim length As Integer
-           ' Dim tempint As Integer
-            Dim mpaacount As Integer = -1
             Dim webpage As New List(Of String)
             Dim mpaaresults(33, 1) As String
-            Dim OriginalTitle As Boolean = False
-            Dim FoundTitle As Boolean = False
             mpaaresults(0, 0) = "MPAA"
             mpaaresults(1, 0) = "UK"
             mpaaresults(2, 0) = "USA"
