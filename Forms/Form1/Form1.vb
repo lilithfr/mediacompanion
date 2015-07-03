@@ -916,11 +916,11 @@ Public Class Form1
             If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
                 Preferences.formwidth = Me.Width
                 Preferences.formheight = Me.Height
-                Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
-                If maxcount2 <> maxcount Then
-                    maxcount = maxcount2
-                    Call mov_WallReset()
-                End If
+                'Dim maxcount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
+                'If maxcount2 <> maxcount Then
+                '    maxcount = maxcount2
+                '    Call mov_WallReset()
+                'End If
 
             End If
             mov_SplitContainerAutoPosition()
@@ -7003,7 +7003,7 @@ Public Class Form1
         Dim count As Integer = 0
         Dim locx As Integer = 0
         Dim locy As Integer = 0
-        Dim maxcount As Integer = Convert.ToInt32((TabPage22.Width - 50) / 150)
+        Dim maxcount As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
 
         While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
             maxcount += 1
@@ -7062,7 +7062,7 @@ Public Class Form1
         'If check = True Then Return
         If moviecount_bak = DataGridViewMovies.RowCount Then Exit Sub
 
-        maxcount = Convert.ToInt32((TabPage22.Width - 50) / 150)
+        maxcount = Math.Floor((TabPage22.Width - 50)/150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
 
         While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
             maxcount += 1
@@ -11924,6 +11924,11 @@ End Sub
                 movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
             ElseIf CurrentTab = "tv shows" Then
                 TvTreeview_AfterSelect_Do()
+            End If
+            Dim maxcount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
+            If maxcount2 <> maxcount Then
+                maxcount = maxcount2
+                Call mov_WallReset()
             End If
         Catch
         End Try
