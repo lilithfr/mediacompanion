@@ -730,7 +730,9 @@ Public Class Classimdb
         Get
             Try
                 Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_VOTES, RegexOptions.Singleline).Groups(1).Value.Trim
-                Return encodespecialchrs(s)
+                s = encodespecialchrs(s)
+                s = s.Replace(".", "")
+                Return s
             Catch ex As Exception
                 Return ""
             End Try
