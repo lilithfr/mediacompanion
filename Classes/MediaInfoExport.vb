@@ -230,6 +230,14 @@ Public Class MediaInfoExport
                     fi = New System.IO.FileInfo(movie.fullpathandfilename)
                     strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
 
+               Case "folder"
+                    fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                    strNFOprop = fi.DirectoryName
+
+               Case "folder_no_drive"
+                    fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                    strNFOprop = Right(fi.DirectoryName,Len(fi.DirectoryName)-2)
+
                 Case "imdb_url"
                     strNFOprop = If(movie.id <> Nothing, Preferences.imdbmirror & "title/" & movie.id & "/", Preferences.imdbmirror)
 
