@@ -4135,7 +4135,10 @@ Public Class Form1
             tmdb.TmdbId = SetId
             tmdb.CollectionSearch = True
         End If
-        fanartArray.AddRange(tmdb.Fanart)
+        Try
+            fanartArray.AddRange(tmdb.Fanart)
+        Catch
+        End Try
 
         Try
             If fanartArray.Count > 0 Then
@@ -16490,27 +16493,106 @@ End Sub
             Dim PathOrUrl As String = t.tb_PathorUrl.Text
             t.Dispose()
             t = Nothing
-            Dim eh As Boolean = Preferences.savefanart
-            Preferences.savefanart = True
-            Movie.SaveFanartImageToCacheAndPath(PathOrUrl, mov_FanartORExtrathumbPath)
-            Preferences.savefanart = eh
-            Dim exists As Boolean = IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
+            Dim cachename As String = Utilities.Download2Cache(PathOrUrl)
+            If cachename <> "" Then
+                If Not MovFanartToggle Then
+                    Dim issavefanart As Boolean = Preferences.savefanart
+                    Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
+                    Dim xtra As Boolean = False
+                    Dim extrfanart As Boolean = False
+                    If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Or rbMovThumb5.Checked Then xtra = True
+                    Preferences.savefanart = True
+                    If xtra AndAlso Preferences.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(cachename, FanartOrExtraPath)
 
-            If exists Then
-                For Each paths In Preferences.offlinefolders
-                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
-                        Dim mediapath As String
-                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                    If xtra OrElse Movie.SaveFanartImageToCacheAndPath(cachename, FanartOrExtraPath) Then
+                        If Not xtra Then
+                            Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                            Movie.SaveFanartImageToCacheAndPaths(cachename, paths)
+                        End If
+                        Preferences.savefanart = issavefanart
+                        mov_DisplayFanart()
+                        util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
+                        movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
+
+                        For Each paths In Preferences.offlinefolders
+                            Dim offlinepath As String = paths & "\"
+                            If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                                Dim mediapath As String
+                                mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                messbox.TextBox1.Text = "Creating Offline Movie..."
+                                Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                            End If
+                        Next
+                    Else
+                        util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
+                        Preferences.savefanart = issavefanart
                     End If
-                Next
 
-                util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
+                    lblMovFanartWidth.Text = PictureBox2.Image.Width
+                    lblMovFanartHeight.Text = PictureBox2.Image.Height
 
-                util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                    UpdateMissingFanart()
 
-                mov_SplitContainerAutoPosition()
+                    XbmcLink_UpdateArtwork
+                Else
+                    Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
+                    If MovSetFanartSavePath <> "" Then
+                        Movie.SaveFanartImageToCacheAndPath(cachename, MovSetFanartSavePath)
+                        util_ImageLoad(PictureBox2, MovSetFanartSavePath, Utilities.DefaultFanartPath)
+                    Else
+                        MsgBox("!!  Problem formulating correct save location for Fanart" & vbCrLf & "                Please check your settings")
+                    End If
+                    'Dim Paths As List(Of String) = Preferences.GetFanartPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
+                    'For Each pth As String In Paths
+                    '    Try
+                    '        File.Copy(cachename, pth, True)
+                    '    Catch ex As Exception
+                    '        'aok = False
+                    '    End Try
+                    'Next
+                    'Dim exists As Boolean = IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
+
+                    'If exists Then
+                    '    For Each path In Preferences.offlinefolders
+                    '        If workingMovieDetails.fileinfo.fanartpath.IndexOf(path) <> -1 Then
+                    '            Dim mediapath As String
+                    '            mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                    '            Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                    '        End If
+                    '    Next
+
+                    '    util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
+
+                    '    util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+
+                    '    mov_SplitContainerAutoPosition()
+                    'End If
+                'Else
+
+                End If
             End If
+            'Dim eh As Boolean = Preferences.savefanart
+            'Preferences.savefanart = True
+            'Movie.SaveFanartImageToCacheAndPath(PathOrUrl, mov_FanartORExtrathumbPath)
+            'Preferences.savefanart = eh
+            'Dim exists As Boolean = IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
+
+            'If exists Then
+            '    For Each paths In Preferences.offlinefolders
+            '        If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
+            '            Dim mediapath As String
+            '            mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+            '            Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+            '        End If
+            '    Next
+
+            '    util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
+
+            '    util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+
+            '    mov_SplitContainerAutoPosition()
+            'End If
 
             UpdateMissingFanart()
             XbmcLink_UpdateArtwork()
@@ -17038,20 +17120,32 @@ End Sub
             Dim aok As Boolean = True
             Dim cachename As String = Utilities.Download2Cache(PathOrUrl)
             If cachename <> "" Then
-                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
-                For Each pth As String In Paths
-                    Try
-                        File.Copy(cachename, pth, True)
-                    Catch ex As Exception
-                        aok = False
-                    End Try
-                Next
-                If aok Then
-                    util_ImageLoad(PictureBoxAssignedMoviePoster, cachename, Utilities.DefaultPosterPath)
-                    util_ImageLoad(PbMoviePoster, cachename, Utilities.DefaultPosterPath)
-                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, cachename)
-                    updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                If Not MovPosterToggle Then
+                    Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
+                    For Each pth As String In Paths
+                        Try
+                            File.Copy(cachename, pth, True)
+                        Catch ex As Exception
+                            aok = False
+                        End Try
+                    Next
+                    If aok Then
+                        util_ImageLoad(PictureBoxAssignedMoviePoster, cachename, Utilities.DefaultPosterPath)
+                        util_ImageLoad(PbMoviePoster, cachename, Utilities.DefaultPosterPath)
+                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, cachename)
+                        updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                    End If
+                Else
+                    Dim MovSetPosterSavePath As String = workingMovieDetails.fileinfo.movsetposterpath
+                    If MovSetPosterSavePath <> "" Then
+                        Movie.SavePosterImageToCacheAndPath(cachename, MovSetPosterSavePath)
+                        util_ImageLoad(PictureBoxAssignedMoviePoster, MovSetPosterSavePath, Utilities.DefaultPosterPath)
+                    Else
+                        messbox.Close()
+                        MsgBox("!!  Problem formulating correct save location for Poster" & vbCrLf & "                    Please check your settings")
+                    End If
                 End If
+                
             Else
                 aok = False
             End If
