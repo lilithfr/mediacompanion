@@ -1,4 +1,11 @@
 ***************************************
+GENERAL TAGS
+***************************************
+<<filename>>		Default output filename. E.g. usage: <<filename>>CopyMoviesInFolders.cmd<</filename>>
+<<textencoding>>	Change the text encoding. Default is UTF8. Only ASCII alternative supported. E.g. usage: <<textencoding>>ASCII<</textencoding>>
+
+
+***************************************
 MOVIE TAGS
 ***************************************
 <<media_item[:limit]>>
@@ -35,7 +42,8 @@ Special Parameters:
                         cascading tags e.g. <<nfo:file:video:container>>
     [char_limit]    -   Integer. Limit the number of characters displayed, followed by a pseudo-ellipses.
                         Available for all NFO parameters except file parameters.
-
+<<folder>>					Movie folder inc drive and path.         - See CopyMoviesInFolders.txt for example usage
+<<folder_no_drive>>		Movie folder ex  drive, including path   - See CopyMoviesInFolders.txt for example usage
 
 
 

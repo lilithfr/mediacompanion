@@ -11,13 +11,15 @@ Public Class MediaInfoExport
         TV
     End Enum
 
-    Private Structure mediaInfoExportTemplate
+    Public Structure mediaInfoExportTemplate
         Dim title As String
         Dim path As String  'not used anymore as the template is stored when adding
         Dim body As String
         Dim type As mediaType
         Dim css As String
         Dim cssfile As String
+        Dim TextEncoding As Encoding
+        Dim FileName As String
 
         Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
             title = ""
@@ -26,10 +28,12 @@ Public Class MediaInfoExport
             type = mediaType.None
             css = ""
             cssfile = ""
+            TextEncoding = Encoding.UTF8
+            FileName = ""
         End Sub
     End Structure
 
-    Dim workingTemplate As mediaInfoExportTemplate
+    Public workingTemplate As mediaInfoExportTemplate
     Dim templateList As New List(Of mediaInfoExportTemplate)
     Dim fullTemplateString As String = Nothing
     'Dim mediaExportNfoFunction As New WorkingWithNfoFiles
@@ -55,11 +59,28 @@ Public Class MediaInfoExport
                     template.path = info.FullName
                     template.body = M.Groups("body").Value.Trim
                     template.type = If(M.Groups("type").Value Is String.Empty, mediaType.Movie, mediaType.TV)
+
                     Dim css As Match = Regex.Match(fileTemplateString, "<<css>>.*?<filename>(?<cssfile>.*?)</filename>(?<cssbody>.*?)<</css>>", regexBlockOption)
                     If css.Success Then
                         template.css = css.Groups("cssbody").Value.Trim
                         template.cssfile = css.Groups("cssfile").Value
                     End If
+
+                    Dim M2 As Match
+
+                    M2 = Regex.Match(fileTemplateString, "<<filename>>(?<filename>.*?)<</filename>>", regexBlockOption)
+                    If M2.Success Then
+                        template.FileName = M2.Groups("filename").Value.Trim
+                    End If
+
+                    M2 = Regex.Match(fileTemplateString, "<<textencoding>>(?<textencoding>.*?)<</textencoding>>", regexBlockOption)
+                    If M2.Success Then
+                        If M2.Groups("textencoding").Value.Trim.ToUpper()="ASCII" then
+                            template.textencoding = Encoding.ASCII
+                        End If
+                    End If
+
+
                     If mediaDropdown IsNot Nothing Then mediaDropdown.Add(M.Groups("title").Value.Trim, template.type) 'title used as key to avoid duplicate titles
                     templateList.Add(template)
                 End If
@@ -169,11 +190,11 @@ Public Class MediaInfoExport
             If headerTagPresent Then tempDoc &= "</html>"
             Try
                 If workingTemplate.css IsNot String.Empty Then
-                    Dim cssWriter As New System.IO.StreamWriter(IO.Path.GetDirectoryName(savePath) & Path.DirectorySeparatorChar & workingTemplate.cssfile, False, Encoding.UTF8)
+                    Dim cssWriter As New System.IO.StreamWriter(IO.Path.GetDirectoryName(savePath) & Path.DirectorySeparatorChar & workingTemplate.cssfile, False, workingTemplate.TextEncoding)
                     cssWriter.Write(workingTemplate.css)
                     cssWriter.Dispose()
                 End If
-                Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
+                Dim docWriter As New System.IO.StreamWriter(savePath, False, workingTemplate.TextEncoding)
                 docWriter.Write(tempDoc)
                 docWriter.Close()
             Catch ex As Exception

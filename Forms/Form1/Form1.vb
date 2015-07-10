@@ -7421,6 +7421,9 @@ Public Class Form1
             .Title = "ExportMedia File"
             .OverwritePrompt = True
             .CheckPathExists = True
+            If mediaInfoExp.workingTemplate.FileName <> "" Then
+                .FileName = mediaInfoExp.workingTemplate.FileName
+            End If
         End With
         If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             savepath = SaveFileDialog1.FileName
