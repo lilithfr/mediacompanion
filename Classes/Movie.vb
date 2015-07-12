@@ -1468,6 +1468,7 @@ Public Class Movie
                 tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
                 If Certificates.Count = 0 Then
                     _scrapedMovie.fullmoviebody.mpaa = If(Preferences.ExcludeMpaaRated, "", "Rated ") & tmdb.Certification 
+                    If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
                 End If
                 _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
                 If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then

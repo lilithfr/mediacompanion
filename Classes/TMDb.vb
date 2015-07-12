@@ -238,25 +238,28 @@ Public Class TMDb
         Get
             Fetch
             FetchReleases
+            Try
+                For Each country In _releases.countries
+                    If country.iso_3166_1.ToLower = LookupLanguages.Item(0) then
+                        Return country.certification
+                    End If
+                Next
 
-            For Each country In _releases.countries
-                If country.iso_3166_1.ToLower = LookupLanguages.Item(0) then
-                    Return country.certification
-                End If
-            Next
+                For Each country In _releases.countries
+                    If country.iso_3166_1.ToLower = Preferences.XbmcTmdbScraperCertCountry Then
+                        Return country.certification
+                    End If
+                Next
 
-            For Each country In _releases.countries
-                If country.iso_3166_1.ToLower = Preferences.XbmcTmdbScraperCertCountry Then
-                    Return country.certification
-                End If
-            Next
-
-            For Each country In _releases.countries
-                If country.certification <> "" then
-                    Return country.certification
-                End If
-            Next
-            Return ""
+                For Each country In _releases.countries
+                    If country.certification <> "" then
+                        Return country.certification
+                    End If
+                Next
+                Return ""
+            Catch
+                Return ""
+            End Try
         End Get 
     End Property
 
