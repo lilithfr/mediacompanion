@@ -719,6 +719,7 @@ Public Class Form1
             genretxt.ShortcutsEnabled = False
 
             Read_XBMC_TMDB_Scraper_Config()
+            Read_XBMC_TVDB_Scraper_Config()
             MainFormLoadedStatus = True
             UcFanartTv1.Form1MainFormLoadedStatus = True
             UcFanartTvTv1.Form1MainFormLoadedStatus = True
