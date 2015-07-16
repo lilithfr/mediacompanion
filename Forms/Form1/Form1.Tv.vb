@@ -1591,7 +1591,7 @@ Partial Public Class Form1
                 TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
                 TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
                 Me.BringToFront()
-                Me.Activate()
+                'Me.Activate()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
