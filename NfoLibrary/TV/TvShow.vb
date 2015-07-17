@@ -193,6 +193,7 @@ Public Class TvShow
         SearchTitle = SearchTitle.Replace(" & ", " ") 'Extra spacing for whole word match only
         SearchTitle = SearchTitle.Replace(" and ", " ")
         SearchTitle = SearchTitle.Replace(".", " ")  'Replace periods in foldernames with spaces (linux OS support)
+        SearchTitle = SearchTitle.Replace("&", "%26")  'Finally if title has & with no spaces between words, ie: Sex&Drugs&Rock&Roll
 
         mirrorsurl = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & SearchTitle & "&language=all"
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl, True)
