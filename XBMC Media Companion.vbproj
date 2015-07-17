@@ -151,6 +151,7 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\NotifyTaskbar.vb" />
     <Compile Include="Classes\xbmcExport.vb" />
     <Compile Include="Classes\FanartTvList.vb" />
     <Compile Include="Classes\MVComboList.vb" />

@@ -35,6 +35,7 @@ Public Class Form1
     Shared Public Property MC_Only_Movies        As List(Of ComboList)
     Public Shared Property MaxXbmcMovies As List(Of MaxXbmcMovie)
     Shared Public MyCulture As New System.Globalization.CultureInfo("en-US")
+    Private Declare Function GetActiveWindow Lib "user32" Alias "GetActiveWindow" () As IntPtr
 
     Public Property        XBMC_Controller_LogLastShownDt  As Date = Now
     Private                XBMC_Link_ErrorLog_Timer As Timers.Timer = New Timers.Timer()
@@ -1127,6 +1128,12 @@ Public Class Form1
         End If
     End Sub
 #End Region
+
+    Private Sub BlinkTaskBar()
+        If GetActiveWindow <> Me.Handle Then
+            Dim res = WindowsApi.FlashWindow(Process.GetCurrentProcess().MainWindowHandle, True, True, 5)
+        End If
+    End Sub
 
     Private Function splashscreenread() As Integer
         Dim scrn As Integer = 0
@@ -5588,6 +5595,13 @@ Public Class Form1
             TabPage15.Text = "Search for new Episodes"
             TabPage15.ToolTipText = "Searches folders for new episodes"
 
+            
+            'Call populatetvtree()
+            globalThreadCounter -= 1
+            Call util_ThreadsRunningCheck()
+            Tv_CacheSave()
+            tv_CacheLoad()
+            tv_Filter()
             If Preferences.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
                 Try
@@ -5597,13 +5611,9 @@ Public Class Form1
                 Throw ex
 #End If
                 End Try
+            Else
+                BlinkTaskBar()
             End If
-            'Call populatetvtree()
-            globalThreadCounter -= 1
-            Call util_ThreadsRunningCheck()
-            Tv_CacheSave()
-            tv_CacheLoad()
-            tv_Filter()
             'For Each Show As Nfo.TvShow In TvShows
             '    Show.SearchForEpisodesInFolder()
             'Next
@@ -11709,8 +11719,10 @@ End Sub
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
         Preferences.MovieChangeMovie = False
-        If Not Preferences.MusicVidScrape Then DisplayLogFile()  ' no need to display log after music video scraping.
+        Dim Displayed As Boolean = False
+        If Not Preferences.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
         Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
+        If Not Displayed Then BlinkTaskBar()
     End Sub
 
 #End Region 
@@ -12001,7 +12013,8 @@ End Sub
         RunBackgroundMovieScrape("ScrapeDroppedFiles")
     End Sub
 
-    Private Sub DisplayLogFile()
+    Private Function DisplayLogFile()
+        Dim Displayed As Boolean = False
         If ScraperErrorDetected And Preferences.ShowLogOnError Then
             scraperLog = "******************************************************************************" & vbCrLf &
                          "* One or more errors were detected during scraping. See below for details.   *" & vbCrLf &
@@ -12010,6 +12023,7 @@ End Sub
         End If
 
         If (Not Preferences.disablelogfiles Or (ScraperErrorDetected And Preferences.ShowLogOnError)) And scraperLog <> "" Then
+            Displayed = True
             Dim MyFormObject As New frmoutputlog(scraperLog, True)
             Try
                 MyFormObject.ShowDialog()
@@ -12018,7 +12032,8 @@ End Sub
         End If
 
         ScraperErrorDetected=False
-    End Sub
+        Return Displayed
+    End Function
 
     Sub pop_cbMovieDisplay_MovieSet
 

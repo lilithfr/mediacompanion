@@ -1114,6 +1114,7 @@ Partial Public Class Form1
         End If
 
         tv_Filter()
+        BlinkTaskBar()
     End Sub
 
     Private Sub Tv_RefreshCacheSave(ByVal tvshowlist As List(Of TvShow), ByVal episodeelist As List(Of TvEpisode))
@@ -1569,6 +1570,7 @@ Partial Public Class Form1
             'ToolStripStatusLabel5.Text = "Populating shows"
             'tv_CacheRefresh()
             ToolStripStatusLabel5.Visible = False
+            BlinkTaskBar
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -1590,7 +1592,7 @@ Partial Public Class Form1
 
                 TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
                 TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
-                Me.BringToFront()
+                'Me.BringToFront()
                 'Me.Activate()
             End If
         Catch ex As Exception
