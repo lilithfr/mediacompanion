@@ -44,11 +44,11 @@ Public Class ucFanartTv
         pbexists.Image = Nothing
         lblftvgroups.Items.clear
         PanelClear()
-        Me.lblTitle.Text = workingMovDetails.fullmoviebody.title 
-        If workingMovDetails.fullmoviebody.imdbid.Contains("tt") Then
-            ID = workingMovDetails.fullmoviebody.imdbid
-        ElseIf workingMovDetails.fullmoviebody.tmdbid <> "" Then
+        Me.lblTitle.Text = workingMovDetails.fullmoviebody.title
+        If workingMovDetails.fullmoviebody.tmdbid <> "" Then
             ID = workingMovDetails.fullmoviebody.tmdbid
+        ElseIf workingMovDetails.fullmoviebody.imdbid.Contains("tt") Then
+            ID = workingMovDetails.fullmoviebody.imdbid
         Else
             Call noID
         End If
