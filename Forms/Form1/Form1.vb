@@ -11275,10 +11275,10 @@ End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
             MsgBox("Please add A Folder containing Home Movies")
             Try
-                TabControl1.SelectedIndex = 4
+                TabControl1.SelectedIndex = 5
             Catch
             End Try
             homeTabIndex = 1
@@ -11293,7 +11293,12 @@ End Sub
             TabControl1.SelectedIndex = homeTabIndex
             Call rebuildHomeMovies()
         ElseIf tab = "screenshot" Then
-            util_ImageLoad(PictureBox5, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            pbx_HmScrnSht.SizeMode = PictureBoxSizeMode.Zoom
+
+            util_ImageLoad(pbx_HmScrnSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            homeTabIndex = TabControl1.SelectedIndex
+        ElseIf tab = " poster " Then
+            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
             homeTabIndex = TabControl1.SelectedIndex
         Else
             homeTabIndex = TabControl1.SelectedIndex
@@ -11328,7 +11333,7 @@ End Sub
 
                         If File.Exists(thumbpathandfilename) Then
                             Try
-                                util_ImageLoad(PictureBox5, thumbpathandfilename, Utilities.DefaultFanartPath)
+                                util_ImageLoad(pbx_HmScrnSht, thumbpathandfilename, Utilities.DefaultFanartPath)
                                 util_ImageLoad(PictureBox4, thumbpathandfilename, Utilities.DefaultFanartPath)
                             Catch
                                 messbox.Close()
@@ -20826,5 +20831,4 @@ End Sub
         'End While
     End Sub
 
-    
 End Class
