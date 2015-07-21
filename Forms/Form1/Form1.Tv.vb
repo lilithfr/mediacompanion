@@ -2862,7 +2862,7 @@ Partial Public Class Form1
                     End If 
                     result = "!!! No Episode thumb to download, Screenshot saved"
                 Else
-                    result = "!!! No Episode thumb to download, Screenshot Could not be saved!""
+                    result = "!!! No Episode thumb to download, Screenshot Could not be saved!"
                 End If
             End If
         ElseIf paths.Count = 0 Then

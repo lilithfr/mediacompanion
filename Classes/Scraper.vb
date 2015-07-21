@@ -1780,7 +1780,7 @@ Public Class Classimdb
         Return genres
     End Function
 
-    Public Function GetImdbKeyWords(ByVal keylimit As Integer, ByVal imdbmirror As String, Optional ByVal imdbid As String = "", ) As List(Of String)
+    Public Function GetImdbKeyWords(ByVal keylimit As Integer, ByVal imdbmirror As String, Optional ByVal imdbid As String = "") As List(Of String)
         Dim keywd As New List(Of String)
         Dim tempstring As String = ""
         Dim webpage As New List(Of String)

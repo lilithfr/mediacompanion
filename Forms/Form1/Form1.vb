@@ -6502,7 +6502,7 @@ Public Class Form1
                 ArtMode.Text=""
                 If eden Then
                     EdenImageTrue.Visible = True
-                    ArtMode.Text="Pre-Frodo Enabled
+                    ArtMode.Text="Pre-Frodo Enabled"
                 End If
                 If frodo Then
                     FrodoImageTrue.Visible = True
@@ -6517,7 +6517,7 @@ Public Class Form1
                     PresentImage = edenpath 
                     EdenImageTrue.Text = "Eden Image Present"
                 Else
-                    EdenImageTrue.Text = "No Eden Image
+                    EdenImageTrue.Text = "No Eden Image"
                 End If
                 If IO.File.Exists(frodopath) then
                     PresentImage = frodopath 
@@ -11273,133 +11273,6 @@ End Sub
         End If
     End Sub
 
-    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
-
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
-            MsgBox("Please add A Folder containing Home Movies")
-            Try
-                TabControl1.SelectedIndex = 5
-            Catch
-            End Try
-            homeTabIndex = 1
-            Exit Sub
-        End If
-
-        Dim tab As String = TabControl1.SelectedTab.Text.ToLower
-        If tab = "search for new home movies" Then
-            TabControl1.SelectedIndex = homeTabIndex
-            Call homeMovieScan()
-        ElseIf tab="refresh list" Then
-            TabControl1.SelectedIndex = homeTabIndex
-            Call rebuildHomeMovies()
-        ElseIf tab = "screenshot" Then
-            pbx_HmScrnSht.SizeMode = PictureBoxSizeMode.Zoom
-
-            util_ImageLoad(pbx_HmScrnSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-            homeTabIndex = TabControl1.SelectedIndex
-        ElseIf tab = " poster " Then
-            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
-            homeTabIndex = TabControl1.SelectedIndex
-        Else
-            homeTabIndex = TabControl1.SelectedIndex
-        End If
-    End Sub
-
-    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
-        Call rebuildHomeMovies()
-    End Sub
-
-    Private Sub btnHomeMovieScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieScreenShot.Click
-        Try
-
-            If IsNumeric(tbHomeMovieScreenShotDelay.Text) Then
-                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
-                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                For Each ext In Utilities.VideoExtensions
-                    Dim tempstring2 As String = pathandfilename & ext
-                    If IO.File.Exists(tempstring2) Then
-                        Dim seconds As Integer = 10
-                        If Convert.ToInt32(tbHomeMovieScreenShotDelay.Text) > 0 Then
-                            seconds = Convert.ToInt32(tbHomeMovieScreenShotDelay.Text)
-                        End If
-
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-
-                        Utilities.CreateScreenShot(tempstring2, thumbpathandfilename, seconds, True)
-
-                        If File.Exists(thumbpathandfilename) Then
-                            Try
-                                util_ImageLoad(pbx_HmScrnSht, thumbpathandfilename, Utilities.DefaultFanartPath)
-                                util_ImageLoad(PictureBox4, thumbpathandfilename, Utilities.DefaultFanartPath)
-                            Catch
-                                messbox.Close()
-                            End Try
-                        End If
-                        Exit For
-                    End If
-                Next
-                messbox.Close()
-            Else
-                MsgBox("Please enter a numerical value into the textbox")
-                tbHomeMovieScreenShotDelay.Focus()
-                Exit Sub
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub PlayHomeMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayHomeMovieToolStripMenuItem.Click
-        mov_Play("HomeMovie")
-    End Sub
-
-    Private Sub OpenFolderToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
-        Try
-            If Not WorkingHomeMovie.fileinfo.fullpathandfilename Is Nothing Then
-                Call util_OpenFolder(WorkingHomeMovie.fileinfo.fullpathandfilename)
-            Else
-                MsgBox("There is no Movie selected to open")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
-        Try
-            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub PictureBox4_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.DoubleClick
-        Try
-            Try
-                If WorkingHomeMovie.fileinfo.fanartpath <> Nothing Then
-                    If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
-                        Me.ControlBox = False
-                        MenuStrip1.Enabled = False
-                        'Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
-                            util_ZoomImage(WorkingHomeMovie.fileinfo.fanartpath)
-                        'End Using
-                    End If
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub TabLevel1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
 
         Select Case TabLevel1.SelectedTab.Text.ToLower
@@ -15691,7 +15564,7 @@ End Sub
 
 #End Region 'Movie Preferences -> Advanced Tab
 
-#Region "Movie Preferences -> Advanced2 Tab""
+#Region "Movie Preferences -> Advanced2 Tab"
     Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
         If tb_MovSeptb.Text <> "" Then
             lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
@@ -19757,6 +19630,132 @@ End Sub
 #End Region
 
 #Region "Home Movie routines"
+
+    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
+
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
+            MsgBox("Please add A Folder containing Home Movies")
+            Try
+                TabControl1.SelectedIndex = 5
+            Catch
+            End Try
+            homeTabIndex = 1
+            Exit Sub
+        End If
+
+        Dim tab As String = TabControl1.SelectedTab.Text.ToLower
+        If tab = "search for new home movies" Then
+            TabControl1.SelectedIndex = homeTabIndex
+            Call homeMovieScan()
+        ElseIf tab="refresh list" Then
+            TabControl1.SelectedIndex = homeTabIndex
+            Call rebuildHomeMovies()
+        ElseIf tab = "screenshot" Then
+            pbx_HmScrnSht.SizeMode = PictureBoxSizeMode.Zoom
+
+            util_ImageLoad(pbx_HmScrnSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            homeTabIndex = TabControl1.SelectedIndex
+        ElseIf tab = " poster " Then
+            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
+            homeTabIndex = TabControl1.SelectedIndex
+        Else
+            homeTabIndex = TabControl1.SelectedIndex
+        End If
+    End Sub
+
+    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
+        Call rebuildHomeMovies()
+    End Sub
+
+    Private Sub btnHomeMovieScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieScreenShot.Click
+        Try
+            If IsNumeric(tbHomeMovieScreenShotDelay.Text) Then
+                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
+                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                For Each ext In Utilities.VideoExtensions
+                    Dim tempstring2 As String = pathandfilename & ext
+                    If IO.File.Exists(tempstring2) Then
+                        Dim seconds As Integer = 10
+                        If Convert.ToInt32(tbHomeMovieScreenShotDelay.Text) > 0 Then
+                            seconds = Convert.ToInt32(tbHomeMovieScreenShotDelay.Text)
+                        End If
+
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        messbox.Show()
+                        messbox.Refresh()
+                        Application.DoEvents()
+
+                        Utilities.CreateScreenShot(tempstring2, thumbpathandfilename, seconds, True)
+
+                        If File.Exists(thumbpathandfilename) Then
+                            Try
+                                util_ImageLoad(pbx_HmScrnSht, thumbpathandfilename, Utilities.DefaultFanartPath)
+                                util_ImageLoad(PictureBox4, thumbpathandfilename, Utilities.DefaultFanartPath)
+                            Catch
+                                messbox.Close()
+                            End Try
+                        End If
+                        Exit For
+                    End If
+                Next
+                messbox.Close()
+            Else
+                MsgBox("Please enter a numerical value into the textbox")
+                tbHomeMovieScreenShotDelay.Focus()
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub PlayHomeMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayHomeMovieToolStripMenuItem.Click
+        mov_Play("HomeMovie")
+    End Sub
+
+    Private Sub OpenFolderToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
+        Try
+            If Not WorkingHomeMovie.fileinfo.fullpathandfilename Is Nothing Then
+                Call util_OpenFolder(WorkingHomeMovie.fileinfo.fullpathandfilename)
+            Else
+                MsgBox("There is no Movie selected to open")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
+        Try
+            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PictureBox4_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.DoubleClick
+        Try
+            Try
+                If WorkingHomeMovie.fileinfo.fanartpath <> Nothing Then
+                    If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
+                        Me.ControlBox = False
+                        MenuStrip1.Enabled = False
+                        'Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
+                            util_ZoomImage(WorkingHomeMovie.fileinfo.fanartpath)
+                        'End Using
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Private Sub SetupHomeMovies()
         If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
