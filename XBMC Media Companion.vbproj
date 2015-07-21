@@ -313,7 +313,6 @@
     <Compile Include="Classes\FullMovieDetails.vb" />
     <Compile Include="Structures\MovieActors.vb" />
     <Compile Include="Structures\BasicMovieNFO.vb" />
-    <Compile Include="Classes\Actors.vb" />
     <Compile Include="Forms\frmBatchScraper.Designer.vb">
       <DependentUpon>frmBatchScraper.vb</DependentUpon>
     </Compile>

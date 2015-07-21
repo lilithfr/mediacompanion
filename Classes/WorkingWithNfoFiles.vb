@@ -16,6 +16,7 @@ Public Class WorkingWithNfoFiles
         Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
         filechck.Close()
+        filechck = Nothing
         If tempstring = Nothing Then
             Return False
         End If
@@ -36,6 +37,7 @@ Public Class WorkingWithNfoFiles
         _Detected = r.CurrentEncoding
 
         r.Close
+        r = Nothing
 
         If _Detected.ToString <> "System.Text.UTF8Encoding" AndAlso _Detected.ToString <> "System.Text.SBCSCodePageEncoding" Then
             Try

@@ -125,6 +125,7 @@ Public Class ImdbScrapper
                     End If
                 Loop
                 objReader.Close()
+                objReader = Nothing
                 tvfblinecount -= 1
             Catch
                 tvfblinecount = 1
@@ -209,7 +210,10 @@ Public Class ImdbScrapper
                 sLine = objReader.ReadLine
                 apple2(fanartlinecount) = sLine
             Loop
-
+            objReader.Close()
+            objStream.Close()
+            objReader = Nothing
+            objStream = Nothing
             fanartlinecount -= 1
 
 
@@ -364,7 +368,10 @@ Public Class ImdbScrapper
                 sLine2 = objReader2.ReadLine
                 apple2(fanartlinecount) = sLine2
             Loop
-
+            objReader2.Close()
+            objStream2.Close()
+            objReader2 = Nothing
+            objStream2 = Nothing
             fanartlinecount -= 1
             Dim xtralge As Boolean = False
             For f = 1 To fanartlinecount
@@ -399,6 +406,10 @@ Public Class ImdbScrapper
                             sLine4 = objReader4.ReadLine
                             apple2(fanartlinecount) = sLine4
                         Loop
+                        objReader4.Close()
+                        objStream4.Close()
+                        objReader4 = Nothing
+                        objStream4 = Nothing
                         fanartlinecount -= 1
                         xtralge = False
                         For g = 1 To fanartlinecount

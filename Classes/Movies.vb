@@ -1245,6 +1245,7 @@ Public Class Movies
         Dim objReader  As New StreamReader(Preferences.workingProfile.MovieCache)
         Dim tempstring As String = objReader.ReadToEnd
         objReader.Close
+        objReader = Nothing
 
         movielist.LoadXml(tempstring)
 

@@ -52,6 +52,8 @@ Public Class MediaInfoExport
                 Dim fileTemplateString As String
                 Dim fileStream As IO.StreamReader = File.OpenText(info.FullName)
                 fileTemplateString = fileStream.ReadToEnd
+                fileStream.Close()
+                fileStream.Dispose()
                 Dim M As Match = Regex.Match(fileTemplateString, "<(menu)?title>(?<title>.*?)</(menu)?title>.*?<<(?<mcpage>mc(?<type> tv)? html page)>>(?<body>.*?)<</\k<mcpage>>>", regexBlockOption)
                 If M.Success Then
                     Dim template As New mediaInfoExportTemplate(True)

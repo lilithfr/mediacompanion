@@ -686,6 +686,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
         filechck.Close()
+        filechck = Nothing
         If tempstring = Nothing Then
             Return False
         End If
@@ -2151,6 +2152,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                         Exit Do
                     End If
                 Loop Until line = Nothing
+                lines.Close()
+                lines = Nothing
                 Return listoflines
             End If
         Catch
@@ -2175,6 +2178,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Else
                 Dim lines As IO.StreamReader = IO.File.OpenText(path)
                 text = lines.ReadToEnd
+                lines.Close()
+                lines = Nothing
                 Return text
             End If
         Catch
@@ -2731,6 +2736,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     Catch ex As Exception
                     End Try
                 Loop Until line = Nothing
+                userConfig.Close()
+                userConfig = Nothing
             Catch ex As Exception
             End Try
         End If

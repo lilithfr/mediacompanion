@@ -53,6 +53,7 @@ Public Class HomeMovies
                             End If
                         Loop Until filechck.EndOfStream
                         filechck.Close()
+                        filechck.Dispose()
                         If needtorename = True Then
                             scraperLog &= " - invalid MC .nfo found - Renaming to .info"
                             Dim fi As New IO.FileInfo(movieNfoFile)

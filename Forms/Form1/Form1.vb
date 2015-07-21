@@ -1503,6 +1503,8 @@ Public Class Form1
                         MessageBox.Show(ex.Message)
                     End Try
                 Loop Until line = Nothing
+                userConfig.Close()
+                userConfig = Nothing
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
             End Try
@@ -2415,6 +2417,7 @@ Public Class Form1
                                         End If
                                     Loop Until tempstring.IndexOf("</movie>") <> -1
                                     filechck.Close()
+                                    filechck = Nothing
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                     Throw ex
@@ -2459,7 +2462,8 @@ Public Class Form1
                     Else
                         validfile = False
                     End If
-
+                    filechck.Close()
+                    filechck = Nothing
 
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -5289,6 +5293,8 @@ Public Class Form1
                 Loop
                 objReader.Close()
                 objStream.Close()
+                objReader = Nothing
+                objStream = Nothing
                 urllinecount -= 1
 
             Catch ex As Exception
@@ -5391,6 +5397,7 @@ Public Class Form1
                     Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
                     tempstring = filechck.ReadToEnd.ToLower
                     filechck.Close()
+                    filechck = Nothing
                     If tempstring = Nothing Then
                         validated = False
                     End If
@@ -5742,6 +5749,8 @@ Public Class Form1
             Dim thisresult As XmlNode = Nothing
             objReader.Close()
             objStream.Close()
+            objReader = Nothing
+            objStream = Nothing
             For Each thisresult In bannerslist("Banners")
                 Select Case thisresult.Name
                     Case "Banner"
@@ -8067,6 +8076,8 @@ Public Class Form1
                 Loop
                 objReader.Close()
                 objStream.Close()
+                objReader = Nothing
+                objStream = Nothing
                 urllinecount -= 1
 
             Catch ex As Exception
@@ -8413,7 +8424,8 @@ Public Class Form1
                     langarray(x, y) = strline(y)
                 Next
             Next
-
+            tmpstream.Close()
+            tmpstream = Nothing
 
         End If
 
@@ -11597,6 +11609,7 @@ End Sub
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
         Preferences.MovieChangeMovie = False
+        GC.Collect()
         Dim Displayed As Boolean = False
         If Not Preferences.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
         Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
@@ -20041,6 +20054,7 @@ End Sub
         Dim objReader As New System.IO.StreamReader(workingProfile.HomeMovieCache)
         Dim tempstring As String = objReader.ReadToEnd
         objReader.Close()
+        objReader = Nothing
 
         movielist.LoadXml(tempstring)
         Dim thisresult As XmlNode = Nothing

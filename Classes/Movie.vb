@@ -680,6 +680,7 @@ Public Class Movie
                             End If
                         Loop Until filechck.EndOfStream
                         filechck.Close()
+                        filechck = Nothing
                     Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -719,6 +720,7 @@ Public Class Movie
                     End If
                 Loop Until filechck.EndOfStream
                 filechck.Close()
+                filechck = Nothing
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -2658,6 +2660,7 @@ Public Class Movie
             Dim objReader As New StreamReader(fileNFO)
             Dim tempInfo As String = objReader.ReadToEnd
             objReader.Close()
+            objReader = Nothing
             Dim M As Match = Regex.Match(tempInfo, "(tt\d{7})")
             If M.Success = True Then
                 extrapossibleID = M.Value
@@ -3962,6 +3965,7 @@ Public Class Movie
             Loop Until filechck.EndOfStream
 
             filechck.Close
+            filechck = Nothing
 
         Catch ex As Exception
 #If SilentErrorScream Then
