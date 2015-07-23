@@ -12205,6 +12205,7 @@ End Sub
         cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
         CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
         cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
+        cb_TvMissingEpOffset            .Checked    = Preferences.TvMissingEpOffset
         AutoScrnShtDelay                .Text       = ScrShtDelay
         cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Preferences.TvXtraFanartQty.ToString)
 
@@ -13710,6 +13711,13 @@ End Sub
     Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
         If prefsload Then Exit Sub
         Preferences.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
+        tvprefschanged = True
+        btnTVPrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cb_TvMissingEpOffset_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvMissingEpOffset.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.TvMissingEpOffset = cb_TvMissingEpOffset.Checked 
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub

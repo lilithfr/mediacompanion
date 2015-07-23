@@ -2951,6 +2951,7 @@ Partial Public Class Form1
     End Sub
     Private Sub tv_Filter(ByVal overrideShowIsMissing As String) 'ByVal butt As String)
         Dim butt As String = ""
+        Dim ThisDate As Date = If(Preferences.TvMissingEpOffset, Now.AddDays(-1), Now)
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
@@ -2977,7 +2978,7 @@ Partial Public Class Form1
                                     episode.EpisodeNode.ForeColor = Color.Gray
                                 Else
                                     Try
-                                        If Convert.ToDateTime(episode.Aired.Value) > Now Then       ' Is the episode in the future?
+                                        If Convert.ToDateTime(episode.Aired.Value) > ThisDate Then       ' Is the episode in the future?
                                             episode.EpisodeNode.ForeColor = Color.Red               '  Yes, so change its colour to Red
                                         Else
                                             episode.EpisodeNode.ForeColor = Drawing.Color.Blue
@@ -3023,7 +3024,7 @@ Partial Public Class Form1
                                 episode.Visible = False
                             Else
                                 Try     ' Has the episode been aired yet?
-                                    If Convert.ToDateTime(episode.Aired.Value) <= Now Then
+                                    If Convert.ToDateTime(episode.Aired.Value) <= ThisDate Then
                                         episode.Visible = True
                                         episode.EpisodeNode.EnsureVisible()
                                     Else
@@ -3076,7 +3077,7 @@ Partial Public Class Form1
                             Try
                             If episode.IsMissing Then
                                 If episode.Aired.Value <> "" Then
-                                    If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                    If Convert.ToDateTime(episode.Aired.Value) > ThisDate Then
                                         episode.EpisodeNode.ForeColor = Color.Red           '  Yes, so change its colour to Red
                                     Else
                                         episode.EpisodeNode.ForeColor = Drawing.Color.Blue

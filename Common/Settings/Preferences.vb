@@ -155,7 +155,7 @@ Public Class Preferences
     Public Shared DisplayMediaInfoFolderSize As Boolean
     Public Shared font As String
     Public Shared MultiMonitoEnabled As Boolean
-    Public Shared ShowAllAudioTracks As Boolean = True
+    Public Shared ShowAllAudioTracks As Boolean
     Private Shared _MkvMergeGuiPath As String
 
     Shared Property MkvMergeGuiPath As String
@@ -355,6 +355,7 @@ Public Class Preferences
     Public Shared copytvactorthumbs As Boolean = False
     Public Shared displayMissingEpisodes As Boolean = False
     Public Shared ignoreMissingSpecials As Boolean = False
+    Public Shared TvMissingEpOffset As Boolean = False
     Public Shared sortorder As String
     Public Shared tvdlposter As Boolean
     Public Shared tvdlfanart As Boolean
@@ -558,7 +559,8 @@ Public Class Preferences
         disablelogfiles = False
         DisplayRatingOverlay = True
         DisplayMediainfoOverlay = True
-        DisplayMediaInfoFolderSize = True
+        DisplayMediaInfoFolderSize = False
+        ShowAllAudioTracks = True
         incmissingmovies = False
         startupCache = True
         rarsize = 8
@@ -580,7 +582,6 @@ Public Class Preferences
         tvbannersplit = 0
         showsortdate = False
         MultiMonitoEnabled = False
-        ShowAllAudioTracks = True
         XBMC_version = 2
         'Proxy settings
         prxyEnabled = False
@@ -679,6 +680,7 @@ Public Class Preferences
         logview = "0"  'first entry in combobox is 'Full' (log view)
         displayMissingEpisodes = False
         ignoreMissingSpecials = False
+        TvMissingEpOffset = False
         ScrShtDelay = 10
         excludefromshowfoldername = "[ended]"
 
@@ -901,6 +903,7 @@ Public Class Preferences
         root.AppendChild(doc, "movieinvertorder",           movieinvertorder)           'btnreverse
         root.AppendChild(doc, "displayMissingEpisodes",     displayMissingEpisodes)     'SearchForMissingEpisodesToolStripMenuItem
         root.AppendChild(doc, "ignoreMissingSpecials",      ignoreMissingSpecials)      'cbTvMissingSpecials
+        root.AppendChild(doc, "TvMissingEpOffset",          TvMissingEpOffset)          'cb_TvMissingEpOffset
 
 
         'Still to do
@@ -1393,6 +1396,7 @@ Public Class Preferences
                     Case "copytvactorthumbs"                    : copytvactorthumbs = thisresult.InnerXml
                     Case "displayMissingEpisodes"               : displayMissingEpisodes = thisresult.InnerXml
                     Case "ignoreMissingSpecials"                : ignoreMissingSpecials = thisresult.InnerXml 
+                    Case "TvMissingEpOffset"                    : TvMissingEpOffset = thisresult.InnerXml
                     Case "actorsavepath"                        : actorsavepath = decxmlchars(thisresult.InnerText)
                     Case "actorsavealpha"                       : actorsavealpha = thisresult.InnerXml
                     Case "actornetworkpath"                     : actornetworkpath = decxmlchars(thisresult.InnerText)
