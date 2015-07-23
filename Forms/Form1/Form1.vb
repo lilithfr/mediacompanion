@@ -2097,7 +2097,7 @@ Public Class Form1
         End If
 
         If Yield(yieldIng) Then Return
-
+        GC.Collect()
         'mov_SplitContainerAutoPosition()
     End Sub
 
@@ -5621,6 +5621,7 @@ Public Class Form1
             Else
                 BlinkTaskBar()
             End If
+            GC.Collect()
             'For Each Show As Nfo.TvShow In TvShows
             '    Show.SearchForEpisodesInFolder()
             'Next

@@ -2409,7 +2409,7 @@ Public Class WorkingWithNfoFiles
 
                 'MsgBox(Format(myDate, "MMddyy"))
                 'MsgBox(myDate.ToString("MMddyy"))
-
+                movie = Nothing
             End If
             Return newmovie
 
@@ -2757,6 +2757,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.fullmoviebody.movieset.MovieSetName = "" Then
                     newmovie.fullmoviebody.movieset.MovieSetName = "-None-"
                 End If
+                movie = Nothing
 
                 Return newmovie
             End If
@@ -2771,11 +2772,12 @@ Public Class WorkingWithNfoFiles
     Public Shared Sub mov_NfoSave(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
         'Monitor.Enter(Me)
         Dim stage As Integer = 1
+        Dim doc As New XmlDocument
         Try
             If movietosave Is Nothing Then Exit Sub
             If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
                 'Try
-                Dim doc As New XmlDocument
+                
                 'Dim thumbnailstring As String = "" Test code?
                 stage = 2
                 Dim thispref As XmlNode = Nothing
@@ -3456,6 +3458,7 @@ Public Class WorkingWithNfoFiles
         Finally
             'Monitor.Exit(Me)
         End Try
+        doc = Nothing
     End Sub
 #End Region
     

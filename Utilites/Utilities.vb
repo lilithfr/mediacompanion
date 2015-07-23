@@ -2271,7 +2271,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return filename
     End Function
 
-    Public Shared Function SaveImage(ByRef image As Bitmap, ByVal path As String) As Boolean
+    Public Shared Function SaveImage(ByVal image As Bitmap, ByVal path As String) As Boolean
         Try
             GC.Collect()
             If (File.Exists(path)) Then
@@ -2291,6 +2291,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         'Finally
         '    image.Dispose() 'because image is passed in ByRef, it should be disposed of, but alas it is not.
         End Try
+        image.Dispose()
     End Function
 
     'Public Shared Function SaveImageNoDispose(ByVal image As Bitmap, ByVal path As String) As Boolean

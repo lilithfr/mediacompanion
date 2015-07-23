@@ -1571,6 +1571,7 @@ Partial Public Class Form1
             'tv_CacheRefresh()
             ToolStripStatusLabel5.Visible = False
             BlinkTaskBar
+            GC.Collect()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -1918,6 +1919,7 @@ Partial Public Class Form1
             ToolStripStatusLabel8.Visible = False
             ToolStripProgressBar7.Visible = False
             TvTreeview_AfterSelect_Do()
+            GC.Collect()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
