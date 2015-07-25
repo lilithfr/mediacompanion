@@ -4318,6 +4318,18 @@ Public Class WorkingWithNfoFiles
                     Next
             End Select
         Next
+        NewMusicVideo.fileinfo.fullpathandfilename = filepath
+        NewMusicVideo.fileinfo.filename = IO.Path.GetFileName(filepath)
+        NewMusicVideo.fileinfo.foldername = Utilities.GetLastFolder(filepath)
+        NewMusicVideo.fileinfo.posterpath = Preferences.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.trailerpath = ""
+        NewMusicVideo.fileinfo.path = IO.Path.GetDirectoryName(filepath) & "\"
+        NewMusicVideo.fileinfo.basepath = Preferences.GetMovBasePath(NewMusicVideo.fileinfo.path)
+        NewMusicVideo.fileinfo.fanartpath = Preferences.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
+        If Not String.IsNullOrEmpty(NewMusicVideo.filedetails.filedetails_video.Container.Value) Then
+            Dim container As String = NewMusicVideo.filedetails.filedetails_video.Container.Value
+            NewMusicVideo.fileinfo.filenameandpath = filepath.Replace(".nfo", container)
+        End If
         Return NewMusicVideo
     End Function
 #End Region

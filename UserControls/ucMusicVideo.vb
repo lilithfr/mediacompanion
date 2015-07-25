@@ -513,7 +513,7 @@ Public Class ucMusicVideo
 
                 'Dim workingMusicVideo As New Music_Video_Class
                 workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
-                workingMusicVideo.fileinfo.fullPathAndFilename = MusicVideo.fullPathAndFilename
+                'workingMusicVideo.fileinfo.fullPathAndFilename = MusicVideo.fullPathAndFilename
                 'populate form
                 txtAlbum.Text = workingMusicVideo.fullmoviebody.album
                 txtArtist.Text = workingMusicVideo.fullmoviebody.artist
@@ -526,10 +526,10 @@ Public Class ucMusicVideo
                 txtYear.Text = workingMusicVideo.fullmoviebody.year
                 txtGenre.Text = workingMusicVideo.fullmoviebody.genre
                 txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                Dim thumbpath As String = MusicVideo.fullPathAndFilename
-                thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
-                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
-                Form1.util_ImageLoad(pcBxScreenshot, thumbpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
+                'Dim thumbpath As String = MusicVideo.fullPathAndFilename
+                'thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
+                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
+                Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
                 Label16.Text = pcBxScreenshot.Image.Width
                 Label17.Text = pcBxScreenshot.Image.Height
                 'Set Media overlay
@@ -537,20 +537,20 @@ Public Class ucMusicVideo
                 movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
 
                 'Load Poster image
-                thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.jpg")
-                If IO.File.Exists(thumbpath) Then
-                    Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                    Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                    Label19.Text = pcBxScreenshot.Image.Width
-                    Label18.Text = pcBxScreenshot.Image.Height
-                Else
-                    thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.png")
-                    If IO.File.Exists(thumbpath) Then
-                        Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                        Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                        Label19.Text = pcBxScreenshot.Image.Width
-                        Label18.Text = pcBxScreenshot.Image.Height
-                    End If
+                'thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.jpg")
+                If IO.File.Exists(workingMusicVideo.fileinfo.posterpath) Then
+                    Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                    Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                    Label19.Text = pcBxSinglePoster.Image.Width
+                    Label18.Text = pcBxSinglePoster.Image.Height
+                'Else
+                '    thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.png")
+                '    If IO.File.Exists(thumbpath) Then
+                '        Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                '        Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                '        Label19.Text = pcBxScreenshot.Image.Width
+                '        Label18.Text = pcBxScreenshot.Image.Height
+                '    End If
                 End If
             End If
         Next
@@ -1239,20 +1239,37 @@ Public Class ucMusicVideo
     End Sub
     
     Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
-        Form1.cropMode = "mvscreenshot"
+        'Form1.cropMode = "mvscreenshot"
         Try
-            Dim t As New frmMovPosterCrop
-            If Preferences.MultiMonitoEnabled Then
-                t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
-                t.StartPosition = FormStartPosition.Manual
-            End If
-            t.ShowDialog()
+            Using t As New frmMovPosterCrop
+                If Preferences.MultiMonitoEnabled Then
+                    t.bounds = screen.allscreens(form1.currentscreen).bounds
+                    t.startposition = formstartposition.manual
+                end if
+                t.img = New Bitmap(pcBxScreenshot.Tag.ToString)
+                t.cropmode = "fanart"
+                t.title = workingMusicVideo.fullmoviebody.title 
+                t.Setup()
+                t.ShowDialog()
+                If Not IsNothing(t.newimg) Then
+                    btnSaveCrop.Enabled = True
+                    btnCropReset.Enabled = True
+                    pcBxScreenshot.Image = t.newimg
+                End If
+            End Using
+            'Dim t As New frmMovPosterCrop
+            'If Preferences.MultiMonitoEnabled Then
+            '    t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+            '    t.StartPosition = FormStartPosition.Manual
+            'End If
+            't.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
     Private Sub btnCropReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCropReset.Click
+        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
         pcBxScreenshot.Image = PcBxMusicVideoScreenShot.Image
         btnCropReset.Enabled = False
         btnSaveCrop.Enabled = False
@@ -1290,20 +1307,30 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
-        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
-        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-        Dim thumbpathandfilename As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-poster.jpg")
-        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
-        bitmap3.Dispose()
-        btnPosterReset.Enabled = False
-        btnPosterSave.Enabled = False
-        pcBxSinglePoster.Image = Nothing
-        pcBxSinglePoster.ImageLocation = thumbpathandfilename
-        PcBxPoster.ImageLocation = thumbpathandfilename
+        Try
+            Using t As New frmMovPosterCrop
+                If Preferences.MultiMonitoEnabled Then
+                    t.bounds = screen.allscreens(form1.currentscreen).bounds
+                    t.startposition = formstartposition.manual
+                end if
+                t.img = New Bitmap(pcBxSinglePoster.Tag.ToString)
+                t.cropmode = "poster"
+                t.title = workingMusicVideo.fullmoviebody.title 
+                t.Setup()
+                t.ShowDialog()
+                If Not IsNothing(t.newimg) Then
+                    btnPosterSave.Enabled = True
+                    btnPosterReset.Enabled = True
+                    pcBxSinglePoster.Image = t.newimg
+                End If
+            End Using
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub btnPosterReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterReset.Click
-        pcBxSinglePoster.Image = PcBxPoster.Image
+        Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultPosterPath)
         btnPosterReset.Enabled = False
         btnPosterSave.Enabled = False
     End Sub

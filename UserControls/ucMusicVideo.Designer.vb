@@ -78,6 +78,11 @@ Partial Class ucMusicVideo
         Me.btnPosterReset = New System.Windows.Forms.Button()
         Me.btnPosterCrop = New System.Windows.Forms.Button()
         Me.pcBxSinglePoster = New System.Windows.Forms.PictureBox()
+        Me.tPManualScrape = New System.Windows.Forms.TabPage()
+        Me.chkBxOverWriteArt = New System.Windows.Forms.CheckBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.btnManualScrape = New System.Windows.Forms.Button()
+        Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
         Me.tPPref = New System.Windows.Forms.TabPage()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.btnRemoveFolder = New System.Windows.Forms.Button()
@@ -86,11 +91,6 @@ Partial Class ucMusicVideo
         Me.btnBrowseFolders = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lstBoxFolders = New System.Windows.Forms.ListBox()
-        Me.tPManualScrape = New System.Windows.Forms.TabPage()
-        Me.chkBxOverWriteArt = New System.Windows.Forms.CheckBox()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.btnManualScrape = New System.Windows.Forms.Button()
-        Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
@@ -100,8 +100,8 @@ Partial Class ucMusicVideo
         CType(Me.pcBxScreenshot,System.ComponentModel.ISupportInitialize).BeginInit
         Me.tPPosterScrape.SuspendLayout
         CType(Me.pcBxSinglePoster,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.tPPref.SuspendLayout
         Me.tPManualScrape.SuspendLayout
+        Me.tPPref.SuspendLayout
         Me.SuspendLayout
         '
         'TabControlMain
@@ -714,7 +714,7 @@ Partial Class ucMusicVideo
         Me.btnPosterSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btnPosterSave.Enabled = false
         Me.btnPosterSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnPosterSave.Location = New System.Drawing.Point(518, 478)
+        Me.btnPosterSave.Location = New System.Drawing.Point(365, 469)
         Me.btnPosterSave.Name = "btnPosterSave"
         Me.btnPosterSave.Size = New System.Drawing.Size(131, 32)
         Me.btnPosterSave.TabIndex = 24
@@ -726,7 +726,7 @@ Partial Class ucMusicVideo
         Me.btnPosterReset.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btnPosterReset.Enabled = false
         Me.btnPosterReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnPosterReset.Location = New System.Drawing.Point(518, 440)
+        Me.btnPosterReset.Location = New System.Drawing.Point(215, 488)
         Me.btnPosterReset.Name = "btnPosterReset"
         Me.btnPosterReset.Size = New System.Drawing.Size(131, 32)
         Me.btnPosterReset.TabIndex = 23
@@ -737,7 +737,7 @@ Partial Class ucMusicVideo
         '
         Me.btnPosterCrop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btnPosterCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnPosterCrop.Location = New System.Drawing.Point(518, 402)
+        Me.btnPosterCrop.Location = New System.Drawing.Point(215, 450)
         Me.btnPosterCrop.Name = "btnPosterCrop"
         Me.btnPosterCrop.Size = New System.Drawing.Size(131, 32)
         Me.btnPosterCrop.TabIndex = 22
@@ -751,9 +751,68 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.pcBxSinglePoster.Location = New System.Drawing.Point(3, 3)
         Me.pcBxSinglePoster.Name = "pcBxSinglePoster"
-        Me.pcBxSinglePoster.Size = New System.Drawing.Size(646, 393)
+        Me.pcBxSinglePoster.Size = New System.Drawing.Size(509, 393)
         Me.pcBxSinglePoster.TabIndex = 0
         Me.pcBxSinglePoster.TabStop = false
+        '
+        'tPManualScrape
+        '
+        Me.tPManualScrape.Controls.Add(Me.chkBxOverWriteArt)
+        Me.tPManualScrape.Controls.Add(Me.Label13)
+        Me.tPManualScrape.Controls.Add(Me.btnManualScrape)
+        Me.tPManualScrape.Controls.Add(Me.WebBrowser1)
+        Me.tPManualScrape.Location = New System.Drawing.Point(4, 22)
+        Me.tPManualScrape.Name = "tPManualScrape"
+        Me.tPManualScrape.Size = New System.Drawing.Size(967, 578)
+        Me.tPManualScrape.TabIndex = 3
+        Me.tPManualScrape.Text = "Manually find Correct Wiki Entry"
+        Me.tPManualScrape.UseVisualStyleBackColor = true
+        '
+        'chkBxOverWriteArt
+        '
+        Me.chkBxOverWriteArt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.chkBxOverWriteArt.AutoSize = true
+        Me.chkBxOverWriteArt.Checked = true
+        Me.chkBxOverWriteArt.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBxOverWriteArt.Location = New System.Drawing.Point(780, 531)
+        Me.chkBxOverWriteArt.Name = "chkBxOverWriteArt"
+        Me.chkBxOverWriteArt.Size = New System.Drawing.Size(172, 30)
+        Me.chkBxOverWriteArt.TabIndex = 3
+        Me.chkBxOverWriteArt.Text = "Un-check if you don't want MC"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"to overwrite your current art. "
+        Me.chkBxOverWriteArt.UseVisualStyleBackColor = true
+        '
+        'Label13
+        '
+        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Label13.AutoSize = true
+        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label13.Location = New System.Drawing.Point(322, 534)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(367, 20)
+        Me.Label13.TabIndex = 2
+        Me.Label13.Text = "Browse to the correct Wikipedia Page and Click Go"
+        '
+        'btnManualScrape
+        '
+        Me.btnManualScrape.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btnManualScrape.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnManualScrape.Location = New System.Drawing.Point(695, 529)
+        Me.btnManualScrape.Name = "btnManualScrape"
+        Me.btnManualScrape.Size = New System.Drawing.Size(70, 30)
+        Me.btnManualScrape.TabIndex = 1
+        Me.btnManualScrape.Text = "Go"
+        Me.btnManualScrape.UseVisualStyleBackColor = true
+        '
+        'WebBrowser1
+        '
+        Me.WebBrowser1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.WebBrowser1.Location = New System.Drawing.Point(3, 3)
+        Me.WebBrowser1.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.WebBrowser1.Name = "WebBrowser1"
+        Me.WebBrowser1.Size = New System.Drawing.Size(964, 520)
+        Me.WebBrowser1.TabIndex = 0
         '
         'tPPref
         '
@@ -840,65 +899,6 @@ Partial Class ucMusicVideo
         Me.lstBoxFolders.Size = New System.Drawing.Size(333, 459)
         Me.lstBoxFolders.TabIndex = 0
         '
-        'tPManualScrape
-        '
-        Me.tPManualScrape.Controls.Add(Me.chkBxOverWriteArt)
-        Me.tPManualScrape.Controls.Add(Me.Label13)
-        Me.tPManualScrape.Controls.Add(Me.btnManualScrape)
-        Me.tPManualScrape.Controls.Add(Me.WebBrowser1)
-        Me.tPManualScrape.Location = New System.Drawing.Point(4, 22)
-        Me.tPManualScrape.Name = "tPManualScrape"
-        Me.tPManualScrape.Size = New System.Drawing.Size(967, 578)
-        Me.tPManualScrape.TabIndex = 3
-        Me.tPManualScrape.Text = "Manually find Correct Wiki Entry"
-        Me.tPManualScrape.UseVisualStyleBackColor = true
-        '
-        'chkBxOverWriteArt
-        '
-        Me.chkBxOverWriteArt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.chkBxOverWriteArt.AutoSize = true
-        Me.chkBxOverWriteArt.Checked = true
-        Me.chkBxOverWriteArt.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkBxOverWriteArt.Location = New System.Drawing.Point(780, 531)
-        Me.chkBxOverWriteArt.Name = "chkBxOverWriteArt"
-        Me.chkBxOverWriteArt.Size = New System.Drawing.Size(172, 30)
-        Me.chkBxOverWriteArt.TabIndex = 3
-        Me.chkBxOverWriteArt.Text = "Un-check if you don't want MC"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"to overwrite your current art. "
-        Me.chkBxOverWriteArt.UseVisualStyleBackColor = true
-        '
-        'Label13
-        '
-        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Label13.AutoSize = true
-        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label13.Location = New System.Drawing.Point(322, 534)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(367, 20)
-        Me.Label13.TabIndex = 2
-        Me.Label13.Text = "Browse to the correct Wikipedia Page and Click Go"
-        '
-        'btnManualScrape
-        '
-        Me.btnManualScrape.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btnManualScrape.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnManualScrape.Location = New System.Drawing.Point(695, 529)
-        Me.btnManualScrape.Name = "btnManualScrape"
-        Me.btnManualScrape.Size = New System.Drawing.Size(70, 30)
-        Me.btnManualScrape.TabIndex = 1
-        Me.btnManualScrape.Text = "Go"
-        Me.btnManualScrape.UseVisualStyleBackColor = true
-        '
-        'WebBrowser1
-        '
-        Me.WebBrowser1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.WebBrowser1.Location = New System.Drawing.Point(3, 3)
-        Me.WebBrowser1.MinimumSize = New System.Drawing.Size(20, 20)
-        Me.WebBrowser1.Name = "WebBrowser1"
-        Me.WebBrowser1.Size = New System.Drawing.Size(964, 520)
-        Me.WebBrowser1.TabIndex = 0
-        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -917,10 +917,10 @@ Partial Class ucMusicVideo
         Me.tPPosterScrape.ResumeLayout(false)
         Me.tPPosterScrape.PerformLayout
         CType(Me.pcBxSinglePoster,System.ComponentModel.ISupportInitialize).EndInit
-        Me.tPPref.ResumeLayout(false)
-        Me.tPPref.PerformLayout
         Me.tPManualScrape.ResumeLayout(false)
         Me.tPManualScrape.PerformLayout
+        Me.tPPref.ResumeLayout(false)
+        Me.tPPref.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub

@@ -63,7 +63,7 @@ Public Class UserRect
 		AddHandler mPictureBox.Paint, AddressOf mPictureBox_Paint
 	End Sub
     
-    Public Function GetCropped(ByVal zm As Double) As Bitmap
+    Public Function GetCropped(ByVal zm As Double, ByVal origimg As Bitmap) As Bitmap
         
         'Dim zm As Double = frmMovPosterCrop.zm
         Dim sx As Integer = rect.X * zm
@@ -72,7 +72,7 @@ Public Class UserRect
         Dim sh As Integer = rect.Height * zm
         
         Dim rect1 As Rectangle = New Rectangle(sx, sy, sw, sh)
-        Dim OriginalImage As Bitmap = New Bitmap(frmMovPosterCrop.img) ', mPictureBox.Width, mPictureBox.Height)
+        Dim OriginalImage As Bitmap = origimg  'New Bitmap(frmMovPosterCrop.img) ', mPictureBox.Width, mPictureBox.Height)
         Dim _img As New Bitmap(sw, sh) ' for cropinf image
         Dim g As Graphics = Graphics.FromImage(_img) ' create graphics
 

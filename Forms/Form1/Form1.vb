@@ -437,7 +437,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
@@ -17130,13 +17130,24 @@ End Sub
 
     Private Sub btn_MovEnableCrop_Click(sender As System.Object, e As System.EventArgs) Handles btnMoviePosterEnableCrop.Click
         Try
-            cropMode = "movieposter"
-            Dim t As New frmMovPosterCrop
-            If Preferences.MultiMonitoEnabled Then
-                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-                t.StartPosition = FormStartPosition.Manual
-            End If
-            t.ShowDialog()
+            cropMode = "poster"
+            Using t As New frmMovPosterCrop
+                If Preferences.MultiMonitoEnabled Then
+                    t.bounds = screen.allscreens(form1.currentscreen).bounds
+                    t.startposition = formstartposition.manual
+                end if
+                t.img = New Bitmap(PictureBoxAssignedMoviePoster.Tag.ToString)
+                t.cropmode = "poster"
+                t.title = workingMovie.title
+                t.Setup()
+                t.ShowDialog()
+                If Not IsNothing(t.newimg) Then
+                    btnMoviePosterSaveCroppedImage.Enabled = True
+                    btnMoviePosterResetImage.Enabled = True
+                    PictureBoxAssignedMoviePoster.Image = t.newimg
+                    lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+                End If
+            End Using
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
