@@ -19684,9 +19684,9 @@ End Sub
             TabControl1.SelectedIndex = homeTabIndex
             Call rebuildHomeMovies()
         ElseIf tab = "screenshot" Then
-            pbx_HmScrnSht.SizeMode = PictureBoxSizeMode.Zoom
+            pbx_HmFanartSht.SizeMode = PictureBoxSizeMode.Zoom
 
-            util_ImageLoad(pbx_HmScrnSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            util_ImageLoad(pbx_HmFanartSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
             homeTabIndex = TabControl1.SelectedIndex
         ElseIf tab = " poster " Then
             util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
@@ -19700,9 +19700,9 @@ End Sub
         Call rebuildHomeMovies()
     End Sub
 
-    Private Sub btnHomeMovieScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieScreenShot.Click
+    Private Sub btn_HmFanartShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFanartShot.Click
         Try
-            If IsNumeric(tbHomeMovieScreenShotDelay.Text) Then
+            If IsNumeric(tb_HmFanartTime.Text) Then
                 Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
                 Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
                 Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
@@ -19710,8 +19710,8 @@ End Sub
                     Dim tempstring2 As String = pathandfilename & ext
                     If IO.File.Exists(tempstring2) Then
                         Dim seconds As Integer = 10
-                        If Convert.ToInt32(tbHomeMovieScreenShotDelay.Text) > 0 Then
-                            seconds = Convert.ToInt32(tbHomeMovieScreenShotDelay.Text)
+                        If Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
+                            seconds = Convert.ToInt32(tb_HmFanartTime.Text)
                         End If
 
                         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -19723,8 +19723,8 @@ End Sub
 
                         If File.Exists(thumbpathandfilename) Then
                             Try
-                                util_ImageLoad(pbx_HmScrnSht, thumbpathandfilename, Utilities.DefaultFanartPath)
-                                util_ImageLoad(PictureBox4, thumbpathandfilename, Utilities.DefaultFanartPath)
+                                util_ImageLoad(pbx_HmFanartSht, thumbpathandfilename, Utilities.DefaultFanartPath)
+                                util_ImageLoad(pbx_HmFanart, thumbpathandfilename, Utilities.DefaultFanartPath)
                             Catch
                                 messbox.Close()
                             End Try
@@ -19735,7 +19735,7 @@ End Sub
                 messbox.Close()
             Else
                 MsgBox("Please enter a numerical value into the textbox")
-                tbHomeMovieScreenShotDelay.Focus()
+                tb_HmFanartTime.Focus()
                 Exit Sub
             End If
         Catch ex As Exception
@@ -19768,7 +19768,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub PictureBox4_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.DoubleClick
+    Private Sub pbx_HmFanart_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles pbx_HmFanart.DoubleClick
         Try
             Try
                 If WorkingHomeMovie.fileinfo.fanartpath <> Nothing Then
@@ -19777,6 +19777,28 @@ End Sub
                         MenuStrip1.Enabled = False
                         'Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
                             util_ZoomImage(WorkingHomeMovie.fileinfo.fanartpath)
+                        'End Using
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub pbx_HmPoster_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles pbx_HmPoster.DoubleClick
+        Try
+            Try
+                If WorkingHomeMovie.fileinfo.posterpath <> Nothing Then
+                    If IO.File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
+                        Me.ControlBox = False
+                        MenuStrip1.Enabled = False
+                        'Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
+                            util_ZoomImage(WorkingHomeMovie.fileinfo.posterpath)
                         'End Using
                     End If
                 End If
@@ -20163,9 +20185,9 @@ End Sub
         HmMovYear.Text = ""
         HmMovPlot.Text = ""
         HmMovStars.Text = ""
-        PictureBox4.Image = Nothing
+        pbx_HmFanart.Image = Nothing
         WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
-        WorkingHomeMovie.fileinfo.fanartpath = Preferences.GetFanartPath(WorkingHomeMovie.fileinfo.fullpathandfilename)
+        'WorkingHomeMovie.fileinfo.fanartpath = Preferences.GetFanartPath(WorkingHomeMovie.fileinfo.fullpathandfilename)
         HmMovTitle.Text = WorkingHomeMovie.fullmoviebody.title
         HmMovSort.Text = WorkingHomeMovie.fullmoviebody.sortorder
         HmMovPlot.Text = WorkingHomeMovie.fullmoviebody.plot
@@ -20175,10 +20197,11 @@ End Sub
         PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
         PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
         If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
-            util_ImageLoad(PictureBox4, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            util_ImageLoad(pbx_HmFanart, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
             Dim video_flags = VidMediaFlags(WorkingHomeMovie.filedetails)
-            movieGraphicInfo.OverlayInfo(PictureBox4, "", video_flags)
+            movieGraphicInfo.OverlayInfo(pbx_HmFanart, "", video_flags)
         End If
+        util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
     End Sub
 
     Private Sub HomeMovieFoldersRefresh()
@@ -20291,6 +20314,70 @@ End Sub
 
     End Sub
 
+    Private Sub btn_HmPosterShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmPosterShot.Click
+        Try
+            If IsNumeric(tb_HmPosterTime.Text) Then
+                Dim thumbpathandfilename As String = IO.Path.Combine(Utilities.CacheFolderPath, WorkingHomeMovie.fileinfo.posterpath.Replace(WorkingHomeMovie.fileinfo.path,""))  
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.filenameandpath  
+                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                If IO.File.Exists(pathandfilename) Then
+                    Dim seconds As Integer = 10
+                    If Convert.ToInt32(tb_HmPosterTime.Text) > 0 Then
+                        seconds = Convert.ToInt32(tb_HmPosterTime.Text)
+                    End If
+
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+
+                    Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
+                    Dim cancelclicked As Boolean
+                    Using pbx As New PictureBox
+                        util_ImageLoad(pbx, thumbpathandfilename, Utilities.DefaultPosterPath)
+                        Using t As New frmMovPosterCrop
+                            If Preferences.MultiMonitoEnabled Then
+                                t.bounds = screen.allscreens(form1.currentscreen).bounds
+                                t.startposition = formstartposition.manual
+                            end if
+                            t.img = pbx.image
+                            t.cropmode = "poster"
+                            t.title = WorkingHomeMovie.fullmoviebody.title 
+                            t.Setup()
+                            t.ShowDialog()
+                            If Not IsNothing(t.newimg) Then
+                                Utilities.SaveImage(t.newimg, WorkingHomeMovie.fileinfo.posterpath)
+                            Else
+                                cancelclicked = True
+                            End If
+                        End Using
+                    End Using
+                    GC.Collect()
+                    GC.Collect()
+                    
+                    Utilities.SafeDeleteFile(thumbpathandfilename)
+
+                    If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
+                        Try
+                            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                            util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                        Catch
+                            messbox.Close()
+                        End Try
+                    End If
+                End If
+                messbox.Close()
+            Else
+                MsgBox("Please enter a numerical value into the textbox")
+                tb_HmPosterTime.Focus()
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+    
 #End Region   'Home Movie Routines, buttons etc.
 
 

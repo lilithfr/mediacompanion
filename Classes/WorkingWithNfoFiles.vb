@@ -3464,11 +3464,11 @@ Public Class WorkingWithNfoFiles
     
     '  All HomeMovie Load/Save Routines
 #Region " Home Movie Routines "
-    Public Function nfoLoadHomeMovie(ByVal filenameandpath As String)
+    Public Function nfoLoadHomeMovie(ByVal filepath As String)
         Try
             Dim newmovie As New HomeMovieDetails
-            newmovie.fileinfo.fullpathandfilename = filenameandpath
-            If Not IO.File.Exists(filenameandpath) Then
+            newmovie.fileinfo.fullpathandfilename = filepath
+            If Not IO.File.Exists(filepath) Then
                 Return "Error"
                 Exit Function
             Else
@@ -3476,9 +3476,9 @@ Public Class WorkingWithNfoFiles
                 Dim movie As New XmlDocument
 
                 Try
-                    movie.Load(filenameandpath)
+                    movie.Load(filepath)
                 Catch ex As Exception
-                    If Not util_NfoValidate(filenameandpath, True) Then
+                    If Not util_NfoValidate(filepath, True) Then
                         newmovie.fullmoviebody.title = "ERROR"
                         Return "ERROR"
                         Exit Function
@@ -3615,18 +3615,30 @@ Public Class WorkingWithNfoFiles
                 'Now we need to make sure no varibles are still set to NOTHING before returning....
 
                 If newmovie.fullmoviebody.title = Nothing Then newmovie.fullmoviebody.title = "ERR - This Movie Has No TITLE!"
-                newmovie.fullmoviebody.filename = IO.Path.GetFileName(filenameandpath)
+                newmovie.fullmoviebody.filename = IO.Path.GetFileName(filepath)
                 If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
                 If newmovie.fullmoviebody.plot = Nothing Then newmovie.fullmoviebody.plot = ""
                 If newmovie.fullmoviebody.runtime = Nothing Then newmovie.fullmoviebody.runtime = ""
                 If newmovie.fullmoviebody.sortorder = Nothing Or newmovie.fullmoviebody.sortorder = "" Then newmovie.fullmoviebody.sortorder = newmovie.fullmoviebody.title
 
-                If newmovie.fullmoviebody.year = Nothing Then newmovie.fullmoviebody.year = "0001"
+                If newmovie.fullmoviebody.year = Nothing Then newmovie.fullmoviebody.year = "1901"
+                newmovie.fileinfo.fullpathandfilename = filepath
+                newmovie.fileinfo.filename = IO.Path.GetFileName(filepath)
+                newmovie.fileinfo.foldername = Utilities.GetLastFolder(filepath)
+                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(filepath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.trailerpath = ""
+                newmovie.fileinfo.path = IO.Path.GetDirectoryName(filepath) & "\"
+                newmovie.fileinfo.basepath = Preferences.GetMovBasePath(newmovie.fileinfo.path)
+                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(filepath, newmovie.fileinfo.filename)
+                If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
+                    Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
+                    newmovie.fileinfo.filenameandpath = filepath.Replace(".nfo", container)
+                End If
 
                 'MsgBox(Format(myDate, "yyyy"))
                 'MsgBox(myDate.ToString("MMddyy"))
 
-
+                movie = Nothing
                 Return newmovie
             End If
 

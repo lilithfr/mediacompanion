@@ -1703,7 +1703,9 @@ Public Class Preferences
                 ElseIf IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg") Then
                     posterpath = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
                 Else
-                    posterpath = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                    Dim postertype As String = ".tbn"
+                    If Preferences.FrodoEnabled Then postertype = "-poster.jpg"
+                    posterpath = FullPath.Replace(IO.Path.GetExtension(FullPath), postertype)
                 End If
             End If
         End If
