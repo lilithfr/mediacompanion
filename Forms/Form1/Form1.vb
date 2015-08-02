@@ -19614,6 +19614,61 @@ End Sub
         End Try
     End Sub
 
+    Private Sub ListBox5_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox5.DragDrop
+        Dim files() As String
+        Dim tempstring3 As String
+        Dim tempint As Integer = 0
+        Dim tempint2 As Integer = 0
+        droppedItems.Clear()
+        files = e.Data.GetData(DataFormats.FileDrop)
+        For f = 0 To UBound(files)
+            If IO.Directory.Exists(files(f)) Then
+                Dim hasseason As Boolean = False
+                If Not ListBox5.Items.Contains(files(f)) Then
+                    For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(files(f))
+                        Dim M As Match
+                        tempstring3 = strfolder2.ToLower.Replace(files(f).ToLower,"")
+                        M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
+                        If M.Success = True Then
+                            hasseason = True
+                            Exit For
+                        End If
+                    Next
+                    If hasseason = True Then
+                        tempint = MessageBox.Show(files(f) & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                        If tempint = DialogResult.Yes Then
+                            ListBox5.Items.Add(files(f))
+                            tvfolderschanged = True
+                        ElseIf tempint = DialogResult.No Then
+                            tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                            If tempint2 = DialogResult.Yes Then
+                                If Not ListBox6.Items.Contains(files(f)) Then
+                                    ListBox6.Items.Add(files(f))
+                                    tvfolderschanged = True
+                                Else
+                                    MsgBox("Folder not added, Already exists")
+                                End If
+                            End If
+                        End If
+                    Else
+                        ListBox5.Items.Add(files(f))
+                        tvfolderschanged = True
+                    End If
+                Else
+                    MsgBox("Root already exists")
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub ListBox5_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox5.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub ListBox5_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox5.KeyDown
         If e.KeyCode = Keys.Delete AndAlso ListBox5.SelectedItem <> Nothing
             Call btn_TvFoldersRootRemove.PerformClick()
@@ -19622,6 +19677,7 @@ End Sub
         
     Private Sub ListBox6_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox6.DragDrop
         Dim files() As String
+        droppedItems.Clear()
         files = e.Data.GetData(DataFormats.FileDrop)
         For f = 0 To UBound(files)
             If IO.Directory.Exists(files(f)) Then
