@@ -13843,6 +13843,8 @@ End Sub
                     Exit For
                 End If
             Next
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
