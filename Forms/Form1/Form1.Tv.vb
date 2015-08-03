@@ -2113,7 +2113,7 @@ Partial Public Class Form1
                     Dim M2 As Match
                     Dim epcount As Integer = 0
                     Dim allepisodes(100) As Integer
-                    S = eps.Thumbnail.FileName
+                    S = Regex.Replace(eps.Thumbnail.FileName, "\(.+\)\s", "")   'Remove anything from filename in brackets like resolution ie: (1920x1080) that may give false episode number
                     eps.Thumbnail.FileName = ""
                     Do
                         '<tvregex>[Ss]([\d]{1,2}).?[Ee]([\d]{3})</tvregex>
