@@ -2,7 +2,7 @@
 Imports System.Xml
 Imports System.Threading
 Imports System.ComponentModel
-Imports MediaInfoNET
+'Imports MediaInfoNET
 Imports System.Data.SQLite
 Imports System.Data
 Imports XBMC.JsonRpc

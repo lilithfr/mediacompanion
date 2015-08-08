@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports Media_Companion
 Imports System.Text
-Imports YouTubeFisher
+'Imports YouTubeFisher
 
 Public Class CertificateMapping
     Public Property Find    As String 

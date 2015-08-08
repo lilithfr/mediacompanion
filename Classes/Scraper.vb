@@ -80,6 +80,11 @@ Module ModGlobals
     End Sub
 
     <Extension()> _
+    Sub AppendTagText(ByRef s As String, name As String, value As String)
+        s &= "<" & name & ">" & DeCodeSpecialChrs(value.Trim.EncodeSpecialChrs) & "</" & name & ">"& vbCrLf
+    End Sub
+
+    <Extension()> _
     Sub ExtractName(ByRef s As String)
         If s.IndexOf("itemprop=""name"">")>-1 Then s=Net.WebUtility.HtmlDecode( Regex.Match(s,MovieRegExs.REGEX_NAME, RegexOptions.Singleline).Groups("name").Value )
     End Sub
@@ -97,6 +102,13 @@ Module ModGlobals
         s = s.Replace(Chr(34), "&quot;")
         s = s.Replace(Chr(31), "")
         s = s.Replace("'", "&apos;")
+        Return s
+    End Function
+
+    <Extension()> _
+    Function DeCodeSpecialChrs(ByRef s As String) As String
+        s = s.Replace("&amp;", "&")
+        s = s.Replace("&apos;", "'")
         Return s
     End Function
 
@@ -1521,10 +1533,10 @@ Public Class Classimdb
             For Each wp In webpage
                 test += wp & vbcrlf
             Next
-            If Preferences.XbmcTmdbStarsFromImdb    Then results.AppendTag( "stars"     , Stars         )
-            If Preferences.XbmcTmdbMissingFromImdb  Then results.AppendTag( "outline"   , Outline       )
-            If Preferences.XbmcTmdbTop250FromImdb   Then results.AppendTag( "top250"    , Top250        )
-            If Preferences.XbmcTmdbVotesFromImdb    Then results.AppendTag( "votes"     , Votes         )
+            If Preferences.XbmcTmdbStarsFromImdb    Then results.AppendTagText( "stars"     , Stars)
+            If Preferences.XbmcTmdbMissingFromImdb  Then results.AppendTagText( "outline"   , Outline)
+            If Preferences.XbmcTmdbTop250FromImdb   Then results.AppendTag( "top250"    , Top250)
+            If Preferences.XbmcTmdbVotesFromImdb    Then results.AppendTag( "votes"     , Votes)
             If Preferences.XbmcTmdbCertFromImdb Then
                 For f = 0 To 33
                     If mpaaresults(f, 1) <> Nothing Then

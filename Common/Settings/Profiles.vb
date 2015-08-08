@@ -16,7 +16,7 @@ Public Class Profiles
 
         profilepath = Path.Combine(profilepath, "profile.xml")
 
-        If File.Exists(profilepath) Then
+        If IO.File.Exists(profilepath) Then
 
             Dim xmlDoc As New XmlDocument
             xmlDoc.Load(profilepath)
