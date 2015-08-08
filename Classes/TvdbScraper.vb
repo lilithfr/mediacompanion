@@ -59,8 +59,9 @@ Public Class TVDBScraper
                         Dim bannerselection As XmlNode = Nothing
                         For Each bannerselection In thisresult.ChildNodes
                             Select Case bannerselection.Name
+                                Case "id"
+                                    bannerlist = bannerlist & "<id>" & bannerselection.InnerXml & "</id>"
                                 Case "BannerPath"
-
                                     bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
                                 Case "BannerType"
                                     bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"

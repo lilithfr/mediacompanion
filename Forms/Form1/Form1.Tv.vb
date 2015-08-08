@@ -3540,6 +3540,8 @@ Partial Public Class Form1
                         Dim individualposter As New TvBanners
                         For Each results In thisresult.ChildNodes
                             Select Case results.Name
+                                Case "id"
+                                    individualposter.id = results.InnerText
                                 Case "url"
                                     individualposter.Url = results.InnerText
                                 Case "bannertype"
@@ -3702,22 +3704,24 @@ Partial Public Class Form1
 
             'ExtraFanart
             If shXtraFanart Then
-                Dim xfanart As String = currentshowpath & "extrafanart\fanart"
-                Dim fanartposter As New List(Of String)
+                Dim xfanart As String = currentshowpath & "extrafanart\"   '"extrafanart\fanart"
+                Dim fanartposter As New List(Of TVBanners)
                 For Each lang In Langlist 
                     For Each Image In artlist
                         If (Image.Language = lang Or lang = "") AndAlso Image.BannerType = "fanart" Then
-                            fanartposter.Add(Image.Url)
+                            fanartposter.Add(Image)
                             'If fanartposter.Count = 5 Then Exit For
                         End If
                     Next
                     'If fanartposter.Count = 5 Then Exit For
                 Next
                 If fanartposter.Count > 0 Then
-                    For x = 1 To Preferences.TvXtraFanartQty
-                        If x = fanartposter.Count Then Exit For
-                        success = Utilities.DownloadFile(fanartposter(x), (xfanart & x & ".jpg"))
-                    Next
+                    Dim x As Integer = 0
+                    Do Until x = Preferences.TvXtraFanartQty
+                        If x = fanartposter.Count Then Exit Do
+                        success = Utilities.DownloadFile(fanartposter(x).url, (xfanart & fanartposter(x).id & ".jpg"))
+                        x = x + 1
+                    Loop
                 End If
             End If
         Catch
