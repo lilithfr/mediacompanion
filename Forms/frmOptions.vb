@@ -8,7 +8,7 @@ Imports System.Xml
 Public Class frmOptions
     Public Const SetDefaults = True
     'Dim Preferences As New _Preferences.Preferences
-    Dim moviefolders As New List(Of String)
+    Dim moviefolders As New List(Of str_RootPaths)
     Dim tvfolders As New List(Of String)
 
 
@@ -823,7 +823,9 @@ Public Class frmOptions
                 Next
 
                 If allok = True Then
-                    Preferences.movieFolders.Add(thefoldernames)
+                    Dim t As New str_RootPaths
+                    t.rpath = thefoldernames
+                    Preferences.movieFolders.Add(t)
                     ListBox2.Items.Add(thefoldernames)
                     ListBox2.Refresh()
                 Else

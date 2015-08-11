@@ -3971,7 +3971,7 @@ Public Class Form1
             If Preferences.movrootfoldercheck Then
                 For Each moviefolder In movieFolders
                     Dim movfolder As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace("\" & workingMovieDetails.fileinfo.filename, "")
-                    If moviefolder = movfolder Then isrootfolder = True 'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
+                    If moviefolder.rpath = movfolder Then isrootfolder = True 'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
                 Next
             End If
             GroupBoxFanartExtrathumbs.Enabled = Not isrootfolder 'Or usefoldernames Or allfolders ' Visible 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
@@ -6610,6 +6610,8 @@ Public Class Form1
                     Dim individualposter As New TvBanners
                     For Each results In thisresult.ChildNodes
                         Select Case results.Name
+                            Case "id"
+                                individualposter.id = results.InnerText
                             Case "url"
                                 individualposter.Url = results.InnerText
                             Case "bannertype"
@@ -10333,9 +10335,10 @@ End Sub
             End If
             If TextBox45.Text = "" Then
                 For Each pat In movieFolders
+                    If Not pat.selected Then Continue For
                     TextBox45.Text += "<folder>" & vbCrLf
-                    TextBox45.Text += "    <mc>" & pat & "</mc>" & vbCrLf
-                    TextBox45.Text += "    <xbmc>" & pat & "</xbmc>" & vbCrLf
+                    TextBox45.Text += "    <mc>" & pat.rpath & "</mc>" & vbCrLf
+                    TextBox45.Text += "    <xbmc>" & pat.rpath & "</xbmc>" & vbCrLf
                     TextBox45.Text += "</folder>" & vbCrLf & vbCrLf
                 Next
                 For Each pat In Preferences.offlinefolders
@@ -12455,9 +12458,11 @@ End Sub
     End Sub
 
     Private Sub mov_PreferencesDisplay()
-        ListBox7.Items.Clear()
+        clbx_MovieRoots.Items.Clear()
+        'ListBox7.Items.Clear()
         For Each item In movieFolders
-            ListBox7.Items.Add(item)
+            clbx_MovieRoots.Items.Add(item.rpath, item.selected)
+            'ListBox7.Items.Add(item)
         Next
         ListBox15.Items.Clear()
         For Each item In Preferences.offlinefolders
@@ -17664,7 +17669,7 @@ End Sub
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
             Dim exists As Boolean = False
-            For Each item In ListBox7.Items
+            For Each item In clbx_MovieRoots.items 'ListBox7.Items
                 If item.ToString.ToLower = tempstring.ToLower Then
                     exists = True
                     Exit For
@@ -17675,15 +17680,19 @@ End Sub
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
-                    ListBox7.Items.Add(tempstring)
-                    ListBox7.Refresh()
+                    clbx_MovieRoots.Items.Add(tempstring, True)
+                    clbx_MovieRoots.Refresh()
+                    'ListBox7.Items.Add(tempstring)
+                    'ListBox7.Refresh()
                     tbMovieManualPath.Text = ""
                     'newTvFolders.Add(tempstring)
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
-                        ListBox7.Items.Add(tempstring)
-                        ListBox7.Refresh()
+                        clbx_MovieRoots.Items.Add(tempstring, True)
+                        clbx_MovieRoots.Refresh()
+                        'ListBox7.Items.Add(tempstring)
+                        'ListBox7.Refresh()
                         tbMovieManualPath.Text = ""
                         'newTvFolders.Add(tempstring)
                     End If
@@ -17707,8 +17716,10 @@ End Sub
                 thefoldernames = (theFolderBrowser.SelectedPath)
                 Preferences.lastpath = thefoldernames
                 If allok = True Then
-                    ListBox7.Items.Add(thefoldernames)
-                    ListBox7.Refresh()
+                    clbx_MovieRoots.Items.Add(thefoldernames, True)
+                    clbx_MovieRoots.Refresh()
+                    'ListBox7.Items.Add(thefoldernames)
+                    'ListBox7.Refresh()
                 Else
                     MsgBox("        Folder Already Exists")
                 End If
@@ -17718,13 +17729,58 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ListBox7_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox7.DragDrop
+  '  Private Sub ListBox7_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox7.DragDrop
+  '      Dim folders() As String
+  '      droppedItems.Clear()
+  '      folders = e.Data.GetData(DataFormats.filedrop)
+  '      For f = 0 To UBound(folders)
+  '          If Preferences.movieFolders.Contains(folders(f)) Then Continue For
+  '          If ListBox7.Items.Contains(folders(f)) Then Continue For
+		'    Dim skip As Boolean = False
+		'    For Each item In droppedItems
+		'	    If item = folders(f) Then
+		'		    skip = True
+		'		    Exit For
+		'	    End If
+		'    Next
+		'If Not skip Then droppedItems.Add(folders(f))
+  '      Next
+  '      If droppedItems.Count < 1 Then Exit Sub
+  '      For Each item In droppedItems
+  '          ListBox7.Items.Add(item)
+  '      Next
+  '      ListBox7.Refresh()
+  '  End Sub
+
+  '  Private Sub ListBox7_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox7.DragEnter
+  '      Try
+  '          e.Effect = DragDropEffects.Copy
+  '      Catch ex As Exception
+  '          ExceptionHandler.LogError(ex)
+  '      End Try
+  '  End Sub
+
+    'Private Sub ListBox7_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox7.KeyDown
+    '    If e.KeyCode = Keys.Delete AndAlso ListBox7.SelectedItem <> Nothing
+    '        Call btn_removemoviefolder.PerformClick()
+    '    End If
+    'End Sub
+
+    Private Sub clbx_MovieRoots_DragDrop(sender As Object, e As DragEventArgs) Handles clbx_MovieRoots.DragDrop
         Dim folders() As String
         droppedItems.Clear()
         folders = e.Data.GetData(DataFormats.filedrop)
         For f = 0 To UBound(folders)
-            If Preferences.movieFolders.Contains(folders(f)) Then Continue For
-            If ListBox7.Items.Contains(folders(f)) Then Continue For
+            Dim exists As Boolean = False
+            For Each rtpath In Preferences.movieFolders
+                If rtpath.rpath = folders(f) Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists Then Continue For
+            'If Preferences.movieFolders.Contains(folders(f)) Then Continue For
+            If clbx_MovieRoots.Items.Contains(folders(f)) Then Continue For
 		    Dim skip As Boolean = False
 		    For Each item In droppedItems
 			    If item = folders(f) Then
@@ -17736,12 +17792,12 @@ End Sub
         Next
         If droppedItems.Count < 1 Then Exit Sub
         For Each item In droppedItems
-            ListBox7.Items.Add(item)
+            clbx_MovieRoots.Items.Add(item, True)
         Next
-        ListBox7.Refresh()
+        clbx_MovieRoots.Refresh()
     End Sub
 
-    Private Sub ListBox7_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox7.DragEnter
+    Private Sub clbx_MovieRoots_DragEnter(sender As Object, e As DragEventArgs) Handles clbx_MovieRoots.DragEnter
         Try
             e.Effect = DragDropEffects.Copy
         Catch ex As Exception
@@ -17749,17 +17805,21 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ListBox7_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox7.KeyDown
-        If e.KeyCode = Keys.Delete AndAlso ListBox7.SelectedItem <> Nothing
+    Private Sub clbx_MovieRoots_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbx_MovieRoots.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso clbx_MovieRoots.SelectedItem <> Nothing
             Call btn_removemoviefolder.PerformClick()
         End If
     End Sub
 
     Private Sub btn_removemoviefolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removemoviefolder.Click
         Try
-            While ListBox7.SelectedItems.Count > 0
-                ListBox7.Items.Remove(ListBox7.SelectedItems(0))
+            While clbx_MovieRoots.SelectedItems.Count > 0
+                clbx_MovieRoots.Items.Remove(clbx_MovieRoots.SelectedItems(0))
             End While
+            'While ListBox7.SelectedItems.Count > 0
+            '    ListBox7.Items.Remove(ListBox7.SelectedItems(0))
+            'End While
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17907,10 +17967,10 @@ End Sub
         Dim offlinefolderstoadd As New List(Of String)
         Dim folderstoremove As New List(Of String)
         Dim offlinefolderstoremove As New List(Of String)
-        For Each item In ListBox7.Items
+        For Each item In clbx_MovieRoots.Items  'ListBox7.Items
             Dim add As Boolean = True
             For Each folder In movieFolders
-                If folder = item Then add = False
+                If folder.rpath = item Then add = False
             Next
             If add = True Then folderstoadd.Add(item)
         Next
@@ -17923,10 +17983,13 @@ End Sub
         Next
         For Each item In movieFolders
             Dim remove As Boolean = True
-            For Each folder In ListBox7.Items
-                If folder = item Then remove = False
+            For Each folder In clbx_MovieRoots.Items
+                If folder = item.rpath Then 
+                    remove = False
+                    Exit For
+                End If
             Next
-            If remove = True Then folderstoremove.Add(item)
+            If remove = True Then folderstoremove.Add(item.rpath)
         Next
         For Each item In Preferences.offlinefolders
             Dim remove As Boolean = True
@@ -17953,7 +18016,7 @@ End Sub
             For f = movieFolders.Count - 1 To 0 Step -1
                 Dim remove As Boolean = False
                 For Each folder In folderstoremove
-                    If movieFolders(f) = folder Then
+                    If movieFolders(f).rpath = folder Then
                         remove = True
                     End If
                 Next
@@ -17974,7 +18037,9 @@ End Sub
             Application.DoEvents()
 
             For Each folder In folderstoadd
-                movieFolders.Add(folder)
+                Dim t As New str_RootPaths
+                t.rpath = folder
+                movieFolders.Add(t)
             Next
             For Each folder In offlinefolderstoadd
                 Preferences.offlinefolders.Add(folder)
@@ -17989,6 +18054,17 @@ End Sub
             Preferences.ConfigSave()
             '     messbox.Close 'Where's the open???
         End If
+        For f = 0 to clbx_MovieRoots.Items.Count-1
+            Dim rtpath As String = clbx_MovieRoots.items(f)
+            Dim chkstate As CheckState = clbx_MovieRoots.GetItemCheckState(f)
+            Dim selected As Boolean = (chkstate = CheckState.Checked)
+            For Each item In Preferences.movieFolders
+                If item.rpath = rtpath Then
+                    item.selected = selected
+                    Exit For
+                End If
+            Next
+        Next
 
         mov_RebuildMovieCaches()
         TabControl2.SelectedIndex = 0

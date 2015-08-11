@@ -2828,7 +2828,7 @@ Public Class Movie
          
         'Get current root folder
         For Each rtfold In Preferences.movieFolders
-            If FilePath.Contains(rtfold) Then currentroot = rtfold
+            If FilePath.Contains(rtfold.rpath) Then currentroot = rtfold.rpath
         Next
         If currentroot.LastIndexOf("\") <> currentroot.Length-1 Then currentroot = currentroot & "\"
 
@@ -3595,7 +3595,7 @@ Public Class Movie
             End If
         Next
         For Each rtfold In Preferences.movieFolders
-            If FilePath.Contains(rtfold) Then currentroot = rtfold
+            If FilePath.Contains(rtfold.rpath) Then currentroot = rtfold.rpath
         Next
         Dim inrootfolder As Boolean = ((currentroot & "\") = FilePath)
         Dim newFolder As String = UserDefinedBaseFolderName

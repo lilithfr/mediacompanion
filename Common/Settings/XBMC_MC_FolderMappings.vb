@@ -191,7 +191,11 @@ Public Class XBMC_MC_FolderMappings
     ReadOnly Property MC_Folders As List(Of String)
         Get
             Dim MovFoldList As New List(Of String)
-            MovFoldList.AddRange(Preferences.movieFolders)
+            For Each rtpath In Preferences.movieFolders 
+                If rtpath.selected Then
+                    MovFoldList.Add(rtpath.rpath)
+                End If
+            Next
             MovFoldList.AddRange(Preferences.offlinefolders)
             Return IIf(Me.Type="Movie",MovFoldList,Preferences.tvFolders) '(Me.Type="Movie",Preferences.movieFolders,Preferences.tvFolders)
         End Get
