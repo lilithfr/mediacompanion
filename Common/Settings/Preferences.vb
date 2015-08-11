@@ -99,7 +99,7 @@ Public Class Preferences
     'Saved Folder Prefs
     Public Shared tvFolders         As New List(Of String)
     Public Shared tvRootFolders     As New List(Of String)
-    Public Shared movieFolders      As New List(Of String)
+    Public Shared movieFolders      As New List(Of str_RootPaths)
     Public Shared offlinefolders    As New List(Of String)
     Public Shared stubfolder        As String
     Public Shared stubmessage       As String = "Insert Media to Continue"
@@ -850,7 +850,8 @@ Public Class Preferences
         Next
 
         For Each path In movieFolders
-            root.AppendChild(doc, "nfofolder", path)
+            Dim t As String = path.rpath & "|" & path.selected 
+            root.AppendChild(doc, "nfofolder", t)
         Next
         root.AppendChild(doc, "stubfolder", stubfolder)
         root.AppendChild(doc, "stubmessage", stubmessage)
@@ -1276,7 +1277,11 @@ Public Class Preferences
 
                     Case "nfofolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        movieFolders.Add(decodestring)
+                        Dim t() As String = decodestring.Split("|")
+                        Dim u As New str_RootPaths
+                        u.rpath = t(0)
+                        If t.Count > 1 Then u.selected = t(1)
+                        movieFolders.Add(u)
                     Case "stubfolder"
                         stubfolder = thisresult.InnerText 
                     Case "stubmessage"
@@ -2107,7 +2112,7 @@ Public Class Preferences
             Dim lastfolder As String = Utilities.GetLastFolder(fullpath)
             Dim rtfolder As String = Nothing
             For Each rfolder In Preferences.movieFolders
-                rtfolder = Path.GetFileName(rfolder)
+                rtfolder = Path.GetFileName(rfolder.rpath)
                 If rtfolder = lastfolder Then isroot = True
             Next
         End If
@@ -2472,12 +2477,14 @@ Public Class Preferences
         Dim match As Boolean = False
         Try
             For Each folder In movieFolders
-                If isfolderinlist.ToLower = folder.ToLower Then
+                If isfolderinlist.ToLower = folder.rpath.ToLower Then
                     match = True
                     Return match
                 End If
             Next
-            movieFolders.Add(isfolderinlist)
+            Dim t As New str_RootPaths 
+            t.rpath = isfolderinlist
+            movieFolders.Add(t)
             Return True
         Catch ex As Exception
             MsgBox("Problem adding [" & isfolderinlist &"] to MovieFolder List. Error Message [" & ex.Message & "]")

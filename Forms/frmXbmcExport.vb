@@ -73,8 +73,8 @@ Public Class frmXbmcExport
             For Each ph In Preferences.movieFolders
                 Dim n As Integer = MCExportdgv.Rows.Add()
                 MCExportdgv.Rows(n).Cells(0).Value = "Movie"
-                MCExportdgv.Rows(n).Cells(1).Value = ph
-                MCExportdgv.Rows(n).Cells(2).Value = ph
+                MCExportdgv.Rows(n).Cells(1).Value = ph.rpath
+                MCExportdgv.Rows(n).Cells(2).Value = ph.rpath
             Next
         End If
         If TVSeries.Count > 0 Then
@@ -128,7 +128,7 @@ Public Class frmXbmcExport
         Next
         For Each ph In Preferences.movieFolders
             Dim t As New XBMCPaths
-            t.rootpath = ph
+            t.rootpath = ph.rpath
             t.pathsource = "movies"
             Pathlist.Add(t)
         Next

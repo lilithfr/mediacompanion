@@ -940,9 +940,29 @@ Public Class Movies
         RemoveHandler oMovie.FileDownloadFailed      , AddressOf newMovie_FileDownloadFailed
     End Sub
     
+    Public Sub AddOnlineFolders( folders As List(Of String), searchfolders As List(Of str_RootPaths) )
+        For Each moviefolder In searchfolders 'Preferences.movieFolders
+            If Not moviefolder.selected Then Continue For
+            Dim dirInfo As New DirectoryInfo(moviefolder.rpath)
+
+            If dirInfo.Exists Then
+                folders.Add(moviefolder.rpath)
+                ReportProgress("Searching movie Folder: " & dirInfo.FullName.ToString & vbCrLf)
+                Try
+                    For Each subfolder In Utilities.EnumerateFolders(moviefolder.rpath)       'Max levels restriction of 6 deep removed
+                        folders.Add(subfolder)
+                    Next
+                Catch ex As Exception
+                    ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+                End Try
+            End If
+            
+            If Cancelled then Exit Sub
+        Next
+    End Sub
+
     Public Sub AddOnlineFolders( folders As List(Of String), searchfolders As List(Of String) )
         For Each moviefolder In searchfolders 'Preferences.movieFolders
-
             Dim dirInfo As New DirectoryInfo(moviefolder)
 
             If dirInfo.Exists Then
@@ -1475,8 +1495,12 @@ Public Class Movies
        ' End If
 
         Dim t As New List(Of String)
-
-        t.AddRange(Preferences.movieFolders)
+        For Each rtpath In Preferences.movieFolders 
+                If rtpath.selected Then
+                    t.Add(rtpath.rpath)
+                End If
+            Next
+        't.AddRange(Preferences.movieFolders)
         t.AddRange(Preferences.offlinefolders)
 
         ReportProgress("Searching movie folders...")
@@ -1540,7 +1564,12 @@ Public Class Movies
 
         Dim RootMovieFolders As New List(Of String)
 
-        RootMovieFolders.AddRange(Preferences.movieFolders)
+        For Each rtpath In Preferences.movieFolders 
+                If rtpath.selected Then
+                    RootMovieFolders.Add(rtpath.rpath)
+                End If
+            Next
+        'RootMovieFolders.AddRange(Preferences.movieFolders)
         RootMovieFolders.AddRange(Preferences.offlinefolders)
 
         ReportProgress("Searching movie folders...")
@@ -2112,12 +2141,12 @@ Public Class Movies
 
     Public Shared Sub SpinUpDrives
         For each item In Preferences.movieFolders
-            
+            If Not item.selected Then Continue For
             Dim bw As BackgroundWorker = New BackgroundWorker
 
             AddHandler bw.DoWork, AddressOf bw_SpinupDrive
 
-            bw.RunWorkerAsync(item)
+            bw.RunWorkerAsync(item.rpath)
         Next
     End Sub
 

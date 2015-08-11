@@ -4180,6 +4180,8 @@ Partial Public Class Form1
                         Dim individualposter As New TvBanners
                         For Each results In thisresult.ChildNodes
                             Select Case results.Name
+                                Case "id"
+                                    individualposter.id = results.InnerText
                                 Case "url"
                                     individualposter.Url = results.InnerText
                                 Case "bannertype"
