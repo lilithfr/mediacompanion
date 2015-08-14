@@ -6745,10 +6745,21 @@ Public Class Form1
 
                 tvpostercheckboxes() = New RadioButton()
                 With tvpostercheckboxes
-                    .Location = New Point(locationX + 50, locationY + 166) '179
+                    .Location = New Point(locationX + 19, locationY + 166) '179
+                    .Width = 79
+                    .Height = 32
                     .Name = "postercheckbox" & itemcounter.ToString
                     .SendToBack()
-                    .Text = " "
+                    .CheckAlign = ContentAlignment.TopCenter
+                    If usedlist(f).Resolution = "season" Then
+                        .Text = " "
+                    ElseIf usedlist(f).Resolution <> "" Then
+                        .Text = usedlist(f).Resolution 
+                    Else
+                        .Text = "?"
+                    End If
+                    .TextAlign = ContentAlignment.BottomCenter
+                    '.Text = " "
                     .Tag = usedlist(f).Url
                     AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
                 End With
@@ -6759,7 +6770,7 @@ Public Class Form1
                 Me.Refresh()
                 Application.DoEvents()
                 If tempboolean = True Then
-                    locationY = 192
+                    locationY = (192 + 19)
                 Else
                     locationX += 120
                     locationY = 0
