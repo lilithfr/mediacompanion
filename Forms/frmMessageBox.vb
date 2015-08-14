@@ -3,6 +3,7 @@ Public Class frmMessageBox
 
     Public Property Cancelled As Boolean
     Public Property btn1site As String
+    Public Property IsActive As Boolean
 
     Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "", Optional ByVal Btn1 As String = "", Optional ByVal Btn2 as String = "")
         InitializeComponent()
@@ -43,6 +44,8 @@ Public Class frmMessageBox
         TextBox1.Text = line1
         TextBox2.Text = line2
         TextBox3.Text = line3
+        IsActive = True
+        Me.TopMost = True
     End Sub
 
     Private Sub DeactivateMessageBox(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Deactivate
@@ -57,6 +60,7 @@ Public Class frmMessageBox
     Private Sub CloseMessageBox(ByVal sender As Object, ByVal e As FormClosingEventArgs) Handles Me.FormClosing
         Try
             Me.Cursor = Cursors.Default
+            IsActive = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

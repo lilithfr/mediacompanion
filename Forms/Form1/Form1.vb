@@ -2974,17 +2974,17 @@ Public Class Form1
             movie.SaveNFO()
             UpdateFilteredList()
         Else
-            Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
-            mess.TextBox3.Text = "Press ESC to cancel"
-            mess.TopMost = True
-            mess.Show()
-            mess.Refresh()
+            messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
+            messbox.TextBox3.Text = "Press ESC to cancel"
+            messbox.TopMost = True
+            messbox.Show()
+            messbox.Refresh()
             Application.DoEvents()
             Dim Startfullpathandfilename As String = ""
             If Not ISNothing(DataGridViewMovies.CurrentRow) Then
                 Dim i As Integer = DataGridViewMovies.CurrentRow.Index
                 Startfullpathandfilename = DataGridViewMovies.Item(0, i).Value.ToString
-                mess.Cancelled = False
+                messbox.Cancelled = False
                 Dim pos As Integer = 0
                 Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
                 For Each nfo As String In NfosToSave
@@ -2992,7 +2992,7 @@ Public Class Form1
                     Dim movie As Movie = oMovies.LoadMovie(nfo)
                     If IsNothing(movie) Then Continue For
                     pos += 1
-                    mess.TextBox2.Text = pos.ToString + " of " + NfosToSave.Count.ToString
+                    messbox.TextBox2.Text = pos.ToString + " of " + NfosToSave.Count.ToString
                     If directortxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
                     If creditstxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
                     If genretxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
@@ -3032,20 +3032,20 @@ Public Class Form1
                     movie.UpdateMovieCache()
                     movie.SaveNFO()
                     Application.DoEvents()
-                    If mess.Cancelled Then Exit For
+                    If messbox.Cancelled Then Exit For
                 Next
 
                 ProgState = ProgramState.Other
 
             Else
-                mess.Close()
+                messbox.Close()
                 MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
                 Exit Sub
             End If
 
             workingMovie.fullpathandfilename = Startfullpathandfilename
             mov_FormPopulate()
-            mess.Close()
+            messbox.Close()
         End If
     End Sub
 
@@ -4007,6 +4007,11 @@ Public Class Form1
 
     End Sub
 
+    Private Sub TabControl2_Selecting(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TabControlCancelEventArgs) Handles TabControl2.Selecting
+        If messbox.visible Then e.Cancel = True
+        'e.Cancel = True
+    End Sub
+
     Private Sub mov_ChangeMovieSetup(ByVal engine As String)
         Dim tempstring As String = ""
         Dim isroot As Boolean = Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -4718,7 +4723,7 @@ Public Class Form1
     End Sub
 
     Private Sub mov_PosterSelectionDisplay()
-        Dim names As New List(Of String)()
+        Dim names As New List(Of str_ListOfPosters)
         messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
@@ -4736,11 +4741,13 @@ Public Class Form1
             End If
             If posterArray.Count > 10 Then
                 For f = 0 To Preferences.maximumthumbs - 1
-                    names.Add(posterArray(f).ldUrl)
+                    names.Add(posterArray(f))
+                    'names.Add(posterArray(f).ldUrl)
                 Next
             Else
                 For f = 0 To posterArray.Count - 1
-                    names.Add(posterArray(f).ldUrl)
+                    names.Add(posterArray(f))
+                    'names.Add(posterArray(f).ldUrl)
                 Next
             End If
 
@@ -4775,8 +4782,8 @@ Public Class Form1
             Dim locationX As Integer = 0
             Dim locationY As Integer = 0
 
-            For Each item As String In names
-                Dim item2 As String = Utilities.Download2Cache(item)
+            For Each item In names
+                Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                 Try
                     posterPicBoxes() = New PictureBox()
                     With posterPicBoxes
@@ -4795,10 +4802,18 @@ Public Class Form1
 
                     posterCheckBoxes() = New RadioButton()
                     With posterCheckBoxes
-                        .Location = New Point(locationX + 50, locationY + 166) '179
+                        .Location = New Point(locationX + 18, locationY + 166) '179
+                        .Width = 79
+                        .Height = 32
                         .Name = "postercheckbox" & itemcounter.ToString
                         .SendToBack()
-                        .Text = " "
+                        .CheckAlign = ContentAlignment.TopCenter
+                        If item.hdheight <> "" Then
+                            .Text = item.hdwidth & " x " & item.hdheight 
+                        Else
+                            .Text = "?"
+                        End If
+                        .TextAlign = ContentAlignment.BottomCenter
                         AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
                     End With
 
@@ -4809,7 +4824,7 @@ Public Class Form1
                     Me.Refresh()
                     Application.DoEvents()
                     If tempboolean = True Then
-                        locationY = 192
+                        locationY = (192 + 19)
                     Else
                         locationX += 120
                         locationY = 0
@@ -4820,6 +4835,7 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
+                If messbox.Cancelled Then Exit For
             Next
         Else
             Dim mainlabel2 As Label
@@ -5985,7 +6001,7 @@ Public Class Form1
                 Exit Sub
             End If
 
-            Dim messbox As New frmMessageBox("Renaming episodes,", "", "   Please Wait")
+            messbox = New frmMessageBox("Renaming episodes,", "", "   Please Wait")
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
@@ -6219,7 +6235,7 @@ Public Class Form1
                 End If
             End If
 
-            Dim messbox As New frmMessageBox("Getting Media Tags for episodes,", "", "   Please Wait")
+            messbox = New frmMessageBox("Getting Media Tags for episodes,", "", "   Please Wait")
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
@@ -6290,7 +6306,7 @@ Public Class Form1
                     seasonnumber = Thisseason.SeasonNumber
                 End If
             End If
-            Dim messbox As New frmMessageBox("Scanning for Missing episode thumbnails,", "and downloading if available.", "   Please Wait")
+            messbox = New frmMessageBox("Scanning for Missing episode thumbnails,", "and downloading if available.", "   Please Wait")
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
@@ -6844,7 +6860,7 @@ Public Class Form1
                 rb.Checked = True
             End If
         Next
-        Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Res Image")
+        messbox = New frmMessageBox("Please wait,", "", "Downloading Full Res Image")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
         Me.Refresh()
@@ -6956,7 +6972,7 @@ Public Class Form1
                 End If
             End If
 
-            Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
+            messbox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -8152,9 +8168,9 @@ Public Class Form1
 
     Private Sub util_ProfileSetup()
 
-        Dim mess As New frmMessageBox(" Please Wait", , "Loading Profile")
-        mess.Show()
-        mess.Refresh()
+        messbox = New frmMessageBox(" Please Wait", , "Loading Profile")
+        messbox.Show()
+        messbox.Refresh()
         Application.DoEvents()
         Me.Enabled = False
         If IO.File.Exists(workingProfile.config) Then
@@ -8291,7 +8307,7 @@ Public Class Form1
 
 
         Me.Enabled = True
-        mess.Close()
+        messbox.Close()
     End Sub
 
     Private Sub mov_SwitchRuntime()
@@ -9713,7 +9729,7 @@ End Sub
 
     Private Sub mov_FanartGet()
         If IsNothing(workingMovieDetails) Then Return
-        Dim messbox As New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
+        messbox = New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
         messbox.Show() : messbox.Refresh()
         Application.DoEvents()
         Dim tmdb       As New TMDb
@@ -9825,7 +9841,7 @@ End Sub
         Dim success As Boolean = False
         Try 
             If workingMovieDetails Is Nothing Then Exit Sub
-            Dim messbox As New frmMessageBox("          Please Wait,", "", "Attempting to download Poster from " & source.ToUpper)
+            messbox = New frmMessageBox("          Please Wait,", "", "Attempting to download Poster from " & source.ToUpper)
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
@@ -10116,7 +10132,7 @@ End Sub
                     End If
                 Next
                 If tempstring = "" Then tempstring = "Checking for missing episodes"
-                Dim messbox As New frmMessageBox(tempstring, "", "Please Wait")
+                messbox = New frmMessageBox(tempstring, "", "Please Wait")
                 messbox.Show()
                 messbox.Refresh()
                 Application.DoEvents()
@@ -16132,9 +16148,9 @@ End Sub
                 End If
                 Call mov_SaveQuick()
             ElseIf DataGridViewMovies.SelectedRows.Count > 1 Then
-                Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")
-                mess.Show()
-                mess.Refresh()
+                messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")
+                messbox.Show()
+                messbox.Refresh()
                 Dim watched As String = ""
                 If btnMovWatched.Text = "&Watched" Then
                     btnMovWatched.Text = "Un&watched"
@@ -16173,7 +16189,7 @@ End Sub
                         Next
                     End If
                 Next
-                mess.Close()
+                messbox.Close()
             End If
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Catch ex As Exception
@@ -16960,6 +16976,7 @@ End Sub
             Dim tempstring2 As String = ""
             Dim allok As Boolean = False
             Dim backup As String = ""
+            If messbox.Visible Then messbox.Close()
             messbox = New frmMessageBox("Downloading Poster...")
             messbox.Show()
             For Each button As Control In Me.panelAvailableMoviePosters.Controls
@@ -17485,7 +17502,7 @@ End Sub
         If ColIndexFromMouseDown < 0 Then Exit Sub
         Dim RowIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).RowIndex
         If RowIndexFromMouseDown < 0 Then Exit Sub
-        Dim messbox As frmMessageBox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
+        messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
         If ColIndexFromMouseDown = 1 Then
             Try
                 Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
@@ -19303,7 +19320,7 @@ End Sub
                 MsgBox("Please select a language that is available for this show")
                 Exit Sub
             End If
-            Dim messbox As frmMessageBox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
+            messbox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             messbox.Refresh()
@@ -19840,7 +19857,7 @@ End Sub
             If IsNumeric(tb_HmFanartTime.Text) Then
                 Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
                 Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
-                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
                 For Each ext In Utilities.VideoExtensions
                     Dim tempstring2 As String = pathandfilename & ext
                     If IO.File.Exists(tempstring2) Then
@@ -20454,7 +20471,7 @@ End Sub
             If IsNumeric(tb_HmPosterTime.Text) Then
                 Dim thumbpathandfilename As String = IO.Path.Combine(Utilities.CacheFolderPath, WorkingHomeMovie.fileinfo.posterpath.Replace(WorkingHomeMovie.fileinfo.path,""))  
                 Dim pathandfilename As String = WorkingHomeMovie.fileinfo.filenameandpath  
-                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
                 If IO.File.Exists(pathandfilename) Then
                     Dim seconds As Integer = 10
                     If Convert.ToInt32(tb_HmPosterTime.Text) > 0 Then
@@ -20704,12 +20721,12 @@ End Sub
 
     Private Sub EmptyCacheFolderToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles EmptyCacheFolderToolStripMenuItem.Click
         If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
-            Dim mess As New frmMessageBox("Emptying Cache Folder", , "   Please Wait.   ")
-            mess.Show()
-            mess.Refresh()
+            messbox = New frmMessageBox("Emptying Cache Folder", , "   Please Wait.   ")
+            messbox.Show()
+            messbox.Refresh()
             Application.DoEvents()
             CleanCacheFolder(True)
-            mess.Close()
+            messbox.Close()
         End If
     End Sub
 
@@ -21005,9 +21022,9 @@ End Sub
     End Sub
     
     Public Function GetlistofPlots() As String
-        Dim mess As New frmMessageBox("Gathering plots", , "     Please Wait.     ")
-        mess.Show()
-        mess.Refresh()
+        messbox = New frmMessageBox("Gathering plots", , "     Please Wait.     ")
+        messbox.Show()
+        messbox.Refresh()
         Dim ListofPlots As New List(Of String)
         Dim _imdbScraper As New Classimdb
         Dim tmdb As New TMDB
@@ -21021,7 +21038,7 @@ End Sub
         End Try
         ListofPlots = _imdbScraper.GetImdbPlots(workingMovieDetails.fullmoviebody.imdbid)
         If Not IsNothing(tmdbplot) AndAlso tmdbplot <> "" Then ListofPlots.Add(tmdbplot)
-        mess.Close()
+        messbox.Close()
         If ListofPlots.Count < 2 Then 
             MsgBox("No Extra Plots found for this movie", MsgBoxStyle.Exclamation)
             Return Nothing
