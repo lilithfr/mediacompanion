@@ -9,12 +9,13 @@ Imports System.Management
 
 
 Public Class frmSplashscreen
-
+    Public Property Cancelled As Boolean
     Dim tempstring As String = ""
 
     Private Sub splashscreen_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             'Me.TopMost = True
+            Me.Focus()
             CheckForIllegalCrossThreadCalls = False
 
             Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
@@ -23,6 +24,13 @@ Public Class frmSplashscreen
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub splashscreen_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+        If  e.KeyCode=Keys.Escape Then
+            Cancelled = True
+        End If
     End Sub
 
 End Class

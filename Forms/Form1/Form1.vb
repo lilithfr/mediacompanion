@@ -437,7 +437,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
@@ -21114,4 +21114,35 @@ End Sub
         'End While
     End Sub
 
+    Private Sub TSMI_AboutMC_Click(sender As Object, e As EventArgs) Handles TSMI_AboutMC.Click
+        Dim txt As String
+        txt = "Media Companion.  Designed by William Adamson in 2008"
+        txt &=  vbCrLf & "" & vbCrLf & "OpenSourced in December 2010"
+        txt &=  vbCrLf & "" & vbCrLf & "Worked on by billyad2000,  EvLSnoopY,  FreddyKrueger,  StormyKnight,  Playos,  HueyHQ,  AnotherPhil,  anand,  vbat99 and many more"
+        txt &=  vbCrLf  & vbCrLf & If(Environment.Is64BitProcess, "64bit build", "32bit build")
+        Dim abtfrm As New frmSplashscreen 
+        Dim scrn As Integer = splashscreenread()
+        'If multimonitor Then
+        '    abtfrm.Bounds = screen.AllScreens(scrn).Bounds
+        '    abtfrm.StartPosition = FormStartPosition.Manual
+        '    Dim x As Integer = screen.AllScreens(scrn).Bounds.X
+        '    abtfrm.Location = New Point(x + 250, 250)
+        '    abtfrm.TopMost = True
+        'End If
+        Dim MClocation as Point
+        abtfrm.StartPosition = FormStartPosition.Manual
+        MClocation = Me.Location
+        abtfrm.Location = New Point(MClocation.X + 50, MClocation.Y + 50)
+        
+        abtfrm.Label1.Visible = False
+        abtfrm.Label3.Visible = False
+        abtfrm.lbl_about.Text = txt
+        abtfrm.lbl_about.Visible = True
+        abtfrm.TopMost = True
+        abtfrm.Show()
+        Do Until abtfrm.cancelled
+            Application.DoEvents()
+        Loop
+        abtfrm.Close()
+    End Sub
 End Class

@@ -27,18 +27,19 @@ Partial Class frmSplashscreen
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.SuspendLayout()
+        Me.lbl_about = New System.Windows.Forms.Label()
+        Me.SuspendLayout
         '
         'BackgroundWorker1
         '
-        Me.BackgroundWorker1.WorkerReportsProgress = True
-        Me.BackgroundWorker1.WorkerSupportsCancellation = True
+        Me.BackgroundWorker1.WorkerReportsProgress = true
+        Me.BackgroundWorker1.WorkerSupportsCancellation = true
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
+        Me.Label3.AutoSize = true
         Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte), True)
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte), true)
         Me.Label3.Location = New System.Drawing.Point(494, 305)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(16, 15)
@@ -47,9 +48,9 @@ Partial Class frmSplashscreen
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoSize = true
         Me.Label1.BackColor = System.Drawing.Color.Transparent
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte), True)
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte), true)
         Me.Label1.Location = New System.Drawing.Point(494, 289)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(61, 15)
@@ -58,9 +59,9 @@ Partial Class frmSplashscreen
         '
         'Label2
         '
-        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label2.Location = New System.Drawing.Point(488, 9)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(200, 16)
@@ -68,14 +69,23 @@ Partial Class frmSplashscreen
         Me.Label2.Text = "Version"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
+        'lbl_about
+        '
+        Me.lbl_about.Location = New System.Drawing.Point(391, 75)
+        Me.lbl_about.Name = "lbl_about"
+        Me.lbl_about.Size = New System.Drawing.Size(260, 172)
+        Me.lbl_about.TabIndex = 6
+        Me.lbl_about.Visible = false
+        '
         'frmSplashscreen
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
+        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"),System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(700, 350)
-        Me.ControlBox = False
+        Me.ControlBox = false
+        Me.Controls.Add(Me.lbl_about)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Label2)
@@ -83,14 +93,15 @@ Partial Class frmSplashscreen
         Me.MaximumSize = New System.Drawing.Size(700, 350)
         Me.MinimumSize = New System.Drawing.Size(700, 350)
         Me.Name = "frmSplashscreen"
-        Me.ShowInTaskbar = False
+        Me.ShowInTaskbar = false
         Me.Text = "splashscreen"
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents lbl_about As Label
 End Class
