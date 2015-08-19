@@ -98,7 +98,7 @@ Public Class Preferences
 
     'Saved Folder Prefs
     Public Shared tvFolders         As New List(Of String)
-    Public Shared tvRootFolders     As New List(Of String)
+    Public Shared tvRootFolders     As New List(Of str_RootPaths)
     Public Shared movieFolders      As New List(Of str_RootPaths)
     Public Shared offlinefolders    As New List(Of String)
     Public Shared stubfolder        As String
@@ -779,6 +779,7 @@ Public Class Preferences
         releaseformat(14) = "DVD"
 
         movieFolders.Clear()
+        tvRootFolders.Clear()
         tvFolders.Clear()
         MVidFolders.Clear()
 
@@ -846,7 +847,8 @@ Public Class Preferences
         Next
 
         For Each path In tvRootFolders
-            root.AppendChild(doc, "tvrootfolder", path)
+            Dim t As String = path.rpath & "|" & path.selected 
+            root.AppendChild(doc, "tvrootfolder", t)
         Next
 
         For Each path In movieFolders
@@ -1294,8 +1296,11 @@ Public Class Preferences
                         tvFolders.Add(decodestring)
                     Case "tvrootfolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        tvRootFolders.Add(decodestring)
-
+                        Dim t() As String = decodestring.Split("|")
+                        Dim u As New str_RootPaths
+                        u.rpath = t(0)
+                        If t.Count > 1 Then u.selected = t(1)
+                        tvRootFolders.Add(u)
                     Case "homemoviefolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         homemoviefolders.Add(decodestring)

@@ -7973,11 +7973,12 @@ Public Class Form1
 
     
 
-    Public Sub tv_ShowFind(ByVal rootfolders As List(Of String), Optional ByVal skiplistboxchk As Boolean = True)
+    Public Sub tv_ShowFind(ByVal rootfolders As List(Of str_RootPaths), Optional ByVal skiplistboxchk As Boolean = True)
         Dim Folders As List(Of String)
         newTvFolders.Clear()
         For Each folder In rootfolders 'ListBox5.Items
-            Folders = Utilities.EnumerateFolders(folder, 0)
+            If Not folder.selected Then Continue For
+            Folders = Utilities.EnumerateFolders(folder.rpath, 0)
             For Each strfolder2 As String In Folders
                 If Not Preferences.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then  'Not ListBox6.Items.Contains(strfolder2)
                     If Not skiplistboxchk AndAlso Not ListBox6.Items.Contains(strfolder2) Then
@@ -10376,8 +10377,8 @@ End Sub
                 Next
                 For Each pat In tvRootFolders
                     TextBox45.Text += "<folder>" & vbCrLf
-                    TextBox45.Text += "    <mc>" & pat & "</mc>" & vbCrLf
-                    TextBox45.Text += "    <xbmc>" & pat & "</xbmc>" & vbCrLf
+                    TextBox45.Text += "    <mc>" & pat.rpath & "</mc>" & vbCrLf
+                    TextBox45.Text += "    <xbmc>" & pat.rpath & "</xbmc>" & vbCrLf
                     TextBox45.Text += "</folder>" & vbCrLf & vbCrLf
                 Next
             End If
@@ -15660,10 +15661,12 @@ End Sub
 
 
     Private Sub tv_FoldersSetup()
-        ListBox5.Items.Clear()
+        clbx_TvRootFolders.Items.Clear()
+        'ListBox5.Items.Clear()
         ListBox6.Items.Clear()
         For Each folder In tvRootFolders
-            ListBox5.Items.Add(folder)
+            clbx_TvRootFolders.Items.Add(folder.rpath, folder.selected)
+            'ListBox5.Items.Add(folder)
         Next
         For Each folder In tvFolders
             ListBox6.Items.Add(folder)
@@ -19464,7 +19467,7 @@ End Sub
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
             Dim exists As Boolean = False
-            For Each item In ListBox5.Items
+            For Each item In clbx_TvRootFolders.items  'ListBox5.Items
                 If item.ToString.ToLower = tempstring.ToLower Then
                     exists = True
                     Exit For
@@ -19475,13 +19478,15 @@ End Sub
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
-                    ListBox5.Items.Add(tempstring)
+                    clbx_TvRootFolders.Items.Add(tempstring, True)
+                    'ListBox5.Items.Add(tempstring)
                     TextBox39.Text = ""
                     tvfolderschanged = True
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
-                        ListBox5.Items.Add(tempstring)
+                        clbx_TvRootFolders.Items.Add(tempstring, True)
+                        'ListBox5.Items.Add(tempstring)
                         TextBox39.Text = ""
                         tvfolderschanged = True
                     End If
@@ -19512,7 +19517,7 @@ End Sub
                 strfolder = (theFolderBrowser.SelectedPath)
                 Preferences.lastpath = strfolder
                 Dim hasseason As Boolean = False
-                If Not ListBox5.Items.Contains(strfolder) Then
+                If Not clbx_TvRootFolders.Items.Contains(strfolder) Then   'ListBox5.Items.Contains(strfolder) Then
                     For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
                         Dim M As Match
                         tempstring3 = strfolder2.ToLower.Replace(strfolder.ToLower,"")
@@ -19525,7 +19530,8 @@ End Sub
                     If hasseason = True Then
                         tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                         If tempint = DialogResult.Yes Then
-                            ListBox5.Items.Add(strfolder)
+                            clbx_TvRootFolders.Items.Add(strfolder, True)
+                            'ListBox5.Items.Add(strfolder)
                             tvfolderschanged = True
                         ElseIf tempint = DialogResult.No Then
                             tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -19539,7 +19545,8 @@ End Sub
                             End If
                         End If
                     Else
-                        ListBox5.Items.Add(strfolder)
+                        clbx_TvRootFolders.Items.Add(strfolder, True)
+                        'ListBox5.Items.Add(strfolder)
                         tvfolderschanged = True
                     End If
                 Else
@@ -19554,10 +19561,14 @@ End Sub
 
     Private Sub btn_TvFoldersRootRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootRemove.Click
         Try
-            While ListBox5.SelectedItems.Count > 0
-                ListBox5.Items.Remove(ListBox5.SelectedItems(0))
+            While clbx_TvRootFolders.SelectedItems.Count > 0
+                clbx_TvRootFolders.Items.Remove(clbx_TvRootFolders.SelectedItems(0))
                 tvfolderschanged = True
             End While
+            'While ListBox5.SelectedItems.Count > 0
+            '    ListBox5.Items.Remove(ListBox5.SelectedItems(0))
+            '    tvfolderschanged = True
+            'End While
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19587,13 +19598,27 @@ End Sub
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
             Dim exists As Boolean = False
+            For each fol In Preferences.tvRootFolders
+                If fol.rpath.ToLower = tempstring.ToLower Then Continue For
+                If tempstring.ToLower.Contains(fol.rpath.ToLower) AndAlso Not fol.selected Then
+                    Dim msg As String = "The series dropped is in a root folder that has been unselected"
+                    msg &= "To avoid catastrophic failure, please re-select"
+                    msg &= "root folder: " & fol.rpath 
+                    msg &= "and attempt again"
+                    MsgBox (msg)
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists Then Exit Sub
+            exists = False
             For Each item In ListBox6.Items
                 If item.ToString.ToLower = tempstring.ToLower Then
                     exists = True
                     Exit For
                 End If
             Next
-            If exists = True Then
+            If exists Then
                 MsgBox("        Folder Already Exists")
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
@@ -19620,7 +19645,7 @@ End Sub
 
     Private Sub btn_TvFoldersAddFromRoot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAddFromRoot.Click
         Try
-            tv_ShowFind(ListBox5.items.Cast(Of String).ToList, False)
+            tv_ShowFind(clbx_TvRootFolders.Items.Cast(Of str_RootPaths).ToList, False)  '(ListBox5.items.Cast(Of String).ToList, False)
             If newTvFolders.Count > 0 Then
                 tvfolderschanged = True
                 For Each item In newTvFolders
@@ -19700,8 +19725,12 @@ End Sub
     Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
         Try
             Preferences.tvRootFolders.Clear()
-            For Each item In ListBox5.Items
-                Preferences.tvRootFolders.Add(item)
+            For f = 0 to clbx_TvRootFolders.Items.Count-1      'ListBox5.Items
+                Dim t As New str_RootPaths 
+                t.rpath = clbx_TvRootFolders.Items(f).ToString
+                Dim chkstate As CheckState = clbx_TvRootFolders.GetItemCheckState(f)
+                t.selected = (chkstate = CheckState.Checked)
+                Preferences.tvRootFolders.Add(t)
             Next
             newTvFolders.Clear()
             Dim tmplist As New List(Of String)
@@ -19721,7 +19750,62 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ListBox5_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox5.DragDrop
+    'Private Sub ListBox5_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox5.DragDrop
+    '    Dim files() As String
+    '    Dim tempstring3 As String
+    '    Dim tempint As Integer = 0
+    '    Dim tempint2 As Integer = 0
+    '    droppedItems.Clear()
+    '    files = e.Data.GetData(DataFormats.FileDrop)
+    '    For f = 0 To UBound(files)
+    '        If IO.Directory.Exists(files(f)) Then
+    '            Dim hasseason As Boolean = False
+    '            If Not ListBox5.Items.Contains(files(f)) Then
+    '                For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(files(f))
+    '                    Dim M As Match
+    '                    tempstring3 = strfolder2.ToLower.Replace(files(f).ToLower,"")
+    '                    M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
+    '                    If M.Success = True Then
+    '                        hasseason = True
+    '                        Exit For
+    '                    End If
+    '                Next
+    '                If hasseason = True Then
+    '                    tempint = MessageBox.Show(files(f) & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '                    If tempint = DialogResult.Yes Then
+    '                        ListBox5.Items.Add(files(f))
+    '                        tvfolderschanged = True
+    '                    ElseIf tempint = DialogResult.No Then
+    '                        tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '                        If tempint2 = DialogResult.Yes Then
+    '                            If Not ListBox6.Items.Contains(files(f)) Then
+    '                                ListBox6.Items.Add(files(f))
+    '                                tvfolderschanged = True
+    '                            Else
+    '                                MsgBox("Folder not added, Already exists")
+    '                            End If
+    '                        End If
+    '                    End If
+    '                Else
+    '                    ListBox5.Items.Add(files(f))
+    '                    tvfolderschanged = True
+    '                End If
+    '            Else
+    '                MsgBox("Root already exists")
+    '            End If
+    '        End If
+    '    Next
+    'End Sub
+
+    'Private Sub ListBox5_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox5.DragEnter
+    '    Try
+    '        e.Effect = DragDropEffects.Copy
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
+
+    Private Sub clbx_TvRootFolders_DragDrop(sender As Object, e As DragEventArgs) Handles clbx_TvRootFolders.DragDrop
         Dim files() As String
         Dim tempstring3 As String
         Dim tempint As Integer = 0
@@ -19731,7 +19815,7 @@ End Sub
         For f = 0 To UBound(files)
             If IO.Directory.Exists(files(f)) Then
                 Dim hasseason As Boolean = False
-                If Not ListBox5.Items.Contains(files(f)) Then
+                If Not clbx_TvRootFolders.Items.Contains(files(f)) Then
                     For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(files(f))
                         Dim M As Match
                         tempstring3 = strfolder2.ToLower.Replace(files(f).ToLower,"")
@@ -19744,7 +19828,8 @@ End Sub
                     If hasseason = True Then
                         tempint = MessageBox.Show(files(f) & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                         If tempint = DialogResult.Yes Then
-                            ListBox5.Items.Add(files(f))
+                            clbx_TvRootFolders.Items.Add(files(f), True)
+                            'ListBox5.Items.Add(files(f))
                             tvfolderschanged = True
                         ElseIf tempint = DialogResult.No Then
                             tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -19758,7 +19843,8 @@ End Sub
                             End If
                         End If
                     Else
-                        ListBox5.Items.Add(files(f))
+                        clbx_TvRootFolders.Items.Add(files(f), True)
+                        'ListBox5.Items.Add(files(f))
                         tvfolderschanged = True
                     End If
                 Else
@@ -19768,7 +19854,7 @@ End Sub
         Next
     End Sub
 
-    Private Sub ListBox5_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox5.DragEnter
+    Private Sub clbx_TvRootFolders_DragEnter(sender As Object, e As DragEventArgs) Handles clbx_TvRootFolders.DragEnter
         Try
             e.Effect = DragDropEffects.Copy
         Catch ex As Exception
@@ -19776,11 +19862,17 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ListBox5_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox5.KeyDown
-        If e.KeyCode = Keys.Delete AndAlso ListBox5.SelectedItem <> Nothing
+    Private Sub clbx_TvRootFolders_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbx_TvRootFolders.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso clbx_TvRootFolders.SelectedItem <> Nothing
             Call btn_TvFoldersRootRemove.PerformClick()
         End If
     End Sub
+
+    'Private Sub ListBox5_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox5.KeyDown
+    '    If e.KeyCode = Keys.Delete AndAlso ListBox5.SelectedItem <> Nothing
+    '        Call btn_TvFoldersRootRemove.PerformClick()
+    '    End If
+    'End Sub
         
     Private Sub ListBox6_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox6.DragDrop
         Dim files() As String
@@ -19789,7 +19881,18 @@ End Sub
         For f = 0 To UBound(files)
             If IO.Directory.Exists(files(f)) Then
                 If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
-                If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
+                For each fol In Preferences.tvRootFolders
+                    If fol.rpath = files(f) Then Continue For
+                    If files(f).Contains(fol.rpath) AndAlso Not fol.selected Then
+                        Dim msg As String = "The series dropped is in a root folder that has been unselected"
+                        msg &= "To avoid catastrophic failure, please re-select"
+                        msg &= "root folder: " & fol.rpath 
+                        msg &= "and attempt again"
+                        MsgBox (msg)
+                        Continue For
+                    End If
+                Next
+                'If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
                 Dim di As New IO.DirectoryInfo(files(f))
                 If ListBox6.Items.Contains(files(f)) Then Continue For
                 Dim skip As Boolean = False

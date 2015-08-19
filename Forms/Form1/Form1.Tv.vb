@@ -131,7 +131,18 @@ Partial Public Class Form1
         For f = 0 To UBound(files)
             If IO.Directory.Exists(files(f)) Then
                 If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
-                If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
+                For each fol In Preferences.tvRootFolders
+                    If fol.rpath = files(f) Then Continue For
+                    If files(f).Contains(fol.rpath) AndAlso Not fol.selected Then
+                        Dim msg As String = "The series dropped is in a root folder that has been unselected"
+                        msg &= "To avoid catastrophic failure, please re-select"
+                        msg &= "root folder: " & fol.rpath 
+                        msg &= "and attempt again"
+                        MsgBox (msg)
+                        Continue For
+                    End If
+                Next
+                'If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
                 Dim di As New IO.DirectoryInfo(files(f))
                 If Preferences.tvFolders.Contains(files(f)) Then Continue For
                 Dim skip As Boolean = False
