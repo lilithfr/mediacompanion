@@ -5167,7 +5167,7 @@ Public Class Form1
         'Me.Refresh()
         Application.DoEvents()
 
-        System.Threading.Thread.Sleep(4000)
+        System.Threading.Thread.Sleep(500)
         Dim XmlFile As String
 
         XmlFile = Utilities.DownloadTextFiles("http://thetvdb.com/api/6E82FED600783400/languages.xml")
@@ -5190,11 +5190,13 @@ Public Class Form1
     Private Sub tv_ShowChangedRePopulate()
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Try
+            TextBox26.Text = Utilities.GetLastFolder(WorkingTvShow.NfoFilePath)
+            tb_TvShSelectSeriesPath.Enabled = True
+            tb_TvShSelectSeriesPath.Text = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "")
+            PictureBox9.Image = Nothing
             If languageList.Count = 0 Then
                 util_LanguageListLoad()
             End If
-            TextBox26.Text = Utilities.GetLastFolder(WorkingTvShow.NfoFilePath)
-            PictureBox9.Image = Nothing
             If workingTvShow.language <> Nothing Then
                 For Each language In languageList
                     If language.Abbreviation.Value = WorkingTvShow.Language.Value Then
