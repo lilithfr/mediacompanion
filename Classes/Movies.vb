@@ -161,7 +161,34 @@ Public Class Movies
                         
             Return q2.AsEnumerable.ToList
         End Get
-    End Property    
+    End Property  
+    
+    Public ReadOnly Property StudiosFilter As List(Of String)
+        Get
+            'Dim q = From x In MovieCache Select ms=x.studioslist
+             
+            'Dim lst = q.SelectMany(Function(m) m).ToList
+
+            'Dim q2 = From x In lst
+            '            Group By xx=x.Trim Into Num=Count
+            '            Order By xx
+            '            Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
+
+            Dim q = From x In MovieCache Select ms=x.studios.Split(",")
+             
+            Dim lst = q.SelectMany(Function(m) m).ToList
+
+            lst.RemoveAll(Function(v) v="" )
+            lst.RemoveAll(Function(v) v=",")
+
+            Dim q2 = From x In lst
+                        Group By x Into Num=Count
+                        Order By x
+                        Select x & " (" & Num.ToString & ")"
+                        
+            Return q2.AsEnumerable.ToList
+        End Get
+    End Property  
 
     Public ReadOnly Property GenresFilter As List(Of String)
         Get
@@ -1319,6 +1346,9 @@ Public Class Movies
                                 Case "countries"
                                     Dim TmpStr As String = detail.InnerText
                                     newmovie.countries = TmpStr.Replace(", ", ",")
+                                Case "studios"
+                                    Dim TmpStr As String = detail.InnerText
+                                    newmovie.studios = TmpStr.Replace(", ", ",")
                                 Case "Resolution"           : newmovie.Resolution = detail.InnerText
                                 Case "VideoCodec"           : newmovie.VideoCodec = detail.InnerText
                                 Case "Container"            : newmovie.Container = detail.InnerText
@@ -1422,6 +1452,7 @@ Public Class Movies
             'End If
             childchild = doc.CreateElement("genre"    ) : childchild.InnerText = movie.genre     : child.AppendChild(childchild)
             childchild = doc.CreateElement("countries") : childchild.InnerText = movie.countries : child.AppendChild(childchild)
+            childchild = doc.CreateElement("studios") : childchild.InnerText = movie.studios : child.AppendChild(childchild)
 
             For Each item In movie.movietag
                 childchild = doc.CreateElement("tag")
@@ -2206,6 +2237,18 @@ Public Class Movies
         Return recs
     End Function
 
+    Function ApplyStudiosFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb,ModuleExtensions.Missing,"")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x) x.studiosList.Intersect(fi.Include).Any() )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not x.studiosList.Intersect(fi.Exclude).Any() )
+        End If
+
+        Return recs
+    End Function
 
     Function ApplyGenresFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim i As Integer = 0

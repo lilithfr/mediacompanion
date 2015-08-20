@@ -32,6 +32,19 @@ Public Class ComboList
         End Get
     End Property
 
+    Property studios              As String
+
+    Public ReadOnly Property studioslist As List(Of String)
+        Get
+            Dim splist() As String = studios.Split(",")
+            Dim retlist As New List(Of String)
+            For Each t In splist
+                retlist.Add(t.Trim)
+            Next
+            Return retlist
+        End Get
+    End Property
+
     Property movietag As New List(Of String)
     Property playcount            As String = ""
     Property lastplayed           As String = ""
@@ -342,6 +355,7 @@ Public Class ComboList
         Me.top250               = From.top250             
         Me.genre                = From.genre  
         Me.countries            = From.countries
+        Me.studios              = From.studios 
         Me.movietag             = From.movietag
         Me.playcount            = From.playcount 
         Me.lastplayed           = From.lastplayed  

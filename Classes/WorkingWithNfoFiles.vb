@@ -2258,6 +2258,8 @@ Public Class WorkingWithNfoFiles
                                 End If
                             Case "countries"
                                 newmovie.countries = thisresult.InnerText
+                            Case "studios"
+                                newmovie.studios = thisresult.InnerText 
                             Case "tag"
                                 newmovie.movietag.Add(thisresult.InnerText)
                                 'If newmovie.tag.add = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "

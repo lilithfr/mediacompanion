@@ -1199,6 +1199,7 @@ Public Class Movie
         _movieCache.top250      = _scrapedMovie.fullmoviebody.top250
         _movieCache.genre       = _scrapedMovie.fullmoviebody.genre
         _movieCache.countries   = _scrapedMovie.fullmoviebody.country
+        _movieCache.studios     = _scrapedMovie.fullmoviebody.studio 
         _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
         _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
