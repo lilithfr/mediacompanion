@@ -19574,6 +19574,51 @@ End Sub
         End Try
     End Sub
 
+    Private Sub clbx_TvRootFolders_Changed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles clbx_TvRootFolders.ItemCheck
+        Static Updating As Boolean
+        If Updating Then Exit Sub
+        Updating = True
+
+        Dim cmbBox As CheckedListBox = sender
+        Dim Item As ItemCheckEventArgs = e
+        Dim unchkd As Boolean = False
+        If Item.NewValue = CheckState.Checked Then
+            cmbBox.SetItemChecked(Item.Index, True)
+        Else
+            unchkd = True
+            cmbBox.SetItemChecked(Item.Index, False)
+        End If
+
+        If unchkd Then
+            Dim rtfolder As String = cmbBox.Items(Item.Index).ToString
+            rtfolder = rtfolder & If(rtfolder.Contains("\"), "\", "/")
+            Dim cachechanged As Boolean = False
+            For f = ListBox6.Items.Count -1 To 0 Step -1
+                If Listbox6.Items(f).contains(rtfolder) Then
+                    Dim Folder = ListBox6.Items(f).ToString
+                    For Each cacheItem As Media_Companion.TvShow In Cache.TvCache.Shows
+                        If cacheItem.FolderPath.Trim("\") = Folder.Trim("\") Then
+                            TvTreeview.Nodes.Remove(cacheItem.ShowNode)
+                            For Each ep As TvEpisode In cacheItem.Episodes
+                                Cache.TvCache.Remove(ep)
+                            Next
+                            Cache.TvCache.Remove(cacheItem)
+                            cachechanged = True
+                            Exit For
+                        End If
+                    Next
+                    ListBox6.Items.RemoveAt(f)
+                    tvfolderschanged = True
+                End If
+            Next
+            If cachechanged Then Tv_CacheSave()
+        End If
+        'Do something with the updated checked box
+        'Call LoadListData(Me, False)
+
+        Updating = False
+    End Sub
+
     Private Sub bnt_TvChkFolderList_Click(sender As System.Object, e As System.EventArgs) Handles bnt_TvChkFolderList.Click
         Try
             tvfolderschanged = tv_Showremovedfromlist(, True)
@@ -19645,7 +19690,15 @@ End Sub
 
     Private Sub btn_TvFoldersAddFromRoot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAddFromRoot.Click
         Try
-            tv_ShowFind(clbx_TvRootFolders.Items.Cast(Of str_RootPaths).ToList, False)  '(ListBox5.items.Cast(Of String).ToList, False)
+            Dim tmplst As New List(Of str_RootPaths)
+            For f = 0 to clbx_TvRootFolders.Items.Count-1      'ListBox5.Items
+                Dim t As New str_RootPaths 
+                t.rpath = clbx_TvRootFolders.Items(f).ToString
+                Dim chkstate As CheckState = clbx_TvRootFolders.GetItemCheckState(f)
+                t.selected = (chkstate = CheckState.Checked)
+                If t.selected Then tmplst.Add(t)
+            Next
+            tv_ShowFind(tmplst, False)  '(ListBox5.items.Cast(Of String).ToList, False)
             If newTvFolders.Count > 0 Then
                 tvfolderschanged = True
                 For Each item In newTvFolders
