@@ -7973,15 +7973,19 @@ Public Class Form1
 
     
 
-    Public Sub tv_ShowFind(ByVal rootfolders As List(Of str_RootPaths), Optional ByVal skiplistboxchk As Boolean = True)
+    Public Sub tv_ShowFind(ByVal rootfolders As List(Of str_RootPaths), Optional ByVal skiptvfolderschk As Boolean = False)
         Dim Folders As List(Of String)
         newTvFolders.Clear()
         For Each folder In rootfolders 'ListBox5.Items
             If Not folder.selected Then Continue For
             Folders = Utilities.EnumerateFolders(folder.rpath, 0)
             For Each strfolder2 As String In Folders
-                If Not Preferences.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then  'Not ListBox6.Items.Contains(strfolder2)
-                    If Not skiplistboxchk AndAlso Not ListBox6.Items.Contains(strfolder2) Then
+                If skiptvfolderschk Then
+                    If Not ListBox6.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
+                        newTvFolders.Add(strfolder2)
+                    End If
+                ElseIf Not Preferences.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then  'Not ListBox6.Items.Contains(strfolder2)
+                    If Not ListBox6.Items.Contains(strfolder2) Then
                         newTvFolders.Add(strfolder2)
                     End If
                 End If
@@ -15664,10 +15668,12 @@ End Sub
         clbx_TvRootFolders.Items.Clear()
         'ListBox5.Items.Clear()
         ListBox6.Items.Clear()
+        AuthorizeCheck = True
         For Each folder In tvRootFolders
             clbx_TvRootFolders.Items.Add(folder.rpath, folder.selected)
             'ListBox5.Items.Add(folder)
         Next
+        AuthorizeCheck = False
         For Each folder In tvFolders
             ListBox6.Items.Add(folder)
         Next
@@ -19573,8 +19579,39 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+    
+    Private Property AuthorizeCheck() As Boolean
+        Get
+	        Return m_AuthorizeCheck
+        End Get
+        Set
+	        m_AuthorizeCheck = Value
+        End Set
+    End Property
 
-    Private Sub clbx_TvRootFolders_Changed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles clbx_TvRootFolders.ItemCheck
+    Private m_AuthorizeCheck As Boolean
+    
+    Private Sub clbx_TvRootFolders_MouseDown(sender As Object, e As MouseEventArgs) Handles clbx_TvRootFolders.MouseDown 
+        Dim loc As Point = Me.clbx_TvRootFolders.PointToClient(Cursor.Position)
+        For i As Integer = 0 To Me.clbx_TvRootFolders.Items.Count - 1
+	        Dim rec As Rectangle = Me.clbx_TvRootFolders.GetItemRectangle(i)
+	        rec.Width = 16
+	        'checkbox itself has a default width of about 16 pixels
+	        If rec.Contains(loc) Then
+		        AuthorizeCheck = True
+		        Dim newValue As Boolean = Not Me.clbx_TvRootFolders.GetItemChecked(i)
+		        Me.clbx_TvRootFolders.SetItemChecked(i, newValue)
+		        AuthorizeCheck = False
+
+		        Return
+	        End If
+        Next
+    End Sub
+
+    Private Sub checkedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbx_TvRootFolders.ItemCheck
+        If Not AuthorizeCheck Then
+	        e.NewValue = e.CurrentValue
+        End If
         Static Updating As Boolean
         If Updating Then Exit Sub
         Updating = True
@@ -19592,29 +19629,13 @@ End Sub
         If unchkd Then
             Dim rtfolder As String = cmbBox.Items(Item.Index).ToString
             rtfolder = rtfolder & If(rtfolder.Contains("\"), "\", "/")
-            Dim cachechanged As Boolean = False
             For f = ListBox6.Items.Count -1 To 0 Step -1
                 If Listbox6.Items(f).contains(rtfolder) Then
-                    Dim Folder = ListBox6.Items(f).ToString
-                    For Each cacheItem As Media_Companion.TvShow In Cache.TvCache.Shows
-                        If cacheItem.FolderPath.Trim("\") = Folder.Trim("\") Then
-                            TvTreeview.Nodes.Remove(cacheItem.ShowNode)
-                            For Each ep As TvEpisode In cacheItem.Episodes
-                                Cache.TvCache.Remove(ep)
-                            Next
-                            Cache.TvCache.Remove(cacheItem)
-                            cachechanged = True
-                            Exit For
-                        End If
-                    Next
                     ListBox6.Items.RemoveAt(f)
                     tvfolderschanged = True
                 End If
             Next
-            If cachechanged Then Tv_CacheSave()
         End If
-        'Do something with the updated checked box
-        'Call LoadListData(Me, False)
 
         Updating = False
     End Sub
@@ -19698,7 +19719,7 @@ End Sub
                 t.selected = (chkstate = CheckState.Checked)
                 If t.selected Then tmplst.Add(t)
             Next
-            tv_ShowFind(tmplst, False)  '(ListBox5.items.Cast(Of String).ToList, False)
+            tv_ShowFind(tmplst, True)  '(ListBox5.items.Cast(Of String).ToList, False)
             If newTvFolders.Count > 0 Then
                 tvfolderschanged = True
                 For Each item In newTvFolders
@@ -19777,6 +19798,7 @@ End Sub
 
     Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
         Try
+            Dim removeTvFolders As New List(Of String)
             Preferences.tvRootFolders.Clear()
             For f = 0 to clbx_TvRootFolders.Items.Count-1      'ListBox5.Items
                 Dim t As New str_RootPaths 
@@ -19795,6 +19817,27 @@ End Sub
                     newTvFolders.Add(item)
                 End If
             Next
+            For each item In tmplist
+                If Not Preferences.tvFolders.Contains(item) Then removeTvFolders.Add(item)
+            Next
+            If Not removeTvFolders.count = 0 Then
+                Dim cachechanged As Boolean = False
+                For each tvfolder In removeTvFolders
+                    'Dim Folder = ListBox6.Items(f).ToString
+                    For Each cacheItem As Media_Companion.TvShow In Cache.TvCache.Shows
+                        If cacheItem.FolderPath.Trim("\") = tvfolder.Trim("\") Then
+                            TvTreeview.Nodes.Remove(cacheItem.ShowNode)
+                            For Each ep As TvEpisode In cacheItem.Episodes
+                                Cache.TvCache.Remove(ep)
+                            Next
+                            Cache.TvCache.Remove(cacheItem)
+                            cachechanged = True
+                            Exit For
+                        End If
+                    Next
+                Next
+                If cachechanged Then Tv_CacheSave()
+            End If
             tvfolderschanged = False
             Preferences.ConfigSave()
             tv_ShowScrape()
@@ -19881,7 +19924,9 @@ End Sub
                     If hasseason = True Then
                         tempint = MessageBox.Show(files(f) & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                         If tempint = DialogResult.Yes Then
+                            AuthorizeCheck = True
                             clbx_TvRootFolders.Items.Add(files(f), True)
+                            AuthorizeCheck = False
                             'ListBox5.Items.Add(files(f))
                             tvfolderschanged = True
                         ElseIf tempint = DialogResult.No Then
@@ -19896,7 +19941,9 @@ End Sub
                             End If
                         End If
                     Else
+                        AuthorizeCheck = True
                         clbx_TvRootFolders.Items.Add(files(f), True)
+                        AuthorizeCheck = False
                         'ListBox5.Items.Add(files(f))
                         tvfolderschanged = True
                     End If
@@ -19930,21 +19977,25 @@ End Sub
     Private Sub ListBox6_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox6.DragDrop
         Dim files() As String
         droppedItems.Clear()
+        Dim skipdrop As Boolean
         files = e.Data.GetData(DataFormats.FileDrop)
         For f = 0 To UBound(files)
+            skipdrop = False
             If IO.Directory.Exists(files(f)) Then
                 If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
                 For each fol In Preferences.tvRootFolders
                     If fol.rpath = files(f) Then Continue For
                     If files(f).Contains(fol.rpath) AndAlso Not fol.selected Then
-                        Dim msg As String = "The series dropped is in a root folder that has been unselected"
-                        msg &= "To avoid catastrophic failure, please re-select"
-                        msg &= "root folder: " & fol.rpath 
+                        Dim msg As String = "The series dropped is in a root folder that has been unselected" & vbcrlf
+                        msg &= "To avoid catastrophic failure, please re-select" & vbcrlf
+                        msg &= "root folder: " & fol.rpath & vbcrlf
                         msg &= "and attempt again"
                         MsgBox (msg)
+                        skipdrop = True
                         Continue For
                     End If
                 Next
+                If skipdrop Then Continue For
                 'If Preferences.tvRootFolders.Contains(files(f)) Then Continue For
                 Dim di As New IO.DirectoryInfo(files(f))
                 If ListBox6.Items.Contains(files(f)) Then Continue For
