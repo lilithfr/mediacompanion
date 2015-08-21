@@ -1250,10 +1250,11 @@ Public Class Form1
         'Update Main Form Window Title to show Currrent Version
         Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
         sAssemblyVersion = Microsoft.VisualBasic.Right(sAssemblyVersion, 7)       'Cuts Version=3.4.0.2 down to just 3.4.0.2
+        Dim codebase As String = If(Environment.Is64BitProcess, "64Bit", "32Bit")
         If workingProfile.profilename.ToLower = "default" Then
-            Me.Text = "Media Companion - V" & sAssemblyVersion
+            Me.Text = "Media Companion - V" & sAssemblyVersion & " - " & codebase
         Else
-            Me.Text = "Media Companion - V" & sAssemblyVersion & " - " & workingProfile.profilename
+            Me.Text = "Media Companion - V" & sAssemblyVersion & " - " & codebase & " - " & workingProfile.profilename
         End If
 
     End Sub
@@ -10618,10 +10619,14 @@ End Sub
         End If
 
         If Preferences.homemoviefolders.Count > 0 Then
-            ListBox19.Items.Clear()
+            'ListBox19.Items.Clear()
+            AuthorizeCheck = True
+            clbx_HMMovieFolders.Items.Clear()
             For Each folder In homemoviefolders
-                ListBox19.Items.Add(folder)
+                clbx_HMMovieFolders.Items.Add(folder.rpath, folder.selected)
+                'ListBox19.Items.Add(folder)
             Next
+            AuthorizeCheck = False
         End If
 
         cbBtnLink.Checked = Preferences.XBMC_Link
@@ -20137,19 +20142,16 @@ End Sub
         End If
 
         Dim tab As String = TabControl1.SelectedTab.Text.ToLower
-        If tab = "search for new home movies" Then
-            TabControl1.SelectedIndex = homeTabIndex
-            Call homeMovieScan()
-        ElseIf tab="refresh list" Then
-            TabControl1.SelectedIndex = homeTabIndex
-            Call rebuildHomeMovies()
-        ElseIf tab = "screenshot" Then
+        If tab = "screenshot" Then
             pbx_HmFanartSht.SizeMode = PictureBoxSizeMode.Zoom
 
             util_ImageLoad(pbx_HmFanartSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
             homeTabIndex = TabControl1.SelectedIndex
         ElseIf tab = " poster " Then
             util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
+            homeTabIndex = TabControl1.SelectedIndex
+        ElseIf tab = "folders" Then
+            HomeFoldersUpdate()
             homeTabIndex = TabControl1.SelectedIndex
         Else
             homeTabIndex = TabControl1.SelectedIndex
@@ -20268,6 +20270,7 @@ End Sub
     End Sub
 
     Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
+        If ListBox18.SelectedIndex < 0 Then Exit Sub
         Try
             For Each homemovie In homemovielist
                 If homemovie.FullPathAndFilename Is CType(ListBox18.SelectedItem, ValueDescriptionPair).Value Then
@@ -20278,6 +20281,27 @@ End Sub
         Catch
         End Try
 
+    End Sub
+
+    Private Sub btnHomeMovieSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieSave.Click
+        If HmMovTitle.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.title = HmMovTitle.Text
+        End If
+        If HmMovSort.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
+        End If
+        WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
+        WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
+        WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
+        nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
+    End Sub
+
+    Private Sub btn_HMSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMSearch.Click
+        Call homeMovieScan()
+    End Sub
+
+    Private Sub btn_HMRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMRefresh.Click
+        Call rebuildHomeMovies()
     End Sub
 
 #End Region
@@ -20400,17 +20424,23 @@ End Sub
 
 #Region "Home folders"
 
-    Private Sub btnHomeMovieSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieSave.Click
-        If HmMovTitle.Text <> "" Then
-            WorkingHomeMovie.fullmoviebody.title = HmMovTitle.Text
-        End If
-        If HmMovSort.Text <> "" Then
-            WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
-        End If
-        WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
-        WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
-        WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
-        nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
+    Private Sub tp_HmFolders_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tp_HmFolders.Leave
+        Try
+            If hmfolderschanged Then
+                Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
+                If save = DialogResult.Yes Then
+                    Call HomeMovieFoldersRefresh()
+                End If
+                hmfolderschanged = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_HmFolderSaveRefresh_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btn_HmFolderSaveRefresh.Click
+        Call HomeMovieFoldersRefresh()
+        hmfolderschanged = False
     End Sub
 
     Private Sub btnHomeFolderAdd_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFolderAdd.Click
@@ -20425,13 +20455,18 @@ End Sub
             If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (theFolderBrowser.SelectedPath)
                 Preferences.lastpath = thefoldernames
-                For Each item As Object In ListBox19.Items
+                'For Each item As Object In ListBox19.Items
+                For Each item As Object In clbx_HMMovieFolders.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
                 Next
 
                 If allok = True Then
-                    ListBox19.Items.Add(thefoldernames)
-                    ListBox19.Refresh()
+                    AuthorizeCheck = True
+                    clbx_HMMovieFolders.Items.Add(thefoldernames, True)
+                    clbx_HMMovieFolders.Refresh()
+                    AuthorizeCheck = False
+                    'ListBox19.Items.Add(thefoldernames)
+                    'ListBox19.Refresh()
                     'Call HomeMovieFoldersRefresh()
                 Else
                     MsgBox("        Folder Already Exists")
@@ -20444,8 +20479,10 @@ End Sub
 
     Private Sub btnHomeFoldersRemove_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFoldersRemove.Click
         Try
-            While ListBox19.SelectedItems.Count > 0
-                ListBox19.Items.Remove(ListBox19.SelectedItems(0))
+            'While ListBox19.SelectedItems.Count > 0
+            While clbx_HMMovieFolders.SelectedItems.Count > 0
+                clbx_HMMovieFolders.Items.Remove(clbx_HMMovieFolders.SelectedItems(0))
+                'ListBox19.Items.Remove(ListBox19.SelectedItems(0))
             End While
             'Call HomeMovieFoldersRefresh()
         Catch ex As Exception
@@ -20469,7 +20506,8 @@ End Sub
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
             Dim exists As Boolean = False
-            For Each item In ListBox19.Items
+            'For Each item In ListBox19.Items
+            For Each item In clbx_HMMovieFolders.Items
                 If item.ToString.ToLower = tempstring.ToLower Then
                     exists = True
                     Exit For
@@ -20480,15 +20518,23 @@ End Sub
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
-                    ListBox19.Items.Add(tempstring)
-                    ListBox19.Refresh()
+                    AuthorizeCheck = True
+                    clbx_HMMovieFolders.Items.Add(tempstring, True)
+                    clbx_HMMovieFolders.Refresh()
+                    AuthorizeCheck = False
+                    'ListBox19.Items.Add(tempstring)
+                    'ListBox19.Refresh()
                     'Call HomeMovieFoldersRefresh()
                     tbHomeManualPath.Text = ""
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
-                        ListBox19.Items.Add(tempstring)
-                        ListBox19.Refresh()
+                        AuthorizeCheck = True
+                        clbx_HMMovieFolders.Items.Add(tempstring, True)
+                        clbx_HMMovieFolders.Refresh()
+                        AuthorizeCheck = False
+                        'ListBox19.Items.Add(tempstring)
+                        'ListBox19.Refresh()
                         'Call HomeMovieFoldersRefresh()
                         tbHomeManualPath.Text = ""
                     End If
@@ -20501,8 +20547,84 @@ End Sub
 
     End Sub
 
-    Private Sub btn_HmFolderSaveRefresh_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFolderSaveRefresh.Click
-        Call HomeMovieFoldersRefresh()
+    Private Sub clbx_HMMovieFolders_DragDrop(sender As Object, e As DragEventArgs) Handles clbx_HMMovieFolders.DragDrop
+        Dim folders() As String
+        droppedItems.Clear()
+        folders = e.Data.GetData(DataFormats.filedrop)
+        For f = 0 To UBound(folders)
+            Dim exists As Boolean = False
+            For Each rtpath In Preferences.homemoviefolders 
+                If rtpath.rpath = folders(f) Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists OrElse clbx_HMMovieFolders.Items.Contains(folders(f)) Then Continue For
+		    Dim skip As Boolean = False
+		    For Each item In droppedItems
+			    If item = folders(f) Then
+				    skip = True
+				    Exit For
+			    End If
+		    Next
+		If Not skip Then droppedItems.Add(folders(f))
+        Next
+        If droppedItems.Count < 1 Then Exit Sub
+        AuthorizeCheck = True
+        For Each item In droppedItems
+            clbx_HMMovieFolders.Items.Add(item, True)
+            hmfolderschanged = True
+        Next
+        AuthorizeCheck = False
+        clbx_HMMovieFolders.Refresh()
+    End Sub
+
+    Private Sub clbx_HMMovieFolders_DragEnter(sender As Object, e As DragEventArgs) Handles clbx_HMMovieFolders.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub clbx_HMMovieFolders_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbx_HMMovieFolders.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso clbx_MovieRoots.SelectedItem <> Nothing
+            Call btnHomeFoldersRemove.PerformClick()
+        End If
+    End Sub
+
+    Private Sub clbx_HMMovieFolders_MouseDown(sender As Object, e As MouseEventArgs) Handles clbx_HMMovieFolders.MouseDown 
+        Dim loc As Point = Me.clbx_HMMovieFolders.PointToClient(Cursor.Position)
+        For i As Integer = 0 To Me.clbx_HMMovieFolders.Items.Count - 1
+	        Dim rec As Rectangle = Me.clbx_HMMovieFolders.GetItemRectangle(i)
+	        rec.Width = 16
+	        'checkbox itself has a default width of about 16 pixels
+	        If rec.Contains(loc) Then
+		        AuthorizeCheck = True
+		        Dim newValue As Boolean = Not Me.clbx_HMMovieFolders.GetItemChecked(i)
+		        Me.clbx_HMMovieFolders.SetItemChecked(i, newValue)
+		        AuthorizeCheck = False
+		        Return
+	        End If
+        Next
+    End Sub
+
+    Private Sub clbx_HMMovieFolders_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbx_HMMovieFolders.ItemCheck
+        If Not AuthorizeCheck Then
+	        e.NewValue = e.CurrentValue
+            Exit Sub
+        End If
+        hmfolderschanged = True
+    End Sub
+    
+    Private Sub HomeFoldersUpdate()
+        AuthorizeCheck = True
+        clbx_HMMovieFolders.Items.Clear()
+        For each item In Preferences.homemoviefolders
+            clbx_HMMovieFolders.Items.Add(item.rpath, item.selected)
+        Next
+        AuthorizeCheck = False
+        hmfolderschanged = False
     End Sub
 #End Region
     
@@ -20518,10 +20640,14 @@ End Sub
                 Call loadhomemovielist()
             End If
             If homemoviefolders.Count > 0 Then
-                ListBox19.Items.Clear()
+                AuthorizeCheck = True
+                clbx_HMMovieFolders.Items.Clear()
+                'ListBox19.Items.Clear()
                 For Each folder In homemoviefolders
-                    ListBox19.Items.Add(folder)
+                    clbx_HMMovieFolders.Items.Add(folder.rpath, folder.selected)
+                    'ListBox19.Items.Add(folder)
                 Next
+                AuthorizeCheck = False
             End If
         End If
     End Sub
@@ -20546,13 +20672,14 @@ End Sub
         Dim totalfolders As New List(Of String)
         totalfolders.Clear()
         For Each moviefolder In homemoviefolders
-            Dim hg As New IO.DirectoryInfo(moviefolder)
+            If Not moviefolder.selected Then Continue For
+            Dim hg As New IO.DirectoryInfo(moviefolder.rpath)
             If hg.Exists Then
                 scraperLog &= "Found Movie Folder: " & hg.FullName.ToString & vbCrLf
-                totalfolders.Add(moviefolder)
+                totalfolders.Add(moviefolder.rpath)
                 Dim newlist As List(Of String)
                 Try
-                    newlist = Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
+                    newlist = Utilities.EnumerateFolders(moviefolder.rpath)       'Max levels restriction of 6 deep removed
                     For Each subfolder In newlist
                         scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                         totalfolders.Add(subfolder)
@@ -20657,13 +20784,14 @@ End Sub
         Dim totalfolders As New List(Of String)
         totalfolders.Clear()
         For Each moviefolder In homemoviefolders
-            Dim hg As New IO.DirectoryInfo(moviefolder)
+            If Not moviefolder.selected Then Continue For
+            Dim hg As New IO.DirectoryInfo(moviefolder.rpath)
             If hg.Exists Then
                 scraperLog &= "Searching Movie Folder: " & hg.FullName.ToString & vbCrLf
-                totalfolders.Add(moviefolder)
+                totalfolders.Add(moviefolder.rpath)
                 Dim newlist As List(Of String)
                 Try
-                    newlist = Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
+                    newlist = Utilities.EnumerateFolders(moviefolder.rpath)       'Max levels restriction of 6 deep removed
                     For Each subfolder In newlist
                         scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                         totalfolders.Add(subfolder)
@@ -20849,12 +20977,20 @@ End Sub
     End Sub
 
     Private Sub HomeMovieFoldersRefresh()
+        AuthorizeCheck = True
         Preferences.homemoviefolders.Clear()
-        For Each item In ListBox19.Items
-            Preferences.homemoviefolders.Add(item)
+        For f = 0 to clbx_HMMovieFolders.Items.Count-1
+            Dim t As New str_RootPaths 
+            t.rpath = clbx_HMMovieFolders.Items(f).ToString
+            Dim chkstate As CheckState = clbx_HMMovieFolders.GetItemCheckState(f)
+            t.selected = (chkstate = CheckState.Checked)
+            Preferences.homemoviefolders.Add(t)
         Next
         Call ConfigSave()
         Call rebuildHomeMovies()
+        AuthorizeCheck = False
+        hmfolderschanged = False
+        TabControl1.SelectedIndex = 0
     End Sub
     
 #End Region   'Home Movie Routines, buttons etc.

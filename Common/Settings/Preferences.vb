@@ -103,7 +103,7 @@ Public Class Preferences
     Public Shared offlinefolders    As New List(Of String)
     Public Shared stubfolder        As String
     Public Shared stubmessage       As String = "Insert Media to Continue"
-    Public Shared homemoviefolders  As New List(Of String)
+    Public Shared homemoviefolders  As New List(Of str_RootPaths)
     Public Shared ExcludeFolders    As New Excludes("Folders")
     Public Shared MVidFolders       As New List(Of String)
 
@@ -857,17 +857,18 @@ Public Class Preferences
         Next
         root.AppendChild(doc, "stubfolder", stubfolder)
         root.AppendChild(doc, "stubmessage", stubmessage)
-        Dim list As New List(Of String)
+        'Dim list As New List(Of String)
         For Each path In offlinefolders
-            If Not list.Contains(path) Then
-                root.AppendChild(doc, "offlinefolder", path)
-                list.Add(path)
-            End If
+            'If Not list.Contains(path) Then
+            root.AppendChild(doc, "offlinefolder", path)
+                'list.Add(path)
+            'End If
         Next
 
-        For Each Path In homemoviefolders
-            root.AppendChild(doc, "homemoviefolder", Path)
-            list.Add(Path)
+        For Each path In homemoviefolders
+            Dim t As String = path.rpath & "|" & path.selected
+            root.AppendChild(doc, "homemoviefolder", t)
+            'list.Add(Path)
         Next
 
         For Each Path In MVidFolders
@@ -1303,8 +1304,11 @@ Public Class Preferences
                         tvRootFolders.Add(u)
                     Case "homemoviefolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        homemoviefolders.Add(decodestring)
-
+                        Dim t() As String = decodestring.Split("|")
+                        Dim u As New str_RootPaths
+                        u.rpath = t(0)
+                        If t.Count > 1 Then u.selected = t(1)
+                        homemoviefolders.Add(u)
                     Case "MVidFolders"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         MVidFolders.Add(decodestring)
