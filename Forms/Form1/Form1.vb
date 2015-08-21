@@ -20070,53 +20070,7 @@ End Sub
         End If
     End Sub
 
-    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
-        Call rebuildHomeMovies()
-    End Sub
-
-    Private Sub btn_HmFanartShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFanartShot.Click
-        Try
-            If IsNumeric(tb_HmFanartTime.Text) Then
-                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
-                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                For Each ext In Utilities.VideoExtensions
-                    Dim tempstring2 As String = pathandfilename & ext
-                    If IO.File.Exists(tempstring2) Then
-                        Dim seconds As Integer = 10
-                        If Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
-                            seconds = Convert.ToInt32(tb_HmFanartTime.Text)
-                        End If
-
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-
-                        Utilities.CreateScreenShot(tempstring2, thumbpathandfilename, seconds, True)
-
-                        If File.Exists(thumbpathandfilename) Then
-                            Try
-                                util_ImageLoad(pbx_HmFanartSht, thumbpathandfilename, Utilities.DefaultFanartPath)
-                                util_ImageLoad(pbx_HmFanart, thumbpathandfilename, Utilities.DefaultFanartPath)
-                            Catch
-                                messbox.Close()
-                            End Try
-                        End If
-                        Exit For
-                    End If
-                Next
-                messbox.Close()
-            Else
-                MsgBox("Please enter a numerical value into the textbox")
-                tb_HmFanartTime.Focus()
-                Exit Sub
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
+#Region "Browser Tab"
 
     Private Sub PlayHomeMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayHomeMovieToolStripMenuItem.Click
         mov_Play("HomeMovie")
@@ -20186,6 +20140,283 @@ End Sub
         End Try
     End Sub
 
+    Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
+        Call homeMovieScan()
+    End Sub
+
+    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
+        Call rebuildHomeMovies()
+    End Sub
+
+    Private Sub ListBox18_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.DoubleClick
+        mov_Play("HomeMovie")
+    End Sub
+
+    Private Sub ListBox18_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox18.MouseDown
+
+    End Sub
+
+    Private Sub ListBox18_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox18.MouseUp
+        Try
+            Dim ptIndex As Integer = ListBox18.IndexFromPoint(e.X, e.Y)
+            If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso ListBox18.SelectedItems.Count > 0 Then
+                Dim newSelection As Boolean = True
+                'If more than one movie is selected, check if right-click is on the selection.
+                If ListBox18.SelectedItems.Count > 1 And ListBox18.GetSelected(ptIndex) Then
+                    newSelection = False
+                End If
+                'Otherwise, bring up the context menu for a single movie
+
+
+                If newSelection Then
+                    ListBox18.SelectedIndex = ptIndex
+                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
+                    PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
+                    PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = "'" & ListBox18.Text & "'"
+                    PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
+        Try
+            For Each homemovie In homemovielist
+                If homemovie.FullPathAndFilename Is CType(ListBox18.SelectedItem, ValueDescriptionPair).Value Then
+                    WorkingHomeMovie.fileinfo.fullpathandfilename = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
+                    Call loadhomemoviedetails()
+                End If
+            Next
+        Catch
+        End Try
+
+    End Sub
+
+#End Region
+ 
+#Region "Home fanart"
+
+    Private Sub btn_HmFanartShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFanartShot.Click
+        Try
+            If IsNumeric(tb_HmFanartTime.Text) Then
+                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
+                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                For Each ext In Utilities.VideoExtensions
+                    Dim tempstring2 As String = pathandfilename & ext
+                    If IO.File.Exists(tempstring2) Then
+                        Dim seconds As Integer = 10
+                        If Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
+                            seconds = Convert.ToInt32(tb_HmFanartTime.Text)
+                        End If
+
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        messbox.Show()
+                        messbox.Refresh()
+                        Application.DoEvents()
+
+                        Utilities.CreateScreenShot(tempstring2, thumbpathandfilename, seconds, True)
+
+                        If File.Exists(thumbpathandfilename) Then
+                            Try
+                                util_ImageLoad(pbx_HmFanartSht, thumbpathandfilename, Utilities.DefaultFanartPath)
+                                util_ImageLoad(pbx_HmFanart, thumbpathandfilename, Utilities.DefaultFanartPath)
+                            Catch
+                                messbox.Close()
+                            End Try
+                        End If
+                        Exit For
+                    End If
+                Next
+                messbox.Close()
+            Else
+                MsgBox("Please enter a numerical value into the textbox")
+                tb_HmFanartTime.Focus()
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+#End Region   
+
+#Region "Home poster"
+
+    Private Sub btn_HmPosterShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmPosterShot.Click
+        Try
+            If IsNumeric(tb_HmPosterTime.Text) Then
+                Dim thumbpathandfilename As String = IO.Path.Combine(Utilities.CacheFolderPath, WorkingHomeMovie.fileinfo.posterpath.Replace(WorkingHomeMovie.fileinfo.path,""))  
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.filenameandpath  
+                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                If IO.File.Exists(pathandfilename) Then
+                    Dim seconds As Integer = 10
+                    If Convert.ToInt32(tb_HmPosterTime.Text) > 0 Then
+                        seconds = Convert.ToInt32(tb_HmPosterTime.Text)
+                    End If
+
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+
+                    Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
+                    Dim cancelclicked As Boolean
+                    Using pbx As New PictureBox
+                        util_ImageLoad(pbx, thumbpathandfilename, Utilities.DefaultPosterPath)
+                        Using t As New frmMovPosterCrop
+                            If Preferences.MultiMonitoEnabled Then
+                                t.bounds = screen.allscreens(form1.currentscreen).bounds
+                                t.startposition = formstartposition.manual
+                            end if
+                            t.img = pbx.image
+                            t.cropmode = "poster"
+                            t.title = WorkingHomeMovie.fullmoviebody.title 
+                            t.Setup()
+                            t.ShowDialog()
+                            If Not IsNothing(t.newimg) Then
+                                Utilities.SaveImage(t.newimg, WorkingHomeMovie.fileinfo.posterpath)
+                            Else
+                                cancelclicked = True
+                            End If
+                        End Using
+                    End Using
+                    GC.Collect()
+                    GC.Collect()
+                    
+                    Utilities.SafeDeleteFile(thumbpathandfilename)
+
+                    If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
+                        Try
+                            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                            util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                        Catch
+                            messbox.Close()
+                        End Try
+                    End If
+                End If
+                messbox.Close()
+            Else
+                MsgBox("Please enter a numerical value into the textbox")
+                tb_HmPosterTime.Focus()
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+#End Region    
+
+#Region "Home folders"
+
+    Private Sub btnHomeMovieSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieSave.Click
+        If HmMovTitle.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.title = HmMovTitle.Text
+        End If
+        If HmMovSort.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
+        End If
+        WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
+        WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
+        WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
+        nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
+    End Sub
+
+    Private Sub btnHomeFolderAdd_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFolderAdd.Click
+        Try
+            Dim allok As Boolean = True
+            Dim theFolderBrowser As New FolderBrowserDialog
+            Dim thefoldernames As String
+            theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
+            theFolderBrowser.ShowNewFolderButton = True
+            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+            theFolderBrowser.SelectedPath = Preferences.lastpath
+            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (theFolderBrowser.SelectedPath)
+                Preferences.lastpath = thefoldernames
+                For Each item As Object In ListBox19.Items
+                    If thefoldernames.ToString = item.ToString Then allok = False
+                Next
+
+                If allok = True Then
+                    ListBox19.Items.Add(thefoldernames)
+                    ListBox19.Refresh()
+                    Call HomeMovieFoldersRefresh()
+                Else
+                    MsgBox("        Folder Already Exists")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnHomeFoldersRemove_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFoldersRemove.Click
+        Try
+            While ListBox19.SelectedItems.Count > 0
+                ListBox19.Items.Remove(ListBox19.SelectedItems(0))
+            End While
+            Call HomeMovieFoldersRefresh()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnHomeManualPathAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnHomeManualPathAdd.Click
+        Try
+            If tbHomeManualPath.Text = Nothing Then
+                Exit Sub
+            End If
+            If tbHomeManualPath.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = tbHomeManualPath.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In ListBox19.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    ListBox19.Items.Add(tempstring)
+                    ListBox19.Refresh()
+                    Call HomeMovieFoldersRefresh()
+                    tbHomeManualPath.Text = ""
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        ListBox19.Items.Add(tempstring)
+                        ListBox19.Refresh()
+                        Call HomeMovieFoldersRefresh()
+                        tbHomeManualPath.Text = ""
+                    End If
+                    Call HomeMovieFoldersRefresh()
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+#End Region
+    
     Private Sub SetupHomeMovies()
         If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
             MsgBox("Please add A Folder containing Home Movies")
@@ -20205,72 +20436,7 @@ End Sub
             End If
         End If
     End Sub
-
-    Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
-        Call homeMovieScan()
-    End Sub
-
-    Private Sub rebuildHomeMovies()
-        homemovielist.Clear()
-        ListBox18.Items.Clear()
-        Dim newhomemoviefolders As New List(Of String)
-        Dim progress As Integer = 0
-        progress = 0
-        scraperLog = ""
-        Dim dirpath As String = String.Empty
-        Dim newHomeMovieList As New List(Of str_BasicHomeMovie)
-        Dim totalfolders As New List(Of String)
-        totalfolders.Clear()
-        For Each moviefolder In homemoviefolders
-            Dim hg As New IO.DirectoryInfo(moviefolder)
-            If hg.Exists Then
-                scraperLog &= "Searching Movie Folder: " & hg.FullName.ToString & vbCrLf
-                totalfolders.Add(moviefolder)
-                Dim newlist As List(Of String)
-                Try
-                    newlist = Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
-                    For Each subfolder In newlist
-                        scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
-                        totalfolders.Add(subfolder)
-                    Next
-                Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                End Try
-            End If
-        Next
-        For Each homemoviefolder In totalfolders
-            Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
-            dirpath = homemoviefolder
-            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-            returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, "*.nfo", scraperLog)         'titlename is logged in here
-            If returnedhomemovielist.Count > 0 Then
-                For Each newhomemovie In returnedhomemovielist
-                    Dim existsincache As Boolean = False
-                    Dim pathOnly As String = IO.Path.GetDirectoryName(newhomemovie.FullPathAndFilename) & "\"
-                    Dim nfopath As String = pathOnly & IO.Path.GetFileNameWithoutExtension(newhomemovie.FullPathAndFilename) & ".nfo"
-                    If IO.File.Exists(nfopath) Then
-                        Try
-                            Dim newexistingmovie As New HomeMovieDetails
-                            newexistingmovie = nfoFunction.nfoLoadHomeMovie(nfopath)
-                            Dim newexistingbasichomemovie As New str_BasicHomeMovie
-                            newexistingbasichomemovie.FullPathAndFilename = newexistingmovie.fileinfo.fullpathandfilename
-                            newexistingbasichomemovie.Title = newexistingmovie.fullmoviebody.title
-
-                            homemovielist.Add(newexistingbasichomemovie)
-                            ListBox18.Items.Add(New ValueDescriptionPair(newexistingbasichomemovie.FullPathAndFilename, newexistingbasichomemovie.Title))
-                        Catch ex As Exception
-                        End Try
-                    Else
-                        newHomeMovieList.Add(newhomemovie)
-                    End If
-                Next
-            End If
-        Next
-        Call HomeMovieCacheSave()
-    End Sub
-
+    
     Private Sub homeMovieScan()
         'Search for new Home Movies
         Dim moviepattern As String
@@ -20390,6 +20556,67 @@ End Sub
         ToolStripStatusLabel9.Visible = False
     End Sub
 
+    Private Sub rebuildHomeMovies()
+        homemovielist.Clear()
+        ListBox18.Items.Clear()
+        Dim newhomemoviefolders As New List(Of String)
+        Dim progress As Integer = 0
+        progress = 0
+        scraperLog = ""
+        Dim dirpath As String = String.Empty
+        Dim newHomeMovieList As New List(Of str_BasicHomeMovie)
+        Dim totalfolders As New List(Of String)
+        totalfolders.Clear()
+        For Each moviefolder In homemoviefolders
+            Dim hg As New IO.DirectoryInfo(moviefolder)
+            If hg.Exists Then
+                scraperLog &= "Searching Movie Folder: " & hg.FullName.ToString & vbCrLf
+                totalfolders.Add(moviefolder)
+                Dim newlist As List(Of String)
+                Try
+                    newlist = Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
+                    For Each subfolder In newlist
+                        scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
+                        totalfolders.Add(subfolder)
+                    Next
+                Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                End Try
+            End If
+        Next
+        For Each homemoviefolder In totalfolders
+            Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
+            dirpath = homemoviefolder
+            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+            returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, "*.nfo", scraperLog)         'titlename is logged in here
+            If returnedhomemovielist.Count > 0 Then
+                For Each newhomemovie In returnedhomemovielist
+                    Dim existsincache As Boolean = False
+                    Dim pathOnly As String = IO.Path.GetDirectoryName(newhomemovie.FullPathAndFilename) & "\"
+                    Dim nfopath As String = pathOnly & IO.Path.GetFileNameWithoutExtension(newhomemovie.FullPathAndFilename) & ".nfo"
+                    If IO.File.Exists(nfopath) Then
+                        Try
+                            Dim newexistingmovie As New HomeMovieDetails
+                            newexistingmovie = nfoFunction.nfoLoadHomeMovie(nfopath)
+                            Dim newexistingbasichomemovie As New str_BasicHomeMovie
+                            newexistingbasichomemovie.FullPathAndFilename = newexistingmovie.fileinfo.fullpathandfilename
+                            newexistingbasichomemovie.Title = newexistingmovie.fullmoviebody.title
+
+                            homemovielist.Add(newexistingbasichomemovie)
+                            ListBox18.Items.Add(New ValueDescriptionPair(newexistingbasichomemovie.FullPathAndFilename, newexistingbasichomemovie.Title))
+                        Catch ex As Exception
+                        End Try
+                    Else
+                        newHomeMovieList.Add(newhomemovie)
+                    End If
+                Next
+            End If
+        Next
+        Call HomeMovieCacheSave()
+    End Sub
+
     Private Sub HomeMovieCacheSave()
         Dim fullpath As String = workingProfile.HomeMovieCache
         If homemovielist.Count > 0 And homemoviefolders.Count > 0 Then
@@ -20506,53 +20733,7 @@ End Sub
             ListBox18.Items.Add(New ValueDescriptionPair(item.FullPathAndFilename, item.Title))
         Next
     End Sub
-
-    Private Sub ListBox18_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.DoubleClick
-        mov_Play("HomeMovie")
-    End Sub
-
-    Private Sub ListBox18_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox18.MouseDown
-
-    End Sub
-
-    Private Sub ListBox18_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox18.MouseUp
-        Try
-            Dim ptIndex As Integer = ListBox18.IndexFromPoint(e.X, e.Y)
-            If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso ListBox18.SelectedItems.Count > 0 Then
-                Dim newSelection As Boolean = True
-                'If more than one movie is selected, check if right-click is on the selection.
-                If ListBox18.SelectedItems.Count > 1 And ListBox18.GetSelected(ptIndex) Then
-                    newSelection = False
-                End If
-                'Otherwise, bring up the context menu for a single movie
-
-
-                If newSelection Then
-                    ListBox18.SelectedIndex = ptIndex
-                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
-                    PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
-                    PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = "'" & ListBox18.Text & "'"
-                    PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
-        Try
-            For Each homemovie In homemovielist
-                If homemovie.FullPathAndFilename Is CType(ListBox18.SelectedItem, ValueDescriptionPair).Value Then
-                    WorkingHomeMovie.fileinfo.fullpathandfilename = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
-                    Call loadhomemoviedetails()
-                End If
-            Next
-        Catch
-        End Try
-
-    End Sub
-
+    
     Private Sub loadhomemoviedetails()
         HmMovTitle.Text = ""
         HmMovSort.Text = ""
@@ -20585,171 +20766,6 @@ End Sub
         Next
         Call ConfigSave()
         Call rebuildHomeMovies()
-    End Sub
-
-    Private Sub btnHomeMovieSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieSave.Click
-        If HmMovTitle.Text <> "" Then
-            WorkingHomeMovie.fullmoviebody.title = HmMovTitle.Text
-        End If
-        If HmMovSort.Text <> "" Then
-            WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
-        End If
-        WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
-        WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
-        WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
-        nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
-    End Sub
-
-    Private Sub btnHomeFolderAdd_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFolderAdd.Click
-        Try
-            Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
-                Preferences.lastpath = thefoldernames
-                For Each item As Object In ListBox19.Items
-                    If thefoldernames.ToString = item.ToString Then allok = False
-                Next
-
-                If allok = True Then
-                    ListBox19.Items.Add(thefoldernames)
-                    ListBox19.Refresh()
-                    Call HomeMovieFoldersRefresh()
-                Else
-                    MsgBox("        Folder Already Exists")
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnHomeFoldersRemove_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFoldersRemove.Click
-        Try
-            While ListBox19.SelectedItems.Count > 0
-                ListBox19.Items.Remove(ListBox19.SelectedItems(0))
-            End While
-            Call HomeMovieFoldersRefresh()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnHomeManualPathAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnHomeManualPathAdd.Click
-        Try
-            If tbHomeManualPath.Text = Nothing Then
-                Exit Sub
-            End If
-            If tbHomeManualPath.Text = "" Then
-                Exit Sub
-            End If
-            Dim tempstring As String = tbHomeManualPath.Text
-            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
-                tempstring = tempstring.Substring(0, tempstring.Length - 1)
-            Loop
-            Dim exists As Boolean = False
-            For Each item In ListBox19.Items
-                If item.ToString.ToLower = tempstring.ToLower Then
-                    exists = True
-                    Exit For
-                End If
-            Next
-            If exists = True Then
-                MsgBox("        Folder Already Exists")
-            Else
-                Dim f As New IO.DirectoryInfo(tempstring)
-                If f.Exists Then
-                    ListBox19.Items.Add(tempstring)
-                    ListBox19.Refresh()
-                    Call HomeMovieFoldersRefresh()
-                    tbHomeManualPath.Text = ""
-                Else
-                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then
-                        ListBox19.Items.Add(tempstring)
-                        ListBox19.Refresh()
-                        Call HomeMovieFoldersRefresh()
-                        tbHomeManualPath.Text = ""
-                    End If
-                    Call HomeMovieFoldersRefresh()
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub btn_HmPosterShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmPosterShot.Click
-        Try
-            If IsNumeric(tb_HmPosterTime.Text) Then
-                Dim thumbpathandfilename As String = IO.Path.Combine(Utilities.CacheFolderPath, WorkingHomeMovie.fileinfo.posterpath.Replace(WorkingHomeMovie.fileinfo.path,""))  
-                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.filenameandpath  
-                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                If IO.File.Exists(pathandfilename) Then
-                    Dim seconds As Integer = 10
-                    If Convert.ToInt32(tb_HmPosterTime.Text) > 0 Then
-                        seconds = Convert.ToInt32(tb_HmPosterTime.Text)
-                    End If
-
-                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                    messbox.Show()
-                    messbox.Refresh()
-                    Application.DoEvents()
-
-                    Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
-                    Dim cancelclicked As Boolean
-                    Using pbx As New PictureBox
-                        util_ImageLoad(pbx, thumbpathandfilename, Utilities.DefaultPosterPath)
-                        Using t As New frmMovPosterCrop
-                            If Preferences.MultiMonitoEnabled Then
-                                t.bounds = screen.allscreens(form1.currentscreen).bounds
-                                t.startposition = formstartposition.manual
-                            end if
-                            t.img = pbx.image
-                            t.cropmode = "poster"
-                            t.title = WorkingHomeMovie.fullmoviebody.title 
-                            t.Setup()
-                            t.ShowDialog()
-                            If Not IsNothing(t.newimg) Then
-                                Utilities.SaveImage(t.newimg, WorkingHomeMovie.fileinfo.posterpath)
-                            Else
-                                cancelclicked = True
-                            End If
-                        End Using
-                    End Using
-                    GC.Collect()
-                    GC.Collect()
-                    
-                    Utilities.SafeDeleteFile(thumbpathandfilename)
-
-                    If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
-                        Try
-                            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
-                            util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
-                        Catch
-                            messbox.Close()
-                        End Try
-                    End If
-                End If
-                messbox.Close()
-            Else
-                MsgBox("Please enter a numerical value into the textbox")
-                tb_HmPosterTime.Focus()
-                Exit Sub
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
     End Sub
     
 #End Region   'Home Movie Routines, buttons etc.
