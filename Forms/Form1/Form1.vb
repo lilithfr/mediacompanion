@@ -144,8 +144,10 @@ Public Class Form1
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
     Public movieprefschanged As Boolean = False
+    Public moviefolderschanged As Boolean = False
     Public tvprefschanged As Boolean = False
     Public tvfolderschanged As Boolean = False
+    Public hmfolderschanged As Boolean = False
     Public cleanfilenameprefchanged As Boolean = False
     Public videosourceprefchanged As Boolean = False
     Public scraperLog As String = ""
@@ -10615,7 +10617,7 @@ End Sub
         Call tv_Filter()
         End If
 
-        If homemoviefolders.Count > 0 Then
+        If Preferences.homemoviefolders.Count > 0 Then
             ListBox19.Items.Clear()
             For Each folder In homemoviefolders
                 ListBox19.Items.Add(folder)
@@ -12494,12 +12496,14 @@ End Sub
     End Sub
 
     Private Sub mov_PreferencesDisplay()
+        AuthorizeCheck = True
         clbx_MovieRoots.Items.Clear()
         'ListBox7.Items.Clear()
         For Each item In movieFolders
             clbx_MovieRoots.Items.Add(item.rpath, item.selected)
             'ListBox7.Items.Add(item)
         Next
+        AuthorizeCheck = False
         ListBox15.Items.Clear()
         For Each item In Preferences.offlinefolders
             ListBox15.Items.Add(item)
@@ -12510,6 +12514,7 @@ End Sub
         For Each t In Preferences.MovSepLst
             lb_MovSepLst.Items.Add(t)
         Next
+        moviefolderschanged = False
     End Sub
 
 
@@ -17694,6 +17699,23 @@ End Sub
 #Region "Movie Folder Tab"
 
     'Movie Folders
+
+    Private Sub TabPage25_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage25.Leave
+        Try
+            If moviefolderschanged Then
+                Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
+                If save = DialogResult.Yes Then
+                    ButtonSaveAndQuickRefresh.PerformClick()
+                Else
+                    'btn_TvFoldersUndo.PerformClick()
+                End If
+                moviefolderschanged = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub btnMovieManualPathAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieManualPathAdd.Click
         Try
             If tbMovieManualPath.Text = Nothing Then
@@ -17721,8 +17743,11 @@ End Sub
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
+                    AuthorizeCheck = True
                     clbx_MovieRoots.Items.Add(tempstring, True)
                     clbx_MovieRoots.Refresh()
+                    moviefolderschanged = True
+                    AuthorizeCheck = False
                     'ListBox7.Items.Add(tempstring)
                     'ListBox7.Refresh()
                     tbMovieManualPath.Text = ""
@@ -17730,8 +17755,11 @@ End Sub
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
+                        AuthorizeCheck = True
                         clbx_MovieRoots.Items.Add(tempstring, True)
                         clbx_MovieRoots.Refresh()
+                        moviefolderschanged = True
+                        AuthorizeCheck = False
                         'ListBox7.Items.Add(tempstring)
                         'ListBox7.Refresh()
                         tbMovieManualPath.Text = ""
@@ -17757,8 +17785,11 @@ End Sub
                 thefoldernames = (theFolderBrowser.SelectedPath)
                 Preferences.lastpath = thefoldernames
                 If allok = True Then
+                    AuthorizeCheck = True
                     clbx_MovieRoots.Items.Add(thefoldernames, True)
                     clbx_MovieRoots.Refresh()
+                    moviefolderschanged = True
+                    AuthorizeCheck = False
                     'ListBox7.Items.Add(thefoldernames)
                     'ListBox7.Refresh()
                 Else
@@ -17832,9 +17863,12 @@ End Sub
 		If Not skip Then droppedItems.Add(folders(f))
         Next
         If droppedItems.Count < 1 Then Exit Sub
+        AuthorizeCheck = True
         For Each item In droppedItems
             clbx_MovieRoots.Items.Add(item, True)
+            moviefolderschanged = True
         Next
+        AuthorizeCheck = False
         clbx_MovieRoots.Refresh()
     End Sub
 
@@ -17852,10 +17886,61 @@ End Sub
         End If
     End Sub
 
+    Private Sub clbx_MovieRoots_MouseDown(sender As Object, e As MouseEventArgs) Handles clbx_MovieRoots.MouseDown 
+        Dim loc As Point = Me.clbx_MovieRoots.PointToClient(Cursor.Position)
+        For i As Integer = 0 To Me.clbx_MovieRoots.Items.Count - 1
+	        Dim rec As Rectangle = Me.clbx_MovieRoots.GetItemRectangle(i)
+	        rec.Width = 16
+	        'checkbox itself has a default width of about 16 pixels
+	        If rec.Contains(loc) Then
+		        AuthorizeCheck = True
+		        Dim newValue As Boolean = Not Me.clbx_MovieRoots.GetItemChecked(i)
+		        Me.clbx_MovieRoots.SetItemChecked(i, newValue)
+		        AuthorizeCheck = False
+		        Return
+	        End If
+        Next
+    End Sub
+
+    Private Sub clbx_MovieRoots_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbx_MovieRoots.ItemCheck
+        If Not AuthorizeCheck Then
+	        e.NewValue = e.CurrentValue
+            Exit Sub
+        End If
+        Static Updating As Boolean
+        If Updating Then Exit Sub
+        moviefolderschanged = True
+        'Updating = True
+
+        'Dim cmbBox As CheckedListBox = sender
+        'Dim Item As ItemCheckEventArgs = e
+        'Dim unchkd As Boolean = False
+        'If Item.NewValue = CheckState.Checked Then
+        '    cmbBox.SetItemChecked(Item.Index, True)
+        'Else
+        '    unchkd = True
+        '    cmbBox.SetItemChecked(Item.Index, False)
+        'End If
+
+        'If unchkd Then
+        '    Dim rtfolder As String = cmbBox.Items(Item.Index).ToString
+        '    rtfolder = rtfolder & If(rtfolder.Contains("\"), "\", "/")
+        '    For f = ListBox6.Items.Count -1 To 0 Step -1
+        '        If Listbox6.Items(f).contains(rtfolder) Then
+        '            ListBox6.Items.RemoveAt(f)
+        '            tvfolderschanged = True
+        '        End If
+        '    Next
+        'End If
+
+        Updating = False
+    End Sub
+
     Private Sub btn_removemoviefolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removemoviefolder.Click
         Try
             While clbx_MovieRoots.SelectedItems.Count > 0
                 clbx_MovieRoots.Items.Remove(clbx_MovieRoots.SelectedItems(0))
+                moviefolderschanged = True
             End While
             'While ListBox7.SelectedItems.Count > 0
             '    ListBox7.Items.Remove(ListBox7.SelectedItems(0))
@@ -18106,8 +18191,9 @@ End Sub
                 End If
             Next
         Next
-
+        
         mov_RebuildMovieCaches()
+        moviefolderschanged = False
         TabControl2.SelectedIndex = 0
     End Sub
 
@@ -20346,7 +20432,7 @@ End Sub
                 If allok = True Then
                     ListBox19.Items.Add(thefoldernames)
                     ListBox19.Refresh()
-                    Call HomeMovieFoldersRefresh()
+                    'Call HomeMovieFoldersRefresh()
                 Else
                     MsgBox("        Folder Already Exists")
                 End If
@@ -20361,7 +20447,7 @@ End Sub
             While ListBox19.SelectedItems.Count > 0
                 ListBox19.Items.Remove(ListBox19.SelectedItems(0))
             End While
-            Call HomeMovieFoldersRefresh()
+            'Call HomeMovieFoldersRefresh()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20396,17 +20482,17 @@ End Sub
                 If f.Exists Then
                     ListBox19.Items.Add(tempstring)
                     ListBox19.Refresh()
-                    Call HomeMovieFoldersRefresh()
+                    'Call HomeMovieFoldersRefresh()
                     tbHomeManualPath.Text = ""
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
                         ListBox19.Items.Add(tempstring)
                         ListBox19.Refresh()
-                        Call HomeMovieFoldersRefresh()
+                        'Call HomeMovieFoldersRefresh()
                         tbHomeManualPath.Text = ""
                     End If
-                    Call HomeMovieFoldersRefresh()
+                    'Call HomeMovieFoldersRefresh()
                 End If
             End If
         Catch ex As Exception
@@ -20415,6 +20501,9 @@ End Sub
 
     End Sub
 
+    Private Sub btn_HmFolderSaveRefresh_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFolderSaveRefresh.Click
+        Call HomeMovieFoldersRefresh()
+    End Sub
 #End Region
     
     Private Sub SetupHomeMovies()
