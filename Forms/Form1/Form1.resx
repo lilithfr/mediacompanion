@@ -156,7 +156,7 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAA+
-        DwAAAk1TRnQBSQFMAgEBCQEAATgBaAE4AWgBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DwAAAk1TRnQBSQFMAgEBCQEAAUABaAFAAWgBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -225,10 +225,10 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
 </value>
   </data>
   <metadata name="TvEpContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>649, 202</value>
+    <value>506, 202</value>
   </metadata>
   <metadata name="TvPosterContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>466, 202</value>
+    <value>323, 202</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Button_Save_TvShow_Episode.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -4859,7 +4859,7 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
 </value>
   </data>
   <metadata name="cmsConfigureMovieFilters.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>288, 202</value>
+    <value>145, 202</value>
   </metadata>
   <data name="cbFilterYear.Values" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
@@ -5053,7 +5053,7 @@ Media Companion will keep these it the Title, and in the Foldername.</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAGMAR0BjAEdASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        CwAAAk1TRnQBSQFMAwEBAAGUAR0BlAEdASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
         AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
         AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
         AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
@@ -5157,6 +5157,9 @@ the program is running, use the
 menu item, located in the
 "TV Shows" drop down menu.</value>
   </data>
+  <metadata name="TvRootFolderContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>957, 165</value>
+  </metadata>
   <data name="Label84.Text" xml:space="preserve">
     <value>
 Separate folders are those that contain only a single TV Show
@@ -7297,10 +7300,10 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
     <value>166, 17</value>
   </metadata>
   <metadata name="ScraperStatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 202</value>
+    <value>1140, 165</value>
   </metadata>
   <metadata name="ssFileDownload.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>160, 202</value>
+    <value>17, 202</value>
   </metadata>
   <metadata name="BindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>538, 91</value>
@@ -7312,7 +7315,7 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
     <value>694, 128</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>25</value>
+    <value>48</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
