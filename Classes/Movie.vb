@@ -2940,7 +2940,6 @@ Public Class Movie
                rl.title
     End Function
   
-    
     Public Sub RescrapeSpecific(rl As RescrapeList)
 
         Rescrape = True
@@ -2954,18 +2953,6 @@ Public Class Movie
         If RescrapeBody(rl) then  
             
             Scraped  = True
-
-            _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
-
-            If _imdbBody = "MIC" Then                        
-                ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Preferences.imdbmirror & """" & vbCrLf)
-            Else
-                ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
-                AssignScrapedMovie(_rescrapedMovie)
-            End If
-            Dim IMDB_Votes As String = _rescrapedMovie.fullmoviebody.votes
-            Dim IMDB_Mpaa As String = _rescrapedMovie.fullmoviebody.mpaa
-
             If Preferences.movies_useXBMC_Scraper OrElse rl.FromTMDB Then
                 Dim useID As String = If(_scrapedMovie.fullmoviebody.tmdbid <> "", _scrapedMovie.fullmoviebody.tmdbid, _scrapedMovie.fullmoviebody.imdbid)
                 _imdbBody = TmdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, useID)
@@ -2975,8 +2962,18 @@ Public Class Movie
                     ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
                     AssignScrapedMovie(_rescrapedMovie)
                 End If
+            Else
+                _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
+
+                If _imdbBody = "MIC" Then                        
+                    ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Preferences.imdbmirror & """" & vbCrLf)
+                Else
+                    ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
+                    AssignScrapedMovie(_rescrapedMovie)
+                End If
             End If
-        
+            
+            UpdateProperty( _rescrapedMovie.fullmoviebody.tmdbid   , _scrapedMovie.fullmoviebody.tmdbid   , True         , True)
             UpdateProperty( _rescrapedMovie.fullmoviebody.credits  , _scrapedMovie.fullmoviebody.credits  , rl.credits   , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.director , _scrapedMovie.fullmoviebody.director , rl.director  , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.stars    , _scrapedMovie.fullmoviebody.stars    , rl.stars     , rl.EmptyMainTags)  
@@ -2995,10 +2992,10 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.title    , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
 
-            If Preferences.movies_useXBMC_Scraper Then
-                If Preferences.XbmcTmdbVotesFromImdb Then UpdateProperty(IMDB_Votes, _scrapedMovie.fullmoviebody.votes, rl.votes, rl.EmptyMainTags)
-                If Preferences.XbmcTmdbCertFromImdb Then UpdateProperty(IMDB_Mpaa, _scrapedMovie.fullmoviebody.mpaa, rl.mpaa, rl.EmptyMainTags)
-            End If
+            'If Preferences.movies_useXBMC_Scraper Then
+            '    If Preferences.XbmcTmdbVotesFromImdb Then UpdateProperty(IMDB_Votes, _scrapedMovie.fullmoviebody.votes, rl.votes, rl.EmptyMainTags)
+            '    If Preferences.XbmcTmdbCertFromImdb Then UpdateProperty(IMDB_Mpaa, _scrapedMovie.fullmoviebody.mpaa, rl.mpaa, rl.EmptyMainTags)
+            'End If
 
             If rl.title 
                 If Preferences.sorttitleignorearticle Then                 'add ignored articles to end of
