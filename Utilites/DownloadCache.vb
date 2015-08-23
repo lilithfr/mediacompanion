@@ -49,8 +49,13 @@ Public Class DownloadCache
     Public Shared Function SaveImageToCacheAndPaths(ByVal URL As String, Paths As List(Of String), Optional ByVal ForceDownload As Boolean = False, _
                                            Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0, _
                                            Optional ByVal Overwrite As Boolean = True) As Boolean
+        Dim verifiedPaths As New List(Of String)
+        For each path in Paths
+            If Not File.exists(path) OrElse Overwrite Then verifiedPaths.add(path)
+        Next
+        If verifiedPaths.Count = 0 Then Return True
         Dim CacheFileName = ""
-        If Not SaveImageToCache(URL, Paths(0), ForceDownload, CacheFileName) Then Return False
+        If Not SaveImageToCache(URL, verifiedPaths(0), ForceDownload, CacheFileName) Then Return False
 
         Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
 
@@ -59,7 +64,7 @@ Public Class DownloadCache
             'Resize cache image only if need to
             If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
-            For Each path In Paths
+            For Each path In verifiedPaths
                 Utilities.EnsureFolderExists(path)
                 If Overwrite OrElse Not File.Exists(path) Then File.Copy(CachePath, path, Overwrite)
             Next

@@ -1749,9 +1749,9 @@ Partial Public Class Form1
                         End If
 
                         'Posters, Fanart and Season art
-                        Dim artlist As New List(Of TvBanners)
-                        Dim showlist2 As New XmlDocument
-                        Dim artdone As Boolean = False
+                        'Dim artlist As New List(Of TvBanners)
+                        'Dim showlist2 As New XmlDocument
+                        'Dim artdone As Boolean = False
                         If tvBatchList.doShowArt = True Then
                             If tvBatchList.shDelArtwork Then TvDeleteShowArt(Cache.TvCache.Shows(f), False)
                             If tvBatchList.shFanart orElse tvBatchList.shPosters OrElse tvBatchList.shSeason OrElse tvBatchList.shXtraFanart Then
@@ -3589,12 +3589,9 @@ Partial Public Class Form1
                     Next
                     If Not IsNothing(mainposter) Then
                         Dim imgpaths As New List(Of String)
-                        'Dim mainposterpath As String = ""
                         If frodo Then imgpaths.Add(currentshowpath & "poster.jpg")
-                            'mainposterpath = currentshowpath & "poster.jpg"
                         If eden AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
                         If frodo AndAlso isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-poster.jpg")
-                        'If Preferences.tvfolderjpg AndAlso isposter = "poster" Then imgpaths.Add(currentshowpath & "folder.jpg")
                         If eden AndAlso isseasonall = "poster" Then imgpaths.Add(currentshowpath & "season-all.tbn")
                         success = DownloadCache.SaveImageToCacheAndPaths(mainposter, imgpaths, False, , ,overwriteimage)
                     End If
@@ -3649,19 +3646,6 @@ Partial Public Class Form1
                             Dim imgpaths As New List(Of String)
                             If frodo Then imgpaths.Add(currentshowpath & "season" & tempstring & "-poster.jpg")
                             If eden Then imgpaths.Add(currentshowpath & "season" & tempstring & ".tbn")
-                            'If Preferences.seasonfolderjpg AndAlso currentshow.Episodes.Count > 0 Then
-                            '    For Each ep In currentshow.Episodes
-                            '        If ep.Season.Value = f Then
-                            '            If ep.FolderPath <> currentshowpath Then
-                            '                Dim TrueSeasonFolder As String = ep.FolderPath & "folder.jpg"
-                            '                If Not File.Exists(TrueSeasonFolder) Then
-                            '                    imgpaths.Add(TrueSeasonFolder)
-                            '                    Exit For
-                            '                End If
-                            '            End If
-                            '        End If
-                            '    Next
-                            'End If
                             success = DownloadCache.SaveImageToCacheAndPaths(seasonXXposter, imgpaths, False, , ,overwriteimage)
                         End If
                     End If
@@ -3693,6 +3677,7 @@ Partial Public Class Form1
                         End If
                     End If
                 Next
+                TvCheckfolderjpgart(currentshow)
             End If
 
             'Main Fanart
@@ -3717,16 +3702,14 @@ Partial Public Class Form1
 
             'ExtraFanart
             If shXtraFanart Then
-                Dim xfanart As String = currentshowpath & "extrafanart\"   '"extrafanart\fanart"
+                Dim xfanart As String = currentshowpath & "extrafanart\"
                 Dim fanartposter As New List(Of TVBanners)
                 For Each lang In Langlist 
                     For Each Image In artlist
                         If (Image.Language = lang Or lang = "") AndAlso Image.BannerType = "fanart" Then
                             fanartposter.Add(Image)
-                            'If fanartposter.Count = 5 Then Exit For
                         End If
                     Next
-                    'If fanartposter.Count = 5 Then Exit For
                 Next
                 If fanartposter.Count > 0 Then
                     Dim x As Integer = 0
@@ -3942,7 +3925,7 @@ Partial Public Class Form1
 
     Private Sub TvCheckfolderjpgart(ByVal ThisShow As TvShow)
         Dim currentshowpath As String = ThisShow.FolderPath
-        If Preferences.tvfolderjpg Then
+        If Preferences.tvfolderjpg AndAlso Not File.Exists(currentshowpath & "folder.jpg") Then
             If File.Exists(currentshowpath & "poster.jpg") AndAlso Preferences.FrodoEnabled Then
                 Utilities.SafeCopyFile(currentshowpath & "poster.jpg", currentshowpath & "folder.jpg", False)
             End If
@@ -3952,7 +3935,7 @@ Partial Public Class Form1
             For Each Seas In ThisShow.Seasons.Values
                 If Seas.FolderPath <> ThisShow.FolderPath Then
                     Dim seasonfile As String = Seas.Poster.FileName   '= Seas.SeasonLabel.ToLower.Replace(" ", "")& "-poster.jpg"
-                    If File.Exists(ThisShow.FolderPath & seasonfile) Then
+                    If File.Exists(ThisShow.FolderPath & seasonfile) AndAlso Not File.Exists(Seas.FolderPath & "folder.jpg") Then
                         Utilities.SafeCopyFile(ThisShow.FolderPath & seasonfile, Seas.FolderPath & "folder.jpg", False)
                     End If
                 End If
