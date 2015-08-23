@@ -2064,7 +2064,9 @@ Partial Public Class Form1
                             newepisode.Episode.Value = M.Groups(2).Value.ToString
 
                             Try
-                                newepisode.Thumbnail.FileName = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
+                                Dim matchvalue As String = M.Value
+                                newepisode.Thumbnail.FileName = S.Substring(S.LastIndexOf(matchvalue)+matchvalue.Length, S.Length - (S.LastIndexOf(matchvalue) + (matchvalue.Length)))
+                                'newepisode.Thumbnail.FileName = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
                             Catch ex As Exception
         #If SilentErrorScream Then
                                     Throw ex
