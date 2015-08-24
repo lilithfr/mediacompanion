@@ -1172,7 +1172,7 @@ Public Class WorkingWithNfoFiles
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
-                                    Case "id"
+                                    Case "actorid"
                                         newactor.actorid = detail.InnerText
                                     Case "name"
                                         newactor.actorname = detail.InnerText

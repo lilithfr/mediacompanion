@@ -1647,11 +1647,12 @@ Partial Public Class Form1
             Dim showsdone As Integer = 0
             Dim showcounter As Integer = 0
             For f = shcachecount - 1 To 0 Step -1
-                'showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
                     If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
-                        'Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
-                        Call nfoFunction.tvshow_NfoSave(nfoFunction.tv_NfoLoad(Cache.TvCache.Shows(f).NfoFilePath), True)
+                        Dim SelectedSeries As New TvShow
+                        SelectedSeries = nfoFunction.tvshow_NfoLoad(Cache.TvCache.Shows(f).NfoFilePath)
+                        Call FixTvActorsNfo(SelectedSeries)
+                        Call nfoFunction.tvshow_NfoSave(SelectedSeries, True)
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
                             Dim epcount As Integer = Cache.TvCache.Shows(f).Episodes.Count
                             progresstext = "Rewriting nfo's of Show: " & Cache.TvCache.Shows(f).Title.Value & ", Episode: " & epcount - g & " of " & epcount & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
@@ -1673,7 +1674,6 @@ Partial Public Class Form1
                     End If
                     If singleshow Then Exit For
                     Continue For
-                    'tvBatchList.RewriteAllNFOs = False
                 End If
 
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open OrElse Cache.TvCache.Shows(f).State = -1 OrElse tvBatchList.includeLocked = True Then
@@ -1749,9 +1749,6 @@ Partial Public Class Form1
                         End If
 
                         'Posters, Fanart and Season art
-                        'Dim artlist As New List(Of TvBanners)
-                        'Dim showlist2 As New XmlDocument
-                        'Dim artdone As Boolean = False
                         If tvBatchList.doShowArt = True Then
                             If tvBatchList.shDelArtwork Then TvDeleteShowArt(Cache.TvCache.Shows(f), False)
                             If tvBatchList.shFanart orElse tvBatchList.shPosters OrElse tvBatchList.shSeason OrElse tvBatchList.shXtraFanart Then
@@ -1789,7 +1786,6 @@ Partial Public Class Form1
                                 End If
                             Next
                             If Not epfound Then
-                                'Dim epattempt2 As Boolean = False
                                 Dim sortorder As String = Cache.TvCache.Shows(f).SortOrder.Value
                                 If sortorder = "" Then sortorder = "default"
                                 Dim tvdbid As String = Cache.TvCache.Shows(f).TvdbId.Value
@@ -3860,6 +3856,33 @@ Partial Public Class Form1
         End While
         Return success
     End Function
+
+    Private Sub FixTvActorsNfo(ByRef TvSeries As TvShow)
+        'If XBMC networkpath changed, update actor thumb path
+        For Each tvActor In TvSeries.listactors
+            If Preferences.actorsave AndAlso tvActor.actorid <> "" Then
+                If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
+                    Dim tempstring As String = Preferences.actorsavepath
+                    Dim workingpath As String = ""
+                    If Preferences.actorsavealpha Then
+                        Dim actorfilename As String = tvActor.actorname.Replace(" ", "_") & "_" & tvActor.actorid & ".jpg"
+                        tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
+                        workingpath = tempstring & actorfilename 
+                    Else
+                        tempstring = tempstring & "\" & tvActor.actorid.Substring(tvActor.actorid.Length - 2, 2) & "\"
+                        workingpath = tempstring & tvActor.actorid & ".jpg"
+                    End If
+                    If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
+                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                            tvActor.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("\", "/")
+                        Else
+                            tvActor.actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("/", "\")
+                        End If
+                    End If
+                End If
+            End If
+        Next
+    End Sub
 
     Private Sub TvDeleteShowArt(ByVal NewShow As Media_Companion.TvShow, Optional ByVal NotActors As Boolean = True)
         Try
