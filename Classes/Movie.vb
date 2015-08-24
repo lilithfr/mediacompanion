@@ -959,7 +959,7 @@ Public Class Movie
 
         ReportProgress( "- Main body " )
    
-        Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Preferences.imdbmirror, Preferences.googlecount)
+        Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Preferences.googlecount)
     End Function
 
     Sub IniTmdb
@@ -1031,7 +1031,7 @@ Public Class Movie
 
         ReportProgress( "- Main body " )
         
-        Return _imdbScraper.gettmdbbody(Title, PossibleYear, PossibleImdb, Preferences.imdbmirror, Preferences.googlecount)
+        Return _imdbScraper.gettmdbbody(Title, PossibleYear, PossibleImdb, Preferences.googlecount)
     End Function
 
 

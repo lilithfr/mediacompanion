@@ -249,6 +249,7 @@ Public Class Preferences
     Public Shared XbmcTmdbVotesFromImdb As Boolean
     Public Shared XbmcTmdbCertFromImdb As Boolean
     Public Shared XbmcTmdbStarsFromImdb As Boolean
+    Public Shared XbmcTmdbAkasFromImdb As Boolean
     Public Shared XbmcTmdbActorDL As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared OfflineDVDTitle As String
@@ -602,6 +603,7 @@ Public Class Preferences
         XbmcTmdbVotesFromImdb = False
         XbmcTmdbCertFromImdb = False
         XbmcTmdbStarsFromImdb = False
+        XbmcTmdbAkasFromImdb = False
         XbmcTmdbActorDL = False
         moviedefaultlist = 0
         moviesortorder = 0
@@ -1068,6 +1070,7 @@ Public Class Preferences
         root.AppendChild(doc, "XbmcTmdbVotesFromImdb",              XbmcTmdbVotesFromImdb)              'cbXbmcTmdbImdbVotes
         root.AppendChild(doc, "XbmcTmdbCertFromImdb",               XbmcTmdbCertFromImdb)               'cbXbmcTmdbCertFromImdb
         root.AppendChild(doc, "XbmcTmdbStarsFromImdb",              XbmcTmdbStarsFromImdb)              'cbXbmcTmdbStarsFromImdb
+        root.AppendChild(doc, "XbmcTmdbAkasFromImdb",               XbmcTmdbAkasFromImdb)               'cbXbmcTmdbAkasFromImdb
         root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
@@ -1366,6 +1369,7 @@ Public Class Preferences
                     Case "XbmcTmdbVotesFromImdb"                : XbmcTmdbVotesFromImdb = thisresult.InnerText
                     Case "XbmcTmdbCertFromImdb"                 : XbmcTmdbCertFromImdb = thisresult.InnerText 
                     Case "XbmcTmdbStarsFromImdb"                : XbmcTmdbStarsFromImdb = thisresult.InnerText
+                    Case "XbmcTmdbAkasFromImdb"                 : XbmcTmdbAkasFromImdb = thisresult.InnerText
                     Case "XbmcTmdbActorDL"                      : XbmcTmdbActorDL = thisresult.InnerText
                     Case "seasonall"                            : seasonall = thisresult.InnerText
                     Case "splitcontainer1"                      : splt1 = Convert.ToInt32(thisresult.InnerText)

@@ -12371,6 +12371,7 @@ End Sub
         cbXbmcTmdbVotesFromImdb             .Checked        = Preferences.XbmcTmdbVotesFromImdb 
         cbXbmcTmdbCertFromImdb              .Checked        = Preferences.XbmcTmdbCertFromImdb
         cbXbmcTmdbStarsFromImdb             .Checked        = Preferences.XbmcTmdbStarsFromImdb 
+        cbXbmcTmdbAkasFromImdb              .Checked        = Preferences.XbmcTmdbAkasFromImdb
         cbXbmcTmdbActorDL                   .Checked        = Preferences.XbmcTmdbActorDL
         saveactorchkbx                      .Checked        = Preferences.actorsave
         cb_LocalActorSaveAlpha              .Checked        = Preferences.actorsavealpha
@@ -14250,6 +14251,13 @@ End Sub
     Private Sub cbXbmcTmdbStarsFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbStarsFromImdb.CheckedChanged
         If prefsload Then Exit Sub
         Preferences.XbmcTmdbStarsFromImdb = cbXbmcTmdbStarsFromImdb.Checked 
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub cbXbmcTmdbAkasFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbAkasFromImdb.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.XbmcTmdbAkasFromImdb = cbXbmcTmdbAkasFromImdb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub

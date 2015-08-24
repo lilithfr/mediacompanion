@@ -936,9 +936,62 @@ Public Class Classimdb
     ReadOnly Property GetFromImdb As Boolean
         Get
             Return Preferences.XbmcTmdbCertFromImdb OrElse Preferences.XbmcTmdbStarsFromImdb OrElse Preferences.XbmcTmdbTop250FromImdb OrElse 
-                Preferences.XbmcTmdbVotesFromImdb OrElse Preferences.XbmcTmdbMissingFromImdb 
+                Preferences.XbmcTmdbVotesFromImdb OrElse Preferences.XbmcTmdbMissingFromImdb OrElse Preferences.XbmcTmdbAkasFromImdb
         End Get
     End Property
+
+    Function AKAS(ByVal imdbid As String) As String
+        Dim totalinfo As String = ""
+        Try
+            'releaseinfo#akas
+            Dim tempstring As String= Preferences.imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
+            Dim webpage As New List(Of String)
+            webpage.Clear()
+            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            For f = 0 To webpage.Count - 1
+                If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
+                    Dim loc As Integer = f
+                    Dim ignore As Boolean = False
+                    Dim original As Boolean = False
+                    For g = loc To loc + 500
+                        If webpage(g).IndexOf("</table>") <> -1 Then Exit For
+                        Dim skip As Boolean = Not ignore
+                        If webpage(g).IndexOf("<td>") <> -1 Then ignore = Not ignore
+                        If skip = True Then
+                            If webpage(g).IndexOf("(original title)") <> -1 Then original = True
+                        End If
+
+                        If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
+                            If webpage(g - 1).IndexOf("Greece") = -1 And webpage(g - 1).IndexOf("Russia") = -1 Then
+                                tempstring = webpage(g)
+                                tempstring = LTrim(tempstring)
+                                tempstring = tempstring.Replace("<td>", "")
+                                tempstring = tempstring.Replace("</td>", "")
+                                tempstring = Utilities.cleanSpecChars(tempstring)
+                                tempstring = encodespecialchrs(tempstring)
+                                Dim TitleTag As String = "<originaltitle>" & tempstring & "</originaltitle>"
+                                If original = False Then
+                                    totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                                Else
+                                    If totalinfo.IndexOf(TitleTag) = -1 Then
+                                        totalinfo = totalinfo & "<originaltitle>" & tempstring & "</originaltitle>" & vbCrLf
+                                    Else
+                                        totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                                    End If
+                                    original = False
+                                End If
+                            Else
+                                g = g + 1
+                            End If
+                            ignore = False
+                        End If
+                    Next
+                End If
+            Next
+        Catch ex As Exception
+        End Try
+        Return totalinfo
+    End Function
 
     Function GetNames(RegExPattern As String, Optional ByVal Max As Integer=-1) As String
         Dim s As String=""
@@ -963,7 +1016,7 @@ Public Class Classimdb
         Return s
     End Function
     
-    Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
+    Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
 
         Dim totalinfo As String = ""
@@ -1033,7 +1086,7 @@ Public Class Classimdb
                 If imdbcounter < 450 Then
                     imdbid = getimdbID(title, year)
                 Else
-                    imdbid = getimdbID_fromimdb(title, imdbmirror, year)
+                    imdbid = getimdbID_fromimdb(title, Preferences.imdbmirror, year)
                 End If
                 If imdbid <> "" And imdbid.IndexOf("tt") = 0 And imdbid.Length = 9 Then
                     allok = True
@@ -1044,7 +1097,7 @@ Public Class Classimdb
                 Exit Function
             End If
             If allok = True Then
-                tempstring = imdbmirror & "title/" & imdbid
+                tempstring = Preferences.imdbmirror & "title/" & imdbid
                 webpage.Clear()
                 webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
 
@@ -1217,7 +1270,7 @@ Public Class Classimdb
                 Next
 
                 Try
-                    tempstring = imdbmirror & "title/" & imdbid & "/plotsummary"
+                    tempstring = Preferences.imdbmirror & "title/" & imdbid & "/plotsummary"
                     Dim plots(20) As String
                     webpage.Clear()
                     webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
@@ -1255,7 +1308,7 @@ Public Class Classimdb
 
                 'certs & mpaa
                 Try
-                    tempstring = imdbmirror & "title/" & imdbid & "/parentalguide#certification"
+                    tempstring = Preferences.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
                     webpage.Clear()
                     webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
                     For f = 0 To webpage.Count - 1
@@ -1298,57 +1351,59 @@ Public Class Classimdb
 
                 Try
                     'releaseinfo#akas
-                    tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
-                    webpage.Clear()
-                    webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
-                    For f = 0 To webpage.Count - 1
-                        If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
-                            Dim loc As Integer = f
-                            Dim ignore As Boolean = False
-                            Dim original As Boolean = False
-                            For g = loc To loc + 500
-                                If webpage(g).IndexOf("</table>") <> -1 Then
-                                    Exit For
-                                End If
-                                Dim skip As Boolean = Not ignore
+                    totalinfo = totalinfo & AKAS(imdbid)
 
-                                If webpage(g).IndexOf("<td>") <> -1 Then    'And ignore = True Then
-                                    ignore = Not ignore
-                                End If
+                    'tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
+                    'webpage.Clear()
+                    'webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                    'For f = 0 To webpage.Count - 1
+                    '    If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
+                    '        Dim loc As Integer = f
+                    '        Dim ignore As Boolean = False
+                    '        Dim original As Boolean = False
+                    '        For g = loc To loc + 500
+                    '            If webpage(g).IndexOf("</table>") <> -1 Then
+                    '                Exit For
+                    '            End If
+                    '            Dim skip As Boolean = Not ignore
 
-                                If skip = True Then
-                                    If webpage(g).IndexOf("(original title)") <> -1 Then
-                                        original = True
-                                    End If
-                                End If
+                    '            If webpage(g).IndexOf("<td>") <> -1 Then    'And ignore = True Then
+                    '                ignore = Not ignore
+                    '            End If
 
-                                If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
-                                    If webpage(g - 1).IndexOf("Greece") = -1 And webpage(g - 1).IndexOf("Russia") = -1 Then
-                                        tempstring = webpage(g)
-                                        tempstring = LTrim(tempstring)
-                                        tempstring = tempstring.Replace("<td>", "")
-                                        tempstring = tempstring.Replace("</td>", "")
-                                        tempstring = Utilities.cleanSpecChars(tempstring)
-                                        tempstring = encodespecialchrs(tempstring)
-                                        Dim TitleTag As String = "<originaltitle>" & tempstring & "</originaltitle>"
-                                        If original = False Then
-                                            totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
-                                        Else
-                                            If totalinfo.IndexOf(TitleTag) = -1 Then
-                                                totalinfo = totalinfo & "<originaltitle>" & tempstring & "</originaltitle>" & vbCrLf
-                                            Else
-                                                totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
-                                            End If
-                                            original = False
-                                        End If
-                                    Else
-                                        g = g + 1
-                                    End If
-                                    ignore = False
-                                End If
-                            Next
-                        End If
-                    Next
+                    '            If skip = True Then
+                    '                If webpage(g).IndexOf("(original title)") <> -1 Then
+                    '                    original = True
+                    '                End If
+                    '            End If
+
+                    '            If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
+                    '                If webpage(g - 1).IndexOf("Greece") = -1 And webpage(g - 1).IndexOf("Russia") = -1 Then
+                    '                    tempstring = webpage(g)
+                    '                    tempstring = LTrim(tempstring)
+                    '                    tempstring = tempstring.Replace("<td>", "")
+                    '                    tempstring = tempstring.Replace("</td>", "")
+                    '                    tempstring = Utilities.cleanSpecChars(tempstring)
+                    '                    tempstring = encodespecialchrs(tempstring)
+                    '                    Dim TitleTag As String = "<originaltitle>" & tempstring & "</originaltitle>"
+                    '                    If original = False Then
+                    '                        totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                    '                    Else
+                    '                        If totalinfo.IndexOf(TitleTag) = -1 Then
+                    '                            totalinfo = totalinfo & "<originaltitle>" & tempstring & "</originaltitle>" & vbCrLf
+                    '                        Else
+                    '                            totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+                    '                        End If
+                    '                        original = False
+                    '                    End If
+                    '                Else
+                    '                    g = g + 1
+                    '                End If
+                    '                ignore = False
+                    '            End If
+                    '        Next
+                    '    End If
+                    'Next
                 Catch ex As Exception
 
                 End Try
@@ -1377,7 +1432,7 @@ Public Class Classimdb
         End Try
     End Function
 
-    Public Function gettmdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal tmdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
+    Public Function gettmdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal tmdbid As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
         Dim IMDbId As String = String.Empty
         Dim totalinfo As String = ""
@@ -1533,6 +1588,7 @@ Public Class Classimdb
             For Each wp In webpage
                 test += wp & vbcrlf
             Next
+            If Preferences.XbmcTmdbAkasFromImdb     Then results = results & AKAS(IMDbId)
             If Preferences.XbmcTmdbStarsFromImdb    Then results.AppendTagText( "stars"     , Stars)
             If Preferences.XbmcTmdbMissingFromImdb  Then results.AppendTagText( "outline"   , Outline)
             If Preferences.XbmcTmdbTop250FromImdb   Then results.AppendTag( "top250"    , Top250)
