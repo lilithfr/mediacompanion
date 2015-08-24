@@ -822,19 +822,15 @@ Public Class Classimdb
     ReadOnly Property Title As String
         Get
             Dim s As String = ""
-
             If Preferences.Original_Title Then
                 s=Original_Title
             End If
-            
             s = s.Replace("""", "")
-
             If s="" Then  
                 s=Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
                 s = s.Replace("&amp;", "&")
                 s = s.Replace( "&quot;", """")
             End If
-
             Return s
         End Get
 
@@ -857,21 +853,14 @@ Public Class Classimdb
             Dim s As String=""
             Dim D = 0
             Dim W = 0
-
             D = Html.IndexOf("<h4 class=""inline"">Genres:</h4>")
-
             If Not D <= 0 Then
                 W = Html.IndexOf("</div>", D)
-
                 Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline)
-
                 Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
-
                 s.AppendList(lst, " / ")
-
                 Return s
             End If
-
             Return s
         End Get
     End Property
@@ -879,19 +868,14 @@ Public Class Classimdb
     ReadOnly Property Directors As String
         Get
             Dim s As String=""
-
             Dim D = Html.IndexOf("itemprop=""director""")
-
             Dim W = If(D > 0, Html.IndexOf("</div>", D), 0)
-
             If Not D <= 0 And Not W <= 0 Then
                 Dim rDir As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN)
                 Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
                              Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
-
                 s.AppendList(lst, " / ")
             End If
-
             Return s
         End Get
     End Property
@@ -909,13 +893,7 @@ Public Class Classimdb
             Return GetNames(MovieRegExs.REGEX_CREDITS)
         End Get
     End Property
-
-    'ReadOnly Property Plot As String
-    '    Get
-    '        Return Regex.Match(Html,MovieRegExs.REGEX_PLOT, RegexOptions.Singleline).ToString.Trim.StripHRef
-    '    End Get
-    'End Property
-
+    
     ReadOnly Property ReleaseDate As String
         Get
             Dim s=""
@@ -1527,8 +1505,7 @@ Public Class Classimdb
             Dim SeparateMovie As String = Utilities.checktitle(title, Preferences.MovSepLst)
             If SeparateMovie <> "" Then
                 FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, TheTitle)
-            End If            
-            'If Preferences.XbmcTmdbCertFromImdb Then results = results & GetImdbCerts(IMDbId)
+            End If
             Return FinalScrapResult
         Catch ex As Exception
             Return "error"
@@ -1581,7 +1558,6 @@ Public Class Classimdb
             Dim movienfoarray As String = String.Empty
             webpage.Clear()
             webpage = loadwebpage(Preferences.proxysettings, IMDbUrl, False)
-
             Dim webPg As String = String.Join( "" , webpage.ToArray() )
             Html = webPg
             Dim test As String = ""
@@ -1605,7 +1581,6 @@ Public Class Classimdb
                         End Try
                     End If
                 Next
-
                 Try
                     IMDbUrl = Preferences.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
                     webpage.Clear()
@@ -1637,7 +1612,6 @@ Public Class Classimdb
                                         If Not Preferences.scrapefullcert Then
                                             mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
                                         End If
-
                                         mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
                                     Catch
                                         mpaaresults(g, 1) = "error"
@@ -1663,7 +1637,6 @@ Public Class Classimdb
                     End If
                 Next
             End If
-
             Return results
         Catch ex As Exception
             Return ""
@@ -1726,7 +1699,6 @@ Public Class Classimdb
                     End If
                 End If
             Next
-            
             If allok = True Then
                 allok = False
                 webpage.Clear()
@@ -1774,12 +1746,9 @@ Public Class Classimdb
 
         Dim webpage As New List(Of String)
         Monitor.Enter(Me)
-
         Try
             Dim wrGETURL As WebRequest = WebRequest.Create(Url)
-
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
-
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
             If proxy.Item(0).ToLower = "false" Then
                 Dim myProxy As New WebProxy("myproxy", 80)
@@ -1789,7 +1758,6 @@ Public Class Classimdb
                 myProxy.Credentials = New NetworkCredential(proxy.Item(3), proxy.item(4))
                 wrGETURL.Proxy = myProxy
             End If
-
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -1831,20 +1799,14 @@ Public Class Classimdb
     End Function
 
     Function GetGenres( ByVal webPage As String )
-
         Dim genres As New List(Of String)
         Dim genre As String
-
         For Each m As Match In Regex.Matches( webPage, Preferences.MovieImdbGenreRegEx )
-
             genre = m.Groups("genre").Value
-
             If Not genres.Contains( genre ) then
                 genres.Add( genre )
             End if
-
-        Next   
-         
+        Next
         Return genres
     End Function
 
