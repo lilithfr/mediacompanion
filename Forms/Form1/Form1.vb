@@ -4084,30 +4084,9 @@ Public Class Form1
         If isfanartpath <> Nothing Or isvideotspath <> "" Then
             Try
                 If IO.File.Exists(isvideotspath) Then
-                    movfanartpath = isvideotspath 
-                    ''Dim OriginalImage As New Bitmap(isvideotspath)
-                    ''Dim Image2 As New Bitmap(OriginalImage)
-                    ''OriginalImage.Dispose()
-                    ''PictureBox2.Image = Image2 'moviethumb - 3
-                    'util_ImageLoad(PictureBox2, isvideotspath, Utilities.DefaultFanartPath)
-                    'lblMovFanartWidth.Text = PictureBox2.Image.Width
-                    'lblMovFanartHeight.Text = PictureBox2.Image.Height
+                    movfanartpath = isvideotspath
                 ElseIf IO.File.Exists(isfanartpath) Then
-                    movfanartpath = isfanartpath 
-                    ''Dim OriginalImage As New Bitmap(isfanartpath)
-                    ''Dim Image2 As New Bitmap(OriginalImage)
-                    ''OriginalImage.Dispose()
-                    ''PictureBox2.Image = Image2 'moviethumb - 3
-                    'util_ImageLoad(PictureBox2, isvideotspath, Utilities.DefaultFanartPath)
-                    'lblMovFanartWidth.Text = PictureBox2.Image.Width
-                    'lblMovFanartHeight.Text = PictureBox2.Image.Height
-                'Else
-                '    Dim OriginalImage As New Bitmap(Utilities.DefaultBannerPath)
-                '    Dim Image2 As New Bitmap(OriginalImage)
-                '    OriginalImage.Dispose()
-                '    PictureBox2.Image = Image2 'moviethumb - 3
-                '    lblMovFanartWidth.Text = PictureBox2.Image.Width
-                '    lblMovFanartHeight.Text = PictureBox2.Image.Height
+                    movfanartpath = isfanartpath
                 End If
                 util_ImageLoad(PictureBox2, movfanartpath, Utilities.DefaultFanartPath)
                 If movfanartpath = "" Then
@@ -4117,15 +4096,7 @@ Public Class Form1
                     lblMovFanartWidth.Text = PictureBox2.Image.Width
                     lblMovFanartHeight.Text = PictureBox2.Image.Height
                 End If
-                'If Not IO.File.Exists(isfanartpath) And Not IO.File.Exists(isvideotspath) Then
-                '    PictureBox2.ImageLocation = Utilities.DefaultFanartPath 'moviethumb - 3
-                '    lblMovFanartWidth.Text = ""
-                '    lblMovFanartHeight.Text = ""
-                'End If
             Catch ex As Exception
-'#If SilentErrorScream Then
-'                        Throw ex
-'#End If
             End Try
         End If
         MovFanartDisplay()
@@ -4273,7 +4244,6 @@ Public Class Form1
         If tempstring.IndexOf("poster") <> -1 Then
             tempstring = tempstring.Replace("poster", "")
             tempint = Convert.ToDecimal(tempstring)
-            'tempstring2 = posterarray(tempint + 1).hdposter
             If tempstring2 = Nothing Then
                 tempint = Convert.ToDecimal(tempstring)
                 tempint = tempint + ((currentPage - 1) * 10)
@@ -4315,7 +4285,6 @@ Public Class Form1
             .Width = bigPanel.Width
             .Height = bigPanel.Height
             .SizeMode = PictureBoxSizeMode.Zoom
-            '.Image = sender.image
             .WaitOnLoad = True
 
             .Visible = False
@@ -4324,8 +4293,6 @@ Public Class Form1
             .Dock = DockStyle.Fill
         End With
         Try
-            'bigPictureBox.ImageLocation = tempstring2
-            'bigPictureBox.Load()
             util_ImageLoad(bigPictureBox, tempstring2, "")
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -4344,7 +4311,6 @@ Public Class Form1
             .Height = 50
             .Visible = True
             .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
-            '   .BringToFront()
         End With
 
         Me.bigPanel.Controls.Add(bigpanellabel)
@@ -4357,8 +4323,6 @@ Public Class Form1
             If bigPictureBox.Image Is Nothing Then
                 tempstring2 = posterArray(tempint).ldUrl
                 util_ImageLoad(bigPictureBox, tempstring2, "")
-                'bigPictureBox.ImageLocation = tempstring2
-                'bigPictureBox.Load()
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -4369,8 +4333,6 @@ Public Class Form1
             If bigPictureBox.Image.Width < 20 Then
                 tempstring2 = posterArray(tempint).ldUrl
                 util_ImageLoad(bigPictureBox, tempstring2, "")
-                'bigPictureBox.ImageLocation = tempstring2
-                'bigPictureBox.Load()
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -4431,7 +4393,6 @@ Public Class Form1
             Else
                 Try
                     If Not MovFanartToggle Then
-                        'Panel1.Controls.Remove(Label1)
                         Dim issavefanart As Boolean = Preferences.savefanart
                         Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
                         Dim xtra As Boolean = False
@@ -4498,8 +4459,7 @@ Public Class Form1
         ProgState = ProgramState.ResettingFilters
         Assign_FilterGeneral
         ProgState = ProgramState.Other
-
-'       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        
         UpdateMissingFanartNav
     End Sub
 
@@ -4577,8 +4537,7 @@ Public Class Form1
         ProgState = ProgramState.ResettingFilters
         Assign_FilterGeneral
         ProgState = ProgramState.Other
-
-'       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        
         UpdateMissingPosterNav             
     End Sub
 
@@ -4745,16 +4704,13 @@ Public Class Form1
             If posterArray.Count > 10 Then
                 For f = 0 To Preferences.maximumthumbs - 1
                     names.Add(posterArray(f))
-                    'names.Add(posterArray(f).ldUrl)
                 Next
             Else
                 For f = 0 To posterArray.Count - 1
                     names.Add(posterArray(f))
-                    'names.Add(posterArray(f).ldUrl)
                 Next
             End If
-
-            'Label7.Visible = True
+            
             If pageCount > 1 Then
                 btnMovPosterNext.Visible = True
                 btnMovPosterPrev.Visible = True
@@ -4933,9 +4889,8 @@ Public Class Form1
             For Each actor In Episode.ListActors
                 If actor.actorname = cmbxEpActor.Text Then
                     tbEpRole.Text = actor.actorrole
-                    'pbEpActorImage.ImageLocation = Utilities.DefaultActorPath
 
-                    Dim temppath As String = Episode.ShowObj.FolderPath   'Episode.NfoFilePath.Replace(IO.Path.GetFileName(Episode.NfoFilePath), "")
+                    Dim temppath As String = Episode.ShowObj.FolderPath
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & If(Preferences.FrodoEnabled, ".jpg", ".tbn")
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
@@ -4952,7 +4907,6 @@ Public Class Form1
                         util_ImageLoad(pbEpActorImage, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
                     End If
                     pbEpActorImage.SizeMode = PictureBoxSizeMode.Zoom
-                    'pbEpActorImage.Load()
                 End If
             Next
         Catch ex As Exception
@@ -5320,10 +5274,6 @@ Public Class Form1
                 urllinecount -= 1
 
             Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-                'MsgBox(ex.ToString)
             End Try
             For f = 1 To urllinecount
                 If websource(f).IndexOf("<Language>") <> -1 Then
@@ -5600,12 +5550,10 @@ Public Class Form1
         Try
 
             If scrapeAndQuit = True Then
-                'Me.Close()
                 sandq = sandq -1
                 Exit Sub 
             End If
-
-
+            
             If Not (e.Error Is Nothing) Then
                 tvScraperLog = tvScraperLog & vbCrLf
                 tvScraperLog = tvScraperLog & "!!! Error, exiting TV episode scraper" & vbCrLf
@@ -5614,8 +5562,7 @@ Public Class Form1
             Else
                 tvScraperLog = tvScraperLog & vbCrLf & "!!! Operation Completed" & vbCrLf
             End If
-
-
+            
             ToolStripProgressBar5.Value = 0
             ToolStripProgressBar5.ProgressBar.Refresh()
             ToolStripProgressBar5.Visible = False
@@ -5623,9 +5570,7 @@ Public Class Form1
             ToolStripStatusLabel6.Visible = False
             TabPage15.Text = "Search for new Episodes"
             TabPage15.ToolTipText = "Searches folders for new episodes"
-
             
-            'Call populatetvtree()
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
             Tv_CacheSave()
@@ -5644,9 +5589,6 @@ Public Class Form1
                 BlinkTaskBar()
             End If
             GC.Collect()
-            'For Each Show As Nfo.TvShow In TvShows
-            '    Show.SearchForEpisodesInFolder()
-            'Next
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5665,7 +5607,7 @@ Public Class Form1
                 ElseIf Not IsNothing(WorkingTvSeason) AndAlso Not IsNothing(WorkingTvSeason.FolderPath) Then
                     Path = WorkingTvSeason.FolderPath 
                 ElseIf Not WorkingTvShow.NfoFilePath Is Nothing And Not WorkingTvShow.NfoFilePath = "" Then
-                    Path = WorkingTvShow.NfoFilePath  'Call util_OpenFolder(WorkingTvShow.NfoFilePath) 'we send the path of the tvshow.nfo, that way in explorer it will be highlighted in the folder
+                    Path = WorkingTvShow.NfoFilePath  'we send the path of the tvshow.nfo, that way in explorer it will be highlighted in the folder
                 Else
                     MsgBox("There is no show selected to open")
                 End If
@@ -5816,7 +5758,6 @@ Public Class Form1
                         .Height = 250
                     End If
                     .SizeMode = PictureBoxSizeMode.Zoom
-                    '.ImageLocation = listOfTvFanarts(f).smallUrl
                     .Visible = True
                     .BorderStyle = BorderStyle.Fixed3D
                     .Name = "tvfanart" & f.ToString
@@ -5877,9 +5818,6 @@ Public Class Form1
     Sub EnableTvBannerScrolling
         Try
             Panel16.Focus()
-            'Dim rb As RadioButton = Panel16.Controls("postercheckbox0")
-            'rb.Select
-            'rb.Checked = Not rb.Checked
         Catch
         End Try
     End Sub
@@ -11753,7 +11691,7 @@ End Sub
         Catch
         End Try
         
-        If DataGridViewMovies.SelectedRows.Count=0 And DataGridViewMovies.Rows.Count>1 Then
+        If DataGridViewMovies.SelectedRows.Count=0 And DataGridViewMovies.Rows.Count>0 Then
             DataGridViewMovies.Rows(0).Selected=True
         End If
 
