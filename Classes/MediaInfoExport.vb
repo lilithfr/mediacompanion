@@ -780,6 +780,9 @@ Public Class MediaInfoExport
                 Case "show_title"
                     strNFOprop = tvShow.Title.Value
 
+                Case "show_plot"
+                    strNFOprop = tvShow.Plot.Value 
+
                 Case "show_year"
                     strNFOprop = tvShow.Year.Value
 
@@ -847,6 +850,12 @@ Public Class MediaInfoExport
                                 strNFOprop = fullTVShowDetails.ImdbId.Value
                             Case "episodeguide"
                                 strNFOprop = fullTVShowDetails.EpisodeGuideUrl.Value
+                            Case "plot"
+                                strNFOprop = fullTVShowDetails.Plot.Value
+                            Case "showtitle"
+                                strNFOprop = fullTVShowDetails.Title.Value
+                            Case "sorttitle"
+                                strNFOprop = fullTVShowDetails.SortTitle.Value
                             Case "actor"                                        ' No support for actor list
                                 strNFOprop = "No support"
                             Case "thumb"                                        ' No support for thumbnail list
