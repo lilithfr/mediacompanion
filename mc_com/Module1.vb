@@ -1704,6 +1704,8 @@ Module Module1
                                         newtvshow.title = Preferences.RemoveIgnoredArticles(tempstring)
                                     Case "id"
                                         newtvshow.id = detail.InnerText
+                                    Case "status"
+                                        newtvshow.status = detail.InnerText 
                                     Case "sortorder"
                                         newtvshow.sortorder = detail.InnerText
                                     Case "language"
@@ -1806,6 +1808,7 @@ Module Module1
             childchild = document.CreateElement("state")              : childchild.InnerText = item.locked              : child.AppendChild(childchild)
             childchild = document.CreateElement("title")              : childchild.InnerText = item.title               : child.AppendChild(childchild)
             childchild = document.CreateElement("id")                 : childchild.InnerText = item.id                  : child.AppendChild(childchild)
+            childchild = document.CreateElement("status")             : childchild.InnerText = item.status              : child.AppendChild(childchild)
             childchild = document.CreateElement("sortorder")          : childchild.InnerText = item.sortorder           : child.AppendChild(childchild)
             childchild = document.CreateElement("language")           : childchild.InnerText = item.language            : child.AppendChild(childchild)
             childchild = document.CreateElement("episodeactorsource") : childchild.InnerText = item.episodeactorsource  : child.AppendChild(childchild)
@@ -2180,6 +2183,7 @@ Public Class basictvshownfo
     Public fullpath As String
     Public title As String
     Public id As String
+    Public status As String
     Public sortorder As String
     Public language As String
     Public episodeactorsource As String
