@@ -241,6 +241,7 @@ Public Class TvShow
         Me.Runtime.Value = Series.RunTime.Value
         Me.Rating.Value = Series.Rating.Value
         Me.Premiered.Value = Series.FirstAired.Value
+        Me.Year.Value = If(Not String.IsNullOrEmpty(Series.FirstAired.Value), Series.FirstAired.Value.Substring(0,4), "")
         Me.Studio.Value = Series.Network.Value
         Me.Status.Value = Series.Status.Value 
         Me.EpisodeGuideUrl.Value = ""

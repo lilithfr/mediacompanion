@@ -1721,7 +1721,10 @@ Partial Public Class Form1
                             Try
                                 editshow.ImdbId.Value = tvseriesdata.Series(0).ImdbId.Value 
                                 If tvBatchList.shMpaa Then editshow.Mpaa.Value = tvseriesdata.Series(0).ContentRating.Value
-                                If tvBatchList.shYear Then editshow.Premiered.Value =  tvseriesdata.Series(0).FirstAired.Value
+                                If tvBatchList.shYear Then 
+                                    editshow.Premiered.Value =  tvseriesdata.Series(0).FirstAired.Value
+                                    editshow.Year.Value = editshow.Premiered.Value.Substring(0,4)
+                                End If
                                 If tvBatchList.shGenre Then
                                     Dim newstring As String
                                     newstring = tvseriesdata.Series(0).Genre.Value 
@@ -2053,9 +2056,36 @@ Partial Public Class Form1
                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                     Exit Sub
                 End If
+                For Each Shows In Cache.TvCache.Shows
+                    If bckgroundscanepisodes.CancellationPending Then
+                        Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
+                        Exit Sub
+                    End If
+                    If newepisode.FolderPath.Contains(Shows.FolderPath) Then
+                        If Shows.ImdbId.Value Is Nothing OrElse String.IsNullOrEmpty(Shows.Premiered.Value) Then
+                            Shows.Load()
+                        End If
+                        newepisode.ShowLang.Value = Shows.Language.Value
+                        newepisode.sortorder.Value = Shows.SortOrder.Value
+                        newepisode.Showtvdbid.Value = Shows.TvdbId.Value
+                        newepisode.Showimdbid.Value = Shows.ImdbId.Value
+                        newepisode.ShowTitle.Value = Shows.Title.Value
+                        newepisode.ShowYear.Value = Shows.Year.Value
+                        If String.IsNullOrEmpty(newepisode.ShowYear.Value) Then
+                            If Not String.IsNullOrEmpty(Shows.Premiered.Value) Then
+                                Dim yr As String = Shows.Premiered.Value.Substring(0,4)
+                                If yr.Length = 4 Then newepisode.ShowYear.Value = yr
+                            End If
+                        End If
+                        newepisode.actorsource.Value = Shows.EpisodeActorSource.Value
+                        Exit For
+                    End If
+                Next
                 Dim episode As New TvEpisode
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
+                    S = S.Replace(newepisode.ShowTitle.Value, "")
+                    If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then S = S.Replace(newepisode.ShowYear.Value, "")
                     S = S.Replace("x265", "")
                     S = S.Replace("x264", "")
                     S = S.Replace("720p", "")
@@ -2106,8 +2136,7 @@ Partial Public Class Form1
                     Preferences.tvScraperLog &= "!!!" & vbCrLf
                     Continue For    'if we can't get season or episode then skip to next episode
                 End If
-
-                tempTVDBiD = ""
+                
                 Dim episodearray As New List(Of TvEpisode)
                 episodearray.Clear()
                 episodearray.Add(eps)
@@ -2171,35 +2200,13 @@ Partial Public Class Form1
                         End If
                     Loop Until M2.Success = False
                     
-                    Dim language As String = ""
-                    Dim sortorder As String = ""
-                    Dim tvdbid As String = ""
-                    Dim imdbid As String = ""
-                    Dim actorsource As String = ""
-                    Dim realshowpath As String = ""
+                    Dim language As String = eps.ShowLang.Value
+                    Dim sortorder As String = eps.sortorder.Value
+                    Dim tvdbid As String = eps.Showtvdbid.Value
+                    Dim imdbid As String = eps.Showimdbid.Value
+                    Dim actorsource As String = eps.actorsource.Value
 
                     savepath = episodearray(0).NfoFilePath
-                    Dim EpisodeName As String = ""
-                    For Each Shows In Cache.TvCache.Shows
-                        If bckgroundscanepisodes.CancellationPending Then
-                            Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
-                            Exit Sub
-                        End If
-                        If episodearray(0).FolderPath.Contains(Shows.FolderPath) Then
-                            If Shows.ImdbId.Value Is Nothing Then
-                                Shows.Load()
-                            End If
-                            language = Shows.Language.Value
-                            sortorder = Shows.SortOrder.Value
-                            tvdbid = Shows.TvdbId.Value
-                            tempTVDBiD = Shows.TvdbId.Value
-                            imdbid = Shows.ImdbId.Value
-                            showtitle = Shows.Title.Value
-                            EpisodeName = Shows.Title.Value
-                            realshowpath = Shows.NfoFilePath
-                            actorsource = Shows.EpisodeActorSource.Value
-                        End If
-                    Next
                     
                     If episodearray.Count > 1 Then
                         For I = 1 To episodearray.Count - 1
@@ -2349,7 +2356,7 @@ Partial Public Class Form1
                                     progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
-                                    If actorsource = "imdb" And (imdbid <> "" OrElse singleepisode.ImdbId.Value <> "") Then 'And singleepisode.ListActors.Count <> 0 Then
+                                    If actorsource = "imdb" And (imdbid <> "" OrElse singleepisode.ImdbId.Value <> "") Then
                                         Preferences.tvScraperLog &= "Scraping actors from IMDB" & vbCrLf
                                         progresstext &= " : Actors..."
                                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
