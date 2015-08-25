@@ -1227,7 +1227,7 @@ Public Class Form1
             Catch
             End Try
         End If
-        If IO.Directory.Exists(SeriesXmlPath) Then
+        If All AndAlso IO.Directory.Exists(SeriesXmlPath) Then
             Dim Files As New IO.DirectoryInfo(SeriesXmlPath)
             Dim Filelist() = Files.GetFiles()
             For Each f In Filelist
@@ -19345,13 +19345,17 @@ End Sub
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
+                    AuthorizeCheck = True
                     clbx_TvRootFolders.Items.Add(tempstring, True)
+                    AuthorizeCheck = False
                     TextBox39.Text = ""
                     tvfolderschanged = True
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
+                        AuthorizeCheck = True
                         clbx_TvRootFolders.Items.Add(tempstring, True)
+                        AuthorizeCheck = False
                         TextBox39.Text = ""
                         tvfolderschanged = True
                     End If
@@ -19409,7 +19413,9 @@ End Sub
                             End If
                         End If
                     Else
+                        AuthorizeCheck = True
                         clbx_TvRootFolders.Items.Add(strfolder, True)
+                        AuthorizeCheck = False
                         tvfolderschanged = True
                     End If
                 Else
