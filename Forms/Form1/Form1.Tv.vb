@@ -387,6 +387,17 @@ Partial Public Class Form1
                 Button_TV_State.BackColor = Color.Gray
             End If
             Button_TV_State.Tag = Show
+
+            If Show.Status.Value = "Ended" Then
+                bnt_TvSeriesStatus.Text = "Ended"
+                bnt_TvSeriesStatus.BackColor = Color.LightPink
+            ElseIf Show.Status.Value = "Continuing" Then
+                bnt_TvSeriesStatus.Text = "Continuing"
+                bnt_TvSeriesStatus.BackColor = Color.LightGreen
+            Else
+                bnt_TvSeriesStatus.Text = "Unknown"
+                bnt_TvSeriesStatus.BackColor = Color.LightYellow
+            End If
             Dim tvpbright As String = Utilities.DefaultTvPosterPath 
             Dim tvpbbottom As String = Utilities.DefaultTvBannerPath
 
@@ -1155,6 +1166,10 @@ Partial Public Class Form1
             childchild.InnerText = item.TvdbId.Value
             child.AppendChild(childchild)
 
+            childchild = document.CreateElement("status")
+            childchild.InnerText = item.Status.Value
+            child.AppendChild(childchild)
+
             childchild = document.CreateElement("sortorder")
             childchild.InnerText = item.SortOrder.Value
             child.AppendChild(childchild)
@@ -1715,10 +1730,11 @@ Partial Public Class Form1
                                     newstring = newstring.Replace("|", " / ")
                                     editshow.Genre.Value = newstring
                                 End If
-                                If tvBatchList.shStudio Then editshow.Studio.Value = tvseriesdata.Series(0).Network.Value
-                                If tvBatchList.shPlot Then editshow.Plot.Value = tvseriesdata.Series(0).Overview.Value
-                                If tvBatchList.shRating Then editshow.Rating.Value = tvseriesdata.Series(0).Rating.Value 
-                                If tvBatchList.shRuntime Then editshow.Runtime.Value =  tvseriesdata.Series(0).RunTime.Value
+                                If tvBatchList.shStudio     Then editshow.Studio.Value = tvseriesdata.Series(0).Network.Value
+                                If tvBatchList.shPlot       Then editshow.Plot.Value = tvseriesdata.Series(0).Overview.Value
+                                If tvBatchList.shRating     Then editshow.Rating.Value = tvseriesdata.Series(0).Rating.Value 
+                                If tvBatchList.shRuntime    Then editshow.Runtime.Value =  tvseriesdata.Series(0).RunTime.Value
+                                If tvBatchList.shStatus     Then editshow.Status.Value = tvseriesdata.Series(0).Status.Value
                                 Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & editshow.TvdbId.Value & "/all/" & language & ".zip"
                                     editshow.EpisodeGuideUrl.Value = ""
                                     editshow.Url.Value = episodeguideurl
@@ -2965,15 +2981,17 @@ Partial Public Class Form1
         Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
 
-        If rbTvListAll.Checked = True Then butt = "all"
-        If rbTvMissingFanart.Checked = True Then butt = "fanart"
-        If rbTvMissingPoster.Checked = True Then butt = "posters"
-        If rbTvMissingThumb.Checked = True Then butt = "screenshot"
-        If rbTvMissingEpisodes.Checked = True Then butt = "missingeps"
-        If rbTvMissingAiredEp.Checked = True Then butt = "airedmissingeps"
-        If rbTvDisplayWatched.Checked Then butt = "watched"
-        If rbTvDisplayUnWatched.Checked Then butt = "unwatched"
-
+        If rbTvListAll.Checked              Then butt = "all"
+        If rbTvMissingFanart.Checked        Then butt = "fanart"
+        If rbTvMissingPoster.Checked        Then butt = "posters"
+        If rbTvMissingThumb.Checked         Then butt = "screenshot"
+        If rbTvMissingEpisodes.Checked      Then butt = "missingeps"
+        If rbTvMissingAiredEp.Checked       Then butt = "airedmissingeps"
+        If rbTvDisplayWatched.Checked       Then butt = "watched"
+        If rbTvDisplayUnWatched.Checked     Then butt = "unwatched"
+        If rbTvListContinuing.Checked       Then butt = "continuing"
+        If rbTvListEnded.Checked            Then butt = "ended"
+        
         If startup = True Then butt = "all"
         If butt = "missingeps" Then
             If Preferences.displayMissingEpisodes Then
@@ -3100,6 +3118,30 @@ Partial Public Class Form1
                             End Try
                             episode.Visible = True
                         End If
+                    Next
+                    Season.Visible = Season.VisibleEpisodeCount > 0
+                Next
+                item.Visible = item.VisibleSeasonCount > 0
+            Next
+        ElseIf butt = "continuing" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                Dim visible As Boolean = item.Status.Value = "Continuing"
+                'item.Visible = If(item.Status.Value = "Continuing", True, False)
+                'If Not item.Visible Then Continue For
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        episode.Visible = visible
+                    Next
+                    Season.Visible = Season.VisibleEpisodeCount > 0
+                Next
+                item.Visible = item.VisibleSeasonCount > 0
+            Next
+        ElseIf butt = "ended" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                Dim visible As Boolean = item.Status.Value = "Ended"
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        episode.Visible = visible
                     Next
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next

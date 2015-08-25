@@ -35,6 +35,10 @@
                 Form1.tvBatchList.doShows = True
                 Form1.tvBatchList.doShowActors = True
             End If
+            If cbshStatus.Checked Then
+                Form1.tvBatchList.doShows = True
+                Form1.tvBatchList.doShowBody = True
+            End If
             If cbshPosters.Checked Then
                 Form1.tvBatchList.doShows = True
                 Form1.tvBatchList.doShowArt = True
@@ -162,6 +166,10 @@
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+    Private Sub cbshStatus_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshStatus.CheckedChanged
+            'Status
+            Form1.tvBatchList.shStatus = cbshStatus.Checked
     End Sub
     Private Sub cbshGenre_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshGenre.CheckedChanged
         Try

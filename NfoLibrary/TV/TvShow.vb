@@ -22,34 +22,34 @@ Public Class TvShow
     Public Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
 
     Public Property Title As New ProtoProperty(Me, "title", CacheMode:=CacheMode.Both)
-    Public Property SortTitle As New ProtoProperty(Me, "sorttitle")                 'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
+    Public Property SortTitle As New ProtoProperty(Me, "sorttitle")                         'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
     Public Property Rating As New ProtoProperty(Me, "rating")
     Public Property Year As New ProtoProperty(Me, "year")
-    Public Property Top250 As New ProtoProperty(Me, "top250")                       'from XBMC created tvshow.nfo
+    Public Property Top250 As New ProtoProperty(Me, "top250")                               'from XBMC created tvshow.nfo
 
-    Public Property Season As New ProtoProperty(Me, "season")                       'from XBMC created tvshow.nfo
-    Public Property EpisodeCount As New ProtoProperty(Me, "episode")                'from XBMC created tvshow.nfo
-    Public Property DisplaySeason As New ProtoProperty(Me, "displayseason")         'from XBMC created tvshow.nfo
-    Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode")       'from XBMC created tvshow.nfo
-    Public Property Votes As New ProtoProperty(Me, "votes")                         'from XBMC created tvshow.nfo
+    Public Property Season As New ProtoProperty(Me, "season")                               'from XBMC created tvshow.nfo
+    Public Property EpisodeCount As New ProtoProperty(Me, "episode")                        'from XBMC created tvshow.nfo
+    Public Property DisplaySeason As New ProtoProperty(Me, "displayseason")                 'from XBMC created tvshow.nfo
+    Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode")               'from XBMC created tvshow.nfo
+    Public Property Votes As New ProtoProperty(Me, "votes")                                 'from XBMC created tvshow.nfo
     Public Property Plot As New ProtoProperty(Me, "plot")
-    Public Property Outline As New ProtoProperty(Me, "outline")                     'XBMC uses same nfo structure for movie as for tvshow nfo file
-    Public Property TagLine As New ProtoProperty(Me, "tagline")                     'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property Outline As New ProtoProperty(Me, "outline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property TagLine As New ProtoProperty(Me, "tagline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property Runtime As New ProtoProperty(Me, "runtime")
     Public Property Mpaa As New ProtoProperty(Me, "mpaa")
-    Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")               'obsolete
+    Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")                       'obsolete
     Public Property Playcount As New ProtoProperty(Me, "playcount", "1", CacheMode:= CacheMode.Both)
     Public Property Genre As New ProtoProperty(Me, "genre")
     Public Property Credits As New ProtoProperty(Me, "credits")
-    Public Property [Set] As New ProtoProperty(Me, "set")                           'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property [Set] As New ProtoProperty(Me, "set")                                       'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property Director As New ProtoProperty(Me, "director")
     Public Property Premiered As New ProtoProperty(Me, "premiered")
-    Public Property Status As New ProtoProperty(Me, "status")                       'No clue what this does
-    Public Property Code As New ProtoProperty(Me, "code")                           'No clue what this does
+    Public Property Status As New ProtoProperty(Me, "status", CacheMode:=CacheMode.Both)        'Series Status, ie: Ended, Continuing.
+    Public Property Code As New ProtoProperty(Me, "code")                                       'No clue what this does
     Public Property Aired As New ProtoProperty(Me, "aired") '
     Public Property Studio As New ProtoProperty(Me, "studio")
-    Public Property Trailer As New ProtoProperty(Me, "trailer")                     'XBMC uses same nfo structure for movie as for tvshow nfo file
-    Public Property Artist As New ProtoProperty(Me, "Artist")                       'Possible hold over from Music?
+    Public Property Trailer As New ProtoProperty(Me, "trailer")                                 'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property Artist As New ProtoProperty(Me, "Artist")                                   'Possible hold over from Music?
 
     Public Property EpisodeGuideUrl As New ProtoProperty(Me, "episodeguide")
     Public Property Url As New ProtoProperty(EpisodeGuideUrl, "url")
@@ -242,7 +242,7 @@ Public Class TvShow
         Me.Rating.Value = Series.Rating.Value
         Me.Premiered.Value = Series.FirstAired.Value
         Me.Studio.Value = Series.Network.Value
-
+        Me.Status.Value = Series.Status.Value 
         Me.EpisodeGuideUrl.Value = ""
         Me.Url.Value = URLs.EpisodeGuide(Series.Id.Value, Series.Language.Value)
         Me.Url.Node.SetAttributeValue("cache", Series.Id.Value)

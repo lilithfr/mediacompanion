@@ -18067,7 +18067,9 @@ End Sub
                                                                                                                         rbTvMissingPoster.CheckedChanged,
                                                                                                                         rbTvListAll.CheckedChanged,
                                                                                                                         rbTvMissingFanart.CheckedChanged,
-                                                                                                                        rbTvMissingThumb.CheckedChanged
+                                                                                                                        rbTvMissingThumb.CheckedChanged,
+                                                                                                                        rbTvListContinuing.CheckedChanged,
+                                                                                                                        rbTvListEnded.CheckedChanged 
         Try
             Call tv_Filter()
         Catch ex As Exception

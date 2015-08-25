@@ -175,70 +175,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         'Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
-    'Public Shared Function FileCompare(ByVal file1 As String, ByVal file2 As String) As Boolean
-    '    Dim file1byte As Integer
-    '    Dim file2byte As Integer
-    '    Dim fs1 As FileStream
-    '    Dim fs2 As FileStream
-
-    '    ' Determine if the same file was referenced two times.
-    '    If (file1 = file2) Then
-    '        ' Return 0 to indicate that the files are the same.
-    '        Return True
-    '    End If
-
-    '    ' Open the two files.
-    '    fs1 = New FileStream(file1, FileMode.Open)
-    '    fs2 = New FileStream(file2, FileMode.Open)
-
-    '    ' Check the file sizes. If they are not the same, the files
-    '    ' are not equal.
-    '    If (fs1.Length <> fs2.Length) Then
-    '        ' Close the file
-    '        fs1.Close()
-    '        fs2.Close()
-
-    '        ' Return a non-zero value to indicate that the files are different.
-    '        Return False
-    '    End If
-
-    '    ' Read and compare a byte from each file until either a
-    '    ' non-matching set of bytes is found or until the end of
-    '    ' file1 is reached.
-    '    Do
-    '        ' Read one byte from each file.
-    '        file1byte = fs1.ReadByte()
-    '        file2byte = fs2.ReadByte()
-    '    Loop While ((file1byte = file2byte) And (file1byte <> -1))
-
-    '    ' Close the files.
-    '    fs1.Close()
-    '    fs2.Close()
-
-    '    ' Return the success of the comparison. "file1byte" is
-    '    ' equal to "file2byte" at this point only if the files are 
-    '    ' the same.
-    '    Return ((file1byte - file2byte) = 0)
-    'End Function
-
-    'Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
-    '    'returns free space in MB, formatted to two decimal places
-    '    'e.g., msgbox("Free Space on C: "& GetFreeSpace("C:\") & "MB")
-
-    '    Dim lBytesTotal, lFreeBytes, lFreeBytesAvailable As Long
-
-    '    Dim iAns As Long
-
-    '    iAns = GetDiskFreeSpaceEx(Drive, lFreeBytesAvailable, _
-    '         lBytesTotal, lFreeBytes)
-    '    If iAns > 0 Then
-
-    '        Return lFreeBytes
-    '    Else
-    '        Throw New Exception("Invalid or unreadable drive")
-    '    End If
-    'End Function
-
     Public Shared Function UrlIsValid(ByVal url As String) As Boolean
         
         If IsNothing(url) or url = "" Then return False
@@ -327,7 +263,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim data As String = ""
         Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(StartURL, "", ForceDownload,,, strValue:=data)
         Return data
-        'Return DownloadCache.DownloadFileToString(StartURL)
     End Function
 
     Public Shared Function GetStdAspectRatio(ByVal Ratio As String) As String

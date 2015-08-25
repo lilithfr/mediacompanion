@@ -936,6 +936,11 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             stage = 9
+            child = doc.CreateElement("status")
+            child.InnerText = tvshowtosave.Status.Value
+            root.AppendChild(child)
+
+            stage = 10
             child = doc.CreateElement("runtime")
             If tvshowtosave.runtime.Value <> Nothing Then
                 Dim minutes As String = tvshowtosave.runtime.Value
@@ -960,35 +965,36 @@ Public Class WorkingWithNfoFiles
                 End Try
                 child.InnerText = minutes
             Else
-                child.InnerText = tvshowtosave.runtime.Value
+                child.InnerText = tvshowtosave.Runtime.Value
             End If
             root.AppendChild(child)
 
-            stage = 10
+            stage = 11
             child = doc.CreateElement("rating")
             child.InnerText = tvshowtosave.rating.Value
             root.AppendChild(child)
 
-            stage = 11
+            stage = 12
             child = doc.CreateElement("year")
             child.InnerText = tvshowtosave.year.Value
             root.AppendChild(child)
 
-            stage = 12
+            stage = 13
             child = doc.CreateElement("premiered")
             child.InnerText = tvshowtosave.premiered.Value
             root.AppendChild(child)
 
-            stage = 13
+            stage = 14
             child = doc.CreateElement("studio")
             child.InnerText = tvshowtosave.studio.Value
             root.AppendChild(child)
 
-            stage = 14
+            stage = 15
             child = doc.CreateElement("genre")
             child.InnerText = tvshowtosave.genre.Value
             root.AppendChild(child)
 
+            stage = 16
             child = doc.CreateElement("episodeguide")
             Dim childchild As XmlElement
             childchild = doc.CreateElement("url")
@@ -1023,12 +1029,12 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
             End If
 
-            stage = 15
+            stage = 17
             child = doc.CreateElement("language")
             child.InnerText = tvshowtosave.language.Value
             root.AppendChild(child)
 
-            stage = 16
+            stage = 18
             For Each thumbnail In tvshowtosave.posters
 
                 child = doc.CreateElement("thumb")
@@ -1036,14 +1042,14 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
             Next
 
-            stage = 17
+            stage = 19
             For Each thumbnail In tvshowtosave.fanart
                 child = doc.CreateElement("fanart")
                 child.InnerText = thumbnail
                 root.AppendChild(child)
             Next
 
-            stage = 18
+            stage = 20
             For each act As Actor In tvshowtosave.ListActors
                 child = doc.CreateElement("actor")
                 actorchild = doc.CreateElement("actorid")
@@ -1068,7 +1074,7 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
             Next
             
-            stage = 19
+            stage = 21
             child = doc.CreateElement("episodeactorsource")
             child.InnerText = tvshowtosave.episodeactorsource.Value
             root.AppendChild(child)
@@ -1076,12 +1082,12 @@ Public Class WorkingWithNfoFiles
             child.InnerText = tvshowtosave.tvshowactorsource.Value
             root.AppendChild(child)
 
-            stage = 20
+            stage = 22
             child = doc.CreateElement("sortorder")
             child.InnerText = tvshowtosave.sortorder.Value
             root.AppendChild(child)
 
-            stage = 21
+            stage = 23
             If tvshowtosave.SortTitle.Value <> "" Then 
                 child = doc.CreateElement("sorttitle")
                 child.InnerText = tvshowtosave.SortTitle.Value
@@ -1131,9 +1137,10 @@ Public Class WorkingWithNfoFiles
                             newtvshow.Title.Value = tempstring
                         Case "episodeguide"
                             tempid = thisresult.InnerText
-                        
                         Case "imdbid"
                             newtvshow.ImdbId.Value = thisresult.InnerText
+                        Case "status"
+                            newtvshow.Status.Value = thisresult.InnerText 
                         Case "mpaa"
                             newtvshow.Mpaa.Value = thisresult.InnerText
                         Case "plot"
