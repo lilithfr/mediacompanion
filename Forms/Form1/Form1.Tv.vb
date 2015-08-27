@@ -2069,7 +2069,7 @@ Partial Public Class Form1
                         newepisode.sortorder.Value = Shows.SortOrder.Value
                         newepisode.Showtvdbid.Value = Shows.TvdbId.Value
                         newepisode.Showimdbid.Value = Shows.ImdbId.Value
-                        newepisode.ShowTitle.Value = Shows.Title.Value
+                        showtitle = Shows.Title.Value
                         newepisode.ShowYear.Value = Shows.Year.Value
                         If String.IsNullOrEmpty(newepisode.ShowYear.Value) Then
                             If Not String.IsNullOrEmpty(Shows.Premiered.Value) Then
@@ -2084,7 +2084,7 @@ Partial Public Class Form1
                 Dim episode As New TvEpisode
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
-                    S = S.Replace(newepisode.ShowTitle.Value, "")
+                    S = S.Replace(showtitle, "")
                     If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then S = S.Replace(newepisode.ShowYear.Value, "")
                     S = S.Replace("x265", "")
                     S = S.Replace("x264", "")

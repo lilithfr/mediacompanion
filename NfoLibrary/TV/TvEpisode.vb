@@ -107,7 +107,6 @@ Public Class TvEpisode
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
     Public Property UniqueId As New ProtoProperty(Me, "uniqueid", CacheMode:=CacheMode.Both)
     Public Property ShowId As New ProtoProperty(Me, "ShowId", CacheMode:=CacheMode.Both)
-    Public Property ShowTitle As New ProtoProperty(Me, "ShowTitle")
     Public Property ShowLang As New ProtoProperty(Me, "ShowLang")
     Public Property Showtvdbid As New ProtoProperty(Me, "Showtvdbid")
     Public Property Showimdbid As New ProtoProperty(Me, "Showimdbid")
