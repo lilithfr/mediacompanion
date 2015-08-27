@@ -1716,6 +1716,8 @@ Module Module1
                                         newtvshow.imdbid = detail.InnerText
                                     Case "fullpathandfilename"
                                         newtvshow.fullpath = detail.InnerText
+                                    Case "hidden"
+                                        newtvshow.hidden = detail.InnerText
                                 End Select
                             Next
                             If newtvshow.playcount = Nothing Then newtvshow.playcount = "0"
@@ -1813,6 +1815,7 @@ Module Module1
             childchild = document.CreateElement("language")           : childchild.InnerText = item.language            : child.AppendChild(childchild)
             childchild = document.CreateElement("episodeactorsource") : childchild.InnerText = item.episodeactorsource  : child.AppendChild(childchild)
             childchild = document.CreateElement("imdbid")             : childchild.InnerText = item.imdbid              : child.AppendChild(childchild)
+            childchild = document.CreateElement("hidden")             : childchild.InnerText = item.hidden              : child.AppendChild(childchild)
             root.AppendChild(child)
         Next
         For Each item In basictvlist 
@@ -2190,6 +2193,7 @@ Public Class basictvshownfo
     Public locked As String
     Public imdbid As String
     Public playcount As String
+    Public hidden As String
     Public allepisodes As New List(Of episodeinfo)
 End Class
 

@@ -183,15 +183,26 @@ Partial Public Class Form1
     End Sub
 
     Private Sub TvTreeviewRebuild()
+        Dim shcount As Integer = 0
+        Dim epcount As Integer = 0
         TvTreeview.Nodes.Clear()              'clear the treeview of old data
         ''Dirty work around until TvShows is repalced with TvCache.Shows universally
         For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
+            If Not String.IsNullOrEmpty(TvShow.Hidden.Value) AndAlso TvShow.Hidden.Value = True Then Continue For
             'TvShow.UpdateTreenode()
+            shcount += 1
+            epcount += TvShow.Episodes.Count
             TvTreeview.Nodes.Add(TvShow.ShowNode)
             TvShow.UpdateTreenode()
         Next
-        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
-        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+
+        If rbTvListAll.Checked Then TvTreeview.BackColor = Color.white
+        If rbTvListEnded.Checked Then TvTreeview.BackColor = Color.lightpink
+        If rbTvListContinuing.Checked Then TvTreeview.BackColor = Color.LightSeaGreen
+        If rbTvListUnKnown.Checked Then TvTreeview.BackColor = Color.LightYellow
+
+        TextBox_TotTVShowCount.Text = shcount.ToString     'Cache.TvCache.Shows.Count
+        TextBox_TotEpisodeCount.Text = epcount.ToString    'Cache.TvCache.Episodes.Count
         TvTreeview.Sort()
     End Sub
 
@@ -393,7 +404,7 @@ Partial Public Class Form1
                 bnt_TvSeriesStatus.BackColor = Color.LightPink
             ElseIf Show.Status.Value = "Continuing" Then
                 bnt_TvSeriesStatus.Text = "Continuing"
-                bnt_TvSeriesStatus.BackColor = Color.LightGreen
+                bnt_TvSeriesStatus.BackColor = Color.LightSeaGreen
             Else
                 bnt_TvSeriesStatus.Text = "Unknown"
                 bnt_TvSeriesStatus.BackColor = Color.LightYellow
@@ -1190,6 +1201,10 @@ Partial Public Class Form1
             childchild.InnerText = item.Playcount.Value
             child.AppendChild(childchild)
 
+            childchild = document.CreateElement("hidden")
+            childchild.InnerText = item.Hidden.Value
+            child.AppendChild(childchild)
+
             root.AppendChild(child)
         Next
 
@@ -1723,7 +1738,7 @@ Partial Public Class Form1
                                 If tvBatchList.shMpaa Then editshow.Mpaa.Value = tvseriesdata.Series(0).ContentRating.Value
                                 If tvBatchList.shYear Then 
                                     editshow.Premiered.Value =  tvseriesdata.Series(0).FirstAired.Value
-                                    editshow.Year.Value = editshow.Premiered.Value.Substring(0,4)
+                                    If Not String.IsNullOrEmpty(editshow.Premiered.Value) Then editshow.Year.Value = editshow.Premiered.Value.Substring(0,4)
                                 End If
                                 If tvBatchList.shGenre Then
                                     Dim newstring As String
@@ -2998,6 +3013,7 @@ Partial Public Class Form1
         If rbTvDisplayUnWatched.Checked     Then butt = "unwatched"
         If rbTvListContinuing.Checked       Then butt = "continuing"
         If rbTvListEnded.Checked            Then butt = "ended"
+        If rbTvListUnKnown.Checked          Then butt = "unknown"
         
         If startup = True Then butt = "all"
         If butt = "missingeps" Then
@@ -3102,6 +3118,7 @@ Partial Public Class Form1
         ElseIf butt = "all" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 item.Visible = True
+                item.Hidden.Value = False.ToString
                 Dim containsVisibleSeason As Boolean = False
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
@@ -3133,6 +3150,7 @@ Partial Public Class Form1
         ElseIf butt = "continuing" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 Dim visible As Boolean = item.Status.Value = "Continuing"
+                item.Hidden.Value = Not visible
                 'item.Visible = If(item.Status.Value = "Continuing", True, False)
                 'If Not item.Visible Then Continue For
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
@@ -3141,18 +3159,31 @@ Partial Public Class Form1
                     Next
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                item.Visible = item.VisibleSeasonCount > 0
+                item.Visible = True
             Next
         ElseIf butt = "ended" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 Dim visible As Boolean = item.Status.Value = "Ended"
+                item.Hidden.Value = Not visible
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
                         episode.Visible = visible
                     Next
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                item.Visible = item.VisibleSeasonCount > 0
+                item.Visible = True
+            Next
+        ElseIf butt = "unknown" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                Dim visible As Boolean = item.Status.Value = ""
+                item.Hidden.Value = Not visible
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        episode.Visible = visible
+                    Next
+                    Season.Visible = Season.VisibleEpisodeCount > 0
+                Next
+                item.Visible = True
             Next
         ElseIf butt = "fanart" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -3196,6 +3227,7 @@ Partial Public Class Form1
 
             Next
         End If
+        If butt = "all" OrElse butt = "ended" OrElse butt = "continuing" OrElse butt = "unknown" Then TvTreeviewRebuild()
     End Sub
 
 #Region "Tv MissingEpisode Routines"
