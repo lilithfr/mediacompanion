@@ -4694,32 +4694,45 @@ Partial Public Class Form1
         If WorkingTvShow Is Nothing Then Exit Sub
 
         If Not IsNothing(WorkingEpisode) Then
-            Dim multi As Boolean = TestForMultiepisode(WorkingEpisode.NfoFilePath)
-            If Not multi Then
-                WorkingEpisode.Load()
-                WorkingEpisode.PlayCount.Value = toggle
-                WorkingEpisode.Save()
-                WorkingEpisode.UpdateTreenode()
-            Else
-                Dim episodelist As New List(Of TvEpisode)
-                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-                For Each epis In episodelist
+            'Dim multi As Boolean = TestForMultiepisode(WorkingEpisode.NfoFilePath)
+            'If Not multi Then
+            '    WorkingEpisode.Load()
+            '    WorkingEpisode.PlayCount.Value = toggle
+            '    WorkingEpisode.Save()
+            '    WorkingEpisode.UpdateTreenode()
+            'Else
+            Dim episodelist As New List(Of TvEpisode)
+            episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+            For Each epis In episodelist
+                If toggle = "3" Then
+                    Dim tmpstr As Integer = If(String.IsNullOrEmpty(epis.PlayCount.Value), 0, epis.PlayCount.Value.ToInt)
+                    If tmpstr > 0 Then 
+                        epis.PlayCount.Value = "0"
+                    Else
+                        epis.PlayCount.Value = "1"
+                    End If
+                    With Me.btn_EpWatched
+                        .Text = If(tmpstr = 0, "Watched", "Unwatched")
+                        .BackColor = If(tmpstr = 0, Color.LawnGreen, Color.Red)
+                    End With
+                Else
                     epis.PlayCount.Value = toggle
-                Next
-                WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
-                WorkingEpisode.Load
-                WorkingEpisode.UpdateTreenode()
-            End If
+                End If
+            Next
+            WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
+            WorkingEpisode.Load
+            WorkingEpisode.UpdateTreenode()
+            'End If
         ElseIf Not IsNothing(WorkingTvSeason) Then
             For Each ep In WorkingTvSeason.Episodes
                 If ep.IsMissing Then Continue For
-                Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
-                If Not multi Then
-                    ep.Load()
-                    ep.PlayCount.Value = toggle
-                    ep.Save()
-                    ep.UpdateTreenode()
-                Else
+                'Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
+                'If Not multi Then
+                '    ep.Load()
+                '    ep.PlayCount.Value = toggle
+                '    ep.Save()
+                '    ep.UpdateTreenode()
+                'Else
                     Dim episodelist As New List(Of TvEpisode)
                     episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
                     For Each epis In episodelist
@@ -4728,19 +4741,19 @@ Partial Public Class Form1
                     WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
                     ep.Load
                     ep.UpdateTreenode()
-                End If
+               ' End If
             Next
             WorkingTvSeason.UpdateTreenode()
         ElseIf Not IsNothing(WorkingTvShow) Then
             For Each ep In WorkingTvShow.Episodes
                 If ep.IsMissing Then Continue For
-                Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
-                If Not multi Then
-                    ep.Load()
-                    ep.PlayCount.Value = toggle
-                    ep.Save()
-                    ep.UpdateTreenode()
-                Else
+                'Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
+                'If Not multi Then
+                '    ep.Load()
+                '    ep.PlayCount.Value = toggle
+                '    ep.Save()
+                '    ep.UpdateTreenode()
+                'Else
                     Dim episodelist As New List(Of TvEpisode)
                     episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
                     For Each epis In episodelist
@@ -4749,7 +4762,7 @@ Partial Public Class Form1
                     WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
                     ep.Load
                     ep.UpdateTreenode()
-                End If
+                'End If
             Next
           For Each seas In WorkingTvShow.Seasons.keys  
                 WorkingTvShow.Seasons(seas).UpdateTreenode()
@@ -4757,34 +4770,7 @@ Partial Public Class Form1
         End If
         WorkingTvShow.UpdateTreenode()
     End Sub
-
-    'Private Sub Tv_MarkAsUnWatched()
-    '    If TvTreeview.SelectedNode Is Nothing Then Return
-    '    Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-    '    Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
-    '    Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-    '    If WorkingTvShow Is Nothing Then Exit Sub
-
-    '    If Not IsNothing(WorkingEpisode) Then
-    '        WorkingEpisode.Load()
-    '        WorkingEpisode.PlayCount.Value = 0
-    '        WorkingEpisode.Save()
-    '    ElseIf Not IsNothing(WorkingTvSeason) Then
-    '        For Each ep In WorkingTvSeason.Episodes
-    '            ep.Load()
-    '            ep.PlayCount.Value = 0
-    '            ep.Save()
-    '        Next
-    '    ElseIf Not IsNothing(WorkingTvShow) Then
-    '        For Each ep In WorkingTvShow.Episodes
-    '            ep.Load()
-    '            ep.PlayCount.Value = 0
-    '            ep.Save()
-    '        Next
-    '    End If
-
-    'End Sub
-
+    
     Public Shared Sub util_EpisodeSetWatched(ByRef playcount As String, Optional ByVal toggle As Boolean = False)
         Dim watched As Boolean = False
         If IsNumeric(playcount) Then

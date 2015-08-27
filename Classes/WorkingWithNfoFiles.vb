@@ -168,7 +168,9 @@ Public Class WorkingWithNfoFiles
                             Case "uniqueid"
                                 newtvepisode.UniqueId.Value = thisresult.InnerText
                             Case "epbookmark"
-                                newtvepisode.EpBookmark.Value = thisresult.InnerText 
+                                newtvepisode.EpBookmark.Value = thisresult.InnerText
+                            Case "runtime"
+                                newtvepisode.Runtime.Value = thisresult.InnerText
                             Case "actor"
                                 Dim actordetail As XmlNode = Nothing
                                 Dim newactor As New str_MovieActors(SetDefaults)
@@ -205,7 +207,7 @@ Public Class WorkingWithNfoFiles
                                                                     newtvepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
                                                                 Case "codec"
                                                                     newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
-                                                                Case "formatinfo"
+                                                                Case "format"
                                                                     newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
                                                                 Case "durationinseconds"
                                                                     newtvepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText

@@ -18077,32 +18077,33 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_EpWatched.Click
+    Private Sub btn_EpWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_EpWatched.Click
         Try
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-            Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
-            If multi = False Then
-                util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
-                WorkingEpisode.Save()
-                WorkingEpisode.UpdateTreenode()
-            Else
-                Dim episodelist As New List(Of TvEpisode)
-                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-                Dim First As Boolean = True
-                Dim done As String = ""
-                For Each ep In episodelist
-                    If First Then done = ep.PlayCount.Value
-                    Dim toggled As String = done
-                    util_EpisodeSetWatched(toggled, True)
-                    ep.PlayCount.Value = toggled
-                    ep.UpdateTreenode()
-                    First = False
-                Next
-                WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
-            End If
-            Dim ThisSeason As TvSeason = tv_SeasonSelectedCurrently()
-            ThisSeason.UpdateTreenode()
-            tv_ShowSelectedCurrently.UpdateTreenode()
+            Tv_MarkAs_Watched_UnWatched("3")
+            'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            'Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
+            'If multi = False Then
+            '    util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
+            '    WorkingEpisode.Save()
+            '    WorkingEpisode.UpdateTreenode()
+            'Else
+            '    Dim episodelist As New List(Of TvEpisode)
+            '    episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+            '    Dim First As Boolean = True
+            '    Dim done As String = ""
+            '    For Each ep In episodelist
+            '        If First Then done = ep.PlayCount.Value
+            '        Dim toggled As String = done
+            '        util_EpisodeSetWatched(toggled, True)
+            '        ep.PlayCount.Value = toggled
+            '        ep.UpdateTreenode()
+            '        First = False
+            '    Next
+            '    WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
+            'End If
+            'Dim ThisSeason As TvSeason = tv_SeasonSelectedCurrently()
+            'ThisSeason.UpdateTreenode()
+            'tv_ShowSelectedCurrently.UpdateTreenode()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
