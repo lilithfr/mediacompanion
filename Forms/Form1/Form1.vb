@@ -3433,6 +3433,7 @@ Public Class Form1
     Public Sub genretxt_MouseClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles genretxt.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Right Then
             Try
+                If DataGridViewMovies.SelectedRows.Count > 1 Then Exit Sub
                 Dim item() As String = workingMovieDetails.fullmoviebody.genre.Split("/")
                 Dim genre As String = ""
                 Dim listof As New List(Of String)
