@@ -502,10 +502,13 @@ Partial Public Class Form1
                 Dim thisshow As TvShow = tv_ShowSelectedCurrently 
                 Dim item() As String = thisshow.Genre.Value.Split("/")
                 Dim genre As String = ""
-                Dim listof As New List(Of String)
+                Dim listof As New List(Of str_genre)
                 listof.Clear()
                 For Each i In item
-                    listof.Add(i.Trim)
+                    Dim g As str_genre
+                    g.genre = i.Trim
+                    g.count = 1
+                    listof.Add(g)
                 Next
                 Dim frm As New frmGenreSelect 
                 frm.SelectedGenres = listof
@@ -515,9 +518,9 @@ Partial Public Class Form1
                     listof.AddRange(frm.SelectedGenres)
                     For each g In listof
                         If genre = "" Then
-                            genre = g
+                            genre = g.genre
                         Else
-                            genre += " / " & g
+                            genre += " / " & g.genre
                         End If
                     Next
                     thisshow.Genre.Value = genre

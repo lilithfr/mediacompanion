@@ -4,10 +4,11 @@ Imports System.Windows.Forms
 
 Public Class frmGenreSelect
     Property FilterSpace     As Integer = 30
+    Public Property multicount As Integer = 0
     Property chkbxlst As New List(Of String)
-    Dim _selectgenres As New List (Of String)
+    Dim _selectgenres As New List (Of str_genre)
 
-    Public Property SelectedGenres As List(Of String)
+    Public Property SelectedGenres As List(Of str_genre)
         Get
             Return _selectgenres 
         End Get
@@ -26,21 +27,30 @@ Public Class frmGenreSelect
     Sub PopCheckListBox
         clbGenreSelect.Items.Clear
         Dim chkd As Boolean
-        Dim i   As Integer=0
         For Each genre In Form1.Genrelist
             chkd = False
             chkbxlst.Add(genre)
             Dim lbl As New Label
             lbl.text = genre
             clbGenreSelect.Items.Add(lbl.Text)
-            For Each g In _selectgenres
-                If g.ToLower = genre.ToLower Then
-                    chkd = True
-                    Exit For
-                End If
-            Next
-            clbGenreSelect.SetItemChecked(i, chkd)
-            i += 1
+        Next
+        chkstate
+    End Sub
+
+    Sub chkstate
+        For each g In _selectgenres
+            Dim indx As Integer = Nothing
+            indx = clbGenreSelect.Items.IndexOf(g.genre)
+            Dim isstate As checkstate
+            If g.count = 0 Then
+                isstate = CheckState.Unchecked
+            ElseIf g.count = multicount  Then
+                isstate = CheckState.Checked
+            Else
+                isstate = CheckState.Indeterminate 
+            End If
+            clbGenreSelect.SetItemCheckState(indx, isstate)
+            clbGenreSelect.Refresh()
         Next
     End Sub
 
@@ -54,14 +64,26 @@ Public Class frmGenreSelect
     End Sub
 
     Private Sub RetrieveSelected
-        Dim listof As New List(Of String)
-        Dim show As Boolean
-        Dim item As String
+        Dim listof As New List(Of str_genre)
         listof.Clear()
         For i = 0 to clbGenreSelect.Items.Count-1
-            item = clbGenreSelect.Items(i)
-            show = clbGenreSelect.GetItemChecked(i)
-            If show Then listof.Add(item)
+            Dim toAdd As Boolean = False
+            Dim show As checkstate
+            Dim g As New str_genre 
+            g.genre = clbGenreSelect.Items(i)
+            For each item In _selectgenres
+                If item.genre.ToLower = g.genre.ToLower Then
+                    toAdd = True
+                    Exit For
+                End If
+            Next
+            show = clbGenreSelect.GetItemCheckState(i)
+            If show = CheckState.Indeterminate Then
+                g.count = 1
+            ElseIf show = CheckState.Checked Then
+                g.count = 2
+            End If
+            If ToAdd OrElse g.count > 0 Then listof.Add(g)
         Next
         SelectedGenres = listof
     End Sub

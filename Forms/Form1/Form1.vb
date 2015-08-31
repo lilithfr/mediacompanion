@@ -3432,31 +3432,92 @@ Public Class Form1
 
     Public Sub genretxt_MouseClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles genretxt.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Right Then
+            Dim multicount As Integer = 0
             Try
-                If DataGridViewMovies.SelectedRows.Count > 1 Then Exit Sub
-                Dim item() As String = workingMovieDetails.fullmoviebody.genre.Split("/")
                 Dim genre As String = ""
-                Dim listof As New List(Of String)
-                listof.Clear()
-                For Each i In item
-                    listof.Add(i.Trim)
-                Next
-                Dim frm As New frmGenreSelect 
+                Dim listof As New List(Of str_genre)
+                Dim Multi As Boolean = DataGridViewMovies.SelectedRows.Count > 1
+                If Not Multi Then
+                    Dim item As List(Of String) = workingMovieDetails.fullmoviebody.genre.Split("/").[Select](Function(p) p.Trim()).ToList
+                    If item(0) = "" Then item.RemoveAt(0)
+                    multicount = multicount +1
+                    listof.Clear()
+                    For Each i In item
+                        Dim g As New str_genre
+                        g.genre = i.Trim
+                        g.count = 1
+                        listof.Add(g)
+                    Next
+                Else
+                     For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+                        multicount = multicount +1
+                        Dim genretxt As String = row.Cells("genre").Value.ToString
+                        Dim spltgenre As List(Of String) = genretxt.Split("/").[Select](Function(p) p.Trim()).ToList
+                        If spltgenre(0) = "" Then spltgenre.RemoveAt(0)
+                        For Each i In spltgenre
+                            Dim g As New str_genre
+                            g.genre = i
+                            g.count = 1
+                            For each item In listof
+                                If item.genre.ToLower = g.genre.ToLower Then
+                                    g.count = item.count
+                                    Exit For
+                                End If
+                            Next
+                            If listof.Contains(g) Then
+                                listof.RemoveAt(listof.IndexOf(g))
+                                g.count = g.count + 1
+                            End If
+                            listof.Add(g)
+                        Next
+                     Next
+                End If
+                Dim frm As New frmGenreSelect
+                frm.multicount = multicount
                 frm.SelectedGenres = listof
                 frm.Init()
                 If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     listof.Clear()
                     listof.AddRange(frm.SelectedGenres)
-                    For each g In listof
-                        If genre = "" Then
-                            genre = g
-                        Else
-                            genre += " / " & g
-                        End If
-                    Next
-                    workingMovieDetails.fullmoviebody.genre = genre
-                    genretxt.Text = genre
-                    Call mov_SaveQuick()
+                    If Not Multi Then
+                        genre = ""
+                        For each g In listof
+                            If g.count = 0 Then Continue For
+                            If genre = "" Then
+                                genre = g.genre 
+                            Else
+                                genre += " / " & g.genre
+                            End If
+                        Next
+                        genretxt.Text = genre
+                        Call mov_SaveQuick()
+                    Else
+                        Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
+                        For Each nfo As String In NfosToSave
+                            If Not File.Exists(nfo) Then Continue For
+                            Dim movie As Movie = oMovies.LoadMovie(nfo)
+                            If IsNothing(movie) Then Continue For
+                            Dim genretxt As String = movie.ScrapedMovie.fullmoviebody.genre
+                            Dim spgenre2 As List(Of String) = genretxt.Split("/").[Select](Function(p) p.Trim()).ToList
+                            genre = ""
+                            For Each g In listof
+                                Dim ToAdd As Boolean = False
+                                If g.count = 0 Then Continue For
+                                If (g.count = 1 AndAlso spgenre2.Contains(g.genre)) OrElse g.count = 2 Then ToAdd = True
+                                If Not ToAdd Then Continue For
+                                If genre = "" Then
+                                    genre = g.genre
+                                Else 
+                                    genre += " / " & g.genre 
+                                End If
+                            Next
+                            movie.ScrapedMovie.fullmoviebody.genre = genre
+                            movie.AssignMovieToCache()
+                            movie.UpdateMovieCache()
+                            movie.SaveNFO()
+                            Application.DoEvents()
+                        Next
+                    End If
                 End If
                 frm.Dispose()
             Catch

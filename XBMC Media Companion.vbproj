@@ -315,6 +315,7 @@
     </Compile>
     <Compile Include="Structures\BasicHomeMovie.vb" />
     <Compile Include="Structures\FanartList.vb" />
+    <Compile Include="Structures\Genre.vb" />
     <Compile Include="Structures\Fanarttv.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
