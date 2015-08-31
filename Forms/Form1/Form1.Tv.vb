@@ -1987,7 +1987,6 @@ Partial Public Class Form1
             Dim ShowsLocked As Integer = 0
             Dim dirpath As String = String.Empty
             Dim moviepattern As String = String.Empty
-            Dim showtitle As String = ""
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
@@ -2089,7 +2088,7 @@ Partial Public Class Form1
                         newepisode.sortorder.Value = Shows.SortOrder.Value
                         newepisode.Showtvdbid.Value = Shows.TvdbId.Value
                         newepisode.Showimdbid.Value = Shows.ImdbId.Value
-                        showtitle = Shows.Title.Value
+                        newepisode.ShowTitle.Value = Shows.Title.Value
                         newepisode.ShowYear.Value = Shows.Year.Value
                         If String.IsNullOrEmpty(newepisode.ShowYear.Value) Then
                             If Not String.IsNullOrEmpty(Shows.Premiered.Value) Then
@@ -2104,7 +2103,7 @@ Partial Public Class Form1
                 Dim episode As New TvEpisode
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
-                    S = S.Replace(showtitle, "")
+                    S = S.Replace(newepisode.ShowTitle.Value, "")
                     If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then S = S.Replace(newepisode.ShowYear.Value, "")
                     S = S.Replace("x265", "")
                     S = S.Replace("x264", "")
@@ -2148,6 +2147,7 @@ Partial Public Class Form1
             Dim scrapedok As Boolean
             Dim epscount As Integer = 0
             For Each eps In newEpisodeList
+                Dim showtitle As String = eps.ShowTitle.Value
                 epscount += 1
                 Preferences.tvScraperLog &= "!!! With File : " & eps.VideoFilePath & vbCrLf
                 Preferences.tvScraperLog &= "!!! Detected  : Season : " & eps.Season.Value & " Episode : " & eps.Episode.Value & vbCrLf

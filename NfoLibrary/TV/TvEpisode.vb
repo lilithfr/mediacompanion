@@ -110,6 +110,7 @@ Public Class TvEpisode
     Public Property ShowLang As New ProtoProperty(Me, "ShowLang")
     Public Property Showtvdbid As New ProtoProperty(Me, "Showtvdbid")
     Public Property Showimdbid As New ProtoProperty(Me, "Showimdbid")
+    Public Property ShowTitle As New ProtoProperty(Me, "ShowTitle")
     Public Property actorsource As New ProtoProperty(Me, "actorsource")
     Public Property ShowYear As New ProtoProperty(Me, "ShowYear")
     Public Property sortorder As New ProtoProperty(Me, "sortorder")
