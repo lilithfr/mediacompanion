@@ -511,12 +511,14 @@ Partial Public Class Form1
                     listof.Add(g)
                 Next
                 Dim frm As New frmGenreSelect 
+                frm.multicount = 1
                 frm.SelectedGenres = listof
                 frm.Init()
                 If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     listof.Clear()
                     listof.AddRange(frm.SelectedGenres)
                     For each g In listof
+                        If g.count = 0 Then Continue For
                         If genre = "" Then
                             genre = g.genre
                         Else
