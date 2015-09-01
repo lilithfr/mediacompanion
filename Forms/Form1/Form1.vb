@@ -4419,7 +4419,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub SaveFanart(hd As Boolean)
+    Private Sub SaveFanart(hd As Boolean, Optional clipbrd As Boolean = False)
         Try
             messbox = New frmMessageBox("", "Downloading Fanart...", "")
             messbox.Show()
@@ -4431,25 +4431,31 @@ Public Class Form1
             Dim tempstring2 As String = String.Empty
             Dim allok As Boolean = False
 
-            'Find selected fanart, if any
-            For Each button As Control In Me.Panel2.Controls
+            If clipbrd Then
+                tempstring2 = PictureBox2.Tag.tostring
+                allok = True
+            Else
+                'Find selected fanart, if any
+                For Each button As Control In Me.Panel2.Controls
 
-                If button.Name.IndexOf("checkbox") <> -1 Then
-                    Dim b1 As RadioButton = CType(button, RadioButton)
-                    If b1.Checked = True Then
-                        tempstring = b1.Name
-                        tempstring = tempstring.Replace("moviefanartcheckbox", "")
-                        tempint = Convert.ToDecimal(tempstring)
-                        If hd Then
-                            tempstring2 = fanartArray(tempint).hdUrl
-                        Else
-                            tempstring2 = fanartArray(tempint).ldUrl
+                    If button.Name.IndexOf("checkbox") <> -1 Then
+                        Dim b1 As RadioButton = CType(button, RadioButton)
+                        If b1.Checked = True Then
+                            tempstring = b1.Name
+                            tempstring = tempstring.Replace("moviefanartcheckbox", "")
+                            tempint = Convert.ToDecimal(tempstring)
+                            If hd Then
+                                tempstring2 = fanartArray(tempint).hdUrl
+                            Else
+                                tempstring2 = fanartArray(tempint).ldUrl
+                            End If
+                            allok = True
+                            Exit For
                         End If
-                        allok = True
-                        Exit For
                     End If
-                End If
-            Next
+                Next
+            End If
+            
             If Not allok Then
                 MsgBox("No Fanart Is Selected")
             Else
@@ -16508,7 +16514,8 @@ End Sub
     Private Sub btnMovPasteClipboardFanart_Click(sender As Object, e As EventArgs) Handles btnMovPasteClipboardFanart.Click
 
         If AssignClipboardImage(PictureBox2) Then
-            btnSaveCropped.Enabled = True
+            SaveFanart(True, True)
+            'btnSaveCropped.Enabled = True
             lblMovFanartWidth.Text = PictureBox2.Image.Width
             lblMovFanartHeight.Text = PictureBox2.Image.Height
         End If
@@ -16921,83 +16928,7 @@ End Sub
     End Sub
 
     Private Sub btnPosterTabs_SaveImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterTabs_SaveImage.Click
-        Try
-            Dim tempstring As String = ""
-            Dim tempint As Integer = 0
-            Dim realnumber As Integer = 0
-            Dim tempstring2 As String = ""
-            Dim allok As Boolean = False
-            Dim backup As String = ""
-            If messbox.Visible Then messbox.Close()
-            messbox = New frmMessageBox("Downloading Poster...")
-            messbox.Show()
-            For Each button As Control In Me.panelAvailableMoviePosters.Controls
-                If button.Name.IndexOf("postercheckbox") <> -1 Then
-                    Dim b1 As RadioButton = CType(button, RadioButton)
-                    If b1.Checked = True Then
-                        tempstring = b1.Name
-                        If tempstring.IndexOf("postercheckbox") <> -1 Then
-                            tempstring = tempstring.Replace("postercheckbox", "")
-                            tempint = Convert.ToDecimal(tempstring)
-                            If tempstring2 = Nothing Then
-                                tempint = Convert.ToDecimal(tempstring)
-                                tempint = tempint + ((currentPage - 1) * 10)
-                                If cbMoviePosterSaveLoRes.Enabled = True Then
-                                    If cbMoviePosterSaveLoRes.CheckState = CheckState.Checked Then
-                                        tempstring2 = posterArray(tempint).ldUrl
-                                    Else
-                                        tempstring2 = posterArray(tempint).hdUrl
-                                        backup = posterArray(tempint).ldUrl
-                                    End If
-                                Else
-                                    tempstring2 = posterArray(tempint).hdUrl
-                                End If
-                                allok = True
-                                Exit For
-                            End If
-                        End If
-                    End If
-                End If
-            Next
-            If allok = False Then
-                MsgBox("No Poster Is Selected")
-                Return
-            End If
-            Try
-                If Not MovPosterToggle Then
-                    util_ImageLoad(PictureBoxAssignedMoviePoster, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
-                    Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
-                    Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(tempstring2, Paths, False, , ,True)
-
-                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
-                    updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
-                    util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
-                    util_ImageLoad(PbMoviePoster, Paths(0), Utilities.DefaultPosterPath)
-                    lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-                    lblCurrentLoadedPoster.Refresh()
-
-                    XbmcLink_UpdateArtwork()
-                Else
-                    Dim MovSetPosterSavePath As String = workingMovieDetails.fileinfo.movsetposterpath
-                    If MovSetPosterSavePath <> "" Then
-                        Movie.SavePosterImageToCacheAndPath(tempstring2, MovSetPosterSavePath)
-                        util_ImageLoad(PictureBoxAssignedMoviePoster, MovSetPosterSavePath, Utilities.DefaultPosterPath)
-                    Else
-                        messbox.Close()
-                        MsgBox("!!  Problem formulating correct save location for Poster" & vbCrLf & "                    Please check your settings")
-                    End If
-                End If
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-            UpdateMissingPoster()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-        messbox.Close()
+        MoviePosterSave()
     End Sub
 
     Private Sub btnMovPosterURLorBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterURLorBrowse.Click
@@ -17100,6 +17031,7 @@ End Sub
 
     Private Sub btnMovPasteClipboardPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPasteClipboardPoster.Click
         If AssignClipboardImage(PictureBoxAssignedMoviePoster) Then
+            MoviePosterSave(True)
             lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
             btnMoviePosterSaveCroppedImage.Enabled = True
         End If
@@ -17161,6 +17093,95 @@ End Sub
         End If
         MovPosterToggle = Not MovPosterToggle 
     End Sub
+
+    Private Function MoviePosterSave(Optional clipbrd As Boolean = False) As Boolean
+        Dim allok As Boolean = False
+        Try
+            Dim tempstring As String = ""
+            Dim tempint As Integer = 0
+            Dim realnumber As Integer = 0
+            Dim tempstring2 As String = ""
+            'Dim allok As Boolean = False
+            Dim backup As String = ""
+            If messbox.Visible Then messbox.Close()
+            messbox = New frmMessageBox("Downloading Poster...")
+            messbox.Show()
+            If clipbrd Then
+                tempstring2 = PictureBoxAssignedMoviePoster.Tag.ToString
+                allok = True
+            Else
+                For Each button As Control In Me.panelAvailableMoviePosters.Controls
+                    If button.Name.IndexOf("postercheckbox") <> -1 Then
+                        Dim b1 As RadioButton = CType(button, RadioButton)
+                        If b1.Checked = True Then
+                            tempstring = b1.Name
+                            If tempstring.IndexOf("postercheckbox") <> -1 Then
+                                tempstring = tempstring.Replace("postercheckbox", "")
+                                tempint = Convert.ToDecimal(tempstring)
+                                If tempstring2 = Nothing Then
+                                    tempint = Convert.ToDecimal(tempstring)
+                                    tempint = tempint + ((currentPage - 1) * 10)
+                                    If cbMoviePosterSaveLoRes.Enabled = True Then
+                                        If cbMoviePosterSaveLoRes.CheckState = CheckState.Checked Then
+                                            tempstring2 = posterArray(tempint).ldUrl
+                                        Else
+                                            tempstring2 = posterArray(tempint).hdUrl
+                                            backup = posterArray(tempint).ldUrl
+                                        End If
+                                    Else
+                                        tempstring2 = posterArray(tempint).hdUrl
+                                    End If
+                                    allok = True
+                                    Exit For
+                                End If
+                            End If
+                        End If
+                    End If
+                Next
+            End If
+            
+            If allok = False Then
+                MsgBox("No Poster Is Selected")
+                Return allok
+            End If
+            Try
+                If Not MovPosterToggle Then
+                    util_ImageLoad(PictureBoxAssignedMoviePoster, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
+                    Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
+                    Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(tempstring2, Paths, False, , ,True)
+
+                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
+                    updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                    util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
+                    util_ImageLoad(PbMoviePoster, Paths(0), Utilities.DefaultPosterPath)
+                    lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+                    lblCurrentLoadedPoster.Refresh()
+
+                    XbmcLink_UpdateArtwork()
+                Else
+                    Dim MovSetPosterSavePath As String = workingMovieDetails.fileinfo.movsetposterpath
+                    If MovSetPosterSavePath <> "" Then
+                        Movie.SavePosterImageToCacheAndPath(tempstring2, MovSetPosterSavePath)
+                        util_ImageLoad(PictureBoxAssignedMoviePoster, MovSetPosterSavePath, Utilities.DefaultPosterPath)
+                    Else
+                        messbox.Close()
+                        MsgBox("!!  Problem formulating correct save location for Poster" & vbCrLf & "                    Please check your settings")
+                    End If
+                End If
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+            UpdateMissingPoster()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+        messbox.Close()
+        Return allok
+    End Function
+
 #End Region
 
 #Region "Movie Sets & Tags Tab"
@@ -21203,7 +21224,12 @@ End Sub
             End If
 
             If Clipboard.GetDataObject.GetDataPresent(DataFormats.Bitmap) Then
-                picBox.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
+                Dim createfilename As String = Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString
+                createfilename = Utilities.CacheFolderPath & createfilename & ".jpg"
+                Dim oImgObj As System.Drawing.Image = Clipboard.GetDataObject.GetData(DataFormats.Bitmap, True)
+                oImgObj.Save(createfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+                util_ImageLoad(picBox, createfilename, Utilities.DefaultPosterPath)
+                'picBox.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
                 Return True
             End If
 
