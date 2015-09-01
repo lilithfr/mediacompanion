@@ -10934,7 +10934,8 @@ End Sub
                 Dim msgstring As String = "Warning, This operation will delete all Episode nfo's and artwork"
                 msgstring &= vbCrLf & "!! Note: will not delete missing episodes." & vbCrLf 
                 msgstring &= vbCrLf & "Are your sure you wish to continue?"
-                If MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete episode nfo(s) & artwork") = MsgBoxResult.Cancel Then Exit Sub
+                Dim res As MsgBoxResult = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete episode nfo(s) & artwork")
+                If res = MsgBoxResult.No OrElse res = MsgBoxResult.Cancel Then Exit Sub
             End If
 
             Dim TheseEpisodes As New List(Of Media_Companion.TvEpisode)

@@ -1085,7 +1085,7 @@ Partial Public Class Form1
         For Each tvfolder In FolderList
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount
-            If Not (Directory.Exists(tvfolder)) Then 
+            If Not Directory.Exists(tvfolder) OrElse Not File.Exists(tvfolder & "\tvshow.nfo") Then 
                 nofolder.Add(tvfolder)
                 Continue For
             End If
@@ -1122,7 +1122,7 @@ Partial Public Class Form1
 
         If nofolder.Count > 0 Then
             Dim mymsg As String
-            mymsg = (nofolder.Count).ToString + " folder/s missing:" + vbCrLf + vbCrLf
+            mymsg = (nofolder.Count).ToString + " folder/s missing or no tvshow.nfo:" + vbCrLf + vbCrLf
             For Each item In nofolder
                 mymsg = mymsg + item + vbCrLf
             Next
@@ -4717,7 +4717,7 @@ Partial Public Class Form1
                 End If
             Next
             'If Not lstboxscan Then tv_CacheRefresh()
-            MsgBox((nofolder.Count).ToString + " folder/s removed")
+            'MsgBox((nofolder.Count).ToString + " folder/s removed")
         End If
         Return status
     End Function
