@@ -17775,6 +17775,10 @@ End Sub
     Private Sub clbx_MovieRoots_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbx_MovieRoots.KeyDown
         If e.KeyCode = Keys.Delete AndAlso clbx_MovieRoots.SelectedItem <> Nothing
             Call btn_removemoviefolder.PerformClick()
+        ElseIf e.KeyCode = Keys.Space Then
+            AuthorizeCheck = True
+            Call clbx_movierootstoggle()
+            AuthorizeCheck = False
         End If
     End Sub
 
@@ -17803,6 +17807,11 @@ End Sub
         If Updating Then Exit Sub
         moviefolderschanged = True
         Updating = False
+    End Sub
+
+    Private Sub clbx_movierootstoggle()
+        Dim i = clbx_MovieRoots.SelectedIndex
+        clbx_MovieRoots.SetItemCheckState(i, If(clbx_MovieRoots.GetItemCheckState(i) = CheckState.Checked, CheckState.Unchecked, CheckState.Checked))
     End Sub
 
     Private Sub btn_removemoviefolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removemoviefolder.Click
@@ -19858,7 +19867,16 @@ End Sub
     Private Sub clbx_TvRootFolders_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbx_TvRootFolders.KeyDown
         If e.KeyCode = Keys.Delete AndAlso clbx_TvRootFolders.SelectedItem <> Nothing
             Call btn_TvFoldersRootRemove.PerformClick()
+        ElseIf e.KeyCode = Keys.Space
+            AuthorizeCheck = True
+            Call clbx_tvrootfoldertoggle()
+            AuthorizeCheck = False
         End If
+    End Sub
+
+    Private Sub clbx_tvrootfoldertoggle()
+        Dim i = clbx_TvRootFolders.SelectedIndex
+        clbx_TvRootFolders.SetItemCheckState(i, If(clbx_TvRootFolders.GetItemCheckState(i) = CheckState.Checked, CheckState.Unchecked, CheckState.Checked))
     End Sub
 
     Private Sub tsmi_tvRtAddSeries_click(sender As Object, e As EventArgs) Handles tsmi_tvRtAddSeries.Click
@@ -20390,6 +20408,10 @@ End Sub
     Private Sub clbx_HMMovieFolders_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbx_HMMovieFolders.KeyDown
         If e.KeyCode = Keys.Delete AndAlso clbx_MovieRoots.SelectedItem <> Nothing
             Call btnHomeFoldersRemove.PerformClick()
+        ElseIf e.KeyCode = Keys.Space Then
+            AuthorizeCheck = True
+            Call clbx_hmmoviefolderstoggle()
+            AuthorizeCheck = False
         End If
     End Sub
 
@@ -20415,6 +20437,11 @@ End Sub
             Exit Sub
         End If
         hmfolderschanged = True
+    End Sub
+    
+    Private Sub clbx_hmmoviefolderstoggle()
+        Dim i = clbx_HMMovieFolders.SelectedIndex
+        clbx_HMMovieFolders.SetItemCheckState(i, If(clbx_HMMovieFolders.GetItemCheckState(i) = CheckState.Checked, CheckState.Unchecked, CheckState.Checked))
     End Sub
     
     Private Sub HomeFoldersUpdate()

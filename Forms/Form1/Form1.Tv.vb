@@ -1596,11 +1596,11 @@ Partial Public Class Form1
                     Next
                     TvCheckfolderjpgart(NewShow)
                 End If
-                If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
+                If newTvFolders.Count > 0 AndAlso Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))
                 End If
                 bckgrnd_tvshowscraper.ReportProgress(1, NewShow)
-                newTvFolders.RemoveAt(0)
+                If newTvFolders.Count > 0 Then newTvFolders.RemoveAt(0)
             Loop
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
