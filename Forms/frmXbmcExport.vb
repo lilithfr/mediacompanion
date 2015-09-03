@@ -40,7 +40,7 @@ Public Class frmXbmcExport
         GetTally()
         UpdateMediaTally()
         ShowMCPaths()
-        TextBox1.Text = "F:\_test publish"
+        TextBox1.Text = "E:\_test publish"
         btn_Validate.PerformClick()
     End Sub
 
@@ -81,8 +81,8 @@ Public Class frmXbmcExport
             For Each ph In Preferences.tvRootFolders
                 Dim n As Integer = MCExportdgv.Rows.Add()
                 MCExportdgv.Rows(n).Cells(0).Value = "TV"
-                MCExportdgv.Rows(n).Cells(1).Value = ph
-                MCExportdgv.Rows(n).Cells(2).Value = ph
+                MCExportdgv.Rows(n).Cells(1).Value = ph.rpath
+                MCExportdgv.Rows(n).Cells(2).Value = ph.rpath
             Next
         End If
     End Sub
@@ -143,16 +143,16 @@ Public Class frmXbmcExport
             CurrentSh = TransposetvShows(tvsh, sh.episodes.count)
             'TransTvArtwork(tvsh)
             TransTvActorImages(tvsh.ListActors, sh.series.Filenameandpath)
-            'For Each ep In sh.episodes
-            '    If Not File.Exists(ep.Filenameandpath) Then Continue For
-            '    Dim tvep As TvEpisode = WorkingWithNfoFiles.ep_NfoLoad(ep.Filenameandpath)
-            '    Dim CurrentEp As New XmlDocument
-            '    CurrentEp = TransposeTvEp(tvep)
-            '    'TransTvEpArtwork(tvep)
-            '    Dim oDoc2 As XMLNode = root.OwnerDocument.ImportNode(CurrentEp.DocumentElement, True)
-            '    CurrentSh.AppendChild(oDoc2)
+            For Each ep In sh.episodes
+                If Not File.Exists(ep.Filenameandpath) Then Continue For
+                Dim tvep As TvEpisode = WorkingWithNfoFiles.ep_NfoLoad(ep.Filenameandpath)
+                Dim CurrentEp As New XmlDocument
+                CurrentEp = TransposeTvEp(tvep, sh.series)
+                'TransTvEpArtwork(tvep)
+                Dim oDoc2 As XMLNode = root.OwnerDocument.ImportNode(CurrentEp.DocumentElement, True)
+                CurrentSh.AppendChild(oDoc2)
 
-            'Next
+            Next
             Dim oDoc As XMLNode = root.OwnerDocument.ImportNode(CurrentSh.DocumentElement, True)
             root.AppendChild(oDoc)
         Next
@@ -355,6 +355,7 @@ Public Class frmXbmcExport
             End If
 
             child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
+            child = thismovie.CreateElement("showlink") : child.InnerText = mov.fullmoviebody.showlink : root.AppendChild(child)
             child = thismovie.CreateElement("playcount") : child.InnerText = mov.fullmoviebody.playcount : root.AppendChild(child)
             child = thismovie.CreateElement("lastplayed") : child.InnerText = mov.fullmoviebody.lastplayed : root.AppendChild(child)
             child = thismovie.CreateElement("path") : child.InnerText = TransposePath(mov.fileinfo.path) : root.AppendChild(child)
@@ -565,9 +566,45 @@ Public Class frmXbmcExport
         Return ThisTvShow 
     End Function
 
-    Private Function TransposeTvEp(ByVal tvep As TvEpisode) As XmlDocument
+    Private Function TransposeTvEp(ByVal tvep As TvEpisode, ByVal sh As xbmctv) As XmlDocument
         Dim ThisTvEp As New XmlDocument
-
+        Try
+            Dim stage As Integer = 0
+            Dim root As XmlElement = Nothing
+            Dim child As XmlElement = Nothing
+            Dim actorchild As XmlElement = Nothing
+            Dim filedetailschild As XmlElement = Nothing
+            Dim filedetailschildchild As XmlElement = Nothing
+            Dim anotherchild As XmlElement = Nothing
+            root = ThisTvEp.CreateElement("episodedetails")
+            child = ThisTvEp.CreateElement("title") : child.InnerText = tvep.Title.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("showtitle") : child.InnerText = sh.Title : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("rating") : child.InnerText = tvep.Rating.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("epbookmark") : child.InnerText = "0.000000" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("year") : child.InnerText = "0" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("top250") : child.InnerText = tvep.Top250.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("season") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("episode") : child.InnerText = epcount : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("uniqueid") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("displayseason") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("displayepisode") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("votes") : child.InnerText = tvep.Votes.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("outline") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("plot") : child.InnerText = tvep.Plot.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("tagline") : child.InnerText = tvep.TagLine.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("runtime") : child.InnerText = tvep.Runtime.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("mpaa") : child.InnerText = sh.Mpaa : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("playcount") : child.InnerText = tvep.Playcount.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("lastplayed") : child.InnerText = tvep.LastPlayed.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("file") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("path") : child.InnerText = tvep.FolderPath : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("filenameandpath") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("basepath") : child.InnerText = tvep.FolderPath : root.AppendChild(child)
+            'child = ThisTvEp.CreateElement("episodeguide") : child.InnerText = tvep.Title.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("id") : child.InnerText = tvep.TvdbId.Value : root.AppendChild(child)
+            ThisTvEp.AppendChild(root)
+        Catch
+        End Try
         Return ThisTvEP 
     End Function
 
@@ -654,16 +691,18 @@ Public Class frmXbmcExport
     End Sub
 
     Private Sub btn_FolderBrowse_Click( sender As Object,  e As EventArgs) Handles btn_FolderBrowse.Click
-        'Dim dialog As New FolderBrowserDialog()
-        'dialog.RootFolder = Environment.SpecialFolder.Desktop
-        'dialog.ShowNewFolderButton = True
-        'dialog.SelectedPath = "C:\"
-        'dialog.Description = "Select Path to save Exported data""
-        'If dialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
-        '    OutputFolder = dialog.SelectedPath
-        'End If
+        Dim dialog As New FolderBrowserDialog()
+        dialog.RootFolder = Environment.SpecialFolder.Desktop
+        dialog.ShowNewFolderButton = True
+        dialog.SelectedPath = "C:\"
+        dialog.Description = "Select Path to save Exported data"
+        If dialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            OutputFolder = dialog.SelectedPath
+        Else
+            Exit Sub
+        End If
         'If IsNothing(OutputFolder) Then
-        '    MsgBox("No folder selected, export aborted")
+        '    'MsgBox("No folder selected, export aborted")
         '    Exit Sub
         'End If 
         OutputFolder = Validatefolder(OutputFolder)
