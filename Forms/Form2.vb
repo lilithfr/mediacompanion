@@ -669,4 +669,14 @@ Public Class Form2
         editsmade = True
     End Sub
 
+    Private Sub btn_SeriesList_Click(sender As Object, e As EventArgs) Handles btn_SeriesList.Click
+        Dim frm As New frmSeriesList
+        frm.Init()
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            tb_SeriesLnk.Text = frm.Selected
+            editsmade = True
+        End If
+        frm.Dispose()
+        frm = Nothing
+    End Sub
 End Class

@@ -113,6 +113,7 @@ Partial Class Form2
         Me.btnSelectAPlot = New System.Windows.Forms.Button()
         Me.tb_SeriesLnk = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
+        Me.btn_SeriesList = New System.Windows.Forms.Button()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).BeginInit
@@ -598,7 +599,7 @@ Partial Class Form2
         '
         'btn_SeriesLnkSearch
         '
-        Me.btn_SeriesLnkSearch.Location = New System.Drawing.Point(342, 209)
+        Me.btn_SeriesLnkSearch.Location = New System.Drawing.Point(468, 209)
         Me.btn_SeriesLnkSearch.Name = "btn_SeriesLnkSearch"
         Me.btn_SeriesLnkSearch.Size = New System.Drawing.Size(134, 23)
         Me.btn_SeriesLnkSearch.TabIndex = 137
@@ -1000,9 +1001,20 @@ Partial Class Form2
         Me.Label8.TabIndex = 136
         Me.Label8.Text = "Series Link : "
         '
+        'btn_SeriesList
+        '
+        Me.btn_SeriesList.Location = New System.Drawing.Point(337, 210)
+        Me.btn_SeriesList.Name = "btn_SeriesList"
+        Me.btn_SeriesList.Size = New System.Drawing.Size(125, 23)
+        Me.btn_SeriesList.TabIndex = 138
+        Me.btn_SeriesList.Text = "List of Cached Series"
+        Me.ToolTip1.SetToolTip(Me.btn_SeriesList, "Displays a list to select a Series that is"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"already loaded into MC TV database.")
+        Me.btn_SeriesList.UseVisualStyleBackColor = true
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.btn_SeriesList)
         Me.Controls.Add(Me.btn_SeriesLnkSearch)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.tb_SeriesLnk)
@@ -1189,4 +1201,5 @@ End Sub
     Friend WithEvents tb_SeriesLnk As TextBox
     Friend WithEvents Label8 As Label
     Friend WithEvents btn_SeriesLnkSearch As Button
+    Friend WithEvents btn_SeriesList As Button
 End Class
