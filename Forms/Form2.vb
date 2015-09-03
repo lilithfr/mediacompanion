@@ -40,6 +40,7 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.tagline <> Nothing Then taglinetxt.Text = workingmovieedit.fullmoviebody.tagline
         If workingmovieedit.fullmoviebody.top250 <> Nothing Then top250txt.Text = workingmovieedit.fullmoviebody.top250 
         If workingmovieedit.fullmoviebody.trailer <> Nothing Then tb_TrailerURL.Text = workingmovieedit.fullmoviebody.trailer
+        If workingmovieedit.fullmoviebody.showlink <> Nothing Then tb_SeriesLnk.Text = workingmovieedit.fullmoviebody.showlink 
         Try
             If workingmovieedit.fileinfo.createdate <> Nothing Then 
                 Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Preferences.datePattern, Nothing)
@@ -453,6 +454,7 @@ Public Class Form2
             workingmovieedit.fullmoviebody.votes = votestxt.Text
             workingmovieedit.fullmoviebody.outline = outlinetxt.Text
             workingmovieedit.fullmoviebody.tagline = taglinetxt.Text
+            workingmovieedit.fullmoviebody.showlink = tb_SeriesLnk.Text
             Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
             Form1.workingMovieDetails.listactors = workingmovieedit.listactors
             Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
@@ -631,6 +633,40 @@ Public Class Form2
         If Not IsNothing(newplot) Then
             plottxt.Text = newplot
         End If
+    End Sub
+
+    Private Sub btn_SeriesLnkSearch_Click(sender As Object, e As EventArgs) Handles btn_SeriesLnkSearch.Click
+        Try
+            Dim theFolderBrowser As New FolderBrowserDialog
+            Dim strfolder As String = ""
+            theFolderBrowser.Description = "Please Select a Series Folder, containing tvshow.nfo file"
+            theFolderBrowser.ShowNewFolderButton = True
+            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+            theFolderBrowser.SelectedPath = Preferences.lastpath
+            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                strfolder = (theFolderBrowser.SelectedPath)
+                If strfolder <> "" AndAlso Directory.Exists(strfolder) Then
+                    Dim nfopath As String = IO.Path.Combine(strfolder, "tvshow.nfo")
+                    If File.Exists(nfopath) Then
+                        Dim tvshownfo As New TvShow
+                        tvshownfo.NfoFilePath = nfopath
+                        tvshownfo.Load
+                        If tvshownfo.Title.Value <> "" Then
+                            tb_SeriesLnk.Text = tvshownfo.Title.Value
+                            editsmade = True
+                        End If
+                        tvshownfo = Nothing
+                    Else
+                        MsgBox("Selected folder does not contain a tvshow.nfo")
+                    End If
+                End If
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub tb_SeriesLnk_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_SeriesLnk.KeyDown
+        editsmade = True
     End Sub
 
 End Class

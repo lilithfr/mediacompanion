@@ -2617,6 +2617,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.top250 = thisresult.InnerText
                         Case "createdate"
                             newmovie.fileinfo.createdate = thisresult.InnerText
+                        Case "showlink"
+                            newmovie.fullmoviebody.showlink = thisresult.InnerText 
                         Case "actor"
                             Dim newactor As New str_MovieActors(SetDefaults)
                             Dim detail As XmlNode = Nothing
@@ -3401,8 +3403,13 @@ Public Class WorkingWithNfoFiles
                         child.InnerText = movietosave.fullmoviebody.source
                         root.AppendChild(child)
                     End If
-                Catch ex As Exception
-
+                Catch
+                End Try
+                Try
+                    child = doc.CreateElement("showlink")
+                    child.InnerText = movietosave.fullmoviebody.showlink
+                    root.AppendChild(child)
+                Catch
                 End Try
                 Try
                     child = doc.CreateElement("createdate")

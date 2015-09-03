@@ -71,6 +71,7 @@ Partial Class Form2
         Me.btnchangemovie = New System.Windows.Forms.Button()
         Me.btnAltPosterBrowser = New System.Windows.Forms.Button()
         Me.btn_BlankNfo = New System.Windows.Forms.Button()
+        Me.btn_SeriesLnkSearch = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.btncropleft = New System.Windows.Forms.Button()
         Me.btncropright = New System.Windows.Forms.Button()
@@ -110,6 +111,8 @@ Partial Class Form2
         Me.PremieredDatePicker = New System.Windows.Forms.DateTimePicker()
         Me.btnWatched = New System.Windows.Forms.Button()
         Me.btnSelectAPlot = New System.Windows.Forms.Button()
+        Me.tb_SeriesLnk = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).BeginInit
@@ -220,7 +223,7 @@ Partial Class Form2
         'taglinetxt
         '
         Me.taglinetxt.BackColor = System.Drawing.Color.White
-        Me.taglinetxt.Location = New System.Drawing.Point(127, 526)
+        Me.taglinetxt.Location = New System.Drawing.Point(126, 534)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.taglinetxt.Multiline = true
         Me.taglinetxt.Name = "taglinetxt"
@@ -230,7 +233,7 @@ Partial Class Form2
         'plottxt
         '
         Me.plottxt.BackColor = System.Drawing.Color.White
-        Me.plottxt.Location = New System.Drawing.Point(127, 359)
+        Me.plottxt.Location = New System.Drawing.Point(126, 383)
         Me.plottxt.Margin = New System.Windows.Forms.Padding(4)
         Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
@@ -241,7 +244,7 @@ Partial Class Form2
         'outlinetxt
         '
         Me.outlinetxt.BackColor = System.Drawing.Color.White
-        Me.outlinetxt.Location = New System.Drawing.Point(127, 303)
+        Me.outlinetxt.Location = New System.Drawing.Point(126, 327)
         Me.outlinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
@@ -285,7 +288,7 @@ Partial Class Form2
         '
         Me.tagline.AutoSize = true
         Me.tagline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tagline.Location = New System.Drawing.Point(22, 526)
+        Me.tagline.Location = New System.Drawing.Point(24, 545)
         Me.tagline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.tagline.Name = "tagline"
         Me.tagline.Size = New System.Drawing.Size(63, 16)
@@ -296,7 +299,7 @@ Partial Class Form2
         '
         Me.plot.AutoSize = true
         Me.plot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.plot.Location = New System.Drawing.Point(21, 359)
+        Me.plot.Location = New System.Drawing.Point(20, 383)
         Me.plot.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.plot.Name = "plot"
         Me.plot.Size = New System.Drawing.Size(40, 16)
@@ -307,7 +310,7 @@ Partial Class Form2
         '
         Me.outline.AutoSize = true
         Me.outline.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.outline.Location = New System.Drawing.Point(21, 304)
+        Me.outline.Location = New System.Drawing.Point(20, 328)
         Me.outline.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.outline.Name = "outline"
         Me.outline.Size = New System.Drawing.Size(58, 16)
@@ -427,7 +430,7 @@ Partial Class Form2
         '
         Me.Label5.AutoSize = true
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label5.Location = New System.Drawing.Point(454, 566)
+        Me.Label5.Location = New System.Drawing.Point(447, 574)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 16)
@@ -438,7 +441,7 @@ Partial Class Form2
         '
         Me.Label4.AutoSize = true
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label4.Location = New System.Drawing.Point(140, 566)
+        Me.Label4.Location = New System.Drawing.Point(133, 574)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 16)
@@ -592,6 +595,16 @@ Partial Class Form2
         Me.btn_BlankNfo.Text = "Blank Nfo"
         Me.ToolTip1.SetToolTip(Me.btn_BlankNfo, "Blank All Fields, including actors")
         Me.btn_BlankNfo.UseVisualStyleBackColor = true
+        '
+        'btn_SeriesLnkSearch
+        '
+        Me.btn_SeriesLnkSearch.Location = New System.Drawing.Point(342, 209)
+        Me.btn_SeriesLnkSearch.Name = "btn_SeriesLnkSearch"
+        Me.btn_SeriesLnkSearch.Size = New System.Drawing.Size(134, 23)
+        Me.btn_SeriesLnkSearch.TabIndex = 137
+        Me.btn_SeriesLnkSearch.Text = "Browse for Series to Link"
+        Me.ToolTip1.SetToolTip(Me.btn_SeriesLnkSearch, "Search for a Series.  Must have a valid"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"tvshow.nfo to read Series Title!")
+        Me.btn_SeriesLnkSearch.UseVisualStyleBackColor = true
         '
         'Label1
         '
@@ -790,7 +803,7 @@ Partial Class Form2
         '
         'starstxt
         '
-        Me.starstxt.Location = New System.Drawing.Point(127, 272)
+        Me.starstxt.Location = New System.Drawing.Point(126, 293)
         Me.starstxt.Name = "starstxt"
         Me.starstxt.Size = New System.Drawing.Size(623, 20)
         Me.starstxt.TabIndex = 15
@@ -799,7 +812,7 @@ Partial Class Form2
         '
         Me.Label6.AutoSize = true
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label6.Location = New System.Drawing.Point(21, 273)
+        Me.Label6.Location = New System.Drawing.Point(20, 297)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(45, 16)
         Me.Label6.TabIndex = 116
@@ -860,7 +873,7 @@ Partial Class Form2
         '
         Me.Label19.AutoSize = true
         Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label19.Location = New System.Drawing.Point(21, 221)
+        Me.Label19.Location = New System.Drawing.Point(20, 245)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(83, 16)
         Me.Label19.TabIndex = 124
@@ -869,7 +882,7 @@ Partial Class Form2
         'tb_TrailerURL
         '
         Me.tb_TrailerURL.BackColor = System.Drawing.Color.White
-        Me.tb_TrailerURL.Location = New System.Drawing.Point(127, 217)
+        Me.tb_TrailerURL.Location = New System.Drawing.Point(126, 241)
         Me.tb_TrailerURL.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_TrailerURL.Multiline = true
         Me.tb_TrailerURL.Name = "tb_TrailerURL"
@@ -962,16 +975,37 @@ Partial Class Form2
         '
         'btnSelectAPlot
         '
-        Me.btnSelectAPlot.Location = New System.Drawing.Point(19, 393)
+        Me.btnSelectAPlot.Location = New System.Drawing.Point(18, 417)
         Me.btnSelectAPlot.Name = "btnSelectAPlot"
         Me.btnSelectAPlot.Size = New System.Drawing.Size(75, 23)
         Me.btnSelectAPlot.TabIndex = 134
         Me.btnSelectAPlot.Text = "Select a Plot"
         Me.btnSelectAPlot.UseVisualStyleBackColor = true
         '
+        'tb_SeriesLnk
+        '
+        Me.tb_SeriesLnk.Location = New System.Drawing.Point(127, 210)
+        Me.tb_SeriesLnk.Name = "tb_SeriesLnk"
+        Me.tb_SeriesLnk.Size = New System.Drawing.Size(195, 20)
+        Me.tb_SeriesLnk.TabIndex = 135
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = true
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label8.Location = New System.Drawing.Point(21, 212)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(83, 16)
+        Me.Label8.TabIndex = 136
+        Me.Label8.Text = "Series Link : "
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.btn_SeriesLnkSearch)
+        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.tb_SeriesLnk)
         Me.Controls.Add(Me.btnSelectAPlot)
         Me.Controls.Add(Me.btnWatched)
         Me.Controls.Add(Me.PremieredDatePicker)
@@ -1152,4 +1186,7 @@ End Sub
     Friend WithEvents PremieredDatePicker As System.Windows.Forms.DateTimePicker
     Friend WithEvents btnWatched As System.Windows.Forms.Button
     Friend WithEvents btnSelectAPlot As System.Windows.Forms.Button
+    Friend WithEvents tb_SeriesLnk As TextBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents btn_SeriesLnkSearch As Button
 End Class
