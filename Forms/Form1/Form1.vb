@@ -1346,6 +1346,7 @@ Public Class Form1
     Private Sub util_RegexSetDefaultScraper()
         tv_RegexScraper.Clear()
         tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
+        tv_RegexScraper.Add("([\d]{1,4}).?[Ee]([\d]{1,4})")
         tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
         tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
         tv_RegexScraper.Add("([\d]{1,2})\.([\d]{2})")

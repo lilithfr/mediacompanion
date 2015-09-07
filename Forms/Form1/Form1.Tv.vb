@@ -1972,6 +1972,7 @@ Partial Public Class Form1
     End Sub
 
     Private Sub TV_EpisodeScraper(ByVal ListOfShows As List(Of TvShow), ByVal manual As Boolean)
+        Dim stage As String = "0"
         Try
             Dim tempstring As String = ""
             Dim tempint As Integer
@@ -2103,8 +2104,11 @@ Partial Public Class Form1
                 Dim episode As New TvEpisode
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
+                    stage = "1"
                     S = S.Replace(newepisode.ShowTitle.Value, "")
+                    stage = "2"
                     If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then S = S.Replace(newepisode.ShowYear.Value, "")
+                    stage = "3"
                     S = S.Replace("x265", "")
                     S = S.Replace("x264", "")
                     S = S.Replace("720p", "")
@@ -2117,6 +2121,7 @@ Partial Public Class Form1
                     S = S.Replace("720I", "")
                     S = S.Replace("1080P", "")
                     S = S.Replace("1080I", "")
+                    stage = "4"
                     Dim M As Match
                     M = Regex.Match(S, Regexs)
                     If M.Success = True Then
@@ -2187,7 +2192,9 @@ Partial Public Class Form1
                     Dim M2 As Match
                     Dim epcount As Integer = 0
                     Dim allepisodes(100) As Integer
+                    stage = "5"
                     S = Regex.Replace(eps.Thumbnail.FileName, "\(.+\)\s", "")   'Remove anything from filename in brackets like resolution ie: (1920x1080) that may give false episode number
+                    stage = "6"
                     eps.Thumbnail.FileName = ""
                     Do
                         '<tvregex>[Ss]([\d]{1,2}).?[Ee]([\d]{3})</tvregex>
@@ -2323,14 +2330,18 @@ Partial Public Class Form1
                                                 newstring = thisresult.InnerText
                                                 newstring = newstring.TrimEnd("|")
                                                 newstring = newstring.TrimStart("|")
+                                                stage = "7"
                                                 newstring = newstring.Replace("|", " / ")
+                                                stage = "8"
                                                 singleepisode.Director.Value = newstring
                                             Case "credits"
                                                 Dim newstring As String
                                                 newstring = thisresult.InnerText
                                                 newstring = newstring.TrimEnd("|")
                                                 newstring = newstring.TrimStart("|")
+                                                stage = "9"
                                                 newstring = newstring.Replace("|", " / ")
+                                                stage = "10"
                                                 singleepisode.Credits.Value = newstring
                                             Case "rating"
                                                 singleepisode.Rating.Value = thisresult.InnerText
@@ -2471,7 +2482,9 @@ Partial Public Class Form1
                     End If
                     
                     For Each Shows In Cache.TvCache.Shows
+                        stage = "11"
                         If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
+                            stage = "12"
                             Dim epseason As String = episodearray(0).Season.Value
                             Dim Seasonxx As String = Shows.FolderPath + "season" + (If(epseason.ToInt < 10, "0" + epseason, epseason)) + (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
                             If epseason = "0" Then Seasonxx = Shows.FolderPath & "season-specials" & (If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn"))
@@ -2510,7 +2523,8 @@ Partial Public Class Form1
             tv_EpisodesMissingUpdate(newEpisodeList)
             bckgroundscanepisodes.ReportProgress(0, progresstext)
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            stage = "stage: " & stage
+            ExceptionHandler.LogError(ex, stage)
         End Try
     End Sub
     
