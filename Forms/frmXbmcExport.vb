@@ -64,6 +64,7 @@ Public Class frmXbmcExport
                 tvshow.episodes.Add(epdata)
             Next
             tvshow.series.Episode = tvshow.episodes.Count.ToString
+            tvshow.series.Season = Sh.Seasons.count.ToString
             TVSeries.Add(tvshow)
         Next
     End Sub
@@ -143,7 +144,7 @@ Public Class frmXbmcExport
             If Not File.Exists(sh.series.Filenameandpath) Then Continue For
             Dim tvsh As TvShow = nfoFunction.tv_NfoLoadFull(sh.series.Filenameandpath)
             Dim CurrentSh As New XmlDocument
-            CurrentSh = TransposetvShows(tvsh, sh.episodes.count)
+            CurrentSh = TransposetvShows(tvsh, sh.episodes.count, sh.series.Season)
             TransTvActorImages(tvsh.ListActors, sh.series.Filenameandpath)
             For Each ep In sh.episodes
                 If Not File.Exists(ep.Filenameandpath) Then Continue For
@@ -177,11 +178,18 @@ Public Class frmXbmcExport
         root.AppendChild(oDoc3)
         doc.AppendChild(root)
         Try
-            Dim output As New XmlTextWriter(FullPathOut & "\videodb.xml", System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-            output.Indentation = 4
-            doc.WriteTo(output)
-            output.Close()
+            Dim settings As New XmlWriterSettings()
+            settings.Encoding = Encoding.UTF8 
+            settings.Indent = True
+            settings.IndentChars = (ControlChars.Tab)
+            settings.NewLineHandling = NewLineHandling.None
+            Dim writer As XmlWriter = XmlWriter.Create(FullPathOut & "\videodb.xml", settings) 
+            'Dim output As New XmlTextWriter(FullPathOut & "\videodb.xml", System.Text.Encoding.UTF8)
+            'output.Formatting = Formatting.Indented
+            'output.Indentation = 4
+            doc.Save(writer)
+            'doc.WriteTo(writer)
+            'output.Close()
         Catch
         End Try
         If ProgressBar1.Value = ProgressBar1.Maximum Then
@@ -354,7 +362,7 @@ Public Class frmXbmcExport
             End If
             root.AppendChild(child)
 
-            If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
+            'If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
                 For Each item In mov.frodoPosterThumbs
                     child = thismovie.CreateElement("thumb")
                     child.SetAttribute("aspect", item.Aspect)
@@ -370,7 +378,7 @@ Public Class frmXbmcExport
                     Catch
                     End Try
                 Next
-            End If
+            'End If
 
             child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
             child = thismovie.CreateElement("showlink") : child.InnerText = mov.fullmoviebody.showlink : root.AppendChild(child)
@@ -543,7 +551,7 @@ Public Class frmXbmcExport
         Return thismovie 
     End Function
 
-    Private Function TransposetvShows(ByVal tvsh As TvShow, ByVal epcount As Integer) As XmlDocument
+    Private Function TransposetvShows(ByVal tvsh As TvShow, ByVal epcount As Integer, ByVal seasoncount As Integer) As XmlDocument
         Dim ThisTvShow As New XmlDocument
         Try
             Dim stage As Integer = 0
@@ -564,12 +572,13 @@ Public Class frmXbmcExport
             child = ThisTvShow.CreateElement("epbookmark") : child.InnerText = "0.000000" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("year") : child.InnerText = tvsh.Year.Value : root.AppendChild(child)
             child = ThisTvShow.CreateElement("top250") : child.InnerText = If(String.IsNullOrEmpty(tvsh.Top250.Value), "0", tvsh.Top250.Value) : root.AppendChild(child)
-            child = ThisTvShow.CreateElement("season") : child.InnerText = "-1" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("season") : child.InnerText = seasoncount : root.AppendChild(child)
             child = ThisTvShow.CreateElement("episode") : child.InnerText = epcount : root.AppendChild(child)
             child = ThisTvShow.CreateElement("uniqueid") : child.InnerText = "" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("displayseason") : child.InnerText = "-1" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("displayepisode") : child.InnerText = "-1" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("votes") : child.InnerText = tvsh.Votes.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("outline") : child.InnerText ="" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("plot") : child.InnerText = tvsh.Plot.Value : root.AppendChild(child)
             child = ThisTvShow.CreateElement("tagline") : child.InnerText = tvsh.TagLine.Value : root.AppendChild(child)
             child = ThisTvShow.CreateElement("runtime") : child.InnerText = tvsh.Runtime.Value : root.AppendChild(child)
@@ -585,7 +594,7 @@ Public Class frmXbmcExport
             childchild = ThisTvShow.CreateElement("url")
             tempppp = tvsh.TvdbId.value
             Attr = ThisTvShow.CreateAttribute("cache")
-            Attr.Value = tempppp
+            Attr.Value = tempppp & "-" & tvsh.Language.value & ".xml"
             childchild.Attributes.Append(Attr)
             If Not IsNothing(tvsh.episodeguideurl) Then
                 '"http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
@@ -619,6 +628,7 @@ Public Class frmXbmcExport
                 Next
             End If
             child = ThisTvShow.CreateElement("premiered") : child.InnerText = tvsh.Premiered.value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("status") : child.InnerText = tvsh.Status.Value : root.AppendChild(child)
             child = ThisTvShow.CreateElement("studio") : child.InnerText = tvsh.Studio.value : root.AppendChild(child)
             For each act As Actor In tvsh.ListActors
                 child = ThisTvShow.CreateElement("actor")
@@ -769,7 +779,10 @@ Public Class frmXbmcExport
             child = ThisTvEp.CreateElement("plot") : child.InnerText = tvep.Plot.Value : root.AppendChild(child)
             child = ThisTvEp.CreateElement("tagline") : child.InnerText = tvep.TagLine.Value : root.AppendChild(child)
             child = ThisTvEp.CreateElement("runtime")
-            Dim runtime As Integer = tvep.Details.StreamDetails.Video.DurationInSeconds.Value.ToInt
+            Dim runtime As Integer = 0
+            If Not tvep.Details.StreamDetails.Video.DurationInSeconds.Value = Nothing Then
+                runtime = tvep.Details.StreamDetails.Video.DurationInSeconds.Value.ToInt
+            End If
             child.InnerText = If(runtime > 0, Math.Floor(runtime/60).ToString, "0")
             root.AppendChild(child)
             child = ThisTvEp.CreateElement("mpaa") : child.InnerText = sh.Mpaa.Value : root.AppendChild(child)
