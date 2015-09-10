@@ -325,6 +325,31 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return ""
     End Function
 
+    Public Shared Function GetDvdLargestVobSet(ByVal Filename As String) As String
+        Dim returnfilename As String = Filename
+        Try
+            Dim vobsetName As String = ""
+            Dim vobsetcount As Integer = 0
+            Dim Path As String = IO.Path.GetDirectoryName(Filename)
+            Dim di As New DirectoryInfo(Path)
+            Dim aryFi As IO.FileInfo() = di.GetFiles("vts*.vob")
+            For each fi In aryFi
+                Dim vset As String = "vts_" & fi.Name.Substring(4,2) & "*.vob"
+                Dim grp As IO.FileInfo() = di.GetFiles(vset)
+                If grp.Count > vobsetcount Then
+                    vobsetcount = grp.Count
+                    vobsetName = vset
+                End If
+            Next
+            If vobsetName <> "" Then
+                Dim fileifo As IO.FileInfo() = di.GetFiles(vobsetName.Replace("vob", "ifo"))
+                If fileifo.Count = 1 Then returnfilename = fileifo(0).FullName
+            End If
+        Catch
+        End Try
+        Return returnfilename
+    End Function
+
     Public Shared Function isMultiPartMedia(ByRef workingFileName As String, ByVal nameOnly As Boolean, Optional ByRef isFirstPart As Boolean = True, _
                                             Optional ByRef stackType As String = "", Optional ByRef nextPart As String = "") _
                                         As Boolean

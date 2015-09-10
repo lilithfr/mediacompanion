@@ -72,6 +72,7 @@ Public Class frmXbmcExport
     Private Sub ShowMCPaths()
         If MovieList.Count > 0 Then
             For Each ph In Preferences.movieFolders
+                If Not ph.selected Then Continue For
                 Dim n As Integer = MCExportdgv.Rows.Add()
                 MCExportdgv.Rows(n).Cells(0).Value = "Movie"
                 MCExportdgv.Rows(n).Cells(1).Value = ph.rpath & "\"
@@ -80,6 +81,7 @@ Public Class frmXbmcExport
         End If
         If TVSeries.Count > 0 Then
             For Each ph In Preferences.tvRootFolders
+                If Not ph.selected Then Continue For
                 Dim n As Integer = MCExportdgv.Rows.Add()
                 MCExportdgv.Rows(n).Cells(0).Value = "TV"
                 MCExportdgv.Rows(n).Cells(1).Value = ph.rpath & "\"
@@ -130,6 +132,7 @@ Public Class frmXbmcExport
         Next
         If MovieList.Count > 0 Then
             For Each ph In Preferences.movieFolders
+                If Not ph.selected Then Continue For
                 Dim t As New XBMCPaths
                 t.rootpath = ph.rpath
                 t.pathsource = "movies"
@@ -164,7 +167,8 @@ Public Class frmXbmcExport
             Me.ProgressBar1.Refresh()
         Next
         If TVSeries.Count > 0 Then
-            For Each ph In Preferences.tvRootFolders 
+            For Each ph In Preferences.tvRootFolders
+                If Not ph.selected Then Continue For
                 Dim t As New XBMCPaths
                 t.rootpath = ph.rpath
                 t.pathsource = "tvshows"
@@ -362,28 +366,28 @@ Public Class frmXbmcExport
             End If
             root.AppendChild(child)
 
-            'If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
-                For Each item In mov.frodoPosterThumbs
-                    child = thismovie.CreateElement("thumb")
-                    child.SetAttribute("aspect", item.Aspect)
-                    child.InnerText = item.Url
-                    root.AppendChild(child)
-                Next
+            For Each item In mov.frodoPosterThumbs
+                child = thismovie.CreateElement("thumb")
+                child.SetAttribute("aspect", item.Aspect)
+                child.InnerText = item.Url
+                root.AppendChild(child)
+            Next
+            If mov.frodoFanartThumbs.Thumbs.Count > 0 Then
                 root.AppendChild(mov.frodoFanartThumbs.GetChild(thismovie))
-                For Each thumbnail In mov.listthumbs
-                    Try
-                        child = thismovie.CreateElement("thumb")
-                        child.InnerText = thumbnail
-                        root.AppendChild(child)
-                    Catch
-                    End Try
-                Next
-            'End If
+            End If
+            For Each thumbnail In mov.listthumbs
+                child = thismovie.CreateElement("thumb")
+                child.InnerText = thumbnail
+                root.AppendChild(child)
+            Next
 
             child = thismovie.CreateElement("mpaa") : child.InnerText = mov.fullmoviebody.mpaa : root.AppendChild(child)
-            child = thismovie.CreateElement("showlink") : child.InnerText = mov.fullmoviebody.showlink : root.AppendChild(child)
+            If mov.fullmoviebody.showlink <> "" Then
+                child = thismovie.CreateElement("showlink") : child.InnerText = mov.fullmoviebody.showlink : root.AppendChild(child)
+            End If
             child = thismovie.CreateElement("playcount") : child.InnerText = mov.fullmoviebody.playcount : root.AppendChild(child)
             child = thismovie.CreateElement("lastplayed") : child.InnerText = mov.fullmoviebody.lastplayed : root.AppendChild(child)
+            child = thismovie.CreateElement("file") : child.InnerText = "" : root.AppendChild(child)
             child = thismovie.CreateElement("path") : child.InnerText = TransposePath(mov.fileinfo.path) : root.AppendChild(child)
             child = thismovie.CreateElement("filenameandpath") : child.InnerText = TransposePath(mov.fileinfo.filenameandpath) : root.AppendChild(child)
             child = thismovie.CreateElement("basepath")
@@ -436,6 +440,11 @@ Public Class frmXbmcExport
                 Next
             End If
 
+            child = thismovie.CreateElement("premiered") : child.InnerText = "" : root.AppendChild(child)
+            child = thismovie.CreateElement("status") : child.InnerText = "" : root.AppendChild(child)
+            child = thismovie.CreateElement("code") : child.InnerText = "" : root.AppendChild(child)
+            child = thismovie.CreateElement("aired") : child.InnerText = "" : root.AppendChild(child)
+
             If mov.fullmoviebody.studio <> "" Then
                 Dim strArr() As String
                 strArr = mov.fullmoviebody.studio.Split(",")
@@ -459,7 +468,7 @@ Public Class frmXbmcExport
             filedetailschild.AppendChild(filedetailschildchild)
 
             filedetailschildchild = thismovie.CreateElement("aspect")
-            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Aspect.Value), "", mov.filedetails.filedetails_video.Aspect.Value)
+            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(mov.filedetails.filedetails_video.Aspect.Value), "", mov.filedetails.filedetails_video.Aspect.Value & "0000")
             filedetailschild.AppendChild(filedetailschildchild)
 
             
@@ -473,6 +482,10 @@ Public Class frmXbmcExport
 
             filedetailschildchild = thismovie.CreateElement("durationinseconds")
             filedetailschildchild.InnerText = If(mov.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "0", mov.filedetails.filedetails_video.DurationInSeconds.Value)
+            filedetailschild.AppendChild(filedetailschildchild)
+
+            filedetailschildchild = thismovie.CreateElement("stereomode")
+            filedetailschildchild.InnerText = ""
             filedetailschild.AppendChild(filedetailschildchild)
             anotherchild.AppendChild(filedetailschild)
 
@@ -493,13 +506,15 @@ Public Class frmXbmcExport
                 anotherchild.AppendChild(filedetailschild)
             Next
 
-            filedetailschild = thismovie.CreateElement("subtitle")
+            
             For Each entry In mov.filedetails.filedetails_subtitles
+                filedetailschild = thismovie.CreateElement("subtitle")
                 filedetailschildchild = thismovie.CreateElement("language")
                 filedetailschildchild.InnerText = If(String.IsNullOrEmpty(entry.Language.Value), "", entry.Language.Value)
                 filedetailschild.AppendChild(filedetailschildchild)
+                anotherchild.AppendChild(filedetailschild)
             Next
-            anotherchild.AppendChild(filedetailschild)
+            
 
             stage = 18
             child.AppendChild(anotherchild)
@@ -627,14 +642,18 @@ Public Class frmXbmcExport
                     root.AppendChild(child)
                 Next
             End If
+            child = ThisTvShow.CreateElement("set") : child.InnerText = "" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("premiered") : child.InnerText = tvsh.Premiered.value : root.AppendChild(child)
             child = ThisTvShow.CreateElement("status") : child.InnerText = tvsh.Status.Value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("code") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("aired") : child.InnerText = "" : root.AppendChild(child)
             child = ThisTvShow.CreateElement("studio") : child.InnerText = tvsh.Studio.value : root.AppendChild(child)
+            child = ThisTvShow.CreateElement("trailer") : child.InnerText = "" : root.AppendChild(child)
             For each act As Actor In tvsh.ListActors
                 child = ThisTvShow.CreateElement("actor")
-                actorchild = ThisTvShow.CreateElement("actorid")
-                actorchild.InnerText = act.actorid 
-                child.AppendChild(actorchild)
+                'actorchild = ThisTvShow.CreateElement("actorid")
+                'actorchild.InnerText = act.actorid 
+                'child.AppendChild(actorchild)
                 actorchild = ThisTvShow.CreateElement("name")
                 actorchild.InnerText = act.actorname
                 child.AppendChild(actorchild)
@@ -776,6 +795,7 @@ Public Class frmXbmcExport
             child = ThisTvEp.CreateElement("displayepisode")
             child.InnerText = If(tvep.DisplayEpisode.Value = "", "-1", tvep.DisplayEpisode.Value) : root.AppendChild(child)
             child = ThisTvEp.CreateElement("votes") : child.InnerText = tvep.Votes.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("outline") : child.InnerText = "" : root.AppendChild(child)
             child = ThisTvEp.CreateElement("plot") : child.InnerText = tvep.Plot.Value : root.AppendChild(child)
             child = ThisTvEp.CreateElement("tagline") : child.InnerText = tvep.TagLine.Value : root.AppendChild(child)
             child = ThisTvEp.CreateElement("runtime")
@@ -793,9 +813,15 @@ Public Class frmXbmcExport
             child = ThisTvEp.CreateElement("filenameandpath") : child.InnerText = tvep.VideoFilePath : root.AppendChild(child)
             child = ThisTvEp.CreateElement("basepath") : child.InnerText = tvep.VideoFilePath : root.AppendChild(child)
             child = ThisTvEp.CreateElement("id") : child.InnerText = tvep.TvdbId.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("set") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("credits") : child.InnerText = tvep.Credits.value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("director") : child.InnerText = tvep.Director.Value : root.AppendChild(child)
             child = ThisTvEp.CreateElement("premiered") : child.InnerText = sh.Premiered.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("status") : child.InnerText = "" : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("code") : child.InnerText = "" : root.AppendChild(child)
             child = ThisTvEp.CreateElement("aired") : child.InnerText = tvep.Aired.Value : root.AppendChild(child)
             child = ThisTvEp.CreateElement("studio") : child.InnerText = sh.Studio.Value : root.AppendChild(child)
+            child = ThisTvEp.CreateElement("trailer") : child.InnerText = "" : root.AppendChild(child)
 
             child = ThisTvEp.CreateElement("fileinfo")
             anotherchild = ThisTvEp.CreateElement("streamdetails")
@@ -806,7 +832,7 @@ Public Class frmXbmcExport
             filedetailschild.AppendChild(filedetailschildchild)
 
             filedetailschildchild = ThisTvEp.CreateElement("aspect")
-            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(tvep.Details.StreamDetails.Video.Aspect.Value), "", tvep.Details.StreamDetails.Video.Aspect.Value)
+            filedetailschildchild.InnerText = If(String.IsNullOrEmpty(tvep.Details.StreamDetails.Video.Aspect.Value), "", tvep.Details.StreamDetails.Video.Aspect.Value & "0000")
             filedetailschild.AppendChild(filedetailschildchild)
             
             filedetailschildchild = ThisTvEp.CreateElement("width")
@@ -848,12 +874,38 @@ Public Class frmXbmcExport
             anotherchild.AppendChild(filedetailschild)
             child.AppendChild(anotherchild)
             root.AppendChild(child)
-
+            If tvep.ListActors.Count > 0 Then
+                For each act As Actor In tvep.ListActors
+                    child = ThisTvEp.CreateElement("actor")
+                    If Not act.actorid = "" Then
+                        actorchild = ThisTvEp.CreateElement("actorid")
+                        actorchild.InnerText = act.actorid 
+                        child.AppendChild(actorchild)
+                    End If
+                    actorchild = ThisTvEp.CreateElement("name")
+                    actorchild.InnerText = act.actorname
+                    child.AppendChild(actorchild)
+                    actorchild = ThisTvEp.CreateElement("role")
+                    actorchild.InnerText = act.actorrole
+                    child.AppendChild(actorchild)
+                    actorchild = ThisTvEp.CreateElement("order")
+                    actorchild.InnerText = If(act.order = "", "0", act.order)
+                    child.AppendChild(actorchild)
+                    '
+                    actorchild = ThisTvEp.CreateElement("thumb")
+                    actorchild.InnerText = act.actorthumb
+                    child.AppendChild(actorchild)
+                    root.AppendChild(child)
+                Next
+                root.AppendChild(child)
+            End If
             For each act As Actor In sh.ListActors
                 child = ThisTvEp.CreateElement("actor")
-                actorchild = ThisTvEp.CreateElement("actorid")
-                actorchild.InnerText = act.actorid 
-                child.AppendChild(actorchild)
+                If Not act.actorid = "" Then
+                    actorchild = ThisTvEp.CreateElement("actorid")
+                    actorchild.InnerText = act.actorid 
+                    child.AppendChild(actorchild)
+                End If
                 actorchild = ThisTvEp.CreateElement("name")
                 actorchild.InnerText = act.actorname
                 child.AppendChild(actorchild)
@@ -861,14 +913,12 @@ Public Class frmXbmcExport
                 actorchild.InnerText = act.actorrole
                 child.AppendChild(actorchild)
                 actorchild = ThisTvEp.CreateElement("order")
-                actorchild.InnerText = act.order
+                actorchild.InnerText = If(act.order = "", "0", act.order)
+                child.AppendChild(actorchild)
+                actorchild = ThisTvEp.CreateElement("thumb")
+                actorchild.InnerText = act.actorthumb
                 child.AppendChild(actorchild)
                 root.AppendChild(child)
-                If Not String.IsNullOrEmpty(act.actorthumb) Then
-                    actorchild = ThisTvEp.CreateElement("thumb")
-                    actorchild.InnerText = act.actorthumb
-                    child.AppendChild(actorchild)
-                End If
             Next
             root.AppendChild(child)
 

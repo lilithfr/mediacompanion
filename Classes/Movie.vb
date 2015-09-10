@@ -2264,7 +2264,7 @@ Public Class Movie
                     ReportProgress(MSG_OK, "!!! MovieSet Fanart Already Exists" & vbCrLf)
                 End If
             Else
-                ReportProgress(MSG_ERROR, "!!! No Fanart available for this MovieSet" & vbCrLf)
+                ReportProgress(, "!!! No Fanart available for this MovieSet" & vbCrLf)
             End If
             If _api.MC_Posters.Count > 0 Then
                 MsetPoster = _api.MC_Posters(0)
@@ -2279,7 +2279,7 @@ Public Class Movie
                     ReportProgress(MSG_OK, "!!! MovieSet Poster Already Exists" & vbCrLf)
                 End If
             Else
-                ReportProgress(MSG_ERROR, "!!! No Poster available for this MovieSet" & vbCrLf)
+                ReportProgress(, "!!! No Poster available for this MovieSet" & vbCrLf)
             End If
             _api = Nothing
         Else

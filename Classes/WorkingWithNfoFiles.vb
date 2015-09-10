@@ -3033,31 +3033,21 @@ Public Class WorkingWithNfoFiles
                     Catch
                     End Try
                     stage = 17
-                    Dim tempint As Integer = 0
                     Try
-                        filedetailschild = doc.CreateElement("subtitle")
                         For Each entry In movietosave.filedetails.filedetails_subtitles
-                            Try
-                                If entry.Language <> Nothing Then
-                                    If entry.Language.Value <> "" Then
-                                        tempint += 1
-                                        filedetailschildchild = doc.CreateElement("language")
-                                        filedetailschildchild.InnerText = entry.Language.Value
-                                        filedetailschild.AppendChild(filedetailschildchild)
-                                    End If
+                            If entry.Language <> Nothing Then
+                                If entry.Language.Value <> "" Then
+                                    filedetailschild = doc.CreateElement("subtitle")
+                                    filedetailschildchild = doc.CreateElement("language")
+                                    filedetailschildchild.InnerText = entry.Language.Value
+                                    filedetailschild.AppendChild(filedetailschildchild)
+                                    anotherchild.AppendChild(filedetailschild)
                                 End If
-                            Catch
-                            End Try
+                            End If
                         Next
                     Catch
                     End Try
                     stage = 18
-                    Try
-                        If tempint > 0 Then
-                            anotherchild.AppendChild(filedetailschild)
-                        End If
-                    Catch ex As Exception
-                    End Try
                 Else
                     Try
                         Dim container As String = movietosave.filedetails.filedetails_video.Container.Value

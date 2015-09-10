@@ -2135,7 +2135,8 @@ Public Class Preferences
     Public Shared Function Get_HdTags(ByVal filename As String) As FullFileDetails
         Try
             If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
-                Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
+                Dim temppath As String = Utilities.GetDvdLargestVobSet(filename)
+                'Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
                 If IO.File.Exists(temppath) Then
                     filename = temppath
                 End If
