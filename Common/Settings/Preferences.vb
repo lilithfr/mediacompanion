@@ -36,8 +36,7 @@ Public Class Preferences
     Public Const SetDefaults = True
     Public Const datePattern As String = "yyyyMMddHHmmss"
     Public Const nfoDatePattern As String = "yyyy-MM-dd"
-
-
+    
     'Not saved items
     Public Shared fixnfoid As Boolean
     Public Shared tv_RegexScraper As New List(Of String)
@@ -176,8 +175,7 @@ Public Class Preferences
     Public Shared prxyPort As String
     Public Shared prxyUsername As String
     Public Shared prxyPassword As String
-
-
+    
     'Saved Movie Prefs
     Public Shared DownloadTrailerDuringScrape As Boolean
     Public Shared NoAltTitle As Boolean
@@ -390,8 +388,7 @@ Public Class Preferences
     Public Shared maximagecount As Integer
     Public Shared episodeacrorsource As String
     Public Shared alwaysuseimdbid As Boolean
-
-
+    
     'XBMC Sync
     Public Shared XBMC_Active As Boolean = False
     Public Shared XBMC_Link                   As Boolean = False
@@ -406,39 +403,30 @@ Public Class Preferences
     Public Shared XBMC_MC_CompareFields       As New XBMC_MC_CompareFields ("Movie")
     Public Shared XBMC_Link_Use_Forward_Slash As Boolean = False    'This property does not get persisted, it's assigned in XbmcController at runtime
     Public Shared XBMC_Delete_Cached_Images   As Boolean = True
-
-
-    Public Shared ShowExtraMovieFilters       As Boolean = False
-
     
-
+    Public Shared ShowExtraMovieFilters       As Boolean = False
+    
     ReadOnly Shared Property AppPath As String
         Get 
             Return My.Application.Info.DirectoryPath
          End Get
     End Property 
-
-
+    
     ReadOnly Shared Property XBMC_TestsPassed As Boolean
         Get 
             'Non-db tests...
             Dim result As Boolean = XBMC_Active AndAlso XBMC_MC_MovieFolderMappings.Initialised AndAlso FrodoEnabled AndAlso XBMC_CanPing AndAlso XBMC_CanConnect 
-
             If Not result Then Return False
 
             'Db tests...
             If XBMC_Delete_Cached_Images Then
-
                 result = XBMC_UserdataFolder_Valid     AndAlso XBMC_TexturesDbFile_Valid   AndAlso XBMC_TexturesDb_Conn_Valid  AndAlso 
-                         XBMC_TexturesDb_Version_Valid AndAlso XBMC_ThumbnailsFolder_Valid    
-
+                         XBMC_TexturesDb_Version_Valid AndAlso XBMC_ThumbnailsFolder_Valid  
             End If
-
             Return result 
          End Get
     End Property  
-
-
+    
     ReadOnly Shared Property XBMC_CanConnect As Boolean
         Get
             Dim xbmc As XbmcJsonRpcConnection
@@ -829,8 +817,6 @@ Public Class Preferences
         engineend.Add("+movie+site%3Aimdb.com")
         enginefront.Add("http://www.ask.com/web?qsrc=1&o=0&l=dir&q=")
         engineend.Add("&qo=serpSearchTopBox")
-        'enginefront.Add("http://search.yahoo.com/search?p=")    'Yahoo isn't allowing searching. 
-        'engineend.Add("+movie+site%3Aimdb.com")
     End Sub
     Public Shared Sub ConfigSave()
         
@@ -861,18 +847,13 @@ Public Class Preferences
         Next
         root.AppendChild(doc, "stubfolder", stubfolder)
         root.AppendChild(doc, "stubmessage", stubmessage)
-        'Dim list As New List(Of String)
         For Each path In offlinefolders
-            'If Not list.Contains(path) Then
             root.AppendChild(doc, "offlinefolder", path)
-                'list.Add(path)
-            'End If
         Next
 
         For Each path In homemoviefolders
             Dim t As String = path.rpath & "|" & path.selected
             root.AppendChild(doc, "homemoviefolder", t)
-            'list.Add(Path)
         Next
 
         For Each Path In MVidFolders
@@ -880,8 +861,7 @@ Public Class Preferences
         Next
 
         root.AppendChild(ExcludeFolders.GetChild(doc))
-
-
+        
         'Form Settings ------------------------------------------------------------
         root.AppendChild(doc, "backgroundcolour",           backgroundcolour)
         root.AppendChild(doc, "forgroundcolour",            forgroundcolour)
@@ -912,8 +892,7 @@ Public Class Preferences
         root.AppendChild(doc, "displayMissingEpisodes",     displayMissingEpisodes)     'SearchForMissingEpisodesToolStripMenuItem
         root.AppendChild(doc, "ignoreMissingSpecials",      ignoreMissingSpecials)      'cbTvMissingSpecials
         root.AppendChild(doc, "TvMissingEpOffset",          TvMissingEpOffset)          'cb_TvMissingEpOffset
-
-
+        
         'Still to do
         child = doc.CreateElement("moviesets")
         Dim childchild As XmlElement
@@ -948,8 +927,7 @@ Public Class Preferences
             child.AppendChild(childchild2)
         Next
         root.AppendChild(child)
-
-
+        
         'General Prefs ------------------------------------------------------------
         root.AppendChild(doc, "startupcache",           startupCache)           'chkbx_disablecache
         root.AppendChild(doc, "renamenfofiles",         renamenfofiles)         'CheckBoxRenameNFOtoINFO
@@ -979,7 +957,6 @@ Public Class Preferences
         root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'tbMkvMergeGuiPath
         root.AppendChild(doc, "ShowAllAudioTracks"   ,  ShowAllAudioTracks   )  'cbShowAllAudioTracks
         
-
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
         End If
@@ -996,8 +973,6 @@ Public Class Preferences
                 root.AppendChild(child)
             End If
         Next
-
-        
         
         'Movie Prefs ------------------------------------------------------------
         root.AppendChild(doc, "DownloadTrailerDuringScrape",        DownloadTrailerDuringScrape)        'cbDlTrailerDuringScrape
@@ -1179,7 +1154,6 @@ Public Class Preferences
         
         root.AppendChild( doc, "ShowExtraMovieFilters"       , ShowExtraMovieFilters     )
         
-
         root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
         root.AppendChild(XBMC_MC_CompareFields      .GetChild(doc))
         
@@ -1188,11 +1162,7 @@ Public Class Preferences
         If String.IsNullOrEmpty(workingProfile.Config) Then
             workingProfile.Config = IO.Path.Combine(applicationPath, "settings\config.xml")
         End If
-
-
         Dim output As XmlTextWriter = Nothing
-
-
         Try
             output = New XmlTextWriter(workingProfile.Config, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
@@ -1204,9 +1174,7 @@ Public Class Preferences
         End Try
         Proxyreload()
     End Sub
-
-
-
+    
     Public Shared Sub ConfigLoad()
         commandlist.Clear()
         moviesets.Clear()
@@ -1237,15 +1205,13 @@ Public Class Preferences
         Catch ex As Exception
             MsgBox("Error : pr24")
         End Try
-
-
+        
         For Each thisresult As XmlNode In prefs("xbmc_media_companion_config_v1.0")
             '            If thisresult.InnerText <> "" Then  'If blank, preference remains at default value
             If thisresult.InnerXml <> "" Then  'If blank, preference remains at default value
 
                 Select Case thisresult.Name
                     Case "moviesets"
-
                         For Each thisset In thisresult.ChildNodes
                             Select Case thisset.Name
                                 Case "set"
@@ -1253,7 +1219,6 @@ Public Class Preferences
                             End Select
                         Next
                     Case "movietags"
-
                         For Each thisset In thisresult.ChildNodes
                             Select Case thisset.Name
                                 Case "tag"
@@ -1261,7 +1226,6 @@ Public Class Preferences
                             End Select
                         Next
                     Case "table"
-
                         For Each thistable In thisresult.ChildNodes
                             Select Case thistable.Name
                                 Case "tab"
@@ -1283,7 +1247,6 @@ Public Class Preferences
                         If newcom.command <> "" And newcom.title <> "" Then
                             commandlist.Add(newcom)
                         End If
-
                     Case "nfofolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         Dim t() As String = decodestring.Split("|")
@@ -1318,27 +1281,22 @@ Public Class Preferences
                     Case "MVidFolders"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         MVidFolders.Add(decodestring)
-
-                    Case "ExcludeFolders" : ExcludeFolders.Load(thisresult)
-
+                    Case "ExcludeFolders"
+                        ExcludeFolders.Load(thisresult)
                     Case "moviethumbpriority"
-                        'ReDim moviethumbpriority(3)
                         Dim tmp() As String = thisresult.InnerXml.Split("|")
                         For Each t In tmp
                             moviethumbpriority.Add(t)
                         Next
-                        'moviethumbpriority = thisresult.InnerXml.Split("|")
                     Case "movseplst"
                         Dim tmp() As String = thisresult.InnerXml.Split("|")
                         MovSepLst.Clear()
                         For Each t In tmp
                             MovSepLst.Add(t)
                         Next
-
                     Case "certificatepriority"
                         ReDim certificatepriority(33)
                         certificatepriority = thisresult.InnerXml.Split("|")
-
                     Case "releaseformat"
                         Dim count As Integer = 0
                         Dim index As Integer = 0
@@ -1348,7 +1306,6 @@ Public Class Preferences
                         Loop
                         ReDim releaseformat(count)
                         releaseformat = thisresult.InnerXml.Split("|")
-
                     Case "tvdblanguage"
                         Dim partone() As String
                         partone = thisresult.InnerXml.Split("|")
@@ -1406,7 +1363,6 @@ Public Class Preferences
                     Case "logview"                              : logview = thisresult.InnerXml
                     Case "fanartnotstacked"                     : fanartnotstacked = thisresult.InnerXml
                     Case "posternotstacked"                     : posternotstacked = thisresult.InnerXml
-'                   Case "downloadfanart"                       : savefanart = thisresult.InnerXml
                     Case "scrapemovieposters"                   : scrapemovieposters = thisresult.InnerXml
                     Case "movrootfoldercheck"                   : movrootfoldercheck = thisresult.InnerXml 
                     Case "posterjpg"                            : posterjpg = thisresult.InnerXml 
@@ -1599,7 +1555,6 @@ Public Class Preferences
                 End Select
             End If
         Next
-        'If MovSepLst.Count = 0 Then Call ResetMovSepLst() 
         If Not MovSepLst.Contains("3DTAB") Then MovSepLst.Insert(0,"3DTAB")
         If Not MovSepLst.Contains("3DSBS") Then MovSepLst.Insert(0,"3DSBS")
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
@@ -1633,11 +1588,9 @@ Public Class Preferences
     End Function
 
     Public Shared Function TrailerExists(NfoPathPrefName As String) As Boolean
-
         Return IO.File.Exists(ActualTrailerPath(NfoPathPrefName))
     End Function
-
-
+    
     Public Shared Function FanartExists(NfoPathPrefName As String) As Boolean
         If Preferences.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
@@ -1645,8 +1598,7 @@ Public Class Preferences
         End If
         Return IO.File.Exists(Preferences.GetFanartPath(NfoPathPrefName))
     End Function
-
-
+    
     Public Shared Function PosterExists(NfoPathPrefName As String) As Boolean
         If Preferences.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
@@ -1655,46 +1607,33 @@ Public Class Preferences
         If Not Preferences.EdenEnabled AndAlso Preferences.posterjpg AndAlso Not GetRootFolderCheck(NfoPathPrefName) Then
             Return IO.File.Exists(IO.Path.GetDirectoryName(NfoPathPrefName) & "\poster.jpg")
         End If
-
         Return IO.File.Exists(Preferences.GetPosterPath(NfoPathPrefName))
     End Function
-
-
+    
     Public Shared Function GetMissingData(NfoPathPrefName As String) As Byte
-
         Dim MissingData As Byte = 0
-        
         If Not Preferences.FanartExists (NfoPathPrefName) Then MissingData += 1
         If Not Preferences.PosterExists (NfoPathPrefName) Then MissingData += 2
         If Not Preferences.TrailerExists(NfoPathPrefName) Then MissingData += 4
-
         Return MissingData
     End Function
-
-
+    
     Public Shared Function ActualTrailerPath(NfoPathPrefName As String) As String
-
         Dim s = NfoPathPrefName
         Dim FileName As String = ""
-
         For Each item In "mp4,flv,webm,mov,m4v".Split(",")
             FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
-
             If IO.File.Exists(FileName) Then Return FileName
         Next
-
         Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
-
     End Function
-
-
+    
     Public Shared Function GetActorPath(ByVal FullPath As String, ByVal ActorName As String, ByVal actorid As String) As String
         If String.IsNullOrEmpty(FullPath) or String.IsNullOrEmpty(ActorName) Then Return ""
         Dim Path As String = FullPath.Replace(IO.Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
         Dim Path2 As String = ""
         If Preferences.actorsave AndAlso actorid <> "" Then
             If Preferences.actorsavealpha Then
-                'Dim actorfilename = ActorName.Replace(" ", "_") & "_" & actorid
                 Path2 = Preferences.actorsavepath & "\" & ActorName.Substring(0,1) & "\" & ActorName.Replace(" ", "_") & "_" & actorid
             Else
                 Path2 = Preferences.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid
@@ -1703,10 +1642,8 @@ Public Class Preferences
             If IO.File.Exists(Path2 & ".tbn") Then Return Path2 & ".tbn"
         End If
         If Preferences.FrodoEnabled And IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
-        If Preferences.EdenEnabled  And IO.File.Exists(Path & ".tbn") Then Return Path & ".tbn"  
-          
-        If IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
-        
+        If Preferences.EdenEnabled  And IO.File.Exists(Path & ".tbn") Then Return Path & ".tbn"
+        If IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"
         Return Path & ".tbn"  
     End Function
 
@@ -1735,7 +1672,6 @@ Public Class Preferences
             If Preferences.posterjpg AndAlso Not IsNothing(MovFilePath) AndAlso Not GetRootFolderCheck(FullPath) AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
                 Dim ispath As Boolean = IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg")
                 If ispath Then posterpath = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
-                'posterpath = FullPath.Replace(MovFilePath,"") & "poster.jpg"
             End If
         Catch
         End Try
@@ -1755,8 +1691,6 @@ Public Class Preferences
         End If
         If IO.File.Exists(dir & "\poster.jpg") Then Return True
         If IO.File.Exists(dir & "\folder.jpg") Then Return True
-        
-
         Return False
     End Function
 
@@ -1784,38 +1718,28 @@ Public Class Preferences
             dir = dir.Substring(0,dir.Length-1)
         End If
         If IO.File.Exists(dir & "\fanart.jpg") Then Return dir & "\fanart.jpg"
-        'If IO.File.Exists(dir & "\folder.jpg") Then Return dir & "\folder.jpg"
         Return ""
     End Function
 
 
     Public Shared Function PreFrodoPosterExists(ByVal nfoFile As String) As Boolean
-
         Return IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), ".tbn"))
-
     End Function
 
 
     Public Shared Function GetAllPosters(ByVal nfoFile As String) As List(Of String)
-
         Dim Results As List(Of String) = New List(Of String)
-
         Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
-
         AddIfExistsAndNew( Results, dir & "\folder.jpg")
         AddIfExistsAndNew( Results, dir & "\poster.jpg")
         AddIfExistsAndNew( Results, nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg") )
         AddIfExistsAndNew( Results, nfoFile.Replace(IO.Path.GetExtension(nfoFile), ".tbn"       ) )
-
         Return Results
     End Function
 
     Public Shared Sub AddIfExistsAndNew( lst As List(Of String), fName As String)
-
         If lst.Contains(fName) Then Return
-
         If Not IO.File.Exists(fName) Then Return
-
         lst.Add(fName)
     End Sub
 
@@ -1853,31 +1777,15 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             End If
-
-
-
         Else
             If Preferences.EdenEnabled Then
-                'If Not Preferences.basicsavemode Then
                 path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
                 lst.Add(path)
-                'End If
-
-                'If Not Utilities.findFileOfType(path, ".tbn") Then
-                '    If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
-                '        path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-                '    Else
-                '        path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                '    End If
-                'End If
-
-                'lst.Add(path)
             End If
             If Preferences.basicsavemode Or Preferences.createfolderjpg And Not isroot Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                 lst.Add(path)
             End If
-
             If Preferences.FrodoEnabled Then
                 If videots = "" Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-poster.jpg")
@@ -1887,7 +1795,6 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             End If
-
         End If
         Return lst
     End Function
@@ -1931,7 +1838,6 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             End If
-
         Else
             If Preferences.EdenEnabled Then
                 path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
@@ -1952,9 +1858,6 @@ Public Class Preferences
                         lst.Add(path)
                     End If
                 End If
-                'If Not videots = "" Then
-                    
-                'End If
             End If
             If Preferences.basicsavemode OrElse Preferences.createfanartjpg Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
@@ -1984,10 +1887,6 @@ Public Class Preferences
             Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
             If IO.File.Exists(dvdbdpath & "fanart.jpg") Then Return dvdbdpath & "fanart.jpg"
         End If
-        'If MovFilePath = "" Then MovFilePath = Nothing
-        'If Not IsNothing(MovFilePath) Then
-        'Dim MovPath As String = FullPath.Replace(MovFilePath,"")
-        'End If
         If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Preferences.basicsavemode, Preferences.fanartjpg, False) Then
             If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso MovFilePath <> "" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath, "") & "fanart.jpg"
@@ -1995,12 +1894,10 @@ Public Class Preferences
             Else
                 fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
             End If
-            'fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
         Else
             If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso MovFilePath <> "" AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath, "") & "fanart.jpg"
                 If IO.File.Exists(MovPath) Then Return MovPath
-                'Return MovPath
             End If
         End If
         Return fanartPath
@@ -2036,7 +1933,6 @@ Public Class Preferences
         If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
             movsetfanartpath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-fanart.jpg"
         Else                                                'or Save to movieset folder if exists.
-           ' Dim MovPath As String = workingMovieDetails.fileinfo.fullpathandfilename
             If MovPath.Contains(MovSetName) AndAlso foldername = MovSetName Then
                 movsetfanartpath = MovPath.Replace(filename, "fanart.jpg")
             ElseIf MovPath.Contains(MovSetName) Then
@@ -2062,7 +1958,6 @@ Public Class Preferences
         If Preferences.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
             movsetposterpath = Preferences.MovSetArtCentralFolder & "\" & MovSetName & "-poster.jpg"
         Else                                                'or Save to movieset folder if exists.
-           ' Dim MovPath As String = workingMovieDetails.fileinfo.fullpathandfilename
             If MovPath.Contains(MovSetName) AndAlso foldername = MovSetName Then
                 movsetposterpath = MovPath.Replace(filename, "poster.jpg")
             ElseIf MovPath.Contains(MovSetName) Then
@@ -2082,37 +1977,32 @@ Public Class Preferences
     Public Shared Function GetActorThumbPath(Optional ByVal location As String = "")
         Dim actualpath As String = ""
         Try
-            If String.IsNullOrEmpty(location) Then
-                Return "none"
-            End If
+            If String.IsNullOrEmpty(location) Then Return "none"
 
-            If location.IndexOf("http") <> -1 Then
-                Return location
-            Else
-                If location.IndexOf(actornetworkpath) <> -1 Then
-                    If Not String.IsNullOrEmpty(actornetworkpath) Or Not String.IsNullOrEmpty(actorsavepath) Then
-                        Dim filename As String = IO.Path.GetFileName(location)
-                        actualpath = IO.Path.Combine(actorsavepath, filename)
-                        If Not IO.File.Exists(actualpath) Then
-                            Dim extension As String = IO.Path.GetExtension(location)
-                            Dim purename As String = IO.Path.GetFileName(location)
-                            purename = purename.Replace(extension, "")
-                            If actorsavealpha Then
-                                actualpath = actorsavepath & "\" & purename.Substring(0,1) & "\" & filename
-                            Else
-                                actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
-                            End If
-                            
+            If location.IndexOf("http") <> -1 Then Return location
+
+            If location.IndexOf(actornetworkpath) <> -1 Then
+                If Not String.IsNullOrEmpty(actornetworkpath) Or Not String.IsNullOrEmpty(actorsavepath) Then
+                    Dim filename As String = IO.Path.GetFileName(location)
+                    actualpath = IO.Path.Combine(actorsavepath, filename)
+                    If Not IO.File.Exists(actualpath) Then
+                        Dim extension As String = IO.Path.GetExtension(location)
+                        Dim purename As String = IO.Path.GetFileName(location)
+                        purename = purename.Replace(extension, "")
+                        If actorsavealpha Then
+                            actualpath = actorsavepath & "\" & purename.Substring(0,1) & "\" & filename
+                        Else
+                            actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
                         End If
-                        If Not IO.File.Exists(actualpath) Then
-                            actualpath = "none"
-                        End If
-                    Else
+                    End If
+                    If Not IO.File.Exists(actualpath) Then
                         actualpath = "none"
                     End If
                 Else
                     actualpath = "none"
                 End If
+            Else
+                actualpath = "none"
             End If
             If String.IsNullOrEmpty(actualpath) Then actualpath = "none"
             Return actualpath
@@ -2258,8 +2148,8 @@ Public Class Preferences
 
             Dim tempmediainfo As String
 
-            workingfiledetails.filedetails_video.Width.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Width)  'tempmediainfo
-            workingfiledetails.filedetails_video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)  'tempmediainfo
+            workingfiledetails.filedetails_video.Width.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Width)
+            workingfiledetails.filedetails_video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)
 
             Try
                 Dim tmp As Double = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).AspectRatio)
@@ -2286,19 +2176,18 @@ Public Class Preferences
                     workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
                 End Try
             End Try
-
-            'Try
+            
             tempmediainfo = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Format)
-                If tempmediainfo.ToLower = "mpeg video" Then
-                    Dim Temp1 As String = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).FormatID)
-                    If Temp1 <> "" Then tempmediainfo = Temp1.ToLower
-                End If
+            If tempmediainfo.ToLower = "mpeg video" Then
+                Dim Temp1 As String = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).FormatID)
+                If Temp1 <> "" Then tempmediainfo = Temp1.ToLower
+            End If
 
-                If tempmediainfo.EndsWith("avc", StringComparison.CurrentCultureIgnoreCase) Then
-                    tempmediainfo = "h264"
-                ElseIf tempmediainfo = "DX50" Then
-                    tempmediainfo = "divx"
-                End If
+            If tempmediainfo.EndsWith("avc", StringComparison.CurrentCultureIgnoreCase) Then
+                tempmediainfo = "h264"
+            ElseIf tempmediainfo = "DX50" Then
+                tempmediainfo = "divx"
+            End If
             workingfiledetails.filedetails_video.Codec.Value = tempmediainfo
 
             tempmediainfo = If(aviFile.Video.Count = 0, "", aviFile.Video(0).CodecID)
@@ -2311,17 +2200,14 @@ Public Class Preferences
                     Else
                         workingfiledetails.filedetails_video.FormatInfo.Value = tempmediainfo 
                     End If
-                    
                 End If
             
-            'Dim fs(100) As String
-            'For f = 1 To 100
-            '    fs(f) = MI.Get_(StreamKind.Visual, 0, f)
-            'Next
-
             Try
                 If playlist.Count = 1 Then
                     Dim duration As String = MI.Get_(StreamKind.Visual, 0, "Duration")
+                    If duration = "" Then
+                        duration = MI.Get_(StreamKind.General, 0, "Duration")
+                    End If
                     If Not String.IsNullOrEmpty(duration) Then
                         workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)
                     Else
@@ -2330,16 +2216,13 @@ Public Class Preferences
                 ElseIf playlist.Count > 1 Then
                     Dim total As Integer = 0
                     For f = 0 To playlist.Count - 1
-
                         Dim M2 As mediainfo = New mediainfo
-
                         M2.Open(playlist(f))
                         Dim duration As String = M2.Get_(StreamKind.Visual, 0, "Duration")
                         If Not String.IsNullOrEmpty(duration) Then
                             total += Math.Round(Convert.ToInt32(duration) / 1000)
                         End If
                     Next
-
                     If total = 0 Then total = -1
                     workingfiledetails.filedetails_video.DurationInSeconds.Value = total
                 End If
@@ -2352,7 +2235,7 @@ Public Class Preferences
 
             workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename) '"This is the extension of the file"
 
-            workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")    'MI.Get_(StreamKind.Visual, curVS, 102) 
+            workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")
             'Video()
             'Format                     : MPEG-4 Visual
             'Format profile             : Streaming Video@L1
@@ -2389,7 +2272,6 @@ Public Class Preferences
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.Codec.Value = "MP3"
                     Else
-                        'audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
                         Try
                             tempmediainfo = aviFile.Audio(curAS).Format
                         Catch
@@ -2417,21 +2299,15 @@ Public Class Preferences
                         tmpaud1 = MI.Get_ (StreamKind.Audio, curAS, "BitRate_Maximum/String")
                         If tmpaud1 <> "" Then audio.Bitrate.Value = tmpaud1
                     End If
-
                     audio.DefaultTrack.Value = MI.Get_(StreamKind.Audio, curAS, "Default")
-
                     workingfiledetails.filedetails_audio.Add(audio)
                     curAS += 1
                 End While
             Else
                 Dim audio As New AudioDetails
-                'audio.Codec.Value = ""
-                'audio.Channels.Value = ""
-                'audio.Bitrate.Value = ""
                 workingfiledetails.filedetails_audio.Add(audio)
             End If
-
-
+            
             Dim numOfSubtitleStreams As Integer = MI.Count_Get(StreamKind.Text)
             Dim curSS As Integer = 0
             If numOfSubtitleStreams > 0 Then
@@ -2444,7 +2320,7 @@ Public Class Preferences
             End If
 
             Return workingfiledetails
-         Catch ex As Exception
+        Catch ex As Exception
 
         Finally
         End Try
