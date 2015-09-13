@@ -34,7 +34,7 @@ Public Class MovieRegExs
     Public Const REGEX_ACTOR_WITH_IMAGE     = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_IMDB_KEYWORD         = "ttkw_kw_[0-9]*"">(?<keyword>.*?)<\/a"
     Public Const REGEX_IMDB_TRAILER         = "<h2><a href=""/video/imdb/vi(.*?)/"
-    Public Const REGEX_TOP_250              = "<strong>Top 250 #(.*?)</strong></a>"
+    Public Const REGEX_TOP_250              = "<strong>Top 250 Movies #(.*?)</strong></a>"
     Public Const REGEX_VOTES                = "<span itemprop=""ratingCount"">([\d{1,3},.?\s]*[0-9]?)</span>"
     Public Const REGEX_TAGLINE              = "<h4 class=""inline"">Tagline.*?:</h4>(.*?)<span class="
     Public Const REGEX_RUNTIME              = "<h4 class=""inline"">Runtime:</h4>(.*?)</div>"
