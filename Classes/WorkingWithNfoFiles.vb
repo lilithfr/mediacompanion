@@ -247,14 +247,16 @@ Public Class WorkingWithNfoFiles
                                                         newtvepisode.Details.StreamDetails.Audio.Add(audio)
                                                     Case "subtitle"
                                                         Dim subsdetails As XmlNode = Nothing
+                                                        Dim sublang As New SubtitleDetails
                                                         For Each subsdetails In detail.ChildNodes
                                                             Select Case subsdetails.Name
                                                                 Case "language"
-                                                                    Dim sublang As New SubtitleDetails
                                                                     sublang.Language.Value = subsdetails.InnerText
-                                                                    newtvepisode.Details.StreamDetails.Subtitles.Add(sublang)
+                                                                Case "default"
+                                                                    sublang.Primary = subsdetails.InnerXml 
                                                             End Select
                                                         Next
+                                                        newtvepisode.Details.StreamDetails.Subtitles.Add(sublang)
                                                 End Select
                                             Next
                                             'newtvepisode.Details = newfilenfo
@@ -630,8 +632,12 @@ Public Class WorkingWithNfoFiles
                             xmlStreamDetailsTypeChild = document.CreateElement("language")
                             xmlStreamDetailsTypeChild.InnerText = subt.Language.Value
                             xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
+                            xmlStreamDetailsTypeChild = document.CreateElement("default")
+                            xmlStreamDetailsTypeChild.InnerXml = subt.Primary 
+                            xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
+                            xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                         End If
-                        xmlStreamDetails.AppendChild(xmlStreamDetailsType)
+                        
                     Next
                 End If
                 xmlFileInfo.AppendChild(xmlStreamDetails)
@@ -2623,7 +2629,6 @@ Public Class WorkingWithNfoFiles
                                                     Dim audiodetails As XmlNode = Nothing
                                                     Dim audio As New AudioDetails
                                                     For Each audiodetails In detail.ChildNodes
-
                                                         Select Case audiodetails.Name
                                                             Case "language"
                                                                 audio.Language.Value = audiodetails.InnerText
@@ -2640,14 +2645,16 @@ Public Class WorkingWithNfoFiles
                                                     newfilenfo.filedetails_audio.Add(audio)
                                                 Case "subtitle"
                                                     Dim subsdetails As XmlNode = Nothing
+                                                    Dim sublang As New SubtitleDetails
                                                     For Each subsdetails In detail.ChildNodes
                                                         Select Case subsdetails.Name
                                                             Case "language"
-                                                                Dim sublang As New SubtitleDetails
                                                                 sublang.Language.Value = subsdetails.InnerText
-                                                                newfilenfo.filedetails_subtitles.Add(sublang)
+                                                            Case "default"
+                                                                sublang.Primary = subsdetails.InnerXml 
                                                         End Select
                                                     Next
+                                                    newfilenfo.filedetails_subtitles.Add(sublang)
                                             End Select
                                         Next
                                         If newfilenfo.filedetails_audio.Count = 0 Then
@@ -2872,6 +2879,9 @@ Public Class WorkingWithNfoFiles
                             filedetailschild = doc.CreateElement("subtitle")
                             filedetailschildchild = doc.CreateElement("language")
                             filedetailschildchild.InnerText = entry.Language.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                            filedetailschildchild = doc.CreateElement("default")
+                            filedetailschildchild.InnerXml = entry.Primary
                             filedetailschild.AppendChild(filedetailschildchild)
                             anotherchild.AppendChild(filedetailschild)
                         End If

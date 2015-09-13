@@ -2314,6 +2314,8 @@ Public Class Preferences
                 While curSS < numOfSubtitleStreams
                     Dim sublanguage As New SubtitleDetails
                     sublanguage.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
+                    Dim DefaultSub As String = MI.Get_(StreamKind.Text, curSS, "Default")
+                    sublanguage.Primary = If(DefaultSub = "Yes", True, False)
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
                 End While

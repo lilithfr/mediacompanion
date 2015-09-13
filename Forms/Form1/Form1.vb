@@ -6270,6 +6270,10 @@ Public Class Form1
                         ThisEp(h).Details.StreamDetails.Audio.Add(audioStream)
                     Next
 
+                    For each langStream In fileStreamDetails.filedetails_subtitles
+                        ThisEp(h).Details.StreamDetails.Subtitles.Add(langStream)
+                    Next
+
                     If ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                         Try
                             Dim tempstring As String

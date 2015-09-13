@@ -6,6 +6,7 @@ Public Class SubtitleDetails
 
 
     Public Property Language As New ProtoProperty(Me, "language", "")
+    Public Property Primary As Boolean = False
 
     Public Sub New()
         MyBase.New(Nothing, Nothing)
