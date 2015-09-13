@@ -193,6 +193,7 @@ Public Class Preferences
     Public Shared keywordlimit As Integer
     Public Shared maxmoviegenre As Integer
     Public Shared enablehdtags As Boolean
+    Public Shared MovDurationAsRuntine As Boolean
     Public Shared movieRuntimeDisplay As String
     Public Shared movieRuntimeFallbackToFile As Boolean = False
     Public Shared disablelogfiles As Boolean
@@ -702,6 +703,7 @@ Public Class Preferences
         usefanart = True
         ignoretrailers = False
         enablehdtags = True
+        MovDurationAsRuntine = False
         savefanart = True
         MovFanartTvscrape = False
         MovFanartTvDlClearArt = True
@@ -1010,6 +1012,7 @@ Public Class Preferences
         root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'ComboBox6
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
+        root.AppendChild(doc, "MovDurationAsRuntine",               MovDurationAsRuntine)               'cb_MovDurationAsRuntine
         root.AppendChild(doc, "movieruntimedisplay",                movieRuntimeDisplay)                'rbRuntimeScraper
         root.AppendChild(doc, "movieRuntimeFallbackToFile",         movieRuntimeFallbackToFile)         'cbMovieRuntimeFallbackToFile
         root.AppendChild(doc, "fanartnotstacked",                   fanartnotstacked)                   'set from frmOptions - obsolete
@@ -1395,6 +1398,7 @@ Public Class Preferences
                     Case "keywordlimit"                         : keywordlimit = Convert.ToInt32(thisresult.InnerXml)
                     Case "maxmoviegenre"                        : maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
                     Case "enablehdtags"                         : enablehdtags = thisresult.InnerXml
+                    Case "MovDurationAsRuntine"                 : MovDurationAsRuntine = thisresult.InnerXml 
                     Case "movieruntimedisplay"                  : movieRuntimeDisplay = thisresult.InnerXml
                     Case "movieRuntimeFallbackToFile"           : movieRuntimeFallbackToFile = thisresult.InnerXml
                     Case "hdtvtags"                             : enabletvhdtags = thisresult.InnerXml

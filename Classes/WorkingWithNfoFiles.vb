@@ -3244,6 +3244,13 @@ Public Class WorkingWithNfoFiles
                 stage = 24
                 Try
                     child = doc.CreateElement("runtime")
+                    If Preferences.MovDurationAsRuntine Then
+                        Dim duration As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
+                        Dim durationInt As Integer = duration.ToInt
+                        If durationInt > 60 Then
+                            movietosave.fullmoviebody.runtime = Math.Floor(durationInt/60).ToString
+                        End If
+                    End If
                     If movietosave.fullmoviebody.runtime <> Nothing Then
                         Dim minutes As String = movietosave.fullmoviebody.runtime
                         minutes = minutes.Replace("minutes", "")

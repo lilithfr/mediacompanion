@@ -12310,6 +12310,7 @@ End Sub
         localactorpath                      .Text           = Preferences.actorsavepath
         xbmcactorpath                       .Text           = Preferences.actornetworkpath
         cbPreferredTrailerResolution        .Text           = Preferences.moviePreferredTrailerResolution.ToUpper()
+        cb_MovDurationAsRuntine             .Checked        = Preferences.MovDurationAsRuntine 
         cbMovieRuntimeFallbackToFile        .Enabled        = (Preferences.movieRuntimeDisplay = "scraper")
         cbMovieRuntimeFallbackToFile        .Checked        = Preferences.movieRuntimeFallbackToFile
         tbDateFormat                        .Text           = Preferences.DateFormat
@@ -15001,6 +15002,12 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cb_MovDurationAsRuntine_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_MovDurationAsRuntine.CheckedChanged
+        Preferences.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeScraper.CheckedChanged
