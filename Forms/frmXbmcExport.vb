@@ -192,6 +192,7 @@ Public Class frmXbmcExport
             'output.Formatting = Formatting.Indented
             'output.Indentation = 4
             doc.Save(writer)
+            writer.Close()
             'doc.WriteTo(writer)
             'output.Close()
         Catch
