@@ -4074,7 +4074,10 @@ Public Class Form1
     End Sub
 
     Private Sub TabControl2_Selecting(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TabControlCancelEventArgs) Handles TabControl2.Selecting
-        If messbox.visible Then e.Cancel = True
+        Try
+            If Not IsNothing(messbox) AndAlso messbox.visible Then e.Cancel = True
+        Catch
+        End Try
         'e.Cancel = True
     End Sub
 
@@ -17485,13 +17488,17 @@ End Sub
         Dim Fail As Boolean = False
         If Not e.Button = MouseButtons.Right Then Exit Sub
         Dim ColIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).ColumnIndex 
-        If ColIndexFromMouseDown < 0 Then Exit Sub
+        If ColIndexFromMouseDown < 0 Then 
+            tsmiMovSetName.Text = ""
+            Exit Sub
+        End If
         Dim RowIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).RowIndex
         If RowIndexFromMouseDown < 0 Then Exit Sub
         messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
+        Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
         If ColIndexFromMouseDown = 1 Then
             Try
-                Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
+                'Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
                 If MsetName = "" Then
                     MsgBox("", "No Movie Set Title!", "")
                     Exit Sub
@@ -17557,13 +17564,105 @@ End Sub
                     MsgBox("Invalid ID." & vbCrLf & "Numerical Only!", , "Invalid TMDB Set ID")
                 End If
             Catch
- 
             End Try
+        ElseIf ColIndexFromMouseDown = 0 Then
+            tsmiMovSetName.Text = MsetName
+            tsmiMovSetShowCollection.Visible = True
+            tsmiMovSetGetFanart.Visible = False
+            tsmiMovSetGetPoster.Visible = False
+        ElseIf ColIndexFromMouseDown = 2 Then
+            tsmiMovSetName.Text = MsetName
+            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetGetFanart.Visible = True
+            tsmiMovSetGetPoster.Visible = False
+        ElseIf ColIndexFromMouseDown = 3 Then
+            tsmiMovSetName.Text = MsetName
+            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetGetFanart.Visible = False
+            tsmiMovSetGetPoster.Visible = True
         End If
         messbox.Close()
         messbox = nothing
         If Fail Then Exit Sub
     End Sub
+
+    Private Sub MovSetsContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovSetsContextMenu.Opening
+        If tsmiMovSetName.Text = "" Then
+            e.cancel = True
+        End If
+        tsmiMovSetName.BackColor = Color.Honeydew
+        tsmiMovSetName.Font = New Font("Arial", 10, FontStyle.Bold)
+    End Sub
+
+    Private Sub tsmiMovSetShowCollection_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetShowCollection.Click
+        Try
+            Dim found As Boolean = False
+            Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+            Dim matchedmovies As New List(Of FullMovieDetails)
+            For Each Mov As Combolist In oMovies.MovieCache
+                If Mov.MovieSet.MovieSetId = MovSet.MovieSetId Then
+                    Dim filepath As String = Mov.fullpathandfilename 
+                    Dim fmd As New FullMovieDetails
+                    fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
+                    matchedmovies.Add(fmd)
+                End If
+            Next
+            If matchedmovies.Count = 0 Then
+                MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
+                Exit Sub
+            End If
+            Dim api As New TMDb
+            api.TmdbId = MovSet.MovieSetId
+            Dim MovCollectionList As New List(Of MovieSetsList)
+            api.CollectionSearch = True
+            MovCollectionList = api.collection
+            For each x In MovCollectionList
+                For each y In matchedmovies
+                    If y.fullmoviebody.tmdbid = x.tmdbid Then
+                        found = True
+                        x.present = True
+                        Exit For
+                    End If
+                Next
+            Next
+            If Not found Then
+                Dim message As String = matchedmovies.Count & " Movie(s) found for:  " & MovSet.MovieSetName & vbCrLf & "But no TMBD ID's match" & vbCrLf
+                message &= "Recommend Batch Wizard to populate movie's TMDb Id's" & vbCrLf 
+                message &= "Select ""Attempt to Locate & Download Fanart for Movies""" & vbCrLf & "is sufficient to populate TMBD Id"
+                MsgBox(message)
+                Exit Sub
+            End If
+            Dim Something As String = "stupid"
+
+            
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMovSetGetFanart_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetFanart.Click
+        Try
+            Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMovSetGetPoster_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetPoster.Click
+        Try
+            Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Function GetMovSetDetails() As MovieSetDatabase
+        Dim t As New MovieSetDatabase 
+        For each p In oMovies.MovieSetDB
+            If p.MovieSetName = tsmiMovSetName.Text Then t = p
+        Next
+        Return t
+    End Function
 
 #End Region 'Movie Set Routines
 

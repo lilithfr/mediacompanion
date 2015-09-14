@@ -65,6 +65,7 @@ Public Class TMDb
     
     Private _mc_posters             As New List(Of str_ListOfPosters)
     Private _mc_backdrops           As New List(Of str_ListOfPosters)
+    Private _mc_collection          As New List(Of MovieSetsList)
     Private _thumbs                 As New List(Of String)
     Private _keywords               As New List(Of String)
     Private _alternateTitles        As WatTmdb.V3.TmdbMovieAlternateTitles
@@ -166,6 +167,13 @@ Public Class TMDb
         Get
             Fetch
             Return _movie
+        End Get 
+    End Property
+
+    Public ReadOnly Property Collection As List(Of MovieSetsList) 
+        Get
+            Fetch
+            Return _mc_collection
         End Get 
     End Property
 
@@ -508,6 +516,11 @@ Public Class TMDb
         Return Not IsNothing(ValidKeyWords)
     End Function
 
+    Function GetMoviesInCollection As Boolean
+        _collection = _api.GetCollectionInfo(TmdbId.ToInt, _lookupLanguages.Item(0))   '_api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
+        Return Not IsNothing(_collection)
+    End Function
+
     Private Sub Fetch
         Try
             If _movie.id = 0 And Not __Serialising And Not _fetched Then
@@ -522,6 +535,7 @@ Public Class TMDb
                     rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
                     rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
                 Else
+                    rhs.Add(New RetryHandler(AddressOf GetMoviesInCollection))
                     rhs.Add(New RetryHandler(AddressOf GetMovieImages))
                 End If
 
@@ -561,6 +575,7 @@ Public Class TMDb
                     AssignMC_Posters()
                     'AssignMC_Thumbs()
                     AssignMC_Backdrops()
+                    AssignMC_Collections()
                 End If
             End If
         Catch ex As Exception
@@ -721,6 +736,15 @@ Public Class TMDb
     Private Sub AssignMC_Thumbs   
         For Each item In ValidBackDrops
             _thumbs.Add( HdPath + item.file_path )
+        Next
+    End Sub
+
+    Private Sub AssignMC_Collections
+        For each item In _collection.parts
+            Dim tmpitem As New MovieSetsList
+            tmpitem.title = item.title
+            tmpitem.tmdbid = item.id
+            _mc_collection.Add(tmpitem)
         Next
     End Sub
 

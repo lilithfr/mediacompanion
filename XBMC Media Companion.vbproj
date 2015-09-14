@@ -324,6 +324,7 @@
     <Compile Include="Structures\Genre.vb" />
     <Compile Include="Structures\Fanarttv.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
+    <Compile Include="Classes\MovieSets.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
     <Compile Include="Structures\TableItems.vb" />
