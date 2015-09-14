@@ -1010,7 +1010,7 @@ Public Class frmXbmcExport
         Return checkpath 
     End Function
     
-    Private Sub frmMediaInfoEdit_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+    Private Sub frmXbmcExport_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.KeyCode = Keys.Escape Then Me.Close()
     End Sub
 

@@ -261,12 +261,6 @@
     <Compile Include="Forms\frmMovPosterCrop.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmMediaInfoEdit.Designer.vb">
-      <DependentUpon>frmMediaInfoEdit.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmMediaInfoEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\frmConfigureXBMC_MC_Folders.Designer.vb">
       <DependentUpon>frmConfigureXBMC_MC_Folders.vb</DependentUpon>
     </Compile>
@@ -589,9 +583,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmXbmcExport.resx">
       <DependentUpon>frmXbmcExport.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMediaInfoEdit.resx">
-      <DependentUpon>frmMediaInfoEdit.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMovPosterCrop.resx">
       <DependentUpon>frmMovPosterCrop.vb</DependentUpon>
