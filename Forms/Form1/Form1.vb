@@ -17596,6 +17596,8 @@ End Sub
 
     Private Sub tsmiMovSetShowCollection_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetShowCollection.Click
         Try
+            MovSetsContextMenu.Close()
+            Application.DoEvents()
             Dim found As Boolean = False
             Dim MovSet As MovieSetDatabase = GetMovSetDetails()
             Dim matchedmovies As New List(Of FullMovieDetails)
@@ -17611,11 +17613,39 @@ End Sub
                 MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
                 Exit Sub
             End If
-            Dim api As New TMDb
-            api.TmdbId = MovSet.MovieSetId
             Dim MovCollectionList As New List(Of MovieSetsList)
-            api.CollectionSearch = True
-            MovCollectionList = api.collection
+            For each mset In oMovies.MovieSetDB
+                If mset.MovieSetId = MovSet.MovieSetId AndAlso mset.collection.Count > 0 Then
+                    For each collect In mset.collection
+                        Dim ac As New MovieSetsList
+                        ac.title = collect.MovieTitle
+                        ac.tmdbid = collect.MovieID
+                        MovCollectionList.Add(ac)
+                    Next
+                    Exit For
+                End If
+            Next
+            messbox = New frmMessageBox("Getting Collection data from TMDb.", "......", "Please Wait")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            If MovCollectionList.Count = 0 Then
+                Try
+                    Dim api As New TMDb
+                    api.TmdbId = MovSet.MovieSetId
+                    api.CollectionSearch = True
+                    MovCollectionList = api.collection
+                Catch ex As Exception
+                    If ex.Message.Contains("TMDB") Then
+                        messbox.Close()
+                        MsgBox("Issue getting data from TMDB")
+                        Exit Sub
+                    End If
+                End Try
+            Else
+                If Not IsNothing(messbox) Then messbox.Close()
+            End If
             For each x In MovCollectionList
                 For each y In matchedmovies
                     If y.fullmoviebody.tmdbid = x.tmdbid Then
@@ -17633,10 +17663,16 @@ End Sub
                 Exit Sub
             End If
             Dim Something As String = "stupid"
-
-            
+            If Not IsNothing(messbox) Then messbox.Close()
+            Dim frm As New frmMovSets
+            frm.CollectionTitle = MovSet.MovieSetName
+            frm.Collection = MovCollectionList
+            frm.Init()
+            frm.ShowDialog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        Finally
+            If Not IsNothing(messbox) Then messbox.Close()
         End Try
     End Sub
 
@@ -21451,14 +21487,56 @@ End Sub
     Private Sub tsmiMovieSetIdCheck_Click( sender As Object,  e As EventArgs) Handles tsmiMovieSetIdCheck.Click
         rescrapeList.ResetFields
         _rescrapeList.FullPathAndFilenames.Clear()
+        Dim MovieSetIds As New List(Of String)
         For Each movie As ComboList In oMovies.MovieCache
-            If movie.MovieSet.MovieSetName.ToLower <> "-none-" AndAlso movie.MovieSet.MovieSetId = "" Then
-                _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
+            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
+                MovieSetIds.Add(movie.MovieSet.MovieSetId)
+                If movie.MovieSet.MovieSetId = "" Or movie.tmdbid = "" Then
+                    _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
+                End If
             End If
         Next
-        If _rescrapeList.FullPathAndFilenames.Count = 0 Then Exit Sub
-        rescrapeList.tmdb_set_id = True
-        RunBackgroundMovieScrape("BatchRescrape")
+        If Not _rescrapeList.FullPathAndFilenames.Count = 0 Then
+            rescrapeList.tmdb_set_id = True
+            RunBackgroundMovieScrape("BatchRescrape")
+        End If
+        If MovieSetIds.Count > 0 Then RebuildMovieSetCollectionList(MovieSetIds)
+    End Sub
+
+    Private Sub RebuildMovieSetCollectionList(ByVal SetIds As List(Of String))
+        Try
+            messbox = New frmMessageBox("Updating Movie Collections", "with Movies in the collection", "Please wait")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            For each item In SetIds
+                Dim api As New TMDb
+                api.TmdbId = item
+                Dim MovCollectionList As New List(Of MovieSetsList)
+                api.CollectionSearch = True
+                Try
+                    MovCollectionList = api.Collection
+                Catch
+                    Continue For
+                End Try
+                For each mset In oMovies.MovieSetDB
+                    If mset.MovieSetId = item Then
+                        mset.collection.Clear()
+                        For each movset In MovCollectionList
+                            Dim ac As New CollectionMovie
+                            ac.MovieID = movset.tmdbid
+                            ac.MovieTitle = movset.title
+                            mset.collection.Add(ac)
+                        Next
+                    End If
+                Next 
+            Next
+            oMovies.SaveMovieSetCache()
+        Catch ex As Exception
+        Finally
+            If Not IsNothing(messbox) Then messbox.Close()
+        End Try
     End Sub
 
     Private Sub TSMI_AboutMC_Click(sender As Object, e As EventArgs) Handles TSMI_AboutMC.Click

@@ -1301,6 +1301,7 @@ Public Class Movies
                 Select Case thisresult.Name
                     Case "movie"
                         Dim newmovie As New ComboList
+                        Dim detail As XmlNode = Nothing
                         For Each detail In thisresult.ChildNodes
                             Select Case detail.Name
                                 Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
@@ -1327,6 +1328,7 @@ Public Class Movies
                                 Case "fullpathandfilename"  : newmovie.fullpathandfilename = detail.InnerText
                                 Case "genre"                : newmovie.genre = detail.InnerText & newmovie.genre
                                 Case "id"                   : newmovie.id = detail.InnerText
+                                Case "tmdbid"               : newmovie.tmdbid = detail.InnerText
                                 Case "playcount"            : newmovie.playcount = detail.InnerText
                                 Case "rating"               : newmovie.rating = detail.InnerText.ToString.ToRating
                                 Case "title"                : newmovie.title = detail.InnerText
@@ -1461,6 +1463,7 @@ Public Class Movies
             Next
 
             childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
+            childchild = doc.CreateElement("tmdbid") : childchild.InnerText = movie.tmdbid : child.AppendChild(childchild)
             childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
             childchild = doc.CreateElement("rating") : childchild.InnerText = movie.rating : child.AppendChild(childchild)
             childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
@@ -1564,7 +1567,7 @@ Public Class Movies
             Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
 
             For Each item In q3.Distinct()
-                _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
+                _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId, New List(Of CollectionMovie)))
             Next
             SaveMovieSetCache()
 
@@ -1928,15 +1931,29 @@ Public Class Movies
                     Dim movieset = ""
                     Dim moviesetId = ""
                     Dim detail As XmlNode = Nothing
+                    Dim movac As New List(Of CollectionMovie)
                     For Each detail In thisresult.ChildNodes
+                        
                         Select Case detail.Name
                             Case "moviesetname"
                                 movieset = detail.InnerText
                             Case "id"
                                 moviesetId = detail.InnerText
+                            Case "collection"
+                                Dim ac As New CollectionMovie
+                                Dim detail2 As XmlNode = Nothing
+                                For each detail2 In detail.ChildNodes
+                                    Select Case detail2.Name
+                                        Case "movietitle"
+                                            ac.MovieTitle = detail2.InnerText
+                                        Case "movieid"
+                                            ac.MovieID = detail2.InnerText
+                                    End Select
+                                Next
+                                movac.Add(ac)
                         End Select
                     Next
-                    setDb.Add(New MovieSetDatabase(movieset, moviesetId))
+                    setDb.Add(New MovieSetDatabase(movieset, moviesetId, movac))
             End Select
         Next
     End Sub
@@ -2042,6 +2059,7 @@ Public Class Movies
         root = doc.CreateElement(typeName & "_cache")
 
         Dim childchild As XmlElement
+        Dim childchildchild As XmlElement 
 
         For Each movieset In setDb
             If movieset.MovieSetName.ToLower = "-none-" Then Continue For
@@ -2052,6 +2070,16 @@ Public Class Movies
             childchild = doc.CreateElement("id")
             childchild.InnerText = movieset.MovieSetId 
             child.AppendChild(childchild)
+            For each item In movieset.collection
+                childchild = doc.CreateElement("collection")
+                childchildchild = doc.createElement("movietitle")
+                childchildchild.InnerText = item.MovieTitle
+                childchild.AppendChild(childchildchild)
+                childchildchild = doc.createElement("movieid")
+                childchildchild.InnerText = item.MovieID
+                childchild.AppendChild(childchildchild)
+                child.AppendChild(childchild)
+            Next
             root.AppendChild(child)
         Next
 

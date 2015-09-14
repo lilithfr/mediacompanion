@@ -418,7 +418,7 @@ Public Class Movie
         Get
             Try
                 If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" Then Return Nothing
-                Return New MovieSetDatabase(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId)
+                Return New MovieSetDatabase(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId, New List(Of CollectionMovie))
             Catch
                 Return Nothing
             End Try
@@ -3032,8 +3032,7 @@ Public Class Movie
 
             IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
             tmdb.Imdb = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, "")
-            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
-
+            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
             If rl.trailer Or rl.Download_Trailer Then
                 If TrailerExists Then
                     ReportProgress("Trailer already exists ", "Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
@@ -3127,6 +3126,7 @@ Public Class Movie
                     _scrapedMovie.listactors.AddRange(_rescrapedMovie.listactors)
                 End If
             End If
+            If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId 
         End If
         If Cancelled() Then Exit Sub
 
