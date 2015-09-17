@@ -305,6 +305,7 @@ Public Class Preferences
     Public Shared tableview As New List(Of String)
     Public Shared tablesortorder As String
     Public Shared MovSepLst As New List(Of String)
+    Public Shared ThreeDKeyWords As New List(Of String)
     Public Shared MovFiltLastSize As Integer
     Public Shared RenameSpaceCharacter As String
 
@@ -620,6 +621,10 @@ Public Class Preferences
         MovSepLst.Add("Extended-Edition")
         MovSepLst.Add("Theatrical-Version")
         MovSepLst.Add("Unrated-Version")
+        ThreeDKeyWords.Add("HSBS")
+        ThreeDKeyWords.Add("SBS")
+        ThreeDKeyWords.Add("TAB")
+        ThreeDKeyWords.Add("MVC")
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
         MovieManualRename = True

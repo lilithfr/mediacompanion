@@ -86,6 +86,7 @@ Public Class Movie
 '   Property TrailerUrl           As String = ""
     Property PosterUrl            As String = ""
     Property SeparateMovie As String = ""
+    Property ThreeDKeep As String = ""
     Property Actions As New ScrapeActions
 '    Property nfopathandfilename As String = ""
     Property RenamedBaseName As String = ""
@@ -935,6 +936,9 @@ Public Class Movie
 
     Sub getspecialMovie
         SeparateMovie = Utilities.checktitle(TitleFull, Preferences.MovSepLst)
+        If SeparateMovie = "3D" Then
+            ThreeDKeep = Utilities.checktitle(TitleFull, Preferences.ThreeDKeyWords)
+        End If
     End Sub
 
     Sub ImdbScraper_GetBody
@@ -1260,7 +1264,7 @@ Public Class Movie
                 Case "title"
                     Dim sepmov As String = ""
                     If SeparateMovie <> "" Then
-                        sepmov = " " & SeparateMovie
+                        sepmov = " " & SeparateMovie & If(ThreeDKeep <> "", " " & ThreeDKeep, "")
                     End If
                     Dim temptitle As String = thisresult.InnerText.ToString.SafeTrim & sepmov
                     _scrapedMovie.fullmoviebody.title = If(Preferences.MovTitleCase, Utilities.TitleCase(temptitle), temptitle)

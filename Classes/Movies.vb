@@ -2100,15 +2100,11 @@ Public Class Movies
         movRebuildCaches = Not Preferences.UseMultipleThreads 
         RebuildMovieCache
         If Cancelled Then Exit Sub
-        If Not movRebuildCaches Then
-            RebuildMoviePeopleCaches
-        Else
-            movRebuildCaches = False
-        End If
+        If Not movRebuildCaches Then RebuildMoviePeopleCaches
         movRebuildCaches = False
     End Sub
 
-    Public Sub RebuildMovieCache
+    Public Sub RebuildMovieCache()
         If Preferences.UseMultipleThreads Then
             '_actorDB      .Clear()
             '_directorDb   .Clear()
@@ -2126,6 +2122,9 @@ Public Class Movies
 
 
     Public Sub RebuildMoviePeopleCaches()
+        
+        Dim MovSetDbTmp As New List(Of MovieSetDatabase)
+        MovSetDbTmp.AddRange(_moviesetDb)
         _actorDB      .Clear()
         _directorDb   .Clear()
         _moviesetDb   .Clear()
@@ -2147,7 +2146,15 @@ Public Class Movies
             For Each act In movie.Actorlist
                 _actorDb.Add(New ActorDatabase(act.actorname, movie.id))
             Next
-            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(movie.MovieSet)
+            Dim tmp2 As New List(Of CollectionMovie)
+            For Each mset In MovSetDbTmp
+                If movie.MovieSet.MovieSetId = "" Then Exit For
+                If movie.MovieSet.MovieSetId = mset.MovieSetId Then
+                    tmp2.AddRange(mset.collection)
+                    Exit For
+                End If
+            Next
+            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(New MovieSetDatabase(movie.MovieSet.MovieSetName, movie.MovieSet.MovieSetId, tmp2))
             Dim directors() As String = movie.director.Split("/")
             For Each d In directors
                 _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))

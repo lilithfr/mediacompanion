@@ -1548,13 +1548,14 @@ Module General
 #End Region
 
 
-    Public Function AddSeparateMovieTitle(ByVal FinalScrape As String, ByVal SepMov As String, ByVal Title As String) As String
-        Try
-            FinalScrape = FinalScrape.Replace("<title>" & Title, "<title>" & Title & " " & SepMov)
-        Catch
-        End Try
-        Return FinalScrape
-    End Function
+    'Public Function AddSeparateMovieTitle(ByVal FinalScrape As String, ByVal SepMov As String, ByVal ThreeDKeep As String, ByVal Title As String) As String
+    '    Try
+    '        If ThreeDKeep <> "" Then ThreeDKeep = " " & ThreeDKeep
+    '        FinalScrape = FinalScrape.Replace("<title>" & Title, "<title>" & Title & " " & SepMov & ThreeDKeep)
+    '    Catch
+    '    End Try
+    '    Return FinalScrape
+    'End Function
 
 
     'Date  : Nov11 

@@ -1502,10 +1502,14 @@ Public Class Classimdb
             FinalScrapResult = FinalScrapResult.Replace("</credits>" & vbcrlf & "  <credits>", ", ")
             FinalScrapResult = FinalScrapResult.Replace("</director>" & vbcrlf & "  <director>", " / ")
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
-            Dim SeparateMovie As String = Utilities.checktitle(title, Preferences.MovSepLst)
-            If SeparateMovie <> "" Then
-                FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, TheTitle)
-            End If
+            'Dim SeparateMovie As String = Utilities.checktitle(title, Preferences.MovSepLst)
+            'If SeparateMovie <> "" Then
+            '    Dim ThreeDKeep As String = ""
+            '    If SeparateMovie = "3D" Then
+            '        ThreeDKeep = Utilities.checktitle(title, Preferences.ThreeDKeyWords)
+            '    End If
+            '    FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, ThreeDKeep, TheTitle)
+            'End If
             Return FinalScrapResult
         Catch ex As Exception
             Return "error"

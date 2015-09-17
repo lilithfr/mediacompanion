@@ -799,9 +799,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function checktitle(ByVal fulltitle As String, ByVal movseplst As List(Of String)) As String
+        fulltitle = fulltitle.replace(".", " ")
         Dim s As String = ""
         For Each t In movseplst
-            If fulltitle.ToLower.Contains(t.ToLower) Then
+            Dim u As String = " " & t & " "
+            If fulltitle.ToLower.Contains(u.ToLower) Then
                 s = t
                 Exit For
             End If
