@@ -17246,7 +17246,7 @@ End Sub
         End If
         For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
             Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-            Dim movie As Movie = oMovies.LoadMovie(filepath)
+            Dim movie As Movie = oMovies.LoadMovie(filepath, false)
             For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
                 If Not IsNothing(ctag) Then
                     If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
@@ -17625,6 +17625,7 @@ End Sub
         Try
             MovSetsContextMenu.Close()
             Application.DoEvents()
+            messbox = New frmMessageBox("Getting Collection data from TMDb.", "......", "Please Wait")
             Dim found As Boolean = False
             Dim MovSet As MovieSetDatabase = GetMovSetDetails()
             Dim matchedmovies As New List(Of FullMovieDetails)
@@ -17642,37 +17643,51 @@ End Sub
             End If
             Dim MovCollectionList As New List(Of MovieSetsList)
             For each mset In oMovies.MovieSetDB
-                If mset.MovieSetId = MovSet.MovieSetId AndAlso mset.collection.Count > 0 Then
-                    For each collect In mset.collection
-                        Dim ac As New MovieSetsList
-                        ac.title = collect.MovieTitle
-                        ac.tmdbid = collect.MovieID
-                        MovCollectionList.Add(ac)
-                    Next
-                    Exit For
+                If mset.MovieSetId = MovSet.MovieSetId Then
+                    If mset.collection.Count > 0 Then
+                        For each collect In mset.collection
+                            Dim ac As New MovieSetsList
+                            ac.title = collect.MovieTitle
+                            ac.tmdbid = collect.MovieID
+                            MovCollectionList.Add(ac)
+                        Next
+                        Exit For
+                    Else
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        messbox.Show()
+                        messbox.Refresh()
+                        Application.DoEvents()
+                        Try
+                            Dim api As New TMDb
+                            api.TmdbId = MovSet.MovieSetId
+                            api.CollectionSearch = True
+                            MovCollectionList = api.collection
+                        Catch ex As Exception
+                            If ex.Message.Contains("TMDB") Then
+                                messbox.Close()
+                                MsgBox("Issue getting data from TMDB")
+                                Exit Sub
+                            End If
+                        End Try
+                        If MovCollectionList.Count > 0 Then
+                            For each Mcol In MovCollectionList
+                                Dim coll As New CollectionMovie
+                                coll.MovieID = Mcol.tmdbid
+                                coll.MovieTitle = Mcol.title
+                                mset.collection.Add(coll)
+                            Next
+                        End If
+                        Exit For
+                    End If
                 End If
             Next
-            messbox = New frmMessageBox("Getting Collection data from TMDb.", "......", "Please Wait")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            messbox.Refresh()
-            Application.DoEvents()
-            If MovCollectionList.Count = 0 Then
-                Try
-                    Dim api As New TMDb
-                    api.TmdbId = MovSet.MovieSetId
-                    api.CollectionSearch = True
-                    MovCollectionList = api.collection
-                Catch ex As Exception
-                    If ex.Message.Contains("TMDB") Then
-                        messbox.Close()
-                        MsgBox("Issue getting data from TMDB")
-                        Exit Sub
-                    End If
-                End Try
-            Else
+            
+            
+            'If MovCollectionList.Count = 0 Then
+                
+           ' Else
                 If Not IsNothing(messbox) Then messbox.Close()
-            End If
+            'End If
             For each x In MovCollectionList
                 For each y In matchedmovies
                     If y.fullmoviebody.tmdbid = x.tmdbid Then
