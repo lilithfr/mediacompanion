@@ -154,6 +154,7 @@ Public Class Form1
     Public NewTagList As New List(Of String)
     Public MovieSearchEngine As String = "imdb"
     Dim mov_TableColumnName As String = ""
+    Dim mov_TableRowNum As Integer = -1
     Dim MovieSetMissingID As Boolean = False
     Dim MovFanartToggle As Boolean = False
     Dim MovPosterToggle As Boolean = False
@@ -9501,12 +9502,15 @@ End Sub
 
     Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
         Try
-            Dim ColIndexFromMouseDown = DataGridView1.HitTest(e.X, e.Y).ColumnIndex 
+            Dim ColIndexFromMouseDown = DataGridView1.HitTest(e.X, e.Y).ColumnIndex
+            Dim objHitTestInfo As DataGridView.HitTestInfo = DataGridView1.HitTest      (e.X, e.Y)
+            Dim MouseRowIndex  As Integer                  = objHitTestInfo.RowIndex
+            mov_TableRowNum = MouseRowIndex
 
             If ColIndexFromMouseDown < 0 Then Exit Sub
 
             mov_TableColumnName = DataGridView1.Columns(ColIndexFromMouseDown).Name
-
+             
             'Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
             'If e.Button = Windows.Forms.MouseButtons.Right Then
             '    If DataGridView1.SelectedRows.Count < 2 Then
@@ -9620,17 +9624,16 @@ End Sub
         End Try
     End Sub
 
+    Private Sub MovieTableContextMenu_Opening(sender As Object, e As CancelEventArgs) Handles MovieTableContextMenu.Opening
+        If mov_TableRowNum = -1 Then e.Cancel = True
+    End Sub
+
     Private Sub GoToToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
-            For Each selecteditem In DataGridView1.SelectedRows
-                tempstring = selecteditem.Cells("fullpathandfilename").Value
-            Next
+            tempstring = DataGridView1.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
             For f = 0 To DataGridViewMovies.Rows.Count - 1
-                'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
-                    'MovieListComboBox.SelectedItems.Clear()
-                    'MovieListComboBox.SelectedIndex = f
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
                     Application.DoEvents()
@@ -9647,13 +9650,12 @@ End Sub
     Private Sub GoToSelectedMoviePosterSelectorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToSelectedMoviePosterSelectorToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
-            For Each selecteditem In DataGridView1.SelectedRows
-                tempstring = selecteditem.Cells("fullpathandfilename").Value
-            Next
+            tempstring = DataGridView1.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
             For f = 0 To DataGridViewMovies.Rows.Count - 1
-                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
                     For Each tabs In TabControl2.TabPages
                         If tabs.text = "Posters" Then
                             currentTabIndex = tabs.tabindex + 1
@@ -9672,13 +9674,12 @@ End Sub
     Private Sub GoToSelectedMovieFanartSelectorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToSelectedMovieFanartSelectorToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
-            For Each selecteditem In DataGridView1.SelectedRows
-                tempstring = selecteditem.Cells("fullpathandfilename").Value
-            Next
+            tempstring = DataGridView1.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
             For f = 0 To DataGridViewMovies.RowCount - 1
-                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
                     For Each tabs In TabControl2.TabPages
                         If tabs.text = "Fanart" Then
                             currentTabIndex = tabs.tabindex + 1
@@ -11728,7 +11729,10 @@ End Sub
 #End Region
 
     Private Sub UpdateFilteredList
-
+        Dim lastSelectedRow As Integer = 0
+        If DataGridViewMovies.SelectedRows.Count = 1 Then 
+            lastSelectedRow = DataGridViewMovies.SelectedRows(0).Index 
+        End If
         ProgState = ProgramState.UpdatingFilteredList
 
         Dim lastSelectedMovie = workingMovie.fullpathandfilename
@@ -11762,9 +11766,14 @@ End Sub
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
         Try
-            For Each row As DataGridViewRow In DataGridViewMovies.Rows
-                row.Selected = (row.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie)
-            Next
+            If DataGridViewMovies.SelectedRows.Count = 0 Then
+                For Each row As DataGridViewRow In DataGridViewMovies.Rows
+                    row.Selected = (row.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie)
+                Next
+            ElseIf DataGridViewMovies.SelectedRows.Count = 1 Then
+                DataGridViewMovies.ClearSelection()
+                DataGridViewMovies.Rows(lastSelectedRow).Selected = True
+            End If
         Catch
         End Try
         
@@ -21563,4 +21572,9 @@ End Sub
         Loop
         abtfrm.Close()
     End Sub
+
+    Private Sub DataGridViewMovies_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridViewMovies.SelectionChanged
+        Dim something As String = ""
+    End Sub
+
 End Class
