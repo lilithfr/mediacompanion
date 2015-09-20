@@ -8534,17 +8534,18 @@ Public Class Form1
         Preferences.tableview.Add("sorttitle|100|10|false")
         Preferences.tableview.Add("outline|200|11|false")
         Preferences.tableview.Add("plot|200|12|false")
-        Preferences.tableview.Add("id|82|13|false")
-        Preferences.tableview.Add("missingdata1|115|14|false")
-        Preferences.tableview.Add("fullpathandfilename|300|15|false")
-        Preferences.tableview.Add("createdate|104|16|false")
+        Preferences.tableview.Add("stars|200|13|false")
+        Preferences.tableview.Add("id|82|14|false")
+        Preferences.tableview.Add("missingdata1|115|15|false")
+        Preferences.tableview.Add("fullpathandfilename|300|16|false")
+        Preferences.tableview.Add("createdate|104|17|false")
     End Sub
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tableview.Count < 17 Then
+        If Preferences.tableview.Count < 18 Then    'Counter. Increase if adding new tableview column else new columns won't be added to config.xml.
             Call mov_TableViewSetup()
         End If
         tableSets.Clear()
@@ -8608,6 +8609,7 @@ Public Class Form1
             If String.IsNullOrEmpty(movie.SortOrder) Then movie.SortOrder = movie.DisplayTitle
             childchild = doc.CreateElement("outline") : childchild.InnerText = movie.outline : child.AppendChild(childchild)
             childchild = doc.CreateElement("plot") : childchild.InnerText = movie.plot : child.AppendChild(childchild)
+            childchild = doc.CreateElement("stars") : childchild.InnerText = movie.stars : child.AppendChild(childchild)
             childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.SortOrder : child.AppendChild(childchild)
 
             childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
@@ -8786,6 +8788,17 @@ Public Class Form1
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
+        Dim starscolumn As New DataGridViewColumn()
+        With starscolumn
+            Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
+            .CellTemplate = oCell
+            .HeaderText = "Stars"
+            .DataPropertyName = "stars"
+            .Name = "stars"
+            .SortMode = DataGridViewColumnSortMode.Automatic
+            .ReadOnly = True
+        End With
+
         Dim sorttitlecolumn As New DataGridViewColumn()
         With sorttitlecolumn
             Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
@@ -8882,7 +8895,7 @@ Public Class Form1
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
-        For f = 0 To 16
+        For f = 0 To tableview.Count -1
             For Each col In tableSets
                 If col.index = f Then
                     Select Case col.title
@@ -8949,6 +8962,11 @@ Public Class Form1
                             plotcolumn.Width = col.width
                             plotcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, plotcolumn)
+                            Exit For
+                        Case "stars"
+                            starscolumn.Width = col.width
+                            starscolumn.Visible = col.visible
+                            DataGridView1.Columns.Insert(f, starscolumn)
                             Exit For
                         Case "id"
                             idcolumn.Width = col.width
@@ -9028,7 +9046,7 @@ Public Class Form1
             Dim dgvNewCol As New DataGridViewColumn
             dgvNewCol = DirectCast(dgvCol.Clone(), DataGridViewColumn)
             dgvNewCol.CellTemplate = DirectCast(dgvCol.CellTemplate, DataGridViewCell)
-            If dgvNewCol.Name = "plot" Or dgvNewCol.Name = "outline" Or dgvNewCol.Name = "id" Or dgvNewCol.Name = "missingdata1" or dgvNewCol.Name = "fullpathandfilename"Then
+            If dgvNewCol.Name = "plot" Or dgvNewCol.Name = "outline" Or dgvNewCol.Name = "stars" Or dgvNewCol.Name = "id" Or dgvNewCol.Name = "missingdata1" or dgvNewCol.Name = "fullpathandfilename"Then
                 dgvNewCol.ReadOnly = True
                 dgvNewCol.DefaultCellStyle.BackColor = System.Drawing.Color.gray
             End If
