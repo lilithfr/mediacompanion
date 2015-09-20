@@ -247,6 +247,7 @@ Public Class clsGridViewMovie
                 Case "Missing Outline"             : b = From f In b Where f.MissingOutline
                 Case "Missing Rating"              : b = From f In b Where f.MissingRating
                 Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
+                Case "Missing Stars"               : b = From f In b Where f.MissingStars 
                 Case "Missing Votes"               : b = From f In b Where f.MissingVotes
                 Case "Missing Year"                : b = From f In b Where f.MissingYear
                 Case "Missing IMDB"                : b = From f In b Where f.MissingIMDBId

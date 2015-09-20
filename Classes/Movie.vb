@@ -1181,7 +1181,8 @@ Public Class Movie
         _movieCache.VideoCodec          = _scrapedMovie.filedetails.filedetails_video.Codec.Value 
         _movieCache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
         _movieCache.Premiered           = _scrapedMovie.fullmoviebody.premiered
-        _movieCache.movietag = _scrapedMovie.fullmoviebody.tag
+        _movieCache.movietag            = _scrapedMovie.fullmoviebody.tag
+        _movieCache.stars               = _scrapedMovie.fullmoviebody.stars 
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
 
         Try

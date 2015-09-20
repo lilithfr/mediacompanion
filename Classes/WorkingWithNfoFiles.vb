@@ -2159,6 +2159,7 @@ Public Class WorkingWithNfoFiles
             '           newmovie.titleandyear = newmovie.title & " (0000)"
                     newmovie.top250 = "0"
                     newmovie.year = "1850"
+                    newmovie.stars = ""
 
                     Return newmovie
                 End Try
@@ -2225,6 +2226,8 @@ Public Class WorkingWithNfoFiles
                                 'End If
                             Case "id"
                                 If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
+                            Case "stars"
+                                newmovie.stars = thisresult.InnerText 
                             Case "tmdbid"
                                 newmovie.tmdbid = thisresult.InnerText 
                             Case "playcount"

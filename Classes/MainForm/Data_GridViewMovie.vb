@@ -29,6 +29,7 @@ Public Class Data_GridViewMovie
     Dim _votes As Integer=0
     Dim _TitleUcase As String
     Dim _IntRuntime As Integer=0
+    Dim _stars As String
     Dim _DisplayFileDate   As String
     Dim _DisplayCreateDate As String
     Dim _movietag As String
@@ -89,6 +90,7 @@ Public Class Data_GridViewMovie
         movietag = String.Join(", ", movie.movietag)
         container = movie.container
         videomissing = movie.VideoMissing
+        stars = movie.stars 
         AssignSubtitleLang(movie.SubLang)
         FolderSize = movie.FolderSize
         DefaultAudioTrack = movie.DefaultAudioTrack
@@ -132,6 +134,7 @@ Public Class Data_GridViewMovie
         convertedMovie.SubLang              = Me.SubLang
         convertedMovie.Premiered            = Me.Premiered
         convertedMovie.Certificate          = Me.Certificate
+        convertedMovie.stars                = Me.stars
         convertedMovie.FrodoPosterExists    = Me.FrodoPosterExists
         convertedMovie.PreFrodoPosterExists = Me.PreFrodoPosterExists
         convertedMovie.FolderSize           = Me.FolderSize
@@ -320,6 +323,15 @@ Public Class Data_GridViewMovie
         End Get
         Set(ByVal value)
             _runtime = value
+        End Set
+    End Property
+
+    Public Property stars
+        Get
+            Return _stars
+        End Get
+        Set(ByVal value)
+            _stars = value
         End Set
     End Property
 
@@ -539,6 +551,11 @@ Public Class Data_GridViewMovie
         End Get
     End Property  
 
+    Public ReadOnly Property MissingStars As Boolean
+        Get
+            Return stars = ""
+        End Get
+    End Property
 
     Public ReadOnly Property MissingVotes As Boolean
         Get

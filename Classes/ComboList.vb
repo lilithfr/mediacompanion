@@ -70,6 +70,7 @@ Public Class ComboList
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
     Property MovieSet             As New MovieSetDatabase 
+    Property stars                As String = ""
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
     Property FolderSize           As Long = -1
@@ -245,7 +246,13 @@ Public Class ComboList
         Get
             Return Utilities.GetFileName(fullpathandfilename,True)
         End Get
-    End Property  
+    End Property
+
+    Public ReadOnly Property MissingStars As Boolean
+        Get
+            Return stars.ToString.Trim=""
+        End Get
+    End Property
 
     ReadOnly Property ActualNfoFileNameMatchesDesired As Boolean
         Get
@@ -381,6 +388,7 @@ Public Class ComboList
         Me.VideoMissing         = From.VideoMissing
         AssignSubtitleLang(From.SubLang)
         Me.MovieSet.Absorb(From.MovieSet)
+        Me.stars                = From.stars
         Me.Actorlist            = From.Actorlist 
         Me.DirectorList         = From.DirectorList 
         Me.FolderSize           = From.FolderSize

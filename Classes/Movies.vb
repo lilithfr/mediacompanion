@@ -320,6 +320,7 @@ Public Class Movies
             lst.Add( FrodoPosterOnly          )
             lst.Add( FrodoAndPreFrodoPosters  )
             lst.Add( MissingRating            )
+            lst.Add( MissingStars             )
             lst.Add( MissingRuntime           )
             lst.Add( MissingTrailer           )
             lst.Add( MissingVotes             )
@@ -465,6 +466,12 @@ Public Class Movies
     Public ReadOnly Property MissingTagline As String
         Get
             Return "Missing Tagline (" & (From x In MovieCache Where x.MissingTagLine).Count & ")" 
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingStars As String
+        Get
+            Return "Missing Stars (" & (From x In MovieCache Where x.MissingStars).Count & ")" 
         End Get
     End Property
 
@@ -1339,6 +1346,7 @@ Public Class Movies
                                 Case "plot"                 : newmovie.plot = detail.InnerText
                                 Case "tagline"              : newmovie.tagline = detail.InnerText
                                 Case "runtime"              : newmovie.runtime = detail.InnerText
+                                Case "stars"                : newmovie.stars = detail.InnerText 
                                 Case "votes"
                                     Try
                                         newmovie.Votes = detail.InnerText
@@ -1483,9 +1491,10 @@ Public Class Movies
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.sortorder : child.AppendChild(childchild)
-            childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
-            childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
-            childchild = doc.CreateElement("year") : childchild.InnerText = movie.year : child.AppendChild(childchild)
+            childchild = doc.CreateElement("stars")     : childchild.InnerText = movie.stars : child.AppendChild(childchild)
+            childchild = doc.CreateElement("runtime")   : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
+            childchild = doc.CreateElement("top250")    : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
+            childchild = doc.CreateElement("year")      : childchild.InnerText = movie.year : child.AppendChild(childchild)
             child.AppendChild(doc, "votes", movie.Votes)
             child.AppendChild(doc, "Resolution", movie.Resolution)
             child.AppendChild(doc, "VideoCodec", movie.VideoCodec)
