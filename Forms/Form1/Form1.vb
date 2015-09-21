@@ -2109,10 +2109,10 @@ Public Class Form1
 
     Public Function CheckforExtraArt() As Boolean
         Dim confirmedpresent As Boolean = False
+        If File.Exists(workingMovieDetails.fileinfo.movsetposterpath) Then FanTvArtList.Items.Add("Set Poster") : confirmedpresent = True
+        If File.Exists(workingMovieDetails.fileinfo.movsetfanartpath) Then FanTvArtList.Items.Add("Set Fanart") : confirmedpresent = True
         If Not Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename) Then
             Dim MovPath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename) & "\"
-            If File.Exists(workingMovieDetails.fileinfo.movsetposterpath) Then FanTvArtList.Items.Add("Set Poster") : confirmedpresent = True
-            If File.Exists(workingMovieDetails.fileinfo.movsetfanartpath) Then FanTvArtList.Items.Add("Set Fanart") : confirmedpresent = True
             If File.Exists(MovPath & "clearart.png") Then FanTvArtList.Items.Add("ClearArt") : confirmedpresent = True
             If File.Exists(MovPath & "logo.png") Then FanTvArtList.Items.Add("Logo") : confirmedpresent = True
             If File.Exists(MovPath & "banner.jpg") Then FanTvArtList.Items.Add("Banner") : confirmedpresent = True
@@ -4038,7 +4038,10 @@ Public Class Form1
             If Preferences.movrootfoldercheck Then
                 For Each moviefolder In movieFolders
                     Dim movfolder As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace("\" & workingMovieDetails.fileinfo.filename, "")
-                    If moviefolder.rpath = movfolder Then isrootfolder = True 'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
+                    If moviefolder.rpath = movfolder Then 
+                        isrootfolder = True 'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
+                        Exit For
+                    End If
                 Next
             End If
             GroupBoxFanartExtrathumbs.Enabled = Not isrootfolder 'Or usefoldernames Or allfolders ' Visible 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
@@ -4048,29 +4051,29 @@ Public Class Form1
             End If
             currentTabIndex = TabControl2.SelectedIndex
             EnableFanartScrolling()
-            ElseIf tab.ToLower = "posters" Then
-                currentTabIndex = TabControl2.SelectedIndex
-                gbMoviePostersAvailable.Refresh()
-                btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
-                UpdateMissingPosterNav()
-            ElseIf tab.ToLower = "change movie" Then
-                Call mov_ChangeMovieSetup(MovieSearchEngine)
-                currentTabIndex = TabControl2.SelectedIndex
-            ElseIf tab.ToLower = "wall" Then
-                Call mov_WallSetup()
-            ElseIf tab.ToLower = "movie & tag sets" Then
-                Call MovieSetsAndTagsSetup()
-            ElseIf tab.ToLower = "fanart.tv"
-                UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
-            ElseIf tab.ToLower = "movie preferences" Then
-                Call mov_PreferencesSetup()
+        ElseIf tab.ToLower = "posters" Then
+            currentTabIndex = TabControl2.SelectedIndex
+            gbMoviePostersAvailable.Refresh()
+            btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
+            UpdateMissingPosterNav()
+        ElseIf tab.ToLower = "change movie" Then
+            Call mov_ChangeMovieSetup(MovieSearchEngine)
+            currentTabIndex = TabControl2.SelectedIndex
+        ElseIf tab.ToLower = "wall" Then
+            Call mov_WallSetup()
+        ElseIf tab.ToLower = "movie & tag sets" Then
+            Call MovieSetsAndTagsSetup()
+        ElseIf tab.ToLower = "fanart.tv"
+            UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
+        ElseIf tab.ToLower = "movie preferences" Then
+            Call mov_PreferencesSetup()
 
-            ElseIf tab.ToLower = "table" Then
-                currentTabIndex = TabControl2.SelectedIndex
-                Call mov_TableSetup()
-            Else
-                currentTabIndex = TabControl2.SelectedIndex
-            End If
+        ElseIf tab.ToLower = "table" Then
+            currentTabIndex = TabControl2.SelectedIndex
+            Call mov_TableSetup()
+        Else
+            currentTabIndex = TabControl2.SelectedIndex
+        End If
 
     End Sub
 
@@ -4509,6 +4512,7 @@ Public Class Form1
                         Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
                         If MovSetFanartSavePath <> "" Then
                             Movie.SaveFanartImageToCacheAndPath(tempstring2, MovSetFanartSavePath)
+                            MovPanel6Update()
                             util_ImageLoad(PictureBox2, MovSetFanartSavePath, Utilities.DefaultFanartPath)
                         Else
                             MsgBox("!!  Problem formulating correct save location for Fanart" & vbCrLf & "                Please check your settings")
@@ -9780,41 +9784,52 @@ End Sub
         End Try
     End Sub
 
-    Private Sub mov_FanartGet()
+    Private Sub mov_FanartGet(Optional ByVal MovSet As Boolean = False)
         If IsNothing(workingMovieDetails) Then Return
         messbox = New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
         messbox.Show() : messbox.Refresh()
         Application.DoEvents()
         Dim tmdb       As New TMDb
-        tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
-        tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
+        tmdb.Imdb = If(MovSet, "", If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, ""))
+        tmdb.TmdbId = If(MovSet, workingMovieDetails.fullmoviebody.movieset.MovieSetId, workingMovieDetails.fullmoviebody.tmdbid)
+        If MovSet Then tmdb.CollectionSearch = True
         Try
-            Dim FanartUrl As String = tmdb.GetBackDropUrl()
+            Dim FanartUrl As String = ""
+            If Not MovSet Then
+                FanartUrl = tmdb.GetBackDropUrl()
+            Else
+                FanartUrl = tmdb.Fanart(0).hdUrl
+            End If
             Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath="","",workingMovieDetails.fileinfo.videotspath+"fanart.jpg")
             If IsNothing(FanartUrl) then
                 MsgBox("No Fanart Found on TMDB")
             Else
-                Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
-                Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(FanartUrl, paths, True)
-                If Not aok Then Throw New Exception("TMDB is offline")
-                'For Each thispath In Preferences.offlinefolders
-                '    Dim offlinepath As String = thispath & "\"
-                '    If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
-                '        Dim mediapath As String
-                '        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                '        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                '    End If
-                'Next
-                util_ImageLoad(PbMovieFanArt, paths(0), Utilities.DefaultFanartPath)
-                util_ImageLoad(PictureBox2, paths(0), Utilities.DefaultFanartPath)
+                If Not MovSet Then
+                    Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                    Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(FanartUrl, paths, True)
+                    If Not aok Then Throw New Exception("TMDB is offline")
+                    util_ImageLoad(PbMovieFanArt, paths(0), Utilities.DefaultFanartPath)
+                    util_ImageLoad(PictureBox2, paths(0), Utilities.DefaultFanartPath)
+                Else
+                    Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
+                    If MovSetFanartSavePath <> "" Then
+                        Movie.SaveFanartImageToCacheAndPath(FanartUrl, MovSetFanartSavePath)
+                        MovPanel6Update()
+                    Else
+                        MsgBox("!!  Problem formulating correct save location for Fanart" & vbCrLf & "                Please check your settings")
+                    End If
+                End If
             End If
         Catch ex As Exception
             If ex.Message = "TMDB is offline" Then
                 messbox.Close()
                 MsgBox("Unable to connect to TheMovieDb.org." & vbCrLf & "Please confirm site is online")
+            ElseIf ex.Message.Contains("Index was out of range") Then
+                messbox.Close()
+                MsgBox("No Fanart available on TMDB Site")
             End If
         End Try
-        messbox.Close()
+        If Not IsNothing(messbox) Then messbox.Close()
     End Sub
 
     'Rescrape Poster
@@ -9890,7 +9905,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub mov_PosterGet(ByVal source As String)
+    Private Sub mov_PosterGet(ByVal source As String, Optional ByVal MovSet As Boolean = False)
         Dim success As Boolean = False
         Try 
             If workingMovieDetails Is Nothing Then Exit Sub
@@ -9904,8 +9919,9 @@ End Sub
             End If
             Dim moviethumburl As String = ""
             Dim tmdb As New TMDb 
-            tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
-            tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid 
+            tmdb.Imdb = If(MovSet, "", If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, ""))
+            tmdb.TmdbId = If(MovSet, workingMovieDetails.fullmoviebody.movieset.MovieSetId, workingMovieDetails.fullmoviebody.tmdbid)
+            If MovSet Then tmdb.CollectionSearch = True
             If tmdb.Imdb = "" AndAlso tmdb.TmdbId = "" Then Exit Sub
 
             If source = "impa" Then
@@ -9915,7 +9931,11 @@ End Sub
             ElseIf source = "tmdb" Then
                 If workingMovieDetails.fullmoviebody.imdbid.Contains("tt") OrElse workingMovieDetails.fullmoviebody.tmdbid <> "" Then
                     Try
-                    moviethumburl = tmdb.FirstOriginalPosterUrl
+                        If Not MovSet Then 
+                            moviethumburl = tmdb.FirstOriginalPosterUrl
+                        Else
+                            moviethumburl = tmdb.MC_Posters(0).hdUrl
+                        End If
                     Catch
                     End Try
                 End If
@@ -9931,14 +9951,25 @@ End Sub
 
             If moviethumburl <> "" And moviethumburl <> "na" Then
                 Try
-                    Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
-                    Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True)
-                    If Not aok Then Throw New Exception()
-                    util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
-                    util_ImageLoad(PbMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
-                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0))
-                    updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
-                    success = True
+                    If Not MovSet Then
+                        Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
+                        Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True)
+                        If Not aok Then Throw New Exception()
+                        util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
+                        util_ImageLoad(PbMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
+                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0))
+                        updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
+                        success = True
+                    Else
+                        Dim MovSetPosterSavePath As String = workingMovieDetails.fileinfo.movsetposterpath
+                        If MovSetPosterSavePath <> "" Then
+                            Movie.SavePosterImageToCacheAndPath(moviethumburl, MovSetPosterSavePath)
+                            MovPanel6Update()
+                        Else
+                            messbox.Close()
+                            MsgBox("!!  Problem formulating correct save location for Poster" & vbCrLf & "                    Please check your settings")
+                        End If
+                    End If
                 Catch ex As Exception
                     MsgBox("Error [" & ex.Message & "] occurred while trying to download and save the poster")
                 End Try
@@ -16532,6 +16563,7 @@ End Sub
                     Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
                     If MovSetFanartSavePath <> "" Then
                         Movie.SaveFanartImageToCacheAndPath(cachename, MovSetFanartSavePath)
+                        MovPanel6Update()
                         util_ImageLoad(PictureBox2, MovSetFanartSavePath, Utilities.DefaultFanartPath)
                     Else
                         MsgBox("!!  Problem formulating correct save location for Fanart" & vbCrLf & "                Please check your settings")
@@ -17009,6 +17041,7 @@ End Sub
                     Dim MovSetPosterSavePath As String = workingMovieDetails.fileinfo.movsetposterpath
                     If MovSetPosterSavePath <> "" Then
                         Movie.SavePosterImageToCacheAndPath(cachename, MovSetPosterSavePath)
+                        MovPanel6Update()
                         util_ImageLoad(PictureBoxAssignedMoviePoster, MovSetPosterSavePath, Utilities.DefaultPosterPath)
                     Else
                         messbox.Close()
@@ -17205,6 +17238,7 @@ End Sub
                     Dim MovSetPosterSavePath As String = workingMovieDetails.fileinfo.movsetposterpath
                     If MovSetPosterSavePath <> "" Then
                         Movie.SavePosterImageToCacheAndPath(tempstring2, MovSetPosterSavePath)
+                        MovPanel6Update()
                         util_ImageLoad(PictureBoxAssignedMoviePoster, MovSetPosterSavePath, Utilities.DefaultPosterPath)
                     Else
                         messbox.Close()
@@ -17681,13 +17715,7 @@ End Sub
                     End If
                 End If
             Next
-            
-            
-            'If MovCollectionList.Count = 0 Then
-                
-           ' Else
-                If Not IsNothing(messbox) Then messbox.Close()
-            'End If
+            If Not IsNothing(messbox) Then messbox.Close()
             For each x In MovCollectionList
                 For each y In matchedmovies
                     If y.fullmoviebody.tmdbid = x.tmdbid Then
@@ -17721,6 +17749,16 @@ End Sub
     Private Sub tsmiMovSetGetFanart_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetFanart.Click
         Try
             Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+            If MovSet.MovieSetId = "" Then Exit Sub
+            For f = 0 To DataGridViewMovies.RowCount - 1
+                If DataGridViewMovies.Rows(f).Cells("movieset").Value = MovSet.MovieSetName Then
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
+                    mov_FanartGet(True)
+                    MovSetArtworkCheck()
+                End If
+            Next
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17729,6 +17767,16 @@ End Sub
     Private Sub tsmiMovSetGetPoster_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetPoster.Click
         Try
             Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+            If MovSet.MovieSetId = "" Then Exit Sub
+            For f = 0 To DataGridViewMovies.RowCount - 1
+                If DataGridViewMovies.Rows(f).Cells("movieset").Value = MovSet.MovieSetName Then
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
+                    mov_PosterGet("tmdb", True)
+                    MovSetArtworkCheck()
+                End If
+            Next
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
