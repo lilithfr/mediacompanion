@@ -2495,16 +2495,6 @@ Partial Public Class Form1
                                 If File.Exists(Seasonxx) Then Utilities.SafeCopyFile(Seasonxx, (episodearray(0).FolderPath & "folder.jpg"))
                             End If
                             
-                            For Each ept In episodearray
-                                Dim list = Shows.MissingEpisodes
-                                For j = list.Count - 1 To 0 Step -1
-                                    If list(j).Title.Value = ept.Title.Value Then
-                                        'not sure this has a point.  missingepisodes is a linq list
-                                        list.RemoveAt(j)
-                                        Exit For
-                                    End If
-                                Next
-                            Next
                             For Each ep In episodearray
                                 Dim newwp As New TvEpisode
                                 newwp = ep                      'added this kline becuase plot + others were not being dispolay after a new ep was found
@@ -2513,6 +2503,7 @@ Partial Public Class Form1
                                 newwp.ShowObj = Shows               '
                                 bckgroundscanepisodes.ReportProgress(1, newwp)
                             Next
+                            tv_EpisodesMissingUpdate(episodearray)
                             Exit For
                         End If
                     Next
@@ -2520,7 +2511,6 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= "!!!" & vbCrLf
             Next
             'newEpisodeList 
-            tv_EpisodesMissingUpdate(newEpisodeList)
             bckgroundscanepisodes.ReportProgress(0, progresstext)
         Catch ex As Exception
             stage = "stage: " & stage
@@ -3411,12 +3401,12 @@ Partial Public Class Form1
         Try
             'Dim missingPath = IO.Path.Combine(Preferences.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
             
-            Dim Ep2Remove As New TvEpisode 
             For Each Ep In newEpList
                 If IO.File.Exists(Ep.NfoFilePath) Then
                     Dim missingEpNfoPath As String = MissingNfoPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
                     If IO.File.Exists(missingEpNfoPath) Then
                         IO.File.Delete(missingEpNfoPath)
+                        Dim Ep2Remove As New TvEpisode
                         For Each epis As TvEpisode In Cache.TvCache.Episodes 
                             If epis.TvdbId.Value = Ep.TvdbId.Value Then
                                 If epis.Season.Value = Ep.Season.Value AndAlso epis.Episode.Value = Ep.Episode.Value AndAlso epis.IsMissing = True Then
