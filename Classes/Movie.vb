@@ -3033,7 +3033,7 @@ Public Class Movie
         If rl.TagsFromKeywords AndAlso (Not Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(True)
         If Cancelled() Then Exit Sub
 
-        If NeedTMDb(rl) Then
+        If NeedTMDb(rl) OrElse (Preferences.movies_useXBMC_Scraper AndAlso rl.premiered) Then
 
             IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
             tmdb.Imdb = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, "")
@@ -3068,6 +3068,10 @@ Public Class Movie
                 End If
             End If
             If Cancelled() Then Exit Sub
+
+            If rl.premiered AndAlso Preferences.movies_useXBMC_Scraper Then
+                UpdateProperty(tmdb.releasedate, _scrapedMovie.fullmoviebody.premiered, True , rl.EmptyMainTags)
+            End If
 
             If rl.TagsFromKeywords AndAlso (Preferences.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(True, tmdb.Movie.id)
 
