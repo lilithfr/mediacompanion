@@ -662,7 +662,7 @@ Public Class Preferences
         TvDlFanartTvArt = False
         TvFanartTvFirst = False
         dlTVxtrafanart = False
-        TvXtraFanartQty = 0
+        TvXtraFanartQty = 5
         tvfolderjpg = False
         seasonfolderjpg = False
         postertype = "poster"

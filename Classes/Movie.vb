@@ -1941,7 +1941,7 @@ Public Class Movie
                 End If
             Next
         End If
-        If Preferences.MusicVidScrape Then 
+        If Preferences.MusicVidScrape AndAlso _scrapedMovie.listthumbs.Count > 0 Then 
             PosterUrl = _scrapedMovie.listthumbs(0).ToString
             validUrl = Utilities.UrlIsValid(PosterUrl)
         End If

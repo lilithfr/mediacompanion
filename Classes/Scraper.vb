@@ -1925,4 +1925,53 @@ Public Class Classimdb
         End Try
         Return plotresults
     End Function
+
+    Public Function getMVbody(Optional ByVal title As String = "")
+        Monitor.Enter(Me)
+        Dim Thetitle As String = ""
+        Dim ParametersForScraper(10) As String
+        Dim FinalScrapResult As String
+        Dim Scraper As String = "metadata.musicvideos.imvdb"
+        Try
+            ' 1st stage
+            ParametersForScraper(0) = title
+            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
+            FinalScrapResult = FinalScrapResult.Replace("<url>", "")
+            FinalScrapResult = FinalScrapResult.Replace("</url>", "")
+            FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+            ' 2st stage
+            ParametersForScraper(0) = FinalScrapResult
+            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return "error"
+            Dim m_xmld As XmlDocument
+            Dim m_nodelist As XmlNodeList
+            Dim m_node As XmlNode
+            m_xmld = New XmlDocument()
+            m_xmld.LoadXml(FinalScrapResult)
+            m_nodelist = m_xmld.SelectNodes("/results/entity")
+            For Each m_node In m_nodelist
+                TheTitle = m_node.ChildNodes.Item(0).InnerText
+                Dim url = m_node.ChildNodes.Item(1).InnerText
+                ParametersForScraper(0) = url
+                Exit For
+            Next
+            ' 3st stage
+            FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" Then
+                Return "error"
+            End If
+            FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+            FinalScrapResult = FinalScrapResult.Replace("details>","musicvideo>")
+            FinalScrapResult = FinalScrapResult.Replace("</studio>" & vbcrlf & "  <studio>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</country>" & vbcrlf & "  <country>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</credits>" & vbcrlf & "  <credits>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</director>" & vbcrlf & "  <director>", " / ")
+            If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;")
+            Return FinalScrapResult
+        Catch ex As Exception
+            Return "error"
+        Finally
+            Monitor.Exit(Me)
+        End Try
+    End Function
 End Class

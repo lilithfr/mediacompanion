@@ -41,13 +41,13 @@ Public Class WikipediaMusivVideoScraper
 
 
             For Each line In webpage
-                If line.IndexOf("<a href=""http://en.wikipedia.org/wiki/") <> -1 Then
+                If line.IndexOf("<a href=""https://en.wikipedia.org/wiki/") <> -1 Then
                     wikipediaURL = ""
 
 
                     Exit For
-                ElseIf line.IndexOf("<a href=""/url?q=http://en.wikipedia.org/wiki/") <> -1 Then
-                    Dim startinteger As Integer = line.IndexOf("<a href=""/url?q=http://en.wikipedia.org/wiki/")
+                ElseIf line.IndexOf("<a href=""/url?q=https://en.wikipedia.org/wiki/") <> -1 Then
+                    Dim startinteger As Integer = line.IndexOf("<a href=""/url?q=https://en.wikipedia.org/wiki/")
                     wikipediaURL = line.Substring(startinteger + 16, 100)
                     wikipediaURL = wikipediaURL.Replace("%253F", "%3F")
                     wikipediaURL = wikipediaURL.Substring(0, wikipediaURL.IndexOf("&"))
@@ -60,6 +60,10 @@ Public Class WikipediaMusivVideoScraper
         Dim fullwebpage As String = ""
         If wikipediaURL <> "" Then
             webpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, False, 10)
+            Dim htpage As String = ""
+            For each p In webpage
+                htpage &= p & vbcrlf
+            Next
             Dim webPg As String = String.Join( "" , webpage.ToArray() )
             fullwebpage = webPg
             Try

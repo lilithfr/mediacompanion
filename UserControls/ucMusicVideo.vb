@@ -17,6 +17,7 @@ Public Class ucMusicVideo
     Public cropimage As Bitmap
     Dim rescraping As Boolean = False
     Dim Movie As New Movie
+    Dim scraper As New Classimdb 
     Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -29,6 +30,8 @@ Public Class ucMusicVideo
 
     Private Sub SearchForNewMV()
         Preferences.MusicVidScrape = True
+        Dim TestString As String = scraper.getMVbody("Abba - Dancing Queen")
+        'Exit Sub
         Form1.RunBackgroundMovieScrape("SearchForNewMusicVideo")
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
