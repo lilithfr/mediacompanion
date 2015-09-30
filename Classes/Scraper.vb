@@ -1926,12 +1926,14 @@ Public Class Classimdb
         Return plotresults
     End Function
 
-    Public Function getMVbody(Optional ByVal title As String = "")
+    Public Function getMVbody(ByVal FullPathandFilename As String,ByRef MVSearchName As String)
         Monitor.Enter(Me)
         Dim Thetitle As String = ""
         Dim ParametersForScraper(10) As String
         Dim FinalScrapResult As String
         Dim Scraper As String = "metadata.musicvideos.imvdb"
+        Dim title As String = getArtistAndTitle(FullPathandFilename)
+        MVSearchName = title
         Try
             ' 1st stage
             ParametersForScraper(0) = title
@@ -1974,4 +1976,27 @@ Public Class Classimdb
             Monitor.Exit(Me)
         End Try
     End Function
+
+    Private Function getArtistAndTitle(ByVal fullpathandfilename As String)
+        Monitor.Enter(Me)
+        Dim searchTerm As String = ""
+        Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
+        If filenameWithoutExtension.IndexOf(" - ") <> -1 Then
+            searchTerm = filenameWithoutExtension
+        Else 'assume /artist/title.ext convention
+            Try
+                Dim lastfolder As String = Utilities.GetLastFolder(fullpathandfilename)
+                searchTerm = lastfolder & " - " & filenameWithoutExtension
+            Catch
+            End Try
+        End If
+
+        If searchTerm = "" Then
+            searchTerm = filenameWithoutExtension
+        End If
+
+        Return searchTerm
+        Monitor.Exit(Me)
+    End Function
+
 End Class

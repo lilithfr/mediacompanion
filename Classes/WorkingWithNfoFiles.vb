@@ -3660,7 +3660,7 @@ Public Class WorkingWithNfoFiles
 
     '  All Music Video Load/Save Routines
 #Region " Music Video Routines "
-    Public Shared Sub MVsaveNfo(ByVal movietosave As FullMovieDetails)
+    Public Shared Sub MVsaveNfo(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails)
         Dim doc As New XmlDocument
         Dim thumbnailstring As String = ""
         Dim thispref As XmlNode = Nothing
@@ -3845,6 +3845,14 @@ Public Class WorkingWithNfoFiles
         child.InnerText = movietosave.fullmoviebody.genre
         root.AppendChild(child)
 
+        child = doc.CreateElement("thumb")
+        child.InnerText = movietosave.fullmoviebody.thumb
+        root.AppendChild(child)
+
+        child = doc.CreateElement("track")
+        child.InnerText = movietosave.fullmoviebody.track
+        root.AppendChild(child)
+
         If movietosave.fullmoviebody.runtime = "Unknown" Then
             Try
                 Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
@@ -3891,14 +3899,13 @@ Public Class WorkingWithNfoFiles
             child.InnerText = movietosave.fileinfo.createdate
         End If
         root.AppendChild(child)
-       
         doc.AppendChild(root)
 
-        Dim nfopath As String = movietosave.fileinfo.fullPathAndFilename
-        nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
+        'Dim nfopath As String = filenameandpath
+        'nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
 
         Try
-            Dim output As New XmlTextWriter(nfopath, System.Text.Encoding.UTF8)
+            Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
             output.Indentation = 4
             doc.WriteTo(output)
@@ -3916,16 +3923,18 @@ Public Class WorkingWithNfoFiles
         Dim newfilenfo As New FullFileDetails
         For Each thisresult In document("musicvideo")
             Select Case thisresult.Name
-                Case "album" : NewMusicVideo.fullmoviebody.album = (thisresult.InnerText)
-                Case "title" : NewMusicVideo.fullmoviebody.title = (thisresult.InnerText)
-                Case "year" : NewMusicVideo.fullmoviebody.year = (thisresult.InnerText)
-                Case "artist" : NewMusicVideo.fullmoviebody.artist = (thisresult.InnerText)
-                Case "director" : NewMusicVideo.fullmoviebody.director = (thisresult.InnerText)
-                Case "genre" : NewMusicVideo.fullmoviebody.genre = (thisresult.InnerText)
-                Case "runtime" : NewMusicVideo.fullmoviebody.runtime = (thisresult.InnerText)
-                Case "plot" : NewMusicVideo.fullmoviebody.plot = (thisresult.InnerText)
-                Case "studio" : NewMusicVideo.fullmoviebody.studio = (thisresult.InnerText)
-                Case "createdate" : NewMusicVideo.fileinfo.createdate = thisresult.InnerText
+                Case "album"    : NewMusicVideo.fullmoviebody.album     = thisresult.InnerText
+                Case "title"    : NewMusicVideo.fullmoviebody.title     = thisresult.InnerText
+                Case "year"     : NewMusicVideo.fullmoviebody.year      = thisresult.InnerText
+                Case "artist"   : NewMusicVideo.fullmoviebody.artist    = thisresult.InnerText
+                Case "director" : NewMusicVideo.fullmoviebody.director  = thisresult.InnerText
+                Case "genre"    : NewMusicVideo.fullmoviebody.genre     = thisresult.InnerText
+                Case "thumb"    : NewMusicVideo.fullmoviebody.thumb     = thisresult.InnerText
+                Case "track"    : NewMusicVideo.fullmoviebody.track     = thisresult.InnerText
+                Case "runtime"  : NewMusicVideo.fullmoviebody.runtime   = thisresult.InnerText
+                Case "plot"     : NewMusicVideo.fullmoviebody.plot      = thisresult.InnerText
+                Case "studio"   : NewMusicVideo.fullmoviebody.studio    = thisresult.InnerText
+                Case "createdate" : NewMusicVideo.fileinfo.createdate   = thisresult.InnerText
                 Case "fileinfo"
                     Dim what As XmlNode = Nothing
                     For Each res In thisresult.ChildNodes
@@ -4005,13 +4014,13 @@ Public Class WorkingWithNfoFiles
             End Select
         Next
         NewMusicVideo.fileinfo.fullpathandfilename = filepath
-        NewMusicVideo.fileinfo.filename = IO.Path.GetFileName(filepath)
-        NewMusicVideo.fileinfo.foldername = Utilities.GetLastFolder(filepath)
-        NewMusicVideo.fileinfo.posterpath = Preferences.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
-        NewMusicVideo.fileinfo.trailerpath = ""
-        NewMusicVideo.fileinfo.path = IO.Path.GetDirectoryName(filepath) & "\"
-        NewMusicVideo.fileinfo.basepath = Preferences.GetMovBasePath(NewMusicVideo.fileinfo.path)
-        NewMusicVideo.fileinfo.fanartpath = Preferences.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.filename     = IO.Path.GetFileName(filepath)
+        NewMusicVideo.fileinfo.foldername   = Utilities.GetLastFolder(filepath)
+        NewMusicVideo.fileinfo.posterpath   = Preferences.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.trailerpath  = ""
+        NewMusicVideo.fileinfo.path         = IO.Path.GetDirectoryName(filepath) & "\"
+        NewMusicVideo.fileinfo.basepath     = Preferences.GetMovBasePath(NewMusicVideo.fileinfo.path)
+        NewMusicVideo.fileinfo.fanartpath   = Preferences.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
         If Not String.IsNullOrEmpty(NewMusicVideo.filedetails.filedetails_video.Container.Value) Then
             Dim container As String = NewMusicVideo.filedetails.filedetails_video.Container.Value
             NewMusicVideo.fileinfo.filenameandpath = filepath.Replace(".nfo", container)

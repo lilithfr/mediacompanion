@@ -74,6 +74,7 @@ Public Class Movie
     Private _previousCache            As ComboList = Nothing
     Private _triedUrls               As New List(Of String)
     Private _trailerUrl               As String =""
+    Public _mvsearchname              As String = ""
      
     Shared Private _availableHeightResolutions As List(Of Integer)
 
@@ -489,6 +490,15 @@ Public Class Movie
         End Get
     End Property
 
+    Public Property MVSearchName
+         Get
+            Return _mvsearchname
+        End Get
+        Set(value)
+            _mvsearchname = value
+        End Set
+    End Property
+
     Public ReadOnly Property Certificates As List(Of String)
         Get
             Scrape
@@ -831,19 +841,25 @@ Public Class Movie
     End Sub
     
     Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"                  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                          ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache             , "Assigning music Video to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                        ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"                 ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"                 ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache             , "Assigning music Video to cache"  ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"                 ) )
+        
     End Sub
  
     Sub AppendScrapeFailedActions
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields  , "Tidy up unscraped fields"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields  , "Tidy up unscraped fields"          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
-        If Not Preferences.MusicVidScrape Then Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
+    End Sub
+
+    Sub AppendMVScrapeFailedActions
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
     End Sub
 
     Sub AppendScraperIMDBSpecific
@@ -857,7 +873,8 @@ Public Class Movie
     End Sub
 
     Sub AppendScraperMusicVidSpecific
-        Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape Wiki Main Body"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape MV Main Body"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape  , "Checking MV Main body scrape" ) )
     End Sub
 
     Sub Scrape(imdb As String)
@@ -993,18 +1010,17 @@ Public Class Movie
             ReportProgress( String.Format(" - Using '{0}'", serchtitle ))
             ReportProgress( "- Main body " )
         End If
-        _scrapedMovie = s.musicVideoScraper(mediapathandfilename, "" , MovieSearchEngine) '(SearchName)
-        AppendMVScrapeSuccessActions
+        _imdbBody = _imdbScraper.getMVbody(mediapathandfilename, MVSearchName)
+        'AppendMVScrapeSuccessActions
     End Sub
-
-
+    
     Sub CheckMusicVidBodyScrape()
         If ImdbBody.ToLower = "error" Then
-            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs :" & searchname & vbCrLf )
-            AppendScrapeFailedActions
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs :" & MVSearchName & vbCrLf )
+            AppendMVScrapeFailedActions
         Else
             ReportProgress(MSG_OK,"!!! Music Video Body Scraped OK" & vbCrLf)
-            AppendScrapeSuccessActions
+            AppendMVScrapeSuccessActions
         End If
     End Sub
 
@@ -1108,12 +1124,13 @@ Public Class Movie
 
         'Dim MovieUpdated As Boolean = File.Exists(Nfo)
         If Preferences.MusicVidScrape Then
-            WorkingWithNfoFiles.MVsaveNfo(fmd)
+            WorkingWithNfoFiles.MVsaveNfo(nfo, fmd)
         Else
             WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)    
         End If
+        If Preferences.MusicVidScrape Then Exit Sub
 
-        If Preferences.XbmcLinkReady AndAlso Not Preferences.MusicVidScrape Then
+        If Preferences.XbmcLinkReady Then
 
             If IsNothing(media) Then
                 media = Utilities.GetFileName(Nfo,True)
@@ -1229,6 +1246,8 @@ Public Class Movie
         _mvcache.plot                = _scrapedMovie.fullmoviebody.plot
         _mvcache.year                = _scrapedMovie.fullmoviebody.year.ToInt
         _mvcache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
+        _mvcache.thumb               = _scrapedMovie.fullmoviebody.thumb
+        _mvcache.track               = _scrapedMovie.fullmoviebody.track 
         _mvcache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
         Try
@@ -1257,10 +1276,12 @@ Public Class Movie
     
     Sub AssignScrapedMovie(_scrapedMovie As FullMovieDetails)
         Dim thumbstring As New XmlDocument
+        Dim xmltype As String = "movie"
+        If Preferences.MusicVidScrape Then xmltype = "musicvideo"
 
         thumbstring.LoadXml(ImdbBody)
-
-        For Each thisresult In thumbstring("movie")
+        Dim thisresult As XmlElement = Nothing
+        For Each thisresult In thumbstring(xmltype)
             Select Case thisresult.Name
                 Case "title"
                     Dim sepmov As String = ""
@@ -1374,10 +1395,16 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.album = thisresult.InnerText
                 Case "artist"
                     _scrapedMovie.fullmoviebody.artist = thisresult.InnerText
+                Case "track"
+                    _scrapedMovie.fullmoviebody.track = thisresult.InnerText
+                Case "thumb"
+                    _scrapedMovie.fullmoviebody.thumb = thisresult.InnerText 
             End Select
         Next
 
-        If Preferences.sorttitleignorearticle AndAlso Not Preferences.MusicVidScrape Then                              'add ignored articles to end of
+        If Preferences.MusicVidScrape Then Exit Sub     'If Music Video Scraping, finished at this point so exit
+
+        If Preferences.sorttitleignorearticle Then                              'add ignored articles to end of
             Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.
             _scrapedMovie.fullmoviebody.sortorder = Preferences.RemoveIgnoredArticles(titletext)
         Else
@@ -1418,28 +1445,24 @@ Public Class Movie
                 _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
             End If
         End If
-        If Not Preferences.MusicVidScrape Then
-            If Rescrape Then
-                _scrapedMovie.fullmoviebody.source = _previousCache.source
-                _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
-                _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
-                _scrapedMovie.fileinfo.createdate = _previousCache.createdate
-                _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
-            Else
-                tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
-                tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
-                If Certificates.Count = 0 Then
-                    _scrapedMovie.fullmoviebody.mpaa = If(Preferences.ExcludeMpaaRated, "", "Rated ") & tmdb.Certification 
-                    If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
-                End If
-                _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
-                If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                    _scrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
-                    _scrapedMovie.fullmoviebody.movieset.MovieSetId = tmdb.Movie.belongs_to_collection.id 
-                End If
-                'If tmdb.TmdbId <> "" AndAlso _scrapedMovie.fullmoviebody.tmdbid = "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId 
+        If Rescrape Then
+            _scrapedMovie.fullmoviebody.source = _previousCache.source
+            _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
+            _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
+            _scrapedMovie.fileinfo.createdate = _previousCache.createdate
+            _scrapedMovie.fullmoviebody.movieset = _previousCache.MovieSet
+        Else
+            tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
+            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
+            If Certificates.Count = 0 Then
+                _scrapedMovie.fullmoviebody.mpaa = If(Preferences.ExcludeMpaaRated, "", "Rated ") & tmdb.Certification 
+                If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
             End If
-            
+            _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
+            If Preferences.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                _scrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                _scrapedMovie.fullmoviebody.movieset.MovieSetId = tmdb.Movie.belongs_to_collection.id 
+            End If
         End If
     End Sub
     
@@ -1880,7 +1903,7 @@ Public Class Movie
     Property TrailerDownloaded As Boolean = False
 
     Private Sub DownloadPoster
-        If Not Preferences.scrapemovieposters then
+        If Not Preferences.MusicVidScrape AndAlso Not Preferences.scrapemovieposters then
             Exit Sub
         End If
         If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
@@ -1918,33 +1941,38 @@ Public Class Movie
         Dim validUrl = False
 
         If imageexistspath = "" Then
-            For Each scraper In Preferences.moviethumbpriority
-                Try
-                    Select Case scraper
-                        Case "Internet Movie Poster Awards"
-                            PosterUrl = _scraperFunctions.impathumb(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year)
-                        Case "IMDB"
-                            PosterUrl = _scraperFunctions.imdbthumb(_scrapedMovie.fullmoviebody.imdbid)
-                        Case "Movie Poster DB"
-                            PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
-                        Case "themoviedb.org"
-                            'moviethumburl = scraperFunction2.tmdbthumb(_scrapedMovie.fullmoviebody.imdbid)
-                            PosterUrl = tmdb.FirstOriginalPosterUrl
-                    End Select
-                Catch
-                    PosterUrl = "na"
-                End Try
+            If Not Preferences.MusicVidScrape Then
+                For Each scraper In Preferences.moviethumbpriority
+                    Try
+                        Select Case scraper
+                            Case "Internet Movie Poster Awards"
+                                PosterUrl = _scraperFunctions.impathumb(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year)
+                            Case "IMDB"
+                                PosterUrl = _scraperFunctions.imdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                            Case "Movie Poster DB"
+                                PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                            Case "themoviedb.org"
+                                'moviethumburl = scraperFunction2.tmdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                                PosterUrl = tmdb.FirstOriginalPosterUrl
+                        End Select
+                    Catch
+                        PosterUrl = "na"
+                    End Try
 
+                    validUrl = Utilities.UrlIsValid(PosterUrl)
+                    If validUrl Or batch Then
+                        Exit For
+                    End If
+                Next
+            Else
+                PosterUrl = _scrapedMovie.fullmoviebody.thumb
                 validUrl = Utilities.UrlIsValid(PosterUrl)
-                If validUrl Or batch Then
-                    Exit For
-                End If
-            Next
+            End If
         End If
-        If Preferences.MusicVidScrape AndAlso _scrapedMovie.listthumbs.Count > 0 Then 
-            PosterUrl = _scrapedMovie.listthumbs(0).ToString
-            validUrl = Utilities.UrlIsValid(PosterUrl)
-        End If
+        'If Preferences.MusicVidScrape AndAlso _scrapedMovie.listthumbs.Count > 0 Then 
+        '    PosterUrl = _scrapedMovie.listthumbs(0).ToString
+        '    validUrl = Utilities.UrlIsValid(PosterUrl)
+        'End If
 
         If validUrl Or imageexistspath <> "" Then
 
@@ -1953,7 +1981,7 @@ Public Class Movie
             Try
 
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
-                SavePosterToPosterWallCache()
+                If Not Preferences.MusicVidScrape Then SavePosterToPosterWallCache()
                 ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
 
 

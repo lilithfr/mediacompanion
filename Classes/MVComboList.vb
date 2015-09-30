@@ -7,7 +7,7 @@ Public Class MVComboList
     Property fullpathandfilename  As String = ""
     Property filename             As String = ""
     Property foldername           As String = ""
-    Property _title               As String = ""
+    Private _title               As String = ""
     Property artist               As String = ""
     Property year                 As Integer= 0
     Property filedate             As String = ""
@@ -21,6 +21,8 @@ Public Class MVComboList
     'Property Votes                As Integer= 0
     Property Resolution           As Integer= -1
     Property Audio                As New List(Of AudioDetails)
+    Property track                As String = ""
+    Private _thumb                As String = ""
     Property FrodoPosterExists    As Boolean
     Property PreFrodoPosterExists As Boolean
 
@@ -30,6 +32,15 @@ Public Class MVComboList
         End Get
         Set
             _title = Value.SafeTrim
+        End Set
+    End Property
+
+    Public Property thumb As String
+        Get
+            Return _thumb
+        End Get
+        Set(value As String)
+            _thumb = Value
         End Set
     End Property
 
@@ -135,7 +146,9 @@ Public Class MVComboList
         Me.createdate           = From.createdate        
         Me.plot                 = From.plot            
         'Me.Votes                = From.Votes              
-        Me.Resolution           = From.Resolution 
+        Me.Resolution           = From.Resolution
+        Me.thumb                = From.thumb
+        Me.track                = From.track
         Me.FrodoPosterExists    = From.FrodoPosterExists
         Me.PreFrodoPosterExists = From.PreFrodoPosterExists
 
@@ -168,6 +181,8 @@ Public Class MVComboList
         Me.plot                 = From.fullmoviebody.plot
         'Me.Votes                = From.Votes              
         Me.Resolution           = From.filedetails.filedetails_video.VideoResolution
+        Me.thumb                = From.fullmoviebody.thumb
+        Me.track                = From.fullmoviebody.track 
         AssignMissingData(From)
         AssignAudio(From.filedetails.filedetails_audio)
     End Sub
