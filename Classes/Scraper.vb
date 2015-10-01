@@ -1928,7 +1928,7 @@ Public Class Classimdb
 
     Public Function getMVbody(ByVal FullPathandFilename As String,ByRef MVSearchName As String)
         Monitor.Enter(Me)
-        Dim Thetitle As String = ""
+        Dim Thetitle As Boolean = False
         Dim ParametersForScraper(10) As String
         Dim FinalScrapResult As String
         Dim Scraper As String = "metadata.musicvideos.imvdb"
@@ -1941,10 +1941,11 @@ Public Class Classimdb
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
             FinalScrapResult = FinalScrapResult.Replace("</url>", "")
             FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+
             ' 2st stage
             ParametersForScraper(0) = FinalScrapResult
             FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
-            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results></results>" Then Return "error"
+            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results sorted=""yes""></results>" Then Return "error"
             Dim m_xmld As XmlDocument
             Dim m_nodelist As XmlNodeList
             Dim m_node As XmlNode
@@ -1952,11 +1953,14 @@ Public Class Classimdb
             m_xmld.LoadXml(FinalScrapResult)
             m_nodelist = m_xmld.SelectNodes("/results/entity")
             For Each m_node In m_nodelist
-                TheTitle = m_node.ChildNodes.Item(0).InnerText
+                TheTitle = ValidateTitleMatch(m_node.ChildNodes.Item(0).InnerText, MVSearchName)
+                If Not Thetitle Then Continue For
                 Dim url = m_node.ChildNodes.Item(1).InnerText
                 ParametersForScraper(0) = url
                 Exit For
             Next
+            If Not Thetitle Then Return "error"
+
             ' 3st stage
             FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
             If FinalScrapResult.ToLower = "error" Then
@@ -1996,6 +2000,18 @@ Public Class Classimdb
         End If
 
         Return searchTerm
+        Monitor.Exit(Me)
+    End Function
+
+    Private Function ValidateTitleMatch(ByVal FullTitle As String, ByVal mvsearch As String) As Boolean
+        Monitor.Enter(Me)
+        Dim SongTitle As String = ""
+        Dim splitsong() As String = FullTitle.Split("-"c)
+        SongTitle = splitsong(1).ToLower.Trim
+        Dim splitsearch() As String = mvsearch.Split("-"c)
+        mvsearch = splitsearch(1).ToLower.Trim
+        If SongTitle = mvsearch Then Return True
+        Return False
         Monitor.Exit(Me)
     End Function
 

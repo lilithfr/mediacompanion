@@ -859,6 +859,7 @@ Public Class Movie
     End Sub
 
     Sub AppendMVScrapeFailedActions
+        Actions.Items.Add( New ScrapeAction(AddressOf TidyMVUnscraped           , "Tidy up unscraped fields"          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
     End Sub
 
@@ -1091,6 +1092,12 @@ Public Class Movie
             If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId
         Catch
         End Try
+    End Sub
+
+    Sub TidyMVUnscraped()
+        If ImdbBody.ToLower = "error" Then
+
+        End If
     End Sub
 
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
