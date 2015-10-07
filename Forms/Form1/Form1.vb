@@ -9779,6 +9779,7 @@ End Sub
         Try
             'download fanart
             Call mov_FanartGet()
+            UpdateMissingFanart()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
