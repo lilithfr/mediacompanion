@@ -1,4 +1,4 @@
-<title>With Outline</title>
+<title>Simple With Outline (HTML)</title>
 <<MC HTML Page>>
 <<header>>
 <meta  content="text/html;  charset=UTF-8"  http-equiv="Content-Type">

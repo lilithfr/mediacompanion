@@ -698,6 +698,9 @@
     <Content Include="Assets\scrapers\metadata.musicvideos.imvdb-master\imvdb.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="html_templates\BasicMoviewPathCSVoutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html_templates\CopyMoviesInFolders.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1604,13 +1607,13 @@
     <Content Include="Classes\UseXBMCScrapers\readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html_templates\another template.txt">
+    <Content Include="html_templates\Simple with Outline.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html_templates\html_template.txt">
+    <Content Include="html_templates\Basic Movie List HTML.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html_templates\INFO_HTMLoutputTags.txt">
+    <Content Include="html_templates\1Export Template Guide.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="html_templates\Movie Card 2up Filter.txt">
@@ -1622,7 +1625,7 @@
     <Content Include="html_templates\Movie Card.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html_templates\new template.txt">
+    <Content Include="html_templates\Simple with Plot.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="html_templates\Table List.txt">
