@@ -18,7 +18,9 @@ Public Class ucMusicVideo
     Dim rescraping As Boolean = False
     Dim Movie As New Movie
     Dim scraper As New Classimdb 
-    Dim workingMusicVideo As New FullMovieDetails 'Music_Video_Class
+    Dim workingMusicVideo As New FullMovieDetails
+
+'Music_Video_Class
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         For Each item In Preferences.MVidFolders
@@ -646,7 +648,6 @@ Public Class ucMusicVideo
         'Call searchFornew(False)
         MVCacheLoadFromNfo
         MusicVideoCacheSave()
-
     End Sub
 
     'Path buttons

@@ -11966,6 +11966,7 @@ End Sub
         Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
         If CurrentTab = "movies" Then mov_RebuildMovieCaches()
         If CurrentTab = "tv shows" Then tv_CacheRefresh()
+        'If CurrentTab = "music vid's" Then ucMusicVideo.ucMusicVideo_KeyDown(sender, e) 'ucMusicVideo.PerformButton(False)
     End Sub
 
     Sub doSearchNew

@@ -1926,17 +1926,17 @@ Public Class Classimdb
         Return plotresults
     End Function
 
-    Public Function getMVbody(ByVal FullPathandFilename As String,ByRef MVSearchName As String)
+    Public Function getMVbody(ByVal FullPathandFilename As String, ByRef MVSearchName As String, Optional ByVal Scraper As String = "")
         Monitor.Enter(Me)
         Dim Thetitle As Boolean = False
         Dim ParametersForScraper(10) As String
         Dim FinalScrapResult As String
-        Dim Scraper As String = "metadata.musicvideos.imvdb"
+        If Scraper = "" Then Scraper = "metadata.musicvideos.imvdb"
         Dim title As String = getArtistAndTitle(FullPathandFilename)
         MVSearchName = title
         Try
             ' 1st stage
-            ParametersForScraper(0) = title
+            ParametersForScraper(0) = title.Replace(" ","%20")
             FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
             FinalScrapResult = FinalScrapResult.Replace("</url>", "")
@@ -2010,7 +2010,7 @@ Public Class Classimdb
         SongTitle = splitsong(1).ToLower.Trim
         Dim splitsearch() As String = mvsearch.Split("-"c)
         mvsearch = splitsearch(1).ToLower.Trim
-        If SongTitle = mvsearch Then Return True
+        If SongTitle.Contains(mvsearch) Then Return True
         Return False
         Monitor.Exit(Me)
     End Function
