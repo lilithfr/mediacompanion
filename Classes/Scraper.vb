@@ -34,7 +34,7 @@ Public Class MovieRegExs
     Public Const REGEX_ACTOR_WITH_IMAGE     = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?loadlate=""(?<actorthumb>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
     Public Const REGEX_IMDB_KEYWORD         = "ttkw_kw_[0-9]*"">(?<keyword>.*?)<\/a"
     Public Const REGEX_IMDB_TRAILER         = "<h2><a href=""/video/imdb/vi(.*?)/"
-    Public Const REGEX_TOP_250              = "<strong>Top 250 Movies #(.*?)</strong></a>"
+    Public Const REGEX_TOP_250              = "=tt_awd""> Top Rated Movies #(.*?)</a>"    '"<strong>Top 250 Movies #(.*?)</strong></a>"
     Public Const REGEX_VOTES                = "<span itemprop=""ratingCount"">([\d{1,3},.?\s]*[0-9]?)</span>"
     Public Const REGEX_TAGLINE              = "<h4 class=""inline"">Tagline.*?:</h4>(.*?)<span class="
     Public Const REGEX_RUNTIME              = "<h4 class=""inline"">Runtime:</h4>(.*?)</div>"
@@ -1926,14 +1926,69 @@ Public Class Classimdb
         Return plotresults
     End Function
 
-    Public Function getMVbody(ByVal FullPathandFilename As String, ByRef MVSearchName As String, Optional ByVal Scraper As String = "")
+    Public Function getMVbodyADB(ByVal FullPathandFilename As String, ByRef MVSearchName As String)
         Monitor.Enter(Me)
         Dim Thetitle As Boolean = False
         Dim ParametersForScraper(10) As String
         Dim FinalScrapResult As String
-        If Scraper = "" Then Scraper = "metadata.musicvideos.imvdb"
+        Dim Scraper As String = "metadata.musicvideos.imvdb" 'theaudiodb.com"
         Dim title As String = getArtistAndTitle(FullPathandFilename)
         MVSearchName = title
+        Try
+            ' 1st stage
+            ParametersForScraper(0) = title.Replace(" ","%20")
+            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
+            FinalScrapResult = FinalScrapResult.Replace("<url>", "")
+            FinalScrapResult = FinalScrapResult.Replace("</url>", "")
+            FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+
+            ' 2st stage
+            ParametersForScraper(0) = FinalScrapResult
+            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" or FinalScrapResult.ToLower = "<results sorted=""yes""></results>" Then Return "error"
+            Dim m_xmld As XmlDocument
+            Dim m_nodelist As XmlNodeList
+            Dim m_node As XmlNode
+            m_xmld = New XmlDocument()
+            m_xmld.LoadXml(FinalScrapResult)
+            m_nodelist = m_xmld.SelectNodes("/results/entity")
+            For Each m_node In m_nodelist
+                TheTitle = ValidateTitleMatch(m_node.ChildNodes.Item(0).InnerText, MVSearchName)
+                If Not Thetitle Then Continue For
+                Dim url = m_node.ChildNodes.Item(1).InnerText
+                ParametersForScraper(0) = url
+                Exit For
+            Next
+            If Not Thetitle Then Return "error"
+
+            ' 3st stage
+            FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" Then
+                Return "error"
+            End If
+            FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+            FinalScrapResult = FinalScrapResult.Replace("details>","musicvideo>")
+            FinalScrapResult = FinalScrapResult.Replace("</director>" & vbcrlf & "  <director>", " / ")
+            If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;")
+            If FinalScrapResult.Contains("imvdbid") Then
+
+            Else
+
+            End If
+            Return FinalScrapResult
+        Catch ex As Exception
+            Return "error"
+        Finally
+            Monitor.Exit(Me)
+        End Try
+    End Function
+
+    Public Function getMVbodyIMVDB(ByVal title As String, ByVal MVSearchName As String)
+        Monitor.Enter(Me)
+        Dim Thetitle As Boolean = False
+        Dim ParametersForScraper(10) As String
+        Dim FinalScrapResult As String
+        Dim Scraper As String = "metadata.musicvideos.imvdb"
         Try
             ' 1st stage
             ParametersForScraper(0) = title.Replace(" ","%20")

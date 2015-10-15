@@ -1011,8 +1011,7 @@ Public Class Movie
             ReportProgress( String.Format(" - Using '{0}'", serchtitle ))
             ReportProgress( "- Main body " )
         End If
-        _imdbBody = _imdbScraper.getMVbody(mediapathandfilename, MVSearchName)
-        '_imdbBody = _imdbScraper.getMVbody(mediapathandfilename, MVSearchName, "metadata.musicvideos.theaudiodb.com")
+        _imdbBody = _imdbScraper.getMVbodyADB(mediapathandfilename, MVSearchName)
         'AppendMVScrapeSuccessActions
     End Sub
     
