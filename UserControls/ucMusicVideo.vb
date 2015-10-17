@@ -944,6 +944,19 @@ Public Class ucMusicVideo
     Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click, btnGoogleSearchPoster.Click
         Call googleSearch()
     End Sub
+
+    Private Sub btnMVPlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMVPlay.Click
+        Dim tempstring As String = ""
+        Dim playlist As New List(Of String)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        If Not String.IsNullOrEmpty(fullpathandfilename) Then
+            tempstring = Utilities.GetFileName(fullpathandfilename)
+            If tempstring <> "" Then playlist.Add(tempstring)
+        End If
+        If playlist.Count > 0 Then
+            Call Form1.launchplaylist(playlist)
+        End If
+    End Sub
 #End Region
 
 #Region "garbage"

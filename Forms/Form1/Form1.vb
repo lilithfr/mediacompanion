@@ -440,7 +440,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
@@ -3345,7 +3345,7 @@ Public Class Form1
         
     End Sub
 
-    Private Sub LaunchPlayList(ByVal plist As List(Of String))
+    Public Sub LaunchPlayList(ByVal plist As List(Of String))
         Dim tempstring = applicationPath & "\settings\temp.m3u"
         frmSplash2.Text = "Playing Movie..."
         frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
@@ -11966,13 +11966,14 @@ End Sub
         Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
         If CurrentTab = "movies" Then mov_RebuildMovieCaches()
         If CurrentTab = "tv shows" Then tv_CacheRefresh()
-        'If CurrentTab = "music vid's" Then ucMusicVideo.ucMusicVideo_KeyDown(sender, e) 'ucMusicVideo.PerformButton(False)
+        If CurrentTab = "music vid's" Then ucMusicVideo1.btnRefresh.PerformClick()
     End Sub
 
     Sub doSearchNew
         Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
         If CurrentTab = "movies" Then SearchForNew()
         If CurrentTab = "tv shows" Then ep_Search()
+        If CurrentTab = "music vid's" Then ucMusicVideo1.btnSearchNew.PerformClick()
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
