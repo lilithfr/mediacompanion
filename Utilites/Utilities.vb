@@ -2463,7 +2463,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return text
     End Function
 
-    Public Shared Function cleanFilenameIllegalChars(ByVal string2clean As String) As String
+    Public Shared Function cleanFilenameIllegalChars(ByVal string2clean As String, Optional ByVal changechr As String = "") As String
         Dim strIllegalChars As String = "\/:""*?<>|"
         Dim illegalChars As Char() = strIllegalChars.ToCharArray
         Dim M As Match = Regex.Match(string2clean, "[\" & strIllegalChars & "]") 'HACK ALERT! - back-slash added to regex pattern string to escape illegal back-slash character!
@@ -2476,7 +2476,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     Case ":", "|"
                         changeTo = " -"
                     Case Else
-                        changeTo = ""
+                        changeTo = changechr
                 End Select
                 string2clean = string2clean.Replace(c, changeTo)
             Next

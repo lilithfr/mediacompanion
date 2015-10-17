@@ -205,7 +205,7 @@ Public Class frmXbmcExport
     End Sub
 
     Private Sub TransMovArtWork(ByVal mov As FullMovieDetails)
-        Dim filenm As String = Utilities.SpacesToCharacter(mov.fullmoviebody.title & " " & mov.fullmoviebody.year, "_")
+        Dim filenm As String = Utilities.SpacesToCharacter(Utilities.cleanFilenameIllegalChars(mov.fullmoviebody.title, " ") & " " & mov.fullmoviebody.year, "_")
         filenm = filenm.Replace(":", "_")
         If File.Exists(mov.fileinfo.fanartpath) Then
             File.Copy(mov.fileinfo.fanartpath, opMovies & filenm & "-fanart.jpg", True)
