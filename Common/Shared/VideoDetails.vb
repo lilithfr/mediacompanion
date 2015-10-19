@@ -9,7 +9,7 @@ Public Class VideoDetails
     Public Property Aspect As New ProtoProperty(Me, "aspect", "")
     Public Property Width As New ProtoProperty(Me, "width", "")
     Public Property Height As New ProtoProperty(Me, "height", "")
-    Public Property DurationInSeconds As New ProtoProperty(Me, "durationinseconds", "")
+    Public Property DurationInSeconds As New ProtoProperty(Me, "durationinseconds", "1")
     Public Property FormatInfo As New ProtoProperty(Me, "formatinfo", "")
     Public Property Bitrate As New ProtoProperty(Me, "bitrate", "")
     Public Property BitrateMode As New ProtoProperty(Me, "bitratemode", "")

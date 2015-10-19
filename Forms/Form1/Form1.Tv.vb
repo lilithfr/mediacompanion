@@ -2441,7 +2441,7 @@ Partial Public Class Form1
                                             For Each audioStream In fileStreamDetails.filedetails_audio
                                                 singleepisode.Details.StreamDetails.Audio.Add(audioStream)
                                             Next
-                                            If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                                            If Not String.IsNullOrEmpty(singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value) Then
                                                 tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
                                                 If Preferences.intruntime Then
                                                     singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
