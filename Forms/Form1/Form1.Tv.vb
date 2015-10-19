@@ -1850,12 +1850,12 @@ Partial Public Class Form1
                                         'its an episode
                                         Dim episodescreenurl As String = ""
                                         Try
-                                            If tvBatchList.epAired Then listofnewepisodes(h).Aired.Value = Episodedata.FirstAired.Value
-                                            If tvBatchList.epPlot Then listofnewepisodes(h).Plot.Value = Episodedata.Overview.Value
-                                            If tvBatchList.epDirector Then listofnewepisodes(h).Director.Value = Utilities.Cleanbraced(Episodedata.Director.Value)
-                                            If tvBatchList.epCredits Then listofnewepisodes(h).Credits.Value = Utilities.Cleanbraced(Episodedata.Writer.Value)
-                                            If tvBatchList.epRating Then listofnewepisodes(h).Rating.Value = Episodedata.Rating.Value
-                                            If tvBatchList.epTitle Then listofnewepisodes(h).Title.Value = Episodedata.EpisodeName.Value
+                                            If tvBatchList.epAired      Then listofnewepisodes(h).Aired.Value       = Episodedata.FirstAired.Value
+                                            If tvBatchList.epPlot       Then listofnewepisodes(h).Plot.Value        = Episodedata.Overview.Value
+                                            If tvBatchList.epDirector   Then listofnewepisodes(h).Director.Value    = Utilities.Cleanbraced(Episodedata.Director.Value)
+                                            If tvBatchList.epCredits    Then listofnewepisodes(h).Credits.Value     = Utilities.Cleanbraced(Episodedata.Writer.Value)
+                                            If tvBatchList.epRating     Then listofnewepisodes(h).Rating.Value      = Episodedata.Rating.Value
+                                            If tvBatchList.epTitle      Then listofnewepisodes(h).Title.Value       = Episodedata.EpisodeName.Value
                                             listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
                                             listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
                                             If tvBatchList.epActor Then
@@ -2105,7 +2105,7 @@ Partial Public Class Form1
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
                     stage = "1"
-                    S = S.Replace(newepisode.ShowTitle.Value, "")
+                    If Not String.IsNullOrEmpty(newepisode.ShowTitle.Value) Then S = S.Replace(newepisode.ShowTitle.Value, "")
                     stage = "2"
                     If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then S = S.Replace(newepisode.ShowYear.Value, "")
                     stage = "3"
@@ -2193,7 +2193,9 @@ Partial Public Class Form1
                     Dim epcount As Integer = 0
                     Dim allepisodes(100) As Integer
                     stage = "5"
-                    S = Regex.Replace(eps.Thumbnail.FileName, "\(.+\)\s", "")   'Remove anything from filename in brackets like resolution ie: (1920x1080) that may give false episode number
+                    If Not String.IsNullOrEmpty(eps.Thumbnail.FileName) Then
+                        S = Regex.Replace(eps.Thumbnail.FileName, "\(.+\)\s", "")   'Remove anything from filename in brackets like resolution ie: (1920x1080) that may give false episode number
+                    End If
                     stage = "6"
                     eps.Thumbnail.FileName = ""
                     Do
