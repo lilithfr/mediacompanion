@@ -10932,46 +10932,52 @@ End Sub
         Debug.Print(Me.Controls.Count)
     End Sub
 
-    Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowNfoArt.Click
+    Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowNfoArt.MouseDown
+        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
+        TVContextMenu.Close()
         Dim Sh As TvShow = tv_ShowSelectedCurrently()
-        TvDelShowNfoArt(Sh)
+        TvDelShowNfoArt(Sh, False, NoDelArt)
     End Sub
 
-    Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelShowEpNfoArt.Click
-        Dim msgstring As String = "Warning:  This will Remove all nfo's and artwork for this Show and Episodes"
+    Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowEpNfoArt.MouseDown 
+        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
+        TVContextMenu.Close()
+        Dim msgstring As String = "Warning:  This will Remove all nfo's" & If(Not NoDelArt, " and artwork", "") & " for this Show and Episodes"
         msgstring &= vbcrlf & "and remove the show's folder from MC's ""List Of Separate Folders""." & vbCrLf 
         msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
         msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
         msgstring &= vbCrLf & "Are your sure you wish to continue?"
-        Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's and artwork")
+        Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
         If x = MsgBoxResult.Cancel Then Exit Sub
         Dim Sh As TvShow = tv_ShowSelectedCurrently()
         Dim seas As TvSeason = tv_SeasonSelectedCurrently()
         Dim ep As TvEpisode = ep_SelectedCurrently()
-        TvDelEpNfoAst(Sh, seas, ep, True)
-        TvDelShowNfoArt(Sh, True)
+        TvDelEpNfoAst(Sh, seas, ep, True, NoDelArt)
+        TvDelShowNfoArt(Sh, True, NoDelArt)
     End Sub
 
-    Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvDelEpNfoArt.Click
+    Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelEpNfoArt.MouseDown 
+        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
+        TVContextMenu.Close()
         Dim Sh As TvShow = tv_ShowSelectedCurrently()
         Dim seas As TvSeason = tv_SeasonSelectedCurrently()
         Dim ep As TvEpisode = ep_SelectedCurrently()
-        TvDelEpNfoAst(Sh, seas, ep)
+        TvDelEpNfoAst(Sh, seas, ep, False, NoDelArt)
     End Sub
 
-    Private Sub TvDelShowNfoArt(Show As TvShow, Optional ByVal Ignore As Boolean = False)
+    Private Sub TvDelShowNfoArt(Show As TvShow, ByVal Ignore As Boolean, Optional ByVal NoDelArt As Boolean = False)
         Try
             If Not Ignore Then
-                Dim msgstring As String = "Warning:  This will Remove the selected Tv Show's nfo and artwork"
+                Dim msgstring As String = "Warning:  This will Remove the selected Tv Show's nfo" & If(Not NoDelArt, " and artwork", "")
                 msgstring &= vbcrlf & "and remove the show's folder from MC's ""List Of Separate Folders""." & vbCrLf 
                 msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
                 msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
                 msgstring &= vbCrLf & "Are your sure you wish to continue?"
-                Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show's nfo's and artwork")
+                Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show's nfo's" & If(Not NoDelArt, " and artwork", ""))
                 If x = MsgBoxResult.Cancel Then Exit Sub
             End If
             'Dim Show As TvShow = tv_ShowSelectedCurrently()
-            TvDeleteShowArt(show)
+            If Not NoDelArt Then TvDeleteShowArt(show)
             Dim showpath As String = Show.FolderPath 
             Utilities.SafeDeleteFile(showpath & "tvshow.nfo")
             showpath = showpath.Substring(0, showpath.Length-1)
@@ -10987,21 +10993,17 @@ End Sub
         End Try
     End Sub
 
-    Private Sub TvDelEpNfoAst(Show As TvShow, season As TvSeason, ep As TvEpisode, Optional ByVal Ignore As Boolean = False)
+    Private Sub TvDelEpNfoAst(Show As TvShow, season As TvSeason, ep As TvEpisode, ByVal Ignore As Boolean, Optional ByVal NoDelArt As Boolean = False)
         Try
             If Not Ignore Then 
-                Dim msgstring As String = "Warning, This operation will delete all Episode nfo's and artwork"
+                Dim msgstring As String = "Warning, This operation will delete all Episode nfo's" & If(Not NoDelArt, " and artwork", "")
                 msgstring &= vbCrLf & "!! Note: will not delete missing episodes." & vbCrLf 
                 msgstring &= vbCrLf & "Are your sure you wish to continue?"
-                Dim res As MsgBoxResult = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete episode nfo(s) & artwork")
+                Dim res As MsgBoxResult = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete episode nfo(s)" & If(Not NoDelArt, " and artwork", ""))
                 If res = MsgBoxResult.No OrElse res = MsgBoxResult.Cancel Then Exit Sub
             End If
 
             Dim TheseEpisodes As New List(Of Media_Companion.TvEpisode)
-            'Dim Show As TvShow = tv_ShowSelectedCurrently()
-            'Dim season As TvSeason = tv_SeasonSelectedCurrently()
-            'Dim ep As TvEpisode = ep_SelectedCurrently()
-            'Dim IsMissing As Boolean = False
             If Not IsNothing(ep) Then
                 For Each epis In season.Episodes
                     If epis.NfoFilePath = ep.NfoFilePath Then TheseEpisodes.Add(epis)
@@ -11018,8 +11020,10 @@ End Sub
                         End If
                         Dim eppath As String = episode.NfoFilePath
                         Utilities.SafeDeleteFile(eppath)
-                        Utilities.SafeDeleteFile(eppath.Replace(".nfo", ".tbn"))
-                        Utilities.SafeDeleteFile(eppath.Replace(".nfo", "-thumb.jpg"))
+                        If Not NoDelArt Then
+                            Utilities.SafeDeleteFile(eppath.Replace(".nfo", ".tbn"))
+                            Utilities.SafeDeleteFile(eppath.Replace(".nfo", "-thumb.jpg"))
+                        End If
                     End If 
                     Cache.TvCache.Remove(episode)
                     TvTreeview.Nodes.Remove(episode.EpisodeNode)
