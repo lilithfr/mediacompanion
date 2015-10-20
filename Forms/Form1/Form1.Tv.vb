@@ -1530,7 +1530,7 @@ Partial Public Class Form1
                                 tvprogresstxt &= " - Getting TVDB artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                             'End If
-                            success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                            success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, langu:=searchLanguage)
                             'If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
                                 If success Then 
                                     tvprogresstxt &= ": OK!"
@@ -1548,7 +1548,7 @@ Partial Public Class Form1
                                 tvprogresstxt &= " - Getting TVDB artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                             'End If
-                                success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, searchLanguage)
+                                success = TvGetArtwork(NewShow, True, True, True, Preferences.dlTVxtrafanart, langu:=searchLanguage)
                             'If Preferences.tvdlfanart Or Preferences.tvdlposter or Preferences.tvdlseasonthumbs Then
                                 If success Then 
                                     tvprogresstxt &= ": OK!"
@@ -1794,6 +1794,21 @@ Partial Public Class Form1
                                 TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason, tvBatchList.shXtraFanart, force:= False)
                             End If
                             If tvBatchList.shFanartTvArt Then TvFanartTvArt(Cache.TvCache.Shows(f), False) 'We're only looking for missing art from Fanart.Tv
+
+                            'If selected, copy Series banner to season banner if no season banner downloaded.
+                            If tvBatchList.shBannerMain AndAlso Preferences.FrodoEnabled Then
+                                Dim mainbanner As String = Cache.TvCache.Shows(f).ImageBanner.Path
+                                If File.Exists(mainbanner) Then
+                                    For each seas As TvSeason In Cache.TvCache.Shows(f).Seasons.values
+                                        Dim SeasonNo As String = seas.SeasonNode.Text.Replace("Season ", "")
+                                        If SeasonNo.ToLower = "specials" Then SeasonNo = "-" & SeasonNo.ToLower 
+                                        Dim SeasonBanner As String = Cache.TvCache.Shows(f).FolderPath & "season" & SeasonNo & "-banner.jpg"
+                                        If Not File.Exists(SeasonBanner) Then
+                                            Utilities.SafeCopyFile(mainbanner, SeasonBanner)
+                                        End If
+                                    Next
+                                End If
+                            End If
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
@@ -1875,11 +1890,7 @@ Partial Public Class Form1
                                                     Dim epid As String = GetEpImdbId(Cache.TvCache.Shows(f).ImdbId.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
                                                     If epid.Contains("tt") Then
                                                         Dim scraperfunction As New Classimdb
-                                                        'Dim ac As New actors
                                                         Dim actorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Preferences.imdbmirror, epid, Preferences.maxactors)
-                                                        'actorlist = ac.EpisodeGetImdbActors(Cache.TvCache.Shows(f).ImdbId.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
-                                                        'If Preferences.actorseasy = True Then
-                                                        'ac.savelocalactors(listofnewepisodes(h).VideoFilePath, actorlist, Cache.TvCache.Shows(f).NfoFilePath, True)
                                                         If actorlist.Count > 0 Then
                                                             listofnewepisodes(h).ListActors.Clear()
                                                             For Each act In actorlist
@@ -1911,7 +1922,7 @@ Partial Public Class Form1
                                 listofnewepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)   'Generic(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
                                     listofnewepisodes(h).GetFileDetails()
-                                    If listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
+                                    If Not String.IsNullOrEmpty(listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value) Then
                                         Try
                                             Dim tempstring As String
                                             tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
@@ -1921,10 +1932,7 @@ Partial Public Class Form1
                                                 listofnewepisodes(h).Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
                                             End If
 
-                                        Catch ex As Exception
-#If SilentErrorScream Then
-                                            Throw ex
-#End If
+                                        Catch 
                                         End Try
                                         WorkingWithNfoFiles.ep_NfoSave(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
                                     End If

@@ -10976,7 +10976,6 @@ End Sub
                 Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show's nfo's" & If(Not NoDelArt, " and artwork", ""))
                 If x = MsgBoxResult.Cancel Then Exit Sub
             End If
-            'Dim Show As TvShow = tv_ShowSelectedCurrently()
             If Not NoDelArt Then TvDeleteShowArt(show)
             Dim showpath As String = Show.FolderPath 
             Utilities.SafeDeleteFile(showpath & "tvshow.nfo")
@@ -18807,7 +18806,7 @@ End Sub
     Private Sub ReScrFanartToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
         Try
             Dim Showname As TvShow = tv_ShowSelectedCurrently()
-            TvGetArtwork(Showname, True, False, False, False)
+            TvGetArtwork(Showname, True, False, False, False, False)
             tv_ShowLoad(Showname)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

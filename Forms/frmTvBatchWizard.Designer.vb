@@ -23,9 +23,11 @@ Partial Class tv_batch_wizard
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cbshStatus = New System.Windows.Forms.CheckBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cbshBannerMain = New System.Windows.Forms.CheckBox()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.cbshDelArtwork = New System.Windows.Forms.CheckBox()
         Me.cbshPosters = New System.Windows.Forms.CheckBox()
         Me.cbshFanartTv = New System.Windows.Forms.CheckBox()
@@ -59,7 +61,6 @@ Partial Class tv_batch_wizard
         Me.btn_TvBatchCancel = New System.Windows.Forms.Button()
         Me.btnTvBatchStart = New System.Windows.Forms.Button()
         Me.cbincludeLocked = New System.Windows.Forms.CheckBox()
-        Me.cbshStatus = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -91,23 +92,9 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(416, 395)
-        Me.SplitContainer1.SplitterDistance = 224
+        Me.SplitContainer1.Size = New System.Drawing.Size(416, 425)
+        Me.SplitContainer1.SplitterDistance = 241
         Me.SplitContainer1.TabIndex = 0
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = true
-        Me.Label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Red
-        Me.Label3.Location = New System.Drawing.Point(215, 42)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(170, 54)
-        Me.Label3.TabIndex = 14
-        Me.Label3.Text = "Some artwork automatically"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"selected if Delete artwork enabled"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"else you'll have "& _ 
-    "no artwork for"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"these Tv Series."
-        Me.Label3.Visible = false
         '
         'GroupBox1
         '
@@ -123,13 +110,24 @@ Partial Class tv_batch_wizard
         Me.GroupBox1.Controls.Add(Me.cbshYear)
         Me.GroupBox1.Location = New System.Drawing.Point(11, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(373, 195)
+        Me.GroupBox1.Size = New System.Drawing.Size(373, 212)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Tags to Rescrape"
         '
+        'cbshStatus
+        '
+        Me.cbshStatus.AutoSize = true
+        Me.cbshStatus.Location = New System.Drawing.Point(7, 66)
+        Me.cbshStatus.Name = "cbshStatus"
+        Me.cbshStatus.Size = New System.Drawing.Size(88, 17)
+        Me.cbshStatus.TabIndex = 14
+        Me.cbshStatus.Text = "Series Status"
+        Me.cbshStatus.UseVisualStyleBackColor = true
+        '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.cbshBannerMain)
         Me.GroupBox3.Controls.Add(Me.Label3)
         Me.GroupBox3.Controls.Add(Me.cbshDelArtwork)
         Me.GroupBox3.Controls.Add(Me.cbshPosters)
@@ -139,10 +137,35 @@ Partial Class tv_batch_wizard
         Me.GroupBox3.Controls.Add(Me.cbshFanart)
         Me.GroupBox3.Location = New System.Drawing.Point(7, 89)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(340, 100)
+        Me.GroupBox3.Size = New System.Drawing.Size(340, 117)
         Me.GroupBox3.TabIndex = 13
         Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Download Missing artwork..."
+        '
+        'cbshBannerMain
+        '
+        Me.cbshBannerMain.AutoSize = true
+        Me.cbshBannerMain.Enabled = false
+        Me.cbshBannerMain.Location = New System.Drawing.Point(7, 94)
+        Me.cbshBannerMain.Name = "cbshBannerMain"
+        Me.cbshBannerMain.Size = New System.Drawing.Size(302, 17)
+        Me.cbshBannerMain.TabIndex = 15
+        Me.cbshBannerMain.Text = "Save Main Banner as Season Banner if none to Download"
+        Me.cbshBannerMain.UseVisualStyleBackColor = true
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = true
+        Me.Label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.Red
+        Me.Label3.Location = New System.Drawing.Point(215, 40)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(170, 54)
+        Me.Label3.TabIndex = 14
+        Me.Label3.Text = "Some artwork automatically"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"selected if Delete artwork enabled"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"else you'll have "& _ 
+    "no artwork for"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"these Tv Series."
+        Me.Label3.Visible = false
         '
         'cbshDelArtwork
         '
@@ -452,8 +475,8 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
-        Me.SplitContainer2.Size = New System.Drawing.Size(416, 448)
-        Me.SplitContainer2.SplitterDistance = 395
+        Me.SplitContainer2.Size = New System.Drawing.Size(416, 483)
+        Me.SplitContainer2.SplitterDistance = 425
         Me.SplitContainer2.TabIndex = 1
         '
         'cbRewiteAllNfo
@@ -495,27 +518,17 @@ Partial Class tv_batch_wizard
         Me.cbincludeLocked.Text = "Include locked shows"
         Me.cbincludeLocked.UseVisualStyleBackColor = true
         '
-        'cbshStatus
-        '
-        Me.cbshStatus.AutoSize = true
-        Me.cbshStatus.Location = New System.Drawing.Point(7, 66)
-        Me.cbshStatus.Name = "cbshStatus"
-        Me.cbshStatus.Size = New System.Drawing.Size(88, 17)
-        Me.cbshStatus.TabIndex = 14
-        Me.cbshStatus.Text = "Series Status"
-        Me.cbshStatus.UseVisualStyleBackColor = true
-        '
         'tv_batch_wizard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_TvBatchCancel
-        Me.ClientSize = New System.Drawing.Size(416, 448)
+        Me.ClientSize = New System.Drawing.Size(416, 483)
         Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(424, 480)
-        Me.MinimumSize = New System.Drawing.Size(424, 480)
+        Me.MaximumSize = New System.Drawing.Size(424, 510)
+        Me.MinimumSize = New System.Drawing.Size(424, 510)
         Me.Name = "tv_batch_wizard"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "TV Batch Wizard"
@@ -577,4 +590,5 @@ End Sub
     Friend WithEvents cbshDelArtwork As System.Windows.Forms.CheckBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents cbshStatus As CheckBox
+    Friend WithEvents cbshBannerMain As CheckBox
 End Class

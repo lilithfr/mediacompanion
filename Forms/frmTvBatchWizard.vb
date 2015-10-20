@@ -1,7 +1,7 @@
 ﻿Public Class tv_batch_wizard
 
     Private Sub btnTvBatchStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvBatchStart.Click
-        Try
+        
             Form1.tvBatchList.activate = True
             If cbshYear.Checked Then
                 Form1.tvBatchList.doShows = True
@@ -102,136 +102,85 @@
             End If
 
             Me.Close()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
     End Sub
 
     Private Sub btn_TvBatchCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvBatchCancel.Click
-        Try
-            Me.Close()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Me.Close()
     End Sub
 
-
-
+    
     'tv settings
     Private Sub cbshYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshYear.CheckedChanged
-        Try
-            'year
-            Form1.tvBatchList.shYear = cbshYear.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'year
+        Form1.tvBatchList.shYear = cbshYear.Checked 
     End Sub
     Private Sub cbshRating_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshRating.CheckedChanged
-        Try
-            'rating
-            Form1.tvBatchList.shRating = cbshRating.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'rating
+        Form1.tvBatchList.shRating = cbshRating.Checked 
     End Sub
     Private Sub cbshRuntime_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshRuntime.CheckedChanged
-        Try
-            'runtime
-            Form1.tvBatchList.shRuntime = cbshRuntime.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'runtime
+        Form1.tvBatchList.shRuntime = cbshRuntime.Checked 
     End Sub
     Private Sub cbshMpaa_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshMpaa.CheckedChanged
-        Try
-            'mpaa
-            Form1.tvBatchList.shMpaa = cbshMpaa.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'mpaa
+        Form1.tvBatchList.shMpaa = cbshMpaa.Checked 
     End Sub
     Private Sub cbshStudio_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshStudio.CheckedChanged
-        Try
-            'studio
-            Form1.tvBatchList.shStudio = cbshStudio.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'studio
+        Form1.tvBatchList.shStudio = cbshStudio.Checked 
     End Sub
     Private Sub cbshActor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshActor.CheckedChanged
-        Try
-            'actors
-            Form1.tvBatchList.shActor = cbshActor.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'actors
+        Form1.tvBatchList.shActor = cbshActor.Checked 
     End Sub
     Private Sub cbshStatus_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshStatus.CheckedChanged
-            'Status
-            Form1.tvBatchList.shStatus = cbshStatus.Checked
+        'Status
+        Form1.tvBatchList.shStatus = cbshStatus.Checked
     End Sub
     Private Sub cbshGenre_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshGenre.CheckedChanged
-        Try
-            'genre
-            Form1.tvBatchList.shGenre = cbshGenre.checked
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'genre
+        Form1.tvBatchList.shGenre = cbshGenre.checked
     End Sub
     Private Sub cbshPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshPlot.CheckedChanged
-        Try
-            'plot
-            Form1.tvBatchList.shPlot = cbshPlot.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'plot
+        Form1.tvBatchList.shPlot = cbshPlot.Checked 
     End Sub
 
     'Tv Show Art
     Private Sub cbshPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshPosters.CheckedChanged
-        Try
-            'missing posters
-            Form1.tvBatchList.shPosters = cbshPosters.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'missing posters
+        Dim IsChecked As Boolean = cbshPosters.checked
+        Form1.tvBatchList.shPosters = IsChecked
+        If Not IsChecked Then
+            cbshBannerMain.Checked = CheckState.Unchecked
+        End If
+        cbshBannerMain.Enabled = IsChecked
     End Sub
 
     Private Sub cbshSeason_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshSeason.CheckedChanged
-        Try
-            'missing season art
-            Form1.tvBatchList.shSeason = cbshSeason.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'missing season art
+        Form1.tvBatchList.shSeason = cbshSeason.Checked 
+    End Sub
+
+    Private Sub cbshBannerMain_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshBannerMain.CheckedChanged
+        'If season banner is not available, save series banner as season banner.
+        Form1.tvBatchList.shBannerMain = cbshBannerMain.Checked
     End Sub
 
     Private Sub cbshFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbshFanart.CheckedChanged
-        Try
-            'missing fanart
-            Form1.tvBatchList.shFanart = cbshFanart.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'missing fanart
+        Form1.tvBatchList.shFanart = cbshFanart.Checked 
     End Sub
 
     Private Sub cbshXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbshXtraFanart.CheckedChanged
-        Try
-            'missing Extra Fanart
-            Form1.tvBatchList.shXtraFanart = cbshXtraFanart.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'missing Extra Fanart
+        Form1.tvBatchList.shXtraFanart = cbshXtraFanart.Checked 
     End Sub
 
     Private Sub cbshFanartTv_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbshFanartTv.CheckedChanged
-        Try
-            'missing Fanart.Tv Art
-            Form1.tvBatchList.shFanartTvArt = cbshFanartTv.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'missing Fanart.Tv Art
+        Form1.tvBatchList.shFanartTvArt = cbshFanartTv.Checked 
     End Sub
 
     Private Sub cbshDelArtwork_CheckedChanged( sender As Object,  e As EventArgs) Handles cbshDelArtwork.CheckedChanged
@@ -246,108 +195,60 @@
 
     'episode settings
     Private Sub cbepPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepPlot.CheckedChanged
-        Try
-            'plot
-            Form1.tvBatchList.epPlot = cbepPlot.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'plot
+        Form1.tvBatchList.epPlot = cbepPlot.Checked 
     End Sub
     Private Sub cbepAired_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepAired.CheckedChanged
-        Try
-            'air date
-            Form1.tvBatchList.epAired = cbepAired.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    'air date
+    Form1.tvBatchList.epAired = cbepAired.Checked
     End Sub
     Private Sub cbepDirector_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepDirector.CheckedChanged
-        Try
-            'director
-            Form1.tvBatchList.epDirector = cbepDirector.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'director
+        Form1.tvBatchList.epDirector = cbepDirector.Checked 
     End Sub
     Private Sub cbepCredits_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepCredits.CheckedChanged
-        Try
-            'credits
-            Form1.tvBatchList.epCredits = cbepCredits.checked
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'credits
+        Form1.tvBatchList.epCredits = cbepCredits.checked
     End Sub
     Private Sub cbepRating_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepRating.CheckedChanged
-        Try
-            'rating
-            Form1.tvBatchList.epRating = cbepRating.checked
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'rating
+        Form1.tvBatchList.epRating = cbepRating.checked
     End Sub
     Private Sub cbepActor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepActor.CheckedChanged
-        Try
-            'actors
-            Form1.tvBatchList.epActor = cbepActor.checked
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'actors
+        Form1.tvBatchList.epActor = cbepActor.checked
     End Sub
     Private Sub cbepRuntime_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepRuntime.CheckedChanged
-        Try
-            'runtime
-            Form1.tvBatchList.epRuntime = cbepRuntime.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'runtime
+        Form1.tvBatchList.epRuntime = cbepRuntime.Checked 
     End Sub
     Private Sub cbepTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepTitle.CheckedChanged
-        Try
-            'Episode Title
-            Form1.tvBatchList.epTitle = cbepTitle.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'Episode Title
+        Form1.tvBatchList.epTitle = cbepTitle.Checked 
     End Sub
     Private Sub cbepStreamDetails_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepStreamDetails.CheckedChanged
-        Try
-            'media tags
-            Form1.tvBatchList.epStreamDetails = cbepStreamDetails.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'media tags
+        Form1.tvBatchList.epStreamDetails = cbepStreamDetails.Checked 
     End Sub
     Private Sub cbepScreenshot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepScreenshot.CheckedChanged
-        Try
-            'download screenshot
-            If cbepScreenshot.Checked Then
-                Form1.tvBatchList.epScreenshot = True
-                cbepCreateScreenshot.Enabled = True
-            Else
-                Form1.tvBatchList.epScreenshot = False
-                cbepCreateScreenshot.Enabled = False
-                cbepCreateScreenshot.CheckState = CheckState.Unchecked
-                Form1.tvBatchList.epCreateScreenshot = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'download screenshot
+        If cbepScreenshot.Checked Then
+            Form1.tvBatchList.epScreenshot = True
+            cbepCreateScreenshot.Enabled = True
+        Else
+            Form1.tvBatchList.epScreenshot = False
+            cbepCreateScreenshot.Enabled = False
+            cbepCreateScreenshot.CheckState = CheckState.Unchecked
+            Form1.tvBatchList.epCreateScreenshot = False
+        End If
     End Sub
     Private Sub cbepCreateScreenshot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepCreateScreenshot.CheckedChanged
-        Try
-            'create screenshot
-            Form1.tvBatchList.epCreateScreenshot = cbepCreateScreenshot.Checked 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'create screenshot
+        Form1.tvBatchList.epCreateScreenshot = cbepCreateScreenshot.Checked 
     End Sub
 
     Private Sub cbincludeLocked_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbincludeLocked.CheckedChanged
-        If cbincludeLocked.Checked = True Then
-            Form1.tvBatchList.includeLocked = True
-        Else
-            Form1.tvBatchList.includeLocked = False
-        End If
+        Form1.tvBatchList.includeLocked = cbincludeLocked.checked
     End Sub
 
     Private Sub cbRewiteAllNfo_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRewiteAllNfo.CheckedChanged
@@ -367,7 +268,6 @@
             End If
         Else
             Form1.tvBatchList.RewriteAllNFOs = False
-
             GroupBox1.Enabled = True
             GroupBox2.Enabled = True
         End If
@@ -386,9 +286,7 @@
     End Sub
 
     Private Sub tv_batch_wizard_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-
-        If               e.KeyCode = Keys.Escape Then btn_TvBatchCancel.PerformClick 
+        If e.KeyCode = Keys.Escape Then btn_TvBatchCancel.PerformClick 
     End Sub
-
     
 End Class
