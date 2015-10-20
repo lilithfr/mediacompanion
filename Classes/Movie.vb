@@ -2327,19 +2327,21 @@ Public Class Movie
         End If
     End Sub
 
-    Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
+    Sub DeleteScrapedFiles(ByVal incTrailer As Boolean, Optional ByVal DelArtwork As Boolean = True)
         Try
             LoadNFO
             If Not Preferences.MusicVidScrape Then
-                DeleteActors     'remove actor images if present
+                If DelArtwork Then DeleteActors     'remove actor images if present
 
                 RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
                 RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
                 If incTrailer Then DeleteTrailer
             End If
             If Not Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt OrElse Preferences.MovieDeleteNfoArtwork Then
-                DeletePoster
-                DeleteFanart
+                If DelArtwork Then
+                    DeletePoster
+                    DeleteFanart
+                End If
             End If
 
             DeleteNFO

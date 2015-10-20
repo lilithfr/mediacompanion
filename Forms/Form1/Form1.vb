@@ -11382,17 +11382,22 @@ End Sub
         UpdateFilteredList
     End Sub
 
-    Private Sub mov_ToolStripDeleteNfoArtwork_Click( sender As System.Object,  e As System.EventArgs) Handles mov_ToolStripDeleteNfoArtwork.Click
-        Mov_DeleteNfoArtwork()
+    Private Sub mov_ToolStripDeleteNfoArtwork_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles mov_ToolStripDeleteNfoArtwork.MouseDown
+        Dim DelArt As Boolean = (e.Button <> MouseButtons.Right)
+        MovieContextMenu.Close()
+        Mov_DeleteNfoArtwork(DelArt)
     End Sub
 
-    Private Sub Mov_DeleteNfoArtwork()
-        If MsgBox(" Are you sure you wish to delete" & vbCrLf & ".nfo, Fanart, Poster and Actors for" & vbCrLf & "Selected Movie(s)?",MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+    Private Sub Mov_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
+        Dim msgstr As String = " Are you sure you wish to delete" & vbCrLf
+        msgstr &= ".nfo" & If(DelArtwork, ", Fanart, Poster and Actors", " only") & " for" & vbCrLf
+        msgstr &= "Selected Movie(s)?"
+        If MsgBox(msgstr, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
             Dim movielist As New List(Of String)
             Preferences.MovieDeleteNfoArtwork = True
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
                 movielist.Add(row.Cells(NFO_INDEX).Value.ToString)
-                oMovies.DeleteScrapedFiles(row.Cells(NFO_INDEX).Value.ToString)
+                oMovies.DeleteScrapedFiles(row.Cells(NFO_INDEX).Value.ToString, DelArtwork)
             Next
 
             'Last remove from dataGridViewMovies and update cache.

@@ -1846,12 +1846,12 @@ Public Class Movies
         Next
     End Sub
 
-    Function DeleteScrapedFiles(nfoPathAndFilename As String) As Boolean
+    Function DeleteScrapedFiles(nfoPathAndFilename As String, Optional ByVal DeleteArtwork As Boolean = True) As Boolean
         Try
             Dim aMovie = New Movie(Me, nfoPathAndFilename)
-            aMovie.DeleteScrapedFiles(True)
+            aMovie.DeleteScrapedFiles(True, DeleteArtwork)
             Dim isRoot As Boolean = Preferences.GetRootFolderCheck(nfoPathAndFilename)
-            If Not isRoot Then
+            If Not isRoot AndAlso DeleteArtwork Then
                 aMovie.DeleteExtraFiles()
                 aMovie.DeleteFanarTvFiles()
             End If
