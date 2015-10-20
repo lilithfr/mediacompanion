@@ -225,6 +225,7 @@ Public Class Preferences
     Public Shared transparencyvalue As Integer
     Public Shared savefanart As Boolean
     Public Shared MovFanartTvscrape As Boolean   'cbMovFanartTvScrape
+    Public Shared MovFanartNaming As Boolean     'cbMovFanartNaming
     Public Shared MovFanartTvDlClearArt As Boolean
     Public Shared MovFanartTvDlClearLogo As Boolean
     Public Shared MovFanartTvDlPoster As Boolean
@@ -294,7 +295,7 @@ Public Class Preferences
     Public Shared MovieList_ShowColPlot As Boolean = False
     Public Shared DisableNotMatchingRenamePattern As Boolean = True
     Public Shared MovieList_ShowColWatched As Boolean = False
-    Public Shared MovieScraper_MaxStudios As Integer = 9     ' 9 = Max
+    Public Shared MovieScraper_MaxStudios As Integer = 3     ' 9 = Max
     Public Shared moviesortorder As Integer
     Public Shared movieinvertorder As Boolean
     Public Shared moviesets As New List(Of String)
@@ -699,6 +700,7 @@ Public Class Preferences
         MovDurationAsRuntine = False
         savefanart = True
         MovFanartTvscrape = False
+        MovFanartNaming = False
         MovFanartTvDlClearArt = True
         MovFanartTvDlClearLogo = True
         MovFanartTvDlPoster = True
@@ -1031,6 +1033,7 @@ Public Class Preferences
         root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'cbMovFanartScrape
         root.AppendChild(doc, "movfanarttvscrape",                  MovFanartTvscrape)                  'cbMovFanartTvScrape
+        root.AppendChild(doc, "MovFanartNaming",                    MovFanartNaming)                    'cbMovFanartNaming
         root.AppendChild(doc, "MovFanartTvDlClearArt",              MovFanartTvDlClearArt)              
         root.AppendChild(doc, "MovFanartTvDlClearLogo",             MovFanartTvDlClearLogo)
         root.AppendChild(doc, "MovFanartTvDlPoster",                MovFanartTvDlPoster)
@@ -1443,7 +1446,8 @@ Public Class Preferences
                     Case "disabletvlogs"                        : disabletvlogs = thisresult.InnerXml
                     Case "folderjpg"                            : createfolderjpg = thisresult.InnerXml
                     Case "savefanart"                           : savefanart = thisresult.InnerXml
-                    Case "movfanarttvscrape"                    : MovFanartTvscrape = thisresult.InnerXml 
+                    Case "movfanarttvscrape"                    : MovFanartTvscrape = thisresult.InnerXml
+                    Case "MovFanartNaming"                      : MovFanartNaming = thisresult.InnerXml 
                     Case "MovFanartTvDlClearArt"                : MovFanartTvDlClearArt = thisresult.InnerXml
                     Case "MovFanartTvDlClearLogo"               : MovFanartTvDlClearLogo = thisresult.InnerXml
                     Case "MovFanartTvDlPoster"                  : MovFanartTvDlPoster = thisresult.InnerXml

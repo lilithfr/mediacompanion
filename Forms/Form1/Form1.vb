@@ -2113,13 +2113,14 @@ Public Class Form1
         If File.Exists(workingMovieDetails.fileinfo.movsetfanartpath) Then FanTvArtList.Items.Add("Set Fanart") : confirmedpresent = True
         If Not Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename) Then
             Dim MovPath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename) & "\"
+            If Preferences.MovFanartNaming Then MovPath = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
             If File.Exists(MovPath & "clearart.png") Then FanTvArtList.Items.Add("ClearArt") : confirmedpresent = True
             If File.Exists(MovPath & "logo.png") Then FanTvArtList.Items.Add("Logo") : confirmedpresent = True
             If File.Exists(MovPath & "banner.jpg") Then FanTvArtList.Items.Add("Banner") : confirmedpresent = True
             If File.Exists(MovPath & "landscape.jpg") Then FanTvArtList.Items.Add("Landscape") : confirmedpresent = True
             If File.Exists(MovPath & "disc.png") Then FanTvArtList.Items.Add("Disc") : confirmedpresent = True
-            If File.Exists(MovPath & "poster.jpg") AndAlso Not Preferences.posterjpg Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
-            If File.Exists(MovPath & "fanart.jpg") AndAlso Not Preferences.fanartjpg Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
+            If File.Exists(MovPath & "poster.jpg") AndAlso Not Preferences.posterjpg AndAlso Not Preferences.MovFanartNaming Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
+            If File.Exists(MovPath & "fanart.jpg") AndAlso Not Preferences.fanartjpg AndAlso Not Preferences.MovFanartNaming Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
             If File.Exists(MovPath & "folder.jpg") Then FanTvArtList.Items.Add("Folder") : confirmedpresent = True
         End If
         Return confirmedpresent 
@@ -2148,9 +2149,14 @@ Public Class Form1
                     imagepath = workingMovieDetails.fileinfo.movsetfanartpath 
                 End If
             Else
-                imagepath = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename)
+                If Preferences.MovFanartNaming Then
+                    imagepath = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
+                Else
+                    imagepath = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename) & "\"
+                End If
+                
                 Dim suffix As String = If((item = "clearart" or item = "logo" or item = "disc"),".png", ".jpg")
-                imagepath &= "\" & item & suffix
+                imagepath &= item & suffix
             End If
             
         End If
@@ -12408,7 +12414,8 @@ End Sub
         cbMovieTrailerUrl                   .Checked        = Preferences.gettrailer
         cbMoviePosterScrape                 .Checked        = Preferences.scrapemovieposters
         cbMovFanartScrape                   .Checked        = Preferences.savefanart
-        cbMovFanartTvScrape                 .Checked        = Preferences.MovFanartTvscrape 
+        cbMovFanartTvScrape                 .Checked        = Preferences.MovFanartTvscrape
+        cbMovFanartNaming                   .Checked        = Preferences.MovFanartNaming
         cbMovieUseFolderNames               .Checked        = Preferences.usefoldernames
         cbMovXtraThumbs                     .Checked        = Preferences.movxtrathumb
         cbMovXtraFanart                     .Checked        = Preferences.movxtrafanart
@@ -14672,6 +14679,13 @@ End Sub
     Private Sub cbMovFanartTvScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartTvScrape.CheckedChanged
         If prefsload Then Exit Sub
         Preferences.MovFanartTvscrape = cbMovFanartTvScrape.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
+    
+    Private Sub cbMovFanartNaming_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartNaming.CheckedChanged
+        If prefsload Then Exit Sub
+        Preferences.MovFanartNaming = cbMovFanartNaming.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub

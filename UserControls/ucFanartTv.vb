@@ -353,6 +353,10 @@ Public Class ucFanartTv
                 Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
                 If MovSetToggle Then
                     savepath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", artType)
+                Else
+                    If Preferences.MovFanartNaming Then
+                        savepath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-" & artType)
+                    End If
                 End If
                 Dim success As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
                 If Preferences.posterjpg AndAlso Preferences.createfolderjpg AndAlso artType.Contains("poster.jpg") Then
