@@ -1594,8 +1594,7 @@ Module Module1
             Dim wrGETURL As WebRequest
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -2358,8 +2357,7 @@ Public Class tvdbscraper
             Dim wrGETURL As WebRequest
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -2412,8 +2410,7 @@ Public Class tvdbscraper
             Dim wrGETURL As WebRequest
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/mirrors.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -2454,8 +2451,9 @@ Public Class tvdbscraper
         Dim wrGETURL As WebRequest
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
         wrGETURL = WebRequest.Create(mirrorsurl)
-        Dim myProxy As New WebProxy("myproxy", 80)
-        myProxy.BypassProxyOnLocal = True
+        wrGETURL.Proxy = Utilities.MyProxy
+        'Dim myProxy As New WebProxy("myproxy", 80)
+        'myProxy.BypassProxyOnLocal = True
         Dim objStream As Stream
         objStream = wrGETURL.GetResponse.GetResponseStream()
         Dim objReader As New StreamReader(objStream)
@@ -2526,8 +2524,9 @@ Public Class tvdbscraper
             Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & language & ".xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            wrGETURL.Proxy = Utilities.MyProxy
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -2577,6 +2576,7 @@ Public Class tvdbscraper
 
             mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream2 As Stream
             objStream2 = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)
@@ -2618,6 +2618,7 @@ Public Class tvdbscraper
 
             mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream3 As Stream
             objStream3 = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader3 As New StreamReader(objStream3)
@@ -2669,6 +2670,15 @@ Public Class tvdbscraper
 
     Public Shared Function DownloadFileToString(ByVal URL As String, Optional ByVal ForceDownload As Boolean = False) As String
         Dim webReq As HttpWebRequest = WebRequest.Create(URL)
+        'If Preferences.proxysettings.Item(0).ToLower = "false" Then
+        '    ' Dim myProxy As New WebProxy("myproxy", 80)
+        '    webReq.Proxy = Nothing
+        'Else
+        '    Dim myProxy As New WebProxy(Preferences.proxysettings.Item(1), Preferences.proxysettings.Item(2).ToInt) 'Convert.ToInt32(Utilities.MCProxy.Item(2)))
+        '    myProxy.Credentials = New NetworkCredential(Preferences.proxysettings.Item(3), Preferences.proxysettings.item(4))
+        '    webReq.Proxy = myProxy
+        'End If
+        webReq.Proxy = Utilities.MyProxy
         Dim html As String
         Using webResp As HttpWebResponse = webReq.GetResponse()
             Dim responseStream As Stream = webResp.GetResponseStream()

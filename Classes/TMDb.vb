@@ -26,6 +26,7 @@ Public Class TMDb
     Public Property Imdb As String
     Public Property TmdbId As String
     Public Property CollectionSearch As Boolean = False
+    Public Property urlcheck As Boolean = True
 
     Public Property Languages As List(Of String)
         Get
@@ -539,7 +540,7 @@ Public Class TMDb
                     rhs.Add(New RetryHandler(AddressOf GetMovieImages))
                 End If
 
-                If Not Utilities.UrlIsValid("http://api.themoviedb.org") Then
+                If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
                     Throw New Exception("TMDB is offline")
                 End If
 

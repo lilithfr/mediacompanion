@@ -84,6 +84,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Private Shared _ApplicationPath As String
     Private Shared _LanguageLibrary As New List(Of langlib)
+    Private Shared _mcproxy As New List(Of String)
 
     Public Shared Function GetFrameworkVersions() As List(Of String)
         Dim installedFrameworks As New List(Of String)
@@ -129,6 +130,36 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             CacheFolderPath             = IO.Path.Combine(_ApplicationPath, "cache\")
             DownloadCache.CacheFolder   = CacheFolderPath
         End Set
+    End Property
+
+    Public Shared Property MCProxy As List(Of String)
+        Get
+            Return _mcproxy
+        End Get
+        Set(value As List(Of String))
+            _mcproxy = value
+        End Set
+    End Property
+
+    Public Shared ReadOnly Property MyProxy As WebProxy
+        Get
+            Try
+                If MCProxy.Item(0).ToLower = "false" Then
+                    ' Dim myProxy As New WebProxy("myproxy", 80)
+                    Return Nothing
+                'ElseIf MCProxy.Item(0).ToLower = "system" Then
+                    'Dim _myProxy As New Webproxy '= CType(WebProxy.GetDefaultProxy(), WebProxy)
+
+                Else
+                    Dim _myProxy As New WebProxy(MCProxy.Item(1), Convert.ToInt32(MCProxy.Item(2)))
+                    _myProxy.Credentials = New NetworkCredential(MCProxy.Item(3), MCProxy.item(4))
+                    _myProxy.BypassProxyOnLocal = True
+                    Return _myProxy
+                End If
+            Catch
+                Return Nothing
+            End Try
+        End Get
     End Property
 
     Public Shared ReadOnly Property languagelibrary As List(Of langlib)
@@ -185,11 +216,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If url.ToLower().StartsWith("www.") Then url = _
             "http://" & url
         If Not url.ToLower().StartsWith("http") Then Return False
-
+        'ServicePoint.UseNagleAlgorithm = False
         Dim web_response As HttpWebResponse = Nothing
 
         Try
             Dim web_request As HttpWebRequest = HttpWebRequest.Create(url)
+            'If Utilities.MCProxy.Item(0).ToLower = "false" Then
+            '    ' Dim myProxy As New WebProxy("myproxy", 80)
+            '    web_request.Proxy = Nothing
+            'Else
+            '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
+            '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
+            '    web_request.Proxy = myProxy
+            'End If
+            ''web_request.Proxy = Nothing
+            ''web_request.Method = "HEAD"
+            web_request.Proxy = Utilities.MyProxy
             web_request.Timeout = 10000
             web_response = DirectCast(web_request.GetResponse(), HttpWebResponse)
             Return True

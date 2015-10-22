@@ -204,8 +204,17 @@ Public Class Classimdb
                 Try
                     Dim wrGETURL As WebRequest
                     wrGETURL = WebRequest.Create(titlesearch)
-                    Dim myProxy As New WebProxy("myproxy", 80)
-                    myProxy.BypassProxyOnLocal = True
+                    'If Utilities.MCProxy.Item(0).ToLower = "false" Then
+                    '    ' Dim myProxy As New WebProxy("myproxy", 80)
+                    '    wrGETURL.Proxy = Nothing
+                    'Else
+                    '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
+                    '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
+                    '    wrGETURL.Proxy = myProxy
+                    'End If
+                    wrGETURL.Proxy = Utilities.MyProxy
+                    'Dim myProxy As New WebProxy("myproxy", 80)
+                    'myProxy.BypassProxyOnLocal = True
                     Dim objStream As Stream
                     objStream = wrGETURL.GetResponse.GetResponseStream()
                     Dim objReader As New StreamReader(objStream)
@@ -460,8 +469,9 @@ Public Class Classimdb
                 Try
                     Dim wrGETURL As WebRequest
                     wrGETURL = WebRequest.Create(titlesearch)
-                    Dim myProxy As New WebProxy("myproxy", 80)
-                    myProxy.BypassProxyOnLocal = True
+                    'Dim myProxy As New WebProxy("myproxy", 80)
+                    'myProxy.BypassProxyOnLocal = True
+                    wrGETURL.Proxy = Utilities.MyProxy
                     Dim objStream As Stream
                     objStream = wrGETURL.GetResponse.GetResponseStream()
                     Dim objReader As New StreamReader(objStream)
@@ -1454,6 +1464,7 @@ Public Class Classimdb
                     Dim url = String.Format("http://api.themoviedb.org/3/find/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}&external_source=imdb_id", tmdbid, TMDb.LanguageCodes(0))
                     Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
                     request.Method = "GET"
+                    request.Proxy = Utilities.MyProxy
                     Dim responseContent As String = ""
                     Try
                     Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
@@ -1754,14 +1765,15 @@ Public Class Classimdb
             Dim wrGETURL As WebRequest = WebRequest.Create(Url)
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
-            If proxy.Item(0).ToLower = "false" Then
-                Dim myProxy As New WebProxy("myproxy", 80)
-                'wrGETURL.Proxy = myProxy
-            Else
-                Dim myProxy As New WebProxy(proxy.Item(1), proxy.Item(2).ToInt)
-                myProxy.Credentials = New NetworkCredential(proxy.Item(3), proxy.item(4))
-                wrGETURL.Proxy = myProxy
-            End If
+            'If proxy.Item(0).ToLower = "false" Then
+            '    Dim myProxy As New WebProxy("myproxy", 80)
+            '    wrGETURL.Proxy = Nothing
+            'Else
+            '    Dim myProxy As New WebProxy(proxy.Item(1), proxy.Item(2).ToInt)
+            '    myProxy.Credentials = New NetworkCredential(proxy.Item(3), proxy.item(4))
+            '    wrGETURL.Proxy = myProxy
+            'End If
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -1863,6 +1875,7 @@ Public Class Classimdb
             Dim url As String = String.Format("http://api.themoviedb.org/3/movie/{0}/keywords?api_key=57983e31fb435df4df77afb854740ea9&language={1}", Id, TMDb.LanguageCodes(0))
             Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
             request.Method = "GET"
+            request.Proxy = Utilities.MyProxy
             Dim responseContent As String
             Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
               Using reader = New System.IO.StreamReader(response.GetResponseStream())

@@ -57,7 +57,7 @@ Public Class WebFileDownloader
             
             FS = New FileStream(Location, FileMode.Create, FileAccess.Write)
             wRemote = WebRequest.Create(URL)
-
+            wRemote.Proxy = Utilities.MyProxy
             wRemote.Timeout = 10000
 
             Dim myWebResponse As WebResponse = wRemote.GetResponse
@@ -82,6 +82,7 @@ Public Class WebFileDownloader
                     sChunks.Close()
 
                     Dim wRequest As HttpWebRequest = WebRequest.Create( URL )
+                    wRequest.Proxy = Utilities.MyProxy
 
                     wRequest.AddRange(iTotalBytesRead)
 

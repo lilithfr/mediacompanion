@@ -117,10 +117,19 @@ Public Class CacheManager
       If (Not mCachedFiles.Contains(filename)) Then
          ' The file doesn't exist in the cache so we will download it
          Trace.WriteLine("Cache manager (" + filename + "), downloading: " + url)
-
+            
             Dim contents As String
             Try
                 Dim TMDBRequest As HttpWebRequest = WebRequest.Create(url)
+                'If Utilities.MCProxy.Item(0).ToLower = "false" Then
+                '    ' Dim myProxy As New WebProxy("myproxy", 80)
+                '    TMDBRequest.Proxy = Nothing
+                'Else
+                '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
+                '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
+                '    TMDBRequest.Proxy = myProxy
+                'End If
+                TMDBRequest.Proxy = Utilities.MyProxy 
                 TMDBRequest.Accept = "application/json"
                 TMDBRequest.ContentType = "application/json"
                 TMDBRequest.Credentials = CredentialCache.DefaultCredentials

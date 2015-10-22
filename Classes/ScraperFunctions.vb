@@ -108,8 +108,9 @@ Public Class ScraperFunctions
 
                 Dim wrGETURL As WebRequest
                 wrGETURL = WebRequest.Create(tvdburl)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
+                'Dim myProxy As New WebProxy("myproxy", 80)
+                'myProxy.BypassProxyOnLocal = True
+                wrGETURL.Proxy = Utilities.MyProxy
                 Dim objStream As Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
                 Dim objReader As New StreamReader(objStream)
@@ -196,9 +197,9 @@ Public Class ScraperFunctions
             Dim wrGETURL As WebRequest
 
             wrGETURL = WebRequest.Create(fanarturl)
-
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            wrGETURL.Proxy = Utilities.MyProxy
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -352,8 +353,9 @@ Public Class ScraperFunctions
             Dim fanartlinecount As Integer = 0
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            'Dim myProxy2 As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
+            wrGETURL2.Proxy = Utilities.MyProxy
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)
@@ -387,8 +389,9 @@ Public Class ScraperFunctions
                         fanartlinecount = 0
                         Dim wrGETURL4 As WebRequest
                         wrGETURL4 = WebRequest.Create(fanarturl)
-                        Dim myProxy4 As New WebProxy("myproxy", 80)
-                        myProxy4.BypassProxyOnLocal = True
+                        wrGETURL4.Proxy = Utilities.MyProxy
+                        'Dim myProxy4 As New WebProxy("myproxy", 80)
+                        'myProxy4.BypassProxyOnLocal = True
                         Dim objStream4 As Stream
                         objStream4 = wrGETURL4.GetResponse.GetResponseStream()
                         Dim objReader4 As New StreamReader(objStream4)
@@ -429,8 +432,9 @@ Public Class ScraperFunctions
             Dim wrGETURL3 As WebRequest
 
             wrGETURL3 = WebRequest.Create(fanarturl)
-            Dim myProxy3 As New WebProxy("myproxy", 80)
-            myProxy3.BypassProxyOnLocal = True
+            wrGETURL3.Proxy = Utilities.MyProxy
+            'Dim myProxy3 As New WebProxy("myproxy", 80)
+            'myProxy3.BypassProxyOnLocal = True
             Dim objStream3 As Stream
             objStream3 = wrGETURL3.GetResponse.GetResponseStream()
             Dim objReader3 As New StreamReader(objStream3)
@@ -529,8 +533,9 @@ Public Class ScraperFunctions
 
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            wrGETURL2.Proxy = Utilities.MyProxy
+            'Dim myProxy2 As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)

@@ -812,7 +812,7 @@ Public Class Preferences
         proxysettings.Add(prxyPort)
         proxysettings.Add(prxyUsername)
         proxysettings.Add(prxyPassword)
-        
+        Utilities.MCProxy = proxysettings
     End Sub
 
     Public Shared Sub engineupdate

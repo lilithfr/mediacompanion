@@ -5335,8 +5335,7 @@ Public Class Form1
             Try
                 Dim wrGETURL As WebRequest
                 wrGETURL = WebRequest.Create(url)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
+                wrGETURL.Proxy = Utilities.MyProxy
                 Dim objStream As Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
                 Dim objReader As New StreamReader(objStream)
@@ -5782,8 +5781,7 @@ Public Class Form1
         Try
             Dim wrGETURL As WebRequest
             wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -8123,8 +8121,7 @@ Public Class Form1
             Try
                 Dim wrGETURL As WebRequest
                 wrGETURL = WebRequest.Create(url)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
+                wrGETURL.Proxy = Utilities.MyProxy
                 Dim objStream As Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
                 Dim objReader As New StreamReader(objStream)
@@ -21620,13 +21617,23 @@ End Sub
 
     Private Sub RebuildMovieSetCollectionList(ByVal SetIds As List(Of String))
         Try
-            messbox = New frmMessageBox("Updating Movie Collections", "with Movies in the collection", "Please wait")
+            messbox = New frmMessageBox("Updating Movie Collections", "with Movies in the collection", "")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            If Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
+                MsgBox("TMDB not accessible," & vbCrLf & "Try again later")
+                Exit Sub
+            End If
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
+            Dim totalsets As Integer = SetIds.Count
+            Dim currentset As Integer = 0
             For each item In SetIds
+                currentset += 1
+                messbox.TextBox3.Text = currentset.ToString & " of " & totalsets.ToString 
+                messbox.Refresh()
                 Dim api As New TMDb
+                api.urlcheck = False
                 api.TmdbId = item
                 Dim MovCollectionList As New List(Of MovieSetsList)
                 api.CollectionSearch = True

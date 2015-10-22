@@ -167,6 +167,15 @@ Public Class DownloadCache
 
                 Try
                     Dim webReq As HttpWebRequest = DirectCast(WebRequest.Create(URL), HttpWebRequest)
+                    'If Utilities.MCProxy.Item(0).ToLower = "false" Then
+                    '   ' Dim myProxy As New WebProxy("myproxy", 80)
+                    '    webReq.Proxy = Nothing
+                    'Else
+                    '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
+                    '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
+                    '    webReq.Proxy = myProxy
+                    'End If
+                    webReq.Proxy = Utilities.MyProxy
                     webReq.AllowAutoRedirect = True
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
 
@@ -223,6 +232,15 @@ Public Class DownloadCache
                 End If
                 Try
                     Dim webReq As HttpWebRequest = DirectCast(WebRequest.Create(URL), HttpWebRequest)
+                    'If Utilities.MCProxy.Item(0).ToLower = "false" Then
+                    '   ' Dim myProxy As New WebProxy("myproxy", 80)
+                    '    webReq.Proxy = Nothing
+                    'Else
+                    '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
+                    '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
+                    '    webReq.Proxy = myProxy
+                    'End If
+                    webReq.Proxy = Utilities.MyProxy
                     webReq.AllowAutoRedirect = True
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
                     Using webResp As HttpWebResponse = webReq.GetResponse()

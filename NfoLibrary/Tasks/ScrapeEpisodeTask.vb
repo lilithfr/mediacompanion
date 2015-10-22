@@ -329,8 +329,9 @@ Namespace Tasks
 
                             Dim wrGETURL As WebRequest
                             wrGETURL = WebRequest.Create(url)
-                            Dim myProxy As New WebProxy("myproxy", 80)
-                            myProxy.BypassProxyOnLocal = True
+                            wrGETURL.Proxy = Utilities.MyProxy
+                            'Dim myProxy As New WebProxy("myproxy", 80)
+                            'myProxy.BypassProxyOnLocal = True
                             Dim objStream As Stream
                             objStream = wrGETURL.GetResponse.GetResponseStream()
                             Dim objReader As New StreamReader(objStream)
