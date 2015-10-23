@@ -147,9 +147,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 If MCProxy.Item(0).ToLower = "false" Then
                     ' Dim myProxy As New WebProxy("myproxy", 80)
                     Return Nothing
-                'ElseIf MCProxy.Item(0).ToLower = "system" Then
-                    'Dim _myProxy As New Webproxy '= CType(WebProxy.GetDefaultProxy(), WebProxy)
-
+                ElseIf MCProxy.Item(0).ToLower = "system" Then
+                    Dim _myProxy As Webproxy = WebRequest.GetSystemWebProxy()
+                    _myProxy.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials()
+                    _myProxy.BypassProxyOnLocal = True
+                    Return _myProxy
                 Else
                     Dim _myProxy As New WebProxy(MCProxy.Item(1), Convert.ToInt32(MCProxy.Item(2)))
                     _myProxy.Credentials = New NetworkCredential(MCProxy.Item(3), MCProxy.item(4))

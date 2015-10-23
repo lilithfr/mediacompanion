@@ -170,7 +170,7 @@ Public Class Preferences
     End Property
 
     'Saved General Proxy Prefs
-    Public Shared prxyEnabled As Boolean
+    Public Shared prxyEnabled As String
     Public Shared prxyIp As String
     Public Shared prxyPort As String
     Public Shared prxyUsername As String
@@ -576,7 +576,7 @@ Public Class Preferences
         MultiMonitoEnabled = False
         XBMC_version = 2
         'Proxy settings
-        prxyEnabled = False
+        prxyEnabled = "false"
         prxyIp = "127.0.0.1"
         prxyPort = "8099"
         prxyUsername = "username"
@@ -957,11 +957,11 @@ Public Class Preferences
         root.AppendChild(doc, "ShowLogOnError"       ,  ShowLogOnError       )  'cbShowLogOnError
         root.AppendChild(doc, "CheckForNewVersion"   ,  CheckForNewVersion   )
         root.AppendChild(doc, "MkvMergeGuiPath"      ,  MkvMergeGuiPath      )  'tbMkvMergeGuiPath
-        root.AppendChild(doc, "prxyEnabled"          ,  prxyEnabled          )  'tbMkvMergeGuiPath
-        root.AppendChild(doc, "prxyIp"               ,  prxyIp               )  'tbMkvMergeGuiPath
-        root.AppendChild(doc, "prxyPort"             ,  prxyPort             )  'tbMkvMergeGuiPath
-        root.AppendChild(doc, "prxyUsername"         ,  prxyUsername         )  'tbMkvMergeGuiPath
-        root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyEnabled"          ,  prxyEnabled          )  'ucGenPref_Proxy.cb_prxyEnable
+        root.AppendChild(doc, "prxyIp"               ,  prxyIp               )  'ucGenPref_Proxy.tb_prxyIp
+        root.AppendChild(doc, "prxyPort"             ,  prxyPort             )  'ucGenPref_Proxy.prxyPort
+        root.AppendChild(doc, "prxyUsername"         ,  prxyUsername         )  'ucGenPref_Proxy.prxyUsername
+        root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'ucGenPref_Proxy.prxyPassword
         root.AppendChild(doc, "ShowAllAudioTracks"   ,  ShowAllAudioTracks   )  'cbShowAllAudioTracks
         
         If Not String.IsNullOrEmpty(font) Then
@@ -1537,7 +1537,7 @@ Public Class Preferences
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml
 
-                    Case "prxyEnabled"                          : prxyEnabled               = thisresult.InnerXml
+                    Case "prxyEnabled"                          : prxyEnabled               = thisresult.InnerText.ToLower
                     Case "prxyIp"                               : prxyIp                    = thisresult.InnerText
                     Case "prxyPort"                             : prxyPort                  = thisresult.InnerText
                     Case "prxyUsername"                         : prxyUsername              = thisresult.InnerText

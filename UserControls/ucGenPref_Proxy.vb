@@ -2,17 +2,16 @@
 
 Public Class ucGenPref_Proxy
 #Region "Properties"
-    Private MovieFolderMappings As XBMC_MC_FolderMappings = New XBMC_MC_FolderMappings
-
-    ReadOnly Property Changed As Boolean
-        Get
-            Return  cb_prxyEnabled      .Checked <> Preferences.prxyEnabled     OrElse
-                    tb_prxyIP           .Text    <> Preferences.prxyIP          OrElse
-                    tb_prxyPort         .Text    <> Preferences.prxyPort        OrElse
-                    tb_prxyUsername     .Text    <> Preferences.prxyUsername    OrElse
-                    tb_prxyPassword     .Text    <> Preferences.prxyPassword
-        End Get
-    End Property
+    Private Property Changed As Boolean = False
+    'ReadOnly Property Changed As Boolean
+    '    Get
+    '        Return  cb_prxyEnabled      .Checked <> Preferences.prxyEnabled     OrElse
+    '                tb_prxyIP           .Text    <> Preferences.prxyIP          OrElse
+    '                tb_prxyPort         .Text    <> Preferences.prxyPort        OrElse
+    '                tb_prxyUsername     .Text    <> Preferences.prxyUsername    OrElse
+    '                tb_prxyPassword     .Text    <> Preferences.prxyPassword
+    '    End Get
+    'End Property
 #End Region         'Properties
 
 #Region "Event Handlers"
@@ -21,47 +20,70 @@ Public Class ucGenPref_Proxy
         UpdatePreferences
 
         Preferences.ConfigSave()
-        SetEnabledStates
+        btnProxySaveChanges.Enabled = False
+        'SetEnabledStates
     End Sub
 
     Private Sub AnyFieldChanged(sender As Object,  e As EventArgs) Handles  cb_prxyEnabled.CheckedChanged, tb_prxyIP.TextChanged, _
                                                                             tb_prxyPort.TextChanged, tb_prxyUsername.TextChanged, _
-                                                                            tb_prxyPassword.TextChanged
-        SetEnabledStates
+                                                                            tb_prxyPassword.TextChanged, cb_prxyNone.CheckedChanged, cb_prxySystem.CheckedChanged
+        If Changed Then Exit Sub
+        If sender Is cb_prxyEnabled AndAlso cb_prxyEnabled.Checked Then
+            Preferences.prxyEnabled = "true"
+            Changed = True
+            cb_prxyNone.Checked = False
+            cb_prxySystem.Checked = False
+        ElseIf sender Is cb_prxyNone AndAlso cb_prxyNone.Checked Then
+            Preferences.prxyEnabled = "false"
+            Changed = True
+            cb_prxyEnabled.Checked = False
+            cb_prxySystem.Checked = False
+        ElseIf sender Is cb_prxySystem AndAlso cb_prxySystem.Checked Then
+            Preferences.prxyEnabled = "system"
+            Changed = True
+            cb_prxyEnabled.Checked = False
+            cb_prxyNone.Checked = False
+        End If
+        Changed = False
+        btnProxySaveChanges.Enabled = True
+        'SetEnabledStates
     End Sub
 #End Region         'Event Handlers
 
 #Region "Main Subs"
     Public Sub pop
         AssignFormFields
-        SetEnabledStates
+        btnProxySaveChanges.Enabled = False
+        'SetEnabledStates
     End Sub
 
 #End Region         'Main Subs
 
 #Region "Other Subs"
-    Sub SetEnabledStates
+    'Sub SetEnabledStates
 
-        btnProxySaveChanges.Enabled = Changed
+    '    btnProxySaveChanges.Enabled = Changed
 
-    End Sub
+    'End Sub
 
     Sub AssignFormFields
-        cb_prxyEnabled      .Checked    = Preferences.prxyEnabled
+        Changed = True
+        cb_prxyEnabled      .Checked    = Preferences.prxyEnabled = "true"
+        cb_prxyNone         .Checked    = Preferences.prxyEnabled = "false"
+        cb_prxySystem       .Checked    = Preferences.prxyEnabled = "system"
         tb_prxyIP           .Text       = Preferences.prxyIp
         tb_prxyPort         .Text       = Preferences.prxyPort
         tb_prxyUsername     .Text       = Preferences.prxyUsername
         tb_prxyPassword     .Text       = Preferences.prxyPassword
-        'MovieFolderMappings.Assign(Preferences.XBMC_MC_MovieFolderMappings)
+        Changed = False 
     End Sub
 
     Sub UpdatePreferences
-        Preferences.prxyEnabled         = cb_prxyEnabled      .Checked
+        'Preferences.prxyEnabled         = cb_prxyEnabled      .Checked
         Preferences.prxyIp              = tb_prxyIP           .Text
         Preferences.prxyPort            = tb_prxyPort         .Text
         Preferences.prxyUsername        = tb_prxyUsername     .Text
         Preferences.prxyPassword        = tb_prxyPassword     .Text
-        'Preferences.XBMC_MC_MovieFolderMappings.Assign(MovieFolderMappings)
     End Sub
 #End Region         'Other Subs
 
