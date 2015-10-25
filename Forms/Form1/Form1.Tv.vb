@@ -1900,9 +1900,9 @@ Partial Public Class Form1
                                                     End If
                                                 End If
                                             End If
-                                            If tvBatchList.doEpisodeArt = True Then
+                                            If tvBatchList.doEpisodeArt AndAlso tvBatchList.epScreenshot Then
                                                 listofnewepisodes(h).Thumbnail.FileName = Episodedata.ThumbNail.Value
-                                                progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epScreenshot).Replace("!!! ","")
+                                                progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epCreateScreenshot).Replace("!!! ","")
                                             End If
                                         Catch ex As Exception
 #If SilentErrorScream Then
