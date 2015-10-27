@@ -5,6 +5,7 @@ Imports System.Data
 Imports System.Text.RegularExpressions
 
 Public Class getimpaposters
+    Public MCProxy As WebProxy
 
     Public Function getimpaafulllist(ByVal title As String, Optional ByVal movieyear As String = "")
         Dim fanarturl As String
@@ -86,10 +87,10 @@ Public Class getimpaposters
         fanarturl = fanarturl & title & "+" & movieyear
         fanarturl = fanarturl & "&sitesearch=www.impawards.com"
         ReDim apple2(10000)
-        Dim wrGETURL2 As WebRequest
-        wrGETURL2 = WebRequest.Create(fanarturl)
-        Dim myProxy2 As New WebProxy("myproxy", 80)
-        myProxy2.BypassProxyOnLocal = True
+        Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
+        wrGETURL2.Proxy = MCProxy 
+        'Dim myProxy2 As New WebProxy("myproxy", 80)
+        'myProxy2.BypassProxyOnLocal = True
         Dim objStream2 As Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
         Dim objReader2 As New StreamReader(objStream2)
@@ -126,10 +127,11 @@ Public Class getimpaposters
             fanarturl = fanarturl & "&sitesearch=www.impawards.com"
             ReDim apple2(2000)
             fanartlinecount = 0
-            Dim wrGETURL4 As WebRequest
-            wrGETURL4 = WebRequest.Create(fanarturl)
-            Dim myProxy4 As New WebProxy("myproxy", 80)
-            myProxy4.BypassProxyOnLocal = True
+            Dim wrGETURL4 As WebRequest = WebRequest.Create(fanarturl)
+            wrGETURL4.Proxy = MCProxy
+            
+            'Dim myProxy4 As New WebProxy("myproxy", 80)
+            'myProxy4.BypassProxyOnLocal = True
             Dim objStream4 As Stream
             objStream4 = wrGETURL4.GetResponse.GetResponseStream()
             Dim objReader4 As New StreamReader(objStream4)
@@ -176,10 +178,10 @@ Public Class getimpaposters
         If fanarturl.IndexOf("art_machine") = -1 And allok = True Then
             ReDim apple2(10000)
             fanartlinecount = 0
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            Dim wrGETURL As WebRequest = WebRequest.Create(fanarturl)
+            wrGETURL.Proxy = MCProxy 
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -338,10 +340,10 @@ Public Class getimpaposters
         End If
         url = url & "&sitesearch=www.impawards.com"
         ReDim apple2(10000)
-        Dim wrGETURL2 As WebRequest
-        wrGETURL2 = WebRequest.Create(url)
-        Dim myProxy2 As New WebProxy("myproxy", 80)
-        myProxy2.BypassProxyOnLocal = True
+        Dim wrGETURL2 As WebRequest = WebRequest.Create(url)
+        wrGETURL2.Proxy = MCProxy 
+        'Dim myProxy2 As New WebProxy("myproxy", 80)
+        'myProxy2.BypassProxyOnLocal = True
         Dim objStream2 As Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
         Dim objReader2 As New StreamReader(objStream2)
@@ -378,10 +380,10 @@ Public Class getimpaposters
             url = url & "&sitesearch=www.impawards.com"
             ReDim apple2(2000)
             fanartlinecount = 0
-            Dim wrGETURL4 As WebRequest
-            wrGETURL4 = WebRequest.Create(url)
-            Dim myProxy4 As New WebProxy("myproxy", 80)
-            myProxy4.BypassProxyOnLocal = True
+            Dim wrGETURL4 As WebRequest = WebRequest.Create(url)
+            wrGETURL4.Proxy = MCProxy 
+            'Dim myProxy4 As New WebProxy("myproxy", 80)
+            'myProxy4.BypassProxyOnLocal = True
             Dim objStream4 As Stream
             objStream4 = wrGETURL4.GetResponse.GetResponseStream()
             Dim objReader4 As New StreamReader(objStream4)
@@ -429,10 +431,10 @@ Public Class getimpaposters
             count = 1
             ReDim apple2(10000)
             fanartlinecount = 0
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(url)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            Dim wrGETURL As WebRequest = WebRequest.Create(url)
+            wrGETURL.Proxy = MCProxy 
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -503,10 +505,10 @@ Public Class getimpaposters
 
 
         Try
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(url)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            Dim wrGETURL As WebRequest = WebRequest.Create(url)
+            wrGETURL.Proxy = MCProxy 
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream, System.Text.UTF8Encoding.UTF7)

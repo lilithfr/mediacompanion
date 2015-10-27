@@ -284,6 +284,7 @@ Public Class frmCoverArt
             messbox.Refresh()
             Call initialise()
             Dim newobject As New class_mpdb_thumbs.Class1
+            newobject.MCProxy = Utilities.MyProxy 
             Dim testthumbs As String = String.Empty
             Try
                 testthumbs = newobject.get_mpdb_thumbs(imdbid)
@@ -316,6 +317,7 @@ Public Class frmCoverArt
         Try
             Call initialise()
             Dim newobject2 As New imdb_thumbs.Class1
+            newobject2.MCProxy = Utilities.MyProxy
             posterurls = newobject2.getimdbposters(imdbid)
             count = UBound(posterurls)
             Call displayselection()

@@ -3,6 +3,7 @@ Imports System.Net
 Imports System.Threading
 
 Public Class Class1
+    Public MCProxy As WebProxy
 
     Public Function get_mpdb_thumbs(ByVal imdbid As String)
 
@@ -21,10 +22,10 @@ Public Class Class1
             Dim temp As String = imdbid
             fanarturl = fanarturl & temp.Replace("tt", "")
 
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
+            wrGETURL2.Proxy = MCProxy 
+            'Dim myProxy2 As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)
@@ -79,10 +80,10 @@ Public Class Class1
                     For g = 1 To groupcount
                         fanarturl = group(g)
 
-                        Dim wrGETURL3 As WebRequest
-                        wrGETURL3 = WebRequest.Create(fanarturl)
-                        Dim myProxy3 As New WebProxy("myproxy", 80)
-                        myProxy3.BypassProxyOnLocal = True
+                        Dim wrGETURL3 As WebRequest = WebRequest.Create(fanarturl)
+                        wrGETURL3.Proxy = MCProxy 
+                        'Dim myProxy3 As New WebProxy("myproxy", 80)
+                        'myProxy3.BypassProxyOnLocal = True
                         ReDim apple2(10000)
                         Dim objStream3 As Stream
                         objStream3 = wrGETURL3.GetResponse.GetResponseStream()

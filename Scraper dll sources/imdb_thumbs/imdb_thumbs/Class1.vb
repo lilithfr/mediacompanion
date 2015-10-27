@@ -7,7 +7,7 @@ Imports System.Text.RegularExpressions
 
 
 Public Class Class1
-
+    Public MCProxy As WebProxy
 
 
     Public Function getimdbposters(ByVal imdbid As String)
@@ -20,10 +20,10 @@ Public Class Class1
 
         fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?refine=poster&ref_=ttmi_ref_pos"
 
-        Dim wrGETURL2 As WebRequest
-        wrGETURL2 = WebRequest.Create(fanarturl)
-        Dim myProxy2 As New WebProxy("myproxy", 80)
-        myProxy2.BypassProxyOnLocal = True
+        Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
+        wrGETURL2.Proxy = MCProxy
+        'Dim myProxy2 As New WebProxy("myproxy", 80)
+        'myProxy2.BypassProxyOnLocal = True
         Dim objStream2 As Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
         Dim objReader2 As New StreamReader(objStream2)
@@ -192,10 +192,10 @@ Public Class Class1
 
 
         Try
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(url)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
+            Dim wrGETURL As WebRequest = WebRequest.Create(url)
+            wrGETURL.Proxy = MCProxy 
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
@@ -263,10 +263,10 @@ Public Class Class1
 
             fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex"
 
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
+            wrGETURL2.Proxy = MCProxy 
+            'Dim myProxy2 As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)
@@ -310,10 +310,10 @@ Public Class Class1
             For g = 2 To totalpages
                 fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?page=" & g.ToString
                 ReDim apple2(10000)
-                Dim wrGETURL As WebRequest
-                wrGETURL = WebRequest.Create(fanarturl)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
+                Dim wrGETURL As WebRequest = WebRequest.Create(fanarturl)
+                wrGETURL.Proxy = MCProxy 
+                'Dim myProxy As New WebProxy("myproxy", 80)
+                'myProxy.BypassProxyOnLocal = True
                 Dim objStream As Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
                 Dim objReader As New StreamReader(objStream)

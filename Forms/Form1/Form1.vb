@@ -16731,6 +16731,7 @@ End Sub
             messbox.Refresh()
             Call mov_PosterInitialise()
             Dim newobject2 As New imdb_thumbs.Class1
+            newobject2.MCProxy = Utilities.MyProxy 
             Dim posters(,) As String = newobject2.getimdbposters(workingMovieDetails.fullmoviebody.imdbid)
             For f = 0 To UBound(posters)
                 If posters(f, 0) <> Nothing Then
@@ -16952,6 +16953,7 @@ End Sub
             messbox.Refresh()
             Call mov_PosterInitialise()
             Dim newobject As New class_mpdb_thumbs.Class1
+            newobject.MCProxy = Utilities.MyProxy 
             Dim teststring As New XmlDocument
             Dim testthumbs As String = String.Empty
             Try
@@ -19363,6 +19365,7 @@ End Sub
             usedlist.Clear()
             If imdbposterlist.Count <= 0 Then
                 Dim newobject2 As New imdb_thumbs.Class1
+                newobject2.MCProxy = Utilities.MyProxy
                 Dim posters(,) As String = newobject2.getimdbposters(WorkingTvShow.ImdbId.Value)
                 For f = 0 To UBound(posters)
                     If posters(f, 0) <> Nothing Then

@@ -5,6 +5,8 @@ Imports System.Xml
 
 
 Public Class Fanarttv
+    Public MCProxy As WebProxy
+
     Public Function get_fanart_list(ByVal ID As String, Optional ByVal s As String = "movie")
         Monitor.Enter(Me)
         Try
@@ -17,10 +19,10 @@ Public Class Fanarttv
             ElseIf s <> "movie" and s <> "tv" Then
                 Return Nothing
             End If
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl2)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
+            Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl2)
+            wrGETURL2.Proxy = MCProxy 
+            'Dim myProxy2 As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
             Dim objReader2 As New StreamReader(objStream2)

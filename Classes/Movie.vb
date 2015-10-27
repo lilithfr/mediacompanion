@@ -1732,14 +1732,18 @@ Public Class Movie
 
         If Preferences.nfoposterscraper And 4 then
             Try
-                If AddThumbs( (New class_mpdb_thumbs.Class1).get_mpdb_thumbs(_scrapedMovie.fullmoviebody.imdbid) ) then Exit Sub
+                Dim mpdbThumbs As New class_mpdb_thumbs.Class1
+                mpdbThumbs.MCProxy = Utilities.MyProxy 
+                If AddThumbs( mpdbThumbs.get_mpdb_thumbs(_scrapedMovie.fullmoviebody.imdbid) ) then Exit Sub
             Catch
             End Try
         End If
 
         If Preferences.nfoposterscraper And 8 then
             Try
-                AddThumbs( (New imdb_thumbs.Class1).getimdbthumbs(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid) )
+                Dim imdbThumbs As New imdb_thumbs.Class1
+                imdbThumbs.MCProxy = Utilities.MyProxy 
+                AddThumbs( imdbThumbs.getimdbthumbs(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid) )
             Catch
             End Try
         End If

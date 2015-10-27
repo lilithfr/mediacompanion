@@ -110,7 +110,7 @@
   <ItemGroup>
     <Reference Include="IMPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\IMPA\IMPA\bin\Release\IMPA.dll</HintPath>
+      <HintPath>Scraper dll sources\IMPA\bin\Debug\IMPA.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1218,9 +1218,6 @@
     <Content Include="Assets\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\IMPA.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\Untitled-1.gif" />
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />
