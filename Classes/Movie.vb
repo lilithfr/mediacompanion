@@ -3864,6 +3864,7 @@ Public Class Movie
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
+                    s = s.Replace("%F", _scrapedMovie.DisplayFolderSize) 
                     s = Utilities.cleanFilenameIllegalChars(s)
                     If Preferences.MovRenameSpaceCharacter Then
                         s = Utilities.SpacesToCharacter(s, Preferences.RenameSpaceCharacter)
@@ -3907,6 +3908,7 @@ Public Class Movie
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
+                    s = s.Replace("%F", _scrapedMovie.DisplayFolderSize) 
                     s = Utilities.cleanFoldernameIllegalChars(s)
                     If Preferences.MovRenameSpaceCharacter Then
                         s = Utilities.SpacesToCharacter(s, Preferences.RenameSpaceCharacter)

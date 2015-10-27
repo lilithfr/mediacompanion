@@ -10,6 +10,30 @@ Public Class FullMovieDetails
     Public listthumbs        As List(Of String)
     Public filedetails       As FullFileDetails
 
+    Private _folderSize As Long = -1
+
+
+    Public ReadOnly Property FolderSize As Long
+        Get
+            If _folderSize = -1 Then
+                Try
+                    Dim fi As System.IO.FileInfo = New System.IO.FileInfo(fileinfo.fullpathandfilename)
+                    _folderSize = Utilities.GetFolderSize(fi.DirectoryName)
+                Catch
+                    _folderSize = 0
+                End Try
+            End If
+            
+            Return _folderSize
+        End Get
+    End Property
+
+    Public ReadOnly Property DisplayFolderSize As Double
+        Get
+            Return Math.Round( FolderSize/(1024*1024*1024),1 )
+        End Get
+    End Property
+
     Sub New
         Init
     End Sub
