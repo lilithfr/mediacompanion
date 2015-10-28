@@ -28,11 +28,10 @@ Public Class FullMovieDetails
         End Get
     End Property
 
-    Public ReadOnly Property DisplayFolderSize As Double
-        Get
-            Return Math.Round( FolderSize/(1024*1024*1024),1 )
-        End Get
-    End Property
+
+    Public Function GetDisplayFolderSize(precision As Integer) As String
+        Return (FolderSize/(1024*1024*1024)).ToString("N" & precision.ToString)
+    End Function
 
     Sub New
         Init

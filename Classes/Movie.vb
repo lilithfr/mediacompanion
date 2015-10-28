@@ -3866,7 +3866,12 @@ Public Class Movie
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
-                    s = s.Replace("%F", _scrapedMovie.DisplayFolderSize) 
+
+                    Dim m = Regex.Match(s,"%F(\d)")
+                    If m.Success Then
+                        s = s.Replace(  m.Value, _scrapedMovie.GetDisplayFolderSize(  Convert.ToInt32(m.Value.Replace("%F",""))  )  )
+                    End If
+
                     s = Utilities.cleanFilenameIllegalChars(s)
                     If Preferences.MovRenameSpaceCharacter Then
                         s = Utilities.SpacesToCharacter(s, Preferences.RenameSpaceCharacter)
@@ -3878,6 +3883,9 @@ Public Class Movie
             Return s.Trim()
         End Get
     End Property
+
+
+
 
     ReadOnly Property UserDefinedBaseFolderName As String
         Get
@@ -3910,7 +3918,12 @@ Public Class Movie
                     s = s.Replace("%C", vc)
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
-                    s = s.Replace("%F", _scrapedMovie.DisplayFolderSize) 
+
+                    Dim m = Regex.Match(s,"%F(\d)")
+                    If m.Success Then
+                        s = s.Replace(  m.Value, _scrapedMovie.GetDisplayFolderSize(  Convert.ToInt32(m.Value.Replace("%F",""))  )  )
+                    End If
+
                     s = Utilities.cleanFoldernameIllegalChars(s)
                     If Preferences.MovRenameSpaceCharacter Then
                         s = Utilities.SpacesToCharacter(s, Preferences.RenameSpaceCharacter)
