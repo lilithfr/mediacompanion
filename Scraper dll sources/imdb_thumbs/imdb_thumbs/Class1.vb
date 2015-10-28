@@ -1,15 +1,14 @@
 ﻿Imports System.Threading
 Imports System.Net
 Imports System.IO
-Imports System.Data
-Imports System.Text.RegularExpressions
+'Imports System.Data
+'Imports System.Text.RegularExpressions
 
 
 
 Public Class Class1
     Public MCProxy As WebProxy
-
-
+    
     Public Function getimdbposters(ByVal imdbid As String)
         Dim posters(10000, 1) As String
         Dim postercount As Integer = 0
@@ -68,55 +67,7 @@ Public Class Class1
         Next
         Catch ex As Exception 
         End Try
-        'For g = 2 To totalpages
-        '    fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?page=" & g.ToString
-        '    ReDim apple2(10000)
-        '    Dim wrGETURL As WebRequest
-        '    wrGETURL = WebRequest.Create(fanarturl)
-        '    Dim myProxy As New WebProxy("myproxy", 80)
-        '    myProxy.BypassProxyOnLocal = True
-        '    Dim objStream As Stream
-        '    objStream = wrGETURL.GetResponse.GetResponseStream()
-        '    Dim objReader As New StreamReader(objStream)
-        '    Dim sLine As String = ""
-        '    fanartlinecount = 0
-
-        '    Do While Not sLine Is Nothing
-        '        fanartlinecount += 1
-        '        sLine = objReader.ReadLine
-        '        apple2(fanartlinecount) = sLine
-        '    Loop
-        '    fanartlinecount -= 1
-
-        '    For f = 1 To fanartlinecount
-
-        '        If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-        '            reached = True
-        '        End If
-        '        If reached = True Then
-        '            If apple2(f).IndexOf("</div>") <> -1 Then
-        '                reached = False
-        '                Exit For
-        '            End If
-        '            If apple2(f).IndexOf("src=""http://") <> -1 Then
-        '                apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
-        '                apple2(f).TrimStart()
-        '                apple2(f) = apple2(f).Replace("src=""", "")
-        '                posters(postercount, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
-        '                posters(postercount, 1) = posters(postercount, 0)
-        '                postercount += 1
-        '            End If
-        '        End If
-        '    Next
-        'Next
-        Dim imdbcounter As Integer = 0
-        'For f = pagecount To 1 Step -1
-        '    imdbcounter += 1
-        '    posterurls(imdbcounter, 1) = posterurls(f, 0) & "_V1._SX1000_SY1000_.jpg"
-        'Next
-        'For f = 1 To pagecount
-        '    posterurls(f, 0) = posterurls(f, 1)
-        'Next
+        
         Dim finalposters(postercount, 1) As String
         Dim counter As String = 0
         For f = postercount-1 To 0 Step -1
@@ -149,16 +100,7 @@ Public Class Class1
         titlesearch = titlesearch.Replace("·", "%C2%B7")
         titlesearch = titlesearch.Replace("Æ", "%C3%86")
         'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
-        'titlesearch = titlesearch.Replace("", "")
+        
         If goodyear = True Then
             titlesearch = titlesearch & "+" & year
         End If
@@ -179,18 +121,12 @@ Public Class Class1
         If allok = False Then
             'try other method
         End If
-
-        'If allok = True Then
-            Return newimdbid
-        'End If
-
-
+        
+        Return newimdbid
     End Function
     Private Function loadwebpage(ByVal url As String, ByVal method As Boolean)
 
         Dim webpage As New List(Of String)
-
-
         Try
             Dim wrGETURL As WebRequest = WebRequest.Create(url)
             wrGETURL.Proxy = MCProxy 
@@ -229,10 +165,8 @@ Public Class Class1
                 Return webpage
             End If
         End Try
-
-
-
     End Function
+
     Public Function getimdbthumbs(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdb As String = "")
         Dim imdbid As String = ""
         Dim count As Integer = 0
@@ -346,23 +280,16 @@ Public Class Class1
                     End If
                 Next
             Next
-            Dim imdbcounter As Integer = 0
-            'For f = count To 1 Step -1
-            '    imdbcounter += 1
-            '    posterurls(imdbcounter) = posterurls(f) & "_V1._SX1000_SY1000_.jpg"
-            'Next
+            
             For f = 1 To count
                 posterurls(f) = "<thumb>" & posterurls(f) & "_V1._SX1000_SY1000_.jpg" & "</thumb>"
                 'posterurls(f) = encodespecialchrs(posterurls(f))
             Next
-
-
+            
             For f = 1 To count
                 thumbs = thumbs & posterurls(f)
             Next
-
-
-
+            
             Return thumbs
         Catch
             Return thumbs

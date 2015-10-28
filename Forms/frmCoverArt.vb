@@ -42,10 +42,7 @@ Public Class frmCoverArt
 
             folderjpgpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "folder.jpg")
 
-            If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then
-                movieyear = Form1.workingMovieDetails.fullmoviebody.year
-
-            End If
+            If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then movieyear = Form1.workingMovieDetails.fullmoviebody.year
 
             TextBox1.Text = Preferences.maximumthumbs.ToString
 
@@ -251,24 +248,19 @@ Public Class frmCoverArt
     Private Sub btnSourceTMDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceTMDB.Click
         Try
             Call initialise()
-
             count = 0
-
             Dim tmdb As New TMDb '(tmdbid)
             tmdb.Imdb = If(imdbid.Contains("tt"), imdbid, "")
             tmdb.TmdbId = tmdbid
-
             For Each item In tmdb.MC_Posters
                  posterurls(count, 0) = item.hdUrl   
                  posterurls(count, 1) = item.ldUrl 
                  count += 1
             Next
-
             Call displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
     End Sub
 
     Private Sub btnSourceMPDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceMPDB.Click
@@ -328,7 +320,6 @@ Public Class frmCoverArt
 
     Private Sub btnSourceIMPA_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceIMPA.Click
         Try
-            
             Dim messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
@@ -336,6 +327,7 @@ Public Class frmCoverArt
             messbox.Refresh()
             Call initialise()
             Dim newobject2 As New IMPA.getimpaposters
+            newobject2.MCProxy = Utilities.MyProxy
             Try
                 posterurls = newobject2.getimpaafulllist(movietitle, movieyear)
                 count = UBound(posterurls)
@@ -365,9 +357,7 @@ Public Class frmCoverArt
             Me.bigpanel.Controls.Add(bigpanellabel)
             bigpanellabel.BringToFront()
             Application.DoEvents()
-
-
-
+            
             If Not bigpicbox.Image Is Nothing And bigpicbox.Image.Width > 20 Then
 
                 Dim sizey As Integer = bigpicbox.Image.Height
@@ -438,7 +428,6 @@ Public Class frmCoverArt
             panel2 = Nothing
             picboxes = Nothing
             checkboxes = Nothing
-
             panel2 = New Panel
             With panel2
                 .Width = 782
@@ -451,19 +440,18 @@ Public Class frmCoverArt
             currentpage += 1
             btnScrollPrev.Enabled = True
 
-            If currentpage = pagecount Then
-                btnScrollNext.Enabled = False
-            Else
-                btnScrollNext.Enabled = True
-            End If
+             btnScrollNext.Enabled = Not (currentpage = pagecount)
+            'If currentpage = pagecount Then
+            '    btnScrollNext.Enabled = False
+            'Else
+            '    btnScrollNext.Enabled = True
+            'End If
 
 
             Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
             Dim tempint2 As Integer = currentpage * maxthumbs
 
-            If tempint2 > count Then
-                tempint2 = count
-            End If
+            If tempint2 > count Then tempint2 = count
 
             Dim names As New List(Of String)()
 
@@ -475,8 +463,6 @@ Public Class frmCoverArt
             Dim location As Integer = 0
             Dim itemcounter As Integer = 0
             For Each item As String In names
-
-
                 picboxes() = New PictureBox()
                 With picboxes
                     .Location = New Point(location, 0)
@@ -772,46 +758,17 @@ Public Class frmCoverArt
                                     b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                                     posterpath = pth
                                 Next
-                                'b1.Image.Save(posterpath)
-                                'If Preferences.createfolderjpg = True Then
-                                '    b1.Image.Save(folderjpgpath)
-                                'End If
-                                'If Preferences.FrodoEnabled and Preferences.EdenEnabled then
-                                '    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
-                                '    b1.Image.Save(frodopath)
-                                '    posterpath=frodopath
-                                'End If
                                 Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
                                 Form1.util_ImageLoad(Form1.PbMoviePoster, posterpath, Utilities.DefaultPosterPath)
                                 Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
-                                'Form2.moviethumb.Image = b1.Image
-                                'Form1.moviethumb.Image = b1.Image
-                                'mainposter.Image = b1.Image
                                 Label6.Visible = True
                                 tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
                                 Label6.Text = tempstring
                                 mainposter.Visible = True
                                 b1.Dispose()
-                                'Dim bm_source As New Bitmap(b1.image) 'save to postercache
-                                'Dim bm_dest As New Bitmap(150, 200)
-                                'Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                'gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                'gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
-                                'Dim tempbitmap As Bitmap = bm_dest
-                                'Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
-                                'Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                                'tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
-                                'tempbitmap.Dispose()
 
                                 Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath)
                                 Form1.updateposterwall(path, fullpathandfilename)
-                                'For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
-                                '    If poster.Tag = fullpathandfilename Then
-                                '        poster.ImageLocation = path
-                                '        poster.Load()
-                                '        Exit For
-                                '    End If
-                                'Next
                                 Me.Close()
                                 Exit For
                             Else
@@ -873,21 +830,9 @@ Public Class frmCoverArt
                                     posterpath = pth
                                 Next
                                 
-                                'b1.Image.Save(posterpath)
-                                'If Preferences.createfolderjpg = True Then
-                                '    b1.Image.Save(folderjpgpath)
-                                'End If
-                                'If Preferences.FrodoEnabled and Preferences.EdenEnabled then
-                                '    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
-                                '    b1.Image.Save(frodopath)
-                                '    posterpath=frodopath
-                                'End If
                                 Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
                                 Form1.util_ImageLoad(Form1.PbMoviePoster, posterpath, Utilities.DefaultPosterPath)
                                 Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
-                                'Form2.moviethumb.Image = b1.Image
-                                'Form1.moviethumb.Image = b1.Image
-                                'mainposter.Image = b1.Image
                                 Label6.Visible = True
                                 tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
                                 Label6.Text = tempstring
@@ -897,26 +842,9 @@ Public Class frmCoverArt
                                     .ImageLocation = (posterurls(realnumber + 1, 1))
                                 End With
                                 b1.Dispose()
-                                'Dim bm_source As New Bitmap(b1.image) 'save to postercache
-                                'Dim bm_dest As New Bitmap(150, 200)
-                                'Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                'gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                'gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
-                                'Dim tempbitmap As Bitmap = bm_dest
-                                'Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
-                                'Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                                'tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
-                                'tempbitmap.Dispose()
 
                                 Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath)
                                 Form1.updateposterwall(path, fullpathandfilename)
-                                'For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
-                                '    If poster.Tag = fullpathandfilename Then
-                                '        poster.ImageLocation = path
-                                '        poster.Load()
-                                '        Exit For
-                                '    End If
-                                'Next
                                 Me.Close()
                                 Exit For
                             Else
@@ -996,6 +924,5 @@ Public Class frmCoverArt
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-
+    
 End Class

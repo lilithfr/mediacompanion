@@ -30,14 +30,6 @@ Module General
         Dim responseFromServer As String = ""
         Try
             Dim TMDBRequest As HttpWebRequest = WebRequest.Create(URLAddress)
-            'If Utilities.MCProxy.Item(0).ToLower = "false" Then
-            '    ' Dim myProxy As New WebProxy("myproxy", 80)
-            '    TMDBRequest.Proxy = Nothing
-            'Else
-            '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
-            '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
-            '    TMDBRequest.Proxy = myProxy
-            'End If
             TMDBRequest.Proxy = Utilities.MyProxy
             TMDBRequest.Accept = "application/json"
             TMDBRequest.ContentType = "application/json"
@@ -73,7 +65,6 @@ Module General
     Public Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal convertAmps As Boolean = True, Optional ByVal InputBuffer As Integer = 1)
         Dim ChoosedScraper As Scraper
         InputBuffer -= 1
-        'Dim ScraperFunctions As List(Of System.Xml.Linq.XElement)
         Dim ScraperFunctiontoExecute As XElement
         If GetURL = True Then
             Dim PrimaryString As String = RetrieveUrls(InputParameters(InputBuffer))
@@ -88,11 +79,8 @@ Module General
             End If
         End If
         ChoosedScraper = ChooseScraper(ScraperName)
-        'ScraperFunctions = ChoosedScraper.Functions
         ScraperFunctiontoExecute = ChoosedScraper.Func(WhatFunction)
-
-
-
+        
         mLastQuery = New ScraperQuery(ChoosedScraper)
         Dim ScrapeResult As String = mLastQuery.Execute(ScraperFunctiontoExecute.Name.LocalName, InputParameters, convertAmps)
         If ScrapeResult.Length = 0 Then
@@ -119,12 +107,11 @@ Module General
             Entrada = ReplaceSpecialCharacters(Entrada)
             Entrada = Entrada.Insert(Entrada.LastIndexOf("</details>") - 1, TempString & Chr(13))
             Return Entrada
-
         Else
             Return ReplaceSpecialCharacters(Entrada)
         End If
-
     End Function
+
     Public Function ReplaceSpecialCharacters(ByVal filterstring As String) As String
         Try
             If filterstring.IndexOf("&#919;") <> -1 Then filterstring = filterstring.Replace("&#919;", "Η")
@@ -841,33 +828,33 @@ Module General
 
 #Region "Misc.TVShows Routines"
 
-    Public Function NeededConversion(ByVal entrada As TvEpisode) As TvEpisode
-        'Dim Teste As New EpisodeInfo
+    'Public Function NeededConversion(ByVal entrada As TvEpisode) As TvEpisode
+    '    'Dim Teste As New EpisodeInfo
 
-        'Teste.aired = entrada.aired
-        'Teste.credits = entrada.credits
-        'Teste.director = entrada.director
-        'Teste.episodeno = entrada.episodeNO
-        'Teste.episodepath = entrada.episodePath
-        'Teste.fanartpath = entrada.fanartPath
-        'Teste.filedetails = entrada.fileDetails
-        'Teste.genre = entrada.genre
-        'For Each merda As Nfo.Actor In entrada.Actors
+    '    'Teste.aired = entrada.aired
+    '    'Teste.credits = entrada.credits
+    '    'Teste.director = entrada.director
+    '    'Teste.episodeno = entrada.episodeNO
+    '    'Teste.episodepath = entrada.episodePath
+    '    'Teste.fanartpath = entrada.fanartPath
+    '    'Teste.filedetails = entrada.fileDetails
+    '    'Teste.genre = entrada.genre
+    '    'For Each merda As Nfo.Actor In entrada.Actors
 
-        '    Teste.Actors.Add(merda1)
-        'Next
-        ''Teste.listactors = entrada.listactors
-        ''Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
-        'Teste.mediaextension = entrada.mediaExtension
-        'Teste.playcount = entrada.playCount
-        'Teste.plot = entrada.plot
-        'Teste.rating = entrada.rating
-        'Teste.runtime = entrada.runtime
-        'Teste.Season.value = entrada.Season.value
-        'Teste.thumb = entrada.thumb
-        'Teste.title = entrada.title
-        Return entrada
-    End Function
+    '    '    Teste.Actors.Add(merda1)
+    '    'Next
+    '    ''Teste.listactors = entrada.listactors
+    '    ''Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
+    '    'Teste.mediaextension = entrada.mediaExtension
+    '    'Teste.playcount = entrada.playCount
+    '    'Teste.plot = entrada.plot
+    '    'Teste.rating = entrada.rating
+    '    'Teste.runtime = entrada.runtime
+    '    'Teste.Season.value = entrada.Season.value
+    '    'Teste.thumb = entrada.thumb
+    '    'Teste.title = entrada.title
+    '    Return entrada
+    'End Function
 
     Public Function Clean_AddTVShowExtraFields(ByVal Entrada As String, ByVal Language As String, ByVal IMDB_ID As String) As String
         Dim m_xmld As XmlDocument
@@ -1020,7 +1007,6 @@ Module General
                         File.Copy(ImageFilename, Path & "\season-specials.tbn", True)
                     End If
                 End If
-
             Next
             Dim ImageFilename1 As String = Path & "\season-all.tbn"
             If Seasonall <> Nothing Then
@@ -1407,7 +1393,6 @@ Module General
                 Try
                     For x As Integer = 0 To 20
                         ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
-                        'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
                         If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
                             Exit For
                         Else
@@ -1444,13 +1429,6 @@ Module General
         Try
             FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).VideoFilePath, TVDBId)
             episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
-            'If episodeInformation(0).Thumbnail.FileName <> Nothing Then
-            '    Dim myWebClient As New System.Net.WebClient()
-            '    Dim ImageFilename As String = EpisodeArray(0).VideoFilePath.Substring(0, EpisodeArray(0).VideoFilePath.LastIndexOf(".")) & ".tbn"
-            '    myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
-            'End If
-            'Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.NfoFilePath, FinalScrapResult)
-            ' HueyHQ 09 MAR 2012 - need to do something similar for TV episodes, CreateMovieNfo() was causing an error
             Return episodeInformation
         Catch
             episodeInformation.Clear()
@@ -1464,7 +1442,6 @@ Module General
             Dim Parameters(2) As String
             Dim ParametersForScraper(9) As String
             ParametersForScraper(0) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
-            'ParametersForScraper(0) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
             Dim m_xmld As XmlDocument
             Dim m_nodelist As XmlNodeList
             Dim m_node As XmlNode
@@ -1515,7 +1492,6 @@ Module General
         Try
             Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
             nfoFileandPath = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition)) & ".nfo"
-            'nfoFilename &= ".nfo"
             Dim doc As New XmlDocument
             doc.LoadXml(FileContent)
             Dim xmlproc As XmlDeclaration
@@ -1527,8 +1503,6 @@ Module General
             doc.WriteTo(output)
             output.Close()
             If Filename.ToLower.Contains("tvshow.nfo") Then Return True
-            'Dim nfoGenerator As WorkingWithNfoFiles
-            'nfoGenerator = New WorkingWithNfoFiles
 
             ' load nfo file to clean
             Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(nfoFileandPath)

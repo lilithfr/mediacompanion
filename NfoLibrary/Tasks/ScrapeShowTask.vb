@@ -610,21 +610,21 @@ Namespace Tasks
         End Sub
 
 
-    Shared Function GetBackDropResolution(selectedIndex As Integer) As Point
+        Shared Function GetBackDropResolution(selectedIndex As Integer) As Point
 
-        'Don't resize selected
-        If selectedIndex=0 then Return New Point(0,0)
+            'Don't resize selected
+            If selectedIndex = 0 then Return New Point(0, 0)
 
-        Dim x = XDocument.Load("Resolutions.xml")
+            Dim x = XDocument.Load("Resolutions.xml")
 
-        Dim row = x.Descendants("Resolution").ElementAt(selectedIndex-1)
-        
-        Dim width  = Convert.ToInt32(row.Attribute("width" ).Value)
-        Dim height = Convert.ToInt32(row.Attribute("height").Value)
+            Dim row = x.Descendants("Resolution").ElementAt(selectedIndex - 1)
 
-        Return New Point(width,height)
+            Dim width = Convert.ToInt32(row.Attribute("width").Value)
+            Dim height = Convert.ToInt32(row.Attribute("height").Value)
 
-    End Function
+            Return New Point(width, height)
+
+        End Function
 
     End Class
 

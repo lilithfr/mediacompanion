@@ -17001,6 +17001,7 @@ End Sub
             messbox.Refresh()
             Call mov_PosterInitialise()
             Dim newobject2 As New IMPA.getimpaposters
+            newobject2.MCProxy = Utilities.MyProxy
             Try
                 Dim posters(,) As String = newobject2.getimpaafulllist(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                 For f = 0 To UBound(posters)

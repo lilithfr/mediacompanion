@@ -204,14 +204,6 @@ Public Class Classimdb
                 Try
                     Dim wrGETURL As WebRequest
                     wrGETURL = WebRequest.Create(titlesearch)
-                    'If Utilities.MCProxy.Item(0).ToLower = "false" Then
-                    '    ' Dim myProxy As New WebProxy("myproxy", 80)
-                    '    wrGETURL.Proxy = Nothing
-                    'Else
-                    '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
-                    '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
-                    '    wrGETURL.Proxy = myProxy
-                    'End If
                     wrGETURL.Proxy = Utilities.MyProxy
                     'Dim myProxy As New WebProxy("myproxy", 80)
                     'myProxy.BypassProxyOnLocal = True
@@ -779,7 +771,6 @@ Public Class Classimdb
         Get
             Try
                 Dim t As String = Regex.Match(Html, MovieRegExs.REGEX_RUNTIME, RegexOptions.Singleline).Groups(1).Value
-                'Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_DURATION, RegexOptions.Singleline).Groups(1).Value.Trim
                 Dim i As Integer=0
 
                 For Each m As Match In Regex.Matches(t, MovieRegExs.REGEX_DURATION, RegexOptions.Singleline) 
@@ -800,7 +791,6 @@ Public Class Classimdb
             Try
                 Dim CountryInfo As String = ""
                 Dim t As String = Regex.Match(Html, MovieRegExs.REGEX_COUNTRYS, RegexOptions.Singleline).Groups(1).Value
-                'Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_COUNTRY, RegexOptions.Singleline).Groups(1).Value.Trim
                 For Each m As Match In Regex.Matches(t, MovieRegExs.REGEX_COUNTRY, RegexOptions.Singleline) 
                     Dim s = Regex.Match(m.Value, MovieRegExs.REGEX_COUNTRY, RegexOptions.Singleline).Groups(1).Value.Trim
                     CountryInfo.AppendValue(Utilities.cleanSpecChars(encodespecialchrs(s)))
@@ -984,23 +974,16 @@ Public Class Classimdb
     Function GetNames(RegExPattern As String, Optional ByVal Max As Integer=-1) As String
         Dim s As String=""
         Dim context = Regex.Match(Html,RegExPattern, RegexOptions.Singleline).ToString
-
         If context = "" Then Return ""
-            
         Dim name=""
-
         If Max=-1 Then Max=999 
         Dim i As Integer=0
-
-        For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_NAME, RegexOptions.Singleline) 
-
+        For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_NAME, RegexOptions.Singleline)
             name=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
-
             s.AppendValue(name)
             i += 1
             If i=Max Then Exit For
-        Next   
-
+        Next
         Return s
     End Function
     
@@ -1008,15 +991,10 @@ Public Class Classimdb
         Monitor.Enter(Me)
 
         Dim totalinfo As String = ""
-        'Dim webcounter As Integer
-        
         Try
-            'Dim first As Integer
             Dim tempstring As String
             Dim actors(10000, 3)
             Dim actorcount As Integer = 0
-            'Dim last As Integer
-            'Dim length As Integer
             Dim tempint As Integer
             Dim mpaacount As Integer = -1
             Dim webpage As New List(Of String)
@@ -1059,10 +1037,8 @@ Public Class Classimdb
             mpaaresults(33, 0) = "Austria"
 
             Dim movienfoarray As String = String.Empty
-
             Dim genre(20)
             Dim thumbs(500)
-
             Dim allok As Boolean = False
             If imdbid <> Nothing Then
                 If imdbid.Length = 9 And imdbid.IndexOf("tt") <> -1 Then
@@ -1292,8 +1268,7 @@ Public Class Classimdb
                 Catch
                     totalinfo = totalinfo & "<plot>scraper error</plot>"
                 End Try
-
-
+                
                 'certs & mpaa
                 Try
                     tempstring = Preferences.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
@@ -1395,7 +1370,6 @@ Public Class Classimdb
                 Catch ex As Exception
 
                 End Try
-
             End If
             For f = 0 To 33
                 If mpaaresults(f, 1) <> Nothing Then
@@ -1513,14 +1487,6 @@ Public Class Classimdb
             FinalScrapResult = FinalScrapResult.Replace("</credits>" & vbcrlf & "  <credits>", ", ")
             FinalScrapResult = FinalScrapResult.Replace("</director>" & vbcrlf & "  <director>", " / ")
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
-            'Dim SeparateMovie As String = Utilities.checktitle(title, Preferences.MovSepLst)
-            'If SeparateMovie <> "" Then
-            '    Dim ThreeDKeep As String = ""
-            '    If SeparateMovie = "3D" Then
-            '        ThreeDKeep = Utilities.checktitle(title, Preferences.ThreeDKeyWords)
-            '    End If
-            '    FinalScrapResult = AddSeparateMovieTitle(FinalScrapResult, SeparateMovie, ThreeDKeep, TheTitle)
-            'End If
             Return FinalScrapResult
         Catch ex As Exception
             Return "error"
@@ -1763,17 +1729,9 @@ Public Class Classimdb
         Monitor.Enter(Me)
         Try
             Dim wrGETURL As WebRequest = WebRequest.Create(Url)
+            wrGETURL.Proxy = Utilities.MyProxy
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
-            'If proxy.Item(0).ToLower = "false" Then
-            '    Dim myProxy As New WebProxy("myproxy", 80)
-            '    wrGETURL.Proxy = Nothing
-            'Else
-            '    Dim myProxy As New WebProxy(proxy.Item(1), proxy.Item(2).ToInt)
-            '    myProxy.Credentials = New NetworkCredential(proxy.Item(3), proxy.item(4))
-            '    wrGETURL.Proxy = myProxy
-            'End If
-            wrGETURL.Proxy = Utilities.MyProxy
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)

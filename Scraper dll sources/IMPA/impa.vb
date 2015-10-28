@@ -1,8 +1,8 @@
-﻿Imports System.Threading
+﻿'Imports System.Threading
 Imports System.Net
 Imports System.IO
-Imports System.Data
-Imports System.Text.RegularExpressions
+'Imports System.Data
+'Imports System.Text.RegularExpressions
 
 Public Class getimpaposters
     Public MCProxy As WebProxy
@@ -12,8 +12,7 @@ Public Class getimpaposters
         Dim fanartlinecount As Integer = 0
         Dim allok As Boolean = True
         Dim apple2(10000)
-
-
+        
         fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
         'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
         title = title.ToLower
@@ -111,9 +110,7 @@ Public Class getimpaposters
                 fanarturl = apple2(f).substring(0, apple2(f).indexof("html") + 4)
             End If
         Next
-
-
-
+        
         Dim tempint As Integer
         Dim tempstring As String
         tempstring = fanarturl.Replace("http://", "")
@@ -161,20 +158,8 @@ Public Class getimpaposters
                 End If
             Next
         End If
-
-
-
-
-
-
-
-
-
-
-
-
+        
         Dim count As Integer = 1
-
         If fanarturl.IndexOf("art_machine") = -1 And allok = True Then
             ReDim apple2(10000)
             fanartlinecount = 0
@@ -253,7 +238,6 @@ Public Class getimpaposters
         Else
             Return "error"
         End If
-
     End Function
 
     Public Function getimpathumbs(ByVal title As String, Optional ByVal movieyear As String = "")
@@ -364,9 +348,7 @@ Public Class getimpaposters
                 url = apple2(f).substring(0, apple2(f).indexof("html") + 4)
             End If
         Next
-
-
-
+        
         Dim tempint As Integer
         Dim tempstring As String
         tempstring = url.Replace("http://", "")
@@ -413,20 +395,7 @@ Public Class getimpaposters
                 End If
             Next
         End If
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
         If url.IndexOf("art_machine") = -1 And allok = True Then
             count = 1
             ReDim apple2(10000)
@@ -496,14 +465,11 @@ Public Class getimpaposters
         End If
 
         Return posterlist
-
     End Function
 
     Private Function loadwebpage(ByVal url As String, ByVal method As Boolean)
 
         Dim webpage As New List(Of String)
-
-
         Try
             Dim wrGETURL As WebRequest = WebRequest.Create(url)
             wrGETURL.Proxy = MCProxy 
@@ -542,11 +508,6 @@ Public Class getimpaposters
                 Return webpage
             End If
         End Try
-
-
-
     End Function
-
-
-
+    
 End Class

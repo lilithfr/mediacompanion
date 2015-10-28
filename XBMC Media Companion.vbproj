@@ -108,10 +108,6 @@
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IMPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Scraper dll sources\IMPA\bin\x86\Debug\IMPA.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\log4net.2.0.0\lib\net40-client\log4net.dll</HintPath>
@@ -1812,6 +1808,10 @@
     <ProjectReference Include="Scraper dll sources\imdb_thumbs\imdb_thumbs\imdb_thumbs.vbproj">
       <Project>{13cbe750-a272-4f39-90d3-2b4e6e1fa04e}</Project>
       <Name>imdb_thumbs</Name>
+    </ProjectReference>
+    <ProjectReference Include="Scraper dll sources\IMPA\IMPA.vbproj">
+      <Project>{0ef49671-9c5e-40fe-a469-86abba142bbe}</Project>
+      <Name>IMPA</Name>
     </ProjectReference>
     <ProjectReference Include="Scraper dll sources\YouTubeUrlGrabber\YouTubeUrlGrabber.csproj">
       <Project>{1597c9b5-c70d-404d-9cc2-2761d43278c6}</Project>

@@ -145,7 +145,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Get
             Try
                 If MCProxy.Item(0).ToLower = "false" Then
-                    ' Dim myProxy As New WebProxy("myproxy", 80)
                     Return Nothing
                 ElseIf MCProxy.Item(0).ToLower = "system" Then
                     Dim _myProxy As Webproxy = WebRequest.GetSystemWebProxy()
@@ -205,7 +204,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function TitleCase(words As String)
         Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
-        'Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
 
     Public Shared Function UrlIsValid(ByVal url As String) As Boolean
@@ -218,21 +216,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If url.ToLower().StartsWith("www.") Then url = _
             "http://" & url
         If Not url.ToLower().StartsWith("http") Then Return False
-        'ServicePoint.UseNagleAlgorithm = False
         Dim web_response As HttpWebResponse = Nothing
-
         Try
             Dim web_request As HttpWebRequest = HttpWebRequest.Create(url)
-            'If Utilities.MCProxy.Item(0).ToLower = "false" Then
-            '    ' Dim myProxy As New WebProxy("myproxy", 80)
-            '    web_request.Proxy = Nothing
-            'Else
-            '    Dim myProxy As New WebProxy(Utilities.MCProxy.Item(1), Convert.ToInt32(Utilities.MCProxy.Item(2)))
-            '    myProxy.Credentials = New NetworkCredential(Utilities.MCProxy.Item(3), Utilities.MCProxy.item(4))
-            '    web_request.Proxy = myProxy
-            'End If
-            ''web_request.Proxy = Nothing
-            ''web_request.Method = "HEAD"
             web_request.Proxy = Utilities.MyProxy
             web_request.Timeout = 10000
             web_response = DirectCast(web_request.GetResponse(), HttpWebResponse)
@@ -282,7 +268,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 Dim myProcess As Process = New Process
                 Try
                     Dim seconds As Integer = sec
-                    
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
                     myProcess.StartInfo.FileName = Utilities.applicationPath & "\Assets\ffmpeg.exe"
@@ -577,10 +562,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
-            'If tempfilename.IndexOf("movie.nfo") > -1 Then
             Dim possiblemovies As New List(Of String)
-            'Dim possiblemovies(1000) As String
-            'Dim possiblemoviescount As Integer = 0
             Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
             Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
             Dim dir_info As New System.IO.DirectoryInfo(dirpath)
@@ -590,34 +572,29 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 Try
                     Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
                     For Each fs_info As IO.FileInfo In fs_infos
-                        'Application.DoEvents()
-                        'If IO.File.Exists(fs_info.FullName) Then
-                            If videoextn = ".rar" Then
-                                If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
-                            End If
-                            tempstring = fs_info.FullName.ToLower
-                            If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
-                                'possiblemoviescount += 1
-                                possiblemovies.Add(fs_info.FullName)
-                                'possiblemovies(possiblemoviescount) = fs_info.FullName
-                            End If
-                        'End If
+                        If videoextn = ".rar" Then
+                            If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
+                        End If
+                        tempstring = fs_info.FullName.ToLower
+                        If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
+                            possiblemovies.Add(fs_info.FullName)
+                        End If
                     Next
                 Catch
                 End Try
             Next
-            If possiblemovies.Count = 1 Then  'possiblemoviescount = 1 Then
-                actualpathandfilename = possiblemovies(0)  'possiblemovies(possiblemoviescount)
-            ElseIf possiblemovies.Count > 1 Then  'possiblemoviescount > 1 Then
+            If possiblemovies.Count = 1 Then
+                actualpathandfilename = possiblemovies(0)
+            ElseIf possiblemovies.Count > 1 Then
                 Dim success As Boolean = False
                 Dim workingstring As String
                 For Each multi In cleanMultipart
                     For Each sep In separators
-                        For Each possiblemov In possiblemovies  'For h = 1 To possiblemoviescount
+                        For Each possiblemov In possiblemovies
                             workingstring = multi & sep & "1"
-                            Dim workingtitle As String = possiblemov.ToLower   'possiblemovies(h).ToLower
+                            Dim workingtitle As String = possiblemov.ToLower
                             If workingtitle.IndexOf(workingstring) <> -1 Then
-                                actualpathandfilename = possiblemov  'possiblemovies(h)
+                                actualpathandfilename = possiblemov
                                 success = True
                                 Exit For
                             End If
@@ -627,7 +604,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     If success Then Exit For
                 Next
             End If
-            'End If
         End If
 
         If actualpathandfilename = "" Then
@@ -1084,30 +1060,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
         Return s
     End Function
-
-    'Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
-    '    Dim intCounter As Integer = 0
-    '    Dim lstStringFolders As New List(Of String)
-    '    For Each SourceFolder In SourcePaths
-    '        lstStringFolders.Add(SourceFolder)
-    '    Next
-    '    Do Until intCounter = lstStringFolders.Count
-    '        Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
-    '        For Each foundDirectory In workingFolder.GetDirectories
-    '            If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden And _
-    '                Not (foundDirectory.Attributes And IO.FileAttributes.System) = IO.FileAttributes.System Then
-    '                If ValidMovieDir(foundDirectory.FullName) Then
-    '                    lstStringFolders.Add(foundDirectory.FullName)
-    '                End If
-    '            End If
-    '        Next
-    '        intCounter += 1
-    '    Loop
-    '    'sorts the folders so that related folders (parent/child) are together
-    '    lstStringFolders.Sort()
-    '    Return lstStringFolders
-    'End Function
-
+    
     Public Shared Function GetLangCode(ByVal strLang As String) As String
         Try
             Select Case strLang.ToLower
@@ -2690,11 +2643,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function GetExtension(path As String) As String
         Dim Extn As String
-        'Dim Dotpos As Integer
         Dim NoDot() As String
         NoDot = Split(path, “.”)
         Extn = NoDot(UBound(NoDot))
-        'MsgBox (Extension)
         Return Extn
     End Function
 

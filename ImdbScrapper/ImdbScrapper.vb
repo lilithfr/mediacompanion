@@ -5,8 +5,6 @@ Imports System.Xml
 
 Public Class ImdbScrapper
 
-
-
     Dim tvdburl As String
     Dim tvfblinecount As Integer
     Dim tvdbwebsource(3000) As String

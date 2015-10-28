@@ -1725,7 +1725,9 @@ Public Class Movie
 
         If Preferences.nfoposterscraper And 1 then
             Try
-                If AddThumbs( (New IMPA.getimpaposters).getimpathumbs(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year) ) then Exit Sub
+                Dim impaThumbs As New IMPA.getimpaposters
+                impaThumbs.MCProxy = Utilities.MyProxy
+                If AddThumbs(impaThumbs.getimpathumbs(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year) ) then Exit Sub
             Catch
             End Try
         End If
@@ -1734,7 +1736,7 @@ Public Class Movie
             Try
                 Dim mpdbThumbs As New class_mpdb_thumbs.Class1
                 mpdbThumbs.MCProxy = Utilities.MyProxy 
-                If AddThumbs( mpdbThumbs.get_mpdb_thumbs(_scrapedMovie.fullmoviebody.imdbid) ) then Exit Sub
+                If AddThumbs(mpdbThumbs.get_mpdb_thumbs(_scrapedMovie.fullmoviebody.imdbid) ) then Exit Sub
             Catch
             End Try
         End If
