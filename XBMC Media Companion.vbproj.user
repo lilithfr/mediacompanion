@@ -30,6 +30,7 @@
     <EnableSecurityDebugging>false</EnableSecurityDebugging>
   </PropertyGroup>
   <PropertyGroup>
-    <ReferencePath>D:\_Development\_MediaComp-T2\Scraper dll sources\YouTubeUrlGrabber\bin\x64\Debug\</ReferencePath>
+    <ReferencePath>
+    </ReferencePath>
   </PropertyGroup>
 </Project>
