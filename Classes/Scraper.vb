@@ -46,6 +46,89 @@ End Class
 
 
 Module ModGlobals
+    Dim arrLetters1
+    Dim arrLetters2
+
+    <Extension()>
+    Public Function CompareString(String1 As String, String2 As String) As Double
+        Dim intLength1
+        Dim intLength2
+        Dim x
+        Dim dblResult
+
+
+        If UCase(String1) = UCase(String2) Then
+            dblResult = 1
+        Else
+            intLength1 = Len(String1)
+            intLength2 = Len(String2)
+
+
+            If intLength1 = 0 Or intLength2 = 0 Then
+                dblResult = 0
+            Else
+                ReDim arrLetters1(intLength1 - 1)
+                ReDim arrLetters2(intLength2 - 1)
+
+                For x = LBound(arrLetters1) To UBound(arrLetters1)
+                    arrLetters1(x) = Asc(UCase(Mid(String1, x + 1, 1)))
+                Next
+
+                For x = LBound(arrLetters2) To UBound(arrLetters2)
+                    arrLetters2(x) = Asc(UCase(Mid(String2, x + 1, 1)))
+                Next
+
+                dblResult = SubSim(1, intLength1, 1, intLength2) / (intLength1 + intLength2) * 2
+            End If
+        End If
+
+        CompareString = dblResult
+    End Function
+
+    Private Function SubSim(intStart1, intEnd1, intStart2, intEnd2) As Double
+        Dim intMax As Integer = Integer.MinValue
+
+        Try
+            Dim y
+            Dim z
+            Dim ns1 As Integer
+            Dim ns2 As Integer
+            Dim i
+
+            If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
+                Return 0
+            End If
+
+            For y = intStart1 To intEnd1
+                For z = intStart1 To intEnd2
+                    i = 0
+
+                    Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
+                        i = i + 1
+
+                        If i > intMax Then
+                            ns1 = y
+                            ns2 = z
+                            intMax = i
+                        End If
+
+                        If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
+                            Exit Do
+                        End If
+                    Loop
+                Next
+            Next
+
+            intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
+            intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
+        Catch ex As OverflowException
+            Return Nothing
+        Catch ex As StackOverflowException
+            Return Nothing
+        End Try
+
+        Return intMax
+    End Function
 
     <Extension()> _
     Function CleanTitle(ByVal sString As String) As String
@@ -1954,12 +2037,14 @@ Public Class Classimdb
         End Try
     End Function
 
-    Public Function getMVbodyIMVDB(ByVal title As String, ByVal MVSearchName As String)
+    Public Function getMVbodyIMVDB(ByVal FullPathandFilename As String, ByRef MVSearchName As String)
         Monitor.Enter(Me)
         Dim Thetitle As Boolean = False
         Dim ParametersForScraper(10) As String
         Dim FinalScrapResult As String
         Dim Scraper As String = "metadata.musicvideos.imvdb"
+        Dim title As String = getArtistAndTitle(FullPathandFilename)
+        MVSearchName = title
         Try
             ' 1st stage
             ParametersForScraper(0) = title.Replace(" ","%20")
@@ -2031,6 +2116,8 @@ Public Class Classimdb
 
     Private Function ValidateTitleMatch(ByVal FullTitle As String, ByVal mvsearch As String) As Boolean
         Monitor.Enter(Me)
+        Dim Similar As Double = CompareString(FullTitle, mvsearch)
+        If Similar > 0.9 Then Return True
         Dim SongTitle As String = ""
         Dim splitsong() As String = FullTitle.Split("-"c)
         SongTitle = splitsong(1).ToLower.Trim

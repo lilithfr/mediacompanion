@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Net
+Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports Media_Companion
@@ -7,6 +8,18 @@ Imports Media_Companion
 
 
 Public Class ucMusicVideo
+    Private WithEvents Tmr As New Timer With {.Interval = 200}
+    Private fb As New FolderBrowserDialog
+    Private Const WM_USER As Integer = &H400
+    Private Const BFFM_SETEXPANDED As Integer = WM_USER + 106
+
+    <DllImport("user32.dll", EntryPoint:="SendMessageW")> _
+    Private Shared Function SendMessageW(ByVal hWnd As IntPtr, ByVal msg As UInteger, ByVal wParam As Integer, <MarshalAs(UnmanagedType.LPWStr)> ByVal lParam As String) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", EntryPoint:="FindWindowW")> _
+    Private Shared Function FindWindowW(<MarshalAs(UnmanagedType.LPWStr)> ByVal lpClassName As String, <MarshalAs(UnmanagedType.LPWStr)> ByVal lpWindowName As String) As IntPtr
+    End Function
     
     'Public Shared musicVideoList As New List(Of FullMovieDetails)
     Public Shared Property MVCache As New List(Of MVComboList)
@@ -16,16 +29,48 @@ Public Class ucMusicVideo
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
     Dim rescraping As Boolean = False
+    Dim mvFoldersChanged As Boolean = False
+    Dim AuthorizeCheck As Boolean = False
     Dim Movie As New Movie
     Dim scraper As New Classimdb 
     Dim workingMusicVideo As New FullMovieDetails
+    Dim PrevTab As Integer = 0
+
+    Private Property MVPrefChanged As Boolean
+        Get
+            Return mvfolderschanged
+        End Get
+        Set(value As Boolean)
+            mvFoldersChanged = value
+            If mvFoldersChanged Then
+                btnMVApply.Enabled = True
+            Else
+                btnMVApply.Enabled = False
+            End If
+        End Set
+    End Property
 
 'Music_Video_Class
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        MVPreferencesLoad()
+    End Sub
+
+    Private Sub MVPreferencesLoad()
+        clbxMvFolders.Items.Clear()
         For Each item In Preferences.MVidFolders
-            lstBoxFolders.Items.Add(item)
+            AuthorizeCheck = True
+            clbxMvFolders.Items.Add(item.rpath, item.selected)
+            AuthorizeCheck = False
         Next
+        If Preferences.MVScraper = "wiki" Then
+            rb_MvScr1.Checked = True
+        ElseIf Preferences.MVScraper = "imvdb" Then
+            rb_MvScr2.Checked = True
+        Else
+            rb_MvScr3.Checked = True
+        End If
+        MVPrefChanged = False
         txtScreenshotTime.Text = "10"
     End Sub
 
@@ -406,7 +451,12 @@ Public Class ucMusicVideo
     Public Sub MVCacheLoadFromNfo()
         tmpMVCache.Clear()
         Dim t As New List(Of String)
-        t.AddRange(Preferences.MVidFolders)
+        For each item In Preferences.MVidFolders
+            If item.selected Then
+                t.Add(item.rpath)
+            End If
+        Next
+        't.AddRange(Preferences.MVidFolders)
         MV_Load(t)
         loadMusicVideolist()
         '...load datagridview??
@@ -568,7 +618,11 @@ Public Class ucMusicVideo
 
     Private Sub TabControlMain_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControlMain.SelectedIndexChanged
         If TabControlMain.SelectedTab.Text = "Manually find Correct Wiki Entry" Then
-
+            If Not Preferences.MVScraper = "wiki" Then
+                MsgBox("Wiki scraper is not selected" & vbCrLf & "Unable to open this tab")
+                TabControlMain.SelectedIndex = PrevTab
+                Exit Sub
+            End If
             Dim searchterm As String = getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value)
             Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
 
@@ -577,6 +631,7 @@ Public Class ucMusicVideo
             WebBrowser1.Navigate(searchurl)
             WebBrowser1.Refresh()
         End If
+        PrevTab = TabControlMain.SelectedIndex
     End Sub
     
     Private Sub ScrnShtTimeAdjust(ByVal Direction As Boolean)
@@ -651,7 +706,52 @@ Public Class ucMusicVideo
     End Sub
 
     'Path buttons
-    Private Sub btnAddFolderPath_Click(sender As Object, e As System.EventArgs) Handles btnAddFolderPath.Click
+    Private Sub tPPref_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tPPref.Leave
+        Try
+            If MVPrefChanged Then
+                Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
+                If save = DialogResult.Yes Then
+                    btnMVApply.PerformClick()
+                Else
+                    MVPreferencesLoad()
+                End If
+                'Preferences.MVidFolders.Clear()
+                'For f = 0 to clbxMvFolders.Items.Count-1
+                '    Dim t As New str_RootPaths 
+                '    t.rpath = clbxMvFolders.Items(f).ToString
+                '    Dim chkstate As CheckState = clbxMvFolders.GetItemCheckState(f)
+                '    t.selected = (chkstate = CheckState.Checked)
+                '    Preferences.MVidFolders.Add(t)
+                'Next
+                'mvFoldersChanged = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnMVApply_Click(sender As System.Object, e As System.EventArgs) Handles btnMVApply.Click
+        Preferences.MVidFolders.Clear()
+        For f = 0 to clbxMvFolders.Items.Count-1
+            Dim t As New str_RootPaths 
+            t.rpath = clbxMvFolders.Items(f).ToString
+            Dim chkstate As CheckState = clbxMvFolders.GetItemCheckState(f)
+            t.selected = (chkstate = CheckState.Checked)
+            Preferences.MVidFolders.Add(t)
+        Next
+        If rb_MvScr1.Checked Then
+            Preferences.MVScraper = "wiki"
+        ElseIf rb_MvScr2.Checked Then
+            Preferences.MVScraper = "imvdb"
+        Else
+            Preferences.MVScraper = "audiodb"
+        End If
+        'TabControlMain.Refresh()
+        Preferences.ConfigSave()
+        MVPrefChanged = False
+    End Sub
+
+    Private Sub btnAddFolderPath_Click(sender As System.Object, e As System.EventArgs) Handles btnAddFolderPath.Click
         Try
             If tbFolderPath.Text = Nothing Then
                 Exit Sub
@@ -667,7 +767,7 @@ Public Class ucMusicVideo
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
             Dim exists As Boolean = False
-            For Each item In lstBoxFolders.Items
+            For Each item In clbxMvFolders.items
                 If item.ToString.ToLower = tempstring.ToLower Then
                     exists = True
                     Exit For
@@ -678,18 +778,21 @@ Public Class ucMusicVideo
             Else
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
-                    lstBoxFolders.Items.Add(tempstring)
+                    AuthorizeCheck = True
+                    clbxMvFolders.Items.Add(tempstring, True)
+                    clbxMvFolders.Refresh()
+                    MVPrefChanged = True
+                    AuthorizeCheck = False
                     tbFolderPath.Text = ""
-                    Preferences.MVidFolders.Add(tempstring)
-                    Preferences.ConfigSave()
-                    lstBoxFolders.Refresh()
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
-                        lstBoxFolders.Items.Add(tempstring)
+                        AuthorizeCheck = True
+                        clbxMvFolders.Items.Add(tempstring, True)
+                        clbxMvFolders.Refresh()
+                        MVPrefChanged = True
+                        AuthorizeCheck = False
                         tbFolderPath.Text = ""
-                        Preferences.MVidFolders.Add(tempstring)
-                        Preferences.ConfigSave() 
                     End If
                 End If
             End If
@@ -697,39 +800,126 @@ Public Class ucMusicVideo
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-    
-    Private Sub btnBrowseFolders_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseFolders.Click
-        Dim allok As Boolean = True
-        Dim theFolderBrowser As New FolderBrowserDialog
-        Dim thefoldernames As String
-        theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
-        theFolderBrowser.ShowNewFolderButton = True
-        theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-        theFolderBrowser.SelectedPath = Preferences.lastpath
-        If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-            thefoldernames = (theFolderBrowser.SelectedPath)
-            For Each item As Object In lstBoxFolders.Items
-                If thefoldernames.ToString = item.ToString Then allok = False
-            Next
 
-            If allok = True Then
-                lstBoxFolders.Items.Add(thefoldernames)
-                lstBoxFolders.Refresh()
-                Preferences.MVidFolders.Add(thefoldernames)
-            Else
-                MsgBox("        Folder Already Exists")
+    Private Sub btnBrowseFolders_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseFolders.Click
+        Try
+            Dim allok As Boolean = True
+            'Dim theFolderBrowser As New FolderBrowserDialog
+            Dim thefoldernames As String
+            fb.Description = "Please Select Folder to Add"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
+                Preferences.lastpath = thefoldernames
+                If allok = True Then
+                    AuthorizeCheck = True
+                    clbxMvFolders.Items.Add(thefoldernames, True)
+                    clbxMvFolders.Refresh()
+                    MVPrefChanged = True
+                    AuthorizeCheck = False
+                Else
+                    MsgBox("        Folder Already Exists")
+                End If
             End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub clbxMvFolders_DragDrop(sender As Object, e As DragEventArgs) Handles clbxMvFolders.DragDrop
+        Dim folders() As String
+        Form1.droppedItems.Clear()
+        folders = e.Data.GetData(DataFormats.filedrop)
+        For f = 0 To UBound(folders)
+            Dim exists As Boolean = False
+            For Each rtpath In Preferences.movieFolders
+                If rtpath.rpath = folders(f) Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists Then Continue For
+            If clbxMvFolders.Items.Contains(folders(f)) Then Continue For
+		    Dim skip As Boolean = False
+		    For Each item In Form1.droppedItems
+			    If item = folders(f) Then
+				    skip = True
+				    Exit For
+			    End If
+		    Next
+		If Not skip Then Form1.droppedItems.Add(folders(f))
+        Next
+        If Form1.droppedItems.Count < 1 Then Exit Sub
+        AuthorizeCheck = True
+        For Each item In Form1.droppedItems
+            clbxMvFolders.Items.Add(item, True)
+            MVPrefChanged = True
+        Next
+        AuthorizeCheck = False
+        clbxMvFolders.Refresh()
+    End Sub
+
+    Private Sub clbxMvFolders_DragEnter(sender As Object, e As DragEventArgs) Handles clbxMvFolders.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub clbxMvFolders_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbxMvFolders.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso clbxMvFolders.SelectedItem <> Nothing
+            Call btnRemoveFolder.PerformClick()
+        ElseIf e.KeyCode = Keys.Space Then
+            AuthorizeCheck = True
+            Call clbxMvFolderstoggle()
+            AuthorizeCheck = False
         End If
     End Sub
 
-    Private Sub btnRemoveFolder_Click( sender As System.Object,  e As System.EventArgs) Handles btnRemoveFolder.Click
+    Private Sub clbxMvFolders_MouseDown(sender As Object, e As MouseEventArgs) Handles clbxMvFolders.MouseDown 
+        Dim loc As Point = Me.clbxMvFolders.PointToClient(Cursor.Position)
+        For i As Integer = 0 To Me.clbxMvFolders.Items.Count - 1
+	        Dim rec As Rectangle = Me.clbxMvFolders.GetItemRectangle(i)
+	        rec.Width = 16
+	        'checkbox itself has a default width of about 16 pixels
+	        If rec.Contains(loc) Then
+		        AuthorizeCheck = True
+		        Dim newValue As Boolean = Not Me.clbxMvFolders.GetItemChecked(i)
+		        Me.clbxMvFolders.SetItemChecked(i, newValue)
+		        AuthorizeCheck = False
+		        Return
+	        End If
+        Next
+    End Sub
+
+    Private Sub clbxMvFolders_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbxMvFolders.ItemCheck
+        If Not AuthorizeCheck Then
+	        e.NewValue = e.CurrentValue
+            Exit Sub
+        End If
+        Static Updating As Boolean
+        If Updating Then Exit Sub
+        MVPrefChanged = True
+        Updating = False
+    End Sub
+
+    Private Sub clbxMvFolderstoggle()
+        Dim i = clbxMvFolders.SelectedIndex
+        clbxMvFolders.SetItemCheckState(i, If(clbxMvFolders.GetItemCheckState(i) = CheckState.Checked, CheckState.Unchecked, CheckState.Checked))
+    End Sub
+
+    Private Sub btnRemoveFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveFolder.Click
         Try
-            While lstBoxFolders.SelectedItems.Count > 0
-                Preferences.MVidFolders.Remove(lstBoxFolders.SelectedItems(0))
-                lstBoxFolders.Items.Remove(lstBoxFolders.SelectedItems(0))
+            While clbxMvFolders.SelectedItems.Count > 0
+                clbxMvFolders.Items.Remove(clbxMvFolders.SelectedItems(0))
+                MVPrefChanged = True
             End While
-            Preferences.ConfigSave()
-        Catch
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
     
@@ -768,7 +958,7 @@ Public Class ucMusicVideo
         workingMusicVideo.fullmoviebody.studio = txtStudio.Text
         workingMusicVideo.fullmoviebody.year = txtYear.Text
 
-        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.filenameandpath, workingMusicVideo)
+        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.fullpathandfilename, workingMusicVideo)
     End Sub
     
     Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
@@ -958,6 +1148,19 @@ Public Class ucMusicVideo
         End If
     End Sub
 #End Region
+
+    Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
+        Dim hFb As IntPtr = FindWindowW("#32770", "Browse For Folder") '#32770 is the class name of a folderbrowser dialog
+        If hFb <> IntPtr.Zero Then
+            If SendMessageW(hFb, BFFM_SETEXPANDED, 1, fb.SelectedPath) = IntPtr.Zero Then
+                Tmr.Stop()
+            End If
+        End If
+    End Sub
+
+    Private Sub rb_MvScr1_CheckedChanged(sender As Object, e As EventArgs) Handles rb_MvScr1.CheckedChanged, rb_MvScr2.CheckedChanged, rb_MvScr3.CheckedChanged
+        MVPrefChanged = True
+    End Sub
 
 #Region "garbage"
 
@@ -1182,7 +1385,7 @@ Public Class ucMusicVideo
 
     '    Dim FullFileList As New List(Of String)
     '    Dim filelist As New List(Of String)
-        
+
     '    For Each folder In fullfolderlist
     '        For Each extension In Utilities.VideoExtensions 
     '            Dim dir_info As New System.IO.DirectoryInfo(folder)

@@ -1011,7 +1011,13 @@ Public Class Movie
             ReportProgress( String.Format(" - Using '{0}'", serchtitle ))
             ReportProgress( "- Main body " )
         End If
-        _imdbBody = _imdbScraper.getMVbodyADB(mediapathandfilename, MVSearchName)
+        If Preferences.MVScraper = "wiki" Then
+            _imdbBody = s.musicVideoScraper(mediapathandfilename, "" , MovieSearchEngine)
+        ElseIf Preferences.MVScraper = "imvdb" Then
+            _imdbBody = _imdbScraper.getMVbodyIMVDB(mediapathandfilename, MVSearchName)
+        ElseIf Preferences.MVScraper = "audiodb" Then
+            _imdbBody = _imdbScraper.getMVbodyADB(mediapathandfilename, MVSearchName)
+        End If
         'AppendMVScrapeSuccessActions
     End Sub
     
@@ -1096,7 +1102,19 @@ Public Class Movie
 
     Sub TidyMVUnscraped()
         If ImdbBody.ToLower = "error" Then
+            Dim success As Boolean = True
+            If _scrapedMovie.fullmoviebody.title = Nothing or _scrapedMovie.fullmoviebody.title = "" Then
+                Dim titlesplit() As String = Title.Split("-")
+                _scrapedMovie.fullmoviebody.title = If(titlesplit.Count > 1, titlesplit(1).Trim, Title)
+                _scrapedMovie.fullmoviebody.plot  = "This Music Video could not be identified."
+                _scrapedMovie.fullmoviebody.genre = ""
+                success = False
+            End If
 
+            If _scrapedMovie.fullmoviebody.year =       Nothing Then _scrapedMovie.fullmoviebody.year = "0"
+            If _scrapedMovie.fullmoviebody.playcount =  Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
+
+            If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
         End If
     End Sub
 

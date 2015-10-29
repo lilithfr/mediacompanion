@@ -44,6 +44,19 @@ Public Class Form1
 
     Declare Function AttachConsole Lib "kernel32.dll" (ByVal dwProcessId As Int32) As Boolean
 
+    Private WithEvents Tmr As New Windows.Forms.Timer With {.Interval = 200}
+    Private fb As New FolderBrowserDialog
+    Private Const WM_USER As Integer = &H400
+    Private Const BFFM_SETEXPANDED As Integer = WM_USER + 106
+
+    <DllImport("user32.dll", EntryPoint:="SendMessageW")> _
+    Private Shared Function SendMessageW(ByVal hWnd As IntPtr, ByVal msg As UInteger, ByVal wParam As Integer, <MarshalAs(UnmanagedType.LPWStr)> ByVal lParam As String) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", EntryPoint:="FindWindowW")> _
+    Private Shared Function FindWindowW(<MarshalAs(UnmanagedType.LPWStr)> ByVal lpClassName As String, <MarshalAs(UnmanagedType.LPWStr)> ByVal lpWindowName As String) As IntPtr
+    End Function
+
     Shared ReadOnly Property Link_TotalQCount
         Get
             Return XbmcControllerQ.Count + XbmcControllerBufferQ.Count
@@ -14960,14 +14973,15 @@ End Sub
 
     Private Sub btnMovSetCentralFolderSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovSetCentralFolderSelect.Click
         Try
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Save All Collection Artwork"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select Folder to Save All Collection Artwork"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
                 tbMovSetArtCentralFolder.Text = thefoldernames
                 Preferences.MovSetArtCentralFolder = thefoldernames
             End If
@@ -15584,19 +15598,20 @@ End Sub
 
     Private Sub Button77_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button77.Click
         Try
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Save Actor Thumbnails)"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select Folder to Save Actor Thumbnails)"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
                 localactorpath.Text = thefoldernames
                 Preferences.lastpath = thefoldernames
                 Preferences.actorsavepath = thefoldernames
             End If
-            theFolderBrowser.Dispose()
+            'theFolderBrowser.Dispose()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17969,14 +17984,15 @@ End Sub
     Private Sub btn_addmoviefolderdialogue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_addmoviefolderdialogue.Click
         Try
             Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
                 Preferences.lastpath = thefoldernames
                 If allok = True Then
                     AuthorizeCheck = True
@@ -18185,14 +18201,15 @@ End Sub
         Try
             'add offline movie folder browser
             Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select a Root Offline DVD Folder to Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select a Root Offline DVD Folder to Add to DB"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
                 Preferences.lastpath = thefoldernames
                 For Each item As Object In ListBox15.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
@@ -19731,17 +19748,18 @@ End Sub
             Dim allok As Boolean = True
             Dim cancelregex As Boolean = False
             Dim newtvshow As Boolean = False
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim strfolder As String
             Dim tempstring3 As String
             Dim tempint As Integer = 0
             Dim tempint2 As Integer = 0
-            theFolderBrowser.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                strfolder = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                strfolder = (fb.SelectedPath)
                 Preferences.lastpath = strfolder
                 Dim hasseason As Boolean = False
                 If Not clbx_TvRootFolders.Items.Contains(strfolder) Then
@@ -19958,14 +19976,15 @@ End Sub
     Private Sub btn_TvFoldersBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersBrowse.Click
         Try
             Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select TV Folder to Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select TV Folder to Add to DB"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
                 For Each item As Object In ListBox6.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
                 Next
@@ -20542,14 +20561,15 @@ End Sub
     Private Sub btnHomeFolderAdd_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFolderAdd.Click
         Try
             Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
+            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
+            fb.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Preferences.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
                 Preferences.lastpath = thefoldernames
                 For Each item As Object In clbx_HMMovieFolders.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
@@ -21692,6 +21712,15 @@ End Sub
 
     Private Sub DataGridViewMovies_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridViewMovies.SelectionChanged
         Dim something As String = ""
+    End Sub
+
+    Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
+        Dim hFb As IntPtr = FindWindowW("#32770", "Browse For Folder") '#32770 is the class name of a folderbrowser dialog
+        If hFb <> IntPtr.Zero Then
+            If SendMessageW(hFb, BFFM_SETEXPANDED, 1, fb.SelectedPath) = IntPtr.Zero Then
+                Tmr.Stop()
+            End If
+        End If
     End Sub
 
 End Class

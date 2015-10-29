@@ -104,7 +104,7 @@ Public Class Preferences
     Public Shared stubmessage       As String = "Insert Media to Continue"
     Public Shared homemoviefolders  As New List(Of str_RootPaths)
     Public Shared ExcludeFolders    As New Excludes("Folders")
-    Public Shared MVidFolders       As New List(Of String)
+    Public Shared MVidFolders       As New List(Of str_RootPaths)
 
     'Saved Form Prefs
     Public Shared backgroundcolour As String
@@ -385,6 +385,9 @@ Public Class Preferences
     Public Shared TvdbLanguageCode As String = "en"
     Public Shared lastrefreshmissingdate As String
     Public Shared excludefromshowfoldername As String
+
+    'Saved Music Video Prefs
+    Public Shared MVScraper As String
 
     '(Unsure)
     Public Shared maximagecount As Integer
@@ -681,6 +684,9 @@ Public Class Preferences
         ScrShtDelay = 10
         excludefromshowfoldername = "[ended]"
 
+        'Music Video
+        MVScraper = "wiki"
+
         'Unknown - need to be sorted/named better
         eprenamelowercase = False
         intruntime = False
@@ -863,8 +869,9 @@ Public Class Preferences
             root.AppendChild(doc, "homemoviefolder", t)
         Next
 
-        For Each Path In MVidFolders
-            root.AppendChild(doc, "MVidFolders", Path)
+        For Each path In MVidFolders
+            Dim t As String = path.rpath & "|" & path.selected
+            root.AppendChild(doc, "MVidFolders", t)
         Next
 
         root.AppendChild(ExcludeFolders.GetChild(doc))
@@ -1146,6 +1153,8 @@ Public Class Preferences
         root.AppendChild(doc, "lastrefreshmissingdate", lastrefreshmissingdate)
         root.AppendChild(doc, "excludefromshowfoldername", excludefromshowfoldername)
 
+        root.AppendChild(doc, "MVScraper",              MVScraper)              'ucMusicVideo.rbscraper
+
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
@@ -1288,7 +1297,11 @@ Public Class Preferences
                         homemoviefolders.Add(u)
                     Case "MVidFolders"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        MVidFolders.Add(decodestring)
+                        Dim t() As String = decodestring.Split("|")
+                        Dim u As New str_RootPaths
+                        u.rpath = t(0)
+                        If t.Count > 1 Then u.selected = t(1)
+                        MVidFolders.Add(u)
                     Case "ExcludeFolders"
                         ExcludeFolders.Load(thisresult)
                     Case "moviethumbpriority"
@@ -1434,6 +1447,9 @@ Public Class Preferences
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "lastrefreshmissingdate"               : lastrefreshmissingdate = thisresult.InnerText 
                     Case "excludefromshowfoldername"            : excludefromshowfoldername = thisresult.InnerText 
+
+                    Case "MVScraper"                            : MVScraper = thisresult.InnerText
+
                     Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
                     Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 

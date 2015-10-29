@@ -7,10 +7,14 @@ Public Class WikipediaMusivVideoScraper
 
     Public Function musicVideoScraper(ByVal fullpathandfilename As String, Optional ByVal searchterm As String = "", Optional ByVal wikipediaURL As String = "")
         Monitor.Enter(Me)
-        Dim musicVideoTitle As New FullMovieDetails
+        Dim totalinfo As String = ""
+        totalinfo = "<musicvideo>" & vbCrLf
+        'Dim musicVideoTitle As New FullMovieDetails
         Dim s As New Classimdb
         Dim webpage As List(Of String)
-        musicVideoTitle.fileinfo.fullpathandfilename = fullpathandfilename
+        Dim Artist As String = ""
+        Dim Title As String = ""
+        'musicVideoTitle.fileinfo.fullpathandfilename = fullpathandfilename
         Dim wikiurlpassed As String = wikipediaURL 
         searchterm = getArtistAndTitle(fullpathandfilename)
 
@@ -18,19 +22,19 @@ Public Class WikipediaMusivVideoScraper
             Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
             Dim strarr() As String
             strarr = filenameWithoutExtension.Split("-"c)
-            musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
-            musicVideoTitle.fullmoviebody.title = strarr(1).Trim
+            Artist = strarr(0).Trim
+            Title = strarr(1).Trim
             searchterm = s.searchurltitle(filenameWithoutExtension)
         ElseIf searchterm <> "" And wikipediaURL = "" Then
             Dim strarr() As String
             strarr = searchterm.Split("-"c)
-            musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
-            musicVideoTitle.fullmoviebody.title = strarr(1).Trim
+            Artist = strarr(0).Trim
+            Title = strarr(1).Trim
         ElseIf wikipediaURL <> "" Then
             Dim strarr() As String
             strarr = fullpathandfilename.Split("-"c)
-            musicVideoTitle.fullmoviebody.artist = strarr(0).Trim
-            musicVideoTitle.fullmoviebody.title = strarr(1).Trim
+            Artist = strarr(0).Trim
+            Title = strarr(1).Trim
             searchterm = fullpathandfilename
         End If
 
@@ -58,6 +62,10 @@ Public Class WikipediaMusivVideoScraper
             webpage.Clear()
         End If
         Dim fullwebpage As String = ""
+        If wikipediaURL = "" Then   'set artist and title if a new scrape, not a change musicvideo.
+            totalinfo.AppendTag("artist", Artist)
+            totalinfo.AppendTag("title", Title)
+        End If
         If wikipediaURL <> "" Then
             webpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, False, 10)
             Dim htpage As String = ""
@@ -79,9 +87,8 @@ Public Class WikipediaMusivVideoScraper
                         Dim director As String = tempstring.Substring(tempstring.ToLower.IndexOf("directed by"), tempstring.Length - tempstring.ToLower.IndexOf("directed by"))
                         director = director.Substring(0, director.IndexOf("</a>"))
                         director = director.Substring(director.LastIndexOf(">") + 1, director.Length - director.LastIndexOf(">") - 1)
-                        musicVideoTitle.fullmoviebody.director = director
+                        totalinfo.AppendTag("director", director)
                     Catch
-                        musicVideoTitle.fullmoviebody.director = "Unknown"
                     End Try
 
                     'strip html tags from plot
@@ -94,7 +101,7 @@ Public Class WikipediaMusivVideoScraper
                     tempstring = tempstring.Replace("<edit>", "")
                     tempstring = tempstring.Replace("Synopsis", vbCrLf & "Synopsis" & vbCrLf)
                     tempstring = tempstring.Replace("Background", vbCrLf & "Background" & vbCrLf)
-                    musicVideoTitle.fullmoviebody.plot = tempstring
+                    totalinfo.AppendTag("plot", tempstring)
                 End If
 
                 'get year
@@ -105,7 +112,7 @@ Public Class WikipediaMusivVideoScraper
                         tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
                         Dim r As Regex = New Regex("\d{4}")
                         Dim match As Match = r.Match(tempstring)
-                        musicVideoTitle.fullmoviebody.year = match.Value
+                        totalinfo.AppendTag("year", match.Value)
                     Catch
                     End Try
                 End If
@@ -116,7 +123,7 @@ Public Class WikipediaMusivVideoScraper
                         Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf(">Genre</a></th>"), fullwebpage.Length - fullwebpage.IndexOf(">Genre</a></th>"))
                         tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
                         tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                        musicVideoTitle.fullmoviebody.genre = tempstring
+                        totalinfo.AppendTag("genre", tempstring)
                     Catch
                     End Try
                 End If
@@ -128,7 +135,7 @@ Public Class WikipediaMusivVideoScraper
                         tempstring = tempstring.Replace("from the album ", "")
                         tempstring = tempstring.Substring(0, tempstring.IndexOf("</i>"))
                         tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                        musicVideoTitle.fullmoviebody.album = tempstring
+                        totalinfo.AppendTag("album", tempstring)
                     Catch
                     End Try
                 End If
@@ -139,7 +146,7 @@ Public Class WikipediaMusivVideoScraper
                         Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("Label</a></th>"), fullwebpage.Length - fullwebpage.IndexOf("Label</a></th>"))
                         tempstring = tempstring.Substring(tempstring.IndexOf("<td>"), tempstring.IndexOf("</td>") - tempstring.IndexOf("<td>"))
                         tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                        musicVideoTitle.fullmoviebody.studio = tempstring
+                        totalinfo.AppendTag("studio", tempstring)
                     Catch
                     End Try
                 End If
@@ -154,7 +161,7 @@ Public Class WikipediaMusivVideoScraper
                             tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".png") - tempstring.LastIndexOf("//upload") + 4)
                         End If
                         tempstring = "http:" & tempstring
-                        musicVideoTitle.listthumbs.Add(tempstring)
+                        totalinfo.AppendTag("thumb", tempstring)
                     Catch
                     End Try
                 End If
@@ -168,8 +175,7 @@ Public Class WikipediaMusivVideoScraper
                             tempstring = tempstring.Replace(""">Single</a>", "")
                             tempstring = tempstring.Substring((tempstring.IndexOf(""">")+2), (tempstring.IndexOf("</a></th>") - tempstring.IndexOf(""">"))-2)
                             tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                        
-                            musicVideoTitle.fullmoviebody.artist = tempstring
+                            totalinfo.AppendTag("artist", tempstring)
                         Catch
                         End Try
                     End If
@@ -183,7 +189,7 @@ Public Class WikipediaMusivVideoScraper
                                 If Not D <= 0 And Not W <= 0 Then
                                     Dim tempstring As String = webpage(f).Substring(d, w - d)
                                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                                    musicVideoTitle.fullmoviebody.title = tempstring
+                                    totalinfo.AppendTag("title", tempstring)
                                 End If
                                 Exit For
                             Catch
@@ -194,19 +200,8 @@ Public Class WikipediaMusivVideoScraper
             Catch
             End Try
         End If
-
-        If musicVideoTitle.fullmoviebody.album = Nothing Then musicVideoTitle.fullmoviebody.album = "Unknown"
-        If musicVideoTitle.fullmoviebody.year = Nothing Then musicVideoTitle.fullmoviebody.year = "0000"
-        If musicVideoTitle.fullmoviebody.director = Nothing Then musicVideoTitle.fullmoviebody.director = "Unknown"
-        If musicVideoTitle.fullmoviebody.genre = Nothing Then musicVideoTitle.fullmoviebody.genre = "Unknown"
-        If musicVideoTitle.fullmoviebody.plot = Nothing Then musicVideoTitle.fullmoviebody.plot = "Unknown"
-        If musicVideoTitle.fullmoviebody.runtime = Nothing Then musicVideoTitle.fullmoviebody.runtime = "Unknown"
-        If musicVideoTitle.fullmoviebody.studio = Nothing Then musicVideoTitle.fullmoviebody.studio = "Unknown"
-        If musicVideoTitle.fileinfo.createdate = Nothing Then 
-            Dim filecreation As New IO.FileInfo(fullpathandfilename)
-            musicVideoTitle.fileinfo.createdate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
-        End If
-        Return musicVideoTitle
+        totalinfo = totalinfo & "</musicvideo>" & vbCrLf
+        Return totalinfo
         Monitor.Exit(Me)
     End Function
 

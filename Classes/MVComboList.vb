@@ -162,7 +162,7 @@ Public Class MVComboList
         Me.foldername           = Utilities.GetLastFolder(From.fileinfo.fullpathandfilename)
         Me.title                = From.fullmoviebody.title
         Me.artist               = From.fullmoviebody.artist
-        Me.year                 = From.fullmoviebody.year
+        Me.year                 = From.fullmoviebody.year.ToInt
         Dim filecreation As New IO.FileInfo(From.fileinfo.fullpathandfilename)
         Try
             Me.filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
