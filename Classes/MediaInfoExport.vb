@@ -106,7 +106,7 @@ Public Class MediaInfoExport
         End If
 
         Dim tempstring As String = ""
-        Dim counter As Integer = 0
+        Dim counter As Integer = 1
         Dim limit As Integer = 0
         Dim tempDoc As String = ""
         Dim headerTagPresent As Boolean = False
@@ -166,9 +166,9 @@ Public Class MediaInfoExport
         End If
 
         For Each mediaItem In mediaCollection
-            If frmMediaInfoExport.IsDisposed OrElse (limit <> 0 And counter >= limit) Then Exit For
+            If frmMediaInfoExport.IsDisposed OrElse (limit <> 0 And counter > limit) Then Exit For
             displayLineTitle = String.Format("Processing: {0}", If(isMovies, mediaItem.title, mediaItem.title.Value))
-            displayLineRemaining = String.Format("{0} {1}{2} Remaining", mediaCollection.Count - (counter + 1), If(isMovies, "Movie", "TV Show"), If((mediaCollection.Count - (counter + 1)) > 1, "s", ""))
+            displayLineRemaining = String.Format("{0} {1}{2} Remaining", mediaCollection.Count - counter, If(isMovies, "Movie", "TV Show"), If((mediaCollection.Count - (counter + 1)) > 1, "s", ""))
             If isConsole Then
                 Console.Write(String.Format("{0} - {1}", displayLineRemaining, displayLineTitle.PadRight(padConsoleLine)))
                 Console.SetCursorPosition(0, Console.CursorTop)
