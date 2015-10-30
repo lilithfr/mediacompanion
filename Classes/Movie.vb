@@ -2900,6 +2900,9 @@ Public Class Movie
         If currentroot.LastIndexOf("\") <> currentroot.Length-1 Then currentroot = currentroot & "\"
 
         Dim inrootfolder As Boolean = (currentroot = FilePath)
+
+
+
         Dim newFolder As String = UserDefinedBaseFolderName
         Dim newpatharr As New List(Of String)
         newpatharr.AddRange(newFolder.Split("\"))
@@ -3860,6 +3863,15 @@ Public Class Movie
     End Function
 
 
+    Public Function GetFolderSize(path As String,precision As Integer) As String
+
+            Dim fi As System.IO.FileInfo = New System.IO.FileInfo(path)
+            Dim folderSize = Utilities.GetFolderSize(fi.DirectoryName)
+
+            Return (folderSize/(1024*1024*1024)).ToString("N" & precision.ToString)
+    End Function
+
+
     ReadOnly Property UserDefinedBaseFileName As String
         Get
             Dim s As String = Path.GetFileNameWithoutExtension(NfoPathAndFilename)
@@ -3887,7 +3899,8 @@ Public Class Movie
 
                     Dim m = Regex.Match(s,"%F(\d)")
                     If m.Success Then
-                        s = s.Replace(  m.Value, _scrapedMovie.GetDisplayFolderSize(  Convert.ToInt32(m.Value.Replace("%F",""))  )  )
+                        Dim pecision = Convert.ToInt32(m.Value.Replace("%F",""))
+                        s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,pecision)  )
                     End If
 
                     s = Utilities.cleanFilenameIllegalChars(s)
@@ -3901,8 +3914,6 @@ Public Class Movie
             Return s.Trim()
         End Get
     End Property
-
-
 
 
     ReadOnly Property UserDefinedBaseFolderName As String
@@ -3939,7 +3950,8 @@ Public Class Movie
 
                     Dim m = Regex.Match(s,"%F(\d)")
                     If m.Success Then
-                        s = s.Replace(  m.Value, _scrapedMovie.GetDisplayFolderSize(  Convert.ToInt32(m.Value.Replace("%F",""))  )  )
+                        Dim pecision = Convert.ToInt32(m.Value.Replace("%F",""))
+                        s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,pecision)  )
                     End If
 
                     s = Utilities.cleanFoldernameIllegalChars(s)
