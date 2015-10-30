@@ -37,6 +37,23 @@ Partial Class ucMusicVideo
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtTitle = New System.Windows.Forms.TextBox()
         Me.lstBxMainList = New System.Windows.Forms.ListBox()
+        Me.CM1MVBrowser = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmiMVName = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMVPlay = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMVOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVViewNfo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMVDelNfoArt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMVRescrape = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVRescrapeSpecific = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVReDirector = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVReGenre = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVRePlot = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVReStudio = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMVReYear = New System.Windows.Forms.ToolStripMenuItem()
         Me.PcBxMusicVideoScreenShot = New System.Windows.Forms.PictureBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -105,6 +122,7 @@ Partial Class ucMusicVideo
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
         CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.CM1MVBrowser.SuspendLayout
         CType(Me.PcBxMusicVideoScreenShot,System.ComponentModel.ISupportInitialize).BeginInit
         Me.tPScreenshotMV.SuspendLayout
         CType(Me.pcBxScreenshot,System.ComponentModel.ISupportInitialize).BeginInit
@@ -337,6 +355,7 @@ Partial Class ucMusicVideo
         'lstBxMainList
         '
         Me.TableLayoutPanel1.SetColumnSpan(Me.lstBxMainList, 3)
+        Me.lstBxMainList.ContextMenuStrip = Me.CM1MVBrowser
         Me.lstBxMainList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lstBxMainList.FormattingEnabled = true
         Me.lstBxMainList.Location = New System.Drawing.Point(11, 100)
@@ -344,6 +363,116 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.SetRowSpan(Me.lstBxMainList, 11)
         Me.lstBxMainList.Size = New System.Drawing.Size(274, 350)
         Me.lstBxMainList.TabIndex = 24
+        '
+        'CM1MVBrowser
+        '
+        Me.CM1MVBrowser.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMVName, Me.ToolStripSeparator1, Me.tsmiMVPlay, Me.ToolStripSeparator2, Me.tsmiMVOpenFolder, Me.tsmiMVViewNfo, Me.ToolStripSeparator3, Me.tsmiMVDelNfoArt, Me.ToolStripSeparator4, Me.tsmiMVRescrape, Me.tsmiMVRescrapeSpecific})
+        Me.CM1MVBrowser.Name = "CM1MVBrowser"
+        Me.CM1MVBrowser.Size = New System.Drawing.Size(188, 204)
+        '
+        'tsmiMVName
+        '
+        Me.tsmiMVName.BackColor = System.Drawing.Color.Honeydew
+        Me.tsmiMVName.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.tsmiMVName.Name = "tsmiMVName"
+        Me.tsmiMVName.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVName.Text = "MusicVid Name"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(184, 6)
+        '
+        'tsmiMVPlay
+        '
+        Me.tsmiMVPlay.Name = "tsmiMVPlay"
+        Me.tsmiMVPlay.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVPlay.Text = "Play Music Video"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(184, 6)
+        '
+        'tsmiMVOpenFolder
+        '
+        Me.tsmiMVOpenFolder.Name = "tsmiMVOpenFolder"
+        Me.tsmiMVOpenFolder.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVOpenFolder.Text = "Open Folder"
+        '
+        'tsmiMVViewNfo
+        '
+        Me.tsmiMVViewNfo.Name = "tsmiMVViewNfo"
+        Me.tsmiMVViewNfo.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVViewNfo.Text = "View Nfo"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(184, 6)
+        '
+        'tsmiMVDelNfoArt
+        '
+        Me.tsmiMVDelNfoArt.Name = "tsmiMVDelNfoArt"
+        Me.tsmiMVDelNfoArt.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVDelNfoArt.Text = "Delete Nfo and Artwork"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(184, 6)
+        '
+        'tsmiMVRescrape
+        '
+        Me.tsmiMVRescrape.Enabled = false
+        Me.tsmiMVRescrape.Name = "tsmiMVRescrape"
+        Me.tsmiMVRescrape.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVRescrape.Text = "ToolStripMenuItem1"
+        '
+        'tsmiMVRescrapeSpecific
+        '
+        Me.tsmiMVRescrapeSpecific.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMVReDirector, Me.tsmiMVReGenre, Me.tsmiMVRePlot, Me.tsmiMVReStudio, Me.tsmiMVReYear})
+        Me.tsmiMVRescrapeSpecific.Enabled = false
+        Me.tsmiMVRescrapeSpecific.Name = "tsmiMVRescrapeSpecific"
+        Me.tsmiMVRescrapeSpecific.Size = New System.Drawing.Size(187, 22)
+        Me.tsmiMVRescrapeSpecific.Text = "Rescrape Specific"
+        '
+        'tsmiMVReDirector
+        '
+        Me.tsmiMVReDirector.Enabled = false
+        Me.tsmiMVReDirector.Name = "tsmiMVReDirector"
+        Me.tsmiMVReDirector.Size = New System.Drawing.Size(112, 22)
+        Me.tsmiMVReDirector.Text = "Director"
+        '
+        'tsmiMVReGenre
+        '
+        Me.tsmiMVReGenre.Enabled = false
+        Me.tsmiMVReGenre.Name = "tsmiMVReGenre"
+        Me.tsmiMVReGenre.Size = New System.Drawing.Size(112, 22)
+        Me.tsmiMVReGenre.Text = "Genre"
+        '
+        'tsmiMVRePlot
+        '
+        Me.tsmiMVRePlot.Enabled = false
+        Me.tsmiMVRePlot.Name = "tsmiMVRePlot"
+        Me.tsmiMVRePlot.Size = New System.Drawing.Size(112, 22)
+        Me.tsmiMVRePlot.Text = "Plot"
+        '
+        'tsmiMVReStudio
+        '
+        Me.tsmiMVReStudio.Enabled = false
+        Me.tsmiMVReStudio.Name = "tsmiMVReStudio"
+        Me.tsmiMVReStudio.Size = New System.Drawing.Size(112, 22)
+        Me.tsmiMVReStudio.Text = "Studio"
+        '
+        'tsmiMVReYear
+        '
+        Me.tsmiMVReYear.Enabled = false
+        Me.tsmiMVReYear.Name = "tsmiMVReYear"
+        Me.tsmiMVReYear.Size = New System.Drawing.Size(112, 22)
+        Me.tsmiMVReYear.Text = "Year"
         '
         'PcBxMusicVideoScreenShot
         '
@@ -1127,6 +1256,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.ResumeLayout(false)
         Me.TableLayoutPanel1.PerformLayout
         CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).EndInit
+        Me.CM1MVBrowser.ResumeLayout(false)
         CType(Me.PcBxMusicVideoScreenShot,System.ComponentModel.ISupportInitialize).EndInit
         Me.tPScreenshotMV.ResumeLayout(false)
         Me.tPScreenshotMV.PerformLayout
@@ -1222,4 +1352,21 @@ End Sub
     Friend WithEvents rb_MvScr2 As RadioButton
     Friend WithEvents rb_MvScr1 As RadioButton
     Friend WithEvents btnMVApply As Button
+    Friend WithEvents CM1MVBrowser As ContextMenuStrip
+    Friend WithEvents tsmiMVName As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents tsmiMVPlay As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents tsmiMVOpenFolder As ToolStripMenuItem
+    Friend WithEvents tsmiMVViewNfo As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents tsmiMVDelNfoArt As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents tsmiMVRescrape As ToolStripMenuItem
+    Friend WithEvents tsmiMVRescrapeSpecific As ToolStripMenuItem
+    Friend WithEvents tsmiMVReDirector As ToolStripMenuItem
+    Friend WithEvents tsmiMVReGenre As ToolStripMenuItem
+    Friend WithEvents tsmiMVRePlot As ToolStripMenuItem
+    Friend WithEvents tsmiMVReStudio As ToolStripMenuItem
+    Friend WithEvents tsmiMVReYear As ToolStripMenuItem
 End Class

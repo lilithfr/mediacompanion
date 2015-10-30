@@ -4129,7 +4129,7 @@ Public Class Form1
     End Sub
 
     
-    Private Sub util_OpenFolder(ByVal path As String)
+    Public Sub util_OpenFolder(ByVal path As String)
         Dim tempstring As String = ""
         Dim action As String = String.Empty
         Dim errors As String = String.Empty

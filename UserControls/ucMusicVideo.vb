@@ -2,9 +2,8 @@
 Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
-Imports System.Xml
+Imports System.Xml   
 Imports Media_Companion
-
 
 
 Public Class ucMusicVideo
@@ -171,7 +170,6 @@ Public Class ucMusicVideo
     End Function
     
     Private Sub lstBxMainList_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles lstBxMainList.SelectedValueChanged
-
         txtAlbum.Text = ""
         txtArtist.Text = ""
         txtDirector.Text = ""
@@ -187,17 +185,10 @@ Public Class ucMusicVideo
         pcBxScreenshot.Image = Nothing
         pcBxSinglePoster.Image = Nothing
         For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
-
-
             If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-
                 Dim nfopath As String = MusicVideo.fullPathAndFilename
                 nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
-
-                'Dim workingMusicVideo As New Music_Video_Class
                 workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
-                'workingMusicVideo.fileinfo.fullPathAndFilename = MusicVideo.fullPathAndFilename
-                'populate form
                 txtAlbum.Text = workingMusicVideo.fullmoviebody.album
                 txtArtist.Text = workingMusicVideo.fullmoviebody.artist
                 txtDirector.Text = workingMusicVideo.fullmoviebody.director
@@ -209,34 +200,37 @@ Public Class ucMusicVideo
                 txtYear.Text = workingMusicVideo.fullmoviebody.year
                 txtGenre.Text = workingMusicVideo.fullmoviebody.genre
                 txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                'Dim thumbpath As String = MusicVideo.fullPathAndFilename
-                'thumbpath = thumbpath.Replace(IO.Path.GetExtension(thumbpath), "-fanart.jpg")
-                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)  'PcBxMusicVideoScreenShot.ImageLocation = thumbpath
-                Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)  'pcBxScreenshot.ImageLocation = thumbpath
+                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                 Label16.Text = pcBxScreenshot.Image.Width
                 Label17.Text = pcBxScreenshot.Image.Height
                 'Set Media overlay
                 Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
                 movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
-
-                'Load Poster image
-                'thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.jpg")
+                
                 If IO.File.Exists(workingMusicVideo.fileinfo.posterpath) Then
-                    Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                    Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
+                    Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                    Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
                     Label19.Text = pcBxSinglePoster.Image.Width
                     Label18.Text = pcBxSinglePoster.Image.Height
-                'Else
-                '    thumbpath = MusicVideo.fullpathandfilename.Replace(IO.Path.GetExtension(MusicVideo.fullpathandfilename), "-poster.png")
-                '    If IO.File.Exists(thumbpath) Then
-                '        Form1.util_ImageLoad(PcBxPoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                '        Form1.util_ImageLoad(pcBxSinglePoster, thumbpath, Utilities.DefaultFanartPath)  'PcBxPoster.ImageLocation = thumbpath
-                '        Label19.Text = pcBxScreenshot.Image.Width
-                '        Label18.Text = pcBxScreenshot.Image.Height
-                '    End If
                 End If
             End If
         Next
+    End Sub
+
+    Private Sub lstBxMainList_MouseUp(sender As Object, e As MouseEventArgs) Handles lstBxMainList.MouseUp
+        Try
+            Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+            If String.IsNullOrEmpty(fullpathandfilename) Then Exit Sub
+            For each MV In MVCache
+                If MV.fullpathandfilename = fullpathandfilename Then
+                    Dim TitleName As String = MV.artist & " - " & MV.title
+                    tsmiMVName.Text = TitleName
+                    Exit Sub
+                End If
+            Next
+        Catch
+        End Try
     End Sub
 
 #Region " Music Video Cache Routines"
@@ -683,14 +677,26 @@ Public Class ucMusicVideo
         'Call searchFornew(False)
     End Sub
 
+    Private Sub MVPlay()
+        Dim tempstring As String = ""
+        Dim playlist As New List(Of String)
+        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+        If Not String.IsNullOrEmpty(fullpathandfilename) Then
+            tempstring = Utilities.GetFileName(fullpathandfilename)
+            If tempstring <> "" Then playlist.Add(tempstring)
+        End If
+        If playlist.Count > 0 Then
+            Call Form1.launchplaylist(playlist)
+        End If
+    End Sub
+
     
 'All Buttons
 #Region "Buttons"  
     
     'Scraping Buttons
     Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
-        Call SearchForNewMV()    ' For Testing of using Movie Scraper routines.
-        'Call searchFornew()
+        Call SearchForNewMV()
     End Sub
 
     Private Sub btnManualScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnManualScrape.Click
@@ -698,9 +704,7 @@ Public Class ucMusicVideo
     End Sub
     
     Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
-        'musicVideoList.Clear()
         lstBxMainList.Items.Clear()
-        'Call searchFornew(False)
         MVCacheLoadFromNfo
         MusicVideoCacheSave()
     End Sub
@@ -715,15 +719,6 @@ Public Class ucMusicVideo
                 Else
                     MVPreferencesLoad()
                 End If
-                'Preferences.MVidFolders.Clear()
-                'For f = 0 to clbxMvFolders.Items.Count-1
-                '    Dim t As New str_RootPaths 
-                '    t.rpath = clbxMvFolders.Items(f).ToString
-                '    Dim chkstate As CheckState = clbxMvFolders.GetItemCheckState(f)
-                '    t.selected = (chkstate = CheckState.Checked)
-                '    Preferences.MVidFolders.Add(t)
-                'Next
-                'mvFoldersChanged = False
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -746,19 +741,13 @@ Public Class ucMusicVideo
         Else
             Preferences.MVScraper = "audiodb"
         End If
-        'TabControlMain.Refresh()
         Preferences.ConfigSave()
         MVPrefChanged = False
     End Sub
 
     Private Sub btnAddFolderPath_Click(sender As System.Object, e As System.EventArgs) Handles btnAddFolderPath.Click
         Try
-            If tbFolderPath.Text = Nothing Then
-                Exit Sub
-            End If
-            If tbFolderPath.Text = "" Then
-                Exit Sub
-            End If
+            If String.IsNullOrEmpty(tbFolderPath.Text) Then Exit Sub
             Dim tempstring As String = tbFolderPath.Text
             Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
@@ -804,7 +793,6 @@ Public Class ucMusicVideo
     Private Sub btnBrowseFolders_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseFolders.Click
         Try
             Dim allok As Boolean = True
-            'Dim theFolderBrowser As New FolderBrowserDialog
             Dim thefoldernames As String
             fb.Description = "Please Select Folder to Add"
             fb.ShowNewFolderButton = True
@@ -850,7 +838,7 @@ Public Class ucMusicVideo
 				    Exit For
 			    End If
 		    Next
-		If Not skip Then Form1.droppedItems.Add(folders(f))
+		    If Not skip Then Form1.droppedItems.Add(folders(f))
         Next
         If Form1.droppedItems.Count < 1 Then Exit Sub
         AuthorizeCheck = True
@@ -1136,17 +1124,9 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub btnMVPlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMVPlay.Click
-        Dim tempstring As String = ""
-        Dim playlist As New List(Of String)
-        Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-        If Not String.IsNullOrEmpty(fullpathandfilename) Then
-            tempstring = Utilities.GetFileName(fullpathandfilename)
-            If tempstring <> "" Then playlist.Add(tempstring)
-        End If
-        If playlist.Count > 0 Then
-            Call Form1.launchplaylist(playlist)
-        End If
+        MVPlay()
     End Sub
+    
 #End Region
 
     Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
@@ -1162,471 +1142,56 @@ Public Class ucMusicVideo
         MVPrefChanged = True
     End Sub
 
+    Private Sub MV_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
+        Dim lbxIndex As Integer = lstBxMainList.SelectedIndex
+        Dim MVRemoved As Boolean = False
+        If lbxIndex < 0 Then Exit Sub
+        Dim MVCacheIndex As Integer = Nothing
+        If MVCache.RemoveAll(Function(c) c.fullpathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
+            Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
+            If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
+            MVArt = workingMusicVideo.fileinfo.posterpath
+            If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
+            Utilities.SafeDeleteFile(workingMusicVideo.fileinfo.fullpathandfilename)
+            loadMusicVideolist
+        End If
+    End Sub
+
+#Region "MVContextMenu Items"
+    
+    Private Sub tsmiMVPlay_Click(sender As Object, e As EventArgs) Handles tsmiMVPlay.Click
+        MVPlay()
+    End Sub
+
+    Private Sub tsmiMVOpenFolder_Click(sender As Object, e As EventArgs) Handles tsmiMVOpenFolder.Click
+        Try
+            If Not workingMusicVideo.fileinfo.fullpathandfilename Is Nothing Then
+                Call Form1.util_OpenFolder(workingMusicVideo.fileinfo.fullpathandfilename)
+            Else
+                MsgBox("There is no Movie selected to open")
+            End If
+        Catch
+
+        End Try
+    End Sub
+
+    Private Sub tsmiMVViewNfo_Click(sender As Object, e As EventArgs) Handles tsmiMVViewNfo.Click
+        Try
+            Utilities.NfoNotepadDisplay(workingMusicVideo.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMVDelNfoArt_Click(sender As Object, e As EventArgs) Handles tsmiMVDelNfoArt.Click
+        MV_DeleteNfoArtwork()
+    End Sub
+    
+#End Region
+
+
 #Region "garbage"
 
-    'Private Function listAllFolders()
-
-    '    Dim allfolders As New List(Of String)
-    '    allfolders.Clear()
-    '    For Each moviefolder In Preferences.MVidFolders
-    '        Dim hg As New IO.DirectoryInfo(moviefolder)
-    '        If hg.Exists Then
-    '            allfolders.Add(moviefolder)
-    '            Dim subfolders As List(Of String)
-    '            subfolders = getSubFolders(moviefolder)
-    '            Try
-    '                For Each subfolder In subfolders
-    '                    allfolders.Add(subfolder)
-    '                Next
-    '            Catch
-    '            End Try
-    '        End If
-    '    Next
-    '    Return allfolders
-    'End Function
-
-    'Public Function getSubFolders(ByVal RootDirectory As String, Optional ByVal log As Boolean = False)
-
-
-    '    Dim folders As New List(Of String)
-
-    '    For Each s As String In Directory.GetDirectories(RootDirectory)
-    '        If (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-    '        Else
-    '            If Not validmoviedir(s) Then
-    '            Else
-    '                Dim exists As Boolean = False
-    '                For Each item In folders
-    '                    If item = s Then exists = True
-    '                Next
-    '                If exists = True Then
-
-    '                Else
-
-    '                    folders.Add(s)
-    '                    For Each t As String In Directory.GetDirectories(s)
-    '                        If (File.GetAttributes(t) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-
-    '                        Else
-    '                            If Not validmoviedir(t) Then
-
-    '                            Else
-    '                                Dim existst As Boolean = False
-    '                                For Each item In folders
-    '                                    If item = t Then existst = True
-    '                                Next
-    '                                If exists = True Then
-
-    '                                Else
-
-    '                                    folders.Add(t)
-    '                                    For Each u As String In Directory.GetDirectories(t)
-    '                                        If (File.GetAttributes(u) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-
-    '                                        Else
-    '                                            If Not validmoviedir(u) Then
-
-    '                                            Else
-    '                                                Dim existsu As Boolean = False
-    '                                                For Each item In folders
-    '                                                    If item = s Then existsu = True
-    '                                                Next
-    '                                                If exists = True Then
-
-    '                                                Else
-
-    '                                                    folders.Add(u)
-    '                                                    For Each v As String In Directory.GetDirectories(u)
-    '                                                        If (File.GetAttributes(v) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-
-    '                                                        Else
-    '                                                            If Not validmoviedir(v) Then
-
-    '                                                            Else
-    '                                                                Dim existsv As Boolean = False
-    '                                                                For Each item In folders
-    '                                                                    If item = v Then existsv = True
-    '                                                                Next
-    '                                                                If existsv = True Then
-
-    '                                                                Else
-
-    '                                                                    folders.Add(v)
-    '                                                                    For Each w As String In Directory.GetDirectories(v)
-    '                                                                        If (File.GetAttributes(w) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-
-    '                                                                        Else
-    '                                                                            If Not validmoviedir(w) Then
-
-    '                                                                            Else
-    '                                                                                Dim existsw As Boolean = False
-    '                                                                                For Each item In folders
-    '                                                                                    If item = w Then existsw = True
-    '                                                                                Next
-    '                                                                                If existsw = True Then
-
-    '                                                                                Else
-
-    '                                                                                    folders.Add(w)
-    '                                                                                    For Each x As String In Directory.GetDirectories(w)
-    '                                                                                        If (File.GetAttributes(x) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-
-    '                                                                                        Else
-    '                                                                                            If Not validmoviedir(x) Then
-
-    '                                                                                            Else
-    '                                                                                                Dim existsx As Boolean = False
-    '                                                                                                For Each item In folders
-    '                                                                                                    If item = x Then existsx = True
-    '                                                                                                Next
-    '                                                                                                If existsx = True Then
-
-    '                                                                                                Else
-
-    '                                                                                                    folders.Add(x)
-    '                                                                                                    For Each y As String In Directory.GetDirectories(x)
-    '                                                                                                        If (File.GetAttributes(y) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-
-    '                                                                                                        Else
-    '                                                                                                            If Not validmoviedir(y) Then
-
-    '                                                                                                            Else
-    '                                                                                                                Dim existsy As Boolean = False
-    '                                                                                                                For Each item In folders
-    '                                                                                                                    If item = y Then existsy = True
-    '                                                                                                                Next
-    '                                                                                                                If existsy = True Then
-
-    '                                                                                                                Else
-
-    '                                                                                                                    folders.Add(y)
-    '                                                                                                                End If
-    '                                                                                                            End If
-    '                                                                                                        End If
-    '                                                                                                    Next
-    '                                                                                                End If
-    '                                                                                            End If
-    '                                                                                        End If
-    '                                                                                    Next
-    '                                                                                End If
-    '                                                                            End If
-    '                                                                        End If
-    '                                                                    Next
-    '                                                                End If
-    '                                                            End If
-    '                                                        End If
-    '                                                    Next
-    '                                                End If
-    '                                            End If
-    '                                        End If
-    '                                    Next
-    '                                End If
-    '                            End If
-    '                        End If
-    '                    Next
-    '                End If
-    '            End If
-    '        End If
-    '    Next
-    '    Return (folders)
-    'End Function
-
-    'Public Function validmoviedir(ByVal s As String) As Boolean
-    '    Dim passed As Boolean = True
-    '    Try
-    '        For Each t As String In Directory.GetDirectories(s)
-    '        Next
-    '        Select Case True
-    '            Case Strings.Right(s, 7).ToLower = "trailer"
-    '                passed = False
-    '            Case Strings.Right(s, 8).ToLower = "(noscan)"
-    '                passed = False
-    '            Case Strings.Right(s, 6).ToLower = "sample"
-    '                passed = False
-    '            Case Strings.Right(s, 8).ToLower = "recycler"
-    '                passed = False
-    '            Case s.ToLower.Contains("$recycle.bin")
-    '                passed = False
-    '            Case Strings.Right(s, 10).ToLower = "lost+found"
-    '                passed = False
-    '            Case s.ToLower.Contains("system volume information")
-    '                passed = False
-    '            Case s.Contains("MSOCache")
-    '                passed = False
-    '        End Select
-    '    Catch ex As Exception
-    '        passed = False
-    '    End Try
-    '    Return passed
-    'End Function
-
-    'Private Function Listvideofiles(ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
-    '    Dim mediaList As New List(Of String)
-
-
-    '    Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*"&pattern)
-
-    '    For Each fs_info As System.IO.FileInfo In fs_infos
-    '        mediaList.Add(fs_info.FullName)
-    '    Next
-    '    Return mediaList
-    'End Function
-
-    'Private Function AssigntoCache(ByVal mv As FullMovieDetails ) As MVComboList 
-    '    Dim cache As New MVComboList
-    '    cache.fullpathandfilename = mv.fileinfo.fullpathandfilename
-    '    cache.filename = mv.fileinfo.filename
-    'End Function
-
-    'Private Sub searchFornew(Optional ByVal scrape As Boolean = True)
-    '    Dim fullfolderlist As New List(Of String)
-    '    fullfolderlist.Clear()
-    '    fullfolderlist = listAllFolders()
-
-    '    Dim FullFileList As New List(Of String)
-    '    Dim filelist As New List(Of String)
-
-    '    For Each folder In fullfolderlist
-    '        For Each extension In Utilities.VideoExtensions 
-    '            Dim dir_info As New System.IO.DirectoryInfo(folder)
-    '            filelist.Clear()
-    '            filelist = Listvideofiles(extension, dir_info)
-    '            For Each item In filelist
-    '                FullFileList.Add(item)
-    '            Next
-    '        Next
-    '    Next
-    '    Dim newMusicVideoList As New List(Of FullMovieDetails)
-    '    newMusicVideoList.Clear()
-    '    For Each videopath In FullFileList
-
-    '        Dim musicVideoTitle As New FullMovieDetails
-    '        Dim scraper As New WikipediaMusivVideoScraper
-
-    '        If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) And scrape = True Then
-    '            Dim searchterm As String = getArtistAndTitle(videopath)
-    '            musicVideoTitle = scraper.musicVideoScraper(videopath, searchterm)
-    '            musicVideoTitle.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
-    '            Try
-    '                If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" And scrape = True Then
-    '                    saveposter(videopath, musicVideoTitle.listthumbs(0))
-    '                End If
-    '            Catch
-    '            End Try
-    '            Dim newstreamdetails As New FullFileDetails
-    '            musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
-
-    '            Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
-    '            Dim hms = TimeSpan.FromSeconds(seconds)
-    '            Dim h = hms.Hours.ToString
-    '            Dim m = hms.Minutes.ToString
-    '            Dim s = hms.Seconds.ToString
-
-    '            If s.Length = 1 Then s = "0" & s
-
-    '            Dim runtime As String
-    '            runtime = h & ":" & m & ":" & s
-    '            If h = "0" Then
-    '                runtime = m & ":" & s
-    '            End If
-    '            If h = "0" And m = "0" Then
-    '                runtime = s
-    '            End If
-    '            musicVideoTitle.fullmoviebody.runtime = runtime
-
-    '            WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
-
-    '            Dim alreadyloaded As Boolean = False
-    '            For Each item In musicVideoList
-    '                If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
-    '                    alreadyloaded = True
-    '                    Exit For
-    '                End If
-    '            Next
-    '            If alreadyloaded = False Then
-    '                MVCacheAddScraped(musicVideoTitle)
-    '                'musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-    '                'musicVideoList.Add(musicVideoTitle)
-
-    '                'lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
-    '            End If
-    '        End If
-
-    '        'ElseIf IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) Then
-    '        '    If validateMusicVideoNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")) = False And scrape = True Then
-
-    '        '        Dim nfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
-    '        '        musicVideoTitle.fileinfo.fullpathandfilename = videopath
-    '        '        Dim oldnfopath As String = videopath.Replace(IO.Path.GetExtension(videopath), "_old.nfo")
-    '        '        IO.File.Move(nfopath, oldnfopath)
-
-    '        '        Dim searchterm As String = getArtistAndTitle(videopath)
-    '        '        musicVideoTitle = scraper.musicVideoScraper(videopath, searchterm)
-    '        '        musicVideoTitle.fileinfo.fullpathandfilename = videopath
-    '        '        Try
-    '        '            If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" And scrape = True Then
-    '        '                saveposter(videopath, musicVideoTitle.listthumbs(0))
-    '        '            End If
-    '        '        Catch
-    '        '        End Try
-    '        '        Dim newstreamdetails As New FullFileDetails
-    '        '        musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
-
-    '        '        Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
-    '        '        Dim hms = TimeSpan.FromSeconds(seconds)
-    '        '        Dim h = hms.Hours.ToString
-    '        '        Dim m = hms.Minutes.ToString
-    '        '        Dim s = hms.Seconds.ToString
-
-    '        '        If s.Length = 1 Then s = "0" & s
-
-    '        '        Dim runtime As String
-    '        '        runtime = h & ":" & m & ":" & s
-    '        '        If h = "0" Then
-    '        '            runtime = m & ":" & s
-    '        '        End If
-    '        '        If h = "0" And m = "0" Then
-    '        '            runtime = s
-    '        '        End If
-    '        '        musicVideoTitle.fullmoviebody.runtime = runtime
-    '        '        WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
-    '        '        Dim alreadyloaded As Boolean = False
-    '        '        For Each item In musicVideoList
-    '        '            If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
-    '        '                alreadyloaded = True
-    '        '            End If
-    '        '        Next
-    '        '        If alreadyloaded = False Then
-    '        '            musicVideoTitle = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-    '        '            musicVideoList.Add(musicVideoTitle)
-
-    '        '            lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
-    '        '        End If
-
-    '        '    Else
-    '        '        Dim existingMusicVideonfo As New FullMovieDetails
-
-    '        '        Dim alreadyloaded As Boolean = False
-    '        '        For Each item In musicVideoList
-    '        '            If IsNothing(item) Then Continue For
-    '        '            If item.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo") Then
-    '        '                alreadyloaded = True
-    '        '            End If
-    '        '        Next
-    '        '        If alreadyloaded = False Then
-    '        '            existingMusicVideonfo = WorkingWithNfoFiles.MVloadNfo(videopath.Replace(IO.Path.GetExtension(videopath), ".nfo"))
-    '        '            existingMusicVideonfo.fileinfo.fullpathandfilename = videopath.Replace(IO.Path.GetExtension(videopath), ".nfo")
-    '        '            musicVideoList.Add(existingMusicVideonfo)
-
-    '        '            lstBxMainList.Items.Add(New ValueDescriptionPair(existingMusicVideonfo.fileinfo.fullpathandfilename, existingMusicVideonfo.fullmoviebody.title))
-    '        '        End If
-    '        '    End If
-    '        'End If
-    '        Try
-    '            If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-fanart.jpg")) And scrape = True Then
-    '                createScreenshot(videopath)
-    '            End If
-    '        Catch
-    '        End Try
-
-    '        Application.DoEvents()
-    '        Me.Refresh()
-
-    '    Next
-    '    Call MusicVideoCacheSave()
-    'End Sub
-
-    'Private Sub ChangeMusicVideo(ByVal url As String)
-    '    Try
-    '        Dim videopath As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-    '        Dim musicVideoTitle As New FullMovieDetails
-    '        Dim scraper As New WikipediaMusivVideoScraper
-
-    '        Dim searchterm As String = getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value)
-    '        musicVideoTitle = scraper.musicVideoScraper(getArtistAndTitle(CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value), "", url)
-
-    '        'poster
-    '        Try
-    '            If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg")) And musicVideoTitle.listthumbs(0) <> "" Then
-    '                'save available posters if dont already exist
-    '                saveposter(videopath, musicVideoTitle.listthumbs(0))
-    '            Else
-    '                If chkBxOverWriteArt.CheckState = CheckState.Checked Then
-    '                    'IF overwrite chkbox ticked then delete and save new
-    '                    IO.File.Delete(videopath.Replace(IO.Path.GetExtension(videopath), "-poster.jpg"))
-    '                    saveposter(videopath, musicVideoTitle.listthumbs(0))
-    '                End If
-    '            End If
-    '        Catch
-    '        End Try
-
-    '        'screenshot
-    '        If Not IO.File.Exists(videopath.Replace(IO.Path.GetExtension(videopath), "-fanart.jpg")) Then
-    '            createScreenshot(videopath)
-    '        Else
-    '            If chkBxOverWriteArt.CheckState = CheckState.Checked Then
-    '                'IF overwrite chkbox ticked then delete and save new
-    '                IO.File.Delete(videopath.Replace(IO.Path.GetExtension(videopath), "-fanart.jpg"))
-    '                createScreenshot(videopath)
-    '            End If
-    '        End If
-
-    '        'streamdetails
-    '        Dim newstreamdetails As New FullFileDetails
-    '        musicVideoTitle.filedetails = Preferences.Get_HdTags(videopath)
-
-    '        Dim seconds As Integer = Convert.ToInt32(musicVideoTitle.filedetails.filedetails_video.DurationInSeconds.Value)
-    '        Dim hms = TimeSpan.FromSeconds(seconds)
-    '        Dim h = hms.Hours.ToString
-    '        Dim m = hms.Minutes.ToString
-    '        Dim s = hms.Seconds.ToString
-
-    '        If s.Length = 1 Then s = "0" & s
-
-    '        Dim runtime As String
-    '        runtime = h & ":" & m & ":" & s
-    '        If h = "0" Then
-    '            runtime = m & ":" & s
-    '        End If
-    '        If h = "0" And m = "0" Then
-    '            runtime = s
-    '        End If
-    '        musicVideoTitle.fullmoviebody.runtime = runtime
-    '        musicVideoTitle.fileinfo.fullpathandfilename = videopath
-    '        WorkingWithNfoFiles.MVsaveNfo(musicVideoTitle)
-
-    '        For f = 0 To musicVideoList.Count - 1
-    '            If musicVideoList.Item(f).fileinfo.fullpathandfilename.ToLower = videopath.ToLower Then
-    '                musicVideoList.RemoveAt(f)
-    '                musicVideoList.Add(musicVideoTitle)
-    '                Exit For
-    '            End If
-    '        Next
-
-    '        For f = 0 To lstBxMainList.Items.Count - 1
-    '            If CType(lstBxMainList.Items(f), ValueDescriptionPair).Value = musicVideoTitle.fileinfo.fullpathandfilename Then
-    '                rescraping = True
-    '                lstBxMainList.Items.RemoveAt(f)
-    '                lstBxMainList.Items.Add(New ValueDescriptionPair(musicVideoTitle.fileinfo.fullpathandfilename, musicVideoTitle.fullmoviebody.title))
-    '                For g = 0 To lstBxMainList.Items.Count - 1
-    '                    If CType(lstBxMainList.Items(g), ValueDescriptionPair).Value = musicVideoTitle.fileinfo.fullpathandfilename Then
-    '                        rescraping = False
-    '                        lstBxMainList.SelectedItem = lstBxMainList.Items(g)
-    '                    End If
-    '                Next
-    '                Exit For
-    '            End If
-    '        Next
-    '    Catch
-    '    End try
-    '    rescraping = False
-    '    TabControlMain.SelectedIndex = 0
-    '    changeMVList.Clear()
-    'End Sub
-
-    'Private Sub btnGoogleSearchPoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearchPoster.Click
-    '    Call googleSearch()
-    'End Sub
 
 #End Region
 

@@ -62,10 +62,10 @@ Public Class WikipediaMusivVideoScraper
             webpage.Clear()
         End If
         Dim fullwebpage As String = ""
-        If wikipediaURL = "" Then   'set artist and title if a new scrape, not a change musicvideo.
-            totalinfo.AppendTag("artist", Artist)
-            totalinfo.AppendTag("title", Title)
-        End If
+        'If wikipediaURL = "" Then   'set artist and title if a new scrape, not a change musicvideo.
+        '    totalinfo.AppendTag("artist", Artist)
+        '    totalinfo.AppendTag("title", Title)
+        'End If
         If wikipediaURL <> "" Then
             webpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, False, 10)
             Dim htpage As String = ""
@@ -166,7 +166,7 @@ Public Class WikipediaMusivVideoScraper
                     End Try
                 End If
 
-                If wikipediaURL = wikiurlpassed Then  '  If change music video, get new title and artist.
+                'If wikipediaURL = wikiurlpassed Then  '  If change music video, get new title and artist.
 
                     'Get artist
                     If fullwebpage.IndexOf(""">Single</a>") <> -1 Then
@@ -196,7 +196,7 @@ Public Class WikipediaMusivVideoScraper
                             End Try
                         End If
                     Next
-                End If
+                'End If
             Catch
             End Try
         End If
