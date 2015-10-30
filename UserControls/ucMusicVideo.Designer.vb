@@ -118,6 +118,7 @@ Partial Class ucMusicVideo
         Me.rb_MvScr1 = New System.Windows.Forms.RadioButton()
         Me.btnMVApply = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.MVDgv1 = New System.Windows.Forms.DataGridView()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
@@ -132,6 +133,7 @@ Partial Class ucMusicVideo
         Me.tPPref.SuspendLayout
         Me.TableLayoutPanel2.SuspendLayout
         Me.GroupBox1.SuspendLayout
+        CType(Me.MVDgv1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
         '
         'TabControlMain
@@ -187,7 +189,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.Controls.Add(Me.txtPlot, 6, 16)
         Me.TableLayoutPanel1.Controls.Add(Me.Label3, 5, 16)
         Me.TableLayoutPanel1.Controls.Add(Me.txtTitle, 5, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.lstBxMainList, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.lstBxMainList, 3, 16)
         Me.TableLayoutPanel1.Controls.Add(Me.PcBxMusicVideoScreenShot, 5, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 5, 8)
         Me.TableLayoutPanel1.Controls.Add(Me.Label10, 5, 14)
@@ -204,6 +206,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.Controls.Add(Me.Label6, 8, 14)
         Me.TableLayoutPanel1.Controls.Add(Me.txtRuntime, 9, 14)
         Me.TableLayoutPanel1.Controls.Add(Me.btnMVPlay, 11, 14)
+        Me.TableLayoutPanel1.Controls.Add(Me.MVDgv1, 1, 5)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -354,21 +357,19 @@ Partial Class ucMusicVideo
         '
         'lstBxMainList
         '
-        Me.TableLayoutPanel1.SetColumnSpan(Me.lstBxMainList, 3)
         Me.lstBxMainList.ContextMenuStrip = Me.CM1MVBrowser
         Me.lstBxMainList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lstBxMainList.FormattingEnabled = true
-        Me.lstBxMainList.Location = New System.Drawing.Point(11, 100)
+        Me.lstBxMainList.Location = New System.Drawing.Point(161, 456)
         Me.lstBxMainList.Name = "lstBxMainList"
-        Me.TableLayoutPanel1.SetRowSpan(Me.lstBxMainList, 11)
-        Me.lstBxMainList.Size = New System.Drawing.Size(274, 350)
+        Me.lstBxMainList.Size = New System.Drawing.Size(124, 105)
         Me.lstBxMainList.TabIndex = 24
         '
         'CM1MVBrowser
         '
         Me.CM1MVBrowser.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMVName, Me.ToolStripSeparator1, Me.tsmiMVPlay, Me.ToolStripSeparator2, Me.tsmiMVOpenFolder, Me.tsmiMVViewNfo, Me.ToolStripSeparator3, Me.tsmiMVDelNfoArt, Me.ToolStripSeparator4, Me.tsmiMVRescrape, Me.tsmiMVRescrapeSpecific})
         Me.CM1MVBrowser.Name = "CM1MVBrowser"
-        Me.CM1MVBrowser.Size = New System.Drawing.Size(188, 204)
+        Me.CM1MVBrowser.Size = New System.Drawing.Size(188, 182)
         '
         'tsmiMVName
         '
@@ -1244,6 +1245,19 @@ Partial Class ucMusicVideo
         Me.btnMVApply.Text = "Apply Changes"
         Me.btnMVApply.UseVisualStyleBackColor = true
         '
+        'MVDgv1
+        '
+        Me.MVDgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.TableLayoutPanel1.SetColumnSpan(Me.MVDgv1, 3)
+        Me.MVDgv1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MVDgv1.Location = New System.Drawing.Point(11, 100)
+        Me.MVDgv1.Name = "MVDgv1"
+        Me.MVDgv1.RowHeadersVisible = false
+        Me.TableLayoutPanel1.SetRowSpan(Me.MVDgv1, 11)
+        Me.MVDgv1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.MVDgv1.Size = New System.Drawing.Size(274, 350)
+        Me.MVDgv1.TabIndex = 54
+        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -1271,6 +1285,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel2.PerformLayout
         Me.GroupBox1.ResumeLayout(false)
         Me.GroupBox1.PerformLayout
+        CType(Me.MVDgv1,System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(false)
 
 End Sub
@@ -1369,4 +1384,5 @@ End Sub
     Friend WithEvents tsmiMVRePlot As ToolStripMenuItem
     Friend WithEvents tsmiMVReStudio As ToolStripMenuItem
     Friend WithEvents tsmiMVReYear As ToolStripMenuItem
+    Friend WithEvents MVDgv1 As DataGridView
 End Class

@@ -539,6 +539,13 @@ Public Class ucMusicVideo
         For Each item In MVCache' musicVideoList
             lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
         Next
+        'MVDgv1.DataSource = MVCache
+        MVDataGridSort()
+    End Sub
+
+    Private Sub MVDataGridSort()
+       ' Dim dvg As DataGridView = DataGridView.DataSource = MVCache
+
     End Sub
     
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
