@@ -402,8 +402,10 @@ Public Class MediaInfoExport
                                                     arrlstFormat.Add("540")
                                                 ElseIf (width <= 1280 And height <= 720) Then
                                                     arrlstFormat.Add("720")
-                                                Else
+                                                ElseIf (width <= 1920 And height <= 1080) Then
                                                     arrlstFormat.Add("1080")
+                                                Else
+                                                    arrlstFormat.Add("2160")
                                                 End If
                                             End If
                                     End Select

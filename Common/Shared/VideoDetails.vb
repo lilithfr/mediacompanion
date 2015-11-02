@@ -28,12 +28,12 @@ Public Class VideoDetails
                 Dim h As Integer = Convert.ToInt32(Height.Value)
 
                 If w =   0 Or  h =  0  Then Return -1
-                If w<= 720 And h<=480  Then Return 480
-                If w<= 768 And h<=576  Then Return 576
-                If w<= 960 And h<=544  Then Return 540
-                If w<=1600 And h<=720  Then Return 720  'If w<=1280 And h<=720  Then Return 720
-            
-                Return 1080
+                If w<= 720 AndAlso h<=480  Then Return 480
+                If w<= 768 AndAlso h<=576  Then Return 576
+                If w<= 960 AndAlso h<=544  Then Return 540
+                If w<=1600 AndAlso h<=720  Then Return 720  'If w<=1280 And h<=720  Then Return 720
+                If w<=1920 AndAlso h<=1080 Then Return 1080
+                Return 2160
             Catch
                 Return -1
             End Try

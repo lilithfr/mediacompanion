@@ -2044,7 +2044,7 @@ Public Class Form1
                 btnPlayMovie.Enabled = True
                 mov_SplitContainerAutoPosition
 
-                Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
+                Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                 movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags,workingMovie.DisplayFolderSize)
                 'FanTvArtList.Items.Clear()
                 'Panel6.Visible = CheckforExtraArt()
@@ -4504,7 +4504,7 @@ Public Class Form1
                             Preferences.savefanart = issavefanart
                             mov_DisplayFanart()
                             util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                            Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
+                            Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                             movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
 
                             For Each paths In Preferences.offlinefolders
@@ -11972,7 +11972,7 @@ End Sub
             If CurrentTab = "movies" Then
                 mov_DisplayFanart()
                 util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
+                Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                 movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
             ElseIf CurrentTab = "tv shows" Then
                 TvTreeview_AfterSelect_Do()
@@ -16573,7 +16573,7 @@ End Sub
                         Preferences.savefanart = issavefanart
                         mov_DisplayFanart()
                         util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails)
+                        Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                         movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
 
                         For Each paths In Preferences.offlinefolders
@@ -21470,7 +21470,7 @@ End Sub
 
 #End Region   'Movie Filter code
 
-    Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails) As List(Of KeyValuePair(Of String, String))
+    Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails, Optional ByVal Is3d As Boolean = False) As List(Of KeyValuePair(Of String, String))
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
             Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=Vidfiledetails.DefaultAudioTrack)
@@ -21483,8 +21483,9 @@ End Sub
 
 
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value)))
-            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(Vidfiledetails.filedetails_video.Codec.Value.RemoveWhitespace)))
+            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(Vidfiledetails.filedetails_video))))  '.Codec.Value.RemoveWhitespace)))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString)))
+            flags.Add(New KeyValuePair(Of String, string)("special", If(Is3d, "3d", "")))
         Catch
         End Try
         Return flags
@@ -21501,6 +21502,12 @@ End Sub
 
     Private Shared Function GetNumAudioTracks(AudCh)
         Return If((AudCh = "" Or AudCh = "-1"), "0", AudCh.Substring(0, 1))
+    End Function
+
+    Private Shared Function GetMasterCodec(strmdata As VideoDetails)
+        Dim codec As String = strmdata.Codec.Value.RemoveWhitespace
+        Dim format As String = strmdata.FormatInfo.Value.RemoveWhitespace
+        Return If(codec = "h264" AndAlso format = "avc1", format, codec)
     End Function
 
     Private Sub TabPage18_Enter(sender As Object, e As EventArgs) Handles TabPage18.Enter

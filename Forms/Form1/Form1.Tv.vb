@@ -4719,7 +4719,7 @@ Partial Public Class Form1
             End If
 
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
-            flags.Add(New KeyValuePair(Of String, string)("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))   '.Codec.Value.RemoveWhitespace))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
         Catch
         End Try
@@ -4754,7 +4754,7 @@ Partial Public Class Form1
                 flags.Add(New KeyValuePair(Of String, string)("audio", ""))
             End If
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
-            flags.Add(New KeyValuePair(Of String, string)("codec", thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))  'thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
         Catch
         End Try

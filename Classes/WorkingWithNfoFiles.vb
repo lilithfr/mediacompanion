@@ -208,6 +208,10 @@ Public Class WorkingWithNfoFiles
                                                                 Case "codec"
                                                                     newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
                                                                 Case "format"
+                                                                    If newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = "" Then
+                                                                        newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                                    End If
+                                                                Case "formatinfo"
                                                                     newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
                                                                 Case "durationinseconds"
                                                                     newtvepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
@@ -396,6 +400,10 @@ Public Class WorkingWithNfoFiles
                                                                                 anotherepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
                                                                             Case "codec"
                                                                                 anotherepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                                                            Case "format"
+                                                                                If anotherepisode.Details.StreamDetails.Video.FormatInfo.Value = "" Then
+                                                                                    anotherepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                                                End If
                                                                             Case "formatinfo"
                                                                                 anotherepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
                                                                             Case "durationinseconds"
@@ -549,7 +557,7 @@ Public Class WorkingWithNfoFiles
                     xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                 End If
                 If Not String.IsNullOrEmpty(ep.Details.StreamDetails.Video.FormatInfo.Value) Then
-                    xmlStreamDetailsTypeChild = document.CreateElement("format")
+                    xmlStreamDetailsTypeChild = document.CreateElement("formatinfo")
                     xmlStreamDetailsTypeChild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
                     xmlStreamDetailsType.AppendChild(xmlStreamDetailsTypeChild)
                 End If
@@ -2608,6 +2616,10 @@ Public Class WorkingWithNfoFiles
                                                                 newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
                                                             Case "codec"
                                                                 newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
+                                                            Case "format"
+                                                                If newfilenfo.filedetails_video.FormatInfo.Value = "" Then
+                                                                    newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
+                                                                End If
                                                             Case "formatinfo"
                                                                 newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
                                                             Case "durationinseconds"
@@ -2787,7 +2799,7 @@ Public Class WorkingWithNfoFiles
                     End If
                     stage = 6
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.FormatInfo.Value) Then
-                        filedetailschildchild = doc.CreateElement("format")
+                        filedetailschildchild = doc.CreateElement("formatinfo")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.FormatInfo.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
@@ -3303,6 +3315,10 @@ Public Class WorkingWithNfoFiles
                                                                     newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
                                                                 Case "codec"
                                                                     newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
+                                                                Case "format"
+                                                                    If newfilenfo.filedetails_video.FormatInfo.Value = "" Then
+                                                                        newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
+                                                                    End If
                                                                 Case "formatinfo"
                                                                     newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
                                                                 Case "durationinseconds"
@@ -3445,7 +3461,7 @@ Public Class WorkingWithNfoFiles
                 End If
 
                 If Not String.IsNullOrEmpty(homemovietosave.filedetails.filedetails_video.FormatInfo.Value) Then
-                    filedetailschildchild = doc.CreateElement("format")
+                    filedetailschildchild = doc.CreateElement("formatinfo")
                     filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.FormatInfo.Value
                     filedetailschild.AppendChild(filedetailschildchild)
                 End If
@@ -3955,6 +3971,10 @@ Public Class WorkingWithNfoFiles
                                                         newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
                                                     Case "codec"
                                                         newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
+                                                    Case "format"
+                                                        If newfilenfo.filedetails_video.FormatInfo.Value = "" Then
+                                                            newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
+                                                        End If
                                                     Case "formatinfo"
                                                         newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
                                                     Case "durationinseconds"
