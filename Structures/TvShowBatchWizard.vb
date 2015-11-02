@@ -10,6 +10,7 @@ Public Structure str_TvShowBatchWizard
     Dim shStudio As Boolean
     Dim shActor As Boolean
     Dim shStatus As Boolean
+    Dim shSeries As Boolean
     Dim shPosters As Boolean
     Dim shFanart As Boolean
     Dim shSeason As Boolean
@@ -51,6 +52,7 @@ Public Structure str_TvShowBatchWizard
         shStudio = False
         shActor = False
         shStatus = False
+        shSeries = False
         shPosters = False
         shFanart = False
         shSeason = False
@@ -92,7 +94,8 @@ Public Structure str_TvShowBatchWizard
         shGenre = False
         shStudio = False
         shActor = False
-        shActor = False
+        shStatus = False
+        shSeries = False
         shPosters = False
         shFanart = False
         shSeason = False

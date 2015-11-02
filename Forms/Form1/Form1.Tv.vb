@@ -1730,6 +1730,17 @@ Partial Public Class Form1
                     Dim tvseriesdata As New Tvdb.ShowData 
                     Dim language As String = editshow.Language.Value
                     If language = "" Then language = "en"
+                    If tvBatchList.shSeries Then
+                        Dim aok As Boolean = tvdbstuff.GetSeriesXml(editshow.TvdbId.Value, language, SeriesXmlPath)
+                        If aok Then
+                            progresstext &= "Updated Series.xml data"
+                        Else
+                            progresstext &= "Failed to update xml data"
+                        End If
+                        tvbckrescrapewizard.ReportProgress(progress, progresstext)
+                        If singleshow Then Exit For
+                        Continue For
+                    End If
                     tvseriesdata = tvdbstuff.GetShow(editshow.TvdbId.Value, language, SeriesXmlPath)
                     If tvseriesdata.FailedLoad Then
                         progresstext &= "Failed to load xml data"

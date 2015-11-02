@@ -4,29 +4,19 @@ Imports System.Text.RegularExpressions
 
 Public Class MVComboList
 
-    Property fullpathandfilename  As String = ""
-    Property filename             As String = ""
-    Property foldername           As String = ""
+    Property nfopathandfilename  As String = ""
     Private _title               As String = ""
-    Property artist               As String = ""
-    Property year                 As Integer= 0
-    Property filedate             As String = ""
-    'Property rating               As Double = 0
-    Property genre                As String = ""
-    Property playcount            As String = ""
-    Property lastplayed           As String = ""
-    Property runtime              As String = ""
-    Property createdate           As String = ""
-    Property plot                 As String = ""
-    'Property Votes                As Integer= 0
-    Property Resolution           As Integer= -1
-    Property Audio                As New List(Of AudioDetails)
-    Property track                As String = ""
-    Private _thumb                As String = ""
-    Property FrodoPosterExists    As Boolean
-    Property PreFrodoPosterExists As Boolean
+    
+    Public Property Artist As String
+        Get
+            Return _artist
+        End Get
+        Set(value As String)
+            _artist = value
+        End Set
+    End Property
 
-    Public Property title As String
+    Public Property Title As String
         Get
             Return _title
         End Get
@@ -35,6 +25,36 @@ Public Class MVComboList
         End Set
     End Property
 
+    Public ReadOnly Property ArtistTitle As String
+        Get
+            Return artist & " - " & Title
+        End Get
+    End Property
+
+    Public ReadOnly Property ArtistTitleYear As String
+        Get
+            Return ArtistTitle & " (" & If(year < 1900, "1901", year.ToString) & ")"
+        End Get
+    End Property
+
+    Private _artist               As String = ""
+    Property year                 As Integer= 0
+    Property filedate             As String = ""
+    Property genre                As String = ""
+    Property playcount            As String = ""
+    Property lastplayed           As String = ""
+    Property runtime              As String = ""
+    Property createdate           As String = ""
+    Property plot                 As String = ""
+    Property Resolution           As Integer= -1
+    Property Audio                As New List(Of AudioDetails)
+    Property track                As String = ""
+    Private _thumb                As String = ""
+    Property FrodoPosterExists    As Boolean
+    Property PreFrodoPosterExists As Boolean
+    Property filename             As String = ""
+    Property foldername           As String = ""
+    
     Public Property thumb As String
         Get
             Return _thumb
@@ -44,28 +64,22 @@ Public Class MVComboList
         End Set
     End Property
 
-    Private _FolderNameYear As Integer = -1
+    'Private _FolderNameYear As Integer = -1
 
-    Public ReadOnly Property FolderNameYear As Integer
-        Get
-            If _FolderNameYear=-1 Then
-                Dim m = Regex.Match(foldername,"(\d{4})")
-                If m.Success Then
-                    _FolderNameYear = Convert.ToInt32(m.Value)
-                Else
-                    _FolderNameYear = -2
-                End If
-            End If
-            Return _FolderNameYear
-        End Get
-    End Property
-    
-    'Public ReadOnly Property MissingRating As Boolean
+    'Public ReadOnly Property FolderNameYear As Integer
     '    Get
-    '        Return rating=0     '.ToString.Trim=""
+    '        If _FolderNameYear=-1 Then
+    '            Dim m = Regex.Match(foldername,"(\d{4})")
+    '            If m.Success Then
+    '                _FolderNameYear = Convert.ToInt32(m.Value)
+    '            Else
+    '                _FolderNameYear = -2
+    '            End If
+    '        End If
+    '        Return _FolderNameYear
     '    End Get
-    'End Property  
-
+    'End Property
+    
     Public ReadOnly Property MissingGenre As Boolean
         Get
             Return genre.ToString.Trim=""
@@ -96,21 +110,21 @@ Public Class MVComboList
         End Get
     End Property  
 
-    Public ReadOnly Property MoviePathAndFileName As String
+    Public ReadOnly Property MusicVidPathAndFileName As String
         Get
-            Return Utilities.GetFileName(fullpathandfilename,True)
+            Return Utilities.GetFileName(nfopathandfilename,True)
         End Get
     End Property  
 
     'ReadOnly Property FrodoPosterExists As Boolean
     '    Get
-    '        Return Preferences.FrodoPosterExists(fullpathandfilename)
+    '        Return Preferences.FrodoPosterExists(nfopathandfilename)
     '    End Get
     'End Property
 
     ReadOnly Property ActualNfoFileName As String
         Get
-            Return Path.GetFileName(fullpathandfilename)
+            Return Path.GetFileName(nfopathandfilename)
         End Get
     End Property
 
@@ -130,72 +144,64 @@ Public Class MVComboList
     'End Property
 
     Public Sub Assign(From As MVComboList)
-
-        Me.fullpathandfilename  = From.fullpathandfilename          
-        Me.filename             = From.filename           
-        Me.foldername           = From.foldername         
-        Me.title                = From.title
-        Me.artist               = From.artist
-        Me.year                 = From.year               
-        Me.filedate             = From.filedate                 
-        'Me.rating               = From.rating             
-        Me.genre                = From.genre
-        Me.playcount            = From.playcount 
-        Me.lastplayed           = From.lastplayed           
-        Me.runtime              = From.runtime            
-        Me.createdate           = From.createdate        
-        Me.plot                 = From.plot            
-        'Me.Votes                = From.Votes              
-        Me.Resolution           = From.Resolution
-        Me.thumb                = From.thumb
-        Me.track                = From.track
-        Me.FrodoPosterExists    = From.FrodoPosterExists
-        Me.PreFrodoPosterExists = From.PreFrodoPosterExists
-
+        nfopathandfilename      = From.nfopathandfilename
+        filename                = From.filename
+        foldername              = From.foldername
+        Title                   = From.Title
+        Artist                  = From.Artist
+        year                    = From.year
+        filedate                = From.filedate           
+        genre                   = From.genre
+        playcount               = From.playcount
+        lastplayed              = From.lastplayed
+        runtime                 = From.runtime
+        createdate              = From.createdate
+        plot                    = From.plot            
+        Resolution              = From.Resolution
+        thumb                   = From.thumb
+        track                   = From.track
+        FrodoPosterExists       = From.FrodoPosterExists
+        PreFrodoPosterExists    = From.PreFrodoPosterExists
         AssignAudio(From.Audio)
     End Sub
 
     Public Sub Assign(From As FullMovieDetails )
 
-        Me.fullpathandfilename  = From.fileinfo.fullpathandfilename
-        Me.filename             = Path.GetFileName(From.fileinfo.fullpathandfilename)
-        Me.foldername           = Utilities.GetLastFolder(From.fileinfo.fullpathandfilename)
-        Me.title                = From.fullmoviebody.title
-        Me.artist               = From.fullmoviebody.artist
-        Me.year                 = From.fullmoviebody.year.ToInt
+        nfopathandfilename      = From.fileinfo.fullpathandfilename
+        filename                = Path.GetFileName(From.fileinfo.fullpathandfilename)
+        foldername              = Utilities.GetLastFolder(From.fileinfo.fullpathandfilename)
+        Title                   = From.fullmoviebody.title
+        Artist                  = From.fullmoviebody.artist
+        year                    = From.fullmoviebody.year.ToInt
         Dim filecreation As New IO.FileInfo(From.fileinfo.fullpathandfilename)
         Try
-            Me.filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
+            filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
         Catch ex As Exception
-        End Try
-        'Me.rating               = From.rating             
-        Me.genre                = From.fullmoviebody.genre
-        Me.playcount            = From.fullmoviebody.playcount
-        Me.lastplayed           = From.fullmoviebody.lastplayed
-        Me.runtime              = From.fullmoviebody.runtime
+        End Try            
+        genre                   = From.fullmoviebody.genre
+        playcount               = From.fullmoviebody.playcount
+        lastplayed              = From.fullmoviebody.lastplayed
+        runtime                 = From.fullmoviebody.runtime
         If String.IsNullOrEmpty(From.fileinfo.createdate) Then
-            Me.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+            createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
         Else
-            Me.createdate = From.fileinfo.createdate
+            createdate = From.fileinfo.createdate
         End If
-        Me.plot                 = From.fullmoviebody.plot
-        'Me.Votes                = From.Votes              
-        Me.Resolution           = From.filedetails.filedetails_video.VideoResolution
-        Me.thumb                = From.fullmoviebody.thumb
-        Me.track                = From.fullmoviebody.track 
+        plot                    = From.fullmoviebody.plot             
+        Resolution              = From.filedetails.filedetails_video.VideoResolution
+        thumb                   = From.fullmoviebody.thumb
+        track                   = From.fullmoviebody.track 
         AssignMissingData(From)
         AssignAudio(From.filedetails.filedetails_audio)
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
-        Me.Audio.Clear
-        Me.Audio.AddRange(From)
+        Audio.Clear
+        Audio.AddRange(From)
     End Sub
 
     Public Sub AssignMissingData(From As FullMovieDetails )
-        Me.FrodoPosterExists = Preferences.FrodoPosterExists(From.fileinfo.fullpathandfilename)
-        Me.PreFrodoPosterExists = Preferences.PreFrodoPosterExists(From.fileinfo.fullpathandfilename)
+        FrodoPosterExists = Preferences.FrodoPosterExists(From.fileinfo.fullpathandfilename)
+        PreFrodoPosterExists = Preferences.PreFrodoPosterExists(From.fileinfo.fullpathandfilename)
     End Sub
-
-
 End Class

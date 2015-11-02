@@ -201,17 +201,15 @@ Public Class TVDBScraper
     End Function
 
     Public Function GetShow(ByVal TvdbId As String, ByVal Language As String, ByVal SeriesXmlPath As String) As Tvdb.ShowData
-        'If Not ReturnSeries Then Return Nothing
-
+        
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & Language & ".xml"
         Dim mirrorsurl2 As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & "/all/" & Language & ".xml"
         Dim success As Boolean = DownloadCache.Savexmltopath(mirrorsurl2, SeriesXmlPath, TvdbId & ".xml", True)
         
         Dim showlist As New Tvdb.ShowData
-        'Try
-        If success Then
+        If success Then     'If download series xml successful
             showlist.Load(SeriesXmlPath & TvdbId & ".xml")
-        Else
+        Else                'Else get just the Show's data.
             Dim xmlfile As String
             xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
             If String.IsNullOrEmpty(xmlfile) Then
@@ -220,9 +218,12 @@ Public Class TVDBScraper
                 showlist.LoadXml(xmlfile)
             End If
         End If
-
         Return showlist
+    End Function
 
+    Public Function GetSeriesXml(ByVal TvdbId As String, ByVal Lan As String, ByVal SeriesXmlPath As String) As Boolean
+        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & "/all/" & Lan & ".xml"
+        Return DownloadCache.Savexmltopath(url, SeriesXmlPath, TvdbId & ".xml", True)
     End Function
 
     Public Function GetActors(ByVal TvdbId As String, ByVal Language As String, Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors) 'Tvdb.Actors

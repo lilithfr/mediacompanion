@@ -185,8 +185,8 @@ Public Class ucMusicVideo
         pcBxScreenshot.Image = Nothing
         pcBxSinglePoster.Image = Nothing
         For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
-            If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                Dim nfopath As String = MusicVideo.fullPathAndFilename
+            If MusicVideo.nfopathandfilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+                Dim nfopath As String = MusicVideo.nfopathandfilename
                 nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
                 workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
                 txtAlbum.Text = workingMusicVideo.fullmoviebody.album
@@ -220,10 +220,10 @@ Public Class ucMusicVideo
 
     Private Sub lstBxMainList_MouseUp(sender As Object, e As MouseEventArgs) Handles lstBxMainList.MouseUp
         Try
-            Dim fullpathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
-            If String.IsNullOrEmpty(fullpathandfilename) Then Exit Sub
+            Dim nfopathandfilename As String = CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value
+            If String.IsNullOrEmpty(nfopathandfilename) Then Exit Sub
             For each MV In MVCache
-                If MV.fullpathandfilename = fullpathandfilename Then
+                If MV.nfopathandfilename = nfopathandfilename Then
                     Dim TitleName As String = MV.artist & " - " & MV.title
                     tsmiMVName.Text = TitleName
                     Exit Sub
@@ -274,65 +274,69 @@ Public Class ucMusicVideo
 
             child = doc.CreateElement("musicvideo")
                 
-        childchild = doc.CreateElement("fullpathandfilename")
-        childchild.InnerText = item.fullpathandfilename
-        child.AppendChild(childchild)
+            childchild = doc.CreateElement("fullpathandfilename")
+            childchild.InnerText = item.nfopathandfilename
+            child.AppendChild(childchild)
 			
-        childchild = doc.CreateElement("filename")
-        childchild.InnerText = item.filename
-        child.AppendChild(childchild)
+            childchild = doc.CreateElement("filename")
+            childchild.InnerText = item.filename
+            child.AppendChild(childchild)
 			
-		childchild = doc.CreateElement("foldername")
-        childchild.InnerText = item.foldername
-        child.AppendChild(childchild)
+		    childchild = doc.CreateElement("foldername")
+            childchild.InnerText = item.foldername
+            child.AppendChild(childchild)
 			
-		childchild = doc.CreateElement("title")
-        childchild.InnerText = item.title
-        child.AppendChild(childchild)
+		    childchild = doc.CreateElement("title")
+            childchild.InnerText = item.title
+            child.AppendChild(childchild)
 			
-		childchild = doc.CreateElement("artist")
-		childchild.InnerText = item.artist
-		child.AppendChild(childchild)
+		    childchild = doc.CreateElement("artist")
+		    childchild.InnerText = item.artist
+		    child.AppendChild(childchild)
 			
-        childchild = doc.CreateElement("year")
-        childchild.InnerText = item.year
-        child.AppendChild(childchild)			
+            childchild = doc.CreateElement("year")
+            childchild.InnerText = item.year
+            child.AppendChild(childchild)			
 			
-        childchild = doc.CreateElement("filedate")
-        childchild.InnerText = item.filedate
-        child.AppendChild(childchild)
+            childchild = doc.CreateElement("filedate")
+            childchild.InnerText = item.filedate
+            child.AppendChild(childchild)
 			
-        childchild = doc.CreateElement("createdate")
-        childchild.InnerText = item.createdate
-        child.AppendChild(childchild)
+            childchild = doc.CreateElement("createdate")
+            childchild.InnerText = item.createdate
+            child.AppendChild(childchild)
 			
-		childchild = doc.CreateElement("genre")
-        childchild.InnerText = item.genre
-        child.AppendChild(childchild)
-			
-		childchild = doc.CreateElement("playcount")
-        childchild.InnerText = item.playcount
-        child.AppendChild(childchild)
-			
-		childchild = doc.CreateElement("runtime")
-        childchild.InnerText = item.runtime
-        child.AppendChild(childchild)
-			
-        childchild = doc.CreateElement("Resolution")
-        childchild.InnerText = item.Resolution
-		child.AppendChild(childchild)
-			
-        childchild = doc.CreateElement("FrodoPosterExists")
-        childchild.InnerText = item.FrodoPosterExists
-		child.AppendChild(childchild)
-			
-        childchild = doc.CreateElement("PreFrodoPosterExists")
-        childchild.InnerText = item.PreFrodoPosterExists
-		child.AppendChild(childchild)
+		    childchild = doc.CreateElement("genre")
+            childchild.InnerText = item.genre
+            child.AppendChild(childchild)
 
-		For Each track In item.Audio  
-            child.AppendChild(track.GetChild(doc))
-        Next
+            childchild = doc.CreateElement("plot")
+            childchild.InnerText = item.plot
+            child.AppendChild(childchild)
+			
+		    childchild = doc.CreateElement("playcount")
+            childchild.InnerText = item.playcount
+            child.AppendChild(childchild)
+			
+		    childchild = doc.CreateElement("runtime")
+            childchild.InnerText = item.runtime
+            child.AppendChild(childchild)
+			
+            childchild = doc.CreateElement("Resolution")
+            childchild.InnerText = item.Resolution
+		    child.AppendChild(childchild)
+			
+            childchild = doc.CreateElement("FrodoPosterExists")
+            childchild.InnerText = item.FrodoPosterExists
+		    child.AppendChild(childchild)
+			
+            childchild = doc.CreateElement("PreFrodoPosterExists")
+            childchild.InnerText = item.PreFrodoPosterExists
+		    child.AppendChild(childchild)
+
+		    For Each track In item.Audio  
+                child.AppendChild(track.GetChild(doc))
+            Next
             
             root.AppendChild(child)
         Next
@@ -384,7 +388,7 @@ Public Class ucMusicVideo
                         Select Case detail.Name
                             'workingmovie.missingdata1
 
-                            Case "fullpathandfilename" : newMV.fullPathAndFilename = detail.InnerText
+                            Case "fullpathandfilename" : newMV.nfopathandfilename = detail.InnerText
                             Case "filename" : newMV.filename = detail.InnerText
                             Case "foldername" : newMV.foldername = detail.InnerText
                             Case "title" : newMV.title = detail.InnerText
@@ -403,9 +407,9 @@ Public Class ucMusicVideo
                                         newMV.filedate = detail.InnerText
                                     End If
                             Case "genre" : newMV.genre = detail.InnerText & newMV.genre
+                            Case "plot" : newMV.plot = detail.InnerText
                             Case "playcount" : newMV.playcount = detail.InnerText
                             Case "runtime" : newMV.runtime = detail.InnerText
-                            Case "plot" : newMV.plot = detail.InnerText
                             Case "Resolution" : newMV.Resolution = detail.InnerText
                             Case "FrodoPosterExists" : newMV.FrodoPosterExists = detail.InnerText
                             Case "PreFrodoPosterExists" : newMV.PreFrodoPosterExists = detail.InnerText
@@ -426,6 +430,7 @@ Public Class ucMusicVideo
                                 newMV.Audio.Add(audio)
                         End Select
                     Next
+                    If newMV.playcount = "" Then newMV.playcount = "0"
                     MVCache.Add(newMV)
             End Select
         Next
@@ -468,7 +473,7 @@ Public Class ucMusicVideo
     End Sub
 
     Sub MVCacheRemove(nfopath As String)
-        MVCache.RemoveAll(Function(c) c.fullpathandfilename = nfopath)
+        MVCache.RemoveAll(Function(c) c.nfopathandfilename = nfopath)
     End Sub
 
 #End Region 
@@ -537,9 +542,9 @@ Public Class ucMusicVideo
         '    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fileinfo.fullPathAndFilename, item.fullmoviebody.title))
         'Next
         For Each item In MVCache' musicVideoList
-            lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+            lstBxMainList.Items.Add(New ValueDescriptionPair(item.nfopathandfilename, item.title))
         Next
-        'MVDgv1.DataSource = MVCache
+        MVDgv1.DataSource = MVCache
         MVDataGridSort()
     End Sub
 
@@ -553,12 +558,12 @@ Public Class ucMusicVideo
             lstBxMainList.Items.Clear()
             For Each item In MVCache 'musicVideoList
                 If item.title.ToLower.IndexOf(txtFilter.Text.ToLower) <> -1 Then
-                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+                    lstBxMainList.Items.Add(New ValueDescriptionPair(item.nfopathandfilename, item.title))
                 End If
             Next
         Else
             For Each item In MVCache 'musicVideoList
-                lstBxMainList.Items.Add(New ValueDescriptionPair(item.fullPathAndFilename, item.title))
+                lstBxMainList.Items.Add(New ValueDescriptionPair(item.nfopathandfilename, item.title))
             Next
         End If
     End Sub
@@ -924,8 +929,8 @@ Public Class ucMusicVideo
         pcBxScreenshot.Image = Nothing
         If Not lstBxMainList.SelectedItem Is Nothing Then
             For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
-                If MusicVideo.fullPathAndFilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                    Dim screenshotpath As String = createScreenshot(MusicVideo.fullPathAndFilename, txtScreenshotTime.Text, True)
+                If MusicVideo.nfopathandfilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+                    Dim screenshotpath As String = createScreenshot(MusicVideo.nfopathandfilename, txtScreenshotTime.Text, True)
                     
                     Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
                     Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
@@ -1154,7 +1159,7 @@ Public Class ucMusicVideo
         Dim MVRemoved As Boolean = False
         If lbxIndex < 0 Then Exit Sub
         Dim MVCacheIndex As Integer = Nothing
-        If MVCache.RemoveAll(Function(c) c.fullpathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
+        If MVCache.RemoveAll(Function(c) c.nfopathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
             Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
             If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
             MVArt = workingMusicVideo.fileinfo.posterpath

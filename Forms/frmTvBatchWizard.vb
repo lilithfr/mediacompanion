@@ -251,8 +251,8 @@
         Form1.tvBatchList.includeLocked = cbincludeLocked.checked
     End Sub
 
-    Private Sub cbRewiteAllNfo_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRewiteAllNfo.CheckedChanged
-        If cbRewiteAllNfo.Checked = True Then
+    Private Sub cbRewriteAllNfo_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRewriteAllNfo.CheckedChanged
+        If cbRewriteAllNfo.Checked = True Then
             Dim infotext As String = ""
             If Form1.tvBatchList.includeLocked = True Then
                 infotext = "all of your"
@@ -263,13 +263,27 @@
                 Form1.tvBatchList.RewriteAllNFOs = True
                 GroupBox1.Enabled = False
                 GroupBox2.Enabled = False
+                cbShSeries.Checked = CheckState.unchecked
             Else
-                cbRewiteAllNfo.Checked = False
+                cbRewriteAllNfo.Checked = False
             End If
         Else
             Form1.tvBatchList.RewriteAllNFOs = False
             GroupBox1.Enabled = True
             GroupBox2.Enabled = True
+        End If
+    End Sub
+
+    Private Sub cbShSeries_CheckedChanged(sender As Object, e As EventArgs) Handles cbShSeries.CheckedChanged
+        If cbShSeries.Checked = True Then
+            GroupBox1.Enabled = False
+            GroupBox2.Enabled = False
+            Form1.tvBatchList.shSeries = True
+            cbRewriteAllNfo.Checked = CheckState.unchecked
+        Else
+            GroupBox1.Enabled = True
+            GroupBox2.Enabled = True
+            Form1.tvBatchList.shSeries = False
         End If
     End Sub
 
@@ -288,5 +302,5 @@
     Private Sub tv_batch_wizard_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode = Keys.Escape Then btn_TvBatchCancel.PerformClick 
     End Sub
-    
+
 End Class

@@ -1263,7 +1263,7 @@ Public Class Movie
 
     Sub AssignMVToCache
         Dim _mvcache As New MVComboList 
-        _mvcache.fullpathandfilename = NfoPathPrefName
+        _mvcache.nfopathandfilename = NfoPathPrefName
         _mvcache.filename            = Path.GetFileName(nfopathandfilename)
         _mvcache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
         _mvcache.title               = _scrapedMovie.fullmoviebody.title

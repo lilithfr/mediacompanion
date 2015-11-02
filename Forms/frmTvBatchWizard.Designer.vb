@@ -57,7 +57,8 @@ Partial Class tv_batch_wizard
         Me.cbepPlot = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.cbRewiteAllNfo = New System.Windows.Forms.CheckBox()
+        Me.cbShSeries = New System.Windows.Forms.CheckBox()
+        Me.cbRewriteAllNfo = New System.Windows.Forms.CheckBox()
         Me.btn_TvBatchCancel = New System.Windows.Forms.Button()
         Me.btnTvBatchStart = New System.Windows.Forms.Button()
         Me.cbincludeLocked = New System.Windows.Forms.CheckBox()
@@ -92,8 +93,8 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(416, 425)
-        Me.SplitContainer1.SplitterDistance = 241
+        Me.SplitContainer1.Size = New System.Drawing.Size(416, 420)
+        Me.SplitContainer1.SplitterDistance = 232
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -471,39 +472,50 @@ Partial Class tv_batch_wizard
         '
         'SplitContainer2.Panel2
         '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.cbRewiteAllNfo)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.cbShSeries)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.cbRewriteAllNfo)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
-        Me.SplitContainer2.Size = New System.Drawing.Size(416, 483)
-        Me.SplitContainer2.SplitterDistance = 425
+        Me.SplitContainer2.Size = New System.Drawing.Size(416, 493)
+        Me.SplitContainer2.SplitterDistance = 420
         Me.SplitContainer2.TabIndex = 1
         '
-        'cbRewiteAllNfo
+        'cbShSeries
         '
-        Me.cbRewiteAllNfo.AutoSize = true
-        Me.cbRewiteAllNfo.Location = New System.Drawing.Point(18, 25)
-        Me.cbRewiteAllNfo.Name = "cbRewiteAllNfo"
-        Me.cbRewiteAllNfo.Size = New System.Drawing.Size(108, 17)
-        Me.cbRewiteAllNfo.TabIndex = 3
-        Me.cbRewiteAllNfo.Text = "Rewrite All NFO's"
-        Me.cbRewiteAllNfo.UseVisualStyleBackColor = true
+        Me.cbShSeries.AutoSize = true
+        Me.cbShSeries.Location = New System.Drawing.Point(18, 41)
+        Me.cbShSeries.Name = "cbShSeries"
+        Me.cbShSeries.Size = New System.Drawing.Size(118, 17)
+        Me.cbShSeries.TabIndex = 15
+        Me.cbShSeries.Text = "Update Series XML"
+        Me.cbShSeries.UseVisualStyleBackColor = true
+        '
+        'cbRewriteAllNfo
+        '
+        Me.cbRewriteAllNfo.AutoSize = true
+        Me.cbRewriteAllNfo.Location = New System.Drawing.Point(18, 25)
+        Me.cbRewriteAllNfo.Name = "cbRewriteAllNfo"
+        Me.cbRewriteAllNfo.Size = New System.Drawing.Size(108, 17)
+        Me.cbRewriteAllNfo.TabIndex = 3
+        Me.cbRewriteAllNfo.Text = "Rewrite All NFO's"
+        Me.cbRewriteAllNfo.UseVisualStyleBackColor = true
         '
         'btn_TvBatchCancel
         '
         Me.btn_TvBatchCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn_TvBatchCancel.Location = New System.Drawing.Point(240, 11)
+        Me.btn_TvBatchCancel.Location = New System.Drawing.Point(210, 14)
         Me.btn_TvBatchCancel.Name = "btn_TvBatchCancel"
-        Me.btn_TvBatchCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btn_TvBatchCancel.Size = New System.Drawing.Size(80, 36)
         Me.btn_TvBatchCancel.TabIndex = 2
         Me.btn_TvBatchCancel.Text = "Cancel"
         Me.btn_TvBatchCancel.UseVisualStyleBackColor = true
         '
         'btnTvBatchStart
         '
-        Me.btnTvBatchStart.Location = New System.Drawing.Point(321, 11)
+        Me.btnTvBatchStart.Location = New System.Drawing.Point(312, 14)
         Me.btnTvBatchStart.Name = "btnTvBatchStart"
-        Me.btnTvBatchStart.Size = New System.Drawing.Size(75, 23)
+        Me.btnTvBatchStart.Size = New System.Drawing.Size(83, 36)
         Me.btnTvBatchStart.TabIndex = 1
         Me.btnTvBatchStart.Text = "Start Update"
         Me.btnTvBatchStart.UseVisualStyleBackColor = true
@@ -523,12 +535,12 @@ Partial Class tv_batch_wizard
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_TvBatchCancel
-        Me.ClientSize = New System.Drawing.Size(416, 483)
+        Me.ClientSize = New System.Drawing.Size(416, 493)
         Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(424, 510)
-        Me.MinimumSize = New System.Drawing.Size(424, 510)
+        Me.MaximumSize = New System.Drawing.Size(424, 520)
+        Me.MinimumSize = New System.Drawing.Size(424, 520)
         Me.Name = "tv_batch_wizard"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "TV Batch Wizard"
@@ -581,7 +593,7 @@ End Sub
     Friend WithEvents btnTvBatchStart As System.Windows.Forms.Button
     Friend WithEvents btn_TvBatchCancel As System.Windows.Forms.Button
     Friend WithEvents cbepStreamDetails As System.Windows.Forms.CheckBox
-    Friend WithEvents cbRewiteAllNfo As System.Windows.Forms.CheckBox
+    Friend WithEvents cbRewriteAllNfo As System.Windows.Forms.CheckBox
     Friend WithEvents cbshSeason As System.Windows.Forms.CheckBox
     Friend WithEvents cbshXtraFanart As System.Windows.Forms.CheckBox
     Friend WithEvents cbshFanartTv As System.Windows.Forms.CheckBox
@@ -591,4 +603,5 @@ End Sub
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents cbshStatus As CheckBox
     Friend WithEvents cbshBannerMain As CheckBox
+    Friend WithEvents cbShSeries As CheckBox
 End Class
