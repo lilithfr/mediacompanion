@@ -224,7 +224,11 @@ Public Class clsGridViewMovie
         Dim b = From f In Form1.oMovies.Data_GridViewMovieCache
        
         If Form1.txt_titlesearch.Text.ToUpper<>"" Then
-            b = From f In b Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
+            If Form1.rbTitleAndYear.Checked OrElse Form1.rbFolder.Checked Then
+                b = From f In b Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
+            ElseIf Form1.rbFileName.Checked Then
+                b = From f In b Where f.filename.ToLower.Contains(Form1.txt_titlesearch.Text.ToLower)
+            End If
         End If
 
         'General
