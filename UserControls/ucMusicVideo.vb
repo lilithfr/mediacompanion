@@ -35,6 +35,8 @@ Public Class ucMusicVideo
     Dim scraper As New Classimdb 
     Dim workingMusicVideo As New FullMovieDetails
     Dim PrevTab As Integer = 0
+    Dim GridFieldToDisplay1 As String ="TitleAndYear"
+    Dim GridFieldToDisplay2 As String ="TitleAndYear"
 
     Private Property MVPrefChanged As Boolean
         Get
@@ -1141,7 +1143,212 @@ Public Class ucMusicVideo
         MVPlay()
     End Sub
     
+    Private Sub btn_MVSortReset_Click(sender As Object, e As EventArgs) Handles btn_MVSortReset.Click
+
+    End Sub
+
+    Private Sub cmbxMVSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMVSort.SelectedIndexChanged
+
+    End Sub
+
 #End Region
+
+#Region "MVDGV"
+    Public Sub GridviewMovieDesign()
+
+        Dim dgv As DataGridView = MVDgv1
+
+        If dgv.Columns.Count < 27 Then Return
+
+        Cursor.Current = Cursors.WaitCursor
+
+        While dgv.Columns(0).CellType.Name="DataGridViewImageCell"
+            dgv.Columns.Remove(dgv.Columns(0))
+        End While
+
+
+        If IsNothing(dgv.Columns("Watched")) Then
+            Dim imgWatched As New DataGridViewImageColumn
+
+            imgWatched.Image       = Global.Media_Companion.My.Resources.Resources.DotGray
+            imgWatched.Name        = "Watched"
+            imgWatched.ToolTipText = "Watched Status"
+            imgWatched.HeaderText  = "W"
+
+            dgv.Columns.Add(imgWatched) 
+            SetColWidth(dgv.Columns("Watched"))
+        End If
+
+
+        If IsNothing(dgv.Columns("ImgPlot")) Then
+            Dim imgPlot As New DataGridViewImageColumn
+
+            imgPlot.Image       = Global.Media_Companion.My.Resources.Resources.DotGray
+            imgPlot.Name        = "ImgPlot"
+            imgPlot.ToolTipText = "Plot"
+            imgPlot.HeaderText  = "P"   
+                    
+            dgv.Columns.Add(imgPlot)
+            SetColWidth(dgv.Columns("ImgPlot"))
+        End If
+
+
+        Dim header_style As New DataGridViewCellStyle
+
+        header_style.ForeColor = Color.White
+        header_style.BackColor = Color.ForestGreen
+        header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
+
+        For Each col As DataGridViewcolumn in dgv.Columns
+            col.HeaderCell.Style = header_style
+        Next
+
+        dgv.EnableHeadersVisualStyles = False
+
+
+        For Each column As DataGridViewColumn In dgv.Columns
+            column.Resizable = DataGridViewTriState.True
+            column.ReadOnly  = True
+            column.SortMode  = DataGridViewColumnSortMode.Automatic
+            column.Visible   = False
+        Next
+
+        dgv.Columns("Watched").Visible = Preferences.MovieList_ShowColWatched
+        dgv.Columns("ImgPlot").Visible = Preferences.MovieList_ShowColPlot   
+
+
+        If dgv.Columns("Watched").Visible Then
+            Dim x = Global.Media_Companion.My.Resources.Movie        'Performance tweak
+
+            'Watched icon
+            For Each row As DataGridViewRow In dgv.Rows
+                If row.Cells("playcount").Value <> "0" Then
+                    row.Cells("Watched").Value = x  
+                End If
+            Next
+        End If
+
+
+        If dgv.Columns("ImgPlot").Visible Then
+            Dim x = Global.Media_Companion.My.Resources.Page        'Performance tweak
+
+            Try
+                'plot icon
+                For Each row As DataGridViewRow In dgv.Rows
+                    If row.Cells("plot").Value <> "" Then  
+                        row.Cells("ImgPlot").Value = x 
+                    End If
+                Next
+            Catch
+                Return
+            End Try
+        End If
+
+        'Highlight titles in datagridview with missing video files.
+        If Preferences.incmissingmovies Then
+            For Each row As DataGridViewRow In dgv.Rows
+                If row.Cells("videomissing").Value = True Then
+                    row.DefaultCellStyle.BackColor = Color.Red                
+                End If
+            Next
+        End If
+
+        dgv.RowHeadersVisible = False
+
+             
+        If GridFieldToDisplay1="TitleAndYear" Then
+            IniColumn(dgv,"DisplayTitle"       ,GridFieldToDisplay2= "Movie Year","Title"       )
+            IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
+        End If
+
+        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
+        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                 )
+        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"    , -20                                           )
+        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                )
+        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
+        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
+         
+        dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
+          
+        SetFirstColumnWidth(dgv)
+
+        Cursor.Current = Cursors.Default
+    End Sub
+
+    Private Sub IniColumn(dgv As DataGridView, name As String, visible As Boolean, Optional toolTip As String=Nothing, Optional headerText As String=Nothing, Optional widthAdjustment As Integer=0, Optional alignment As DataGridViewContentAlignment=Nothing )
+
+        Dim col As DataGridViewColumn = dgv.Columns(name)
+
+        If IsNothing(toolTip) Then toolTip = Utilities.TitleCase(name)  'CapsFirstLetter(name)
+
+        col.Visible     = visible
+        col.ToolTipText = toolTip
+        col.HeaderText  = If(IsNothing(headerText),toolTip,headerText)
+        SetColWidth(col,widthAdjustment)
+       
+        If Not IsNothing(alignment) Then
+
+            Dim header_style As New DataGridViewCellStyle
+
+            header_style.ForeColor = Color.White
+            header_style.BackColor = Color.ForestGreen
+            header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
+            header_style.Alignment = alignment
+
+            col.HeaderCell.Style = header_style
+
+            col.DefaultCellStyle.Alignment = alignment
+        End If
+    End Sub
+
+
+    Function CapsFirstLetter(words As String)
+        Return Form1.MyCulture.TextInfo.ToTitleCase(words)
+    End Function
+
+
+    Sub SetColWidth(col As DataGridViewColumn, Optional widthAdjustment As Integer=0)
+
+        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells    'Set auto-size mode
+
+        Dim initialAutoSizeWidth As Integer = col.Width                 'Save calculated width after auto-sizing
+
+        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet        'Revert sizing mode to default
+
+        col.Width = initialAutoSizeWidth+widthAdjustment                'Set width to calculated auto-size - adjustment needed because header has excess padding
+    End Sub
+
+
+    Sub SetFirstColumnWidth(dgvMovies As DataGridView)
+        Try
+            Dim firstColWidth As Integer = dgvMovies.Width - 17
+
+            If Not IsNothing(dgvMovies.Columns("ImgPlot")) AndAlso dgvMovies.Columns("ImgPlot").Visible then firstColWidth -= dgvMovies.Columns("ImgPlot").Width
+            If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
+
+
+            If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
+            If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
+            If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
+            If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
+            If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
+            If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
+            If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize" ).Width
+
+
+            If firstColWidth>0 Then
+                If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"           ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("foldername"         )) Then dgvMovies.Columns("foldername"         ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("DisplayTitle"       )) Then dgvMovies.Columns("DisplayTitle"       ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("DisplayTitleAndYear")) Then dgvMovies.Columns("DisplayTitleAndYear").Width = firstColWidth
+            End If
+        Catch
+        End Try
+    End Sub
+#End Region   'MVDGV routines
 
     Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
         Dim hFb As IntPtr = FindWindowW("#32770", "Browse For Folder") '#32770 is the class name of a folderbrowser dialog

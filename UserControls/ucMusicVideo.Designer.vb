@@ -119,6 +119,10 @@ Partial Class ucMusicVideo
         Me.rb_MvScr1 = New System.Windows.Forms.RadioButton()
         Me.btnMVApply = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.cmbxMVSort = New System.Windows.Forms.ComboBox()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.btn_MVSortReset = New System.Windows.Forms.Button()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
@@ -164,11 +168,14 @@ Partial Class ucMusicVideo
         '
         'TableLayoutPanel1
         '
-        Me.TableLayoutPanel1.ColumnCount = 14
+        Me.TableLayoutPanel1.ColumnCount = 17
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60!))
@@ -180,45 +187,51 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10!))
         Me.TableLayoutPanel1.Controls.Add(Me.btnSearchNew, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtFilter, 1, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.PcBxPoster, 10, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtFullpath, 6, 14)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnRefresh, 3, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnSave, 12, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 5, 12)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtPlot, 6, 16)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 5, 16)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtTitle, 5, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.lstBxMainList, 3, 16)
-        Me.TableLayoutPanel1.Controls.Add(Me.PcBxMusicVideoScreenShot, 5, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 5, 8)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label10, 5, 14)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtArtist, 6, 8)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtDirector, 6, 12)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label7, 5, 10)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtYear, 6, 10)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label1, 8, 8)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtAlbum, 9, 8)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 8, 10)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtStudio, 9, 10)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label11, 8, 12)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtGenre, 9, 12)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 8, 14)
-        Me.TableLayoutPanel1.Controls.Add(Me.txtRuntime, 9, 14)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnMVPlay, 11, 14)
-        Me.TableLayoutPanel1.Controls.Add(Me.MVDgv1, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtFilter, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.PcBxPoster, 13, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtFullpath, 9, 16)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnRefresh, 5, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnSave, 15, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 8, 14)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtPlot, 9, 18)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 8, 18)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtTitle, 8, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.lstBxMainList, 6, 18)
+        Me.TableLayoutPanel1.Controls.Add(Me.PcBxMusicVideoScreenShot, 8, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 8, 10)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label10, 8, 16)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtArtist, 9, 10)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtDirector, 9, 14)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label7, 8, 12)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtYear, 9, 12)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label1, 11, 10)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtAlbum, 12, 10)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 11, 12)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtStudio, 12, 12)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label11, 11, 14)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtGenre, 12, 14)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 11, 16)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtRuntime, 12, 16)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnMVPlay, 14, 16)
+        Me.TableLayoutPanel1.Controls.Add(Me.MVDgv1, 1, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.cmbxMVSort, 2, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label23, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label24, 5, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_MVSortReset, 5, 3)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 18
+        Me.TableLayoutPanel1.RowCount = 20
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33!))
@@ -234,12 +247,13 @@ Partial Class ucMusicVideo
         '
         'btnSearchNew
         '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.btnSearchNew, 3)
         Me.btnSearchNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnSearchNew.Image = Global.Media_Companion.My.Resources.Resources.new2
         Me.btnSearchNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnSearchNew.Location = New System.Drawing.Point(8, 8)
         Me.btnSearchNew.Name = "btnSearchNew"
-        Me.btnSearchNew.Size = New System.Drawing.Size(122, 33)
+        Me.btnSearchNew.Size = New System.Drawing.Size(120, 33)
         Me.btnSearchNew.TabIndex = 25
         Me.btnSearchNew.Text = "Search  "
         Me.btnSearchNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -248,11 +262,11 @@ Partial Class ucMusicVideo
         '
         'txtFilter
         '
-        Me.TableLayoutPanel1.SetColumnSpan(Me.txtFilter, 3)
+        Me.TableLayoutPanel1.SetColumnSpan(Me.txtFilter, 4)
         Me.txtFilter.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtFilter.Location = New System.Drawing.Point(8, 56)
+        Me.txtFilter.Location = New System.Drawing.Point(8, 85)
         Me.txtFilter.Name = "txtFilter"
-        Me.txtFilter.Size = New System.Drawing.Size(269, 26)
+        Me.txtFilter.Size = New System.Drawing.Size(140, 26)
         Me.txtFilter.TabIndex = 50
         Me.ToolTip1.SetToolTip(Me.txtFilter, "Text Filter")
         '
@@ -261,10 +275,10 @@ Partial Class ucMusicVideo
         Me.PcBxPoster.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel1.SetColumnSpan(Me.PcBxPoster, 2)
         Me.PcBxPoster.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PcBxPoster.Location = New System.Drawing.Point(690, 56)
+        Me.PcBxPoster.Location = New System.Drawing.Point(690, 53)
         Me.PcBxPoster.Name = "PcBxPoster"
-        Me.TableLayoutPanel1.SetRowSpan(Me.PcBxPoster, 4)
-        Me.PcBxPoster.Size = New System.Drawing.Size(218, 225)
+        Me.TableLayoutPanel1.SetRowSpan(Me.PcBxPoster, 6)
+        Me.PcBxPoster.Size = New System.Drawing.Size(218, 231)
         Me.PcBxPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PcBxPoster.TabIndex = 52
         Me.PcBxPoster.TabStop = false
@@ -284,10 +298,11 @@ Partial Class ucMusicVideo
         '
         'btnRefresh
         '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.btnRefresh, 2)
         Me.btnRefresh.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnRefresh.Image = Global.Media_Companion.My.Resources.Resources.RefreshAll
         Me.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnRefresh.Location = New System.Drawing.Point(158, 8)
+        Me.btnRefresh.Location = New System.Drawing.Point(154, 8)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(123, 33)
         Me.btnRefresh.TabIndex = 49
@@ -360,9 +375,9 @@ Partial Class ucMusicVideo
         Me.lstBxMainList.ContextMenuStrip = Me.CM1MVBrowser
         Me.lstBxMainList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lstBxMainList.FormattingEnabled = true
-        Me.lstBxMainList.Location = New System.Drawing.Point(158, 459)
+        Me.lstBxMainList.Location = New System.Drawing.Point(218, 459)
         Me.lstBxMainList.Name = "lstBxMainList"
-        Me.lstBxMainList.Size = New System.Drawing.Size(124, 105)
+        Me.lstBxMainList.Size = New System.Drawing.Size(64, 105)
         Me.lstBxMainList.TabIndex = 24
         '
         'CM1MVBrowser
@@ -480,10 +495,10 @@ Partial Class ucMusicVideo
         Me.PcBxMusicVideoScreenShot.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel1.SetColumnSpan(Me.PcBxMusicVideoScreenShot, 5)
         Me.PcBxMusicVideoScreenShot.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PcBxMusicVideoScreenShot.Location = New System.Drawing.Point(296, 56)
+        Me.PcBxMusicVideoScreenShot.Location = New System.Drawing.Point(296, 53)
         Me.PcBxMusicVideoScreenShot.Name = "PcBxMusicVideoScreenShot"
-        Me.TableLayoutPanel1.SetRowSpan(Me.PcBxMusicVideoScreenShot, 4)
-        Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(388, 225)
+        Me.TableLayoutPanel1.SetRowSpan(Me.PcBxMusicVideoScreenShot, 6)
+        Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(388, 231)
         Me.PcBxMusicVideoScreenShot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PcBxMusicVideoScreenShot.TabIndex = 26
         Me.PcBxMusicVideoScreenShot.TabStop = false
@@ -673,13 +688,13 @@ Partial Class ucMusicVideo
         'MVDgv1
         '
         Me.MVDgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.TableLayoutPanel1.SetColumnSpan(Me.MVDgv1, 3)
+        Me.TableLayoutPanel1.SetColumnSpan(Me.MVDgv1, 6)
         Me.MVDgv1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.MVDgv1.Location = New System.Drawing.Point(8, 97)
+        Me.MVDgv1.Location = New System.Drawing.Point(8, 123)
         Me.MVDgv1.Name = "MVDgv1"
         Me.MVDgv1.RowHeadersVisible = false
         Me.TableLayoutPanel1.SetRowSpan(Me.MVDgv1, 11)
-        Me.MVDgv1.Size = New System.Drawing.Size(274, 356)
+        Me.MVDgv1.Size = New System.Drawing.Size(274, 330)
         Me.MVDgv1.TabIndex = 54
         '
         'tPScreenshotMV
@@ -1257,6 +1272,49 @@ Partial Class ucMusicVideo
         Me.btnMVApply.Text = "Apply Changes"
         Me.btnMVApply.UseVisualStyleBackColor = true
         '
+        'cmbxMVSort
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.cmbxMVSort, 3)
+        Me.cmbxMVSort.FormattingEnabled = true
+        Me.cmbxMVSort.Items.AddRange(New Object() {"A-Z", "Title", "Year"})
+        Me.cmbxMVSort.Location = New System.Drawing.Point(43, 53)
+        Me.cmbxMVSort.Name = "cmbxMVSort"
+        Me.cmbxMVSort.Size = New System.Drawing.Size(105, 21)
+        Me.cmbxMVSort.TabIndex = 55
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = true
+        Me.Label23.Location = New System.Drawing.Point(8, 56)
+        Me.Label23.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(26, 13)
+        Me.Label23.TabIndex = 56
+        Me.Label23.Text = "Sort"
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = true
+        Me.TableLayoutPanel1.SetColumnSpan(Me.Label24, 2)
+        Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label24.Location = New System.Drawing.Point(157, 90)
+        Me.Label24.Margin = New System.Windows.Forms.Padding(6, 8, 3, 0)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(61, 18)
+        Me.Label24.TabIndex = 57
+        Me.Label24.Text = "Search"
+        '
+        'btn_MVSortReset
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.btn_MVSortReset, 2)
+        Me.btn_MVSortReset.Location = New System.Drawing.Point(161, 54)
+        Me.btn_MVSortReset.Margin = New System.Windows.Forms.Padding(10, 4, 3, 3)
+        Me.btn_MVSortReset.Name = "btn_MVSortReset"
+        Me.btn_MVSortReset.Size = New System.Drawing.Size(80, 20)
+        Me.btn_MVSortReset.TabIndex = 58
+        Me.btn_MVSortReset.Text = "Reset Sort"
+        Me.btn_MVSortReset.UseVisualStyleBackColor = true
+        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -1384,4 +1442,8 @@ End Sub
     Friend WithEvents tsmiMVReStudio As ToolStripMenuItem
     Friend WithEvents tsmiMVReYear As ToolStripMenuItem
     Friend WithEvents MVDgv1 As DataGridView
+    Friend WithEvents cmbxMVSort As ComboBox
+    Friend WithEvents Label23 As Label
+    Friend WithEvents Label24 As Label
+    Friend WithEvents btn_MVSortReset As Button
 End Class
