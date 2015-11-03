@@ -3189,7 +3189,7 @@ Public Class Movie
 
             If rl.actors Then
                 _rescrapedMovie.listactors.Clear()
-                If Preferences.TmdbActorsImdbScrape Then
+                If (Preferences.movies_useXBMC_Scraper AndAlso Preferences.XbmcTmdbActorDL) OrElse Preferences.TmdbActorsImdbScrape Then
                     _rescrapedMovie.listactors = GetTmdbActors
                 Else
                     _rescrapedMovie.listactors = GetImdbActors()
