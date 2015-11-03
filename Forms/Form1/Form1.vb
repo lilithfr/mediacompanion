@@ -299,6 +299,9 @@ Public Class Form1
             Utilities.applicationPath = Application.StartupPath
             MissingNfoPath = IO.Path.Combine(Utilities.applicationPath, "missing\")
             SeriesXmlPath = IO.Path.Combine(Utilities.applicationPath, "SeriesXml\")
+            If Not Directory.Exists(Utilities.CacheFolderPath) Then
+                Directory.CreateDirectory(Utilities.CacheFolderPath)
+            End If
             If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
                 Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
                 If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
@@ -453,7 +456,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
+            TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
             PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()

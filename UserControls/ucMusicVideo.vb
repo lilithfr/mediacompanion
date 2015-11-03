@@ -2,7 +2,8 @@
 Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
-Imports System.Xml   
+Imports System.Xml 
+Imports System.Linq  
 Imports Media_Companion
 
 
@@ -550,7 +551,8 @@ Public Class ucMusicVideo
 
     Private Sub MVDataGridSort()
        ' Dim dvg As DataGridView = DataGridView.DataSource = MVCache
-
+        Dim b = From f In MVCache
+        
     End Sub
     
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
