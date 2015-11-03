@@ -10,6 +10,7 @@ Imports System.Management
 
 Public Class frmSplashscreen
     Public Property Cancelled As Boolean
+    Public Property allowlostfocus As Boolean = False
     Dim tempstring As String = ""
 
     Private Sub splashscreen_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -31,6 +32,10 @@ Public Class frmSplashscreen
         If  e.KeyCode=Keys.Escape Then
             Cancelled = True
         End If
+    End Sub
+
+    Private Sub frmSplashscreen_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
+        If allowlostfocus Then Cancelled = True
     End Sub
 
 End Class

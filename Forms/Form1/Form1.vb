@@ -21709,6 +21709,7 @@ End Sub
         abtfrm.Label3.Visible = False
         abtfrm.lbl_about.Text = txt
         abtfrm.lbl_about.Visible = True
+        abtfrm.allowlostfocus = True
         abtfrm.TopMost = True
         abtfrm.Show()
         Do Until abtfrm.cancelled
