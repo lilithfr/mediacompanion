@@ -134,7 +134,6 @@ Public Class Form1
     Public startup As Boolean = True
     Public tv_RegexScraper As New List(Of String)
     Public tv_RegexRename As New List(Of String)
-    Public MissingNfoPath As String 
     Public SeriesXmlPath As String
     Public dList As New List(Of String)
     Public scraperFunction2 As New ScraperFunctions
@@ -297,11 +296,10 @@ Public Class Form1
 
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
-            MissingNfoPath = IO.Path.Combine(Utilities.applicationPath, "missing\")
             SeriesXmlPath = IO.Path.Combine(Utilities.applicationPath, "SeriesXml\")
-            If Not Directory.Exists(Utilities.CacheFolderPath) Then
-                Directory.CreateDirectory(Utilities.CacheFolderPath)
-            End If
+            Utilities.EnsureFolderExists(Utilities.PosterCachePath)
+            Utilities.EnsureFolderExists(Utilities.MissingPath)
+            Utilities.EnsureFolderExists(Utilities.CacheFolderPath)
             If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
                 Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
                 If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
@@ -525,10 +523,10 @@ Public Class Form1
             util_MainFormTitleUpdate()
 
 
-            Dim g As New IO.DirectoryInfo(IO.Path.Combine(applicationPath, "settings\postercache\"))
+            Dim g As New IO.DirectoryInfo(Utilities.PosterCachePath)
             If Not g.Exists Then
                 Try
-                    Directory.CreateDirectory(IO.Path.Combine(applicationPath, "settings\postercache\"))
+                    Directory.CreateDirectory(Utilities.PosterCachePath)
                 Catch ex As Exception
                     MsgBox(ex.Message.ToString)
                     End
@@ -701,7 +699,7 @@ Public Class Form1
                 frmSplash.Label3.Text = "Status :- Cleaning Cache folder."
                 frmSplash.Label3.Refresh()
 
-                CleanCacheFolder()  'Limit cachefolder to max 100 files.  Cleaned on startup and shutdown.
+                CleanCacheFolder()  'Limit cachefolder to max 300 files.  Cleaned on startup and shutdown.
 
                 frmSplash.Close()
 
@@ -805,8 +803,8 @@ Public Class Form1
         Try
             Me.Dispose()
             Me.Finalize()
-            CleanCacheFolder()  'Limit cachefolder to max 200 files.  Cleaned on startup and shutdown.
-            If cbClearCache.Checked = True Then ClearCacheFolder() ' delete cache folder if option selected.
+            CleanCacheFolder(, cbClearCache.Checked)  'Limit cachefolder to max 300 files.  Cleaned on startup and shutdown.
+            'If cbClearCache checked then completely empty
             If cbClearMissingFolder.Checked = True Then ClearMissingFolder() ' delete missing folder if option selected.
             End
         Catch ex As Exception
@@ -1213,25 +1211,13 @@ Public Class Form1
         'oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
 
     End Sub
-
-    Sub ClearCacheFolder            
-        Try
-            Dim cacheFolder As String = applicationPath & "\cache"
-            If IO.Directory.Exists(cacheFolder)
-                IO.Directory.Delete(cacheFolder, True)                 ' Delete Cache folder as it is re-created when required.
-            End If
-            
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-    Sub CleanCacheFolder(Optional ByVal All As Boolean = False)
+    
+    Sub CleanCacheFolder(Optional ByVal All As Boolean = False, Optional ByVal Total As Boolean = False)
         Dim cachefolder As String = applicationPath & "\cache\"
         If IO.Directory.Exists(cacheFolder) Then
             Dim Files As New IO.DirectoryInfo(cachefolder)
             Dim FileList() = Files.GetFiles().OrderByDescending(Function(f) f.LastWriteTime).ToArray
-            Dim limit As Integer = If(All, 0, 199)
+            Dim limit As Integer = If(Total, 0, 299)
             Dim i As Integer = FileList.Count
             Try
                 If i > limit Then
@@ -1244,7 +1230,14 @@ Public Class Form1
             Catch
             End Try
         End If
-        If All AndAlso IO.Directory.Exists(SeriesXmlPath) Then
+        If All Then
+            ClearSeriesFolder()
+            ClearPosterFolder()
+        End If
+    End Sub
+
+    Sub ClearSeriesFolder()
+        If IO.Directory.Exists(SeriesXmlPath) Then
             Dim Files As New IO.DirectoryInfo(SeriesXmlPath)
             Dim Filelist() = Files.GetFiles()
             For Each f In Filelist
@@ -1255,12 +1248,25 @@ Public Class Form1
 
     Sub ClearMissingFolder()
         Try
-            Dim missingfolder As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
-            If IO.Directory.Exists(missingfolder)
-                IO.Directory.Delete(missingfolder, True)
+            If IO.Directory.Exists(Utilities.MissingPath)
+                Dim Files As New IO.DirectoryInfo(Utilities.MissingPath)
+                Dim Filelist() = Files.GetFiles()
+                For Each f In Filelist
+                    Utilities.SafeDeleteFile(f.FullName)
+                Next
             End If
         Catch ex As Exception
         End Try
+    End Sub
+
+    Sub ClearPosterFolder()
+        If IO.Directory.Exists(Utilities.PosterCachePath) Then
+            Dim Files As New IO.DirectoryInfo(Utilities.PosterCachePath)
+            Dim Filelist() = Files.GetFiles()
+            For Each f In Filelist
+                Utilities.SafeDeleteFile(f.FullName)
+            Next
+        End If
     End Sub
 
     Sub util_MainFormTitleUpdate()
@@ -7190,7 +7196,7 @@ Public Class Form1
                 .SizeMode = PictureBoxSizeMode.StretchImage
                 '.Image = sender.image
                 Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
-                Dim posterCache As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
                 If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(m.fullpathandfilename)) Then
                     Try
                         Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(m.fullpathandfilename))
@@ -8048,18 +8054,9 @@ Public Class Form1
     End Sub
 
     Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.Click
-        Try
-            Preferences.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked 
-            'If cbImdbgetTMDBActor.CheckState = CheckState.Checked Then
-            '    Preferences.TmdbActorsImdbScrape = True
-            'Else 
-            '    Preferences.TmdbActorsImdbScrape = False
-            'End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Preferences.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub 
 
     Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbPrimaryPlot.Click
@@ -10201,7 +10198,7 @@ End Sub
     Private Sub RefreshMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMissingEpisodesToolStripMenuItem.Click
         Preferences.DlMissingEpData = True
         Preferences.lastrefreshmissingdate = DateTime.Now.ToString("yyyy-MM-dd")
-        tv_EpisodesMissingClean
+        ClearMissingFolder()   'tv_EpisodesMissingClean
         tv_EpisodesMissingLoad(True)
         
     End Sub
@@ -21291,13 +21288,35 @@ End Sub
         fixCreateDate.ShowDialog()
     End Sub
 
-    Private Sub EmptyCacheFolderToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles EmptyCacheFolderToolStripMenuItem.Click
+    Private Sub tsmicacheclean_Click( sender As Object,  e As EventArgs) Handles tsmicacheclean.Click
         If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
-            messbox = New frmMessageBox("Emptying Cache Folder", , "   Please Wait.   ")
+            messbox = New frmMessageBox("Emptying Cache & Series Folders", , "   Please Wait.   ")
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            CleanCacheFolder(True)
+            CleanCacheFolder(True, True)
+            messbox.Close()
+        End If
+    End Sub
+    
+    Private Sub tsmiCleanCacheOnly_Click(sender As Object, e As EventArgs) Handles tsmiCleanCacheOnly.Click
+        If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+            messbox = New frmMessageBox("Emptying Cache Folders", , "   Please Wait.   ")
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            CleanCacheFolder(, True)
+            messbox.Close()
+        End If
+    End Sub
+
+    Private Sub tsmiCleanSeriesonly_Click(sender As Object, e As EventArgs) Handles tsmiCleanSeriesonly.Click
+        If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+            messbox = New frmMessageBox("Emptying Series Folder", , "   Please Wait.   ")
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            ClearSeriesFolder()
             messbox.Close()
         End If
     End Sub

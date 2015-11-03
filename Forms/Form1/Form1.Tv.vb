@@ -1263,7 +1263,7 @@ Partial Public Class Form1
     End Sub
 
     Private Function loadepisodes(ByVal newtvshownfo As TvShow, ByRef episodelist As List(Of TvEpisode))
-        Dim missingeppath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
+        Dim missingeppath As String = Utilities.MissingPath
         Dim newlist As New List(Of String)
         newlist.Clear()
         newlist = Utilities.EnumerateFolders(newtvshownfo.FolderPath) 'TODO: Restore loging functions
@@ -3181,7 +3181,7 @@ Partial Public Class Form1
     End Sub
 
     Private Sub tv_EpisodesMissingFind(ByVal ShowList As List(Of TvShow))
-        Utilities.EnsureFolderExists(MissingNfoPath)
+        Utilities.EnsureFolderExists(Utilities.MissingPath)
         For Each item In ShowList
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
             If item.State = Media_Companion.ShowState.Open Then
@@ -3211,7 +3211,7 @@ Partial Public Class Form1
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                         If Preferences.ignoreMissingSpecials AndAlso NewEpisode.SeasonNumber.Value = "0" Then
-                            Dim missingspecialnfo As String = MissingNfoPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
+                            Dim missingspecialnfo As String = Utilities.MissingPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
                             If IO.File.Exists(missingspecialnfo) Then
                                 Utilities.SafeDeleteFile(missingspecialnfo)
                             End If
@@ -3220,7 +3220,7 @@ Partial Public Class Form1
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
                         If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
-                            MissingEpisode.NfoFilePath = MissingNfoPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
+                            MissingEpisode.NfoFilePath = Utilities.MissingPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
                             If Not IO.File.Exists(MissingEpisode.NfoFilePath) OrElse Preferences.DlMissingEpData Then
                                 MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
                                 MissingEpisode.IsMissing = True
@@ -3247,7 +3247,7 @@ Partial Public Class Form1
             
             For Each Ep In newEpList
                 If IO.File.Exists(Ep.NfoFilePath) Then
-                    Dim missingEpNfoPath As String = MissingNfoPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
+                    Dim missingEpNfoPath As String = Utilities.MissingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
                     If IO.File.Exists(missingEpNfoPath) Then
                         IO.File.Delete(missingEpNfoPath)
                         Dim Ep2Remove As New TvEpisode
@@ -3269,19 +3269,17 @@ Partial Public Class Form1
         Return Removed
     End Function
 
-    Public Sub tv_EpisodesMissingClean()
-        'Dim missingnfopath As String = IO.Path.Combine(Preferences.applicationPath, "missing\")
-        Dim dir_info As New IO.DirectoryInfo(MissingNfoPath)
-        For Each File in dir_info.GetFiles(".nfo")
-            If IO.File.Exists(File.Fullname) Then
-                Try
-                    IO.File.Delete(File.FullName)
-                Catch
-                End Try
-            End If
-        Next
-        
-    End Sub
+    'Public Sub tv_EpisodesMissingClean()
+    '    Dim dir_info As New IO.DirectoryInfo(Utilities.MissingPath)
+    '    For Each File in dir_info.GetFiles(".nfo")
+    '        If IO.File.Exists(File.Fullname) Then
+    '            Try
+    '                IO.File.Delete(File.FullName)
+    '            Catch
+    '            End Try
+    '        End If
+    '    Next
+    'End Sub
 
 #End Region
 

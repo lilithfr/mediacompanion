@@ -156,7 +156,7 @@ Public Class Movie
 
     ReadOnly Property PosterCachePath As String
         Get
-            Return Path.Combine(Preferences.applicationPath, "settings\postercache\" & Utilities.GetCRC32(NfoPathPrefName) & ".jpg")
+            Return Utilities.PosterCachePath & Utilities.GetCRC32(NfoPathPrefName) & ".jpg"
         End Get
     End Property
 

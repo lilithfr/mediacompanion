@@ -77,6 +77,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultActorPath As String
     Public Shared Property DefaultScreenShotPath As String
     Public Shared Property CacheFolderPath As String
+    Public Shared Property PosterCachePath As String
+    Public Shared Property MissingPath As String
 
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
@@ -128,6 +130,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             DefaultActorPath            = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
             DefaultScreenShotPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
             CacheFolderPath             = IO.Path.Combine(_ApplicationPath, "cache\")
+            PosterCachePath             = IO.Path.Combine(_ApplicationPath, "settings\postercache\")
+            MissingPath                 = IO.Path.Combine(_ApplicationPath, "missing\")
             DownloadCache.CacheFolder   = CacheFolderPath
         End Set
     End Property
@@ -977,11 +981,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
         Dim tempbitmap As Bitmap = bm_dest
         Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
-        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\")
-        If Not Directory.Exists(path) Then
-            Directory.CreateDirectory(path)
+        If Not Directory.Exists(Utilities.PosterCachePath) Then
+            Directory.CreateDirectory(Utilities.PosterCachePath)
         End If
-        path = path & filename & ".jpg"
+        Dim path = Utilities.PosterCachePath & filename & ".jpg"
         Try
             File.Delete(path)
         Catch
