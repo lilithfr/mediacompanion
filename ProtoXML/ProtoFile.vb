@@ -1,4 +1,5 @@
 ﻿Imports System.Xml
+Imports System.Text
 
 Public Class ProtoFile
     Implements IProtoXFile
@@ -239,7 +240,14 @@ Public Class ProtoFile
                 myloop = False
             End If
         Loop While myloop
-        Doc.Save(Path)
+        Dim settings As New XmlWriterSettings()
+        settings.Encoding = New UTF8Encoding(False)
+        settings.Indent = True
+        settings.IndentChars = (ControlChars.Tab)
+        settings.NewLineHandling = NewLineHandling.None
+        Dim writer As XmlWriter = XmlWriter.Create(Path, settings)
+        Doc.Save(writer)
+        writer.Close()
         Me.IsCache = False
     End Sub
 
