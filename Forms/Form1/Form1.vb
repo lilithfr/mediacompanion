@@ -10679,6 +10679,7 @@ End Sub
             loadinginfo = "Status :- Loading Music Video Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
+            UcMusicVideo1.cmbxMVSort.SelectedIndex = 0
             Call UcMusicVideo1.MusicVideoCacheLoad()
         End If
 

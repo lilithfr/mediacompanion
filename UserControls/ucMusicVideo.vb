@@ -35,8 +35,8 @@ Public Class ucMusicVideo
     Dim scraper As New Classimdb 
     Dim workingMusicVideo As New FullMovieDetails
     Dim PrevTab As Integer = 0
-    Dim GridFieldToDisplay1 As String ="TitleAndYear"
-    Dim GridFieldToDisplay2 As String ="TitleAndYear"
+    Dim GridFieldToDisplay1 As String ="ArtistTitle"
+    Dim GridFieldToDisplay2 As String ="A-Z"
 
     Private Property MVPrefChanged As Boolean
         Get
@@ -59,6 +59,7 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub MVPreferencesLoad()
+        cmbxMVSort.SelectedIndex = 0
         clbxMvFolders.Items.Clear()
         For Each item In Preferences.MVidFolders
             AuthorizeCheck = True
@@ -553,8 +554,8 @@ Public Class ucMusicVideo
 
     Private Sub MVDataGridSort()
        ' Dim dvg As DataGridView = DataGridView.DataSource = MVCache
-        Dim b = From f In MVCache
-        
+        'Dim b = From f In MVCache
+        GridviewMovieDesign()
     End Sub
     
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.TextChanged
@@ -1148,7 +1149,7 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub cmbxMVSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMVSort.SelectedIndexChanged
-
+        GridFieldToDisplay2 = cmbxMVSort.text
     End Sub
 
 #End Region
@@ -1256,22 +1257,22 @@ Public Class ucMusicVideo
         dgv.RowHeadersVisible = False
 
              
-        If GridFieldToDisplay1="TitleAndYear" Then
-            IniColumn(dgv,"DisplayTitle"       ,GridFieldToDisplay2= "Movie Year","Title"       )
-            IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
+        If GridFieldToDisplay1="ArtistTitle" Then
+            IniColumn(dgv,"ArtistTitle"         ,GridFieldToDisplay2= "TitleAndYear","Title"       )
+            IniColumn(dgv,"ArtistTitleYear"     ,GridFieldToDisplay2<>"TitleAndYear","Title & Year")
         End If
 
         IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
         IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                 )
         IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"    , -20                                           )
-        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                )
-        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
+        'IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                )
+        'IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
         IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
-        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
+        'IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
+        'IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
+        'IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
          
-        dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
+        'dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
         SetFirstColumnWidth(dgv)
 
@@ -1281,25 +1282,19 @@ Public Class ucMusicVideo
     Private Sub IniColumn(dgv As DataGridView, name As String, visible As Boolean, Optional toolTip As String=Nothing, Optional headerText As String=Nothing, Optional widthAdjustment As Integer=0, Optional alignment As DataGridViewContentAlignment=Nothing )
 
         Dim col As DataGridViewColumn = dgv.Columns(name)
-
         If IsNothing(toolTip) Then toolTip = Utilities.TitleCase(name)  'CapsFirstLetter(name)
-
         col.Visible     = visible
         col.ToolTipText = toolTip
         col.HeaderText  = If(IsNothing(headerText),toolTip,headerText)
         SetColWidth(col,widthAdjustment)
        
         If Not IsNothing(alignment) Then
-
             Dim header_style As New DataGridViewCellStyle
-
             header_style.ForeColor = Color.White
             header_style.BackColor = Color.ForestGreen
             header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
             header_style.Alignment = alignment
-
             col.HeaderCell.Style = header_style
-
             col.DefaultCellStyle.Alignment = alignment
         End If
     End Sub
@@ -1335,15 +1330,15 @@ Public Class ucMusicVideo
             If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
             If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
             If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
-            If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
-            If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize" ).Width
+            'If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
+            'If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize" ).Width
 
 
             If firstColWidth>0 Then
-                If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"           ).Width = firstColWidth
-                If Not IsNothing(dgvMovies.Columns("foldername"         )) Then dgvMovies.Columns("foldername"         ).Width = firstColWidth
-                If Not IsNothing(dgvMovies.Columns("DisplayTitle"       )) Then dgvMovies.Columns("DisplayTitle"       ).Width = firstColWidth
-                If Not IsNothing(dgvMovies.Columns("DisplayTitleAndYear")) Then dgvMovies.Columns("DisplayTitleAndYear").Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"            ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("foldername"         )) Then dgvMovies.Columns("foldername"          ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("ArtistTitle"        )) Then dgvMovies.Columns("ArtistTitle"         ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("ArtistTitleYear"    )) Then dgvMovies.Columns("ArtistTitleYear"     ).Width = firstColWidth
             End If
         Catch
         End Try
