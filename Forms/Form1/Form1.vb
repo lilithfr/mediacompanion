@@ -829,7 +829,7 @@ Public Class Form1
             End If
             Call HomeMovieCacheSave()
 
-            Call UcMusicVideo1.MusicVideoCacheSave()
+            Call UcMusicVideo1.MVCacheSave()
 
             'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
 
@@ -8257,7 +8257,7 @@ Public Class Form1
         End If
 
         If IO.File.Exists(workingProfile.MusicVideoCache) Then
-            Call UcMusicVideo1.MusicVideoCacheLoad()
+            Call UcMusicVideo1.MVCacheLoad()
         End If
 
 
@@ -10680,7 +10680,7 @@ End Sub
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
             UcMusicVideo1.cmbxMVSort.SelectedIndex = 0
-            Call UcMusicVideo1.MusicVideoCacheLoad()
+            Call UcMusicVideo1.MVCacheLoad()
         End If
 
         If Not prefs then

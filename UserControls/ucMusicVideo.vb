@@ -22,6 +22,7 @@ Public Class ucMusicVideo
     End Function
     
     'Public Shared musicVideoList As New List(Of FullMovieDetails)
+    Public DataGridViewBindingSource As New BindingSource
     Public Shared Property MVCache As New List(Of MVComboList)
     Private Property tmpMVCache As New List(Of MVComboList)
     Public Shared changeMVList As New List(Of String)
@@ -34,9 +35,12 @@ Public Class ucMusicVideo
     Dim Movie As New Movie
     Dim scraper As New Classimdb 
     Dim workingMusicVideo As New FullMovieDetails
+    Dim workingMV As New MVComboList 
+    Dim LastMV As String = ""
     Dim PrevTab As Integer = 0
     Dim GridFieldToDisplay1 As String ="ArtistTitle"
     Dim GridFieldToDisplay2 As String ="A-Z"
+    Dim GridInvert As Boolean = False
 
     Private Property MVPrefChanged As Boolean
         Get
@@ -173,26 +177,59 @@ Public Class ucMusicVideo
         Return allfolders
     End Function
     
-    Private Sub lstBxMainList_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles lstBxMainList.SelectedValueChanged
-        txtAlbum.Text = ""
-        txtArtist.Text = ""
-        txtDirector.Text = ""
-        txtFullpath.Text = ""
-        txtGenre.Text = ""
-        txtPlot.Text = ""
-        txtRuntime.Text = ""
-        txtStudio.Text = ""
-        txtTitle.Text = ""
-        txtYear.Text = ""
-        PcBxMusicVideoScreenShot.Image = Nothing
-        PcBxPoster.Image = Nothing
-        pcBxScreenshot.Image = Nothing
-        pcBxSinglePoster.Image = Nothing
-        For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
-            If MusicVideo.nfopathandfilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
-                Dim nfopath As String = MusicVideo.nfopathandfilename
-                nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
-                workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
+    Private Sub DisplayMV()
+        Try
+            DisplayMV(MVDgv1.SelectedCells, MVDgv1.SelectedRows)
+        Catch
+            Return
+        End Try
+    End Sub
+
+    Private Sub DisplayMV(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection)
+        Try
+            If selectedRows.Count = 1 Then
+                If LastMV = selectedCells(0).Value.ToString Then Return
+                LastMV = selectedCells(0).Value.ToString
+            Else
+                LastMV = ""
+            End If
+        Catch
+            Return
+        End Try
+        If selectedRows.Count = 0 Then Exit Sub
+        MVForm_Init()
+        Dim query = From f In MVCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
+        Dim queryList As List(Of MVComboList) = query.ToList()
+
+        If queryList.Count > 0 Then
+            workingMV.nfopathandfilename = queryList(0).nfopathandfilename
+            MVForm_Populate()
+            'workingMovie.filedate = queryList(0).filedate
+            'workingMovie.filename = queryList(0).filename
+            'workingMovie.foldername = queryList(0).foldername
+            'workingMovie.fullpathandfilename = queryList(0).fullpathandfilename
+            'workingMovie.genre = queryList(0).genre
+            'workingMovie.id = queryList(0).id
+            'workingMovie.playcount = queryList(0).playcount
+            'workingMovie.rating = queryList(0).Rating
+            'workingMovie.title = queryList(0).title
+            'workingMovie.top250 = queryList(0).top250
+            'workingMovie.year = queryList(0).year
+            'workingMovie.FolderSize = queryList(0).FolderSize
+            'mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
+            'Call mov_FormPopulate(yielding)
+        Else
+            MVForm_Populate()
+        End If
+
+        'this is where we customize  controls when movie is displayed. ie toolbars visible etc.
+
+    End Sub
+
+    Private Sub MVForm_Populate()
+        If Not String.IsNullOrEmpty(workingMV.nfopathandfilename) AndAlso MVDgv1.Rows.Count > 0 Then
+            workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(workingMV.nfopathandfilename)
+            If IsNothing(workingMusicVideo) = False Then
                 txtAlbum.Text = workingMusicVideo.fullmoviebody.album
                 txtArtist.Text = workingMusicVideo.fullmoviebody.artist
                 txtDirector.Text = workingMusicVideo.fullmoviebody.director
@@ -219,7 +256,73 @@ Public Class ucMusicVideo
                     Label18.Text = pcBxSinglePoster.Image.Height
                 End If
             End If
-        Next
+        End If
+    End Sub
+    
+    Private Sub MVForm_Init()
+        txtAlbum.Text = ""
+        txtArtist.Text = ""
+        txtDirector.Text = ""
+        txtFullpath.Text = ""
+        txtGenre.Text = ""
+        txtPlot.Text = ""
+        txtRuntime.Text = ""
+        txtStudio.Text = ""
+        txtTitle.Text = ""
+        txtYear.Text = ""
+        PcBxMusicVideoScreenShot.Image = Nothing
+        PcBxPoster.Image = Nothing
+        pcBxScreenshot.Image = Nothing
+        pcBxSinglePoster.Image = Nothing
+    End Sub
+    
+    Private Sub lstBxMainList_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles lstBxMainList.SelectedValueChanged
+        'txtAlbum.Text = ""
+        'txtArtist.Text = ""
+        'txtDirector.Text = ""
+        'txtFullpath.Text = ""
+        'txtGenre.Text = ""
+        'txtPlot.Text = ""
+        'txtRuntime.Text = ""
+        'txtStudio.Text = ""
+        'txtTitle.Text = ""
+        'txtYear.Text = ""
+        'PcBxMusicVideoScreenShot.Image = Nothing
+        'PcBxPoster.Image = Nothing
+        'pcBxScreenshot.Image = Nothing
+        'pcBxSinglePoster.Image = Nothing
+        'For Each MusicVideo As MVComboList In MVCache 'In musicVideoList
+        '    If MusicVideo.nfopathandfilename Is CType(lstBxMainList.SelectedItem, ValueDescriptionPair).Value Then
+        '        Dim nfopath As String = MusicVideo.nfopathandfilename
+        '        nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
+        '        workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(nfopath)
+        '        txtAlbum.Text = workingMusicVideo.fullmoviebody.album
+        '        txtArtist.Text = workingMusicVideo.fullmoviebody.artist
+        '        txtDirector.Text = workingMusicVideo.fullmoviebody.director
+        '        txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
+        '        txtPlot.Text = workingMusicVideo.fullmoviebody.plot
+        '        txtRuntime.Text = workingMusicVideo.fullmoviebody.runtime
+        '        txtStudio.Text = workingMusicVideo.fullmoviebody.studio
+        '        txtTitle.Text = workingMusicVideo.fullmoviebody.title
+        '        txtYear.Text = workingMusicVideo.fullmoviebody.year
+        '        txtGenre.Text = workingMusicVideo.fullmoviebody.genre
+        '        txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
+        '        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+        '        Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+        '        Label16.Text = pcBxScreenshot.Image.Width
+        '        Label17.Text = pcBxScreenshot.Image.Height
+        '        'Set Media overlay
+        '        Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
+        '        movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
+                
+        '        If IO.File.Exists(workingMusicVideo.fileinfo.posterpath) Then
+        '            Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
+        '            Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
+        '            Label19.Text = pcBxSinglePoster.Image.Width
+        '            Label18.Text = pcBxSinglePoster.Image.Height
+        '        End If
+        '    End If
+        'Next
     End Sub
 
     Private Sub lstBxMainList_MouseUp(sender As Object, e As MouseEventArgs) Handles lstBxMainList.MouseUp
@@ -238,7 +341,7 @@ Public Class ucMusicVideo
     End Sub
 
 #Region " Music Video Cache Routines"
-    Public Sub MusicVideoCacheSave()
+    Public Sub MVCacheSave()
         Dim fullpath As String = Preferences.workingProfile.MusicVideoCache
         'If musicVideoList.Count > 0 And Preferences.MVidFolders.Count > 0 Then
         If IO.File.Exists(fullpath) Then
@@ -369,7 +472,7 @@ Public Class ucMusicVideo
         'End If
     End Sub
 
-    Public Sub MusicVideoCacheLoad()
+    Public Sub MVCacheLoad()
         MVCache.Clear()
         'musicVideoList.Clear()
 
@@ -406,9 +509,9 @@ Public Class ucMusicVideo
                                     End If
                             Case "createdate"
                                 If detail.InnerText.Length <> 14 Then 'i.e. invalid date
-                                        newMV.filedate = "18500101000000" '01/01/1850 00:00:00
+                                        newMV.CreateDate = "18500101000000" '01/01/1850 00:00:00
                                     Else
-                                        newMV.filedate = detail.InnerText
+                                        newMV.CreateDate = detail.InnerText
                                     End If
                             Case "genre" : newMV.genre = detail.InnerText & newMV.genre
                             Case "plot" : newMV.plot = detail.InnerText
@@ -441,9 +544,13 @@ Public Class ucMusicVideo
 
         Call loadMusicVideolist()
         Try
-            If lstBxMainList.Items.Count > 0 Then
-                lstBxMainList.SelectedIndex = 0
-            End If
+            If MVDgv1.Rows.Count > 0 then
+                MVDgv1.Rows(0).Selected = True
+             End If
+            'If lstBxMainList.Items.Count > 0 Then
+            '    lstBxMainList.SelectedIndex = 0
+            'End If
+            DisplayMV()
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -723,7 +830,7 @@ Public Class ucMusicVideo
     Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
         lstBxMainList.Items.Clear()
         MVCacheLoadFromNfo
-        MusicVideoCacheSave()
+        MVCacheSave()
     End Sub
 
     'Path buttons
@@ -1145,106 +1252,113 @@ Public Class ucMusicVideo
     End Sub
     
     Private Sub btn_MVSortReset_Click(sender As Object, e As EventArgs) Handles btn_MVSortReset.Click
-
+        cmbxMVSort.SelectedIndex = 0
     End Sub
 
     Private Sub cmbxMVSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMVSort.SelectedIndexChanged
         GridFieldToDisplay2 = cmbxMVSort.text
+        mov_FiltersAndSortApply()
+        DisplayMV()
+        If Not Form1.MainFormLoadedStatus Then Exit Sub
+        Preferences.MVsortorder = cmbxMVSort.SelectedIndex 
+    End Sub
+    
+    Private Sub rbMVArtistAndTitle_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVArtistAndTitle.CheckedChanged
+        HandleMovieList_DisplayChange("ArtistTitle")
+        If Not cmbxMVSort.SelectedIndex = 0 Then
+            cmbxMVSort.SelectedIndex = 0
+        Else
+            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
+        End If
+    End Sub
+
+    Private Sub rbMVTitleandYear_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVTitleandYear.CheckedChanged
+        HandleMovieList_DisplayChange("TitleYear")
+        If Not cmbxMVSort.SelectedIndex = 0 Then
+            cmbxMVSort.SelectedIndex = 0
+        Else
+            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
+        End If
+    End Sub
+
+    Private Sub rbMVFilename_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVFilename.CheckedChanged
+        HandleMovieList_DisplayChange("FileName")
+        If Not cmbxMVSort.SelectedIndex = 0 Then
+            cmbxMVSort.SelectedIndex = 0
+        Else
+            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
+        End If
     End Sub
 
 #End Region
 
-#Region "MVDGV"
+#Region "MVDGV  Setup"
     Public Sub GridviewMovieDesign()
-
+        'If Not Form1.MainFormLoadedStatus Then Exit Sub
         Dim dgv As DataGridView = MVDgv1
-
         If dgv.Columns.Count < 27 Then Return
-
         Cursor.Current = Cursors.WaitCursor
-
         While dgv.Columns(0).CellType.Name="DataGridViewImageCell"
             dgv.Columns.Remove(dgv.Columns(0))
         End While
 
-
         If IsNothing(dgv.Columns("Watched")) Then
             Dim imgWatched As New DataGridViewImageColumn
-
             imgWatched.Image       = Global.Media_Companion.My.Resources.Resources.DotGray
             imgWatched.Name        = "Watched"
             imgWatched.ToolTipText = "Watched Status"
             imgWatched.HeaderText  = "W"
-
             dgv.Columns.Add(imgWatched) 
             SetColWidth(dgv.Columns("Watched"))
         End If
-
-
         If IsNothing(dgv.Columns("ImgPlot")) Then
             Dim imgPlot As New DataGridViewImageColumn
-
             imgPlot.Image       = Global.Media_Companion.My.Resources.Resources.DotGray
             imgPlot.Name        = "ImgPlot"
             imgPlot.ToolTipText = "Plot"
-            imgPlot.HeaderText  = "P"   
-                    
+            imgPlot.HeaderText  = "P"
             dgv.Columns.Add(imgPlot)
             SetColWidth(dgv.Columns("ImgPlot"))
         End If
 
-
         Dim header_style As New DataGridViewCellStyle
-
         header_style.ForeColor = Color.White
         header_style.BackColor = Color.ForestGreen
         header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
-
         For Each col As DataGridViewcolumn in dgv.Columns
             col.HeaderCell.Style = header_style
         Next
-
         dgv.EnableHeadersVisualStyles = False
-
-
         For Each column As DataGridViewColumn In dgv.Columns
             column.Resizable = DataGridViewTriState.True
             column.ReadOnly  = True
             column.SortMode  = DataGridViewColumnSortMode.Automatic
             column.Visible   = False
         Next
-
-        dgv.Columns("Watched").Visible = Preferences.MovieList_ShowColWatched
-        dgv.Columns("ImgPlot").Visible = Preferences.MovieList_ShowColPlot   
-
-
-        If dgv.Columns("Watched").Visible Then
-            Dim x = Global.Media_Companion.My.Resources.Movie        'Performance tweak
-
-            'Watched icon
-            For Each row As DataGridViewRow In dgv.Rows
-                If row.Cells("playcount").Value <> "0" Then
-                    row.Cells("Watched").Value = x  
-                End If
-            Next
-        End If
-
-
-        If dgv.Columns("ImgPlot").Visible Then
-            Dim x = Global.Media_Companion.My.Resources.Page        'Performance tweak
-
-            Try
-                'plot icon
-                For Each row As DataGridViewRow In dgv.Rows
-                    If row.Cells("plot").Value <> "" Then  
-                        row.Cells("ImgPlot").Value = x 
-                    End If
-                Next
-            Catch
-                Return
-            End Try
-        End If
-
+        'dgv.Columns("Watched").Visible = Preferences.MovieList_ShowColWatched
+        'dgv.Columns("ImgPlot").Visible = Preferences.MovieList_ShowColPlot
+        'If dgv.Columns("Watched").Visible Then
+        '    Dim x = Global.Media_Companion.My.Resources.Movie        'Performance tweak
+        '    'Watched icon
+        '    For Each row As DataGridViewRow In dgv.Rows
+        '        If row.Cells("playcount").Value <> "0" Then
+        '            row.Cells("Watched").Value = x  
+        '        End If
+        '    Next
+        'End If
+        'If dgv.Columns("ImgPlot").Visible Then
+        '    Dim x = Global.Media_Companion.My.Resources.Page        'Performance tweak
+        '    Try
+        '        'plot icon
+        '        For Each row As DataGridViewRow In dgv.Rows
+        '            If row.Cells("plot").Value <> "" Then  
+        '                row.Cells("ImgPlot").Value = x 
+        '            End If
+        '        Next
+        '    Catch
+        '        Return
+        '    End Try
+        'End If
         'Highlight titles in datagridview with missing video files.
         If Preferences.incmissingmovies Then
             For Each row As DataGridViewRow In dgv.Rows
@@ -1253,29 +1367,26 @@ Public Class ucMusicVideo
                 End If
             Next
         End If
-
         dgv.RowHeadersVisible = False
-
-             
         If GridFieldToDisplay1="ArtistTitle" Then
-            IniColumn(dgv,"ArtistTitle"         ,GridFieldToDisplay2= "TitleAndYear","Title"       )
-            IniColumn(dgv,"ArtistTitleYear"     ,GridFieldToDisplay2<>"TitleAndYear","Title & Year")
+            IniColumn(dgv,"Title"               ,GridFieldToDisplay2= "Year","Title"       )
+            IniColumn(dgv,"ArtistTitleYear"     ,GridFieldToDisplay2<>"Year","Title & Year")
         End If
-
+        If GridFieldToDisplay1="TitleYear" Then
+            IniColumn(dgv,"Title"         ,GridFieldToDisplay2= "Year","Title"       )
+            IniColumn(dgv,"TitleYear"     ,GridFieldToDisplay2<>"Year","Title & Year")
+        End If
         IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
-        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                 )
-        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"    , -20                                           )
+        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Year"        ,"Movie year"       ,"Year"    , -20                                           )
+        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="DateAdded"   ,"Date Added"       ,"Added"                                                   )
+        'IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                 )
         'IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                )
         'IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
-        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
-        'IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
         'IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
         'IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
-         
         'dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
-          
         SetFirstColumnWidth(dgv)
-
         Cursor.Current = Cursors.Default
     End Sub
 
@@ -1298,52 +1409,238 @@ Public Class ucMusicVideo
             col.DefaultCellStyle.Alignment = alignment
         End If
     End Sub
-
-
+    
     Function CapsFirstLetter(words As String)
         Return Form1.MyCulture.TextInfo.ToTitleCase(words)
     End Function
-
-
+    
     Sub SetColWidth(col As DataGridViewColumn, Optional widthAdjustment As Integer=0)
-
         col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells    'Set auto-size mode
-
         Dim initialAutoSizeWidth As Integer = col.Width                 'Save calculated width after auto-sizing
-
         col.AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet        'Revert sizing mode to default
-
         col.Width = initialAutoSizeWidth+widthAdjustment                'Set width to calculated auto-size - adjustment needed because header has excess padding
     End Sub
-
-
+    
     Sub SetFirstColumnWidth(dgvMovies As DataGridView)
         Try
             Dim firstColWidth As Integer = dgvMovies.Width - 17
 
             If Not IsNothing(dgvMovies.Columns("ImgPlot")) AndAlso dgvMovies.Columns("ImgPlot").Visible then firstColWidth -= dgvMovies.Columns("ImgPlot").Width
             If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
-
-
-            If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
-            If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
-            If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
+            
+            If GridFieldToDisplay2 = "Year" Then firstColWidth -= dgvMovies.Columns("Year"             ).Width
+            'If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
+            'If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
             If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
-            If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
+            If GridFieldToDisplay2 = "DateAdded" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
             'If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
             'If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize" ).Width
-
-
+            
             If firstColWidth>0 Then
                 If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"            ).Width = firstColWidth
-                If Not IsNothing(dgvMovies.Columns("foldername"         )) Then dgvMovies.Columns("foldername"          ).Width = firstColWidth
+                'If Not IsNothing(dgvMovies.Columns("foldername"         )) Then dgvMovies.Columns("foldername"          ).Width = firstColWidth
                 If Not IsNothing(dgvMovies.Columns("ArtistTitle"        )) Then dgvMovies.Columns("ArtistTitle"         ).Width = firstColWidth
                 If Not IsNothing(dgvMovies.Columns("ArtistTitleYear"    )) Then dgvMovies.Columns("ArtistTitleYear"     ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("Title"              )) Then dgvMovies.Columns("Title"               ).Width = firstColWidth
+                If Not IsNothing(dgvMovies.Columns("TitleYear"          )) Then dgvMovies.Columns("TitleYear"           ).Width = firstColWidth
             End If
         Catch
         End Try
     End Sub
-#End Region   'MVDGV routines
+
+    Public Sub mov_FiltersAndSortApply() 'Form1 As Form1)
+
+        If Not Form1.MainFormLoadedStatus Then Exit Sub
+ 
+        Dim b = From f In MVCache ' Form1.oMovies.Data_GridViewMovieCache
+       
+        If txtFilter.Text.ToUpper<>"" Then
+            If rbMVArtistAndTitle.Checked Then
+                b = From f In b Where f.ArtistTitle.ToUpper.Contains(txtFilter.Text.ToUpper)
+            ElseIf rbMVTitleandYear.Checked Then
+                b = From f In b Where f.TitleUcase.Contains(txtFilter.Text.ToUpper)
+            ElseIf Form1.rbFileName.Checked Then
+                b = From f In b Where f.filename.ToLower.Contains(txtFilter.Text.ToLower)
+            End If
+        End If
+
+        'General
+        'If Form1.cbFilterGeneral.Visible Then
+        '    Select Form1.cbFilterGeneral.Text.RemoveAfterMatch
+
+        '        Case "Watched"                     : b = From f In b Where     f.Watched
+        '        Case "Unwatched"                   : b = From f In b Where Not f.Watched
+        '        Case "Scrape Error"                : b = From f In b Where f.genre.ToLower = "problem"
+
+        '        Case "Duplicates"                  : Dim sort = b.Where(Function(y) y.id<>"0").GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
+
+        '        Case "Missing Poster"              : b = From f In b Where f.MissingPoster
+        '        Case "Missing Fanart"              : b = From f In b Where f.MissingFanart
+        '        Case "Missing Trailer"             : b = From f In b Where f.MissingTrailer
+        '        Case "Missing Local Actors"        : b = From f In b Where f.MissingLocalActors
+        '        Case "Missing Plot"                : b = From f In b Where f.MissingPlot
+        '        Case "Missing Tagline"             : b = From f In b Where f.MissingTagline
+        '        Case "Missing Genre"               : b = From f In b Where f.MissingGenre
+        '        Case "Missing Outline"             : b = From f In b Where f.MissingOutline
+        '        Case "Missing Rating"              : b = From f In b Where f.MissingRating
+        '        Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
+        '        Case "Missing Stars"               : b = From f In b Where f.MissingStars 
+        '        Case "Missing Votes"               : b = From f In b Where f.MissingVotes
+        '        Case "Missing Year"                : b = From f In b Where f.MissingYear
+        '        Case "Missing IMDB"                : b = From f In b Where f.MissingIMDBId
+        '        Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
+        '        Case "Missing Source"              : b = From f In b Where f.MissingSource
+        '        Case "Missing Director"            : b = From f In b Where f.MissingDirector
+        '        Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
+        '        Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
+        '        Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )
+        '        Case "Pre-Frodo poster only"       : b = From f In b Where     f.PreFrodoPosterExists And Not f.FrodoPosterExists
+        '        Case "Frodo poster only"           : b = From f In b Where Not f.PreFrodoPosterExists And     f.FrodoPosterExists
+        '        Case "Both poster formats"         : b = From f In b Where     f.PreFrodoPosterExists And     f.FrodoPosterExists
+        '        Case "Imdb in folder name"         : b = From f In b Where     f.ImdbInFolderName
+        '        Case "Imdb in not folder name"     : b = From f In b Where Not f.ImdbInFolderName
+        '        Case "Imdb not in folder name & year mismatch" : b = From f In b Where Not f.ImdbInFolderName And f.year<>f.FolderNameYear
+        '        Case "Plot same as Outline"        : b = (From f In b From m In Form1.oMovies.MovieCache _
+        '                                                  Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
+        '                                                  Select f
+        '                                                  )
+        '    End Select
+        'End If
+
+        'If Yield Then Return
+
+'        If Form1.cbFilterRating  .Visible Then b = From f In b Where f.Rating     >= Form1.cbFilterRating  .SelectedMin and f.Rating     <= Form1.cbFilterRating  .SelectedMax   
+'        If Form1.cbFilterVotes   .Visible Then b = From f In b Where f.Votes      >= Form1.cbFilterVotes   .SelectedMin and f.Votes      <= Form1.cbFilterVotes   .SelectedMax   
+'        If Form1.cbFilterRuntime .Visible Then b = From f In b Where f.IntRuntime >= Form1.cbFilterRuntime .SelectedMin and f.IntRuntime <= Form1.cbFilterRuntime .SelectedMax   
+
+''        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where CInt( f.FolderSize /(1024*1024*1024) )  >= Form1.cbFilterFolderSizes.SelectedMin and CInt( f.FolderSize /(1024*1024*1024) )  <= Form1.cbFilterFolderSizes.SelectedMax     'Votes
+'        If Form1.cbFilterFolderSizes .Visible Then b = From f In b Where f.DisplayFolderSize >= Form1.cbFilterFolderSizes.SelectedMin and f.DisplayFolderSize <= Form1.cbFilterFolderSizes.SelectedMax
+'        If Form1.cbFilterYear  .Visible Then b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
+
+'        If Form1.cbFilterCountries             .Visible Then b = Form1.oMovies.ApplyCountiesFilter              ( b , Form1.cbFilterCountries             )
+'        If Form1.cbFilterStudios               .Visible Then b = Form1.oMovies.ApplyStudiosFilter               ( b,  Form1.cbFilterStudios               )
+'        If Form1.cbFilterGenre                 .Visible Then b = Form1.oMovies.ApplyGenresFilter                ( b , Form1.cbFilterGenre                 )
+'        If Form1.cbFilterCertificate           .Visible Then b = Form1.oMovies.ApplyCertificatesFilter          ( b , Form1.cbFilterCertificate           )
+'        If Form1.cbFilterSet                   .Visible Then b = Form1.oMovies.ApplySetsFilter                  ( b , Form1.cbFilterSet                   )
+'        If Form1.cbFilterResolution            .Visible Then b = Form1.oMovies.ApplyResolutionsFilter           ( b , Form1.cbFilterResolution            )
+'        If Form1.cbFilterVideoCodec            .Visible Then b = Form1.oMovies.ApplyVideoCodecFilter            ( b , Form1.cbFilterVideoCodec            )
+'        If Form1.cbFilterAudioCodecs           .Visible Then b = Form1.oMovies.ApplyAudioCodecsFilter           ( b , Form1.cbFilterAudioCodecs           )
+'        If Form1.cbFilterAudioChannels         .Visible Then b = Form1.oMovies.ApplyAudioChannelsFilter         ( b , Form1.cbFilterAudioChannels         )
+'        If Form1.cbFilterAudioBitrates         .Visible Then b = Form1.oMovies.ApplyAudioBitratesFilter         ( b , Form1.cbFilterAudioBitrates         )
+'        If Form1.cbFilterNumAudioTracks        .Visible Then b = Form1.oMovies.ApplyNumAudioTracksFilter        ( b , Form1.cbFilterNumAudioTracks        )
+'        If Form1.cbFilterAudioLanguages        .Visible Then b = Form1.oMovies.ApplyAudioLanguagesFilter        ( b , Form1.cbFilterAudioLanguages        )
+'        If Form1.cbFilterAudioDefaultLanguages .Visible Then b = Form1.oMovies.ApplyAudioDefaultLanguagesFilter ( b , Form1.cbFilterAudioDefaultLanguages )
+'        If Form1.cbFilterActor                 .Visible Then b = Form1.oMovies.ApplyActorsFilter                ( b , Form1.cbFilterActor                 )
+'        If Form1.cbFilterDirector              .Visible Then b = Form1.oMovies.ApplyDirectorsFilter             ( b , Form1.cbFilterDirector              )
+'        If Form1.cbFilterSource                .Visible Then b = Form1.oMovies.ApplySourcesFilter               ( b , Form1.cbFilterSource                )
+'        If Form1.cbFilterTag                   .Visible Then b = Form1.oMovies.ApplyTagsFilter                  ( b , Form1.cbFilterTag                   )
+'        If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )       
+ 
+        Select Case cmbxMVSort.Text
+            Case "A-Z"
+                If Not GridInvert Then
+                    If GridFieldToDisplay1="ArtistTitle" Then
+                        b = From f In b Order By f.ArtistTitle Ascending
+                    ElseIf GridFieldToDisplay1="TitleYear" Then
+                        b = From f In b Order By f.Title Ascending
+                    Else
+                        b = From f In b Order By f.filename Ascending            'DisplayTitleAndYear
+                    End If
+                Else
+                    If GridFieldToDisplay1="ArtistTitle" Then
+                        b = From f In b Order By f.ArtistTitle Descending
+                    ElseIf GridFieldToDisplay1="TitleYear" Then
+                        b = From f In b Order By f.Title Descending
+                    Else
+                        b = From f In b Order By f.filename Descending           'DisplayTitleAndYear
+                    End If
+                End If
+            Case "Year"
+                If Not GridInvert Then
+                    b = From f In b Order By f.year Ascending
+                Else
+                    b = From f In b Order By f.year Descending
+                End If
+            'Case "Modified"
+            '    If GridSort = "Asc" Then
+            '        b = From f In b Order By f.filedate Ascending
+            '    Else
+            '        b = From f In b Order By f.filedate Descending
+            '    End If
+            Case "Runtime"
+                If Not GridInvert Then
+                    b = From f In b Order By f.IntRuntime Ascending        
+                Else
+                    b = From f In b Order By f.IntRuntime Descending
+                End If
+            'Case "Rating"
+            '    If GridSort = "Asc" Then
+            '        b = From f In b Order By f.Rating Ascending
+            '    Else
+            '        b = From f In b Order By f.Rating Descending
+            '    End If
+            'Case "Sort Order"
+            '    If GridSort = "Asc" Then
+            '        b = From f In b Order By f.DisplaySortOrder Ascending
+            '    Else
+            '        b = From f In b Order By f.DisplaySortOrder Descending
+            '    End If
+            'Case "Folder Size"
+            '    If GridSort = "Asc" Then
+            '        b = From f In b Order By f.FolderSize Ascending
+            '    Else
+            '        b = From f In b Order By f.FolderSize Descending
+            '    End If
+            Case "DateAdded"
+                If Not GridInvert Then
+                    b = From f In b Order By f.Createdate Descending
+                Else
+                    b = From f In b Order By f.Createdate Ascending
+                End If
+            'Case "Votes"
+            '    If GridSort = "Asc" Then
+            '        b = From f In b Order By f.Votes Ascending
+            '    Else
+            '        b = From f In b Order By f.Votes Descending
+            '    End If
+        End Select
+
+        'If Yield Then Return
+
+        Dim lst = b.ToList
+
+        'Form1.DataGridViewMovies.DataSource = lst
+
+        DataGridViewBindingSource.DataSource = lst
+        MVDgv1                   .DataSource = DataGridViewBindingSource
+        
+        'If Yield Then Return
+
+        GridviewMovieDesign()
+
+        'Form1.LabelCountFilter.Text = "Displaying " & lst.Count.ToString & " of " & Form1.oMovies.MovieCache.Count
+    End Sub
+
+    Sub HandleMovieList_DisplayChange(DisplayField As String)
+        GridFieldToDisplay1 = DisplayField
+
+        If rbMVArtistAndTitle.Checked Then Preferences.moviedefaultlist = 0
+        If rbMVTitleandYear  .Checked Then Preferences.moviedefaultlist = 1
+        If rbMVFilename      .Checked Then Preferences.moviedefaultlist = 2
+
+        GridviewMovieDesign()
+        If Form1.MainFormLoadedStatus Then
+            DisplayMV()
+        End If
+    End Sub
+
+#End Region   'MVDGV Setup
+
+#Region "MVDgv1 Handlers"
+
+
+
+#End Region     'MVDgv1 Handlers
 
     Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
         Dim hFb As IntPtr = FindWindowW("#32770", "Browse For Folder") '#32770 is the class name of a folderbrowser dialog
@@ -1402,7 +1699,41 @@ Public Class ucMusicVideo
     Private Sub tsmiMVDelNfoArt_Click(sender As Object, e As EventArgs) Handles tsmiMVDelNfoArt.Click
         MV_DeleteNfoArtwork()
     End Sub
-    
+
+    Private Sub MVDgv1_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles MVDgv1.CellClick
+        DisplayMV()
+    End Sub
+
+    Private Sub MVDgv1_ColumnHeaderMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles MVDgv1.ColumnHeaderMouseClick
+        GridInvert = Not GridInvert
+        mov_FiltersAndSortApply()
+        DisplayMV()
+    End Sub
+
+    Private Sub MVDgv1_DoubleClick(sender As Object, e As MouseEventArgs) Handles MVDgv1.DoubleClick
+        Try
+            Dim info = MVDgv1.HitTest(e.X, e.Y)
+
+            If info.ColumnX = -1 Then
+                Return
+            End If
+
+            Try
+                If IsNumeric(MVDgv1.SelectedCells(1).Value.ToString) Then
+                    Return
+                End If
+            Catch
+                Return
+            End Try
+
+            If info.Type <> DataGridViewHitTestType.ColumnHeader Then
+                'mov_Play("Movie")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
 #End Region
 
 

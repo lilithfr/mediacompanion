@@ -3,6 +3,11 @@ Imports XBMC.JsonRpc
 Imports System.Text.RegularExpressions
 
 Public Class MVComboList
+    
+    Dim _DisplayCreateDate As String
+    Dim _createdate As String
+    Dim _TitleUcase As String
+    Dim _IntRuntime As Integer=0
 
     Property nfopathandfilename  As String = ""
     Private _title               As String = ""
@@ -37,6 +42,12 @@ Public Class MVComboList
         End Get
     End Property
 
+    Public ReadOnly Property TitleYear As String
+        Get
+            Return Title & " (" & If(year < 1900, "1901", year.ToString) & ")"
+        End Get
+    End Property
+
     Private _artist               As String = ""
     Property year                 As Integer= 0
     Property filedate             As String = ""
@@ -44,7 +55,7 @@ Public Class MVComboList
     Property playcount            As String = ""
     Property lastplayed           As String = ""
     Property runtime              As String = ""
-    Property createdate           As String = ""
+    'Public Property createdate           As String = ""
     Property plot                 As String = ""
     Property Resolution           As Integer= -1
     Property Audio                As New List(Of AudioDetails)
@@ -79,6 +90,29 @@ Public Class MVComboList
     '        Return _FolderNameYear
     '    End Get
     'End Property
+
+    Public Property CreateDate
+        Get
+            Return _createdate
+        End Get
+        Set(ByVal value)
+            _createdate = value
+        End Set
+    End Property
+
+    Public ReadOnly Property DisplayCreateDate As String
+        Get
+            If IsNothing(_DisplayCreateDate) Then
+                Try
+                    _DisplayCreateDate = DecodeDateTime(CreateDate)
+                Catch ex As Exception
+                    _DisplayCreateDate = CreateDate.ToString
+                End Try
+            End If
+
+            Return _DisplayCreateDate
+        End Get
+    End Property
     
     Public ReadOnly Property MissingGenre As Boolean
         Get
@@ -128,6 +162,24 @@ Public Class MVComboList
         End Get
     End Property
 
+    Public Property TitleUcase
+        Get
+            Return _TitleUcase
+        End Get
+        Set(ByVal value)
+            _TitleUcase = value
+        End Set
+    End Property
+
+    Public Property IntRuntime
+        Get
+            Return _IntRuntime
+        End Get
+        Set(ByVal value)
+            _IntRuntime = value
+        End Set
+    End Property
+
     'ReadOnly Property UserDefinedFileName As String
     '    Get
     '        Dim s As String = Preferences.MovieRenameTemplate
@@ -143,6 +195,27 @@ Public Class MVComboList
     '    End Get
     'End Property
 
+    Public Function DecodeDateTime(s As String) As String
+
+        Dim YYYY As String = s.SubString( 0,4)
+        Dim MM   As String = s.SubString( 4,2)
+        Dim DD   As String = s.SubString( 6,2)
+        Dim HH   As String = s.SubString( 8,2)
+        Dim MIN  As String = s.SubString(10,2)
+        Dim SS   As String = s.SubString(12,2)
+
+        Dim x As String = Preferences.DateFormat
+
+        x = x.Replace("YYYY", YYYY)
+        x = x.Replace("MM"  , MM  )
+        x = x.Replace("DD"  , DD  )
+        x = x.Replace("HH"  , HH  )
+        x = x.Replace("MIN" , MIN )
+        x = x.Replace("SS"  , SS  )
+
+        Return x
+    End Function
+
     Public Sub Assign(From As MVComboList)
         nfopathandfilename      = From.nfopathandfilename
         filename                = From.filename
@@ -155,8 +228,10 @@ Public Class MVComboList
         playcount               = From.playcount
         lastplayed              = From.lastplayed
         runtime                 = From.runtime
-        createdate              = From.createdate
-        plot                    = From.plot            
+        Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
+        CreateDate              = From.Createdate
+        plot                    = From.plot
+        TitleUcase              = From.Title.ToUpper            
         Resolution              = From.Resolution
         thumb                   = From.thumb
         track                   = From.track
@@ -183,11 +258,13 @@ Public Class MVComboList
         lastplayed              = From.fullmoviebody.lastplayed
         runtime                 = From.fullmoviebody.runtime
         If String.IsNullOrEmpty(From.fileinfo.createdate) Then
-            createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+            Createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
         Else
-            createdate = From.fileinfo.createdate
+            Createdate = From.fileinfo.createdate
         End If
-        plot                    = From.fullmoviebody.plot             
+        plot                    = From.fullmoviebody.plot 
+        TitleUcase              = From.fullmoviebody.title.ToUpper
+        Integer.TryParse(runtime.Replace(" min",""),IntRuntime)          
         Resolution              = From.filedetails.filedetails_video.VideoResolution
         thumb                   = From.fullmoviebody.thumb
         track                   = From.fullmoviebody.track 

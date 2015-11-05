@@ -23,9 +23,16 @@ Partial Class ucMusicVideo
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.TabControlMain = New System.Windows.Forms.TabControl()
         Me.tPMainMV = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.rbMVFilename = New System.Windows.Forms.RadioButton()
+        Me.rbMVTitleandYear = New System.Windows.Forms.RadioButton()
+        Me.rbMVArtistAndTitle = New System.Windows.Forms.RadioButton()
+        Me.Label31 = New System.Windows.Forms.Label()
         Me.btnSearchNew = New System.Windows.Forms.Button()
         Me.txtFilter = New System.Windows.Forms.TextBox()
         Me.PcBxPoster = New System.Windows.Forms.PictureBox()
@@ -123,14 +130,10 @@ Partial Class ucMusicVideo
         Me.rb_MvScr1 = New System.Windows.Forms.RadioButton()
         Me.btnMVApply = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.rbMVFilename = New System.Windows.Forms.RadioButton()
-        Me.rbMVTitleandYear = New System.Windows.Forms.RadioButton()
-        Me.rbMVArtistAndTitle = New System.Windows.Forms.RadioButton()
-        Me.Label31 = New System.Windows.Forms.Label()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
+        Me.Panel1.SuspendLayout
         CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).BeginInit
         Me.CM1MVBrowser.SuspendLayout
         CType(Me.PcBxMusicVideoScreenShot,System.ComponentModel.ISupportInitialize).BeginInit
@@ -143,7 +146,6 @@ Partial Class ucMusicVideo
         Me.tPPref.SuspendLayout
         Me.TableLayoutPanel2.SuspendLayout
         Me.GroupBox1.SuspendLayout
-        Me.Panel1.SuspendLayout
         Me.SuspendLayout
         '
         'TabControlMain
@@ -253,6 +255,76 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(961, 572)
         Me.TableLayoutPanel1.TabIndex = 53
+        '
+        'Panel1
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.Panel1, 7)
+        Me.Panel1.Controls.Add(Me.rbMVFilename)
+        Me.Panel1.Controls.Add(Me.rbMVTitleandYear)
+        Me.Panel1.Controls.Add(Me.rbMVArtistAndTitle)
+        Me.Panel1.Controls.Add(Me.Label31)
+        Me.Panel1.Location = New System.Drawing.Point(4, 49)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
+        Me.Panel1.Name = "Panel1"
+        Me.TableLayoutPanel1.SetRowSpan(Me.Panel1, 2)
+        Me.Panel1.Size = New System.Drawing.Size(277, 27)
+        Me.Panel1.TabIndex = 62
+        '
+        'rbMVFilename
+        '
+        Me.rbMVFilename.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rbMVFilename.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rbMVFilename.Image = Global.Media_Companion.My.Resources.Resources.Folder
+        Me.rbMVFilename.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.rbMVFilename.Location = New System.Drawing.Point(198, 2)
+        Me.rbMVFilename.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbMVFilename.Name = "rbMVFilename"
+        Me.rbMVFilename.Size = New System.Drawing.Size(80, 25)
+        Me.rbMVFilename.TabIndex = 2
+        Me.rbMVFilename.Text = "Filename"
+        Me.rbMVFilename.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.rbMVFilename.UseVisualStyleBackColor = true
+        '
+        'rbMVTitleandYear
+        '
+        Me.rbMVTitleandYear.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rbMVTitleandYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rbMVTitleandYear.Image = Global.Media_Companion.My.Resources.Resources.Page
+        Me.rbMVTitleandYear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.rbMVTitleandYear.Location = New System.Drawing.Point(112, 2)
+        Me.rbMVTitleandYear.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbMVTitleandYear.Name = "rbMVTitleandYear"
+        Me.rbMVTitleandYear.Size = New System.Drawing.Size(84, 25)
+        Me.rbMVTitleandYear.TabIndex = 1
+        Me.rbMVTitleandYear.Text = "Title && Year"
+        Me.rbMVTitleandYear.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.rbMVTitleandYear.UseVisualStyleBackColor = true
+        '
+        'rbMVArtistAndTitle
+        '
+        Me.rbMVArtistAndTitle.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rbMVArtistAndTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rbMVArtistAndTitle.Image = Global.Media_Companion.My.Resources.Resources.Clock
+        Me.rbMVArtistAndTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.rbMVArtistAndTitle.Location = New System.Drawing.Point(28, 2)
+        Me.rbMVArtistAndTitle.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbMVArtistAndTitle.Name = "rbMVArtistAndTitle"
+        Me.rbMVArtistAndTitle.Size = New System.Drawing.Size(84, 25)
+        Me.rbMVArtistAndTitle.TabIndex = 0
+        Me.rbMVArtistAndTitle.Text = "Artist && Title"
+        Me.rbMVArtistAndTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.rbMVArtistAndTitle.UseVisualStyleBackColor = true
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = true
+        Me.Label31.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label31.Location = New System.Drawing.Point(1, 8)
+        Me.Label31.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(23, 13)
+        Me.Label31.TabIndex = 62
+        Me.Label31.Text = "List"
         '
         'btnSearchNew
         '
@@ -696,14 +768,35 @@ Partial Class ucMusicVideo
         '
         'MVDgv1
         '
+        Me.MVDgv1.AllowUserToAddRows = false
+        Me.MVDgv1.AllowUserToDeleteRows = false
+        Me.MVDgv1.AllowUserToResizeRows = false
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
+        Me.MVDgv1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        Me.MVDgv1.BackgroundColor = System.Drawing.Color.LightGray
+        Me.MVDgv1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.MVDgv1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
+        Me.MVDgv1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.MVDgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.TableLayoutPanel1.SetColumnSpan(Me.MVDgv1, 6)
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumSeaGreen
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.MVDgv1.DefaultCellStyle = DataGridViewCellStyle2
         Me.MVDgv1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MVDgv1.GridColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
         Me.MVDgv1.Location = New System.Drawing.Point(8, 156)
         Me.MVDgv1.Name = "MVDgv1"
         Me.MVDgv1.RowHeadersVisible = false
         Me.TableLayoutPanel1.SetRowSpan(Me.MVDgv1, 11)
+        Me.MVDgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.MVDgv1.ShowCellErrors = false
         Me.MVDgv1.Size = New System.Drawing.Size(274, 297)
+        Me.MVDgv1.StandardTab = true
         Me.MVDgv1.TabIndex = 54
         '
         'cmbxMVSort
@@ -1325,76 +1418,6 @@ Partial Class ucMusicVideo
         Me.btnMVApply.Text = "Apply Changes"
         Me.btnMVApply.UseVisualStyleBackColor = true
         '
-        'Panel1
-        '
-        Me.TableLayoutPanel1.SetColumnSpan(Me.Panel1, 7)
-        Me.Panel1.Controls.Add(Me.rbMVFilename)
-        Me.Panel1.Controls.Add(Me.rbMVTitleandYear)
-        Me.Panel1.Controls.Add(Me.rbMVArtistAndTitle)
-        Me.Panel1.Controls.Add(Me.Label31)
-        Me.Panel1.Location = New System.Drawing.Point(4, 49)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel1.Name = "Panel1"
-        Me.TableLayoutPanel1.SetRowSpan(Me.Panel1, 2)
-        Me.Panel1.Size = New System.Drawing.Size(277, 27)
-        Me.Panel1.TabIndex = 62
-        '
-        'rbMVFilename
-        '
-        Me.rbMVFilename.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rbMVFilename.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbMVFilename.Image = Global.Media_Companion.My.Resources.Resources.Folder
-        Me.rbMVFilename.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.rbMVFilename.Location = New System.Drawing.Point(198, 2)
-        Me.rbMVFilename.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbMVFilename.Name = "rbMVFilename"
-        Me.rbMVFilename.Size = New System.Drawing.Size(80, 25)
-        Me.rbMVFilename.TabIndex = 2
-        Me.rbMVFilename.Text = "Filename"
-        Me.rbMVFilename.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.rbMVFilename.UseVisualStyleBackColor = true
-        '
-        'rbMVTitleandYear
-        '
-        Me.rbMVTitleandYear.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rbMVTitleandYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbMVTitleandYear.Image = Global.Media_Companion.My.Resources.Resources.Page
-        Me.rbMVTitleandYear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.rbMVTitleandYear.Location = New System.Drawing.Point(112, 2)
-        Me.rbMVTitleandYear.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbMVTitleandYear.Name = "rbMVTitleandYear"
-        Me.rbMVTitleandYear.Size = New System.Drawing.Size(84, 25)
-        Me.rbMVTitleandYear.TabIndex = 1
-        Me.rbMVTitleandYear.Text = "Title && Year"
-        Me.rbMVTitleandYear.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.rbMVTitleandYear.UseVisualStyleBackColor = true
-        '
-        'rbMVArtistAndTitle
-        '
-        Me.rbMVArtistAndTitle.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rbMVArtistAndTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbMVArtistAndTitle.Image = Global.Media_Companion.My.Resources.Resources.Clock
-        Me.rbMVArtistAndTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.rbMVArtistAndTitle.Location = New System.Drawing.Point(28, 2)
-        Me.rbMVArtistAndTitle.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbMVArtistAndTitle.Name = "rbMVArtistAndTitle"
-        Me.rbMVArtistAndTitle.Size = New System.Drawing.Size(84, 25)
-        Me.rbMVArtistAndTitle.TabIndex = 0
-        Me.rbMVArtistAndTitle.Text = "Artist && Title"
-        Me.rbMVArtistAndTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.rbMVArtistAndTitle.UseVisualStyleBackColor = true
-        '
-        'Label31
-        '
-        Me.Label31.AutoSize = true
-        Me.Label31.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label31.Location = New System.Drawing.Point(1, 8)
-        Me.Label31.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(23, 13)
-        Me.Label31.TabIndex = 62
-        Me.Label31.Text = "List"
-        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -1406,6 +1429,8 @@ Partial Class ucMusicVideo
         Me.tPMainMV.ResumeLayout(false)
         Me.TableLayoutPanel1.ResumeLayout(false)
         Me.TableLayoutPanel1.PerformLayout
+        Me.Panel1.ResumeLayout(false)
+        Me.Panel1.PerformLayout
         CType(Me.PcBxPoster,System.ComponentModel.ISupportInitialize).EndInit
         Me.CM1MVBrowser.ResumeLayout(false)
         CType(Me.PcBxMusicVideoScreenShot,System.ComponentModel.ISupportInitialize).EndInit
@@ -1423,8 +1448,6 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel2.PerformLayout
         Me.GroupBox1.ResumeLayout(false)
         Me.GroupBox1.PerformLayout
-        Me.Panel1.ResumeLayout(false)
-        Me.Panel1.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
