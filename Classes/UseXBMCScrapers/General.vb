@@ -1017,7 +1017,14 @@ Module General
     End Function
 
     Public Function InsertFileEpisodeInformationTags(ByVal Entrada() As String, ByVal Filename As String, ByVal TVDBId As String) As String
-        Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
+        Dim WorkingFileDetails As New FullFileDetails
+        Try
+            Dim wkingdetails As FullFileDetails = Preferences.Get_HdTags(Filename)
+            If Not IsNothing(wkingdetails) Then WorkingFileDetails = wkingdetails
+        Catch
+            Dim Something As String = Nothing
+        End Try
+        'Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
         Dim FileInfoString As String = ""
         Dim TempString As String = ""
 
