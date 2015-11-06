@@ -2116,6 +2116,7 @@ Public Class Movie
                     _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
                 End If
                 Dim DestPath As String = Path.GetDirectoryName(NfoPathAndFilename) & "\"   'Preferences.GetFanartTvMoviePath(NfoPathAndFilename, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                If Preferences.MovFanartNaming Then DestPath = NfoPathAndFilename.Replace(".nfo", "-")
                 Dim ID = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, If(_scrapedMovie.fullmoviebody.tmdbid<>"", _scrapedMovie.fullmoviebody.tmdbid,""))
                 If ID = "" Then
                     ReportProgress(,"!!! Abort Fanart,Tv artwork, no IMDB or TMDBID Found" &vbCrLf)
