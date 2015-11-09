@@ -2213,7 +2213,8 @@ Partial Public Class Form1
                     Dim allepisodes(100) As Integer
                     stage = "5"
                     If Not String.IsNullOrEmpty(eps.Thumbnail.FileName) Then
-                        S = Regex.Replace(eps.Thumbnail.FileName, "\(.+\)\s", "")   'Remove anything from filename in brackets like resolution ie: (1920x1080) that may give false episode number
+                        S = Regex.Replace(eps.Thumbnail.FileName, "\(.*?\)", "")   'Remove anything from filename in brackets like resolution ie: (1920x1080) that may give false episode number
+                        S = Regex.Replace(S, "\[.*?\]", "")
                     End If
                     stage = "6"
                     eps.Thumbnail.FileName = ""
