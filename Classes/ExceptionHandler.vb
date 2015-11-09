@@ -35,6 +35,7 @@ Friend NotInheritable Class ExceptionHandler
                     ofrmExcept.StartPosition = FormStartPosition.Manual
                 End If
                 ofrmExcept.txtExceptionTrace.Text = msg
+                ofrmExcept.TopMost = True
                 ofrmExcept.ShowDialog()
             Catch ex1 As Exception
                 Dim log As New EventLog
