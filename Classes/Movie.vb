@@ -847,7 +847,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache             , "Assigning music Video to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                        ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"                 ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"                 ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"                 ) )
         
     End Sub
  
@@ -2033,7 +2033,14 @@ Public Class Movie
         If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
 
         If Preferences.MusicVidScrape Then
-            ucMusicVideo.createScreenshot(mediapathandfilename, , True)
+            Dim aok As Boolean = Utilities.CreateScreenShot(mediapathandfilename, NfoPathAndFilename.Replace(".nfo", "-fanart.jpg"), Preferences.MVPrefScrnSht, True)
+            ReportProgress(, "!!! Fanart Screenshot " & If(aok, "created", "- Failed!") & vbCrLf)
+            'If aok Then
+            '    ReportProgress(, "!!! Fanart Screenshot created" & vbCrLf)
+            'Else
+            '    ReportProgress(, "!!! Fanart Screenshot - Failed!" & vbCrLf)
+            'End If
+            'ucMusicVideo.createScreenshot(mediapathandfilename, , True)
         Else
             DoDownloadFanart()
         End If

@@ -21,19 +21,14 @@ Public Class ucMusicVideo
     Private Shared Function FindWindowW(<MarshalAs(UnmanagedType.LPWStr)> ByVal lpClassName As String, <MarshalAs(UnmanagedType.LPWStr)> ByVal lpWindowName As String) As IntPtr
     End Function
     
-    'Public Shared musicVideoList As New List(Of FullMovieDetails)
     Public DataGridViewBindingSource As New BindingSource
     Public Shared Property MVCache As New List(Of MVComboList)
-    Private Property tmpMVCache As New List(Of MVComboList)
     Public Shared changeMVList As New List(Of String)
     Private changefields As Boolean = False
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
-    Dim rescraping As Boolean = False
     Dim mvFoldersChanged As Boolean = False
     Dim AuthorizeCheck As Boolean = False
-    Dim Movie As New Movie
-    Dim scraper As New Classimdb 
     Dim workingMusicVideo As New FullMovieDetails
     Dim workingMV As New MVComboList 
     Dim LastMV As String = ""
@@ -41,6 +36,7 @@ Public Class ucMusicVideo
     Dim GridFieldToDisplay1 As String ="ArtistTitle"
     Dim GridFieldToDisplay2 As String ="A-Z"
     Dim GridInvert As Boolean = False
+    Dim MVPrefLoad As Boolean = False
 
     Private Property MVPrefChanged As Boolean
         Get
@@ -57,20 +53,34 @@ Public Class ucMusicVideo
     End Property
 
 'Music_Video_Class
+#Region "Main Functions"
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         MVPreferencesLoad()
     End Sub
 
     Private Sub MVPreferencesLoad()
-        cmbxMVSort.SelectedIndex = Preferences.MVsortorder
-        If Preferences.MVdefaultlist = 0 Then
-            rbMVArtistAndTitle.Checked = True
-        ElseIf Preferences.MVdefaultlist = 1 Then
-            rbMVTitleandYear.Checked = True
-        ElseIf Preferences.MVdefaultlist = 2 Then
-            rbMVFilename.Checked = True
-        End If
+        MVPrefLoad = True
+        cmbxMVSort.SelectedIndex    = Preferences.MVsortorder
+        cb_MVPrefShowLog.Checked    = Preferences.MVPrefShowLog
+        tb_MVPrefScrnSht.Text       = Preferences.MVPrefScrnSht.ToString
+        Select Case Preferences.MVScraper
+            Case "wiki"     : rb_MvScr1.Checked = True
+            Case "imvdb"    : rb_MvScr2.Checked = True
+            Case "audiodb"  : rb_MvScr3.Checked = True
+        End Select
+        Select Case Preferences.MVdefaultlist
+            Case 0  : rbMVArtistAndTitle.Checked = True
+            Case 1  : rbMVTitleandYear.Checked = True
+            Case 2  : rbMVFilename.Checked = True
+        End Select
+        'If Preferences.MVdefaultlist = 0 Then
+        '    rbMVArtistAndTitle.Checked = True
+        'ElseIf Preferences.MVdefaultlist = 1 Then
+        '    rbMVTitleandYear.Checked = True
+        'ElseIf Preferences.MVdefaultlist = 2 Then
+        '    rbMVFilename.Checked = True
+        'End If
         clbxMvFolders.Items.Clear()
         For Each item In Preferences.MVidFolders
             AuthorizeCheck = True
@@ -85,7 +95,8 @@ Public Class ucMusicVideo
             rb_MvScr3.Checked = True
         End If
         MVPrefChanged = False
-        txtScreenshotTime.Text = "10"
+        txtScreenshotTime.Text = Preferences.MVPrefScrnSht.ToString
+        MVPrefLoad = False
     End Sub
 
     Private Sub SearchForNewMV()
@@ -107,359 +118,83 @@ Public Class ucMusicVideo
         MVCacheSave()
         loadMVDV1()
     End Sub
-    
-    Public Function saveposter(ByVal path As String, ByVal url As String)
-        Try
-            Dim posterpath As String = ""
-            If url.IndexOf(".jpg") <> -1 Then
-                posterpath = path.Replace(IO.Path.GetExtension(path), "-poster.jpg")
-            ElseIf url.IndexOf(".png") <> -1 Then
-                posterpath = path.Replace(IO.Path.GetExtension(path), "-poster.png")
-            End If
 
-            Dim web_client As WebClient = New WebClient
-            web_client.DownloadFile(url, posterpath)
-            Return True
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
-
-    Public Shared Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False) As String
-        
-        Try
-
-            Dim applicationpath As String = Preferences.applicationPath 'get application root path
-            
-            Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
-            Dim filepath As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "")
-            Dim fileexists As Boolean = False
-            For Each extn In Utilities.VideoExtensions
-                If IO.File.Exists(filepath & extn) Then
-                    filepath = filepath & extn
-                    fileexists = True
-                End If
-            Next
-            If Not fileexists Then Return ""
-
-            If overwrite = True Then
-                If IO.File.Exists(thumbpathandfilename) Then
-                    Try
-                        IO.File.Delete(thumbpathandfilename)
-                    Catch
-                    End Try
-                End If
-            End If
-
-            If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
-                Dim myProcess As Process = New Process
-                myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                myProcess.StartInfo.CreateNoWindow = False
-                myProcess.StartInfo.FileName = applicationpath & "\Assets\ffmpeg.exe"
-                Dim proc_arguments As String = "-y -i """ & filepath & """ -f mjpeg -ss " & time.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-                myProcess.StartInfo.Arguments = proc_arguments
-                myProcess.Start()
-                myProcess.WaitForExit()
-                Return thumbpathandfilename
-            Else
-                Return ""
-            End If
-        Catch
-            Return False
-        End Try
-
-    End Function
-
-    Private Function validateMusicVideoNfo(ByVal fullPathandFilename As String)
-        Dim tempstring As String
-        Dim filechck As IO.StreamReader = IO.File.OpenText(fullPathandFilename)
-        tempstring = filechck.ReadToEnd.ToLower
-        filechck.Close()
-        If tempstring = Nothing Then
-            Return False
-        End If
-        If tempstring.IndexOf("<musicvideo>") <> -1 And tempstring.IndexOf("</musicvideo>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
-            Return True
-            Exit Function
-        End If
-        Return False
-    End Function
-    
-    'Public Function getallfolders() As List(Of String)
-    '    Dim allfolders As New List(Of String)
-    '    oMovies.FindNewMusicVideos()
-    '    Return allfolders
-    'End Function
-    
-    Private Sub DisplayMV()
-        Try
-            DisplayMV(MVDgv1.SelectedCells, MVDgv1.SelectedRows)
-        Catch
-            Return
-        End Try
-    End Sub
-
-    Private Sub DisplayMV(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection)
-        Try
-            If selectedRows.Count = 1 Then
-                If LastMV = selectedCells(0).Value.ToString Then Return
-                LastMV = selectedCells(0).Value.ToString
-            Else
-                LastMV = ""
-            End If
-        Catch
-            Return
-        End Try
-        If selectedRows.Count = 0 Then Exit Sub
-        MVForm_Init()
-        Dim query = From f In MVCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
-        Dim queryList As List(Of MVComboList) = query.ToList()
-
-        If queryList.Count > 0 Then
-            workingMV.nfopathandfilename = queryList(0).nfopathandfilename
-            MVForm_Populate()
-            'workingMovie.filedate = queryList(0).filedate
-            'workingMovie.filename = queryList(0).filename
-            'workingMovie.foldername = queryList(0).foldername
-            'workingMovie.fullpathandfilename = queryList(0).fullpathandfilename
-            'workingMovie.genre = queryList(0).genre
-            'workingMovie.id = queryList(0).id
-            'workingMovie.playcount = queryList(0).playcount
-            'workingMovie.rating = queryList(0).Rating
-            'workingMovie.title = queryList(0).title
-            'workingMovie.top250 = queryList(0).top250
-            'workingMovie.year = queryList(0).year
-            'workingMovie.FolderSize = queryList(0).FolderSize
-            'mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
-            'Call mov_FormPopulate(yielding)
-        Else
-            MVForm_Populate()
-        End If
-
-        'this is where we customize  controls when movie is displayed. ie toolbars visible etc.
-
-    End Sub
-
-    Private Sub MVForm_Populate()
-        If Not String.IsNullOrEmpty(workingMV.nfopathandfilename) AndAlso MVDgv1.Rows.Count > 0 Then
-            workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(workingMV.nfopathandfilename)
-            If IsNothing(workingMusicVideo) = False Then
-                txtAlbum.Text = workingMusicVideo.fullmoviebody.album
-                txtArtist.Text = workingMusicVideo.fullmoviebody.artist
-                txtDirector.Text = workingMusicVideo.fullmoviebody.director
-                txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                txtPlot.Text = workingMusicVideo.fullmoviebody.plot
-                Dim runtimestr As String = workingMusicVideo.fullmoviebody.runtime
-                If runtimestr = "" OrElse runtimestr = "-1" Then
-                    If workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value <> "" AndAlso workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value <> "-1" Then
-                        runtimestr = Math.Floor((workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value.ToInt)/60).ToString & " min"
-                    End If
-                Else
-                    runtimestr &= " min"
-                End If
-                txtRuntime.Text = runtimestr   'workingMusicVideo.fullmoviebody.runtime
-                txtStudio.Text = workingMusicVideo.fullmoviebody.studio
-                txtTitle.Text = workingMusicVideo.fullmoviebody.title
-                txtYear.Text = workingMusicVideo.fullmoviebody.year
-                txtGenre.Text = workingMusicVideo.fullmoviebody.genre
-                txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
-                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                Label16.Text = pcBxScreenshot.Image.Width
-                Label17.Text = pcBxScreenshot.Image.Height
-                'Set Media overlay
-                Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
-                movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
-                
-                If IO.File.Exists(workingMusicVideo.fileinfo.posterpath) Then
-                    Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
-                    Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
-                    Label19.Text = pcBxSinglePoster.Image.Width
-                    Label18.Text = pcBxSinglePoster.Image.Height
-                End If
-            End If
-        End If
-    End Sub
-    
-    Private Sub MVForm_Init()
-        txtAlbum.Text = ""
-        txtArtist.Text = ""
-        txtDirector.Text = ""
-        txtFullpath.Text = ""
-        txtGenre.Text = ""
-        txtPlot.Text = ""
-        txtRuntime.Text = ""
-        txtStudio.Text = ""
-        txtTitle.Text = ""
-        txtYear.Text = ""
-        PcBxMusicVideoScreenShot.Image = Nothing
-        PcBxPoster.Image = Nothing
-        pcBxScreenshot.Image = Nothing
-        pcBxSinglePoster.Image = Nothing
-    End Sub
-    
+#End Region             'Main Functions
     
 #Region " Music Video Cache Routines"
     Public Sub MVCacheSave()
         Dim fullpath As String = Preferences.workingProfile.MusicVideoCache
-        'If musicVideoList.Count > 0 And Preferences.MVidFolders.Count > 0 Then
-        If IO.File.Exists(fullpath) Then
-            Dim don As Boolean = False
-            Dim count As Integer = 0
-            Do
-                Try
-                    If IO.File.Exists(fullpath) Then
-                        IO.File.Delete(fullpath)
-                        don = True
-                    Else
-                        don = True
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-                Finally
-                    count += 1
-                End Try
-            Loop Until don = True
+        If IO.File.Exists(fullpath) Then 
+            Dim aok As Boolean = Utilities.SafeDeleteFile(fullpath)
+            If Not aok Then
+                MsgBox(" Error Overwriting existing MusicVideo Cache! ")
+                Exit Sub
+            End If
         End If
 
         Dim doc As New XmlDocument
-        'Dim thispref As XmlNode = Nothing
         Dim xmlproc As XmlDeclaration
-            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
         Dim root As XmlElement
         Dim child As XmlElement
-        root = doc.CreateElement("music_video_cache")
         Dim childchild As XmlElement
-
-        Dim count2 As Integer = 0
-
+        root = doc.CreateElement("music_video_cache")
         For Each item In MVCache
-
             child = doc.CreateElement("musicvideo")
-                
-            childchild = doc.CreateElement("fullpathandfilename")
-            childchild.InnerText = item.nfopathandfilename
-            child.AppendChild(childchild)
-			
-            childchild = doc.CreateElement("filename")
-            childchild.InnerText = item.filename
-            child.AppendChild(childchild)
-			
-		    childchild = doc.CreateElement("foldername")
-            childchild.InnerText = item.foldername
-            child.AppendChild(childchild)
-			
-		    childchild = doc.CreateElement("title")
-            childchild.InnerText = item.title
-            child.AppendChild(childchild)
-			
-		    childchild = doc.CreateElement("artist")
-		    childchild.InnerText = item.artist
-		    child.AppendChild(childchild)
-			
-            childchild = doc.CreateElement("year")
-            childchild.InnerText = item.year
-            child.AppendChild(childchild)			
-			
-            childchild = doc.CreateElement("filedate")
-            childchild.InnerText = item.filedate
-            child.AppendChild(childchild)
-			
-            childchild = doc.CreateElement("createdate")
-            childchild.InnerText = item.createdate
-            child.AppendChild(childchild)
-			
-		    childchild = doc.CreateElement("genre")
-            childchild.InnerText = item.genre
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("plot")
-            childchild.InnerText = item.plot
-            child.AppendChild(childchild)
-			
-		    childchild = doc.CreateElement("playcount")
-            childchild.InnerText = item.playcount
-            child.AppendChild(childchild)
-			
-		    childchild = doc.CreateElement("runtime")
-            childchild.InnerText = item.runtime
-            child.AppendChild(childchild)
-			
-            childchild = doc.CreateElement("Resolution")
-            childchild.InnerText = item.Resolution
-		    child.AppendChild(childchild)
-			
-            childchild = doc.CreateElement("FrodoPosterExists")
-            childchild.InnerText = item.FrodoPosterExists
-		    child.AppendChild(childchild)
-			
-            childchild = doc.CreateElement("PreFrodoPosterExists")
-            childchild.InnerText = item.PreFrodoPosterExists
-		    child.AppendChild(childchild)
-
+            childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = item.nfopathandfilename : child.AppendChild(childchild)
+			childchild = doc.CreateElement("filename") : childchild.InnerText = item.filename : child.AppendChild(childchild)
+			childchild = doc.CreateElement("foldername") : childchild.InnerText = item.foldername : child.AppendChild(childchild)
+			childchild = doc.CreateElement("title") : childchild.InnerText = item.title : child.AppendChild(childchild)
+			childchild = doc.CreateElement("artist") : childchild.InnerText = item.artist : child.AppendChild(childchild)
+			childchild = doc.CreateElement("year") : childchild.InnerText = item.year : child.AppendChild(childchild)
+			childchild = doc.CreateElement("filedate") : childchild.InnerText = item.filedate : child.AppendChild(childchild)
+			childchild = doc.CreateElement("createdate") : childchild.InnerText = item.createdate : child.AppendChild(childchild)
+			childchild = doc.CreateElement("genre") : childchild.InnerText = item.genre : child.AppendChild(childchild)
+            childchild = doc.CreateElement("plot") : childchild.InnerText = item.plot : child.AppendChild(childchild)
+			childchild = doc.CreateElement("playcount") : childchild.InnerText = item.playcount : child.AppendChild(childchild)
+			childchild = doc.CreateElement("runtime") : childchild.InnerText = item.runtime : child.AppendChild(childchild)
+			childchild = doc.CreateElement("Resolution") : childchild.InnerText = item.Resolution : child.AppendChild(childchild)
+			childchild = doc.CreateElement("FrodoPosterExists") : childchild.InnerText = item.FrodoPosterExists : child.AppendChild(childchild)
+			childchild = doc.CreateElement("PreFrodoPosterExists") : childchild.InnerText = item.PreFrodoPosterExists : child.AppendChild(childchild)
 		    For Each track In item.Audio  
                 child.AppendChild(track.GetChild(doc))
             Next
-            
             root.AppendChild(child)
         Next
-
         doc.AppendChild(root)
 
         Try
-
             Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
             output.Formatting = Xml.Formatting.Indented
             doc.WriteTo(output)
             output.Close()
-            'Exit For
         Catch ex As Exception
-#If SilentErrorScream Then
-        Throw ex
-#End If
         End Try
-        'Else
-        '    Try
-        '        If IO.File.Exists(fullpath) Then
-        '            IO.File.Delete(fullpath)
-        '        End If
-        '    Catch
-        '    End Try
-        'End If
     End Sub
 
     Public Sub MVCacheLoad()
         MVCache.Clear()
-        'musicVideoList.Clear()
-
         Dim musicvideocache As New XmlDocument
-        Dim objReader As New System.IO.StreamReader(Preferences.workingProfile.MusicVideoCache)
-        Dim tempstring As String = objReader.ReadToEnd
-        objReader.Close()
-
-
-
-        musicvideocache.LoadXml(tempstring)
+        Try
+            musicvideocache.Load(Preferences.workingProfile.MusicVideoCache)
+        Catch ex As Exception
+            MsgBox("Error : pr25")
+        End Try
         Dim thisresult As XmlNode = Nothing
         For Each thisresult In musicvideocache("music_video_cache")
             Select Case thisresult.Name
                 Case "musicvideo"
-                    Dim newMV As New MVComboList   
-
+                    Dim newMV As New MVComboList
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
-                            'workingmovie.missingdata1
-
-                            Case "fullpathandfilename" : newMV.nfopathandfilename = detail.InnerText
-                            Case "filename" : newMV.filename = detail.InnerText
-                            Case "foldername" : newMV.foldername = detail.InnerText
-                            Case "title" : newMV.title = detail.InnerText
-                            Case "artist" : newMV.artist = detail.InnerText
-                            Case "year" : newMV.year = detail.InnerText
+                            Case "fullpathandfilename"  : newMV.nfopathandfilename = detail.InnerText
+                            Case "filename"             : newMV.filename = detail.InnerText
+                            Case "foldername"           : newMV.foldername = detail.InnerText
+                            Case "title"                : newMV.title = detail.InnerText
+                            Case "artist"               : newMV.artist = detail.InnerText
+                            Case "year"                 : newMV.year = detail.InnerText
                             Case "filedate"
                                 If detail.InnerText.Length <> 14 Then 'i.e. invalid date
                                         newMV.filedate = "18500101000000" '01/01/1850 00:00:00
@@ -472,25 +207,21 @@ Public Class ucMusicVideo
                                     Else
                                         newMV.CreateDate = detail.InnerText
                                     End If
-                            Case "genre" : newMV.genre = detail.InnerText & newMV.genre
-                            Case "plot" : newMV.plot = detail.InnerText
-                            Case "playcount" : newMV.playcount = detail.InnerText
-                            Case "runtime" : newMV.runtime = detail.InnerText
-                            Case "Resolution" : newMV.Resolution = detail.InnerText
-                            Case "FrodoPosterExists" : newMV.FrodoPosterExists = detail.InnerText
+                            Case "genre"                : newMV.genre = detail.InnerText & newMV.genre
+                            Case "plot"                 : newMV.plot = detail.InnerText
+                            Case "playcount"            : newMV.playcount = detail.InnerText
+                            Case "runtime"              : newMV.runtime = detail.InnerText
+                            Case "Resolution"           : newMV.Resolution = detail.InnerText
+                            Case "FrodoPosterExists"    : newMV.FrodoPosterExists = detail.InnerText
                             Case "PreFrodoPosterExists" : newMV.PreFrodoPosterExists = detail.InnerText
                             Case "audio"
                                 Dim audio As New AudioDetails
                                 For Each audiodetails As XmlNode In detail.ChildNodes
                                     Select Case audiodetails.Name
-                                        Case "language"
-                                            audio.Language.Value = audiodetails.InnerText
-                                        Case "codec"
-                                            audio.Codec.Value = audiodetails.InnerText
-                                        Case "channels"
-                                            audio.Channels.Value = audiodetails.InnerText
-                                        Case "bitrate"
-                                            audio.Bitrate.Value = audiodetails.InnerText
+                                        Case "language" : audio.Language.Value = audiodetails.InnerText
+                                        Case "codec"    : audio.Codec.Value = audiodetails.InnerText
+                                        Case "channels" : audio.Channels.Value = audiodetails.InnerText
+                                        Case "bitrate"  : audio.Bitrate.Value = audiodetails.InnerText
                                     End Select
                                 Next
                                 newMV.Audio.Add(audio)
@@ -500,30 +231,14 @@ Public Class ucMusicVideo
                     MVCache.Add(newMV)
             End Select
         Next
-
         Call loadMVDV1()
         Try
             If MVDgv1.Rows.Count > 0 Then MVDgv1.Rows(0).Selected = True
             DisplayMV()
         Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
         End Try
     End Sub
-
-    Public Sub MVCacheLoadFromNfo()
-        tmpMVCache.Clear()
-        Dim t As New List(Of String)
-        For each item In Preferences.MVidFolders
-            If item.selected Then
-                t.Add(item.rpath)
-            End If
-        Next
-        MV_Load(t)
-        loadMVDV1()
-    End Sub
-
+    
     Public Sub MVCacheAddScraped(tmpMV As FullMovieDetails)
         MVCacheadd(tmpMV)
         loadMVDV1()
@@ -539,77 +254,15 @@ Public Class ucMusicVideo
         MVCache.RemoveAll(Function(c) c.nfopathandfilename = nfopath)
     End Sub
 
-#End Region 
+#End Region 'Cache Routines
 
-    Sub MV_Load(ByVal folderlist As List(Of String))
-        Dim tempint As Integer
-        Dim dirinfo As String = String.Empty
-        Const pattern = "*.nfo"
-        Dim moviePaths As New List(Of String)
-
-        For Each moviefolder In folderlist
-            If (New DirectoryInfo(moviefolder)).Exists Then
-                moviePaths.Add(moviefolder)
-            End If
-        Next
-        tempint = moviePaths.Count
-
-        'Add sub-folders
-        For f = 0 To tempint - 1
-            Try
-                For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
-                    moviePaths.Add(subfolder)
-                Next
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
-            End Try
-        Next
-        'Dim i = 0
-        For Each Path In moviePaths
-            'i += 1
-            'PercentDone = CalcPercentDone(i, moviePaths.Count)
-            'ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
-
-            MV_ListFiles(pattern, New DirectoryInfo(Path))
-            'If Cancelled Then Exit Sub
-        Next
-        MVCache.Clear
-        MVDgv1.DataSource = MVCache
-        MVDgv1.DataSource = Nothing
-        MVCache.AddRange(tmpMVCache)
-    End Sub
-
-    Private Sub MV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-        'Dim incmissing As Boolean = Preferences.incmissingmovies 
-        If IsNothing(dirInfo) Then Exit Sub
-         
-        For Each oFileInfo In dirInfo.GetFiles(pattern)
-            Dim tmp As New MVComboList
-            Application.DoEvents
-            'If Cancelled Then Exit Sub
-            If Not File.Exists(oFileInfo.FullName) Then Continue For
-            Try
-                If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
-                Dim mvideo As New FullMovieDetails
-                mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
-                tmp.Assign(mvideo)
-                tmpMVCache.Add(tmp)
-            Catch
-                MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
-            End Try
-        Next
-
-    End Sub
-
+#Region "Common Routines"
+    
     Private Sub loadMVDV1()
         MVDgv1.DataSource = Nothing
         MVDgv1.DataSource = MVCache
-        MVDataGridSort()
-        mv_FiltersAndSortApply()
-    End Sub
-
-    Private Sub MVDataGridSort()
         GridviewMovieDesign()
+        mv_FiltersAndSortApply()
     End Sub
     
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.KeyDown, txtFilter.ModifiedChanged
@@ -624,7 +277,6 @@ Public Class ucMusicVideo
             mv_FiltersAndSortApply()
             DisplayMV()
         Catch ex As Exception
-
         End Try
     End Sub
     
@@ -674,11 +326,7 @@ Public Class ucMusicVideo
             Catch
             End Try
         End If
-
-        If searchTerm = "" Then
-            searchTerm = filenameWithoutExtension
-        End If
-
+        If searchTerm = "" Then searchTerm = filenameWithoutExtension
         Return searchTerm
     End Function
 
@@ -691,7 +339,6 @@ Public Class ucMusicVideo
             End If
             Dim searchterm As String = getArtistAndTitle(workingMusicVideo.fileinfo.fullpathandfilename)
             Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
-
             WebBrowser1.Stop()
             WebBrowser1.ScriptErrorsSuppressed = True
             WebBrowser1.Navigate(searchurl)
@@ -701,7 +348,7 @@ Public Class ucMusicVideo
     End Sub
     
     Private Sub ScrnShtTimeAdjust(ByVal Direction As Boolean)
-        Dim number As Integer = CInt(txtScreenshotTime.Text)
+        Dim number As Integer = txtScreenshotTime.Text.ToInt
         If Direction Then
             number += 1
         Else
@@ -727,7 +374,6 @@ Public Class ucMusicVideo
             Exit Sub
         Else
             changefields = chkBxOverWriteArt.CheckState
-            'ChangeMusicVideo(WebBrowser1.Url.ToString)  ' ucMusicVideo Routine
             TabControlMain.SelectedIndex = 0
             ChangeMV(WebBrowser1.Url.ToString, changefields)   ' For Testing through scraping routine.
         End If
@@ -761,26 +407,422 @@ Public Class ucMusicVideo
         End If
     End Sub
 
+    Private Function validateMusicVideoNfo(ByVal fullPathandFilename As String)
+        Dim tempstring As String
+        Dim filechck As IO.StreamReader = IO.File.OpenText(fullPathandFilename)
+        tempstring = filechck.ReadToEnd.ToLower
+        filechck.Close()
+        If tempstring = Nothing Then
+            Return False
+        End If
+        If tempstring.IndexOf("<musicvideo>") <> -1 And tempstring.IndexOf("</musicvideo>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
+            Return True
+            Exit Function
+        End If
+        Return False
+    End Function
     
+    Private Sub DisplayMV()
+        Try
+            DisplayMV(MVDgv1.SelectedCells, MVDgv1.SelectedRows)
+        Catch
+            Return
+        End Try
+    End Sub
 
-    
-'All Buttons
+    Private Sub DisplayMV(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection)
+        Try
+            If selectedRows.Count = 1 Then
+                If LastMV = selectedCells(0).Value.ToString Then Return
+                LastMV = selectedCells(0).Value.ToString
+            Else
+                LastMV = ""
+            End If
+        Catch
+            Return
+        End Try
+        If selectedRows.Count = 0 Then Exit Sub
+        MVForm_Init()
+        Dim query = From f In MVCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
+        Dim queryList As List(Of MVComboList) = query.ToList()
+
+        If queryList.Count > 0 Then
+            workingMV.nfopathandfilename = queryList(0).nfopathandfilename
+            MVForm_Populate()
+        Else
+            MVForm_Populate()
+        End If
+    End Sub
+
+    Private Sub MVForm_Populate()
+        If Not String.IsNullOrEmpty(workingMV.nfopathandfilename) AndAlso MVDgv1.Rows.Count > 0 Then
+            workingMusicVideo = WorkingWithNfoFiles.MVloadNfo(workingMV.nfopathandfilename)
+            If IsNothing(workingMusicVideo) = False Then
+                txtAlbum.Text = workingMusicVideo.fullmoviebody.album
+                txtArtist.Text = workingMusicVideo.fullmoviebody.artist
+                txtDirector.Text = workingMusicVideo.fullmoviebody.director
+                txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
+                txtPlot.Text = workingMusicVideo.fullmoviebody.plot
+                Dim runtimestr As String = workingMusicVideo.fullmoviebody.runtime
+                If runtimestr = "" OrElse runtimestr = "-1" Then
+                    If workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value <> "" AndAlso workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value <> "-1" Then
+                        runtimestr = Math.Floor((workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value.ToInt)/60).ToString & " min"
+                    End If
+                Else
+                    runtimestr &= " min"
+                End If
+                txtRuntime.Text = runtimestr   'workingMusicVideo.fullmoviebody.runtime
+                txtStudio.Text = workingMusicVideo.fullmoviebody.studio
+                txtTitle.Text = workingMusicVideo.fullmoviebody.title
+                txtYear.Text = workingMusicVideo.fullmoviebody.year
+                txtGenre.Text = workingMusicVideo.fullmoviebody.genre
+                txtFullpath.Text = workingMusicVideo.fileinfo.fullPathAndFilename
+                Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                Label16.Text = pcBxScreenshot.Image.Width
+                Label17.Text = pcBxScreenshot.Image.Height
+                'Set Media overlay
+                Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
+                movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
+                
+                If IO.File.Exists(workingMusicVideo.fileinfo.posterpath) Then
+                    Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                    Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                    Label19.Text = pcBxSinglePoster.Image.Width
+                    Label18.Text = pcBxSinglePoster.Image.Height
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub MVForm_Init()
+        txtAlbum.Text = ""
+        txtArtist.Text = ""
+        txtDirector.Text = ""
+        txtFullpath.Text = ""
+        txtGenre.Text = ""
+        txtPlot.Text = ""
+        txtRuntime.Text = ""
+        txtStudio.Text = ""
+        txtTitle.Text = ""
+        txtYear.Text = ""
+        PcBxMusicVideoScreenShot.Image = Nothing
+        PcBxPoster.Image = Nothing
+        pcBxScreenshot.Image = Nothing
+        pcBxSinglePoster.Image = Nothing
+    End Sub
+
+    Sub HandleMovieList_DisplayChange(DisplayField As String)
+        GridFieldToDisplay1 = DisplayField
+        If rbMVArtistAndTitle.Checked Then Preferences.moviedefaultlist = 0
+        If rbMVTitleandYear  .Checked Then Preferences.moviedefaultlist = 1
+        If rbMVFilename      .Checked Then Preferences.moviedefaultlist = 2
+        GridviewMovieDesign()
+        If Form1.MainFormLoadedStatus Then
+            DisplayMV()
+        End If
+    End Sub
+
+    Private Sub MV_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
+        If MVDgv1.RowCount = 0 AndAlso MVDgv1.SelectedRows.Count < 1 Then Exit Sub
+        Dim MVRemoved As Boolean = False
+        Dim MVCacheIndex As Integer = Nothing
+        Dim MVDGVRowIndex As Integer = MVDgv1.CurrentRow.index
+        If MVCache.RemoveAll(Function(c) c.nfopathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
+            Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
+            If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
+            MVArt = workingMusicVideo.fileinfo.posterpath
+            If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
+            Utilities.SafeDeleteFile(workingMusicVideo.fileinfo.fullpathandfilename)
+            MVDgv1.DataSource = Nothing
+            loadMVDV1()
+        End If
+    End Sub
+
+    Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
+        Dim hFb As IntPtr = FindWindowW("#32770", "Browse For Folder") '#32770 is the class name of a folderbrowser dialog
+        If hFb <> IntPtr.Zero Then
+            If SendMessageW(hFb, BFFM_SETEXPANDED, 1, fb.SelectedPath) = IntPtr.Zero Then
+                Tmr.Stop()
+            End If
+        End If
+    End Sub
+
+#End Region             'Common Routines
+
 #Region "Buttons"  
     
-    'Scraping Buttons
+#Region "Browser Tab"
     Private Sub btnSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchNew.Click
         Call SearchForNewMV()
     End Sub
 
-    Private Sub btnManualScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnManualScrape.Click
-        ManualScrape()
-    End Sub
-    
     Private Sub btnRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRefresh.Click
         RefreshallMV()
     End Sub
 
-    'Path buttons
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        workingMusicVideo.fullmoviebody.title = txtTitle.Text
+        workingMusicVideo.fullmoviebody.artist = txtArtist.Text
+        workingMusicVideo.fullmoviebody.album = txtAlbum.Text
+        workingMusicVideo.fullmoviebody.year = txtYear.Text
+        workingMusicVideo.fullmoviebody.studio = txtStudio.Text
+        workingMusicVideo.fullmoviebody.director = txtDirector.Text
+        workingMusicVideo.fullmoviebody.genre = txtGenre.Text
+        workingMusicVideo.fullmoviebody.plot = txtPlot.Text
+        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.fullpathandfilename, workingMusicVideo)
+    End Sub
+
+    Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
+        Try
+            If Not PcBxPoster.Tag Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                Call Form1.util_ZoomImage(PcBxPoster.Tag.ToString)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub PcBxMusicVideoScreenShot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxMusicVideoScreenShot.DoubleClick
+        Try
+            If Not PcBxMusicVideoScreenShot.Tag Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                Call Form1.util_ZoomImage(PcBxMusicVideoScreenShot.Tag.ToString)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnMVPlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMVPlay.Click
+        MVPlay()
+    End Sub
+
+    Private Sub btn_MVSortReset_Click(sender As Object, e As EventArgs) Handles btn_MVSortReset.Click
+        cmbxMVSort.SelectedIndex = 0
+        txtFilter.Text = ""
+        rbMVArtistAndTitle.Checked = True
+    End Sub
+
+    Private Sub cmbxMVSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMVSort.SelectedIndexChanged
+        GridFieldToDisplay2 = cmbxMVSort.text
+        mv_FiltersAndSortApply()
+        DisplayMV()
+        If Not Form1.MainFormLoadedStatus Then Exit Sub
+        Preferences.MVsortorder = cmbxMVSort.SelectedIndex 
+    End Sub
+    
+    Private Sub rbMVArtistAndTitle_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVArtistAndTitle.CheckedChanged
+        HandleMovieList_DisplayChange("ArtistTitle")
+        If Not cmbxMVSort.SelectedIndex = 0 Then
+            cmbxMVSort.SelectedIndex = 0
+        Else
+            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
+        End If
+    End Sub
+
+    Private Sub rbMVTitleandYear_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVTitleandYear.CheckedChanged
+        HandleMovieList_DisplayChange("TitleYear")
+        If Not cmbxMVSort.SelectedIndex = 0 Then
+            cmbxMVSort.SelectedIndex = 0
+        Else
+            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
+        End If
+    End Sub
+
+    Private Sub rbMVFilename_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVFilename.CheckedChanged
+        HandleMovieList_DisplayChange("FileName")
+        If Not cmbxMVSort.SelectedIndex = 0 Then
+            cmbxMVSort.SelectedIndex = 0
+        Else
+            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
+        End If
+    End Sub
+
+#End Region             'Browser Tab
+
+#Region "ScreenShot Tab"
+
+    Private Sub btnCreateScreenshot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCreateScreenshot.Click
+        Try
+            PcBxMusicVideoScreenShot.Image = Nothing
+            pcBxScreenshot.Image = Nothing
+            Dim screenshotpath As String = workingMusicVideo.fileinfo.fanartpath
+            If screenshotpath = "" Then screenshotpath = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+            Utilities.CreateScreenShot(workingMusicVideo.fileinfo.filenameandpath, screenshotpath, txtScreenshotTime.Text.ToInt, True)
+                    
+            Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
+            Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
+        Catch
+        End Try
+    End Sub
+    
+    Private Sub btnScreenshotMinus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotMinus.Click
+        ScrnShtTimeAdjust(False)
+    End Sub
+
+    Private Sub btnScreenshotPlus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotPlus.Click
+        ScrnShtTimeAdjust(True)
+    End Sub
+
+    Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
+        'Form1.cropMode = "mvscreenshot"
+        Try
+            Using t As New frmMovPosterCrop
+                If Preferences.MultiMonitoEnabled Then
+                    t.bounds = screen.allscreens(form1.currentscreen).bounds
+                    t.startposition = formstartposition.manual
+                end if
+                t.img = New Bitmap(pcBxScreenshot.Tag.ToString)
+                t.cropmode = "fanart"
+                t.title = workingMusicVideo.fullmoviebody.title 
+                t.Setup()
+                t.ShowDialog()
+                If Not IsNothing(t.newimg) Then
+                    btnSaveCrop.Enabled = True
+                    btnCropReset.Enabled = True
+                    pcBxScreenshot.Image = t.newimg
+                End If
+            End Using
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCropReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCropReset.Click
+        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+        Form1.util_ImageLoad(pcBxScreenshot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+    End Sub
+
+    Private Sub btnSaveCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCrop.Click
+        Dim bitmap3 As New Bitmap(pcBxScreenshot.Image)
+        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-fanart.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpathandfilename, Utilities.DefaultTvFanartPath)
+        Form1.util_ImageLoad(pcBxScreenshot, thumbpathandfilename, Utilities.DefaultTvFanartPath)
+    End Sub
+
+    Private Sub btnPasteFromClipboard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteFromClipboard.Click
+        If AssignClipboardImage(pcBxScreenshot) Then
+            btnCropReset.Enabled = True
+            btnSaveCrop.Enabled = True
+            Label16.Text = pcBxScreenshot.Image.Width
+            Label17.Text = pcBxScreenshot.Image.Height
+        End If
+    End Sub
+
+    Private Sub pcBxScreenshot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxScreenshot.DoubleClick
+        Try
+            If Not pcBxScreenshot.Tag Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                Call Form1.util_ZoomImage(pcBxScreenshot.Tag.ToString)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click, btnGoogleSearchPoster.Click
+        Call googleSearch()
+    End Sub
+    
+#End Region         'ScreenShot Tab
+    
+#Region "Poster Tab"
+
+    Private Sub btnPosterPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterPaste.Click
+        If AssignClipboardImage(pcBxSinglePoster) Then
+            btnPosterReset.Enabled = True
+            btnPosterSave.Enabled = True
+            Label16.Text = pcBxSinglePoster.Image.Width
+            Label17.Text = pcBxSinglePoster.Image.Height
+        End If
+    End Sub
+    
+    Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
+        Try
+            Using t As New frmMovPosterCrop
+                If Preferences.MultiMonitoEnabled Then
+                    t.bounds = screen.allscreens(form1.currentscreen).bounds
+                    t.startposition = formstartposition.manual
+                end if
+                t.img = New Bitmap(pcBxSinglePoster.Tag.ToString)
+                t.cropmode = "poster"
+                t.title = workingMusicVideo.fullmoviebody.title 
+                t.Setup()
+                t.ShowDialog()
+                If Not IsNothing(t.newimg) Then
+                    btnPosterSave.Enabled = True
+                    btnPosterReset.Enabled = True
+                    pcBxSinglePoster.Image = t.newimg
+                End If
+            End Using
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnPosterReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterReset.Click
+        Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultPosterPath)
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+    End Sub
+
+    Private Sub btnPosterSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterSave.Click
+        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
+        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
+        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
+        bitmap3.Dispose()
+        btnCropReset.Enabled = False
+        btnSaveCrop.Enabled = False
+        Form1.util_ImageLoad(PcBxPoster, thumbpathandfilename, Utilities.DefaultPosterPath)
+        Form1.util_ImageLoad(pcBxSinglePoster, thumbpathandfilename, Utilities.DefaultPosterPath)
+        btnPosterReset.Enabled = False
+        btnPosterSave.Enabled = False
+    End Sub
+    
+    Private Sub pcBxSinglePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxSinglePoster.DoubleClick
+        Try
+            If Not pcBxSinglePoster.Tag Is Nothing Then
+                Form1.ControlBox = False
+                Form1.MenuStrip1.Enabled = False
+                Call Form1.util_ZoomImage(pcBxSinglePoster.Tag.ToString)
+            Else
+                MsgBox("No Image Available To Zoom")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region              'Poster Tab
+
+#Region "Manual Search Tab"
+
+    Private Sub btnManualScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnManualScrape.Click
+        ManualScrape()
+    End Sub         'Wiki Go Button
+
+#End Region       'Manual Search Tab
+    
+    
+#Region "Preferences Tab"
+
     Private Sub tPPref_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tPPref.Leave
         Try
             If MVPrefChanged Then
@@ -817,6 +859,57 @@ Public Class ucMusicVideo
         TabControlMain.SelectedIndex = 0
         RefreshallMV()
     End Sub
+
+    Private Sub cb_MVPrefShowLog_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MVPrefShowLog.CheckedChanged
+        If MVPrefLoad Then Exit Sub
+        Preferences.MVPrefShowLog = cb_MVPrefShowLog.Checked
+        MVPrefChanged = True
+    End Sub
+
+    Private Sub tb_MVPrefScrnSht_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tb_MVPrefScrnSht.KeyPress 
+        Try
+            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+                If tb_MVPrefScrnSht.Text <> "" Then
+                    e.Handled = True
+                Else
+                    MsgBox("Please Enter at least 1")
+                    tb_MVPrefScrnSht.Text = "10"
+                End If
+            End If
+            If tb_MVPrefScrnSht.Text = "" Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                tb_MVPrefScrnSht.Text = "10"
+                Exit Sub
+            End If
+            If Not IsNumeric(tb_MVPrefScrnSht.Text) Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                tb_MVPrefScrnSht.Text = "10"
+                Exit Sub
+            End If
+            Preferences.MVPrefScrnSht = Convert.ToInt32(tb_MVPrefScrnSht.Text)
+            MVPrefChanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tb_MVPrefScrnSht_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tb_MVPrefScrnSht.TextChanged
+        If MVPrefLoad Then Exit Sub
+        If IsNumeric(tb_MVPrefScrnSht.Text) AndAlso Convert.ToInt32(tb_MVPrefScrnSht.Text)>0 Then
+            Preferences.MVPrefScrnSht = Convert.ToInt32(tb_MVPrefScrnSht.Text)
+            MVPrefChanged = True
+        Else
+            Preferences.MVPrefScrnSht = 10
+            tb_MVPrefScrnSht.Text = "10"
+            MsgBox("Please enter a numerical Value that is 1 or more")
+        End If
+    End Sub
+
+    Private Sub rb_MvScr1_CheckedChanged(sender As Object, e As EventArgs) Handles rb_MvScr1.CheckedChanged, rb_MvScr2.CheckedChanged, rb_MvScr3.CheckedChanged
+        MVPrefChanged = True
+    End Sub
+
+#Region "Folders Buttons & Routines"
 
     Private Sub btnAddFolderPath_Click(sender As System.Object, e As System.EventArgs) Handles btnAddFolderPath.Click
         Try
@@ -983,251 +1076,12 @@ Public Class ucMusicVideo
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+#End Region         'Folders Buttons & Routines
+
+#End Region         'Preferences Tab
     
-    'Poster/Image buttons
-    Private Sub btnCreateScreenshot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCreateScreenshot.Click
-        Try
-            PcBxMusicVideoScreenShot.Image = Nothing
-            pcBxScreenshot.Image = Nothing
-            Dim screenshotpath As String = createScreenshot(workingMusicVideo.fileinfo.fullpathandfilename, txtScreenshotTime.Text, True)
-                    
-            Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
-            Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
-        Catch
-        End Try
-    End Sub
-    
-    Private Sub btnScreenshotMinus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotMinus.Click
-        ScrnShtTimeAdjust(False)
-    End Sub
-
-    Private Sub btnScreenshotPlus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotPlus.Click
-        ScrnShtTimeAdjust(True)
-    End Sub
-
-    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
-        'save text routine
-        workingMusicVideo.fullmoviebody.title = txtTitle.Text
-        workingMusicVideo.fullmoviebody.album = txtAlbum.Text
-        workingMusicVideo.fullmoviebody.artist = txtArtist.Text
-        workingMusicVideo.fullmoviebody.director = txtDirector.Text
-        workingMusicVideo.fullmoviebody.genre = txtGenre.Text
-        workingMusicVideo.fullmoviebody.plot = txtPlot.Text
-        workingMusicVideo.fullmoviebody.studio = txtStudio.Text
-        workingMusicVideo.fullmoviebody.year = txtYear.Text
-
-        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.fullpathandfilename, workingMusicVideo)
-    End Sub
-    
-    Private Sub btnCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCrop.Click
-        'Form1.cropMode = "mvscreenshot"
-        Try
-            Using t As New frmMovPosterCrop
-                If Preferences.MultiMonitoEnabled Then
-                    t.bounds = screen.allscreens(form1.currentscreen).bounds
-                    t.startposition = formstartposition.manual
-                end if
-                t.img = New Bitmap(pcBxScreenshot.Tag.ToString)
-                t.cropmode = "fanart"
-                t.title = workingMusicVideo.fullmoviebody.title 
-                t.Setup()
-                t.ShowDialog()
-                If Not IsNothing(t.newimg) Then
-                    btnSaveCrop.Enabled = True
-                    btnCropReset.Enabled = True
-                    pcBxScreenshot.Image = t.newimg
-                End If
-            End Using
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnCropReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCropReset.Click
-        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, workingMusicVideo.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-        pcBxScreenshot.Image = PcBxMusicVideoScreenShot.Image
-        btnCropReset.Enabled = False
-        btnSaveCrop.Enabled = False
-    End Sub
-
-    Private Sub btnSaveCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCrop.Click
-        Dim bitmap3 As New Bitmap(pcBxScreenshot.Image)
-        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-fanart.jpg")
-        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
-        bitmap3.Dispose()
-        btnCropReset.Enabled = False
-        btnSaveCrop.Enabled = False
-        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, thumbpathandfilename, Utilities.DefaultTvFanartPath)
-        Form1.util_ImageLoad(pcBxScreenshot, thumbpathandfilename, Utilities.DefaultTvFanartPath)
-    End Sub
-    
-    Private Sub btnPosterPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterPaste.Click
-        If AssignClipboardImage(pcBxSinglePoster) Then
-            btnPosterReset.Enabled = True
-            btnPosterSave.Enabled = True
-            Label16.Text = pcBxSinglePoster.Image.Width
-            Label17.Text = pcBxSinglePoster.Image.Height
-        End If
-    End Sub
-
-    Private Sub btnPasteFromClipboard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteFromClipboard.Click
-        If AssignClipboardImage(pcBxScreenshot) Then
-            btnCropReset.Enabled = True
-            btnSaveCrop.Enabled = True
-            Label16.Text = pcBxScreenshot.Image.Width
-            Label17.Text = pcBxScreenshot.Image.Height
-        End If
-    End Sub
-
-    Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
-        Try
-            Using t As New frmMovPosterCrop
-                If Preferences.MultiMonitoEnabled Then
-                    t.bounds = screen.allscreens(form1.currentscreen).bounds
-                    t.startposition = formstartposition.manual
-                end if
-                t.img = New Bitmap(pcBxSinglePoster.Tag.ToString)
-                t.cropmode = "poster"
-                t.title = workingMusicVideo.fullmoviebody.title 
-                t.Setup()
-                t.ShowDialog()
-                If Not IsNothing(t.newimg) Then
-                    btnPosterSave.Enabled = True
-                    btnPosterReset.Enabled = True
-                    pcBxSinglePoster.Image = t.newimg
-                End If
-            End Using
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btnPosterReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterReset.Click
-        Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultPosterPath)
-        btnPosterReset.Enabled = False
-        btnPosterSave.Enabled = False
-    End Sub
-
-    Private Sub btnPosterSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterSave.Click
-        Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
-        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
-        bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
-        bitmap3.Dispose()
-        btnCropReset.Enabled = False
-        btnSaveCrop.Enabled = False
-        Form1.util_ImageLoad(PcBxPoster, thumbpathandfilename, Utilities.DefaultPosterPath)
-        Form1.util_ImageLoad(pcBxSinglePoster, thumbpathandfilename, Utilities.DefaultPosterPath)
-        btnPosterReset.Enabled = False
-        btnPosterSave.Enabled = False
-    End Sub
-    
-    Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
-        Try
-            If Not PcBxPoster.Tag Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                Call Form1.util_ZoomImage(PcBxPoster.Tag.ToString)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub pcBxSinglePoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxSinglePoster.DoubleClick
-        Try
-            If Not pcBxSinglePoster.Tag Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                Call Form1.util_ZoomImage(pcBxSinglePoster.Tag.ToString)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub pcBxScreenshot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcBxScreenshot.DoubleClick
-        Try
-            If Not pcBxScreenshot.Tag Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                Call Form1.util_ZoomImage(pcBxScreenshot.Tag.ToString)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub PcBxMusicVideoScreenShot_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxMusicVideoScreenShot.DoubleClick
-        Try
-            If Not PcBxMusicVideoScreenShot.Tag Is Nothing Then
-                Form1.ControlBox = False
-                Form1.MenuStrip1.Enabled = False
-                Call Form1.util_ZoomImage(PcBxMusicVideoScreenShot.Tag.ToString)
-            Else
-                MsgBox("No Image Available To Zoom")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    'Misc
-    Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click, btnGoogleSearchPoster.Click
-        Call googleSearch()
-    End Sub
-
-    Private Sub btnMVPlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMVPlay.Click
-        MVPlay()
-    End Sub
-    
-    Private Sub btn_MVSortReset_Click(sender As Object, e As EventArgs) Handles btn_MVSortReset.Click
-        cmbxMVSort.SelectedIndex = 0
-        txtFilter.Text = ""
-        rbMVArtistAndTitle.Checked = True
-    End Sub
-
-    Private Sub cmbxMVSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMVSort.SelectedIndexChanged
-        GridFieldToDisplay2 = cmbxMVSort.text
-        mv_FiltersAndSortApply()
-        DisplayMV()
-        If Not Form1.MainFormLoadedStatus Then Exit Sub
-        Preferences.MVsortorder = cmbxMVSort.SelectedIndex 
-    End Sub
-    
-    Private Sub rbMVArtistAndTitle_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVArtistAndTitle.CheckedChanged
-        HandleMovieList_DisplayChange("ArtistTitle")
-        If Not cmbxMVSort.SelectedIndex = 0 Then
-            cmbxMVSort.SelectedIndex = 0
-        Else
-            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
-        End If
-    End Sub
-
-    Private Sub rbMVTitleandYear_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVTitleandYear.CheckedChanged
-        HandleMovieList_DisplayChange("TitleYear")
-        If Not cmbxMVSort.SelectedIndex = 0 Then
-            cmbxMVSort.SelectedIndex = 0
-        Else
-            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
-        End If
-    End Sub
-
-    Private Sub rbMVFilename_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVFilename.CheckedChanged
-        HandleMovieList_DisplayChange("FileName")
-        If Not cmbxMVSort.SelectedIndex = 0 Then
-            cmbxMVSort.SelectedIndex = 0
-        Else
-            cmbxMVSort_SelectedIndexChanged(cmbxMVSort, EventArgs.Empty)
-        End If
-    End Sub
-
-#End Region
+#End Region                     'All Buttons
 
 #Region "MVDGV  Setup"
     Public Sub GridviewMovieDesign()
@@ -1264,17 +1118,17 @@ Public Class ucMusicVideo
         End If
         dgv.RowHeadersVisible = False
         If GridFieldToDisplay1="ArtistTitle" Then
-            IniColumn(dgv,"Title"               ,GridFieldToDisplay2= "Year","Title"       )
-            IniColumn(dgv,"ArtistTitleYear"     ,GridFieldToDisplay2<>"Year","Title & Year")
+            IniColumn(dgv,"Title"           ,GridFieldToDisplay2= "Year","Title"       )
+            IniColumn(dgv,"ArtistTitleYear" ,GridFieldToDisplay2<>"Year","Title & Year")
         End If
         If GridFieldToDisplay1="TitleYear" Then
-            IniColumn(dgv,"Title"         ,GridFieldToDisplay2= "Year","Title"       )
-            IniColumn(dgv,"TitleYear"     ,GridFieldToDisplay2<>"Year","Title & Year")
+            IniColumn(dgv,"Title"           ,GridFieldToDisplay2= "Year","Title"       )
+            IniColumn(dgv,"TitleYear"       ,GridFieldToDisplay2<>"Year","Title & Year")
         End If
-        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
-        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Year"        ,"Movie year"       ,"Year"    , -20                                           )
-        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="DateAdded"   ,"Date Added"       ,"Added"                                                   )
+        IniColumn(dgv,"filename"            ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
+        IniColumn(dgv,"year"                ,GridFieldToDisplay2="Year"        ,"Movie year"       ,"Year"    , -20                                           )
+        IniColumn(dgv,"runtime"             ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate"   ,GridFieldToDisplay2="DateAdded"   ,"Date Added"       ,"Added"                                                   )
         SetFirstColumnWidth(dgv)
         Cursor.Current = Cursors.Default
     End Sub
@@ -1316,9 +1170,9 @@ Public Class ucMusicVideo
             
             If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
             
-            If GridFieldToDisplay2 = "Year" Then firstColWidth -= dgvMovies.Columns("Year"             ).Width
-            If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
-            If GridFieldToDisplay2 = "DateAdded" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
+            If GridFieldToDisplay2 = "Year"         Then firstColWidth -= dgvMovies.Columns("Year"             ).Width
+            If GridFieldToDisplay2 = "Runtime"      Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
+            If GridFieldToDisplay2 = "DateAdded"    Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
             
             If firstColWidth>0 Then
                 If Not IsNothing(dgvMovies.Columns("filename"           )) Then dgvMovies.Columns("filename"            ).Width = firstColWidth
@@ -1332,11 +1186,9 @@ Public Class ucMusicVideo
     End Sub
 
     Public Sub mv_FiltersAndSortApply(Optional ByVal Force As Boolean = False) 'Form1 As Form1)
-
         If Not Form1.MainFormLoadedStatus AndAlso Not Force Then Exit Sub
- 
+
         Dim b = From f In MVCache
-       
         If txtFilter.Text.ToUpper<>"" Then
             If rbMVArtistAndTitle.Checked Then
                 b = From f In b Where f.ArtistTitle.ToUpper.Contains(txtFilter.Text.ToUpper)
@@ -1442,19 +1294,8 @@ Public Class ucMusicVideo
         MVDgv1                   .DataSource = DataGridViewBindingSource
         GridviewMovieDesign()
     End Sub
-
-    Sub HandleMovieList_DisplayChange(DisplayField As String)
-        GridFieldToDisplay1 = DisplayField
-        If rbMVArtistAndTitle.Checked Then Preferences.moviedefaultlist = 0
-        If rbMVTitleandYear  .Checked Then Preferences.moviedefaultlist = 1
-        If rbMVFilename      .Checked Then Preferences.moviedefaultlist = 2
-        GridviewMovieDesign()
-        If Form1.MainFormLoadedStatus Then
-            DisplayMV()
-        End If
-    End Sub
-
-#End Region   'MVDGV Setup
+    
+#End Region                 'MVDGV Setup
 
 #Region "MVDgv1 Handlers"
 
@@ -1478,7 +1319,7 @@ Public Class ucMusicVideo
                 Return
             End Try
             If info.Type <> DataGridViewHitTestType.ColumnHeader Then
-                'mov_Play("Movie")
+                MVPlay()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -1494,38 +1335,8 @@ Public Class ucMusicVideo
         End Try
     End Sub
 
-#End Region     'MVDgv1 Handlers
-
-    Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick
-        Dim hFb As IntPtr = FindWindowW("#32770", "Browse For Folder") '#32770 is the class name of a folderbrowser dialog
-        If hFb <> IntPtr.Zero Then
-            If SendMessageW(hFb, BFFM_SETEXPANDED, 1, fb.SelectedPath) = IntPtr.Zero Then
-                Tmr.Stop()
-            End If
-        End If
-    End Sub
-
-    Private Sub rb_MvScr1_CheckedChanged(sender As Object, e As EventArgs) Handles rb_MvScr1.CheckedChanged, rb_MvScr2.CheckedChanged, rb_MvScr3.CheckedChanged
-        MVPrefChanged = True
-    End Sub
-
-    Private Sub MV_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
-        If MVDgv1.RowCount = 0 AndAlso MVDgv1.SelectedRows.Count < 1 Then Exit Sub
-        Dim MVRemoved As Boolean = False
-        Dim MVCacheIndex As Integer = Nothing
-        Dim MVDGVRowIndex As Integer = MVDgv1.CurrentRow.index
-        If MVCache.RemoveAll(Function(c) c.nfopathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
-            Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
-            If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
-            MVArt = workingMusicVideo.fileinfo.posterpath
-            If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
-            Utilities.SafeDeleteFile(workingMusicVideo.fileinfo.fullpathandfilename)
-            MVDgv1.DataSource = Nothing
-            loadMVDV1()
-        End If
-    End Sub
-
-
+#End Region             'MVDgv1 Handlers
+    
 #Region "MVContextMenu Items"
     
     Private Sub tsmiMVPlay_Click(sender As Object, e As EventArgs) Handles tsmiMVPlay.Click
@@ -1540,7 +1351,6 @@ Public Class ucMusicVideo
                 MsgBox("There is no Movie selected to open")
             End If
         Catch
-
         End Try
     End Sub
 
@@ -1555,12 +1365,140 @@ Public Class ucMusicVideo
     Private Sub tsmiMVDelNfoArt_Click(sender As Object, e As EventArgs) Handles tsmiMVDelNfoArt.Click
         MV_DeleteNfoArtwork()
     End Sub
+
     
+
 #End Region
 
-
 #Region "garbage"
-    
+
+        'Public Function saveposter(ByVal path As String, ByVal url As String)
+    '    Try
+    '        Dim posterpath As String = ""
+    '        If url.IndexOf(".jpg") <> -1 Then
+    '            posterpath = path.Replace(IO.Path.GetExtension(path), "-poster.jpg")
+    '        ElseIf url.IndexOf(".png") <> -1 Then
+    '            posterpath = path.Replace(IO.Path.GetExtension(path), "-poster.png")
+    '        End If
+
+    '        Dim web_client As WebClient = New WebClient
+    '        web_client.DownloadFile(url, posterpath)
+    '        Return True
+    '    Catch ex As Exception
+    '        Return False
+    '    End Try
+    'End Function
+
+    'Public Shared Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False) As String
+    '    Try
+    '        Dim applicationpath As String = Preferences.applicationPath 'get application root path
+    '        Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
+    '        Dim filepath As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "")
+    '        Dim fileexists As Boolean = False
+    '        For Each extn In Utilities.VideoExtensions
+    '            If IO.File.Exists(filepath & extn) Then
+    '                filepath = filepath & extn
+    '                fileexists = True
+    '            End If
+    '        Next
+    '        If Not fileexists Then Return ""
+    '        If overwrite = True Then
+    '            If IO.File.Exists(thumbpathandfilename) Then
+    '                Try
+    '                    IO.File.Delete(thumbpathandfilename)
+    '                Catch
+    '                End Try
+    '            End If
+    '        End If
+    '        If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
+    '            Dim myProcess As Process = New Process
+    '            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+    '            myProcess.StartInfo.CreateNoWindow = False
+    '            myProcess.StartInfo.FileName = applicationpath & "\Assets\ffmpeg.exe"
+    '            Dim proc_arguments As String = "-y -i """ & filepath & """ -f mjpeg -ss " & time.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+    '            myProcess.StartInfo.Arguments = proc_arguments
+    '            myProcess.Start()
+    '            myProcess.WaitForExit()
+    '            Return thumbpathandfilename
+    '        Else
+    '            Return ""
+    '        End If
+    '    Catch
+    '        Return ""
+    '    End Try
+    'End Function
+
+    'Public Sub MVCacheLoadFromNfo()
+    '    tmpMVCache.Clear()
+    '    Dim t As New List(Of String)
+    '    For each item In Preferences.MVidFolders
+    '        If item.selected Then
+    '            t.Add(item.rpath)
+    '        End If
+    '    Next
+    '    MV_Load(t)
+    '    loadMVDV1()
+    'End Sub
+
+    'Sub MV_Load(ByVal folderlist As List(Of String))
+    '    Dim tempint As Integer
+    '    Dim dirinfo As String = String.Empty
+    '    Const pattern = "*.nfo"
+    '    Dim moviePaths As New List(Of String)
+
+    '    For Each moviefolder In folderlist
+    '        If (New DirectoryInfo(moviefolder)).Exists Then
+    '            moviePaths.Add(moviefolder)
+    '        End If
+    '    Next
+    '    tempint = moviePaths.Count
+
+    '    'Add sub-folders
+    '    For f = 0 To tempint - 1
+    '        Try
+    '            For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
+    '                moviePaths.Add(subfolder)
+    '            Next
+    '        Catch ex As Exception
+    '            ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+    '        End Try
+    '    Next
+    '    'Dim i = 0
+    '    For Each Path In moviePaths
+    '        'i += 1
+    '        'PercentDone = CalcPercentDone(i, moviePaths.Count)
+    '        'ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
+
+    '        MV_ListFiles(pattern, New DirectoryInfo(Path))
+    '        'If Cancelled Then Exit Sub
+    '    Next
+    '    MVCache.Clear
+    '    MVDgv1.DataSource = MVCache
+    '    MVDgv1.DataSource = Nothing
+    '    MVCache.AddRange(tmpMVCache)
+    'End Sub
+
+    'Private Sub MV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+    '    'Dim incmissing As Boolean = Preferences.incmissingmovies 
+    '    If IsNothing(dirInfo) Then Exit Sub
+
+    '    For Each oFileInfo In dirInfo.GetFiles(pattern)
+    '        Dim tmp As New MVComboList
+    '        Application.DoEvents
+    '        'If Cancelled Then Exit Sub
+    '        If Not File.Exists(oFileInfo.FullName) Then Continue For
+    '        Try
+    '            If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
+    '            Dim mvideo As New FullMovieDetails
+    '            mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
+    '            tmp.Assign(mvideo)
+    '            tmpMVCache.Add(tmp)
+    '        Catch
+    '            MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
+    '        End Try
+    '    Next
+
+    'End Sub
 
 #End Region
 

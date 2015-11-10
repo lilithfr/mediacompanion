@@ -11751,8 +11751,8 @@ End Sub
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
         Preferences.MovieChangeMovie = False
         GC.Collect()
-        Dim Displayed As Boolean = False
-        If Not Preferences.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
+        Dim Displayed As Boolean = DisplayLogFile()
+        'If Not Preferences.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
         Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
         If Not Displayed Then BlinkTaskBar()
     End Sub
@@ -12065,7 +12065,7 @@ End Sub
                          "******************************************************************************" & vbCrLf & vbCrLf & scraperLog
         End If
 
-        If (Not Preferences.disablelogfiles Or (ScraperErrorDetected And Preferences.ShowLogOnError)) And scraperLog <> "" Then
+        If (Not Preferences.disablelogfiles Or (Preferences.MusicVidScrape AndAlso Preferences.MVPrefShowLog) Or (ScraperErrorDetected And Preferences.ShowLogOnError)) And scraperLog <> "" Then
             Displayed = True
             Dim MyFormObject As New frmoutputlog(scraperLog, True)
             Try

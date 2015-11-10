@@ -390,6 +390,8 @@ Public Class Preferences
     Public Shared MVScraper As String
     Public Shared MVsortorder As Integer
     Public Shared MVdefaultlist As Integer
+    Public Shared MVPrefScrnSht As Integer
+    Public Shared MVPrefShowLog As Boolean
 
     '(Unsure)
     Public Shared maximagecount As Integer
@@ -690,6 +692,8 @@ Public Class Preferences
         MVScraper = "wiki"
         MVsortorder = 0
         MVdefaultlist = 0
+        MVPrefScrnSht = 10
+        MVPrefShowLog = True
 
         'Unknown - need to be sorted/named better
         eprenamelowercase = False
@@ -1159,7 +1163,9 @@ Public Class Preferences
 
         root.AppendChild(doc, "MVScraper",              MVScraper)              'ucMusicVideo.rbscraper
         root.AppendChild(doc, "MVsortorder",            MVsortorder)  
-        root.AppendChild(doc, "MVdefaultlist",          MVdefaultlist)          
+        root.AppendChild(doc, "MVdefaultlist",          MVdefaultlist)  
+        root.AppendChild(doc, "MVPrefScrnSht",          MVPrefScrnSht)          'tb_MVPrefScrnSht
+        root.AppendChild(doc, "MVPrefShowLog",          MVPrefShowLog)          'cb_MVPrefShowLog        
 
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
@@ -1457,6 +1463,8 @@ Public Class Preferences
                     Case "MVScraper"                            : MVScraper = thisresult.InnerText
                     Case "MVsortorder"                          : MVsortorder = thisresult.InnerXml 
                     Case "MVdefaultlist"                        : MVdefaultlist = thisresult.InnerXml 
+                    Case "MVPrefScrnSht"                        : MVPrefScrnSht = thisresult.InnerXml
+                    Case "MVPrefShowLog"                        : MVPrefShowLog = thisresult.InnerXml
 
                     Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml
