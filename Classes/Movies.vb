@@ -36,6 +36,7 @@ Public Class Movies
     Public Property Bw            As BackgroundWorker = Nothing
     Public Property MovieCache    As New List(Of ComboList)
     Public Property TmpMovieCache As New List(Of ComboList)
+    Public Property tmpMVCache    As New List(Of MVComboList)
     
     Public Property NewMovies     As New List(Of Movie)
     Public Property PercentDone   As Integer = 0
@@ -1278,6 +1279,21 @@ Public Class Movies
         Return (q.Count > 0)
     End Function
 
+    Private Function validateMusicVideoNfo(ByVal fullPathandFilename As String)
+        Dim tempstring As String
+        Dim filechck As IO.StreamReader = IO.File.OpenText(fullPathandFilename)
+        tempstring = filechck.ReadToEnd.ToLower
+        filechck.Close()
+        If tempstring = Nothing Then
+            Return False
+        End If
+        If tempstring.IndexOf("<musicvideo>") <> -1 And tempstring.IndexOf("</musicvideo>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
+            Return True
+            Exit Function
+        End If
+        Return False
+    End Function
+
     Public Sub LoadCaches
         LoadMovieCache
         LoadPeopleCaches
@@ -1526,7 +1542,7 @@ Public Class Movies
     End Sub
 
     Public Sub MVCacheLoadFromNfo()
-        'tmpMVCache.Clear()
+        tmpMVCache.Clear()
         Dim t As New List(Of String)
         For each item In Preferences.MVidFolders
             If item.selected Then
@@ -1881,36 +1897,33 @@ Public Class Movies
                 ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
             End Try
         Next
-        'Dim i = 0
+        Dim i = 0
         For Each Path In moviePaths
-            'i += 1
-            'PercentDone = CalcPercentDone(i, moviePaths.Count)
-            'ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
+            i += 1
+            PercentDone = CalcPercentDone(i, moviePaths.Count)
+            ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
 
             MV_ListFiles(pattern, New DirectoryInfo(Path))
-            'If Cancelled Then Exit Sub
+            If Cancelled Then Exit Sub
         Next
-        'MVCache.Clear
-        'MVDgv1.DataSource = MVCache
-        'MVDgv1.DataSource = Nothing
-        'MVCache.AddRange(tmpMVCache)
+        ucMusicVideo.MVCache.Clear
+        ucMusicVideo.MVCache.AddRange(tmpMVCache)
     End Sub
 
     Private Sub MV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-        'Dim incmissing As Boolean = Preferences.incmissingmovies 
         If IsNothing(dirInfo) Then Exit Sub
          
         For Each oFileInfo In dirInfo.GetFiles(pattern)
             Dim tmp As New MVComboList
             Application.DoEvents
-            'If Cancelled Then Exit Sub
+            If Cancelled Then Exit Sub
             If Not File.Exists(oFileInfo.FullName) Then Continue For
             Try
-                'If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
+                If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
                 Dim mvideo As New FullMovieDetails
                 mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
                 tmp.Assign(mvideo)
-                'tmpMVCache.Add(tmp)
+                tmpMVCache.Add(tmp)
             Catch
                 MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
             End Try
@@ -2338,7 +2351,7 @@ Public Class Movies
     End Sub
 
     Public Sub RebuildMVCache()
-        LoadMovieCacheFromNfos
+        MVCacheLoadFromNfo()
         'If Cancelled Then Exit Sub
        ' SaveMovieCache
     End Sub

@@ -11635,6 +11635,7 @@ End Sub
             Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
             Case "SearchForNewMovies"     : Return True
             Case "SearchForNewMusicVideo" : Return True
+            Case "RefreshMVCache"         : Return True
             Case "ChangeMusicVideo"       : Return True
             Case "RebuildCaches"          : Return True
         End Select
@@ -11702,6 +11703,10 @@ End Sub
 
     Public Sub SearchForNewMusicVideo
         oMovies.FindNewMusicVideos()
+    End Sub
+
+    Public Sub RefreshMVCache
+        oMovies.RebuildMVCache()
     End Sub
 
     Public Sub ChangeMusicVideo

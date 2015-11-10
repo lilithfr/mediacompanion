@@ -96,6 +96,17 @@ Public Class ucMusicVideo
         End While
         loadMVDV1()
     End Sub
+
+    Private Sub RefreshallMV()
+        Preferences.MusicVidScrape = True
+        Form1.RunBackgroundMovieScrape("RefreshMVCache")
+        While Form1.BckWrkScnMovies.IsBusy
+            Application.DoEvents()
+        End While
+        'MVCacheLoadFromNfo
+        MVCacheSave()
+        loadMVDV1()
+    End Sub
     
     Public Function saveposter(ByVal path As String, ByVal url As String)
         Try
@@ -174,11 +185,11 @@ Public Class ucMusicVideo
         Return False
     End Function
     
-    Public Function getallfolders() As List(Of String)
-        Dim allfolders As New List(Of String)
-        oMovies.FindNewMusicVideos()
-        Return allfolders
-    End Function
+    'Public Function getallfolders() As List(Of String)
+    '    Dim allfolders As New List(Of String)
+    '    oMovies.FindNewMusicVideos()
+    '    Return allfolders
+    'End Function
     
     Private Sub DisplayMV()
         Try
@@ -750,10 +761,7 @@ Public Class ucMusicVideo
         End If
     End Sub
 
-    Private Sub RefreshallMV()
-        MVCacheLoadFromNfo
-        MVCacheSave()
-    End Sub
+    
 
     
 'All Buttons
