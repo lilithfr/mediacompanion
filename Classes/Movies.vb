@@ -1525,6 +1525,18 @@ Public Class Movies
         output.Close()
     End Sub
 
+    Public Sub MVCacheLoadFromNfo()
+        'tmpMVCache.Clear()
+        Dim t As New List(Of String)
+        For each item In Preferences.MVidFolders
+            If item.selected Then
+                t.Add(item.rpath)
+            End If
+        Next
+        MV_NfoLoad(t)
+        'loadMVDV1()
+    End Sub
+
     Public Sub LoadMovieCacheFromNfos
         TmpMovieCache.Clear
 
@@ -1844,6 +1856,66 @@ Public Class Movies
                 MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
             End Try
         Next
+    End Sub
+
+    Sub MV_NfoLoad(ByVal folderlist As List(Of String))
+        Dim tempint As Integer
+        Dim dirinfo As String = String.Empty
+        Const pattern = "*.nfo"
+        Dim moviePaths As New List(Of String)
+
+        For Each moviefolder In folderlist
+            If (New DirectoryInfo(moviefolder)).Exists Then
+                moviePaths.Add(moviefolder)
+            End If
+        Next
+        tempint = moviePaths.Count
+
+        'Add sub-folders
+        For f = 0 To tempint - 1
+            Try
+                For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
+                    moviePaths.Add(subfolder)
+                Next
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+            End Try
+        Next
+        'Dim i = 0
+        For Each Path In moviePaths
+            'i += 1
+            'PercentDone = CalcPercentDone(i, moviePaths.Count)
+            'ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
+
+            MV_ListFiles(pattern, New DirectoryInfo(Path))
+            'If Cancelled Then Exit Sub
+        Next
+        'MVCache.Clear
+        'MVDgv1.DataSource = MVCache
+        'MVDgv1.DataSource = Nothing
+        'MVCache.AddRange(tmpMVCache)
+    End Sub
+
+    Private Sub MV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+        'Dim incmissing As Boolean = Preferences.incmissingmovies 
+        If IsNothing(dirInfo) Then Exit Sub
+         
+        For Each oFileInfo In dirInfo.GetFiles(pattern)
+            Dim tmp As New MVComboList
+            Application.DoEvents
+            'If Cancelled Then Exit Sub
+            If Not File.Exists(oFileInfo.FullName) Then Continue For
+            Try
+                'If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
+                Dim mvideo As New FullMovieDetails
+                mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
+                tmp.Assign(mvideo)
+                'tmpMVCache.Add(tmp)
+            Catch
+                MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
+            End Try
+        Next
+
     End Sub
 
     Function DeleteScrapedFiles(nfoPathAndFilename As String, Optional ByVal DeleteArtwork As Boolean = True) As Boolean
@@ -2263,6 +2335,12 @@ Public Class Movies
         Next
 
         If scrape then ScrapeNewMovies
+    End Sub
+
+    Public Sub RebuildMVCache()
+        LoadMovieCacheFromNfos
+        'If Cancelled Then Exit Sub
+       ' SaveMovieCache
     End Sub
 #End Region
 

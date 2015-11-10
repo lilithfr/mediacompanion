@@ -389,6 +389,7 @@ Public Class Preferences
     'Saved Music Video Prefs
     Public Shared MVScraper As String
     Public Shared MVsortorder As Integer
+    Public Shared MVdefaultlist As Integer
 
     '(Unsure)
     Public Shared maximagecount As Integer
@@ -688,6 +689,7 @@ Public Class Preferences
         'Music Video
         MVScraper = "wiki"
         MVsortorder = 0
+        MVdefaultlist = 0
 
         'Unknown - need to be sorted/named better
         eprenamelowercase = False
@@ -1156,7 +1158,8 @@ Public Class Preferences
         root.AppendChild(doc, "excludefromshowfoldername", excludefromshowfoldername)
 
         root.AppendChild(doc, "MVScraper",              MVScraper)              'ucMusicVideo.rbscraper
-        root.AppendChild(doc, "MVsortorder",            MVsortorder)            
+        root.AppendChild(doc, "MVsortorder",            MVsortorder)  
+        root.AppendChild(doc, "MVdefaultlist",          MVdefaultlist)          
 
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
@@ -1453,6 +1456,7 @@ Public Class Preferences
 
                     Case "MVScraper"                            : MVScraper = thisresult.InnerText
                     Case "MVsortorder"                          : MVsortorder = thisresult.InnerXml 
+                    Case "MVdefaultlist"                        : MVdefaultlist = thisresult.InnerXml 
 
                     Case "preferredscreen"                      : preferredscreen = Convert.ToInt32(thisresult.InnerXml)
                     Case "hdtags"                               : enablehdtags = thisresult.InnerXml

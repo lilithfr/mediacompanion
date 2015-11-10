@@ -1267,6 +1267,7 @@ Public Class Movie
         _mvcache.filename            = Path.GetFileName(nfopathandfilename)
         _mvcache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
         _mvcache.title               = _scrapedMovie.fullmoviebody.title
+        _mvcache.Artist              = _scrapedMovie.fullmoviebody.artist 
         _mvcache.runtime             = _scrapedMovie.fullmoviebody.runtime
         _mvcache.plot                = _scrapedMovie.fullmoviebody.plot
         _mvcache.year                = _scrapedMovie.fullmoviebody.year.ToInt
@@ -1276,17 +1277,19 @@ Public Class Movie
         _mvcache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
         Try
-            _movieCache.filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
+            _mvcache.filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
         End Try
-
+        If _scrapedMovie.fullmoviebody.runtime = "" AndAlso _scrapedMovie.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
+            _scrapedMovie.fullmoviebody.runtime = Math.Floor((_scrapedMovie.filedetails.filedetails_video.DurationInSeconds.Value.ToInt)/60)
+        End If
         If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
-            _movieCache.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+            _mvcache.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
         Else
-            _movieCache.createdate = _scrapedMovie.fileinfo.createdate
+            _mvcache.createdate = _scrapedMovie.fileinfo.createdate
         End If
         _mvcache.genre       = _scrapedMovie.fullmoviebody.genre
         _mvcache.playcount   = _scrapedMovie.fullmoviebody.playcount

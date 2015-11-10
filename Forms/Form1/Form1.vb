@@ -11444,6 +11444,8 @@ End Sub
                     Preferences.movie_filters.SetMovieFiltersVisibility
                     UpdateMovieFiltersPanel
                 End If
+            Case "music vid's"
+                UcMusicVideo1.mv_FiltersAndSortApply(True)
         End Select
 
     End Sub
