@@ -2116,12 +2116,13 @@ Public Class Preferences
                                     If workingfiledetails.filedetails_video.Codec.Value.ToLower = "mpeg video" AndAlso workingfiledetails.filedetails_video.FormatInfo.Value.Contains("2") Then
                                         workingfiledetails.filedetails_video.Codec.Value = "MPEG2VIDEO"
                                     End If
-                                    workingfiledetails.filedetails_video.Width.Value = workingfiledetails.filedetails_video.Width.Value.Replace(" pixels", "")
-                                    workingfiledetails.filedetails_video.Height.Value = workingfiledetails.filedetails_video.Height.Value.Replace(" pixels", "")
+                                    If workingfiledetails.filedetails_video.Codec.Value.ToLower = "avc" Then workingfiledetails.filedetails_video.Codec.Value = "avc1"
+                                    workingfiledetails.filedetails_video.Width.Value = workingfiledetails.filedetails_video.Width.Value.Replace(" pixels", "").Replace(" ", "")
+                                    workingfiledetails.filedetails_video.Height.Value = workingfiledetails.filedetails_video.Height.Value.Replace(" pixels", "").Replace(" ", "")
                                     workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
                                     workingfiledetails.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
                                 End If
-                                
+
                                 If check.Contains("""Audio""") Then
                                     tmpaud = ""
                                     Dim audio As New AudioDetails
@@ -2137,7 +2138,7 @@ Public Class Preferences
                                             Case "Bit_rate"
                                                 audio.Bitrate.Value = result.InnerText
                                             Case "Language"
-                                                audio.Language.Value = result.InnerText
+                                                audio.Language.Value = Utilities.GetLangCode(result.InnerText)
                                             Case "Default"
                                                 audio.DefaultTrack.Value = result.InnerText
                                         End Select
@@ -2157,6 +2158,17 @@ Public Class Preferences
                                     If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "AC3"
                                     workingfiledetails.filedetails_audio.Add(audio)
                                 End If
+                                
+                                If check.Contains("""Text""") Then
+                                    Dim SubTitle As New SubtitleDetails
+                                    For each result In thisresult
+                                        Select Case result.name
+                                            Case "Language"
+                                                SubTitle.Language.Value = Utilities.GetLangCode(result.InnerText)
+                                        End Select
+                                    Next
+                                    workingfiledetails.filedetails_subtitles.Add(SubTitle)
+                                End If
                         End Select
                     Next
                     If workingfiledetails.filedetails_audio.Count = 0 Then
@@ -2165,7 +2177,7 @@ Public Class Preferences
                     End If
                     Return workingfiledetails
                 Else
-                    Return workingfiledetails 
+                    Return workingfiledetails
                 End If
             End If
             Dim playlist As New List(Of String)
