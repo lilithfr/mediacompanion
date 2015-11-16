@@ -183,27 +183,32 @@ Partial Public Class Form1
     End Sub
 
     Private Sub TvTreeviewRebuild()
-        Dim shcount As Integer = 0
-        Dim epcount As Integer = 0
-        TvTreeview.Nodes.Clear()              'clear the treeview of old data
-        ''Dirty work around until TvShows is repalced with TvCache.Shows universally
-        For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
-            If Not String.IsNullOrEmpty(TvShow.Hidden.Value) AndAlso TvShow.Hidden.Value = True Then Continue For
-            'TvShow.UpdateTreenode()
-            shcount += 1
-            epcount += TvShow.Episodes.Count
-            TvTreeview.Nodes.Add(TvShow.ShowNode)
-            TvShow.UpdateTreenode()
-        Next
+        TvTreeview.BeginUpdate()
+        Try
+            Dim shcount As Integer = 0
+            Dim epcount As Integer = 0
+            TvTreeview.Nodes.Clear()              'clear the treeview of old data
+            ''Dirty work around until TvShows is repalced with TvCache.Shows universally
+            For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
+                If Not String.IsNullOrEmpty(TvShow.Hidden.Value) AndAlso TvShow.Hidden.Value = True Then Continue For
+                'TvShow.UpdateTreenode()
+                shcount += 1
+                epcount += TvShow.Episodes.Count
+                TvTreeview.Nodes.Add(TvShow.ShowNode)
+                TvShow.UpdateTreenode()
+            Next
 
-        If rbTvListAll.Checked Then TvTreeview.BackColor = Color.white
-        If rbTvListEnded.Checked Then TvTreeview.BackColor = Color.lightpink
-        If rbTvListContinuing.Checked Then TvTreeview.BackColor = Color.LightSeaGreen
-        If rbTvListUnKnown.Checked Then TvTreeview.BackColor = Color.LightYellow
+            If rbTvListAll.Checked Then TvTreeview.BackColor = Color.white
+            If rbTvListEnded.Checked Then TvTreeview.BackColor = Color.lightpink
+            If rbTvListContinuing.Checked Then TvTreeview.BackColor = Color.LightSeaGreen
+            If rbTvListUnKnown.Checked Then TvTreeview.BackColor = Color.LightYellow
 
-        TextBox_TotTVShowCount.Text = shcount.ToString     'Cache.TvCache.Shows.Count
-        TextBox_TotEpisodeCount.Text = epcount.ToString    'Cache.TvCache.Episodes.Count
-        TvTreeview.Sort()
+            TextBox_TotTVShowCount.Text = shcount.ToString     'Cache.TvCache.Shows.Count
+            TextBox_TotEpisodeCount.Text = epcount.ToString    'Cache.TvCache.Episodes.Count
+            TvTreeview.Sort()
+        Finally
+            TvTreeview.EndUpdate()
+        End Try
     End Sub
 
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
@@ -1007,13 +1012,18 @@ Partial Public Class Form1
     Public Sub tv_CacheLoad()
         Cache.TvCache.TvCachePath = Preferences.workingProfile.TvCache
         Cache.TvCache.Load()
-        TvTreeview.Nodes.Clear()              'clear the treeview of old data
-        ''Dirty work around until TvShows is repalced with TvCache.Shows universally
-        For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
-            'TvShow.UpdateTreenode()
-            TvTreeview.Nodes.Add(TvShow.ShowNode)
-            TvShow.UpdateTreenode()
-        Next
+        TvTreeview.BeginUpdate()
+        Try
+            TvTreeview.Nodes.Clear()              'clear the treeview of old data
+            ''Dirty work around until TvShows is repalced with TvCache.Shows universally
+            For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
+                'TvShow.UpdateTreenode()
+                TvTreeview.Nodes.Add(TvShow.ShowNode)
+                TvShow.UpdateTreenode()
+            Next
+        Finally
+            TvTreeview.EndUpdate()
+        End Try
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
         'TvTreeview.Sort()
