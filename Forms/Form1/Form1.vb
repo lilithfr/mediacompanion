@@ -20256,15 +20256,15 @@ End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
-            MsgBox("Please add A Folder containing Home Movies")
-            Try
-                TabControl1.SelectedIndex = 5
-            Catch
-            End Try
-            homeTabIndex = 1
-            Exit Sub
-        End If
+        'If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
+        '    MsgBox("Please add A Folder containing Home Movies")
+        '    Try
+        '        TabControl1.SelectedIndex = 5
+        '    Catch
+        '    End Try
+        '    homeTabIndex = 1
+        '    Exit Sub
+        'End If
 
         Dim tab As String = TabControl1.SelectedTab.Text.ToLower
         If tab = "screenshot" Then
@@ -20434,36 +20434,42 @@ End Sub
     Private Sub btn_HmFanartShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFanartShot.Click
         Try
             If IsNumeric(tb_HmFanartTime.Text) Then
-                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fanartpath
                 Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
                 messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                Dim aok As Boolean = False
                 For Each ext In Utilities.VideoExtensions
                     Dim tempstring2 As String = pathandfilename & ext
                     If IO.File.Exists(tempstring2) Then
-                        Dim seconds As Integer = 10
-                        If Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
-                            seconds = Convert.ToInt32(tb_HmFanartTime.Text)
-                        End If
-
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-
-                        Utilities.CreateScreenShot(tempstring2, thumbpathandfilename, seconds, True)
-
-                        If File.Exists(thumbpathandfilename) Then
-                            Try
-                                util_ImageLoad(pbx_HmFanartSht, thumbpathandfilename, Utilities.DefaultFanartPath)
-                                util_ImageLoad(pbx_HmFanart, thumbpathandfilename, Utilities.DefaultFanartPath)
-                            Catch
-                                messbox.Close()
-                            End Try
-                        End If
+                        pathandfilename = tempstring2
+                        aok = True
                         Exit For
                     End If
                 Next
-                messbox.Close()
+                If aok Then
+                    Dim seconds As Integer = 10
+                    If Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
+                        seconds = Convert.ToInt32(tb_HmFanartTime.Text)
+                    End If
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+                    aok = Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
+                    messbox.Close()
+                    If aok AndAlso File.Exists(thumbpathandfilename) Then
+                        Try
+                            util_ImageLoad(pbx_HmFanartSht, thumbpathandfilename, Utilities.DefaultFanartPath)
+                            util_ImageLoad(pbx_HmFanart, thumbpathandfilename, Utilities.DefaultFanartPath)
+                        Catch
+                        End Try
+                    Else
+                        MsgBox("Failed to get ScreenShot")
+                    End If
+                Else
+                    If Not IsNothing(messbox) Then messbox.Close()
+                    MsgBox("Failed to find Video file.")
+                End If
             Else
                 MsgBox("Please enter a numerical value into the textbox")
                 tb_HmFanartTime.Focus()
@@ -20471,6 +20477,8 @@ End Sub
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        Finally
+            If Not IsNothing(messbox) Then messbox.Close()
         End Try
 
     End Sub
@@ -20483,55 +20491,64 @@ End Sub
         Try
             If IsNumeric(tb_HmPosterTime.Text) Then
                 Dim thumbpathandfilename As String = IO.Path.Combine(Utilities.CacheFolderPath, WorkingHomeMovie.fileinfo.posterpath.Replace(WorkingHomeMovie.fileinfo.path,""))  
-                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.filenameandpath  
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")  
                 messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                If IO.File.Exists(pathandfilename) Then
+                Dim aok As Boolean = False
+                For Each ext In Utilities.VideoExtensions
+                    Dim tempstring2 As String = pathandfilename & ext
+                    If IO.File.Exists(tempstring2) Then
+                        pathandfilename = tempstring2
+                        aok = True
+                        Exit For
+                    End If
+                Next
+                If aok Then
                     Dim seconds As Integer = 10
                     If Convert.ToInt32(tb_HmPosterTime.Text) > 0 Then
                         seconds = Convert.ToInt32(tb_HmPosterTime.Text)
                     End If
-
                     System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-
-                    Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
-                    Dim cancelclicked As Boolean
-                    Using pbx As New PictureBox
-                        util_ImageLoad(pbx, thumbpathandfilename, Utilities.DefaultPosterPath)
-                        Using t As New frmMovPosterCrop
-                            If Preferences.MultiMonitoEnabled Then
-                                t.bounds = screen.allscreens(form1.currentscreen).bounds
-                                t.startposition = formstartposition.manual
-                            end if
-                            t.img = pbx.image
-                            t.cropmode = "poster"
-                            t.title = WorkingHomeMovie.fullmoviebody.title 
-                            t.Setup()
-                            t.ShowDialog()
-                            If Not IsNothing(t.newimg) Then
-                                Utilities.SaveImage(t.newimg, WorkingHomeMovie.fileinfo.posterpath)
-                            Else
-                                cancelclicked = True
-                            End If
+                    aok = Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
+                    messbox.Close()
+                    If aok Then
+                        Dim cancelclicked As Boolean
+                        Using pbx As New PictureBox
+                            util_ImageLoad(pbx, thumbpathandfilename, Utilities.DefaultPosterPath)
+                            Using t As New frmMovPosterCrop
+                                If Preferences.MultiMonitoEnabled Then
+                                    t.bounds = screen.allscreens(form1.currentscreen).bounds
+                                    t.startposition = formstartposition.manual
+                                end if
+                                t.img = pbx.image
+                                t.cropmode = "poster"
+                                t.title = WorkingHomeMovie.fullmoviebody.title 
+                                t.Setup()
+                                t.ShowDialog()
+                                If Not IsNothing(t.newimg) Then
+                                    Utilities.SaveImage(t.newimg, WorkingHomeMovie.fileinfo.posterpath)
+                                Else
+                                    cancelclicked = True
+                                End If
+                            End Using
                         End Using
-                    End Using
-                    GC.Collect()
-                    GC.Collect()
                     
-                    Utilities.SafeDeleteFile(thumbpathandfilename)
+                        Utilities.SafeDeleteFile(thumbpathandfilename)
 
-                    If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
-                        Try
-                            util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
-                            util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
-                        Catch
-                            messbox.Close()
-                        End Try
+                        If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
+                            Try
+                                util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                                util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                            Catch
+                            End Try
+                        End If
+                    Else
+                        MsgBox("Failed to get ScreenShot")
                     End If
                 End If
-                messbox.Close()
+                If Not IsNothing(messbox) Then messbox.Close()
             Else
                 MsgBox("Please enter a numerical value into the textbox")
                 tb_HmPosterTime.Focus()
@@ -20539,6 +20556,8 @@ End Sub
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        Finally
+            If Not IsNothing(messbox) Then messbox.Close()
         End Try
 
     End Sub
@@ -20746,27 +20765,27 @@ End Sub
     End Sub
 #End Region
     
-    Private Sub SetupHomeMovies()
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
-            MsgBox("Please add A Folder containing Home Movies")
-            Try
-                TabControl1.SelectedIndex = 4
-            Catch
-            End Try
-        Else
-            If homemovielist.Count > 0 Then
-                Call loadhomemovielist()
-            End If
-            If homemoviefolders.Count > 0 Then
-                AuthorizeCheck = True
-                clbx_HMMovieFolders.Items.Clear()
-                For Each folder In homemoviefolders
-                    clbx_HMMovieFolders.Items.Add(folder.rpath, folder.selected)
-                Next
-                AuthorizeCheck = False
-            End If
-        End If
-    End Sub
+    'Private Sub SetupHomeMovies()
+    '    If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
+    '        MsgBox("Please add A Folder containing Home Movies")
+    '        Try
+    '            TabControl1.SelectedIndex = 4
+    '        Catch
+    '        End Try
+    '    Else
+    '        If homemovielist.Count > 0 Then
+    '            Call loadhomemovielist()
+    '        End If
+    '        If homemoviefolders.Count > 0 Then
+    '            AuthorizeCheck = True
+    '            clbx_HMMovieFolders.Items.Clear()
+    '            For Each folder In homemoviefolders
+    '                clbx_HMMovieFolders.Items.Add(folder.rpath, folder.selected)
+    '            Next
+    '            AuthorizeCheck = False
+    '        End If
+    '    End If
+    'End Sub
     
     Private Sub homeMovieScan()
         'Search for new Home Movies
