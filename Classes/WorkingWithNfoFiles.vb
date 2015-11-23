@@ -4056,7 +4056,7 @@ Public Class WorkingWithNfoFiles
             End Select
         Next
         NewMusicVideo.fileinfo.fullpathandfilename = filepath
-        NewMusicVideo.fileinfo.filename     = IO.Path.GetFileName(filepath)
+        NewMusicVideo.fileinfo.filename     = IO.Path.GetFileName(filepath).Replace(".nfo", NewMusicVideo.filedetails.filedetails_video.Container.Value)
         NewMusicVideo.fileinfo.foldername   = Utilities.GetLastFolder(filepath)
         NewMusicVideo.fileinfo.posterpath   = Preferences.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
         NewMusicVideo.fileinfo.trailerpath  = ""

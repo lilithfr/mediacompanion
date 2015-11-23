@@ -527,7 +527,7 @@ Public Class ucMusicVideo
         If MVDgv1.RowCount = 0 AndAlso MVDgv1.SelectedRows.Count < 1 Then Exit Sub
         Dim MVRemoved As Boolean = False
         Dim MVCacheIndex As Integer = Nothing
-        Dim MVDGVRowIndex As Integer = MVDgv1.CurrentRow.index
+        Dim MVDGVRowIndex As Integer = MVDgv1.SelectedRows(0).Index 
         If MVCache.RemoveAll(Function(c) c.nfopathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
             Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
             If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
@@ -1118,8 +1118,8 @@ Public Class ucMusicVideo
         End If
         dgv.RowHeadersVisible = False
         If GridFieldToDisplay1="ArtistTitle" Then
-            IniColumn(dgv,"Title"           ,GridFieldToDisplay2= "Year","Title"       )
-            IniColumn(dgv,"ArtistTitleYear" ,GridFieldToDisplay2<>"Year","Title & Year")
+            IniColumn(dgv,"ArtistTitle"     ,GridFieldToDisplay2= "Year","Artist & Title"   , "Artist & Title"         )
+            IniColumn(dgv,"ArtistTitleYear" ,GridFieldToDisplay2<>"Year","Title & Year"     , "Artist, Title & Year"   )
         End If
         If GridFieldToDisplay1="TitleYear" Then
             IniColumn(dgv,"Title"           ,GridFieldToDisplay2= "Year","Title"       )
@@ -1328,8 +1328,28 @@ Public Class ucMusicVideo
 
     Private Sub MVDgv1_MouseUp(sender As Object, e As MouseEventArgs) Handles MVDgv1.MouseUp
         Try
-            If e.Button = MouseButtons.Right AndAlso MVDgv1.RowCount > 0 Then
-                tsmiMVName.Text = "'" & MVDgv1.SelectedCells(3).Value.ToString & "'"
+            'If e.Button = MouseButtons.Right AndAlso MVDgv1.RowCount > 0 Then
+            '    tsmiMVName.Text = "'" & MVDgv1.SelectedCells(3).Value.ToString & "'"
+            'End If
+            If e.Button = MouseButtons.Right Then
+                Dim pt As Point
+                pt.X = e.X
+                pt.Y = e.Y
+
+                'Dim objMousePosition As Point = MVDgv1.PointToClient(Control.MousePosition)
+                'Dim objHitTestInfo As DataGridView.HitTestInfo
+                'objHitTestInfo = MVDgv1.HitTest(pt.X, pt.Y)
+                Dim RowIndexFromMouseDown As Integer = Nothing
+                Try
+                    RowIndexFromMouseDown = MVDgv1.HitTest(e.X, e.Y).RowIndex
+                Catch
+                End Try
+                If RowIndexFromMouseDown <> Nothing AndAlso RowIndexFromMouseDown <> -1 Then
+                    MVDgv1.ClearSelection()
+                    MVDgv1.rows(RowIndexFromMouseDown).Selected = True
+                    DisplayMV()
+                End If
+                TSMIMVConfig()
             End If
         Catch
         End Try
@@ -1338,6 +1358,10 @@ Public Class ucMusicVideo
 #End Region             'MVDgv1 Handlers
     
 #Region "MVContextMenu Items"
+
+    Private Sub TSMIMVConfig()
+        tsmiMVName.Text = "'" & MVDgv1.SelectedCells(3).Value.ToString & "'"
+    End Sub
     
     Private Sub tsmiMVPlay_Click(sender As Object, e As EventArgs) Handles tsmiMVPlay.Click
         MVPlay()

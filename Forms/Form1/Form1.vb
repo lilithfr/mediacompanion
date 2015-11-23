@@ -18422,13 +18422,13 @@ End Sub
     Private Sub TvTreeview_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TvTreeview.MouseUp
 
         If e.Button = MouseButtons.Right Then
-            Dim pt As Point
-            pt.X = e.X
-            pt.Y = e.Y
+            'Dim pt As Point
+            'pt.X = e.X
+            'pt.Y = e.Y
 
-            Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
-            Dim objHitTestInfo As DataGridView.HitTestInfo
-            objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
+            'Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
+            'Dim objHitTestInfo As DataGridView.HitTestInfo
+            'objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
 
             TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
 

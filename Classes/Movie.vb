@@ -1264,7 +1264,7 @@ Public Class Movie
     Sub AssignMVToCache
         Dim _mvcache As New MVComboList 
         _mvcache.nfopathandfilename = NfoPathPrefName
-        _mvcache.filename            = Path.GetFileName(nfopathandfilename)
+        _mvcache.filename            = Path.GetFileName(TitleFull)
         _mvcache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
         _mvcache.title               = _scrapedMovie.fullmoviebody.title
         _mvcache.Artist              = _scrapedMovie.fullmoviebody.artist 

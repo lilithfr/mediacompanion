@@ -243,7 +243,7 @@ Public Class MVComboList
     Public Sub Assign(From As FullMovieDetails )
 
         nfopathandfilename      = From.fileinfo.fullpathandfilename
-        filename                = Path.GetFileName(From.fileinfo.fullpathandfilename)
+        filename                = Path.GetFileName(From.fileinfo.filename)
         foldername              = Utilities.GetLastFolder(From.fileinfo.fullpathandfilename)
         Title                   = From.fullmoviebody.title
         Artist                  = From.fullmoviebody.artist
