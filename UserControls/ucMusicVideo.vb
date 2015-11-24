@@ -527,7 +527,7 @@ Public Class ucMusicVideo
         If MVDgv1.RowCount = 0 AndAlso MVDgv1.SelectedRows.Count < 1 Then Exit Sub
         Dim MVRemoved As Boolean = False
         Dim MVCacheIndex As Integer = Nothing
-        Dim MVDGVRowIndex As Integer = MVDgv1.SelectedRows(0).Index 
+        'Dim MVDGVRowIndex As Integer = MVDgv1.SelectedRows(0).Index 
         If MVCache.RemoveAll(Function(c) c.nfopathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
             Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
             If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
@@ -1328,17 +1328,7 @@ Public Class ucMusicVideo
 
     Private Sub MVDgv1_MouseUp(sender As Object, e As MouseEventArgs) Handles MVDgv1.MouseUp
         Try
-            'If e.Button = MouseButtons.Right AndAlso MVDgv1.RowCount > 0 Then
-            '    tsmiMVName.Text = "'" & MVDgv1.SelectedCells(3).Value.ToString & "'"
-            'End If
             If e.Button = MouseButtons.Right Then
-                Dim pt As Point
-                pt.X = e.X
-                pt.Y = e.Y
-
-                'Dim objMousePosition As Point = MVDgv1.PointToClient(Control.MousePosition)
-                'Dim objHitTestInfo As DataGridView.HitTestInfo
-                'objHitTestInfo = MVDgv1.HitTest(pt.X, pt.Y)
                 Dim RowIndexFromMouseDown As Integer = Nothing
                 Try
                     RowIndexFromMouseDown = MVDgv1.HitTest(e.X, e.Y).RowIndex
@@ -1348,8 +1338,8 @@ Public Class ucMusicVideo
                     MVDgv1.ClearSelection()
                     MVDgv1.rows(RowIndexFromMouseDown).Selected = True
                     DisplayMV()
+                    TSMIMVConfig()
                 End If
-                TSMIMVConfig()
             End If
         Catch
         End Try
@@ -1389,140 +1379,11 @@ Public Class ucMusicVideo
     Private Sub tsmiMVDelNfoArt_Click(sender As Object, e As EventArgs) Handles tsmiMVDelNfoArt.Click
         MV_DeleteNfoArtwork()
     End Sub
-
     
-
 #End Region
 
 #Region "garbage"
-
-        'Public Function saveposter(ByVal path As String, ByVal url As String)
-    '    Try
-    '        Dim posterpath As String = ""
-    '        If url.IndexOf(".jpg") <> -1 Then
-    '            posterpath = path.Replace(IO.Path.GetExtension(path), "-poster.jpg")
-    '        ElseIf url.IndexOf(".png") <> -1 Then
-    '            posterpath = path.Replace(IO.Path.GetExtension(path), "-poster.png")
-    '        End If
-
-    '        Dim web_client As WebClient = New WebClient
-    '        web_client.DownloadFile(url, posterpath)
-    '        Return True
-    '    Catch ex As Exception
-    '        Return False
-    '    End Try
-    'End Function
-
-    'Public Shared Function createScreenshot(ByVal fullpathAndFilename As String, Optional ByVal time As Integer = 10, Optional ByVal overwrite As Boolean = False) As String
-    '    Try
-    '        Dim applicationpath As String = Preferences.applicationPath 'get application root path
-    '        Dim thumbpathandfilename As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "-fanart.jpg")
-    '        Dim filepath As String = fullpathAndFilename.Replace(IO.Path.GetExtension(fullpathAndFilename), "")
-    '        Dim fileexists As Boolean = False
-    '        For Each extn In Utilities.VideoExtensions
-    '            If IO.File.Exists(filepath & extn) Then
-    '                filepath = filepath & extn
-    '                fileexists = True
-    '            End If
-    '        Next
-    '        If Not fileexists Then Return ""
-    '        If overwrite = True Then
-    '            If IO.File.Exists(thumbpathandfilename) Then
-    '                Try
-    '                    IO.File.Delete(thumbpathandfilename)
-    '                Catch
-    '                End Try
-    '            End If
-    '        End If
-    '        If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
-    '            Dim myProcess As Process = New Process
-    '            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-    '            myProcess.StartInfo.CreateNoWindow = False
-    '            myProcess.StartInfo.FileName = applicationpath & "\Assets\ffmpeg.exe"
-    '            Dim proc_arguments As String = "-y -i """ & filepath & """ -f mjpeg -ss " & time.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
-    '            myProcess.StartInfo.Arguments = proc_arguments
-    '            myProcess.Start()
-    '            myProcess.WaitForExit()
-    '            Return thumbpathandfilename
-    '        Else
-    '            Return ""
-    '        End If
-    '    Catch
-    '        Return ""
-    '    End Try
-    'End Function
-
-    'Public Sub MVCacheLoadFromNfo()
-    '    tmpMVCache.Clear()
-    '    Dim t As New List(Of String)
-    '    For each item In Preferences.MVidFolders
-    '        If item.selected Then
-    '            t.Add(item.rpath)
-    '        End If
-    '    Next
-    '    MV_Load(t)
-    '    loadMVDV1()
-    'End Sub
-
-    'Sub MV_Load(ByVal folderlist As List(Of String))
-    '    Dim tempint As Integer
-    '    Dim dirinfo As String = String.Empty
-    '    Const pattern = "*.nfo"
-    '    Dim moviePaths As New List(Of String)
-
-    '    For Each moviefolder In folderlist
-    '        If (New DirectoryInfo(moviefolder)).Exists Then
-    '            moviePaths.Add(moviefolder)
-    '        End If
-    '    Next
-    '    tempint = moviePaths.Count
-
-    '    'Add sub-folders
-    '    For f = 0 To tempint - 1
-    '        Try
-    '            For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
-    '                moviePaths.Add(subfolder)
-    '            Next
-    '        Catch ex As Exception
-    '            ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
-    '        End Try
-    '    Next
-    '    'Dim i = 0
-    '    For Each Path In moviePaths
-    '        'i += 1
-    '        'PercentDone = CalcPercentDone(i, moviePaths.Count)
-    '        'ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
-
-    '        MV_ListFiles(pattern, New DirectoryInfo(Path))
-    '        'If Cancelled Then Exit Sub
-    '    Next
-    '    MVCache.Clear
-    '    MVDgv1.DataSource = MVCache
-    '    MVDgv1.DataSource = Nothing
-    '    MVCache.AddRange(tmpMVCache)
-    'End Sub
-
-    'Private Sub MV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-    '    'Dim incmissing As Boolean = Preferences.incmissingmovies 
-    '    If IsNothing(dirInfo) Then Exit Sub
-
-    '    For Each oFileInfo In dirInfo.GetFiles(pattern)
-    '        Dim tmp As New MVComboList
-    '        Application.DoEvents
-    '        'If Cancelled Then Exit Sub
-    '        If Not File.Exists(oFileInfo.FullName) Then Continue For
-    '        Try
-    '            If Not validateMusicVideoNfo(oFileInfo.FullName) Then Continue For
-    '            Dim mvideo As New FullMovieDetails
-    '            mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
-    '            tmp.Assign(mvideo)
-    '            tmpMVCache.Add(tmp)
-    '        Catch
-    '            MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
-    '        End Try
-    '    Next
-
-    'End Sub
+    
 
 #End Region
 

@@ -1781,33 +1781,20 @@ Public Class Movie
 
 
     Function AddThumbs( thumbs As List(Of String) ) As Boolean
-
-        If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Preferences.maximumthumbs then
-            Return True
-        End If
+        If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Preferences.maximumthumbs Then Return True
 
         For Each thumb In thumbs
             _scrapedMovie.listthumbs.Add(thumb)
-
-            If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Preferences.maximumthumbs then
-                Return True
-            End If
+            If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Preferences.maximumthumbs Then Return True
         Next
-
         Return False
     End Function
 
     Function AddThumbs( thumbs As String ) As Boolean
-
-        If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Preferences.maximumthumbs then
-            Return True
-        End If
-
+        If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Preferences.maximumthumbs Then Return True
         Try
             Dim xmlDoc As New XmlDocument
-
             xmlDoc.LoadXml("<thumblist>" & thumbs & "</thumblist>")
-
             For Each thisresult In xmlDoc("thumblist")
                 Select Case thisresult.Name
                     Case "thumb"
@@ -1971,9 +1958,7 @@ Public Class Movie
                 Exit Sub
             End If
         End If
-
         Dim validUrl = False
-
         If imageexistspath = "" Then
             If Not Preferences.MusicVidScrape Then
                 For Each scraper In Preferences.moviethumbpriority
@@ -1986,39 +1971,27 @@ Public Class Movie
                             Case "Movie Poster DB"
                                 PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
                             Case "themoviedb.org"
-                                'moviethumburl = scraperFunction2.tmdbthumb(_scrapedMovie.fullmoviebody.imdbid)
                                 PosterUrl = tmdb.FirstOriginalPosterUrl
                         End Select
                     Catch
                         PosterUrl = "na"
                     End Try
-
                     validUrl = Utilities.UrlIsValid(PosterUrl)
-                    If validUrl Or batch Then
-                        Exit For
-                    End If
+                    If validUrl Or batch Then Exit For
                 Next
             Else
                 PosterUrl = _scrapedMovie.fullmoviebody.thumb
                 validUrl = Utilities.UrlIsValid(PosterUrl)
             End If
         End If
-        'If Preferences.MusicVidScrape AndAlso _scrapedMovie.listthumbs.Count > 0 Then 
-        '    PosterUrl = _scrapedMovie.listthumbs(0).ToString
-        '    validUrl = Utilities.UrlIsValid(PosterUrl)
-        'End If
 
         If validUrl Or imageexistspath <> "" Then
-
             ReportProgress("Poster")
             If imageexistspath <> "" Then PosterUrl = imageexistspath 
             Try
-
                 SavePosterImageToCacheAndPaths(PosterUrl, paths)
                 If Not Preferences.MusicVidScrape Then SavePosterToPosterWallCache()
                 ReportProgress(MSG_OK, "!!! Poster(s) scraped OK" & vbCrLf)
-
-
             Catch ex As Exception
                 ReportProgress(MSG_ERROR, "!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf)
             End Try
@@ -2035,12 +2008,6 @@ Public Class Movie
         If Preferences.MusicVidScrape Then
             Dim aok As Boolean = Utilities.CreateScreenShot(mediapathandfilename, NfoPathAndFilename.Replace(".nfo", "-fanart.jpg"), Preferences.MVPrefScrnSht, True)
             ReportProgress(, "!!! Fanart Screenshot " & If(aok, "created", "- Failed!") & vbCrLf)
-            'If aok Then
-            '    ReportProgress(, "!!! Fanart Screenshot created" & vbCrLf)
-            'Else
-            '    ReportProgress(, "!!! Fanart Screenshot - Failed!" & vbCrLf)
-            'End If
-            'ucMusicVideo.createScreenshot(mediapathandfilename, , True)
         Else
             DoDownloadFanart()
         End If
@@ -2050,7 +2017,6 @@ Public Class Movie
         Dim imageexistspath As String = ""
         Dim FanartUrl As String = ""
         Dim MoviePath As String = NfoPathPrefName
-        'Dim isfanartjpg As String = IO.Path.GetDirectoryName(MoviePath) & "\fanart.jpg"
         Dim isMovieFanart As String = MoviePath.Replace(".nfo", "-fanart.jpg")
         If IO.Path.GetFileName(MoviePath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(MoviePath)
@@ -2089,18 +2055,16 @@ Public Class Movie
             ReportProgress("Fanart", )
             Try
                 SaveFanartImageToCacheAndPaths(FanartUrl, paths)
-
                 ReportProgress(MSG_OK, "!!! Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR, "!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
-
         End If
     End Sub
 
     Sub DownloadFromFanartTv(Optional rescrapelist As Boolean = False)
         If Preferences.MovieChangeMovie AndAlso Preferences.MovieChangeKeepExistingArt Then Exit Sub
-        If Preferences.MovFanartTvscrape OrElse rescrapelist Then   'AndAlso (Preferences.allfolders Or Preferences.usefoldernames) 
+        If Preferences.MovFanartTvscrape OrElse rescrapelist Then
             DoDownloadFromFanartTv(rescrapelist)
         Else
             ReportProgress(, "Scraping from Fanart.Tv, not selected" & vbCrLf)
@@ -2125,7 +2089,7 @@ Public Class Movie
                 If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
                     _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
                 End If
-                Dim DestPath As String = "" 'Path.GetDirectoryName(NfoPathAndFilename) & "\"   'Preferences.GetFanartTvMoviePath(NfoPathAndFilename, If(_videotsrootpath <> "", _videotsrootpath, ""))
+                Dim DestPath As String = ""
                 If Preferences.MovFanartNaming Then
                     DestPath = NfoPathAndFilename.Replace(".nfo", "-")
                 Else
@@ -2223,8 +2187,6 @@ Public Class Movie
                 If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logoLD
                 If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlClearArt Then Utilities.DownloadImage(clearart, DestPath & "clearart.png", Overwrite)
                 If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlClearLogo Then Utilities.DownloadImage(logo, DestPath & "logo.png", Overwrite)
-                'Utilities.DownloadFile(poster, DestPath & "poster.jpg")
-                'Utilities.DownloadFile(fanart, DestPath & "fanart.jpg")
                 If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlDisc Then Utilities.DownloadImage(disc, DestPath & "disc.png", Overwrite)
                 If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlBanner Then Utilities.DownloadImage(banner, DestPath & "banner.jpg", Overwrite)
                 If Preferences.MovFanartTvDlAll OrElse Preferences.MovFanartTvDlLandscape Then Utilities.DownloadImage(landscape, DestPath & "landscape.jpg", Overwrite)
@@ -2240,7 +2202,6 @@ Public Class Movie
                     If Not posterpaths.Contains(DestPath & "poster.jpg") Then posterpaths.Add(DestPath & "poster.jpg")
                     DownloadCache.SaveImageToCacheAndPaths(poster, posterpaths, False, 0, 0, Overwrite)
                 End If
-
                 ReportProgress(MSG_OK, "!!! Artwork from Fanart.Tv Downloaded OK" & vbCrLf)
             Else
                 ReportProgress(, "!!! Artwork from Fanart.Tv bypassed as Movie is in Root Folder." & vbCrLf & "Artwork Downloaded requires Movies to be in separate folders." & vbCrLf)
@@ -2511,7 +2472,6 @@ Public Class Movie
     End Sub
 
     Public Sub AssignMovieToAddMissingData
-
         _movieCache.missingdata1         = GetMissingData
         _movieCache.FrodoPosterExists    = FrodoPosterExists
         _movieCache.PreFrodoPosterExists = PreFrodoPosterExists
@@ -2522,22 +2482,14 @@ Public Class Movie
 
         Dim missingdata As Byte = 0
 
-        If Preferences.CheckmissingFanart(NfoPathPrefName) Then 'Not File.Exists(FanartPath) Then
-            missingdata += 1
-        End If
+        If Preferences.CheckmissingFanart(NfoPathPrefName) Then missingdata += 1
 
-        If Preferences.CheckmissingPoster(NfoPathPrefName) Then 'Not File.Exists(PosterPath) Then
-            missingdata += 2
-        End If
+        If Preferences.CheckmissingPoster(NfoPathPrefName) Then missingdata += 2
 
         'Not used yet
-        If Not TrailerExists Then
-            missingdata += 4
-        End If
+        If Not TrailerExists Then missingdata += 4
 
-        If MissingLocalActors Then
-            missingdata += 8
-        End If
+        If MissingLocalActors Then missingdata += 8
 
         Return missingdata
     End Function
@@ -2682,59 +2634,7 @@ Public Class Movie
     End Sub
     #End Region 'Events
 
-
-    #Region "TMDB Test scrape"
-    'Just for speed testing vs IMDB - Results: TMDb ~ 2 secs, IMDB ~ 5 secs.
-    'IMDB is more complete & IMO worth the little extra time
-    Sub TMDbScrape
-        Actions.Items.Clear
-        Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb               ,"Ini TMDb"                    ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf TMDbAssignScrapedMovie,"TMDbAssignScrapedMovie"      ) )
-        RunScrapeActions
-    End Sub
-
-    Sub TMDbAssignScrapedMovie
-
-        _scrapedMovie.fullmoviebody.title = tmdb.Movie.title
-        _scrapedMovie.fullmoviebody.originaltitle = tmdb.Movie.original_title
-        
-        _scrapedMovie.alternativetitles.AddRange(tmdb.AlternateTitles)
-
-        If tmdb.Movie.production_countries.Count > 0 then
-            _scrapedMovie.fullmoviebody.country = tmdb.Movie.production_countries(0).name
-        End If
-
- '       _scrapedMovie.fullmoviebody.credits   = "Unknown"
-        _scrapedMovie.fullmoviebody.director  = tmdb.Director
-        _scrapedMovie.fullmoviebody.stars     = tmdb.Stars
-        _scrapedMovie.fullmoviebody.genre     = tmdb.Genres
-        _scrapedMovie.fullmoviebody.mpaa      = tmdb.Certification
-        _scrapedMovie.fullmoviebody.outline   = tmdb.Movie.overview
-        _scrapedMovie.fullmoviebody.plot      = tmdb.Movie.overview
-        _scrapedMovie.fullmoviebody.premiered = tmdb.Movie.release_date
-        _scrapedMovie.fullmoviebody.rating    = tmdb.Movie.vote_average
-        _scrapedMovie.fullmoviebody.runtime   = tmdb.Movie.runtime
-
-        If tmdb.Movie.production_companies.Count > 0 then
-            _scrapedMovie.fullmoviebody.studio = tmdb.Movie.production_companies(0).name
-        End If
-
-        _scrapedMovie.fullmoviebody.tagline   = tmdb.Movie.tagline
-'       _scrapedMovie.fullmoviebody.top250    = tmdb.Movie.t
-        _scrapedMovie.fullmoviebody.votes     = tmdb.Movie.vote_count
-        _scrapedMovie.fullmoviebody.year      = tmdb.Movie.release_date
-        _scrapedMovie.fullmoviebody.imdbid    = tmdb.Imdb
-
-
-        If _scrapedMovie.fullmoviebody.plot      = ""      Then _scrapedMovie.fullmoviebody.plot      = _scrapedMovie.fullmoviebody.outline
-        If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
-        If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
-        If _scrapedMovie.fullmoviebody.top250    = Nothing Then _scrapedMovie.fullmoviebody.top250    = "0"
-
-    End Sub
-    #End Region 'TMDB Test scrape
-
-
+    
     Public Shared Function getExtraIdFromNFO(ByVal fullPath As String, Optional log As String="") As String
         Dim extrapossibleID As String = String.Empty
         Dim fileNFO As String = fullPath
@@ -2767,8 +2667,7 @@ Public Class Movie
         End If
         Return extrapossibleID
     End Function
-
-
+    
     Public Function fileRename(ByRef movieFileInfo As Movie) As String 'ByVal movieDetails As str_BasicMovieNFO, ByRef movieFileInfo As Movie) As String
         If Preferences.MusicVidScrape Then Return ""  ' Temporary till get music vid posters scraping.
         Dim log As String = ""
@@ -2915,9 +2814,7 @@ Public Class Movie
         If currentroot.LastIndexOf("\") <> currentroot.Length-1 Then currentroot = currentroot & "\"
 
         Dim inrootfolder As Boolean = (currentroot = FilePath)
-
-
-
+        
         Dim newFolder As String = UserDefinedBaseFolderName
         Dim newpatharr As New List(Of String)
         newpatharr.AddRange(newFolder.Split("\"))
@@ -3301,22 +3198,17 @@ Public Class Movie
     Sub RemoveActorsFromCache(MovieId)
         _parent.ActorDb.RemoveAll(Function(c) c.MovieId = MovieId)
     End Sub
-
-
+    
     Sub RemoveDirectorFromCache
         If IsNothing(Director) Then Exit Sub
         RemoveDirectorFromCache(Director.MovieId)
     End Sub
-
-
+    
     Sub RemoveDirectorFromCache(MovieId)
         _parent.DirectorDb.RemoveAll(Function(c) c.MovieId = MovieId)
     End Sub
 
     Sub RemoveMovieSetFromCache
-        'If MovieSet.count = 0 Then Exit Sub
-        '_parent.MovieSetDB.Remove(MovieSet)
-
         If IsNothing(MovieSet) Then Exit Sub
         RemoveMovieSetFromCache(MovieSet.MovieSetId)
     End Sub
@@ -3396,44 +3288,29 @@ Public Class Movie
     End Sub
   
     Shared Function SaveFanartImageToCacheAndPaths(url As String, paths As List(Of String))
-
         If Not Preferences.savefanart Then Return False
-
         Dim point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
-
         Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs, point.X, point.Y)
     End Function
 
     Shared Function SaveFanartImageToCacheAndPath(url As String, path As String)
-
         If Not Preferences.savefanart Then Return False
-
         Dim point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
-
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, point.X, point.Y)
     End Function
 
     Shared Function SaveActorImageToCacheAndPath(url As String, path As String)
-    
-        'If Not Preferences.actorsave Then Return False
-
         Dim height = GetHeightResolution(Preferences.ActorResolutionSI)
-
-'        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
         Return DownloadCache.SaveImageToCacheAndPath(url, path, True, , height  )
     End Function
 
     Shared Function SavePosterImageToCacheAndPath(url As String, path As String) As Boolean
-
         Dim height = GetHeightResolution(Preferences.PosterResolutionSI)
-
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
     End Function
 
     Shared Function SavePosterImageToCacheAndPaths(url As String, paths As List(Of String)) As Boolean
-
         Dim Height = GetHeightResolution(Preferences.PosterResolutionSI)
-
         Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs, , height)
     End Function
 
@@ -3444,48 +3321,19 @@ Public Class Movie
                 Dim bm2 As New Bitmap(bm)
                 bm.Dispose()
                 bm2 = Utilities.ResizeImage(bm2, 150, 200)
-
                 Utilities.SaveImage(bm2, PosterCachePath)
-
                 bm2.Dispose()
-            Catch
-                'Invalid file
+            Catch       'Invalid file
                 Utilities.SafeDeleteFile(PosterPath     )
                 Utilities.SafeDeleteFile(PosterCachePath)
             End Try
         End If
     End Sub
-
-    'Sub LoadPosterFromPosterCache(picBox As PictureBox)
-
-    '    If Not File.Exists(PosterCachePath) Then SavePosterToPosterWallCache
-
-    '    picBox.Tag = Nothing
-
-    '    If File.Exists(PosterCachePath) Then
-    '        Try
-    '            picBox.Image = Utilities.LoadImage(PosterCachePath)
-    '            picBox.Tag = PosterPath
-    '        Catch
-    '            'Invalid file
-    '            Utilities.SafeDeleteFile(PosterPath     )
-    '            Utilities.SafeDeleteFile(PosterCachePath)
-    '        End Try
-    '    Else
-    '        Try
-    '            picBox.Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
-    '        Catch
-    '        End Try
-    '    End If
-
-    'End Sub
-
-
+    
     Function GetActorFileName( actorName As String) As String
         Return IO.Path.Combine(ActorPath, actorName.Replace(" ", "_") & ".tbn")
     End Function
-
-
+    
     Public Function RenameExistingMetaFiles As String
 
         Dim log                 = ""
@@ -4088,75 +3936,39 @@ Public Class Movie
 
 
     Shared Function GetMissingDataText(missingdata1 As Int32) As String
-
         Dim missingstring As String = ""
         If missingdata1 - 8 > -1 Then missingstring &= "Local Actor(s)" : missingdata1 = missingdata1 - 8
         If missingdata1 - 4 > -1 Then
-            If Not missingstring = "" Then
-                missingstring &= ", "
-            End If
+            If Not missingstring = "" Then missingstring &= ", "
             missingstring &= "Trailer" : missingdata1 = missingdata1 - 4
         End If
         If missingdata1 - 2 > -1 Then
-            If Not missingstring = "" Then
-                missingstring &= ", "
-            End If
+            If Not missingstring = "" Then missingstring &= ", "
             missingstring &= "Poster" : missingdata1 = missingdata1 - 2
         End If
         If missingdata1 - 1 > -1 Then
-            If Not missingstring = "" Then
-                missingstring &= ", "
-            End If
+            If Not missingstring = "" Then missingstring &= ", "
             missingstring &= "Fanart" : missingdata1 = missingdata1 - 1
         End If
         If missingdata1 = 0 Then
-            If missingstring = "" Then
-                missingstring &= "None"
-            End If
+            If missingstring = "" Then missingstring &= "None"
             Return missingstring
         Else
             Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
         End If
-        'If missingdata1 = 0 Then Return "None"
-        'If missingdata1 = 1 Then Return "Fanart"
-        'If missingdata1 = 2 Then Return "Poster"
-        'If missingdata1 = 3 Then Return "Fanart & Poster"
-        'If missingdata1 = 4 Then Return "Trailer"
-        'If missingdata1 = 5 Then Return "Fanart & Trailer"
-        'If missingdata1 = 6 Then Return "Poster & Trailer"
-        'If missingdata1 = 7 Then Return "Fanart, Poster & Trailer"
-        'If missingdata1 = 8 Then Return "Local Actor(s)"
-        'If missingdata1 = 9 Then Return "Local Actor(s), Fanart"
-        'If missingdata1 = 10 Then Return "Local Actor(s), Poster"
-        'If missingdata1 = 11 Then Return "Local Actor(s), Fanart & Poster"
-        'If missingdata1 = 12 Then Return "Trailer & Local Actor(s)"
-
-        'Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
-
     End Function
 
 
     Function GetYouTubeIds As List(Of String)
-
         Dim Results As List(Of String) = New List(Of String)
-
         Dim url = "http://www.youtube.com/results?search_query=" + _scrapedMovie.fullmoviebody.title + "+" + _scrapedMovie.fullmoviebody.year + "+trailer&filters=short&lclk=short"
-        
         Dim RegExPattern = "href=""/watch[?]v=(?<id>.*?)"""
-
         Dim s As New Classimdb
-
         Dim html As String = s.loadwebpage(Preferences.proxysettings, url,True,10).ToString
-
-        For Each m As Match In Regex.Matches(html, RegExPattern, RegexOptions.Singleline) 
-
+        For Each m As Match In Regex.Matches(html, RegExPattern, RegexOptions.Singleline)
             Dim id As String = Net.WebUtility.HtmlDecode(m.Groups("id").Value)
-
-            If Not Results.Contains(id) Then
-                Results.Add(id)
-            End If
+            If Not Results.Contains(id) Then Results.Add(id)
         Next 
-
         Return Results  
     End Function
 
