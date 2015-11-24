@@ -108,7 +108,7 @@ Public Class WorkingWithNfoFiles
                 newtvshow.TvdbId.Value = ""
 
                 If newtvshow.Episode.Value = Nothing Or newtvshow.Episode.Value = Nothing Then
-                    For Each regexp In Preferences.tv_RegexScraper
+                    For Each regexp In Pref.tv_RegexScraper
 
                         Dim M As Match
                         M = Regex.Match(newtvshow.NfoFilePath, regexp)
@@ -291,7 +291,7 @@ Public Class WorkingWithNfoFiles
                 Next
 
                 If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
-                    For Each regexp In Preferences.tv_RegexScraper
+                    For Each regexp In Pref.tv_RegexScraper
 
                         Dim M As Match
                         M = Regex.Match(newtvepisode.NfoFilePath, regexp)
@@ -483,7 +483,7 @@ Public Class WorkingWithNfoFiles
                             Try
                                 anotherepisode.NfoFilePath = path
                                 If anotherepisode.Episode.Value = Nothing Or anotherepisode.Episode.Value = Nothing Then
-                                    For Each regexp In Preferences.tv_RegexScraper
+                                    For Each regexp In Pref.tv_RegexScraper
 
                                         Dim M As Match
                                         M = Regex.Match(anotherepisode.NfoFilePath, regexp)
@@ -549,7 +549,7 @@ Public Class WorkingWithNfoFiles
         For Each ep In listofepisodes
 
             xmlEpisode = document.CreateElement("episodedetails")
-            If Preferences.enabletvhdtags = True Then
+            If Pref.enabletvhdtags = True Then
                 xmlFileInfo = document.CreateElement("fileinfo")
                 xmlStreamDetails = document.CreateElement("streamdetails")
                 xmlStreamDetailsType = document.CreateElement("video")
@@ -734,7 +734,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             Dim actorstosave As Integer = ep.ListActors.Count
-            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+            If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
             For f = 0 To actorstosave - 1
                 xmlActor = document.CreateElement("actor")
                 xmlActorchild = document.CreateElement("name")
@@ -935,9 +935,9 @@ Public Class WorkingWithNfoFiles
                         minutes = minutes.Substring(1, minutes.Length - 1)
                     Loop
                     If minutes = "" Then minutes = "00"
-                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Pref.roundminutes = True Then
                         minutes = "0" & minutes & " min"
-                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Pref.roundminutes = True Then
                         minutes = "00" & minutes & " min"
                     Else
                         minutes = tvshowtosave.runtime.Value
@@ -1193,14 +1193,14 @@ Public Class WorkingWithNfoFiles
                 newtvshow.Year.Value = "0000"
             End If
             If newtvshow.TvShowActorSource.Value = Nothing Then
-                If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
+                If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Then
                     newtvshow.TvShowActorSource.Value = "tvdb"
                 Else
                     newtvshow.TvShowActorSource.Value = "imdb"
                 End If
             End If
             If newtvshow.EpisodeActorSource.Value = Nothing Then
-                If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
+                If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 2 Then
                     newtvshow.EpisodeActorSource.Value = "tvdb"
                 Else
                     newtvshow.EpisodeActorSource.Value = "imdb"
@@ -1212,7 +1212,7 @@ Public Class WorkingWithNfoFiles
                 tempid = tempid.Replace(".zip", "")
                 newtvshow.Language.Value = tempid
             End If
-            If newtvshow.SortOrder.Value = Nothing Then newtvshow.SortOrder.Value = Preferences.sortorder 
+            If newtvshow.SortOrder.Value = Nothing Then newtvshow.SortOrder.Value = Pref.sortorder 
 
             Return newtvshow
         Catch
@@ -1245,7 +1245,7 @@ Public Class WorkingWithNfoFiles
 
     '        newepisode.NfoFilePath = path
     '        If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
-    '            For Each regexp In Preferences.tv_RegexScraper
+    '            For Each regexp In Pref.tv_RegexScraper
 
     '                Dim M As Match
     '                M = Regex.Match(newepisode.NfoFilePath, regexp)
@@ -1283,7 +1283,7 @@ Public Class WorkingWithNfoFiles
     '            newepisode.NfoFilePath = path
     '            'newepisode.VideoFilePath = path
     '            If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
-    '                For Each regexp In Preferences.tv_RegexScraper
+    '                For Each regexp In Pref.tv_RegexScraper
 
     '                    Dim M As Match
     '                    M = Regex.Match(newepisode.NfoFilePath, regexp)
@@ -1432,7 +1432,7 @@ Public Class WorkingWithNfoFiles
     '            Next
 
     '            If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
-    '                For Each regexp In Preferences.tv_RegexScraper
+    '                For Each regexp In Pref.tv_RegexScraper
 
     '                    Dim M As Match
     '                    M = Regex.Match(newtvepisode.NfoFilePath, regexp)
@@ -1638,7 +1638,7 @@ Public Class WorkingWithNfoFiles
     '        xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
     '        document.AppendChild(xmlproc)
     '        Dim anotherchild As XmlNode = Nothing
-    '        If Preferences.enabletvhdtags = True Then
+    '        If Pref.enabletvhdtags = True Then
     '            Try
     '                child = document.CreateElement("fileinfo")
 
@@ -1838,7 +1838,7 @@ Public Class WorkingWithNfoFiles
     '        root.AppendChild(child)
 
     '        Dim actorstosave As Integer = listofepisodes(0).ListActors.Count
-    '        If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+    '        If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
     '        For f = 0 To actorstosave - 1
     '            child = document.CreateElement("actor")
     '            actorchild = document.CreateElement("name")
@@ -1895,7 +1895,7 @@ Public Class WorkingWithNfoFiles
     '            xmlEpisode = document.CreateElement("episodedetails")
     '            If done = False Then
     '                'done = True
-    '                If Preferences.enabletvhdtags = True Then
+    '                If Pref.enabletvhdtags = True Then
     '                    Try
     '                        xmlStreamDetails = document.CreateElement("streamdetails")
     '                        xmlFileInfo = document.CreateElement("fileinfo")
@@ -2096,7 +2096,7 @@ Public Class WorkingWithNfoFiles
     '            xmlEpisode.AppendChild(xmlEpisodechild)
 
     '            Dim actorstosave As Integer = ep.ListActors.Count
-    '            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+    '            If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
     '            For f = 0 To actorstosave - 1
     '                xmlActor = document.CreateElement("actor")
     '                xmlActorchild = document.CreateElement("name")
@@ -2159,7 +2159,7 @@ Public Class WorkingWithNfoFiles
                     Dim filecreation2 As New IO.FileInfo(path)
                     Dim myDate2 As Date = filecreation2.LastWriteTime
                     Try
-                        newmovie.filedate = Format(myDate2, Preferences.datePattern).ToString
+                        newmovie.filedate = Format(myDate2, Pref.datePattern).ToString
                     Catch
                     End Try
                     newmovie.filename = IO.Path.GetFileName(path)
@@ -2202,7 +2202,7 @@ Public Class WorkingWithNfoFiles
                                 'Dim tempstring As String = ""
                                 'tempstring = thisresult.InnerText
                                 ''-------------- Aqui
-                                'If Preferences.ignorearticle = True Then
+                                'If Pref.ignorearticle = True Then
                                 '    If tempstring.ToLower.IndexOf("the ") = 0 Then
                                 '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
                                 '        tempstring = tempstring & ", The"
@@ -2363,7 +2363,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.title = Nothing Then newmovie.title = "ERR - This Movie Has No TITLE!"
                 If newmovie.createdate = "" Or newmovie.createdate = Nothing Then newmovie.createdate = "18000101000000"
                 Try
-                    newmovie.filedate = Format(myDate, Preferences.datePattern)
+                    newmovie.filedate = Format(myDate, Pref.datePattern)
                 Catch ex As Exception
                     MsgBox(ex.ToString)
                 End Try
@@ -2727,13 +2727,13 @@ Public Class WorkingWithNfoFiles
                 Else
                     newmovie.fileinfo.videotspath = ""
                 End If
-                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path, newmovie.fileinfo.filename)
+                newmovie.fileinfo.posterpath = Pref.GetPosterPath(path, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
-                newmovie.fileinfo.basepath = Preferences.GetMovBasePath(newmovie.fileinfo.path)
-                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path, newmovie.fileinfo.filename)
-                newmovie.fileinfo.movsetfanartpath = Preferences.GetMovSetFanartPath(path, newmovie.fullmoviebody.movieset.MovieSetName)
-                newmovie.fileinfo.movsetposterpath = Preferences.GetMovSetPosterPath(path, newmovie.fullmoviebody.movieset.MovieSetName)
+                newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
+                newmovie.fileinfo.fanartpath = Pref.GetFanartPath(path, newmovie.fileinfo.filename)
+                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(path, newmovie.fullmoviebody.movieset.MovieSetName)
+                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(path, newmovie.fullmoviebody.movieset.MovieSetName)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
@@ -2793,7 +2793,7 @@ Public Class WorkingWithNfoFiles
                 child = doc.CreateElement("fileinfo")
                 anotherchild = doc.CreateElement("streamdetails")
                 filedetailschild = doc.CreateElement("video")
-                If Preferences.enablehdtags = True Then
+                If Pref.enablehdtags = True Then
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Width.Value) Then
                         filedetailschildchild = doc.CreateElement("width")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Width.Value
@@ -2944,7 +2944,7 @@ Public Class WorkingWithNfoFiles
 
                 root.AppendChild(child)
 
-                If Not Preferences.NoAltTitle AndAlso movietosave.alternativetitles.Count > 0 Then
+                If Not Pref.NoAltTitle AndAlso movietosave.alternativetitles.Count > 0 Then
                     For Each title In movietosave.alternativetitles
                         If title <> movietosave.fullmoviebody.title Then
                             child = doc.CreateElement("alternativetitle")
@@ -2982,7 +2982,7 @@ Public Class WorkingWithNfoFiles
                 child = doc.CreateElement("votes")
                 Dim votes As String = movietosave.fullmoviebody.votes
                 If Not String.IsNullOrEmpty(votes) then
-                    If Not Preferences.MovThousSeparator Then
+                    If Not Pref.MovThousSeparator Then
                         votes = votes.Replace(",", "")
                     Else
                         If Not votes.Contains(",") Then
@@ -3020,7 +3020,7 @@ Public Class WorkingWithNfoFiles
 
                 stage = 22
                 Try
-                    If Preferences.XtraFrodoUrls AndAlso Preferences.FrodoEnabled Then
+                    If Pref.XtraFrodoUrls AndAlso Pref.FrodoEnabled Then
                         For Each item In movietosave.frodoPosterThumbs
 
                             child = doc.CreateElement("thumb")
@@ -3048,7 +3048,7 @@ Public Class WorkingWithNfoFiles
                 stage = 24
                 Try
                     child = doc.CreateElement("runtime")
-                    If Preferences.MovDurationAsRuntine Then
+                    If Pref.MovDurationAsRuntine Then
                         Dim duration As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
                         Dim durationInt As Integer = If(String.IsNullOrEmpty(duration), 0, duration.ToInt)
                         If durationInt > 60 Then
@@ -3066,13 +3066,13 @@ Public Class WorkingWithNfoFiles
                                 Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                                     minutes = minutes.Substring(1, minutes.Length - 1)
                                 Loop
-                                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Pref.roundminutes = True Then
                                     minutes = "0" & minutes
-                                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Pref.roundminutes = True Then
                                     minutes = "00" & minutes
                                 End If
                             End If
-                            If Preferences.intruntime = False And IsNumeric(minutes) Then
+                            If Pref.intruntime = False And IsNumeric(minutes) Then
                                 If minutes = "0" AndAlso Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.DurationInSeconds.Value) Then
                                     Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
                                     If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
@@ -3176,7 +3176,7 @@ Public Class WorkingWithNfoFiles
                 If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
                     Dim myDate2 As Date = System.DateTime.Now
                     Try
-                        child.InnerText = Format(myDate2, Preferences.datePattern).ToString
+                        child.InnerText = Format(myDate2, Pref.datePattern).ToString
                     Catch ex2 As Exception
                     End Try
                 Else
@@ -3189,7 +3189,7 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
 
                 Dim actorstosave As Integer = movietosave.listactors.Count
-                If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+                If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
                 For f = 0 To actorstosave - 1
                     child = doc.CreateElement("actor")
                     actorchild = doc.CreateElement("id")
@@ -3280,23 +3280,23 @@ Public Class WorkingWithNfoFiles
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
                                 '-------------- Aqui
-                                'If Preferences.ignorearticle = True Then
+                                'If Pref.ignorearticle = True Then
                                 '    If tempstring.ToLower.IndexOf("the ") = 0 Then
                                 '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
                                 '        tempstring = tempstring & ", The"
                                 '    End If
                                 'End If
-                                'If Preferences.ignoreAarticle Then
+                                'If Pref.ignoreAarticle Then
                                 '    If tempstring.ToLower.IndexOf("a ") = 0 Then
                                 '        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
                                 '    End If
                                 'End If
-                                'If Preferences.ignoreAn Then
+                                'If Pref.ignoreAn Then
                                 '    If tempstring.ToLower.IndexOf("an ") = 0 Then
                                 '        tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
                                 '    End If
                                 'End If
-                                newmovie.fullmoviebody.title = Preferences.RemoveIgnoredArticles(tempstring)
+                                newmovie.fullmoviebody.title = Pref.RemoveIgnoredArticles(tempstring)
                             Case "set"
                                 newmovie.fullmoviebody.movieset = thisresult.InnerText
                             Case "stars"
@@ -3410,11 +3410,11 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.fullpathandfilename = filepath
                 newmovie.fileinfo.filename = IO.Path.GetFileName(filepath)
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(filepath)
-                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(filepath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.posterpath = Pref.GetPosterPath(filepath, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(filepath) & "\"
-                newmovie.fileinfo.basepath = Preferences.GetMovBasePath(newmovie.fileinfo.path)
-                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(filepath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
+                newmovie.fileinfo.fanartpath = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
                     newmovie.fileinfo.filenameandpath = filepath.Replace(".nfo", container)
@@ -3452,7 +3452,7 @@ Public Class WorkingWithNfoFiles
 
             root = doc.CreateElement("movie")
 
-            If Preferences.enablehdtags = True Then
+            If Pref.enablehdtags = True Then
                 child = doc.CreateElement("fileinfo")
                 anotherchild = doc.CreateElement("streamdetails")
                 filedetailschild = doc.CreateElement("video")
@@ -3489,7 +3489,7 @@ Public Class WorkingWithNfoFiles
                 If Not String.IsNullOrEmpty(homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value) Then
                     filedetailschildchild = doc.CreateElement("durationinseconds")
                     Dim temptemp As String = homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value
-                    If Preferences.intruntime Then
+                    If Pref.intruntime Then
                         temptemp = Utilities.cleanruntime(homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value)
                         If IsNumeric(temptemp) Then
                             filedetailschildchild.InnerText = temptemp
@@ -3627,7 +3627,7 @@ Public Class WorkingWithNfoFiles
                 minutes = minutes.Replace("mins", "")
                 minutes = minutes.Replace("min", "")
                 minutes = minutes.Replace(" ", "")
-                'If Preferences.intruntime = True And Not IsNumeric(minutes) Then
+                'If Pref.intruntime = True And Not IsNumeric(minutes) Then
                 '    Dim tempstring As String = Form1.filefunction.cleanruntime(minutes)
                 '    If IsNumeric(tempstring) Then
                 '        minutes = tempstring
@@ -3637,12 +3637,12 @@ Public Class WorkingWithNfoFiles
                     Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                         minutes = minutes.Substring(1, minutes.Length - 1)
                     Loop
-                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Pref.roundminutes = True Then
                         minutes = "0" & minutes
-                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Pref.roundminutes = True Then
                         minutes = "00" & minutes
                     End If
-                    If Preferences.intruntime = False And IsNumeric(minutes) Then
+                    If Pref.intruntime = False And IsNumeric(minutes) Then
                         minutes = minutes & " min"
                     End If
                 Catch
@@ -3662,7 +3662,7 @@ Public Class WorkingWithNfoFiles
             If String.IsNullOrEmpty(homemovietosave.fileinfo.createdate) Then
                 Dim myDate2 As Date = System.DateTime.Now
                 Try
-                    child.InnerText = Format(myDate2, Preferences.datePattern).ToString
+                    child.InnerText = Format(myDate2, Pref.datePattern).ToString
                 Catch ex2 As Exception
                 End Try
             Else
@@ -3929,7 +3929,7 @@ Public Class WorkingWithNfoFiles
         If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
             Dim myDate2 As Date = System.DateTime.Now
             Try
-                child.InnerText = Format(myDate2, Preferences.datePattern).ToString
+                child.InnerText = Format(myDate2, Pref.datePattern).ToString
             Catch ex2 As Exception
             End Try
         Else
@@ -4058,11 +4058,11 @@ Public Class WorkingWithNfoFiles
         NewMusicVideo.fileinfo.fullpathandfilename = filepath
         NewMusicVideo.fileinfo.filename     = IO.Path.GetFileName(filepath).Replace(".nfo", NewMusicVideo.filedetails.filedetails_video.Container.Value)
         NewMusicVideo.fileinfo.foldername   = Utilities.GetLastFolder(filepath)
-        NewMusicVideo.fileinfo.posterpath   = Preferences.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.posterpath   = Pref.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
         NewMusicVideo.fileinfo.trailerpath  = ""
         NewMusicVideo.fileinfo.path         = IO.Path.GetDirectoryName(filepath) & "\"
-        NewMusicVideo.fileinfo.basepath     = Preferences.GetMovBasePath(NewMusicVideo.fileinfo.path)
-        NewMusicVideo.fileinfo.fanartpath   = Preferences.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.basepath     = Pref.GetMovBasePath(NewMusicVideo.fileinfo.path)
+        NewMusicVideo.fileinfo.fanartpath   = Pref.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
         If Not String.IsNullOrEmpty(NewMusicVideo.filedetails.filedetails_video.Container.Value) Then
             Dim container As String = NewMusicVideo.filedetails.filedetails_video.Container.Value
             NewMusicVideo.fileinfo.filenameandpath = filepath.Replace(".nfo", container)

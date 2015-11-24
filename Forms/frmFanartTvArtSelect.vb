@@ -19,50 +19,50 @@ Public Class frmFanartTvArtSelect
         Dim lbl As New Label
         lbl.Text = "Clear Art"
         clbFanartTvArtSelect.Items.Add(lbl.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlClearArt)
-        chkbxlst.Add(Preferences.MovFanartTvDlClearArt)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlClearArt)
+        chkbxlst.Add(Pref.MovFanartTvDlClearArt)
         i +=1
 
         Dim lbl2 As New Label
         lbl2.Text = "Clear Logo"
         clbFanartTvArtSelect.Items.Add(lbl2.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlClearLogo)
-        chkbxlst.Add(Preferences.MovFanartTvDlClearLogo)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlClearLogo)
+        chkbxlst.Add(Pref.MovFanartTvDlClearLogo)
         i +=1
 
         Dim lbl3 As New Label
         lbl3.Text = "Poster"
         clbFanartTvArtSelect.Items.Add(lbl3.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlPoster)
-        chkbxlst.Add(Preferences.MovFanartTvDlPoster)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlPoster)
+        chkbxlst.Add(Pref.MovFanartTvDlPoster)
         i +=1
 
         Dim lbl4 As New Label
         lbl4.Text = "Fanart"
         clbFanartTvArtSelect.Items.Add(lbl4.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlFanart)
-        chkbxlst.Add(Preferences.MovFanartTvDlFanart)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlFanart)
+        chkbxlst.Add(Pref.MovFanartTvDlFanart)
         i +=1
 
         Dim lbl5 As New Label
         lbl5.Text = "Disc"
         clbFanartTvArtSelect.Items.Add(lbl5.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlDisc)
-        chkbxlst.Add(Preferences.MovFanartTvDlDisc)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlDisc)
+        chkbxlst.Add(Pref.MovFanartTvDlDisc)
         i +=1
 
         Dim lbl6 As New Label
         lbl6.Text = "Banner"
         clbFanartTvArtSelect.Items.Add(lbl6.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlBanner)
-        chkbxlst.Add(Preferences.MovFanartTvDlBanner)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlBanner)
+        chkbxlst.Add(Pref.MovFanartTvDlBanner)
         i +=1
 
         Dim lbl7 As New Label
         lbl7.Text = "Landscape"
         clbFanartTvArtSelect.Items.Add(lbl7.Text)
-        clbFanartTvArtSelect.SetItemChecked(i, Preferences.MovFanartTvDlLandscape)
-        chkbxlst.Add(Preferences.MovFanartTvDlLandscape)
+        clbFanartTvArtSelect.SetItemChecked(i, Pref.MovFanartTvDlLandscape)
+        chkbxlst.Add(Pref.MovFanartTvDlLandscape)
 
     End Sub
 
@@ -85,37 +85,37 @@ Public Class frmFanartTvArtSelect
                 Case "Clear Art"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlClearArt = show
+                        Pref.MovFanartTvDlClearArt = show
                     End If
                 Case "Clear Logo"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlClearLogo = show
+                        Pref.MovFanartTvDlClearLogo = show
                     End If
                 Case "Poster"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlPoster = show
+                        Pref.MovFanartTvDlPoster = show
                     End If
                 Case "Fanart"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlFanart = show
+                        Pref.MovFanartTvDlFanart = show
                     End If
                 Case "Disc"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlDisc = show
+                        Pref.MovFanartTvDlDisc = show
                     End If
                 Case "Banner"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlBanner = show
+                        Pref.MovFanartTvDlBanner = show
                     End If
                 Case "Landscape"
                     If chkbxlst.Item(h) <> show Then
                         IsChanged = True
-                        Preferences.MovFanartTvDlLandscape = show
+                        Pref.MovFanartTvDlLandscape = show
                     End If
             End Select
         Next

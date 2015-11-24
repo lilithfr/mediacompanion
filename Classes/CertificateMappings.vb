@@ -23,8 +23,8 @@ End Class
 
 Public Class CertificateMappings
 
-    Public MappingsFile        = Preferences.applicationPath & "\classes\CertificateMappings.xml"
-    Public DefaultMappingsFile = Preferences.applicationPath & "\classes\DefaultCertificateMappings.xml"
+    Public MappingsFile        = Pref.applicationPath & "\classes\CertificateMappings.xml"
+    Public DefaultMappingsFile = Pref.applicationPath & "\classes\DefaultCertificateMappings.xml"
 
     Public Property List As New List(Of CertificateMapping)
 

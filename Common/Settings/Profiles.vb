@@ -11,7 +11,7 @@ Public Class Profiles
 
     Public Sub Load
         ProfileList.Clear()
-        Dim applicationpath As String = Preferences.applicationPath 
+        Dim applicationpath As String = Pref.applicationPath 
         Dim profilepath As String = Path.Combine(applicationpath, "settings")
 
         profilepath = Path.Combine(profilepath, "profile.xml")

@@ -10,7 +10,7 @@ Partial Public Class TvSeason
 
         If Me.SeasonNode.TreeView Is Nothing Then
             If ShowObj IsNot Nothing Then
-                If Preferences.displayMissingEpisodes AndAlso ShowObj.MissingEpisodes.Count > 0 Then
+                If Pref.displayMissingEpisodes AndAlso ShowObj.MissingEpisodes.Count > 0 Then
                     Dim seasonismissingeps As Boolean = False
                     Dim thisseason As String = ""
                     For Each ShSeason In ShowObj.Seasons

@@ -13,10 +13,10 @@ Public Class XbmcJson
     Private _opened     As Boolean = False
     Private _xbmcMovies As List(Of MinXbmcMovie)
 
-    Public Property Address  As String = Preferences.XBMC_Address
-    Public Property Port     As String = Preferences.XBMC_Port
-    Public Property Username As String = Preferences.XBMC_Username
-    Public Property Password As String = Preferences.XBMC_Password
+    Public Property Address  As String = Pref.XBMC_Address
+    Public Property Port     As String = Pref.XBMC_Port
+    Public Property Username As String = Pref.XBMC_Username
+    Public Property Password As String = Pref.XBMC_Password
 
     Public Property xbmc     As XbmcJsonRpcConnection
 

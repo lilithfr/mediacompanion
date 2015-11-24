@@ -40,7 +40,7 @@ Public Class TvEpisode
                 'End If
             End If
 
-            Me.Thumbnail.Path = _PureName & If(Preferences.FrodoEnabled, "-thumb.jpg", ".tbn")
+            Me.Thumbnail.Path = _PureName & If(Pref.FrodoEnabled, "-thumb.jpg", ".tbn")
 
             ' Me.EditAttribute("PureName", Me.PureName)
             ' Me.EditAttribute("MediaExtension", Me.MediaExtension)
@@ -232,7 +232,7 @@ Public Class TvEpisode
     End Property
 
     Public Sub GetFileDetails()
-        Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Me.VideoFilePath)
+        Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Me.VideoFilePath)
         If Not IsNothing(fileStreamDetails) Then
             Me.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
             Me.Details.StreamDetails.Audio.Clear()
@@ -248,7 +248,7 @@ Public Class TvEpisode
                 Dim tempstring As String = ""
                 tempstring = Me.Details.StreamDetails.Video.DurationInSeconds.Value
                 If tempstring <> "" Then
-                    If Preferences.intruntime Then
+                    If Pref.intruntime Then
                         Me.Runtime.Value = Math.Round(tempstring / 60).ToString
                     Else
                         Me.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"

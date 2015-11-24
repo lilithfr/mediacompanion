@@ -190,7 +190,7 @@ Public Class Renamer
     End Function
 
     Public Shared Sub applySeasonEpisodeCase()
-        If Preferences.eprenamelowercase Then
+        If Pref.eprenamelowercase Then
             rename.seasChar = rename.seasChar.ToLower()
             rename.epChar = rename.epChar.ToLower()
         Else

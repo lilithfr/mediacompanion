@@ -7,8 +7,8 @@ Public Class frmXBMC_Progress
 
 
     Private Sub panelXBMC_Click( sender As Object,  e As EventArgs) Handles LinkLabel1.Click
-        Preferences.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file )
-        Preferences.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
+        Pref.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file )
+        Pref.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
     End Sub
 
 

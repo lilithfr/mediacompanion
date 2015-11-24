@@ -6,7 +6,7 @@ Partial Public Class TvShow
 
     Public Sub UpdateTreenode()
         Me.ShowNode.Tag = Me
-        Me.ShowNode.Text = Preferences.RemoveIgnoredArticles(Me.Title.Value)
+        Me.ShowNode.Text = Pref.RemoveIgnoredArticles(Me.Title.Value)
         Dim locked As Boolean = False
         Select Case Me.State
             Case Media_Companion.ShowState.Open
@@ -64,7 +64,7 @@ Partial Public Class TvShow
             ShowNode.ForeColor = Drawing.Color.Red
         End If
 
-        If Preferences.displayMissingEpisodes AndAlso Me.MissingEpisodes.Count > 0 Then
+        If Pref.displayMissingEpisodes AndAlso Me.MissingEpisodes.Count > 0 Then
             ShowNode.ImageKey = "missing.png"
             ShowNode.SelectedImageKey = "missing.png"
         End If

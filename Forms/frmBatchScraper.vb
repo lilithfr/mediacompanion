@@ -71,7 +71,7 @@
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
         Try
             If CheckBox17.CheckState = CheckState.Checked Then
-                If Preferences.savefanart Then
+                If Pref.savefanart Then
                     Form1.rescrapeList.missingfanart = True
                 Else
                     Form1.rescrapeList.missingfanart = False
@@ -89,7 +89,7 @@
     Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
         Try
             If CheckBox18.CheckState = CheckState.Checked Then
-                If Preferences.scrapemovieposters Then
+                If Pref.scrapemovieposters Then
                     Form1.rescrapeList.missingposters = True
                 Else
                     Form1.rescrapeList.missingposters = False
@@ -149,8 +149,8 @@
 
     ReadOnly Property FilesRenamable As Boolean
         Get
-            If Preferences.basicsavemode OrElse Not Preferences.MovieManualRename Then Return False
-            If Preferences.usefoldernames Then
+            If Pref.basicsavemode OrElse Not Pref.MovieManualRename Then Return False
+            If Pref.usefoldernames Then
                 Dim tempint As Integer = MessageBox.Show("You currently have 'UseFolderName' Selected" & vbCrLf & "Are you sure you wish to Rename this Movie file" & vbCrLf & "Folder Renaming will still commence", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.No Then
                     Return False
@@ -163,7 +163,7 @@
 
     ReadOnly Property FoldersRenamable As Boolean
         Get
-            Return Preferences.MovieManualRename
+            Return Pref.MovieManualRename
         End Get
     End Property
 
@@ -196,7 +196,7 @@
 
 
     Private Sub cbFrodo_Poster_Thumbs_CheckedChanged( sender As Object,  e As EventArgs) Handles cbFrodo_Poster_Thumbs.CheckedChanged
-        If Preferences.FrodoEnabled Then
+        If Pref.FrodoEnabled Then
             Form1.rescrapeList.Frodo_Poster_Thumbs = cbFrodo_Poster_Thumbs.Checked
         Else
             cbFrodo_Poster_Thumbs.Checked = False
@@ -204,7 +204,7 @@
     End Sub
     
     Private Sub cbFrodo_Fanart_Thumbs_CheckedChanged( sender As Object,  e As EventArgs) Handles cbFrodo_Fanart_Thumbs.CheckedChanged
-        If Preferences.FrodoEnabled Then
+        If Pref.FrodoEnabled Then
             Form1.rescrapeList.Frodo_Fanart_Thumbs = cbFrodo_Fanart_Thumbs.Checked
         Else
             cbFrodo_Fanart_Thumbs.Checked = False

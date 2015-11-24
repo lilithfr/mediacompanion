@@ -152,7 +152,7 @@ Public Class MVComboList
 
     'ReadOnly Property FrodoPosterExists As Boolean
     '    Get
-    '        Return Preferences.FrodoPosterExists(nfopathandfilename)
+    '        Return Pref.FrodoPosterExists(nfopathandfilename)
     '    End Get
     'End Property
 
@@ -182,7 +182,7 @@ Public Class MVComboList
 
     'ReadOnly Property UserDefinedFileName As String
     '    Get
-    '        Dim s As String = Preferences.MovieRenameTemplate
+    '        Dim s As String = Pref.MovieRenameTemplate
     '        s = s.Replace("%T", title)
     '        s = s.Replace("%Y", year)
     '        s = s.Replace("%I", id)
@@ -204,7 +204,7 @@ Public Class MVComboList
         Dim MIN  As String = s.SubString(10,2)
         Dim SS   As String = s.SubString(12,2)
 
-        Dim x As String = Preferences.DateFormat
+        Dim x As String = Pref.DateFormat
 
         x = x.Replace("YYYY", YYYY)
         x = x.Replace("MM"  , MM  )
@@ -250,7 +250,7 @@ Public Class MVComboList
         year                    = From.fullmoviebody.year.ToInt
         Dim filecreation As New IO.FileInfo(From.fileinfo.fullpathandfilename)
         Try
-            filedate = Format(filecreation.LastWriteTime, Preferences.datePattern).ToString
+            filedate = Format(filecreation.LastWriteTime, Pref.datePattern).ToString
         Catch ex As Exception
         End Try            
         genre                   = From.fullmoviebody.genre
@@ -258,7 +258,7 @@ Public Class MVComboList
         lastplayed              = From.fullmoviebody.lastplayed
         runtime                 = From.fullmoviebody.runtime
         If String.IsNullOrEmpty(From.fileinfo.createdate) Then
-            Createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+            Createdate = Format(System.DateTime.Now, Pref.datePattern).ToString
         Else
             Createdate = From.fileinfo.createdate
         End If
@@ -278,7 +278,7 @@ Public Class MVComboList
     End Sub
 
     Public Sub AssignMissingData(From As FullMovieDetails )
-        FrodoPosterExists = Preferences.FrodoPosterExists(From.fileinfo.fullpathandfilename)
-        PreFrodoPosterExists = Preferences.PreFrodoPosterExists(From.fileinfo.fullpathandfilename)
+        FrodoPosterExists = Pref.FrodoPosterExists(From.fileinfo.fullpathandfilename)
+        PreFrodoPosterExists = Pref.PreFrodoPosterExists(From.fileinfo.fullpathandfilename)
     End Sub
 End Class

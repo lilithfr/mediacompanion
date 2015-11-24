@@ -12,9 +12,9 @@ Public Class HomeMovies
                 Dim titleDir As String = fs_info.Directory.ToString & IO.Path.DirectorySeparatorChar
                 Dim titleExt As String = fs_info.Extension
                 Dim doNotAdd As Boolean = False
-                Dim newHomeMovieDetails As New str_BasicHomeMovie(Preferences.SetDefaults)
+                Dim newHomeMovieDetails As New str_BasicHomeMovie(Pref.SetDefaults)
 
-                If Preferences.usefoldernames = True Then
+                If Pref.usefoldernames = True Then
                     scraperLog &= "  '" & fs_info.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
                 Else
                     scraperLog &= "  '" & fs_info.ToString & "'"                    'log title name

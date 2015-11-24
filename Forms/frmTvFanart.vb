@@ -21,7 +21,7 @@ Public Class frmTvFanart
     Dim title As String = Form1.titletxt.Text
     Dim itemnumber As Integer
     Dim rememberint As Integer
-    Dim maxthumbs As Integer = Preferences.maximumthumbs
+    Dim maxthumbs As Integer = Pref.maximumthumbs
     Dim pagecount As Integer = 0
     Dim currentpage As Integer = 1
     Dim downloadthumb(3000, 1) As String
@@ -130,18 +130,18 @@ Public Class frmTvFanart
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
                 maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                Preferences.maximumthumbs = maxthumbs
+                Pref.maximumthumbs = maxthumbs
             Else
                 MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
                 maxthumbs = 10
                 TextBox1.Text = "10"
-                Preferences.maximumthumbs = 10
+                Pref.maximumthumbs = 10
             End If
         Else
             MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
             maxthumbs = 10
             TextBox1.Text = "10"
-            Preferences.maximumthumbs = 10
+            Pref.maximumthumbs = 10
         End If
 
         Button5.Visible = False
@@ -768,7 +768,7 @@ Public Class frmTvFanart
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
         Try
-            openFD.InitialDirectory = Preferences.applicationPath
+            openFD.InitialDirectory = Pref.applicationPath
             openFD.Title = "Select a jpeg image file File"
             openFD.FileName = ""
             openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"

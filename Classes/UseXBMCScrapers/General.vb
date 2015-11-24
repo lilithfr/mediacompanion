@@ -496,7 +496,7 @@ Module General
     End Function
 
     Public Function InsertFileInformationTags(ByVal Entrada As String, ByVal Filename As String) As String
-        Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
+        Dim WorkingFileDetails As FullFileDetails = Pref.Get_HdTags(Filename)
         Dim FileInfoString As String = "<movie>" & vbLf & "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
 
         If WorkingFileDetails.filedetails_video.Width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.Width.Value & "</width>" & vbLf
@@ -534,7 +534,7 @@ Module General
             FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
         End If
         FileInfoString &= "<playcount>0</playcount>" & vbLf
-        FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Preferences.datePattern).ToString & "</createdate>" & vbLf
+        FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Pref.datePattern).ToString & "</createdate>" & vbLf
         Dim TempString As String = Entrada.Remove(0, Entrada.IndexOf("<id>"))
         TempString = FileInfoString & TempString
         TempString = TempString.Remove(TempString.LastIndexOf("</details>"), 10)
@@ -736,7 +736,7 @@ Module General
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "fanart"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.cbXbmcTmdbFanart.Checked = If(Preferences.XbmcTmdbScraperFanart = Nothing, Test, Convert.ToBoolean(Preferences.XbmcTmdbScraperFanart))
+                                        Form1.cbXbmcTmdbFanart.Checked = If(Pref.XbmcTmdbScraperFanart = Nothing, Test, Convert.ToBoolean(Pref.XbmcTmdbScraperFanart))
                                     Case "trailerq"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -744,7 +744,7 @@ Module General
                                         For Each thisvalue In splitvalues
                                             Form1.cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
                                         Next
-                                        Form1.cmbxXbmcTmdbHDTrailer.Text = If(Preferences.XbmcTmdbScraperTrailerQ = Nothing, Test, Preferences.XbmcTmdbScraperTrailerQ)
+                                        Form1.cmbxXbmcTmdbHDTrailer.Text = If(Pref.XbmcTmdbScraperTrailerQ = Nothing, Test, Pref.XbmcTmdbScraperTrailerQ)
                                     Case "language"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -752,11 +752,11 @@ Module General
                                         For Each thisvalue In splitvalues
                                             Form1.cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
                                         Next
-                                        Form1.cmbxXbmcTmdbTitleLanguage.Text = If(Preferences.XbmcTmdbScraperLanguage = Nothing, Test, Preferences.XbmcTmdbScraperLanguage)
+                                        Form1.cmbxXbmcTmdbTitleLanguage.Text = If(Pref.XbmcTmdbScraperLanguage = Nothing, Test, Pref.XbmcTmdbScraperLanguage)
                                     Case "ratings"
                                         Dim Test As String = NodeChild.Attributes("default").Value
-                                        If Preferences.XbmcTmdbScraperRatings = Nothing Then Preferences.XbmcTmdbScraperRatings = Test
-                                        Form1.cbXbmcTmdbIMDBRatings.Checked = If(Preferences.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
+                                        If Pref.XbmcTmdbScraperRatings = Nothing Then Pref.XbmcTmdbScraperRatings = Test
+                                        Form1.cbXbmcTmdbIMDBRatings.Checked = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
                                     Case "tmdbcertcountry"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -764,7 +764,7 @@ Module General
                                         For Each thisvalue In splitvalues
                                             Form1.cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
                                         Next
-                                        Form1.cmbxTMDBPreferredCertCountry.Text = If(Preferences.XbmcTmdbScraperCertCountry = Nothing, Test, Preferences.XbmcTmdbScraperCertCountry)
+                                        Form1.cmbxTMDBPreferredCertCountry.Text = If(Pref.XbmcTmdbScraperCertCountry = Nothing, Test, Pref.XbmcTmdbScraperCertCountry)
                                 End Select
                             Catch
                                 'empty node
@@ -924,7 +924,7 @@ Module General
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
-        If Preferences.tvdlseasonthumbs = True Then
+        If Pref.tvdlseasonthumbs = True Then
             Try
                 For Each m_node In m_nodelist
                     For Each NodeChild In m_node.ChildNodes
@@ -950,20 +950,20 @@ Module General
             End Try
         End If
         Dim myWebClient As New System.Net.WebClient()
-        If Preferences.tvdlposter = True Then
-            If Preferences.postertype = "banner" Then
+        If Pref.tvdlposter = True Then
+            If Pref.postertype = "banner" Then
                 Dim ImageFilename As String = Path & "\folder.jpg"
                 If ArtforDownload(0) <> Nothing Then
                     myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(0), ImageFilename)
                 End If
-            ElseIf Preferences.postertype = "poster" Then
+            ElseIf Pref.postertype = "poster" Then
                 Dim ImageFilename As String = Path & "\folder.jpg"
                 If ArtforDownload(1) <> Nothing Then
                     myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(1), ImageFilename)
                 End If
             End If
         End If
-        If Preferences.tvdlfanart = True Then
+        If Pref.tvdlfanart = True Then
             Dim ImageFilename As String = Path & "\fanart.jpg"
             If ArtforDownload(2) <> Nothing Then
 
@@ -971,7 +971,7 @@ Module General
 
                 'myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
                 ''-----------------Start Resize Fanart
-                'If Preferences.resizefanart = 2 Then
+                'If Pref.resizefanart = 2 Then
                 '    Dim FanartToBeResized As New Bitmap(ImageFilename)
                 '    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
                 '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
@@ -979,7 +979,7 @@ Module General
                 '    Else
                 '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
                 '    End If
-                'ElseIf Preferences.resizefanart = 3 Then
+                'ElseIf Pref.resizefanart = 3 Then
                 '    Dim FanartToBeResized As New Bitmap(ImageFilename)
                 '    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
                 '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
@@ -992,7 +992,7 @@ Module General
             End If
         End If
 
-        If Preferences.tvdlseasonthumbs = True Then
+        If Pref.tvdlseasonthumbs = True Then
             For n As Integer = 0 To SeasonPosters.Length - 1
                 Dim SeasonTemp As String = ""
                 If n <= 9 Then
@@ -1019,12 +1019,12 @@ Module General
     Public Function InsertFileEpisodeInformationTags(ByVal Entrada() As String, ByVal Filename As String, ByVal TVDBId As String) As String
         Dim WorkingFileDetails As New FullFileDetails
         Try
-            Dim wkingdetails As FullFileDetails = Preferences.Get_HdTags(Filename)
+            Dim wkingdetails As FullFileDetails = Pref.Get_HdTags(Filename)
             If Not IsNothing(wkingdetails) Then WorkingFileDetails = wkingdetails
         Catch
             Dim Something As String = Nothing
         End Try
-        'Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
+        'Dim WorkingFileDetails As FullFileDetails = Pref.Get_HdTags(Filename)
         Dim FileInfoString As String = ""
         Dim TempString As String = ""
 
@@ -1065,7 +1065,7 @@ Module General
                 End If
             End If
             FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
-            FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Preferences.datePattern).ToString & "</createdate>" & vbLf
+            FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Pref.datePattern).ToString & "</createdate>" & vbLf
             TempString = ""
             TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))
             TempString = TempString.Replace("<details>", "")
@@ -1241,7 +1241,7 @@ Module General
             Next
             If Not TempXMLEpisode1.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
                 Dim tempstring = TempXMLEpisode1.Details.StreamDetails.Video.DurationInSeconds.Value
-                If Preferences.intruntime Then
+                If Pref.intruntime Then
                     TempXMLEpisode1.Runtime.Value = Math.Round(tempstring / 60).ToString
                 Else
                     TempXMLEpisode1.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"

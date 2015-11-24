@@ -20,7 +20,7 @@ Public Class frmCoverArt
     Dim title As String = Form1.workingMovieDetails.fullmoviebody.title
     Dim itemnumber As Integer
     Dim rememberint As Integer
-    Dim maxthumbs As Integer = Preferences.maximumthumbs
+    Dim maxthumbs As Integer = Pref.maximumthumbs
     Dim pagecount As Integer = 0
     Dim currentpage As Integer = 1
     Dim movieyear As String
@@ -30,7 +30,7 @@ Public Class frmCoverArt
     Dim movietitle As String =  Form1.workingMovieDetails.fullmoviebody.title
     Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
     Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
-    Dim applicationPath As String = Preferences.applicationPath
+    Dim applicationPath As String = Pref.applicationPath
 
     Private Sub frmCoverArt_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.KeyCode = Keys.Escape Then Me.Close()
@@ -44,7 +44,7 @@ Public Class frmCoverArt
 
             If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then movieyear = Form1.workingMovieDetails.fullmoviebody.year
 
-            TextBox1.Text = Preferences.maximumthumbs.ToString
+            TextBox1.Text = Pref.maximumthumbs.ToString
 
             Dim exists As Boolean = System.IO.File.Exists(posterpath)
             If exists = True Then
@@ -408,7 +408,7 @@ Public Class frmCoverArt
                     If Convert.ToDecimal(TextBox1.Text) >= 1 Then
                         e.Handled = True
                         maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                        Preferences.maximumthumbs = maxthumbs
+                        Pref.maximumthumbs = maxthumbs
                     Else
                         MsgBox("Please Enter A Number More Than 0")
                     End If
@@ -684,18 +684,18 @@ Public Class frmCoverArt
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
                 maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                Preferences.maximumthumbs = maxthumbs
+                Pref.maximumthumbs = maxthumbs
             Else
                 MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
                 maxthumbs = 10
                 TextBox1.Text = "10"
-                Preferences.maximumthumbs = 10
+                Pref.maximumthumbs = 10
             End If
         Else
             MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
             maxthumbs = 10
             TextBox1.Text = "10"
-            Preferences.maximumthumbs = 10
+            Pref.maximumthumbs = 10
         End If
 
         btnSaveSmall.Visible = False
@@ -753,7 +753,7 @@ Public Class frmCoverArt
                         Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
                         If Not b1.Image Is Nothing Then
                             If b1.Image.Width > 20 Then
-                                Dim paths As List(Of String) = Preferences.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
+                                Dim paths As List(Of String) = Pref.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
                                 For Each pth As String In Paths
                                     b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                                     posterpath = pth
@@ -824,7 +824,7 @@ Public Class frmCoverArt
                                         .ImageLocation = (posterurls(realnumber + 1, 1))
                                     End Try
                                 End With
-                                Dim paths As List(Of String) = Preferences.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
+                                Dim paths As List(Of String) = Pref.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
                                 For Each pth As String In Paths
                                     b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                                     posterpath = pth

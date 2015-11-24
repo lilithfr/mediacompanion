@@ -77,10 +77,10 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
     'Property LogMode              As EnumLogMode = EnumLogMode.Brief
 
-    Property XbmcThumbnailsFolder As String = Preferences.XBMC_Thumbnails_Path
+    Property XbmcThumbnailsFolder As String = Pref.XBMC_Thumbnails_Path
     Property MoviesInFolder       As New Dictionary(Of String, Integer)
     Property BatchScanFolders     As List(Of String) = New List(Of String)
-    Property MovieFolderMappings  As XBMC_MC_FolderMappings = Preferences.XBMC_MC_MovieFolderMappings
+    Property MovieFolderMappings  As XBMC_MC_FolderMappings = Pref.XBMC_MC_MovieFolderMappings
     Property LastEvent            As BaseEvent = New BaseEvent()
     Property Parent               As Form1
     Property McMoviePath          As String
@@ -136,7 +136,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Public ReadOnly Property XbmcTexturesDb As SQLiteConnection
         Get
             If IsNothing(_xbmcTexturesDb) Then
-                _xbmcTexturesDb = New SQLiteConnection(Preferences.XBMC_TexturesDb_ConnectionStr)
+                _xbmcTexturesDb = New SQLiteConnection(Pref.XBMC_TexturesDb_ConnectionStr)
             End If
 
             Return _xbmcTexturesDb
@@ -457,7 +457,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
        'AddTransition( S.Ready                      , E.GetNewMovieIds          , S.Ready                      , AddressOf GetNewMovieIds       )
                                                                                                                                               
         Initialize(S.NotConnected)
-        'If Preferences.XbmcLinkReady Then Q.Write(E.ConnectReq, PriorityQueue.Priorities.medium)   
+        'If Pref.XbmcLinkReady Then Q.Write(E.ConnectReq, PriorityQueue.Priorities.medium)   
     End Sub                                                                                                                                  
 #End Region          'Constructor
 
@@ -678,7 +678,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             backSlashes    = file.Split("\").Length -1 
             forwardSlashes = file.Split("/").Length -1 
 
-            Preferences.XBMC_Link_Use_Forward_Slash =(forwardSlashes>backSlashes)
+            Pref.XBMC_Link_Use_Forward_Slash =(forwardSlashes>backSlashes)
         Catch
         End Try
 
@@ -739,7 +739,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     Sub ReconnectOrNot(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
 
         LogInfo("Reconnect or not...")
-        Q.Write(IIf(Preferences.XBMC_Link, E.Yes, E.No), PriorityQueue.Priorities.high )
+        Q.Write(IIf(Pref.XBMC_Link, E.Yes, E.No), PriorityQueue.Priorities.high )
     End Sub
 
     Sub Connect(sender As Object, args As TransitionEventArgs(Of S, E, EventArgs))
@@ -786,7 +786,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
 
         LogInfo("Fetching full movie details for all movies...")
 
-        MaxXbmcMovies = XbmcJson.xbmc.Library.Video.GetMaxXbmcMovies(Preferences.XBMC_MC_CompareFields.Get_Xbmc_Fields)
+        MaxXbmcMovies = XbmcJson.xbmc.Library.Video.GetMaxXbmcMovies(Pref.XBMC_MC_CompareFields.Get_Xbmc_Fields)
 
   '      Dim msg = New XBMC_MaxMovies_EventArgs(MaxXbmcMovies)
   '      ReportProgress(E.MC_MaxMovieDetails,msg)
@@ -1032,7 +1032,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         
         StopTimeoutTimer
 
-        If Not Preferences.XBMC_Delete_Cached_Images Then
+        If Not Pref.XBMC_Delete_Cached_Images Then
             LogInfo("Skipping delete orphaned movie images from thumbnail folder")
             Return
         End If
@@ -1156,7 +1156,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
     '            Dim xb As New XbmcProps
     '            cl.XbmcProps = xb
 
-    '            'For Each item In Preferences.XBMC_MC_CompareFields.Get_Xbmc_Fields.ToList
+    '            'For Each item In Pref.XBMC_MC_CompareFields.Get_Xbmc_Fields.ToList
 
     '            'Next
  

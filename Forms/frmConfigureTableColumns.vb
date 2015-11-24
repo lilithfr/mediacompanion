@@ -13,7 +13,7 @@ Public Class frmConfigureTableColumns
     Sub PopCheckListBox
         clbColumnsSelect.Items.Clear
         Dim i   As Integer=0
-        For Each column In Preferences.tableview
+        For Each column In Pref.tableview
             tablecolumns.Add(column)
             Dim lbl As New Label
             Dim tempdata() As String
@@ -35,7 +35,7 @@ Public Class frmConfigureTableColumns
     Private Sub ConfigureFilters
         Dim show    As Boolean
         Dim item    As String
-        Preferences.tableview.Clear()
+        Pref.tableview.Clear()
         For i=0 to clbColumnsSelect.Items.Count-1
             item        = clbColumnsSelect.Items(i)
             show        = clbColumnsSelect.GetItemChecked(i)
@@ -47,7 +47,7 @@ Public Class frmConfigureTableColumns
                     Exit For
                 End If
             Next
-            Preferences.tableview.Add(newdata)
+            Pref.tableview.Add(newdata)
         Next
     End Sub
 

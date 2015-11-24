@@ -45,13 +45,13 @@ Public Class MediaStubs
             theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
             theFolderBrowser.ShowNewFolderButton = True
             theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
+            theFolderBrowser.SelectedPath = Pref.lastpath
             If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 Dim newfolder As String = ""
                 newfolder = theFolderBrowser.SelectedPath
-                If Preferences.stubofflinefolder(newfolder) Then
-                    Preferences.stubfolder = newfolder
-                    Preferences.ConfigSave()
+                If Pref.stubofflinefolder(newfolder) Then
+                    Pref.stubfolder = newfolder
+                    Pref.ConfigSave()
                     tb_Stub_folder.Text = newfolder
                 Else
                     MsgBox ("Folder " & vbCrLf & "[" & newfolder & "]" & vbCrLf & "already in Movie Folder List")
@@ -65,8 +65,8 @@ Public Class MediaStubs
     End Sub
 
     Private Sub btn_StubSetDefaultMessage_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_StubSetDefaultMessage.Click
-            Preferences.stubmessage = tb_Stub_Message.Text
-            Preferences.ConfigSave() 
+            Pref.stubmessage = tb_Stub_Message.Text
+            Pref.ConfigSave() 
     End Sub
 
     Private Sub btn_StubSaveStub_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_StubSaveStub.Click
@@ -92,11 +92,11 @@ Public Class MediaStubs
     End Sub
 
     Private Sub btn_StubClear_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles btn_StubClear.Click
-        tb_Stub_folder.text = Preferences.stubfolder
+        tb_Stub_folder.text = Pref.stubfolder
         tb_Stub_Alt_Title.Text = ""
         tb_Stub_filename.Text = ""
         tb_disc_filename.Text = ""
-        tb_Stub_Message.Text = Preferences.stubmessage
+        tb_Stub_Message.Text = Pref.stubmessage
         cb_Stub_Formats.SelectedIndex = 0
         UpdateStubFilename()
         UpdateStubfile()
@@ -142,7 +142,7 @@ Public Class MediaStubs
 #Region "Functions"
     Private Function savestub As Boolean
         Dim success As Boolean = False
-        Dim StubFileToSave As String = Preferences.stubfolder & "\" & StubFilename
+        Dim StubFileToSave As String = Pref.stubfolder & "\" & StubFilename
         If IO.File.Exists(StubFileToSave) Then
             Dim fsize As Long = Utilities.GetFileSize(StubFileToSave)
                 If fsize > 600 Then
@@ -160,7 +160,7 @@ Public Class MediaStubs
 
             Dim output As XmlTextWriter = Nothing
             Try
-                output = New XmlTextWriter(Preferences.stubfolder & "\" & StubFilename, System.Text.Encoding.UTF8)
+                output = New XmlTextWriter(Pref.stubfolder & "\" & StubFilename, System.Text.Encoding.UTF8)
                 output.Formatting = Formatting.Indented
                 doc.WriteTo(output)
             Catch 
@@ -177,7 +177,7 @@ Public Class MediaStubs
 
     Private Function loadstub As Boolean
         Dim success As Boolean = False
-        Dim StubFileToLoad As String = Preferences.stubfolder & "\" & StubFilename
+        Dim StubFileToLoad As String = Pref.stubfolder & "\" & StubFilename
         Dim loadfail As Boolean = False
         Try
             Dim lstub As New XmlDocument
@@ -221,7 +221,7 @@ Public Class MediaStubs
             End If
             If loadfail Then
                 tb_Stub_Alt_Title.Text = tb_Stub_filename.Text
-                tb_Stub_Message.Text = Preferences.stubmessage 
+                tb_Stub_Message.Text = Pref.stubmessage 
             End If
             tb_disc_filename.Text = StubFilename 
             UpdateStubfile()
@@ -238,7 +238,7 @@ Public Class MediaStubs
         Try
             Dim filebrowser As New OpenFileDialog
             Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-            filebrowser.InitialDirectory = Preferences.stubfolder
+            filebrowser.InitialDirectory = Pref.stubfolder
             filebrowser.Filter = "Disc Files|*.disc"
             filebrowser.Title = "Select Media Stub ""disc"" file to load"
             If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then

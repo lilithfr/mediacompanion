@@ -70,8 +70,8 @@ Public Class clsGridViewMovie
             column.Visible   = False
         Next
 
-        dgv.Columns("Watched").Visible = Preferences.MovieList_ShowColWatched
-        dgv.Columns("ImgPlot").Visible = Preferences.MovieList_ShowColPlot   
+        dgv.Columns("Watched").Visible = Pref.MovieList_ShowColWatched
+        dgv.Columns("ImgPlot").Visible = Pref.MovieList_ShowColPlot   
 
 
         If dgv.Columns("Watched").Visible Then
@@ -102,7 +102,7 @@ Public Class clsGridViewMovie
         End If
 
         'Highlight titles in datagridview with missing video files.
-        If Preferences.incmissingmovies Then
+        If Pref.incmissingmovies Then
             For Each row As DataGridViewRow In dgv.Rows
                 If row.Cells("videomissing").Value = True Then
                     row.DefaultCellStyle.BackColor = Color.Red                

@@ -71,7 +71,7 @@ Public Class frmXbmcExport
 
     Private Sub ShowMCPaths()
         If MovieList.Count > 0 Then
-            For Each ph In Preferences.movieFolders
+            For Each ph In Pref.movieFolders
                 If Not ph.selected Then Continue For
                 Dim n As Integer = MCExportdgv.Rows.Add()
                 MCExportdgv.Rows(n).Cells(0).Value = "Movie"
@@ -80,7 +80,7 @@ Public Class frmXbmcExport
             Next
         End If
         If TVSeries.Count > 0 Then
-            For Each ph In Preferences.tvRootFolders
+            For Each ph In Pref.tvRootFolders
                 If Not ph.selected Then Continue For
                 Dim n As Integer = MCExportdgv.Rows.Add()
                 MCExportdgv.Rows(n).Cells(0).Value = "TV"
@@ -131,7 +131,7 @@ Public Class frmXbmcExport
             Me.ProgressBar1.Refresh()
         Next
         If MovieList.Count > 0 Then
-            For Each ph In Preferences.movieFolders
+            For Each ph In Pref.movieFolders
                 If Not ph.selected Then Continue For
                 Dim t As New XBMCPaths
                 t.rootpath = ph.rpath
@@ -167,7 +167,7 @@ Public Class frmXbmcExport
             Me.ProgressBar1.Refresh()
         Next
         If TVSeries.Count > 0 Then
-            For Each ph In Preferences.tvRootFolders
+            For Each ph In Pref.tvRootFolders
                 If Not ph.selected Then Continue For
                 Dim t As New XBMCPaths
                 t.rootpath = ph.rpath
@@ -218,7 +218,7 @@ Public Class frmXbmcExport
     Private Sub TransActorImages(ByVal mov As FullMovieDetails)
         Try
             For Each actr In mov.listactors
-                Dim temppath = Preferences.GetActorPath(mov.fileinfo.fullpathandfilename, actr.actorname, actr.actorid)
+                Dim temppath = Pref.GetActorPath(mov.fileinfo.fullpathandfilename, actr.actorname, actr.actorid)
                 If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
                     Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
                     File.Copy(temppath, opActors & actfilename, True)
@@ -232,7 +232,7 @@ Public Class frmXbmcExport
     Private Sub TransTvActorImages(ByVal TvActor As ActorList, ByVal nfopath As String)
         Try
             For Each actr In TvActor
-                Dim temppath = Preferences.GetActorPath(nfopath, actr.actorname, actr.actorid)
+                Dim temppath = Pref.GetActorPath(nfopath, actr.actorname, actr.actorid)
                 If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
                     Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
                     File.Copy(temppath, opActors & actfilename, True)
@@ -335,7 +335,7 @@ Public Class frmXbmcExport
             child = thismovie.CreateElement("votes")
             Dim votes As String = mov.fullmoviebody.votes
             If Not String.IsNullOrEmpty(votes) then
-                If Not Preferences.MovThousSeparator Then
+                If Not Pref.MovThousSeparator Then
                     votes = votes.Replace(",", "")
                 Else
                     If Not votes.Contains(",") Then
@@ -522,7 +522,7 @@ Public Class frmXbmcExport
             root.AppendChild(child)
 
             Dim actorstosave As Integer = mov.listactors.Count
-            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+            If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
             For f = 0 To actorstosave - 1
                 child = thismovie.CreateElement("actor")
                 actorchild = thismovie.CreateElement("name")
@@ -981,7 +981,7 @@ Public Class frmXbmcExport
 
     Private Function Formatdate(ByVal thisdate As String) As String
         Try
-            Return DateTime.ParseExact(thisdate, Preferences.datePattern, Nothing).ToString(Preferences.DateFormat2)
+            Return DateTime.ParseExact(thisdate, Pref.datePattern, Nothing).ToString(Pref.DateFormat2)
         Catch
             Return "2001-01-01 01:01:00"
         End Try

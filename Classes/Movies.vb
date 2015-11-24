@@ -130,7 +130,7 @@ Public Class Movies
 
     Public ReadOnly Property TagFilter As List(Of String)
         Get
-            Dim q2 = From x In Preferences.movietags
+            Dim q2 = From x In Pref.movietags
            
             Return q2.AsEnumerable.ToList
         End Get
@@ -306,7 +306,7 @@ Public Class Movies
             lst.Add( Unwatched                )
             lst.Add( ScrapeError              )
             lst.Add( Duplicates               )
-            If Not Preferences.DisableNotMatchingRenamePattern Then
+            If Not Pref.DisableNotMatchingRenamePattern Then
                 lst.Add( NotMatchingRenamePattern )
             End If
             lst.Add( MissingCertificate       )
@@ -329,13 +329,13 @@ Public Class Movies
             lst.Add( MissingIMDBId            )
             lst.Add( MissingSource            )
             lst.Add( MissingDirector          )
-            If Preferences.ShowExtraMovieFilters Then
+            If Pref.ShowExtraMovieFilters Then
                 lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
                 lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
                 lst.Add( "Imdb not in folder name & year mismatch (" & NotImdbInFolderNameAndYearMisMatch & ")")
                 lst.Add( "Plot same as Outline (" &  PlotEqOutline & ")")
             End If
-            If Preferences.XBMC_Link Then
+            If Pref.XBMC_Link Then
                 If Not IsNothing(Form1.MC_Only_Movies) Then lst.Add( MC_Only_Movies )
                 If Not IsNothing(XbmcMcMovies) Then lst.Add( "Different titles (" & Xbmc_DifferentTitles.Count.ToString & ")"  )
             End If
@@ -554,15 +554,15 @@ Public Class Movies
                 Group By 
                     x.ActorName Into NumFilms=Count 
                 Where 
-                    NumFilms>=Preferences.ActorsFilterMinFilms
+                    NumFilms>= Pref.ActorsFilterMinFilms
             
-            If Preferences.MovieFilters_Actors_Order=0 Then 
+            If Pref.MovieFilters_Actors_Order=0 Then 
                 q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
             Else
                 q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
             End If
 
-            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxActorsInFilter
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxActorsInFilter
         End Get
     End Property    
 
@@ -572,15 +572,15 @@ Public Class Movies
                 Group By 
                     x.ActorName Into NumFilms=Count 
                 Where 
-                    NumFilms>=Preferences.DirectorsFilterMinFilms
+                    NumFilms>=Pref.DirectorsFilterMinFilms
                                 
-            If Preferences.MovieFilters_Directors_Order=0 Then 
+            If Pref.MovieFilters_Directors_Order=0 Then 
                 q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
             Else
                 q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
             End If
 
-            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxDirectorsInFilter
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxDirectorsInFilter
         End Get
     End Property    
 
@@ -772,15 +772,15 @@ Public Class Movies
                 Group By 
                     x.MovieSet.MovieSetName Into NumFilms=Count
                 Where 
-                    NumFilms>=Preferences.SetsFilterMinFilms 
+                    NumFilms>=Pref.SetsFilterMinFilms 
 
-            If Preferences.MovieFilters_Sets_Order=0 Then 
+            If Pref.MovieFilters_Sets_Order=0 Then 
                 q = From x In q Order by x.NumFilms Descending, x.MovieSetName Ascending
             Else
                 q = From x In q Order by x.MovieSetName.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Return From x In q Select x.MovieSetName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxSetsInFilter 
+            Return From x In q Select x.MovieSetName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxSetsInFilter 
         End Get
     End Property    
 
@@ -939,7 +939,7 @@ Public Class Movies
 
         Dim folders As New List(Of String)
 
-        AddOnlineFolders ( folders , Preferences.movieFolders )
+        AddOnlineFolders ( folders , Pref.movieFolders )
         AddOfflineFolders( folders )
 
         Dim i = 0
@@ -976,7 +976,7 @@ Public Class Movies
     End Sub
     
     Public Sub AddOnlineFolders( folders As List(Of String), searchfolders As List(Of str_RootPaths) )
-        For Each moviefolder In searchfolders 'Preferences.movieFolders
+        For Each moviefolder In searchfolders 'Pref.movieFolders
             If Not moviefolder.selected Then Continue For
             Dim dirInfo As New DirectoryInfo(moviefolder.rpath)
 
@@ -997,7 +997,7 @@ Public Class Movies
     End Sub
 
     Public Sub AddOnlineFolders( folders As List(Of String), searchfolders As List(Of String) )
-        For Each moviefolder In searchfolders 'Preferences.movieFolders
+        For Each moviefolder In searchfolders 'Pref.movieFolders
             Dim dirInfo As New DirectoryInfo(moviefolder)
 
             If dirInfo.Exists Then
@@ -1017,7 +1017,7 @@ Public Class Movies
     End Sub
 
     Public Sub AddOfflineFolders( folders As List(Of String) )
-        For Each moviefolder In Preferences.offlinefolders
+        For Each moviefolder In Pref.offlinefolders
 
             Dim dirInfo As New DirectoryInfo(moviefolder)
 
@@ -1056,7 +1056,7 @@ Public Class Movies
 
     Public Sub AddNewMovies(DirPath As String)   'Search for valid video file
 
-        If Preferences.ExcludeFolders.Match(DirPath) Then 
+        If Pref.ExcludeFolders.Match(DirPath) Then 
             ReportProgress(,"Skipping excluded folder [" & DirPath & "] from scrape." & vbCrLf)
             Return
         End If
@@ -1082,7 +1082,7 @@ Public Class Movies
         Next
         If found > 0 then
             ReportProgress(,String.Format("{0} new movie{1} found in [{2}]", found, If(found=1,"","s"), DirPath) & vbCrLf)
-            Preferences.DoneAMov = True
+            Pref.DoneAMov = True
         End IF
     End Sub
 
@@ -1129,15 +1129,15 @@ Public Class Movies
             ReportProgress( "Scraping " & i & " of " & NewMovies.Count )
             
             ScrapeMovie(newMovie)
-            Preferences.googlecount += 1
-            Preferences.engineno += 1
-            If Preferences.engineno = 3 Then Preferences.engineno = 0
+            Pref.googlecount += 1
+            Pref.engineno += 1
+            If Pref.engineno = 3 Then Pref.engineno = 0
             If newMovie.TimingsLog <> "" then
                 ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
             End If
             If Cancelled then Exit Sub
         Next
-        Preferences.googlecount = 0
+        Pref.googlecount = 0
         ReportProgress( ,"!!! " & vbCrLf & "!!! Finished" )
     End Sub
 
@@ -1153,7 +1153,7 @@ Public Class Movies
 
         movie.DeleteScrapedFiles(True)
 
-        If Not Preferences.MusicVidScrape Then movie.ScrapedMovie.Init
+        If Not Pref.MusicVidScrape Then movie.ScrapedMovie.Init
 
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False
@@ -1237,7 +1237,7 @@ Public Class Movies
         movie.Rescrape = True
 
         Dim imdbid As String = movie.PossibleImdb 
-        If Preferences.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then  'AndAlso tmdbid <> "" 
+        If Pref.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then  'AndAlso tmdbid <> "" 
             imdbid = tmdbid
         End If
         movie.DeleteScrapedFiles(False)
@@ -1312,7 +1312,7 @@ Public Class Movies
         MovieCache.Clear
 
         Dim movielist  As New XmlDocument
-        Dim objReader  As New StreamReader(Preferences.workingProfile.MovieCache)
+        Dim objReader  As New StreamReader(Pref.workingProfile.MovieCache)
         Dim tempstring As String = objReader.ReadToEnd
         objReader.Close
         objReader = Nothing
@@ -1430,7 +1430,7 @@ Public Class Movies
 
 
     Public Sub SaveMovieCache
-        Dim cacheFile As String = Preferences.workingProfile.MovieCache
+        Dim cacheFile As String = Pref.workingProfile.MovieCache
         If File.Exists(cacheFile) Then
             File.Delete(cacheFile)
         End If
@@ -1544,7 +1544,7 @@ Public Class Movies
     Public Sub MVCacheLoadFromNfo()
         tmpMVCache.Clear()
         Dim t As New List(Of String)
-        For each item In Preferences.MVidFolders
+        For each item In Pref.MVidFolders
             If item.selected Then
                 t.Add(item.rpath)
             End If
@@ -1566,20 +1566,20 @@ Public Class Movies
        '' End If
 
         Dim t As New List(Of String)
-        For Each rtpath In Preferences.movieFolders 
+        For Each rtpath In Pref.movieFolders 
                 If rtpath.selected Then
                     t.Add(rtpath.rpath)
                 End If
             Next
-        't.AddRange(Preferences.movieFolders)
-        t.AddRange(Preferences.offlinefolders)
+        't.AddRange(Pref.movieFolders)
+        t.AddRange(Pref.offlinefolders)
 
         ReportProgress("Searching movie folders...")
         mov_NfoLoad(t)
 
         If Cancelled Then Exit Sub
 
-        If Not Preferences.usefoldernames Then
+        If Not Pref.usefoldernames Then
             For Each movie In TmpMovieCache
                 If movie.filename <> Nothing Then movie.filename = movie.filename.Replace(".nfo", "")
             Next
@@ -1614,7 +1614,7 @@ Public Class Movies
         MovieCache.AddRange(TmpMovieCache)
         Rebuild_Data_GridViewMovieCache()
 
-        If Preferences.XbmcLinkReady Then
+        If Pref.XbmcLinkReady Then
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
             Form1.XbmcControllerQ.Write(evt)
         End If
@@ -1635,13 +1635,13 @@ Public Class Movies
 
         Dim RootMovieFolders As New List(Of String)
 
-        For Each rtpath In Preferences.movieFolders 
+        For Each rtpath In Pref.movieFolders 
                 If rtpath.selected Then
                     RootMovieFolders.Add(rtpath.rpath)
                 End If
             Next
-        'RootMovieFolders.AddRange(Preferences.movieFolders)
-        RootMovieFolders.AddRange(Preferences.offlinefolders)
+        'RootMovieFolders.AddRange(Pref.movieFolders)
+        RootMovieFolders.AddRange(Pref.offlinefolders)
 
         ReportProgress("Searching movie folders...")
 
@@ -1694,7 +1694,7 @@ Public Class Movies
 
         Rebuild_Data_GridViewMovieCache
 
-        If Preferences.XbmcLinkReady Then
+        If Pref.XbmcLinkReady Then
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
             Form1.XbmcControllerQ.Write(evt)
         End If
@@ -1784,7 +1784,7 @@ Public Class Movies
 
         bw.ReportProgress( -1, progress.Clone )
 
-        If Not Preferences.usefoldernames Then
+        If Not Pref.usefoldernames Then
             For Each movie In Cache
                 If movie.filename <> Nothing Then movie.filename = movie.filename.Replace(".nfo", "")
             Next
@@ -1792,7 +1792,7 @@ Public Class Movies
     End Sub
 
     Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
-        Dim incmissing As Boolean = Preferences.incmissingmovies 
+        Dim incmissing As Boolean = Pref.incmissingmovies 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
 
             Application.DoEvents
@@ -1807,8 +1807,8 @@ Public Class Movies
        
             movie.LoadNFO(False)
 
-            If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
-                Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+            If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
+                Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
             End If
             Cache.Add(movie.Cache)
         Next
@@ -1851,7 +1851,7 @@ Public Class Movies
     End Sub
 
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
-        Dim incmissing As Boolean = Preferences.incmissingmovies 
+        Dim incmissing As Boolean = Pref.incmissingmovies 
         If IsNothing(dirInfo) Then Exit Sub
         For Each oFileInfo In dirInfo.GetFiles(pattern)
             Application.DoEvents
@@ -1864,8 +1864,8 @@ Public Class Movies
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
-                If Not Preferences.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
-                    Preferences.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+                If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
+                    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
                 End If
                 TmpMovieCache.Add(movie.Cache)
             Catch
@@ -1935,7 +1935,7 @@ Public Class Movies
         Try
             Dim aMovie = New Movie(Me, nfoPathAndFilename)
             aMovie.DeleteScrapedFiles(True, DeleteArtwork)
-            Dim isRoot As Boolean = Preferences.GetRootFolderCheck(nfoPathAndFilename)
+            Dim isRoot As Boolean = Pref.GetRootFolderCheck(nfoPathAndFilename)
             If Not isRoot AndAlso DeleteArtwork Then
                 aMovie.DeleteExtraFiles()
                 aMovie.DeleteFanarTvFiles()
@@ -1952,15 +1952,15 @@ Public Class Movies
     End Sub
 
     Sub LoadMovieSetCaches()
-        LoadMovieSetCache(_moviesetDb, "movieset", Preferences.workingProfile.moviesetcache)
+        LoadMovieSetCache(_moviesetDb, "movieset", Pref.workingProfile.moviesetcache)
     End Sub
 
     Sub LoadActorCache()
-        LoadPersonCache(_actorDb,"actor",Preferences.workingProfile.actorcache)
+        LoadPersonCache(_actorDb,"actor",Pref.workingProfile.actorcache)
     End Sub
 
     Sub LoadDirectorCache()
-        LoadPersonCache(_directorDb,"director",Preferences.workingProfile.DirectorCache)
+        LoadPersonCache(_directorDb,"director",Pref.workingProfile.DirectorCache)
     End Sub
 
     Sub LoadPersonCache(peopleDb As List(Of ActorDatabase),typeName As String,  fileName As String)
@@ -2053,15 +2053,15 @@ Public Class Movies
     End Sub
 
     Sub SaveActorCache()
-        SavePersonCache(ActorDb,"actor",Preferences.workingProfile.actorcache)
+        SavePersonCache(ActorDb,"actor",Pref.workingProfile.actorcache)
     End Sub
 
     Sub SaveDirectorCache()
-        SavePersonCache(DirectorDb,"director",Preferences.workingProfile.directorCache)
+        SavePersonCache(DirectorDb,"director",Pref.workingProfile.directorCache)
     End Sub
 
     Sub SaveMovieSetCache()
-        SaveMovieSetCache(MovieSetDB, "movieset", Preferences.workingProfile.moviesetcache)
+        SaveMovieSetCache(MovieSetDB, "movieset", Pref.workingProfile.moviesetcache)
     End Sub
 
     Sub SavePersonCache(peopleDb As List(Of ActorDatabase), typeName As String, fileName As String)
@@ -2186,12 +2186,12 @@ Public Class Movies
     End Sub
 
     Public Sub RebuildCaches
-        'If Preferences.UseMultipleThreads Then
+        'If Pref.UseMultipleThreads Then
         '    movRebuildCaches = False
         'Else
         '    movRebuildCaches = True
         'End If
-        movRebuildCaches = Not Preferences.UseMultipleThreads 
+        movRebuildCaches = Not Pref.UseMultipleThreads 
         RebuildMovieCache
         If Cancelled Then Exit Sub
         'If Not movRebuildCaches Then RebuildMoviePeopleCaches
@@ -2200,7 +2200,7 @@ Public Class Movies
     End Sub
 
     Public Sub RebuildMovieCache()
-        If Preferences.UseMultipleThreads Then
+        If Pref.UseMultipleThreads Then
             '_actorDB      .Clear()
             '_directorDb   .Clear()
             '_moviesetDb   .Clear()
@@ -2286,7 +2286,7 @@ Public Class Movies
         MovieCache             .RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
         Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
 
-        If Preferences.XbmcLinkReady Then
+        If Pref.XbmcLinkReady Then
             Dim media As String = Utilities.GetFileName(fullpathandfilename,True)
 
             If media <> "none" Then
@@ -2301,7 +2301,7 @@ Public Class Movies
     End Sub
 
     Public Shared Sub SpinUpDrives
-        For each item In Preferences.movieFolders
+        For each item In Pref.movieFolders
             If Not item.selected Then Continue For
             Dim bw As BackgroundWorker = New BackgroundWorker
 
@@ -2330,7 +2330,7 @@ Public Class Movies
 
         Dim folders As New List(Of String)
 
-        AddOnlineFolders ( folders , Preferences.MVidFolders )
+        AddOnlineFolders ( folders , Pref.MVidFolders )
         'AddOfflineFolders( folders )
 
         Dim i = 0

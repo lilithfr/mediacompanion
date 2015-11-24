@@ -11,7 +11,7 @@ Public Class frmoutputlog
         'Catch ex As Exception
         '    ExceptionHandler.LogError(ex)
         'End Try
-        If Preferences.MultiMonitoEnabled Then
+        If Pref.MultiMonitoEnabled Then
             Me.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
             Me.Width = 861
             Me.Height = 580
@@ -84,7 +84,7 @@ Public Class frmoutputlog
 
         TextBox1.Text = ""
 
-        Preferences.logview = ComboBoxLogViewType.SelectedIndex
+        Pref.logview = ComboBoxLogViewType.SelectedIndex
 
         Dim builder As New StringBuilder
 
@@ -100,7 +100,7 @@ Public Class frmoutputlog
             ElseIf line.Contains("!!! ") Then 
                 builder.Append(Strings.Right(line, Strings.Len(line) - 4)).AppendLine
 
-            ElseIf (Preferences.logview=0 OrElse FullViewOverride) Then          '0 = Full log view -> Append details
+            ElseIf (Pref.logview=0 OrElse FullViewOverride) Then          '0 = Full log view -> Append details
                 builder.Append(line).AppendLine
             End If
         Next
@@ -109,7 +109,7 @@ Public Class frmoutputlog
     End Sub
 
     Private Sub frmoutputlog_Shown( sender As System.Object,  e As System.EventArgs) Handles MyBase.Shown
-        ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
+        ComboBoxLogViewType.SelectedIndex = Pref.logview 'set the combobox entry as per the preferences
     End Sub
 
     Private Sub frmoutputlog_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown 

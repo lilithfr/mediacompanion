@@ -9,7 +9,7 @@ Public Class ListOfProfiles
 
     Property DirectorCache  As String
         Get
-            Return IIf(_directorCache="",Preferences.applicationPath & "\Settings\directorcache.xml",_directorCache)
+            Return IIf(_directorCache="", Pref.applicationPath & "\Settings\directorcache.xml", _directorCache)
         End Get
 
         Set(value As String)

@@ -26,7 +26,7 @@ Public Class ucFanartTvTv
 
     Public Sub ucFanartTv_Refresh(ByVal ThisTvShow As TvShow)
         nodata = False
-        'isroot = Preferences.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
+        'isroot = Pref.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
         If WorkingShow.Title.Value <> ThisTvShow.Title.Value Then
             WorkingShow = ThisTvShow
         Else
@@ -358,12 +358,12 @@ Public Class ucFanartTvTv
                         seasonno = "-specials"
                     End If
                     savepath = WorkingShow.FolderPath & artType.Replace("season", "season" & seasonno)
-                    If Preferences.FrodoEnabled Then savepaths.Add(savepath)
-                    If Preferences.EdenEnabled AndAlso artType.contains("-poster.jpg") Then
+                    If Pref.FrodoEnabled Then savepaths.Add(savepath)
+                    If Pref.EdenEnabled AndAlso artType.contains("-poster.jpg") Then
                         savepath = savepath.Replace("-poster.jpg", ".tbn")
                         savepaths.Add(savepath)
                     End If
-                    If Preferences.seasonfolderjpg AndAlso WorkingShow.Episodes.Count > 0 Then
+                    If Pref.seasonfolderjpg AndAlso WorkingShow.Episodes.Count > 0 Then
                         For Each ep In WorkingShow.Episodes
                             Dim TrueSeasonFolder As String = Nothing
                             Dim folder As Boolean = False
@@ -383,16 +383,16 @@ Public Class ucFanartTvTv
             Else
                 If artType = "poster.jpg" Or artType = "fanart.jpg" or artType = "banner.jpg" Then
                     savepaths.Add(WorkingShow.FolderPath & artType)
-                    If Preferences.FrodoEnabled Then
+                    If Pref.FrodoEnabled Then
                         savepaths.Add(WorkingShow.FolderPath & "season-all-" & artType)
                     End If
-                    If Preferences.EdenEnabled Then
+                    If Pref.EdenEnabled Then
                         If artType = "poster.jpg" Then
                             savepaths.Add(WorkingShow.FolderPath & "folder.jpg")
                             savepaths.Add(WorkingShow.FolderPath & "season-all.tbn")
                         End If
                     End If
-                    If Preferences.tvfolderjpg AndAlso artType = "poster.jpg" Then
+                    If Pref.tvfolderjpg AndAlso artType = "poster.jpg" Then
                         savepaths.Add(WorkingShow.FolderPath & "folder.jpg")
                     End If
                 End If

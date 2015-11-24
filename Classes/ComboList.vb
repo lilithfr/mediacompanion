@@ -273,7 +273,7 @@ Public Class ComboList
 
             Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
 
-            If isFirstPart And Preferences.namemode="1" Then
+            If isFirstPart And Pref.namemode="1" Then
                 Dim i As Integer  
                 result &= stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
             End If
@@ -284,7 +284,7 @@ Public Class ComboList
 
     'ReadOnly Property FrodoPosterExists As Boolean
     '    Get
-    '        Return Preferences.FrodoPosterExists(fullpathandfilename)
+    '        Return Pref.FrodoPosterExists(fullpathandfilename)
     '    End Get
     'End Property
 
@@ -302,7 +302,7 @@ Public Class ComboList
 
     ReadOnly Property UserDefinedFileName As String
         Get
-            Dim s As String = Preferences.MovieRenameTemplate
+            Dim s As String = Pref.MovieRenameTemplate
 
             s = s.Replace("%T", title)
             s = s.Replace("%Y", year)

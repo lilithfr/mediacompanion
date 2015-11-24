@@ -123,7 +123,7 @@ Public Class frmMessageBox
 
     Private Sub Button1_Click( sender As System.Object,  e As System.EventArgs) Handles Button1.Click
         Try
-            Preferences.WebSite = btn1site
+            Pref.WebSite = btn1site
             Me.Close()
         Catch ex As Exception
 
@@ -133,7 +133,7 @@ Public Class frmMessageBox
 
     Private Sub Button2_Click( sender As System.Object,  e As System.EventArgs) Handles Button2.Click
         Try
-            Preferences.WebSite = "imdb"
+            Pref.WebSite = "imdb"
             Me.Close()
         Catch ex As Exception
 

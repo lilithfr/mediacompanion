@@ -30,7 +30,7 @@ Public Class ucFanartTv
 
     Public Sub ucFanartTv_Refresh(ByVal moviedetails As FullMovieDetails)
         nodata = False
-        isroot = Preferences.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
+        isroot = Pref.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
         If workingMovDetails.fullmoviebody.title <> moviedetails.fullmoviebody.title Then
             workingMovDetails = Form1.workingMovieDetails
             MovSetToggle = False
@@ -354,12 +354,12 @@ Public Class ucFanartTv
                 If MovSetToggle Then
                     savepath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", artType)
                 Else
-                    If Preferences.MovFanartNaming Then
+                    If Pref.MovFanartNaming Then
                         savepath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-" & artType)
                     End If
                 End If
                 Dim success As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
-                If Preferences.posterjpg AndAlso Preferences.createfolderjpg AndAlso artType.Contains("poster.jpg") Then
+                If Pref.posterjpg AndAlso Pref.createfolderjpg AndAlso artType.Contains("poster.jpg") Then
                     savepath = savepath.Replace(artType, "folder.jpg")
                     Dim asuccess As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
                 End If

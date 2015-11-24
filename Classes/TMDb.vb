@@ -7,7 +7,7 @@ Public Class TMDb
     Public Const Key          = "3f026194412846e530a208cf8a39e9cb"
     Public Const TMDB_EXC_MSG = "TMDb is unavailable!"
 
-    Public Shared LanguagesFile               = Preferences.applicationPath & "\classes\tmdb_languages.xml"
+    Public Shared LanguagesFile               = Pref.applicationPath & "\classes\tmdb_languages.xml"
     Public Const  TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
     Public Const  TMDbConfigFileMaxAgeInDays  = 14
 
@@ -47,7 +47,7 @@ Public Class TMDb
     Public Property ValidBackDrops As New List(Of WatTmdb.V3.Backdrop)
     Public Property ValidPosters   As New List(Of WatTmdb.V3.Poster  )
     Public Property ValidKeyWords  As WatTmdb.V3.TmdbMovieKeywords
-    Public Property MaxGenres      As Integer = Media_Companion.Preferences.maxmoviegenre
+    Public Property MaxGenres      As Integer = Media_Companion.Pref.maxmoviegenre
 
 
     #End Region 'Read-write properties
@@ -81,10 +81,10 @@ Public Class TMDb
  
     Shared Public ReadOnly Property LanguageCodes As List(Of String)
         Get
-            If Media_Companion.Preferences.TMDbUseCustomLanguage and Media_Companion.Preferences.TMDbCustomLanguageValue<>"" then        
-                Return Media_Companion.Preferences.TMDbCustomLanguageValue.Split(",").ToList
+            If Media_Companion.Pref.TMDbUseCustomLanguage and Media_Companion.Pref.TMDbCustomLanguageValue<>"" then        
+                Return Media_Companion.Pref.TMDbCustomLanguageValue.Split(",").ToList
             Else
-                Return GetLanguageCodes(Media_Companion.Preferences.TMDbSelectedLanguageName)
+                Return GetLanguageCodes(Media_Companion.Pref.TMDbSelectedLanguageName)
             End If
         End Get
     End Property
@@ -135,7 +135,7 @@ Public Class TMDb
             Try
                 Dim x = _cast.cast.Count
                 If x < 1 Then Return alist
-                For i = 0 to Preferences.maxactors-1
+                For i = 0 to Pref.maxactors-1
                     If x = i Then Exit For
                     Dim newact As New str_MovieActors
                     newact.actorid      = _cast.cast(i).id
@@ -255,7 +255,7 @@ Public Class TMDb
                 Next
 
                 For Each country In _releases.countries
-                    If country.iso_3166_1.ToLower = Preferences.XbmcTmdbScraperCertCountry Then
+                    If country.iso_3166_1.ToLower = Pref.XbmcTmdbScraperCertCountry Then
                         Return country.certification
                     End If
                 Next

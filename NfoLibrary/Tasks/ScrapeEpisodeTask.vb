@@ -56,7 +56,7 @@ Namespace Tasks
                 Dim Temp As List(Of String) = GetArgumentSafe("regexlist")
 
                 If Temp Is Nothing Then
-                    Return Preferences.tv_RegexScraper
+                    Return Pref.tv_RegexScraper
                 End If
 
                 Return Temp
@@ -138,7 +138,7 @@ Namespace Tasks
             '                End Try
             '            End If
             '            If bckgroundscanepisodes.CancellationPending Then
-            '                Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            '                Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             '                Exit Sub
             '            End If
             '        Loop Until M2.Success = False
@@ -153,7 +153,7 @@ Namespace Tasks
             'Dim EpisodeName As String = ""
             'For Each Shows In Cache.TvCache.Shows
             '    'If bckgroundscanepisodes.CancellationPending Then
-            '    '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            '    '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             '    '    Exit Sub
             '    'End If
             '    If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
@@ -169,18 +169,18 @@ Namespace Tasks
             '    End If
             'Next
             'If episodearray.Count > 1 Then
-            '    Preferences.tvScraperLog &= "Multipart episode found: " & vbCrLf
-            '    Preferences.tvScraperLog &= "Season: " & episodearray(0).Season.Value & " Episodes, "
+            '    Pref.tvScraperLog &= "Multipart episode found: " & vbCrLf
+            '    Pref.tvScraperLog &= "Season: " & episodearray(0).Season.Value & " Episodes, "
             '    For Each ep In episodearray
-            '        Preferences.tvScraperLog &= ep.Episode.Value & ", "
+            '        Pref.tvScraperLog &= ep.Episode.Value & ", "
             '    Next
-            '    Preferences.tvScraperLog &= vbCrLf
+            '    Pref.tvScraperLog &= vbCrLf
             'End If
             'Preferences.tvScraperLog &= "Looking up scraper options from tvshow.nfo" & vbCrLf
 
 
             'If bckgroundscanepisodes.CancellationPending Then
-            '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             '    Exit Sub
             'End If
             'If Me.Episode.Season.Value.Length > 0 Or Me.Episode.Season.Value.IndexOf("0") = 0 Then
@@ -206,7 +206,7 @@ Namespace Tasks
             Dim tempstring As String
             Dim progresstext As String = ""
             tvdbid = Me.Show.TvdbId.Value
-            Preferences.tvScraperLog &= "Using Settings: TVdbID: " & tvdbid & " SortOrder: " & sortorder & " Language: " & language & " Actor Source: " & actorsource & vbCrLf
+            Pref.tvScraperLog &= "Using Settings: TVdbID: " & tvdbid & " SortOrder: " & sortorder & " Language: " & language & " Actor Source: " & actorsource & vbCrLf
             If tvdbid <> "" Then
                 progresstext &= " - Scraping..."
                 'bckgroundscanepisodes.ReportProgress(progress, progresstext)
@@ -215,10 +215,10 @@ Namespace Tasks
                 If Not Utilities.UrlIsValid(episodeurl) Then
                     If sortorder.ToLower = "dvd" Then
                         tempsortorder = "default"
-                        Preferences.tvScraperLog &= "WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
-                        Preferences.tvScraperLog &= "Attempting to find using default sort order" & vbCrLf
+                        Pref.tvScraperLog &= "WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
+                        Pref.tvScraperLog &= "Attempting to find using default sort order" & vbCrLf
                         episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/default/" & Me.Episode.Season.Value & "/" & Me.Episode.Episode.Value & "/" & language & ".xml"
-                        Preferences.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
+                        Pref.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
                     End If
                 End If
 
@@ -237,16 +237,16 @@ Namespace Tasks
                     '########################################################################
 
                     'If Utilities.UrlIsValid(episodeurl) Then
-                    '    'If Preferences.tvshow_useXBMC_Scraper = True Then
+                    '    'If Pref.tvshow_useXBMC_Scraper = True Then
                     '    '    Dim FinalResult As String = ""
                     '    '    episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
                     '    '    If episodearray.Count >= 1 Then
                     '    '        For x As Integer = 0 To episodearray.Count - 1
-                    '    '            Preferences.tvScraperLog &= "Scraping body of episode: " & episodearray(x).Episode.Value & " - OK" & vbCrLf
+                    '    '            Pref.tvScraperLog &= "Scraping body of episode: " & episodearray(x).Episode.Value & " - OK" & vbCrLf
                     '    '        Next
                     '    '        scrapedok = True
                     '    '    Else
-                    '    '        Preferences.tvScraperLog &= "WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                    '    '        Pref.tvScraperLog &= "WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
                     '    '        scrapedok = False
                     '    '    End If
                     '    '    Exit For
@@ -259,14 +259,14 @@ Namespace Tasks
                     '    '                            Exit For
                     '    If tempepisode = Nothing Then
                     '        ScrapedOk = False
-                    '        Preferences.tvScraperLog &= "WARNING: This episode could not be found on TVDB" & vbCrLf
+                    '        Pref.tvScraperLog &= "WARNING: This episode could not be found on TVDB" & vbCrLf
                     '    End If
                     '    If ScrapedOk = True Then
                     '        progresstext &= " OK."
                     '        'bckgroundscanepisodes.ReportProgress(progress, progresstext)
                     '        Dim scrapedepisode As New XmlDocument
 
-                    '        Preferences.tvScraperLog &= "Scraping body of episode: " & Me.Episode.Episode.Value & vbCrLf
+                    '        Pref.tvScraperLog &= "Scraping body of episode: " & Me.Episode.Episode.Value & vbCrLf
 
                     '        scrapedepisode.LoadXml(tempepisode)
 
@@ -323,7 +323,7 @@ Namespace Tasks
                             Dim tvdbwebsource(10000)
                             tvfblinecount = 0
                             'If bckgroundscanepisodes.CancellationPending Then
-                            '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                            '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                             '    Exit Sub
                             'End If
 
@@ -345,7 +345,7 @@ Namespace Tasks
                                     tvdbwebsource(tvfblinecount) = tvdbsLine
                                 End If
                                 'If bckgroundscanepisodes.CancellationPending Then
-                                '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                                '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                                 '    Exit Sub
                                 'End If
                             Loop
@@ -369,7 +369,7 @@ Namespace Tasks
                             '                '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                             '                Dim scraperfunction As New Classimdb
                             '                Dim actorlist As String = ""
-                            '                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Preferences.maxactors)
+                            '                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Pref.maxactors)
                             '                Dim tempactorlist As New List(Of str_MovieActors)
                             '                Dim thumbstring As New XmlDocument
 
@@ -379,12 +379,12 @@ Namespace Tasks
                             '                Dim countactors As Integer = 0
                             '                For Each thisresult As XmlNode In thumbstring("actorlist")
                             '                    'If bckgroundscanepisodes.CancellationPending Then
-                            '                    '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                            '                    '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                             '                    '    Exit Sub
                             '                    'End If
                             '                    Select Case thisresult.Name
                             '                        Case "actor"
-                            '                            If countactors >= Preferences.maxactors Then
+                            '                            If countactors >= Pref.maxactors Then
                             '                                Exit For
                             '                            End If
                             '                            countactors += 1
@@ -400,7 +400,7 @@ Namespace Tasks
                             '                                        newactor.actorthumb = detail.InnerText
                             '                                    Case "actorid"
                             '                                        If newactor.actorthumb <> Nothing Then
-                            '                                            If Preferences.actorseasy = True And detail.InnerText <> "" Then
+                            '                                            If Pref.actorseasy = True And detail.InnerText <> "" Then
                             '                                                Dim workingpath As String = episodearray(0).VideoFilePath.Replace(IO.Path.GetFileName(episodearray(0).VideoFilePath), "")
                             '                                                workingpath = workingpath & ".actors\"
                             '                                                Dim hg As New IO.DirectoryInfo(workingpath)
@@ -449,9 +449,9 @@ Namespace Tasks
                             '                                                    End If
                             '                                                End If
                             '                                            End If
-                            '                                            If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
+                            '                                            If Pref.actorsave = True And detail.InnerText <> "" And Pref.actorseasy = False Then
                             '                                                Dim workingpath As String = ""
-                            '                                                Dim networkpath As String = Preferences.actorsavepath
+                            '                                                Dim networkpath As String = Pref.actorsavepath
 
                             '                                                tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
                             '                                                Dim hg As New IO.DirectoryInfo(tempstring)
@@ -480,24 +480,24 @@ Namespace Tasks
                             '                                                    fstrm.Close()
                             '                                                End If
                             '                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                            '                                                If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                            '                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                            '                                                If Pref.actornetworkpath.IndexOf("/") <> -1 Then
+                            '                                                    newactor.actorthumb = Pref.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                             '                                                Else
-                            '                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                            '                                                    newactor.actorthumb = Pref.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                             '                                                End If
 
                             '                                            End If
                             '                                        End If
                             '                                End Select
                             '                                'If bckgroundscanepisodes.CancellationPending Then
-                            '                                '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                            '                                '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                             '                                '    Exit Sub
                             '                                'End If
                             '                            Next
                             '                            tempactorlist.Add(newactor)
                             '                    End Select
                             '                    'If bckgroundscanepisodes.CancellationPending Then
-                            '                    '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                            '                    '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                             '                    '    Exit Sub
                             '                    'End If
                             '                Next
@@ -510,7 +510,7 @@ Namespace Tasks
                             '                    'Preferences.tvScraperLog &= "Actors scraped from IMDB OK" & vbCrLf
                             '                    'progresstext &= " OK."
                             '                    'bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                            '                    While tempactorlist.Count > Preferences.maxactors
+                            '                    While tempactorlist.Count > Pref.maxactors
                             '                        tempactorlist.RemoveAt(tempactorlist.Count - 1)
                             '                    End While
                             '                    Me.Episode.ListActors.Clear()
@@ -519,14 +519,14 @@ Namespace Tasks
                             '                    Next
                             '                    tempactorlist.Clear()
                             '                Else
-                            '                    Preferences.tvScraperLog &= "WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
+                            '                    Pref.tvScraperLog &= "WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
                             '                End If
 
                             '                Exit For
                             '            End If
                             '        End If
                             '        'If bckgroundscanepisodes.CancellationPending Then
-                            '        '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                            '        '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                             '        '    Exit Sub
                             '        'End If
                             '    Next
@@ -539,7 +539,7 @@ Namespace Tasks
                     End If
 
 
-                    If Preferences.enablehdtags = True Then
+                    If Pref.enablehdtags = True Then
                         'progresstext &= " HD Tags..."
                         'bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
@@ -571,10 +571,10 @@ Namespace Tasks
 
                     End If
                 Else
-                    Preferences.tvScraperLog &= "WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                    Pref.tvScraperLog &= "WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
                 End If
             Else
-                Preferences.tvScraperLog &= "WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
+                Pref.tvScraperLog &= "WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
             End If
 
 
@@ -588,7 +588,7 @@ Namespace Tasks
 
             'If savepath <> "" And scrapedok = True Then
             '    If bckgroundscanepisodes.CancellationPending Then
-            '        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            '        Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             '        Exit Sub
             '    End If
             '    Dim newnamepath As String = ""
@@ -596,7 +596,7 @@ Namespace Tasks
 
 
             '    '' Commented out the lines below so that the episodes are renamed irrelavent of scraper (MC or XBMC scraper) - not sure of their purpose. 
-            '    'If Preferences.tvshow_useXBMC_Scraper = True Then
+            '    'If Pref.tvshow_useXBMC_Scraper = True Then
             '    '    newnamepath = savepath
             '    'Else
             '    newnamepath = ep_add(episodearray, savepath, showtitle)
@@ -607,7 +607,7 @@ Namespace Tasks
             '    'End If
             '    'bckgroundscanepisodes.ReportProgress(9999999, episodearray)
             '    'If bckgroundscanepisodes.CancellationPending Then
-            '    '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            '    '    Pref.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             '    '    Exit Sub
             '    'End If
             '    For Each Shows In Cache.TvCache.Shows

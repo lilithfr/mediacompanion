@@ -46,7 +46,7 @@ Public Structure str_MovieActors
 
             Dim filename As String = GetActorFileName(ActorPath)
 
-            If Preferences.actorseasy Then  'Allow to save to .actors folder
+            If Pref.actorseasy Then  'Allow to save to .actors folder
                 Dim hg As New IO.DirectoryInfo(ActorPath)
                 If Not hg.Exists Then
                     IO.Directory.CreateDirectory(ActorPath)
@@ -55,11 +55,11 @@ Public Structure str_MovieActors
             End If
 
             'Allow also to save to local path/network path
-            If Preferences.actorsave AndAlso actorid <> "" Then
-                If Not String.IsNullOrEmpty(Preferences.actorsavepath) Then
-                    Dim tempstring As String = Preferences.actorsavepath
+            If Pref.actorsave AndAlso actorid <> "" Then
+                If Not String.IsNullOrEmpty(Pref.actorsavepath) Then
+                    Dim tempstring As String = Pref.actorsavepath
                     Dim workingpath As String = ""
-                    If Preferences.actorsavealpha Then
+                    If Pref.actorsavealpha Then
                         Dim actorfilename As String = actorname.Replace(" ", "_") & "_" & actorid & ".jpg"
                         tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
                         workingpath = tempstring & actorfilename 
@@ -69,14 +69,14 @@ Public Structure str_MovieActors
                     End If
                     Utilities.EnsureFolderExists(tempstring)
                     
-                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Preferences.overwritethumbs, , Movie.GetHeightResolution(Preferences.ActorResolutionSI))
+                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Pref.overwritethumbs, , Movie.GetHeightResolution(Pref.ActorResolutionSI))
                     ActorSave(workingpath)
 
-                    If Not String.IsNullOrEmpty(Preferences.actornetworkpath) Then
-                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                            actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("\", "/") 'Preferences.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
+                    If Not String.IsNullOrEmpty(Pref.actornetworkpath) Then
+                        If Pref.actornetworkpath.IndexOf("/") <> -1 Then
+                            actorthumb = workingpath.Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("\", "/") 'Pref.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
                         Else
-                            actorthumb = workingpath.Replace(Preferences.actorsavepath, Preferences.actornetworkpath).Replace("/", "\") 'Preferences.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
+                            actorthumb = workingpath.Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("/", "\") 'Pref.actornetworkpath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid & ".jpg"
                         End If
                     End If
                 End If
@@ -85,12 +85,12 @@ Public Structure str_MovieActors
     End Sub
 
     Sub ActorSave(ByRef workingpath As String)
-        If Preferences.EdenEnabled And Not Preferences.FrodoEnabled Then
-            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Preferences.overwritethumbs)
+        If Pref.EdenEnabled And Not Pref.FrodoEnabled Then
+            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Pref.overwritethumbs)
             Utilities.SafeDeleteFile(workingpath)
             workingpath = workingpath.Replace(".jpg", ".tbn")
-        ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Preferences.overwritethumbs)
+        ElseIf Pref.EdenEnabled And Pref.FrodoEnabled Then
+            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".jpg", ".tbn"), Pref.overwritethumbs)
         End If
     End Sub
 

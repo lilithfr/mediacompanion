@@ -5,11 +5,11 @@ Public Class ucGenPref_Proxy
     Private Property Changed As Boolean = False
     'ReadOnly Property Changed As Boolean
     '    Get
-    '        Return  cb_prxyEnabled      .Checked <> Preferences.prxyEnabled     OrElse
-    '                tb_prxyIP           .Text    <> Preferences.prxyIP          OrElse
-    '                tb_prxyPort         .Text    <> Preferences.prxyPort        OrElse
-    '                tb_prxyUsername     .Text    <> Preferences.prxyUsername    OrElse
-    '                tb_prxyPassword     .Text    <> Preferences.prxyPassword
+    '        Return  cb_prxyEnabled      .Checked <> Pref.prxyEnabled     OrElse
+    '                tb_prxyIP           .Text    <> Pref.prxyIP          OrElse
+    '                tb_prxyPort         .Text    <> Pref.prxyPort        OrElse
+    '                tb_prxyUsername     .Text    <> Pref.prxyUsername    OrElse
+    '                tb_prxyPassword     .Text    <> Pref.prxyPassword
     '    End Get
     'End Property
 #End Region         'Properties
@@ -19,7 +19,7 @@ Public Class ucGenPref_Proxy
 
         UpdatePreferences
 
-        Preferences.ConfigSave()
+        Pref.ConfigSave()
         btnProxySaveChanges.Enabled = False
         'SetEnabledStates
     End Sub
@@ -29,17 +29,17 @@ Public Class ucGenPref_Proxy
                                                                             tb_prxyPassword.TextChanged, cb_prxyNone.CheckedChanged, cb_prxySystem.CheckedChanged
         If Changed Then Exit Sub
         If sender Is cb_prxyEnabled AndAlso cb_prxyEnabled.Checked Then
-            Preferences.prxyEnabled = "true"
+            Pref.prxyEnabled = "true"
             Changed = True
             cb_prxyNone.Checked = False
             cb_prxySystem.Checked = False
         ElseIf sender Is cb_prxyNone AndAlso cb_prxyNone.Checked Then
-            Preferences.prxyEnabled = "false"
+            Pref.prxyEnabled = "false"
             Changed = True
             cb_prxyEnabled.Checked = False
             cb_prxySystem.Checked = False
         ElseIf sender Is cb_prxySystem AndAlso cb_prxySystem.Checked Then
-            Preferences.prxyEnabled = "system"
+            Pref.prxyEnabled = "system"
             Changed = True
             cb_prxyEnabled.Checked = False
             cb_prxyNone.Checked = False
@@ -68,22 +68,22 @@ Public Class ucGenPref_Proxy
 
     Sub AssignFormFields
         Changed = True
-        cb_prxyEnabled      .Checked    = Preferences.prxyEnabled = "true"
-        cb_prxyNone         .Checked    = Preferences.prxyEnabled = "false"
-        cb_prxySystem       .Checked    = Preferences.prxyEnabled = "system"
-        tb_prxyIP           .Text       = Preferences.prxyIp
-        tb_prxyPort         .Text       = Preferences.prxyPort
-        tb_prxyUsername     .Text       = Preferences.prxyUsername
-        tb_prxyPassword     .Text       = Preferences.prxyPassword
+        cb_prxyEnabled      .Checked    = Pref.prxyEnabled = "true"
+        cb_prxyNone         .Checked    = Pref.prxyEnabled = "false"
+        cb_prxySystem       .Checked    = Pref.prxyEnabled = "system"
+        tb_prxyIP           .Text       = Pref.prxyIp
+        tb_prxyPort         .Text       = Pref.prxyPort
+        tb_prxyUsername     .Text       = Pref.prxyUsername
+        tb_prxyPassword     .Text       = Pref.prxyPassword
         Changed = False 
     End Sub
 
     Sub UpdatePreferences
         'Preferences.prxyEnabled         = cb_prxyEnabled      .Checked
-        Preferences.prxyIp              = tb_prxyIP           .Text
-        Preferences.prxyPort            = tb_prxyPort         .Text
-        Preferences.prxyUsername        = tb_prxyUsername     .Text
-        Preferences.prxyPassword        = tb_prxyPassword     .Text
+        Pref.prxyIp              = tb_prxyIP           .Text
+        Pref.prxyPort            = tb_prxyPort         .Text
+        Pref.prxyUsername        = tb_prxyUsername     .Text
+        Pref.prxyPassword        = tb_prxyPassword     .Text
     End Sub
 #End Region         'Other Subs
 

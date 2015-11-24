@@ -20,7 +20,7 @@ Public Class GraphicInfo
         
         fanartRatio = bmFanart.Height / fanartHeight
 
-        If Preferences.DisplayRatingOverlay Then
+        If Pref.DisplayRatingOverlay Then
             If Not sRating = "" Or Single.TryParse(sRating, iRating) Then
             iRating = Math.Min(iRating, 10)
             sRating = sRating.FormatRating
@@ -47,7 +47,7 @@ Public Class GraphicInfo
 
 
         'OVERLAY VIDEO FLAGS
-        If Preferences.DisplayMediainfoOverlay Then
+        If Pref.DisplayMediainfoOverlay Then
             For Each item In flags
                 Try
                     If Not String.IsNullOrEmpty(item.Value) Then    'Catch any empty values for selected flags
@@ -56,10 +56,10 @@ Public Class GraphicInfo
                         Dim flagPath As String
 
                         If item.Key.IndexOf("lang") > -1 Then
-                            flagPath = IO.Path.Combine(Preferences.applicationPath, "Resources\video_flags\" + item.Key + ".png")
+                            flagPath = IO.Path.Combine(Pref.applicationPath, "Resources\video_flags\" + item.Key + ".png")
                         Else
                             flagName = String.Format("media_{0}_{1}.png", item.Key, item.Value )
-                            flagPath = IO.Path.Combine(Preferences.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
+                            flagPath = IO.Path.Combine(Pref.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
                         End If
                         
                         Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
@@ -116,8 +116,8 @@ Public Class GraphicInfo
 
 
     Public Sub DisplayMediaInfoFolderSize(folderSize As Double)
-        If Preferences.DisplayMediaInfoFolderSize And folderSize > -1 Then
-            Dim flagPath As String = IO.Path.Combine(Preferences.applicationPath, "Resources\video_flags\long_blank.png")
+        If Pref.DisplayMediaInfoFolderSize And folderSize > -1 Then
+            Dim flagPath As String = IO.Path.Combine(Pref.applicationPath, "Resources\video_flags\long_blank.png")
             Dim bmflagStream As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
             Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
 

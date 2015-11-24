@@ -46,7 +46,7 @@ Partial Public Class TvEpisode
         End If
 
         If Me.IsMissing Then
-            Dim ThisDate As Date = If(Media_Companion.Preferences.TvMissingEpOffset, Now.AddDays(-1), Now)
+            Dim ThisDate As Date = If(Media_Companion.Pref.TvMissingEpOffset, Now.AddDays(-1), Now)
             ' Phyonics - Fix for issue #208
             If String.IsNullOrEmpty(Aired.Value) Then
                 ' Change the colour to gray

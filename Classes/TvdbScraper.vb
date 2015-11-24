@@ -228,7 +228,7 @@ Public Class TVDBScraper
 
     Public Function GetActors(ByVal TvdbId As String, ByVal Language As String, Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors) 'Tvdb.Actors
         If maxactors = 9999 Then 
-            maxactors= Preferences.maxactors
+            maxactors= Pref.maxactors
         End If
         Dim results As New List(Of str_MovieActors)
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/actors.xml"

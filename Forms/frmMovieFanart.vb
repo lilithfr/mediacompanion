@@ -315,13 +315,13 @@ Public Class frmMovieFanart
                     '        i1.ImageLocation = backup
                     '    End If
                     'End If
-                    Dim paths As List(Of String) = Preferences.GetfanartPaths(fullpathandfilename,If(videotspath <>"",videotspath,""))
+                    Dim paths As List(Of String) = Pref.GetfanartPaths(fullpathandfilename,If(videotspath <>"",videotspath,""))
                     'For Each pth As String In Paths
                     '    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                     '    fanartpath = pth
                     'Next
                     Movie.SaveFanartImageToCacheAndPaths(tempstring2, paths)
-                 '  If Utilities.DownloadImage(tempstring2, fanartpath, True, Preferences.resizefanart) Then
+                 '  If Utilities.DownloadImage(tempstring2, fanartpath, True, Pref.resizefanart) Then
                     If IO.File.Exists(fanartpath) Then 'Movie.SaveFanartImageToCacheAndPath(tempstring2, fanartpath) Then
 
                         'mainfanart = New PictureBox
@@ -410,14 +410,14 @@ Public Class frmMovieFanart
             '    Dim bmp As New Bitmap(ImageStream)
 
 
-            '    If Preferences.resizefanart = 1 Then
+            '    If Pref.resizefanart = 1 Then
             '        Try
             '            Dim tempbitmap As Bitmap = bmp
             '            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
             '        Catch ex As Exception
             '            tempstring = ex.Message.ToString
             '        End Try
-            '    ElseIf Preferences.resizefanart = 2 Then
+            '    ElseIf Pref.resizefanart = 2 Then
             '        If bmp.Width > 1280 Or bmp.Height > 720 Then
             '            Dim bm_source As New Bitmap(bmp)
             '            Dim bm_dest As New Bitmap(1280, 720)
@@ -430,7 +430,7 @@ Public Class frmMovieFanart
             '            Threading.Thread.Sleep(30)
             '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
             '        End If
-            '    ElseIf Preferences.resizefanart = 3 Then
+            '    ElseIf Pref.resizefanart = 3 Then
             '        If bmp.Width > 960 Or bmp.Height > 540 Then
             '            Dim bm_source As New Bitmap(bmp)
             '            Dim bm_dest As New Bitmap(960, 540)

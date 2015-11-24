@@ -5,7 +5,7 @@ Public Class frmmovieplotlist
     Public ListOfPlots As New List(Of String)
 
     Private Sub frmplotlist(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        If Preferences.MultiMonitoEnabled Then
+        If Pref.MultiMonitoEnabled Then
             Me.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
             Me.Width = 861
             Me.Height = 580

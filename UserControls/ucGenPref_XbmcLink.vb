@@ -7,16 +7,16 @@ Public Class ucGenPref_XbmcLink
 
     ReadOnly Property Changed As Boolean
         Get
-            Return  cbXBMC_Active               .Checked <> Preferences.XBMC_Active               OrElse
-                    MovieFolderMappings.Changed(Preferences.XBMC_MC_MovieFolderMappings)          OrElse
-                    tbXBMC_Address              .Text    <> Preferences.XBMC_Address              OrElse
-                    tbXBMC_Port                 .Text    <> Preferences.XBMC_Port                 OrElse
-                    tbXBMC_Username             .Text    <> Preferences.XBMC_Username             OrElse
-                    tbXBMC_Password             .Text    <> Preferences.XBMC_Password             OrElse
-                    cbXBMC_Delete_Cached_Images .Checked <> Preferences.XBMC_Delete_Cached_Images OrElse
-                    tbXBMC_UserdataFolder       .Text    <> Preferences.XBMC_UserdataFolder       OrElse
-                    tbXBMC_TexturesDb           .Text    <> Preferences.XBMC_TexturesDb           OrElse
-                    tbXBMC_ThumbnailsFolder     .Text    <> Preferences.XBMC_ThumbnailsFolder
+            Return  cbXBMC_Active               .Checked <> Pref.XBMC_Active               OrElse
+                    MovieFolderMappings.Changed(Pref.XBMC_MC_MovieFolderMappings)          OrElse
+                    tbXBMC_Address              .Text    <> Pref.XBMC_Address              OrElse
+                    tbXBMC_Port                 .Text    <> Pref.XBMC_Port                 OrElse
+                    tbXBMC_Username             .Text    <> Pref.XBMC_Username             OrElse
+                    tbXBMC_Password             .Text    <> Pref.XBMC_Password             OrElse
+                    cbXBMC_Delete_Cached_Images .Checked <> Pref.XBMC_Delete_Cached_Images OrElse
+                    tbXBMC_UserdataFolder       .Text    <> Pref.XBMC_UserdataFolder       OrElse
+                    tbXBMC_TexturesDb           .Text    <> Pref.XBMC_TexturesDb           OrElse
+                    tbXBMC_ThumbnailsFolder     .Text    <> Pref.XBMC_ThumbnailsFolder
         End Get
     End Property
 #End Region         'Properties
@@ -64,7 +64,7 @@ Public Class ucGenPref_XbmcLink
 
         UpdatePreferences
 
-        Preferences.ConfigSave()
+        Pref.ConfigSave()
         SetEnabledStates
     End Sub
 
@@ -135,45 +135,45 @@ Public Class ucGenPref_XbmcLink
     End Sub
 
     Sub AssignFormFields
-        cbXBMC_Active               .Checked = Preferences.XBMC_Active
-        tbXBMC_Address              .Text    = Preferences.XBMC_Address
-        tbXBMC_Port                 .Text    = Preferences.XBMC_Port
-        tbXBMC_Username             .Text    = Preferences.XBMC_Username
-        tbXBMC_Password             .Text    = Preferences.XBMC_Password
-        cbXBMC_Delete_Cached_Images .Checked = Preferences.XBMC_Delete_Cached_Images
-        tbXBMC_UserdataFolder       .Text    = Preferences.XBMC_UserdataFolder
-        tbXBMC_TexturesDb           .Text    = Preferences.XBMC_TexturesDb
-        tbXBMC_ThumbnailsFolder     .Text    = Preferences.XBMC_ThumbnailsFolder
-        MovieFolderMappings.Assign(Preferences.XBMC_MC_MovieFolderMappings)
+        cbXBMC_Active               .Checked = Pref.XBMC_Active
+        tbXBMC_Address              .Text    = Pref.XBMC_Address
+        tbXBMC_Port                 .Text    = Pref.XBMC_Port
+        tbXBMC_Username             .Text    = Pref.XBMC_Username
+        tbXBMC_Password             .Text    = Pref.XBMC_Password
+        cbXBMC_Delete_Cached_Images .Checked = Pref.XBMC_Delete_Cached_Images
+        tbXBMC_UserdataFolder       .Text    = Pref.XBMC_UserdataFolder
+        tbXBMC_TexturesDb           .Text    = Pref.XBMC_TexturesDb
+        tbXBMC_ThumbnailsFolder     .Text    = Pref.XBMC_ThumbnailsFolder
+        MovieFolderMappings.Assign(Pref.XBMC_MC_MovieFolderMappings)
     End Sub
 
     Sub UpdatePreferences
-        Preferences.XBMC_Active                = cbXBMC_Active              .Checked
-        Preferences.XBMC_Address              = tbXBMC_Address              .Text
-        Preferences.XBMC_Port                 = tbXBMC_Port                 .Text
-        Preferences.XBMC_Username             = tbXBMC_Username             .Text
-        Preferences.XBMC_Password             = tbXBMC_Password             .Text
-        Preferences.XBMC_Delete_Cached_Images = cbXBMC_Delete_Cached_Images .Checked
-        Preferences.XBMC_UserdataFolder       = tbXBMC_UserdataFolder       .Text
-        Preferences.XBMC_TexturesDb           = tbXBMC_TexturesDb           .Text
-        Preferences.XBMC_ThumbnailsFolder     = tbXBMC_ThumbnailsFolder     .Text
-        Preferences.XBMC_MC_MovieFolderMappings.Assign(MovieFolderMappings)
+        Pref.XBMC_Active                = cbXBMC_Active              .Checked
+        Pref.XBMC_Address              = tbXBMC_Address              .Text
+        Pref.XBMC_Port                 = tbXBMC_Port                 .Text
+        Pref.XBMC_Username             = tbXBMC_Username             .Text
+        Pref.XBMC_Password             = tbXBMC_Password             .Text
+        Pref.XBMC_Delete_Cached_Images = cbXBMC_Delete_Cached_Images .Checked
+        Pref.XBMC_UserdataFolder       = tbXBMC_UserdataFolder       .Text
+        Pref.XBMC_TexturesDb           = tbXBMC_TexturesDb           .Text
+        Pref.XBMC_ThumbnailsFolder     = tbXBMC_ThumbnailsFolder     .Text
+        Pref.XBMC_MC_MovieFolderMappings.Assign(MovieFolderMappings)
     End Sub
 
     Private Sub ValidateSettings
 
         Dim tmp_MovieFolderMappings As XBMC_MC_FolderMappings = New XBMC_MC_FolderMappings
 
-        Dim tmp_tbXBMC_Address              As String  = Preferences.XBMC_Address
-        Dim tmp_tbXBMC_Port                 As String  = Preferences.XBMC_Port
-        Dim tmp_tbXBMC_Username             As String  = Preferences.XBMC_Username
-        Dim tmp_tbXBMC_Password             As String  = Preferences.XBMC_Password
-        Dim tmp_cbXBMC_Delete_Cached_Images As Boolean = Preferences.XBMC_Delete_Cached_Images
-        Dim tmp_tbXBMC_UserdataFolder       As String  = Preferences.XBMC_UserdataFolder
-        Dim tmp_tbXBMC_TexturesDb           As String  = Preferences.XBMC_TexturesDb
-        Dim tmp_tbXBMC_ThumbnailsFolder     As String  = Preferences.XBMC_ThumbnailsFolder
+        Dim tmp_tbXBMC_Address              As String  = Pref.XBMC_Address
+        Dim tmp_tbXBMC_Port                 As String  = Pref.XBMC_Port
+        Dim tmp_tbXBMC_Username             As String  = Pref.XBMC_Username
+        Dim tmp_tbXBMC_Password             As String  = Pref.XBMC_Password
+        Dim tmp_cbXBMC_Delete_Cached_Images As Boolean = Pref.XBMC_Delete_Cached_Images
+        Dim tmp_tbXBMC_UserdataFolder       As String  = Pref.XBMC_UserdataFolder
+        Dim tmp_tbXBMC_TexturesDb           As String  = Pref.XBMC_TexturesDb
+        Dim tmp_tbXBMC_ThumbnailsFolder     As String  = Pref.XBMC_ThumbnailsFolder
 
-        tmp_MovieFolderMappings.Assign(Preferences.XBMC_MC_MovieFolderMappings)
+        tmp_MovieFolderMappings.Assign(Pref.XBMC_MC_MovieFolderMappings)
 
         UpdatePreferences
 
@@ -182,21 +182,21 @@ Public Class ucGenPref_XbmcLink
 
         Dim ParentForm                                 As Form1   = Me.Parent.Parent.Parent.Parent.Parent 
         Dim PreFrodoPosterOnlyCount                    As Integer = ParentForm.oMovies.PreFrodoPosterOnlyCount
-        Dim MovieFoldersConfigured                     As Boolean = (Preferences.XBMC_MC_MovieFolderMappings.Items.Count>0)
+        Dim MovieFoldersConfigured                     As Boolean = (Pref.XBMC_MC_MovieFolderMappings.Items.Count>0)
 
-        Dim tstFrodoEnabled                            As Boolean = Preferences.FrodoEnabled
+        Dim tstFrodoEnabled                            As Boolean = Pref.FrodoEnabled
         Dim tstPreFrodoPosterOnlyCount                 As Boolean = PreFrodoPosterOnlyCount=0
-        Dim tstXBMC_CanPing                            As Boolean = Preferences.XBMC_CanPing                  
-        Dim tstcanConnect                              As Boolean = Preferences.XBMC_CanConnect                                 
-        Dim tstXBMC_UserdataFolder_Valid               As Boolean = Preferences.XBMC_UserdataFolder_Valid     
-        Dim tstXBMC_TexturesDbFile_Valid               As Boolean = Preferences.XBMC_TexturesDbFile_Valid     
-        Dim tstXBMC_TexturesDb_Conn_Valid              As Boolean = Preferences.XBMC_TexturesDb_Conn_Valid    
-        Dim tstXBMC_TexturesDb_Version_Valid           As Boolean = Preferences.XBMC_TexturesDb_Version_Valid 
-        Dim tstXBMC_ThumbnailsFolder_Valid             As Boolean = Preferences.XBMC_ThumbnailsFolder_Valid   
+        Dim tstXBMC_CanPing                            As Boolean = Pref.XBMC_CanPing                  
+        Dim tstcanConnect                              As Boolean = Pref.XBMC_CanConnect                                 
+        Dim tstXBMC_UserdataFolder_Valid               As Boolean = Pref.XBMC_UserdataFolder_Valid     
+        Dim tstXBMC_TexturesDbFile_Valid               As Boolean = Pref.XBMC_TexturesDbFile_Valid     
+        Dim tstXBMC_TexturesDb_Conn_Valid              As Boolean = Pref.XBMC_TexturesDb_Conn_Valid    
+        Dim tstXBMC_TexturesDb_Version_Valid           As Boolean = Pref.XBMC_TexturesDb_Version_Valid 
+        Dim tstXBMC_ThumbnailsFolder_Valid             As Boolean = Pref.XBMC_ThumbnailsFolder_Valid   
         Dim tstMovieFoldersConfigured                  As Boolean = MovieFoldersConfigured                    
-        Dim tstXBMC_MC_MovieFolderMappings_Initialised As Boolean = Preferences.XBMC_MC_MovieFolderMappings.Initialised
+        Dim tstXBMC_MC_MovieFolderMappings_Initialised As Boolean = Pref.XBMC_MC_MovieFolderMappings.Initialised
 
-        Dim needDb = Preferences.XBMC_Delete_Cached_Images
+        Dim needDb = Pref.XBMC_Delete_Cached_Images
 
         Dim overAll As Boolean = tstFrodoEnabled                            And
                                  tstPreFrodoPosterOnlyCount                 And
@@ -235,12 +235,12 @@ Public Class ucGenPref_XbmcLink
         UpdateImage(4 ,tstcanConnect)
 
 
-        If Not Preferences.FrodoEnabled Or PreFrodoPosterOnlyCount>0 Or Not tstcanConnect Or Not MovieFoldersConfigured Then
+        If Not Pref.FrodoEnabled Or PreFrodoPosterOnlyCount>0 Or Not tstcanConnect Or Not MovieFoldersConfigured Then
             AppendDialogue("****************************************")
             AppendDialogue("")
             AppendDialogue("Things to check:")
 
-            If Not Preferences.FrodoEnabled Then
+            If Not Pref.FrodoEnabled Then
                 AppendDialogue("    - MC has General Preferences-General-Artwork Version->Frodo enabled ")
             End If
 
@@ -278,16 +278,16 @@ Public Class ucGenPref_XbmcLink
             AppendDialogue("****************************************")
         End If
 
-        Preferences.XBMC_Address              = tmp_tbXBMC_Address         
-        Preferences.XBMC_Port                 = tmp_tbXBMC_Port            
-        Preferences.XBMC_Username             = tmp_tbXBMC_Username        
-        Preferences.XBMC_Password             = tmp_tbXBMC_Password        
-        Preferences.XBMC_Delete_Cached_Images = tmp_cbXBMC_Delete_Cached_Images
-        Preferences.XBMC_UserdataFolder       = tmp_tbXBMC_UserdataFolder  
-        Preferences.XBMC_TexturesDb           = tmp_tbXBMC_TexturesDb      
-        Preferences.XBMC_ThumbnailsFolder     = tmp_tbXBMC_ThumbnailsFolder
+        Pref.XBMC_Address              = tmp_tbXBMC_Address         
+        Pref.XBMC_Port                 = tmp_tbXBMC_Port            
+        Pref.XBMC_Username             = tmp_tbXBMC_Username        
+        Pref.XBMC_Password             = tmp_tbXBMC_Password        
+        Pref.XBMC_Delete_Cached_Images = tmp_cbXBMC_Delete_Cached_Images
+        Pref.XBMC_UserdataFolder       = tmp_tbXBMC_UserdataFolder  
+        Pref.XBMC_TexturesDb           = tmp_tbXBMC_TexturesDb      
+        Pref.XBMC_ThumbnailsFolder     = tmp_tbXBMC_ThumbnailsFolder
                                               
-        Preferences.XBMC_MC_MovieFolderMappings.Assign(tmp_MovieFolderMappings)
+        Pref.XBMC_MC_MovieFolderMappings.Assign(tmp_MovieFolderMappings)
     End Sub
 
     Function ShowTest(test As String, result As Boolean, row As Integer)

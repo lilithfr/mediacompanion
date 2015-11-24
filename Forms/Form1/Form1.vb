@@ -7,7 +7,7 @@ Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.Runtime.InteropServices
 Imports Microsoft.Win32
-Imports Media_Companion.Preferences
+Imports Media_Companion.Pref
 Imports System.Xml
 Imports System.Reflection
 Imports System.Windows.Forms
@@ -278,10 +278,10 @@ Public Class Form1
 #Region "Form1 Events"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PictureBoxAssignedMoviePoster.AllowDrop = True
-        AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
+        AddHandler Pref.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
         Try
             'AddRegKey()    'disabled as user's were receiving UAC messages.
-            Preferences.movie_filters.FilterPanel = SplitContainer5.Panel2
+            Pref.movie_filters.FilterPanel = SplitContainer5.Panel2
 
             Label73.Text = ""
 
@@ -294,7 +294,7 @@ Public Class Form1
                 Common.Tasks.Add(New Tasks.BlankTask())
             Next
 
-            Preferences.applicationPath = Application.StartupPath
+            Pref.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
             SeriesXmlPath = IO.Path.Combine(Utilities.applicationPath, "SeriesXml\")
             Utilities.EnsureFolderExists(Utilities.PosterCachePath)
@@ -405,8 +405,8 @@ Public Class Form1
             End If
             CheckForIllegalCrossThreadCalls = False
 
-            Preferences.maximised = False
-            Preferences.SetUpPreferences()  'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
+            Pref.maximised = False
+            Pref.SetUpPreferences()  'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
             generalprefschanged = False
 
             GenreMasterLoad()
@@ -414,14 +414,14 @@ Public Class Form1
             tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
             Dim hg As New IO.DirectoryInfo(tempstring)
             If hg.Exists Then
-                Preferences.configpath = tempstring & "config.xml"
-                If Not IO.File.Exists(Preferences.configpath) Then
-                    Preferences.ConfigSave()
+                Pref.configpath = tempstring & "config.xml"
+                If Not IO.File.Exists(Pref.configpath) Then
+                    Pref.ConfigSave()
                 End If
             Else
                 IO.Directory.CreateDirectory(tempstring)
                 workingProfile.Config = applicationPath & "\Settings\config.xml"
-                Preferences.ConfigSave()
+                Pref.ConfigSave()
             End If
 
             If Not IO.File.Exists(applicationPath & "\settings\profile.xml") Then
@@ -568,8 +568,8 @@ Public Class Form1
                 Me.Visible = True
                 Dim intX As Integer
                 Dim intY As Integer
-                If Preferences.MultiMonitoEnabled Then
-                    Dim scrn As Integer = If(NumOfScreens > 0, Preferences.preferredscreen, 0)
+                If Pref.MultiMonitoEnabled Then
+                    Dim scrn As Integer = If(NumOfScreens > 0, Pref.preferredscreen, 0)
                     intX = screen.AllScreens(scrn).Bounds.X + screen.AllScreens(scrn).Bounds.Width
                     intY = screen.AllScreens(scrn).Bounds.Height
                 Else
@@ -582,18 +582,18 @@ Public Class Form1
                 SplitContainer4.IsSplitterFixed = True
                 SplitContainer5.IsSplitterFixed = True
 
-                If Preferences.locx < 0 Then Preferences.locx = 0
-                If Preferences.locy < 0 Then Preferences.locy = 0
-                If Preferences.formheight > intY Then Preferences.formheight = intY
-                If Preferences.formwidth > intX Then Preferences.formwidth = intX
-                If Preferences.locx >= intX Then Preferences.locx = intX - Preferences.formwidth
-                If Preferences.locy >= intY Then Preferences.locy = intY - Preferences.formheight
-                If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
-                    Me.Width = Preferences.formwidth
-                    Me.Height = Preferences.formheight
-                    Me.Location = New Point(Preferences.locx, Preferences.locy)
+                If Pref.locx < 0 Then Pref.locx = 0
+                If Pref.locy < 0 Then Pref.locy = 0
+                If Pref.formheight > intY Then Pref.formheight = intY
+                If Pref.formwidth > intX Then Pref.formwidth = intX
+                If Pref.locx >= intX Then Pref.locx = intX - Pref.formwidth
+                If Pref.locy >= intY Then Pref.locy = intY - Pref.formheight
+                If Pref.formheight <> 0 And Pref.formwidth <> 0 Then
+                    Me.Width = Pref.formwidth
+                    Me.Height = Pref.formheight
+                    Me.Location = New Point(Pref.locx, Pref.locy)
                 End If
-                If Preferences.maximised Then
+                If Pref.maximised Then
                     Me.WindowState = FormWindowState.Maximized
                 End If
 
@@ -616,29 +616,29 @@ Public Class Form1
 
                 TabControl3.TabPages.RemoveAt(1)
 
-                If Preferences.splt5 = 0 Then
+                If Pref.splt5 = 0 Then
                     Dim tempint As Integer = SplitContainer1.Height
                     tempint = tempint / 4
                     tempint = tempint * 3
                     If tempint > 275 Then
-                        Preferences.splt5 = tempint
+                        Pref.splt5 = tempint
                     Else
-                        Preferences.splt5 = 275
+                        Pref.splt5 = 275
                     End If
                 End If
 
-                SplitContainer1.SplitterDistance = Preferences.splt1
-                SplitContainer2.SplitterDistance = Preferences.splt2
-                SplitContainer5.SplitterDistance = Preferences.splt5
-                SplitContainer3.SplitterDistance = Preferences.splt3
-                SplitContainer4.SplitterDistance = Preferences.splt4
-                TabLevel1.SelectedIndex = Preferences.startuptab
+                SplitContainer1.SplitterDistance = Pref.splt1
+                SplitContainer2.SplitterDistance = Pref.splt2
+                SplitContainer5.SplitterDistance = Pref.splt5
+                SplitContainer3.SplitterDistance = Pref.splt3
+                SplitContainer4.SplitterDistance = Pref.splt4
+                TabLevel1.SelectedIndex = Pref.startuptab
 
-                If Preferences.startuptab = 0 Then
+                If Pref.startuptab = 0 Then
                     If Not MoviesFiltersResizeCalled Then
                         MoviesFiltersResizeCalled = True
-                        Preferences.movie_filters.RemoveInvalidMovieFilters
-                        Preferences.movie_filters.SetMovieFiltersVisibility
+                        Pref.movie_filters.RemoveInvalidMovieFilters
+                        Pref.movie_filters.SetMovieFiltersVisibility
                         UpdateMovieFiltersPanel
                     End If
                 End If
@@ -656,14 +656,14 @@ Public Class Form1
                 Me.Close()
             Else
                 Try
-                    If cbMovieDisplay_MovieSet.Items.Count <> Preferences.moviesets.Count Then
+                    If cbMovieDisplay_MovieSet.Items.Count <> Pref.moviesets.Count Then
                         cbMovieDisplay_MovieSet.Items.Clear()
-                        For Each mset In Preferences.moviesets
+                        For Each mset In Pref.moviesets
                             cbMovieDisplay_MovieSet.Items.Add(mset)
                         Next
                     End If
                     If Not IsNothing(workingMovieDetails) AndAlso workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
-                        For Each mset In Preferences.moviesets
+                        For Each mset In Pref.moviesets
                             cbMovieDisplay_MovieSet.Items.Add(mset)
                         Next
                         For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
@@ -714,7 +714,7 @@ Public Class Form1
             End If
 
             'Parameters to display the movie grid at startup
-            Select Case Preferences.moviedefaultlist
+            Select Case Pref.moviedefaultlist
                 Case 0
                     rbTitleAndYear.Checked = True
                 Case 1
@@ -724,11 +724,11 @@ Public Class Form1
             End Select
 
             Try
-                cbSort.SelectedIndex = Preferences.moviesortorder
+                cbSort.SelectedIndex = Pref.moviesortorder
             Catch
                 cbSort.SelectedIndex = 0
             End Try
-            btnreverse.Checked = Preferences.movieinvertorder
+            btnreverse.Checked = Pref.movieinvertorder
             If btnreverse.Checked Then
                 Mc.clsGridViewMovie.GridSort = "Desc"
             Else
@@ -748,12 +748,12 @@ Public Class Form1
 
             UpdateFilteredList()
 
-            If Not IsNothing(Preferences.MovFiltLastSize) Then ResizeBottomLHSPanel(Preferences.MovFiltLastSize, MovieFiltersPanelMaxHeight)
+            If Not IsNothing(Pref.MovFiltLastSize) Then ResizeBottomLHSPanel(Pref.MovFiltLastSize, MovieFiltersPanelMaxHeight)
 
             Common.Tasks.StartTaskEngine()
             ForegroundWorkTimer.Start()
 
-            If Preferences.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
+            If Pref.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
 
             BckWrkXbmcController.WorkerReportsProgress = True
             ' BckWrkXbmcController.WorkerSupportsCancellation = true
@@ -837,50 +837,50 @@ Public Class Form1
 
             'Me.LoadConfig()
 
-            Preferences.splt1 = SplitContainer1.SplitterDistance
-            Preferences.splt2 = SplitContainer2.SplitterDistance
-            Preferences.splt3 = SplitContainer3.SplitterDistance
-            Preferences.splt4 = SplitContainer4.SplitterDistance
-            Preferences.splt5 = SplitContainer5.SplitterDistance
-            Preferences.splt6 = _tv_SplitContainer.SplitterDistance
-            Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
-            Preferences.MovFiltLastSize = SplitContainer5.Height - SplitContainer5.SplitterDistance
-            Preferences.preferredscreen = CurrentScreen
+            Pref.splt1 = SplitContainer1.SplitterDistance
+            Pref.splt2 = SplitContainer2.SplitterDistance
+            Pref.splt3 = SplitContainer3.SplitterDistance
+            Pref.splt4 = SplitContainer4.SplitterDistance
+            Pref.splt5 = SplitContainer5.SplitterDistance
+            Pref.splt6 = _tv_SplitContainer.SplitterDistance
+            Pref.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
+            Pref.MovFiltLastSize = SplitContainer5.Height - SplitContainer5.SplitterDistance
+            Pref.preferredscreen = CurrentScreen
 
 
             If Me.WindowState = FormWindowState.Minimized Then
                 Me.WindowState = FormWindowState.Normal
-                Preferences.formwidth = Me.Width
-                Preferences.formheight = Me.Height
-                Preferences.locx = Me.Location.X
-                Preferences.locy = Me.Location.Y
-                Preferences.maximised = False
+                Pref.formwidth = Me.Width
+                Pref.formheight = Me.Height
+                Pref.locx = Me.Location.X
+                Pref.locy = Me.Location.Y
+                Pref.maximised = False
             End If
 
             If Me.WindowState = FormWindowState.Normal Then
-                Preferences.formwidth = Me.Width
-                Preferences.formheight = Me.Height
-                Preferences.locx = Me.Location.X
-                Preferences.locy = Me.Location.Y
-                Preferences.maximised = False
+                Pref.formwidth = Me.Width
+                Pref.formheight = Me.Height
+                Pref.locx = Me.Location.X
+                Pref.locy = Me.Location.Y
+                Pref.maximised = False
             End If
 
             If Me.WindowState = FormWindowState.Maximized Then
                 Me.WindowState = FormWindowState.Normal
-                Preferences.maximised = True
+                Pref.maximised = True
             End If
 
             If DataGridView1.Columns.Count > 0 Then
-                Preferences.tableview.Clear()
+                Pref.tableview.Clear()
                 For Each column In DataGridView1.Columns
                     Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
-                    Preferences.tableview.Add(tempstring)
+                    Pref.tableview.Add(tempstring)
                 Next
             End If
 
-            Preferences.startuptab = TabLevel1.SelectedIndex
+            Pref.startuptab = TabLevel1.SelectedIndex
 
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
             SplashscreenWrite()
             Call util_ProfileSave()
             Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
@@ -913,8 +913,8 @@ Public Class Form1
                 tv_SplitContainerAutoPosition()
             End If
             If startup = False Then
-                Preferences.locx = Me.Location.X
-                Preferences.locy = Me.Location.Y
+                Pref.locx = Me.Location.X
+                Pref.locy = Me.Location.Y
             End If
             If MainFormLoadedStatus = True Then
                 doResizeRefresh()
@@ -932,9 +932,9 @@ Public Class Form1
 
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
         Try
-            If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
-                Preferences.formwidth = Me.Width
-                Preferences.formheight = Me.Height
+            If Pref.formwidth <> Me.Width Or Pref.formheight <> Me.Height Then
+                Pref.formwidth = Me.Width
+                Pref.formheight = Me.Height
                 'Dim maxcount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
                 'If maxcount2 <> maxcount Then
                 '    maxcount = maxcount2
@@ -972,7 +972,7 @@ Public Class Form1
     End Sub
 
     'Sub SendXbmcConnect
-    '    If Preferences.XbmcLinkReady Then 
+    '    If Pref.XbmcLinkReady Then 
     '        XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
     '    End If
     'End Sub
@@ -991,8 +991,8 @@ Public Class Form1
         If Not BckWrkScnMovies.IsBusy And XbmcControllerBufferQ.Count = 0 Then
             If DateDiff(DateInterval.Second, XBMC_Controller_LogLastShownDt, Now) > 30 Then
 
-                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file)
-                Preferences.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
+                Pref.OpenFileInAppPath(Form1.XBMC_Controller_full_log_file)
+                Pref.OpenFileInAppPath(Form1.XBMC_Controller_brief_log_file)
 
                 frmXBMC_Progress.Reset()
                 Dim ce As New BaseEvent(XbmcController.E.ResetErrorCount, New BaseEventArgs())
@@ -1031,7 +1031,7 @@ Public Class Form1
         If HandleEvents(oProgress) Then Return
 
         If oProgress.ErrorCount > 0 Then
-            If Preferences.ShowLogOnError Then
+            If Pref.ShowLogOnError Then
                 XBMC_Link_ErrorLog_Timer.Start()
             End If
 
@@ -1108,15 +1108,15 @@ Public Class Form1
                 If cbBtnLink.Enabled Then
                     cbBtnLink.BackColor = IIf(cbBtnLink.Checked, Color.LightGreen, Color.Transparent)
 
-                    If Preferences.XBMC_Link <> cbBtnLink.Checked Then
+                    If Pref.XBMC_Link <> cbBtnLink.Checked Then
 
-                        Preferences.XBMC_Link = cbBtnLink.Checked
+                        Pref.XBMC_Link = cbBtnLink.Checked
 
-                        If Preferences.XbmcLinkReady Then
+                        If Pref.XbmcLinkReady Then
                             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
                         End If
 
-                        Preferences.ConfigSave()
+                        Pref.ConfigSave()
                     End If
                 Else
                     cbBtnLink.Checked = False
@@ -1139,7 +1139,7 @@ Public Class Form1
     End Sub
 
     Sub XbmcLink_UpdateArtwork()
-        If Preferences.XBMC_Delete_Cached_Images AndAlso Preferences.XbmcLinkReady Then
+        If Pref.XBMC_Delete_Cached_Images AndAlso Pref.XbmcLinkReady Then
             Dim m As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
             m.SaveNFO()
         End If
@@ -1154,7 +1154,7 @@ Public Class Form1
 
     Private Function splashscreenread() As Integer
         Dim scrn As Integer = 0
-        Dim checkpath As String = Preferences.applicationPath & "\Settings\screen.xml"
+        Dim checkpath As String = Pref.applicationPath & "\Settings\screen.xml"
         If File.Exists(checkpath) Then
             Try
                 Dim document As XDocument = XDocument.Load(checkpath)
@@ -1181,13 +1181,13 @@ Public Class Form1
         doc.AppendChild(xmlproc)
         root = doc.CreateElement("root")
         child = doc.CreateElement("MultiEnabled")
-        child.InnerXml = Preferences.MultiMonitoEnabled
+        child.InnerXml = Pref.MultiMonitoEnabled
         root.AppendChild(child)
         child = doc.CreateElement("screen")
         child.InnerText = CurrentScreen.ToString
         root.AppendChild(child)
         doc.AppendChild(root)
-        Dim screenpath As String = Preferences.applicationPath & "\Settings\screen.xml"
+        Dim screenpath As String = Pref.applicationPath & "\Settings\screen.xml"
         Try
             Dim output As New XmlTextWriter(screenpath, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
@@ -1335,10 +1335,10 @@ Public Class Form1
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
         Try     'Try Catch for minimize of MC when Full-screen
             If _tv_SplitContainer.Height > 100 Then
-                If Preferences.tvbannersplit = 0 Then
+                If Pref.tvbannersplit = 0 Then
                     _tv_SplitContainer.SplitterDistance = HorizontalSplit
                 Else
-                    _tv_SplitContainer.SplitterDistance = _tv_SplitContainer.Height * Preferences.tvbannersplit 
+                    _tv_SplitContainer.SplitterDistance = _tv_SplitContainer.Height * Pref.tvbannersplit 
                 End If
             End If
         Catch
@@ -1474,7 +1474,7 @@ Public Class Form1
     End Sub
 
     Private Sub util_FilterLoad()
-        'If File.Exists(workingProfile.filters) Or Preferences.startupCache = False Then
+        'If File.Exists(workingProfile.filters) Or Pref.startupCache = False Then
 
         '    Dim line As String = String.Empty
         '    CheckedListBox2.Items.Clear()
@@ -1511,7 +1511,7 @@ Public Class Form1
     End Sub
 
     Private Sub util_GenreLoad()
-        If File.Exists(workingProfile.Genres) Or Not Preferences.startupCache Then
+        If File.Exists(workingProfile.Genres) Or Not Pref.startupCache Then
             Dim line As String = String.Empty
             Dim listof As New List(Of String)
             listof.Clear()
@@ -1558,13 +1558,13 @@ Public Class Form1
         For Each prof In profileStruct.ProfileList
             If prof.profilename = workingProfile.profilename Then
                 tempstring = prof.Config
-                If IO.File.Exists(tempstring) Then Preferences.configpath = tempstring
-                Preferences.configpath = tempstring
+                If IO.File.Exists(tempstring) Then Pref.configpath = tempstring
+                Pref.configpath = tempstring
 
                 Me.util_ConfigLoad()
             End If
         Next
-        For Each item In Preferences.moviesets
+        For Each item In Pref.moviesets
             cbMovieDisplay_MovieSet.Items.Add(item)
         Next
     End Sub
@@ -1772,7 +1772,7 @@ Public Class Form1
     End Sub
 
     Private Sub util_CommandListLoad()
-        For Each com In Preferences.commandlist
+        For Each com In Pref.commandlist
             ToolsToolStripMenuItem.DropDownItems.Add(com.title)
         Next
     End Sub
@@ -1925,7 +1925,7 @@ Public Class Form1
                 End If
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
                 top250txt.Text = workingMovieDetails.fullmoviebody.top250
-                If Preferences.movieRuntimeDisplay = "file" Then
+                If Pref.movieRuntimeDisplay = "file" Then
                     displayRuntimeScraper = False
                 Else
                     displayRuntimeScraper = True
@@ -1936,8 +1936,8 @@ Public Class Form1
                 workingMovieDetails.fileinfo.filename = IO.Path.GetFileName(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.path = IO.Path.GetFullPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.foldername = workingMovie.foldername
-                'workingMovieDetails.fileinfo.posterpath = Preferences.GetPosterPath(workingMovie.fullpathandfilename, workingMovie.filename)
-                'workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename, workingMovie.ActualNfoFileName) 'filename)
+                'workingMovieDetails.fileinfo.posterpath = Pref.GetPosterPath(workingMovie.fullpathandfilename, workingMovie.filename)
+                'workingMovieDetails.fileinfo.fanartpath = Pref.GetFanartPath(workingMovie.fullpathandfilename, workingMovie.ActualNfoFileName) 'filename)
 
                 workingMovieDetails.fileinfo.trailerpath = GetTrailerPath(workingMovieDetails.fileinfo.path)
                 If Yield(yieldIng) Then Return
@@ -1956,7 +1956,7 @@ Public Class Form1
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Dim workingposter As String = workingMovieDetails.fileinfo.posterpath
                     'Dim frodoPath As String
-                    'If Preferences.FrodoEnabled Then 
+                    'If Pref.FrodoEnabled Then 
                     '    If workingMovieDetails.fileinfo.videotspath<>"" Then
                     '        frodoPath = workingMovieDetails.fileinfo.videotspath+"poster.jpg"
                     '    Else
@@ -1978,7 +1978,7 @@ Public Class Form1
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Dim workingfanart As String = workingMovieDetails.fileinfo.fanartpath
                     'Dim frodoPath As String
-                    'If Preferences.FrodoEnabled Then 
+                    'If Pref.FrodoEnabled Then 
                     '    If workingMovieDetails.fileinfo.videotspath<>"" Then
                     '        frodoPath = workingMovieDetails.fileinfo.videotspath+"fanart.jpg"
                     '    Else
@@ -2028,14 +2028,14 @@ Public Class Form1
 
                 If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" And workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "" Then
                     Dim add As Boolean = True
-                    For Each item In Preferences.moviesets
+                    For Each item In Pref.moviesets
                         If item = workingMovieDetails.fullmoviebody.movieset.MovieSetName Then
                             add = False
                             Exit For
                         End If
                     Next
                     If add Then
-                        Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset.MovieSetName)
+                        Pref.moviesets.Add(workingMovieDetails.fullmoviebody.movieset.MovieSetName)
                     End If
                 End If
 
@@ -2133,16 +2133,16 @@ Public Class Form1
         Dim confirmedpresent As Boolean = False
         If File.Exists(workingMovieDetails.fileinfo.movsetposterpath) Then FanTvArtList.Items.Add("Set Poster") : confirmedpresent = True
         If File.Exists(workingMovieDetails.fileinfo.movsetfanartpath) Then FanTvArtList.Items.Add("Set Fanart") : confirmedpresent = True
-        If Not Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename) Then
+        If Not Pref.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename) Then
             Dim MovPath As String = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename) & "\"
-            If Preferences.MovFanartNaming Then MovPath = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
+            If Pref.MovFanartNaming Then MovPath = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
             If File.Exists(MovPath & "clearart.png") Then FanTvArtList.Items.Add("ClearArt") : confirmedpresent = True
             If File.Exists(MovPath & "logo.png") Then FanTvArtList.Items.Add("Logo") : confirmedpresent = True
             If File.Exists(MovPath & "banner.jpg") Then FanTvArtList.Items.Add("Banner") : confirmedpresent = True
             If File.Exists(MovPath & "landscape.jpg") Then FanTvArtList.Items.Add("Landscape") : confirmedpresent = True
             If File.Exists(MovPath & "disc.png") Then FanTvArtList.Items.Add("Disc") : confirmedpresent = True
-            If File.Exists(MovPath & "poster.jpg") AndAlso Not Preferences.posterjpg AndAlso Not Preferences.MovFanartNaming Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
-            If File.Exists(MovPath & "fanart.jpg") AndAlso Not Preferences.fanartjpg AndAlso Not Preferences.MovFanartNaming Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
+            If File.Exists(MovPath & "poster.jpg") AndAlso Not Pref.posterjpg AndAlso Not Pref.MovFanartNaming Then FanTvArtList.Items.Add("Poster") : confirmedpresent = True
+            If File.Exists(MovPath & "fanart.jpg") AndAlso Not Pref.fanartjpg AndAlso Not Pref.MovFanartNaming Then FanTvArtList.Items.Add("Fanart") : confirmedpresent = True
             If File.Exists(MovPath & "folder.jpg") Then FanTvArtList.Items.Add("Folder") : confirmedpresent = True
         End If
         Return confirmedpresent 
@@ -2171,7 +2171,7 @@ Public Class Form1
                     imagepath = workingMovieDetails.fileinfo.movsetfanartpath 
                 End If
             Else
-                If Preferences.MovFanartNaming Then
+                If Pref.MovFanartNaming Then
                     imagepath = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
                 Else
                     imagepath = IO.Path.GetDirectoryName(workingMovieDetails.fileinfo.fullpathandfilename) & "\"
@@ -2387,7 +2387,7 @@ Public Class Form1
             If IO.File.Exists(fullpathandfilename) = False Then
                 Dim rarname As String = tempmovie2
                 Dim SizeOfFile As Integer = FileLen(rarname)
-                tempint2 = Convert.ToInt32(Preferences.rarsize) * 1048576
+                tempint2 = Convert.ToInt32(Pref.rarsize) * 1048576
                 If SizeOfFile > tempint2 Then
                     Dim mat As Match
                     mat = Regex.Match(rarname, "\.part[0-9][0-9]?[0-9]?[0-9]?.rar")
@@ -2488,7 +2488,7 @@ Public Class Form1
                     tempstring = filechck.ReadToEnd
                     filechck.Close()
                     If tempstring.IndexOf("<movie>") = -1 And tempstring.IndexOf("</movie>") = -1 Then
-                        If Preferences.renamenfofiles = True Then
+                        If Pref.renamenfofiles = True Then
                             Dim fi As New IO.FileInfo(nfopaths(f))
                             Dim newpath As String = nfopaths(f).Replace(nfopaths(f).Substring(nfopaths(f).LastIndexOf("."), nfopaths(f).Length - nfopaths(f).LastIndexOf(".")), ".info")
                             fi.MoveTo(newpath)
@@ -2556,10 +2556,10 @@ Public Class Form1
         Dim action As String
         Dim errors As String
         Try
-            Dim myProc As Process = Process.Start("""" & Preferences.selectedvideoplayer & """", """" & tempstring & """")
+            Dim myProc As Process = Process.Start("""" & Pref.selectedvideoplayer & """", """" & tempstring & """")
         Catch ex As Exception
             errors = ex.ToString
-            action = "Dim myProc As Process = Process.Start(""" & Preferences.selectedvideoplayer & """," & """" & tempstring & """)"
+            action = "Dim myProc As Process = Process.Start(""" & Pref.selectedvideoplayer & """," & """" & tempstring & """)"
             Call util_ErrorLog(action, errors)
         End Try
     End Sub
@@ -2580,7 +2580,7 @@ Public Class Form1
     End Sub
 
     Public Sub tv_RefreshLog(ByVal action As String, Optional ByVal errors As String = "", Optional ByVal clear As Boolean = False)
-        If Preferences.tvshowrefreshlog = False Then
+        If Pref.tvshowrefreshlog = False Then
             Exit Sub
         End If
 
@@ -3099,7 +3099,7 @@ Public Class Form1
 
     Private Sub Mov_OpenFileToolStripMenuItem2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripViewNfo.Click
         Try
-            Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
+            Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename, Pref.altnfoeditor)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -3109,7 +3109,7 @@ Public Class Form1
     Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripPosterBrowserAlt.Click
         Try
             Dim t As New frmCoverArt
-            If Preferences.MultiMonitoEnabled Then
+            If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
                 t.Bounds = screen.AllScreens(CurrentScreen).Bounds
@@ -3126,7 +3126,7 @@ Public Class Form1
     Private Sub mov_ToolStripFanartBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripFanartBrowserAlt.Click
         Try
             Dim t As New frmMovieFanart
-            If Preferences.MultiMonitoEnabled Then
+            If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
                 t.Bounds = screen.AllScreens(CurrentScreen).Bounds
@@ -3245,7 +3245,7 @@ Public Class Form1
             Dim newlist As New List(Of ComboList)
             newlist.Clear()
             For Each movie In oMovies.MovieCache
-                If Not IO.File.Exists(Preferences.GetFanartPath(movie.fullpathandfilename)) Then
+                If Not IO.File.Exists(Pref.GetFanartPath(movie.fullpathandfilename)) Then
                     Dim movietoadd As New ComboList
                     movietoadd.fullpathandfilename = movie.fullpathandfilename
                     '       movietoadd.titleandyear = movie.titleandyear
@@ -3274,7 +3274,7 @@ Public Class Form1
             Dim newlist As New List(Of ComboList)
             newlist.Clear()
             For Each movie In oMovies.MovieCache
-                If Not IO.File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
+                If Not IO.File.Exists(Pref.GetPosterPath(movie.fullpathandfilename)) Then
                     Dim movietoadd As New ComboList
                     movietoadd.fullpathandfilename = movie.fullpathandfilename
                     '   movietoadd.titleandyear = movie.titleandyear
@@ -3397,14 +3397,14 @@ Public Class Form1
 
             frmSplash2.Label1.Text = "Launching Player....."
 
-            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Preferences.videomode = 3 Then
-                Preferences.videomode = 2
+            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Pref.videomode = 3 Then
+                Pref.videomode = 2
                 Call util_VideoMode2(tempstring)
             End If
-            If Preferences.videomode >= 4 Then
-                If Preferences.selectedvideoplayer <> Nothing Then
+            If Pref.videomode >= 4 Then
+                If Pref.selectedvideoplayer <> Nothing Then
                     Call util_VideoMode4(tempstring)
                 Else
                     Call util_VideoMode1(tempstring)
@@ -3870,7 +3870,7 @@ Public Class Form1
                 Dim Plot As String = DataGridViewMovies.Rows(MouseRowIndex).Cells("Plot").Value.ToString
 
                 If objHitTestInfo.RowY > -1 Then
-                    TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
+                    TooltipGridViewMovies1.Visible = Pref.ShowMovieGridToolTip
 
                     TooltipGridViewMovies1.Textinfo(Plot)
                     TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
@@ -3984,7 +3984,7 @@ Public Class Form1
         Dim tab As String = TabControl2.SelectedTab.Text
 
         If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" And tab <> "Media Stubs" Then
-            If workingMovieDetails Is Nothing And movieFolders.Count = 0 And Preferences.offlinefolders.Count = 0 Then
+            If workingMovieDetails Is Nothing And movieFolders.Count = 0 And Pref.offlinefolders.Count = 0 Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 MsgBox("There are no movies in your list to work on" & vbCrLf & "Add movie folders in the Folders Tab" & vbCrLf & "Then select the ""Search For New Movies"" Tab")
                 Exit Sub
@@ -4007,11 +4007,11 @@ Public Class Form1
                 Dim weburl As String = ""
                 Dim TMDB As String = workingMovieDetails.fullmoviebody.tmdbid 
                 Dim IMDB As String = workingMovieDetails.fullmoviebody.imdbid
-                Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Preferences.TMDbSelectedLanguageName)
+                Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)
                 If (IMDB <> "" And IMDB <> "0") AndAlso TMDB <> "" Then
                     Dim t As New frmMessageBox("Please Select","your preferred site","","2","1")
                     t.ShowDialog()
-                    If Preferences.WebSite = "tmdb" Then
+                    If Pref.WebSite = "tmdb" Then
                         weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                     Else
                         weburl = "http://www.imdb.com/title/" & IMDB & "/"
@@ -4022,7 +4022,7 @@ Public Class Form1
                     weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                 End If
 
-                If Preferences.externalbrowser = True Then
+                If Pref.externalbrowser = True Then
                     Me.TabControl2.SelectedIndex = currentTabIndex
 
                     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
@@ -4063,7 +4063,7 @@ Public Class Form1
 
         ElseIf tab.ToLower = "fanart" Then
             Dim isrootfolder As Boolean = False
-            If Preferences.movrootfoldercheck Then
+            If Pref.movrootfoldercheck Then
                 For Each moviefolder In movieFolders
                     Dim movfolder As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace("\" & workingMovieDetails.fileinfo.filename, "")
                     If moviefolder.rpath = movfolder Then 
@@ -4115,8 +4115,8 @@ Public Class Form1
 
     Private Sub mov_ChangeMovieSetup(ByVal engine As String)
         Dim tempstring As String = ""
-        Dim isroot As Boolean = Preferences.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename)
-        If Preferences.usefoldernames = False OrElse isroot Then
+        Dim isroot As Boolean = Pref.GetRootFolderCheck(workingMovieDetails.fileinfo.fullpathandfilename)
+        If Pref.usefoldernames = False OrElse isroot Then
             tempstring = Utilities.RemoveFilenameExtension(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename))
         Else
             tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -4126,7 +4126,7 @@ Public Class Form1
         End If
         Dim url As String
         If engine = "imdb" Then
-            url = Preferences.imdbmirror & "find?s=tt&q=" & Utilities.CleanFileName(tempstring)
+            url = Pref.imdbmirror & "find?s=tt&q=" & Utilities.CleanFileName(tempstring)
         Else
             url = "http://www.themoviedb.org/search?query=" & Utilities.CleanFileName(tempstring)
         End If
@@ -4497,26 +4497,26 @@ Public Class Form1
             Else
                 Try
                     If Not MovFanartToggle Then
-                        Dim issavefanart As Boolean = Preferences.savefanart
+                        Dim issavefanart As Boolean = Pref.savefanart
                         Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
                         Dim xtra As Boolean = False
                         Dim extrfanart As Boolean = False
                         If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Or rbMovThumb5.Checked Then xtra = True
-                        Preferences.savefanart = True
-                        If xtra AndAlso Preferences.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath)
+                        Pref.savefanart = True
+                        If xtra AndAlso Pref.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath)
 
                         If xtra OrElse Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath) Then
                             If Not xtra Then
-                                Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                                Dim paths As List(Of String) = Pref.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
                                 Movie.SaveFanartImageToCacheAndPaths(tempstring2, paths)
                             End If
-                            Preferences.savefanart = issavefanart
+                            Pref.savefanart = issavefanart
                             mov_DisplayFanart()
                             util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                             Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                             movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
 
-                            For Each paths In Preferences.offlinefolders
+                            For Each paths In Pref.offlinefolders
                                 Dim offlinepath As String = paths & "\"
                                 If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                     Dim mediapath As String
@@ -4527,7 +4527,7 @@ Public Class Form1
                             Next
                         Else
                             util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
-                            Preferences.savefanart = issavefanart
+                            Pref.savefanart = issavefanart
                         End If
 
                         lblMovFanartWidth.Text = PictureBox2.Image.Width
@@ -4773,9 +4773,9 @@ Public Class Form1
         For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
             panelAvailableMoviePosters.Controls.RemoveAt(i)
         Next
-        If Preferences.maximumthumbs < 1 Then
+        If Pref.maximumthumbs < 1 Then
         Else
-            Preferences.maximumthumbs = 10
+            Pref.maximumthumbs = 10
         End If
         btnPosterTabs_SaveImage.Enabled = False
         cbMoviePosterSaveLoRes.Enabled = False
@@ -4799,15 +4799,15 @@ Public Class Form1
         Dim itemcounter As Integer = 0
         If posterArray.Count > 0 Then
 
-            If posterArray.Count > Preferences.maximumthumbs Then
+            If posterArray.Count > Pref.maximumthumbs Then
                 Dim tempmaxthumbs As Integer = posterArray.Count
                 Do Until tempmaxthumbs < 1
                     pageCount += 1
-                    tempmaxthumbs -= Preferences.maximumthumbs
+                    tempmaxthumbs -= Pref.maximumthumbs
                 Loop
             End If
             If posterArray.Count > 10 Then
-                For f = 0 To Preferences.maximumthumbs - 1
+                For f = 0 To Pref.maximumthumbs - 1
                     names.Add(posterArray(f))
                 Next
             Else
@@ -4996,7 +4996,7 @@ Public Class Form1
                     tbEpRole.Text = actor.actorrole
 
                     Dim temppath As String = Episode.ShowObj.FolderPath
-                    Dim tempname As String = actor.actorname.Replace(" ", "_") & If(Preferences.FrodoEnabled, ".jpg", ".tbn")
+                    Dim tempname As String = actor.actorname.Replace(" ", "_") & If(Pref.FrodoEnabled, ".jpg", ".tbn")
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
                         util_ImageLoad(pbEpActorImage, temppath, Utilities.DefaultActorPath)
@@ -5138,11 +5138,11 @@ Public Class Form1
             ElseIf tab = "TVDB/IMDB" Then
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
-                    If Preferences.externalbrowser = True Then
+                    If Pref.externalbrowser = True Then
                         Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                         Dim t As New frmMessageBox("Please Select","your preferred site","","1","1")
                         t.ShowDialog()
-                        If Preferences.WebSite = "tvdb" Then
+                        If Pref.WebSite = "tvdb" Then
                             tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                         Else
                             tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
@@ -5173,14 +5173,14 @@ Public Class Form1
                 UcFanartTvTv1.ucFanartTv_Refresh(tv_ShowSelectedCurrently())
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                If Preferences.EdenEnabled Then
+                If Pref.EdenEnabled Then
                     util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
                 End If
-                If Preferences.FrodoEnabled Then
+                If Pref.FrodoEnabled Then
                     util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg"), Utilities.DefaultScreenShotPath)
                 End If
                 If TextBox35.Text = "" Then
-                    TextBox35.Text = Preferences.ScrShtDelay
+                    TextBox35.Text = Pref.ScrShtDelay
                 End If
             End If
         Catch ex As Exception
@@ -5267,13 +5267,13 @@ Public Class Form1
                     End If
                 Next
             Else
-                ListBox1.SelectedItem = Preferences.TvdbLanguage
+                ListBox1.SelectedItem = Pref.TvdbLanguage
             End If
-            Label55.Text = "Default Language for TV Shows is :- " & Preferences.TvdbLanguage
+            Label55.Text = "Default Language for TV Shows is :- " & Pref.TvdbLanguage
             Call tv_ShowListLoad()
             Try
-                If Preferences.sortorder <> Nothing Then
-                    If Preferences.sortorder = "dvd" Then
+                If Pref.sortorder <> Nothing Then
+                    If Pref.sortorder = "dvd" Then
                         RadioButton14.Checked = True
                     Else
                         RadioButton15.Checked = True
@@ -5288,7 +5288,7 @@ Public Class Form1
                 RadioButton15.Checked = True
             End Try
 
-            Select Case Preferences.seasonall
+            Select Case Pref.seasonall
                 Case "none"
                     RadioButton18.Checked = True
                 Case "poster"
@@ -5300,34 +5300,34 @@ Public Class Form1
             '1 - Everything from IMDB
             '2 - TV show Nfo From IMDB, Episode nfo from TVDB
             '3 - TV show Nfo From TVDB, Episode nfo from IMDB
-            If Preferences.tvdbactorscrape = 0 Then
+            If Pref.tvdbactorscrape = 0 Then
                 RadioButton13.Checked = True
                 RadioButton11.Checked = True
             End If
-            If Preferences.tvdbactorscrape = 1 Then
+            If Pref.tvdbactorscrape = 1 Then
                 RadioButton12.Checked = True
                 RadioButton10.Checked = True
             End If
-            If Preferences.tvdbactorscrape = 2 Then
+            If Pref.tvdbactorscrape = 2 Then
                 RadioButton12.Checked = True
                 RadioButton11.Checked = True
             End If
-            If Preferences.tvdbactorscrape = 3 Then
+            If Pref.tvdbactorscrape = 3 Then
                 RadioButton13.Checked = True
                 RadioButton10.Checked = True
             End If
-            If Preferences.postertype = "poster" Then
+            If Pref.postertype = "poster" Then
                 RadioButton9.Checked = True
             Else
                 RadioButton8.Checked = True
             End If
 
-            cbTvChgShowDLFanart         .Checked    = Preferences.tvdlfanart
-            cbTvChgShowDLPoster         .Checked    = Preferences.tvdlposter
-            cbTvChgShowDLSeason         .Checked    = Preferences.tvdlseasonthumbs
-            cbTvChgShowDLFanartTvArt    .Checked    = Preferences.TvDlFanartTvArt 
+            cbTvChgShowDLFanart         .Checked    = Pref.tvdlfanart
+            cbTvChgShowDLPoster         .Checked    = Pref.tvdlposter
+            cbTvChgShowDLSeason         .Checked    = Pref.tvdlseasonthumbs
+            cbTvChgShowDLFanartTvArt    .Checked    = Pref.TvDlFanartTvArt 
             
-            If Preferences.tvshow_useXBMC_Scraper = True Then
+            If Pref.tvshow_useXBMC_Scraper = True Then
                 GroupBox2.Enabled = False
                 GroupBox3.Enabled = False
                 GroupBox5.Enabled = False
@@ -5346,7 +5346,7 @@ Public Class Form1
 
     Private Sub util_LanguageCheck()
         Try
-            If ListBox1.SelectedIndex < 0 Then ListBox1.SelectedIndex = languageList.FindIndex(Function(index As Tvdb.Language) index.Abbreviation.Value = Preferences.TvdbLanguageCode)
+            If ListBox1.SelectedIndex < 0 Then ListBox1.SelectedIndex = languageList.FindIndex(Function(index As Tvdb.Language) index.Abbreviation.Value = Pref.TvdbLanguageCode)
             If ListBox3.SelectedIndex = -1 orElse listOfShows(ListBox3.SelectedIndex).showid = "none" Then Exit Sub
             Dim languagecode As String = languageList(ListBox1.SelectedIndex).Abbreviation.Value
             Dim url As String = "http://thetvdb.com/api/6E82FED600783400/series/" & listOfShows(ListBox3.SelectedIndex).showid & "/" & languagecode & ".xml"
@@ -5436,9 +5436,9 @@ Public Class Form1
 
         WorkingWithNfoFiles.ep_NfoSave(alleps, path)
 
-        tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Preferences.autoepisodescreenshot) & vbcrlf
+        tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.autoepisodescreenshot) & vbcrlf
 
-        If Preferences.autorenameepisodes = True Then
+        If Pref.autorenameepisodes = True Then
             Dim eps As New List(Of String)
             eps.Clear()
             For Each ep In alleps
@@ -5541,7 +5541,7 @@ Public Class Form1
             Dim filename_video As String = FilePath
             Dim filename_nfo As String = filename_video.Replace(IO.Path.GetExtension(filename_video), ".nfo")
             If IO.File.Exists(filename_nfo) Then
-                If ep_NfoValidate(filename_nfo) = False And Preferences.renamenfofiles = True Then
+                If ep_NfoValidate(filename_nfo) = False And Pref.renamenfofiles = True Then
                     Dim movefilename As String = filename_nfo.Replace(IO.Path.GetExtension(filename_nfo), ".info")
                     Try
                         If File.Exists(movefilename) Then
@@ -5571,7 +5571,7 @@ Public Class Form1
                             If IO.File.Exists(tempmovie) = False Then
                                 Dim rarname As String = tempmovie2
                                 Dim SizeOfFile As Integer = FileLen(rarname)
-                                tempint2 = Convert.ToInt32(Preferences.rarsize) * 1048576
+                                tempint2 = Convert.ToInt32(Pref.rarsize) * 1048576
                                 If SizeOfFile > tempint2 Then
                                     Dim mat As Match
                                     mat = Regex.Match(rarname, "\.part[0-9][0-9]?[0-9]?[0-9]?.rar")
@@ -5680,7 +5680,7 @@ Public Class Form1
             Tv_CacheSave()
             tv_CacheLoad()
             tv_Filter()
-            If Preferences.disabletvlogs Then
+            If Pref.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -6065,7 +6065,7 @@ Public Class Form1
                 For Each tvshow In Cache.TvCache.Shows
                     Dim showpath As String = tvshow.NfoFilePath.Replace(IO.Path.GetFileName(tvshow.NfoFilePath), "")
                     If renamefile.IndexOf(showpath) <> -1 Then
-                        showtitle = Preferences.RemoveIgnoredArticles(tvshow.Title.Value)
+                        showtitle = Pref.RemoveIgnoredArticles(tvshow.Title.Value)
                         For Each episode In tvshow.Episodes
                             If episode.NfoFilePath = renamefile Then
                                 If seasonno = "" Then
@@ -6200,7 +6200,7 @@ Public Class Form1
             Next
             Call Tv_CacheSave()
             messbox.Close()
-            If Preferences.disabletvlogs Then
+            If Pref.disabletvlogs Then
                 Dim MyFormObject As New frmoutputlog(renamelog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -6296,7 +6296,7 @@ Public Class Form1
                 ThisEp = WorkingWithNfoFiles.ep_NfoLoad(nfo)  'nfoFunction.ep_NfoLoadGeneric(nfo)
                 For h = ThisEp.Count - 1 To 0 Step -1
 
-                    Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
+                    Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
                     ThisEp(h).Details.StreamDetails.Video = fileStreamDetails.filedetails_video
 
                     ThisEp(h).Details.StreamDetails.Audio.Clear()
@@ -6312,7 +6312,7 @@ Public Class Form1
                         Try
                             Dim tempstring As String
                             tempstring = ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value
-                            If Preferences.intruntime Then
+                            If Pref.intruntime Then
                                 ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString
                             Else
                                 ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
@@ -6500,8 +6500,8 @@ Public Class Form1
             rbTVposter.Enabled = True
             rbTVbanner.Enabled = True
             btnTvPosterTVDBSpecific.Enabled = True
-            Dim eden As Boolean = Preferences.EdenEnabled
-            Dim frodo As Boolean = Preferences.FrodoEnabled
+            Dim eden As Boolean = Pref.EdenEnabled
+            Dim frodo As Boolean = Pref.FrodoEnabled
             Dim edenpath As String =""
             Dim frodopath As string =""
             Dim tempstring As String = ComboBox2.SelectedItem
@@ -6709,10 +6709,10 @@ Public Class Form1
             Exit Sub
         End If
         If Not rbTVbanner.Checked Then
-            If usedlist.Count > Preferences.maximumthumbs Then
+            If usedlist.Count > Pref.maximumthumbs Then
                 btnTvPosterNext.Visible = True
                 btnTvPosterPrev.Visible = True
-                If usedlist.Count >= Preferences.maximumthumbs Then
+                If usedlist.Count >= Pref.maximumthumbs Then
                     Label72.Text = "Displaying 1 to 10 of " & usedlist.Count.ToString & " Images"
                 Else
                     Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
@@ -6725,8 +6725,8 @@ Public Class Form1
             Else
                 btnTvPosterNext.Visible = False
                 btnTvPosterPrev.Visible = False
-                If posterArray.Count >= Preferences.maximumthumbs Then
-                    Label72.Text = "Displaying 1 to " & Preferences.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
+                If posterArray.Count >= Pref.maximumthumbs Then
+                    Label72.Text = "Displaying 1 to " & Pref.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
                 Else
                     Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
                 End If
@@ -6756,7 +6756,7 @@ Public Class Form1
 
 
 
-        Dim tempint As Integer = (tvposterpage * (Preferences.maximumthumbs) + 1) - Preferences.maximumthumbs
+        Dim tempint As Integer = (tvposterpage * (Pref.maximumthumbs) + 1) - Pref.maximumthumbs
         Dim tempint2 As Integer = tvposterpage * 10
 
         If tempint2 > usedlist.Count Then
@@ -6942,11 +6942,11 @@ Public Class Form1
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim workingposterpath = WorkingTvShow.FolderPath & "folder.jpg"
             If ComboBox2.Text.ToLower = "main image" Then
-                If (Preferences.EdenEnabled OrElse Preferences.tvfolderjpg) And Not (Preferences.FrodoEnabled AndAlso rbTVbanner.Checked) Then
+                If (Pref.EdenEnabled OrElse Pref.tvfolderjpg) And Not (Pref.FrodoEnabled AndAlso rbTVbanner.Checked) Then
                     imagePaths.Add(workingposterpath)
                     eden = 1
                 End If
-                If Preferences.FrodoEnabled Then
+                If Pref.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg"))
                         frodo = 1
@@ -6955,17 +6955,17 @@ Public Class Form1
                         frodo = 1
                     End If
                 End If
-                If Preferences.tvfolderjpg AndAlso rbTVposter.Checked Then
+                If Pref.tvfolderjpg AndAlso rbTVposter.Checked Then
                     imagePaths.Add(workingposterpath)
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
                 Dim temp As String = ComboBox2.Text.ToLower
                 temp = temp.Replace(" ", "")
-                If Preferences.EdenEnabled Then
+                If Pref.EdenEnabled Then
                     imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn"))
                     eden =1
                 End If
-                If Preferences.FrodoEnabled Then
+                If Pref.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg"))
                         frodo = 1
@@ -6974,7 +6974,7 @@ Public Class Form1
                         frodo = 1
                     End If
                 End If
-                If Preferences.seasonfolderjpg Then
+                If Pref.seasonfolderjpg Then
                     temp = temp.Replace("season", "")
                     Dim seasonno As Integer = temp.ToInt
                     Dim seasonpath As String = Nothing
@@ -6987,16 +6987,16 @@ Public Class Form1
                     If Not IsNothing(seasonpath) Then imagePaths.Add(WorkingTvShow.FolderPath & seasonpath & "folder.jpg")
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
-                If Preferences.EdenEnabled Then
-                    If Preferences.seasonall="poster" and rbTVposter.Checked Then
+                If Pref.EdenEnabled Then
+                    If Pref.seasonall="poster" and rbTVposter.Checked Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn"))
                         eden =1
-                    ElseIf Preferences.seasonall="wide" and rbTVbanner.Checked Then
+                    ElseIf Pref.seasonall="wide" and rbTVbanner.Checked Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn"))
                         eden =1
                     End If 
                 End If
-                If Preferences.FrodoEnabled Then
+                If Pref.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg"))
                         frodo = 1
@@ -7006,11 +7006,11 @@ Public Class Form1
                     End If
                 End If
             ElseIf ComboBox2.Text.ToLower = "specials" Then
-                If Preferences.EdenEnabled Then
+                If Pref.EdenEnabled Then
                     imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn"))
                     eden =1
                 End If
-                If Preferences.FrodoEnabled Then
+                If Pref.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg"))
                         frodo = 1
@@ -7019,7 +7019,7 @@ Public Class Form1
                         frodo = 1
                     End If
                 End If
-                If Preferences.seasonfolderjpg AndAlso rbTVposter.Checked Then
+                If Pref.seasonfolderjpg AndAlso rbTVposter.Checked Then
                     Dim seasonpath As String = ""
                     For Each seas In WorkingTvShow.Seasons.Values
                         If seas.SeasonNumber = 0 Then
@@ -7092,7 +7092,7 @@ Public Class Form1
     Sub ShowMovieFilter(cbFilter As Control)
         If Not cbFilter.Visible Then 
             movie_filters.GetItem(cbFilter.Name).Visible = True
-            Preferences.movie_filters.SetMovieFiltersVisibility
+            Pref.movie_filters.SetMovieFiltersVisibility
             UpdateMovieFiltersPanel
         End If
     End Sub
@@ -7197,15 +7197,15 @@ Public Class Form1
                 '.Image = sender.image
                 Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
                 Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
-                If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(m.fullpathandfilename)) Then
+                If Not File.Exists(posterCache) And File.Exists(Pref.GetPosterPath(m.fullpathandfilename)) Then
                     Try
-                        Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(m.fullpathandfilename))
+                        Dim bitmap2 As New Bitmap(Pref.GetPosterPath(m.fullpathandfilename))
                         bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
                         Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
                         bitmap2.Dispose()
                     Catch
                         'Invalid file
-                        File.Delete(Preferences.GetPosterPath(m.fullpathandfilename))
+                        File.Delete(Pref.GetPosterPath(m.fullpathandfilename))
                     End Try
                 End If
                 If File.Exists(posterCache) Then
@@ -7213,7 +7213,7 @@ Public Class Form1
                         .Image = Utilities.LoadImage(posterCache)
                     Catch
                         'Invalid file
-                        File.Delete(Preferences.GetPosterPath(m.fullpathandfilename))
+                        File.Delete(Pref.GetPosterPath(m.fullpathandfilename))
                     End Try
                 Else
                     .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
@@ -7406,18 +7406,18 @@ Public Class Form1
             Dim tempstring As String = ClickedControl
             If tempstring <> Nothing Then
                 Try
-                    Dim Temp2 As String = Preferences.GetPosterPath(tempstring)
+                    Dim Temp2 As String = Pref.GetPosterPath(tempstring)
                     If IO.File.Exists(Temp2) Then
                         Me.ControlBox = False
                         MenuStrip1.Enabled = False
                         'ToolStrip1.Enabled = False
-                        'Dim newimage As New Bitmap(Preferences.GetPosterPath(tempstring))
+                        'Dim newimage As New Bitmap(Pref.GetPosterPath(tempstring))
                         'Dim newimage2 As New Bitmap(newimage)
                         'newimage.Dispose()
                         'Call util_ZoomImage(newimage2)
                         util_ZoomImage(Temp2)
                     Else
-                        MsgBox("Cant find file:-" & vbCrLf & Preferences.GetPosterPath(tempstring))
+                        MsgBox("Cant find file:-" & vbCrLf & Pref.GetPosterPath(tempstring))
                     End If
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -7459,10 +7459,10 @@ Public Class Form1
                     Dim file = IO.File.CreateText(trailerstring)
                     file.WriteLine(trailerpath)
                     file.Close()
-                    If Preferences.videomode = 1 Then Call util_VideoMode1(trailerstring)
-                    If Preferences.videomode = 2 Or Preferences.videomode = 3 Then Call util_VideoMode2(trailerstring)
-                    If Preferences.videomode >= 4 Then
-                        If Preferences.selectedvideoplayer <> Nothing Then
+                    If Pref.videomode = 1 Then Call util_VideoMode1(trailerstring)
+                    If Pref.videomode = 2 Or Pref.videomode = 3 Then Call util_VideoMode2(trailerstring)
+                    If Pref.videomode >= 4 Then
+                        If Pref.selectedvideoplayer <> Nothing Then
                             Call util_VideoMode4(trailerstring)
                         Else
                             Call util_VideoMode1(trailerstring)
@@ -7811,9 +7811,9 @@ Public Class Form1
         Dim height = 0
 
         If postersOrBackdrops = "Backdrops" then
-            point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
+            point = Movie.GetBackDropResolution(Pref.BackDropResolutionSI)
         Else
-            height = Movie.GetHeightResolution(Preferences.PosterResolutionSI)
+            height = Movie.GetHeightResolution(Pref.PosterResolutionSI)
         End If
 
 
@@ -7830,14 +7830,14 @@ Public Class Form1
 
                 If postersOrBackdrops = "Backdrops" then
 
-                    path = Preferences.GetFanartPath(m.fullpathandfilename)
+                    path = Pref.GetFanartPath(m.fullpathandfilename)
 
                     If File.Exists(path) then
                         DownloadCache.CopyAndDownSizeImage(path, path, point.x, point.y)
                     End If
                 Else
 
-                    path   = Preferences.GetPosterPath(m.fullpathandfilename)
+                    path   = Pref.GetPosterPath(m.fullpathandfilename)
 
                     If File.Exists(path) then
                         DownloadCache.CopyAndDownSizeImage(path, path, , height  )
@@ -8007,13 +8007,13 @@ Public Class Form1
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
         Try
             'tv_FoldersSetup()
-            tv_ShowFind(Preferences.tvRootFolders, False)
+            tv_ShowFind(Pref.tvRootFolders, False)
             If newTvFolders.Count > 0 Then
                 For Each item In newTvFolders
-                    Preferences.tvFolders.Add(item)
+                    Pref.tvFolders.Add(item)
                 Next
-                Preferences.tvFolders.Sort()
-                Preferences.ConfigSave()
+                Pref.tvFolders.Sort()
+                Pref.ConfigSave()
             End If
             tv_ShowScrape()
         Catch ex As Exception
@@ -8032,7 +8032,7 @@ Public Class Form1
                     If Not ListBox6.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
                         newTvFolders.Add(strfolder2)
                     End If
-                ElseIf Not Preferences.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
+                ElseIf Not Pref.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
                     If Not ListBox6.Items.Contains(strfolder2) Then
                         newTvFolders.Add(strfolder2)
                     End If
@@ -8047,21 +8047,21 @@ Public Class Form1
                 ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
                 ToolStripStatusLabel5.Visible = True
             End If
-            Dim selectedLang As String = If(Preferences.tvshow_useXBMC_Scraper, ComboBox_TVDB_Language.Text, Preferences.TvdbLanguageCode)
+            Dim selectedLang As String = If(Pref.tvshow_useXBMC_Scraper, ComboBox_TVDB_Language.Text, Pref.TvdbLanguageCode)
             Dim args As TvdbArgs = New TvdbArgs("", selectedLang)
             bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
         End If
     End Sub
 
     Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.Click
-        Preferences.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
+        Pref.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub 
 
     Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbPrimaryPlot.Click
         Try
-            Preferences.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
+            Pref.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -8071,7 +8071,7 @@ Public Class Form1
 
     Private Sub ListBox9_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox9.SelectedIndexChanged
         Try
-            Preferences.imdbmirror = ListBox9.SelectedItem
+            Pref.imdbmirror = ListBox9.SelectedItem
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -8081,37 +8081,37 @@ Public Class Form1
 
     Private Sub mov_ThumbNailUrlsSet()
         If IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 0
+            Pref.nfoposterscraper = 0
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 1
+            Pref.nfoposterscraper = 1
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 2
+            Pref.nfoposterscraper = 2
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 3
+            Pref.nfoposterscraper = 3
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 4
+            Pref.nfoposterscraper = 4
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 5
+            Pref.nfoposterscraper = 5
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 6
+            Pref.nfoposterscraper = 6
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Preferences.nfoposterscraper = 7
+            Pref.nfoposterscraper = 7
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 8
+            Pref.nfoposterscraper = 8
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 9
+            Pref.nfoposterscraper = 9
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 10
+            Pref.nfoposterscraper = 10
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 11
+            Pref.nfoposterscraper = 11
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 12
+            Pref.nfoposterscraper = 12
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 13
+            Pref.nfoposterscraper = 13
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 14
+            Pref.nfoposterscraper = 14
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Preferences.nfoposterscraper = 15
+            Pref.nfoposterscraper = 15
         End If
     End Sub
 
@@ -8184,7 +8184,7 @@ Public Class Form1
         Try
             generalprefschanged = False
 
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
 
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = e.ClickedItem.Text Then
@@ -8228,7 +8228,7 @@ Public Class Form1
         Application.DoEvents()
         Me.Enabled = False
         If IO.File.Exists(workingProfile.config) Then
-            Preferences.moviesets.Clear()
+            Pref.moviesets.Clear()
             Me.util_ConfigLoad()
         Else
             Call SetUpPreferences()
@@ -8236,7 +8236,7 @@ Public Class Form1
 
         util_MainFormTitleUpdate()  'creates & shows new title to Form1, also includes current profile name
 
-        If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
+        If Not IO.File.Exists(workingProfile.moviecache) Or Pref.startupCache = False Then
             mov_RebuildMovieCaches
         Else
             oMovies.LoadCaches
@@ -8250,7 +8250,7 @@ Public Class Form1
             Call util_GenreLoad()
         End If
 
-        If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
+        If Not IO.File.Exists(workingProfile.tvcache) Or Pref.startupCache = False Then
             Call tv_CacheRefresh()
         Else
             Call tv_CacheLoad()
@@ -8261,52 +8261,52 @@ Public Class Form1
         End If
 
 
-        'If Preferences.maximised = True Then
+        'If Pref.maximised = True Then
         '    Me.WindowState = FormWindowState.Maximized
         'Else
-        '    If Preferences.locx <> 0 Then
-        '        Me.Location = New Point(Preferences.locx, Preferences.locy)
+        '    If Pref.locx <> 0 Then
+        '        Me.Location = New Point(Pref.locx, Pref.locy)
         '    End If
-        '    If Preferences.locy <> 0 Then
-        '        Me.Location = New Point(Preferences.locx, Preferences.locy)
+        '    If Pref.locy <> 0 Then
+        '        Me.Location = New Point(Pref.locx, Pref.locy)
         '    End If
-        '    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
-        '        Me.Width = Preferences.formwidth
-        '        Me.Height = Preferences.formheight
+        '    If Pref.formheight <> 0 And Pref.formwidth <> 0 Then
+        '        Me.Width = Pref.formwidth
+        '        Me.Height = Pref.formheight
         '    End If
         'End If
 
         Me.Refresh()
         Application.DoEvents()
 
-        If Preferences.splt5 = 0 Then
+        If Pref.splt5 = 0 Then
             Dim tempint As Integer = SplitContainer1.Height
             tempint = tempint / 4
             tempint = tempint * 3
             If tempint > 275 Then
-                Preferences.splt5 = tempint
+                Pref.splt5 = tempint
             Else
-                Preferences.splt5 = 275
+                Pref.splt5 = 275
             End If
         End If
 
-        If Preferences.startuptab = 0 Then
-            SplitContainer1.SplitterDistance = Preferences.splt1
-            SplitContainer2.SplitterDistance = Preferences.splt2
-            SplitContainer5.SplitterDistance = Preferences.splt5
+        If Pref.startuptab = 0 Then
+            SplitContainer1.SplitterDistance = Pref.splt1
+            SplitContainer2.SplitterDistance = Pref.splt2
+            SplitContainer5.SplitterDistance = Pref.splt5
             TabLevel1.SelectedIndex = 1
-            SplitContainer3.SplitterDistance = Preferences.splt3
-            SplitContainer4.SplitterDistance = Preferences.splt4
-            _tv_SplitContainer.SplitterDistance = Preferences.splt6 
+            SplitContainer3.SplitterDistance = Pref.splt3
+            SplitContainer4.SplitterDistance = Pref.splt4
+            _tv_SplitContainer.SplitterDistance = Pref.splt6 
             TabLevel1.SelectedIndex = 0
         Else
-            SplitContainer1.SplitterDistance = Preferences.splt1
-            SplitContainer2.SplitterDistance = Preferences.splt2
-            SplitContainer5.SplitterDistance = Preferences.splt5
+            SplitContainer1.SplitterDistance = Pref.splt1
+            SplitContainer2.SplitterDistance = Pref.splt2
+            SplitContainer5.SplitterDistance = Pref.splt5
             TabLevel1.SelectedIndex = 1
-            SplitContainer3.SplitterDistance = Preferences.splt3
-            SplitContainer4.SplitterDistance = Preferences.splt4
-            _tv_SplitContainer.SplitterDistance = Preferences.splt6
+            SplitContainer3.SplitterDistance = Pref.splt3
+            SplitContainer4.SplitterDistance = Pref.splt4
+            _tv_SplitContainer.SplitterDistance = Pref.splt6
         End If
         SplitContainer1.IsSplitterFixed = False
         SplitContainer2.IsSplitterFixed = False
@@ -8317,14 +8317,14 @@ Public Class Form1
         'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
         Try
-            If cbMovieDisplay_MovieSet.Items.Count <> Preferences.moviesets.Count Then
+            If cbMovieDisplay_MovieSet.Items.Count <> Pref.moviesets.Count Then
                 cbMovieDisplay_MovieSet.Items.Clear()
-                For Each mset In Preferences.moviesets
+                For Each mset In Pref.moviesets
                     cbMovieDisplay_MovieSet.Items.Add(mset)
                 Next
             End If
             If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
-                For Each mset In Preferences.moviesets
+                For Each mset In Pref.moviesets
                     cbMovieDisplay_MovieSet.Items.Add(mset)
                 Next
                 For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
@@ -8366,7 +8366,7 @@ Public Class Form1
 
     Private Sub mov_SwitchRuntime()
         If workingMovieDetails Is Nothing Then Exit Sub
-        If Preferences.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
+        If Pref.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
             runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
             runtimetxt.Enabled = False
         Else
@@ -8388,11 +8388,11 @@ Public Class Form1
     End Function
 
     Private Sub util_FontSetup()
-        If Preferences.font <> Nothing Then
-            If Preferences.font <> "" Then
+        If Pref.font <> Nothing Then
+            If Pref.font <> "" Then
                 Try
                     Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                    Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
+                    Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
                     genretxt.Font = newFont
                     premiertxt.Font = newFont 
                     certtxt.Font = newFont
@@ -8516,14 +8516,14 @@ Public Class Form1
 
     Private Sub tpMoviesTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Leave
         DataGridView1.EndEdit()
-        Preferences.tableview.Clear()
+        Pref.tableview.Clear()
         For Each column In DataGridView1.Columns
             Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
-            Preferences.tableview.Add(tempstring)
+            Pref.tableview.Add(tempstring)
         Next
         If IsNothing(DataGridView1.SortedColumn) = False Then
-            Preferences.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
-            Preferences.ConfigSave()
+            Pref.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
+            Pref.ConfigSave()
         End If
 
         If DataDirty Then
@@ -8540,36 +8540,36 @@ Public Class Form1
 
 'Table Setup and update
     Private Sub mov_TableViewSetup()
-        Preferences.tableview.Clear()
-        Preferences.tableview.Add("title|150|0|true")
-        Preferences.tableview.Add("year|40|1|true")
-        Preferences.tableview.Add("genre|160|2|true")
-        Preferences.tableview.Add("rating|50|3|true")
-        Preferences.tableview.Add("runtime|60|4|true")
-        Preferences.tableview.Add("top250|89|5|false")
-        Preferences.tableview.Add("source|150|6|false")
-        Preferences.tableview.Add("playcount|120|7|true")
-        Preferences.tableview.Add("set|150|8|true")
-        Preferences.tableview.Add("certificate|100|9|false")
-        Preferences.tableview.Add("sorttitle|100|10|false")
-        Preferences.tableview.Add("outline|200|11|false")
-        Preferences.tableview.Add("plot|200|12|false")
-        Preferences.tableview.Add("stars|200|13|false")
-        Preferences.tableview.Add("id|82|14|false")
-        Preferences.tableview.Add("missingdata1|115|15|false")
-        Preferences.tableview.Add("fullpathandfilename|300|16|false")
-        Preferences.tableview.Add("createdate|104|17|false")
+        Pref.tableview.Clear()
+        Pref.tableview.Add("title|150|0|true")
+        Pref.tableview.Add("year|40|1|true")
+        Pref.tableview.Add("genre|160|2|true")
+        Pref.tableview.Add("rating|50|3|true")
+        Pref.tableview.Add("runtime|60|4|true")
+        Pref.tableview.Add("top250|89|5|false")
+        Pref.tableview.Add("source|150|6|false")
+        Pref.tableview.Add("playcount|120|7|true")
+        Pref.tableview.Add("set|150|8|true")
+        Pref.tableview.Add("certificate|100|9|false")
+        Pref.tableview.Add("sorttitle|100|10|false")
+        Pref.tableview.Add("outline|200|11|false")
+        Pref.tableview.Add("plot|200|12|false")
+        Pref.tableview.Add("stars|200|13|false")
+        Pref.tableview.Add("id|82|14|false")
+        Pref.tableview.Add("missingdata1|115|15|false")
+        Pref.tableview.Add("fullpathandfilename|300|16|false")
+        Pref.tableview.Add("createdate|104|17|false")
     End Sub
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
-        If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tableview.Count < 18 Then    'Counter. Increase if adding new tableview column else new columns won't be added to config.xml.
+        If Pref.tablesortorder = Nothing Then Pref.tablesortorder = "Title|Ascending"
+        If Pref.tablesortorder = "" Then Pref.tablesortorder = "Title|Ascending"
+        If Pref.tableview.Count < 18 Then    'Counter. Increase if adding new tableview column else new columns won't be added to config.xml.
             Call mov_TableViewSetup()
         End If
         tableSets.Clear()
-        For Each item In Preferences.tableview
+        For Each item In Pref.tableview
             Dim tempdata() As String
             tempdata = item.Split("|")
             Dim newcolumn As New str_TableItems(SetDefaults)
@@ -8694,7 +8694,7 @@ Public Class Form1
                             If chi.InnerText = "" Or Not IsNumeric(chi.InnerText) Then
                                 chi.InnerText = "0"
                             Else
-                                chi.InnerText = Utilities.DecodeDateTime(chi.InnerText, Preferences.DateFormat)
+                                chi.InnerText = Utilities.DecodeDateTime(chi.InnerText, Pref.DateFormat)
                             End If
                         End If
                     Next
@@ -8851,7 +8851,7 @@ Public Class Form1
         End With
 
         Dim sourcecolumn As New DataGridViewComboBoxColumn()
-        For Each src In Preferences.releaseformat
+        For Each src In Pref.releaseformat
             sourcecolumn.Items.Add(src)
         Next
         With sourcecolumn
@@ -8883,7 +8883,7 @@ Public Class Form1
         End With
 
         Dim setscolumn As New DataGridViewComboBoxColumn
-        For Each sets In Preferences.moviesets
+        For Each sets In Pref.moviesets
             setscolumn.Items.Add(sets)
         Next
         With setscolumn
@@ -9016,7 +9016,7 @@ Public Class Form1
         Dim sortheader As String
         Dim sortord As String
         Dim tempdata2() As String
-        tempdata2 = Preferences.tablesortorder.Split("|")
+        tempdata2 = Pref.tablesortorder.Split("|")
         sortheader = tempdata2(0)
         sortord = tempdata2(1)
 
@@ -9375,7 +9375,7 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
                 Dim checkmpaa = oCachedMovie.Certificate 
-                If Not Preferences.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
+                If Not Pref.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
                     checkmpaa = "Rated " & checkmpaa
                 End If
                 oMovie.ScrapedMovie.fullmoviebody.mpaa = checkmpaa
@@ -9822,7 +9822,7 @@ End Sub
                 MsgBox("No Fanart Found on TMDB")
             Else
                 If Not MovSet Then
-                    Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                    Dim paths As List(Of String) = Pref.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
                     Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(FanartUrl, paths, True)
                     If Not aok Then Throw New Exception("TMDB is offline")
                     util_ImageLoad(PbMovieFanArt, paths(0), Utilities.DefaultFanartPath)
@@ -9969,7 +9969,7 @@ End Sub
             If moviethumburl <> "" And moviethumburl <> "na" Then
                 Try
                     If Not MovSet Then
-                        Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
+                        Dim PostPaths As List(Of String) = Pref.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
                         Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True)
                         If Not aok Then Throw New Exception()
                         util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
@@ -10021,8 +10021,8 @@ End Sub
         End If
         Try
             Dim fanartpath As String = ""
-            If IO.File.Exists(Preferences.GetFanartPath(nfopath)) Then
-                fanartpath = Preferences.GetFanartPath(nfopath)
+            If IO.File.Exists(Pref.GetFanartPath(nfopath)) Then
+                fanartpath = Pref.GetFanartPath(nfopath)
             Else
                 fanartpath = Utilities.DefaultOfflineArtPath
             End If
@@ -10132,7 +10132,7 @@ End Sub
 
     Private Sub ToolsToolStripMenuItem_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles ToolsToolStripMenuItem.DropDownItemClicked
         Try
-            For Each temp In Preferences.commandlist
+            For Each temp In Pref.commandlist
                 If temp.title = e.ClickedItem.Text Then
                     Try
                         Process.Start(temp.command)
@@ -10149,7 +10149,7 @@ End Sub
     Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click 
         Try
             Dim t As New frmOptions
-            If Preferences.MultiMonitoEnabled Then
+            If Pref.MultiMonitoEnabled Then
                 t.Bounds = screen.AllScreens(CurrentScreen).Bounds
                 t.StartPosition = FormStartPosition.Manual
             End If
@@ -10162,9 +10162,9 @@ End Sub
     Private Sub SearchForMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForMissingEpisodesToolStripMenuItem.Click
         Try
             If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
-                Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
-                Preferences.ConfigSave()
-                If Preferences.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                Pref.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
+                Pref.ConfigSave()
+                If Pref.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
                     RefreshMissingEpisodesToolStripMenuItem.Enabled = False
                     rbTvListAll.Checked = True
                     rbTvMissingEpisodes.Enabled = False
@@ -10175,14 +10175,14 @@ End Sub
                     Return
                 End If
                 RefreshMissingEpisodesToolStripMenuItem.Enabled = True
-                RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Preferences.lastrefreshmissingdate
+                RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate
                 rbTvMissingEpisodes.Enabled = True
                 rbTvMissingAiredEp.Enabled = True
                 'Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
                 'If answer = MsgBoxResult.Yes 
                     'Preferences.DlMissingEpData = True
                 'Else
-                    Preferences.DlMissingEpData = False
+                    Pref.DlMissingEpData = False
                 'End If
                 tv_EpisodesMissingLoad(False)
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
@@ -10196,8 +10196,8 @@ End Sub
     End Sub
 
     Private Sub RefreshMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMissingEpisodesToolStripMenuItem.Click
-        Preferences.DlMissingEpData = True
-        Preferences.lastrefreshmissingdate = DateTime.Now.ToString("yyyy-MM-dd")
+        Pref.DlMissingEpData = True
+        Pref.lastrefreshmissingdate = DateTime.Now.ToString("yyyy-MM-dd")
         ClearMissingFolder()   'tv_EpisodesMissingClean
         tv_EpisodesMissingLoad(True)
         
@@ -10287,7 +10287,7 @@ End Sub
                 tvBatchList.Reset()
 
                 Dim displaywizard As New tv_batch_wizard
-                If Preferences.MultiMonitoEnabled Then
+                If Pref.MultiMonitoEnabled Then
                     displaywizard.Bounds = screen.AllScreens(CurrentScreen).Bounds
                     displaywizard.StartPosition = FormStartPosition.Manual
                 End If
@@ -10335,11 +10335,11 @@ End Sub
                         Dim fullpathandfilename As String = sRow.Cells("fullpathandfilename").Value.ToString
 
                         listoffilestomove.Add(fullpathandfilename)
-                        If IO.File.Exists(Preferences.GetFanartPath(fullpathandfilename)) Then
-                            listoffilestomove.Add(Preferences.GetFanartPath(fullpathandfilename))
+                        If IO.File.Exists(Pref.GetFanartPath(fullpathandfilename)) Then
+                            listoffilestomove.Add(Pref.GetFanartPath(fullpathandfilename))
                         End If
-                        If IO.File.Exists(Preferences.GetPosterPath(fullpathandfilename)) Then
-                            listoffilestomove.Add(Preferences.GetPosterPath(fullpathandfilename))
+                        If IO.File.Exists(Pref.GetPosterPath(fullpathandfilename)) Then
+                            listoffilestomove.Add(Pref.GetPosterPath(fullpathandfilename))
                         End If
                         Dim di As DirectoryInfo = New DirectoryInfo(fullpathandfilename.Replace(IO.Path.GetFileName(fullpathandfilename), ""))
                         Dim filenama As String = IO.Path.GetFileNameWithoutExtension(fullpathandfilename)
@@ -10394,7 +10394,7 @@ End Sub
                 '    If drivespace > totalfilesize Then
                 '        'My.Computer.FileSystem.CopyFile("C:\UserFiles\TestFiles\testFile.txt", "C:\UserFiles\TestFiles2\NewFile.txt", FileIO.UIOption.AllDialogs, FileIO.UICancelOption.DoNothing)
                 Dim frm As New frmCopyProgress
-                If Preferences.MultiMonitoEnabled Then
+                If Pref.MultiMonitoEnabled Then
                     frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
                     frm.StartPosition = FormStartPosition.Manual
                 End If
@@ -10458,7 +10458,7 @@ End Sub
                     TextBox45.Text += "    <xbmc>" & pat.rpath & "</xbmc>" & vbCrLf
                     TextBox45.Text += "</folder>" & vbCrLf & vbCrLf
                 Next
-                For Each pat In Preferences.offlinefolders
+                For Each pat In Pref.offlinefolders
                     TextBox45.Text += "<folder>" & vbCrLf
                     TextBox45.Text += "    <mc>" & pat & "</mc>" & vbCrLf
                     TextBox45.Text += "    <xbmc>" & pat & "</xbmc>" & vbCrLf
@@ -10592,47 +10592,47 @@ End Sub
     End Sub
     
     Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )
-        Preferences.ConfigLoad()
-        Preferences.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
+        Pref.ConfigLoad()
+        Pref.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
 
         DataGridViewMovies.DataSource = Nothing
 
-        Me.GroupBox22.Visible = Not Preferences.tvshow_useXBMC_Scraper
+        Me.GroupBox22.Visible = Not Pref.tvshow_useXBMC_Scraper
         Me.GroupBox22.SendToBack()
-        Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
+        Me.GroupBox_TVDB_Scraper_Preferences.Visible = Pref.tvshow_useXBMC_Scraper
         Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
 
-        Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
-        Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
+        Me.CheckBoxRenameNFOtoINFO.Checked = Pref.renamenfofiles
+        Me.ScrapeFullCertCheckBox.Checked = Pref.scrapefullcert
 
-        Me.cbMovieRenameEnable.Checked = Preferences.MovieRenameEnable
-        Me.cbMovFolderRename.Checked = Preferences.MovFolderRename
-        Me.cbMovSetIgnArticle.Checked = Preferences.MovSetIgnArticle 
-        Me.cbMovTitleIgnArticle.Checked = Preferences.MovTitleIgnArticle
-        Me.cbRenameUnderscore.Checked = Preferences.MovRenameSpaceCharacter
-        Me.ManualRenameChkbox.Checked = Preferences.MovieManualRename
-        Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
-        Me.tb_MovieRenameEnable.Text = Preferences.MovieRenameTemplate
-        Me.tb_MovFolderRename.Text = Preferences.MovFolderRenameTemplate 
-        Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
-        Me.RefreshMissingEpisodesToolStripMenuItem.Enabled = Preferences.displayMissingEpisodes
-        If Preferences.displayMissingEpisodes Then 
-            Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Preferences.lastrefreshmissingdate 
+        Me.cbMovieRenameEnable.Checked = Pref.MovieRenameEnable
+        Me.cbMovFolderRename.Checked = Pref.MovFolderRename
+        Me.cbMovSetIgnArticle.Checked = Pref.MovSetIgnArticle 
+        Me.cbMovTitleIgnArticle.Checked = Pref.MovTitleIgnArticle
+        Me.cbRenameUnderscore.Checked = Pref.MovRenameSpaceCharacter
+        Me.ManualRenameChkbox.Checked = Pref.MovieManualRename
+        Me.TextBox_OfflineDVDTitle.Text = Pref.OfflineDVDTitle
+        Me.tb_MovieRenameEnable.Text = Pref.MovieRenameTemplate
+        Me.tb_MovFolderRename.Text = Pref.MovFolderRenameTemplate 
+        Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Pref.displayMissingEpisodes
+        Me.RefreshMissingEpisodesToolStripMenuItem.Enabled = Pref.displayMissingEpisodes
+        If Pref.displayMissingEpisodes Then 
+            Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate 
         End If
-        Me.rbTvMissingEpisodes.Enabled = Preferences.displayMissingEpisodes
-        Me.rbTvMissingAiredEp.Enabled = Preferences.displayMissingEpisodes 
-        Me.TextBox35.Text = Preferences.ScrShtDelay.ToString 
-        Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
-        Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
-        Me.cbxNameMode.Checked = Preferences.namemode
+        Me.rbTvMissingEpisodes.Enabled = Pref.displayMissingEpisodes
+        Me.rbTvMissingAiredEp.Enabled = Pref.displayMissingEpisodes 
+        Me.TextBox35.Text = Pref.ScrShtDelay.ToString 
+        Me.CheckBox_ShowDateOnMovieList.Checked = Pref.showsortdate
+        Me.cbxCleanFilenameIgnorePart.Checked = Pref.movieignorepart
+        Me.cbxNameMode.Checked = Pref.namemode
         lblNameMode.Text = createNameModeText()
-        Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename), tv_RegexScraper)
-        If Not Preferences.XbmcTmdbScraperRatings = Nothing Then
-            Save_XBMC_TMDB_Scraper_Config("fanart", Preferences.XbmcTmdbScraperFanart)
-            Save_XBMC_TMDB_Scraper_Config("trailerq", Preferences.XbmcTmdbScraperTrailerQ)
-            Save_XBMC_TMDB_Scraper_Config("language", Preferences.XbmcTmdbScraperLanguage)
-            Save_XBMC_TMDB_Scraper_Config("ratings", Preferences.XbmcTmdbScraperRatings)
-            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Preferences.XbmcTmdbScraperCertCountry)
+        Renamer.setRenamePref(tv_RegexRename.Item(Pref.tvrename), tv_RegexScraper)
+        If Not Pref.XbmcTmdbScraperRatings = Nothing Then
+            Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
+            Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
+            Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
+            Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
+            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
         End If
 
         'Read_XBMC_IMDB_Scraper_Config()
@@ -10642,7 +10642,7 @@ End Sub
         mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
         '----------------------------------------------------------
         Dim loadinginfo As String = ""
-        If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
+        If Not IO.File.Exists(workingProfile.moviecache) Or Pref.startupCache = False Then
             loadinginfo = "Status :- Building Movie caches"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
@@ -10684,7 +10684,7 @@ End Sub
         End If
 
         If Not prefs then
-        If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
+        If Not IO.File.Exists(workingProfile.tvcache) Or Pref.startupCache = False Then
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
@@ -10698,7 +10698,7 @@ End Sub
         Call tv_Filter()
         End If
 
-        If Preferences.homemoviefolders.Count > 0 Then
+        If Pref.homemoviefolders.Count > 0 Then
             AuthorizeCheck = True
             clbx_HMMovieFolders.Items.Clear()
             For Each folder In homemoviefolders
@@ -10707,9 +10707,9 @@ End Sub
             AuthorizeCheck = False
         End If
 
-        cbBtnLink.Checked = Preferences.XBMC_Link
+        cbBtnLink.Checked = Pref.XBMC_Link
         SetcbBtnLink
-        If Preferences.XbmcLinkReady Then
+        If Pref.XbmcLinkReady Then
             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
         End If
     End Sub
@@ -10911,14 +10911,14 @@ End Sub
             Dim ep As TvEpisode = ep_SelectedCurrently()
             If ep.IsMissing Then Exit Sub
             Dim tempstring As String = ep.VideoFilePath     'DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
-            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Preferences.videomode = 3 Then
-                Preferences.videomode = 2
+            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Pref.videomode = 3 Then
+                Pref.videomode = 2
                 Call util_VideoMode2(tempstring)
             End If
-            If Preferences.videomode >= 4 Then
-                If Preferences.selectedvideoplayer <> Nothing Then
+            If Pref.videomode >= 4 Then
+                If Pref.selectedvideoplayer <> Nothing Then
                     Call util_VideoMode4(tempstring)
                 Else
                     Call util_VideoMode1(tempstring)
@@ -10934,11 +10934,11 @@ End Sub
         Try
             If TvTreeview.SelectedNode Is Nothing Then Exit Sub
             If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvShow).NfoFilePath, Preferences.altnfoeditor)
+                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvShow).NfoFilePath, Pref.altnfoeditor)
             ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
                 MsgBox("A Season NFO is invalid so it can't be shown")
             ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).NfoFilePath, Preferences.altnfoeditor)
+                Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).NfoFilePath, Pref.altnfoeditor)
             Else
                 MsgBox("None")
             End If
@@ -10998,7 +10998,7 @@ End Sub
             Utilities.SafeDeleteFile(showpath & "tvshow.nfo")
             showpath = showpath.Substring(0, showpath.Length-1)
             If ListBox6.items.Contains(showpath) Then ListBox6.Items.Remove(showpath)
-            If Preferences.tvFolders.Contains(showpath) Then Preferences.tvFolders.Remove(showpath)
+            If Pref.tvFolders.Contains(showpath) Then Pref.tvFolders.Remove(showpath)
             TvTreeview.Nodes.Remove(show.ShowNode)
             Cache.TvCache.Remove(show)
             Tv_CacheSave()
@@ -11084,10 +11084,10 @@ End Sub
                 e.Cancel = True
             End If
 
-            RenameFilesToolStripMenuItem.Enabled = Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode And Preferences.MovieRenameEnable
+            RenameFilesToolStripMenuItem.Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
 
-            tsmiRescrapeFrodo_Poster_Thumbs.Enabled = Preferences.FrodoEnabled
-            tsmiRescrapeFrodo_Fanart_Thumbs.Enabled = Preferences.FrodoEnabled
+            tsmiRescrapeFrodo_Poster_Thumbs.Enabled = Pref.FrodoEnabled
+            tsmiRescrapeFrodo_Fanart_Thumbs.Enabled = Pref.FrodoEnabled
 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -11147,7 +11147,7 @@ End Sub
                     End With
 
                     If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-                        'Utilities.DownloadImage(tempstring2, SaveFileDialog1.FileName, True, Preferences.resizefanart)
+                        'Utilities.DownloadImage(tempstring2, SaveFileDialog1.FileName, True, Pref.resizefanart)
                         Movie.SaveFanartImageToCacheAndPath(tempstring2, SaveFileDialog1.FileName)
                     End If
 
@@ -11170,7 +11170,7 @@ End Sub
     Private Function createNameModeText() As String
         Dim txtMovieTitle As String = "Movie (0000)"
         Dim lstNameModeFiles As New List(Of String)(New String() {txtMovieTitle & " CD1.avi", txtMovieTitle & " CD2.avi"})
-        If Preferences.namemode = "1" Then txtMovieTitle &= " CD1"
+        If Pref.namemode = "1" Then txtMovieTitle &= " CD1"
         lstNameModeFiles.Add(txtMovieTitle & ".nfo")
         lstNameModeFiles.Add(txtMovieTitle & ".tbn")
         lstNameModeFiles.Add(txtMovieTitle & "-fanart.jpg")
@@ -11236,7 +11236,7 @@ End Sub
     Private Sub ShowBigMovieText()
 
         Dim frm As New frmBigMovieText
-        If Preferences.MultiMonitoEnabled Then
+        If Pref.MultiMonitoEnabled Then
             frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
             frm.StartPosition = FormStartPosition.Manual
         End If
@@ -11255,15 +11255,15 @@ End Sub
 
     Private Function GetActorThumb(ByRef currentUri As String)
         Dim actorthumb As String = currentUri
-        If Preferences.actorsave Then
+        If Pref.actorsave Then
             Dim uri As Uri
             uri = New Uri(actorthumb)
 
-            If Len(Preferences.actornetworkpath) > 0 AndAlso Len(Preferences.actorsavepath) > 0 Then
+            If Len(Pref.actornetworkpath) > 0 AndAlso Len(Pref.actorsavepath) > 0 Then
                 Dim actorThumbFileName As String
                 Dim localActorThumbFileName As String
-                actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
-                localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
+                actorThumbFileName = System.IO.Path.Combine(Pref.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
+                localActorThumbFileName = System.IO.Path.Combine(Pref.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
                 Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName)
                 actorthumb = actorThumbFileName
             End If
@@ -11290,11 +11290,11 @@ End Sub
         Try
             cbMovieDisplay_Source.Items.Clear()
             cbMovieDisplay_Source.Items.Add("")
-            For Each mset In Preferences.releaseformat
+            For Each mset In Pref.releaseformat
                 cbMovieDisplay_Source.Items.Add(mset)
             Next
                 
-            cbFilterSource.UpdateItems( Preferences.releaseformat.ToList )
+            cbFilterSource.UpdateItems( Pref.releaseformat.ToList )
 
             cbMovieDisplay_Source.SelectedIndex = 0
             If IsNothing(workingMovieDetails) = False Then
@@ -11320,14 +11320,14 @@ End Sub
             For i = 0 To lbCleanFilename.Items.Count - 1
                 strTemp &= lbCleanFilename.Items(i) & "|"
             Next
-            Preferences.moviecleanTags = strTemp.TrimEnd("|")
+            Pref.moviecleanTags = strTemp.TrimEnd("|")
             cleanfilenameprefchanged = False
         End If
         If videosourceprefchanged Then
             Dim count As Integer = lbVideoSource.Items.Count - 1
-            ReDim Preferences.releaseformat(count)
+            ReDim Pref.releaseformat(count)
             For g = 0 To count
-                Preferences.releaseformat(g) = lbVideoSource.Items(g)
+                Pref.releaseformat(g) = lbVideoSource.Items(g)
             Next
             mov_VideoSourcePopulate()
             ep_VideoSourcePopulate()
@@ -11338,8 +11338,8 @@ End Sub
     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
     Public Sub OpenUrl(ByVal url As String)
         Try
-            If Preferences.selectedBrowser <> "" Then
-                Process.Start(Preferences.selectedBrowser, Uri.EscapeUriString(url))
+            If Pref.selectedBrowser <> "" Then
+                Process.Start(Pref.selectedBrowser, Uri.EscapeUriString(url))
             Else
                 Try
                     Process.Start(url)
@@ -11405,7 +11405,7 @@ End Sub
         msgstr &= "Selected Movie(s)?"
         If MsgBox(msgstr, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
             Dim movielist As New List(Of String)
-            Preferences.MovieDeleteNfoArtwork = True
+            Pref.MovieDeleteNfoArtwork = True
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
                 movielist.Add(row.Cells(NFO_INDEX).Value.ToString)
                 oMovies.DeleteScrapedFiles(row.Cells(NFO_INDEX).Value.ToString, DelArtwork)
@@ -11413,7 +11413,7 @@ End Sub
 
             'Last remove from dataGridViewMovies and update cache.
             Mov_RemoveMovie()
-            Preferences.MovieDeleteNfoArtwork = False
+            Pref.MovieDeleteNfoArtwork = False
         Else
             MsgBox(" Deletion of .nfo, artwork and Actors " &vbCrLf & "has been Cancelled")
         End If
@@ -11441,7 +11441,7 @@ End Sub
             Case "movies"
                 If Not MoviesFiltersResizeCalled Then
                     MoviesFiltersResizeCalled = True
-                    Preferences.movie_filters.SetMovieFiltersVisibility
+                    Pref.movie_filters.SetMovieFiltersVisibility
                     UpdateMovieFiltersPanel
                 End If
             Case "music vid's"
@@ -11453,9 +11453,9 @@ End Sub
     Sub HandleMovieList_DisplayChange(DisplayField As String)
         Mc.clsGridViewMovie.GridFieldToDisplay1 = DisplayField
 
-        If rbTitleAndYear.Checked Then Preferences.moviedefaultlist = 0
-        If rbFileName    .Checked Then Preferences.moviedefaultlist = 1
-        If rbFolder      .Checked Then Preferences.moviedefaultlist = 2
+        If rbTitleAndYear.Checked Then Pref.moviedefaultlist = 0
+        If rbFileName    .Checked Then Pref.moviedefaultlist = 1
+        If rbFolder      .Checked Then Pref.moviedefaultlist = 2
 
         Mc.clsGridViewMovie.GridviewMovieDesign(Me)
         If MainFormLoadedStatus Then
@@ -11539,7 +11539,7 @@ End Sub
 
     Private Sub TimerToolTip_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerToolTip.Tick
         TimerToolTip.Enabled = False
-        TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
+        TooltipGridViewMovies1.Visible = Pref.ShowMovieGridToolTip
     End Sub
 
 
@@ -11697,7 +11697,7 @@ End Sub
 
 
     Public Sub SearchForNewMovies
-        Preferences.googlecount = 0
+        Pref.googlecount = 0
         oMovies.FindNewMovies
     End Sub
 
@@ -11749,11 +11749,11 @@ End Sub
         ScraperStatusStrip.Visible = False
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
-        Preferences.MovieChangeMovie = False
+        Pref.MovieChangeMovie = False
         GC.Collect()
         Dim Displayed As Boolean = DisplayLogFile()
-        'If Not Preferences.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
-        Preferences.MusicVidScrape = False  '  Reset to false only after scrapers complete
+        'If Not Pref.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
+        Pref.MusicVidScrape = False  '  Reset to false only after scrapers complete
         If Not Displayed Then BlinkTaskBar()
     End Sub
 
@@ -12058,14 +12058,14 @@ End Sub
 
     Private Function DisplayLogFile()
         Dim Displayed As Boolean = False
-        If ScraperErrorDetected And Preferences.ShowLogOnError Then
+        If ScraperErrorDetected And Pref.ShowLogOnError Then
             scraperLog = "******************************************************************************" & vbCrLf &
                          "* One or more errors were detected during scraping. See below for details.   *" & vbCrLf &
                          "* To disable seeing this, turn off General Preferences -'Show log on error'. *" & vbCrLf & 
                          "******************************************************************************" & vbCrLf & vbCrLf & scraperLog
         End If
 
-        If (Not Preferences.disablelogfiles Or (Preferences.MusicVidScrape AndAlso Preferences.MVPrefShowLog) Or (ScraperErrorDetected And Preferences.ShowLogOnError)) And scraperLog <> "" Then
+        If (Not Pref.disablelogfiles Or (Pref.MusicVidScrape AndAlso Pref.MVPrefShowLog) Or (ScraperErrorDetected And Pref.ShowLogOnError)) And scraperLog <> "" Then
             Displayed = True
             Dim MyFormObject As New frmoutputlog(scraperLog, True)
             Try
@@ -12084,7 +12084,7 @@ End Sub
 
         cbMovieDisplay_MovieSet.Sorted = True
         cbMovieDisplay_MovieSet.Items.Clear
-        cbMovieDisplay_MovieSet.Items.AddRange( Preferences.moviesets.ToArray )
+        cbMovieDisplay_MovieSet.Items.AddRange( Pref.moviesets.ToArray )
         cbMovieDisplay_MovieSet.Sorted = False
 
         If cbMovieDisplay_MovieSet.Items.Count = 0 Then
@@ -12216,62 +12216,62 @@ End Sub
     
     Private Sub General_PreferencesSetup()
 
-        CopyOfPreferencesIgnoreArticle = Preferences.ignorearticle
+        CopyOfPreferencesIgnoreArticle = Pref.ignorearticle
 
         prefsload = True
         generalprefschanged = False
 
         Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
         Dim newFont As System.Drawing.Font
-        If Preferences.font <> Nothing Then
-            If Preferences.font <> "" Then
+        If Pref.font <> Nothing Then
+            If Pref.font <> "" Then
                 Try
-                    newFont = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
+                    newFont = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
                 Catch ex As Exception
                     newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
-                    Preferences.font = "Times New Roman, 9pt"
+                    Pref.font = "Times New Roman, 9pt"
                 End Try
             Else
                 newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
-                Preferences.font = "Times New Roman, 9pt"
+                Pref.font = "Times New Roman, 9pt"
             End If
         Else
             newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
-            Preferences.font = "Times New Roman, 9pt"
+            Pref.font = "Times New Roman, 9pt"
         End If
         Label130.Font = newFont
-        Label130.Text = Preferences.font
+        Label130.Text = Pref.font
 
-        chkbx_disablecache          .Checked    = Not Preferences.startupCache
-        cbOverwriteArtwork          .Checked    = Not Preferences.overwritethumbs
-        cbDisplayLocalActor         .Checked    = Preferences.LocalActorImage
-        CheckBoxRenameNFOtoINFO     .Checked    = Preferences.renamenfofiles
-        cb_IgnoreThe                .Checked    = Preferences.ignorearticle
-        cb_IgnoreA                  .Checked    = Preferences.ignoreAarticle
-        cb_IgnoreAn                 .Checked    = Preferences.ignoreAn
-        cb_SorttitleIgnoreArticles  .Checked    = Preferences.sorttitleignorearticle
-        CheckBox38                  .Checked    = Preferences.intruntime
-        CheckBox33                  .Checked    = Preferences.actorseasy
-        txtbx_minrarsize            .Text       = Preferences.rarsize.ToString
-        cbExternalbrowser           .Checked    = Preferences.externalbrowser
+        chkbx_disablecache          .Checked    = Not Pref.startupCache
+        cbOverwriteArtwork          .Checked    = Not Pref.overwritethumbs
+        cbDisplayLocalActor         .Checked    = Pref.LocalActorImage
+        CheckBoxRenameNFOtoINFO     .Checked    = Pref.renamenfofiles
+        cb_IgnoreThe                .Checked    = Pref.ignorearticle
+        cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
+        cb_IgnoreAn                 .Checked    = Pref.ignoreAn
+        cb_SorttitleIgnoreArticles  .Checked    = Pref.sorttitleignorearticle
+        CheckBox38                  .Checked    = Pref.intruntime
+        CheckBox33                  .Checked    = Pref.actorseasy
+        txtbx_minrarsize            .Text       = Pref.rarsize.ToString
+        cbExternalbrowser           .Checked    = Pref.externalbrowser
         btnFindBrowser              .Enabled    = cbExternalbrowser.Checked
-        tbaltnfoeditor              .Text       = Preferences.altnfoeditor 
-        cbCheckForNewVersion        .Checked    = Preferences.CheckForNewVersion
-        cbDisplayRatingOverlay      .Checked    = Preferences.DisplayRatingOverlay
-        cbDisplayMediaInfoOverlay   .Checked    = Preferences.DisplayMediainfoOverlay 
-        cbDisplayMediaInfoFolderSize.Checked    = Preferences.DisplayMediaInfoFolderSize
-        cbMultiMonitorEnable        .Checked    = Preferences.MultiMonitoEnabled 
+        tbaltnfoeditor              .Text       = Pref.altnfoeditor 
+        cbCheckForNewVersion        .Checked    = Pref.CheckForNewVersion
+        cbDisplayRatingOverlay      .Checked    = Pref.DisplayRatingOverlay
+        cbDisplayMediaInfoOverlay   .Checked    = Pref.DisplayMediainfoOverlay 
+        cbDisplayMediaInfoFolderSize.Checked    = Pref.DisplayMediaInfoFolderSize
+        cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled 
 
-        If Preferences.videomode = 1 Then
+        If Pref.videomode = 1 Then
             RadioButton38.Checked = True
-        ElseIf Preferences.videomode = 2 Then
+        ElseIf Pref.videomode = 2 Then
             RadioButton37.Checked = True
-        ElseIf Preferences.videomode = 4 Then
+        ElseIf Pref.videomode = 4 Then
             RadioButton36.Checked = True
         End If
 
-        If Preferences.videomode = 4 Then
-            Label121.Text = Preferences.selectedvideoplayer
+        If Pref.videomode = 4 Then
+            Label121.Text = Pref.selectedvideoplayer
             Label121.Visible = True
             btn_custommediaplayer.Enabled = True
         Else
@@ -12279,11 +12279,11 @@ End Sub
             Label121.Visible = False
         End If
 
-        If Preferences.XBMC_version = 0 Then
+        If Pref.XBMC_version = 0 Then
             rbXBMCv_pre.Checked = True
-        ElseIf Preferences.XBMC_version = 1 Then
+        ElseIf Pref.XBMC_version = 1 Then
             rbXBMCv_both.Checked = True
-        ElseIf Preferences.XBMC_version = 2 Then
+        ElseIf Pref.XBMC_version = 2 Then
             rbXBMCv_post.Checked = True
         End If
 
@@ -12296,17 +12296,17 @@ End Sub
 
         ListBox16.Items.Clear()
         ListBox17.Items.Clear()
-        For Each com In Preferences.commandlist
+        For Each com In Pref.commandlist
             ListBox16.Items.Add(com.title)
             ListBox17.Items.Add(com.command)
         Next
 
-        cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
-        cbShowLogOnError      .Checked = Preferences.ShowLogOnError
-        cbUseMultipleThreads  .Checked = Preferences.UseMultipleThreads
-        cbShowAllAudioTracks  .Checked = Preferences.ShowAllAudioTracks
+        cbShowMovieGridToolTip.Checked = Pref.ShowMovieGridToolTip
+        cbShowLogOnError      .Checked = Pref.ShowLogOnError
+        cbUseMultipleThreads  .Checked = Pref.UseMultipleThreads
+        cbShowAllAudioTracks  .Checked = Pref.ShowAllAudioTracks
 
-        Preferences.ExcludeFolders.PopTextBox(tbExcludeFolders)
+        Pref.ExcludeFolders.PopTextBox(tbExcludeFolders)
 
         prefsload = False
         generalprefschanged = False
@@ -12331,36 +12331,36 @@ End Sub
         Next
 
         ListBox12.Items.Clear()
-        ListBox12.Items.Add(Preferences.TvdbLanguage)
+        ListBox12.Items.Add(Pref.TvdbLanguage)
         If ListBox12.Items.Count <> 0 Then
             ListBox12.SelectedIndex = 0
         End If
 
-        ComboBox8.SelectedIndex                     = Preferences.TvdbActorScrape
-        ComboBox_tv_EpisodeRename.SelectedIndex     = If(Preferences.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Preferences.tvrename, 0)
-        CheckBox17                      .Checked    = Preferences.disabletvlogs
-        CheckBox20                      .Checked    = Preferences.enabletvhdtags
-        CheckBox_tv_EpisodeRenameCase   .Checked    = Preferences.eprenamelowercase
-        CheckBox_tv_EpisodeRenameAuto   .Checked    = Preferences.autorenameepisodes
-        cbTvAutoScreenShot              .Checked    = Preferences.autoepisodescreenshot
-        cbTvScrShtTVDBResize            .Checked    = Preferences.tvscrnshtTVDBResize 
-        cbTvQuickAddShow                .Checked    = Preferences.tvshowautoquick
-        CheckBox34                      .Checked    = Preferences.copytvactorthumbs
-        cbTvDlPosterArt                 .Checked    = Preferences.tvdlposter
-        cbTvDlFanart                    .Checked    = Preferences.tvdlfanart
-        cbTvDlSeasonArt                 .Checked    = Preferences.tvdlseasonthumbs
-        cbTvDlXtraFanart                .Checked    = Preferences.dlTVxtrafanart
-        cbTvDlFanartTvArt               .Checked    = Preferences.TvDlFanartTvArt
-        cbTvFanartTvFirst               .Checked    = Preferences.TvFanartTvFirst
-        cb_TvFolderJpg                  .Checked    = Preferences.tvfolderjpg
-        cbSeasonFolderjpg               .Checked    = Preferences.seasonfolderjpg 
-        CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Preferences.tvshow_useXBMC_Scraper
-        cbTvMissingSpecials             .Checked    = Preferences.ignoreMissingSpecials
-        cb_TvMissingEpOffset            .Checked    = Preferences.TvMissingEpOffset
+        ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
+        ComboBox_tv_EpisodeRename.SelectedIndex     = If(Pref.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Pref.tvrename, 0)
+        CheckBox17                      .Checked    = Pref.disabletvlogs
+        CheckBox20                      .Checked    = Pref.enabletvhdtags
+        CheckBox_tv_EpisodeRenameCase   .Checked    = Pref.eprenamelowercase
+        CheckBox_tv_EpisodeRenameAuto   .Checked    = Pref.autorenameepisodes
+        cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
+        cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize 
+        cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
+        CheckBox34                      .Checked    = Pref.copytvactorthumbs
+        cbTvDlPosterArt                 .Checked    = Pref.tvdlposter
+        cbTvDlFanart                    .Checked    = Pref.tvdlfanart
+        cbTvDlSeasonArt                 .Checked    = Pref.tvdlseasonthumbs
+        cbTvDlXtraFanart                .Checked    = Pref.dlTVxtrafanart
+        cbTvDlFanartTvArt               .Checked    = Pref.TvDlFanartTvArt
+        cbTvFanartTvFirst               .Checked    = Pref.TvFanartTvFirst
+        cb_TvFolderJpg                  .Checked    = Pref.tvfolderjpg
+        cbSeasonFolderjpg               .Checked    = Pref.seasonfolderjpg 
+        CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Pref.tvshow_useXBMC_Scraper
+        cbTvMissingSpecials             .Checked    = Pref.ignoreMissingSpecials
+        cb_TvMissingEpOffset            .Checked    = Pref.TvMissingEpOffset
         AutoScrnShtDelay                .Text       = ScrShtDelay
-        cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Preferences.TvXtraFanartQty.ToString)
+        cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Pref.TvXtraFanartQty.ToString)
 
-        Select Case Preferences.seasonall
+        Select Case Pref.seasonall
             Case "none"
                 RadioButton41.Checked = True
             Case "poster"
@@ -12369,13 +12369,13 @@ End Sub
                 RadioButton39.Checked = True
         End Select
 
-        If Preferences.sortorder = "dvd" Then
+        If Pref.sortorder = "dvd" Then
             RadioButton42.Checked = True
         Else
             RadioButton43.Checked = True
         End If
 
-        If Preferences.postertype = "poster" Then
+        If Pref.postertype = "poster" Then
             posterbtn.Checked = True
         Else
             bannerbtn.Checked = True
@@ -12388,10 +12388,10 @@ End Sub
     Private Sub mov_PreferencesSetup()
         prefsload = True
         displayRuntimeScraper = True
-        If Preferences.enablehdtags = True Then
+        If Pref.enablehdtags = True Then
             CheckBox19.CheckState = CheckState.Checked
             PanelDisplayRuntime.Enabled = True
-            If Preferences.movieRuntimeDisplay = "file" Then
+            If Pref.movieRuntimeDisplay = "file" Then
                 rbRuntimeFile.Checked = True
             Else
                 rbRuntimeScraper.Checked = True
@@ -12403,173 +12403,173 @@ End Sub
         End If
         Call mov_SwitchRuntime()
 
-        ListBox9                            .SelectedItem   = Preferences.imdbmirror
-        TextBox_OfflineDVDTitle             .Text           = Preferences.OfflineDVDTitle
-        tb_MovieRenameEnable                .Text           = Preferences.MovieRenameTemplate
-        tb_MovFolderRename                  .Text           = Preferences.MovFolderRenameTemplate 
-        localactorpath                      .Text           = Preferences.actorsavepath
-        xbmcactorpath                       .Text           = Preferences.actornetworkpath
-        cbPreferredTrailerResolution        .Text           = Preferences.moviePreferredTrailerResolution.ToUpper()
-        cb_MovDurationAsRuntine             .Checked        = Preferences.MovDurationAsRuntine 
-        cbMovieRuntimeFallbackToFile        .Enabled        = (Preferences.movieRuntimeDisplay = "scraper")
-        cbMovieRuntimeFallbackToFile        .Checked        = Preferences.movieRuntimeFallbackToFile
-        tbDateFormat                        .Text           = Preferences.DateFormat
-        cbMovieList_ShowColPlot             .Checked        = Preferences.MovieList_ShowColPlot
-        cbDisableNotMatchingRenamePattern   .Checked        = Preferences.DisableNotMatchingRenamePattern
-        cbMovieList_ShowColWatched          .Checked        = Preferences.MovieList_ShowColWatched
-        cmbxMovieScraper_MaxStudios         .SelectedItem   = Preferences.MovieScraper_MaxStudios.ToString
-        nudActorsFilterMinFilms             .Text           = Preferences.ActorsFilterMinFilms
-        nudMaxActorsInFilter                .Text           = Preferences.MaxActorsInFilter
-        cbMovieFilters_Actors_Order         .SelectedIndex  = Preferences.MovieFilters_Actors_Order
-        nudDirectorsFilterMinFilms          .Text           = Preferences.DirectorsFilterMinFilms
-        nudMaxDirectorsInFilter             .Text           = Preferences.MaxDirectorsInFilter
-        cbMovieFilters_Directors_Order      .SelectedIndex  = Preferences.MovieFilters_Directors_Order
-        cbMissingMovie                      .Checked        = Preferences.incmissingmovies 
-        nudSetsFilterMinFilms               .Text           = Preferences.SetsFilterMinFilms
-        nudMaxSetsInFilter                  .Text           = Preferences.MaxSetsInFilter
-        cbMovieFilters_Sets_Order           .SelectedIndex  = Preferences.MovieFilters_Sets_Order
-        chkbOriginal_Title                  .Checked        = Preferences.Original_Title
-        'RadioButton52                      .Checked        = If(Preferences.XBMC_Scraper = "tmdb", True, False ) 
-        cbNoAltTitle                        .Checked        = Preferences.NoAltTitle
-        cbXtraFrodoUrls                     .Checked        = Not Preferences.XtraFrodoUrls
-        CheckBox16                          .Checked        = Not Preferences.disablelogfiles
-        cbDlTrailerDuringScrape             .Checked        = Preferences.DownloadTrailerDuringScrape
-        cbMovieTrailerUrl                   .Checked        = Preferences.gettrailer
-        cbMoviePosterScrape                 .Checked        = Preferences.scrapemovieposters
-        cbMovFanartScrape                   .Checked        = Preferences.savefanart
-        cbMovFanartTvScrape                 .Checked        = Preferences.MovFanartTvscrape
-        cbMovFanartNaming                   .Checked        = Preferences.MovFanartNaming
-        cbMovieUseFolderNames               .Checked        = Preferences.usefoldernames
-        cbMovXtraThumbs                     .Checked        = Preferences.movxtrathumb
-        cbMovXtraFanart                     .Checked        = Preferences.movxtrafanart
-        cbDlXtraFanart                      .Checked        = Preferences.dlxtrafanart
-        cbMovSetArtScrape                   .Checked        = Preferences.dlMovSetArtwork
-        rbMovSetArtSetFolder                .Checked        = Preferences.MovSetArtSetFolder
-        rbMovSetFolder                      .Checked        = Not Preferences.MovSetArtSetFolder 
-        btnMovSetCentralFolderSelect        .Enabled        = Preferences.MovSetArtSetFolder 
-        tbMovSetArtCentralFolder            .Text           = Preferences.MovSetArtCentralFolder 
-        cbMovieAllInFolders                 .Checked        = Preferences.allfolders
-        cbMovCreateFolderjpg                .Checked        = Preferences.createfolderjpg
-        cbMovCreateFanartjpg                .Checked        = Preferences.createfanartjpg
-        cbMovRootFolderCheck                .Checked        = Preferences.movrootfoldercheck
-        cbMovieBasicSave                    .Checked        = Preferences.basicsavemode
-        cbxNameMode                         .Checked        = Preferences.namemode
-        cbxCleanFilenameIgnorePart          .Checked        = Preferences.movieignorepart
-        ScrapeFullCertCheckBox              .Checked        = Preferences.scrapefullcert
-        cbMovieRenameEnable                 .Checked        = Preferences.MovieRenameEnable
-        cbMovNewFolderInRootFolder          .Checked        = Preferences.MovNewFolderInRootFolder
-        cbMovFolderRename                   .Checked        = Preferences.MovFolderRename
-        cbMovSetIgnArticle                  .Checked        = Preferences.MovSetIgnArticle
-        cbMovSortIgnArticle                 .Checked        = Preferences.MovSortIgnArticle
-        cbMovTitleIgnArticle                .Checked        = Preferences.MovTitleIgnArticle
-        cbMovTitleCase                      .Checked        = Preferences.MovTitleCase
-        cbExcludeMpaaRated                  .Checked        = Preferences.ExcludeMpaaRated
-        cbMovThousSeparator                 .Checked        = Preferences.MovThousSeparator
-        cbRenameUnderscore                  .Checked        = Preferences.MovRenameSpaceCharacter
-        If Preferences.RenameSpaceCharacter = "_" Then
+        ListBox9                            .SelectedItem   = Pref.imdbmirror
+        TextBox_OfflineDVDTitle             .Text           = Pref.OfflineDVDTitle
+        tb_MovieRenameEnable                .Text           = Pref.MovieRenameTemplate
+        tb_MovFolderRename                  .Text           = Pref.MovFolderRenameTemplate 
+        localactorpath                      .Text           = Pref.actorsavepath
+        xbmcactorpath                       .Text           = Pref.actornetworkpath
+        cbPreferredTrailerResolution        .Text           = Pref.moviePreferredTrailerResolution.ToUpper()
+        cb_MovDurationAsRuntine             .Checked        = Pref.MovDurationAsRuntine 
+        cbMovieRuntimeFallbackToFile        .Enabled        = (Pref.movieRuntimeDisplay = "scraper")
+        cbMovieRuntimeFallbackToFile        .Checked        = Pref.movieRuntimeFallbackToFile
+        tbDateFormat                        .Text           = Pref.DateFormat
+        cbMovieList_ShowColPlot             .Checked        = Pref.MovieList_ShowColPlot
+        cbDisableNotMatchingRenamePattern   .Checked        = Pref.DisableNotMatchingRenamePattern
+        cbMovieList_ShowColWatched          .Checked        = Pref.MovieList_ShowColWatched
+        cmbxMovieScraper_MaxStudios         .SelectedItem   = Pref.MovieScraper_MaxStudios.ToString
+        nudActorsFilterMinFilms             .Text           = Pref.ActorsFilterMinFilms
+        nudMaxActorsInFilter                .Text           = Pref.MaxActorsInFilter
+        cbMovieFilters_Actors_Order         .SelectedIndex  = Pref.MovieFilters_Actors_Order
+        nudDirectorsFilterMinFilms          .Text           = Pref.DirectorsFilterMinFilms
+        nudMaxDirectorsInFilter             .Text           = Pref.MaxDirectorsInFilter
+        cbMovieFilters_Directors_Order      .SelectedIndex  = Pref.MovieFilters_Directors_Order
+        cbMissingMovie                      .Checked        = Pref.incmissingmovies 
+        nudSetsFilterMinFilms               .Text           = Pref.SetsFilterMinFilms
+        nudMaxSetsInFilter                  .Text           = Pref.MaxSetsInFilter
+        cbMovieFilters_Sets_Order           .SelectedIndex  = Pref.MovieFilters_Sets_Order
+        chkbOriginal_Title                  .Checked        = Pref.Original_Title
+        'RadioButton52                      .Checked        = If(Pref.XBMC_Scraper = "tmdb", True, False ) 
+        cbNoAltTitle                        .Checked        = Pref.NoAltTitle
+        cbXtraFrodoUrls                     .Checked        = Not Pref.XtraFrodoUrls
+        CheckBox16                          .Checked        = Not Pref.disablelogfiles
+        cbDlTrailerDuringScrape             .Checked        = Pref.DownloadTrailerDuringScrape
+        cbMovieTrailerUrl                   .Checked        = Pref.gettrailer
+        cbMoviePosterScrape                 .Checked        = Pref.scrapemovieposters
+        cbMovFanartScrape                   .Checked        = Pref.savefanart
+        cbMovFanartTvScrape                 .Checked        = Pref.MovFanartTvscrape
+        cbMovFanartNaming                   .Checked        = Pref.MovFanartNaming
+        cbMovieUseFolderNames               .Checked        = Pref.usefoldernames
+        cbMovXtraThumbs                     .Checked        = Pref.movxtrathumb
+        cbMovXtraFanart                     .Checked        = Pref.movxtrafanart
+        cbDlXtraFanart                      .Checked        = Pref.dlxtrafanart
+        cbMovSetArtScrape                   .Checked        = Pref.dlMovSetArtwork
+        rbMovSetArtSetFolder                .Checked        = Pref.MovSetArtSetFolder
+        rbMovSetFolder                      .Checked        = Not Pref.MovSetArtSetFolder 
+        btnMovSetCentralFolderSelect        .Enabled        = Pref.MovSetArtSetFolder 
+        tbMovSetArtCentralFolder            .Text           = Pref.MovSetArtCentralFolder 
+        cbMovieAllInFolders                 .Checked        = Pref.allfolders
+        cbMovCreateFolderjpg                .Checked        = Pref.createfolderjpg
+        cbMovCreateFanartjpg                .Checked        = Pref.createfanartjpg
+        cbMovRootFolderCheck                .Checked        = Pref.movrootfoldercheck
+        cbMovieBasicSave                    .Checked        = Pref.basicsavemode
+        cbxNameMode                         .Checked        = Pref.namemode
+        cbxCleanFilenameIgnorePart          .Checked        = Pref.movieignorepart
+        ScrapeFullCertCheckBox              .Checked        = Pref.scrapefullcert
+        cbMovieRenameEnable                 .Checked        = Pref.MovieRenameEnable
+        cbMovNewFolderInRootFolder          .Checked        = Pref.MovNewFolderInRootFolder
+        cbMovFolderRename                   .Checked        = Pref.MovFolderRename
+        cbMovSetIgnArticle                  .Checked        = Pref.MovSetIgnArticle
+        cbMovSortIgnArticle                 .Checked        = Pref.MovSortIgnArticle
+        cbMovTitleIgnArticle                .Checked        = Pref.MovTitleIgnArticle
+        cbMovTitleCase                      .Checked        = Pref.MovTitleCase
+        cbExcludeMpaaRated                  .Checked        = Pref.ExcludeMpaaRated
+        cbMovThousSeparator                 .Checked        = Pref.MovThousSeparator
+        cbRenameUnderscore                  .Checked        = Pref.MovRenameSpaceCharacter
+        If Pref.RenameSpaceCharacter = "_" Then
             rbRenameUnderscore.Checked = True
         Else
             rbRenameFullStop.Checked = True
         End If
-        CheckBox_ShowDateOnMovieList        .Checked        = Preferences.showsortdate
-        cbImdbgetTMDBActor                  .Checked        = Preferences.TmdbActorsImdbScrape
-        'cbTMDBPreferredCertCountry          .Checked        = Preferences.TMDBPreferredCertCountry
-        cbImdbPrimaryPlot                   .Checked        = Preferences.ImdbPrimaryPlot
-        cbXbmcTmdbRename                    .Checked        = Preferences.XbmcTmdbRenameMovie
-        cbXbmcTmdbOutlineFromImdb           .Checked        = Preferences.XbmcTmdbMissingFromImdb
-        cbXbmcTmdbTop250FromImdb            .Checked        = Preferences.XbmcTmdbTop250FromImdb 
-        cbXbmcTmdbVotesFromImdb             .Checked        = Preferences.XbmcTmdbVotesFromImdb 
-        cbXbmcTmdbCertFromImdb              .Checked        = Preferences.XbmcTmdbCertFromImdb
-        cbXbmcTmdbStarsFromImdb             .Checked        = Preferences.XbmcTmdbStarsFromImdb 
-        cbXbmcTmdbAkasFromImdb              .Checked        = Preferences.XbmcTmdbAkasFromImdb
-        cbXbmcTmdbActorDL                   .Checked        = Preferences.XbmcTmdbActorDL
-        saveactorchkbx                      .Checked        = Preferences.actorsave
-        cb_LocalActorSaveAlpha              .Checked        = Preferences.actorsavealpha
+        CheckBox_ShowDateOnMovieList        .Checked        = Pref.showsortdate
+        cbImdbgetTMDBActor                  .Checked        = Pref.TmdbActorsImdbScrape
+        'cbTMDBPreferredCertCountry          .Checked        = Pref.TMDBPreferredCertCountry
+        cbImdbPrimaryPlot                   .Checked        = Pref.ImdbPrimaryPlot
+        cbXbmcTmdbRename                    .Checked        = Pref.XbmcTmdbRenameMovie
+        cbXbmcTmdbOutlineFromImdb           .Checked        = Pref.XbmcTmdbMissingFromImdb
+        cbXbmcTmdbTop250FromImdb            .Checked        = Pref.XbmcTmdbTop250FromImdb 
+        cbXbmcTmdbVotesFromImdb             .Checked        = Pref.XbmcTmdbVotesFromImdb 
+        cbXbmcTmdbCertFromImdb              .Checked        = Pref.XbmcTmdbCertFromImdb
+        cbXbmcTmdbStarsFromImdb             .Checked        = Pref.XbmcTmdbStarsFromImdb 
+        cbXbmcTmdbAkasFromImdb              .Checked        = Pref.XbmcTmdbAkasFromImdb
+        cbXbmcTmdbActorDL                   .Checked        = Pref.XbmcTmdbActorDL
+        saveactorchkbx                      .Checked        = Pref.actorsave
+        cb_LocalActorSaveAlpha              .Checked        = Pref.actorsavealpha
 
-        localactorpath              .Enabled        = Preferences.actorsave
-        xbmcactorpath               .Enabled        = Preferences.actorsave
-        Button77                    .Enabled        = Preferences.actorsave
+        localactorpath              .Enabled        = Pref.actorsave
+        xbmcactorpath               .Enabled        = Pref.actorsave
+        Button77                    .Enabled        = Pref.actorsave
 
-        If Not Preferences.usefoldernames and Not Preferences.allfolders then
+        If Not Pref.usefoldernames and Not Pref.allfolders then
             cbMovCreateFolderjpg.Enabled = False
             cbMovCreateFanartjpg.Enabled = False
             cbMovieFanartInFolders.Enabled = False
             cbMoviePosterInFolder.Enabled = False
-            Preferences.fanartjpg=False
-            Preferences.posterjpg=False
+            Pref.fanartjpg=False
+            Pref.posterjpg=False
         Else
-            cbMovieFanartInFolders  .Checked    = Preferences.fanartjpg
-            cbMoviePosterInFolder   .Checked    = Preferences.posterjpg
+            cbMovieFanartInFolders  .Checked    = Pref.fanartjpg
+            cbMoviePosterInFolder   .Checked    = Pref.posterjpg
         End If
 
-        cmbxMovXtraFanartQty.SelectedIndex = cmbxMovXtraFanartQty.FindStringExact(Preferences.movxtrafanartqty.ToString)
+        cmbxMovXtraFanartQty.SelectedIndex = cmbxMovXtraFanartQty.FindStringExact(Pref.movxtrafanartqty.ToString)
 
 
-        Select Case Preferences.maxactors
+        Select Case Pref.maxactors
             Case 9999
                 ComboBox7.SelectedItem = "All Available"
             Case 0
                 ComboBox7.SelectedItem = "None"
             Case Else
-                ComboBox7.SelectedItem = Preferences.maxactors.ToString
+                ComboBox7.SelectedItem = Pref.maxactors.ToString
         End Select
 
-        Select Case Preferences.maxmoviegenre
+        Select Case Pref.maxmoviegenre
             Case 99
                 ComboBox6.SelectedItem = "All Available"
             Case 0
                 ComboBox6.SelectedItem = "None"
             Case Else
-                ComboBox6.SelectedItem = Preferences.maxmoviegenre.ToString
+                ComboBox6.SelectedItem = Pref.maxmoviegenre.ToString
         End Select
 
-        cb_keywordasTag.Checkstate = If(Preferences.keywordasTag, CheckState.Checked, CheckState.Unchecked)
-        Select Case Preferences.keywordlimit 
+        cb_keywordasTag.Checkstate = If(Pref.keywordasTag, CheckState.Checked, CheckState.Unchecked)
+        Select Case Pref.keywordlimit 
             Case 999
                 cb_keywordlimit.SelectedItem = "All Available"
             Case 0
                 cb_keywordlimit.SelectedItem = "None"
             Case Else
-                cb_keywordlimit.SelectedItem = Preferences.keywordlimit.ToString
+                cb_keywordlimit.SelectedItem = Pref.keywordlimit.ToString
         End Select
 
-        If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Count Then
+        If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
             lbPosterSourcePriorities.Items.Clear()
-            For f = 0 To Preferences.moviethumbpriority.Count-1
-                lbPosterSourcePriorities.Items.Add(Preferences.moviethumbpriority(f))
+            For f = 0 To Pref.moviethumbpriority.Count-1
+                lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
             Next
         End If
-        If lb_MovSepLst.Items.Count <> Preferences.MovSepLst.Count Then
+        If lb_MovSepLst.Items.Count <> Pref.MovSepLst.Count Then
             lb_MovSepLst.Items.Clear()
-            For Each t In Preferences.MovSepLst 
+            For Each t In Pref.MovSepLst 
                 lb_MovSepLst.Items.Add(t)
             Next
         End If
 
-        If ListBox11.Items.Count <> Preferences.certificatepriority.Length Then
+        If ListBox11.Items.Count <> Pref.certificatepriority.Length Then
             ListBox11.Items.Clear()
             For f = 0 To 33
-                ListBox11.Items.Add(Preferences.certificatepriority(f))
+                ListBox11.Items.Add(Pref.certificatepriority(f))
             Next
         End If
 
-        If lbVideoSource.Items.Count <> Preferences.releaseformat.Length Then
+        If lbVideoSource.Items.Count <> Pref.releaseformat.Length Then
             lbVideoSource.Items.Clear()
-            For f = 0 To Preferences.releaseformat.Length - 1
-                lbVideoSource.Items.Add(Preferences.releaseformat(f))
+            For f = 0 To Pref.releaseformat.Length - 1
+                lbVideoSource.Items.Add(Pref.releaseformat(f))
             Next
         End If
 
         lbCleanFilename.Items.Clear()
-        lbCleanFilename.Items.AddRange(Preferences.moviecleanTags.Split("|"))
+        lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
 
-        IMPA_chk.CheckState = If(Preferences.nfoposterscraper And 1, CheckState.Checked, CheckState.Unchecked)
-        tmdb_chk.CheckState = If(Preferences.nfoposterscraper And 2, CheckState.Checked, CheckState.Unchecked)
-        mpdb_chk.CheckState = If(Preferences.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
-        imdb_chk.CheckState = If(Preferences.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
+        IMPA_chk.CheckState = If(Pref.nfoposterscraper And 1, CheckState.Checked, CheckState.Unchecked)
+        tmdb_chk.CheckState = If(Pref.nfoposterscraper And 2, CheckState.Checked, CheckState.Unchecked)
+        mpdb_chk.CheckState = If(Pref.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
+        imdb_chk.CheckState = If(Pref.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
 
 
-        If Preferences.movies_useXBMC_Scraper = True Then
+        If Pref.movies_useXBMC_Scraper = True Then
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
             Read_XBMC_TMDB_Scraper_Config
         Else
@@ -12589,15 +12589,15 @@ End Sub
     Private Sub TMDbControlsIni()
         TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
 
-        comboBoxTMDbSelectedLanguage.Text = Preferences.TMDbSelectedLanguageName
-        cbUseCustomLanguage.Checked = Preferences.TMDbUseCustomLanguage
-        tbCustomLanguageValue.Text = Preferences.TMDbCustomLanguageValue
+        comboBoxTMDbSelectedLanguage.Text = Pref.TMDbSelectedLanguageName
+        cbUseCustomLanguage.Checked = Pref.TMDbUseCustomLanguage
+        tbCustomLanguageValue.Text = Pref.TMDbCustomLanguageValue
 
-        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Preferences.BackDropResolutionSI) 'SI = Selected Index
-        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Preferences.PosterResolutionSI)
-        Movie.LoadHeightResolutionOptions(comboActorResolutions, Preferences.ActorResolutionSI)
+        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
+        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Pref.PosterResolutionSI)
+        Movie.LoadHeightResolutionOptions(comboActorResolutions, Pref.ActorResolutionSI)
 
-        cbGetMovieSetFromTMDb.Checked = Preferences.GetMovieSetFromTMDb
+        cbGetMovieSetFromTMDb.Checked = Pref.GetMovieSetFromTMDb
 
         SetLanguageControlsState()
     End Sub
@@ -12615,13 +12615,13 @@ End Sub
         Next
         AuthorizeCheck = False
         ListBox15.Items.Clear()
-        For Each item In Preferences.offlinefolders
+        For Each item In Pref.offlinefolders
             ListBox15.Items.Add(item)
         Next
         lbCleanFilename.Items.Clear()
-        lbCleanFilename.Items.AddRange(Preferences.moviecleanTags.Split("|"))
+        lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
         lb_MovSepLst.Items.Clear()
-        For Each t In Preferences.MovSepLst
+        For Each t In Pref.MovSepLst
             lb_MovSepLst.Items.Add(t)
         Next
         moviefolderschanged = False
@@ -12643,10 +12643,10 @@ End Sub
                 generalprefschanged = False
                 btnGeneralPrefsSaveChanges.Enabled = False
             End If
-            If Preferences.font <> Nothing Then
-                If Preferences.font <> "" Then
+            If Pref.font <> Nothing Then
+                If Pref.font <> "" Then
                     Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                    Dim newFont As System.Drawing.Font = CType(tc.ConvertFromString(Preferences.font), System.Drawing.Font)
+                    Dim newFont As System.Drawing.Font = CType(tc.ConvertFromString(Pref.font), System.Drawing.Font)
                     Call util_FontSetup()
                 End If
             End If
@@ -12658,11 +12658,11 @@ End Sub
     End Sub
 
     Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
-        Preferences.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
+        Pref.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
 
-        Preferences.ConfigSave()
+        Pref.ConfigSave()
 
-        If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
+        If CopyOfPreferencesIgnoreArticle <> Pref.ignorearticle Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         End If
 
@@ -12674,7 +12674,7 @@ End Sub
 
     Private Sub RadioButton38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton38.CheckedChanged
         If RadioButton38.Checked = True Then
-            Preferences.videomode = 1
+            Pref.videomode = 1
         End If
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12682,7 +12682,7 @@ End Sub
 
     Private Sub RadioButton37_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton37.CheckedChanged
         If RadioButton37.Checked = True Then
-            Preferences.videomode = 2
+            Pref.videomode = 2
         End If
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12690,12 +12690,12 @@ End Sub
 
     Private Sub RadioButton36_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton36.CheckedChanged
         If RadioButton36.Checked = True Then
-            Preferences.videomode = 4
+            Pref.videomode = 4
             btn_custommediaplayer.Enabled = True
             Label121.Visible = True
-            If Preferences.selectedvideoplayer <> Nothing Then
-                If Preferences.selectedvideoplayer <> "" Then
-                    Label121.Text = Preferences.selectedvideoplayer
+            If Pref.selectedvideoplayer <> Nothing Then
+                If Pref.selectedvideoplayer <> "" Then
+                    Label121.Text = Pref.selectedvideoplayer
                 Else
                     Label121.Text = ""
                 End If
@@ -12718,9 +12718,9 @@ End Sub
             filebrowser.Filter = "Executable Files|*.exe"
             filebrowser.Title = "Find Executable Of Preferred Media Player"
             If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                Preferences.selectedvideoplayer = filebrowser.FileName
+                Pref.selectedvideoplayer = filebrowser.FileName
                 Label121.Visible = True
-                Label121.Text = Preferences.selectedvideoplayer
+                Label121.Text = Pref.selectedvideoplayer
             End If
             If prefsload Then Exit Sub
             generalprefschanged = True
@@ -12750,7 +12750,7 @@ End Sub
                 txtbx_minrarsize.Text = "8"
                 Exit Sub
             End If
-            Preferences.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -12758,9 +12758,9 @@ End Sub
 
     Private Sub txtbx_minrarsize_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtbx_minrarsize.TextChanged
         If IsNumeric(txtbx_minrarsize.Text) Then
-            Preferences.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
         Else
-            Preferences.rarsize = 8
+            Pref.rarsize = 8
             txtbx_minrarsize.Text = "8"
         End If
         If prefsload Then Exit Sub
@@ -12770,7 +12770,7 @@ End Sub
 
     Private Sub CheckBox33_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox33.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.actorseasy = CheckBox33.Checked
+        Pref.actorseasy = CheckBox33.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
@@ -12783,10 +12783,10 @@ End Sub
                 Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
                 Dim fontString As String = tc.ConvertToString(dlg.Font)
 
-                Preferences.font = fontString
+                Pref.font = fontString
 
                 Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
+                Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
 
                 Label130.Font = newFont
                 Label130.Text = fontString
@@ -12804,10 +12804,10 @@ End Sub
             'Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
             'Dim fontString As String = tc.ConvertToString("Times New Roman, 9pt")
 
-            Preferences.font = "Times New Roman, 9pt"
+            Pref.font = "Times New Roman, 9pt"
 
             Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-            Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Preferences.font), System.Drawing.Font)
+            Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
 
             Label130.Font = newFont
             Label130.Text = "Times New Roman, 9pt"
@@ -12822,7 +12822,7 @@ End Sub
     Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_pre.CheckedChanged
         If prefsload Then Exit Sub
         If rbXBMCv_pre.Checked Then
-            Preferences.XBMC_version = 0
+            Pref.XBMC_version = 0
         End If
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12831,7 +12831,7 @@ End Sub
     Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
         If prefsload Then Exit Sub
         If rbXBMCv_post.Checked Then
-            Preferences.XBMC_version = 2
+            Pref.XBMC_version = 2
         End If
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12840,7 +12840,7 @@ End Sub
     Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
         If prefsload Then Exit Sub
         If rbXBMCv_both.Checked Then
-            Preferences.XBMC_version = 1
+            Pref.XBMC_version = 1
         End If
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12854,7 +12854,7 @@ End Sub
         ofd.Filter           = "Executable Files|*.exe"
         ofd.Title            = "Locate mkvmerge GUI (mmg.exe)"
 
-        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Preferences.MkvMergeGuiPath = ofd.FileName
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Pref.MkvMergeGuiPath = ofd.FileName
 
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12867,7 +12867,7 @@ End Sub
 
     Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) Handles lblaltnfoeditorclear.Click
         tbaltnfoeditor.Text = ""
-        Preferences.altnfoeditor = ""
+        Pref.altnfoeditor = ""
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
@@ -12878,8 +12878,8 @@ End Sub
         ofd.Filter           = "Executable Files|*.exe"
         ofd.Title            = "Locate Alternative nfo viewer-editor"
         If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then 
-            Preferences.altnfoeditor = ofd.FileName
-            tbaltnfoeditor.Text = Preferences.altnfoeditor 
+            Pref.altnfoeditor = ofd.FileName
+            tbaltnfoeditor.Text = Pref.altnfoeditor 
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
@@ -12887,49 +12887,49 @@ End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.intruntime = CheckBox38.Checked
+        Pref.intruntime = CheckBox38.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_IgnoreThe_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreThe.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.ignorearticle = cb_IgnoreThe.Checked
+        Pref.ignorearticle = cb_IgnoreThe.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_IgnoreA_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreA.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.ignoreAarticle = cb_IgnoreA.Checked
+        Pref.ignoreAarticle = cb_IgnoreA.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreAn.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.ignoreAn = cb_IgnoreAn.Checked
+        Pref.ignoreAn = cb_IgnoreAn.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+        Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.overwritethumbs = Not cbOverwriteArtwork.Checked
+        Pref.overwritethumbs = Not cbOverwriteArtwork.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.externalbrowser = cbExternalbrowser.Checked
+        Pref.externalbrowser = cbExternalbrowser.Checked
         btnFindBrowser.Enabled      = cbExternalbrowser.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
@@ -12943,7 +12943,7 @@ End Sub
             filebrowser.Filter = "Executable Files|*.exe"
             filebrowser.Title = "Find Executable Of Preferred Browser"
             If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                Preferences.selectedBrowser = filebrowser.FileName
+                Pref.selectedBrowser = filebrowser.FileName
             End If
             If prefsload Then Exit Sub
             generalprefschanged = True
@@ -12955,14 +12955,14 @@ End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.startupCache = Not chkbx_disablecache.Checked
+        Pref.startupCache = Not chkbx_disablecache.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
         If MainFormLoadedStatus Then
-            Preferences.UseMultipleThreads = cbUseMultipleThreads.Checked
+            Pref.UseMultipleThreads = cbUseMultipleThreads.Checked
             If prefsload Then Exit Sub
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
@@ -12971,7 +12971,7 @@ End Sub
 
     Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) Handles cbCheckForNewVersion.CheckedChanged
         If MainFormLoadedStatus Then
-            Preferences.CheckForNewVersion = cbCheckForNewVersion.Checked
+            Pref.CheckForNewVersion = cbCheckForNewVersion.Checked
             If prefsload Then Exit Sub
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
@@ -12980,14 +12980,14 @@ End Sub
 
     Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.LocalActorImage = cbDisplayLocalActor.Checked = True
+        Pref.LocalActorImage = cbDisplayLocalActor.Checked = True
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
         If MainFormLoadedStatus Then
-            Preferences.ShowLogOnError = cbShowLogOnError.Checked
+            Pref.ShowLogOnError = cbShowLogOnError.Checked
             If prefsload Then Exit Sub
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
@@ -12996,56 +12996,56 @@ End Sub
 
     Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
+        Pref.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
+        Pref.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDisplayRatingOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayRatingOverlay.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
+        Pref.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
+        Pref.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbDisplayMediaInfoFolderSize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoFolderSize.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.DisplayMediaInfoFolderSize = cbDisplayMediaInfoFolderSize.Checked
+        Pref.DisplayMediaInfoFolderSize = cbDisplayMediaInfoFolderSize.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMultiMonitorEnable.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
+        Pref.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbShowAllAudioTracks_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbShowAllAudioTracks.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
+        Pref.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
         generalprefschanged = True
         btnGeneralPrefsSaveChanges.Enabled = True
     End Sub
 
     Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
         If prefsload Then Exit Sub
-        If Preferences.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
+        If Pref.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
@@ -13312,14 +13312,14 @@ End Sub
                     Dim newcom As New str_ListOfCommands(SetDefaults)
                     newcom.command = TextBox43.Text
                     newcom.title = TextBox41.Text
-                    Preferences.commandlist.Add(newcom)
+                    Pref.commandlist.Add(newcom)
                     ListBox16.Items.Add(newcom.title)
                     ListBox17.Items.Add(newcom.command)
                     Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
                     For i = x-1 To MCToolsCommands Step -1
                         ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
                     Next
-                    For Each com In Preferences.commandlist
+                    For Each com In Pref.commandlist
                         ToolsToolStripMenuItem.DropDownItems.Add(com.title)
                     Next
                     If prefsload Then Exit Sub
@@ -13355,9 +13355,9 @@ End Sub
     Private Sub btn_ToolsCommandRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ToolsCommandRemove.Click
         Try
             If ListBox16.SelectedItem <> "" And ListBox17.SelectedItem <> "" Then
-                For Each com In Preferences.commandlist
+                For Each com In Pref.commandlist
                     If com.title = ListBox16.SelectedItem And com.command = ListBox17.SelectedItem Then
-                        Preferences.commandlist.Remove(com)
+                        Pref.commandlist.Remove(com)
                         Exit For
                     End If
                 Next
@@ -13367,7 +13367,7 @@ End Sub
                 For i = x-1 To MCToolsCommands Step -1
                     ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
                 Next
-                For Each com In Preferences.commandlist
+                For Each com In Pref.commandlist
                     ListBox16.Items.Add(com.title)
                     ListBox17.Items.Add(com.command)
                     ToolsToolStripMenuItem.DropDownItems.Add(com.title)
@@ -13396,7 +13396,7 @@ End Sub
                 If tempint = DialogResult.Yes Then
 
                     Call util_RegexSave()
-                    Preferences.ConfigSave()
+                    Pref.ConfigSave()
                     MsgBox("Changes Saved")
                 Else
 
@@ -13414,7 +13414,7 @@ End Sub
     Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVPrefSaveChanges.Click
         Try
             mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
             Call util_RegexSave()
             ComboBox_tv_EpisodeRename.Items.Clear()
             For Each Regex In tv_RegexRename
@@ -13536,7 +13536,7 @@ End Sub
             util_LanguageListLoad()
 
             Try
-                ListBox12.SelectedItem = Preferences.TvdbLanguage
+                ListBox12.SelectedItem = Pref.TvdbLanguage
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -13552,8 +13552,8 @@ End Sub
         Try
             For Each lan In languageList
                 If lan.Language.Value = ListBox12.SelectedItem Then
-                    Preferences.TvdbLanguage = lan.Language.Value
-                    Preferences.TvdbLanguageCode = lan.Abbreviation.Value
+                    Pref.TvdbLanguage = lan.Language.Value
+                    Pref.TvdbLanguageCode = lan.Abbreviation.Value
                     Exit For
                 End If
             Next
@@ -13568,9 +13568,9 @@ End Sub
         If prefsload Then Exit Sub
         Try
             If RadioButton42.Checked = True Then
-                Preferences.sortorder = "dvd"
+                Pref.sortorder = "dvd"
             Else
-                Preferences.sortorder = "default"
+                Pref.sortorder = "default"
             End If
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
@@ -13582,9 +13582,9 @@ End Sub
     'Private Sub RadioButton43_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton43.CheckedChanged
     '    Try
     '        If RadioButton43.Checked = True Then
-    '            Preferences.sortorder = "default"
+    '            Pref.sortorder = "default"
     '        Else
-    '            Preferences.sortorder = "dvd"
+    '            Pref.sortorder = "dvd"
     '        End If
     '        tvprefschanged = True
     '        btnTVPrefSaveChanges.Enabled = True
@@ -13597,9 +13597,9 @@ End Sub
         If prefsload Then Exit Sub
         Try
             If CheckBox34.Checked = True Then
-                Preferences.copytvactorthumbs = True
+                Pref.copytvactorthumbs = True
             Else
-                Preferences.copytvactorthumbs = False
+                Pref.copytvactorthumbs = False
             End If
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
@@ -13611,7 +13611,7 @@ End Sub
     Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_TVDB_Scraper.CheckedChanged
         Try
             If CheckBox_Use_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
-                Preferences.tvshow_useXBMC_Scraper = True
+                Pref.tvshow_useXBMC_Scraper = True
                 GroupBox2.Enabled = False
                 GroupBox3.Enabled = False
                 GroupBox5.Enabled = False
@@ -13620,7 +13620,7 @@ End Sub
                 GroupBox_TVDB_Scraper_Preferences.Visible = True
                 GroupBox_TVDB_Scraper_Preferences.BringToFront()
             Else
-                Preferences.tvshow_useXBMC_Scraper = False
+                Pref.tvshow_useXBMC_Scraper = False
                 GroupBox2.Enabled = True
                 GroupBox3.Enabled = True
                 GroupBox5.Enabled = True
@@ -13640,28 +13640,28 @@ End Sub
 'TvShow Auto Scrape Options
     Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlPosterArt.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.tvdlposter = cbTvDlPosterArt.Checked
+        Pref.tvdlposter = cbTvDlPosterArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanart.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.tvdlfanart = cbTvDlFanart.Checked
+        Pref.tvdlfanart = cbTvDlFanart.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlSeasonArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlSeasonArt.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
+        Pref.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTvDlXtraFanart.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.dlTVxtrafanart = cbTvDlXtraFanart.Checked
+        Pref.dlTVxtrafanart = cbTvDlXtraFanart.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -13669,70 +13669,70 @@ End Sub
     Private Sub cmbxTvXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxTvXtraFanartQty.SelectedIndexChanged
         If prefsload Then Exit Sub
         Dim newvalue As String = cmbxTvXtraFanartQty.SelectedItem
-        Preferences.TvXtraFanartQty = newvalue.toint
+        Pref.TvXtraFanartQty = newvalue.toint
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvDlFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanartTvArt.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
+        Pref.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub   'TvFanartTvFirst
 
     Private Sub cbTvFanartTvFirst_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvFanartTvFirst.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.TvFanartTvFirst = cbTvFanartTvFirst.Checked
+        Pref.TvFanartTvFirst = cbTvFanartTvFirst.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub   'TvFanartTvFirst
 
     Private Sub RadioButton41_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton41.CheckedChanged
         If prefsload Then Exit Sub
-        If RadioButton41.Checked = True Then Preferences.seasonall = "none"
+        If RadioButton41.Checked = True Then Pref.seasonall = "none"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton40_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton40.CheckedChanged
         If prefsload Then Exit Sub
-        If RadioButton40.Checked = True Then Preferences.seasonall = "poster"
+        If RadioButton40.Checked = True Then Pref.seasonall = "poster"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub RadioButton39_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton39.CheckedChanged
         If prefsload Then Exit Sub
-        If RadioButton39.Checked = True Then Preferences.seasonall = "wide"
+        If RadioButton39.Checked = True Then Pref.seasonall = "wide"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub posterbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles posterbtn.CheckedChanged
         If prefsload Then Exit Sub
-        If posterbtn.Checked = True Then Preferences.postertype = "poster"
+        If posterbtn.Checked = True Then Pref.postertype = "poster"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub bannerbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bannerbtn.CheckedChanged
         If prefsload Then Exit Sub
-        If bannerbtn.Checked = True Then Preferences.postertype = "banner"
+        If bannerbtn.Checked = True Then Pref.postertype = "banner"
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_TvFolderJpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvFolderJpg.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.tvfolderjpg = cb_TvFolderJpg.Checked
+        Pref.tvfolderjpg = cb_TvFolderJpg.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbSeasonFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbSeasonFolderjpg.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.seasonfolderjpg = cbSeasonFolderjpg.checked
+        Pref.seasonfolderjpg = cbSeasonFolderjpg.checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -13741,28 +13741,28 @@ End Sub
 
     Private Sub cbTvQuickAddShow_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvQuickAddShow.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.tvshowautoquick =cbTvQuickAddShow.Checked 
+        Pref.tvshowautoquick =cbTvQuickAddShow.Checked 
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.enabletvhdtags =CheckBox20.Checked
+        Pref.enabletvhdtags =CheckBox20.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvAutoScreenShot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvAutoScreenShot.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.autoepisodescreenshot = cbTvAutoScreenShot.Checked
+        Pref.autoepisodescreenshot = cbTvAutoScreenShot.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTvScrShtTVDBResize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvScrShtTVDBResize.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.tvscrnshtTVDBResize = cbTvScrShtTVDBResize.checked
+        Pref.tvscrnshtTVDBResize = cbTvScrShtTVDBResize.checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -13797,9 +13797,9 @@ End Sub
     Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AutoScrnShtDelay.TextChanged
         If prefsload Then Exit Sub
         If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
-            Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
+            Pref.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
         Else
-            Preferences.ScrShtDelay = 10
+            Pref.ScrShtDelay = 10
             AutoScrnShtDelay.Text = "10"
             MsgBox("Please enter a numerical Value that is 1 or more")
         End If
@@ -13811,7 +13811,7 @@ End Sub
 
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.disabletvlogs = CheckBox17.Checked
+        Pref.disabletvlogs = CheckBox17.Checked
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -13819,7 +13819,7 @@ End Sub
     Private Sub ComboBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox8.SelectedIndexChanged
         If prefsload Then Exit Sub
         Try
-            Preferences.TvdbActorScrape = ComboBox8.SelectedIndex.ToString
+            Pref.TvdbActorScrape = ComboBox8.SelectedIndex.ToString
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -13831,7 +13831,7 @@ End Sub
         If prefsload Then Exit Sub
         Try
             If Renamer.setRenamePref(tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), tv_RegexScraper) Then
-                Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
+                Pref.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
                 tvprefschanged = True
                 btnTVPrefSaveChanges.Enabled = True
             Else
@@ -13844,7 +13844,7 @@ End Sub
 
     Private Sub CheckBox_tv_EpisodeRenameAuto_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameAuto.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.autorenameepisodes = CheckBox_tv_EpisodeRenameAuto.Checked 
+        Pref.autorenameepisodes = CheckBox_tv_EpisodeRenameAuto.Checked 
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
@@ -13853,9 +13853,9 @@ End Sub
         If prefsload Then Exit Sub
         Try
             If CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked Then
-                Preferences.eprenamelowercase = True
+                Pref.eprenamelowercase = True
             Else
-                Preferences.eprenamelowercase = False
+                Pref.eprenamelowercase = False
             End If
             Renamer.applySeasonEpisodeCase()
             tvprefschanged = True
@@ -13867,20 +13867,20 @@ End Sub
 
     Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
+        Pref.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cb_TvMissingEpOffset_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvMissingEpOffset.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.TvMissingEpOffset = cb_TvMissingEpOffset.Checked 
+        Pref.TvMissingEpOffset = cb_TvMissingEpOffset.Checked 
         tvprefschanged = True
         btnTVPrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbTv_fixNFOid_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbTv_fixNFOid.CheckedChanged
-        Preferences.fixnfoid =cbTv_fixNFOid.Checked 
+        Pref.fixnfoid =cbTv_fixNFOid.Checked 
     End Sub
 
 #End Region   'TV Preferences -> General/Scraper Tab
@@ -14160,7 +14160,7 @@ End Sub
             For Each Regex In tv_RegexRename
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
-            ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename >= idxRegexSelected, Preferences.tvrename - 1, Preferences.tvrename)
+            ComboBox_tv_EpisodeRename.SelectedIndex = If(Pref.tvrename >= idxRegexSelected, Pref.tvrename - 1, Pref.tvrename)
 
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
@@ -14179,7 +14179,7 @@ End Sub
             For Each Regex In tv_RegexRename
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
-            ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+            ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
 
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
@@ -14221,7 +14221,7 @@ End Sub
             For Each Regex In tv_RegexRename
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
-            ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+            ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -14242,7 +14242,7 @@ End Sub
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
                     applyAdvancedLists()
-                    Preferences.ConfigSave()
+                    Pref.ConfigSave()
                 Else
                     util_ConfigLoad(True)
                 End If
@@ -14268,7 +14268,7 @@ End Sub
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
 
             movieprefschanged = False
             btnMoviePrefSaveChanges.Enabled = False
@@ -14283,7 +14283,7 @@ End Sub
     Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
         Try
             If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
-                Preferences.movies_useXBMC_Scraper = True
+                Pref.movies_useXBMC_Scraper = True
                 Read_XBMC_TMDB_Scraper_Config()
                 GroupBox_MovieIMDBMirror.Enabled = False
                 GroupBox_MovieIMDBMirror.Visible = False
@@ -14291,7 +14291,7 @@ End Sub
                 GroupBox_TMDB_Scraper_Preferences.Visible = True
                 GroupBox_TMDB_Scraper_Preferences.BringToFront()
             Else
-                Preferences.movies_useXBMC_Scraper = False
+                Pref.movies_useXBMC_Scraper = False
                 GroupBox_MovieIMDBMirror.Enabled = True
                 GroupBox_MovieIMDBMirror.Visible = True
                 GroupBox_MovieIMDBMirror.BringToFront()
@@ -14308,11 +14308,11 @@ End Sub
     Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbFanart.CheckedChanged
         Try
             If cbXbmcTmdbFanart.Checked = True Then
-                Preferences.XbmcTmdbScraperFanart = "true"
+                Pref.XbmcTmdbScraperFanart = "true"
             Else
-                Preferences.XbmcTmdbScraperFanart = "false"
+                Pref.XbmcTmdbScraperFanart = "false"
             End If
-            Save_XBMC_TMDB_Scraper_Config("fanart", Preferences.XbmcTmdbScraperFanart)
+            Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14324,11 +14324,11 @@ End Sub
     Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged, cbXbmcTmdbIMDBRatings.CheckStateChanged 
         Try
             If cbXbmcTmdbIMDBRatings.Checked = True Then
-                Preferences.XbmcTmdbScraperRatings = "IMDb"
+                Pref.XbmcTmdbScraperRatings = "IMDb"
             Else
-                Preferences.XbmcTmdbScraperRatings = "TMDb"
+                Pref.XbmcTmdbScraperRatings = "TMDb"
             End If
-            Save_XBMC_TMDB_Scraper_Config("ratings", Preferences.XbmcTmdbScraperRatings)
+            Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14339,50 +14339,50 @@ End Sub
 
     Private Sub cbXbmcTmdbOutlineFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbOutlineFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbMissingFromImdb = cbXbmcTmdbOutlineFromImdb.Checked 
+        Pref.XbmcTmdbMissingFromImdb = cbXbmcTmdbOutlineFromImdb.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbXbmcTmdbTop250FromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbTop250FromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbTop250FromImdb = cbXbmcTmdbTop250FromImdb.Checked 
+        Pref.XbmcTmdbTop250FromImdb = cbXbmcTmdbTop250FromImdb.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbXbmcTmdbVotesFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbVotesFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbVotesFromImdb = cbXbmcTmdbVotesFromImdb.Checked
+        Pref.XbmcTmdbVotesFromImdb = cbXbmcTmdbVotesFromImdb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbXbmcTmdbStarsFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbStarsFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbStarsFromImdb = cbXbmcTmdbStarsFromImdb.Checked 
+        Pref.XbmcTmdbStarsFromImdb = cbXbmcTmdbStarsFromImdb.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbXbmcTmdbAkasFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbAkasFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbAkasFromImdb = cbXbmcTmdbAkasFromImdb.Checked
+        Pref.XbmcTmdbAkasFromImdb = cbXbmcTmdbAkasFromImdb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbXbmcTmdbCertFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbCertFromImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked
+        Pref.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbHDTrailer.SelectedIndexChanged
         Try
-            Preferences.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
-            Save_XBMC_TMDB_Scraper_Config("trailerq", Preferences.XbmcTmdbScraperTrailerQ)
+            Pref.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
+            Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14393,8 +14393,8 @@ End Sub
 
     Private Sub cmbxXbmcTmdbTitleLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbTitleLanguage.SelectedIndexChanged
         Try
-            Preferences.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
-            Save_XBMC_TMDB_Scraper_Config("language", Preferences.XbmcTmdbScraperLanguage)
+            Pref.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
+            Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
             'mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
             'Read_XBMC_TMDB_Scraper_Config()
             movieprefschanged = True
@@ -14407,8 +14407,8 @@ End Sub
     Private Sub cmbxTMDBPreferredCertCountry_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxTMDBPreferredCertCountry.SelectedIndexChanged
         If prefsload Then Exit Sub
         Try     'tmdbcertcountry
-            Preferences.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
-            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Preferences.XbmcTmdbScraperCertCountry)
+            Pref.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
+            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -14419,14 +14419,14 @@ End Sub
     Private Sub cbXbmcTmdbRename_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbRename.CheckedChanged
         Try
             If cbXbmcTmdbRename.CheckState = CheckState.Checked Then
-                If Preferences.MovieRenameEnable Then
-                    Preferences.XbmcTmdbRenameMovie = True
+                If Pref.MovieRenameEnable Then
+                    Pref.XbmcTmdbRenameMovie = True
                 Else
                     MsgBox("Please also enable 'Rename Movie'")
                     cbXbmcTmdbRename.CheckState = CheckState.Unchecked 
                 End If
             Else
-                Preferences.XbmcTmdbRenameMovie = False
+                Pref.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14436,7 +14436,7 @@ End Sub
 
     Private Sub cbMovNewFolderInRootFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovNewFolderInRootFolder.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked
+        Pref.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked
             
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
@@ -14444,7 +14444,7 @@ End Sub
 
     Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
+        Pref.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14454,11 +14454,11 @@ End Sub
     Private Sub ComboBox7_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox7.SelectedIndexChanged
         Try
             If IsNumeric(ComboBox7.SelectedItem) Then
-                Preferences.maxactors = Convert.ToInt32(ComboBox7.SelectedItem)
+                Pref.maxactors = Convert.ToInt32(ComboBox7.SelectedItem)
             ElseIf ComboBox7.SelectedItem.ToString.ToLower = "none" Then
-                Preferences.maxactors = 0
+                Pref.maxactors = 0
             Else
-                Preferences.maxactors = 9999
+                Pref.maxactors = 9999
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14471,11 +14471,11 @@ End Sub
     Private Sub ComboBox6_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox6.SelectedIndexChanged
         Try
             If IsNumeric(ComboBox6.SelectedItem) Then
-                Preferences.maxmoviegenre = Convert.ToInt32(ComboBox6.SelectedItem)
+                Pref.maxmoviegenre = Convert.ToInt32(ComboBox6.SelectedItem)
             ElseIf ComboBox6.SelectedItem.ToString.ToLower = "none" Then
-                Preferences.maxmoviegenre = 0
+                Pref.maxmoviegenre = 0
             Else
-                Preferences.maxmoviegenre = 99
+                Pref.maxmoviegenre = 99
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14487,7 +14487,7 @@ End Sub
     Private Sub cmbxMovieScraper_MaxStudios_SelectedIndexChanged( sender As Object,  e As EventArgs) Handles cmbxMovieScraper_MaxStudios.SelectedIndexChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieScraper_MaxStudios = Convert.ToInt32(cmbxMovieScraper_MaxStudios.SelectedItem)  'nudMovieScraper_MaxStudios.Value
+                Pref.MovieScraper_MaxStudios = Convert.ToInt32(cmbxMovieScraper_MaxStudios.SelectedItem)  'nudMovieScraper_MaxStudios.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -14499,34 +14499,34 @@ End Sub
 'Other Options
     Private Sub cbGetMovieSetFromTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbGetMovieSetFromTMDb.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
+        Pref.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles chkbOriginal_Title.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.Original_Title = chkbOriginal_Title.Checked
+        Pref.Original_Title = chkbOriginal_Title.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
 'Preferred Language
     Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
-        Preferences.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+        Pref.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) Handles cbUseCustomLanguage.Click
-        Preferences.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
+        Pref.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
         SetLanguageControlsState()
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
-        Preferences.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
+        Pref.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14539,12 +14539,12 @@ End Sub
     Private Sub cbMovieUseFolderNames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieUseFolderNames.CheckedChanged
         Try
             If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
-                Preferences.usefoldernames = True
+                Pref.usefoldernames = True
                 cbMovieAllInFolders.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
                 cbMovCreateFanartjpg.Enabled = True
                 cbDlXtraFanart.Enabled = True
-                If Preferences.basicsavemode Then
+                If Pref.basicsavemode Then
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Enabled = False
                 Else
@@ -14552,8 +14552,8 @@ End Sub
                     cbMoviePosterInFolder.Enabled = True
                 End If
             Else
-                Preferences.usefoldernames = False
-                If Not Preferences.allfolders AndAlso Not Preferences.basicsavemode Then
+                Pref.usefoldernames = False
+                If Not Pref.allfolders AndAlso Not Pref.basicsavemode Then
                     cbMovCreateFolderjpg.Checked = False
                     cbMovCreateFolderjpg.Enabled = False
                     cbMovCreateFanartjpg.Enabled = False
@@ -14564,7 +14564,7 @@ End Sub
                     cbMoviePosterInFolder.Enabled = False
                     cbDlXtraFanart.Checked = False
                     cbDlXtraFanart.Enabled = False
-                ElseIf Not Preferences.allfolders AndAlso Preferences.basicsavemode Then
+                ElseIf Not Pref.allfolders AndAlso Pref.basicsavemode Then
                     msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
                     cbMovieUseFolderNames.Checked = CheckState.Checked
                 End If
@@ -14578,12 +14578,12 @@ End Sub
 
     Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieAllInFolders.CheckedChanged
         If cbMovieAllInFolders.CheckState = CheckState.Checked Then 
-            Preferences.allfolders = True
+            Pref.allfolders = True
             cbMovieUseFolderNames.Checked = False
             cbMovCreateFolderjpg.Enabled = True
             cbMovCreateFanartjpg.Enabled = True
             cbDlXtraFanart.Enabled = True
-            If Preferences.basicsavemode Then
+            If Pref.basicsavemode Then
                 cbMovieFanartInFolders.Enabled = False
                 cbMoviePosterInFolder.Enabled = False
             Else
@@ -14591,8 +14591,8 @@ End Sub
                 cbMoviePosterInFolder.Enabled = True
             End If               
         Else
-            Preferences.allfolders = False
-            If Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode Then
+            Pref.allfolders = False
+            If Not Pref.usefoldernames AndAlso Not Pref.basicsavemode Then
                     
                 cbMovCreateFolderjpg.Enabled = False
                 cbMovCreateFolderjpg.Checked = False
@@ -14604,7 +14604,7 @@ End Sub
                 cbMoviePosterInFolder.Enabled = False
                 cbDlXtraFanart.Checked = False
                 cbDlXtraFanart.Enabled = False
-            ElseIf Not Preferences.usefoldernames AndAlso Preferences.basicsavemode Then
+            ElseIf Not Pref.usefoldernames AndAlso Pref.basicsavemode Then
                 msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
                 cbMovieAllInFolders.Checked = CheckState.Checked
             End If
@@ -14617,23 +14617,23 @@ End Sub
     Private Sub cbMovieBasicSave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieBasicSave.CheckedChanged 
         Try
             If cbMovieBasicSave.CheckState = CheckState.Checked Then
-                If Preferences.usefoldernames or Preferences.allfolders Then
-                    Preferences.basicsavemode = True
+                If Pref.usefoldernames or Pref.allfolders Then
+                    Pref.basicsavemode = True
                     cbMovieFanartInFolders.Checked =CheckState.Unchecked
                     cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = CheckState.Unchecked
                     cbMoviePosterInFolder.Enabled = False
                 Else
-                    If (Not Preferences.usefoldernames AndAlso Not Preferences.allfolders) Then
+                    If (Not Pref.usefoldernames AndAlso Not Pref.allfolders) Then
                     MsgBox("Either Use Foldername or Movies In Folders" & vbCrLf & "must be selected")
                     End If
-                    Preferences.basicsavemode = False
+                    Pref.basicsavemode = False
                     cbMovieFanartInFolders.Enabled = True 
                     cbMoviePosterInFolder.Enabled = True
                     cbMovieBasicSave.Checked = False
                 End If
             Else
-                Preferences.basicsavemode = False
+                Pref.basicsavemode = False
                 cbMovieFanartInFolders.Enabled = True 
                 cbMoviePosterInFolder.Enabled = True 
             End If
@@ -14648,12 +14648,12 @@ End Sub
     Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_keywordasTag.CheckedChanged
         Try
             If cb_keywordasTag.CheckState = CheckState.Checked Then
-                Preferences.keywordasTag = True
-                If Preferences.keywordlimit = 0 Then
+                Pref.keywordasTag = True
+                If Pref.keywordlimit = 0 Then
                     MsgBox(" Please select a limit above Zero keywords" & vbCrLf & "else no keywords will be stored as Tags")
                 End If
             Else
-                Preferences.keywordasTag = False
+                Pref.keywordasTag = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14665,11 +14665,11 @@ End Sub
     Private Sub cb_keywordlimit_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_keywordlimit.SelectedIndexChanged
         Try
             If IsNumeric(cb_keywordlimit.SelectedItem) Then
-                Preferences.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
+                Pref.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
             ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
-                Preferences.keywordlimit = 0
+                Pref.keywordlimit = 0
             Else
-                Preferences.keywordlimit = 999
+                Pref.keywordlimit = 999
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14686,14 +14686,14 @@ End Sub
 'Scraping Options
     Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMoviePosterScrape.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.scrapemovieposters = cbMoviePosterScrape.checked
+        Pref.scrapemovieposters = cbMoviePosterScrape.checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMovFanartScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartScrape.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.savefanart = cbMovFanartScrape.Checked
+        Pref.savefanart = cbMovFanartScrape.Checked
 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
@@ -14701,14 +14701,14 @@ End Sub
 
     Private Sub cbMovFanartTvScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartTvScrape.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.MovFanartTvscrape = cbMovFanartTvScrape.Checked
+        Pref.MovFanartTvscrape = cbMovFanartTvScrape.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
     
     Private Sub cbMovFanartNaming_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartNaming.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.MovFanartNaming = cbMovFanartNaming.Checked
+        Pref.MovFanartNaming = cbMovFanartNaming.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14726,19 +14726,19 @@ End Sub
     Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlXtraFanart.CheckedChanged
         If prefsload Then Exit Sub
         If cbDlXtraFanart.Checked Then
-            If Not Preferences.allfolders AndAlso Not Preferences.usefoldernames Then
+            If Not Pref.allfolders AndAlso Not Pref.usefoldernames Then
                 MsgBox("Please select ""Use Foldername"" or ""Movies in Separate Folders""")
                 cbDlXtraFanart.Checked = False
             Else
-                If Not Preferences.movxtrafanart AndAlso Not Preferences.movxtrathumb Then
+                If Not Pref.movxtrafanart AndAlso Not Pref.movxtrathumb Then
                     MsgBox("Please select ""Allow save ExtraThumbs"" And/Or ""Allow save ExtraFanart""")
                     cbDlXtraFanart.Checked = False
                 Else 
-                    Preferences.dlxtrafanart = True
+                    Pref.dlxtrafanart = True
                 End If
             End If
         Else
-            Preferences.dlxtrafanart = False
+            Pref.dlxtrafanart = False
         End If
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
@@ -14756,9 +14756,9 @@ End Sub
                     lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex)
                 End If
                 Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
-                Preferences.moviethumbpriority.Clear()
+                Pref.moviethumbpriority.Clear()
                 For f = 0 To mothpr
-                    Preferences.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+                    Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
                 Next
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
@@ -14783,9 +14783,9 @@ End Sub
                     lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex + 1)
                 End If
                 Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
-                Preferences.moviethumbpriority.Clear()
+                Pref.moviethumbpriority.Clear()
                 For f = 0 To mothpr
-                    Preferences.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+                    Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
                 Next
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
@@ -14801,11 +14801,11 @@ End Sub
     End Sub
 
     Private Sub btn_MovPosterPriorityReset_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityReset.Click
-        Preferences.resetmovthumblist()
-        If lbPosterSourcePriorities.Items.Count <> Preferences.moviethumbpriority.Count Then
+        Pref.resetmovthumblist()
+        If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
             lbPosterSourcePriorities.Items.Clear()
-            For f = 0 To Preferences.moviethumbpriority.Count-1
-                lbPosterSourcePriorities.Items.Add(Preferences.moviethumbpriority(f))
+            For f = 0 To Pref.moviethumbpriority.Count-1
+                lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
             Next
         End If
         movieprefschanged = True
@@ -14818,9 +14818,9 @@ End Sub
             If selected = -1 Then Exit Sub
             Me.lbPosterSourcePriorities.Items.RemoveAt(selected)
             Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
-            Preferences.moviethumbpriority.Clear()
+            Pref.moviethumbpriority.Clear()
             For f = 0 To mothpr
-                Preferences.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+                Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
             Next
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14834,13 +14834,13 @@ End Sub
         If prefsload Then Exit Sub
         Try
             If cbMovXtraThumbs.Checked Then
-                Preferences.movxtrathumb = True
+                Pref.movxtrathumb = True
             Else
                 If Not cbMovXtraFanart.Checked Then
                     cbDlXtraFanart.Checked = False
                     MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
                 End If
-                Preferences.movxtrathumb = False
+                Pref.movxtrathumb = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14853,13 +14853,13 @@ End Sub
         If prefsload Then Exit Sub
         Try
             If cbMovXtraFanart.Checked Then
-                Preferences.movxtrafanart = True
+                Pref.movxtrafanart = True
             Else
                 If Not cbMovXtraThumbs.Checked Then
                     cbDlXtraFanart.Checked = False
                     MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
                 End If
-                Preferences.movxtrafanart = False
+                Pref.movxtrafanart = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14871,7 +14871,7 @@ End Sub
     Private Sub cmbxMovXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMovXtraFanartQty.SelectedIndexChanged
         If prefsload Then Exit Sub
         Dim newvalue As String = cmbxMovXtraFanartQty.SelectedItem
-        Preferences.movxtrafanartqty = newvalue.toint
+        Pref.movxtrafanartqty = newvalue.toint
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14879,15 +14879,15 @@ End Sub
     Private Sub cbMoviePosterInFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMoviePosterInFolder.CheckedChanged 
         Try
             If cbMoviePosterInFolder.CheckState = CheckState.Checked Then
-                If Preferences.usefoldernames or Preferences.allfolders Then
-                    Preferences.posterjpg = True
+                If Pref.usefoldernames or Pref.allfolders Then
+                    Pref.posterjpg = True
                 Else 
-                    Preferences.posterjpg = False
+                    Pref.posterjpg = False
                     cbMoviePosterInFolder.Checked = False
                     MsgBox("Either Use Foldername or All Movies in Folders not selected!")
                 End If
             Else
-                Preferences.posterjpg = False
+                Pref.posterjpg = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14899,15 +14899,15 @@ End Sub
     Private Sub cbMovieFanartInFolders_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieFanartInFolders.CheckedChanged
         Try
             If cbMovieFanartInFolders.CheckState = CheckState.Checked Then
-                If Preferences.usefoldernames or Preferences.allfolders Then
-                    Preferences.fanartjpg = True
+                If Pref.usefoldernames or Pref.allfolders Then
+                    Pref.fanartjpg = True
                 Else 
-                    Preferences.fanartjpg = False
+                    Pref.fanartjpg = False
                     cbMovieFanartInFolders.Checked = False
                     MsgBox("Either Use Foldername or All Movies in Folders not selected!")
                 End If
             Else
-                Preferences.fanartjpg = False
+                Pref.fanartjpg = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14918,10 +14918,10 @@ End Sub
 
     Private Sub cbMovCreateFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovCreateFolderjpg.CheckedChanged 
         Try
-            If cbMovCreateFolderjpg.CheckState = CheckState.Checked and (Preferences.usefoldernames or Preferences.allfolders) Then
-                Preferences.createfolderjpg = True
+            If cbMovCreateFolderjpg.CheckState = CheckState.Checked and (Pref.usefoldernames or Pref.allfolders) Then
+                Pref.createfolderjpg = True
             Else
-                Preferences.createfolderjpg = False
+                Pref.createfolderjpg = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14932,10 +14932,10 @@ End Sub
 
     Private Sub cbMovCreateFanartjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovCreateFanartjpg.CheckedChanged 
         Try
-            If cbMovCreateFanartjpg.CheckState = CheckState.Checked and (Preferences.usefoldernames or Preferences.allfolders) Then
-                Preferences.createfanartjpg = True
+            If cbMovCreateFanartjpg.CheckState = CheckState.Checked and (Pref.usefoldernames or Pref.allfolders) Then
+                Pref.createfanartjpg = True
             Else
-                Preferences.createfanartjpg = False
+                Pref.createfanartjpg = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14946,19 +14946,19 @@ End Sub
 
 'Image Resizing
     Private Sub comboActorResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboActorResolutions.SelectedIndexChanged
-        Preferences.ActorResolutionSI = comboActorResolutions.SelectedIndex
+        Pref.ActorResolutionSI = comboActorResolutions.SelectedIndex
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub comboPosterResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboPosterResolutions.SelectedIndexChanged
-        Preferences.PosterResolutionSI = comboPosterResolutions.SelectedIndex
+        Pref.PosterResolutionSI = comboPosterResolutions.SelectedIndex
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub comboBackDropResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboBackDropResolutions.SelectedIndexChanged
-        Preferences.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
+        Pref.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -14966,14 +14966,14 @@ End Sub
 'Movie Set Artwork
     Private Sub cbMovSetArtScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetArtScrape.CheckedChanged
         If prefsload Then Exit Sub
-        Preferences.dlMovSetArtwork = cbMovSetArtScrape.Checked 
+        Pref.dlMovSetArtwork = cbMovSetArtScrape.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub rbMovSetCentralFolder_CheckedChanged( sender As Object,  e As EventArgs) Handles rbMovSetArtSetFolder.CheckedChanged, rbMovSetFolder.CheckedChanged 
         If prefsload Then Exit Sub
-        Preferences.MovSetArtSetFolder = rbMovSetArtSetFolder.checked
+        Pref.MovSetArtSetFolder = rbMovSetArtSetFolder.checked
         btnMovSetCentralFolderSelect.Enabled = rbMovSetArtSetFolder.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
@@ -14986,12 +14986,12 @@ End Sub
             fb.Description = "Please Select Folder to Save All Collection Artwork"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
                 tbMovSetArtCentralFolder.Text = thefoldernames
-                Preferences.MovSetArtCentralFolder = thefoldernames
+                Pref.MovSetArtCentralFolder = thefoldernames
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -15006,12 +15006,12 @@ End Sub
     Private Sub cbMovieTrailerUrl_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieTrailerUrl.CheckedChanged
         Try
             If cbMovieTrailerUrl.CheckState = CheckState.Checked Then
-                Preferences.gettrailer = True
+                Pref.gettrailer = True
             Else
                 If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
                     cbMovieTrailerUrl.CheckState = CheckState.Checked 
                 Else
-                    Preferences.gettrailer = False
+                    Pref.gettrailer = False
                 End If
             End If
             movieprefschanged = True
@@ -15023,10 +15023,10 @@ End Sub
     Private Sub cbDlTrailerDuringScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbDlTrailerDuringScrape.CheckedChanged
         Try
             If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
-                Preferences.DownloadTrailerDuringScrape = True
+                Pref.DownloadTrailerDuringScrape = True
                 cbMovieTrailerUrl.CheckState = CheckState.Checked 
             Else 
-                Preferences.DownloadTrailerDuringScrape = False
+                Pref.DownloadTrailerDuringScrape = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15035,41 +15035,41 @@ End Sub
     End Sub
 
     Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
-        Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
+        Pref.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMovTitleCase_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleCase.CheckedChanged
-        Preferences.MovTitleCase = cbMovTitleCase.Checked
+        Pref.MovTitleCase = cbMovTitleCase.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
-        Preferences.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
+        Pref.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbMovThousSeparator_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovThousSeparator.CheckedChanged
-        Preferences.MovThousSeparator = cbMovThousSeparator.Checked
+        Pref.MovThousSeparator = cbMovThousSeparator.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbNoAltTitle.CheckedChanged
         If cbNoAltTitle.CheckState = CheckState.Checked Then
-            Preferences.NoAltTitle = True
+            Pref.NoAltTitle = True
         Else
-            Preferences.NoAltTitle = False
+            Pref.NoAltTitle = False
         End If
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbXtraFrodoUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXtraFrodoUrls.CheckedChanged
-        Preferences.XtraFrodoUrls = Not cbXtraFrodoUrls.Checked 
+        Pref.XtraFrodoUrls = Not cbXtraFrodoUrls.Checked 
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -15077,9 +15077,9 @@ End Sub
     Private Sub CheckBox16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox16.CheckedChanged
         Try
             If CheckBox16.CheckState = CheckState.Checked Then
-                Preferences.disablelogfiles = False
+                Pref.disablelogfiles = False
             Else
-                Preferences.disablelogfiles = True
+                Pref.disablelogfiles = True
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15092,16 +15092,16 @@ End Sub
         Try
             displayRuntimeScraper = True
             If CheckBox19.CheckState = CheckState.Checked Then
-                Preferences.enablehdtags = True
+                Pref.enablehdtags = True
                 PanelDisplayRuntime.Enabled = True
-                If Preferences.movieRuntimeDisplay = "file" Then
+                If Pref.movieRuntimeDisplay = "file" Then
                     rbRuntimeFile.Checked = True
                     displayRuntimeScraper = False
                 Else
                     rbRuntimeScraper.Checked = True
                 End If
             Else
-                Preferences.enablehdtags = False
+                Pref.enablehdtags = False
                 PanelDisplayRuntime.Enabled = False
                 rbRuntimeScraper.Checked = True
             End If
@@ -15114,7 +15114,7 @@ End Sub
     End Sub
 
     Private Sub cb_MovDurationAsRuntine_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_MovDurationAsRuntine.CheckedChanged
-        Preferences.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
+        Pref.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -15122,10 +15122,10 @@ End Sub
     Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeScraper.CheckedChanged
         Try
             If rbRuntimeScraper.Checked = True Then
-                Preferences.movieRuntimeDisplay = "scraper"
+                Pref.movieRuntimeDisplay = "scraper"
                 displayRuntimeScraper = True
             Else
-                Preferences.movieRuntimeDisplay = "file"
+                Pref.movieRuntimeDisplay = "file"
                 displayRuntimeScraper = False
             End If
 
@@ -15140,14 +15140,14 @@ End Sub
     End Sub
 
     Private Sub cbMovieRuntimeFallbackToFile_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRuntimeFallbackToFile.CheckedChanged
-        Preferences.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
+        Pref.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
         Try
-            Preferences.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
+            Pref.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -15158,7 +15158,7 @@ End Sub
     Private Sub tbDateFormat_TextChanged( sender As System.Object,  e As System.EventArgs) Handles tbDateFormat.TextChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.DateFormat = tbDateFormat.Text
+                Pref.DateFormat = tbDateFormat.Text
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15170,7 +15170,7 @@ End Sub
     Private Sub cbMovieList_ShowColPlot_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColPlot.CheckedChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
+                Pref.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15182,7 +15182,7 @@ End Sub
     Private Sub cbMovieList_ShowColWatched_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColWatched.CheckedChanged
          If MainFormLoadedStatus Then
             Try
-                Preferences.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
+                Pref.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15194,9 +15194,9 @@ End Sub
     Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
         Try
             If CheckBox_ShowDateOnMovieList.Checked = True Then
-                Preferences.showsortdate = True
+                Pref.showsortdate = True
             Else
-                Preferences.showsortdate = False
+                Pref.showsortdate = False
             End If
             Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             movieprefschanged = True
@@ -15209,9 +15209,9 @@ End Sub
     Private Sub cbMissingMovie_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingMovie.CheckedChanged
         Try
             If cbMissingMovie.CheckState = CheckState.Checked Then
-                Preferences.incmissingmovies = True 
+                Pref.incmissingmovies = True 
             Else
-                Preferences.incmissingmovies = False 
+                Pref.incmissingmovies = False 
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15223,9 +15223,9 @@ End Sub
     Private Sub cbxCleanFilenameIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxCleanFilenameIgnorePart.CheckedChanged 
         Try
             If cbxCleanFilenameIgnorePart.Checked = True Then
-                Preferences.movieignorepart = True
+                Pref.movieignorepart = True
             Else
-                Preferences.movieignorepart = False
+                Pref.movieignorepart = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15236,9 +15236,9 @@ End Sub
 
     Private Sub cbxNameMode_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxNameMode.CheckedChanged
         If cbxNameMode.Checked Then
-            Preferences.namemode = "1"
+            Pref.namemode = "1"
         Else
-            Preferences.namemode = "0"
+            Pref.namemode = "0"
         End If
         lblNameMode.Text = createNameModeText()
         movieprefschanged = True
@@ -15248,7 +15248,7 @@ End Sub
 'Rename Movie Settings
     Private Sub tb_MovieRenameEnable_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovieRenameEnable.TextChanged
         Try
-            Preferences.MovieRenameTemplate = tb_MovieRenameEnable.Text
+            Pref.MovieRenameTemplate = tb_MovieRenameEnable.Text
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -15258,7 +15258,7 @@ End Sub
 
     Private Sub tb_MovFolderRename_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovFolderRename.TextChanged
         Try
-            Preferences.MovFolderRenameTemplate = tb_MovFolderRename.Text
+            Pref.MovFolderRenameTemplate = tb_MovFolderRename.Text
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -15269,9 +15269,9 @@ End Sub
     Private Sub cbMovieRenameEnable_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRenameEnable.CheckedChanged
         Try
             If cbMovieRenameEnable.CheckState = CheckState.Checked Then
-                Preferences.MovieRenameEnable = True
+                Pref.MovieRenameEnable = True
             Else
-                Preferences.MovieRenameEnable = False
+                Pref.MovieRenameEnable = False
                 'Preferences.XbmcTmdbRenameMovie = False
             End If
             movieprefschanged = True
@@ -15284,9 +15284,9 @@ End Sub
     Private Sub cbMovFolderRename_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovFolderRename.CheckedChanged
         Try
             If cbMovFolderRename.CheckState = CheckState.Checked Then
-                Preferences.MovFolderRename = True
+                Pref.MovFolderRename = True
             Else
-                Preferences.MovFolderRename = False
+                Pref.MovFolderRename = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15298,9 +15298,9 @@ End Sub
     Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
         Try
             If cbRenameUnderscore.CheckState = CheckState.Checked Then
-                Preferences.MovRenameSpaceCharacter = True
+                Pref.MovRenameSpaceCharacter = True
             Else
-                Preferences.MovRenameSpaceCharacter = False
+                Pref.MovRenameSpaceCharacter = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15312,9 +15312,9 @@ End Sub
     Private Sub rbRenameUnderscore_CheckedChanged( sender As Object,  e As EventArgs) Handles rbRenameUnderscore.CheckedChanged
         If prefsload Then Exit Sub
         If rbRenameUnderscore.Checked = True Then
-            Preferences.RenameSpaceCharacter = "_"
+            Pref.RenameSpaceCharacter = "_"
         Else
-            Preferences.RenameSpaceCharacter = "."
+            Pref.RenameSpaceCharacter = "."
         End If
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
@@ -15323,9 +15323,9 @@ End Sub
     Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetIgnArticle.CheckedChanged
         Try
             If cbMovSetIgnArticle.CheckState = CheckState.Checked Then
-                Preferences.MovSetIgnArticle = True
+                Pref.MovSetIgnArticle = True
             Else
-                Preferences.MovSetIgnArticle = False
+                Pref.MovSetIgnArticle = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15337,9 +15337,9 @@ End Sub
     Private Sub cbMovTitleIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleIgnArticle.CheckedChanged
         Try
             If cbMovTitleIgnArticle.CheckState = CheckState.Checked Then
-                Preferences.MovTitleIgnArticle = True
+                Pref.MovTitleIgnArticle = True
             Else
-                Preferences.MovTitleIgnArticle = False
+                Pref.MovTitleIgnArticle = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15351,9 +15351,9 @@ End Sub
     Private Sub cbMovSortIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSortIgnArticle.CheckedChanged
         Try
             If cbMovSortIgnArticle.CheckState = CheckState.Checked Then
-                Preferences.MovSortIgnArticle = True
+                Pref.MovSortIgnArticle = True
             Else
-                Preferences.MovSortIgnArticle = False
+                Pref.MovSortIgnArticle = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15365,7 +15365,7 @@ End Sub
     Private Sub ManualRenameChkbox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ManualRenameChkbox.CheckedChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieManualRename = ManualRenameChkbox.Checked
+                Pref.MovieManualRename = ManualRenameChkbox.Checked
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15377,9 +15377,9 @@ End Sub
     Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
         Try
             If ScrapeFullCertCheckBox.Checked Then
-                Preferences.scrapefullcert = True
+                Pref.scrapefullcert = True
             Else
-                Preferences.scrapefullcert = False
+                Pref.scrapefullcert = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15400,7 +15400,7 @@ End Sub
                     ListBox11.Items.RemoveAt(mOtherIndex)
                 End If
                 For f = 0 To 33
-                    Preferences.certificatepriority(f) = ListBox11.Items(f)
+                    Pref.certificatepriority(f) = ListBox11.Items(f)
                 Next
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
@@ -15425,7 +15425,7 @@ End Sub
                     ListBox11.Items.RemoveAt(mOtherIndex + 1)
                 End If
                 For f = 0 To 33
-                    Preferences.certificatepriority(f) = ListBox11.Items(f)
+                    Pref.certificatepriority(f) = ListBox11.Items(f)
                 Next
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
@@ -15443,7 +15443,7 @@ End Sub
     Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
+                Pref.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15455,7 +15455,7 @@ End Sub
     Private Sub nudMaxActorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxActorsInFilter.ValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MaxActorsInFilter = nudMaxActorsInFilter.Value
+                Pref.MaxActorsInFilter = nudMaxActorsInFilter.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15467,7 +15467,7 @@ End Sub
     Private Sub cbMovieFilters_Actors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Actors_Order.SelectedValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
+                Pref.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15479,7 +15479,7 @@ End Sub
     Private Sub nudDirectorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudDirectorsFilterMinFilms.ValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
+                Pref.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15491,7 +15491,7 @@ End Sub
     Private Sub nudMaxDirectorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxDirectorsInFilter.ValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
+                Pref.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15503,7 +15503,7 @@ End Sub
     Private Sub cbMovieFilters_Directors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Directors_Order.SelectedValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
+                Pref.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15515,7 +15515,7 @@ End Sub
     Private Sub nudSetsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudSetsFilterMinFilms.ValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
+                Pref.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15527,7 +15527,7 @@ End Sub
     Private Sub nudMaxSetsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxSetsInFilter.ValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MaxSetsInFilter = nudMaxSetsInFilter.Value
+                Pref.MaxSetsInFilter = nudMaxSetsInFilter.Value
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15539,7 +15539,7 @@ End Sub
     Private Sub cbMovieFilters_Sets_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Sets_Order.SelectedValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
+                Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15551,7 +15551,7 @@ End Sub
     Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) Handles cbDisableNotMatchingRenamePattern.CheckedChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
+                Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -15567,15 +15567,15 @@ End Sub
     Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
         Try
             If saveactorchkbx.CheckState = CheckState.Checked Then
-                Preferences.actorsave = True
-                localactorpath.Text = Preferences.actorsavepath
-                xbmcactorpath.Text = Preferences.actornetworkpath
+                Pref.actorsave = True
+                localactorpath.Text = Pref.actorsavepath
+                xbmcactorpath.Text = Pref.actornetworkpath
                 localactorpath.Enabled = True
                 xbmcactorpath.Enabled = True
                 cb_LocalActorSaveAlpha.Enabled = True
                 Button77.Enabled = True
             Else
-                Preferences.actorsave = False
+                Pref.actorsave = False
                 localactorpath.Text = ""
                 xbmcactorpath.Text = ""
                 localactorpath.Enabled = False
@@ -15593,9 +15593,9 @@ End Sub
     Private Sub cb_LocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_LocalActorSaveAlpha.CheckedChanged
         Try
             If cb_LocalActorSaveAlpha.CheckState = CheckState.Checked Then
-                Preferences.actorsavealpha = True
+                Pref.actorsavealpha = True
             Else
-                Preferences.actorsavealpha = False
+                Pref.actorsavealpha = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15611,13 +15611,13 @@ End Sub
             fb.Description = "Please Select Folder to Save Actor Thumbnails)"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
                 localactorpath.Text = thefoldernames
-                Preferences.lastpath = thefoldernames
-                Preferences.actorsavepath = thefoldernames
+                Pref.lastpath = thefoldernames
+                Pref.actorsavepath = thefoldernames
             End If
             'theFolderBrowser.Dispose()
         Catch ex As Exception
@@ -15627,7 +15627,7 @@ End Sub
 
     Private Sub localactorpath_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles localactorpath.TextChanged
         Try
-            Preferences.actorsavepath = localactorpath.Text
+            Pref.actorsavepath = localactorpath.Text
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -15637,7 +15637,7 @@ End Sub
 
     Private Sub xbmcactorpath_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles xbmcactorpath.TextChanged
         Try
-            Preferences.actornetworkpath = xbmcactorpath.Text
+            Pref.actornetworkpath = xbmcactorpath.Text
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
@@ -15689,9 +15689,9 @@ End Sub
     Private Sub cbMovRootFolderCheck_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovRootFolderCheck.CheckedChanged
         Try
             If cbMovRootFolderCheck.CheckState = CheckState.Checked Then
-                Preferences.movrootfoldercheck = True
+                Pref.movrootfoldercheck = True
             Else
-                Preferences.movrootfoldercheck = False
+                Pref.movrootfoldercheck = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15749,7 +15749,7 @@ End Sub
     Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
         If tb_MovSeptb.Text <> "" Then
             lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
-            Preferences.MovSepLst.Add(tb_MovSeptb.Text)
+            Pref.MovSepLst.Add(tb_MovSeptb.Text)
             tb_MovSeptb.Text = ""
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -15759,9 +15759,9 @@ End Sub
 
     Private Sub btn_MovSepRem_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepRem.Click
         lb_MovSepLst.Items.RemoveAt(lb_MovSepLst.SelectedIndex)
-        Preferences.MovSepLst.Clear()
+        Pref.MovSepLst.Clear()
         For Each t In lb_MovSepLst.Items
-            Preferences.MovSepLst.Add(t)
+            Pref.MovSepLst.Add(t)
         Next
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
@@ -15769,7 +15769,7 @@ End Sub
     End Sub
 
     Private Sub btn_MovSepReset_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepReset.Click
-        Preferences.ResetMovSepLst()
+        Pref.ResetMovSepLst()
         lb_MovSepLst.Items.Clear()
         For Each it In MovSepLst
             lb_MovSepLst.Items.Add(it)
@@ -15844,7 +15844,7 @@ End Sub
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
         If Not MainFormLoadedStatus Then Exit Sub
-        Preferences.moviesortorder = cbSort.SelectedIndex
+        Pref.moviesortorder = cbSort.SelectedIndex
     End Sub
 
     Private Sub btnreverse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnreverse.CheckedChanged
@@ -15853,7 +15853,7 @@ End Sub
         Else
             Mc.clsGridViewMovie.GridSort = "Asc"
         End If
-        Preferences.movieinvertorder = btnreverse.Checked
+        Pref.movieinvertorder = btnreverse.Checked
 
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
@@ -16044,7 +16044,7 @@ End Sub
                 RescrapeFanartToolStripMenuItem.Visible = False
                 DownloadFanartToolStripMenuItem.Visible = False
                 Try
-                    If IO.File.Exists(Preferences.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Or (workingMovieDetails.fileinfo.videotspath <> "" And IO.File.Exists(workingMovieDetails.fileinfo.videotspath + "fanart.jpg")) Then
+                    If IO.File.Exists(Pref.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Or (workingMovieDetails.fileinfo.videotspath <> "" And IO.File.Exists(workingMovieDetails.fileinfo.videotspath + "fanart.jpg")) Then
                         RescrapeFanartToolStripMenuItem.Visible = True
                     Else
                         DownloadFanartToolStripMenuItem.Visible = True
@@ -16121,7 +16121,7 @@ End Sub
                 RescrapeFanartToolStripMenuItem.Visible = False
                 DownloadFanartToolStripMenuItem.Visible = False
                 Try
-                    If IO.File.Exists(Preferences.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
+                    If IO.File.Exists(Pref.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
                         RescrapePToolStripMenuItem.Visible = True
                         RescrapePosterFromTMDBToolStripMenuItem.Visible = True
                         RescraToolStripMenuItem.Visible = True
@@ -16171,10 +16171,10 @@ End Sub
                         util_ImageLoad(PictureBoxActor, temppath, Utilities.DefaultActorPath)
                         Exit Sub
                     End If
-                    If actor.actorthumb <> Nothing Then 'And Not Preferences.LocalActorImage Then
-                        Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
+                    If actor.actorthumb <> Nothing Then 'And Not Pref.LocalActorImage Then
+                        Dim actorthumbpath As String = Pref.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
-                            If Not Preferences.LocalActorImage AndAlso actorthumbpath.IndexOf("http") = 0 Then
+                            If Not Pref.LocalActorImage AndAlso actorthumbpath.IndexOf("http") = 0 Then
                                 If actorthumbpath.ToLower.IndexOf("http") <> -1 OrElse IO.File.Exists(actorthumbpath) Then
                                     util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
                                 End If
@@ -16245,14 +16245,14 @@ End Sub
             Dim file = IO.File.CreateText(tempstring)
             file.WriteLine(workingMovieDetails.fileinfo.trailerpath)
             file.Close()
-            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Preferences.videomode = 3 Then
-                Preferences.videomode = 2
+            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Pref.videomode = 3 Then
+                Pref.videomode = 2
                 Call util_VideoMode2(tempstring)
             End If
-            If Preferences.videomode >= 4 Then
-                If Preferences.selectedvideoplayer <> Nothing Then
+            If Pref.videomode >= 4 Then
+                If Pref.selectedvideoplayer <> Nothing Then
                     Call util_VideoMode4(tempstring)
                 Else
                     Call util_VideoMode1(tempstring)
@@ -16530,7 +16530,7 @@ End Sub
                 If rbMovFanart.Checked Then ' i.e. this is a fanart task rather than an extrathumb task
                     PbMovieFanArt.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
                     '                Rating1.PictureInit = PbMovieFanArt.Image
-                    For Each paths In Preferences.offlinefolders
+                    For Each paths In Pref.offlinefolders
                         If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                             Dim mediapath As String
                             mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -16565,26 +16565,26 @@ End Sub
             Dim cachename As String = Utilities.Download2Cache(PathOrUrl)
             If cachename <> "" Then
                 If Not MovFanartToggle Then
-                    Dim issavefanart As Boolean = Preferences.savefanart
+                    Dim issavefanart As Boolean = Pref.savefanart
                     Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
                     Dim xtra As Boolean = False
                     Dim extrfanart As Boolean = False
                     If rbMovThumb1.Checked Or rbMovThumb2.Checked Or rbMovThumb3.Checked Or rbMovThumb4.Checked Or rbMovThumb5.Checked Then xtra = True
-                    Preferences.savefanart = True
-                    If xtra AndAlso Preferences.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(cachename, FanartOrExtraPath)
+                    Pref.savefanart = True
+                    If xtra AndAlso Pref.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(cachename, FanartOrExtraPath)
 
                     If xtra OrElse Movie.SaveFanartImageToCacheAndPath(cachename, FanartOrExtraPath) Then
                         If Not xtra Then
-                            Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                            Dim paths As List(Of String) = Pref.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
                             Movie.SaveFanartImageToCacheAndPaths(cachename, paths)
                         End If
-                        Preferences.savefanart = issavefanart
+                        Pref.savefanart = issavefanart
                         mov_DisplayFanart()
                         util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                         Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                         movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
 
-                        For Each paths In Preferences.offlinefolders
+                        For Each paths In Pref.offlinefolders
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
@@ -16595,7 +16595,7 @@ End Sub
                         Next
                     Else
                         util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
-                        Preferences.savefanart = issavefanart
+                        Pref.savefanart = issavefanart
                     End If
 
                     lblMovFanartWidth.Text = PictureBox2.Image.Width
@@ -17071,7 +17071,7 @@ End Sub
             Dim cachename As String = Utilities.Download2Cache(PathOrUrl)
             If cachename <> "" Then
                 If Not MovPosterToggle Then
-                    Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
+                    Dim Paths As List(Of String) = Pref.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
                     For Each pth As String In Paths
                         Try
                             File.Copy(cachename, pth, True)
@@ -17129,7 +17129,7 @@ End Sub
             Try
                 Dim posterpath As String = ""
                 Dim stream As New System.IO.MemoryStream
-                Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
+                Dim PostPaths As List(Of String) = Pref.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
                 Dim bitmap3 As New Bitmap(PictureBoxAssignedMoviePoster.Image)
                 For Each pth As String In PostPaths
                     bitmap3.Save(pth, System.Drawing.Imaging.ImageFormat.Jpeg)
@@ -17165,7 +17165,7 @@ End Sub
         Try
             cropMode = "poster"
             Using t As New frmMovPosterCrop
-                If Preferences.MultiMonitoEnabled Then
+                If Pref.MultiMonitoEnabled Then
                     t.bounds = screen.allscreens(form1.currentscreen).bounds
                     t.startposition = formstartposition.manual
                 end if
@@ -17271,7 +17271,7 @@ End Sub
             Try
                 If Not MovPosterToggle Then
                     util_ImageLoad(PictureBoxAssignedMoviePoster, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
-                    Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
+                    Dim Paths As List(Of String) = Pref.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
                     Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(tempstring2, Paths, False, , ,True)
 
                     Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
@@ -17315,7 +17315,7 @@ End Sub
         MovSetDgvLoad()
         MovSetArtworkCheck()
         TagListBox.Items.Clear()
-        For Each mtag In Preferences.movietags
+        For Each mtag In Pref.movietags
             If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
         Next
         CurrentMovieTags.Items.Clear()
@@ -17342,14 +17342,14 @@ End Sub
         Try
             If txtbxMovTagEntry.Text <> "" Then
                 Dim ex As Boolean = False
-                For Each mtag In Preferences.movietags
+                For Each mtag In Pref.movietags
                     If mtag.ToLower = txtbxMovTagEntry.Text.ToLower Then
                         ex = True
                         Exit For
                     End If
                 Next
                 If ex = False Then
-                    Preferences.movietags.Add(txtbxMovTagEntry.Text)
+                    Pref.movietags.Add(txtbxMovTagEntry.Text)
                     TagListBox.Items.Add(txtbxMovTagEntry.Text)
                     txtbxMovTagEntry.Clear()
                 Else
@@ -17366,9 +17366,9 @@ End Sub
             For i = 0 To TagListBox.SelectedItems.Count - 1
                 Dim tempboolean As Boolean = False
                 If TagListBox.SelectedItems(i) <> Nothing And TagListBox.SelectedItems(i) <> "" Then
-                    For Each mtag In Preferences.movietags
+                    For Each mtag In Pref.movietags
                         If mtag = TagListBox.SelectedItems(i) Then
-                            Preferences.movietags.Remove(mtag)
+                            Pref.movietags.Remove(mtag)
                             Exit For
                         End If
                     Next
@@ -17377,7 +17377,7 @@ End Sub
 
             TagListBox.Items.Clear()
 
-            For Each mset In Preferences.movietags
+            For Each mset In Pref.movietags
                 If Not IsNothing(mset) Then TagListBox.Items.Add(mset)
             Next
         Catch ex As Exception
@@ -17396,9 +17396,9 @@ End Sub
                     End If
                 Next
             Next
-            Preferences.movietags.Clear()
+            Pref.movietags.Clear()
             For Each mtag In TagListBox.Items
-                Preferences.movietags.Add(mtag)
+                Pref.movietags.Add(mtag)
             Next
             UpdateFilteredList()
         Catch ex As Exception
@@ -17482,10 +17482,10 @@ End Sub
 
     Private Sub MovSetDgvLoad()
         Dim MsetCache As New List(Of MovieSetDatabase)
-        oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+        oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
         MovieSetMissingID = False
         dgvmovset.Rows.Clear()
-        For Each mset In Preferences.moviesets
+        For Each mset In Pref.moviesets
             If mset <> "-None-" Then
                 Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
                 Dim msetid As String = ""
@@ -17506,14 +17506,14 @@ End Sub
         Try
             If tbMovSetEntry.Text <> "" Then
                 Dim ex As Boolean = False
-                For Each mset In Preferences.moviesets
+                For Each mset In Pref.moviesets
                     If mset.ToLower = tbMovSetEntry.Text.ToLower Then
                         ex = True
                         Exit For
                     End If
                 Next
                 If ex = False Then
-                    Preferences.moviesets.Add(tbMovSetEntry.Text)
+                    Pref.moviesets.Add(tbMovSetEntry.Text)
                     MovSetDgvLoad()
                     pop_cbMovieDisplay_MovieSet()
                     tbMovSetEntry.Clear()
@@ -17537,7 +17537,7 @@ End Sub
     Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
         Try
             Dim SelectedMovieSet As String = dgvmovset.SelectedCells(0).Value
-            Preferences.moviesets.Remove(SelectedMovieSet)
+            Pref.moviesets.Remove(SelectedMovieSet)
             dgvmovset.Rows.RemoveAt(dgvmovset.CurrentRow.Index)
             pop_cbMovieDisplay_MovieSet()
         Catch ex As Exception
@@ -17553,9 +17553,9 @@ End Sub
     End Sub
 
     Private Sub MovSetsRepopulate()
-        Preferences.moviesets.Clear()
-        Preferences.moviesets.Add("-None-")
-        Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
+        Pref.moviesets.Clear()
+        Pref.moviesets.Add("-None-")
+        Pref.moviesets.AddRange(oMovies.MoviesSetsExNone)
     End Sub
 
     Private Sub MovSetArtworkCheck()
@@ -17563,8 +17563,8 @@ End Sub
             Dim mset As String = row.Cells(0).Value
             For Each mov In oMovies.MovieCache
                 If mov.MovieSet.MovieSetName = mset Then
-                    Dim movsetfanart As String = Preferences.GetMovSetFanartPath(mov.fullpathandfilename, mset)
-                    Dim movsetposter As String = Preferences.GetMovSetPosterPath(mov.fullpathandfilename, mset)
+                    Dim movsetfanart As String = Pref.GetMovSetFanartPath(mov.fullpathandfilename, mset)
+                    Dim movsetposter As String = Pref.GetMovSetPosterPath(mov.fullpathandfilename, mset)
                     If File.Exists(movsetfanart) Then 
                         row.Cells(2).Value = Global.Media_Companion.My.Resources.Resources.correct
                         row.Cells(2).Tag = movsetfanart
@@ -17614,7 +17614,7 @@ End Sub
                 End If
                 Dim CurrentTMDbId As String = ""
                 Dim MsetCache As New List(Of MovieSetDatabase)
-                oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+                oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                 Dim q = From x In MsetCache Where x.MovieSetName = MsetName Select x.MovieSetId
                 If q.ToString <> Nothing AndAlso q.ToString <> "Enumeration yielded no results" Then
                     CurrentTMDbId = q(0).ToString 
@@ -17627,7 +17627,7 @@ End Sub
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    oMovies.LoadMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+                    oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                     Dim found As Boolean = False
                     For Each s As MovieSetDatabase In MsetCache
                         If s.MovieSetName = MsetName Then
@@ -17640,7 +17640,7 @@ End Sub
                                     End If
                                 End If
                                 s.MovieSetId = NewTMDBID
-                                oMovies.SaveMovieSetCache(MsetCache, "movieset", Preferences.workingProfile.moviesetcache)
+                                oMovies.SaveMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                                 found = True
                             End If
                         End If
@@ -17866,7 +17866,7 @@ End Sub
             If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
-            Preferences.MovieChangeMovie = True
+            Pref.MovieChangeMovie = True
             RunBackgroundMovieScrape("ChangeMovie")
         ElseIf MovieSearchEngine = "tmdb" Then
             Dim mat As String = WebBrowser1.Url.ToString
@@ -17882,7 +17882,7 @@ End Sub
             If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
                 Exit Sub
             End If
-            Preferences.MovieChangeMovie = True
+            Pref.MovieChangeMovie = True
             RunBackgroundMovieScrape("ChangeMovie")
         End If
 
@@ -17914,7 +17914,7 @@ End Sub
     End Sub
 
     Private Sub CheckBox2_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles CheckBox2.CheckedChanged
-        Preferences.MovieChangeKeepExistingArt =  Not CheckBox2.Checked
+        Pref.MovieChangeKeepExistingArt =  Not CheckBox2.Checked
     End Sub
 
 #End Region
@@ -17997,11 +17997,11 @@ End Sub
             fb.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
-                Preferences.lastpath = thefoldernames
+                Pref.lastpath = thefoldernames
                 If allok = True Then
                     AuthorizeCheck = True
                     clbx_MovieRoots.Items.Add(thefoldernames, True)
@@ -18023,7 +18023,7 @@ End Sub
         folders = e.Data.GetData(DataFormats.filedrop)
         For f = 0 To UBound(folders)
             Dim exists As Boolean = False
-            For Each rtpath In Preferences.movieFolders
+            For Each rtpath In Pref.movieFolders
                 If rtpath.rpath = folders(f) Then
                     exists = True
                     Exit For
@@ -18214,11 +18214,11 @@ End Sub
             fb.Description = "Please Select a Root Offline DVD Folder to Add to DB"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
-                Preferences.lastpath = thefoldernames
+                Pref.lastpath = thefoldernames
                 For Each item As Object In ListBox15.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
                 Next
@@ -18263,7 +18263,7 @@ End Sub
         Next
         For Each item In ListBox15.Items
             Dim add As Boolean = True
-            For Each folder In Preferences.offlinefolders
+            For Each folder In Pref.offlinefolders
                 If folder = item Then add = False
             Next
             If add = True Then offlinefolderstoadd.Add(item)
@@ -18278,7 +18278,7 @@ End Sub
             Next
             If remove = True Then folderstoremove.Add(item.rpath)
         Next
-        For Each item In Preferences.offlinefolders
+        For Each item In Pref.offlinefolders
             Dim remove As Boolean = True
             For Each folder In ListBox15.Items
                 If folder = item Then remove = False
@@ -18309,16 +18309,16 @@ End Sub
                 Next
                 If remove = True Then movieFolders.RemoveAt(f)
             Next
-            For f = Preferences.offlinefolders.Count - 1 To 0 Step -1
+            For f = Pref.offlinefolders.Count - 1 To 0 Step -1
                 Dim remove As Boolean = False
                 For Each folder In offlinefolderstoremove
-                    If Preferences.offlinefolders(f) = folder Then
+                    If Pref.offlinefolders(f) = folder Then
                         remove = True
                     End If
                 Next
-                If remove = True Then Preferences.offlinefolders.RemoveAt(f)
+                If remove = True Then Pref.offlinefolders.RemoveAt(f)
             Next
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
         End If
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
             Application.DoEvents()
@@ -18329,21 +18329,21 @@ End Sub
                 movieFolders.Add(t)
             Next
             For Each folder In offlinefolderstoadd
-                Preferences.offlinefolders.Add(folder)
+                Pref.offlinefolders.Add(folder)
                 folderstoadd.Add(folder)
             Next
-            If Preferences.usefoldernames = True Then         'use TRUE if folder contains nfo's, False if folder contains folders which contain nfo's
+            If Pref.usefoldernames = True Then         'use TRUE if folder contains nfo's, False if folder contains folders which contain nfo's
                 progressmode = False
             Else
                 progressmode = True
             End If
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
         End If
         For f = 0 to clbx_MovieRoots.Items.Count-1
             Dim rtpath As String = clbx_MovieRoots.items(f)
             Dim chkstate As CheckState = clbx_MovieRoots.GetItemCheckState(f)
             Dim selected As Boolean = (chkstate = CheckState.Checked)
-            For Each item In Preferences.movieFolders
+            For Each item In Pref.movieFolders
                 If item.rpath = rtpath Then
                     item.selected = selected
                     Exit For
@@ -18386,16 +18386,16 @@ End Sub
 
 
 
-                            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-                            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
+                            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+                            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
 
-                            If Preferences.videomode = 3 Then
-                                Preferences.videomode = 2
+                            If Pref.videomode = 3 Then
+                                Pref.videomode = 2
                                 Call util_VideoMode2(tempstring)
                             End If
 
-                            If Preferences.videomode >= 4 Then
-                                If Preferences.selectedvideoplayer <> Nothing Then
+                            If Pref.videomode >= 4 Then
+                                If Pref.selectedvideoplayer <> Nothing Then
                                     Call util_VideoMode4(tempstring)
                                 Else
                                     Call util_VideoMode1(tempstring)
@@ -18506,7 +18506,7 @@ End Sub
     Private Sub ShowBigTvEpisodeText()
 
         Dim frm As New frmBigTvEpisodeText
-        If Preferences.MultiMonitoEnabled Then
+        If Pref.MultiMonitoEnabled Then
             frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
             frm.StartPosition = FormStartPosition.Manual
         End If
@@ -18542,22 +18542,22 @@ End Sub
         'On Error Resume Next
         'If Panel9.Visible = False Then
         '    '-------------- Aqui
-        '    'If Preferences.ignorearticle = True Then
+        '    'If Pref.ignorearticle = True Then
         '    '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
         '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
         '    '    End If
         '    'End If
-        '    'If Preferences.ignoreAarticle Then
+        '    'If Pref.ignoreAarticle Then
         '    '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
         '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
         '    '    End If
         '    'End If
-        '    'If Preferences.ignoreAn Then
+        '    'If Pref.ignoreAn Then
         '    '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
         '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
         '    '    End If
         '    'End If
-        '    WorkingTvShow.Title.Value = Preferences.RemoveIgnoredArticles(tb_Sh_Ep_Title.Text)
+        '    WorkingTvShow.Title.Value = Pref.RemoveIgnoredArticles(tb_Sh_Ep_Title.Text)
         'Else
         '    WorkingEpisode.Title.Value = tb_Sh_Ep_Title.Text
         '    Dim trueseason As String = WorkingEpisode.Season.Value
@@ -18626,7 +18626,7 @@ End Sub
                 If TmpTitle <> Show.Title.Value Then
                     Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
                     If TryTitle = MsgBoxResult.No Then
-                        tb_Sh_Ep_Title.Text = Preferences.RemoveIgnoredArticles(Show.Title.Value)
+                        tb_Sh_Ep_Title.Text = Pref.RemoveIgnoredArticles(Show.Title.Value)
                         Exit Sub
                     End If
                     Show.Title.Value = TmpTitle
@@ -18948,7 +18948,7 @@ End Sub
 
     Private Sub _tv_SplitContainer_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles _tv_SplitContainer.SplitterMoved
         If Not MainFormLoadedStatus Then Exit Sub
-        Preferences.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
+        Pref.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
     End Sub
     
 #End Region 'Tv PictureBoxes    
@@ -19000,8 +19000,8 @@ End Sub
 #Region "Tv Fanart Form"
 
     Private Sub btnTvFanartSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSave.Click
-        Dim issavefanart As Boolean = Preferences.savefanart
-        Preferences.savefanart =true
+        Dim issavefanart As Boolean = Pref.savefanart
+        Pref.savefanart =true
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             lbl_movVotes.Text = "Please Wait, Trying to Download Fanart"
@@ -19044,17 +19044,17 @@ End Sub
                     Else
                         PictureBox10.Image = Nothing
                     End If
-                    If Preferences.FrodoEnabled Then 
+                    If Pref.FrodoEnabled Then 
                         Utilities.SafeCopyFile(savepath,savepath.Replace("fanart.jpg","season-all-fanart.jpg"),True)
                     End If
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
             End If
-            Preferences.savefanart = issavefanart
+            Pref.savefanart = issavefanart
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
-            Preferences.savefanart=issavefanart
+            Pref.savefanart=issavefanart
         End Try
     End Sub
 
@@ -19214,10 +19214,10 @@ End Sub
             t = Nothing
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-            Dim eh As Boolean = Preferences.savefanart
-            Preferences.savefanart = True
+            Dim eh As Boolean = Pref.savefanart
+            Pref.savefanart = True
             Movie.SaveFanartImageToCacheAndPath(PathOrUrl, savepath)
-            Preferences.savefanart = eh
+            Pref.savefanart = eh
             Dim exists As Boolean = System.IO.File.Exists(savepath)
             If exists = True Then
 
@@ -19481,9 +19481,9 @@ End Sub
     Private Sub RadioButton8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
         Try
             If RadioButton8.Checked = True Then
-                Preferences.postertype = "banner"
+                Pref.postertype = "banner"
             Else
-                Preferences.postertype = "poster"
+                Pref.postertype = "poster"
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19493,9 +19493,9 @@ End Sub
     Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
         Try
             If RadioButton9.Checked = True Then
-                Preferences.postertype = "poster"
+                Pref.postertype = "poster"
             Else
-                Preferences.postertype = "banner"
+                Pref.postertype = "banner"
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19505,7 +19505,7 @@ End Sub
     Private Sub RadioButton16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton16.CheckedChanged
         Try
             If RadioButton16.Checked = True Then
-                Preferences.seasonall = "wide"
+                Pref.seasonall = "wide"
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19515,7 +19515,7 @@ End Sub
     Private Sub RadioButton17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton17.CheckedChanged
         Try
             If RadioButton17.Checked = True Then
-                Preferences.seasonall = "poster"
+                Pref.seasonall = "poster"
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19525,7 +19525,7 @@ End Sub
     Private Sub RadioButton18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton18.CheckedChanged
         Try
             If RadioButton18.Checked = True Then
-                Preferences.seasonall = "none"
+                Pref.seasonall = "none"
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -19534,7 +19534,7 @@ End Sub
 
     Private Sub cbTvChgShowDLSeason_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLSeason.CheckedChanged
         Try
-            Preferences.TvChgShowDlSeasonthumbs = cbTvChgShowDLSeason.Checked 
+            Pref.TvChgShowDlSeasonthumbs = cbTvChgShowDLSeason.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19542,7 +19542,7 @@ End Sub
 
     Private Sub cbTvChgShowOverwriteImgs_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowOverwriteImgs.CheckedChanged
         Try
-            Preferences.TvChgShowOverwriteImgs = cbTvChgShowOverwriteImgs.Checked 
+            Pref.TvChgShowOverwriteImgs = cbTvChgShowOverwriteImgs.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19550,7 +19550,7 @@ End Sub
 
     Private Sub cbTvChgShowDLFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanart.CheckedChanged
         Try
-            Preferences.TvChgShowDlFanart = cbTvChgShowDLFanart.Checked 
+            Pref.TvChgShowDlFanart = cbTvChgShowDLFanart.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19558,7 +19558,7 @@ End Sub
 
     Private Sub cbTvChgShowDLFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLFanartTvArt.CheckedChanged
         Try
-            Preferences.TvChgShowDlFanartTvArt = cbTvChgShowDLFanartTvArt.Checked 
+            Pref.TvChgShowDlFanartTvArt = cbTvChgShowDLFanartTvArt.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19566,7 +19566,7 @@ End Sub
 
     Private Sub cbTvChgShowDLPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLPoster.CheckedChanged
         Try
-            Preferences.TvChgShowDlPoster = cbTvChgShowDLPoster.Checked 
+            Pref.TvChgShowDlPoster = cbTvChgShowDLPoster.Checked 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19592,11 +19592,11 @@ End Sub
 
             Dim LanCode As String
             If ListBox1.SelectedIndex = -1 Then
-                LanCode = Preferences.TvdbLanguageCode
+                LanCode = Pref.TvdbLanguageCode
             Else
                 LanCode = languageList(ListBox1.SelectedIndex).Abbreviation.Value
             End If
-            If Preferences.tvshow_useXBMC_Scraper = True Then
+            If Pref.tvshow_useXBMC_Scraper = True Then
 
                 Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(ListBox3.SelectedIndex).showid, LanCode, WorkingTvShow.NfoFilePath)
                 If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
@@ -19605,7 +19605,7 @@ End Sub
                 messbox.Close()
                 TabControl3.SelectedIndex = 0
             Else
-                If Preferences.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
+                If Pref.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
                 Cache.TvCache.Remove(WorkingTvShow)
                 newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
                 Dim args As TvdbArgs = New TvdbArgs(listOfShows(ListBox3.SelectedIndex).showid, LanCode)
@@ -19619,11 +19619,11 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         Finally
-            Preferences.TvChgShowDlFanart = False
-            Preferences.TvChgShowDlFanartTvArt = False
-            Preferences.TvChgShowDlPoster = False
-            Preferences.TvChgShowDlSeasonthumbs = False
-            Preferences.TvChgShowOverwriteImgs = False
+            Pref.TvChgShowDlFanart = False
+            Pref.TvChgShowDlFanartTvArt = False
+            Pref.TvChgShowDlPoster = False
+            Pref.TvChgShowDlSeasonthumbs = False
+            Pref.TvChgShowOverwriteImgs = False
         End Try
     End Sub
 
@@ -19764,11 +19764,11 @@ End Sub
             fb.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 strfolder = (fb.SelectedPath)
-                Preferences.lastpath = strfolder
+                Pref.lastpath = strfolder
                 Dim hasseason As Boolean = False
                 If Not clbx_TvRootFolders.Items.Contains(strfolder) Then
                     For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
@@ -19914,7 +19914,7 @@ End Sub
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
             Dim exists As Boolean = False
-            For each fol In Preferences.tvRootFolders
+            For each fol In Pref.tvRootFolders
                 If fol.rpath.ToLower = tempstring.ToLower Then Continue For
                 If tempstring.ToLower.Contains(fol.rpath.ToLower) AndAlso Not fol.selected Then
                     Dim msg As String = "The series dropped is in a root folder that has been unselected"
@@ -19989,14 +19989,14 @@ End Sub
             fb.Description = "Please Select TV Folder to Add to DB"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
                 For Each item As Object In ListBox6.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
                 Next
-                Preferences.lastpath = thefoldernames
+                Pref.lastpath = thefoldernames
                 If allok = True Then
                     ListBox6.Items.Add(thefoldernames)
                     newTvFolders.Add(thefoldernames)
@@ -20049,26 +20049,26 @@ End Sub
     Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
         Try
             Dim removeTvFolders As New List(Of String)
-            Preferences.tvRootFolders.Clear()
+            Pref.tvRootFolders.Clear()
             For f = 0 to clbx_TvRootFolders.Items.Count-1
                 Dim t As New str_RootPaths 
                 t.rpath = clbx_TvRootFolders.Items(f).ToString
                 Dim chkstate As CheckState = clbx_TvRootFolders.GetItemCheckState(f)
                 t.selected = (chkstate = CheckState.Checked)
-                Preferences.tvRootFolders.Add(t)
+                Pref.tvRootFolders.Add(t)
             Next
             newTvFolders.Clear()
             Dim tmplist As New List(Of String)
-            tmplist.AddRange(Preferences.tvFolders)
-            Preferences.tvFolders.Clear()
+            tmplist.AddRange(Pref.tvFolders)
+            Pref.tvFolders.Clear()
             For Each item In ListBox6.Items
-                Preferences.tvFolders.Add(item)
+                Pref.tvFolders.Add(item)
                 If Not tmplist.Contains(item) Then
                     newTvFolders.Add(item)
                 End If
             Next
             For each item In tmplist
-                If Not Preferences.tvFolders.Contains(item) Then removeTvFolders.Add(item)
+                If Not Pref.tvFolders.Contains(item) Then removeTvFolders.Add(item)
             Next
             If Not removeTvFolders.count = 0 Then
                 Dim cachechanged As Boolean = False
@@ -20088,7 +20088,7 @@ End Sub
                 If cachechanged Then Tv_CacheSave()
             End If
             tvfolderschanged = False
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
             tv_ShowScrape()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -20204,7 +20204,7 @@ End Sub
             skipdrop = False
             If IO.Directory.Exists(files(f)) Then
                 If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
-                For each fol In Preferences.tvRootFolders
+                For each fol In Pref.tvRootFolders
                     If fol.rpath = files(f) Then Continue For
                     If files(f).Contains(fol.rpath) AndAlso Not fol.selected Then
                         Dim msg As String = "The series dropped is in a root folder that has been unselected" & vbcrlf
@@ -20256,7 +20256,7 @@ End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
-        'If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
+        'If Pref.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
         '    MsgBox("Please add A Folder containing Home Movies")
         '    Try
         '        TabControl1.SelectedIndex = 5
@@ -20303,7 +20303,7 @@ End Sub
 
     Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
         Try
-            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
+            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename, Pref.altnfoeditor)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20518,7 +20518,7 @@ End Sub
                         Using pbx As New PictureBox
                             util_ImageLoad(pbx, thumbpathandfilename, Utilities.DefaultPosterPath)
                             Using t As New frmMovPosterCrop
-                                If Preferences.MultiMonitoEnabled Then
+                                If Pref.MultiMonitoEnabled Then
                                     t.bounds = screen.allscreens(form1.currentscreen).bounds
                                     t.startposition = formstartposition.manual
                                 end if
@@ -20593,11 +20593,11 @@ End Sub
             fb.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
-                Preferences.lastpath = thefoldernames
+                Pref.lastpath = thefoldernames
                 For Each item As Object In clbx_HMMovieFolders.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
                 Next
@@ -20681,7 +20681,7 @@ End Sub
         folders = e.Data.GetData(DataFormats.filedrop)
         For f = 0 To UBound(folders)
             Dim exists As Boolean = False
-            For Each rtpath In Preferences.homemoviefolders 
+            For Each rtpath In Pref.homemoviefolders 
                 If rtpath.rpath = folders(f) Then
                     exists = True
                     Exit For
@@ -20757,7 +20757,7 @@ End Sub
     Private Sub HomeFoldersUpdate()
         AuthorizeCheck = True
         clbx_HMMovieFolders.Items.Clear()
-        For each item In Preferences.homemoviefolders
+        For each item In Pref.homemoviefolders
             clbx_HMMovieFolders.Items.Add(item.rpath, item.selected)
         Next
         AuthorizeCheck = False
@@ -20766,7 +20766,7 @@ End Sub
 #End Region
     
     'Private Sub SetupHomeMovies()
-    '    If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
+    '    If Pref.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
     '        MsgBox("Please add A Folder containing Home Movies")
     '        Try
     '            TabControl1.SelectedIndex = 4
@@ -20875,7 +20875,7 @@ End Sub
                 fulldetails.fullmoviebody.year = yearstring
 
                 'create fanart for home movie if it does not exist
-                Dim thumbpathandfilename As String = Preferences.GetFanartPath(item.FullPathAndFilename)
+                Dim thumbpathandfilename As String = Pref.GetFanartPath(item.FullPathAndFilename)
                 If Not IO.File.Exists(thumbpathandfilename) Then
                     Try
                         Utilities.CreateScreenShot(item.FullPathAndFilename, thumbpathandfilename, 10)
@@ -20887,7 +20887,7 @@ End Sub
                 Dim extension As String = ""
                 fulldetails.fullmoviebody.movieset = "Home Movie"
                 fulldetails.fileinfo.fullpathandfilename = newhomemovie.FullPathAndFilename
-                fulldetails.filedetails = Preferences.Get_HdTags(fulldetails.fileinfo.fullpathandfilename)
+                fulldetails.filedetails = Pref.Get_HdTags(fulldetails.fileinfo.fullpathandfilename)
                 Dim rtime As Integer = (fulldetails.filedetails.filedetails_video.DurationInSeconds.Value / 60)
                 fulldetails.fullmoviebody.runtime = rtime.ToString
                 Dim pathOnly As String = IO.Path.GetDirectoryName(fulldetails.fileinfo.fullpathandfilename) & "\"
@@ -21111,13 +21111,13 @@ End Sub
 
     Private Sub HomeMovieFoldersRefresh()
         AuthorizeCheck = True
-        Preferences.homemoviefolders.Clear()
+        Pref.homemoviefolders.Clear()
         For f = 0 to clbx_HMMovieFolders.Items.Count-1
             Dim t As New str_RootPaths 
             t.rpath = clbx_HMMovieFolders.Items(f).ToString
             Dim chkstate As CheckState = clbx_HMMovieFolders.GetItemCheckState(f)
             t.selected = (chkstate = CheckState.Checked)
-            Preferences.homemoviefolders.Add(t)
+            Pref.homemoviefolders.Add(t)
         Next
         Call ConfigSave()
         Call rebuildHomeMovies()
@@ -21160,17 +21160,17 @@ End Sub
 #Region "ToolStrip Menus"
 
     Private Sub tsmi_RenMovieOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieOnly.Click
-        Dim ismovrenenabled As Boolean = Preferences.MovieRenameEnable
-        Dim isusefolder As Boolean = Preferences.usefoldernames
-        If Preferences.MovieManualRename Then
+        Dim ismovrenenabled As Boolean = Pref.MovieRenameEnable
+        Dim isusefolder As Boolean = Pref.usefoldernames
+        If Pref.MovieManualRename Then
             If isusefolder Then
                 Dim tempint As Integer = MessageBox.Show("You currently have 'UseFolderName' Selected" & vbCrLf & "Are you sure you wish to Rename this Movie file", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.No Then
                     Exit Sub
                 End If
             End If
-            Preferences.MovieRenameEnable = True
-            Preferences.usefoldernames = False
+            Pref.MovieRenameEnable = True
+            Pref.usefoldernames = False
             mov_ScrapeSpecific("rename_files")
             While BckWrkScnMovies.IsBusy
                 Application.DoEvents()
@@ -21178,14 +21178,14 @@ End Sub
         Else
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
-        Preferences.MovieRenameEnable = ismovrenenabled
-        Preferences.usefoldernames = isusefolder
+        Pref.MovieRenameEnable = ismovrenenabled
+        Pref.usefoldernames = isusefolder
     End Sub
 
     Private Sub tsmi_RenMovFolderOnly_click(sender As Object, e As EventArgs) Handles tsmi_RenMovFolderOnly.Click
-        Dim isMovFoldRenEnabled As Boolean = Preferences.MovFolderRename
-        If Preferences.MovieManualRename Then
-            Preferences.MovFolderRename = True
+        Dim isMovFoldRenEnabled As Boolean = Pref.MovFolderRename
+        If Pref.MovieManualRename Then
+            Pref.MovFolderRename = True
             mov_ScrapeSpecific("rename_folders")
             While BckWrkScnMovies.IsBusy
                 Application.DoEvents()
@@ -21193,14 +21193,14 @@ End Sub
         Else
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
-        Preferences.MovFolderRename = isMovFoldRenEnabled
+        Pref.MovFolderRename = isMovFoldRenEnabled
     End Sub
 
     Private Sub tsmi_RenMovieAndFolder_click(sender As Object, e As EventArgs) Handles tsmi_RenMovieAndFolder.Click
-        Dim isMovFoldRenEnabled As Boolean = Preferences.MovFolderRename
-        Dim isMovRenEnabled As Boolean = Preferences.MovieRenameEnable
-        Dim isusefolder As Boolean = Preferences.usefoldernames
-        If Preferences.MovieManualRename Then
+        Dim isMovFoldRenEnabled As Boolean = Pref.MovFolderRename
+        Dim isMovRenEnabled As Boolean = Pref.MovieRenameEnable
+        Dim isusefolder As Boolean = Pref.usefoldernames
+        If Pref.MovieManualRename Then
             Dim renmov As Boolean = True
             If isusefolder Then
                 Dim tempint As Integer = MessageBox.Show("You currently have 'UseFolderName' Selected" & vbCrLf & "Are you sure you wish to Rename this Movie file" & vbCrLf & "Folder Renaming will still commence", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -21208,9 +21208,9 @@ End Sub
                     renmov = False
                 End If
             End If
-            Preferences.MovFolderRename = True
-            Preferences.MovieRenameEnable = True
-            Preferences.usefoldernames = False
+            Pref.MovFolderRename = True
+            Pref.MovieRenameEnable = True
+            Pref.usefoldernames = False
             _rescrapeList.FullPathAndFilenames.Clear()
 
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
@@ -21228,9 +21228,9 @@ End Sub
         Else
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
-        Preferences.MovFolderRename = isMovFoldRenEnabled
-        Preferences.MovieRenameEnable = isMovRenEnabled
-        Preferences.usefoldernames = isusefolder
+        Pref.MovFolderRename = isMovFoldRenEnabled
+        Pref.MovieRenameEnable = isMovRenEnabled
+        Pref.usefoldernames = isusefolder
     End Sub
 
     Private Sub tsmiOpenInMkvmergeGUI_Click(sender As Object, e As EventArgs) Handles tsmiOpenInMkvmergeGUI.Click
@@ -21240,7 +21240,7 @@ End Sub
         End If
 
         For Each row In DataGridViewMovies.SelectedRows
-            Process.Start(Preferences.MkvMergeGuiPath, """" & Utilities.GetFileName(row.Cells("fullpathandfilename").Value) & """")
+            Process.Start(Pref.MkvMergeGuiPath, """" & Utilities.GetFileName(row.Cells("fullpathandfilename").Value) & """")
         Next
     End Sub
 
@@ -21304,7 +21304,7 @@ End Sub
 
     Private Sub FixNFOCreateDateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FixNFOCreateDateToolStripMenuItem.Click
         Dim fixCreateDate As New frmCreateDateFix
-        If Preferences.MultiMonitoEnabled Then
+        If Pref.MultiMonitoEnabled Then
             Dim w As Integer = fixCreateDate.Width
             Dim h As Integer = fixCreateDate.Height
             fixCreateDate.Bounds = screen.AllScreens(CurrentScreen).Bounds
@@ -21355,7 +21355,7 @@ End Sub
 
     Private Sub ExportLibraryToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles ExportLibraryToolStripMenuItem.Click
         Dim frmxport As New frmXbmcExport
-        If Preferences.MultiMonitoEnabled Then
+        If Pref.MultiMonitoEnabled Then
             Dim w As Integer = frmxport.Width
             Dim h As Integer = frmxport.Height
             frmxport.Bounds = screen.AllScreens(CurrentScreen).Bounds
@@ -21370,7 +21370,7 @@ End Sub
 
     Sub MkvMergeGuiPath_ChangeHandler()
         tsmiOpenInMkvmergeGUI.Enabled = True
-        tbMkvMergeGuiPath.Text = Preferences.MkvMergeGuiPath
+        tbMkvMergeGuiPath.Text = Pref.MkvMergeGuiPath
     End Sub
 
 #Region "Movie Filters"
@@ -21382,21 +21382,21 @@ End Sub
 
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
             UpdateMovieFiltersPanel()
-            Preferences.ConfigSave()
+            Pref.ConfigSave()
             UpdateFilteredList()
         End If
     End Sub
 
     Sub UpdateMovieFiltersPanel()
         'ResizeBottomLHSPanel
-        Preferences.movie_filters.UpdateFromPanel()
+        Pref.movie_filters.UpdateFromPanel()
         ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
-        Preferences.movie_filters.PositionMovieFilters()
+        Pref.movie_filters.PositionMovieFilters()
     End Sub
 
     ReadOnly Property MovieFiltersPanelMaxHeight As Integer
         Get
-            Return Preferences.movie_filters.CalculatedFilterPanelHeight
+            Return Pref.movie_filters.CalculatedFilterPanelHeight
         End Get
     End Property
 
@@ -21522,7 +21522,7 @@ End Sub
     Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails, Optional ByVal Is3d As Boolean = False) As List(Of KeyValuePair(Of String, String))
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
-            Dim tracks = If(Preferences.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=Vidfiledetails.DefaultAudioTrack)
+            Dim tracks = If(Pref.ShowAllAudioTracks,Vidfiledetails.filedetails_audio,From x In Vidfiledetails.filedetails_audio Where x=Vidfiledetails.DefaultAudioTrack)
 
             For Each track In tracks
                 flags.Add( New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=Vidfiledetails.DefaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
@@ -21613,7 +21613,7 @@ End Sub
 
         Dim s As New Classimdb
 
-        Dim html As String = s.loadwebpage(Preferences.proxysettings, HOME_PAGE, True, 10).ToString
+        Dim html As String = s.loadwebpage(Pref.proxysettings, HOME_PAGE, True, 10).ToString
 
         Dim m = Regex.Match(html, MC_Version_RegEx, RegexOptions.Singleline)
 

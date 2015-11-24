@@ -654,7 +654,7 @@ Public Class Classimdb
         End If
         Monitor.Enter(Me)
         Try
-            Dim engine As Integer = Preferences.engineno 
+            Dim engine As Integer = Pref.engineno 
             Dim newimdbid As String = ""
             Dim allok As Boolean = False
             Dim goodyear As Boolean = False
@@ -666,13 +666,13 @@ Public Class Classimdb
 
             'Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
             'Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
-            Dim url As String = Preferences.enginefront(engine)
+            Dim url As String = Pref.enginefront(engine)
             Dim titlesearch As String = searchurltitle(title)
             If goodyear = True Then
                 titlesearch = titlesearch & "+%28" & year & "%29"
             End If
-            url = url & titlesearch & Preferences.engineend(engine)
-            Dim webpage As String = loadwebpage(Preferences.proxysettings, url, True)
+            url = url & titlesearch & Pref.engineend(engine)
+            Dim webpage As String = loadwebpage(Pref.proxysettings, url, True)
 
             'www.imdb.com/title/tt0402022
             If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then
@@ -905,7 +905,7 @@ Public Class Classimdb
     ReadOnly Property Title As String
         Get
             Dim s As String = ""
-            If Preferences.Original_Title Then
+            If Pref.Original_Title Then
                 s=Original_Title
             End If
             s = s.Replace("""", "")
@@ -966,7 +966,7 @@ Public Class Classimdb
     'Studio = Production
     ReadOnly Property Studio As String
         Get
-            Return GetNames(MovieRegExs.REGEX_STUDIO,Preferences.MovieScraper_MaxStudios)
+            Return GetNames(MovieRegExs.REGEX_STUDIO,Pref.MovieScraper_MaxStudios)
         End Get
     End Property
 
@@ -996,8 +996,8 @@ Public Class Classimdb
 
     ReadOnly Property GetFromImdb As Boolean
         Get
-            Return Preferences.XbmcTmdbCertFromImdb OrElse Preferences.XbmcTmdbStarsFromImdb OrElse Preferences.XbmcTmdbTop250FromImdb OrElse 
-                Preferences.XbmcTmdbVotesFromImdb OrElse Preferences.XbmcTmdbMissingFromImdb OrElse Preferences.XbmcTmdbAkasFromImdb
+            Return Pref.XbmcTmdbCertFromImdb OrElse Pref.XbmcTmdbStarsFromImdb OrElse Pref.XbmcTmdbTop250FromImdb OrElse 
+                Pref.XbmcTmdbVotesFromImdb OrElse Pref.XbmcTmdbMissingFromImdb OrElse Pref.XbmcTmdbAkasFromImdb
         End Get
     End Property
 
@@ -1005,10 +1005,10 @@ Public Class Classimdb
         Dim totalinfo As String = ""
         Try
             'releaseinfo#akas
-            Dim tempstring As String= Preferences.imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
+            Dim tempstring As String= Pref.imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
             Dim webpage As New List(Of String)
             webpage.Clear()
-            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            webpage = loadwebpage(Pref.proxysettings, tempstring, False)
             For f = 0 To webpage.Count - 1
                 If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
                     Dim loc As Integer = f
@@ -1133,7 +1133,7 @@ Public Class Classimdb
                 If imdbcounter < 450 Then
                     imdbid = getimdbID(title, year)
                 Else
-                    imdbid = getimdbID_fromimdb(title, Preferences.imdbmirror, year)
+                    imdbid = getimdbID_fromimdb(title, Pref.imdbmirror, year)
                 End If
                 If imdbid <> "" And imdbid.IndexOf("tt") = 0 And imdbid.Length = 9 Then
                     allok = True
@@ -1144,9 +1144,9 @@ Public Class Classimdb
                 Exit Function
             End If
             If allok = True Then
-                tempstring = Preferences.imdbmirror & "title/" & imdbid
+                tempstring = Pref.imdbmirror & "title/" & imdbid
                 webpage.Clear()
-                webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                webpage = loadwebpage(Pref.proxysettings, tempstring, False)
 
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
@@ -1317,10 +1317,10 @@ Public Class Classimdb
                 Next
 
                 Try
-                    tempstring = Preferences.imdbmirror & "title/" & imdbid & "/plotsummary"
+                    tempstring = Pref.imdbmirror & "title/" & imdbid & "/plotsummary"
                     Dim plots(20) As String
                     webpage.Clear()
-                    webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                    webpage = loadwebpage(Pref.proxysettings, tempstring, False)
                     tempint = 0
                     Dim doo As Boolean = False
                     For Each line In webpage
@@ -1340,7 +1340,7 @@ Public Class Classimdb
                             biggest = f
                         End If
                     Next
-                    If Preferences.ImdbPrimaryPlot Then biggest = 1    'If selected only use Primary Plot.
+                    If Pref.ImdbPrimaryPlot Then biggest = 1    'If selected only use Primary Plot.
                     If plots(biggest) <> Nothing Then
                         movienfoarray = plots(biggest).StripTagsLeaveContent
                         movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
@@ -1354,9 +1354,9 @@ Public Class Classimdb
                 
                 'certs & mpaa
                 Try
-                    tempstring = Preferences.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
+                    tempstring = Pref.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
                     webpage.Clear()
-                    webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                    webpage = loadwebpage(Pref.proxysettings, tempstring, False)
                     For f = 0 To webpage.Count - 1
                         'mpaa
                         If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
@@ -1380,7 +1380,7 @@ Public Class Classimdb
                                     mpaaresults(g, 1) = tempstring
                                     Try
                                         'line below determines if cert is full or short as e.g. UK:15 becomes 15
-                                        If Not Preferences.scrapefullcert Then
+                                        If Not Pref.scrapefullcert Then
                                             mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
                                         End If
 
@@ -1401,7 +1401,7 @@ Public Class Classimdb
 
                     'tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
                     'webpage.Clear()
-                    'webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                    'webpage = loadwebpage(Pref.proxysettings, tempstring, False)
                     'For f = 0 To webpage.Count - 1
                     '    If webpage(f).IndexOf("<h4 class=""li_group"">Also Known As (AKA)") <> -1 Then    '"<h5><a name=""akas"">Also Known As"
                     '        Dim loc As Integer = f
@@ -1582,7 +1582,7 @@ Public Class Classimdb
         Dim results As String = ""
         Monitor.Enter(Me)
         Try
-            Dim IMDbUrl As String = Preferences.imdbmirror & "title/" & IMDbId
+            Dim IMDbUrl As String = Pref.imdbmirror & "title/" & IMDbId
             Dim webpage As New List(Of String)
             Dim mpaaresults(33, 1) As String
             mpaaresults(0, 0) = "MPAA"
@@ -1621,19 +1621,19 @@ Public Class Classimdb
             mpaaresults(33, 0) = "Austria"
             Dim movienfoarray As String = String.Empty
             webpage.Clear()
-            webpage = loadwebpage(Preferences.proxysettings, IMDbUrl, False)
+            webpage = loadwebpage(Pref.proxysettings, IMDbUrl, False)
             Dim webPg As String = String.Join( "" , webpage.ToArray() )
             Html = webPg
             Dim test As String = ""
             For Each wp In webpage
                 test += wp & vbcrlf
             Next
-            If Preferences.XbmcTmdbAkasFromImdb     Then results = results & AKAS(IMDbId)
-            If Preferences.XbmcTmdbStarsFromImdb    Then results.AppendTagText( "stars"     , Stars)
-            If Preferences.XbmcTmdbMissingFromImdb  Then results.AppendTagText( "outline"   , Outline)
-            If Preferences.XbmcTmdbTop250FromImdb   Then results.AppendTag( "top250"    , Top250)
-            If Preferences.XbmcTmdbVotesFromImdb    Then results.AppendTag( "votes"     , Votes)
-            If Preferences.XbmcTmdbCertFromImdb Then
+            If Pref.XbmcTmdbAkasFromImdb     Then results = results & AKAS(IMDbId)
+            If Pref.XbmcTmdbStarsFromImdb    Then results.AppendTagText( "stars"     , Stars)
+            If Pref.XbmcTmdbMissingFromImdb  Then results.AppendTagText( "outline"   , Outline)
+            If Pref.XbmcTmdbTop250FromImdb   Then results.AppendTag( "top250"    , Top250)
+            If Pref.XbmcTmdbVotesFromImdb    Then results.AppendTag( "votes"     , Votes)
+            If Pref.XbmcTmdbCertFromImdb Then
                 For f = 0 To 33
                     If mpaaresults(f, 1) <> Nothing Then
                         Try
@@ -1646,9 +1646,9 @@ Public Class Classimdb
                     End If
                 Next
                 Try
-                    IMDbUrl = Preferences.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
+                    IMDbUrl = Pref.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
                     webpage.Clear()
-                    webpage = loadwebpage(Preferences.proxysettings, IMDbUrl, False)
+                    webpage = loadwebpage(Pref.proxysettings, IMDbUrl, False)
                     Dim tempstring As String = ""
                     For f = 0 To webpage.Count - 1
                         'mpaa
@@ -1673,7 +1673,7 @@ Public Class Classimdb
                                     mpaaresults(g, 1) = tempstring
                                     Try
                                         'line below determines if cert is full or short as e.g. UK:15 becomes 15
-                                        If Not Preferences.scrapefullcert Then
+                                        If Not Pref.scrapefullcert Then
                                             mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
                                         End If
                                         mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
@@ -1712,10 +1712,10 @@ Public Class Classimdb
     Public Function GetImdbActorsList(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors)
 
         If maxactors = 9999 Then 
-            maxactors= Preferences.maxactors
+            maxactors= Pref.maxactors
         End If
 
-        Dim tbl As String = GetActorsTable(  loadwebpage(Preferences.proxysettings, imdbmirror & "title/" & imdbid & "/fullcredits#cast", True)  )
+        Dim tbl As String = GetActorsTable(  loadwebpage(Pref.proxysettings, imdbmirror & "title/" & imdbid & "/fullcredits#cast", True)  )
 
         Dim mc As MatchCollection = Regex.Matches(tbl, MovieRegExs.REGEX_TR, RegexOptions.Singleline)
 
@@ -1749,7 +1749,7 @@ Public Class Classimdb
         Try
             Dim webpage As List(Of String)
             tempstring = imdbmirror & "title/" & imdbid & "/trailers"
-            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            webpage = loadwebpage(Pref.proxysettings, tempstring, False)
             For f = 0 To webpage.Count - 1
                 If webpage(f).Contains("<h2><a href=""/video/imdb") Then
                     Dim s As String = webpage(f)
@@ -1766,7 +1766,7 @@ Public Class Classimdb
             If allok = True Then
                 allok = False
                 webpage.Clear()
-                webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+                webpage = loadwebpage(Pref.proxysettings, tempstring, False)
                 Dim htmlpg As String = ""
                 For Each wp In webpage
                     htmlpg += wp & vbcrlf
@@ -1858,7 +1858,7 @@ Public Class Classimdb
     Function GetGenres( ByVal webPage As String )
         Dim genres As New List(Of String)
         Dim genre As String
-        For Each m As Match In Regex.Matches( webPage, Preferences.MovieImdbGenreRegEx )
+        For Each m As Match In Regex.Matches( webPage, Pref.MovieImdbGenreRegEx )
             genre = m.Groups("genre").Value
             If Not genres.Contains( genre ) then
                 genres.Add( genre )
@@ -1875,7 +1875,7 @@ Public Class Classimdb
         Try
             tempstring = imdbmirror & "title/" & imdbid & "keywords?ref_=tt_stry_kw"
             webpage.Clear()
-            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            webpage = loadwebpage(Pref.proxysettings, tempstring, False)
             Dim webPg1 As String = String.Join( vbcrlf , webpage.ToArray() )
             For f = 0 To webpage.Count - 1
                 If webpage(f).IndexOf("Plot Keywords</h1") <> -1 Then
@@ -1951,10 +1951,10 @@ Public Class Classimdb
         Dim movienfoarray As String = String.Empty
         Dim webpage As New List(Of String)
         Try
-            tempstring = Preferences.imdbmirror & "title/" & imdbid & "/plotsummary"
+            tempstring = Pref.imdbmirror & "title/" & imdbid & "/plotsummary"
             Dim plots(20) As String
             webpage.Clear()
-            webpage = loadwebpage(Preferences.proxysettings, tempstring, False)
+            webpage = loadwebpage(Pref.proxysettings, tempstring, False)
             tempint = 0
             Dim doo As Boolean = False
             For Each line In webpage

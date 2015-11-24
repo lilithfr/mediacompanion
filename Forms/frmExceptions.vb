@@ -17,8 +17,8 @@ Public Class frmExceptions
     Private Sub lnkCodeplex_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles lnkCodeplex.LinkClicked
         'System.Diagnostics.Process.Start(lnkCodeplex.Text)
        Try
-            If Preferences.selectedBrowser <> "" then
-                Process.Start(Preferences.selectedBrowser,lnkCodeplex.Text)
+            If Pref.selectedBrowser <> "" then
+                Process.Start(Pref.selectedBrowser,lnkCodeplex.Text)
             Else
                 Try
                     Process.Start(lnkCodeplex.Text)

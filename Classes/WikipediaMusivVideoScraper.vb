@@ -41,7 +41,7 @@ Public Class WikipediaMusivVideoScraper
         Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
 
         If wikipediaURL = "" Then
-            webpage = s.loadwebpage(Preferences.proxysettings, searchurl, False, 10)
+            webpage = s.loadwebpage(Pref.proxysettings, searchurl, False, 10)
 
 
             For Each line In webpage
@@ -67,7 +67,7 @@ Public Class WikipediaMusivVideoScraper
         '    totalinfo.AppendTag("title", Title)
         'End If
         If wikipediaURL <> "" Then
-            webpage = s.loadwebpage(Preferences.proxysettings, wikipediaURL, False, 10)
+            webpage = s.loadwebpage(Pref.proxysettings, wikipediaURL, False, 10)
             Dim htpage As String = ""
             For each p In webpage
                 htpage &= p & vbcrlf

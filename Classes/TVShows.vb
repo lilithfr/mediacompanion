@@ -30,7 +30,7 @@ End Class
 Public Class TVShows
 
     Public Shared Function episodeRename(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
-        showtitle = Preferences.RemoveIgnoredArticles(showtitle)
+        showtitle = Pref.RemoveIgnoredArticles(showtitle)
         Dim returnpath As String = "false"
 
         Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
@@ -128,17 +128,17 @@ Public Class TVShows
                             Dim fi As New IO.FileInfo(ITEMS)
                             fi.MoveTo(newname)
                             If FirstCount = True Then  'we only want to show the renamed mediafile in the brief view
-                                Preferences.tvScraperLog &= "!!! Renamed to: " & newname & vbCrLf
+                                Pref.tvScraperLog &= "!!! Renamed to: " & newname & vbCrLf
                                 FirstCount = False
                             Else
-                                Preferences.tvScraperLog &= "                " & newname & vbCrLf
+                                Pref.tvScraperLog &= "                " & newname & vbCrLf
                             End If
 
                         Catch ex As Exception
                             done = path
-                            Preferences.tvScraperLog &= "!!! *** Rename FAILED for : " & newname & vbCrLf
-                            Preferences.tvScraperLog &= "!!! *** Reported Message  : " & ex.Message & vbCrLf
-                            Preferences.tvScraperLog &= "!!! *** Resolve the indicated issue, & then try to rename the files again." & vbCrLf
+                            Pref.tvScraperLog &= "!!! *** Rename FAILED for : " & newname & vbCrLf
+                            Pref.tvScraperLog &= "!!! *** Reported Message  : " & ex.Message & vbCrLf
+                            Pref.tvScraperLog &= "!!! *** Resolve the indicated issue, & then try to rename the files again." & vbCrLf
                             Exit For 'we need to stop renaming the rest of the files if we get here. We usually get here if the episode
                             '        ' cannot be renamed because another process has locked the file. i.e. another app has the file open.  
                         End Try
@@ -146,9 +146,9 @@ Public Class TVShows
                     Next
                     returnpath = done
                 Else
-                    Preferences.tvScraperLog &= "!!! Rename aborted - file already exists : " & RenameFailedFile & vbCrLf
+                    Pref.tvScraperLog &= "!!! Rename aborted - file already exists : " & RenameFailedFile & vbCrLf
                 End If
-                Preferences.tvScraperLog &= "!!! " & vbCrLf
+                Pref.tvScraperLog &= "!!! " & vbCrLf
             End If
         Next
         Return returnpath

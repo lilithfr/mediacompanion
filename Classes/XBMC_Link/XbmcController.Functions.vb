@@ -240,7 +240,7 @@ Public Partial Class XbmcController
 
     Sub GetCachedUrls
 
-        If Not Preferences.XBMC_Delete_Cached_Images Then
+        If Not Pref.XBMC_Delete_Cached_Images Then
             LogInfo("Skipping getting cached image urls from TexturesDb")
             Return
         End If
@@ -498,7 +498,7 @@ Public Partial Class XbmcController
 
     '    MovieFolderMappings.Clear
 
-    '    For Each folder In Preferences.movieFolders
+    '    For Each folder In Pref.movieFolders
     '        Try
     '            Dim wotEver = folder
 

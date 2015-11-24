@@ -228,7 +228,7 @@ Public Class MediaInfoExport
             Select Case tokenInstr(0)
                 Case "smallimage", "createimage"
                     If thumbpath IsNot String.Empty AndAlso Not thumbpath.Equals("!HEADER!") Then
-                        Dim origImage = Preferences.GetPosterPath(movie.fullpathandfilename)
+                        Dim origImage = Pref.GetPosterPath(movie.fullpathandfilename)
                         Try
                             If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "images/"
                             strNFOprop &= Utilities.createImage(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
@@ -262,7 +262,7 @@ Public Class MediaInfoExport
                     strNFOprop = Right(fi.DirectoryName,Len(fi.DirectoryName)-2)
 
                 Case "imdb_url"
-                    strNFOprop = If(movie.id <> Nothing, Preferences.imdbmirror & "title/" & movie.id & "/", Preferences.imdbmirror)
+                    strNFOprop = If(movie.id <> Nothing, Pref.imdbmirror & "title/" & movie.id & "/", Pref.imdbmirror)
 
                 Case "title"
                     strNFOprop = If(movie.title <> Nothing, movie.title, "")
@@ -489,10 +489,10 @@ Public Class MediaInfoExport
                                         Dim newDate, localDatePattern As String
                                         If tokenInstr(1) = "createdate" Then
                                             newDate = newplotdetails.fileinfo.createdate
-                                            localDatePattern = Preferences.datePattern
+                                            localDatePattern = Pref.datePattern
                                         Else
                                             newDate = newplotdetails.fullmoviebody.premiered
-                                            localDatePattern = Preferences.nfoDatePattern
+                                            localDatePattern = Pref.nfoDatePattern
                                         End If
                                         Try
                                             Dim result As Date
@@ -514,7 +514,7 @@ Public Class MediaInfoExport
                                                     strNFOprop = strNFOprop.Replace("_", separator)
                                                 End If
                                             Else
-                                                strNFOprop = Format(result, Preferences.datePattern).ToString
+                                                strNFOprop = Format(result, Pref.datePattern).ToString
                                             End If
                                         Catch ex As Exception
                                             strNFOprop = "Error in date format"
@@ -621,7 +621,7 @@ Public Class MediaInfoExport
             Dim inclSeason As Boolean = False
             Dim inclEpisode As Boolean = False
             Dim inclMissingSeason As Boolean = False
-            Dim inclMissingEpisode As Boolean = Preferences.displayMissingEpisodes
+            Dim inclMissingEpisode As Boolean = Pref.displayMissingEpisodes
             If text.IndexOf("<<season>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
                 If text.IndexOf("<<season") <> -1 Then inclSeason = True
                 If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
@@ -772,7 +772,7 @@ Public Class MediaInfoExport
                         Dim imageType As String = "poster"
                         If tokenInstr.Length > 2 AndAlso tokenInstr(2) = "banner" Then
                             imageType = "banner"
-                            origImage = If(Preferences.FrodoEnabled, tvShow.ImageBanner.Path, tvShow.ImageAllSeasons.Path)
+                            origImage = If(Pref.FrodoEnabled, tvShow.ImageBanner.Path, tvShow.ImageAllSeasons.Path)
                         End If
 
                         If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
@@ -795,7 +795,7 @@ Public Class MediaInfoExport
                     strNFOprop = tvShow.ImdbId.Value
 
                 Case "show_imdburl"
-                    strNFOprop = If(tvShow.ImdbId <> Nothing, Preferences.imdbmirror & "title/" & tvShow.ImdbId.Value & "/", Preferences.imdbmirror)
+                    strNFOprop = If(tvShow.ImdbId <> Nothing, Pref.imdbmirror & "title/" & tvShow.ImdbId.Value & "/", Pref.imdbmirror)
 
                 Case "show_tvdbid"
                     strNFOprop = tvShow.TvdbId.Value
@@ -1004,7 +1004,7 @@ Public Class MediaInfoExport
                     strNFOprop = tvEpisode.ImdbId.Value
 
                 Case "ep_imdburl"
-                    strNFOprop = If(tvEpisode.ImdbId.Value <> Nothing, Preferences.imdbmirror & "title/" & tvEpisode.ImdbId.Value & "/", Preferences.imdbmirror)
+                    strNFOprop = If(tvEpisode.ImdbId.Value <> Nothing, Pref.imdbmirror & "title/" & tvEpisode.ImdbId.Value & "/", Pref.imdbmirror)
 
                 Case "ep_tvdbid"
                     strNFOprop = tvEpisode.TvdbId.Value
@@ -1089,7 +1089,7 @@ Public Class MediaInfoExport
                                 If tokenInstr.Length > 2 Then
                                     Try
                                         Dim result As Date
-                                        result = DateTime.ParseExact(newDate, Preferences.nfoDatePattern, Nothing)
+                                        result = DateTime.ParseExact(newDate, Pref.nfoDatePattern, Nothing)
                                         strNFOprop = Format(result, tokenInstr(2)).ToString
                                         If tokenInstr.Length > 3 Then
                                             Dim separator As String = "!"

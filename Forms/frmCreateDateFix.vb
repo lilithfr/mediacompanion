@@ -64,7 +64,7 @@ Public Class frmCreateDateFix
             'If IO.File.Exists(row.File) AndAlso Integer.TryParse(row.CreateDate, i) Then   'row.Title and row.NFOpath wil add, even if empty - test NFO later
             Try
                 _lst.Rows.Add(row.Title, _
-                              Date.ParseExact(row.CreateDate, Preferences.datePattern, Globalization.DateTimeFormatInfo.InvariantInfo), _
+                              Date.ParseExact(row.CreateDate, Pref.datePattern, Globalization.DateTimeFormatInfo.InvariantInfo), _
                               IO.File.GetLastWriteTime(row.File), _
                               row.NFOpath)
             Catch ex As Exception
@@ -213,7 +213,7 @@ Public Class frmCreateDateFix
                 Dim m As Movie = Form1.oMovies.LoadMovie(selectedItem.Cells("NFOpath").Value)
                 If Not IsNothing(m) Then
                     Dim createDate As Date = selectedItem.Cells("FileDate").Value
-                    m._movieCache.createdate = createDate.ToString(Preferences.datePattern)
+                    m._movieCache.createdate = createDate.ToString(Pref.datePattern)
                     m.ScrapedMovie.fileinfo.createdate = m._movieCache.createdate
                     m.UpdateMovieCache()
                     m.SaveNFO()

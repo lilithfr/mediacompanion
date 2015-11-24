@@ -11,7 +11,7 @@ Public Module LinkExt
     Function FormatXbmcPath(ByVal sString As String) As String
         Dim s As String = sString
 
-        If Preferences.XBMC_Link_Use_Forward_Slash Then
+        If Pref.XBMC_Link_Use_Forward_Slash Then
             s = s.Replace("\","/")
 
 
@@ -191,13 +191,13 @@ Public Class XBMC_MC_FolderMappings
     ReadOnly Property MC_Folders As List(Of String)
         Get
             Dim MovFoldList As New List(Of String)
-            For Each rtpath In Preferences.movieFolders 
+            For Each rtpath In Pref.movieFolders 
                 If rtpath.selected Then
                     MovFoldList.Add(rtpath.rpath)
                 End If
             Next
-            MovFoldList.AddRange(Preferences.offlinefolders)
-            Return IIf(Me.Type="Movie",MovFoldList,Preferences.tvFolders) '(Me.Type="Movie",Preferences.movieFolders,Preferences.tvFolders)
+            MovFoldList.AddRange(Pref.offlinefolders)
+            Return IIf(Me.Type="Movie",MovFoldList,Pref.tvFolders) '(Me.Type="Movie",Pref.movieFolders,Pref.tvFolders)
         End Get
     End Property
 

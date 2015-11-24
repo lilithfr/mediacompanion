@@ -43,7 +43,7 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.showlink <> Nothing Then tb_SeriesLnk.Text = workingmovieedit.fullmoviebody.showlink 
         Try
             If workingmovieedit.fileinfo.createdate <> Nothing Then 
-                Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Preferences.datePattern, Nothing)
+                Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Pref.datePattern, Nothing)
             End If
         Catch ex As Exception 
             MsgBox(ex.tostring)
@@ -112,9 +112,9 @@ Public Class Form2
             RemoveHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
             RemoveHandler PremieredDatePicker.ValueChanged, AddressOf PremieredDatePicker_ValueChanged
             Createdatepicker.Format = DateTimePickerFormat.Custom
-            Createdatepicker.CustomFormat = Preferences.datePattern  '"yyyyMMddHHmmss"
+            Createdatepicker.CustomFormat = Pref.datePattern  '"yyyyMMddHHmmss"
             PremieredDatePicker.Format = DateTimePickerFormat.Custom
-            PremieredDatePicker.CustomFormat = Preferences.nfoDatePattern  '"yyyy-MM-dd"
+            PremieredDatePicker.CustomFormat = Pref.nfoDatePattern  '"yyyy-MM-dd"
             
             
             Call setupdisplay()
@@ -171,7 +171,7 @@ Public Class Form2
             roletxt.Text = workingmovieedit.listactors(actorcb.SelectedIndex).actorrole
             If workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb <> Nothing Then
                 Try
-                    PictureBox1.ImageLocation = Preferences.GetActorThumbPath(workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb)
+                    PictureBox1.ImageLocation = Pref.GetActorThumbPath(workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb)
                 Catch ex As Exception
                     PictureBox1.Image = Nothing
                 End Try
@@ -242,7 +242,7 @@ Public Class Form2
     Private Sub btnAltPosterBrowser_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAltPosterBrowser.Click
         Try
             Dim t As New frmCoverArt()
-            If Preferences.MultiMonitoEnabled Then
+            If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
                 t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
@@ -459,13 +459,13 @@ Public Class Form2
             Form1.workingMovieDetails.listactors = workingmovieedit.listactors
             Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
             If datechanged Then
-                Dim credate As String =  Format(Createdatepicker.Value, Preferences.datePattern).ToString
+                Dim credate As String =  Format(Createdatepicker.Value, Pref.datePattern).ToString
                 If workingmovieedit.fileinfo.createdate <> credate Then
-                    workingmovieedit.fileinfo.createdate = credate 'Format(credate, Preferences.datePattern).ToString
+                    workingmovieedit.fileinfo.createdate = credate 'Format(credate, Pref.datePattern).ToString
                 End If
             End If
             If PremierDateChanged Then
-                Dim premdate As String = Format(PremieredDatePicker.Value, Preferences.nfoDatePattern).ToString
+                Dim premdate As String = Format(PremieredDatePicker.Value, Pref.nfoDatePattern).ToString
                 If workingmovieedit.fullmoviebody.premiered <> premdate Then
                     workingmovieedit.fullmoviebody.premiered = premdate 
                 End If
@@ -549,7 +549,7 @@ Public Class Form2
     Private Sub btnfanart_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnfanart.Click
         Try
             Dim t As New frmMovieFanart
-            If Preferences.MultiMonitoEnabled Then
+            If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
                 t.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
@@ -588,7 +588,7 @@ Public Class Form2
     End Sub
 
     Private Sub Createdatepicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles Createdatepicker.ValueChanged
-        Dim newdate As String = Format(Createdatepicker.Value, Preferences.datePattern).ToString
+        Dim newdate As String = Format(Createdatepicker.Value, Pref.datePattern).ToString
         If workingmovieedit.fileinfo.createdate <> newdate Then
             datechanged = True
             editsmade = True
@@ -605,7 +605,7 @@ Public Class Form2
     End Sub
 
     Private Sub PremieredDatePicker_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles PremieredDatePicker.ValueChanged
-        Dim newdate As String = Format(PremieredDatePicker.Value, Preferences.nfoDatePattern).ToString
+        Dim newdate As String = Format(PremieredDatePicker.Value, Pref.nfoDatePattern).ToString
         If workingmovieedit.fullmoviebody.premiered <> newdate Then
             PremierDateChanged = True
             editsmade = True
@@ -642,7 +642,7 @@ Public Class Form2
             theFolderBrowser.Description = "Please Select a Series Folder, containing tvshow.nfo file"
             theFolderBrowser.ShowNewFolderButton = True
             theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Preferences.lastpath
+            theFolderBrowser.SelectedPath = Pref.lastpath
             If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 strfolder = (theFolderBrowser.SelectedPath)
                 If strfolder <> "" AndAlso Directory.Exists(strfolder) Then

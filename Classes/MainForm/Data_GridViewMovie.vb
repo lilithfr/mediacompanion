@@ -183,7 +183,7 @@ Public Class Data_GridViewMovie
     ReadOnly Property DisplayTitle As String
         Get
             Dim t As String = If(IsNothing(title),"Unknown",title)
-            Return Preferences.RemoveIgnoredArticles(t)
+            Return Pref.RemoveIgnoredArticles(t)
         End Get
     End Property
 
@@ -462,7 +462,7 @@ Public Class Data_GridViewMovie
     ReadOnly Property DisplaySortOrder As String
         Get
             Dim t As String = If(IsNothing(SortOrder),"Unknown",SortOrder)
-            Return Preferences.RemoveIgnoredArticles(t)
+            Return Pref.RemoveIgnoredArticles(t)
         End Get
     End Property
 
@@ -476,7 +476,7 @@ Public Class Data_GridViewMovie
         Dim MIN  As String = s.SubString(10,2)
         Dim SS   As String = s.SubString(12,2)
 
-        Dim x As String = Preferences.DateFormat
+        Dim x As String = Pref.DateFormat
 
         x = x.Replace("YYYY", YYYY)
         x = x.Replace("MM"  , MM  )
@@ -629,7 +629,7 @@ Public Class Data_GridViewMovie
 
             Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
 
-            If isFirstPart And Preferences.namemode="1" Then
+            If isFirstPart And Pref.namemode="1" Then
                 Dim i As Integer  
                 result &= stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
             End If
@@ -648,7 +648,7 @@ Public Class Data_GridViewMovie
 
     ReadOnly Property UserDefinedFileName As String
         Get
-            Dim s As String = Preferences.MovieRenameTemplate
+            Dim s As String = Pref.MovieRenameTemplate
 
             s = s.Replace("%T", title)
             s = s.Replace("%Y", year)

@@ -61,46 +61,46 @@ Public Class ucMusicVideo
 
     Private Sub MVPreferencesLoad()
         MVPrefLoad = True
-        cmbxMVSort.SelectedIndex    = Preferences.MVsortorder
-        cb_MVPrefShowLog.Checked    = Preferences.MVPrefShowLog
-        tb_MVPrefScrnSht.Text       = Preferences.MVPrefScrnSht.ToString
-        Select Case Preferences.MVScraper
+        cmbxMVSort.SelectedIndex    = Pref.MVsortorder
+        cb_MVPrefShowLog.Checked    = Pref.MVPrefShowLog
+        tb_MVPrefScrnSht.Text       = Pref.MVPrefScrnSht.ToString
+        Select Case Pref.MVScraper
             Case "wiki"     : rb_MvScr1.Checked = True
             Case "imvdb"    : rb_MvScr2.Checked = True
             Case "audiodb"  : rb_MvScr3.Checked = True
         End Select
-        Select Case Preferences.MVdefaultlist
+        Select Case Pref.MVdefaultlist
             Case 0  : rbMVArtistAndTitle.Checked = True
             Case 1  : rbMVTitleandYear.Checked = True
             Case 2  : rbMVFilename.Checked = True
         End Select
-        'If Preferences.MVdefaultlist = 0 Then
+        'If Pref.MVdefaultlist = 0 Then
         '    rbMVArtistAndTitle.Checked = True
-        'ElseIf Preferences.MVdefaultlist = 1 Then
+        'ElseIf Pref.MVdefaultlist = 1 Then
         '    rbMVTitleandYear.Checked = True
-        'ElseIf Preferences.MVdefaultlist = 2 Then
+        'ElseIf Pref.MVdefaultlist = 2 Then
         '    rbMVFilename.Checked = True
         'End If
         clbxMvFolders.Items.Clear()
-        For Each item In Preferences.MVidFolders
+        For Each item In Pref.MVidFolders
             AuthorizeCheck = True
             clbxMvFolders.Items.Add(item.rpath, item.selected)
             AuthorizeCheck = False
         Next
-        If Preferences.MVScraper = "wiki" Then
+        If Pref.MVScraper = "wiki" Then
             rb_MvScr1.Checked = True
-        ElseIf Preferences.MVScraper = "imvdb" Then
+        ElseIf Pref.MVScraper = "imvdb" Then
             rb_MvScr2.Checked = True
         Else
             rb_MvScr3.Checked = True
         End If
         MVPrefChanged = False
-        txtScreenshotTime.Text = Preferences.MVPrefScrnSht.ToString
+        txtScreenshotTime.Text = Pref.MVPrefScrnSht.ToString
         MVPrefLoad = False
     End Sub
 
     Private Sub SearchForNewMV()
-        Preferences.MusicVidScrape = True
+        Pref.MusicVidScrape = True
         Form1.RunBackgroundMovieScrape("SearchForNewMusicVideo")
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
@@ -109,7 +109,7 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub RefreshallMV()
-        Preferences.MusicVidScrape = True
+        Pref.MusicVidScrape = True
         Form1.RunBackgroundMovieScrape("RefreshMVCache")
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
@@ -123,7 +123,7 @@ Public Class ucMusicVideo
     
 #Region " Music Video Cache Routines"
     Public Sub MVCacheSave()
-        Dim fullpath As String = Preferences.workingProfile.MusicVideoCache
+        Dim fullpath As String = Pref.workingProfile.MusicVideoCache
         If IO.File.Exists(fullpath) Then 
             Dim aok As Boolean = Utilities.SafeDeleteFile(fullpath)
             If Not aok Then
@@ -177,7 +177,7 @@ Public Class ucMusicVideo
         MVCache.Clear()
         Dim musicvideocache As New XmlDocument
         Try
-            musicvideocache.Load(Preferences.workingProfile.MusicVideoCache)
+            musicvideocache.Load(Pref.workingProfile.MusicVideoCache)
         Catch ex As Exception
             MsgBox("Error : pr25")
         End Try
@@ -332,7 +332,7 @@ Public Class ucMusicVideo
 
     Private Sub TabControlMain_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControlMain.SelectedIndexChanged
         If TabControlMain.SelectedTab.Text = "Manually find Correct Wiki Entry" Then
-            If Not Preferences.MVScraper = "wiki" Then
+            If Not Pref.MVScraper = "wiki" Then
                 MsgBox("Wiki scraper is not selected" & vbCrLf & "Unable to open this tab")
                 TabControlMain.SelectedIndex = PrevTab
                 Exit Sub
@@ -386,7 +386,7 @@ Public Class ucMusicVideo
         changeMVList.Add(videopath)
         changeMVList.Add(url)
         changeMVList.Add(overwrite)
-        Preferences.MusicVidScrape = True
+        Pref.MusicVidScrape = True
         Form1.RunBackgroundMovieScrape("ChangeMusicVideo")
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
@@ -514,9 +514,9 @@ Public Class ucMusicVideo
 
     Sub HandleMovieList_DisplayChange(DisplayField As String)
         GridFieldToDisplay1 = DisplayField
-        If rbMVArtistAndTitle.Checked Then Preferences.moviedefaultlist = 0
-        If rbMVTitleandYear  .Checked Then Preferences.moviedefaultlist = 1
-        If rbMVFilename      .Checked Then Preferences.moviedefaultlist = 2
+        If rbMVArtistAndTitle.Checked Then Pref.moviedefaultlist = 0
+        If rbMVTitleandYear  .Checked Then Pref.moviedefaultlist = 1
+        If rbMVFilename      .Checked Then Pref.moviedefaultlist = 2
         GridviewMovieDesign()
         If Form1.MainFormLoadedStatus Then
             DisplayMV()
@@ -616,7 +616,7 @@ Public Class ucMusicVideo
         mv_FiltersAndSortApply()
         DisplayMV()
         If Not Form1.MainFormLoadedStatus Then Exit Sub
-        Preferences.MVsortorder = cmbxMVSort.SelectedIndex 
+        Pref.MVsortorder = cmbxMVSort.SelectedIndex 
     End Sub
     
     Private Sub rbMVArtistAndTitle_CheckedChanged(sender As Object, e As EventArgs) Handles rbMVArtistAndTitle.CheckedChanged
@@ -676,7 +676,7 @@ Public Class ucMusicVideo
         'Form1.cropMode = "mvscreenshot"
         Try
             Using t As New frmMovPosterCrop
-                If Preferences.MultiMonitoEnabled Then
+                If Pref.MultiMonitoEnabled Then
                     t.bounds = screen.allscreens(form1.currentscreen).bounds
                     t.startposition = formstartposition.manual
                 end if
@@ -757,7 +757,7 @@ Public Class ucMusicVideo
     Private Sub btnPosterCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterCrop.Click
         Try
             Using t As New frmMovPosterCrop
-                If Preferences.MultiMonitoEnabled Then
+                If Pref.MultiMonitoEnabled Then
                     t.bounds = screen.allscreens(form1.currentscreen).bounds
                     t.startposition = formstartposition.manual
                 end if
@@ -839,22 +839,22 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub btnMVApply_Click(sender As System.Object, e As System.EventArgs) Handles btnMVApply.Click
-        Preferences.MVidFolders.Clear()
+        Pref.MVidFolders.Clear()
         For f = 0 to clbxMvFolders.Items.Count-1
             Dim t As New str_RootPaths 
             t.rpath = clbxMvFolders.Items(f).ToString
             Dim chkstate As CheckState = clbxMvFolders.GetItemCheckState(f)
             t.selected = (chkstate = CheckState.Checked)
-            Preferences.MVidFolders.Add(t)
+            Pref.MVidFolders.Add(t)
         Next
         If rb_MvScr1.Checked Then
-            Preferences.MVScraper = "wiki"
+            Pref.MVScraper = "wiki"
         ElseIf rb_MvScr2.Checked Then
-            Preferences.MVScraper = "imvdb"
+            Pref.MVScraper = "imvdb"
         Else
-            Preferences.MVScraper = "audiodb"
+            Pref.MVScraper = "audiodb"
         End If
-        Preferences.ConfigSave()
+        Pref.ConfigSave()
         MVPrefChanged = False
         TabControlMain.SelectedIndex = 0
         RefreshallMV()
@@ -862,7 +862,7 @@ Public Class ucMusicVideo
 
     Private Sub cb_MVPrefShowLog_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MVPrefShowLog.CheckedChanged
         If MVPrefLoad Then Exit Sub
-        Preferences.MVPrefShowLog = cb_MVPrefShowLog.Checked
+        Pref.MVPrefShowLog = cb_MVPrefShowLog.Checked
         MVPrefChanged = True
     End Sub
 
@@ -886,7 +886,7 @@ Public Class ucMusicVideo
                 tb_MVPrefScrnSht.Text = "10"
                 Exit Sub
             End If
-            Preferences.MVPrefScrnSht = Convert.ToInt32(tb_MVPrefScrnSht.Text)
+            Pref.MVPrefScrnSht = Convert.ToInt32(tb_MVPrefScrnSht.Text)
             MVPrefChanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -896,10 +896,10 @@ Public Class ucMusicVideo
     Private Sub tb_MVPrefScrnSht_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tb_MVPrefScrnSht.TextChanged
         If MVPrefLoad Then Exit Sub
         If IsNumeric(tb_MVPrefScrnSht.Text) AndAlso Convert.ToInt32(tb_MVPrefScrnSht.Text)>0 Then
-            Preferences.MVPrefScrnSht = Convert.ToInt32(tb_MVPrefScrnSht.Text)
+            Pref.MVPrefScrnSht = Convert.ToInt32(tb_MVPrefScrnSht.Text)
             MVPrefChanged = True
         Else
-            Preferences.MVPrefScrnSht = 10
+            Pref.MVPrefScrnSht = 10
             tb_MVPrefScrnSht.Text = "10"
             MsgBox("Please enter a numerical Value that is 1 or more")
         End If
@@ -963,11 +963,11 @@ Public Class ucMusicVideo
             fb.Description = "Please Select Folder to Add"
             fb.ShowNewFolderButton = True
             fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Preferences.lastpath
+            fb.SelectedPath = Pref.lastpath
             Tmr.Start()
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
-                Preferences.lastpath = thefoldernames
+                Pref.lastpath = thefoldernames
                 If allok = True Then
                     AuthorizeCheck = True
                     clbxMvFolders.Items.Add(thefoldernames, True)
@@ -989,7 +989,7 @@ Public Class ucMusicVideo
         folders = e.Data.GetData(DataFormats.filedrop)
         For f = 0 To UBound(folders)
             Dim exists As Boolean = False
-            For Each rtpath In Preferences.movieFolders
+            For Each rtpath In Pref.movieFolders
                 If rtpath.rpath = folders(f) Then
                     exists = True
                     Exit For
@@ -1109,7 +1109,7 @@ Public Class ucMusicVideo
         Next
 
         'Highlight titles in datagridview with missing video files.
-        If Preferences.incmissingmovies Then
+        If Pref.incmissingmovies Then
             For Each row As DataGridViewRow In dgv.Rows
                 If row.Cells("videomissing").Value = True Then
                     row.DefaultCellStyle.BackColor = Color.Red                
@@ -1370,7 +1370,7 @@ Public Class ucMusicVideo
 
     Private Sub tsmiMVViewNfo_Click(sender As Object, e As EventArgs) Handles tsmiMVViewNfo.Click
         Try
-            Utilities.NfoNotepadDisplay(workingMusicVideo.fileinfo.fullpathandfilename, Preferences.altnfoeditor)
+            Utilities.NfoNotepadDisplay(workingMusicVideo.fileinfo.fullpathandfilename, Pref.altnfoeditor)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
