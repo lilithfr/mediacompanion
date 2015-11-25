@@ -132,6 +132,16 @@
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>522, 17</value>
   </metadata>
+  <data name="Label104.Text" xml:space="preserve">
+    <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled. The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).</value>
+  </data>
+  <data name="Label103.Text" xml:space="preserve">
+    <value>The "XBMC path" needs to be to the same folder as above, but from where XBMC is installed. If XBMC is installed on the same machine as Media Companion then the paths will be the same, but if XBMC is located on a seperate network device then the path will need to be as it is from XBMC to the Actor folders. The folder will need to be shared, and have any user and password information included in the path. eg "smb://username:password@devicename/sharename/"</value>
+  </data>
+  <data name="Label101.Text" xml:space="preserve">
+    <value>Under normal circumstances, Media Companion will include the internet location for each available actor thumbnail. There are a couple of problems with this, firstly, when XBMC scrapes each nfo, if you enable actor thumbnails, XBMC needs to download these from the internet. Secondly, since MC also uses these urls to display actor thumbs, it can slow  down the Media Companion browser.
+These settings allow you to override this behaviour, saving the actor thumbs to a local folder, and adding the path to this into the nfo instead of a url.</value>
+  </data>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>621, 17</value>
   </metadata>

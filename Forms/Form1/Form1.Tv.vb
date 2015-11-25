@@ -945,7 +945,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub ep_VideoSourcePopulate()
+    Public Sub ep_VideoSourcePopulate()
         Try
             cbTvSource.Items.Clear()
             cbTvSource.Items.Add("")

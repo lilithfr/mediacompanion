@@ -1,4 +1,5 @@
-﻿Imports System.Net
+﻿Imports System.ComponentModel
+Imports System.Net
 Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
@@ -7,13 +8,36 @@ Imports System.Xml
 
 Public Class frmOptions
     Public Const SetDefaults = True
-    'Dim Preferences As New _Pref.Preferences
+    Private fb As New FolderBrowserDialog
+    Dim _Pref As New Pref
     Dim moviefolders As New List(Of str_RootPaths)
     Dim tvfolders As New List(Of String)
+    Dim _changed As Boolean
+    Dim prefsload As Boolean = False
+    Dim videosourceprefchanged As Boolean = False
+    Dim cleanfilenameprefchanged As Boolean = False
+    
+    Public Property Changes As Boolean
+        Get
+            Return _changed
+        End Get
+        Set(value As Boolean)
+            _changed = value
+        End Set
+    End Property
 
+#Region "Form Events"
 
     Private Sub options_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Try
+            If Changes Then
+                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If tempint = DialogResult.Yes Then
+                    Pref.ConfigSave()
+                Else
+                    Pref.ConfigLoad()
+                End If
+            End If
             'For f = 0 To 33
             '    Pref.certificatepriority(f) = ListBox5.Items(f)
             'Next
@@ -41,719 +65,437 @@ Public Class frmOptions
 
     Private Sub options_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
-            Select Case Pref.seasonall
-                Case "none"
-                    RadioButton6.Checked = True
-                Case "poster"
-                    RadioButton9.Checked = True
-                Case "wide"
-                    RadioButton10.Checked = True
-            End Select
+            prefsload = True
+            PrefInit()
+            CommonInit()
+            GeneralInit()
+            
+            prefsload = False
+            Changes = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
-            If Pref.tvshowrefreshlog = True Then
-                CheckBox11.CheckState = CheckState.Checked
-            Else
-                CheckBox11.CheckState = CheckState.Unchecked
-            End If
+    End Sub
 
-            For Each Regex In Form1.tv_RegexScraper
-                ListBox7.Items.Add(Regex)
+    Private Sub btn_SettingsApply_Click(sender As Object, e As EventArgs) Handles btn_SettingsApply.Click
+        If cleanfilenameprefchanged OrElse videosourceprefchanged Then
+            applyAdvancedLists()
+        End If
+        Pref.ConfigSave()
+        Changes = False
+    End Sub
+
+    Private Sub btn_SettingsCancel_Click(sender As Object, e As EventArgs) Handles btn_SettingsCancel.Click
+        Changes = False
+        Pref.ConfigLoad()
+    End Sub
+
+    Private Sub btn_SettingsClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsClose.Click
+        Me.Close()
+    End Sub
+    
+#End Region 'Form Events
+
+    Private Sub PrefInit()
+        'Initial
+        Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+        Dim newFont As System.Drawing.Font
+        If Not String.IsNullOrEmpty(Pref.font) Then
+            Try
+                newFont = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
+            Catch ex As Exception
+                newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
+                Pref.font = "Times New Roman, 9pt"
+            End Try
+        Else
+            newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
+            Pref.font = "Times New Roman, 9pt"
+        End If
+        lbl_FontSample.Font = newFont
+        lbl_FontSample.Text = Pref.font
+    End Sub
+
+    Private Sub CommonInit()
+        'Common Section
+        If Pref.XBMC_version = 0 Then
+            rbXBMCv_pre.Checked = True
+        ElseIf Pref.XBMC_version = 1 Then
+            rbXBMCv_both.Checked = True
+        ElseIf Pref.XBMC_version = 2 Then
+            rbXBMCv_post.Checked = True
+        End If
+        CheckBox38                  .Checked    = Pref.intruntime
+        cb_IgnoreThe                .Checked    = Pref.ignorearticle
+        cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
+        cb_IgnoreAn                 .Checked    = Pref.ignoreAn
+        cb_SorttitleIgnoreArticles  .Checked    = Pref.sorttitleignorearticle
+        cbOverwriteArtwork          .Checked    = Not Pref.overwritethumbs
+        cbDisplayRatingOverlay      .Checked    = Pref.DisplayRatingOverlay
+        cbDisplayMediaInfoOverlay   .Checked    = Pref.DisplayMediainfoOverlay 
+        cbDisplayMediaInfoFolderSize.Checked    = Pref.DisplayMediaInfoFolderSize
+        cbShowAllAudioTracks        .Checked    = Pref.ShowAllAudioTracks
+        AutoScrnShtDelay            .Text       = Pref.ScrShtDelay
+        Pref.ExcludeFolders.PopTextBox(tbExcludeFolders)
+
+        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
+        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Pref.PosterResolutionSI)
+        Movie.LoadHeightResolutionOptions(comboActorResolutions, Pref.ActorResolutionSI)
+
+        lbCleanFilename.Items.Clear()
+        lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
+        If lbVideoSource.Items.Count <> Pref.releaseformat.Length Then
+            lbVideoSource.Items.Clear()
+            For f = 0 To Pref.releaseformat.Length - 1
+                lbVideoSource.Items.Add(Pref.releaseformat(f))
             Next
-            ComboBox3.SelectedIndex = Pref.tvrename
-
-            If Pref.roundminutes = True Then
-                CheckBox6.CheckState = CheckState.Checked
-            ElseIf Pref.roundminutes = False Then
-                CheckBox6.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.externalbrowser = True Then
-                CheckBox5.CheckState = CheckState.Checked
-            ElseIf Pref.externalbrowser = False Then
-                CheckBox5.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.videomode = 1 Then
-                rb_MediaPlayerDefault.Checked = True
-            ElseIf Pref.videomode = 2 Then
-                rb_MediaPlayerWMP.Checked = True
-            ElseIf Pref.videomode = 4 Then
-                rb_MediaPlayerUser.Checked = True
-            End If
-            lbl_MediaPlayerUser.Text = "Custom Player - " & Pref.selectedvideoplayer
-            If Pref.overwritethumbs = True Then
-                CheckBox1.Checked = CheckState.Unchecked
-            Else
-                CheckBox1.Checked = CheckState.Checked
-            End If
-
-            'If Pref.keepfoldername = True Then
-            CheckBox10.CheckState = CheckState.Checked
-            'Else
-            '    CheckBox10.CheckState = CheckState.Unchecked
-            'End If
-
-
-            If Pref.disabletvlogs = True Then
-                CheckBox18.CheckState = CheckState.Checked
-            Else
-                CheckBox18.CheckState = CheckState.Unchecked
-            End If
-
-            If IsNumeric(Pref.rarsize) Then
-                Dim tempint As Integer = Pref.rarsize
-                If tempint <= 0 Then
-                    tempint = 8
-                    Pref.rarsize = 8
-                End If
-                txtbx_minrarsize.Text = tempint.ToString
-            End If
-
-
-            'If Pref.resizefanart = 1 Then
-            '    RadioButton17.Checked = True
-            'ElseIf Pref.resizefanart = 2 Then
-            '    RadioButton18.Checked = True
-            'ElseIf Pref.resizefanart = 3 Then
-            '    RadioButton19.Checked = True
-            'End If
-
-            moviefolders = Pref.movieFolders
-            tvfolders = Pref.tvFolders
-
-
-
-            ListBox2.Items.Clear()
-            For Each item In Pref.movieFolders
-                ListBox2.Items.Add(item)
-            Next
-
-            For Each item In tvfolders
-                ListBox1.Items.Add(item)
-            Next
-
-            If Pref.gettrailer = True Then
-                CheckBox4.CheckState = CheckState.Checked
-            Else
-                CheckBox4.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.startupCache = True Then
-                chkbx_disablecache.CheckState = CheckState.Unchecked
-            Else
-                chkbx_disablecache.CheckState = CheckState.Checked
-            End If
-
-            If Pref.enablehdtags = True Then
-                CheckBox22.CheckState = CheckState.Checked
-            Else
-                CheckBox22.CheckState = CheckState.Unchecked
-            End If
-
-            If IsNumeric(Pref.rarsize) Then
-                txtbx_minrarsize.Text = Pref.rarsize.ToString
-            Else
-                txtbx_minrarsize.Text = "8"
-            End If
-
-            If Pref.actorsave = True Then
-                localactorpath.Enabled = True
-                xbmcactorpath.Enabled = True
-                xbmcactorpath.Text = Pref.actornetworkpath
-                localactorpath.Text = Pref.actorsavepath
-                Button1.Enabled = True
-                saveactorchkbx.CheckState = CheckState.Checked
-            Else
-                'localactorpath.Enabled = False
-                'xbmcactorpath.Enabled = False
-                'Button1.Enabled = False
-                saveactorchkbx.CheckState = CheckState.Unchecked
-            End If
-
-            'If Pref.keepfoldername = False Then
-            CheckBox10.CheckState = CheckState.Unchecked
-            'Else
-            '    CheckBox10.CheckState = CheckState.Checked
-            'End If
-
-            If Pref.ignoretrailers = False Then
-                chkbx_ignoretrailers.CheckState = CheckState.Unchecked
-            Else
-                chkbx_ignoretrailers.CheckState = CheckState.Checked
-            End If
-
-            For f = 0 To 3
-                ListBox3.Items.Add(Pref.moviethumbpriority(f))
-            Next
-            For f = 0 To 33
-                ListBox5.Items.Add(Pref.certificatepriority(f))
-            Next
-
-            If Pref.tvdlfanart = True Then
-                CheckBox9.CheckState = CheckState.Checked
-            Else
-                CheckBox9.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.tvdlposter = True Then
-                CheckBox8.CheckState = CheckState.Checked
-            Else
-                CheckBox8.CheckState = CheckState.Unchecked
-            End If
-
-
-
-
-
-            If Pref.tvdlseasonthumbs = True Then
-                CheckBox7.CheckState = CheckState.Checked
-            Else
-                CheckBox7.CheckState = CheckState.Unchecked
-            End If
-
-
-            If Pref.posternotstacked = True Then
-                chkbx_unstackposternames.CheckState = CheckState.Checked
-            Else
-                chkbx_unstackposternames.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.fanartnotstacked = True Then
-                chkbx_unstackfanartnames.CheckState = CheckState.Checked
-            Else
-                chkbx_unstackfanartnames.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.scrapemovieposters = False Then
-                CheckBox18.CheckState = CheckState.Unchecked
-            Else
-                CheckBox18.CheckState = CheckState.Checked
-            End If
-
-            If Pref.dontdisplayposter = False Then
-                Chkbx_fanartnoposter.CheckState = CheckState.Unchecked
-            Else
-                Chkbx_fanartnoposter.CheckState = CheckState.Checked
-            End If
-
-
-            Dim intX As Integer = Screen.PrimaryScreen.Bounds.Width
-            Dim intY As Integer = Screen.PrimaryScreen.Bounds.Height
-            If intX <= 861 Or intY <= 580 Then
-                Me.AutoScroll = True
-            End If
-
-            If Pref.renamenfofiles = False Then
-                chkbx_renamnfofiles.Checked = False
-            Else
-                chkbx_renamnfofiles.Checked = True
-            End If
-
-            If Pref.disabletvlogs = True Then
-                CheckBox15.CheckState = CheckState.Checked
-            Else
-                CheckBox15.CheckState = CheckState.Unchecked
-            End If
-
-            TPGenOld.BackColor = Form1.BackColor
-            TabPage2.BackColor = Form1.BackColor
-            TabPage3.BackColor = Form1.BackColor
-            ListBox4.SelectedItem = Pref.imdbmirror
-
-
-            Select Case Pref.maxactors
-                Case 9999
-                    ComboBox1.SelectedItem = "All Available"
-                Case 0
-                    ComboBox1.SelectedItem = "None"
-                Case 5
-                    ComboBox1.SelectedItem = "5"
-                Case 10
-                    ComboBox1.SelectedItem = "10"
-                Case 15
-                    ComboBox1.SelectedItem = "15"
-                Case 20
-                    ComboBox1.SelectedItem = "20"
-                Case 25
-                    ComboBox1.SelectedItem = "25"
-                Case 30
-                    ComboBox1.SelectedItem = "30"
-                Case 40
-                    ComboBox1.SelectedItem = "40"
-                Case 50
-                    ComboBox1.SelectedItem = "50"
-                Case 70
-                    ComboBox1.SelectedItem = "70"
-                Case 90
-                    ComboBox1.SelectedItem = "90"
-                Case 110
-                    ComboBox1.SelectedItem = "110"
-                Case 125
-                    ComboBox1.SelectedItem = "125"
-                Case 150
-                    ComboBox1.SelectedItem = "150"
-                Case 175
-                    ComboBox1.SelectedItem = "175"
-                Case 200
-                    ComboBox1.SelectedItem = "200"
-                Case 250
-                    ComboBox1.SelectedItem = "250"
-            End Select
-
-            Select Case Pref.maxmoviegenre
-                Case 9999
-                    ComboBox2.SelectedItem = "All Available"
-                Case 0
-                    ComboBox2.SelectedItem = "None"
-                Case 1
-                    ComboBox2.SelectedItem = "1"
-                Case 2
-                    ComboBox2.SelectedItem = "2"
-                Case 3
-                    ComboBox2.SelectedItem = "3"
-                Case 4
-                    ComboBox2.SelectedItem = "4"
-                Case 5
-                    ComboBox2.SelectedItem = "5"
-                Case 6
-                    ComboBox2.SelectedItem = "6"
-                Case 7
-                    ComboBox2.SelectedItem = "7"
-                Case 8
-                    ComboBox2.SelectedItem = "8"
-                Case 9
-                    ComboBox2.SelectedItem = "9"
-                Case 10
-                    ComboBox2.SelectedItem = "10"
-            End Select
-
-
-            'If Pref.resizefanart = 1 Then
-            '    RadioButton17.Checked = True
-            'ElseIf Pref.resizefanart = 2 Then
-            '    RadioButton18.Checked = True
-            'ElseIf Pref.resizefanart = 3 Then
-            '    RadioButton19.Checked = True
-            'Else
-            '    Pref.resizefanart = 1
-            '    RadioButton17.Checked = True
-            'End If
-
-
-
-            If Pref.usefanart = True Then chkbxfanart.CheckState = CheckState.Checked
-            If Pref.usefanart = False Then chkbxfanart.CheckState = CheckState.Unchecked
-            If Pref.remembersize = True Then chk_rememberformsize.CheckState = CheckState.Checked
-            If Pref.remembersize = False Then chk_rememberformsize.CheckState = CheckState.Unchecked
-
-
-            Me.BackColor = Form1.BackColor
-
-
-            If Pref.usefoldernames = True Then
-                chkbx_usefoldernames.CheckState = CheckState.Checked
-                chkbx_createfolderjpg.Enabled = True
-                chkbx_basicsave.Enabled = True
-                If Pref.createfolderjpg = True Then
-                    chkbx_createfolderjpg.CheckState = CheckState.Checked
-                Else
-                    chkbx_createfolderjpg.CheckState = CheckState.Unchecked
-                End If
-                If Pref.basicsavemode = True Then
-                    chkbx_basicsave.CheckState = CheckState.Checked
-                Else
-                    chkbx_basicsave.CheckState = CheckState.Unchecked
-                End If
-            Else
-                chkbx_usefoldernames.CheckState = CheckState.Unchecked
-                chkbx_createfolderjpg.Enabled = False
-                chkbx_basicsave.Enabled = False
-                Pref.createfolderjpg = False
-                Pref.basicsavemode = False
-            End If
-
-
-            ComboBox5.SelectedIndex = Pref.TvdbActorScrape
-
-            If Pref.postertype = "poster" Then
-                poster.Checked = True
-            Else
-                banner.Checked = True
-            End If
-
-            If Pref.usefanart = True Then
-                chkbxfanart.Checked = True
-            Else
-                chkbxfanart.Checked = False
-            End If
-
-            If Pref.usetransparency = True Then
-                chkbxusealpha.Checked = True
-            Else
-                chkbxusealpha.Checked = False
-            End If
-
-            TrackBar1.Value = Pref.transparencyvalue
-            Label13.Text = TrackBar1.Value.ToString
-
-
-            If Pref.ignoreactorthumbs = True Then
-                chkbx_notactorthumbs.CheckState = CheckState.Checked
-            Else
-                chkbx_notactorthumbs.CheckState = CheckState.Unchecked
-            End If
-
-            If Pref.nfoposterscraper = 0 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 1 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 2 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 3 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 4 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 5 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 6 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 7 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Unchecked
-            ElseIf Pref.nfoposterscraper = 8 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 9 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 10 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 11 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Unchecked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 12 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 13 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Unchecked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 14 Then
-                IMPA_chk.CheckState = CheckState.Unchecked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Checked
-            ElseIf Pref.nfoposterscraper = 15 Then
-                IMPA_chk.CheckState = CheckState.Checked
-                tmdb_chk.CheckState = CheckState.Checked
-                mpdb_chk.CheckState = CheckState.Checked
-                imdb_chk.CheckState = CheckState.Checked
-            End If
-
-            If Pref.savefanart = True Then
-                CheckBox3.CheckState = CheckState.Checked
-            Else
-                CheckBox3.CheckState = CheckState.Unchecked
-            End If
-
-            'Call loadregex()
-            'call loadprofiles
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
+        End If
+
+        'Common - Actors Section
+        cb_actorseasy               .Checked    = Pref.actorseasy 
+        Select Case Pref.maxactors
+            Case 9999
+                ComboBox7.SelectedItem = "All Available"
+            Case 0
+                ComboBox7.SelectedItem = "None"
+            Case Else
+                ComboBox7.SelectedItem = Pref.maxactors.ToString
+        End Select
+        saveactorchkbx                      .Checked        = Pref.actorsave
+        cb_LocalActorSaveAlpha              .Checked        = Pref.actorsavealpha
+        localactorpath                      .Text           = Pref.actorsavepath
+        xbmcactorpath                       .Text           = Pref.actornetworkpath
     End Sub
 
-    Private Sub btn_setbackcolour_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_setbackcolour.Click
-        Try
-            ColorDialog.Color = ColorTranslator.FromHtml(Pref.backgroundcolour)
-            If ColorDialog.ShowDialog() = DialogResult.OK Then
-                Pref.backgroundcolour = ColorTranslator.ToHtml(ColorDialog.Color)
-                Me.BackColor = ColorDialog.Color
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub GeneralInit()
+        'General Section
+        If Pref.videomode = 1 Then
+            rb_MediaPlayerDefault.Checked = True
+        ElseIf Pref.videomode = 2 Then
+            rb_MediaPlayerWMP.Checked = True
+        ElseIf Pref.videomode = 4 Then
+            rb_MediaPlayerUser.Checked = True
+        End If
+
+        If Pref.videomode = 4 Then
+            lbl_MediaPlayerUser.Text = Pref.selectedvideoplayer
+            lbl_MediaPlayerUser.Visible = True
+            btn_MediaPlayerBrowse.Enabled = True
+        Else
+            btn_MediaPlayerBrowse.Enabled = False
+            lbl_MediaPlayerUser.Visible = False
+        End If
+        txtbx_minrarsize            .Text       = Pref.rarsize.ToString
+        cbExternalbrowser           .Checked    = Pref.externalbrowser
+        chkbx_disablecache          .Checked    = Not Pref.startupCache
+        cbUseMultipleThreads        .Checked    = Pref.UseMultipleThreads
+        cbShowLogOnError            .Checked    = Pref.ShowLogOnError
+        cbCheckForNewVersion        .Checked    = Pref.CheckForNewVersion
+        cbDisplayLocalActor         .Checked    = Pref.LocalActorImage
+        cbRenameNFOtoINFO           .Checked    = Pref.renamenfofiles
+        cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled
+        tbaltnfoeditor              .Text       = Pref.altnfoeditor
+        tbMkvMergeGuiPath           .Text       = Pref.MkvMergeGuiPath
+    End Sub
+    
+
+#Region "Common Tab"
+
+#Region "Common Settings Tab"
+
+    Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_pre.CheckedChanged
+        If prefsload Then Exit Sub
+        If rbXBMCv_pre.Checked Then
+            Pref.XBMC_version = 0
+        End If
+        Changes = True
     End Sub
 
-    Private Sub btn_setforcolour_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_setforcolour.Click
-        Try
-            ColorDialog.Color = ColorTranslator.FromHtml(Pref.forgroundcolour)
-            If ColorDialog.ShowDialog() = DialogResult.OK Then
-                Pref.forgroundcolour = ColorTranslator.ToHtml(ColorDialog.Color)
-                ListBox2.BackColor = ColorTranslator.FromHtml(Pref.forgroundcolour)
-                ListBox1.BackColor = ColorTranslator.FromHtml(Pref.forgroundcolour)
-                ListBox8.BackColor = ColorTranslator.FromHtml(Pref.forgroundcolour)
-                ComboBox5.BackColor = ColorTranslator.FromHtml(Pref.forgroundcolour)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
+        If prefsload Then Exit Sub
+        If rbXBMCv_post.Checked Then
+            Pref.XBMC_version = 2
+        End If
+        Changes = True
     End Sub
 
-    Private Sub chk_rememberformsize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chk_rememberformsize.CheckedChanged
-        Try
-            If chk_rememberformsize.CheckState = CheckState.Checked Then
-                Pref.remembersize = True
-            Else
-                Pref.remembersize = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub chkbxfanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbxfanart.CheckedChanged
-        Try
-            If chkbxfanart.CheckState = CheckState.Checked Then
-                Pref.usefanart = True
-            Else
-                Pref.usefanart = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub Chkbx_fanartnoposter_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Chkbx_fanartnoposter.CheckedChanged
-        Try
-            If Chkbx_fanartnoposter.CheckState = CheckState.Checked Then
-                Pref.dontdisplayposter = True
-            Else
-                Pref.dontdisplayposter = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub chkbxusealpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbxusealpha.CheckedChanged
-        Try
-            If chkbxusealpha.CheckState = CheckState.Checked Then
-                Pref.usetransparency = True
-            Else
-                Pref.usetransparency = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub TrackBar1_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TrackBar1.ValueChanged
-        Try
-            Label13.Text = TrackBar1.Value.ToString
-            Label13.Refresh()
-            Pref.transparencyvalue = TrackBar1.Value.ToString
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub chkbx_usefoldernames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_usefoldernames.CheckedChanged
-        Try
-            If chkbx_usefoldernames.CheckState = CheckState.Checked Then
-                Pref.usefoldernames = True
-                chkbx_createfolderjpg.Enabled = True
-                chkbx_basicsave.Enabled = True
-            Else
-                Pref.usefoldernames = False
-                chkbx_createfolderjpg.CheckState = CheckState.Unchecked
-                chkbx_basicsave.CheckState = CheckState.Unchecked
-                chkbx_createfolderjpg.Enabled = False
-                chkbx_basicsave.Enabled = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
+        If prefsload Then Exit Sub
+        If rbXBMCv_both.Checked Then
+            Pref.XBMC_version = 1
+        End If
+        Changes = True
     End Sub
 
 
 
-    Private Sub chkbx_createfolderjpg_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkbx_createfolderjpg.CheckedChanged
-        Try
-            If chkbx_createfolderjpg.CheckState = CheckState.Checked Then
-                Pref.createfolderjpg = True
-            Else
-                Pref.createfolderjpg = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.intruntime = CheckBox38.Checked
+        Changes = True
     End Sub
 
-
-    Private Sub chkbx_basicsave_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkbx_basicsave.CheckedChanged
-        Try
-            If chkbx_basicsave.CheckState = CheckState.Checked Then
-                Pref.basicsavemode = True
-            Else
-                Pref.basicsavemode = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub cb_IgnoreThe_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreThe.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ignorearticle = cb_IgnoreThe.Checked
+        Changes = True
     End Sub
 
-    Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtbx_minrarsize.KeyPress
+    Private Sub cb_IgnoreA_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreA.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ignoreAarticle = cb_IgnoreA.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreAn.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ignoreAn = cb_IgnoreAn.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.overwritethumbs = Not cbOverwriteArtwork.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbDisplayRatingOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayRatingOverlay.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbDisplayMediaInfoFolderSize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoFolderSize.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.DisplayMediaInfoFolderSize = cbDisplayMediaInfoFolderSize.Checked
+        Changes = True
+    End Sub
+
+    Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) Handles AutoScrnShtDelay.KeyPress
         Try
             If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-                If txtbx_minrarsize.Text <> "" Then
+                If AutoScrnShtDelay.Text <> "" Then
                     e.Handled = True
                 Else
-                    MsgBox("Please Enter at least 0")
-                    txtbx_minrarsize.Text = "8"
-                    Pref.rarsize = 8
-                End If
-            End If
-            If txtbx_minrarsize.Text = "" Then
-                MsgBox("Please enter a numerical Value that is 1 or more")
-                txtbx_minrarsize.Text = "8"
-                Pref.rarsize = 8
-                Exit Sub
-            End If
-            If Not IsNumeric(txtbx_minrarsize.Text) Then
-                MsgBox("Please enter a numerical Value that is 1 or more")
-                txtbx_minrarsize.Text = "8"
-                Pref.rarsize = 8
-                Exit Sub
-            End If
-
-            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub txtbox_maxposters_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtbox_maxposters.KeyPress
-        Try
-            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-                If txtbox_maxposters.Text <> "" Then
-                    If Convert.ToDecimal(txtbox_maxposters.Text) >= 1 Then
-                        e.Handled = True
-                        Pref.maximagecount = Convert.ToInt32(txtbox_maxposters.Text)
-                    Else
-                        MsgBox("Please Enter at least 1")
-                        Pref.maximagecount = 5
-                    End If
-                Else
                     MsgBox("Please Enter at least 1")
-                    txtbox_maxposters.Text = "5"
-                    Pref.maximagecount = 5
+                    AutoScrnShtDelay.Text = "10"
                 End If
             End If
+            If AutoScrnShtDelay.Text = "" Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                AutoScrnShtDelay.Text = "10"
+                Exit Sub
+            End If
+            If Not IsNumeric(AutoScrnShtDelay.Text) Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                AutoScrnShtDelay.Text = "10"
+                Exit Sub
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub chkbx_notactorthumbs_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_notactorthumbs.CheckedChanged
+    Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles AutoScrnShtDelay.TextChanged
+        If prefsload Then Exit Sub
+        If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
+            Pref.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
+        Else
+            Pref.ScrShtDelay = 10
+            AutoScrnShtDelay.Text = "10"
+            MsgBox("Please enter a numerical Value that is 1 or more")
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
+        If prefsload Then Exit Sub
+        If Pref.ExcludeFolders.Changed(tbExcludeFolders) Then
+            Changes = True
+        End If
+    End Sub
+
+    Private Sub tbExcludeFolders_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbExcludeFolders.TextChanged
+        'Preferences.ExcludeFolders = ExcludeFolders.Text
+        Changes = True
+    End Sub
+
+'Image Resizing
+    Private Sub comboActorResolutions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboActorResolutions.SelectedIndexChanged
+        Pref.ActorResolutionSI = comboActorResolutions.SelectedIndex
+        Changes = True
+    End Sub
+
+    Private Sub comboPosterResolutions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboPosterResolutions.SelectedIndexChanged
+        Pref.PosterResolutionSI = comboPosterResolutions.SelectedIndex
+        Changes = True
+    End Sub
+
+    Private Sub comboBackDropResolutions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboBackDropResolutions.SelectedIndexChanged
+        Pref.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
+        Changes = True
+    End Sub
+
+    Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameAdd.Click
+        lbCleanFilename.Items.Add(txtCleanFilenameAdd.Text)
+        Changes = True
+        cleanfilenameprefchanged = True
+    End Sub
+
+    Private Sub btnCleanFilenameRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameRemove.Click
+        lbCleanFilename.Items.RemoveAt(lbCleanFilename.SelectedIndex)
+        Changes = True
+        cleanfilenameprefchanged = True
+    End Sub
+
+    Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
+        If txtVideoSourceAdd.Text <> "" Then        
+            lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
+            Changes = True
+            videosourceprefchanged = True
+        End If
+    End Sub
+
+    Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
+        Dim strSelected = lbVideoSource.SelectedItem
+        Dim idxSelected = lbVideoSource.SelectedIndex
         Try
-            If chkbx_notactorthumbs.CheckState = CheckState.Checked Then
-                Pref.ignoreactorthumbs = True
+            lbVideoSource.Items.RemoveAt(idxSelected)
+            Changes = True
+            videosourceprefchanged = True
+        Catch ex As Exception
+        End Try
+    End Sub
+
+#End Region 'Common Settings Tab
+
+#Region "Actors Tab"
+
+    Private Sub cb_actorseasy_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_actorseasy.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.actorseasy = cb_actorseasy.Checked
+        Changes = True
+    End Sub
+
+    Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
+        'If prefsload Then Exit Sub
+        If saveactorchkbx.CheckState = CheckState.Checked Then
+            Pref.actorsave = True
+            localactorpath.Text = Pref.actorsavepath
+            xbmcactorpath.Text = Pref.actornetworkpath
+            localactorpath.Enabled = True
+            xbmcactorpath.Enabled = True
+            cb_LocalActorSaveAlpha.Enabled = True
+            btn_localactorpathbrowse.Enabled = True
+        Else
+            Pref.actorsave = False
+            localactorpath.Text = ""
+            xbmcactorpath.Text = ""
+            localactorpath.Enabled = False
+            xbmcactorpath.Enabled = False
+            cb_LocalActorSaveAlpha.Enabled = False
+            btn_localactorpathbrowse.Enabled = False
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub cb_LocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_LocalActorSaveAlpha.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.actorsavealpha = cb_LocalActorSaveAlpha.CheckState
+        Changes = True
+    End Sub
+
+    Private Sub btn_localactorpathbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_localactorpathbrowse.Click
+        Try
+            Dim thefoldernames As String
+            fb.Description = "Please Select Folder to Save Actor Thumbnails)"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Pref.lastpath
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
+                localactorpath.Text = thefoldernames
+                Pref.lastpath = thefoldernames
+                Pref.actorsavepath = thefoldernames
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub localactorpath_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles localactorpath.TextChanged
+        If prefsload Then Exit Sub
+        Pref.actorsavepath = localactorpath.Text
+        Changes = True
+    End Sub
+
+    Private Sub xbmcactorpath_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles xbmcactorpath.TextChanged
+        If prefsload Then Exit Sub
+        Pref.actornetworkpath = xbmcactorpath.Text
+        Changes = True
+    End Sub
+
+#End Region 'Actors Tab
+
+#End Region 'Common Tab
+
+#Region "General"
+
+    Private Sub rb_MediaPlayerDefault_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles rb_MediaPlayerDefault.CheckedChanged
+        If prefsload Then Exit Sub
+        If rb_MediaPlayerDefault.Checked = True Then
+            Pref.videomode = 1
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub rb_MediaPlayerWMP_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles rb_MediaPlayerWMP.CheckedChanged
+        If prefsload Then Exit Sub
+        If rb_MediaPlayerWMP.Checked = True Then
+            Pref.videomode = 2
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub rb_MediaPlayerUser_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles rb_MediaPlayerUser.CheckedChanged
+        If Prefsload Then
+            If rb_MediaPlayerUser.Checked AndAlso Not String.IsNullOrEmpty(Pref.selectedvideoplayer) Then
+                lbl_MediaPlayerUser.Text = Pref.selectedvideoplayer
             Else
-                Pref.ignoreactorthumbs = False
+                lbl_MediaPlayerUser.Text = ""
             End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub chkbx_ignoretrailers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_ignoretrailers.CheckedChanged
-        Try
-            If chkbx_ignoretrailers.CheckState = CheckState.Checked Then
-                Pref.ignoretrailers = True
+            Exit Sub
+        End If
+        If rb_MediaPlayerUser.Checked = True Then
+            Pref.videomode = 4
+            btn_MediaPlayerBrowse.Enabled = True
+            lbl_MediaPlayerUser.Visible = True
+            If Not String.IsNullOrEmpty(Pref.selectedvideoplayer) Then
+                lbl_MediaPlayerUser.Text = Pref.selectedvideoplayer
             Else
-                Pref.ignoretrailers = False
+                lbl_MediaPlayerUser.Text = ""
             End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Else
+            lbl_MediaPlayerUser.Visible = False
+            btn_MediaPlayerBrowse.Enabled = False
+        End If
+        Changes = True
     End Sub
 
-    Private Sub chkbx_renamnfofiles_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_renamnfofiles.CheckedChanged
-        Try
-            If chkbx_renamnfofiles.CheckState = CheckState.Checked Then
-                Pref.renamenfofiles = True
-            Else
-                Pref.renamenfofiles = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub rb_MediaPlayerDefault_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rb_MediaPlayerDefault.CheckedChanged
-        Try
-            If rb_MediaPlayerDefault.Checked = True Then
-                Pref.videomode = 1
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub rb_MediaPlayerWMP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rb_MediaPlayerWMP.CheckedChanged
-        Try
-            If rb_MediaPlayerWMP.Checked = True Then
-                Pref.videomode = 2
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub rb_MediaPlayerUser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rb_MediaPlayerUser.CheckedChanged
-        Try
-            If rb_MediaPlayerUser.Checked = True Then
-                Pref.videomode = 4
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_MediaPlayerBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_MediaPlayerBrowse.Click
+    Private Sub btn_MediaPlayerBrowse_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btn_MediaPlayerBrowse.Click
+        If prefsload Then Exit Sub
         Try
             Dim filebrowser As New OpenFileDialog
             Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
@@ -765,825 +507,213 @@ Public Class frmOptions
                 lbl_MediaPlayerUser.Visible = True
                 lbl_MediaPlayerUser.Text = Pref.selectedvideoplayer
             End If
+            If prefsload Then Exit Sub
+            Changes = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs) Handles txtbx_minrarsize.KeyPress
+        If prefsload Then Exit Sub
+        Try
+            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+                If txtbx_minrarsize.Text <> "" Then
+                    e.Handled = True
+                Else
+                    MsgBox("Please Enter at least 0")
+                    txtbx_minrarsize.Text = "8"
+                End If
+            End If
+            If txtbx_minrarsize.Text = "" Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                txtbx_minrarsize.Text = "8"
+                Exit Sub
+            End If
+            If Not IsNumeric(txtbx_minrarsize.Text) Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                txtbx_minrarsize.Text = "8"
+                Exit Sub
+            End If
+            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub txtbx_minrarsize_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtbx_minrarsize.TextChanged
+        If prefsload Then Exit Sub
+        If IsNumeric(txtbx_minrarsize.Text) Then
+            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+        Else
+            Pref.rarsize = 8
+            txtbx_minrarsize.Text = "8"
+        End If
+        
+        Changes = True
+    End Sub
+    
+    Private Sub btnFontSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFontSelect.Click
+        Try
+            Dim dlg As FontDialog = New FontDialog()
+            Dim res As DialogResult = dlg.ShowDialog()
+            If res = Windows.Forms.DialogResult.OK Then
+                Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+                Dim fontString As String = tc.ConvertToString(dlg.Font)
+
+                Pref.font = fontString
+
+                Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+                Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
+
+                lbl_FontSample.Font = newFont
+                lbl_FontSample.Text = fontString
+                Changes = True
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnFontReset_Click(sender As System.Object, e As System.EventArgs) Handles btnFontReset.Click
+        Try
+            'Reset Font
+            Pref.font = "Times New Roman, 9pt"
+            Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+            Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
+            lbl_FontSample.Font = newFont
+            lbl_FontSample.Text = "Times New Roman, 9pt"
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles btnMkvMergeGuiPath.Click
+        Dim ofd As New OpenFileDialog
+        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+        ofd.Filter           = "Executable Files|*.exe"
+        ofd.Title            = "Locate mkvmerge GUI (mmg.exe)"
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Pref.MkvMergeGuiPath = ofd.FileName
+        Changes = True
+    End Sub
+
+    Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles llMkvMergeGuiPath.Click
+        Form1.OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
+    End Sub
+
+    Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) Handles lblaltnfoeditorclear.Click
+        tbaltnfoeditor.Text = ""
+        Pref.altnfoeditor = ""
+        Changes = True
+    End Sub
+
+    Private Sub btnaltnfoeditor_Click( sender As Object,  e As EventArgs) Handles btnaltnfoeditor.Click
+        Dim ofd As New OpenFileDialog
+        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+        ofd.Filter           = "Executable Files|*.exe"
+        ofd.Title            = "Locate Alternative nfo viewer-editor"
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then 
+            Pref.altnfoeditor = ofd.FileName
+            tbaltnfoeditor.Text = Pref.altnfoeditor 
+            Changes = True
+        End If
+    End Sub
+
+    Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.externalbrowser = cbExternalbrowser.Checked
+        btnFindBrowser.Enabled = cbExternalbrowser.Checked
+        Changes = True
     End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
-        Try
-            If chkbx_disablecache.CheckState = CheckState.Checked Then
-                Pref.startupCache = False
-            Else
-                Pref.startupCache = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.startupCache = Not chkbx_disablecache.Checked
+        Changes = True
     End Sub
 
-    Private Sub chkbx_unstackposternames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_unstackposternames.CheckedChanged
-        Try
-            If chkbx_unstackposternames.CheckState = CheckState.Checked Then
-                Pref.posternotstacked = True
-            Else
-                Pref.posternotstacked = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.UseMultipleThreads = cbUseMultipleThreads.Checked
+        If prefsload Then Exit Sub
+        Changes = True
     End Sub
 
-    Private Sub chkbx_unstackfanartnames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_unstackfanartnames.CheckedChanged
-        Try
-            If chkbx_unstackfanartnames.CheckState = CheckState.Checked Then
-                Pref.fanartnotstacked = True
-            Else
-                Pref.fanartnotstacked = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ShowLogOnError = cbShowLogOnError.Checked
+        If prefsload Then Exit Sub
+        Changes = True
     End Sub
 
-    Private Sub btn_addmoviefolderdialogue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_addmoviefolderdialogue.Click
-        Try
-            Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Pref.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
-                Pref.lastpath = thefoldernames
-                For Each item As Object In ListBox2.Items
-                    If thefoldernames.ToString = item.ToString Then allok = False
-                Next
-
-                If allok = True Then
-                    Dim t As New str_RootPaths
-                    t.rpath = thefoldernames
-                    Pref.movieFolders.Add(t)
-                    ListBox2.Items.Add(thefoldernames)
-                    ListBox2.Refresh()
-                Else
-                    MsgBox("        Folder Already Exists")
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) Handles cbCheckForNewVersion.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.CheckForNewVersion = cbCheckForNewVersion.Checked
+        If prefsload Then Exit Sub
+        Changes = True
     End Sub
 
-    Private Sub btn_removemoviefolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removemoviefolder.Click
-        Try
-            Dim folderstoremove As New ArrayList
-            For i = 0 To ListBox2.SelectedItems.Count - 1
-                Pref.movieFolders.Remove(ListBox2.SelectedItems(i))
+    Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.LocalActorImage = cbDisplayLocalActor.Checked = True
+        Changes = True
+    End Sub
+
+    Private Sub cbRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRenameNFOtoINFO.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.renamenfofiles = cbRenameNFOtoINFO.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMultiMonitorEnable.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
+        Changes = True
+    End Sub
+    
+
+#End Region 'General
+
+#Region "Movie Preferences"
+
+#End Region 'Movie Preferences
+
+#Region "TV Preferences"
+
+#End Region 'TV Preferences
+
+#Region "Proxy"
+    'Handled by user control ucGenPref_Proxy
+#End Region 'Proxy
+
+#Region "XBMC Link"
+    'Handles by user control ucGenPref_XbmcLink
+#End Region 'XBMC Link
+
+#Region "Profiles & Commands"
+
+#End Region 'Profiles & Commands
+
+    Private Sub applyAdvancedLists()
+        If cleanfilenameprefchanged Then
+            Dim strTemp As String = ""
+            For i = 0 To lbCleanFilename.Items.Count - 1
+                strTemp &= lbCleanFilename.Items(i) & "|"
             Next
-            ListBox2.Items.Clear()
-            For Each folder In Pref.movieFolders
-                ListBox2.Items.Add(folder)
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub CheckBox10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox10.CheckedChanged
-        Try
-            If CheckBox10.CheckState = CheckState.Checked Then
-                'Pref.keepfoldername = True
-            Else
-                'Pref.keepfoldername = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub RadioButton3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton3.CheckedChanged
-        Try
-            If RadioButton3.Checked = True Then
-                Pref.moviescraper = 1
-            Else
-                Pref.moviescraper = 2
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub setnfothumbnailurls()
-        If IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 0
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 1
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 2
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 3
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 4
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 5
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 6
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 7
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 8
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 9
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 10
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 11
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 12
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 13
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 14
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 15
+            Pref.moviecleanTags = strTemp.TrimEnd("|")
+            cleanfilenameprefchanged = False
         End If
-    End Sub
-    Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IMPA_chk.CheckedChanged
-        Try
-            Call setnfothumbnailurls()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub mpdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mpdb_chk.CheckedChanged
-        Try
-            Call setnfothumbnailurls()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub tmdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmdb_chk.CheckedChanged
-        Try
-            Call setnfothumbnailurls()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub imdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles imdb_chk.CheckedChanged
-        Try
-            Call setnfothumbnailurls()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
-        Try
-            'use imdbid for tmdb
-            If CheckBox2.CheckState = CheckState.Checked Then
-                Pref.alwaysuseimdbid = True
-            Else
-                Pref.alwaysuseimdbid = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Button12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button12.Click
-        Try
-
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox5.SelectedIndex <> 0 Then
-                mSelectedIndex = Me.ListBox5.SelectedIndex
-                mOtherIndex = mSelectedIndex - 1
-                ListBox5.Items.Insert(mSelectedIndex + 1, ListBox5.Items(mOtherIndex))
-                ListBox5.Items.RemoveAt(mOtherIndex)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub Button11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button11.Click
-        Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox5.SelectedIndex <> Me.ListBox5.Items.Count - 1 Then
-                mSelectedIndex = Me.ListBox5.SelectedIndex
-                mOtherIndex = mSelectedIndex + 1
-                ListBox5.Items.Insert(mSelectedIndex, ListBox5.Items(mOtherIndex))
-                ListBox5.Items.RemoveAt(mOtherIndex + 1)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
-        Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox3.SelectedIndex <> 0 Then
-                mSelectedIndex = Me.ListBox3.SelectedIndex
-                mOtherIndex = mSelectedIndex - 1
-                ListBox3.Items.Insert(mSelectedIndex + 1, ListBox3.Items(mOtherIndex))
-                ListBox3.Items.RemoveAt(mOtherIndex)
-            End If
-        Catch
-        End Try
-    End Sub
-    Private Sub Button10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button10.Click
-        Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox3.SelectedIndex <> Me.ListBox3.Items.Count - 1 Then
-                mSelectedIndex = Me.ListBox3.SelectedIndex
-                mOtherIndex = mSelectedIndex + 1
-                ListBox3.Items.Insert(mSelectedIndex, ListBox3.Items(mOtherIndex))
-                ListBox3.Items.RemoveAt(mOtherIndex + 1)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub ListBox4_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox4.SelectedIndexChanged
-        Try
-            Pref.imdbmirror = ListBox4.SelectedItem
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
-        Try
-            If ComboBox1.SelectedItem = "None" Then
-                Pref.maxactors = 0
-            ElseIf ComboBox1.SelectedItem = "All Available" Then
-                Pref.maxactors = 9999
-            Else
-                Pref.maxactors = Convert.ToInt32(ComboBox1.SelectedItem)
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox22_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox22.CheckedChanged
-        Try
-            If CheckBox22.CheckState = CheckState.Checked Then
-                Pref.enablehdtags = True
-            Else
-                Pref.enablehdtags = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox4.CheckedChanged
-        Try
-            If CheckBox4.CheckState = CheckState.Checked Then
-                Pref.gettrailer = True
-            Else
-                Pref.gettrailer = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
-        Try
-            If saveactorchkbx.CheckState = CheckState.Checked Then
-                Pref.actorsave = True
-            Else
-                Pref.actorsave = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub localactorpath_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles localactorpath.Leave
-        Try
-            Pref.actorsavepath = localactorpath.Text
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub xbmcactorpath_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles xbmcactorpath.Leave
-        Try
-            Pref.actornetworkpath = xbmcactorpath.Text
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Try
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select Folder to Save Actor Thumbnails)"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Pref.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
-                localactorpath.Text = thefoldernames
-                Pref.lastpath = thefoldernames
-                Pref.actorsavepath = thefoldernames
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
-        Try
-            If CheckBox3.CheckState = CheckState.Checked Then
-                Pref.savefanart = True
-            Else
-                Pref.savefanart = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-
-
-
-
-    Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
-        Try
-            If CheckBox18.CheckState = CheckState.Checked Then
-                Pref.scrapemovieposters = True
-            Else
-                Pref.scrapemovieposters = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox15_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox15.CheckedChanged
-        Try
-            If CheckBox18.CheckState = CheckState.Checked Then
-                Pref.disabletvlogs = True
-            Else
-                Pref.disabletvlogs = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub txtbx_minrarsize_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtbx_minrarsize.TextChanged
-        Try
-            If IsNumeric(txtbx_minrarsize.Text) Then
-                Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
-            Else
-                Pref.rarsize = 8
-                txtbx_minrarsize.Text = "8"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
-        Try
-            If CheckBox1.CheckState = CheckState.Checked Then
-                Pref.overwritethumbs = False
-            Else
-                Pref.overwritethumbs = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox5.CheckedChanged
-        Try
-            If CheckBox5.CheckState = CheckState.Checked Then
-                Pref.externalbrowser = True
-            Else
-                Pref.externalbrowser = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox6.CheckedChanged
-        Try
-            If CheckBox6.CheckState = CheckState.Checked Then
-                Pref.roundminutes = True
-            Else
-                Pref.roundminutes = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
-        Try
-            Dim allok As Boolean = True
-            Dim cancelregex As Boolean = False
-            Dim newtvshow As Boolean = False
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            Dim tempstring3 As String
-            Dim tempint As Integer
-            Dim tempint2 As Integer
-            theFolderBrowser.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Pref.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
-                Pref.lastpath = thefoldernames
-                For Each strfolder As String In My.Computer.FileSystem.GetDirectories(thefoldernames)
-                    Try
-                        If strfolder.IndexOf("System Volume Information") = -1 Then
-
-                            allok = True
-                            For Each item As Object In ListBox1.Items
-                                If strfolder = item.ToString Then allok = False
-                            Next
-                            If allok = True Then
-                                If cancelregex = False Then
-                                    Dim M As Match
-                                    tempstring3 = strfolder.ToLower
-                                    M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
-                                    If M.Success = True Then
-                                        tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders" & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, Each in it's own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                                        If tempint = DialogResult.Yes Then
-                                            ListBox1.Items.Add(strfolder)
-                                            Pref.tvFolders.Add(strfolder)
-                                            cancelregex = True
-                                        End If
-                                        If tempint = DialogResult.No Then
-                                            tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                                            If tempint2 = DialogResult.Yes Then
-                                                ListBox1.Items.Add(thefoldernames)
-                                                Pref.tvFolders.Add(strfolder)
-                                                Exit Sub
-                                            End If
-                                            If tempint2 = DialogResult.No Then
-                                                Exit Sub
-                                            End If
-                                        End If
-                                    Else
-                                        ListBox1.Items.Add(strfolder)
-                                        Pref.tvFolders.Add(strfolder)
-                                    End If
-                                Else
-                                    ListBox1.Items.Add(strfolder)
-                                    Pref.tvFolders.Add(strfolder)
-                                End If
-                            End If
-                        End If
-                    Catch ex As Exception
-                        MsgBox("error")
-                    End Try
-                Next
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub RadioButton7_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton7.CheckedChanged
-        Try
-            If RadioButton7.Checked = True Then
-                Pref.sortorder = "default"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
-        Try
-            If RadioButton8.Checked = True Then
-                Pref.sortorder = "dvd"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-    Dim languagelist As New List(Of Tvdb.Language)
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
-        Try
-            If ListBox8.Items.Count = 0 Then
-                Try
-                    Form1.util_LanguageListLoad()
-                    For Each lan In Form1.ListBox1.Items
-                        ListBox8.Items.Add(lan.language)
-                    Next
-                Catch
-                End Try
-                Try
-                    ListBox8.SelectedItem = Pref.TvdbLanguage
-                Catch
-                End Try
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub btn_removetvfolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removetvfolder.Click
-        Try
-            For i = 0 To ListBox1.SelectedItems.Count - 1
-                Dim tempboolean As Boolean = False
-                If ListBox1.SelectedItems(i) <> Nothing And ListBox1.SelectedItems(i) <> "" Then
-                    For Each folder In Pref.tvFolders
-                        If folder = ListBox1.SelectedItems(i) Then
-                            Pref.tvFolders.Remove(folder)
-                            Exit For
-                        End If
-                    Next
-                End If
+        If videosourceprefchanged Then
+            Dim count As Integer = lbVideoSource.Items.Count - 1
+            ReDim Pref.releaseformat(count)
+            For g = 0 To count
+                Pref.releaseformat(g) = lbVideoSource.Items(g)
             Next
-
-            ListBox1.Items.Clear()
-            For Each folder In Pref.tvFolders
-                ListBox1.Items.Add(folder)
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-
-    Private Sub btn_addtvfolderdialogue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_addtvfolderdialogue.Click
-        Try
-            Dim allok As Boolean = True
-            Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            theFolderBrowser.Description = "Please Select TV Folder to Add to DB"
-            theFolderBrowser.ShowNewFolderButton = True
-            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-            theFolderBrowser.SelectedPath = Pref.lastpath
-            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (theFolderBrowser.SelectedPath)
-                For Each item As Object In ListBox1.Items
-                    If thefoldernames.ToString = item.ToString Then allok = False
-                Next
-                Pref.lastpath = thefoldernames
-                If allok = True Then
-                    ListBox1.Items.Add(thefoldernames)
-                    Pref.tvFolders.Add(thefoldernames)
-                Else
-                    MsgBox("        Folder Already Exists")
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
-        Try
-            Pref.TvdbActorScrape = ComboBox5.SelectedIndex.ToString
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ListBox7_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox7.SelectedIndexChanged
-        Try
-            If ListBox7.SelectedItem <> Nothing Then
-                TextBox6.Text = ListBox7.SelectedItem
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
-        Try
-            If TextBox6.Text = "" Then
-                MsgBox("No Text")
-                TextBox6.Text = ListBox7.SelectedItem
-                Exit Sub
-            End If
-            If Not validateregex(TextBox6.Text) Then
-                MsgBox("Invalid Regex")
-                Exit Sub
-            End If
-            Dim tempint As Integer = ListBox7.SelectedIndex
-            ListBox7.Items.Remove(ListBox7.SelectedItem)
-            ListBox7.Items.Insert(tempint, TextBox6.Text)
-            ListBox7.SelectedIndex = tempint
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
-        Try
-
-            If ListBox7.SelectedItem = Nothing Then
-                MsgBox("Please Select a Regex to test")
-                Exit Sub
-            End If
-            If TextBox4.Text = "" Then
-                MsgBox("Please Enter a filename or any string to test")
-                Exit Sub
-            End If
-            TextBox5.Text = ""
-            Dim tvseries As String
-            Dim tvepisode As String
-            Dim s As String
-            Dim tempstring As String = TextBox4.Text
-            s = tempstring '.ToLower
-            Dim M As Match
-
-
-            M = Regex.Match(s, ListBox7.SelectedItem)
-            If M.Success = True Then
-                Try
-                    tvseries = M.Groups(1).Value
-                    tvepisode = M.Groups(2).Value
-                Catch
-                    tvseries = "-1"
-                    tvepisode = "-1"
-                End Try
-                Try
-                    If tvseries <> "-1" Then
-                        TextBox5.Text = "Series No = " & tvseries & vbCrLf
-                    End If
-                    If tvepisode <> "-1" Then
-                        TextBox5.Text = TextBox5.Text & "Episode No = " & tvepisode
-                    End If
-                Catch
-                End Try
-            Else
-                TextBox5.Text = "No Matches"
-            End If
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
-        Try
-            If Not validateregex(TextBox3.Text) Then
-                MsgBox("Invalid Regex")
-                Exit Sub
-            End If
-            For Each item In ListBox7.Items
-                If item.ToString = TextBox3.Text Then
-                    MsgBox("Regex already exists")
-                    Exit Sub
-                End If
-            Next
-            ListBox7.Items.Add(TextBox3.Text)
-            Form1.tv_RegexScraper.Add(TextBox3.Text)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
-        Try
-            Dim tempstring = ListBox7.SelectedItem
-            Try
-                ListBox7.Items.Remove(ListBox7.SelectedItem)
-            Catch
-            End Try
-            For Each regexp In Form1.tv_RegexScraper
-                If regexp = tempstring Then
-                    Form1.tv_RegexScraper.Remove(regexp)
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Button13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button13.Click
-        Try
-            Form1.tv_RegexScraper.Clear()
-            Form1.tv_RegexScraper.Add("[Ss]([\d]{1,2}).?[Ee]([\d]{1,2})")
-            Form1.tv_RegexScraper.Add("([\d]{1,2}) ?[xX] ?([\d]{1,2})")
-            Form1.tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
-            ListBox7.Items.Clear()
-            For Each Regex In Form1.tv_RegexScraper
-                ListBox7.Items.Add(Regex)
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Function validateregex(ByVal regexs As String)
-        Try
-            Dim test As Match
-            test = Regex.Match("", regexs)
-        Catch ex As Exception
-            Return False
-        End Try
-        Return True
-    End Function
-
-    Private Sub ComboBox3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox3.SelectedIndexChanged
-        Try
-            Pref.tvrename = ComboBox3.SelectedIndex
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub poster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles poster.CheckedChanged
-        Try
-            If poster.Checked = True Then
-                Pref.postertype = "poster"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub banner_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles banner.CheckedChanged
-        Try
-            If banner.Checked = True Then
-                Pref.postertype = "banner"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub ListBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox8.SelectedIndexChanged
-        Try
-            For Each lan In languagelist
-                If lan.Language.Value = ListBox8.Text Then
-                    Pref.TvdbLanguage = lan.Language.Value
-                    Pref.TvdbLanguageCode = lan.Abbreviation.Value
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.CheckedChanged
-        Try
-            If RadioButton6.Checked = True Then
-                Pref.seasonall = "none"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
-        Try
-            If RadioButton9.Checked = True Then
-                Pref.seasonall = "poster"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton10.CheckedChanged
-        Try
-            If RadioButton10.Checked = True Then
-                Pref.seasonall = "wide"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
-        Try
-            If CheckBox11.CheckState = CheckState.Checked Then
-                Pref.tvshowrefreshlog = True
-            Else
-                Pref.tvshowrefreshlog = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+            Form1.mov_VideoSourcePopulate()
+            Form1.ep_VideoSourcePopulate()
+            videosourceprefchanged = False
+        End If
     End Sub
 
 End Class

@@ -278,7 +278,7 @@ Public Class Form1
 #Region "Form1 Events"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PictureBoxAssignedMoviePoster.AllowDrop = True
-        AddHandler Pref.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
+        'AddHandler Pref.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
         Try
             'AddRegKey()    'disabled as user's were receiving UAC messages.
             Pref.movie_filters.FilterPanel = SplitContainer5.Panel2
@@ -11085,9 +11085,9 @@ End Sub
             End If
 
             RenameFilesToolStripMenuItem.Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
-
-            tsmiRescrapeFrodo_Poster_Thumbs.Enabled = Pref.FrodoEnabled
-            tsmiRescrapeFrodo_Fanart_Thumbs.Enabled = Pref.FrodoEnabled
+            tsmiOpenInMkvmergeGUI           .Enabled    = (Pref.MkvMergeGuiPath <> "")
+            tsmiRescrapeFrodo_Poster_Thumbs .Enabled    = Pref.FrodoEnabled
+            tsmiRescrapeFrodo_Fanart_Thumbs .Enabled    = Pref.FrodoEnabled
 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -11286,7 +11286,7 @@ End Sub
         RunBackgroundMovieScrape("RescrapeAll")
     End Sub
     
-    Private Sub mov_VideoSourcePopulate()
+    Public Sub mov_VideoSourcePopulate()
         Try
             cbMovieDisplay_Source.Items.Clear()
             cbMovieDisplay_Source.Items.Add("")
@@ -12504,7 +12504,10 @@ End Sub
 
         cmbxMovXtraFanartQty.SelectedIndex = cmbxMovXtraFanartQty.FindStringExact(Pref.movxtrafanartqty.ToString)
 
-
+        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
+        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Pref.PosterResolutionSI)
+        Movie.LoadHeightResolutionOptions(comboActorResolutions, Pref.ActorResolutionSI)
+        
         Select Case Pref.maxactors
             Case 9999
                 ComboBox7.SelectedItem = "All Available"
@@ -12592,11 +12595,6 @@ End Sub
         comboBoxTMDbSelectedLanguage.Text = Pref.TMDbSelectedLanguageName
         cbUseCustomLanguage.Checked = Pref.TMDbUseCustomLanguage
         tbCustomLanguageValue.Text = Pref.TMDbCustomLanguageValue
-
-        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
-        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Pref.PosterResolutionSI)
-        Movie.LoadHeightResolutionOptions(comboActorResolutions, Pref.ActorResolutionSI)
-
         cbGetMovieSetFromTMDb.Checked = Pref.GetMovieSetFromTMDb
 
         SetLanguageControlsState()
@@ -21368,10 +21366,10 @@ End Sub
 
 #End Region 'ToolStrip Menus misc
 
-    Sub MkvMergeGuiPath_ChangeHandler()
-        tsmiOpenInMkvmergeGUI.Enabled = True
-        tbMkvMergeGuiPath.Text = Pref.MkvMergeGuiPath
-    End Sub
+    'Sub MkvMergeGuiPath_ChangeHandler()
+    '    tsmiOpenInMkvmergeGUI.Enabled = True
+    '    tbMkvMergeGuiPath.Text = Pref.MkvMergeGuiPath
+    'End Sub
 
 #Region "Movie Filters"
 

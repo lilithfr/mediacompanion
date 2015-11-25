@@ -31,7 +31,7 @@ End Module
 
 Public Class Pref 
 
-    Shared Event PropertyChanged_MkvMergeGuiPath
+    'Shared Event PropertyChanged_MkvMergeGuiPath
 
     Public Const SetDefaults = True
     Public Const datePattern As String = "yyyyMMddHHmmss"
@@ -155,19 +155,20 @@ Public Class Pref
     Public Shared font As String
     Public Shared MultiMonitoEnabled As Boolean
     Public Shared ShowAllAudioTracks As Boolean
-    Private Shared _MkvMergeGuiPath As String
+    'Private Shared _MkvMergeGuiPath As String
+    Public Shared MkvMergeGuiPath As String
 
-    Shared Property MkvMergeGuiPath As String
-        Get
-            Return _MkvMergeGuiPath
-        End Get
-        Set (ByVal value As String)
-            If IO.File.Exists(value) Then
-                _MkvMergeGuiPath = value
-                RaiseEvent PropertyChanged_MkvMergeGuiPath
-            End If
-        End Set
-    End Property
+    'Shared Property MkvMergeGuiPath As String
+    '    Get
+    '        Return _MkvMergeGuiPath
+    '    End Get
+    '    Set (ByVal value As String)
+    '        If IO.File.Exists(value) Then
+    '            _MkvMergeGuiPath = value
+    '            RaiseEvent PropertyChanged_MkvMergeGuiPath
+    '        End If
+    '    End Set
+    'End Property
 
     'Saved General Proxy Prefs
     Public Shared prxyEnabled As String
@@ -1596,6 +1597,11 @@ Public Class Pref
                 End Select
             End If
         Next
+        If Not String.IsNullOrEmpty(MkvMergeGuiPath) Then
+            If Not IO.File.Exists(MkvMergeGuiPath) Then
+                MkvMergeGuiPath = ""
+            End If
+        End If
         If Not MovSepLst.Contains("3DTAB") Then MovSepLst.Insert(0,"3DTAB")
         If Not MovSepLst.Contains("3DSBS") Then MovSepLst.Insert(0,"3DSBS")
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
