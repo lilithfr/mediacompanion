@@ -65,11 +65,13 @@ Public Class frmOptions
 
     Private Sub options_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
+            btn_SettingsClose2.Visible = False
             prefsload = True
             PrefInit()
             CommonInit()
             GeneralInit()
             
+            CmdsNProfilesInit()
             prefsload = False
             Changes = False
         Catch ex As Exception
@@ -91,7 +93,7 @@ Public Class frmOptions
         Pref.ConfigLoad()
     End Sub
 
-    Private Sub btn_SettingsClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsClose.Click
+    Private Sub btn_SettingsClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsClose.Click, btn_SettingsClose2.Click
         Me.Close()
     End Sub
     
@@ -198,6 +200,19 @@ Public Class frmOptions
         tbMkvMergeGuiPath           .Text       = Pref.MkvMergeGuiPath
     End Sub
     
+    Private Sub CmdsNProfilesInit()
+        'Commands
+        lb_CommandTitle.Items.Clear()
+        lb_CommandCommand.Items.Clear()
+        For Each com In Pref.commandlist
+            lb_CommandTitle.Items.Add(com.title)
+            lb_CommandCommand.Items.Add(com.command)
+        Next
+        'Profiles
+        For Each prof In Form1.profileStruct.ProfileList
+            lb_ProfileList.Items.Add(prof.ProfileName)
+        Next
+    End Sub
 
 #Region "Common Tab"
 
@@ -693,7 +708,310 @@ Public Class frmOptions
 
 #Region "Profiles & Commands"
 
+#Region "Commands"
+
+    Private Sub btn_CommandAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_CommandAdd.Click
+        Try
+            If tb_CommandTitle.Text <> "" And tb_CommandCommand.Text <> "" Then
+                Dim allgood As Boolean = True
+                For Each item In lb_CommandTitle.Items
+                    If tb_CommandTitle.Text = item Then
+                        allgood = False
+                    End If
+                Next
+                If allgood Then
+                    Dim newcom As New str_ListOfCommands(SetDefaults)
+                    newcom.command = tb_CommandCommand.Text
+                    newcom.title = tb_CommandTitle.Text
+                    Pref.commandlist.Add(newcom)
+                    lb_CommandTitle.Items.Add(newcom.title)
+                    lb_CommandCommand.Items.Add(newcom.command)
+                    Dim x As Integer = Form1.ToolsToolStripMenuItem.DropDownItems.Count
+                    For i = x-1 To Form1.MCToolsCommands Step -1
+                       Form1. ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+                    Next
+                    For Each com In Pref.commandlist
+                       Form1.ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+                    Next
+                    If prefsload Then Exit Sub
+                    Changes = True
+                Else
+                    MsgBox("Title already exists in list")
+                End If
+            Else
+                MsgBox("This feature needs both a title & command")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub lb_CommandTitle_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lb_CommandTitle.SelectedIndexChanged
+        Try
+            lb_CommandCommand.SelectedIndex = lb_CommandTitle.SelectedIndex
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub lb_CommandCommand_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lb_CommandCommand.SelectedIndexChanged
+        Try
+            lb_CommandTitle.SelectedIndex = lb_CommandCommand.SelectedIndex
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_CommandRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_CommandRemove.Click
+        Try
+            If lb_CommandTitle.SelectedItem <> "" And lb_CommandCommand.SelectedItem <> "" Then
+                For Each com In Pref.commandlist
+                    If com.title = lb_CommandTitle.SelectedItem And com.command = lb_CommandCommand.SelectedItem Then
+                        Pref.commandlist.Remove(com)
+                        Exit For
+                    End If
+                Next
+                lb_CommandTitle.Items.Clear()
+                lb_CommandCommand.Items.Clear()
+                Dim x As Integer = Form1.ToolsToolStripMenuItem.DropDownItems.Count
+                For i = x-1 To Form1.MCToolsCommands Step -1
+                    Form1.ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+                Next
+                For Each com In Pref.commandlist
+                    lb_CommandTitle.Items.Add(com.title)
+                    lb_CommandCommand.Items.Add(com.command)
+                    Form1.ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+                Next
+            Else
+                MsgBox("Nothing selected to remove")
+            End If
+            If prefsload Then Exit Sub
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region
+
+#Region "Profiles"
+    'Profiles
+    Private Sub btn_ProfileAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ProfileAdd.Click
+        Try
+            For Each pro In Form1.profileStruct.ProfileList
+                If pro.ProfileName.ToLower = tb_ProfileNew.Text.ToLower Then
+                    MsgBox("This Profile Already Exists" & vbCrLf & "Please Select Another Name")
+                    Exit Sub
+                End If
+            Next
+            Dim done As Boolean = False
+            Dim tempint As Integer = 0
+            For f = 1 To 1000
+                Dim tempstring2 As String = Pref.applicationPath & "\Settings\"
+                Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
+                Dim actorcachepath As String = tempstring2 & "actorcache" & f.ToString & ".xml"
+                Dim directorcachepath As String = tempstring2 & "directorcache" & f.ToString & ".xml"
+                Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".txt"
+                Dim genrespath As String = tempstring2 & "genres" & f.ToString & ".txt"
+                Dim moviecachepath As String = tempstring2 & "moviecache" & f.ToString & ".xml"
+                Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
+                Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
+                Dim musicvideocachepath As String = tempstring2 & "musicvideocache" & f.ToString & ".xml"
+                Dim ok As Boolean = True
+                If File.Exists(configpath) Then ok = False
+                If File.Exists(actorcachepath) Then ok = False
+                If File.Exists(directorcachepath) Then ok = False
+                If File.Exists(filterspath) Then ok = False
+                If File.Exists(genrespath) Then ok = False
+                If File.Exists(moviecachepath) Then ok = False
+                If File.Exists(regexpath) Then ok = False
+                If File.Exists(tvcachepath) Then ok = False
+                If File.Exists(musicvideocachepath) Then ok = False
+                If ok = True Then
+                    tempint = f
+                    Exit For
+                End If
+            Next
+            'new profilename
+            Dim tempstring As String = Pref.applicationPath & "\Settings\"
+            Dim moviecachetocopy        As String = String.Empty
+            Dim actorcachetocopy        As String = String.Empty
+            Dim musiccachetocopy        As String = String.Empty
+            Dim musicvideocachetocopy   As String = String.Empty
+            Dim directorcachetocopy     As String = String.Empty
+            Dim tvcachetocopy           As String = String.Empty
+            Dim configtocopy            As String = String.Empty
+            Dim filterstocopy           As String = String.Empty
+            Dim genrestocopy            As String = String.Empty
+            Dim regextocopy             As String = String.Empty
+            Dim moviesetcachetocopy     As String = String.Empty
+            For Each profs In Form1.profileStruct.ProfileList
+                If profs.ProfileName = Form1.profileStruct.DefaultProfile Then
+                    musicvideocachetocopy   = profs.MusicVideoCache
+                    moviecachetocopy        = profs.MovieCache
+                    actorcachetocopy        = profs.ActorCache
+                    directorcachetocopy     = profs.DirectorCache
+                    tvcachetocopy           = profs.TvCache
+                    configtocopy            = profs.Config
+                    filterstocopy           = profs.Filters
+                    genrestocopy            = profs.Genres 
+                    regextocopy             = profs.RegExList
+                    moviesetcachetocopy     = profs.MovieSetCache 
+                End If
+            Next
+
+            Dim profiletoadd As New ListOfProfiles
+            profiletoadd.ActorCache         = tempstring & "actorcache" & tempint.ToString & ".xml"
+            profiletoadd.DirectorCache      = tempstring & "directorcache" & tempint.ToString & ".xml"
+            profiletoadd.Config             = tempstring & "config" & tempint.ToString & ".xml"
+            profiletoadd.Filters            = tempstring & "filters" & tempint.ToString & ".txt"
+            profiletoadd.Genres             = tempstring & "genres" & tempint.ToString & ".txt"
+            profiletoadd.MovieCache         = tempstring & "moviecache" & tempint.ToString & ".xml"
+            profiletoadd.RegExList          = tempstring & "regex" & tempint.ToString & ".xml"
+            profiletoadd.TvCache            = tempstring & "tvcache" & tempint.ToString & ".xml"
+            profiletoadd.MusicVideoCache    = tempstring & "musicvideocache" & tempint.ToString & ".xml"
+            profiletoadd.MovieSetCache      = tempstring & "moviesetcache" & tempint.ToString & ".xml"
+            profiletoadd.ProfileName        = tb_ProfileNew.Text
+            Form1.profileStruct.ProfileList.Add(profiletoadd)
+
+            If File.Exists(moviecachetocopy)        Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
+            If File.Exists(musicvideocachetocopy)   Then File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
+            If File.Exists(actorcachetocopy)        Then File.Copy(actorcachetocopy, profiletoadd.ActorCache)
+            If File.Exists(directorcachetocopy)     Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
+            If File.Exists(tvcachetocopy)           Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
+            If File.Exists(configtocopy)            Then File.Copy(configtocopy, profiletoadd.Config)
+            If File.Exists(filterstocopy)           Then File.Copy(filterstocopy, profiletoadd.Filters)
+            If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
+            If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
+            If File.Exists(moviesetcachetocopy)     Then File.Copy(moviesetcachetocopy, profiletoadd.MovieSetCache)
+            lb_ProfileList.Items.Add(tb_ProfileNew.Text)
+            Call Form1.util_ProfileSave()
+            done = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_ProfileSetDefault_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ProfileSetDefault.Click
+        Try
+            'setselected profile to default
+            For Each prof In Form1.profileStruct.ProfileList
+                If prof.ProfileName = lb_ProfileList.SelectedItem Then
+                    Form1.profileStruct.defaultprofile = prof.ProfileName
+                    Label18.Text = "Current Default Profile: " & prof.ProfileName
+                    Call Form1.util_ProfileSave()
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_ProfileSetStartup_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ProfileSetStartup.Click
+        Try
+            'setselected profile to startup
+            For Each prof In Form1.profileStruct.ProfileList
+                If prof.ProfileName = lb_ProfileList.SelectedItem Then
+                    Form1.profileStruct.startupprofile = prof.ProfileName
+                    Label3.Text = "Current Startup Profile: " & prof.ProfileName
+                    Call Form1.util_ProfileSave()
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btn_ProfileRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ProfileRemove.Click
+        Try
+            'remove selected profile
+            If lb_ProfileList.SelectedItem = Form1.profileStruct.DefaultProfile Then
+                MsgBox("You can't delete your default profile" & vbCrLf & "Set another Profile to default then delete it")
+                Exit Sub
+            End If
+            If lb_ProfileList.SelectedItem = Form1.profileStruct.StartupProfile Then
+                MsgBox("You can't delete your startup profile" & vbCrLf & "Set another Profile to startup then delete it")
+                Exit Sub
+            End If
+            If lb_ProfileList.SelectedItem = Pref.workingProfile.profilename Then
+                MsgBox("You can't delete a loaded profile" & vbCrLf & "Load another Profile then delete it")
+                Exit Sub
+            End If
+            Dim tempint As Integer = MessageBox.Show("Removing a profile will delete all associated cache files and settings," & vbCrLf & "Are you sure you want to remove the selected profile", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If tempint = DialogResult.Yes Then
+                Dim tempint2 As Integer = 0
+                For f = 0 To Form1.profileStruct.ProfileList.Count - 1
+                    If Form1.profileStruct.profilelist(f).ProfileName = lb_ProfileList.SelectedItem Then
+                        tempint2 = f
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).ActorCache)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).DirectorCache)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).Config)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).Filters)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).Genres)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).MovieCache)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).MusicVideoCache)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).RegExList)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).TvCache)
+                        Catch ex As Exception
+                        End Try
+                        Try
+                            File.Delete(Form1.profileStruct.profilelist(f).MovieSetCache)
+                        Catch ex As Exception
+                        End Try
+                        Exit For
+                    End If
+                Next
+                Form1.profileStruct.ProfileList.RemoveAt(tempint2)
+                lb_ProfileList.Items.Clear()
+                Form1.ProfilesToolStripMenuItem.DropDownItems.Clear()
+                If Form1.profileStruct.ProfileList.Count > 1 Then
+                    Form1.ProfilesToolStripMenuItem.Visible = True
+                Else
+                    Form1.ProfilesToolStripMenuItem.Visible = False
+                End If
+                Form1.ProfilesToolStripMenuItem.DropDownItems.Clear()
+                For Each prof In Form1.profileStruct.ProfileList
+                    lb_ProfileList.Items.Add(prof.ProfileName)
+                    Form1.ProfilesToolStripMenuItem.DropDownItems.Add(prof.ProfileName)
+                Next
+                Form1.util_ProfileSave()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+#End Region
+
 #End Region 'Profiles & Commands
+
+
 
     Private Sub applyAdvancedLists()
         If cleanfilenameprefchanged Then
@@ -716,4 +1034,17 @@ Public Class frmOptions
         End If
     End Sub
 
+    Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+        If TabControl1.SelectedTab.Text.ToLower = "xbmc link" OrElse TabControl1.SelectedTab.Text.ToLower = "proxy" Then
+            btn_SettingsApply.Visible = False
+            btn_SettingsCancel.Visible = False
+            btn_SettingsClose.Visible = False
+            btn_SettingsClose2.Visible = True
+        Else
+            btn_SettingsApply.Visible = True
+            btn_SettingsCancel.Visible = True
+            btn_SettingsClose.Visible = True
+            btn_SettingsClose2.Visible = False
+        End If
+    End Sub
 End Class

@@ -71,6 +71,8 @@ Partial Class frmOptions
         Me.TPCommon = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.Label185 = New System.Windows.Forms.Label()
+        Me.AutoScrnShtDelay = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.gbImageResizing = New System.Windows.Forms.GroupBox()
         Me.Label171 = New System.Windows.Forms.Label()
@@ -128,9 +130,7 @@ Partial Class frmOptions
         Me.TPMovPref = New System.Windows.Forms.TabPage()
         Me.TPTVPref = New System.Windows.Forms.TabPage()
         Me.TPProxy = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -157,8 +157,9 @@ Partial Class frmOptions
         Me.btn_SettingsCancel = New System.Windows.Forms.Button()
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
-        Me.Label185 = New System.Windows.Forms.Label()
-        Me.AutoScrnShtDelay = New System.Windows.Forms.TextBox()
+        Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -674,6 +675,22 @@ Partial Class frmOptions
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
         '
+        'Label185
+        '
+        Me.Label185.AutoSize = true
+        Me.Label185.Location = New System.Drawing.Point(50, 301)
+        Me.Label185.Name = "Label185"
+        Me.Label185.Size = New System.Drawing.Size(197, 13)
+        Me.Label185.TabIndex = 104
+        Me.Label185.Text = "AutoScreenShot delay (in Seconds only)"
+        '
+        'AutoScrnShtDelay
+        '
+        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(7, 298)
+        Me.AutoScrnShtDelay.Name = "AutoScrnShtDelay"
+        Me.AutoScrnShtDelay.Size = New System.Drawing.Size(37, 20)
+        Me.AutoScrnShtDelay.TabIndex = 103
+        '
         'Label4
         '
         Me.Label4.AutoSize = true
@@ -762,7 +779,7 @@ Partial Class frmOptions
         Me.grpCleanFilename.Controls.Add(Me.txtCleanFilenameAdd)
         Me.grpCleanFilename.Controls.Add(Me.btnCleanFilenameAdd)
         Me.grpCleanFilename.Controls.Add(Me.lbCleanFilename)
-        Me.grpCleanFilename.Location = New System.Drawing.Point(542, 143)
+        Me.grpCleanFilename.Location = New System.Drawing.Point(542, 146)
         Me.grpCleanFilename.Name = "grpCleanFilename"
         Me.grpCleanFilename.Size = New System.Drawing.Size(241, 356)
         Me.grpCleanFilename.TabIndex = 100
@@ -935,7 +952,7 @@ Partial Class frmOptions
         Me.gbxXBMCversion.Controls.Add(Me.rbXBMCv_both)
         Me.gbxXBMCversion.Controls.Add(Me.rbXBMCv_post)
         Me.gbxXBMCversion.Controls.Add(Me.rbXBMCv_pre)
-        Me.gbxXBMCversion.Location = New System.Drawing.Point(259, 144)
+        Me.gbxXBMCversion.Location = New System.Drawing.Point(259, 146)
         Me.gbxXBMCversion.Name = "gbxXBMCversion"
         Me.gbxXBMCversion.Size = New System.Drawing.Size(277, 146)
         Me.gbxXBMCversion.TabIndex = 48
@@ -1281,14 +1298,6 @@ Partial Class frmOptions
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
-        'UcGenPref_Proxy1
-        '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 555)
-        Me.UcGenPref_Proxy1.TabIndex = 0
-        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -1298,14 +1307,6 @@ Partial Class frmOptions
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
-        '
-        'UcGenPref_XbmcLink1
-        '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 555)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -1602,21 +1603,30 @@ Partial Class frmOptions
         Me.btn_SettingsApply.Text = "Apply"
         Me.btn_SettingsApply.UseVisualStyleBackColor = true
         '
-        'Label185
+        'btn_SettingsClose2
         '
-        Me.Label185.AutoSize = true
-        Me.Label185.Location = New System.Drawing.Point(50, 301)
-        Me.Label185.Name = "Label185"
-        Me.Label185.Size = New System.Drawing.Size(197, 13)
-        Me.Label185.TabIndex = 104
-        Me.Label185.Text = "AutoScreenShot delay (in Seconds only)"
+        Me.btn_SettingsClose2.Location = New System.Drawing.Point(520, 545)
+        Me.btn_SettingsClose2.Name = "btn_SettingsClose2"
+        Me.btn_SettingsClose2.Size = New System.Drawing.Size(109, 23)
+        Me.btn_SettingsClose2.TabIndex = 23
+        Me.btn_SettingsClose2.Text = "Close"
+        Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'AutoScrnShtDelay
+        'UcGenPref_Proxy1
         '
-        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(7, 298)
-        Me.AutoScrnShtDelay.Name = "AutoScrnShtDelay"
-        Me.AutoScrnShtDelay.Size = New System.Drawing.Size(37, 20)
-        Me.AutoScrnShtDelay.TabIndex = 103
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 555)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 555)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'frmOptions
         '
@@ -1625,6 +1635,7 @@ Partial Class frmOptions
         Me.ClientSize = New System.Drawing.Size(1008, 581)
         Me.Controls.Add(Me.btn_SettingsCancel)
         Me.Controls.Add(Me.btn_SettingsClose)
+        Me.Controls.Add(Me.btn_SettingsClose2)
         Me.Controls.Add(Me.btn_SettingsApply)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.PictureBox1)
@@ -1817,4 +1828,5 @@ End Sub
     Friend WithEvents Label4 As Label
     Friend WithEvents Label185 As Label
     Friend WithEvents AutoScrnShtDelay As TextBox
+    Friend WithEvents btn_SettingsClose2 As Button
 End Class

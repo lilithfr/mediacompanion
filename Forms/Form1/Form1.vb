@@ -199,7 +199,7 @@ Public Class Form1
     Dim realMoviePaths As New List(Of String)
     Dim realTvPaths As New List(Of String)
     Dim newTvShows As New List(Of String)
-    Dim profileStruct As New Profiles
+    Public Shared profileStruct As New Profiles
     Dim frmSplash As New frmSplashscreen
     Dim frmSplash2 As New frmProgressScreen
     Public Shared multimonitor As Boolean = False
@@ -455,7 +455,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             'TabLevel1.TabPages.Remove(Me.TabMV)         'Hide Music Video Tab while Work-In-Progress
-            PreferencesToolStripMenuItem.Visible = False
+            'PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
             For Each prof In profileStruct.ProfileList
@@ -1670,7 +1670,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub util_ProfileSave()
+    Public Sub util_ProfileSave()
         Dim profilepath As String = IO.Path.Combine(applicationPath, "settings")
         profilepath = IO.Path.Combine(profilepath, "profile.xml")
 
