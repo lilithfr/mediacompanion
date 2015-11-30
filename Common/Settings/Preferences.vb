@@ -315,9 +315,12 @@ Public Class Pref
     Public Shared UseMultipleThreads As Boolean=False
     Public Shared XbmcTmdbScraperFanart As String = Nothing
     Public Shared XbmcTmdbScraperTrailerQ As String = Nothing
+    Public Shared XbmcTmdbScraperTrailerQLB As New List(Of String)
     Public Shared XbmcTmdbScraperLanguage As String = Nothing
+    Public Shared XbmcTmdbScraperLanguageLB As New List(Of String)
     Public Shared XbmcTmdbScraperRatings As String = Nothing
     Public Shared XbmcTmdbScraperCertCountry As String = Nothing
+    Public Shared XbmcTmdbScraperCertCountryLB As New List(Of String)
 
     Public Shared movie_filters As MovieFilters = New MovieFilters
 

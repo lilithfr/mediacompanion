@@ -142,9 +142,64 @@
     <value>Under normal circumstances, Media Companion will include the internet location for each available actor thumbnail. There are a couple of problems with this, firstly, when XBMC scrapes each nfo, if you enable actor thumbnails, XBMC needs to download these from the internet. Secondly, since MC also uses these urls to display actor thumbs, it can slow  down the Media Companion browser.
 These settings allow you to override this behaviour, saving the actor thumbs to a local folder, and adding the path to this into the nfo instead of a url.</value>
   </data>
+  <data name="cbMovieBasicSave.ToolTip" xml:space="preserve">
+    <value>Saving movies in Basic Save Mode is only possible if
+"Use Foder Names for Scraping", or "All Movies are in Folders"
+is also selected.
+Saving of fanart.jpg or poster.jpg is disabled as per XBMC
+requirements.</value>
+  </data>
+  <data name="cbMoviePosterInFolder.ToolTip" xml:space="preserve">
+    <value>Drops filename from in front of poster.jpg.
+Either "Use Foldernames" or "All Movies in Folders"
+must be enabled.
+If Both artwork model is selected, Pre-Frodo artwork
+is still saved, as it should be.</value>
+  </data>
+  <data name="cbMovieFanartInFolders.ToolTip" xml:space="preserve">
+    <value>Drops filename from in front of fanart.jpg.
+Either "Use Foldernames" or "All Movies in Folders"
+must be enabled.
+If Both artwork model is selected, Pre-Frodo artwork
+is still saved, as it should be.</value>
+  </data>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>621, 17</value>
   </metadata>
+  <data name="Label196.Text" xml:space="preserve">
+    <value>Notes:  - If Movie is in Root folder, new folder created
+    - Separate folders with '\' character
+    - If %N (Movieset) is empty, folder for movieset is not
+        created, but MovieTitle folder is created.</value>
+  </data>
+  <data name="Label100.Text" xml:space="preserve">
+    <value>%T - Movie Title
+%Z - Sort Title
+%Y - Year
+%I - IMDbId
+%G - Genre (only first)
+%S - Movie Source 
+%N - MovieSet
+%P - Premiered Date
+%R - Rating
+%M - Mpaa Cert
+%L - Runtime length
+%V - Video Resolution
+%C - Video Codec
+%A - Audio Codec + Ch
+%O - Audio Channels
+%Fd - Folder size d=pecision</value>
+  </data>
+  <data name="Label198.Text" xml:space="preserve">
+    <value>Entries in this box, separate same movies.
+ie: Avatar 3D
+or Avatar Directors-Cut
+or Avatar Extended-Edition
+
+If these words are in the movie's title, then Media Companion will handle them as separate movies.
+
+Media Companion will keep these it the Title, and in the Foldername.</value>
+  </data>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start
 an XBMC Update, or maybe just to launch an external program.

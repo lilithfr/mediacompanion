@@ -245,7 +245,7 @@ Public Class Form1
     Dim moviecount_bak As Integer = 0
     Dim lastSort As String = ""
     Dim lastinvert As String = ""
-    Dim displayRuntimeScraper As Boolean = True
+    Public displayRuntimeScraper As Boolean = True
     Dim tv_IMDbID_detected As Boolean = False
     Dim tv_IMDbID_warned As Boolean = False
     Dim tv_IMDbID_detectedMsg As String = String.Format("Media Companion has detected one or more TV Shows has an incorrect ID.{0}", vbCrLf) & _
@@ -8363,7 +8363,7 @@ Public Class Form1
         messbox.Close()
     End Sub
 
-    Private Sub mov_SwitchRuntime()
+    Public Sub mov_SwitchRuntime()
         If workingMovieDetails Is Nothing Then Exit Sub
         If Pref.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
             runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
@@ -12387,6 +12387,7 @@ End Sub
     Private Sub mov_PreferencesSetup()
         prefsload = True
         displayRuntimeScraper = True
+        Read_XBMC_TMDB_Scraper_Config
         If Pref.enablehdtags = True Then
             CheckBox19.CheckState = CheckState.Checked
             PanelDisplayRuntime.Enabled = True
@@ -12573,13 +12574,29 @@ End Sub
 
         If Pref.movies_useXBMC_Scraper = True Then
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
-            Read_XBMC_TMDB_Scraper_Config
         Else
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
             GroupBox_MovieIMDBMirror.Enabled = True
             GroupBox_MovieIMDBMirror.Visible = True
             GroupBox_MovieIMDBMirror.BringToFront()
         End If
+        cbXbmcTmdbFanart                    .Checked        = Convert.ToBoolean(Pref.XbmcTmdbScraperFanart)
+        cmbxXbmcTmdbHDTrailer.Items.Clear()
+        For each thisvalue In Pref.XbmcTmdbScraperTrailerQLB
+            cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
+        Next
+        cmbxXbmcTmdbHDTrailer.Text = Pref.XbmcTmdbScraperTrailerQ
+        cmbxXbmcTmdbTitleLanguage.Items.Clear()
+        For Each thisvalue In Pref.XbmcTmdbScraperLanguageLB
+            cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
+        Next
+        cmbxXbmcTmdbTitleLanguage.Text = Pref.XbmcTmdbScraperLanguage
+        cbXbmcTmdbIMDBRatings               .Checked        = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
+        cmbxTMDBPreferredCertCountry.Items.Clear()
+        For Each thisvalue In Pref.XbmcTmdbScraperCertCountryLB
+            cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
+        Next
+        cmbxTMDBPreferredCertCountry.Text = Pref.XbmcTmdbScraperCertCountry
 
         TMDbControlsIni()
 
@@ -12588,7 +12605,7 @@ End Sub
         btnMoviePrefSaveChanges.Enabled = False
     End Sub
 
-    Private Sub TMDbControlsIni()
+    Public Sub TMDbControlsIni()
         TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
 
         comboBoxTMDbSelectedLanguage.Text = Pref.TMDbSelectedLanguageName

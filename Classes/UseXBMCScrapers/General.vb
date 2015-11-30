@@ -723,10 +723,10 @@ Module General
         Dim MovieFanartURL As String = ""
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
-
-        If Form1.cmbxXbmcTmdbHDTrailer.Items.Count > 0 Then Form1.cmbxXbmcTmdbHDTrailer.Items.Clear()
-        If Form1.cmbxXbmcTmdbTitleLanguage.Items.Count > 0 Then Form1.cmbxXbmcTmdbTitleLanguage.Items.Clear()
-        If Form1.cmbxTMDBPreferredCertCountry.Items.Count > 0 Then Form1.cmbxTMDBPreferredCertCountry.Items.Clear()
+        Pref.XbmcTmdbScraperTrailerQLB.Clear()
+        Pref.XbmcTmdbScraperLanguageLB.Clear()
+        Pref.XbmcTmdbScraperCertCountryLB.Clear()
+        
         Try
             For Each m_node In m_nodelist
                 For Each NodeChild In m_node.ChildNodes
@@ -735,36 +735,34 @@ Module General
                             Try
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "fanart"
-                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.cbXbmcTmdbFanart.Checked = If(Pref.XbmcTmdbScraperFanart = Nothing, Test, Convert.ToBoolean(Pref.XbmcTmdbScraperFanart))
+                                        Pref.XbmcTmdbScraperFanart = NodeChild.Attributes("default").Value
                                     Case "trailerq"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
                                         Dim splitvalues() As String = AllValues.Split("|")
                                         For Each thisvalue In splitvalues
-                                            Form1.cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
+                                            Pref.XbmcTmdbScraperTrailerQLB.Add(thisvalue)
                                         Next
-                                        Form1.cmbxXbmcTmdbHDTrailer.Text = If(Pref.XbmcTmdbScraperTrailerQ = Nothing, Test, Pref.XbmcTmdbScraperTrailerQ)
+                                        Pref.XbmcTmdbScraperTrailerQ = Test
                                     Case "language"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
                                         Dim splitvalues() As String = AllValues.Split("|")
                                         For Each thisvalue In splitvalues
-                                            Form1.cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
+                                            Pref.XbmcTmdbScraperLanguageLB.Add(thisvalue)
                                         Next
-                                        Form1.cmbxXbmcTmdbTitleLanguage.Text = If(Pref.XbmcTmdbScraperLanguage = Nothing, Test, Pref.XbmcTmdbScraperLanguage)
+                                        Pref.XbmcTmdbScraperLanguage = Test
                                     Case "ratings"
                                         Dim Test As String = NodeChild.Attributes("default").Value
-                                        If Pref.XbmcTmdbScraperRatings = Nothing Then Pref.XbmcTmdbScraperRatings = Test
-                                        Form1.cbXbmcTmdbIMDBRatings.Checked = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
+                                        Pref.XbmcTmdbScraperRatings = Test
                                     Case "tmdbcertcountry"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
                                         Dim splitvalues() As String = AllValues.Split("|")
                                         For Each thisvalue In splitvalues
-                                            Form1.cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
+                                            Pref.XbmcTmdbScraperCertCountryLB.Add(thisvalue)
                                         Next
-                                        Form1.cmbxTMDBPreferredCertCountry.Text = If(Pref.XbmcTmdbScraperCertCountry = Nothing, Test, Pref.XbmcTmdbScraperCertCountry)
+                                        Pref.XbmcTmdbScraperCertCountry = Test
                                 End Select
                             Catch
                                 'empty node
