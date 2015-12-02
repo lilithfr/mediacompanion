@@ -155,9 +155,25 @@ Public Class Form1
     Public workingMovie As New ComboList
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
-    Public movieprefschanged As Boolean = False
+    Private _movieprefschanged As Boolean = False
+    Public Property movieprefschanged As Boolean
+        Get
+            Return _movieprefschanged
+        End Get
+        Set(value As Boolean)
+            _movieprefschanged = value
+        End Set
+    End Property
     Public moviefolderschanged As Boolean = False
-    Public tvprefschanged As Boolean = False
+    Private _tvprefschanged As Boolean = False
+    Public Property tvprefschanged As Boolean
+        Get
+            Return _tvprefschanged
+        End Get
+        Set(value As Boolean)
+            _tvprefschanged = value
+        End Set
+    End Property
     Public tvfolderschanged As Boolean = False
     Public hmfolderschanged As Boolean = False
     Public cleanfilenameprefchanged As Boolean = False
@@ -454,7 +470,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            PreferencesToolStripMenuItem.Visible = False
+            'PreferencesToolStripMenuItem.Visible = False
             
             Call util_ProfilesLoad()
             For Each prof In profileStruct.ProfileList
@@ -1364,26 +1380,7 @@ Public Class Form1
 
         mov_FormPopulate
     End Sub
-
-    Private Sub util_RegexSetDefaultScraper()
-        tv_RegexScraper.Clear()
-        tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
-        tv_RegexScraper.Add("([\d]{1,4}).?[Ee]([\d]{1,4})")
-        tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
-        tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
-        tv_RegexScraper.Add("([\d]{1,2})\.([\d]{2})")
-    End Sub
-
-    Private Sub util_RegexSetDefaultRename()
-        tv_RegexRename.Clear()
-        tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
-        tv_RegexRename.Add("S01E01 - Episode Title.ext")
-        tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
-        tv_RegexRename.Add("1x01 - Episode Title.ext")
-        tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
-        tv_RegexRename.Add("101 - Episode Title.ext")
-    End Sub
-
+    
     Private Sub util_RegexLoad()
 
         Dim tempstring As String
@@ -1436,8 +1433,8 @@ Public Class Form1
         Dim root As XmlElement
         Dim child As XmlElement
 
-        If setScraperDefault = True Then util_RegexSetDefaultScraper()
-        If setRenameDefault = True Then util_RegexSetDefaultRename()
+        If setScraperDefault = True Then Pref.util_RegexSetDefaultScraper()
+        If setRenameDefault = True Then Pref.util_RegexSetDefaultRename()
 
         doc.AppendChild(xmlProc)
         root = doc.CreateElement("regexlist")
@@ -3998,7 +3995,7 @@ Public Class Form1
                 End If
             End If
         Else
-            currentTabIndex = Me.TabControl2.SelectedIndex
+            If tab <> "Movie Preferences" Then currentTabIndex = Me.TabControl2.SelectedIndex
         End If
 
         If tab = "" Then
@@ -4093,7 +4090,9 @@ Public Class Form1
         ElseIf tab.ToLower = "fanart.tv"
             UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
         ElseIf tab.ToLower = "movie preferences" Then
-            Call mov_PreferencesSetup()
+            Me.TabControl2.SelectedIndex = currentTabIndex
+            OpenPreferences(2)
+            'Call mov_PreferencesSetup()
 
         ElseIf tab.ToLower = "table" Then
             currentTabIndex = TabControl2.SelectedIndex
@@ -5103,7 +5102,9 @@ Public Class Form1
                     End If
                 End If
             ElseIf tab = "TV Preferences" Then
-                Call tv_PreferencesSetup()
+                TabControl3.SelectedIndex = tvCurrentTabIndex
+                OpenPreferences(3)
+                'Call tv_PreferencesSetup()
                 Exit Sub
             ElseIf tab.Tolower = "folders" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
@@ -8114,7 +8115,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Function util_RegexValidate(ByVal regexs As String)
+    Public Function util_RegexValidate(ByVal regexs As String)
         Try
             Dim test As Match
             test = Regex.Match("", regexs)
@@ -10145,9 +10146,24 @@ End Sub
         End Try
     End Sub
 
-    Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click 
+    Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click
+        OpenPreferences()
+        'Try
+        '    Dim t As New frmOptions
+        '    If Pref.MultiMonitoEnabled Then
+        '        t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+        '        t.StartPosition = FormStartPosition.Manual
+        '    End If
+        '    t.ShowDialog()
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
+    End Sub
+
+    Private Sub OpenPreferences(Optional ByVal TabRequired As Integer = 0)
         Try
             Dim t As New frmOptions
+            t.SelectTab = TabRequired
             If Pref.MultiMonitoEnabled Then
                 t.Bounds = screen.AllScreens(CurrentScreen).Bounds
                 t.StartPosition = FormStartPosition.Manual
@@ -10609,7 +10625,7 @@ End Sub
         Me.cbMovSetIgnArticle.Checked = Pref.MovSetIgnArticle 
         Me.cbMovTitleIgnArticle.Checked = Pref.MovTitleIgnArticle
         Me.cbRenameUnderscore.Checked = Pref.MovRenameSpaceCharacter
-        Me.ManualRenameChkbox.Checked = Pref.MovieManualRename
+        'Me.ManualRenameChkbox.Checked = Pref.MovieManualRename
         Me.TextBox_OfflineDVDTitle.Text = Pref.OfflineDVDTitle
         Me.tb_MovieRenameEnable.Text = Pref.MovieRenameTemplate
         Me.tb_MovFolderRename.Text = Pref.MovFolderRenameTemplate 
@@ -10711,6 +10727,7 @@ End Sub
         If Pref.XbmcLinkReady Then
             XbmcControllerQ.Write(XbmcController.E.ConnectReq, PriorityQueue.Priorities.low)
         End If
+        movieprefschanged = False
     End Sub
 
     Private Sub MediaCompanionHelpFileToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles MediaCompanionHelpFileToolStripMenuItem.Click
@@ -11166,7 +11183,7 @@ End Sub
         Me.TasksOnlyIncompleteTasks = TasksDontShowCompleted.Checked
     End Sub
 
-    Private Function createNameModeText() As String
+    Public Function createNameModeText() As String
         Dim txtMovieTitle As String = "Movie (0000)"
         Dim lstNameModeFiles As New List(Of String)(New String() {txtMovieTitle & " CD1.avi", txtMovieTitle & " CD2.avi"})
         If Pref.namemode = "1" Then txtMovieTitle &= " CD1"
@@ -12466,6 +12483,7 @@ End Sub
         cbExcludeMpaaRated                  .Checked        = Pref.ExcludeMpaaRated
         cbMovThousSeparator                 .Checked        = Pref.MovThousSeparator
         cbRenameUnderscore                  .Checked        = Pref.MovRenameSpaceCharacter
+        ManualRenameChkbox                  .Checked        = Pref.MovieManualRename
         If Pref.RenameSpaceCharacter = "_" Then
             rbRenameUnderscore.Checked = True
         Else
@@ -13626,18 +13644,18 @@ End Sub
         Try
             If CheckBox_Use_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
                 Pref.tvshow_useXBMC_Scraper = True
-                GroupBox2.Enabled = False
-                GroupBox3.Enabled = False
-                GroupBox5.Enabled = False
+                'GroupBox2.Enabled = False
+                'GroupBox3.Enabled = False
+                'GroupBox5.Enabled = False
                 GroupBox22.Visible = False
                 GroupBox22.SendToBack()
                 GroupBox_TVDB_Scraper_Preferences.Visible = True
                 GroupBox_TVDB_Scraper_Preferences.BringToFront()
             Else
                 Pref.tvshow_useXBMC_Scraper = False
-                GroupBox2.Enabled = True
-                GroupBox3.Enabled = True
-                GroupBox5.Enabled = True
+                'GroupBox2.Enabled = True
+                'GroupBox3.Enabled = True
+                'GroupBox5.Enabled = True
                 GroupBox22.Visible = True
                 GroupBox22.BringToFront()
                 GroupBox_TVDB_Scraper_Preferences.Visible = False
@@ -14071,7 +14089,7 @@ End Sub
 
     Private Sub Button_tv_RegexScrape_Restore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Restore.Click
         Try
-            util_RegexSetDefaultScraper()
+            Pref.util_RegexSetDefaultScraper()
             ListBox_tv_RegexScrape.Items.Clear()
             For Each Regex In tv_RegexScraper
                 ListBox_tv_RegexScrape.Items.Add(Regex)
@@ -14226,7 +14244,7 @@ End Sub
 
     Private Sub Button_tv_RegexRename_Restore_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Restore.Click
         Try
-            util_RegexSetDefaultRename()
+            Pref.util_RegexSetDefaultRename()
             ListBox_tv_RegexRename.Items.Clear()
             For Each Regex In tv_RegexRename
                 ListBox_tv_RegexRename.Items.Add(Regex)
@@ -14790,7 +14808,7 @@ End Sub
         Try
             Try
                 Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.lbPosterSourcePriorities.SelectedIndex <> Me.ListBox3.Items.Count - 1 Then
+                If Me.lbPosterSourcePriorities.SelectedIndex <> - 1 Then
                     mSelectedIndex = Me.lbPosterSourcePriorities.SelectedIndex
                     mOtherIndex = mSelectedIndex + 1
                     lbPosterSourcePriorities.Items.Insert(mSelectedIndex, lbPosterSourcePriorities.Items(mOtherIndex))
@@ -14816,12 +14834,12 @@ End Sub
 
     Private Sub btn_MovPosterPriorityReset_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityReset.Click
         Pref.resetmovthumblist()
-        If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
+        'If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
             lbPosterSourcePriorities.Items.Clear()
             For f = 0 To Pref.moviethumbpriority.Count-1
                 lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
             Next
-        End If
+        'End If
         movieprefschanged = True
         btnMoviePrefSaveChanges.Enabled = True
     End Sub
@@ -15785,7 +15803,7 @@ End Sub
     Private Sub btn_MovSepReset_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepReset.Click
         Pref.ResetMovSepLst()
         lb_MovSepLst.Items.Clear()
-        For Each it In MovSepLst
+        For Each it In Pref.MovSepLst
             lb_MovSepLst.Items.Add(it)
         Next
         movieprefschanged = True

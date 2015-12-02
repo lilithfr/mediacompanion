@@ -133,7 +133,9 @@
     <value>522, 17</value>
   </metadata>
   <data name="Label104.Text" xml:space="preserve">
-    <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled. The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).</value>
+    <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled.
+The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).
+If these are set incorrectly, it could result in XBMC being unable to scrape actor thumbs.</value>
   </data>
   <data name="Label103.Text" xml:space="preserve">
     <value>The "XBMC path" needs to be to the same folder as above, but from where XBMC is installed. If XBMC is installed on the same machine as Media Companion then the paths will be the same, but if XBMC is located on a seperate network device then the path will need to be as it is from XBMC to the Actor folders. The folder will need to be shared, and have any user and password information included in the path. eg "smb://username:password@devicename/sharename/"</value>
@@ -166,6 +168,27 @@ is still saved, as it should be.</value>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>621, 17</value>
   </metadata>
+  <data name="Label138.Text" xml:space="preserve">
+    <value>If you have enabled the option to 'Save Actor
+Thumbs to the '.Actors' Folder' located in the
+general preferences then this gives you this
+additional option.
+When Scraping episodes from TVDB, the only
+actor thumbnails avaialble are those at IMDB,
+but compared to TVDB, these actor thumbs
+are low quality.
+
+This preference gives you the option to copy an
+actors thumb, if available, to the episodes actor
+folder, allowing the higher quality TVDB actor
+thumb to be used for the episode.</value>
+  </data>
+  <data name="Label139.Text" xml:space="preserve">
+    <value>Enabling the 'Quick Add' option will speed up the
+scraping of TV Shows by not downloading available
+Art. All show art can be scraped at any time by using
+the TV context menu item to 'Download missing art'</value>
+  </data>
   <data name="Label196.Text" xml:space="preserve">
     <value>Notes:  - If Movie is in Root folder, new folder created
     - Separate folders with '\' character
@@ -199,6 +222,14 @@ or Avatar Extended-Edition
 If these words are in the movie's title, then Media Companion will handle them as separate movies.
 
 Media Companion will keep these it the Title, and in the Foldername.</value>
+  </data>
+  <data name="Label140.Text" xml:space="preserve">
+    <value>Media Companion now offers the option to
+automatically rename episodes during
+scraping.
+Only use this option if you are sure that the
+media file is named according to supported
+MC naming conventions.</value>
   </data>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start

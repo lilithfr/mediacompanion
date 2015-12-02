@@ -1612,6 +1612,24 @@ Public Class Pref
         XBMC_MC_MovieFolderMappings.IniFolders
     End Sub
 
+    Public Shared Sub util_RegexSetDefaultScraper()
+        tv_RegexScraper.Clear()
+        tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
+        tv_RegexScraper.Add("([\d]{1,4}).?[Ee]([\d]{1,4})")
+        tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
+        tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
+        tv_RegexScraper.Add("([\d]{1,2})\.([\d]{2})")
+    End Sub
+
+    Public Shared Sub util_RegexSetDefaultRename()
+        tv_RegexRename.Clear()
+        tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
+        tv_RegexRename.Add("S01E01 - Episode Title.ext")
+        tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
+        tv_RegexRename.Add("1x01 - Episode Title.ext")
+        tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
+        tv_RegexRename.Add("101 - Episode Title.ext")
+    End Sub
 
     Public Shared Function decxmlchars(ByVal line As String) As String
         line = line.Replace("&amp;", "&")

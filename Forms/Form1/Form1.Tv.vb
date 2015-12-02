@@ -10,7 +10,7 @@ Imports System.Linq
 
 Partial Public Class Form1
     Dim newEpisodeList As New List(Of TvEpisode)
-    Dim languageList As New List(Of Tvdb.Language)
+    Public languageList As New List(Of Tvdb.Language)
     Dim listOfShows As New List(Of str_PossibleShowList)
 
     Dim tvdbposterlist As New List(Of TvBanners)
