@@ -1247,7 +1247,7 @@ Module Module1
             End If
             root.AppendChild(xmlEpisode)        'otherwise, each episode is appended to the 'multiepisode' element
         Next
-
+        doc.AppendChild(root)
         Try
             Dim settings As New XmlWriterSettings()
             settings.Encoding = New UTF8Encoding(False)
@@ -1257,7 +1257,7 @@ Module Module1
             Dim writer As XmlWriter = XmlWriter.Create(path, settings)
             doc.Save(writer)
             writer.Close()
-            'doc.AppendChild(root)
+            '
             'Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
             'output.Formatting = Formatting.Indented
 
