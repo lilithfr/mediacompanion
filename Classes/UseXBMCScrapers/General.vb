@@ -1266,7 +1266,7 @@ Module General
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
-        If Form1.ComboBox_TVDB_Language.Items.Count > 0 Then Form1.ComboBox_TVDB_Language.Items.Clear()
+        'If Form1.ComboBox_TVDB_Language.Items.Count > 0 Then Form1.ComboBox_TVDB_Language.Items.Clear()
         Try
             For Each m_node In m_nodelist
                 For Each NodeChild In m_node.ChildNodes
@@ -1277,16 +1277,20 @@ Module General
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "dvdorder"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.rbXBMCTvdbDVDOrder.Checked = Test
+                                        Pref.XBMCTVDbDvdOrder = Test
+                                        'Form1.rbXBMCTvdbDVDOrder.Checked = Test
                                     Case "absolutenumber"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.rbXBMCTvdbAbsoluteNumber.Checked = Test
+                                        Pref.XBMCTVDbAbsoluteNumber = Test
+                                        'Form1.rbXBMCTvdbAbsoluteNumber.Checked = Test
                                     Case "fanart"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.cbXBMCTvdbFanart.Checked = Test
+                                        Pref.XBMCTVDbFanart = Test
+                                        'Form1.cbXBMCTvdbFanart.Checked = Test
                                     Case "posters"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.cbXBMCTvdbPosters.Checked = Test
+                                        Pref.XBMCTVDbPoster = Test
+                                        'Form1.cbXBMCTvdbPosters.Checked = Test
                                     Case "language"
                                         Dim Test As String = NodeChild.Attributes("default").Value
                                         Dim AllValues As String = NodeChild.Attributes("values").Value
@@ -1301,20 +1305,24 @@ Module General
                                                 TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
                                                 AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
                                             End If
-                                            Form1.ComboBox_TVDB_Language.Items.Add(TempValue)
+                                            Pref.XBMCTVDbLanguageLB.Add(TempValue)
+                                            'Form1.ComboBox_TVDB_Language.Items.Add(TempValue)
                                         Loop Until GetOut = True
-                                        Form1.ComboBox_TVDB_Language.Text = Test
+                                        Pref.XBMCTVDbLanguage = Test
+                                        'Form1.ComboBox_TVDB_Language.Text = Test
                                     Case "ratings"
                                         Dim Test As String = NodeChild.Attributes("default").Value
-                                        If Test = "IMDb" Then
-                                            Form1.cbXBMCTvdbRatingImdb.Checked = True
-                                        Else
-                                            Form1.cbXBMCTvdbRatingImdb.Checked = False
-                                        End If
+                                        Pref.XBMCTVDbRatings = Test
+                                        'If Test = "IMDb" Then
+                                        '    Form1.cbXBMCTvdbRatingImdb.Checked = True
+                                        'Else
+                                        '    Form1.cbXBMCTvdbRatingImdb.Checked = False
+                                        'End If
                                     Case "fallback"
                                         Dim Test As Boolean = NodeChild.Attributes("default").Value
-                                        Form1.cbXBMCTvdbRatingFallback.Checked = Test
-                                        Form1.cbXBMCTvdbRatingFallback.Enabled = Form1.cbXBMCTvdbRatingImdb.Checked
+                                        Pref.XBMCTVDbfallback = Test
+                                        'Form1.cbXBMCTvdbRatingFallback.Checked = Test
+                                        'Form1.cbXBMCTvdbRatingFallback.Enabled = Form1.cbXBMCTvdbRatingImdb.Checked
                                 End Select
                             Catch
                                 'empty node

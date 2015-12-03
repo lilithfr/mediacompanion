@@ -15,6 +15,8 @@ Public Class frmOptions
     Dim moviefolders As New List(Of str_RootPaths)
     Dim tvfolders As New List(Of String)
     Dim _changed As Boolean
+    Dim XbmcTMDbScraperChanged As Boolean = False
+    Dim XbmcTvdbScraperChanged As Boolean = False
     Dim prefsload As Boolean = False
     Dim videosourceprefchanged As Boolean = False
     Dim cleanfilenameprefchanged As Boolean = False
@@ -46,29 +48,24 @@ Public Class frmOptions
             If Changes Then
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
+                    If Pref.videomode = 4 AndAlso Not IO.File.Exists(Pref.selectedvideoplayer) Then
+                        MsgBox("You Have Not Selected Your Preferred Media Player")
+                        e.Cancel = True
+                        Exit Sub
+                    End If
+                    Form1.util_RegexSave()
                     Pref.ConfigSave()
-                    XBMCTMDBConfigSave()
-                    'XBMCTVDBConfigSave()
+                    If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
+                    If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
                 Else
-                    Pref.ConfigLoad()
+                    Form1.util_ConfigLoad(True)
+                    Form1.util_RegexLoad()
+                    'Pref.ConfigLoad()
                 End If
+                Changes = False
+                XbmcTvdbScraperChanged = False
+                XbmcTMDbScraperChanged = False
             End If
-            'For f = 0 To 33
-            '    Pref.certificatepriority(f) = ListBox5.Items(f)
-            'Next
-            'For f = 0 To 3
-            '    Pref.moviethumbpriority(f) = ListBox3.Items(f)
-            'Next
-
-            'If Pref.videomode = 4 Then
-            '    If Not IO.File.Exists(Pref.selectedvideoplayer) Then
-            '        MsgBox("You Have Not Selected Your Preferred Media Player")
-            '        e.Cancel = True
-            '        Exit Sub
-            '    End If
-            'End If
-
-            'Pref.SaveConfig()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -226,26 +223,6 @@ Public Class frmOptions
         MovArtInit()
         MovGenInit
         MovAdvInit()
-        
-        'Call Form1.mov_SwitchRuntime()
-        'localactorpath                      .Text           = Pref.actorsavepath
-        'xbmcactorpath                       .Text           = Pref.actornetworkpath
-        'RadioButton52                      .Checked        = If(Pref.XBMC_Scraper = "tmdb", True, False )
-        'cbTMDBPreferredCertCountry          .Checked        = Pref.TMDBPreferredCertCountry
-        'saveactorchkbx                      .Checked        = Pref.actorsave
-        'cb_LocalActorSaveAlpha              .Checked        = Pref.actorsavealpha
-        'localactorpath              .Enabled        = Pref.actorsave
-        'xbmcactorpath               .Enabled        = Pref.actorsave
-        'Button77                    .Enabled        = Pref.actorsave
-        'If lbVideoSource.Items.Count <> Pref.releaseformat.Length Then
-        '    lbVideoSource.Items.Clear()
-        '    For f = 0 To Pref.releaseformat.Length - 1
-        '        lbVideoSource.Items.Add(Pref.releaseformat(f))
-        '    Next
-        'End If
-        'lbCleanFilename.Items.Clear()
-        'lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
-        'Form1.TMDbControlsIni()
     End Sub
     
     Private Sub MovScraperInit()
@@ -444,6 +421,7 @@ Public Class frmOptions
 
         'Name Mode
         cbMoviePartsNameMode                .Checked        = Pref.namemode
+        lblNameMode                         .Text           = Form1.createNameModeText()
         cbMoviePartsIgnorePart              .Checked        = Pref.movieignorepart
 
         'Movie Filters
@@ -493,7 +471,18 @@ Public Class frmOptions
         End If
 
         'XBMC TVBD Scraper
-
+        rbXBMCTvdbDVDOrder              .Checked    = Pref.XBMCTVDbDvdOrder
+        rbXBMCTvdbAbsoluteNumber        .Checked    = Pref.XBMCTVDbAbsoluteNumber
+        cbXBMCTvdbFanart                .Checked    = Pref.XBMCTVDbFanart
+        cbXBMCTvdbPosters               .Checked    = Pref.XBMCTVDbPoster
+        ComboBox_TVDB_Language.Items.Clear()
+        For Each item In Pref.XBMCTVDbLanguageLB
+            ComboBox_TVDB_Language.Items.Add(item)
+        Next
+        ComboBox_TVDB_Language          .Text       = Pref.XBMCTVDbLanguage
+        cbXBMCTvdbRatingImdb            .Checked    = If(Pref.XBMCTVDbRatings.ToLower = "imdb", True, False)
+        cbXBMCTvdbRatingFallback        .Checked    = Pref.XBMCTVDbfallback
+        cbXBMCTvdbRatingFallback        .Enabled    = cbXBMCTvdbRatingImdb.Checked
 
         'MC TVDB Scraper Options
         If Pref.sortorder = "dvd" Then
@@ -532,7 +521,7 @@ Public Class frmOptions
 
         'TV Ep Renaming
         ComboBox_tv_EpisodeRename.Items.Clear()
-        For Each Regex In Form1.tv_RegexRename
+        For Each Regex In Pref.tv_RegexRename
             ComboBox_tv_EpisodeRename.Items.Add(Regex)
         Next
         ComboBox_tv_EpisodeRename.SelectedIndex     = If(Pref.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Pref.tvrename, 0)
@@ -556,12 +545,12 @@ Public Class frmOptions
 
     Private Sub TVRegexInit()
         lb_tv_RegexScrape.Items.Clear()
-        For Each regexc In Form1.tv_RegexScraper
+        For Each regexc In Pref.tv_RegexScraper
             lb_tv_RegexScrape.Items.Add(regexc)
         Next
 
         lb_tv_RegexRename.Items.Clear()
-        For Each regexc In Form1.tv_RegexRename
+        For Each regexc In Pref.tv_RegexRename
             lb_tv_RegexRename.Items.Add(regexc)
         Next
     End Sub
@@ -1080,7 +1069,6 @@ Public Class frmOptions
         Try
             If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
                 Pref.movies_useXBMC_Scraper = True
-                'Read_XBMC_TMDB_Scraper_Config()
                 GroupBox_MovieIMDBMirror.Enabled = False
                 GroupBox_MovieIMDBMirror.Visible = False
                 GroupBox_TMDB_Scraper_Preferences.Enabled = True
@@ -1101,31 +1089,24 @@ Public Class frmOptions
 
 'XBMC Scraper Preferences - TMDB
     Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbFanart.CheckedChanged
-        Try
-            If cbXbmcTmdbFanart.Checked = True Then
-                Pref.XbmcTmdbScraperFanart = "true"
-            Else
-                Pref.XbmcTmdbScraperFanart = "false"
-            End If
-            ''Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If cbXbmcTmdbFanart.Checked = True Then
+            Pref.XbmcTmdbScraperFanart = "true"
+        Else
+            Pref.XbmcTmdbScraperFanart = "false"
+        End If
+        Changes = True
+        XbmcTMDbScraperChanged = True
     End Sub
 
-    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged, cbXbmcTmdbIMDBRatings.CheckStateChanged 
-        Try
-            If cbXbmcTmdbIMDBRatings.Checked = True Then
-                Pref.XbmcTmdbScraperRatings = "IMDb"
-            Else
-                Pref.XbmcTmdbScraperRatings = "TMDb"
-            End If
-            'Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged, cbXbmcTmdbIMDBRatings.CheckStateChanged
+        If prefsload Then Exit Sub
+        If cbXbmcTmdbIMDBRatings.Checked = True Then
+            Pref.XbmcTmdbScraperRatings = "IMDb"
+        Else
+            Pref.XbmcTmdbScraperRatings = "TMDb"
+        End If
+        Changes = True
+        XbmcTMDbScraperChanged = True
     End Sub
 
     Private Sub cbXbmcTmdbOutlineFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbOutlineFromImdb.CheckedChanged
@@ -1165,58 +1146,44 @@ Public Class frmOptions
     End Sub
 
     Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbHDTrailer.SelectedIndexChanged
-        Try
-            Pref.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
-            'Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
+        Changes = True
+        XbmcTMDbScraperChanged = True
     End Sub
 
     Private Sub cmbxXbmcTmdbTitleLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbTitleLanguage.SelectedIndexChanged
-        Try
-            Pref.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
-            'Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
+        Changes = True
+        XbmcTMDbScraperChanged = True
     End Sub
 
     Private Sub cmbxTMDBPreferredCertCountry_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxTMDBPreferredCertCountry.SelectedIndexChanged
         If prefsload Then Exit Sub
-        Try     'tmdbcertcountry
-            Pref.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
-            'Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
+        Changes = True
+        XbmcTMDbScraperChanged = True
     End Sub
 
     Private Sub cbXbmcTmdbRename_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbRename.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If cbXbmcTmdbRename.CheckState = CheckState.Checked Then
-                If Pref.MovieRenameEnable Then
-                    Pref.XbmcTmdbRenameMovie = True
-                Else
-                    MsgBox("Please also enable 'Rename Movie'")
-                    cbXbmcTmdbRename.CheckState = CheckState.Unchecked 
-                End If
+        If cbXbmcTmdbRename.CheckState = CheckState.Checked Then
+            If Pref.MovieRenameEnable Then
+                Pref.XbmcTmdbRenameMovie = True
             Else
-                Pref.XbmcTmdbRenameMovie = False
+                MsgBox("Please also enable 'Rename Movie'")
+                cbXbmcTmdbRename.CheckState = CheckState.Unchecked 
             End If
-            Changes = True
-        Catch
-        End Try
+        Else
+            Pref.XbmcTmdbRenameMovie = False
+        End If
+        Changes = True
     End Sub
 
     Private Sub cbMovNewFolderInRootFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovNewFolderInRootFolder.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked
-            
+        Pref.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked 
         Changes = True
     End Sub
 
@@ -1225,6 +1192,7 @@ Public Class frmOptions
         Pref.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
         Changes = True
     End Sub
+
 'End of "Choose Default Scraper"
 
 'IMDB Scraper Limits
@@ -2280,98 +2248,50 @@ Public Class frmOptions
 'XBMC TVDB Scraper options
     Private Sub rbXBMCTvdbDVDOrder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbXBMCTvdbDVDOrder.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If rbXBMCTvdbDVDOrder.Checked = True Then
-                Save_XBMC_TVDB_Scraper_Config("dvdorder", "true")
-                Save_XBMC_TVDB_Scraper_Config("absolutenumber", "false")
-            Else
-                Save_XBMC_TVDB_Scraper_Config("dvdorder", "false")
-                Save_XBMC_TVDB_Scraper_Config("absolutenumber", "true")
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.XBMCTVDbDvdOrder = rbXBMCTvdbDVDOrder.Checked
+        Pref.XBMCTVDbAbsoluteNumber = Not rbXBMCTvdbDVDOrder.Checked
+        Changes = True
+        XbmcTvdbScraperChanged = True
     End Sub
 
     Private Sub cbXBMCTvdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbFanart.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If cbXBMCTvdbFanart.Checked = True Then
-                Save_XBMC_TVDB_Scraper_Config("fanart", "true")
-            Else
-                Save_XBMC_TVDB_Scraper_Config("fanart", "false")
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.XBMCTVDbFanart = cbXBMCTvdbFanart.Checked
+        Changes = True
+        XbmcTvdbScraperChanged = True
     End Sub
 
     Private Sub cbXBMCTvdbPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbPosters.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If cbXBMCTvdbPosters.Checked = True Then
-                Save_XBMC_TVDB_Scraper_Config("posters", "true")
-            Else
-                Save_XBMC_TVDB_Scraper_Config("posters", "false")
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.XBMCTVDbPoster = cbXBMCTvdbPosters.Checked
+        Changes = True
+        XbmcTvdbScraperChanged = True
     End Sub
 
     Private Sub ComboBox_TVDB_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_TVDB_Language.SelectedIndexChanged
         If prefsload Then Exit Sub
-        Try
-            Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
-            'Read_XBMC_TVDB_Scraper_Config()
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.XBMCTVDbLanguage = ComboBox_TVDB_Language.Text
+        Changes = True
+        XbmcTvdbScraperChanged = True
     End Sub
 
     Private Sub cbXBMCTvdbRatingImdb_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbRatingImdb.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If cbXBMCTvdbRatingImdb.Checked = True Then
-                Save_XBMC_TVDB_Scraper_Config("ratings", "IMDb")
-                cbXBMCTvdbRatingFallback.Enabled = True
-            Else
-                Save_XBMC_TVDB_Scraper_Config("ratings", "TheTVDB")
-                cbXBMCTvdbRatingFallback.Enabled = False
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        cbXBMCTvdbRatingFallback.Enabled = cbXBMCTvdbRatingImdb.Checked
+        If cbXBMCTvdbRatingImdb.Checked = True Then
+            Pref.XBMCTVDbRatings = "IMDb"
+        Else
+            Pref.XBMCTVDbRatings = "TheTVDB"
+        End If
+        Changes = True
+        XbmcTvdbScraperChanged = True
     End Sub
 
     Private Sub cbXBMCTvdbRatingFallback_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbRatingFallback.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If cbXBMCTvdbRatingFallback.Checked = True Then
-                Save_XBMC_TVDB_Scraper_Config("fallback", "true")
-            Else
-                Save_XBMC_TVDB_Scraper_Config("fallback", "false")
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.XBMCTVDbfallback = cbXBMCTvdbRatingFallback.Checked
+        Changes = True
+        XbmcTvdbScraperChanged = True
     End Sub
 
 'Endof - XBMC TVDB Scraper options
@@ -2473,7 +2393,7 @@ Public Class frmOptions
                 GroupBox_TVDB_Scraper_Preferences.Visible = False
                 GroupBox_TVDB_Scraper_Preferences.SendToBack()
             End If
-            Read_XBMC_TVDB_Scraper_Config()
+            'Read_XBMC_TVDB_Scraper_Config()
             Changes = True
             
         Catch ex As Exception
@@ -2654,7 +2574,7 @@ Public Class frmOptions
     Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
         If prefsload Then Exit Sub
         Try
-            If Renamer.setRenamePref(Form1.tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), Form1.tv_RegexScraper) Then
+            If Renamer.setRenamePref(Pref.tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), Pref.tv_RegexScraper) Then
                 Pref.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
                 Changes = True
                 
@@ -2729,9 +2649,9 @@ Public Class frmOptions
                 lb_tv_RegexScrape.Items.Insert(mSelectedIndex + 1, lb_tv_RegexScrape.Items(mOtherIndex))
                 lb_tv_RegexScrape.Items.RemoveAt(mOtherIndex)
             End If
-            Form1.tv_RegexScraper.Clear()
+            Pref.tv_RegexScraper.Clear()
             For Each item In lb_tv_RegexScrape.Items
-                Form1.tv_RegexScraper.Add(item)
+                Pref.tv_RegexScraper.Add(item)
             Next
             Changes = True
         Catch ex As Exception
@@ -2749,9 +2669,9 @@ Public Class frmOptions
                 lb_tv_RegexScrape.Items.Insert(mSelectedIndex, lb_tv_RegexScrape.Items(mOtherIndex))
                 lb_tv_RegexScrape.Items.RemoveAt(mOtherIndex + 1)
             End If
-            Form1.tv_RegexScraper.Clear()
+            Pref.tv_RegexScraper.Clear()
             For Each item In lb_tv_RegexScrape.Items
-                Form1.tv_RegexScraper.Add(item)
+                Pref.tv_RegexScraper.Add(item)
             Next
             Changes = True
         Catch ex As Exception
@@ -2773,9 +2693,9 @@ Public Class frmOptions
             lb_tv_RegexScrape.Items.RemoveAt(tempint)
             lb_tv_RegexScrape.Items.Insert(tempint, tb_tv_RegexScrape_Edit.Text)
             lb_tv_RegexScrape.SelectedIndex = tempint
-            Form1.tv_RegexScraper.Clear()
+            Pref.tv_RegexScraper.Clear()
             For Each regexp In lb_tv_RegexScrape.Items
-                Form1.tv_RegexScraper.Add(regexp)
+                Pref.tv_RegexScraper.Add(regexp)
             Next
             Changes = True
         Catch ex As Exception
@@ -2791,7 +2711,7 @@ Public Class frmOptions
                 Exit Sub
             End If
             lb_tv_RegexScrape.Items.Add(tb_tv_RegexScrape_New.Text)
-            Form1.tv_RegexScraper.Add(tb_tv_RegexScrape_New.Text)
+            Pref.tv_RegexScraper.Add(tb_tv_RegexScrape_New.Text)
             Changes = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -2806,9 +2726,9 @@ Public Class frmOptions
                 lb_tv_RegexScrape.Items.Remove(lb_tv_RegexScrape.SelectedItem)
             Catch ex As Exception
             End Try
-            For Each regexp In Form1.tv_RegexScraper
+            For Each regexp In Pref.tv_RegexScraper
                 If regexp = tempstring Then
-                    Form1.tv_RegexScraper.Remove(regexp)
+                    Pref.tv_RegexScraper.Remove(regexp)
                     Exit For
                 End If
             Next
@@ -2866,7 +2786,7 @@ Public Class frmOptions
         Try
            Pref. util_RegexSetDefaultScraper()
             lb_tv_RegexScrape.Items.Clear()
-            For Each Regex In Form1.tv_RegexScraper
+            For Each Regex In Pref.tv_RegexScraper
                 lb_tv_RegexScrape.Items.Add(Regex)
             Next
             Changes = True
@@ -2896,9 +2816,9 @@ Public Class frmOptions
                 lb_tv_RegexRename.Items.Insert(mSelectedIndex, lb_tv_RegexRename.Items(mOtherIndex))
                 lb_tv_RegexRename.Items.RemoveAt(mOtherIndex + 1)
             End If
-            Form1.tv_RegexRename.Clear()
+            Pref.tv_RegexRename.Clear()
             For Each item In lb_tv_RegexRename.Items
-                Form1.tv_RegexRename.Add(item)
+                Pref.tv_RegexRename.Add(item)
             Next
             Changes = True
         Catch ex As Exception
@@ -2916,9 +2836,9 @@ Public Class frmOptions
                 lb_tv_RegexRename.Items.Insert(mSelectedIndex + 1, lb_tv_RegexRename.Items(mOtherIndex))
                 lb_tv_RegexRename.Items.RemoveAt(mOtherIndex)
             End If
-            Form1.tv_RegexRename.Clear()
+            Pref.tv_RegexRename.Clear()
             For Each item In lb_tv_RegexRename.Items
-                Form1.tv_RegexRename.Add(item)
+                Pref.tv_RegexRename.Add(item)
             Next
             Changes = True
         Catch ex As Exception
@@ -2935,15 +2855,15 @@ Public Class frmOptions
             Catch ex As Exception
             End Try
 
-            For Each regexp In Form1.tv_RegexRename
+            For Each regexp In Pref.tv_RegexRename
                 If regexp = strRegexSelected Then
-                    Form1.tv_RegexRename.Remove(regexp)
+                    Pref.tv_RegexRename.Remove(regexp)
                     Exit For
                 End If
             Next
             tb_tv_RegexRename_Edit.Clear()
             ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Form1.tv_RegexRename
+            For Each Regex In Pref.tv_RegexRename
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
             ComboBox_tv_EpisodeRename.SelectedIndex = If(Pref.tvrename >= idxRegexSelected, Pref.tvrename - 1, Pref.tvrename)
@@ -2957,10 +2877,10 @@ Public Class frmOptions
         Try
             'add
             lb_tv_RegexRename.Items.Add(tb_tv_RegexRename_New.Text)
-            Form1.tv_RegexRename.Add(tb_tv_RegexRename_New.Text)
+            Pref.tv_RegexRename.Add(tb_tv_RegexRename_New.Text)
             tb_tv_RegexRename_New.Clear()
             ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Form1.tv_RegexRename
+            For Each Regex In Pref.tv_RegexRename
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
             ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
@@ -2980,9 +2900,9 @@ Public Class frmOptions
             lb_tv_RegexRename.Items.RemoveAt(tempint)
             lb_tv_RegexRename.Items.Insert(tempint, tb_tv_RegexRename_Edit.Text)
             lb_tv_RegexRename.SelectedIndex = tempint
-            Form1.tv_RegexRename.Clear()
+            Pref.tv_RegexRename.Clear()
             For Each regexp In lb_tv_RegexRename.Items
-                Form1.tv_RegexRename.Add(regexp)
+                Pref.tv_RegexRename.Add(regexp)
             Next
             tb_tv_RegexRename_Edit.Clear()
             Changes = True
@@ -2996,7 +2916,7 @@ Public Class frmOptions
             Pref.util_RegexSetDefaultRename()
             lb_tv_RegexRename.Items.Clear()
             ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Form1.tv_RegexRename
+            For Each Regex In Pref.tv_RegexRename
                 lb_tv_RegexRename.Items.Add(Regex)
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
@@ -3383,7 +3303,7 @@ Public Class frmOptions
             Pref.nfoposterscraper = 15
         End If
     End Sub
-
+    
     Private Sub XBMCTMDBConfigSave()
         If Not Pref.XbmcTmdbScraperRatings = Nothing Then
             Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
@@ -3391,6 +3311,18 @@ Public Class frmOptions
             Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
             Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
             Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
+        End If
+    End Sub
+
+    Private Sub XBMCTVDBConfigSave()
+        If Not String.IsNullOrEmpty(Pref.XBMCTVDbLanguage) Then
+            Save_XBMC_TVDB_Scraper_Config("dvdorder", Pref.XBMCTVDbDvdOrder)
+            Save_XBMC_TVDB_Scraper_Config("absolutenumber", Pref.XBMCTVDbAbsoluteNumber)
+            Save_XBMC_TVDB_Scraper_Config("fanart", Pref.XBMCTVDbFanart)
+            Save_XBMC_TVDB_Scraper_Config("posters", Pref.XBMCTVDbPoster)
+            Save_XBMC_TVDB_Scraper_Config("language", Pref.XBMCTVDbLanguage)  'ComboBox_TVDB_Language.Text)
+            Save_XBMC_TVDB_Scraper_Config("ratings", Pref.XBMCTVDbRatings)
+            Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback)
         End If
     End Sub
 

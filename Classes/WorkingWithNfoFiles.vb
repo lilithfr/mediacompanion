@@ -69,14 +69,22 @@ Public Class WorkingWithNfoFiles
     Public Shared Function SaveXMLDoc(ByVal doc As XmlDocument, ByVal Filename As String) As Boolean
         Dim aok As Boolean = False
         Try
-            Dim settings As New XmlWriterSettings()
-            settings.Encoding = New UTF8Encoding(False)
-            settings.Indent = True
-            settings.IndentChars = (ControlChars.Tab)
-            settings.NewLineHandling = NewLineHandling.None
-            Dim writer As XmlWriter = XmlWriter.Create(Filename, settings)
-            doc.Save(writer)
-            writer.Close()
+            Dim output As New XmlTextWriter(Filename, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            output.Indentation = 4
+            doc.WriteTo(output)
+            output.Close()
+
+            '''New Routine not encoding characters correctly, so revert to original routine above.
+            ''Dim settings As New XmlWriterSettings()
+            ''settings.Encoding = New UTF8Encoding(False)
+            ''settings.Indent = True
+            ''settings.IndentChars = (ControlChars.Tab)
+            ''settings.NewLineHandling = NewLineHandling.None
+            ''Dim writer As XmlWriter = XmlWriter.Create(Filename, settings)
+            ''doc.Save(writer)
+            ''writer.Close()
+
             aok = True
         Catch
         End Try
@@ -833,11 +841,11 @@ Public Class WorkingWithNfoFiles
         Return newtvshow
     End Function
 
-    'Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
-    '    If IO.File.Exists(Path) And Not overwrite Then Exit Sub
+    Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+        If IO.File.Exists(Path) And Not overwrite Then Exit Sub
 
-    '    Show.Save(Path)
-    'End Sub
+        Show.Save(Path)
+    End Sub
 
     Public Function tv_NfoLoadCheck(ByVal Path As String) As Boolean
         'Check if XBMC nfo and correct some entries before loading into Media Companion.

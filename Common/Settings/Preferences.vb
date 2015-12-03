@@ -389,6 +389,15 @@ Public Class Pref
     Public Shared TvdbLanguageCode As String = "en"
     Public Shared lastrefreshmissingdate As String
     Public Shared excludefromshowfoldername As String
+    'XBMC TVDB Scraper Options
+    Public Shared XBMCTVDbDvdOrder As Boolean
+    Public Shared XBMCTVDbAbsoluteNumber As Boolean
+    Public Shared XBMCTVDbFanart As Boolean
+    Public Shared XBMCTVDbPoster As Boolean
+    Public Shared XBMCTVDbLanguage As String
+    Public Shared XBMCTVDbLanguageLB As New List(Of String)
+    Public Shared XBMCTVDbRatings As String
+    Public Shared XBMCTVDbfallback As Boolean
 
     'Saved Music Video Prefs
     Public Shared MVScraper As String
@@ -1137,33 +1146,40 @@ Public Class Pref
 
 
         'TV Prefs ------------------------------------------------------------
-        root.AppendChild(doc, "tvshowautoquick",        tvshowautoquick)        'cbTvQuickAddShow
-        root.AppendChild(doc, "copytvactorthumbs",      copytvactorthumbs)      'CheckBox34
-        root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42
-        root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
-        root.AppendChild(doc, "tvfolderjpg",            tvfolderjpg)            'cb_TvFolderJpg
-        root.AppendChild(doc, "seasonfolderjpg",        seasonfolderjpg)        'cbseasonfolderjpg
-        root.AppendChild(doc, "downloadtvfanart",       tvdlfanart)             'cbTvDlFanart
-        root.AppendChild(doc, "downloadtvposter",       tvdlposter)             'cbTvDlPosterArt
-        root.AppendChild(doc, "downloadtvseasonthumbs", tvdlseasonthumbs)       'cbTvDlSeasonArt
-        root.AppendChild(doc, "TvDlFanartTvArt",        TvDlFanartTvArt)        'cbTvDlFanartTvArt
-        root.AppendChild(doc, "TvFanartTvFirst",        TvFanartTvFirst)        'cbTvFanartTvFirst
-        root.AppendChild(doc, "dlTVxtrafanart",         dlTVxtrafanart)         'cbDlTVxtrafanart
-        root.AppendChild(doc, "TvXtraFanartQty",        TvXtraFanartQty)        'cmbxTvXtraFanartQty
-        root.AppendChild(doc, "hdtvtags",               enabletvhdtags)         'CheckBox20
-        root.AppendChild(doc, "disabletvlogs",          disabletvlogs)          'CheckBox17
-        root.AppendChild(doc, "postertype",             postertype)             'posterbtn
-        root.AppendChild(doc, "seasonall",              seasonall)              'RadioButton39-41
-        root.AppendChild(doc, "tvrename",               tvrename)               'ComboBox_tv_EpisodeRename
-        root.AppendChild(doc, "eprenamelowercase",      eprenamelowercase)      'CheckBox_tv_EpisodeRenameCase
-        root.AppendChild(doc, "tvshowrefreshlog",       tvshowrefreshlog)       'set from frmOptions - obsolete
-        root.AppendChild(doc, "autoepisodescreenshot",  autoepisodescreenshot)  'cbTvAutoScreenShot
-        root.AppendChild(doc, "tvscrnshtTVDBResize",    tvscrnshtTVDBResize)    'cbTvScrnShtTVDBResize
-        root.AppendChild(doc, "TVShowUseXBMCScraper",   tvshow_useXBMC_Scraper) 'CheckBox_Use_XBMC_TVDB_Scraper
-        root.AppendChild(doc, "autorenameepisodes",     autorenameepisodes)     'CheckBox_tv_EpisodeRenameAuto
-        root.AppendChild(doc, "ScrShtDelay",            ScrShtDelay)            'AutoScrShtDelay
-        root.AppendChild(doc, "lastrefreshmissingdate", lastrefreshmissingdate)
-        root.AppendChild(doc, "excludefromshowfoldername", excludefromshowfoldername)
+        root.AppendChild(doc, "tvshowautoquick",                    tvshowautoquick)            'cbTvQuickAddShow
+        root.AppendChild(doc, "copytvactorthumbs",                  copytvactorthumbs)          'CheckBox34
+        root.AppendChild(doc, "tvdbmode",                           sortorder)                  'RadioButton42
+        root.AppendChild(doc, "tvdbactorscrape",                    TvdbActorScrape)            'ComboBox8
+        root.AppendChild(doc, "tvfolderjpg",                        tvfolderjpg)                'cb_TvFolderJpg
+        root.AppendChild(doc, "seasonfolderjpg",                    seasonfolderjpg)            'cbseasonfolderjpg
+        root.AppendChild(doc, "downloadtvfanart",                   tvdlfanart)                 'cbTvDlFanart
+        root.AppendChild(doc, "downloadtvposter",                   tvdlposter)                 'cbTvDlPosterArt
+        root.AppendChild(doc, "downloadtvseasonthumbs",             tvdlseasonthumbs)           'cbTvDlSeasonArt
+        root.AppendChild(doc, "TvDlFanartTvArt",                    TvDlFanartTvArt)            'cbTvDlFanartTvArt
+        root.AppendChild(doc, "TvFanartTvFirst",                    TvFanartTvFirst)            'cbTvFanartTvFirst
+        root.AppendChild(doc, "dlTVxtrafanart",                     dlTVxtrafanart)             'cbDlTVxtrafanart
+        root.AppendChild(doc, "TvXtraFanartQty",                    TvXtraFanartQty)            'cmbxTvXtraFanartQty
+        root.AppendChild(doc, "hdtvtags",                           enabletvhdtags)             'CheckBox20
+        root.AppendChild(doc, "disabletvlogs",                      disabletvlogs)              'CheckBox17
+        root.AppendChild(doc, "postertype",                         postertype)                 'posterbtn
+        root.AppendChild(doc, "seasonall",                          seasonall)                  'RadioButton39-41
+        root.AppendChild(doc, "tvrename",                           tvrename)                   'ComboBox_tv_EpisodeRename
+        root.AppendChild(doc, "eprenamelowercase",                  eprenamelowercase)          'CheckBox_tv_EpisodeRenameCase
+        root.AppendChild(doc, "tvshowrefreshlog",                   tvshowrefreshlog)           'set from frmOptions - obsolete
+        root.AppendChild(doc, "autoepisodescreenshot",              autoepisodescreenshot)      'cbTvAutoScreenShot
+        root.AppendChild(doc, "tvscrnshtTVDBResize",                tvscrnshtTVDBResize)        'cbTvScrnShtTVDBResize
+        root.AppendChild(doc, "TVShowUseXBMCScraper",               tvshow_useXBMC_Scraper)     'CheckBox_Use_XBMC_TVDB_Scraper
+        root.AppendChild(doc, "autorenameepisodes",                 autorenameepisodes)         'CheckBox_tv_EpisodeRenameAuto
+        root.AppendChild(doc, "ScrShtDelay",                        ScrShtDelay)                'AutoScrShtDelay
+        root.AppendChild(doc, "lastrefreshmissingdate",             lastrefreshmissingdate)
+        root.AppendChild(doc, "excludefromshowfoldername",          excludefromshowfoldername)
+        root.AppendChild(doc, "XBMCTVDbDvdOrder",                   XBMCTVDbDvdOrder)            'rbXBMCTvdbDVDOrder
+        root.AppendChild(doc, "XBMCTVDbAbsoluteNumber",             XBMCTVDbAbsoluteNumber)      'rbXBMCTvdbAbsoluteNumber
+        root.AppendChild(doc, "XBMCTVDbFanart",                     XBMCTVDbFanart)              'cbXBMCTvdbFanart
+        root.AppendChild(doc, "XBMCTVDbPoster",                     XBMCTVDbPoster)              'cbXBMCTvdbPosters
+        root.AppendChild(doc, "XBMCTVDbLanguage",                   XBMCTVDbLanguage)            'ComboBox_TVDB_Language.Text
+        root.AppendChild(doc, "XBMCTVDbRatings",                    XBMCTVDbRatings)             'cbXBMCTvdbRatingImdb
+        root.AppendChild(doc, "XBMCTVDbfallback",                   XBMCTVDbfallback)            'cbXBMCTvdbRatingFallback
 
         root.AppendChild(doc, "MVScraper",              MVScraper)              'ucMusicVideo.rbscraper
         root.AppendChild(doc, "MVsortorder",            MVsortorder)  
@@ -1462,7 +1478,14 @@ Public Class Pref
                     Case "downloadtvseasonthumbs"               : tvdlseasonthumbs = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "lastrefreshmissingdate"               : lastrefreshmissingdate = thisresult.InnerText 
-                    Case "excludefromshowfoldername"            : excludefromshowfoldername = thisresult.InnerText 
+                    Case "excludefromshowfoldername"            : excludefromshowfoldername = thisresult.InnerText
+                    Case "XBMCTVDbDvdOrder"                     : XBMCTVDbDvdOrder = thisresult.InnerXml
+                    Case "XBMCTVDbAbsoluteNumber"               : XBMCTVDbAbsoluteNumber = thisresult.InnerXml
+                    Case "XBMCTVDbFanart"                       : XBMCTVDbFanart = thisresult.InnerXml
+                    Case "XBMCTVDbPoster"                       : XBMCTVDbPoster = thisresult.InnerXml
+                    Case "XBMCTVDbLanguage"                     : XBMCTVDbLanguage = thisresult.InnerText
+                    Case "XBMCTVDbRatings"                      : XBMCTVDbRatings = thisresult.InnerText
+                    Case "XBMCTVDbfallback"                     : XBMCTVDbfallback = thisresult.InnerXml
 
                     Case "MVScraper"                            : MVScraper = thisresult.InnerText
                     Case "MVsortorder"                          : MVsortorder = thisresult.InnerXml 
