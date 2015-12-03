@@ -223,6 +223,8 @@ Public Class frmOptions
         MovArtInit()
         MovGenInit
         MovAdvInit()
+        'the following code aligns the 2 groupboxes ontop of each other which cannot be done in the GUI
+        GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
     End Sub
     
     Private Sub MovScraperInit()
@@ -1191,6 +1193,29 @@ Public Class frmOptions
         If prefsload Then Exit Sub
         Pref.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
         Changes = True
+    End Sub
+
+'MC Scraper Options
+    Private Sub cbImdbgetTMDBActor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
+        Changes = True
+    End Sub 
+
+    Private Sub cbImdbPrimaryPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)  Handles cbImdbPrimaryPlot.CheckedChanged 
+        If prefsload Then Exit Sub
+        Pref.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
+        Changes = True
+    End Sub
+
+    Private Sub lb_IMDBMirrors_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lb_IMDBMirrors.SelectedIndexChanged
+        If prefsload Then Exit Sub
+        Try
+            Pref.imdbmirror = lb_IMDBMirrors.SelectedItem
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 'End of "Choose Default Scraper"

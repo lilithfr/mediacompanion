@@ -126,28 +126,6 @@
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>271, 54</value>
-  </metadata>
-  <data name="cb_LocalActorSaveAlpha.ToolTip" xml:space="preserve">
-    <value>If this option is selected the file is saved in
-first letter of firstname folder, 
-firstname_lastname.jpg (or .tbn)
-example:
-\B\Brad_Pitt.jpg
-
-Default options is to use actor's imdb id as filename.</value>
-  </data>
-  <data name="Label104.Text" xml:space="preserve">
-    <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled. The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).</value>
-  </data>
-  <data name="Label103.Text" xml:space="preserve">
-    <value>The "XBMC path" needs to be to the same folder as above, but from where XBMC is installed. If XBMC is installed on the same machine as Media Companion then the paths will be the same, but if XBMC is located on a seperate network device then the path will need to be as it is from XBMC to the Actor folders. The folder will need to be shared, and have any user and password information included in the path. eg "smb://username:password@devicename/sharename/"</value>
-  </data>
-  <data name="Label101.Text" xml:space="preserve">
-    <value>Under normal circumstances, Media Companion will include the internet location for each available actor thumbnail. There are a couple of problems with this, firstly, when XBMC scrapes each nfo, if you enable actor thumbnails, XBMC needs to download these from the internet. Secondly, since MC also uses these urls to display actor thumbs, it can slow  down the Media Companion browser.
-These settings allow you to override this behaviour, saving the actor thumbs to a local folder, and adding the path to this into the nfo instead of a url.</value>
-  </data>
   <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1026, 54</value>
   </metadata>
@@ -156,7 +134,7 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAA+
-        DwAAAk1TRnQBSQFMAgEBCQEAAdQBaAHUAWgBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DwAAAk1TRnQBSQFMAgEBCQEAAdwBaAHcAWgBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -550,27 +528,6 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
   <metadata name="TVContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>429, 17</value>
   </metadata>
-  <data name="cbMovieBasicSave.ToolTip" xml:space="preserve">
-    <value>Saving movies in Basic Save Mode is only possible if
-"Use Foder Names for Scraping", or "All Movies are in Folders"
-is also selected.
-Saving of fanart.jpg or poster.jpg is disabled as per XBMC
-requirements.</value>
-  </data>
-  <data name="cbMoviePosterInFolder.ToolTip" xml:space="preserve">
-    <value>Drops filename from in front of poster.jpg.
-Either "Use Foldernames" or "All Movies in Folders"
-must be enabled.
-If Both artwork model is selected, Pre-Frodo artwork
-is still saved, as it should be.</value>
-  </data>
-  <data name="cbMovieFanartInFolders.ToolTip" xml:space="preserve">
-    <value>Drops filename from in front of fanart.jpg.
-Either "Use Foldernames" or "All Movies in Folders"
-must be enabled.
-If Both artwork model is selected, Pre-Frodo artwork
-is still saved, as it should be.</value>
-  </data>
   <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>519, 128</value>
   </metadata>
@@ -1639,6 +1596,9 @@ Removed tags are prefix with '-'</value>
         gIeAW3wPP5NWfDzmV171/5//5/8FivmRo6RpYfIAAAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>271, 54</value>
+  </metadata>
   <data name="btnMovieDisplay_CountriesFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -4922,12 +4882,6 @@ This can be any editable field including sets, and clicking the save button will
 If you do not wish to edit a field then leave it blank, only fields that contain
                                              text will be changed.</value>
   </data>
-  <data name="cbMovCreateFolderjpg.ToolTip" xml:space="preserve">
-    <value>Enabling this option will allow Media Companion to save the Poster as folder.jpg.
-This will allow XBMC to display the poster when browsing movies in file mode.
-Either "Use Foldernames" or "All Movies in Folders" must be enabled.
-</value>
-  </data>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>540, 54</value>
   </metadata>
@@ -5014,41 +4968,6 @@ Once folders have been added and saved, use the
 "Search for new movies" tab to allow MC to find and
 scrape any located media</value>
   </data>
-  <data name="Label196.Text" xml:space="preserve">
-    <value>Notes:  Folder Rename.
-    - If Movie is in Root folder, new folder created
-    - Separate folders with '\' character
-    - If %N (Movieset) is empty, folder for movieset is not
-        created, but MovieTitle folder is created.</value>
-  </data>
-  <data name="Label100.Text" xml:space="preserve">
-    <value>%T - Movie Title
-%Z - Sort Title
-%Y - Year
-%I - IMDbId
-%G - Genre (only first)
-%S - Movie Source 
-%N - MovieSet
-%P - Premiered Date
-%R - Rating
-%M - Mpaa Cert
-%L - Runtime length
-%V - Video Resolution
-%C - Video Codec
-%A - Audio Codec + Ch
-%O - Audio Channels
-%Fd - Folder size d=pecision</value>
-  </data>
-  <data name="Label198.Text" xml:space="preserve">
-    <value>Entries in this box, separate same movies.
-ie: Avatar 3D
-or Avatar Directors-Cut
-or Avatar Extended-Edition
-
-If these words are in the movie's title, then Media Companion will handle them as separate movies.
-
-Media Companion will keep these it the Title, and in the Foldername.</value>
-  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>920, 54</value>
   </metadata>
@@ -5057,7 +4976,7 @@ Media Companion will keep these it the Title, and in the Foldername.</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAEoAR4BKAEeASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        CwAAAk1TRnQBSQFMAwEBAAEwAR4BMAEeASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
         AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
         AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
         AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE

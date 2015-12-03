@@ -720,8 +720,8 @@ Public Class Form1
 
                 frmSplash.Close()
 
-                'the following code aligns the 2 groupboxes ontop of each other which cannot be done in the GUI
-                GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+                ''the following code aligns the 2 groupboxes ontop of each other which cannot be done in the GUI
+                'GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
 
                 'ToolStrip1.Enabled = True
 
@@ -8072,67 +8072,67 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbgetTMDBActor.Click
-        Pref.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub 
+    'Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Pref.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
+    '    movieprefschanged = True
+    '    btnMoviePrefSaveChanges.Enabled = True
+    'End Sub 
 
-    Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbImdbPrimaryPlot.Click
-        Try
-            Pref.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        Pref.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ListBox9_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox9.SelectedIndexChanged
-        Try
-            Pref.imdbmirror = ListBox9.SelectedItem
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ListBox9_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        Pref.imdbmirror = ListBox9.SelectedItem
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub mov_ThumbNailUrlsSet()
-        If IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 0
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 1
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 2
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 3
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 4
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 5
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 6
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Pref.nfoposterscraper = 7
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 8
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 9
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 10
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 11
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 12
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 13
-        ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 14
-        ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Pref.nfoposterscraper = 15
-        End If
-    End Sub
+    'Private Sub mov_ThumbNailUrlsSet()
+    '    If IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 0
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 1
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 2
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 3
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 4
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 5
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 6
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
+    '        Pref.nfoposterscraper = 7
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 8
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 9
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 10
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 11
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 12
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 13
+    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 14
+    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
+    '        Pref.nfoposterscraper = 15
+    '    End If
+    'End Sub
 
     Public Function util_RegexValidate(ByVal regexs As String)
         Try
@@ -11351,26 +11351,26 @@ End Sub
         End Try
     End Sub
 
-    Private Sub applyAdvancedLists()
-        If cleanfilenameprefchanged Then
-            Dim strTemp As String = ""
-            For i = 0 To lbCleanFilename.Items.Count - 1
-                strTemp &= lbCleanFilename.Items(i) & "|"
-            Next
-            Pref.moviecleanTags = strTemp.TrimEnd("|")
-            cleanfilenameprefchanged = False
-        End If
-        If videosourceprefchanged Then
-            Dim count As Integer = lbVideoSource.Items.Count - 1
-            ReDim Pref.releaseformat(count)
-            For g = 0 To count
-                Pref.releaseformat(g) = lbVideoSource.Items(g)
-            Next
-            mov_VideoSourcePopulate()
-            ep_VideoSourcePopulate()
-            videosourceprefchanged = False
-        End If
-    End Sub
+    'Private Sub applyAdvancedLists()
+    '    If cleanfilenameprefchanged Then
+    '        Dim strTemp As String = ""
+    '        For i = 0 To lbCleanFilename.Items.Count - 1
+    '            strTemp &= lbCleanFilename.Items(i) & "|"
+    '        Next
+    '        Pref.moviecleanTags = strTemp.TrimEnd("|")
+    '        cleanfilenameprefchanged = False
+    '    End If
+    '    If videosourceprefchanged Then
+    '        Dim count As Integer = lbVideoSource.Items.Count - 1
+    '        ReDim Pref.releaseformat(count)
+    '        For g = 0 To count
+    '            Pref.releaseformat(g) = lbVideoSource.Items(g)
+    '        Next
+    '        mov_VideoSourcePopulate()
+    '        ep_VideoSourcePopulate()
+    '        videosourceprefchanged = False
+    '    End If
+    'End Sub
 
     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
     Public Sub OpenUrl(ByVal url As String)
@@ -12442,244 +12442,244 @@ End Sub
     '    btnTVPrefSaveChanges.Enabled = False
     'End Sub
 
-    Private Sub mov_PreferencesSetup()
-        prefsload = True
-        displayRuntimeScraper = True
-        Read_XBMC_TMDB_Scraper_Config
-        If Pref.enablehdtags = True Then
-            CheckBox19.CheckState = CheckState.Checked
-            PanelDisplayRuntime.Enabled = True
-            If Pref.movieRuntimeDisplay = "file" Then
-                rbRuntimeFile.Checked = True
-            Else
-                rbRuntimeScraper.Checked = True
-            End If
-        Else
-            CheckBox19.CheckState = CheckState.Unchecked
-            PanelDisplayRuntime.Enabled = False
-            rbRuntimeScraper.Checked = True
-        End If
-        Call mov_SwitchRuntime()
+    'Private Sub mov_PreferencesSetup()
+    '    prefsload = True
+    '    displayRuntimeScraper = True
+    '    Read_XBMC_TMDB_Scraper_Config
+    '    If Pref.enablehdtags = True Then
+    '        CheckBox19.CheckState = CheckState.Checked
+    '        PanelDisplayRuntime.Enabled = True
+    '        If Pref.movieRuntimeDisplay = "file" Then
+    '            rbRuntimeFile.Checked = True
+    '        Else
+    '            rbRuntimeScraper.Checked = True
+    '        End If
+    '    Else
+    '        CheckBox19.CheckState = CheckState.Unchecked
+    '        PanelDisplayRuntime.Enabled = False
+    '        rbRuntimeScraper.Checked = True
+    '    End If
+    '    Call mov_SwitchRuntime()
 
-        ListBox9                            .SelectedItem   = Pref.imdbmirror
-        TextBox_OfflineDVDTitle             .Text           = Pref.OfflineDVDTitle
-        tb_MovieRenameEnable                .Text           = Pref.MovieRenameTemplate
-        tb_MovFolderRename                  .Text           = Pref.MovFolderRenameTemplate 
-        localactorpath                      .Text           = Pref.actorsavepath
-        xbmcactorpath                       .Text           = Pref.actornetworkpath
-        cbPreferredTrailerResolution        .Text           = Pref.moviePreferredTrailerResolution.ToUpper()
-        cb_MovDurationAsRuntine             .Checked        = Pref.MovDurationAsRuntine 
-        cbMovieRuntimeFallbackToFile        .Enabled        = (Pref.movieRuntimeDisplay = "scraper")
-        cbMovieRuntimeFallbackToFile        .Checked        = Pref.movieRuntimeFallbackToFile
-        tbDateFormat                        .Text           = Pref.DateFormat
-        cbMovieList_ShowColPlot             .Checked        = Pref.MovieList_ShowColPlot
-        cbDisableNotMatchingRenamePattern   .Checked        = Pref.DisableNotMatchingRenamePattern
-        cbMovieList_ShowColWatched          .Checked        = Pref.MovieList_ShowColWatched
-        cmbxMovieScraper_MaxStudios         .SelectedItem   = Pref.MovieScraper_MaxStudios.ToString
-        nudActorsFilterMinFilms             .Text           = Pref.ActorsFilterMinFilms
-        nudMaxActorsInFilter                .Text           = Pref.MaxActorsInFilter
-        cbMovieFilters_Actors_Order         .SelectedIndex  = Pref.MovieFilters_Actors_Order
-        nudDirectorsFilterMinFilms          .Text           = Pref.DirectorsFilterMinFilms
-        nudMaxDirectorsInFilter             .Text           = Pref.MaxDirectorsInFilter
-        cbMovieFilters_Directors_Order      .SelectedIndex  = Pref.MovieFilters_Directors_Order
-        cbMissingMovie                      .Checked        = Pref.incmissingmovies 
-        nudSetsFilterMinFilms               .Text           = Pref.SetsFilterMinFilms
-        nudMaxSetsInFilter                  .Text           = Pref.MaxSetsInFilter
-        cbMovieFilters_Sets_Order           .SelectedIndex  = Pref.MovieFilters_Sets_Order
-        chkbOriginal_Title                  .Checked        = Pref.Original_Title
-        'RadioButton52                      .Checked        = If(Pref.XBMC_Scraper = "tmdb", True, False ) 
-        cbNoAltTitle                        .Checked        = Pref.NoAltTitle
-        cbXtraFrodoUrls                     .Checked        = Not Pref.XtraFrodoUrls
-        CheckBox16                          .Checked        = Not Pref.disablelogfiles
-        cbDlTrailerDuringScrape             .Checked        = Pref.DownloadTrailerDuringScrape
-        cbMovieTrailerUrl                   .Checked        = Pref.gettrailer
-        cbMoviePosterScrape                 .Checked        = Pref.scrapemovieposters
-        cbMovFanartScrape                   .Checked        = Pref.savefanart
-        cbMovFanartTvScrape                 .Checked        = Pref.MovFanartTvscrape
-        cbMovFanartNaming                   .Checked        = Pref.MovFanartNaming
-        cbMovieUseFolderNames               .Checked        = Pref.usefoldernames
-        cbMovXtraThumbs                     .Checked        = Pref.movxtrathumb
-        cbMovXtraFanart                     .Checked        = Pref.movxtrafanart
-        cbDlXtraFanart                      .Checked        = Pref.dlxtrafanart
-        cbMovSetArtScrape                   .Checked        = Pref.dlMovSetArtwork
-        rbMovSetArtSetFolder                .Checked        = Pref.MovSetArtSetFolder
-        rbMovSetFolder                      .Checked        = Not Pref.MovSetArtSetFolder 
-        btnMovSetCentralFolderSelect        .Enabled        = Pref.MovSetArtSetFolder 
-        tbMovSetArtCentralFolder            .Text           = Pref.MovSetArtCentralFolder 
-        cbMovieAllInFolders                 .Checked        = Pref.allfolders
-        cbMovCreateFolderjpg                .Checked        = Pref.createfolderjpg
-        cbMovCreateFanartjpg                .Checked        = Pref.createfanartjpg
-        cbMovRootFolderCheck                .Checked        = Pref.movrootfoldercheck
-        cbMovieBasicSave                    .Checked        = Pref.basicsavemode
-        cbxNameMode                         .Checked        = Pref.namemode
-        lblNameMode                         .Text           = createNameModeText()
-        cbxCleanFilenameIgnorePart          .Checked        = Pref.movieignorepart
-        ScrapeFullCertCheckBox              .Checked        = Pref.scrapefullcert
-        cbMovieRenameEnable                 .Checked        = Pref.MovieRenameEnable
-        cbMovNewFolderInRootFolder          .Checked        = Pref.MovNewFolderInRootFolder
-        cbMovFolderRename                   .Checked        = Pref.MovFolderRename
-        cbMovSetIgnArticle                  .Checked        = Pref.MovSetIgnArticle
-        cbMovSortIgnArticle                 .Checked        = Pref.MovSortIgnArticle
-        cbMovTitleIgnArticle                .Checked        = Pref.MovTitleIgnArticle
-        cbMovTitleCase                      .Checked        = Pref.MovTitleCase
-        cbExcludeMpaaRated                  .Checked        = Pref.ExcludeMpaaRated
-        cbMovThousSeparator                 .Checked        = Pref.MovThousSeparator
-        cbRenameUnderscore                  .Checked        = Pref.MovRenameSpaceCharacter
-        ManualRenameChkbox                  .Checked        = Pref.MovieManualRename
-        If Pref.RenameSpaceCharacter = "_" Then
-            rbRenameUnderscore.Checked = True
-        Else
-            rbRenameFullStop.Checked = True
-        End If
-        CheckBox_ShowDateOnMovieList        .Checked        = Pref.showsortdate
-        cbImdbgetTMDBActor                  .Checked        = Pref.TmdbActorsImdbScrape
-        'cbTMDBPreferredCertCountry          .Checked        = Pref.TMDBPreferredCertCountry
-        cbImdbPrimaryPlot                   .Checked        = Pref.ImdbPrimaryPlot
-        cbXbmcTmdbRename                    .Checked        = Pref.XbmcTmdbRenameMovie
-        cbXbmcTmdbOutlineFromImdb           .Checked        = Pref.XbmcTmdbMissingFromImdb
-        cbXbmcTmdbTop250FromImdb            .Checked        = Pref.XbmcTmdbTop250FromImdb 
-        cbXbmcTmdbVotesFromImdb             .Checked        = Pref.XbmcTmdbVotesFromImdb 
-        cbXbmcTmdbCertFromImdb              .Checked        = Pref.XbmcTmdbCertFromImdb
-        cbXbmcTmdbStarsFromImdb             .Checked        = Pref.XbmcTmdbStarsFromImdb 
-        cbXbmcTmdbAkasFromImdb              .Checked        = Pref.XbmcTmdbAkasFromImdb
-        cbXbmcTmdbActorDL                   .Checked        = Pref.XbmcTmdbActorDL
-        saveactorchkbx                      .Checked        = Pref.actorsave
-        cb_LocalActorSaveAlpha              .Checked        = Pref.actorsavealpha
+    '    ListBox9                            .SelectedItem   = Pref.imdbmirror
+    '    TextBox_OfflineDVDTitle             .Text           = Pref.OfflineDVDTitle
+    '    tb_MovieRenameEnable                .Text           = Pref.MovieRenameTemplate
+    '    tb_MovFolderRename                  .Text           = Pref.MovFolderRenameTemplate 
+    '    localactorpath                      .Text           = Pref.actorsavepath
+    '    xbmcactorpath                       .Text           = Pref.actornetworkpath
+    '    cbPreferredTrailerResolution        .Text           = Pref.moviePreferredTrailerResolution.ToUpper()
+    '    cb_MovDurationAsRuntine             .Checked        = Pref.MovDurationAsRuntine 
+    '    cbMovieRuntimeFallbackToFile        .Enabled        = (Pref.movieRuntimeDisplay = "scraper")
+    '    cbMovieRuntimeFallbackToFile        .Checked        = Pref.movieRuntimeFallbackToFile
+    '    tbDateFormat                        .Text           = Pref.DateFormat
+    '    cbMovieList_ShowColPlot             .Checked        = Pref.MovieList_ShowColPlot
+    '    cbDisableNotMatchingRenamePattern   .Checked        = Pref.DisableNotMatchingRenamePattern
+    '    cbMovieList_ShowColWatched          .Checked        = Pref.MovieList_ShowColWatched
+    '    cmbxMovieScraper_MaxStudios         .SelectedItem   = Pref.MovieScraper_MaxStudios.ToString
+    '    nudActorsFilterMinFilms             .Text           = Pref.ActorsFilterMinFilms
+    '    nudMaxActorsInFilter                .Text           = Pref.MaxActorsInFilter
+    '    cbMovieFilters_Actors_Order         .SelectedIndex  = Pref.MovieFilters_Actors_Order
+    '    nudDirectorsFilterMinFilms          .Text           = Pref.DirectorsFilterMinFilms
+    '    nudMaxDirectorsInFilter             .Text           = Pref.MaxDirectorsInFilter
+    '    cbMovieFilters_Directors_Order      .SelectedIndex  = Pref.MovieFilters_Directors_Order
+    '    cbMissingMovie                      .Checked        = Pref.incmissingmovies 
+    '    nudSetsFilterMinFilms               .Text           = Pref.SetsFilterMinFilms
+    '    nudMaxSetsInFilter                  .Text           = Pref.MaxSetsInFilter
+    '    cbMovieFilters_Sets_Order           .SelectedIndex  = Pref.MovieFilters_Sets_Order
+    '    chkbOriginal_Title                  .Checked        = Pref.Original_Title
+    '    'RadioButton52                      .Checked        = If(Pref.XBMC_Scraper = "tmdb", True, False ) 
+    '    cbNoAltTitle                        .Checked        = Pref.NoAltTitle
+    '    cbXtraFrodoUrls                     .Checked        = Not Pref.XtraFrodoUrls
+    '    CheckBox16                          .Checked        = Not Pref.disablelogfiles
+    '    cbDlTrailerDuringScrape             .Checked        = Pref.DownloadTrailerDuringScrape
+    '    cbMovieTrailerUrl                   .Checked        = Pref.gettrailer
+    '    cbMoviePosterScrape                 .Checked        = Pref.scrapemovieposters
+    '    cbMovFanartScrape                   .Checked        = Pref.savefanart
+    '    cbMovFanartTvScrape                 .Checked        = Pref.MovFanartTvscrape
+    '    cbMovFanartNaming                   .Checked        = Pref.MovFanartNaming
+    '    cbMovieUseFolderNames               .Checked        = Pref.usefoldernames
+    '    cbMovXtraThumbs                     .Checked        = Pref.movxtrathumb
+    '    cbMovXtraFanart                     .Checked        = Pref.movxtrafanart
+    '    cbDlXtraFanart                      .Checked        = Pref.dlxtrafanart
+    '    cbMovSetArtScrape                   .Checked        = Pref.dlMovSetArtwork
+    '    rbMovSetArtSetFolder                .Checked        = Pref.MovSetArtSetFolder
+    '    rbMovSetFolder                      .Checked        = Not Pref.MovSetArtSetFolder 
+    '    btnMovSetCentralFolderSelect        .Enabled        = Pref.MovSetArtSetFolder 
+    '    tbMovSetArtCentralFolder            .Text           = Pref.MovSetArtCentralFolder 
+    '    cbMovieAllInFolders                 .Checked        = Pref.allfolders
+    '    cbMovCreateFolderjpg                .Checked        = Pref.createfolderjpg
+    '    cbMovCreateFanartjpg                .Checked        = Pref.createfanartjpg
+    '    cbMovRootFolderCheck                .Checked        = Pref.movrootfoldercheck
+    '    cbMovieBasicSave                    .Checked        = Pref.basicsavemode
+    '    cbxNameMode                         .Checked        = Pref.namemode
+    '    lblNameMode                         .Text           = createNameModeText()
+    '    cbxCleanFilenameIgnorePart          .Checked        = Pref.movieignorepart
+    '    ScrapeFullCertCheckBox              .Checked        = Pref.scrapefullcert
+    '    cbMovieRenameEnable                 .Checked        = Pref.MovieRenameEnable
+    '    cbMovNewFolderInRootFolder          .Checked        = Pref.MovNewFolderInRootFolder
+    '    cbMovFolderRename                   .Checked        = Pref.MovFolderRename
+    '    cbMovSetIgnArticle                  .Checked        = Pref.MovSetIgnArticle
+    '    cbMovSortIgnArticle                 .Checked        = Pref.MovSortIgnArticle
+    '    cbMovTitleIgnArticle                .Checked        = Pref.MovTitleIgnArticle
+    '    cbMovTitleCase                      .Checked        = Pref.MovTitleCase
+    '    cbExcludeMpaaRated                  .Checked        = Pref.ExcludeMpaaRated
+    '    cbMovThousSeparator                 .Checked        = Pref.MovThousSeparator
+    '    cbRenameUnderscore                  .Checked        = Pref.MovRenameSpaceCharacter
+    '    ManualRenameChkbox                  .Checked        = Pref.MovieManualRename
+    '    If Pref.RenameSpaceCharacter = "_" Then
+    '        rbRenameUnderscore.Checked = True
+    '    Else
+    '        rbRenameFullStop.Checked = True
+    '    End If
+    '    CheckBox_ShowDateOnMovieList        .Checked        = Pref.showsortdate
+    '    cbImdbgetTMDBActor                  .Checked        = Pref.TmdbActorsImdbScrape
+    '    'cbTMDBPreferredCertCountry          .Checked        = Pref.TMDBPreferredCertCountry
+    '    cbImdbPrimaryPlot                   .Checked        = Pref.ImdbPrimaryPlot
+    '    cbXbmcTmdbRename                    .Checked        = Pref.XbmcTmdbRenameMovie
+    '    cbXbmcTmdbOutlineFromImdb           .Checked        = Pref.XbmcTmdbMissingFromImdb
+    '    cbXbmcTmdbTop250FromImdb            .Checked        = Pref.XbmcTmdbTop250FromImdb 
+    '    cbXbmcTmdbVotesFromImdb             .Checked        = Pref.XbmcTmdbVotesFromImdb 
+    '    cbXbmcTmdbCertFromImdb              .Checked        = Pref.XbmcTmdbCertFromImdb
+    '    cbXbmcTmdbStarsFromImdb             .Checked        = Pref.XbmcTmdbStarsFromImdb 
+    '    cbXbmcTmdbAkasFromImdb              .Checked        = Pref.XbmcTmdbAkasFromImdb
+    '    cbXbmcTmdbActorDL                   .Checked        = Pref.XbmcTmdbActorDL
+    '    saveactorchkbx                      .Checked        = Pref.actorsave
+    '    cb_LocalActorSaveAlpha              .Checked        = Pref.actorsavealpha
 
-        localactorpath              .Enabled        = Pref.actorsave
-        xbmcactorpath               .Enabled        = Pref.actorsave
-        Button77                    .Enabled        = Pref.actorsave
+    '    localactorpath              .Enabled        = Pref.actorsave
+    '    xbmcactorpath               .Enabled        = Pref.actorsave
+    '    Button77                    .Enabled        = Pref.actorsave
 
-        If Not Pref.usefoldernames and Not Pref.allfolders then
-            cbMovCreateFolderjpg.Enabled = False
-            cbMovCreateFanartjpg.Enabled = False
-            cbMovieFanartInFolders.Enabled = False
-            cbMoviePosterInFolder.Enabled = False
-            Pref.fanartjpg=False
-            Pref.posterjpg=False
-        Else
-            cbMovieFanartInFolders  .Checked    = Pref.fanartjpg
-            cbMoviePosterInFolder   .Checked    = Pref.posterjpg
-        End If
+    '    If Not Pref.usefoldernames and Not Pref.allfolders then
+    '        cbMovCreateFolderjpg.Enabled = False
+    '        cbMovCreateFanartjpg.Enabled = False
+    '        cbMovieFanartInFolders.Enabled = False
+    '        cbMoviePosterInFolder.Enabled = False
+    '        Pref.fanartjpg=False
+    '        Pref.posterjpg=False
+    '    Else
+    '        cbMovieFanartInFolders  .Checked    = Pref.fanartjpg
+    '        cbMoviePosterInFolder   .Checked    = Pref.posterjpg
+    '    End If
 
-        cmbxMovXtraFanartQty.SelectedIndex = cmbxMovXtraFanartQty.FindStringExact(Pref.movxtrafanartqty.ToString)
+    '    cmbxMovXtraFanartQty.SelectedIndex = cmbxMovXtraFanartQty.FindStringExact(Pref.movxtrafanartqty.ToString)
 
-        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
-        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Pref.PosterResolutionSI)
-        Movie.LoadHeightResolutionOptions(comboActorResolutions, Pref.ActorResolutionSI)
-        
-        Select Case Pref.maxactors
-            Case 9999
-                ComboBox7.SelectedItem = "All Available"
-            Case 0
-                ComboBox7.SelectedItem = "None"
-            Case Else
-                ComboBox7.SelectedItem = Pref.maxactors.ToString
-        End Select
+    '    Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
+    '    Movie.LoadHeightResolutionOptions(comboPosterResolutions, Pref.PosterResolutionSI)
+    '    Movie.LoadHeightResolutionOptions(comboActorResolutions, Pref.ActorResolutionSI)
 
-        Select Case Pref.maxmoviegenre
-            Case 99
-                ComboBox6.SelectedItem = "All Available"
-            Case 0
-                ComboBox6.SelectedItem = "None"
-            Case Else
-                ComboBox6.SelectedItem = Pref.maxmoviegenre.ToString
-        End Select
+    '    Select Case Pref.maxactors
+    '        Case 9999
+    '            ComboBox7.SelectedItem = "All Available"
+    '        Case 0
+    '            ComboBox7.SelectedItem = "None"
+    '        Case Else
+    '            ComboBox7.SelectedItem = Pref.maxactors.ToString
+    '    End Select
 
-        cb_keywordasTag.Checkstate = If(Pref.keywordasTag, CheckState.Checked, CheckState.Unchecked)
-        Select Case Pref.keywordlimit 
-            Case 999
-                cb_keywordlimit.SelectedItem = "All Available"
-            Case 0
-                cb_keywordlimit.SelectedItem = "None"
-            Case Else
-                cb_keywordlimit.SelectedItem = Pref.keywordlimit.ToString
-        End Select
+    '    Select Case Pref.maxmoviegenre
+    '        Case 99
+    '            ComboBox6.SelectedItem = "All Available"
+    '        Case 0
+    '            ComboBox6.SelectedItem = "None"
+    '        Case Else
+    '            ComboBox6.SelectedItem = Pref.maxmoviegenre.ToString
+    '    End Select
 
-        If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
-            lbPosterSourcePriorities.Items.Clear()
-            For f = 0 To Pref.moviethumbpriority.Count-1
-                lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
-            Next
-        End If
-        If lb_MovSepLst.Items.Count <> Pref.MovSepLst.Count Then
-            lb_MovSepLst.Items.Clear()
-            For Each t In Pref.MovSepLst 
-                lb_MovSepLst.Items.Add(t)
-            Next
-        End If
+    '    cb_keywordasTag.Checkstate = If(Pref.keywordasTag, CheckState.Checked, CheckState.Unchecked)
+    '    Select Case Pref.keywordlimit 
+    '        Case 999
+    '            cb_keywordlimit.SelectedItem = "All Available"
+    '        Case 0
+    '            cb_keywordlimit.SelectedItem = "None"
+    '        Case Else
+    '            cb_keywordlimit.SelectedItem = Pref.keywordlimit.ToString
+    '    End Select
 
-        If ListBox11.Items.Count <> Pref.certificatepriority.Length Then
-            ListBox11.Items.Clear()
-            For f = 0 To 33
-                ListBox11.Items.Add(Pref.certificatepriority(f))
-            Next
-        End If
+    '    If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
+    '        lbPosterSourcePriorities.Items.Clear()
+    '        For f = 0 To Pref.moviethumbpriority.Count-1
+    '            lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
+    '        Next
+    '    End If
+    '    If lb_MovSepLst.Items.Count <> Pref.MovSepLst.Count Then
+    '        lb_MovSepLst.Items.Clear()
+    '        For Each t In Pref.MovSepLst 
+    '            lb_MovSepLst.Items.Add(t)
+    '        Next
+    '    End If
 
-        If lbVideoSource.Items.Count <> Pref.releaseformat.Length Then
-            lbVideoSource.Items.Clear()
-            For f = 0 To Pref.releaseformat.Length - 1
-                lbVideoSource.Items.Add(Pref.releaseformat(f))
-            Next
-        End If
+    '    If ListBox11.Items.Count <> Pref.certificatepriority.Length Then
+    '        ListBox11.Items.Clear()
+    '        For f = 0 To 33
+    '            ListBox11.Items.Add(Pref.certificatepriority(f))
+    '        Next
+    '    End If
 
-        lbCleanFilename.Items.Clear()
-        lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
+    '    If lbVideoSource.Items.Count <> Pref.releaseformat.Length Then
+    '        lbVideoSource.Items.Clear()
+    '        For f = 0 To Pref.releaseformat.Length - 1
+    '            lbVideoSource.Items.Add(Pref.releaseformat(f))
+    '        Next
+    '    End If
 
-        IMPA_chk.CheckState = If(Pref.nfoposterscraper And 1, CheckState.Checked, CheckState.Unchecked)
-        tmdb_chk.CheckState = If(Pref.nfoposterscraper And 2, CheckState.Checked, CheckState.Unchecked)
-        mpdb_chk.CheckState = If(Pref.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
-        imdb_chk.CheckState = If(Pref.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
+    '    lbCleanFilename.Items.Clear()
+    '    lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
+
+    '    IMPA_chk.CheckState = If(Pref.nfoposterscraper And 1, CheckState.Checked, CheckState.Unchecked)
+    '    tmdb_chk.CheckState = If(Pref.nfoposterscraper And 2, CheckState.Checked, CheckState.Unchecked)
+    '    mpdb_chk.CheckState = If(Pref.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
+    '    imdb_chk.CheckState = If(Pref.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
 
 
-        If Pref.movies_useXBMC_Scraper = True Then
-            CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
-        Else
-            CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
-            GroupBox_MovieIMDBMirror.Enabled = True
-            GroupBox_MovieIMDBMirror.Visible = True
-            GroupBox_MovieIMDBMirror.BringToFront()
-        End If
-        cbXbmcTmdbFanart                    .Checked        = Convert.ToBoolean(Pref.XbmcTmdbScraperFanart)
-        cmbxXbmcTmdbHDTrailer.Items.Clear()
-        For each thisvalue In Pref.XbmcTmdbScraperTrailerQLB
-            cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
-        Next
-        cmbxXbmcTmdbHDTrailer.Text = Pref.XbmcTmdbScraperTrailerQ
-        cmbxXbmcTmdbTitleLanguage.Items.Clear()
-        For Each thisvalue In Pref.XbmcTmdbScraperLanguageLB
-            cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
-        Next
-        cmbxXbmcTmdbTitleLanguage.Text = Pref.XbmcTmdbScraperLanguage
-        cbXbmcTmdbIMDBRatings               .Checked        = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
-        cmbxTMDBPreferredCertCountry.Items.Clear()
-        For Each thisvalue In Pref.XbmcTmdbScraperCertCountryLB
-            cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
-        Next
-        cmbxTMDBPreferredCertCountry.Text = Pref.XbmcTmdbScraperCertCountry
+    '    If Pref.movies_useXBMC_Scraper = True Then
+    '        CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
+    '    Else
+    '        CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
+    '        GroupBox_MovieIMDBMirror.Enabled = True
+    '        GroupBox_MovieIMDBMirror.Visible = True
+    '        GroupBox_MovieIMDBMirror.BringToFront()
+    '    End If
+    '    cbXbmcTmdbFanart                    .Checked        = Convert.ToBoolean(Pref.XbmcTmdbScraperFanart)
+    '    cmbxXbmcTmdbHDTrailer.Items.Clear()
+    '    For each thisvalue In Pref.XbmcTmdbScraperTrailerQLB
+    '        cmbxXbmcTmdbHDTrailer.Items.Add(thisvalue)
+    '    Next
+    '    cmbxXbmcTmdbHDTrailer.Text = Pref.XbmcTmdbScraperTrailerQ
+    '    cmbxXbmcTmdbTitleLanguage.Items.Clear()
+    '    For Each thisvalue In Pref.XbmcTmdbScraperLanguageLB
+    '        cmbxXbmcTmdbTitleLanguage.Items.Add(thisvalue)
+    '    Next
+    '    cmbxXbmcTmdbTitleLanguage.Text = Pref.XbmcTmdbScraperLanguage
+    '    cbXbmcTmdbIMDBRatings               .Checked        = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
+    '    cmbxTMDBPreferredCertCountry.Items.Clear()
+    '    For Each thisvalue In Pref.XbmcTmdbScraperCertCountryLB
+    '        cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
+    '    Next
+    '    cmbxTMDBPreferredCertCountry.Text = Pref.XbmcTmdbScraperCertCountry
 
-        TMDbControlsIni()
+    '    TMDbControlsIni()
 
-        prefsload = False
-        movieprefschanged = False
-        btnMoviePrefSaveChanges.Enabled = False
-    End Sub
+    '    prefsload = False
+    '    movieprefschanged = False
+    '    btnMoviePrefSaveChanges.Enabled = False
+    'End Sub
 
-    Public Sub TMDbControlsIni()
-        TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
+    'Public Sub TMDbControlsIni()
+    '    TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
 
-        comboBoxTMDbSelectedLanguage.Text = Pref.TMDbSelectedLanguageName
-        cbUseCustomLanguage.Checked = Pref.TMDbUseCustomLanguage
-        tbCustomLanguageValue.Text = Pref.TMDbCustomLanguageValue
-        cbGetMovieSetFromTMDb.Checked = Pref.GetMovieSetFromTMDb
+    '    comboBoxTMDbSelectedLanguage.Text = Pref.TMDbSelectedLanguageName
+    '    cbUseCustomLanguage.Checked = Pref.TMDbUseCustomLanguage
+    '    tbCustomLanguageValue.Text = Pref.TMDbCustomLanguageValue
+    '    cbGetMovieSetFromTMDb.Checked = Pref.GetMovieSetFromTMDb
 
-        SetLanguageControlsState()
-    End Sub
+    '    SetLanguageControlsState()
+    'End Sub
 
-    Private Sub SetLanguageControlsState()
-        comboBoxTMDbSelectedLanguage.Enabled = Not cbUseCustomLanguage.Checked
-        gbCustomLanguage.Enabled = cbUseCustomLanguage.Checked
-    End Sub
+    'Private Sub SetLanguageControlsState()
+    '    comboBoxTMDbSelectedLanguage.Enabled = Not cbUseCustomLanguage.Checked
+    '    gbCustomLanguage.Enabled = cbUseCustomLanguage.Checked
+    'End Sub
 
     Private Sub mov_PreferencesDisplay()
         AuthorizeCheck = True
@@ -12692,12 +12692,12 @@ End Sub
         For Each item In Pref.offlinefolders
             ListBox15.Items.Add(item)
         Next
-        lbCleanFilename.Items.Clear()
-        lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
-        lb_MovSepLst.Items.Clear()
-        For Each t In Pref.MovSepLst
-            lb_MovSepLst.Items.Add(t)
-        Next
+        'lbCleanFilename.Items.Clear()
+        'lbCleanFilename.Items.AddRange(Pref.moviecleanTags.Split("|"))
+        'lb_MovSepLst.Items.Clear()
+        'For Each t In Pref.MovSepLst
+        '    lb_MovSepLst.Items.Add(t)
+        'Next
         moviefolderschanged = False
     End Sub
 
@@ -14329,1534 +14329,1534 @@ End Sub
 
 #Region "Movie Preferences"
 
-    Private Sub TabPage26_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage26.Leave
-        Try
-            If movieprefschanged Then
-                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If tempint = DialogResult.Yes Then
-                    btnMoviePrefSaveChanges.PerformClick()
-                    'applyAdvancedLists()
-                    'Pref.ConfigSave()
-                Else
-                    util_ConfigLoad(True)
-                End If
-            End If
-            movieprefschanged = False
-            btnMoviePrefSaveChanges.Enabled = False
-            XbmcTMDbScraperChanged = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub TabPage26_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage26.Leave
+'        Try
+'            If movieprefschanged Then
+'                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+'                If tempint = DialogResult.Yes Then
+'                    btnMoviePrefSaveChanges.PerformClick()
+'                    'applyAdvancedLists()
+'                    'Pref.ConfigSave()
+'                Else
+'                    util_ConfigLoad(True)
+'                End If
+'            End If
+'            movieprefschanged = False
+'            btnMoviePrefSaveChanges.Enabled = False
+'            XbmcTMDbScraperChanged = False
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub btnMoviePrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
-        Try
-            applyAdvancedLists()
-            If XbmcTMDbScraperChanged Then
-                XBMCTMDBConfigSave()
-                mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
-            End If
-            For Each row As DataGridViewRow In DataGridViewMovies.Rows
-                Dim m As Data_GridViewMovie = row.DataBoundItem
-                m.ClearStoredCalculatedFields()
-            Next
+'    Private Sub btnMoviePrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'applyAdvancedLists()
+'            If XbmcTMDbScraperChanged Then
+'                XBMCTMDBConfigSave()
+'                mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+'            End If
+'            For Each row As DataGridViewRow In DataGridViewMovies.Rows
+'                Dim m As Data_GridViewMovie = row.DataBoundItem
+'                m.ClearStoredCalculatedFields()
+'            Next
 
-            UpdateFilteredList
+'            UpdateFilteredList
 
-            Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
+'            Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
+'            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 
-            Pref.ConfigSave()
+'            Pref.ConfigSave()
 
-            movieprefschanged = False
-            btnMoviePrefSaveChanges.Enabled = False
-            XbmcTMDbScraperChanged = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            movieprefschanged = False
+'            btnMoviePrefSaveChanges.Enabled = False
+'            XbmcTMDbScraperChanged = False
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
 #Region "Movie Preferences -> Scraper Tab"
 
-'Choose Default Scraper
-    Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
-        Try
-            If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
-                Pref.movies_useXBMC_Scraper = True
-                Read_XBMC_TMDB_Scraper_Config()
-                GroupBox_MovieIMDBMirror.Enabled = False
-                GroupBox_MovieIMDBMirror.Visible = False
-                GroupBox_TMDB_Scraper_Preferences.Enabled = True
-                GroupBox_TMDB_Scraper_Preferences.Visible = True
-                GroupBox_TMDB_Scraper_Preferences.BringToFront()
-            Else
-                Pref.movies_useXBMC_Scraper = False
-                GroupBox_MovieIMDBMirror.Enabled = True
-                GroupBox_MovieIMDBMirror.Visible = True
-                GroupBox_MovieIMDBMirror.BringToFront()
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+''Choose Default Scraper
+'    Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
+'                Pref.movies_useXBMC_Scraper = True
+'                Read_XBMC_TMDB_Scraper_Config()
+'                GroupBox_MovieIMDBMirror.Enabled = False
+'                GroupBox_MovieIMDBMirror.Visible = False
+'                GroupBox_TMDB_Scraper_Preferences.Enabled = True
+'                GroupBox_TMDB_Scraper_Preferences.Visible = True
+'                GroupBox_TMDB_Scraper_Preferences.BringToFront()
+'            Else
+'                Pref.movies_useXBMC_Scraper = False
+'                GroupBox_MovieIMDBMirror.Enabled = True
+'                GroupBox_MovieIMDBMirror.Visible = True
+'                GroupBox_MovieIMDBMirror.BringToFront()
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
 
-'XBMC Scraper Preferences - TMDB
-    Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbFanart.CheckedChanged
-        Try
-            If cbXbmcTmdbFanart.Checked = True Then
-                Pref.XbmcTmdbScraperFanart = "true"
-            Else
-                Pref.XbmcTmdbScraperFanart = "false"
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-            XbmcTMDbScraperChanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+''XBMC Scraper Preferences - TMDB
+'    Private Sub cbXbmcTmdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If cbXbmcTmdbFanart.Checked = True Then
+'                Pref.XbmcTmdbScraperFanart = "true"
+'            Else
+'                Pref.XbmcTmdbScraperFanart = "false"
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'            XbmcTMDbScraperChanged = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXbmcTmdbIMDBRatings.CheckedChanged, cbXbmcTmdbIMDBRatings.CheckStateChanged 
-        If cbXbmcTmdbIMDBRatings.Checked = True Then
-            Pref.XbmcTmdbScraperRatings = "IMDb"
-        Else
-            Pref.XbmcTmdbScraperRatings = "TMDb"
-        End If
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        XbmcTMDbScraperChanged = True
-    End Sub
+'    Private Sub cbXbmcTmdbIMDBRatings_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)  
+'        If cbXbmcTmdbIMDBRatings.Checked = True Then
+'            Pref.XbmcTmdbScraperRatings = "IMDb"
+'        Else
+'            Pref.XbmcTmdbScraperRatings = "TMDb"
+'        End If
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'        XbmcTMDbScraperChanged = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbOutlineFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbOutlineFromImdb.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbMissingFromImdb = cbXbmcTmdbOutlineFromImdb.Checked 
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbXbmcTmdbOutlineFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbMissingFromImdb = cbXbmcTmdbOutlineFromImdb.Checked 
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbTop250FromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbTop250FromImdb.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbTop250FromImdb = cbXbmcTmdbTop250FromImdb.Checked 
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbXbmcTmdbTop250FromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbTop250FromImdb = cbXbmcTmdbTop250FromImdb.Checked 
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbVotesFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbVotesFromImdb.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbVotesFromImdb = cbXbmcTmdbVotesFromImdb.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbXbmcTmdbVotesFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbVotesFromImdb = cbXbmcTmdbVotesFromImdb.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbStarsFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbStarsFromImdb.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbStarsFromImdb = cbXbmcTmdbStarsFromImdb.Checked 
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbXbmcTmdbStarsFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbStarsFromImdb = cbXbmcTmdbStarsFromImdb.Checked 
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbAkasFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbAkasFromImdb.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbAkasFromImdb = cbXbmcTmdbAkasFromImdb.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbXbmcTmdbAkasFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbAkasFromImdb = cbXbmcTmdbAkasFromImdb.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbCertFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbCertFromImdb.CheckedChanged
+'    Private Sub cbXbmcTmdbCertFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
 
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbHDTrailer.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        XbmcTMDbScraperChanged = True
-    End Sub
+'    Private Sub cmbxXbmcTmdbHDTrailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbScraperTrailerQ = cmbxXbmcTmdbHDTrailer.Text
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'        XbmcTMDbScraperChanged = True
+'    End Sub
 
-    Private Sub cmbxXbmcTmdbTitleLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxXbmcTmdbTitleLanguage.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        XbmcTMDbScraperChanged = True
-    End Sub
+'    Private Sub cmbxXbmcTmdbTitleLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbScraperLanguage = cmbxXbmcTmdbTitleLanguage.Text
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'        XbmcTMDbScraperChanged = True
+'    End Sub
 
-    Private Sub cmbxTMDBPreferredCertCountry_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxTMDBPreferredCertCountry.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        XbmcTMDbScraperChanged = True
-    End Sub
+'    Private Sub cmbxTMDBPreferredCertCountry_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbScraperCertCountry = cmbxTMDBPreferredCertCountry.Text
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'        XbmcTMDbScraperChanged = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbRename_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbRename.CheckedChanged
-        Try
-            If cbXbmcTmdbRename.CheckState = CheckState.Checked Then
-                If Pref.MovieRenameEnable Then
-                    Pref.XbmcTmdbRenameMovie = True
-                Else
-                    MsgBox("Please also enable 'Rename Movie'")
-                    cbXbmcTmdbRename.CheckState = CheckState.Unchecked 
-                End If
-            Else
-                Pref.XbmcTmdbRenameMovie = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch
-        End Try
-    End Sub
+'    Private Sub cbXbmcTmdbRename_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        Try
+'            If cbXbmcTmdbRename.CheckState = CheckState.Checked Then
+'                If Pref.MovieRenameEnable Then
+'                    Pref.XbmcTmdbRenameMovie = True
+'                Else
+'                    MsgBox("Please also enable 'Rename Movie'")
+'                    cbXbmcTmdbRename.CheckState = CheckState.Unchecked 
+'                End If
+'            Else
+'                Pref.XbmcTmdbRenameMovie = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch
+'        End Try
+'    End Sub
 
-    Private Sub cbMovNewFolderInRootFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovNewFolderInRootFolder.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMovNewFolderInRootFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.MovNewFolderInRootFolder = cbMovNewFolderInRootFolder.checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
-'End of "Choose Default Scraper"
+'    Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
+''End of "Choose Default Scraper"
 
-'IMDB Scraper Limits
-    Private Sub ComboBox7_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox7.SelectedIndexChanged
-        Try
-            If IsNumeric(ComboBox7.SelectedItem) Then
-                Pref.maxactors = Convert.ToInt32(ComboBox7.SelectedItem)
-            ElseIf ComboBox7.SelectedItem.ToString.ToLower = "none" Then
-                Pref.maxactors = 0
-            Else
-                Pref.maxactors = 9999
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+''IMDB Scraper Limits
+'    Private Sub ComboBox7_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If IsNumeric(ComboBox7.SelectedItem) Then
+'                Pref.maxactors = Convert.ToInt32(ComboBox7.SelectedItem)
+'            ElseIf ComboBox7.SelectedItem.ToString.ToLower = "none" Then
+'                Pref.maxactors = 0
+'            Else
+'                Pref.maxactors = 9999
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
 
-    Private Sub ComboBox6_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox6.SelectedIndexChanged
-        Try
-            If IsNumeric(ComboBox6.SelectedItem) Then
-                Pref.maxmoviegenre = Convert.ToInt32(ComboBox6.SelectedItem)
-            ElseIf ComboBox6.SelectedItem.ToString.ToLower = "none" Then
-                Pref.maxmoviegenre = 0
-            Else
-                Pref.maxmoviegenre = 99
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub ComboBox6_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If IsNumeric(ComboBox6.SelectedItem) Then
+'                Pref.maxmoviegenre = Convert.ToInt32(ComboBox6.SelectedItem)
+'            ElseIf ComboBox6.SelectedItem.ToString.ToLower = "none" Then
+'                Pref.maxmoviegenre = 0
+'            Else
+'                Pref.maxmoviegenre = 99
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cmbxMovieScraper_MaxStudios_SelectedIndexChanged( sender As Object,  e As EventArgs) Handles cmbxMovieScraper_MaxStudios.SelectedIndexChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MovieScraper_MaxStudios = Convert.ToInt32(cmbxMovieScraper_MaxStudios.SelectedItem)  'nudMovieScraper_MaxStudios.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cmbxMovieScraper_MaxStudios_SelectedIndexChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieScraper_MaxStudios = Convert.ToInt32(cmbxMovieScraper_MaxStudios.SelectedItem)  'nudMovieScraper_MaxStudios.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-'Other Options
-    Private Sub cbGetMovieSetFromTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbGetMovieSetFromTMDb.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+''Other Options
+'    Private Sub cbGetMovieSetFromTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles chkbOriginal_Title.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.Original_Title = chkbOriginal_Title.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.Original_Title = chkbOriginal_Title.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-'Preferred Language
-    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
-        Pref.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+''Preferred Language
+'    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) Handles cbUseCustomLanguage.Click
-        Pref.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
-        SetLanguageControlsState()
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) 
+'        Pref.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
+'        SetLanguageControlsState()
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
-        Pref.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub llLanguagesFile_Click(sender As System.Object, e As System.EventArgs) Handles llLanguagesFile.Click
-        System.Diagnostics.Process.Start(TMDb.LanguagesFile)
-    End Sub
+'    Private Sub llLanguagesFile_Click(sender As System.Object, e As System.EventArgs) 
+'        System.Diagnostics.Process.Start(TMDb.LanguagesFile)
+'    End Sub
 
 'Individual Movie Folder Options
-    Private Sub cbMovieUseFolderNames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieUseFolderNames.CheckedChanged
-        Try
-            If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
-                Pref.usefoldernames = True
-                cbMovieAllInFolders.Checked = False
-                cbMovCreateFolderjpg.Enabled = True
-                cbMovCreateFanartjpg.Enabled = True
-                cbDlXtraFanart.Enabled = True
-                If Pref.basicsavemode Then
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Enabled = False
-                Else
-                    cbMovieFanartInFolders.Enabled = True
-                    cbMoviePosterInFolder.Enabled = True
-                End If
-            Else
-                Pref.usefoldernames = False
-                If Not Pref.allfolders AndAlso Not Pref.basicsavemode Then
-                    cbMovCreateFolderjpg.Checked = False
-                    cbMovCreateFolderjpg.Enabled = False
-                    cbMovCreateFanartjpg.Enabled = False
-                    cbMovCreateFanartjpg.Checked = False
-                    cbMovieFanartInFolders.Checked = False
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Checked = False
-                    cbMoviePosterInFolder.Enabled = False
-                    cbDlXtraFanart.Checked = False
-                    cbDlXtraFanart.Enabled = False
-                ElseIf Not Pref.allfolders AndAlso Pref.basicsavemode Then
-                    msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
-                    cbMovieUseFolderNames.Checked = CheckState.Checked
-                End If
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovieUseFolderNames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
+'                Pref.usefoldernames = True
+'                cbMovieAllInFolders.Checked = False
+'                cbMovCreateFolderjpg.Enabled = True
+'                cbMovCreateFanartjpg.Enabled = True
+'                cbDlXtraFanart.Enabled = True
+'                If Pref.basicsavemode Then
+'                    cbMovieFanartInFolders.Enabled = False
+'                    cbMoviePosterInFolder.Enabled = False
+'                Else
+'                    cbMovieFanartInFolders.Enabled = True
+'                    cbMoviePosterInFolder.Enabled = True
+'                End If
+'            Else
+'                Pref.usefoldernames = False
+'                If Not Pref.allfolders AndAlso Not Pref.basicsavemode Then
+'                    cbMovCreateFolderjpg.Checked = False
+'                    cbMovCreateFolderjpg.Enabled = False
+'                    cbMovCreateFanartjpg.Enabled = False
+'                    cbMovCreateFanartjpg.Checked = False
+'                    cbMovieFanartInFolders.Checked = False
+'                    cbMovieFanartInFolders.Enabled = False
+'                    cbMoviePosterInFolder.Checked = False
+'                    cbMoviePosterInFolder.Enabled = False
+'                    cbDlXtraFanart.Checked = False
+'                    cbDlXtraFanart.Enabled = False
+'                ElseIf Not Pref.allfolders AndAlso Pref.basicsavemode Then
+'                    msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
+'                    cbMovieUseFolderNames.Checked = CheckState.Checked
+'                End If
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieAllInFolders.CheckedChanged
-        If cbMovieAllInFolders.CheckState = CheckState.Checked Then 
-            Pref.allfolders = True
-            cbMovieUseFolderNames.Checked = False
-            cbMovCreateFolderjpg.Enabled = True
-            cbMovCreateFanartjpg.Enabled = True
-            cbDlXtraFanart.Enabled = True
-            If Pref.basicsavemode Then
-                cbMovieFanartInFolders.Enabled = False
-                cbMoviePosterInFolder.Enabled = False
-            Else
-                cbMovieFanartInFolders.Enabled = True
-                cbMoviePosterInFolder.Enabled = True
-            End If               
-        Else
-            Pref.allfolders = False
-            If Not Pref.usefoldernames AndAlso Not Pref.basicsavemode Then
+'    Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If cbMovieAllInFolders.CheckState = CheckState.Checked Then 
+'            Pref.allfolders = True
+'            cbMovieUseFolderNames.Checked = False
+'            cbMovCreateFolderjpg.Enabled = True
+'            cbMovCreateFanartjpg.Enabled = True
+'            cbDlXtraFanart.Enabled = True
+'            If Pref.basicsavemode Then
+'                cbMovieFanartInFolders.Enabled = False
+'                cbMoviePosterInFolder.Enabled = False
+'            Else
+'                cbMovieFanartInFolders.Enabled = True
+'                cbMoviePosterInFolder.Enabled = True
+'            End If               
+'        Else
+'            Pref.allfolders = False
+'            If Not Pref.usefoldernames AndAlso Not Pref.basicsavemode Then
                     
-                cbMovCreateFolderjpg.Enabled = False
-                cbMovCreateFolderjpg.Checked = False
-                cbMovCreateFanartjpg.Enabled = False
-                cbMovCreateFanartjpg.Checked = False
-                cbMovieFanartInFolders.Checked = False
-                cbMovieFanartInFolders.Enabled = False
-                cbMoviePosterInFolder.Checked = False
-                cbMoviePosterInFolder.Enabled = False
-                cbDlXtraFanart.Checked = False
-                cbDlXtraFanart.Enabled = False
-            ElseIf Not Pref.usefoldernames AndAlso Pref.basicsavemode Then
-                msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
-                cbMovieAllInFolders.Checked = CheckState.Checked
-            End If
-        End If
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'                cbMovCreateFolderjpg.Enabled = False
+'                cbMovCreateFolderjpg.Checked = False
+'                cbMovCreateFanartjpg.Enabled = False
+'                cbMovCreateFanartjpg.Checked = False
+'                cbMovieFanartInFolders.Checked = False
+'                cbMovieFanartInFolders.Enabled = False
+'                cbMoviePosterInFolder.Checked = False
+'                cbMoviePosterInFolder.Enabled = False
+'                cbDlXtraFanart.Checked = False
+'                cbDlXtraFanart.Enabled = False
+'            ElseIf Not Pref.usefoldernames AndAlso Pref.basicsavemode Then
+'                msgbox("Basic Save option is enabled" & vbCrLf & "Use Folder Name or All Movies in Folders" & vbCrLf & "must be selected!",MsgBoxStyle.Exclamation)
+'                cbMovieAllInFolders.Checked = CheckState.Checked
+'            End If
+'        End If
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-'Basic Movie
-    Private Sub cbMovieBasicSave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieBasicSave.CheckedChanged 
-        Try
-            If cbMovieBasicSave.CheckState = CheckState.Checked Then
-                If Pref.usefoldernames or Pref.allfolders Then
-                    Pref.basicsavemode = True
-                    cbMovieFanartInFolders.Checked =CheckState.Unchecked
-                    cbMovieFanartInFolders.Enabled = False
-                    cbMoviePosterInFolder.Checked = CheckState.Unchecked
-                    cbMoviePosterInFolder.Enabled = False
-                Else
-                    If (Not Pref.usefoldernames AndAlso Not Pref.allfolders) Then
-                    MsgBox("Either Use Foldername or Movies In Folders" & vbCrLf & "must be selected")
-                    End If
-                    Pref.basicsavemode = False
-                    cbMovieFanartInFolders.Enabled = True 
-                    cbMoviePosterInFolder.Enabled = True
-                    cbMovieBasicSave.Checked = False
-                End If
-            Else
-                Pref.basicsavemode = False
-                cbMovieFanartInFolders.Enabled = True 
-                cbMoviePosterInFolder.Enabled = True 
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+''Basic Movie
+'    Private Sub cbMovieBasicSave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)  
+'        Try
+'            If cbMovieBasicSave.CheckState = CheckState.Checked Then
+'                If Pref.usefoldernames or Pref.allfolders Then
+'                    Pref.basicsavemode = True
+'                    cbMovieFanartInFolders.Checked =CheckState.Unchecked
+'                    cbMovieFanartInFolders.Enabled = False
+'                    cbMoviePosterInFolder.Checked = CheckState.Unchecked
+'                    cbMoviePosterInFolder.Enabled = False
+'                Else
+'                    If (Not Pref.usefoldernames AndAlso Not Pref.allfolders) Then
+'                    MsgBox("Either Use Foldername or Movies In Folders" & vbCrLf & "must be selected")
+'                    End If
+'                    Pref.basicsavemode = False
+'                    cbMovieFanartInFolders.Enabled = True 
+'                    cbMoviePosterInFolder.Enabled = True
+'                    cbMovieBasicSave.Checked = False
+'                End If
+'            Else
+'                Pref.basicsavemode = False
+'                cbMovieFanartInFolders.Enabled = True 
+'                cbMoviePosterInFolder.Enabled = True 
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-'Keywords As Tags
-    Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_keywordasTag.CheckedChanged
-        Try
-            If cb_keywordasTag.CheckState = CheckState.Checked Then
-                Pref.keywordasTag = True
-                If Pref.keywordlimit = 0 Then
-                    MsgBox(" Please select a limit above Zero keywords" & vbCrLf & "else no keywords will be stored as Tags")
-                End If
-            Else
-                Pref.keywordasTag = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
+''Keywords As Tags
+'    Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        Try
+'            If cb_keywordasTag.CheckState = CheckState.Checked Then
+'                Pref.keywordasTag = True
+'                If Pref.keywordlimit = 0 Then
+'                    MsgBox(" Please select a limit above Zero keywords" & vbCrLf & "else no keywords will be stored as Tags")
+'                End If
+'            Else
+'                Pref.keywordasTag = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
 
-        End Try
-    End Sub
+'        End Try
+'    End Sub
 
-    Private Sub cb_keywordlimit_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_keywordlimit.SelectedIndexChanged
-        Try
-            If IsNumeric(cb_keywordlimit.SelectedItem) Then
-                Pref.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
-            ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
-                Pref.keywordlimit = 0
-            Else
-                Pref.keywordlimit = 999
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+'    Private Sub cb_keywordlimit_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If IsNumeric(cb_keywordlimit.SelectedItem) Then
+'                Pref.keywordlimit = Convert.ToInt32(cb_keywordlimit.SelectedItem)
+'            ElseIf cb_keywordlimit.SelectedItem.ToString.ToLower = "none" Then
+'                Pref.keywordlimit = 0
+'            Else
+'                Pref.keywordlimit = 999
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
 
 #End Region  'Movie Preferences -> Scraper Tab
 
 #Region "Movie Preferences -> Artwork Tab"
     
 'Scraping Options
-    Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMoviePosterScrape.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.scrapemovieposters = cbMoviePosterScrape.checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.scrapemovieposters = cbMoviePosterScrape.checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMovFanartScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartScrape.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.savefanart = cbMovFanartScrape.Checked
+'    Private Sub cbMovFanartScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.savefanart = cbMovFanartScrape.Checked
 
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMovFanartTvScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartTvScrape.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.MovFanartTvscrape = cbMovFanartTvScrape.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMovFanartTvScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.MovFanartTvscrape = cbMovFanartTvScrape.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
     
-    Private Sub cbMovFanartNaming_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovFanartNaming.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.MovFanartNaming = cbMovFanartNaming.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMovFanartNaming_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.MovFanartNaming = cbMovFanartNaming.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub btnMovFanartTvSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartTvSelect.Click
-        Dim frm As New frmFanartTvArtSelect
-        frm.Init()
-        If frm.ShowDialog() = Windows.Forms.DialogResult.OK AndAlso frm.IsChanged Then
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        End If
-        frm.Dispose()
-    End Sub
+'    Private Sub btnMovFanartTvSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Dim frm As New frmFanartTvArtSelect
+'        frm.Init()
+'        If frm.ShowDialog() = Windows.Forms.DialogResult.OK AndAlso frm.IsChanged Then
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        End If
+'        frm.Dispose()
+'    End Sub
 
-    Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlXtraFanart.CheckedChanged
-        If prefsload Then Exit Sub
-        If cbDlXtraFanart.Checked Then
-            If Not Pref.allfolders AndAlso Not Pref.usefoldernames Then
-                MsgBox("Please select ""Use Foldername"" or ""Movies in Separate Folders""")
-                cbDlXtraFanart.Checked = False
-            Else
-                If Not Pref.movxtrafanart AndAlso Not Pref.movxtrathumb Then
-                    MsgBox("Please select ""Allow save ExtraThumbs"" And/Or ""Allow save ExtraFanart""")
-                    cbDlXtraFanart.Checked = False
-                Else 
-                    Pref.dlxtrafanart = True
-                End If
-            End If
-        Else
-            Pref.dlxtrafanart = False
-        End If
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        If cbDlXtraFanart.Checked Then
+'            If Not Pref.allfolders AndAlso Not Pref.usefoldernames Then
+'                MsgBox("Please select ""Use Foldername"" or ""Movies in Separate Folders""")
+'                cbDlXtraFanart.Checked = False
+'            Else
+'                If Not Pref.movxtrafanart AndAlso Not Pref.movxtrathumb Then
+'                    MsgBox("Please select ""Allow save ExtraThumbs"" And/Or ""Allow save ExtraFanart""")
+'                    cbDlXtraFanart.Checked = False
+'                Else 
+'                    Pref.dlxtrafanart = True
+'                End If
+'            End If
+'        Else
+'            Pref.dlxtrafanart = False
+'        End If
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-'Movie Scraper Poster Priority
-    Private Sub Button73_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button73.Click
-        Try
-            Try
-                Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.lbPosterSourcePriorities.SelectedIndex <> 0 Then
-                    mSelectedIndex = Me.lbPosterSourcePriorities.SelectedIndex
-                    mOtherIndex = mSelectedIndex - 1
-                    lbPosterSourcePriorities.Items.Insert(mSelectedIndex + 1, lbPosterSourcePriorities.Items(mOtherIndex))
-                    lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex)
-                End If
-                Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
-                Pref.moviethumbpriority.Clear()
-                For f = 0 To mothpr
-                    Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
-                Next
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+''Movie Scraper Poster Priority
+'    Private Sub Button73_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Try
+'                Dim mSelectedIndex, mOtherIndex As Integer
+'                If Me.lbPosterSourcePriorities.SelectedIndex <> 0 Then
+'                    mSelectedIndex = Me.lbPosterSourcePriorities.SelectedIndex
+'                    mOtherIndex = mSelectedIndex - 1
+'                    lbPosterSourcePriorities.Items.Insert(mSelectedIndex + 1, lbPosterSourcePriorities.Items(mOtherIndex))
+'                    lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex)
+'                End If
+'                Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
+'                Pref.moviethumbpriority.Clear()
+'                For f = 0 To mothpr
+'                    Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+'                Next
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button61_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button61.Click
-        Try
-            Try
-                Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.lbPosterSourcePriorities.SelectedIndex <> - 1 Then
-                    mSelectedIndex = Me.lbPosterSourcePriorities.SelectedIndex
-                    mOtherIndex = mSelectedIndex + 1
-                    lbPosterSourcePriorities.Items.Insert(mSelectedIndex, lbPosterSourcePriorities.Items(mOtherIndex))
-                    lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex + 1)
-                End If
-                Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
-                Pref.moviethumbpriority.Clear()
-                For f = 0 To mothpr
-                    Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
-                Next
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+'    Private Sub Button61_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Try
+'                Dim mSelectedIndex, mOtherIndex As Integer
+'                If Me.lbPosterSourcePriorities.SelectedIndex <> - 1 Then
+'                    mSelectedIndex = Me.lbPosterSourcePriorities.SelectedIndex
+'                    mOtherIndex = mSelectedIndex + 1
+'                    lbPosterSourcePriorities.Items.Insert(mSelectedIndex, lbPosterSourcePriorities.Items(mOtherIndex))
+'                    lbPosterSourcePriorities.Items.RemoveAt(mOtherIndex + 1)
+'                End If
+'                Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
+'                Pref.moviethumbpriority.Clear()
+'                For f = 0 To mothpr
+'                    Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+'                Next
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
 
-    Private Sub btn_MovPosterPriorityReset_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityReset.Click
-        Pref.resetmovthumblist()
-        'If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
-            lbPosterSourcePriorities.Items.Clear()
-            For f = 0 To Pref.moviethumbpriority.Count-1
-                lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
-            Next
-        'End If
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub btn_MovPosterPriorityReset_Click( sender As System.Object,  e As System.EventArgs) 
+'        Pref.resetmovthumblist()
+'        'If lbPosterSourcePriorities.Items.Count <> Pref.moviethumbpriority.Count Then
+'            lbPosterSourcePriorities.Items.Clear()
+'            For f = 0 To Pref.moviethumbpriority.Count-1
+'                lbPosterSourcePriorities.Items.Add(Pref.moviethumbpriority(f))
+'            Next
+'        'End If
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub btn_MovPosterPriorityRemove_Click( sender As System.Object,  e As System.EventArgs) Handles btn_MovPosterPriorityRemove.Click
-        Try
-            Dim selected As Integer = Me.lbPosterSourcePriorities.SelectedIndex
-            If selected = -1 Then Exit Sub
-            Me.lbPosterSourcePriorities.Items.RemoveAt(selected)
-            Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
-            Pref.moviethumbpriority.Clear()
-            For f = 0 To mothpr
-                Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
-            Next
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
+'    Private Sub btn_MovPosterPriorityRemove_Click( sender As System.Object,  e As System.EventArgs) 
+'        Try
+'            Dim selected As Integer = Me.lbPosterSourcePriorities.SelectedIndex
+'            If selected = -1 Then Exit Sub
+'            Me.lbPosterSourcePriorities.Items.RemoveAt(selected)
+'            Dim mothpr As Integer = lbPosterSourcePriorities.Items.Count -1
+'            Pref.moviethumbpriority.Clear()
+'            For f = 0 To mothpr
+'                Pref.moviethumbpriority.Add(lbPosterSourcePriorities.Items(f).ToString)
+'            Next
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
 
-        End Try
-    End Sub
+'        End Try
+'    End Sub
 
-'Movie's in folders
-    Private Sub cbMovXtraThumbs_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraThumbs.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            If cbMovXtraThumbs.Checked Then
-                Pref.movxtrathumb = True
-            Else
-                If Not cbMovXtraFanart.Checked Then
-                    cbDlXtraFanart.Checked = False
-                    MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
-                End If
-                Pref.movxtrathumb = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+''Movie's in folders
+'    Private Sub cbMovXtraThumbs_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            If cbMovXtraThumbs.Checked Then
+'                Pref.movxtrathumb = True
+'            Else
+'                If Not cbMovXtraFanart.Checked Then
+'                    cbDlXtraFanart.Checked = False
+'                    MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
+'                End If
+'                Pref.movxtrathumb = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraFanart.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            If cbMovXtraFanart.Checked Then
-                Pref.movxtrafanart = True
-            Else
-                If Not cbMovXtraThumbs.Checked Then
-                    cbDlXtraFanart.Checked = False
-                    MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
-                End If
-                Pref.movxtrafanart = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            If cbMovXtraFanart.Checked Then
+'                Pref.movxtrafanart = True
+'            Else
+'                If Not cbMovXtraThumbs.Checked Then
+'                    cbDlXtraFanart.Checked = False
+'                    MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
+'                End If
+'                Pref.movxtrafanart = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cmbxMovXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMovXtraFanartQty.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Dim newvalue As String = cmbxMovXtraFanartQty.SelectedItem
-        Pref.movxtrafanartqty = newvalue.toint
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cmbxMovXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) 
+'        If prefsload Then Exit Sub
+'        Dim newvalue As String = cmbxMovXtraFanartQty.SelectedItem
+'        Pref.movxtrafanartqty = newvalue.toint
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMoviePosterInFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMoviePosterInFolder.CheckedChanged 
-        Try
-            If cbMoviePosterInFolder.CheckState = CheckState.Checked Then
-                If Pref.usefoldernames or Pref.allfolders Then
-                    Pref.posterjpg = True
-                Else 
-                    Pref.posterjpg = False
-                    cbMoviePosterInFolder.Checked = False
-                    MsgBox("Either Use Foldername or All Movies in Folders not selected!")
-                End If
-            Else
-                Pref.posterjpg = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMoviePosterInFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs)  
+'        Try
+'            If cbMoviePosterInFolder.CheckState = CheckState.Checked Then
+'                If Pref.usefoldernames or Pref.allfolders Then
+'                    Pref.posterjpg = True
+'                Else 
+'                    Pref.posterjpg = False
+'                    cbMoviePosterInFolder.Checked = False
+'                    MsgBox("Either Use Foldername or All Movies in Folders not selected!")
+'                End If
+'            Else
+'                Pref.posterjpg = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovieFanartInFolders_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieFanartInFolders.CheckedChanged
-        Try
-            If cbMovieFanartInFolders.CheckState = CheckState.Checked Then
-                If Pref.usefoldernames or Pref.allfolders Then
-                    Pref.fanartjpg = True
-                Else 
-                    Pref.fanartjpg = False
-                    cbMovieFanartInFolders.Checked = False
-                    MsgBox("Either Use Foldername or All Movies in Folders not selected!")
-                End If
-            Else
-                Pref.fanartjpg = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovieFanartInFolders_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        Try
+'            If cbMovieFanartInFolders.CheckState = CheckState.Checked Then
+'                If Pref.usefoldernames or Pref.allfolders Then
+'                    Pref.fanartjpg = True
+'                Else 
+'                    Pref.fanartjpg = False
+'                    cbMovieFanartInFolders.Checked = False
+'                    MsgBox("Either Use Foldername or All Movies in Folders not selected!")
+'                End If
+'            Else
+'                Pref.fanartjpg = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovCreateFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovCreateFolderjpg.CheckedChanged 
-        Try
-            If cbMovCreateFolderjpg.CheckState = CheckState.Checked and (Pref.usefoldernames or Pref.allfolders) Then
-                Pref.createfolderjpg = True
-            Else
-                Pref.createfolderjpg = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovCreateFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)  
+'        Try
+'            If cbMovCreateFolderjpg.CheckState = CheckState.Checked and (Pref.usefoldernames or Pref.allfolders) Then
+'                Pref.createfolderjpg = True
+'            Else
+'                Pref.createfolderjpg = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovCreateFanartjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovCreateFanartjpg.CheckedChanged 
-        Try
-            If cbMovCreateFanartjpg.CheckState = CheckState.Checked and (Pref.usefoldernames or Pref.allfolders) Then
-                Pref.createfanartjpg = True
-            Else
-                Pref.createfanartjpg = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovCreateFanartjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)  
+'        Try
+'            If cbMovCreateFanartjpg.CheckState = CheckState.Checked and (Pref.usefoldernames or Pref.allfolders) Then
+'                Pref.createfanartjpg = True
+'            Else
+'                Pref.createfanartjpg = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-'Image Resizing
-    Private Sub comboActorResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboActorResolutions.SelectedIndexChanged
-        Pref.ActorResolutionSI = comboActorResolutions.SelectedIndex
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+''Image Resizing
+'    Private Sub comboActorResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.ActorResolutionSI = comboActorResolutions.SelectedIndex
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub comboPosterResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboPosterResolutions.SelectedIndexChanged
-        Pref.PosterResolutionSI = comboPosterResolutions.SelectedIndex
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub comboPosterResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.PosterResolutionSI = comboPosterResolutions.SelectedIndex
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub comboBackDropResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboBackDropResolutions.SelectedIndexChanged
-        Pref.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub comboBackDropResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-'Movie Set Artwork
-    Private Sub cbMovSetArtScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetArtScrape.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.dlMovSetArtwork = cbMovSetArtScrape.Checked 
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+''Movie Set Artwork
+'    Private Sub cbMovSetArtScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.dlMovSetArtwork = cbMovSetArtScrape.Checked 
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub rbMovSetCentralFolder_CheckedChanged( sender As Object,  e As EventArgs) Handles rbMovSetArtSetFolder.CheckedChanged, rbMovSetFolder.CheckedChanged 
-        If prefsload Then Exit Sub
-        Pref.MovSetArtSetFolder = rbMovSetArtSetFolder.checked
-        btnMovSetCentralFolderSelect.Enabled = rbMovSetArtSetFolder.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub rbMovSetCentralFolder_CheckedChanged( sender As Object,  e As EventArgs)  
+'        If prefsload Then Exit Sub
+'        Pref.MovSetArtSetFolder = rbMovSetArtSetFolder.checked
+'        btnMovSetCentralFolderSelect.Enabled = rbMovSetArtSetFolder.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub btnMovSetCentralFolderSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovSetCentralFolderSelect.Click
-        Try
-            'Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            fb.Description = "Please Select Folder to Save All Collection Artwork"
-            fb.ShowNewFolderButton = True
-            fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Pref.lastpath
-            Tmr.Start()
-            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (fb.SelectedPath)
-                tbMovSetArtCentralFolder.Text = thefoldernames
-                Pref.MovSetArtCentralFolder = thefoldernames
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub btnMovSetCentralFolderSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'Dim theFolderBrowser As New FolderBrowserDialog
+'            Dim thefoldernames As String
+'            fb.Description = "Please Select Folder to Save All Collection Artwork"
+'            fb.ShowNewFolderButton = True
+'            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+'            fb.SelectedPath = Pref.lastpath
+'            Tmr.Start()
+'            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+'                thefoldernames = (fb.SelectedPath)
+'                tbMovSetArtCentralFolder.Text = thefoldernames
+'                Pref.MovSetArtCentralFolder = thefoldernames
+'            End If
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
 #End Region 'Movie Preferences -> Scraper Tab
 
 #Region "Movie Preferences -> General Tab"
 
 'General Options Settings
-    Private Sub cbMovieTrailerUrl_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieTrailerUrl.CheckedChanged
-        Try
-            If cbMovieTrailerUrl.CheckState = CheckState.Checked Then
-                Pref.gettrailer = True
-            Else
-                If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
-                    cbMovieTrailerUrl.CheckState = CheckState.Checked 
-                Else
-                    Pref.gettrailer = False
-                End If
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch
-        End Try
-    End Sub
+'    Private Sub cbMovieTrailerUrl_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If cbMovieTrailerUrl.CheckState = CheckState.Checked Then
+'                Pref.gettrailer = True
+'            Else
+'                If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
+'                    cbMovieTrailerUrl.CheckState = CheckState.Checked 
+'                Else
+'                    Pref.gettrailer = False
+'                End If
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch
+'        End Try
+'    End Sub
 
-    Private Sub cbDlTrailerDuringScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbDlTrailerDuringScrape.CheckedChanged
-        Try
-            If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
-                Pref.DownloadTrailerDuringScrape = True
-                cbMovieTrailerUrl.CheckState = CheckState.Checked 
-            Else 
-                Pref.DownloadTrailerDuringScrape = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch
-        End Try
-    End Sub
+'    Private Sub cbDlTrailerDuringScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
+'                Pref.DownloadTrailerDuringScrape = True
+'                cbMovieTrailerUrl.CheckState = CheckState.Checked 
+'            Else 
+'                Pref.DownloadTrailerDuringScrape = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch
+'        End Try
+'    End Sub
 
-    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
-        Pref.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMovTitleCase_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleCase.CheckedChanged
-        Pref.MovTitleCase = cbMovTitleCase.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMovTitleCase_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.MovTitleCase = cbMovTitleCase.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
-        Pref.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMovThousSeparator_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovThousSeparator.CheckedChanged
-        Pref.MovThousSeparator = cbMovThousSeparator.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMovThousSeparator_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.MovThousSeparator = cbMovThousSeparator.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbNoAltTitle.CheckedChanged
-        If cbNoAltTitle.CheckState = CheckState.Checked Then
-            Pref.NoAltTitle = True
-        Else
-            Pref.NoAltTitle = False
-        End If
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If cbNoAltTitle.CheckState = CheckState.Checked Then
+'            Pref.NoAltTitle = True
+'        Else
+'            Pref.NoAltTitle = False
+'        End If
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbXtraFrodoUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXtraFrodoUrls.CheckedChanged
-        Pref.XtraFrodoUrls = Not cbXtraFrodoUrls.Checked 
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbXtraFrodoUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Pref.XtraFrodoUrls = Not cbXtraFrodoUrls.Checked 
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub CheckBox16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox16.CheckedChanged
-        Try
-            If CheckBox16.CheckState = CheckState.Checked Then
-                Pref.disablelogfiles = False
-            Else
-                Pref.disablelogfiles = True
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub CheckBox16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If CheckBox16.CheckState = CheckState.Checked Then
+'                Pref.disablelogfiles = False
+'            Else
+'                Pref.disablelogfiles = True
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub CheckBox19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox19.CheckedChanged
-        Try
-            displayRuntimeScraper = True
-            If CheckBox19.CheckState = CheckState.Checked Then
-                Pref.enablehdtags = True
-                PanelDisplayRuntime.Enabled = True
-                If Pref.movieRuntimeDisplay = "file" Then
-                    rbRuntimeFile.Checked = True
-                    displayRuntimeScraper = False
-                Else
-                    rbRuntimeScraper.Checked = True
-                End If
-            Else
-                Pref.enablehdtags = False
-                PanelDisplayRuntime.Enabled = False
-                rbRuntimeScraper.Checked = True
-            End If
-            Call mov_SwitchRuntime()
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub CheckBox19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            displayRuntimeScraper = True
+'            If CheckBox19.CheckState = CheckState.Checked Then
+'                Pref.enablehdtags = True
+'                PanelDisplayRuntime.Enabled = True
+'                If Pref.movieRuntimeDisplay = "file" Then
+'                    rbRuntimeFile.Checked = True
+'                    displayRuntimeScraper = False
+'                Else
+'                    rbRuntimeScraper.Checked = True
+'                End If
+'            Else
+'                Pref.enablehdtags = False
+'                PanelDisplayRuntime.Enabled = False
+'                rbRuntimeScraper.Checked = True
+'            End If
+'            Call mov_SwitchRuntime()
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cb_MovDurationAsRuntine_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_MovDurationAsRuntine.CheckedChanged
-        Pref.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cb_MovDurationAsRuntine_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Pref.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeScraper.CheckedChanged
-        Try
-            If rbRuntimeScraper.Checked = True Then
-                Pref.movieRuntimeDisplay = "scraper"
-                displayRuntimeScraper = True
-            Else
-                Pref.movieRuntimeDisplay = "file"
-                displayRuntimeScraper = False
-            End If
+'    Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If rbRuntimeScraper.Checked = True Then
+'                Pref.movieRuntimeDisplay = "scraper"
+'                displayRuntimeScraper = True
+'            Else
+'                Pref.movieRuntimeDisplay = "file"
+'                displayRuntimeScraper = False
+'            End If
 
-            cbMovieRuntimeFallbackToFile.Enabled = rbRuntimeScraper.Checked
+'            cbMovieRuntimeFallbackToFile.Enabled = rbRuntimeScraper.Checked
 
-            'Call mov_SwitchRuntime() 'Damn it - this call prevents MC starting, and I have no idea why! HueyHQ
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            'Call mov_SwitchRuntime() 'Damn it - this call prevents MC starting, and I have no idea why! HueyHQ
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovieRuntimeFallbackToFile_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRuntimeFallbackToFile.CheckedChanged
-        Pref.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMovieRuntimeFallbackToFile_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Pref.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
-        Try
-            Pref.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Pref.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub tbDateFormat_TextChanged( sender As System.Object,  e As System.EventArgs) Handles tbDateFormat.TextChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.DateFormat = tbDateFormat.Text
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub tbDateFormat_TextChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.DateFormat = tbDateFormat.Text
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub cbMovieList_ShowColPlot_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColPlot.CheckedChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cbMovieList_ShowColPlot_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub cbMovieList_ShowColWatched_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColWatched.CheckedChanged
-         If MainFormLoadedStatus Then
-            Try
-                Pref.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cbMovieList_ShowColWatched_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'         If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
-        Try
-            If CheckBox_ShowDateOnMovieList.Checked = True Then
-                Pref.showsortdate = True
-            Else
-                Pref.showsortdate = False
-            End If
-            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If CheckBox_ShowDateOnMovieList.Checked = True Then
+'                Pref.showsortdate = True
+'            Else
+'                Pref.showsortdate = False
+'            End If
+'            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMissingMovie_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingMovie.CheckedChanged
-        Try
-            If cbMissingMovie.CheckState = CheckState.Checked Then
-                Pref.incmissingmovies = True 
-            Else
-                Pref.incmissingmovies = False 
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMissingMovie_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If cbMissingMovie.CheckState = CheckState.Checked Then
+'                Pref.incmissingmovies = True 
+'            Else
+'                Pref.incmissingmovies = False 
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbxCleanFilenameIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxCleanFilenameIgnorePart.CheckedChanged 
-        Try
-            If cbxCleanFilenameIgnorePart.Checked = True Then
-                Pref.movieignorepart = True
-            Else
-                Pref.movieignorepart = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbxCleanFilenameIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs)  
+'        Try
+'            If cbxCleanFilenameIgnorePart.Checked = True Then
+'                Pref.movieignorepart = True
+'            Else
+'                Pref.movieignorepart = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbxNameMode_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxNameMode.CheckedChanged
-        If cbxNameMode.Checked Then
-            Pref.namemode = "1"
-        Else
-            Pref.namemode = "0"
-        End If
-        lblNameMode.Text = createNameModeText()
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbxNameMode_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If cbxNameMode.Checked Then
+'            Pref.namemode = "1"
+'        Else
+'            Pref.namemode = "0"
+'        End If
+'        lblNameMode.Text = createNameModeText()
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-'Rename Movie Settings
-    Private Sub tb_MovieRenameEnable_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovieRenameEnable.TextChanged
-        Try
-            Pref.MovieRenameTemplate = tb_MovieRenameEnable.Text
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+''Rename Movie Settings
+'    Private Sub tb_MovieRenameEnable_TextChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            Pref.MovieRenameTemplate = tb_MovieRenameEnable.Text
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub tb_MovFolderRename_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovFolderRename.TextChanged
-        Try
-            Pref.MovFolderRenameTemplate = tb_MovFolderRename.Text
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub tb_MovFolderRename_TextChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            Pref.MovFolderRenameTemplate = tb_MovFolderRename.Text
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovieRenameEnable_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRenameEnable.CheckedChanged
-        Try
-            If cbMovieRenameEnable.CheckState = CheckState.Checked Then
-                Pref.MovieRenameEnable = True
-            Else
-                Pref.MovieRenameEnable = False
-                'Preferences.XbmcTmdbRenameMovie = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovieRenameEnable_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbMovieRenameEnable.CheckState = CheckState.Checked Then
+'                Pref.MovieRenameEnable = True
+'            Else
+'                Pref.MovieRenameEnable = False
+'                'Preferences.XbmcTmdbRenameMovie = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovFolderRename_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovFolderRename.CheckedChanged
-        Try
-            If cbMovFolderRename.CheckState = CheckState.Checked Then
-                Pref.MovFolderRename = True
-            Else
-                Pref.MovFolderRename = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovFolderRename_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbMovFolderRename.CheckState = CheckState.Checked Then
+'                Pref.MovFolderRename = True
+'            Else
+'                Pref.MovFolderRename = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
-        Try
-            If cbRenameUnderscore.CheckState = CheckState.Checked Then
-                Pref.MovRenameSpaceCharacter = True
-            Else
-                Pref.MovRenameSpaceCharacter = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbRenameUnderscore.CheckState = CheckState.Checked Then
+'                Pref.MovRenameSpaceCharacter = True
+'            Else
+'                Pref.MovRenameSpaceCharacter = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub rbRenameUnderscore_CheckedChanged( sender As Object,  e As EventArgs) Handles rbRenameUnderscore.CheckedChanged
-        If prefsload Then Exit Sub
-        If rbRenameUnderscore.Checked = True Then
-            Pref.RenameSpaceCharacter = "_"
-        Else
-            Pref.RenameSpaceCharacter = "."
-        End If
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+'    Private Sub rbRenameUnderscore_CheckedChanged( sender As Object,  e As EventArgs) 
+'        If prefsload Then Exit Sub
+'        If rbRenameUnderscore.Checked = True Then
+'            Pref.RenameSpaceCharacter = "_"
+'        Else
+'            Pref.RenameSpaceCharacter = "."
+'        End If
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetIgnArticle.CheckedChanged
-        Try
-            If cbMovSetIgnArticle.CheckState = CheckState.Checked Then
-                Pref.MovSetIgnArticle = True
-            Else
-                Pref.MovSetIgnArticle = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbMovSetIgnArticle.CheckState = CheckState.Checked Then
+'                Pref.MovSetIgnArticle = True
+'            Else
+'                Pref.MovSetIgnArticle = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovTitleIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleIgnArticle.CheckedChanged
-        Try
-            If cbMovTitleIgnArticle.CheckState = CheckState.Checked Then
-                Pref.MovTitleIgnArticle = True
-            Else
-                Pref.MovTitleIgnArticle = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovTitleIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbMovTitleIgnArticle.CheckState = CheckState.Checked Then
+'                Pref.MovTitleIgnArticle = True
+'            Else
+'                Pref.MovTitleIgnArticle = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovSortIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSortIgnArticle.CheckedChanged
-        Try
-            If cbMovSortIgnArticle.CheckState = CheckState.Checked Then
-                Pref.MovSortIgnArticle = True
-            Else
-                Pref.MovSortIgnArticle = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovSortIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If cbMovSortIgnArticle.CheckState = CheckState.Checked Then
+'                Pref.MovSortIgnArticle = True
+'            Else
+'                Pref.MovSortIgnArticle = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub ManualRenameChkbox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ManualRenameChkbox.CheckedChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MovieManualRename = ManualRenameChkbox.Checked
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub ManualRenameChkbox_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieManualRename = ManualRenameChkbox.Checked
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
-        Try
-            If ScrapeFullCertCheckBox.Checked Then
-                Pref.scrapefullcert = True
-            Else
-                Pref.scrapefullcert = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+'    Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If ScrapeFullCertCheckBox.Checked Then
+'                Pref.scrapefullcert = True
+'            Else
+'                Pref.scrapefullcert = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
     
-    Private Sub Button75_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button75.Click
-        Try
-            Try
-                Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.ListBox11.SelectedIndex <> 0 Then
-                    mSelectedIndex = Me.ListBox11.SelectedIndex
-                    mOtherIndex = mSelectedIndex - 1
-                    ListBox11.Items.Insert(mSelectedIndex + 1, ListBox11.Items(mOtherIndex))
-                    ListBox11.Items.RemoveAt(mOtherIndex)
-                End If
-                For f = 0 To 33
-                    Pref.certificatepriority(f) = ListBox11.Items(f)
-                Next
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button75_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Try
+'                Dim mSelectedIndex, mOtherIndex As Integer
+'                If Me.ListBox11.SelectedIndex <> 0 Then
+'                    mSelectedIndex = Me.ListBox11.SelectedIndex
+'                    mOtherIndex = mSelectedIndex - 1
+'                    ListBox11.Items.Insert(mSelectedIndex + 1, ListBox11.Items(mOtherIndex))
+'                    ListBox11.Items.RemoveAt(mOtherIndex)
+'                End If
+'                For f = 0 To 33
+'                    Pref.certificatepriority(f) = ListBox11.Items(f)
+'                Next
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'                Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button74_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button74.Click
-        Try
-            Try
-                Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.ListBox11.SelectedIndex <> Me.ListBox11.Items.Count - 1 Then
-                    mSelectedIndex = Me.ListBox11.SelectedIndex
-                    mOtherIndex = mSelectedIndex + 1
-                    ListBox11.Items.Insert(mSelectedIndex, ListBox11.Items(mOtherIndex))
-                    ListBox11.Items.RemoveAt(mOtherIndex + 1)
-                End If
-                For f = 0 To 33
-                    Pref.certificatepriority(f) = ListBox11.Items(f)
-                Next
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button74_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Try
+'                Dim mSelectedIndex, mOtherIndex As Integer
+'                If Me.ListBox11.SelectedIndex <> Me.ListBox11.Items.Count - 1 Then
+'                    mSelectedIndex = Me.ListBox11.SelectedIndex
+'                    mOtherIndex = mSelectedIndex + 1
+'                    ListBox11.Items.Insert(mSelectedIndex, ListBox11.Items(mOtherIndex))
+'                    ListBox11.Items.RemoveAt(mOtherIndex + 1)
+'                End If
+'                For f = 0 To 33
+'                    Pref.certificatepriority(f) = ListBox11.Items(f)
+'                Next
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'                Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-'Movie Filters settings
-    Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+''Movie Filters settings
+'    Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub nudMaxActorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxActorsInFilter.ValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MaxActorsInFilter = nudMaxActorsInFilter.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub nudMaxActorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MaxActorsInFilter = nudMaxActorsInFilter.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub cbMovieFilters_Actors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Actors_Order.SelectedValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cbMovieFilters_Actors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub nudDirectorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudDirectorsFilterMinFilms.ValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub nudDirectorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub nudMaxDirectorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxDirectorsInFilter.ValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub nudMaxDirectorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub cbMovieFilters_Directors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Directors_Order.SelectedValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cbMovieFilters_Directors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub nudSetsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudSetsFilterMinFilms.ValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub nudSetsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub nudMaxSetsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxSetsInFilter.ValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MaxSetsInFilter = nudMaxSetsInFilter.Value
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub nudMaxSetsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MaxSetsInFilter = nudMaxSetsInFilter.Value
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub cbMovieFilters_Sets_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Sets_Order.SelectedValueChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cbMovieFilters_Sets_Order_SelectedValueChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
-    Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) Handles cbDisableNotMatchingRenamePattern.CheckedChanged
-        If MainFormLoadedStatus Then
-            Try
-                Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
-                movieprefschanged = True
-                btnMoviePrefSaveChanges.Enabled = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
-    End Sub
+'    Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Try
+'                Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
+'                movieprefschanged = True
+'                btnMoviePrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'                ExceptionHandler.LogError(ex)
+'            End Try
+'        End If
+'    End Sub
 
 #End Region 'Movie Preferences -> General Tab
 
 #Region "Movie Preferences -> Advanced Tab"
     'Download Actor Thumbs
-    Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
-        Try
-            If saveactorchkbx.CheckState = CheckState.Checked Then
-                Pref.actorsave = True
-                localactorpath.Text = Pref.actorsavepath
-                xbmcactorpath.Text = Pref.actornetworkpath
-                localactorpath.Enabled = True
-                xbmcactorpath.Enabled = True
-                cb_LocalActorSaveAlpha.Enabled = True
-                Button77.Enabled = True
-            Else
-                Pref.actorsave = False
-                localactorpath.Text = ""
-                xbmcactorpath.Text = ""
-                localactorpath.Enabled = False
-                xbmcactorpath.Enabled = False
-                cb_LocalActorSaveAlpha.Enabled = False
-                Button77.Enabled = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If saveactorchkbx.CheckState = CheckState.Checked Then
+'                Pref.actorsave = True
+'                localactorpath.Text = Pref.actorsavepath
+'                xbmcactorpath.Text = Pref.actornetworkpath
+'                localactorpath.Enabled = True
+'                xbmcactorpath.Enabled = True
+'                cb_LocalActorSaveAlpha.Enabled = True
+'                Button77.Enabled = True
+'            Else
+'                Pref.actorsave = False
+'                localactorpath.Text = ""
+'                xbmcactorpath.Text = ""
+'                localactorpath.Enabled = False
+'                xbmcactorpath.Enabled = False
+'                cb_LocalActorSaveAlpha.Enabled = False
+'                Button77.Enabled = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cb_LocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_LocalActorSaveAlpha.CheckedChanged
-        Try
-            If cb_LocalActorSaveAlpha.CheckState = CheckState.Checked Then
-                Pref.actorsavealpha = True
-            Else
-                Pref.actorsavealpha = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cb_LocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If cb_LocalActorSaveAlpha.CheckState = CheckState.Checked Then
+'                Pref.actorsavealpha = True
+'            Else
+'                Pref.actorsavealpha = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button77_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button77.Click
-        Try
-            'Dim theFolderBrowser As New FolderBrowserDialog
-            Dim thefoldernames As String
-            fb.Description = "Please Select Folder to Save Actor Thumbnails)"
-            fb.ShowNewFolderButton = True
-            fb.RootFolder = System.Environment.SpecialFolder.Desktop
-            fb.SelectedPath = Pref.lastpath
-            Tmr.Start()
-            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
-                thefoldernames = (fb.SelectedPath)
-                localactorpath.Text = thefoldernames
-                Pref.lastpath = thefoldernames
-                Pref.actorsavepath = thefoldernames
-            End If
-            'theFolderBrowser.Dispose()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button77_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'Dim theFolderBrowser As New FolderBrowserDialog
+'            Dim thefoldernames As String
+'            fb.Description = "Please Select Folder to Save Actor Thumbnails)"
+'            fb.ShowNewFolderButton = True
+'            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+'            fb.SelectedPath = Pref.lastpath
+'            Tmr.Start()
+'            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+'                thefoldernames = (fb.SelectedPath)
+'                localactorpath.Text = thefoldernames
+'                Pref.lastpath = thefoldernames
+'                Pref.actorsavepath = thefoldernames
+'            End If
+'            'theFolderBrowser.Dispose()
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub localactorpath_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles localactorpath.TextChanged
-        Try
-            Pref.actorsavepath = localactorpath.Text
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub localactorpath_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) 
+'        Try
+'            Pref.actorsavepath = localactorpath.Text
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub xbmcactorpath_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles xbmcactorpath.TextChanged
-        Try
-            Pref.actornetworkpath = xbmcactorpath.Text
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub xbmcactorpath_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Pref.actornetworkpath = xbmcactorpath.Text
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    'nfoPoster Options
-    Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IMPA_chk.CheckedChanged
-        Try
-            Call mov_ThumbNailUrlsSet()
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    'nfoPoster Options
+'    Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Call mov_ThumbNailUrlsSet()
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub mpdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mpdb_chk.CheckedChanged
-        Try
-            Call mov_ThumbNailUrlsSet()
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub mpdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Call mov_ThumbNailUrlsSet()
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub tmdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmdb_chk.CheckedChanged
-        Try
-            Call mov_ThumbNailUrlsSet()
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub tmdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Call mov_ThumbNailUrlsSet()
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub imdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles imdb_chk.CheckedChanged
-        Try
-            Call mov_ThumbNailUrlsSet()
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub imdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Call mov_ThumbNailUrlsSet()
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbMovRootFolderCheck_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovRootFolderCheck.CheckedChanged
-        Try
-            If cbMovRootFolderCheck.CheckState = CheckState.Checked Then
-                Pref.movrootfoldercheck = True
-            Else
-                Pref.movrootfoldercheck = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbMovRootFolderCheck_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        Try
+'            If cbMovRootFolderCheck.CheckState = CheckState.Checked Then
+'                Pref.movrootfoldercheck = True
+'            Else
+'                Pref.movrootfoldercheck = False
+'            End If
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameAdd.Click
-        lbCleanFilename.Items.Add(txtCleanFilenameAdd.Text)
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        cleanfilenameprefchanged = True
-    End Sub
+'    Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) 
+'        lbCleanFilename.Items.Add(txtCleanFilenameAdd.Text)
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'        cleanfilenameprefchanged = True
+'    End Sub
 
-    Private Sub btnCleanFilenameRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameRemove.Click
-        lbCleanFilename.Items.RemoveAt(lbCleanFilename.SelectedIndex)
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        cleanfilenameprefchanged = True
-    End Sub
+'    Private Sub btnCleanFilenameRemove_Click(sender As System.Object, e As System.EventArgs) 
+'        lbCleanFilename.Items.RemoveAt(lbCleanFilename.SelectedIndex)
+'        movieprefschanged = True
+'        btnMoviePrefSaveChanges.Enabled = True
+'        cleanfilenameprefchanged = True
+'    End Sub
 
-    Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
-        If txtVideoSourceAdd.Text <> "" Then        
-            lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-            videosourceprefchanged = True
-        End If
-    End Sub
+'    Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) 
+'        If txtVideoSourceAdd.Text <> "" Then        
+'            lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'            videosourceprefchanged = True
+'        End If
+'    End Sub
 
-    Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
-        Dim strSelected = lbVideoSource.SelectedItem
-        Dim idxSelected = lbVideoSource.SelectedIndex
+'    Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) 
+'        Dim strSelected = lbVideoSource.SelectedItem
+'        Dim idxSelected = lbVideoSource.SelectedIndex
 
-        Try
-            If cbMovieDisplay_Source.Text = strSelected Then cbMovieDisplay_Source.SelectedIndex = 0
-            lbVideoSource.Items.RemoveAt(idxSelected)
-            mov_VideoSourcePopulate()
-            ep_VideoSourcePopulate()
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-            videosourceprefchanged = True
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
+'        Try
+'            If cbMovieDisplay_Source.Text = strSelected Then cbMovieDisplay_Source.SelectedIndex = 0
+'            lbVideoSource.Items.RemoveAt(idxSelected)
+'            mov_VideoSourcePopulate()
+'            ep_VideoSourcePopulate()
+'            movieprefschanged = True
+'            btnMoviePrefSaveChanges.Enabled = True
+'            videosourceprefchanged = True
+'        Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'        End Try
 
-    End Sub
+'    End Sub
 
 #End Region 'Movie Preferences -> Advanced Tab
 
 #Region "Movie Preferences -> Advanced2 Tab"
-    Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepAdd.Click
-        If tb_MovSeptb.Text <> "" Then
-            lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
-            Pref.MovSepLst.Add(tb_MovSeptb.Text)
-            tb_MovSeptb.Text = ""
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-            videosourceprefchanged = True
-        End If
-    End Sub
+    'Private Sub btn_MovSepAdd_Click(sender As System.Object, e As System.EventArgs) 
+    '    If tb_MovSeptb.Text <> "" Then
+    '        lb_MovSepLst.Items.Add(tb_MovSeptb.Text)
+    '        Pref.MovSepLst.Add(tb_MovSeptb.Text)
+    '        tb_MovSeptb.Text = ""
+    '        movieprefschanged = True
+    '        btnMoviePrefSaveChanges.Enabled = True
+    '        videosourceprefchanged = True
+    '    End If
+    'End Sub
 
-    Private Sub btn_MovSepRem_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepRem.Click
-        lb_MovSepLst.Items.RemoveAt(lb_MovSepLst.SelectedIndex)
-        Pref.MovSepLst.Clear()
-        For Each t In lb_MovSepLst.Items
-            Pref.MovSepLst.Add(t)
-        Next
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-        'videosourceprefchanged = True
-    End Sub
+    'Private Sub btn_MovSepRem_Click(sender As System.Object, e As System.EventArgs) 
+    '    lb_MovSepLst.Items.RemoveAt(lb_MovSepLst.SelectedIndex)
+    '    Pref.MovSepLst.Clear()
+    '    For Each t In lb_MovSepLst.Items
+    '        Pref.MovSepLst.Add(t)
+    '    Next
+    '    movieprefschanged = True
+    '    btnMoviePrefSaveChanges.Enabled = True
+    '    'videosourceprefchanged = True
+    'End Sub
 
-    Private Sub btn_MovSepReset_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSepReset.Click
-        Pref.ResetMovSepLst()
-        lb_MovSepLst.Items.Clear()
-        For Each it In Pref.MovSepLst
-            lb_MovSepLst.Items.Add(it)
-        Next
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub btn_MovSepReset_Click(sender As System.Object, e As System.EventArgs) 
+    '    Pref.ResetMovSepLst()
+    '    lb_MovSepLst.Items.Clear()
+    '    For Each it In Pref.MovSepLst
+    '        lb_MovSepLst.Items.Add(it)
+    '    Next
+    '    movieprefschanged = True
+    '    btnMoviePrefSaveChanges.Enabled = True
+    'End Sub
 
 #End Region 'Movie Preferences -> Advanced2 Tab
 
