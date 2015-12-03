@@ -3368,6 +3368,14 @@ Public Class frmOptions
         End If
     End Sub
 
+    Private Sub TPXBMCLink_Enter(sender As Object, e As EventArgs) Handles TPXBMCLink.Enter
+        UcGenPref_XbmcLink1.Pop()
+    End Sub
+
+    Private Sub tpPrxy_Enter(sender As Object, e As EventArgs) 
+        UcGenPref_Proxy1.pop()
+    End Sub
+
     Private Sub TMDbControlsIni()
         TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
         'SetLanguageControlsState()

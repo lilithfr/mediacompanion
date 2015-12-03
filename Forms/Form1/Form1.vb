@@ -12258,104 +12258,104 @@ End Sub
 #End Region  'ToolStripmenu Movie Rescrape Specific
 
     
-    Private Sub General_PreferencesSetup()
+    'Private Sub General_PreferencesSetup()
 
-        CopyOfPreferencesIgnoreArticle = Pref.ignorearticle
+    '    CopyOfPreferencesIgnoreArticle = Pref.ignorearticle
 
-        prefsload = True
-        generalprefschanged = False
+    '    prefsload = True
+    '    generalprefschanged = False
 
-        Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-        Dim newFont As System.Drawing.Font
-        If Pref.font <> Nothing Then
-            If Pref.font <> "" Then
-                Try
-                    newFont = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
-                Catch ex As Exception
-                    newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
-                    Pref.font = "Times New Roman, 9pt"
-                End Try
-            Else
-                newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
-                Pref.font = "Times New Roman, 9pt"
-            End If
-        Else
-            newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
-            Pref.font = "Times New Roman, 9pt"
-        End If
-        Label130.Font = newFont
-        Label130.Text = Pref.font
+    '    Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+    '    Dim newFont As System.Drawing.Font
+    '    If Pref.font <> Nothing Then
+    '        If Pref.font <> "" Then
+    '            Try
+    '                newFont = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
+    '            Catch ex As Exception
+    '                newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
+    '                Pref.font = "Times New Roman, 9pt"
+    '            End Try
+    '        Else
+    '            newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
+    '            Pref.font = "Times New Roman, 9pt"
+    '        End If
+    '    Else
+    '        newFont = CType(tcc.ConvertFromString("Times New Roman, 9pt"), System.Drawing.Font)
+    '        Pref.font = "Times New Roman, 9pt"
+    '    End If
+    '    Label130.Font = newFont
+    '    Label130.Text = Pref.font
 
-        chkbx_disablecache          .Checked    = Not Pref.startupCache
-        cbOverwriteArtwork          .Checked    = Not Pref.overwritethumbs
-        cbDisplayLocalActor         .Checked    = Pref.LocalActorImage
-        CheckBoxRenameNFOtoINFO     .Checked    = Pref.renamenfofiles
-        cb_IgnoreThe                .Checked    = Pref.ignorearticle
-        cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
-        cb_IgnoreAn                 .Checked    = Pref.ignoreAn
-        cb_SorttitleIgnoreArticles  .Checked    = Pref.sorttitleignorearticle
-        CheckBox38                  .Checked    = Pref.intruntime
-        CheckBox33                  .Checked    = Pref.actorseasy
-        txtbx_minrarsize            .Text       = Pref.rarsize.ToString
-        cbExternalbrowser           .Checked    = Pref.externalbrowser
-        btnFindBrowser              .Enabled    = cbExternalbrowser.Checked
-        tbaltnfoeditor              .Text       = Pref.altnfoeditor 
-        cbCheckForNewVersion        .Checked    = Pref.CheckForNewVersion
-        cbDisplayRatingOverlay      .Checked    = Pref.DisplayRatingOverlay
-        cbDisplayMediaInfoOverlay   .Checked    = Pref.DisplayMediainfoOverlay 
-        cbDisplayMediaInfoFolderSize.Checked    = Pref.DisplayMediaInfoFolderSize
-        cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled 
+    '    chkbx_disablecache          .Checked    = Not Pref.startupCache
+    '    cbOverwriteArtwork          .Checked    = Not Pref.overwritethumbs
+    '    cbDisplayLocalActor         .Checked    = Pref.LocalActorImage
+    '    CheckBoxRenameNFOtoINFO     .Checked    = Pref.renamenfofiles
+    '    cb_IgnoreThe                .Checked    = Pref.ignorearticle
+    '    cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
+    '    cb_IgnoreAn                 .Checked    = Pref.ignoreAn
+    '    cb_SorttitleIgnoreArticles  .Checked    = Pref.sorttitleignorearticle
+    '    CheckBox38                  .Checked    = Pref.intruntime
+    '    CheckBox33                  .Checked    = Pref.actorseasy
+    '    txtbx_minrarsize            .Text       = Pref.rarsize.ToString
+    '    cbExternalbrowser           .Checked    = Pref.externalbrowser
+    '    btnFindBrowser              .Enabled    = cbExternalbrowser.Checked
+    '    tbaltnfoeditor              .Text       = Pref.altnfoeditor 
+    '    cbCheckForNewVersion        .Checked    = Pref.CheckForNewVersion
+    '    cbDisplayRatingOverlay      .Checked    = Pref.DisplayRatingOverlay
+    '    cbDisplayMediaInfoOverlay   .Checked    = Pref.DisplayMediainfoOverlay 
+    '    cbDisplayMediaInfoFolderSize.Checked    = Pref.DisplayMediaInfoFolderSize
+    '    cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled 
 
-        If Pref.videomode = 1 Then
-            RadioButton38.Checked = True
-        ElseIf Pref.videomode = 2 Then
-            RadioButton37.Checked = True
-        ElseIf Pref.videomode = 4 Then
-            RadioButton36.Checked = True
-        End If
+    '    If Pref.videomode = 1 Then
+    '        RadioButton38.Checked = True
+    '    ElseIf Pref.videomode = 2 Then
+    '        RadioButton37.Checked = True
+    '    ElseIf Pref.videomode = 4 Then
+    '        RadioButton36.Checked = True
+    '    End If
 
-        If Pref.videomode = 4 Then
-            Label121.Text = Pref.selectedvideoplayer
-            Label121.Visible = True
-            btn_custommediaplayer.Enabled = True
-        Else
-            btn_custommediaplayer.Enabled = False
-            Label121.Visible = False
-        End If
+    '    If Pref.videomode = 4 Then
+    '        Label121.Text = Pref.selectedvideoplayer
+    '        Label121.Visible = True
+    '        btn_custommediaplayer.Enabled = True
+    '    Else
+    '        btn_custommediaplayer.Enabled = False
+    '        Label121.Visible = False
+    '    End If
 
-        If Pref.XBMC_version = 0 Then
-            rbXBMCv_pre.Checked = True
-        ElseIf Pref.XBMC_version = 1 Then
-            rbXBMCv_both.Checked = True
-        ElseIf Pref.XBMC_version = 2 Then
-            rbXBMCv_post.Checked = True
-        End If
+    '    If Pref.XBMC_version = 0 Then
+    '        rbXBMCv_pre.Checked = True
+    '    ElseIf Pref.XBMC_version = 1 Then
+    '        rbXBMCv_both.Checked = True
+    '    ElseIf Pref.XBMC_version = 2 Then
+    '        rbXBMCv_post.Checked = True
+    '    End If
 
-        Label112.Text = "Current Default Profile: " & profileStruct.DefaultProfile
-        Label108.Text = "Current Startup Profile: " & profileStruct.StartupProfile
-        ListBox13.Items.Clear()
-        For Each prof In profileStruct.ProfileList
-            ListBox13.Items.Add(prof.ProfileName)
-        Next
+    '    Label112.Text = "Current Default Profile: " & profileStruct.DefaultProfile
+    '    Label108.Text = "Current Startup Profile: " & profileStruct.StartupProfile
+    '    ListBox13.Items.Clear()
+    '    For Each prof In profileStruct.ProfileList
+    '        ListBox13.Items.Add(prof.ProfileName)
+    '    Next
 
-        ListBox16.Items.Clear()
-        ListBox17.Items.Clear()
-        For Each com In Pref.commandlist
-            ListBox16.Items.Add(com.title)
-            ListBox17.Items.Add(com.command)
-        Next
+    '    ListBox16.Items.Clear()
+    '    ListBox17.Items.Clear()
+    '    For Each com In Pref.commandlist
+    '        ListBox16.Items.Add(com.title)
+    '        ListBox17.Items.Add(com.command)
+    '    Next
 
-        cbShowMovieGridToolTip.Checked = Pref.ShowMovieGridToolTip
-        cbShowLogOnError      .Checked = Pref.ShowLogOnError
-        cbUseMultipleThreads  .Checked = Pref.UseMultipleThreads
-        cbShowAllAudioTracks  .Checked = Pref.ShowAllAudioTracks
+    '    cbShowMovieGridToolTip.Checked = Pref.ShowMovieGridToolTip
+    '    cbShowLogOnError      .Checked = Pref.ShowLogOnError
+    '    cbUseMultipleThreads  .Checked = Pref.UseMultipleThreads
+    '    cbShowAllAudioTracks  .Checked = Pref.ShowAllAudioTracks
 
-        Pref.ExcludeFolders.PopTextBox(tbExcludeFolders)
+    '    Pref.ExcludeFolders.PopTextBox(tbExcludeFolders)
 
-        prefsload = False
-        generalprefschanged = False
-        btnGeneralPrefsSaveChanges.Enabled = False
-    End Sub
+    '    prefsload = False
+    '    generalprefschanged = False
+    '    btnGeneralPrefsSaveChanges.Enabled = False
+    'End Sub
 
     'Private Sub tv_PreferencesSetup()
     '    prefsload = True
@@ -12704,758 +12704,758 @@ End Sub
 
 #Region "General Preferences"
     
-    Private Sub TabPage18_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage18.Leave
-        Try
-            If generalprefschanged = True Then
-                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If tempint = DialogResult.Yes Then
-                    btnGeneralPrefsSaveChanges.PerformClick 
-                    MsgBox("Changes Saved")
-                Else
-                    Me.util_ConfigLoad(True)
-                End If
-                generalprefschanged = False
-                btnGeneralPrefsSaveChanges.Enabled = False
-            End If
-            If Pref.font <> Nothing Then
-                If Pref.font <> "" Then
-                    Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                    Dim newFont As System.Drawing.Font = CType(tc.ConvertFromString(Pref.font), System.Drawing.Font)
-                    Call util_FontSetup()
-                End If
-            End If
+    'Private Sub TabPage18_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage18.Leave
+    '    Try
+    '        If generalprefschanged = True Then
+    '            Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '            If tempint = DialogResult.Yes Then
+    '                btnGeneralPrefsSaveChanges.PerformClick 
+    '                MsgBox("Changes Saved")
+    '            Else
+    '                Me.util_ConfigLoad(True)
+    '            End If
+    '            generalprefschanged = False
+    '            btnGeneralPrefsSaveChanges.Enabled = False
+    '        End If
+    '        If Pref.font <> Nothing Then
+    '            If Pref.font <> "" Then
+    '                Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+    '                Dim newFont As System.Drawing.Font = CType(tc.ConvertFromString(Pref.font), System.Drawing.Font)
+    '                Call util_FontSetup()
+    '            End If
+    '        End If
 
-            SetcbBtnLink
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    '        SetcbBtnLink
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
-        Pref.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
+    'Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) 
+    '    Pref.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
 
-        Pref.ConfigSave()
+    '    Pref.ConfigSave()
 
-        If CopyOfPreferencesIgnoreArticle <> Pref.ignorearticle Then
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-        End If
+    '    If CopyOfPreferencesIgnoreArticle <> Pref.ignorearticle Then
+    '        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+    '    End If
 
-        generalprefschanged = False
-        btnGeneralPrefsSaveChanges.Enabled = False
-    End Sub
+    '    generalprefschanged = False
+    '    btnGeneralPrefsSaveChanges.Enabled = False
+    'End Sub
 
 #Region "General"
 
-    Private Sub RadioButton38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton38.CheckedChanged
-        If RadioButton38.Checked = True Then
-            Pref.videomode = 1
-        End If
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub RadioButton38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If RadioButton38.Checked = True Then
+    '        Pref.videomode = 1
+    '    End If
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub RadioButton37_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton37.CheckedChanged
-        If RadioButton37.Checked = True Then
-            Pref.videomode = 2
-        End If
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub RadioButton37_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If RadioButton37.Checked = True Then
+    '        Pref.videomode = 2
+    '    End If
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub RadioButton36_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton36.CheckedChanged
-        If RadioButton36.Checked = True Then
-            Pref.videomode = 4
-            btn_custommediaplayer.Enabled = True
-            Label121.Visible = True
-            If Pref.selectedvideoplayer <> Nothing Then
-                If Pref.selectedvideoplayer <> "" Then
-                    Label121.Text = Pref.selectedvideoplayer
-                Else
-                    Label121.Text = ""
-                End If
-            Else
-                Label121.Text = ""
-            End If
-        Else
-            Label121.Visible = False
-            btn_custommediaplayer.Enabled = False
-        End If
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub RadioButton36_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If RadioButton36.Checked = True Then
+    '        Pref.videomode = 4
+    '        btn_custommediaplayer.Enabled = True
+    '        Label121.Visible = True
+    '        If Pref.selectedvideoplayer <> Nothing Then
+    '            If Pref.selectedvideoplayer <> "" Then
+    '                Label121.Text = Pref.selectedvideoplayer
+    '            Else
+    '                Label121.Text = ""
+    '            End If
+    '        Else
+    '            Label121.Text = ""
+    '        End If
+    '    Else
+    '        Label121.Visible = False
+    '        btn_custommediaplayer.Enabled = False
+    '    End If
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub btn_custommediaplayer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_custommediaplayer.Click
-        Try
-            Dim filebrowser As New OpenFileDialog
-            Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-            filebrowser.InitialDirectory = mstrProgramFilesPath
-            filebrowser.Filter = "Executable Files|*.exe"
-            filebrowser.Title = "Find Executable Of Preferred Media Player"
-            If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                Pref.selectedvideoplayer = filebrowser.FileName
-                Label121.Visible = True
-                Label121.Text = Pref.selectedvideoplayer
-            End If
-            If prefsload Then Exit Sub
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub btn_custommediaplayer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        Dim filebrowser As New OpenFileDialog
+    '        Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+    '        filebrowser.InitialDirectory = mstrProgramFilesPath
+    '        filebrowser.Filter = "Executable Files|*.exe"
+    '        filebrowser.Title = "Find Executable Of Preferred Media Player"
+    '        If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+    '            Pref.selectedvideoplayer = filebrowser.FileName
+    '            Label121.Visible = True
+    '            Label121.Text = Pref.selectedvideoplayer
+    '        End If
+    '        If prefsload Then Exit Sub
+    '        generalprefschanged = True
+    '        btnGeneralPrefsSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtbx_minrarsize.KeyPress
-        Try
-            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-                If txtbx_minrarsize.Text <> "" Then
-                    e.Handled = True
-                Else
-                    MsgBox("Please Enter at least 0")
-                    txtbx_minrarsize.Text = "8"
-                End If
-            End If
-            If txtbx_minrarsize.Text = "" Then
-                MsgBox("Please enter a numerical Value that is 1 or more")
-                txtbx_minrarsize.Text = "8"
-                Exit Sub
-            End If
-            If Not IsNumeric(txtbx_minrarsize.Text) Then
-                MsgBox("Please enter a numerical Value that is 1 or more")
-                txtbx_minrarsize.Text = "8"
-                Exit Sub
-            End If
-            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) 
+    '    Try
+    '        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+    '            If txtbx_minrarsize.Text <> "" Then
+    '                e.Handled = True
+    '            Else
+    '                MsgBox("Please Enter at least 0")
+    '                txtbx_minrarsize.Text = "8"
+    '            End If
+    '        End If
+    '        If txtbx_minrarsize.Text = "" Then
+    '            MsgBox("Please enter a numerical Value that is 1 or more")
+    '            txtbx_minrarsize.Text = "8"
+    '            Exit Sub
+    '        End If
+    '        If Not IsNumeric(txtbx_minrarsize.Text) Then
+    '            MsgBox("Please enter a numerical Value that is 1 or more")
+    '            txtbx_minrarsize.Text = "8"
+    '            Exit Sub
+    '        End If
+    '        Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub txtbx_minrarsize_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtbx_minrarsize.TextChanged
-        If IsNumeric(txtbx_minrarsize.Text) Then
-            Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
-        Else
-            Pref.rarsize = 8
-            txtbx_minrarsize.Text = "8"
-        End If
-        If prefsload Then Exit Sub
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub txtbx_minrarsize_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If IsNumeric(txtbx_minrarsize.Text) Then
+    '        Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+    '    Else
+    '        Pref.rarsize = 8
+    '        txtbx_minrarsize.Text = "8"
+    '    End If
+    '    If prefsload Then Exit Sub
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub CheckBox33_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox33.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.actorseasy = CheckBox33.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub CheckBox33_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.actorseasy = CheckBox33.Checked
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub Button96_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button96.Click
-        Try
-            Dim dlg As FontDialog = New FontDialog()
-            Dim res As DialogResult = dlg.ShowDialog()
-            If res = Windows.Forms.DialogResult.OK Then
-                Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                Dim fontString As String = tc.ConvertToString(dlg.Font)
+    'Private Sub Button96_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        Dim dlg As FontDialog = New FontDialog()
+    '        Dim res As DialogResult = dlg.ShowDialog()
+    '        If res = Windows.Forms.DialogResult.OK Then
+    '            Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+    '            Dim fontString As String = tc.ConvertToString(dlg.Font)
 
-                Pref.font = fontString
+    '            Pref.font = fontString
 
-                Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-                Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
+    '            Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+    '            Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
 
-                Label130.Font = newFont
-                Label130.Text = fontString
-                generalprefschanged = True
-                btnGeneralPrefsSaveChanges.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    '            Label130.Font = newFont
+    '            Label130.Text = fontString
+    '            generalprefschanged = True
+    '            btnGeneralPrefsSaveChanges.Enabled = True
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub Button111_Click(sender As System.Object, e As System.EventArgs) Handles Button111.Click
-        Try
-            'Reset Font
-            'Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-            'Dim fontString As String = tc.ConvertToString("Times New Roman, 9pt")
+    'Private Sub Button111_Click(sender As System.Object, e As System.EventArgs) 
+    '    Try
+    '        'Reset Font
+    '        'Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+    '        'Dim fontString As String = tc.ConvertToString("Times New Roman, 9pt")
 
-            Pref.font = "Times New Roman, 9pt"
+    '        Pref.font = "Times New Roman, 9pt"
 
-            Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
-            Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
+    '        Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+    '        Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(Pref.font), System.Drawing.Font)
 
-            Label130.Font = newFont
-            Label130.Text = "Times New Roman, 9pt"
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    '        Label130.Font = newFont
+    '        Label130.Text = "Times New Roman, 9pt"
+    '        generalprefschanged = True
+    '        btnGeneralPrefsSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
 
-    End Sub
+    'End Sub
 
-    Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_pre.CheckedChanged
-        If prefsload Then Exit Sub
-        If rbXBMCv_pre.Checked Then
-            Pref.XBMC_version = 0
-        End If
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If rbXBMCv_pre.Checked Then
+    '        Pref.XBMC_version = 0
+    '    End If
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
-        If prefsload Then Exit Sub
-        If rbXBMCv_post.Checked Then
-            Pref.XBMC_version = 2
-        End If
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If rbXBMCv_post.Checked Then
+    '        Pref.XBMC_version = 2
+    '    End If
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
-        If prefsload Then Exit Sub
-        If rbXBMCv_both.Checked Then
-            Pref.XBMC_version = 1
-        End If
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+    'Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If rbXBMCv_both.Checked Then
+    '        Pref.XBMC_version = 1
+    '    End If
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles btnMkvMergeGuiPath.Click
+    'Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) 
 
-        Dim ofd As New OpenFileDialog
+    '    Dim ofd As New OpenFileDialog
 
-        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-        ofd.Filter           = "Executable Files|*.exe"
-        ofd.Title            = "Locate mkvmerge GUI (mmg.exe)"
+    '    ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+    '    ofd.Filter           = "Executable Files|*.exe"
+    '    ofd.Title            = "Locate mkvmerge GUI (mmg.exe)"
 
-        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Pref.MkvMergeGuiPath = ofd.FileName
+    '    If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Pref.MkvMergeGuiPath = ofd.FileName
 
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
+    '    generalprefschanged = True
+    '    btnGeneralPrefsSaveChanges.Enabled = True
         
-    End Sub
+    'End Sub
 
-    Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles llMkvMergeGuiPath.Click
-        OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
-    End Sub
+    'Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) 
+    '    OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
+    'End Sub
 
-    Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) Handles lblaltnfoeditorclear.Click
-        tbaltnfoeditor.Text = ""
-        Pref.altnfoeditor = ""
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) 
+'        tbaltnfoeditor.Text = ""
+'        Pref.altnfoeditor = ""
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub btnaltnfoeditor_Click( sender As Object,  e As EventArgs) Handles btnaltnfoeditor.Click
-        Dim ofd As New OpenFileDialog
-        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-        ofd.Filter           = "Executable Files|*.exe"
-        ofd.Title            = "Locate Alternative nfo viewer-editor"
-        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then 
-            Pref.altnfoeditor = ofd.FileName
-            tbaltnfoeditor.Text = Pref.altnfoeditor 
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
-    End Sub
+'    Private Sub btnaltnfoeditor_Click( sender As Object,  e As EventArgs) 
+'        Dim ofd As New OpenFileDialog
+'        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+'        ofd.Filter           = "Executable Files|*.exe"
+'        ofd.Title            = "Locate Alternative nfo viewer-editor"
+'        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then 
+'            Pref.altnfoeditor = ofd.FileName
+'            tbaltnfoeditor.Text = Pref.altnfoeditor 
+'            generalprefschanged = True
+'            btnGeneralPrefsSaveChanges.Enabled = True
+'        End If
+'    End Sub
 
-    Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.intruntime = CheckBox38.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.intruntime = CheckBox38.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cb_IgnoreThe_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreThe.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ignorearticle = cb_IgnoreThe.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cb_IgnoreThe_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.ignorearticle = cb_IgnoreThe.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cb_IgnoreA_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreA.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ignoreAarticle = cb_IgnoreA.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cb_IgnoreA_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.ignoreAarticle = cb_IgnoreA.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_IgnoreAn.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ignoreAn = cb_IgnoreAn.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cb_IgnoreAn_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.ignoreAn = cb_IgnoreAn.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.overwritethumbs = Not cbOverwriteArtwork.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.overwritethumbs = Not cbOverwriteArtwork.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.externalbrowser = cbExternalbrowser.Checked
-        btnFindBrowser.Enabled      = cbExternalbrowser.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.externalbrowser = cbExternalbrowser.Checked
+'        btnFindBrowser.Enabled      = cbExternalbrowser.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) Handles btnFindBrowser.Click
-        Try
-            Dim filebrowser As New OpenFileDialog
-            Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-            filebrowser.InitialDirectory = mstrProgramFilesPath
-            filebrowser.Filter = "Executable Files|*.exe"
-            filebrowser.Title = "Find Executable Of Preferred Browser"
-            If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-                Pref.selectedBrowser = filebrowser.FileName
-            End If
-            If prefsload Then Exit Sub
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            Dim filebrowser As New OpenFileDialog
+'            Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+'            filebrowser.InitialDirectory = mstrProgramFilesPath
+'            filebrowser.Filter = "Executable Files|*.exe"
+'            filebrowser.Title = "Find Executable Of Preferred Browser"
+'            If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+'                Pref.selectedBrowser = filebrowser.FileName
+'            End If
+'            If prefsload Then Exit Sub
+'            generalprefschanged = True
+'            btnGeneralPrefsSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.startupCache = Not chkbx_disablecache.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.startupCache = Not chkbx_disablecache.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
-        If MainFormLoadedStatus Then
-            Pref.UseMultipleThreads = cbUseMultipleThreads.Checked
-            If prefsload Then Exit Sub
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
-    End Sub
+'    Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Pref.UseMultipleThreads = cbUseMultipleThreads.Checked
+'            If prefsload Then Exit Sub
+'            generalprefschanged = True
+'            btnGeneralPrefsSaveChanges.Enabled = True
+'        End If
+'    End Sub
 
-    Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) Handles cbCheckForNewVersion.CheckedChanged
-        If MainFormLoadedStatus Then
-            Pref.CheckForNewVersion = cbCheckForNewVersion.Checked
-            If prefsload Then Exit Sub
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
-    End Sub
+'    Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Pref.CheckForNewVersion = cbCheckForNewVersion.Checked
+'            If prefsload Then Exit Sub
+'            generalprefschanged = True
+'            btnGeneralPrefsSaveChanges.Enabled = True
+'        End If
+'    End Sub
 
-    Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.LocalActorImage = cbDisplayLocalActor.Checked = True
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.LocalActorImage = cbDisplayLocalActor.Checked = True
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
-        If MainFormLoadedStatus Then
-            Pref.ShowLogOnError = cbShowLogOnError.Checked
-            If prefsload Then Exit Sub
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
-    End Sub
+'    Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) 
+'        If MainFormLoadedStatus Then
+'            Pref.ShowLogOnError = cbShowLogOnError.Checked
+'            If prefsload Then Exit Sub
+'            generalprefschanged = True
+'            btnGeneralPrefsSaveChanges.Enabled = True
+'        End If
+'    End Sub
 
-    Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.renamenfofiles = CheckBoxRenameNFOtoINFO.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbDisplayRatingOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayRatingOverlay.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbDisplayRatingOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.DisplayRatingOverlay = cbDisplayRatingOverlay.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoOverlay.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbDisplayMediaInfoOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.DisplayMediainfoOverlay = cbDisplayMediaInfoOverlay.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbDisplayMediaInfoFolderSize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayMediaInfoFolderSize.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.DisplayMediaInfoFolderSize = cbDisplayMediaInfoFolderSize.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbDisplayMediaInfoFolderSize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.DisplayMediaInfoFolderSize = cbDisplayMediaInfoFolderSize.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMultiMonitorEnable.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub cbShowAllAudioTracks_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbShowAllAudioTracks.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub cbShowAllAudioTracks_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-    Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) Handles tbExcludeFolders.Validating
-        If prefsload Then Exit Sub
-        If Pref.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        End If
-    End Sub
+'    Private Sub tbExcludeFolders_Validating( sender As Object,  e As CancelEventArgs) 
+'        If prefsload Then Exit Sub
+'        If Pref.ExcludeFolders.Changed(tbExcludeFolders) And Not prefsload Then
+'            generalprefschanged = True
+'            btnGeneralPrefsSaveChanges.Enabled = True
+'        End If
+'    End Sub
 
-    Private Sub tbExcludeFolders_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbExcludeFolders.TextChanged
-        'Preferences.ExcludeFolders = ExcludeFolders.Text
-        generalprefschanged = True
-        btnGeneralPrefsSaveChanges.Enabled = True
-    End Sub
+'    Private Sub tbExcludeFolders_TextChanged(sender As System.Object, e As System.EventArgs) 
+'        'Preferences.ExcludeFolders = ExcludeFolders.Text
+'        generalprefschanged = True
+'        btnGeneralPrefsSaveChanges.Enabled = True
+'    End Sub
 
-'Profiles
-    Private Sub Button79_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button79.Click
-        Try
-            For Each pro In profileStruct.ProfileList
-                If pro.ProfileName.ToLower = TextBox42.Text.ToLower Then
-                    MsgBox("This Profile Already Exists" & vbCrLf & "Please Select Another Name")
-                    Exit Sub
-                End If
-            Next
-            Dim done As Boolean = False
-            Dim tempint As Integer = 0
-            For f = 1 To 1000
-                Dim tempstring2 As String = applicationPath & "\Settings\"
-                Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
-                Dim actorcachepath As String = tempstring2 & "actorcache" & f.ToString & ".xml"
-                Dim directorcachepath As String = tempstring2 & "directorcache" & f.ToString & ".xml"
-                Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".txt"
-                Dim genrespath As String = tempstring2 & "genres" & f.ToString & ".txt"
-                Dim moviecachepath As String = tempstring2 & "moviecache" & f.ToString & ".xml"
-                Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
-                Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
-                Dim musicvideocachepath As String = tempstring2 & "musicvideocache" & f.ToString & ".xml"
-                Dim ok As Boolean = True
-                If File.Exists(configpath) Then ok = False
-                If File.Exists(actorcachepath) Then ok = False
-                If File.Exists(directorcachepath) Then ok = False
-                If File.Exists(filterspath) Then ok = False
-                If File.Exists(genrespath) Then ok = False
-                If File.Exists(moviecachepath) Then ok = False
-                If File.Exists(regexpath) Then ok = False
-                If File.Exists(tvcachepath) Then ok = False
-                If File.Exists(musicvideocachepath) Then ok = False
-                If ok = True Then
-                    tempint = f
-                    Exit For
-                End If
-            Next
-            'new profilename
-            Dim tempstring As String = applicationPath & "\Settings\"
-            Dim moviecachetocopy        As String = String.Empty
-            Dim actorcachetocopy        As String = String.Empty
-            Dim musiccachetocopy        As String = String.Empty
-            Dim musicvideocachetocopy   As String = String.Empty
-            Dim directorcachetocopy     As String = String.Empty
-            Dim tvcachetocopy           As String = String.Empty
-            Dim configtocopy            As String = String.Empty
-            Dim filterstocopy           As String = String.Empty
-            Dim genrestocopy            As String = String.Empty
-            Dim regextocopy             As String = String.Empty
-            Dim moviesetcachetocopy     As String = String.Empty
-            For Each profs In profileStruct.ProfileList
-                If profs.ProfileName = profileStruct.DefaultProfile Then
-                    musicvideocachetocopy   = profs.MusicVideoCache
-                    moviecachetocopy        = profs.MovieCache
-                    actorcachetocopy        = profs.ActorCache
-                    directorcachetocopy     = profs.DirectorCache
-                    tvcachetocopy           = profs.TvCache
-                    configtocopy            = profs.Config
-                    filterstocopy           = profs.Filters
-                    genrestocopy            = profs.Genres 
-                    regextocopy             = profs.RegExList
-                    moviesetcachetocopy     = profs.MovieSetCache 
-                End If
-            Next
+''Profiles
+'    Private Sub Button79_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            For Each pro In profileStruct.ProfileList
+'                If pro.ProfileName.ToLower = TextBox42.Text.ToLower Then
+'                    MsgBox("This Profile Already Exists" & vbCrLf & "Please Select Another Name")
+'                    Exit Sub
+'                End If
+'            Next
+'            Dim done As Boolean = False
+'            Dim tempint As Integer = 0
+'            For f = 1 To 1000
+'                Dim tempstring2 As String = applicationPath & "\Settings\"
+'                Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
+'                Dim actorcachepath As String = tempstring2 & "actorcache" & f.ToString & ".xml"
+'                Dim directorcachepath As String = tempstring2 & "directorcache" & f.ToString & ".xml"
+'                Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".txt"
+'                Dim genrespath As String = tempstring2 & "genres" & f.ToString & ".txt"
+'                Dim moviecachepath As String = tempstring2 & "moviecache" & f.ToString & ".xml"
+'                Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
+'                Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
+'                Dim musicvideocachepath As String = tempstring2 & "musicvideocache" & f.ToString & ".xml"
+'                Dim ok As Boolean = True
+'                If File.Exists(configpath) Then ok = False
+'                If File.Exists(actorcachepath) Then ok = False
+'                If File.Exists(directorcachepath) Then ok = False
+'                If File.Exists(filterspath) Then ok = False
+'                If File.Exists(genrespath) Then ok = False
+'                If File.Exists(moviecachepath) Then ok = False
+'                If File.Exists(regexpath) Then ok = False
+'                If File.Exists(tvcachepath) Then ok = False
+'                If File.Exists(musicvideocachepath) Then ok = False
+'                If ok = True Then
+'                    tempint = f
+'                    Exit For
+'                End If
+'            Next
+'            'new profilename
+'            Dim tempstring As String = applicationPath & "\Settings\"
+'            Dim moviecachetocopy        As String = String.Empty
+'            Dim actorcachetocopy        As String = String.Empty
+'            Dim musiccachetocopy        As String = String.Empty
+'            Dim musicvideocachetocopy   As String = String.Empty
+'            Dim directorcachetocopy     As String = String.Empty
+'            Dim tvcachetocopy           As String = String.Empty
+'            Dim configtocopy            As String = String.Empty
+'            Dim filterstocopy           As String = String.Empty
+'            Dim genrestocopy            As String = String.Empty
+'            Dim regextocopy             As String = String.Empty
+'            Dim moviesetcachetocopy     As String = String.Empty
+'            For Each profs In profileStruct.ProfileList
+'                If profs.ProfileName = profileStruct.DefaultProfile Then
+'                    musicvideocachetocopy   = profs.MusicVideoCache
+'                    moviecachetocopy        = profs.MovieCache
+'                    actorcachetocopy        = profs.ActorCache
+'                    directorcachetocopy     = profs.DirectorCache
+'                    tvcachetocopy           = profs.TvCache
+'                    configtocopy            = profs.Config
+'                    filterstocopy           = profs.Filters
+'                    genrestocopy            = profs.Genres 
+'                    regextocopy             = profs.RegExList
+'                    moviesetcachetocopy     = profs.MovieSetCache 
+'                End If
+'            Next
 
-            Dim profiletoadd As New ListOfProfiles
-            profiletoadd.ActorCache         = tempstring & "actorcache" & tempint.ToString & ".xml"
-            profiletoadd.DirectorCache      = tempstring & "directorcache" & tempint.ToString & ".xml"
-            profiletoadd.Config             = tempstring & "config" & tempint.ToString & ".xml"
-            profiletoadd.Filters            = tempstring & "filters" & tempint.ToString & ".txt"
-            profiletoadd.Genres             = tempstring & "genres" & tempint.ToString & ".txt"
-            profiletoadd.MovieCache         = tempstring & "moviecache" & tempint.ToString & ".xml"
-            profiletoadd.RegExList          = tempstring & "regex" & tempint.ToString & ".xml"
-            profiletoadd.TvCache            = tempstring & "tvcache" & tempint.ToString & ".xml"
-            profiletoadd.MusicVideoCache    = tempstring & "musicvideocache" & tempint.ToString & ".xml"
-            profiletoadd.MovieSetCache      = tempstring & "moviesetcache" & tempint.ToString & ".xml"
-            profiletoadd.ProfileName        = TextBox42.Text
-            profileStruct.ProfileList.Add(profiletoadd)
+'            Dim profiletoadd As New ListOfProfiles
+'            profiletoadd.ActorCache         = tempstring & "actorcache" & tempint.ToString & ".xml"
+'            profiletoadd.DirectorCache      = tempstring & "directorcache" & tempint.ToString & ".xml"
+'            profiletoadd.Config             = tempstring & "config" & tempint.ToString & ".xml"
+'            profiletoadd.Filters            = tempstring & "filters" & tempint.ToString & ".txt"
+'            profiletoadd.Genres             = tempstring & "genres" & tempint.ToString & ".txt"
+'            profiletoadd.MovieCache         = tempstring & "moviecache" & tempint.ToString & ".xml"
+'            profiletoadd.RegExList          = tempstring & "regex" & tempint.ToString & ".xml"
+'            profiletoadd.TvCache            = tempstring & "tvcache" & tempint.ToString & ".xml"
+'            profiletoadd.MusicVideoCache    = tempstring & "musicvideocache" & tempint.ToString & ".xml"
+'            profiletoadd.MovieSetCache      = tempstring & "moviesetcache" & tempint.ToString & ".xml"
+'            profiletoadd.ProfileName        = TextBox42.Text
+'            profileStruct.ProfileList.Add(profiletoadd)
 
-            If File.Exists(moviecachetocopy)        Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
-            If File.Exists(musicvideocachetocopy)   Then File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
-            If File.Exists(actorcachetocopy)        Then File.Copy(actorcachetocopy, profiletoadd.ActorCache)
-            If File.Exists(directorcachetocopy)     Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
-            If File.Exists(tvcachetocopy)           Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
-            If File.Exists(configtocopy)            Then File.Copy(configtocopy, profiletoadd.Config)
-            If File.Exists(filterstocopy)           Then File.Copy(filterstocopy, profiletoadd.Filters)
-            If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
-            If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
-            If File.Exists(moviesetcachetocopy)     Then File.Copy(moviesetcachetocopy, profiletoadd.MovieSetCache)
-            ListBox13.Items.Add(TextBox42.Text)
-            Call util_ProfileSave()
-            done = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            If File.Exists(moviecachetocopy)        Then File.Copy(moviecachetocopy, profiletoadd.MovieCache)
+'            If File.Exists(musicvideocachetocopy)   Then File.Copy(musicvideocachetocopy, profiletoadd.MusicVideoCache)
+'            If File.Exists(actorcachetocopy)        Then File.Copy(actorcachetocopy, profiletoadd.ActorCache)
+'            If File.Exists(directorcachetocopy)     Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
+'            If File.Exists(tvcachetocopy)           Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
+'            If File.Exists(configtocopy)            Then File.Copy(configtocopy, profiletoadd.Config)
+'            If File.Exists(filterstocopy)           Then File.Copy(filterstocopy, profiletoadd.Filters)
+'            If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
+'            If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
+'            If File.Exists(moviesetcachetocopy)     Then File.Copy(moviesetcachetocopy, profiletoadd.MovieSetCache)
+'            ListBox13.Items.Add(TextBox42.Text)
+'            Call util_ProfileSave()
+'            done = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button78_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button78.Click
-        Try
-            'setselected profile to default
-            For Each prof In profileStruct.ProfileList
-                If prof.ProfileName = ListBox13.SelectedItem Then
-                    profileStruct.defaultprofile = prof.ProfileName
-                    Label112.Text = "Current Default Profile: " & prof.ProfileName
-                    Call util_ProfileSave()
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button78_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'setselected profile to default
+'            For Each prof In profileStruct.ProfileList
+'                If prof.ProfileName = ListBox13.SelectedItem Then
+'                    profileStruct.defaultprofile = prof.ProfileName
+'                    Label112.Text = "Current Default Profile: " & prof.ProfileName
+'                    Call util_ProfileSave()
+'                    Exit For
+'                End If
+'            Next
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button93_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button93.Click
-        Try
-            'setselected profile to startup
-            For Each prof In profileStruct.ProfileList
-                If prof.ProfileName = ListBox13.SelectedItem Then
-                    profileStruct.startupprofile = prof.ProfileName
-                    Label108.Text = "Current Startup Profile: " & prof.ProfileName
-                    Call util_ProfileSave()
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button93_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'setselected profile to startup
+'            For Each prof In profileStruct.ProfileList
+'                If prof.ProfileName = ListBox13.SelectedItem Then
+'                    profileStruct.startupprofile = prof.ProfileName
+'                    Label108.Text = "Current Startup Profile: " & prof.ProfileName
+'                    Call util_ProfileSave()
+'                    Exit For
+'                End If
+'            Next
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button80_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button80.Click
-        Try
-            'remove selected profile
-            If ListBox13.SelectedItem = profileStruct.DefaultProfile Then
-                MsgBox("You can't delete your default profile" & vbCrLf & "Set another Profile to default then delete it")
-                Exit Sub
-            End If
-            If ListBox13.SelectedItem = profileStruct.StartupProfile Then
-                MsgBox("You can't delete your startup profile" & vbCrLf & "Set another Profile to startup then delete it")
-                Exit Sub
-            End If
-            If ListBox13.SelectedItem = workingProfile.profilename Then
-                MsgBox("You can't delete a loaded profile" & vbCrLf & "Load another Profile then delete it")
-                Exit Sub
-            End If
-            Dim tempint As Integer = MessageBox.Show("Removing a profile will delete all associated cache files and settings," & vbCrLf & "Are you sure you want to remove the selected profile", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If tempint = DialogResult.Yes Then
-                Dim tempint2 As Integer = 0
-                For f = 0 To profileStruct.ProfileList.Count - 1
-                    If profileStruct.profilelist(f).ProfileName = ListBox13.SelectedItem Then
-                        tempint2 = f
-                        Try
-                            File.Delete(profileStruct.profilelist(f).ActorCache)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).DirectorCache)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).Config)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).Filters)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).Genres)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).MovieCache)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).MusicVideoCache)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).RegExList)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).TvCache)
-                        Catch ex As Exception
-                        End Try
-                        Try
-                            File.Delete(profileStruct.profilelist(f).MovieSetCache)
-                        Catch ex As Exception
-                        End Try
-                        Exit For
-                    End If
-                Next
-                profileStruct.ProfileList.RemoveAt(tempint2)
-                ListBox13.Items.Clear()
-                ProfilesToolStripMenuItem.DropDownItems.Clear()
-                If profileStruct.ProfileList.Count > 1 Then
-                    ProfilesToolStripMenuItem.Visible = True
-                Else
-                    ProfilesToolStripMenuItem.Visible = False
-                End If
-                ProfilesToolStripMenuItem.DropDownItems.Clear()
-                For Each prof In profileStruct.ProfileList
-                    ListBox13.Items.Add(prof.ProfileName)
-                    ProfilesToolStripMenuItem.DropDownItems.Add(prof.ProfileName)
-                Next
-                util_ProfileSave()
+'    Private Sub Button80_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'remove selected profile
+'            If ListBox13.SelectedItem = profileStruct.DefaultProfile Then
+'                MsgBox("You can't delete your default profile" & vbCrLf & "Set another Profile to default then delete it")
+'                Exit Sub
+'            End If
+'            If ListBox13.SelectedItem = profileStruct.StartupProfile Then
+'                MsgBox("You can't delete your startup profile" & vbCrLf & "Set another Profile to startup then delete it")
+'                Exit Sub
+'            End If
+'            If ListBox13.SelectedItem = workingProfile.profilename Then
+'                MsgBox("You can't delete a loaded profile" & vbCrLf & "Load another Profile then delete it")
+'                Exit Sub
+'            End If
+'            Dim tempint As Integer = MessageBox.Show("Removing a profile will delete all associated cache files and settings," & vbCrLf & "Are you sure you want to remove the selected profile", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+'            If tempint = DialogResult.Yes Then
+'                Dim tempint2 As Integer = 0
+'                For f = 0 To profileStruct.ProfileList.Count - 1
+'                    If profileStruct.profilelist(f).ProfileName = ListBox13.SelectedItem Then
+'                        tempint2 = f
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).ActorCache)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).DirectorCache)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).Config)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).Filters)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).Genres)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).MovieCache)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).MusicVideoCache)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).RegExList)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                        Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).TvCache)
+'                        Catch ex As Exception
+'                        End Try
+'                        Try
+'                            File.Delete(profileStruct.profilelist(f).MovieSetCache)
+'                        Catch ex As Exception
+'                        End Try
+'                        Exit For
+'                    End If
+'                Next
+'                profileStruct.ProfileList.RemoveAt(tempint2)
+'                ListBox13.Items.Clear()
+'                ProfilesToolStripMenuItem.DropDownItems.Clear()
+'                If profileStruct.ProfileList.Count > 1 Then
+'                    ProfilesToolStripMenuItem.Visible = True
+'                Else
+'                    ProfilesToolStripMenuItem.Visible = False
+'                End If
+'                ProfilesToolStripMenuItem.DropDownItems.Clear()
+'                For Each prof In profileStruct.ProfileList
+'                    ListBox13.Items.Add(prof.ProfileName)
+'                    ProfilesToolStripMenuItem.DropDownItems.Add(prof.ProfileName)
+'                Next
+'                util_ProfileSave()
 
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+'            End If
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
 
 #End Region
 
 #Region "Custom Commands"
-    Private Sub btn_ToolsCommandAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ToolsCommandAdd.Click
-        Try
-            If TextBox41.Text <> "" And TextBox43.Text <> "" Then
-                Dim allgood As Boolean = True
-                For Each item In ListBox16.Items
-                    If TextBox41.Text = item Then
-                        allgood = False
-                    End If
-                Next
-                If allgood Then
-                    Dim newcom As New str_ListOfCommands(SetDefaults)
-                    newcom.command = TextBox43.Text
-                    newcom.title = TextBox41.Text
-                    Pref.commandlist.Add(newcom)
-                    ListBox16.Items.Add(newcom.title)
-                    ListBox17.Items.Add(newcom.command)
-                    Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
-                    For i = x-1 To MCToolsCommands Step -1
-                        ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
-                    Next
-                    For Each com In Pref.commandlist
-                        ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-                    Next
-                    If prefsload Then Exit Sub
-                    generalprefschanged = True
-                    btnGeneralPrefsSaveChanges.Enabled = True
-                Else
-                    MsgBox("Title already exists in list")
-                End If
-            Else
-                MsgBox("This feature needs both a title & command")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub btn_ToolsCommandAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        If TextBox41.Text <> "" And TextBox43.Text <> "" Then
+    '            Dim allgood As Boolean = True
+    '            For Each item In ListBox16.Items
+    '                If TextBox41.Text = item Then
+    '                    allgood = False
+    '                End If
+    '            Next
+    '            If allgood Then
+    '                Dim newcom As New str_ListOfCommands(SetDefaults)
+    '                newcom.command = TextBox43.Text
+    '                newcom.title = TextBox41.Text
+    '                Pref.commandlist.Add(newcom)
+    '                ListBox16.Items.Add(newcom.title)
+    '                ListBox17.Items.Add(newcom.command)
+    '                Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
+    '                For i = x-1 To MCToolsCommands Step -1
+    '                    ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+    '                Next
+    '                For Each com In Pref.commandlist
+    '                    ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+    '                Next
+    '                If prefsload Then Exit Sub
+    '                generalprefschanged = True
+    '                btnGeneralPrefsSaveChanges.Enabled = True
+    '            Else
+    '                MsgBox("Title already exists in list")
+    '            End If
+    '        Else
+    '            MsgBox("This feature needs both a title & command")
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ListBox16_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox16.SelectedIndexChanged
-        Try
-            ListBox17.SelectedIndex = ListBox16.SelectedIndex
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ListBox16_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        ListBox17.SelectedIndex = ListBox16.SelectedIndex
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ListBox17_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox17.SelectedIndexChanged
-        Try
-            ListBox16.SelectedIndex = ListBox17.SelectedIndex
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ListBox17_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        ListBox16.SelectedIndex = ListBox17.SelectedIndex
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub btn_ToolsCommandRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ToolsCommandRemove.Click
-        Try
-            If ListBox16.SelectedItem <> "" And ListBox17.SelectedItem <> "" Then
-                For Each com In Pref.commandlist
-                    If com.title = ListBox16.SelectedItem And com.command = ListBox17.SelectedItem Then
-                        Pref.commandlist.Remove(com)
-                        Exit For
-                    End If
-                Next
-                ListBox16.Items.Clear()
-                ListBox17.Items.Clear()
-                Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
-                For i = x-1 To MCToolsCommands Step -1
-                    ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
-                Next
-                For Each com In Pref.commandlist
-                    ListBox16.Items.Add(com.title)
-                    ListBox17.Items.Add(com.command)
-                    ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-                Next
-            Else
-                MsgBox("Nothing selected to remove")
-            End If
-            If prefsload Then Exit Sub
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub btn_ToolsCommandRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        If ListBox16.SelectedItem <> "" And ListBox17.SelectedItem <> "" Then
+    '            For Each com In Pref.commandlist
+    '                If com.title = ListBox16.SelectedItem And com.command = ListBox17.SelectedItem Then
+    '                    Pref.commandlist.Remove(com)
+    '                    Exit For
+    '                End If
+    '            Next
+    '            ListBox16.Items.Clear()
+    '            ListBox17.Items.Clear()
+    '            Dim x As Integer = ToolsToolStripMenuItem.DropDownItems.Count
+    '            For i = x-1 To MCToolsCommands Step -1
+    '                ToolsToolStripMenuItem.DropDownItems.RemoveAt(i)
+    '            Next
+    '            For Each com In Pref.commandlist
+    '                ListBox16.Items.Add(com.title)
+    '                ListBox17.Items.Add(com.command)
+    '                ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+    '            Next
+    '        Else
+    '            MsgBox("Nothing selected to remove")
+    '        End If
+    '        If prefsload Then Exit Sub
+    '        generalprefschanged = True
+    '        btnGeneralPrefsSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
 #End Region 'General Preferences -> Custom Commands Tab
 
@@ -21640,13 +21640,13 @@ End Sub
         Return If(codec = "h264" AndAlso format = "avc1", format, codec)
     End Function
 
-    Private Sub TabPage18_Enter(sender As Object, e As EventArgs) Handles TabPage18.Enter
-        UcGenPref_XbmcLink.Pop()
-    End Sub
+    'Private Sub TabPage18_Enter(sender As Object, e As EventArgs) Handles TabPage18.Enter
+    '    UcGenPref_XbmcLink.Pop()
+    'End Sub
 
-    Private Sub tpPrxy_Enter(sender As Object, e As EventArgs) Handles tpPrxy.Enter
-        UcGenPref_Proxy1.pop()
-    End Sub
+    'Private Sub tpPrxy_Enter(sender As Object, e As EventArgs) 
+    '    UcGenPref_Proxy1.pop()
+    'End Sub
 
     Private Sub tsmiSyncToXBMC_Click(sender As Object, e As EventArgs) Handles tsmiSyncToXBMC.Click
         Try
