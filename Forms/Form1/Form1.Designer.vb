@@ -65,13 +65,9 @@ Partial Class Form1
         Me.btn_TvFoldersAddFromRoot = New System.Windows.Forms.Button()
         Me.ComboBox6 = New System.Windows.Forms.ComboBox()
         Me.ComboBox7 = New System.Windows.Forms.ComboBox()
-        Me.Button_tv_RegexScrape_MoveDown = New System.Windows.Forms.Button()
-        Me.Button_tv_RegexScrape_MoveUp = New System.Windows.Forms.Button()
         Me.btn_movTableApply = New System.Windows.Forms.Button()
         Me.ButtonSaveAndQuickRefresh = New System.Windows.Forms.Button()
         Me.panelAvailableMoviePosters = New System.Windows.Forms.Panel()
-        Me.Button_tv_RegexRename_MoveDown = New System.Windows.Forms.Button()
-        Me.Button_tv_RegexRename_MoveUp = New System.Windows.Forms.Button()
         Me.tb_Sh_Ep_Title = New System.Windows.Forms.TextBox()
         Me.cbDlTrailerDuringScrape = New System.Windows.Forms.CheckBox()
         Me.btnFindBrowser = New System.Windows.Forms.Button()
@@ -1032,93 +1028,6 @@ Partial Class Form1
         Me.btn_TvFoldersUndo = New System.Windows.Forms.Button()
         Me.btn_TvFoldersSave = New System.Windows.Forms.Button()
         Me.TabPage24 = New System.Windows.Forms.TabPage()
-        Me.btnTVPrefSaveChanges = New System.Windows.Forms.Button()
-        Me.TabControl6 = New System.Windows.Forms.TabControl()
-        Me.TabPage30 = New System.Windows.Forms.TabPage()
-        Me.GroupBox17 = New System.Windows.Forms.GroupBox()
-        Me.cbTvScrShtTVDBResize = New System.Windows.Forms.CheckBox()
-        Me.GroupBox43 = New System.Windows.Forms.GroupBox()
-        Me.cb_TvMissingEpOffset = New System.Windows.Forms.CheckBox()
-        Me.cbTvMissingSpecials = New System.Windows.Forms.CheckBox()
-        Me.Label185 = New System.Windows.Forms.Label()
-        Me.AutoScrnShtDelay = New System.Windows.Forms.TextBox()
-        Me.GroupBox_TVDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
-        Me.cbXBMCTvdbRatingFallback = New System.Windows.Forms.CheckBox()
-        Me.cbXBMCTvdbRatingImdb = New System.Windows.Forms.CheckBox()
-        Me.ComboBox_TVDB_Language = New System.Windows.Forms.ComboBox()
-        Me.Label154 = New System.Windows.Forms.Label()
-        Me.cbXBMCTvdbPosters = New System.Windows.Forms.CheckBox()
-        Me.cbXBMCTvdbFanart = New System.Windows.Forms.CheckBox()
-        Me.rbXBMCTvdbAbsoluteNumber = New System.Windows.Forms.RadioButton()
-        Me.rbXBMCTvdbDVDOrder = New System.Windows.Forms.RadioButton()
-        Me.Label111 = New System.Windows.Forms.Label()
-        Me.cbTv_fixNFOid = New System.Windows.Forms.CheckBox()
-        Me.GroupBox22 = New System.Windows.Forms.GroupBox()
-        Me.Button91 = New System.Windows.Forms.Button()
-        Me.RadioButton43 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton42 = New System.Windows.Forms.RadioButton()
-        Me.Label124 = New System.Windows.Forms.Label()
-        Me.Label123 = New System.Windows.Forms.Label()
-        Me.Label138 = New System.Windows.Forms.Label()
-        Me.CheckBox34 = New System.Windows.Forms.CheckBox()
-        Me.cbTvAutoScreenShot = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_Use_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
-        Me.Label139 = New System.Windows.Forms.Label()
-        Me.GroupBox20 = New System.Windows.Forms.GroupBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.cmbxTvXtraFanartQty = New System.Windows.Forms.ComboBox()
-        Me.cbTvFanartTvFirst = New System.Windows.Forms.CheckBox()
-        Me.cbTvDlFanartTvArt = New System.Windows.Forms.CheckBox()
-        Me.cbSeasonFolderjpg = New System.Windows.Forms.CheckBox()
-        Me.cb_TvFolderJpg = New System.Windows.Forms.CheckBox()
-        Me.cbTvDlXtraFanart = New System.Windows.Forms.CheckBox()
-        Me.GroupBox18 = New System.Windows.Forms.GroupBox()
-        Me.posterbtn = New System.Windows.Forms.RadioButton()
-        Me.bannerbtn = New System.Windows.Forms.RadioButton()
-        Me.cbTvDlPosterArt = New System.Windows.Forms.CheckBox()
-        Me.cbTvDlSeasonArt = New System.Windows.Forms.CheckBox()
-        Me.cbTvDlFanart = New System.Windows.Forms.CheckBox()
-        Me.GroupBox19 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton39 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton40 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton41 = New System.Windows.Forms.RadioButton()
-        Me.cbTvQuickAddShow = New System.Windows.Forms.CheckBox()
-        Me.GroupBox15 = New System.Windows.Forms.GroupBox()
-        Me.CheckBox_tv_EpisodeRenameCase = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_tv_EpisodeRenameAuto = New System.Windows.Forms.CheckBox()
-        Me.Label140 = New System.Windows.Forms.Label()
-        Me.ComboBox_tv_EpisodeRename = New System.Windows.Forms.ComboBox()
-        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
-        Me.ListBox12 = New System.Windows.Forms.ListBox()
-        Me.Label122 = New System.Windows.Forms.Label()
-        Me.ComboBox8 = New System.Windows.Forms.ComboBox()
-        Me.TabPage31 = New System.Windows.Forms.TabPage()
-        Me.GroupBox_tv_RegexRename = New System.Windows.Forms.GroupBox()
-        Me.Button_tv_RegexRename_Restore = New System.Windows.Forms.Button()
-        Me.ListBox_tv_RegexRename = New System.Windows.Forms.ListBox()
-        Me.Button_tv_RegexRename_Remove = New System.Windows.Forms.Button()
-        Me.Label158 = New System.Windows.Forms.Label()
-        Me.Label159 = New System.Windows.Forms.Label()
-        Me.TextBox_tv_RegexRename_New = New System.Windows.Forms.TextBox()
-        Me.TextBox_tv_RegexRename_Edit = New System.Windows.Forms.TextBox()
-        Me.Button_tv_RegexRename_Add = New System.Windows.Forms.Button()
-        Me.Button_tv_RegexRename_Edit = New System.Windows.Forms.Button()
-        Me.GroupBox_tv_RegexScrape = New System.Windows.Forms.GroupBox()
-        Me.ListBox_tv_RegexScrape = New System.Windows.Forms.ListBox()
-        Me.Button_tv_RegexScrape_Remove = New System.Windows.Forms.Button()
-        Me.Label119 = New System.Windows.Forms.Label()
-        Me.Label117 = New System.Windows.Forms.Label()
-        Me.TextBox_tv_RegexScrape_New = New System.Windows.Forms.TextBox()
-        Me.TextBox_tv_RegexScrape_Edit = New System.Windows.Forms.TextBox()
-        Me.Button_tv_RegexScrape_Add = New System.Windows.Forms.Button()
-        Me.Button_tv_RegexScrape_Edit = New System.Windows.Forms.Button()
-        Me.Button_tv_RegexScrape_Restore = New System.Windows.Forms.Button()
-        Me.GroupBox_tv_RegexScrape_Test = New System.Windows.Forms.GroupBox()
-        Me.TextBox_tv_RegexScrape_TestResult = New System.Windows.Forms.TextBox()
-        Me.Button_tv_RegexScrape_Test = New System.Windows.Forms.Button()
-        Me.TextBox_tv_RegexScrape_TestString = New System.Windows.Forms.TextBox()
-        Me.Label118 = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tp_HmMainBrowser = New System.Windows.Forms.TabPage()
@@ -1583,21 +1492,6 @@ Partial Class Form1
         Me.TvRootFolderContextMenu.SuspendLayout
         Me.TableLayoutPanel5.SuspendLayout
         Me.TableLayoutPanel25.SuspendLayout
-        Me.TabPage24.SuspendLayout
-        Me.TabControl6.SuspendLayout
-        Me.TabPage30.SuspendLayout
-        Me.GroupBox17.SuspendLayout
-        Me.GroupBox43.SuspendLayout
-        Me.GroupBox_TVDB_Scraper_Preferences.SuspendLayout
-        Me.GroupBox22.SuspendLayout
-        Me.GroupBox20.SuspendLayout
-        Me.GroupBox18.SuspendLayout
-        Me.GroupBox19.SuspendLayout
-        Me.GroupBox15.SuspendLayout
-        Me.TabPage31.SuspendLayout
-        Me.GroupBox_tv_RegexRename.SuspendLayout
-        Me.GroupBox_tv_RegexScrape.SuspendLayout
-        Me.GroupBox_tv_RegexScrape_Test.SuspendLayout
         Me.TabPage3.SuspendLayout
         Me.TabControl1.SuspendLayout
         Me.tp_HmMainBrowser.SuspendLayout
@@ -2082,30 +1976,6 @@ Partial Class Form1
         Me.ToolTip1.SetToolTip(Me.ComboBox7, "Media Companion will not scrape more than the number of actors set using this con"& _ 
         "trol")
         '
-        'Button_tv_RegexScrape_MoveDown
-        '
-        Me.Button_tv_RegexScrape_MoveDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_MoveDown.Location = New System.Drawing.Point(398, 71)
-        Me.Button_tv_RegexScrape_MoveDown.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_MoveDown.Name = "Button_tv_RegexScrape_MoveDown"
-        Me.Button_tv_RegexScrape_MoveDown.Size = New System.Drawing.Size(36, 29)
-        Me.Button_tv_RegexScrape_MoveDown.TabIndex = 33
-        Me.Button_tv_RegexScrape_MoveDown.Text = "v"
-        Me.ToolTip1.SetToolTip(Me.Button_tv_RegexScrape_MoveDown, "Alter Selected RegEx's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"           Priority")
-        Me.Button_tv_RegexScrape_MoveDown.UseVisualStyleBackColor = true
-        '
-        'Button_tv_RegexScrape_MoveUp
-        '
-        Me.Button_tv_RegexScrape_MoveUp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_MoveUp.Location = New System.Drawing.Point(398, 21)
-        Me.Button_tv_RegexScrape_MoveUp.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_MoveUp.Name = "Button_tv_RegexScrape_MoveUp"
-        Me.Button_tv_RegexScrape_MoveUp.Size = New System.Drawing.Size(36, 29)
-        Me.Button_tv_RegexScrape_MoveUp.TabIndex = 32
-        Me.Button_tv_RegexScrape_MoveUp.Text = "^"
-        Me.ToolTip1.SetToolTip(Me.Button_tv_RegexScrape_MoveUp, "Alter Selected RegEx's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"           Priority")
-        Me.Button_tv_RegexScrape_MoveUp.UseVisualStyleBackColor = true
-        '
         'btn_movTableApply
         '
         Me.btn_movTableApply.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
@@ -2143,30 +2013,6 @@ Partial Class Form1
         Me.panelAvailableMoviePosters.TabIndex = 113
         Me.ToolTip1.SetToolTip(Me.panelAvailableMoviePosters, "Double Click a thumbnail to the left to view a large"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"preview Image. For TMDB and"& _ 
         " some IMPA posters"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"this will also display the HD image.")
-        '
-        'Button_tv_RegexRename_MoveDown
-        '
-        Me.Button_tv_RegexRename_MoveDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexRename_MoveDown.Location = New System.Drawing.Point(401, 237)
-        Me.Button_tv_RegexRename_MoveDown.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexRename_MoveDown.Name = "Button_tv_RegexRename_MoveDown"
-        Me.Button_tv_RegexRename_MoveDown.Size = New System.Drawing.Size(36, 31)
-        Me.Button_tv_RegexRename_MoveDown.TabIndex = 43
-        Me.Button_tv_RegexRename_MoveDown.Text = "v"
-        Me.ToolTip1.SetToolTip(Me.Button_tv_RegexRename_MoveDown, "Alter Selected RegEx's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"           Priority")
-        Me.Button_tv_RegexRename_MoveDown.UseVisualStyleBackColor = true
-        '
-        'Button_tv_RegexRename_MoveUp
-        '
-        Me.Button_tv_RegexRename_MoveUp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexRename_MoveUp.Location = New System.Drawing.Point(399, 24)
-        Me.Button_tv_RegexRename_MoveUp.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexRename_MoveUp.Name = "Button_tv_RegexRename_MoveUp"
-        Me.Button_tv_RegexRename_MoveUp.Size = New System.Drawing.Size(36, 29)
-        Me.Button_tv_RegexRename_MoveUp.TabIndex = 42
-        Me.Button_tv_RegexRename_MoveUp.Text = "^"
-        Me.ToolTip1.SetToolTip(Me.Button_tv_RegexRename_MoveUp, "Alter Selected RegEx's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"           Priority")
-        Me.Button_tv_RegexRename_MoveUp.UseVisualStyleBackColor = true
         '
         'tb_Sh_Ep_Title
         '
@@ -4316,7 +4162,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(327, 625)
-        Me.SplitContainer5.SplitterDistance = 384
+        Me.SplitContainer5.SplitterDistance = 383
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -4391,7 +4237,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 286)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 285)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -4426,7 +4272,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 364)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 363)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -4558,7 +4404,7 @@ Partial Class Form1
         Me.cbFilterSubTitleLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterSubTitleLang.FormattingEnabled = true
         Me.cbFilterSubTitleLang.IntegralHeight = false
-        Me.cbFilterSubTitleLang.Location = New System.Drawing.Point(147, 28636)
+        Me.cbFilterSubTitleLang.Location = New System.Drawing.Point(147, 28803)
         Me.cbFilterSubTitleLang.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterSubTitleLang.Name = "cbFilterSubTitleLang"
         Me.cbFilterSubTitleLang.QuickSelect = false
@@ -4573,7 +4419,7 @@ Partial Class Form1
         Me.lblFilterSubTitleLangMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterSubTitleLangMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterSubTitleLangMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterSubTitleLangMode.Location = New System.Drawing.Point(129, 28637)
+        Me.lblFilterSubTitleLangMode.Location = New System.Drawing.Point(129, 28804)
         Me.lblFilterSubTitleLangMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterSubTitleLangMode.Name = "lblFilterSubTitleLangMode"
         Me.lblFilterSubTitleLangMode.Size = New System.Drawing.Size(17, 21)
@@ -4587,7 +4433,7 @@ Partial Class Form1
         Me.lblFilterSubTitleLang.BackColor = System.Drawing.Color.Gray
         Me.lblFilterSubTitleLang.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterSubTitleLang.ForeColor = System.Drawing.Color.White
-        Me.lblFilterSubTitleLang.Location = New System.Drawing.Point(4, 28637)
+        Me.lblFilterSubTitleLang.Location = New System.Drawing.Point(4, 28804)
         Me.lblFilterSubTitleLang.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterSubTitleLang.Name = "lblFilterSubTitleLang"
         Me.lblFilterSubTitleLang.Size = New System.Drawing.Size(124, 21)
@@ -4601,7 +4447,7 @@ Partial Class Form1
         Me.lblFilterVideoCodec.BackColor = System.Drawing.Color.Gray
         Me.lblFilterVideoCodec.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterVideoCodec.ForeColor = System.Drawing.Color.White
-        Me.lblFilterVideoCodec.Location = New System.Drawing.Point(4, 28637)
+        Me.lblFilterVideoCodec.Location = New System.Drawing.Point(4, 28804)
         Me.lblFilterVideoCodec.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterVideoCodec.Name = "lblFilterVideoCodec"
         Me.lblFilterVideoCodec.Size = New System.Drawing.Size(124, 21)
@@ -4615,7 +4461,7 @@ Partial Class Form1
         Me.lblFilterVideoCodecMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterVideoCodecMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterVideoCodecMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterVideoCodecMode.Location = New System.Drawing.Point(129, 28637)
+        Me.lblFilterVideoCodecMode.Location = New System.Drawing.Point(129, 28804)
         Me.lblFilterVideoCodecMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterVideoCodecMode.Name = "lblFilterVideoCodecMode"
         Me.lblFilterVideoCodecMode.Size = New System.Drawing.Size(17, 21)
@@ -4635,7 +4481,7 @@ Partial Class Form1
         Me.cbFilterVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterVideoCodec.FormattingEnabled = true
         Me.cbFilterVideoCodec.IntegralHeight = false
-        Me.cbFilterVideoCodec.Location = New System.Drawing.Point(147, 28636)
+        Me.cbFilterVideoCodec.Location = New System.Drawing.Point(147, 28803)
         Me.cbFilterVideoCodec.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterVideoCodec.Name = "cbFilterVideoCodec"
         Me.cbFilterVideoCodec.QuickSelect = false
@@ -5237,7 +5083,7 @@ Partial Class Form1
         Me.cbFilterStudios.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterStudios.FormattingEnabled = true
         Me.cbFilterStudios.IntegralHeight = false
-        Me.cbFilterStudios.Location = New System.Drawing.Point(147, 29117)
+        Me.cbFilterStudios.Location = New System.Drawing.Point(147, 29284)
         Me.cbFilterStudios.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Normal
         Me.cbFilterStudios.Name = "cbFilterStudios"
         Me.cbFilterStudios.QuickSelect = false
@@ -5641,7 +5487,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(140, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(243, 225)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(242, 225)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -5651,7 +5497,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(33, 80)
+        Me.Label128.Location = New System.Drawing.Point(32, 80)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -9276,7 +9122,7 @@ Partial Class Form1
         '
         Me.Button82.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button82.Location = New System.Drawing.Point(431, -1608)
+        Me.Button82.Location = New System.Drawing.Point(431, -1624)
         Me.Button82.Margin = New System.Windows.Forms.Padding(4)
         Me.Button82.Name = "Button82"
         Me.Button82.Size = New System.Drawing.Size(150, 30)
@@ -11018,7 +10864,7 @@ Partial Class Form1
         '
         Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel8.Controls.Add(Me.TableLayoutPanel30)
-        Me.Panel8.Location = New System.Drawing.Point(530, 352)
+        Me.Panel8.Location = New System.Drawing.Point(529, 352)
         Me.Panel8.MaximumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.MinimumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.Name = "Panel8"
@@ -11461,7 +11307,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(308, 196)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(307, 196)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -14028,1069 +13874,13 @@ Partial Class Form1
         '
         Me.TabPage24.AutoScroll = true
         Me.TabPage24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.TabPage24.Controls.Add(Me.btnTVPrefSaveChanges)
-        Me.TabPage24.Controls.Add(Me.TabControl6)
-        Me.TabPage24.Location = New System.Drawing.Point(4, 25)
+        Me.TabPage24.Location = New System.Drawing.Point(4, 27)
         Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage24.Name = "TabPage24"
-        Me.TabPage24.Size = New System.Drawing.Size(1041, 628)
+        Me.TabPage24.Size = New System.Drawing.Size(1041, 626)
         Me.TabPage24.TabIndex = 9
         Me.TabPage24.Text = "TV Preferences"
         Me.TabPage24.UseVisualStyleBackColor = true
-        '
-        'btnTVPrefSaveChanges
-        '
-        Me.btnTVPrefSaveChanges.Location = New System.Drawing.Point(15, 562)
-        Me.btnTVPrefSaveChanges.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnTVPrefSaveChanges.Name = "btnTVPrefSaveChanges"
-        Me.btnTVPrefSaveChanges.Size = New System.Drawing.Size(195, 30)
-        Me.btnTVPrefSaveChanges.TabIndex = 23
-        Me.btnTVPrefSaveChanges.Text = "Apply Changes"
-        Me.btnTVPrefSaveChanges.UseVisualStyleBackColor = true
-        '
-        'TabControl6
-        '
-        Me.TabControl6.Controls.Add(Me.TabPage30)
-        Me.TabControl6.Controls.Add(Me.TabPage31)
-        Me.TabControl6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl6.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabControl6.Name = "TabControl6"
-        Me.TabControl6.SelectedIndex = 0
-        Me.TabControl6.Size = New System.Drawing.Size(1037, 624)
-        Me.TabControl6.TabIndex = 15
-        '
-        'TabPage30
-        '
-        Me.TabPage30.Controls.Add(Me.GroupBox17)
-        Me.TabPage30.Location = New System.Drawing.Point(4, 24)
-        Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabPage30.Name = "TabPage30"
-        Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage30.Size = New System.Drawing.Size(1029, 596)
-        Me.TabPage30.TabIndex = 0
-        Me.TabPage30.Text = "General / Scraper"
-        Me.TabPage30.UseVisualStyleBackColor = true
-        '
-        'GroupBox17
-        '
-        Me.GroupBox17.Controls.Add(Me.cbTvScrShtTVDBResize)
-        Me.GroupBox17.Controls.Add(Me.GroupBox43)
-        Me.GroupBox17.Controls.Add(Me.Label185)
-        Me.GroupBox17.Controls.Add(Me.AutoScrnShtDelay)
-        Me.GroupBox17.Controls.Add(Me.GroupBox_TVDB_Scraper_Preferences)
-        Me.GroupBox17.Controls.Add(Me.Label111)
-        Me.GroupBox17.Controls.Add(Me.cbTv_fixNFOid)
-        Me.GroupBox17.Controls.Add(Me.GroupBox22)
-        Me.GroupBox17.Controls.Add(Me.cbTvAutoScreenShot)
-        Me.GroupBox17.Controls.Add(Me.CheckBox_Use_XBMC_TVDB_Scraper)
-        Me.GroupBox17.Controls.Add(Me.Label139)
-        Me.GroupBox17.Controls.Add(Me.GroupBox20)
-        Me.GroupBox17.Controls.Add(Me.cbTvQuickAddShow)
-        Me.GroupBox17.Controls.Add(Me.GroupBox15)
-        Me.GroupBox17.Controls.Add(Me.CheckBox20)
-        Me.GroupBox17.Controls.Add(Me.CheckBox17)
-        Me.GroupBox17.Controls.Add(Me.ListBox12)
-        Me.GroupBox17.Controls.Add(Me.Label122)
-        Me.GroupBox17.Controls.Add(Me.ComboBox8)
-        Me.GroupBox17.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox17.Location = New System.Drawing.Point(4, 4)
-        Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox17.Name = "GroupBox17"
-        Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox17.Size = New System.Drawing.Size(1021, 588)
-        Me.GroupBox17.TabIndex = 22
-        Me.GroupBox17.TabStop = false
-        Me.GroupBox17.Text = "Default TV Scraper Settings"
-        '
-        'cbTvScrShtTVDBResize
-        '
-        Me.cbTvScrShtTVDBResize.AutoSize = true
-        Me.cbTvScrShtTVDBResize.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(412, 512)
-        Me.cbTvScrShtTVDBResize.Name = "cbTvScrShtTVDBResize"
-        Me.cbTvScrShtTVDBResize.Size = New System.Drawing.Size(235, 49)
-        Me.cbTvScrShtTVDBResize.TabIndex = 73
-        Me.cbTvScrShtTVDBResize.Text = "Save Screenshot in TVDB friendly size."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3"& _ 
-    " means saving at 400x300"
-        Me.cbTvScrShtTVDBResize.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbTvScrShtTVDBResize.UseVisualStyleBackColor = true
-        '
-        'GroupBox43
-        '
-        Me.GroupBox43.Controls.Add(Me.cb_TvMissingEpOffset)
-        Me.GroupBox43.Controls.Add(Me.cbTvMissingSpecials)
-        Me.GroupBox43.Location = New System.Drawing.Point(720, 391)
-        Me.GroupBox43.Name = "GroupBox43"
-        Me.GroupBox43.Size = New System.Drawing.Size(264, 85)
-        Me.GroupBox43.TabIndex = 72
-        Me.GroupBox43.TabStop = false
-        Me.GroupBox43.Text = "Missing Episode Options"
-        '
-        'cb_TvMissingEpOffset
-        '
-        Me.cb_TvMissingEpOffset.AutoSize = true
-        Me.cb_TvMissingEpOffset.Location = New System.Drawing.Point(14, 45)
-        Me.cb_TvMissingEpOffset.Name = "cb_TvMissingEpOffset"
-        Me.cb_TvMissingEpOffset.Size = New System.Drawing.Size(181, 19)
-        Me.cb_TvMissingEpOffset.TabIndex = 1
-        Me.cb_TvMissingEpOffset.Text = "Delay missing aired by 1 day"
-        Me.cb_TvMissingEpOffset.UseVisualStyleBackColor = true
-        '
-        'cbTvMissingSpecials
-        '
-        Me.cbTvMissingSpecials.AutoSize = true
-        Me.cbTvMissingSpecials.Location = New System.Drawing.Point(14, 20)
-        Me.cbTvMissingSpecials.Name = "cbTvMissingSpecials"
-        Me.cbTvMissingSpecials.Size = New System.Drawing.Size(172, 19)
-        Me.cbTvMissingSpecials.TabIndex = 0
-        Me.cbTvMissingSpecials.Text = "Ignore specials (Season 0)"
-        Me.cbTvMissingSpecials.UseVisualStyleBackColor = true
-        '
-        'Label185
-        '
-        Me.Label185.AutoSize = true
-        Me.Label185.Location = New System.Drawing.Point(455, 485)
-        Me.Label185.Name = "Label185"
-        Me.Label185.Size = New System.Drawing.Size(224, 15)
-        Me.Label185.TabIndex = 71
-        Me.Label185.Text = "AutoScreenShot delay (in Seconds only)"
-        '
-        'AutoScrnShtDelay
-        '
-        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(412, 482)
-        Me.AutoScrnShtDelay.Name = "AutoScrnShtDelay"
-        Me.AutoScrnShtDelay.Size = New System.Drawing.Size(37, 21)
-        Me.AutoScrnShtDelay.TabIndex = 70
-        '
-        'GroupBox_TVDB_Scraper_Preferences
-        '
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingFallback)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingImdb)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.ComboBox_TVDB_Language)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.Label154)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbPosters)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbFanart)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.rbXBMCTvdbAbsoluteNumber)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.rbXBMCTvdbDVDOrder)
-        Me.GroupBox_TVDB_Scraper_Preferences.Location = New System.Drawing.Point(124, 20)
-        Me.GroupBox_TVDB_Scraper_Preferences.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_TVDB_Scraper_Preferences.Name = "GroupBox_TVDB_Scraper_Preferences"
-        Me.GroupBox_TVDB_Scraper_Preferences.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_TVDB_Scraper_Preferences.Size = New System.Drawing.Size(270, 275)
-        Me.GroupBox_TVDB_Scraper_Preferences.TabIndex = 67
-        Me.GroupBox_TVDB_Scraper_Preferences.TabStop = false
-        Me.GroupBox_TVDB_Scraper_Preferences.Text = "XBMC Scraper TheTVDB Preferences"
-        Me.GroupBox_TVDB_Scraper_Preferences.Visible = false
-        '
-        'cbXBMCTvdbRatingFallback
-        '
-        Me.cbXBMCTvdbRatingFallback.AutoSize = true
-        Me.cbXBMCTvdbRatingFallback.Location = New System.Drawing.Point(12, 209)
-        Me.cbXBMCTvdbRatingFallback.Name = "cbXBMCTvdbRatingFallback"
-        Me.cbXBMCTvdbRatingFallback.Size = New System.Drawing.Size(243, 19)
-        Me.cbXBMCTvdbRatingFallback.TabIndex = 7
-        Me.cbXBMCTvdbRatingFallback.Text = "Ratings fall back to TVDB if not on IMDB"
-        Me.cbXBMCTvdbRatingFallback.UseVisualStyleBackColor = true
-        '
-        'cbXBMCTvdbRatingImdb
-        '
-        Me.cbXBMCTvdbRatingImdb.AutoSize = true
-        Me.cbXBMCTvdbRatingImdb.Location = New System.Drawing.Point(12, 184)
-        Me.cbXBMCTvdbRatingImdb.Name = "cbXBMCTvdbRatingImdb"
-        Me.cbXBMCTvdbRatingImdb.Size = New System.Drawing.Size(200, 19)
-        Me.cbXBMCTvdbRatingImdb.TabIndex = 6
-        Me.cbXBMCTvdbRatingImdb.Text = "Get Episode Ratings from IMDB"
-        Me.cbXBMCTvdbRatingImdb.UseVisualStyleBackColor = true
-        '
-        'ComboBox_TVDB_Language
-        '
-        Me.ComboBox_TVDB_Language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_TVDB_Language.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ComboBox_TVDB_Language.FormattingEnabled = true
-        Me.ComboBox_TVDB_Language.Location = New System.Drawing.Point(85, 144)
-        Me.ComboBox_TVDB_Language.Margin = New System.Windows.Forms.Padding(4)
-        Me.ComboBox_TVDB_Language.Name = "ComboBox_TVDB_Language"
-        Me.ComboBox_TVDB_Language.Size = New System.Drawing.Size(150, 23)
-        Me.ComboBox_TVDB_Language.Sorted = true
-        Me.ComboBox_TVDB_Language.TabIndex = 5
-        '
-        'Label154
-        '
-        Me.Label154.AutoSize = true
-        Me.Label154.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label154.Location = New System.Drawing.Point(9, 148)
-        Me.Label154.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label154.Name = "Label154"
-        Me.Label154.Size = New System.Drawing.Size(63, 15)
-        Me.Label154.TabIndex = 4
-        Me.Label154.Text = "Language"
-        '
-        'cbXBMCTvdbPosters
-        '
-        Me.cbXBMCTvdbPosters.AutoSize = true
-        Me.cbXBMCTvdbPosters.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbXBMCTvdbPosters.Location = New System.Drawing.Point(12, 114)
-        Me.cbXBMCTvdbPosters.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbXBMCTvdbPosters.Name = "cbXBMCTvdbPosters"
-        Me.cbXBMCTvdbPosters.Size = New System.Drawing.Size(103, 19)
-        Me.cbXBMCTvdbPosters.TabIndex = 3
-        Me.cbXBMCTvdbPosters.Text = "Prefer Posters"
-        Me.cbXBMCTvdbPosters.UseVisualStyleBackColor = true
-        '
-        'cbXBMCTvdbFanart
-        '
-        Me.cbXBMCTvdbFanart.AutoSize = true
-        Me.cbXBMCTvdbFanart.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbXBMCTvdbFanart.Location = New System.Drawing.Point(12, 84)
-        Me.cbXBMCTvdbFanart.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbXBMCTvdbFanart.Name = "cbXBMCTvdbFanart"
-        Me.cbXBMCTvdbFanart.Size = New System.Drawing.Size(103, 19)
-        Me.cbXBMCTvdbFanart.TabIndex = 2
-        Me.cbXBMCTvdbFanart.Text = "Enable Fanart"
-        Me.cbXBMCTvdbFanart.UseVisualStyleBackColor = true
-        '
-        'rbXBMCTvdbAbsoluteNumber
-        '
-        Me.rbXBMCTvdbAbsoluteNumber.AutoSize = true
-        Me.rbXBMCTvdbAbsoluteNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbXBMCTvdbAbsoluteNumber.Location = New System.Drawing.Point(12, 58)
-        Me.rbXBMCTvdbAbsoluteNumber.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbXBMCTvdbAbsoluteNumber.Name = "rbXBMCTvdbAbsoluteNumber"
-        Me.rbXBMCTvdbAbsoluteNumber.Size = New System.Drawing.Size(148, 19)
-        Me.rbXBMCTvdbAbsoluteNumber.TabIndex = 1
-        Me.rbXBMCTvdbAbsoluteNumber.TabStop = true
-        Me.rbXBMCTvdbAbsoluteNumber.Text = "Use Absolute Ordering"
-        Me.rbXBMCTvdbAbsoluteNumber.UseVisualStyleBackColor = true
-        '
-        'rbXBMCTvdbDVDOrder
-        '
-        Me.rbXBMCTvdbDVDOrder.AutoSize = true
-        Me.rbXBMCTvdbDVDOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbXBMCTvdbDVDOrder.Location = New System.Drawing.Point(12, 29)
-        Me.rbXBMCTvdbDVDOrder.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbXBMCTvdbDVDOrder.Name = "rbXBMCTvdbDVDOrder"
-        Me.rbXBMCTvdbDVDOrder.Size = New System.Drawing.Size(157, 19)
-        Me.rbXBMCTvdbDVDOrder.TabIndex = 0
-        Me.rbXBMCTvdbDVDOrder.TabStop = true
-        Me.rbXBMCTvdbDVDOrder.Text = "Use DVD Order (default)"
-        Me.rbXBMCTvdbDVDOrder.UseVisualStyleBackColor = true
-        '
-        'Label111
-        '
-        Me.Label111.Location = New System.Drawing.Point(717, 482)
-        Me.Label111.Name = "Label111"
-        Me.Label111.Size = New System.Drawing.Size(267, 32)
-        Me.Label111.TabIndex = 69
-        Me.Label111.Text = "Enable this  to correct the <ID> field in tvshow.nfo (non-persistant)."
-        '
-        'cbTv_fixNFOid
-        '
-        Me.cbTv_fixNFOid.AutoSize = true
-        Me.cbTv_fixNFOid.Location = New System.Drawing.Point(720, 517)
-        Me.cbTv_fixNFOid.Name = "cbTv_fixNFOid"
-        Me.cbTv_fixNFOid.Size = New System.Drawing.Size(198, 19)
-        Me.cbTv_fixNFOid.TabIndex = 68
-        Me.cbTv_fixNFOid.Text = "Fix NFO id during cache refresh"
-        Me.cbTv_fixNFOid.UseVisualStyleBackColor = true
-        '
-        'GroupBox22
-        '
-        Me.GroupBox22.Controls.Add(Me.Button91)
-        Me.GroupBox22.Controls.Add(Me.RadioButton43)
-        Me.GroupBox22.Controls.Add(Me.RadioButton42)
-        Me.GroupBox22.Controls.Add(Me.Label124)
-        Me.GroupBox22.Controls.Add(Me.Label123)
-        Me.GroupBox22.Controls.Add(Me.Label138)
-        Me.GroupBox22.Controls.Add(Me.CheckBox34)
-        Me.GroupBox22.Location = New System.Drawing.Point(124, 20)
-        Me.GroupBox22.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox22.Name = "GroupBox22"
-        Me.GroupBox22.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox22.Size = New System.Drawing.Size(270, 400)
-        Me.GroupBox22.TabIndex = 66
-        Me.GroupBox22.TabStop = false
-        '
-        'Button91
-        '
-        Me.Button91.Location = New System.Drawing.Point(8, 19)
-        Me.Button91.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button91.Name = "Button91"
-        Me.Button91.Size = New System.Drawing.Size(208, 29)
-        Me.Button91.TabIndex = 1
-        Me.Button91.Text = "Get Languages From TVDB"
-        Me.Button91.UseVisualStyleBackColor = true
-        '
-        'RadioButton43
-        '
-        Me.RadioButton43.AutoSize = true
-        Me.RadioButton43.Checked = true
-        Me.RadioButton43.Location = New System.Drawing.Point(24, 99)
-        Me.RadioButton43.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton43.Name = "RadioButton43"
-        Me.RadioButton43.Size = New System.Drawing.Size(89, 19)
-        Me.RadioButton43.TabIndex = 2
-        Me.RadioButton43.TabStop = true
-        Me.RadioButton43.Text = "Use Default"
-        Me.RadioButton43.UseVisualStyleBackColor = true
-        '
-        'RadioButton42
-        '
-        Me.RadioButton42.AutoSize = true
-        Me.RadioButton42.Location = New System.Drawing.Point(24, 119)
-        Me.RadioButton42.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton42.Name = "RadioButton42"
-        Me.RadioButton42.Size = New System.Drawing.Size(92, 19)
-        Me.RadioButton42.TabIndex = 3
-        Me.RadioButton42.Text = "DVD Sorting"
-        Me.RadioButton42.UseVisualStyleBackColor = true
-        '
-        'Label124
-        '
-        Me.Label124.AutoSize = true
-        Me.Label124.Location = New System.Drawing.Point(20, 80)
-        Me.Label124.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label124.Name = "Label124"
-        Me.Label124.Size = New System.Drawing.Size(111, 15)
-        Me.Label124.TabIndex = 4
-        Me.Label124.Text = "Episode Sort Order"
-        '
-        'Label123
-        '
-        Me.Label123.AutoSize = true
-        Me.Label123.Location = New System.Drawing.Point(11, 51)
-        Me.Label123.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label123.Name = "Label123"
-        Me.Label123.Size = New System.Drawing.Size(194, 15)
-        Me.Label123.TabIndex = 5
-        Me.Label123.Text = "If not selected English will be used"
-        '
-        'Label138
-        '
-        Me.Label138.AutoSize = true
-        Me.Label138.Location = New System.Drawing.Point(6, 148)
-        Me.Label138.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label138.Name = "Label138"
-        Me.Label138.Size = New System.Drawing.Size(261, 195)
-        Me.Label138.TabIndex = 32
-        Me.Label138.Text = resources.GetString("Label138.Text")
-        '
-        'CheckBox34
-        '
-        Me.CheckBox34.AutoSize = true
-        Me.CheckBox34.Location = New System.Drawing.Point(9, 354)
-        Me.CheckBox34.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox34.Name = "CheckBox34"
-        Me.CheckBox34.Size = New System.Drawing.Size(224, 34)
-        Me.CheckBox34.TabIndex = 33
-        Me.CheckBox34.Text = "Enable TV Show Actor Thumbs to be"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"copied for Episode Actor Thumbs "
-        Me.CheckBox34.UseVisualStyleBackColor = true
-        '
-        'cbTvAutoScreenShot
-        '
-        Me.cbTvAutoScreenShot.AutoSize = true
-        Me.cbTvAutoScreenShot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(412, 457)
-        Me.cbTvAutoScreenShot.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbTvAutoScreenShot.Name = "cbTvAutoScreenShot"
-        Me.cbTvAutoScreenShot.Size = New System.Drawing.Size(296, 19)
-        Me.cbTvAutoScreenShot.TabIndex = 37
-        Me.cbTvAutoScreenShot.Text = "Auto create screenshot if TVDB does not have one"
-        Me.cbTvAutoScreenShot.UseVisualStyleBackColor = true
-        '
-        'CheckBox_Use_XBMC_TVDB_Scraper
-        '
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.AutoSize = true
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(128, 431)
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Name = "CheckBox_Use_XBMC_TVDB_Scraper"
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Size = New System.Drawing.Size(195, 19)
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.TabIndex = 65
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Text = "Use XBMC ""TheTVDB"" Scraper"
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.UseVisualStyleBackColor = true
-        '
-        'Label139
-        '
-        Me.Label139.AutoSize = true
-        Me.Label139.Location = New System.Drawing.Point(399, 360)
-        Me.Label139.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label139.Name = "Label139"
-        Me.Label139.Size = New System.Drawing.Size(286, 60)
-        Me.Label139.TabIndex = 36
-        Me.Label139.Text = resources.GetString("Label139.Text")
-        '
-        'GroupBox20
-        '
-        Me.GroupBox20.Controls.Add(Me.Label2)
-        Me.GroupBox20.Controls.Add(Me.cmbxTvXtraFanartQty)
-        Me.GroupBox20.Controls.Add(Me.cbTvFanartTvFirst)
-        Me.GroupBox20.Controls.Add(Me.cbTvDlFanartTvArt)
-        Me.GroupBox20.Controls.Add(Me.cbSeasonFolderjpg)
-        Me.GroupBox20.Controls.Add(Me.cb_TvFolderJpg)
-        Me.GroupBox20.Controls.Add(Me.cbTvDlXtraFanart)
-        Me.GroupBox20.Controls.Add(Me.GroupBox18)
-        Me.GroupBox20.Controls.Add(Me.cbTvDlPosterArt)
-        Me.GroupBox20.Controls.Add(Me.cbTvDlSeasonArt)
-        Me.GroupBox20.Controls.Add(Me.cbTvDlFanart)
-        Me.GroupBox20.Controls.Add(Me.GroupBox19)
-        Me.GroupBox20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox20.Location = New System.Drawing.Point(402, 20)
-        Me.GroupBox20.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox20.Name = "GroupBox20"
-        Me.GroupBox20.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox20.Size = New System.Drawing.Size(310, 336)
-        Me.GroupBox20.TabIndex = 35
-        Me.GroupBox20.TabStop = false
-        Me.GroupBox20.Text = "TV Show Selector / Auto Scraper Default settings"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = true
-        Me.Label2.Location = New System.Drawing.Point(163, 109)
-        Me.Label2.Name = "Label2"
-        Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label2.Size = New System.Drawing.Size(82, 15)
-        Me.Label2.TabIndex = 75
-        Me.Label2.Text = "........Quantity?"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'cmbxTvXtraFanartQty
-        '
-        Me.cmbxTvXtraFanartQty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbxTvXtraFanartQty.FormattingEnabled = true
-        Me.cmbxTvXtraFanartQty.Items.AddRange(New Object() {"5", "10", "15", "20"})
-        Me.cmbxTvXtraFanartQty.Location = New System.Drawing.Point(251, 103)
-        Me.cmbxTvXtraFanartQty.Name = "cmbxTvXtraFanartQty"
-        Me.cmbxTvXtraFanartQty.Size = New System.Drawing.Size(55, 23)
-        Me.cmbxTvXtraFanartQty.TabIndex = 74
-        '
-        'cbTvFanartTvFirst
-        '
-        Me.cbTvFanartTvFirst.AutoSize = true
-        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(190, 129)
-        Me.cbTvFanartTvFirst.Name = "cbTvFanartTvFirst"
-        Me.cbTvFanartTvFirst.Size = New System.Drawing.Size(110, 34)
-        Me.cbTvFanartTvFirst.TabIndex = 73
-        Me.cbTvFanartTvFirst.Text = "Fanart.tv before"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"TVDB Artwork"
-        Me.cbTvFanartTvFirst.UseVisualStyleBackColor = true
-        '
-        'cbTvDlFanartTvArt
-        '
-        Me.cbTvDlFanartTvArt.AutoSize = true
-        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 137)
-        Me.cbTvDlFanartTvArt.Name = "cbTvDlFanartTvArt"
-        Me.cbTvDlFanartTvArt.Size = New System.Drawing.Size(155, 19)
-        Me.cbTvDlFanartTvArt.TabIndex = 72
-        Me.cbTvDlFanartTvArt.Text = "Download Fanart.Tv Art."
-        Me.cbTvDlFanartTvArt.UseVisualStyleBackColor = true
-        '
-        'cbSeasonFolderjpg
-        '
-        Me.cbSeasonFolderjpg.AutoSize = true
-        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(8, 295)
-        Me.cbSeasonFolderjpg.Name = "cbSeasonFolderjpg"
-        Me.cbSeasonFolderjpg.Size = New System.Drawing.Size(237, 34)
-        Me.cbSeasonFolderjpg.TabIndex = 71
-        Me.cbSeasonFolderjpg.Text = "Save Season Poster as ""folder.jpg"" into"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Season Folder if present."
-        Me.cbSeasonFolderjpg.UseVisualStyleBackColor = true
-        '
-        'cb_TvFolderJpg
-        '
-        Me.cb_TvFolderJpg.AutoSize = true
-        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(8, 270)
-        Me.cb_TvFolderJpg.Name = "cb_TvFolderJpg"
-        Me.cb_TvFolderJpg.Size = New System.Drawing.Size(221, 19)
-        Me.cb_TvFolderJpg.TabIndex = 70
-        Me.cb_TvFolderJpg.Text = "Save Show Poster also as folder.jpg"
-        Me.cb_TvFolderJpg.UseVisualStyleBackColor = true
-        '
-        'cbTvDlXtraFanart
-        '
-        Me.cbTvDlXtraFanart.AutoSize = true
-        Me.cbTvDlXtraFanart.Location = New System.Drawing.Point(10, 105)
-        Me.cbTvDlXtraFanart.Name = "cbTvDlXtraFanart"
-        Me.cbTvDlXtraFanart.Size = New System.Drawing.Size(148, 19)
-        Me.cbTvDlXtraFanart.TabIndex = 69
-        Me.cbTvDlXtraFanart.Text = "Download ExtraFanart"
-        Me.cbTvDlXtraFanart.UseVisualStyleBackColor = true
-        '
-        'GroupBox18
-        '
-        Me.GroupBox18.Controls.Add(Me.posterbtn)
-        Me.GroupBox18.Controls.Add(Me.bannerbtn)
-        Me.GroupBox18.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox18.Location = New System.Drawing.Point(10, 219)
-        Me.GroupBox18.Name = "GroupBox18"
-        Me.GroupBox18.Size = New System.Drawing.Size(290, 45)
-        Me.GroupBox18.TabIndex = 68
-        Me.GroupBox18.TabStop = false
-        Me.GroupBox18.Text = "Default TV Show Thumbnails"
-        '
-        'posterbtn
-        '
-        Me.posterbtn.AutoSize = true
-        Me.posterbtn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.posterbtn.Location = New System.Drawing.Point(8, 19)
-        Me.posterbtn.Margin = New System.Windows.Forms.Padding(4)
-        Me.posterbtn.Name = "posterbtn"
-        Me.posterbtn.Size = New System.Drawing.Size(60, 19)
-        Me.posterbtn.TabIndex = 1
-        Me.posterbtn.TabStop = true
-        Me.posterbtn.Text = "Poster"
-        Me.posterbtn.UseVisualStyleBackColor = true
-        '
-        'bannerbtn
-        '
-        Me.bannerbtn.AutoSize = true
-        Me.bannerbtn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.bannerbtn.Location = New System.Drawing.Point(79, 19)
-        Me.bannerbtn.Margin = New System.Windows.Forms.Padding(4)
-        Me.bannerbtn.Name = "bannerbtn"
-        Me.bannerbtn.Size = New System.Drawing.Size(65, 19)
-        Me.bannerbtn.TabIndex = 2
-        Me.bannerbtn.Text = "Banner"
-        Me.bannerbtn.UseVisualStyleBackColor = true
-        '
-        'cbTvDlPosterArt
-        '
-        Me.cbTvDlPosterArt.AutoSize = true
-        Me.cbTvDlPosterArt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlPosterArt.Location = New System.Drawing.Point(10, 25)
-        Me.cbTvDlPosterArt.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbTvDlPosterArt.Name = "cbTvDlPosterArt"
-        Me.cbTvDlPosterArt.Size = New System.Drawing.Size(212, 19)
-        Me.cbTvDlPosterArt.TabIndex = 9
-        Me.cbTvDlPosterArt.Text = "Download TV Show poster/banner"
-        Me.cbTvDlPosterArt.UseVisualStyleBackColor = true
-        '
-        'cbTvDlSeasonArt
-        '
-        Me.cbTvDlSeasonArt.AutoSize = true
-        Me.cbTvDlSeasonArt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlSeasonArt.Location = New System.Drawing.Point(10, 79)
-        Me.cbTvDlSeasonArt.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbTvDlSeasonArt.Name = "cbTvDlSeasonArt"
-        Me.cbTvDlSeasonArt.Size = New System.Drawing.Size(175, 19)
-        Me.cbTvDlSeasonArt.TabIndex = 8
-        Me.cbTvDlSeasonArt.Text = "Download Season Thumbs"
-        Me.cbTvDlSeasonArt.UseVisualStyleBackColor = true
-        '
-        'cbTvDlFanart
-        '
-        Me.cbTvDlFanart.AutoSize = true
-        Me.cbTvDlFanart.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlFanart.Location = New System.Drawing.Point(10, 51)
-        Me.cbTvDlFanart.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbTvDlFanart.Name = "cbTvDlFanart"
-        Me.cbTvDlFanart.Size = New System.Drawing.Size(171, 19)
-        Me.cbTvDlFanart.TabIndex = 10
-        Me.cbTvDlFanart.Text = "Download TV Show Fanart"
-        Me.cbTvDlFanart.UseVisualStyleBackColor = true
-        '
-        'GroupBox19
-        '
-        Me.GroupBox19.Controls.Add(Me.RadioButton39)
-        Me.GroupBox19.Controls.Add(Me.RadioButton40)
-        Me.GroupBox19.Controls.Add(Me.RadioButton41)
-        Me.GroupBox19.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox19.Location = New System.Drawing.Point(10, 167)
-        Me.GroupBox19.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox19.Name = "GroupBox19"
-        Me.GroupBox19.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox19.Size = New System.Drawing.Size(290, 45)
-        Me.GroupBox19.TabIndex = 12
-        Me.GroupBox19.TabStop = false
-        Me.GroupBox19.Text = "Download season-all.tbn"
-        '
-        'RadioButton39
-        '
-        Me.RadioButton39.AutoSize = true
-        Me.RadioButton39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton39.Location = New System.Drawing.Point(156, 17)
-        Me.RadioButton39.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton39.Name = "RadioButton39"
-        Me.RadioButton39.Size = New System.Drawing.Size(65, 19)
-        Me.RadioButton39.TabIndex = 2
-        Me.RadioButton39.TabStop = true
-        Me.RadioButton39.Text = "Banner"
-        Me.RadioButton39.UseVisualStyleBackColor = true
-        '
-        'RadioButton40
-        '
-        Me.RadioButton40.AutoSize = true
-        Me.RadioButton40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton40.Location = New System.Drawing.Point(79, 17)
-        Me.RadioButton40.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton40.Name = "RadioButton40"
-        Me.RadioButton40.Size = New System.Drawing.Size(60, 19)
-        Me.RadioButton40.TabIndex = 1
-        Me.RadioButton40.TabStop = true
-        Me.RadioButton40.Text = "Poster"
-        Me.RadioButton40.UseVisualStyleBackColor = true
-        '
-        'RadioButton41
-        '
-        Me.RadioButton41.AutoSize = true
-        Me.RadioButton41.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton41.Location = New System.Drawing.Point(8, 17)
-        Me.RadioButton41.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton41.Name = "RadioButton41"
-        Me.RadioButton41.Size = New System.Drawing.Size(55, 19)
-        Me.RadioButton41.TabIndex = 0
-        Me.RadioButton41.TabStop = true
-        Me.RadioButton41.Text = "None"
-        Me.RadioButton41.UseVisualStyleBackColor = true
-        '
-        'cbTvQuickAddShow
-        '
-        Me.cbTvQuickAddShow.AutoSize = true
-        Me.cbTvQuickAddShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 430)
-        Me.cbTvQuickAddShow.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbTvQuickAddShow.Name = "cbTvQuickAddShow"
-        Me.cbTvQuickAddShow.Size = New System.Drawing.Size(181, 19)
-        Me.cbTvQuickAddShow.TabIndex = 34
-        Me.cbTvQuickAddShow.Text = "Quick add for new TV Shows"
-        Me.cbTvQuickAddShow.UseVisualStyleBackColor = true
-        '
-        'GroupBox15
-        '
-        Me.GroupBox15.Controls.Add(Me.CheckBox_tv_EpisodeRenameCase)
-        Me.GroupBox15.Controls.Add(Me.CheckBox_tv_EpisodeRenameAuto)
-        Me.GroupBox15.Controls.Add(Me.Label140)
-        Me.GroupBox15.Controls.Add(Me.ComboBox_tv_EpisodeRename)
-        Me.GroupBox15.Location = New System.Drawing.Point(720, 134)
-        Me.GroupBox15.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox15.Name = "GroupBox15"
-        Me.GroupBox15.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox15.Size = New System.Drawing.Size(264, 250)
-        Me.GroupBox15.TabIndex = 31
-        Me.GroupBox15.TabStop = false
-        Me.GroupBox15.Text = "TV Episode Renaming Settings"
-        '
-        'CheckBox_tv_EpisodeRenameCase
-        '
-        Me.CheckBox_tv_EpisodeRenameCase.AutoSize = true
-        Me.CheckBox_tv_EpisodeRenameCase.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_tv_EpisodeRenameCase.Location = New System.Drawing.Point(14, 190)
-        Me.CheckBox_tv_EpisodeRenameCase.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox_tv_EpisodeRenameCase.Name = "CheckBox_tv_EpisodeRenameCase"
-        Me.CheckBox_tv_EpisodeRenameCase.Size = New System.Drawing.Size(170, 49)
-        Me.CheckBox_tv_EpisodeRenameCase.TabIndex = 3
-        Me.CheckBox_tv_EpisodeRenameCase.Text = "Use lowercase"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"s01e01 instead of S01E01"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"1x01 instead of 1X01"
-        Me.CheckBox_tv_EpisodeRenameCase.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.CheckBox_tv_EpisodeRenameCase.UseVisualStyleBackColor = true
-        '
-        'CheckBox_tv_EpisodeRenameAuto
-        '
-        Me.CheckBox_tv_EpisodeRenameAuto.AutoSize = true
-        Me.CheckBox_tv_EpisodeRenameAuto.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_tv_EpisodeRenameAuto.Location = New System.Drawing.Point(14, 163)
-        Me.CheckBox_tv_EpisodeRenameAuto.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox_tv_EpisodeRenameAuto.Name = "CheckBox_tv_EpisodeRenameAuto"
-        Me.CheckBox_tv_EpisodeRenameAuto.Size = New System.Drawing.Size(185, 19)
-        Me.CheckBox_tv_EpisodeRenameAuto.TabIndex = 2
-        Me.CheckBox_tv_EpisodeRenameAuto.Text = "Enable auto episode rename"
-        Me.CheckBox_tv_EpisodeRenameAuto.UseVisualStyleBackColor = true
-        '
-        'Label140
-        '
-        Me.Label140.AutoSize = true
-        Me.Label140.Location = New System.Drawing.Point(10, 61)
-        Me.Label140.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label140.Name = "Label140"
-        Me.Label140.Size = New System.Drawing.Size(243, 90)
-        Me.Label140.TabIndex = 1
-        Me.Label140.Text = resources.GetString("Label140.Text")
-        '
-        'ComboBox_tv_EpisodeRename
-        '
-        Me.ComboBox_tv_EpisodeRename.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ComboBox_tv_EpisodeRename.FormattingEnabled = true
-        Me.ComboBox_tv_EpisodeRename.Location = New System.Drawing.Point(13, 24)
-        Me.ComboBox_tv_EpisodeRename.Margin = New System.Windows.Forms.Padding(4)
-        Me.ComboBox_tv_EpisodeRename.Name = "ComboBox_tv_EpisodeRename"
-        Me.ComboBox_tv_EpisodeRename.Size = New System.Drawing.Size(240, 23)
-        Me.ComboBox_tv_EpisodeRename.TabIndex = 0
-        '
-        'CheckBox20
-        '
-        Me.CheckBox20.AutoSize = true
-        Me.CheckBox20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox20.Location = New System.Drawing.Point(128, 458)
-        Me.CheckBox20.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox20.Name = "CheckBox20"
-        Me.CheckBox20.Size = New System.Drawing.Size(229, 19)
-        Me.CheckBox20.TabIndex = 14
-        Me.CheckBox20.Text = "Save Media Tags to episode.nfo files."
-        Me.CheckBox20.UseVisualStyleBackColor = true
-        '
-        'CheckBox17
-        '
-        Me.CheckBox17.AutoSize = true
-        Me.CheckBox17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox17.Location = New System.Drawing.Point(128, 485)
-        Me.CheckBox17.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox17.Name = "CheckBox17"
-        Me.CheckBox17.Size = New System.Drawing.Size(216, 19)
-        Me.CheckBox17.TabIndex = 13
-        Me.CheckBox17.Text = "Display log after scraping episodes"
-        Me.CheckBox17.UseVisualStyleBackColor = true
-        '
-        'ListBox12
-        '
-        Me.ListBox12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ListBox12.FormattingEnabled = true
-        Me.ListBox12.ItemHeight = 15
-        Me.ListBox12.Location = New System.Drawing.Point(12, 26)
-        Me.ListBox12.Margin = New System.Windows.Forms.Padding(4)
-        Me.ListBox12.Name = "ListBox12"
-        Me.ListBox12.Size = New System.Drawing.Size(103, 424)
-        Me.ListBox12.TabIndex = 11
-        '
-        'Label122
-        '
-        Me.Label122.AutoSize = true
-        Me.Label122.Location = New System.Drawing.Point(717, 26)
-        Me.Label122.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label122.Name = "Label122"
-        Me.Label122.Size = New System.Drawing.Size(278, 60)
-        Me.Label122.TabIndex = 6
-        Me.Label122.Text = "Use the Selection Box Below to choose where"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"to get tv actor nfo from."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Only use "& _ 
-    "IMDB if the show series order is identical"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"to thetvdb.com or wrong actors will "& _ 
-    "be obtained"
-        '
-        'ComboBox8
-        '
-        Me.ComboBox8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ComboBox8.FormattingEnabled = true
-        Me.ComboBox8.Items.AddRange(New Object() {"All Actors from TVDB", "All Actors from IMDB", "TVshow Actor from IMDB, Episode from TVDB", "TVshow Actor from TVDB, Episode from IMDB"})
-        Me.ComboBox8.Location = New System.Drawing.Point(720, 97)
-        Me.ComboBox8.Margin = New System.Windows.Forms.Padding(4)
-        Me.ComboBox8.Name = "ComboBox8"
-        Me.ComboBox8.Size = New System.Drawing.Size(264, 23)
-        Me.ComboBox8.TabIndex = 0
-        '
-        'TabPage31
-        '
-        Me.TabPage31.Controls.Add(Me.GroupBox_tv_RegexRename)
-        Me.TabPage31.Controls.Add(Me.GroupBox_tv_RegexScrape)
-        Me.TabPage31.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Name = "TabPage31"
-        Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(1029, 598)
-        Me.TabPage31.TabIndex = 1
-        Me.TabPage31.Text = "Regex"
-        Me.TabPage31.UseVisualStyleBackColor = true
-        '
-        'GroupBox_tv_RegexRename
-        '
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Button_tv_RegexRename_Restore)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.ListBox_tv_RegexRename)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Button_tv_RegexRename_Remove)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Label158)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Button_tv_RegexRename_MoveDown)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Label159)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Button_tv_RegexRename_MoveUp)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.TextBox_tv_RegexRename_New)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.TextBox_tv_RegexRename_Edit)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Button_tv_RegexRename_Add)
-        Me.GroupBox_tv_RegexRename.Controls.Add(Me.Button_tv_RegexRename_Edit)
-        Me.GroupBox_tv_RegexRename.Location = New System.Drawing.Point(514, 7)
-        Me.GroupBox_tv_RegexRename.Name = "GroupBox_tv_RegexRename"
-        Me.GroupBox_tv_RegexRename.Size = New System.Drawing.Size(450, 480)
-        Me.GroupBox_tv_RegexRename.TabIndex = 36
-        Me.GroupBox_tv_RegexRename.TabStop = false
-        Me.GroupBox_tv_RegexRename.Text = "Rename"
-        '
-        'Button_tv_RegexRename_Restore
-        '
-        Me.Button_tv_RegexRename_Restore.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexRename_Restore.Location = New System.Drawing.Point(266, 426)
-        Me.Button_tv_RegexRename_Restore.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexRename_Restore.Name = "Button_tv_RegexRename_Restore"
-        Me.Button_tv_RegexRename_Restore.Size = New System.Drawing.Size(168, 31)
-        Me.Button_tv_RegexRename_Restore.TabIndex = 44
-        Me.Button_tv_RegexRename_Restore.Text = "Restore Defaults"
-        Me.Button_tv_RegexRename_Restore.UseVisualStyleBackColor = true
-        '
-        'ListBox_tv_RegexRename
-        '
-        Me.ListBox_tv_RegexRename.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.ListBox_tv_RegexRename.FormattingEnabled = true
-        Me.ListBox_tv_RegexRename.ItemHeight = 15
-        Me.ListBox_tv_RegexRename.Location = New System.Drawing.Point(19, 24)
-        Me.ListBox_tv_RegexRename.Margin = New System.Windows.Forms.Padding(4)
-        Me.ListBox_tv_RegexRename.MaximumSize = New System.Drawing.Size(2000, 275)
-        Me.ListBox_tv_RegexRename.MinimumSize = New System.Drawing.Size(0, 79)
-        Me.ListBox_tv_RegexRename.Name = "ListBox_tv_RegexRename"
-        Me.ListBox_tv_RegexRename.Size = New System.Drawing.Size(374, 244)
-        Me.ListBox_tv_RegexRename.TabIndex = 35
-        '
-        'Button_tv_RegexRename_Remove
-        '
-        Me.Button_tv_RegexRename_Remove.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexRename_Remove.Location = New System.Drawing.Point(269, 290)
-        Me.Button_tv_RegexRename_Remove.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexRename_Remove.Name = "Button_tv_RegexRename_Remove"
-        Me.Button_tv_RegexRename_Remove.Size = New System.Drawing.Size(168, 31)
-        Me.Button_tv_RegexRename_Remove.TabIndex = 34
-        Me.Button_tv_RegexRename_Remove.Text = "Remove Selected"
-        Me.Button_tv_RegexRename_Remove.UseVisualStyleBackColor = true
-        '
-        'Label158
-        '
-        Me.Label158.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label158.AutoSize = true
-        Me.Label158.Location = New System.Drawing.Point(16, 353)
-        Me.Label158.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label158.Name = "Label158"
-        Me.Label158.Size = New System.Drawing.Size(71, 15)
-        Me.Label158.TabIndex = 37
-        Me.Label158.Text = "New Regex"
-        '
-        'Label159
-        '
-        Me.Label159.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label159.AutoSize = true
-        Me.Label159.Location = New System.Drawing.Point(16, 396)
-        Me.Label159.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label159.Name = "Label159"
-        Me.Label159.Size = New System.Drawing.Size(67, 15)
-        Me.Label159.TabIndex = 39
-        Me.Label159.Text = "Edit Regex"
-        '
-        'TextBox_tv_RegexRename_New
-        '
-        Me.TextBox_tv_RegexRename_New.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox_tv_RegexRename_New.Location = New System.Drawing.Point(98, 349)
-        Me.TextBox_tv_RegexRename_New.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_tv_RegexRename_New.Name = "TextBox_tv_RegexRename_New"
-        Me.TextBox_tv_RegexRename_New.Size = New System.Drawing.Size(263, 21)
-        Me.TextBox_tv_RegexRename_New.TabIndex = 36
-        '
-        'TextBox_tv_RegexRename_Edit
-        '
-        Me.TextBox_tv_RegexRename_Edit.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox_tv_RegexRename_Edit.Location = New System.Drawing.Point(98, 389)
-        Me.TextBox_tv_RegexRename_Edit.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_tv_RegexRename_Edit.Name = "TextBox_tv_RegexRename_Edit"
-        Me.TextBox_tv_RegexRename_Edit.Size = New System.Drawing.Size(263, 21)
-        Me.TextBox_tv_RegexRename_Edit.TabIndex = 40
-        '
-        'Button_tv_RegexRename_Add
-        '
-        Me.Button_tv_RegexRename_Add.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexRename_Add.Location = New System.Drawing.Point(369, 347)
-        Me.Button_tv_RegexRename_Add.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexRename_Add.Name = "Button_tv_RegexRename_Add"
-        Me.Button_tv_RegexRename_Add.Size = New System.Drawing.Size(66, 31)
-        Me.Button_tv_RegexRename_Add.TabIndex = 38
-        Me.Button_tv_RegexRename_Add.Text = "Add"
-        Me.Button_tv_RegexRename_Add.UseVisualStyleBackColor = true
-        '
-        'Button_tv_RegexRename_Edit
-        '
-        Me.Button_tv_RegexRename_Edit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexRename_Edit.Location = New System.Drawing.Point(369, 389)
-        Me.Button_tv_RegexRename_Edit.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexRename_Edit.Name = "Button_tv_RegexRename_Edit"
-        Me.Button_tv_RegexRename_Edit.Size = New System.Drawing.Size(66, 31)
-        Me.Button_tv_RegexRename_Edit.TabIndex = 41
-        Me.Button_tv_RegexRename_Edit.Text = "Edit"
-        Me.Button_tv_RegexRename_Edit.UseVisualStyleBackColor = true
-        '
-        'GroupBox_tv_RegexScrape
-        '
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.ListBox_tv_RegexScrape)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Button_tv_RegexScrape_Remove)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Label119)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Button_tv_RegexScrape_MoveDown)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Label117)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Button_tv_RegexScrape_MoveUp)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.TextBox_tv_RegexScrape_New)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.TextBox_tv_RegexScrape_Edit)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Button_tv_RegexScrape_Add)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Button_tv_RegexScrape_Edit)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.Button_tv_RegexScrape_Restore)
-        Me.GroupBox_tv_RegexScrape.Controls.Add(Me.GroupBox_tv_RegexScrape_Test)
-        Me.GroupBox_tv_RegexScrape.Location = New System.Drawing.Point(7, 7)
-        Me.GroupBox_tv_RegexScrape.Name = "GroupBox_tv_RegexScrape"
-        Me.GroupBox_tv_RegexScrape.Size = New System.Drawing.Size(450, 480)
-        Me.GroupBox_tv_RegexScrape.TabIndex = 34
-        Me.GroupBox_tv_RegexScrape.TabStop = false
-        Me.GroupBox_tv_RegexScrape.Text = "Scrape"
-        '
-        'ListBox_tv_RegexScrape
-        '
-        Me.ListBox_tv_RegexScrape.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.ListBox_tv_RegexScrape.FormattingEnabled = true
-        Me.ListBox_tv_RegexScrape.ItemHeight = 15
-        Me.ListBox_tv_RegexScrape.Location = New System.Drawing.Point(16, 21)
-        Me.ListBox_tv_RegexScrape.Margin = New System.Windows.Forms.Padding(4)
-        Me.ListBox_tv_RegexScrape.MaximumSize = New System.Drawing.Size(2000, 79)
-        Me.ListBox_tv_RegexScrape.MinimumSize = New System.Drawing.Size(0, 79)
-        Me.ListBox_tv_RegexScrape.Name = "ListBox_tv_RegexScrape"
-        Me.ListBox_tv_RegexScrape.Size = New System.Drawing.Size(374, 79)
-        Me.ListBox_tv_RegexScrape.TabIndex = 23
-        '
-        'Button_tv_RegexScrape_Remove
-        '
-        Me.Button_tv_RegexScrape_Remove.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_Remove.Location = New System.Drawing.Point(266, 108)
-        Me.Button_tv_RegexScrape_Remove.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_Remove.Name = "Button_tv_RegexScrape_Remove"
-        Me.Button_tv_RegexScrape_Remove.Size = New System.Drawing.Size(168, 29)
-        Me.Button_tv_RegexScrape_Remove.TabIndex = 15
-        Me.Button_tv_RegexScrape_Remove.Text = "Remove Selected"
-        Me.Button_tv_RegexScrape_Remove.UseVisualStyleBackColor = true
-        '
-        'Label119
-        '
-        Me.Label119.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label119.AutoSize = true
-        Me.Label119.Location = New System.Drawing.Point(16, 156)
-        Me.Label119.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label119.Name = "Label119"
-        Me.Label119.Size = New System.Drawing.Size(71, 15)
-        Me.Label119.TabIndex = 25
-        Me.Label119.Text = "New Regex"
-        '
-        'Label117
-        '
-        Me.Label117.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label117.AutoSize = true
-        Me.Label117.Location = New System.Drawing.Point(16, 198)
-        Me.Label117.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label117.Name = "Label117"
-        Me.Label117.Size = New System.Drawing.Size(67, 15)
-        Me.Label117.TabIndex = 28
-        Me.Label117.Text = "Edit Regex"
-        '
-        'TextBox_tv_RegexScrape_New
-        '
-        Me.TextBox_tv_RegexScrape_New.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox_tv_RegexScrape_New.Location = New System.Drawing.Point(98, 152)
-        Me.TextBox_tv_RegexScrape_New.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_tv_RegexScrape_New.Name = "TextBox_tv_RegexScrape_New"
-        Me.TextBox_tv_RegexScrape_New.Size = New System.Drawing.Size(262, 21)
-        Me.TextBox_tv_RegexScrape_New.TabIndex = 24
-        '
-        'TextBox_tv_RegexScrape_Edit
-        '
-        Me.TextBox_tv_RegexScrape_Edit.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox_tv_RegexScrape_Edit.Location = New System.Drawing.Point(98, 192)
-        Me.TextBox_tv_RegexScrape_Edit.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_tv_RegexScrape_Edit.Name = "TextBox_tv_RegexScrape_Edit"
-        Me.TextBox_tv_RegexScrape_Edit.Size = New System.Drawing.Size(262, 21)
-        Me.TextBox_tv_RegexScrape_Edit.TabIndex = 29
-        '
-        'Button_tv_RegexScrape_Add
-        '
-        Me.Button_tv_RegexScrape_Add.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_Add.Location = New System.Drawing.Point(368, 145)
-        Me.Button_tv_RegexScrape_Add.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_Add.Name = "Button_tv_RegexScrape_Add"
-        Me.Button_tv_RegexScrape_Add.Size = New System.Drawing.Size(66, 29)
-        Me.Button_tv_RegexScrape_Add.TabIndex = 26
-        Me.Button_tv_RegexScrape_Add.Text = "Add"
-        Me.Button_tv_RegexScrape_Add.UseVisualStyleBackColor = true
-        '
-        'Button_tv_RegexScrape_Edit
-        '
-        Me.Button_tv_RegexScrape_Edit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_Edit.Location = New System.Drawing.Point(368, 187)
-        Me.Button_tv_RegexScrape_Edit.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_Edit.Name = "Button_tv_RegexScrape_Edit"
-        Me.Button_tv_RegexScrape_Edit.Size = New System.Drawing.Size(66, 29)
-        Me.Button_tv_RegexScrape_Edit.TabIndex = 30
-        Me.Button_tv_RegexScrape_Edit.Text = "Edit"
-        Me.Button_tv_RegexScrape_Edit.UseVisualStyleBackColor = true
-        '
-        'Button_tv_RegexScrape_Restore
-        '
-        Me.Button_tv_RegexScrape_Restore.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_Restore.Location = New System.Drawing.Point(266, 425)
-        Me.Button_tv_RegexScrape_Restore.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_Restore.Name = "Button_tv_RegexScrape_Restore"
-        Me.Button_tv_RegexScrape_Restore.Size = New System.Drawing.Size(168, 29)
-        Me.Button_tv_RegexScrape_Restore.TabIndex = 31
-        Me.Button_tv_RegexScrape_Restore.Text = "Restore Defaults"
-        Me.Button_tv_RegexScrape_Restore.UseVisualStyleBackColor = true
-        '
-        'GroupBox_tv_RegexScrape_Test
-        '
-        Me.GroupBox_tv_RegexScrape_Test.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.TextBox_tv_RegexScrape_TestResult)
-        Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.Button_tv_RegexScrape_Test)
-        Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.TextBox_tv_RegexScrape_TestString)
-        Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.Label118)
-        Me.GroupBox_tv_RegexScrape_Test.Location = New System.Drawing.Point(16, 228)
-        Me.GroupBox_tv_RegexScrape_Test.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_tv_RegexScrape_Test.Name = "GroupBox_tv_RegexScrape_Test"
-        Me.GroupBox_tv_RegexScrape_Test.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_tv_RegexScrape_Test.Size = New System.Drawing.Size(418, 189)
-        Me.GroupBox_tv_RegexScrape_Test.TabIndex = 27
-        Me.GroupBox_tv_RegexScrape_Test.TabStop = false
-        Me.GroupBox_tv_RegexScrape_Test.Text = "Test Selected Regex"
-        '
-        'TextBox_tv_RegexScrape_TestResult
-        '
-        Me.TextBox_tv_RegexScrape_TestResult.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox_tv_RegexScrape_TestResult.Location = New System.Drawing.Point(8, 62)
-        Me.TextBox_tv_RegexScrape_TestResult.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_tv_RegexScrape_TestResult.Multiline = true
-        Me.TextBox_tv_RegexScrape_TestResult.Name = "TextBox_tv_RegexScrape_TestResult"
-        Me.TextBox_tv_RegexScrape_TestResult.Size = New System.Drawing.Size(402, 119)
-        Me.TextBox_tv_RegexScrape_TestResult.TabIndex = 3
-        '
-        'Button_tv_RegexScrape_Test
-        '
-        Me.Button_tv_RegexScrape_Test.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexScrape_Test.Location = New System.Drawing.Point(334, 20)
-        Me.Button_tv_RegexScrape_Test.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button_tv_RegexScrape_Test.Name = "Button_tv_RegexScrape_Test"
-        Me.Button_tv_RegexScrape_Test.Size = New System.Drawing.Size(66, 29)
-        Me.Button_tv_RegexScrape_Test.TabIndex = 2
-        Me.Button_tv_RegexScrape_Test.Text = "Test"
-        Me.Button_tv_RegexScrape_Test.UseVisualStyleBackColor = true
-        '
-        'TextBox_tv_RegexScrape_TestString
-        '
-        Me.TextBox_tv_RegexScrape_TestString.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox_tv_RegexScrape_TestString.Location = New System.Drawing.Point(81, 24)
-        Me.TextBox_tv_RegexScrape_TestString.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_tv_RegexScrape_TestString.Name = "TextBox_tv_RegexScrape_TestString"
-        Me.TextBox_tv_RegexScrape_TestString.Size = New System.Drawing.Size(243, 21)
-        Me.TextBox_tv_RegexScrape_TestString.TabIndex = 1
-        '
-        'Label118
-        '
-        Me.Label118.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label118.AutoSize = true
-        Me.Label118.Location = New System.Drawing.Point(5, 28)
-        Me.Label118.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label118.Name = "Label118"
-        Me.Label118.Size = New System.Drawing.Size(65, 15)
-        Me.Label118.TabIndex = 0
-        Me.Label118.Text = "Test String"
         '
         'TabPage3
         '
@@ -15767,7 +14557,7 @@ Partial Class Form1
         Me.TabMV.Controls.Add(Me.UcMusicVideo1)
         Me.TabMV.Location = New System.Drawing.Point(4, 24)
         Me.TabMV.Name = "TabMV"
-        Me.TabMV.Size = New System.Drawing.Size(1061, 669)
+        Me.TabMV.Size = New System.Drawing.Size(747, 72)
         Me.TabMV.TabIndex = 15
         Me.TabMV.Text = "Music Vid's"
         Me.TabMV.UseVisualStyleBackColor = true
@@ -15780,7 +14570,7 @@ Partial Class Form1
         Me.UcMusicVideo1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.UcMusicVideo1.Location = New System.Drawing.Point(0, 0)
         Me.UcMusicVideo1.Name = "UcMusicVideo1"
-        Me.UcMusicVideo1.Size = New System.Drawing.Size(1057, 665)
+        Me.UcMusicVideo1.Size = New System.Drawing.Size(743, 68)
         Me.UcMusicVideo1.TabIndex = 0
         '
         'TabPage18
@@ -17906,32 +16696,6 @@ Partial Class Form1
         Me.TableLayoutPanel5.ResumeLayout(false)
         Me.TableLayoutPanel5.PerformLayout
         Me.TableLayoutPanel25.ResumeLayout(false)
-        Me.TabPage24.ResumeLayout(false)
-        Me.TabControl6.ResumeLayout(false)
-        Me.TabPage30.ResumeLayout(false)
-        Me.GroupBox17.ResumeLayout(false)
-        Me.GroupBox17.PerformLayout
-        Me.GroupBox43.ResumeLayout(false)
-        Me.GroupBox43.PerformLayout
-        Me.GroupBox_TVDB_Scraper_Preferences.ResumeLayout(false)
-        Me.GroupBox_TVDB_Scraper_Preferences.PerformLayout
-        Me.GroupBox22.ResumeLayout(false)
-        Me.GroupBox22.PerformLayout
-        Me.GroupBox20.ResumeLayout(false)
-        Me.GroupBox20.PerformLayout
-        Me.GroupBox18.ResumeLayout(false)
-        Me.GroupBox18.PerformLayout
-        Me.GroupBox19.ResumeLayout(false)
-        Me.GroupBox19.PerformLayout
-        Me.GroupBox15.ResumeLayout(false)
-        Me.GroupBox15.PerformLayout
-        Me.TabPage31.ResumeLayout(false)
-        Me.GroupBox_tv_RegexRename.ResumeLayout(false)
-        Me.GroupBox_tv_RegexRename.PerformLayout
-        Me.GroupBox_tv_RegexScrape.ResumeLayout(false)
-        Me.GroupBox_tv_RegexScrape.PerformLayout
-        Me.GroupBox_tv_RegexScrape_Test.ResumeLayout(false)
-        Me.GroupBox_tv_RegexScrape_Test.PerformLayout
         Me.TabPage3.ResumeLayout(false)
         Me.TabControl1.ResumeLayout(false)
         Me.tp_HmMainBrowser.ResumeLayout(false)
@@ -18376,7 +17140,6 @@ End Sub
     Friend WithEvents SearchForNewEpisodesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TVShowBrowserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SearchForNewMoviesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button_tv_RegexScrape_Remove As System.Windows.Forms.Button
     Friend WithEvents ListBox13 As System.Windows.Forms.ListBox
     Friend WithEvents Label112 As System.Windows.Forms.Label
     Friend WithEvents Button78 As System.Windows.Forms.Button
@@ -18395,54 +17158,13 @@ End Sub
     Friend WithEvents chkbx_unstackfanartnames As System.Windows.Forms.CheckBox
     Friend WithEvents chkbx_unstackposternames As System.Windows.Forms.CheckBox
     Friend WithEvents Label110 As System.Windows.Forms.Label
-    Friend WithEvents GroupBox17 As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox19 As System.Windows.Forms.GroupBox
-    Friend WithEvents RadioButton39 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton40 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton41 As System.Windows.Forms.RadioButton
-    Friend WithEvents ListBox12 As System.Windows.Forms.ListBox
-    Friend WithEvents cbTvDlFanart As System.Windows.Forms.CheckBox
-    Friend WithEvents cbTvDlPosterArt As System.Windows.Forms.CheckBox
-    Friend WithEvents cbTvDlSeasonArt As System.Windows.Forms.CheckBox
-    Friend WithEvents bannerbtn As System.Windows.Forms.RadioButton
-    Friend WithEvents posterbtn As System.Windows.Forms.RadioButton
-    Friend WithEvents Label122 As System.Windows.Forms.Label
-    Friend WithEvents ComboBox8 As System.Windows.Forms.ComboBox
-    Friend WithEvents Label123 As System.Windows.Forms.Label
-    Friend WithEvents Label124 As System.Windows.Forms.Label
-    Friend WithEvents RadioButton42 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton43 As System.Windows.Forms.RadioButton
-    Friend WithEvents Button91 As System.Windows.Forms.Button
-    Friend WithEvents btnTVPrefSaveChanges As System.Windows.Forms.Button
     Friend WithEvents CheckBox16 As System.Windows.Forms.CheckBox
-    Friend WithEvents CheckBox17 As System.Windows.Forms.CheckBox
     Friend WithEvents bckgrnd_tvshowscraper As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripStatusLabel5 As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ProfilesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Label108 As System.Windows.Forms.Label
     Friend WithEvents Button93 As System.Windows.Forms.Button
     Friend WithEvents CheckBox19 As System.Windows.Forms.CheckBox
-    Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
-    Friend WithEvents TabControl6 As System.Windows.Forms.TabControl
-    Friend WithEvents TabPage30 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage31 As System.Windows.Forms.TabPage
-    Friend WithEvents Button_tv_RegexScrape_MoveDown As System.Windows.Forms.Button
-    Friend WithEvents Button_tv_RegexScrape_MoveUp As System.Windows.Forms.Button
-    Friend WithEvents ListBox_tv_RegexScrape As System.Windows.Forms.ListBox
-    Friend WithEvents Button_tv_RegexScrape_Add As System.Windows.Forms.Button
-    Friend WithEvents Button_tv_RegexScrape_Restore As System.Windows.Forms.Button
-    Friend WithEvents GroupBox_tv_RegexScrape_Test As System.Windows.Forms.GroupBox
-    Friend WithEvents TextBox_tv_RegexScrape_TestResult As System.Windows.Forms.TextBox
-    Friend WithEvents Button_tv_RegexScrape_Test As System.Windows.Forms.Button
-    Friend WithEvents TextBox_tv_RegexScrape_TestString As System.Windows.Forms.TextBox
-    Friend WithEvents Label118 As System.Windows.Forms.Label
-    Friend WithEvents Button_tv_RegexScrape_Edit As System.Windows.Forms.Button
-    Friend WithEvents TextBox_tv_RegexScrape_Edit As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox_tv_RegexScrape_New As System.Windows.Forms.TextBox
-    Friend WithEvents Label117 As System.Windows.Forms.Label
-    Friend WithEvents Label119 As System.Windows.Forms.Label
-    Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
-    Friend WithEvents ComboBox_tv_EpisodeRename As System.Windows.Forms.ComboBox
     Friend WithEvents tpMoviesTable As System.Windows.Forms.TabPage
     Friend WithEvents BasicmovienfoBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents BasicmovienfoBindingSource1 As System.Windows.Forms.BindingSource
@@ -18501,15 +17223,7 @@ End Sub
     Friend WithEvents SplitContainer7 As System.Windows.Forms.SplitContainer
     Friend WithEvents CheckBox33 As System.Windows.Forms.CheckBox
     Friend WithEvents Label137 As System.Windows.Forms.Label
-    Friend WithEvents Label138 As System.Windows.Forms.Label
-    Friend WithEvents CheckBox34 As System.Windows.Forms.CheckBox
     Friend WithEvents Tv_TreeViewContext_FindMissArt As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GroupBox20 As System.Windows.Forms.GroupBox
-    Friend WithEvents cbTvQuickAddShow As System.Windows.Forms.CheckBox
-    Friend WithEvents Label139 As System.Windows.Forms.Label
-    Friend WithEvents cbTvAutoScreenShot As System.Windows.Forms.CheckBox
-    Friend WithEvents Label140 As System.Windows.Forms.Label
-    Friend WithEvents CheckBox_tv_EpisodeRenameAuto As System.Windows.Forms.CheckBox
     Friend WithEvents ButtonFanartSaveLoRes As System.Windows.Forms.Button
     Friend WithEvents ExportToXBMCToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabPage33 As System.Windows.Forms.TabPage
@@ -18542,7 +17256,6 @@ End Sub
     Friend WithEvents tvbckrescrapewizard As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripStatusLabel8 As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ToolStripProgressBar7 As System.Windows.Forms.ToolStripProgressBar
-    Friend WithEvents CheckBox_tv_EpisodeRenameCase As System.Windows.Forms.CheckBox
     Friend WithEvents mov_ToolStripExportMovies As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabPage34 As System.Windows.Forms.TabPage
     Friend WithEvents Label149 As System.Windows.Forms.Label
@@ -18552,21 +17265,12 @@ End Sub
     Friend WithEvents Button109 As System.Windows.Forms.Button
     Friend WithEvents cb_IgnoreThe As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox_Use_XBMC_Scraper As System.Windows.Forms.CheckBox
-    Friend WithEvents CheckBox_Use_XBMC_TVDB_Scraper As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox_TMDB_Scraper_Preferences As System.Windows.Forms.GroupBox
     Friend WithEvents cmbxXbmcTmdbTitleLanguage As System.Windows.Forms.ComboBox
     Friend WithEvents cbXbmcTmdbFanart As System.Windows.Forms.CheckBox
     Friend WithEvents cmbxXbmcTmdbHDTrailer As System.Windows.Forms.ComboBox
     Friend WithEvents Label153 As System.Windows.Forms.Label
     Friend WithEvents cbXbmcTmdbIMDBRatings As System.Windows.Forms.CheckBox
-    Friend WithEvents GroupBox22 As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox_TVDB_Scraper_Preferences As System.Windows.Forms.GroupBox
-    Friend WithEvents ComboBox_TVDB_Language As System.Windows.Forms.ComboBox
-    Friend WithEvents Label154 As System.Windows.Forms.Label
-    Friend WithEvents cbXBMCTvdbPosters As System.Windows.Forms.CheckBox
-    Friend WithEvents cbXBMCTvdbFanart As System.Windows.Forms.CheckBox
-    Friend WithEvents rbXBMCTvdbAbsoluteNumber As System.Windows.Forms.RadioButton
-    Friend WithEvents rbXBMCTvdbDVDOrder As System.Windows.Forms.RadioButton
     Friend WithEvents Label155 As System.Windows.Forms.Label
     Friend WithEvents ButtonSaveAndQuickRefresh As System.Windows.Forms.Button
     Friend WithEvents Label22 As System.Windows.Forms.Label
@@ -18621,23 +17325,7 @@ End Sub
     Friend WithEvents Tv_TreeViewContext_RescrapeShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Tv_TreeViewContext_WatchedShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Tv_TreeViewContext_UnWatchedShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GroupBox_tv_RegexScrape As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox_tv_RegexRename As System.Windows.Forms.GroupBox
-    Friend WithEvents Button_tv_RegexRename_Restore As System.Windows.Forms.Button
-    Friend WithEvents ListBox_tv_RegexRename As System.Windows.Forms.ListBox
-    Friend WithEvents Button_tv_RegexRename_Remove As System.Windows.Forms.Button
-    Friend WithEvents Label158 As System.Windows.Forms.Label
-    Friend WithEvents Button_tv_RegexRename_MoveDown As System.Windows.Forms.Button
-    Friend WithEvents Label159 As System.Windows.Forms.Label
-    Friend WithEvents Button_tv_RegexRename_MoveUp As System.Windows.Forms.Button
-    Friend WithEvents TextBox_tv_RegexRename_New As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox_tv_RegexRename_Edit As System.Windows.Forms.TextBox
-    Friend WithEvents Button_tv_RegexRename_Add As System.Windows.Forms.Button
-    Friend WithEvents Button_tv_RegexRename_Edit As System.Windows.Forms.Button
-    Friend WithEvents GroupBox18 As System.Windows.Forms.GroupBox
     Friend WithEvents YearToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents cbTv_fixNFOid As System.Windows.Forms.CheckBox
-    Friend WithEvents Label111 As System.Windows.Forms.Label
     Friend WithEvents GroupBox23 As System.Windows.Forms.GroupBox
     Friend WithEvents rbTVbanner As System.Windows.Forms.RadioButton
     Friend WithEvents rbTVposter As System.Windows.Forms.RadioButton
@@ -18840,8 +17528,6 @@ End Sub
     Friend WithEvents btnMovieManualPathAdd As System.Windows.Forms.Button
     Friend WithEvents Label184 As System.Windows.Forms.Label
     Friend WithEvents tbMovieManualPath As System.Windows.Forms.TextBox
-    Friend WithEvents Label185 As System.Windows.Forms.Label
-    Friend WithEvents AutoScrnShtDelay As System.Windows.Forms.TextBox
     Friend WithEvents cbUseMultipleThreads As System.Windows.Forms.CheckBox
     Friend WithEvents cbMovieFanartInFolders As System.Windows.Forms.CheckBox
     Friend WithEvents btnTvRefreshAll As System.Windows.Forms.Button
@@ -19044,7 +17730,6 @@ End Sub
     Friend WithEvents GroupBox41 As System.Windows.Forms.GroupBox
     Friend WithEvents Label189 As System.Windows.Forms.Label
     Friend WithEvents cbDlXtraFanart As System.Windows.Forms.CheckBox
-    Friend WithEvents cbTvDlXtraFanart As System.Windows.Forms.CheckBox
     Friend WithEvents cbXbmcTmdbActorDL As System.Windows.Forms.CheckBox
     Friend WithEvents cbXbmcTmdbRename As System.Windows.Forms.CheckBox
     Friend WithEvents Label192 As System.Windows.Forms.Label
@@ -19142,7 +17827,6 @@ End Sub
     Friend WithEvents cbTvActorRole As System.Windows.Forms.ComboBox
     Friend WithEvents TabCustTv As System.Windows.Forms.TabPage
     Friend WithEvents Custom_Tv1 As Media_Companion.Custom_Tv
-    Friend WithEvents cb_TvFolderJpg As System.Windows.Forms.CheckBox
     Friend WithEvents tpPrxy As System.Windows.Forms.TabPage
     Friend WithEvents UcGenPref_Proxy1 As Media_Companion.ucGenPref_Proxy
     Friend WithEvents tpMediaStubs As System.Windows.Forms.TabPage
@@ -19180,8 +17864,6 @@ End Sub
     Friend WithEvents lbl_sorttitle As System.Windows.Forms.Label
     Friend WithEvents TextBox_Sorttitle As System.Windows.Forms.TextBox
     Friend WithEvents cb_LocalActorSaveAlpha As System.Windows.Forms.CheckBox
-    Friend WithEvents GroupBox43 As System.Windows.Forms.GroupBox
-    Friend WithEvents cbTvMissingSpecials As System.Windows.Forms.CheckBox
     Friend WithEvents RefreshMissingEpisodesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cbMovTitleIgnArticle As System.Windows.Forms.CheckBox
     Friend WithEvents cbNoAltTitle As System.Windows.Forms.CheckBox
@@ -19214,7 +17896,6 @@ End Sub
     Friend WithEvents TableLayoutPanel29 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents lbl_movCountry As System.Windows.Forms.Label
     Friend WithEvents countrytxt As System.Windows.Forms.TextBox
-    Friend WithEvents cbSeasonFolderjpg As System.Windows.Forms.CheckBox
     Friend WithEvents cbExcludeMpaaRated As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox45 As System.Windows.Forms.GroupBox
     Friend WithEvents btnaltnfoeditor As System.Windows.Forms.Button
@@ -19245,7 +17926,6 @@ End Sub
     Friend WithEvents tvtpfanarttv As System.Windows.Forms.TabPage
     Friend WithEvents UcFanartTvTv1 As Media_Companion.ucFanartTvTv
     Friend WithEvents cbMultiMonitorEnable As System.Windows.Forms.CheckBox
-    Friend WithEvents cbTvDlFanartTvArt As System.Windows.Forms.CheckBox
     Friend WithEvents cbTvChgShowDLFanartTvArt As System.Windows.Forms.CheckBox
     Friend WithEvents Panel7 As System.Windows.Forms.Panel
     Friend WithEvents tvFanlistbox As System.Windows.Forms.ListBox
@@ -19264,7 +17944,6 @@ End Sub
     Friend WithEvents cbXbmcTmdbStarsFromImdb As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox46 As System.Windows.Forms.GroupBox
     Friend WithEvents btn_MovSepReset As System.Windows.Forms.Button
-    Friend WithEvents cbTvFanartTvFirst As System.Windows.Forms.CheckBox
     Friend WithEvents cmbxTMDBPreferredCertCountry As System.Windows.Forms.ComboBox
     Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents cbMovThousSeparator As System.Windows.Forms.CheckBox
@@ -19276,9 +17955,6 @@ End Sub
     Friend WithEvents rcmenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents TableLayoutPanel31 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents btnMovSelectPlot As System.Windows.Forms.Button
-    Friend WithEvents cbTvScrShtTVDBResize As System.Windows.Forms.CheckBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents cmbxTvXtraFanartQty As System.Windows.Forms.ComboBox
     Friend WithEvents ToolStripSeparator29 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator30 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ExportLibraryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -19322,15 +17998,12 @@ End Sub
     Friend WithEvents lbl_airbefore As System.Windows.Forms.Label
     Friend WithEvents lbl_airseason As System.Windows.Forms.Label
     Friend WithEvents tb_airseason As System.Windows.Forms.TextBox
-    Friend WithEvents cbXBMCTvdbRatingFallback As System.Windows.Forms.CheckBox
-    Friend WithEvents cbXBMCTvdbRatingImdb As System.Windows.Forms.CheckBox
     Friend WithEvents tp_HmPoster As System.Windows.Forms.TabPage
     Friend WithEvents TableLayoutPanel32 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Label38 As System.Windows.Forms.Label
     Friend WithEvents pbx_HmPosterSht As System.Windows.Forms.PictureBox
     Friend WithEvents btn_HmPosterShot As System.Windows.Forms.Button
     Friend WithEvents tb_HmPosterTime As System.Windows.Forms.TextBox
-    Friend WithEvents cb_TvMissingEpOffset As System.Windows.Forms.CheckBox
     Friend WithEvents Label65 As Label
     Friend WithEvents pbx_HmPoster As PictureBox
     Friend WithEvents clbx_MovieRoots As System.Windows.Forms.CheckedListBox

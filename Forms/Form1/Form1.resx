@@ -156,7 +156,7 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAA+
-        DwAAAk1TRnQBSQFMAgEBCQEAAcwBaAHMAWgBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DwAAAk1TRnQBSQFMAgEBCQEAAdQBaAHUAWgBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -5057,7 +5057,7 @@ Media Companion will keep these it the Title, and in the Foldername.</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAEgAR4BIAEeASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        CwAAAk1TRnQBSQFMAwEBAAEoAR4BKAEeASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
         AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
         AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
         AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
@@ -5174,35 +5174,6 @@ You would add the path:
 D:/Root/TV Show 1
 
 Adding shows using this method means that all shows must be added manually.</value>
-  </data>
-  <data name="Label138.Text" xml:space="preserve">
-    <value>If you have enabled the option to 'Save Actor
-Thumbs to the '.Actors' Folder' located in the
-general preferences then this gives you this
-additional option.
-When Scraping episodes from TVDB, the only
-actor thumbnails avaialble are those at IMDB,
-but compared to TVDB, these actor thumbs
-are low quality.
-
-This preference gives you the option to copy an
-actors thumb, if available, to the episodes actor
-folder, allowing the higher quality TVDB actor
-thumb to be used for the episode.</value>
-  </data>
-  <data name="Label139.Text" xml:space="preserve">
-    <value>Enabling the 'Quick Add' option will speed up the
-scraping of TV Shows by not downloading available
-Art. All show art can be scraped at any time by using
-the TV context menu item to 'Download missing art'</value>
-  </data>
-  <data name="Label140.Text" xml:space="preserve">
-    <value>Media Companion now offers the option to
-automatically rename episodes during
-scraping.
-Only use this option if you are sure that the
-media file is named according to supported
-MC naming conventions.</value>
   </data>
   <data name="btnHomeMovieSave.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

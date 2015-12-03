@@ -3975,6 +3975,15 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub TabControl2_Selecting(ByVal sender As Object, ByVal e As CancelEventArgs) Handles TabControl2.Selecting
+        Dim tab As String = TabControl2.SelectedTab.Text
+        If tab.ToLower = "movie preferences" Then
+            'Me.TabControl2.SelectedIndex = currentTabIndex
+            e.Cancel = True
+            OpenPreferences(2)
+        End If
+    End Sub
+
     Private Sub TabControl2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl2.SelectedIndexChanged
 
         mov_PreferencesDisplay()
@@ -4092,11 +4101,10 @@ Public Class Form1
             Call MovieSetsAndTagsSetup()
         ElseIf tab.ToLower = "fanart.tv"
             UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
-        ElseIf tab.ToLower = "movie preferences" Then
-            'Me.TabControl2.SelectedIndex = currentTabIndex
-            'OpenPreferences(2)
-            Call mov_PreferencesSetup()
-
+        'ElseIf tab.ToLower = "movie preferences" Then
+        '    Me.TabControl2.SelectedIndex = currentTabIndex
+        '    OpenPreferences(2)
+            'Call mov_PreferencesSetup()
         ElseIf tab.ToLower = "table" Then
             currentTabIndex = TabControl2.SelectedIndex
             Call mov_TableSetup()
@@ -5077,6 +5085,13 @@ Public Class Form1
         Dim Episode As Media_Companion.TvEpisode = ep_SelectedCurrently()
     End Sub
 
+    Private Sub TabControl3_Selecting(ByVal sender As Object, ByVal e As CancelEventArgs) Handles TabControl3.Selecting 
+        'Dim tab As String = TabControl3.SelectedTab.Text
+        If TabControl3.SelectedTab.Text = "TV Preferences" Then
+            e.Cancel = True
+            OpenPreferences(3)
+        End If
+    End Sub
     Private Sub TabControl3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl3.SelectedIndexChanged
         
         Try
@@ -5104,11 +5119,11 @@ Public Class Form1
                         Exit Sub
                     End If
                 End If
-            ElseIf tab = "TV Preferences" Then
-                'TabControl3.SelectedIndex = tvCurrentTabIndex
-                'OpenPreferences(3)
-                Call tv_PreferencesSetup()
-                Exit Sub
+            'ElseIf tab = "TV Preferences" Then
+            '    TabControl3.SelectedIndex = tvCurrentTabIndex
+            '    OpenPreferences(3)
+            '    'Call tv_PreferencesSetup()
+            '    Exit Sub
             ElseIf tab.Tolower = "folders" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 TabControl3.SelectedIndex = tvCurrentTabIndex
@@ -5227,9 +5242,10 @@ Public Class Form1
     End Sub
 
     Public Sub util_LanguageListLoad()
-        ListBox12.Items.Add("Working...")
-        ListBox12.Invalidate()
+        'ListBox12.Items.Add("Working...")
+        'ListBox12.Invalidate()
         'Me.Refresh()
+        languageList.Clear()
         Application.DoEvents()
 
         System.Threading.Thread.Sleep(500)
@@ -5243,11 +5259,11 @@ Public Class Form1
             languageList.Add(Lang)
         Next
 
-        ListBox12.Items.Clear()
+        'ListBox12.Items.Clear()
         ListBox1.Items.Clear()
 
         For Each lan In languageList
-            ListBox12.Items.Add(lan.Language.Value)
+            'ListBox12.Items.Add(lan.Language.Value)
             ListBox1.Items.Add(lan.Language.Value)
         Next
     End Sub
@@ -11440,11 +11456,18 @@ End Sub
         End If
     End Sub
 
+    Private Sub TabLevel1_Selecting(sender As System.Object, e As CancelEventArgs) Handles TabLevel1.Selecting
+        If TabLevel1.SelectedTab.Text.ToLower = "general preferences" Then
+            e.Cancel = True
+            OpenPreferences(1)
+        End If
+    End Sub
+
     Private Sub TabLevel1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
 
         Select Case TabLevel1.SelectedTab.Text.ToLower
-            Case "general preferences"
-                Call General_PreferencesSetup()
+            'Case "general preferences"
+                'Call General_PreferencesSetup()
             Case "config.xml"
                 RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\settings\config.xml"
             Case "moviecache" 
@@ -12334,90 +12357,90 @@ End Sub
         btnGeneralPrefsSaveChanges.Enabled = False
     End Sub
 
-    Private Sub tv_PreferencesSetup()
-        prefsload = True
-        ComboBox_tv_EpisodeRename.Items.Clear()
-        For Each Regex In Pref.tv_RegexRename
-            ComboBox_tv_EpisodeRename.Items.Add(Regex)
-        Next
+    'Private Sub tv_PreferencesSetup()
+    '    prefsload = True
+    '    ComboBox_tv_EpisodeRename.Items.Clear()
+    '    For Each Regex In Pref.tv_RegexRename
+    '        ComboBox_tv_EpisodeRename.Items.Add(Regex)
+    '    Next
 
-        ListBox_tv_RegexScrape.Items.Clear()
-        For Each regexc In Pref.tv_RegexScraper
-            ListBox_tv_RegexScrape.Items.Add(regexc)
-        Next
+    '    ListBox_tv_RegexScrape.Items.Clear()
+    '    For Each regexc In Pref.tv_RegexScraper
+    '        ListBox_tv_RegexScrape.Items.Add(regexc)
+    '    Next
 
-        ListBox_tv_RegexRename.Items.Clear()
-        For Each regexc In Pref.tv_RegexRename
-            ListBox_tv_RegexRename.Items.Add(regexc)
-        Next
+    '    ListBox_tv_RegexRename.Items.Clear()
+    '    For Each regexc In Pref.tv_RegexRename
+    '        ListBox_tv_RegexRename.Items.Add(regexc)
+    '    Next
 
-        ListBox12.Items.Clear()
-        ListBox12.Items.Add(Pref.TvdbLanguage)
-        If ListBox12.Items.Count <> 0 Then
-            ListBox12.SelectedIndex = 0
-        End If
+    '    ListBox12.Items.Clear()
+    '    ListBox12.Items.Add(Pref.TvdbLanguage)
+    '    If ListBox12.Items.Count <> 0 Then
+    '        ListBox12.SelectedIndex = 0
+    '    End If
 
-        ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
-        ComboBox_tv_EpisodeRename.SelectedIndex     = If(Pref.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Pref.tvrename, 0)
-        CheckBox17                      .Checked    = Pref.disabletvlogs
-        CheckBox20                      .Checked    = Pref.enabletvhdtags
-        CheckBox_tv_EpisodeRenameCase   .Checked    = Pref.eprenamelowercase
-        CheckBox_tv_EpisodeRenameAuto   .Checked    = Pref.autorenameepisodes
-        cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
-        cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize 
-        cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
-        CheckBox34                      .Checked    = Pref.copytvactorthumbs
-        cbTvDlPosterArt                 .Checked    = Pref.tvdlposter
-        cbTvDlFanart                    .Checked    = Pref.tvdlfanart
-        cbTvDlSeasonArt                 .Checked    = Pref.tvdlseasonthumbs
-        cbTvDlXtraFanart                .Checked    = Pref.dlTVxtrafanart
-        cbTvDlFanartTvArt               .Checked    = Pref.TvDlFanartTvArt
-        cbTvFanartTvFirst               .Checked    = Pref.TvFanartTvFirst
-        cb_TvFolderJpg                  .Checked    = Pref.tvfolderjpg
-        cbSeasonFolderjpg               .Checked    = Pref.seasonfolderjpg 
-        CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Pref.tvshow_useXBMC_Scraper
-        cbTvMissingSpecials             .Checked    = Pref.ignoreMissingSpecials
-        cb_TvMissingEpOffset            .Checked    = Pref.TvMissingEpOffset
-        AutoScrnShtDelay                .Text       = ScrShtDelay
-        rbXBMCTvdbDVDOrder              .Checked    = Pref.XBMCTVDbDvdOrder
-        rbXBMCTvdbAbsoluteNumber        .Checked    = Pref.XBMCTVDbAbsoluteNumber
-        cbXBMCTvdbFanart                .Checked    = Pref.XBMCTVDbFanart
-        cbXBMCTvdbPosters               .Checked    = Pref.XBMCTVDbPoster
-        ComboBox_TVDB_Language.Items.Clear()
-        For Each item In Pref.XBMCTVDbLanguageLB
-            ComboBox_TVDB_Language.Items.Add(item)
-        Next
-        ComboBox_TVDB_Language          .Text       = Pref.XBMCTVDbLanguage
-        cbXBMCTvdbRatingImdb            .Checked    = If(Pref.XBMCTVDbRatings.ToLower = "imdb", True, False)
-        cbXBMCTvdbRatingFallback        .Checked    = Pref.XBMCTVDbfallback
-        cbXBMCTvdbRatingFallback        .Enabled    = cbXBMCTvdbRatingImdb.Checked
+    '    ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
+    '    ComboBox_tv_EpisodeRename.SelectedIndex     = If(Pref.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Pref.tvrename, 0)
+    '    CheckBox17                      .Checked    = Pref.disabletvlogs
+    '    CheckBox20                      .Checked    = Pref.enabletvhdtags
+    '    CheckBox_tv_EpisodeRenameCase   .Checked    = Pref.eprenamelowercase
+    '    CheckBox_tv_EpisodeRenameAuto   .Checked    = Pref.autorenameepisodes
+    '    cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
+    '    cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize 
+    '    cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
+    '    CheckBox34                      .Checked    = Pref.copytvactorthumbs
+    '    cbTvDlPosterArt                 .Checked    = Pref.tvdlposter
+    '    cbTvDlFanart                    .Checked    = Pref.tvdlfanart
+    '    cbTvDlSeasonArt                 .Checked    = Pref.tvdlseasonthumbs
+    '    cbTvDlXtraFanart                .Checked    = Pref.dlTVxtrafanart
+    '    cbTvDlFanartTvArt               .Checked    = Pref.TvDlFanartTvArt
+    '    cbTvFanartTvFirst               .Checked    = Pref.TvFanartTvFirst
+    '    cb_TvFolderJpg                  .Checked    = Pref.tvfolderjpg
+    '    cbSeasonFolderjpg               .Checked    = Pref.seasonfolderjpg 
+    '    CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Pref.tvshow_useXBMC_Scraper
+    '    cbTvMissingSpecials             .Checked    = Pref.ignoreMissingSpecials
+    '    cb_TvMissingEpOffset            .Checked    = Pref.TvMissingEpOffset
+    '    AutoScrnShtDelay                .Text       = ScrShtDelay
+    '    rbXBMCTvdbDVDOrder              .Checked    = Pref.XBMCTVDbDvdOrder
+    '    rbXBMCTvdbAbsoluteNumber        .Checked    = Pref.XBMCTVDbAbsoluteNumber
+    '    cbXBMCTvdbFanart                .Checked    = Pref.XBMCTVDbFanart
+    '    cbXBMCTvdbPosters               .Checked    = Pref.XBMCTVDbPoster
+    '    ComboBox_TVDB_Language.Items.Clear()
+    '    For Each item In Pref.XBMCTVDbLanguageLB
+    '        ComboBox_TVDB_Language.Items.Add(item)
+    '    Next
+    '    ComboBox_TVDB_Language          .Text       = Pref.XBMCTVDbLanguage
+    '    cbXBMCTvdbRatingImdb            .Checked    = If(Pref.XBMCTVDbRatings.ToLower = "imdb", True, False)
+    '    cbXBMCTvdbRatingFallback        .Checked    = Pref.XBMCTVDbfallback
+    '    cbXBMCTvdbRatingFallback        .Enabled    = cbXBMCTvdbRatingImdb.Checked
 
-        cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Pref.TvXtraFanartQty.ToString)
+    '    cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Pref.TvXtraFanartQty.ToString)
 
-        Select Case Pref.seasonall
-            Case "none"
-                RadioButton41.Checked = True
-            Case "poster"
-                RadioButton40.Checked = True
-            Case "wide"
-                RadioButton39.Checked = True
-        End Select
+    '    Select Case Pref.seasonall
+    '        Case "none"
+    '            RadioButton41.Checked = True
+    '        Case "poster"
+    '            RadioButton40.Checked = True
+    '        Case "wide"
+    '            RadioButton39.Checked = True
+    '    End Select
 
-        If Pref.sortorder = "dvd" Then
-            RadioButton42.Checked = True
-        Else
-            RadioButton43.Checked = True
-        End If
+    '    If Pref.sortorder = "dvd" Then
+    '        RadioButton42.Checked = True
+    '    Else
+    '        RadioButton43.Checked = True
+    '    End If
 
-        If Pref.postertype = "poster" Then
-            posterbtn.Checked = True
-        Else
-            bannerbtn.Checked = True
-        End If
-        prefsload = False
-        tvprefschanged = False
-        btnTVPrefSaveChanges.Enabled = False
-    End Sub
+    '    If Pref.postertype = "poster" Then
+    '        posterbtn.Checked = True
+    '    Else
+    '        bannerbtn.Checked = True
+    '    End If
+    '    prefsload = False
+    '    tvprefschanged = False
+    '    btnTVPrefSaveChanges.Enabled = False
+    'End Sub
 
     Private Sub mov_PreferencesSetup()
         prefsload = True
@@ -13440,216 +13463,216 @@ End Sub
 
 #Region "Tv Preferences"
 
-    Private Sub TabPage24_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage24.Leave
-        Try
-            If tvprefschanged = True Then
-                Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If tempint = DialogResult.Yes Then
-                    'If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
-                    btnTVPrefSaveChanges.PerformClick()
-                    'Call util_RegexSave()
-                    'Pref.ConfigSave()
-                    'MsgBox("Changes Saved")
-                Else
+    'Private Sub TabPage24_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage24.Leave
+    '    Try
+    '        If tvprefschanged = True Then
+    '            Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '            If tempint = DialogResult.Yes Then
+    '                'If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
+    '                btnTVPrefSaveChanges.PerformClick()
+    '                'Call util_RegexSave()
+    '                'Pref.ConfigSave()
+    '                'MsgBox("Changes Saved")
+    '            Else
 
-                    Me.util_ConfigLoad(True)
-                    Call util_RegexLoad()
-                End If
-                tvprefschanged = False
-                btnTVPrefSaveChanges.Enabled = False
-                XbmcTvdbScraperChanged = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    '                Me.util_ConfigLoad(True)
+    '                Call util_RegexLoad()
+    '            End If
+    '            tvprefschanged = False
+    '            btnTVPrefSaveChanges.Enabled = False
+    '            XbmcTvdbScraperChanged = False
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVPrefSaveChanges.Click
-        Try
-            If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
-            mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
-            Pref.ConfigSave()
-            Call util_RegexSave()
-            ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Pref.tv_RegexRename
-                ComboBox_tv_EpisodeRename.Items.Add(Regex)
-            Next
-            'MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
-            tvprefschanged = False
-            btnTVPrefSaveChanges.Enabled = False
-            XbmcTvdbScraperChanged = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
+    '        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+    '        Pref.ConfigSave()
+    '        Call util_RegexSave()
+    '        ComboBox_tv_EpisodeRename.Items.Clear()
+    '        For Each Regex In Pref.tv_RegexRename
+    '            ComboBox_tv_EpisodeRename.Items.Add(Regex)
+    '        Next
+    '        'MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
+    '        tvprefschanged = False
+    '        btnTVPrefSaveChanges.Enabled = False
+    '        XbmcTvdbScraperChanged = False
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
 #Region "General/Scraper"
 
 'XBMC TVDB Scraper options
-    Private Sub rbXBMCTvdbDVDOrder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbXBMCTvdbDVDOrder.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.XBMCTVDbDvdOrder = rbXBMCTvdbDVDOrder.Checked
-        Pref.XBMCTVDbAbsoluteNumber = Not rbXBMCTvdbDVDOrder.Checked
-        tvprefschanged = True
-        XbmcTvdbScraperChanged = True
-        btnTVPrefSaveChanges.Enabled = True
-        'Try
-        '    If rbXBMCTvdbDVDOrder.Checked = True Then
-        '        Save_XBMC_TVDB_Scraper_Config("dvdorder", "true")
-        '        Save_XBMC_TVDB_Scraper_Config("absolutenumber", "false")
-        '    Else
-        '        Save_XBMC_TVDB_Scraper_Config("dvdorder", "false")
-        '        Save_XBMC_TVDB_Scraper_Config("absolutenumber", "true")
-        '    End If
-        '    'Read_XBMC_TVDB_Scraper_Config()
-        '    tvprefschanged = True
-        '    btnTVPrefSaveChanges.Enabled = True
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
-    End Sub
+'    Private Sub rbXBMCTvdbDVDOrder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Pref.XBMCTVDbDvdOrder = rbXBMCTvdbDVDOrder.Checked
+'        Pref.XBMCTVDbAbsoluteNumber = Not rbXBMCTvdbDVDOrder.Checked
+'        tvprefschanged = True
+'        XbmcTvdbScraperChanged = True
+'        btnTVPrefSaveChanges.Enabled = True
+'        'Try
+'        '    If rbXBMCTvdbDVDOrder.Checked = True Then
+'        '        Save_XBMC_TVDB_Scraper_Config("dvdorder", "true")
+'        '        Save_XBMC_TVDB_Scraper_Config("absolutenumber", "false")
+'        '    Else
+'        '        Save_XBMC_TVDB_Scraper_Config("dvdorder", "false")
+'        '        Save_XBMC_TVDB_Scraper_Config("absolutenumber", "true")
+'        '    End If
+'        '    'Read_XBMC_TVDB_Scraper_Config()
+'        '    tvprefschanged = True
+'        '    btnTVPrefSaveChanges.Enabled = True
+'        'Catch ex As Exception
+'        '    ExceptionHandler.LogError(ex)
+'        'End Try
+'    End Sub
 
-    Private Sub cbXBMCTvdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbFanart.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            Pref.XBMCTVDbFanart = cbXBMCTvdbFanart.Checked
-            'If cbXBMCTvdbFanart.Checked = True Then
-            '    Save_XBMC_TVDB_Scraper_Config("fanart", "true")
-            'Else
-            '    Save_XBMC_TVDB_Scraper_Config("fanart", "false")
-            'End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-            XbmcTvdbScraperChanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbXBMCTvdbFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            Pref.XBMCTVDbFanart = cbXBMCTvdbFanart.Checked
+'            'If cbXBMCTvdbFanart.Checked = True Then
+'            '    Save_XBMC_TVDB_Scraper_Config("fanart", "true")
+'            'Else
+'            '    Save_XBMC_TVDB_Scraper_Config("fanart", "false")
+'            'End If
+'            'Read_XBMC_TVDB_Scraper_Config()
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'            XbmcTvdbScraperChanged = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbXBMCTvdbPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbPosters.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            Pref.XBMCTVDbPoster = cbXBMCTvdbPosters.Checked
-            'If cbXBMCTvdbPosters.Checked = True Then
-            '    Save_XBMC_TVDB_Scraper_Config("posters", "true")
-            'Else
-            '    Save_XBMC_TVDB_Scraper_Config("posters", "false")
-            'End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-            XbmcTvdbScraperChanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbXBMCTvdbPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            Pref.XBMCTVDbPoster = cbXBMCTvdbPosters.Checked
+'            'If cbXBMCTvdbPosters.Checked = True Then
+'            '    Save_XBMC_TVDB_Scraper_Config("posters", "true")
+'            'Else
+'            '    Save_XBMC_TVDB_Scraper_Config("posters", "false")
+'            'End If
+'            'Read_XBMC_TVDB_Scraper_Config()
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'            XbmcTvdbScraperChanged = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub ComboBox_TVDB_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_TVDB_Language.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Try
-            Pref.XBMCTVDbLanguage = ComboBox_TVDB_Language.Text
-            'Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
-            'Read_XBMC_TVDB_Scraper_Config()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-            XbmcTvdbScraperChanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub ComboBox_TVDB_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            Pref.XBMCTVDbLanguage = ComboBox_TVDB_Language.Text
+'            'Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
+'            'Read_XBMC_TVDB_Scraper_Config()
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'            XbmcTvdbScraperChanged = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbXBMCTvdbRatingImdb_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbRatingImdb.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            cbXBMCTvdbRatingFallback.Enabled = cbXBMCTvdbRatingImdb.Checked
-            If cbXBMCTvdbRatingImdb.Checked = True Then
-                Pref.XBMCTVDbRatings = "IMDb"
-                'Save_XBMC_TVDB_Scraper_Config("ratings", "IMDb")
-                'cbXBMCTvdbRatingFallback.Enabled = True
-            Else
-                Pref.XBMCTVDbRatings = "TheTVDB"
-                'Save_XBMC_TVDB_Scraper_Config("ratings", "TheTVDB")
-                'cbXBMCTvdbRatingFallback.Enabled = False
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-            XbmcTvdbScraperChanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbXBMCTvdbRatingImdb_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            cbXBMCTvdbRatingFallback.Enabled = cbXBMCTvdbRatingImdb.Checked
+'            If cbXBMCTvdbRatingImdb.Checked = True Then
+'                Pref.XBMCTVDbRatings = "IMDb"
+'                'Save_XBMC_TVDB_Scraper_Config("ratings", "IMDb")
+'                'cbXBMCTvdbRatingFallback.Enabled = True
+'            Else
+'                Pref.XBMCTVDbRatings = "TheTVDB"
+'                'Save_XBMC_TVDB_Scraper_Config("ratings", "TheTVDB")
+'                'cbXBMCTvdbRatingFallback.Enabled = False
+'            End If
+'            'Read_XBMC_TVDB_Scraper_Config()
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'            XbmcTvdbScraperChanged = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub cbXBMCTvdbRatingFallback_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXBMCTvdbRatingFallback.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            Pref.XBMCTVDbfallback = cbXBMCTvdbRatingFallback.Checked
-            'If cbXBMCTvdbRatingFallback.Checked = True Then
-            '    Save_XBMC_TVDB_Scraper_Config("fallback", "true")
-            'Else
-            '    Save_XBMC_TVDB_Scraper_Config("fallback", "false")
-            'End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-            XbmcTvdbScraperChanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub cbXBMCTvdbRatingFallback_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            Pref.XBMCTVDbfallback = cbXBMCTvdbRatingFallback.Checked
+'            'If cbXBMCTvdbRatingFallback.Checked = True Then
+'            '    Save_XBMC_TVDB_Scraper_Config("fallback", "true")
+'            'Else
+'            '    Save_XBMC_TVDB_Scraper_Config("fallback", "false")
+'            'End If
+'            'Read_XBMC_TVDB_Scraper_Config()
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'            XbmcTvdbScraperChanged = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-'Endof - XBMC TVDB Scraper options
+''Endof - XBMC TVDB Scraper options
 
-    Private Sub Button91_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button91.Click
-        Try
-            ListBox12.Items.Clear()
-            languageList.Clear()
-            util_LanguageListLoad()
+'    Private Sub Button91_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            ListBox12.Items.Clear()
+'            languageList.Clear()
+'            util_LanguageListLoad()
 
-            Try
-                ListBox12.SelectedItem = Pref.TvdbLanguage
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            Try
+'                ListBox12.SelectedItem = Pref.TvdbLanguage
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub ListBox12_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox12.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Try
-            For Each lan In languageList
-                If lan.Language.Value = ListBox12.SelectedItem Then
-                    Pref.TvdbLanguage = lan.Language.Value
-                    Pref.TvdbLanguageCode = lan.Abbreviation.Value
-                    Exit For
-                End If
-            Next
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub ListBox12_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            For Each lan In languageList
+'                If lan.Language.Value = ListBox12.SelectedItem Then
+'                    Pref.TvdbLanguage = lan.Language.Value
+'                    Pref.TvdbLanguageCode = lan.Abbreviation.Value
+'                    Exit For
+'                End If
+'            Next
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton42.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            If RadioButton42.Checked = True Then
-                Pref.sortorder = "dvd"
-            Else
-                Pref.sortorder = "default"
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        If prefsload Then Exit Sub
+'        Try
+'            If RadioButton42.Checked = True Then
+'                Pref.sortorder = "dvd"
+'            Else
+'                Pref.sortorder = "default"
+'            End If
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
     'Private Sub RadioButton43_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton43.CheckedChanged
     '    Try
@@ -13665,640 +13688,640 @@ End Sub
     '    End Try
     'End Sub
 
-    Private Sub CheckBox34_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox34.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            If CheckBox34.Checked = True Then
-                Pref.copytvactorthumbs = True
-            Else
-                Pref.copytvactorthumbs = False
-            End If
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox34_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Try
+    '        If CheckBox34.Checked = True Then
+    '            Pref.copytvactorthumbs = True
+    '        Else
+    '            Pref.copytvactorthumbs = False
+    '        End If
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_TVDB_Scraper.CheckedChanged
-        Try
-            If CheckBox_Use_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
-                Pref.tvshow_useXBMC_Scraper = True
-                'GroupBox2.Enabled = False
-                'GroupBox3.Enabled = False
-                'GroupBox5.Enabled = False
-                GroupBox22.Visible = False
-                GroupBox22.SendToBack()
-                GroupBox_TVDB_Scraper_Preferences.Visible = True
-                GroupBox_TVDB_Scraper_Preferences.BringToFront()
-            Else
-                Pref.tvshow_useXBMC_Scraper = False
-                'GroupBox2.Enabled = True
-                'GroupBox3.Enabled = True
-                'GroupBox5.Enabled = True
-                GroupBox22.Visible = True
-                GroupBox22.BringToFront()
-                GroupBox_TVDB_Scraper_Preferences.Visible = False
-                GroupBox_TVDB_Scraper_Preferences.SendToBack()
-            End If
-            'Read_XBMC_TVDB_Scraper_Config()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    Try
+    '        If CheckBox_Use_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
+    '            Pref.tvshow_useXBMC_Scraper = True
+    '            'GroupBox2.Enabled = False
+    '            'GroupBox3.Enabled = False
+    '            'GroupBox5.Enabled = False
+    '            GroupBox22.Visible = False
+    '            GroupBox22.SendToBack()
+    '            GroupBox_TVDB_Scraper_Preferences.Visible = True
+    '            GroupBox_TVDB_Scraper_Preferences.BringToFront()
+    '        Else
+    '            Pref.tvshow_useXBMC_Scraper = False
+    '            'GroupBox2.Enabled = True
+    '            'GroupBox3.Enabled = True
+    '            'GroupBox5.Enabled = True
+    '            GroupBox22.Visible = True
+    '            GroupBox22.BringToFront()
+    '            GroupBox_TVDB_Scraper_Preferences.Visible = False
+    '            GroupBox_TVDB_Scraper_Preferences.SendToBack()
+    '        End If
+    '        'Read_XBMC_TVDB_Scraper_Config()
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
 'TvShow Auto Scrape Options
-    Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlPosterArt.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.tvdlposter = cbTvDlPosterArt.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.tvdlposter = cbTvDlPosterArt.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTvDlFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanart.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.tvdlfanart = cbTvDlFanart.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvDlFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.tvdlfanart = cbTvDlFanart.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTvDlSeasonArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlSeasonArt.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvDlSeasonArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTvDlXtraFanart.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.dlTVxtrafanart = cbTvDlXtraFanart.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.dlTVxtrafanart = cbTvDlXtraFanart.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cmbxTvXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxTvXtraFanartQty.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Dim newvalue As String = cmbxTvXtraFanartQty.SelectedItem
-        Pref.TvXtraFanartQty = newvalue.toint
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cmbxTvXtraFanartQty_SelectedIndexChanged(sender As Object, e As EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Dim newvalue As String = cmbxTvXtraFanartQty.SelectedItem
+    '    Pref.TvXtraFanartQty = newvalue.toint
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTvDlFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlFanartTvArt.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub   'TvFanartTvFirst
+    'Private Sub cbTvDlFanartTvArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.TvDlFanartTvArt = cbTvDlFanartTvArt.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub   'TvFanartTvFirst
 
-    Private Sub cbTvFanartTvFirst_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvFanartTvFirst.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.TvFanartTvFirst = cbTvFanartTvFirst.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub   'TvFanartTvFirst
+    'Private Sub cbTvFanartTvFirst_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.TvFanartTvFirst = cbTvFanartTvFirst.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub   'TvFanartTvFirst
 
-    Private Sub RadioButton41_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton41.CheckedChanged
-        If prefsload Then Exit Sub
-        If RadioButton41.Checked = True Then Pref.seasonall = "none"
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub RadioButton41_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If RadioButton41.Checked = True Then Pref.seasonall = "none"
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub RadioButton40_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton40.CheckedChanged
-        If prefsload Then Exit Sub
-        If RadioButton40.Checked = True Then Pref.seasonall = "poster"
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub RadioButton40_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If RadioButton40.Checked = True Then Pref.seasonall = "poster"
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub RadioButton39_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton39.CheckedChanged
-        If prefsload Then Exit Sub
-        If RadioButton39.Checked = True Then Pref.seasonall = "wide"
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub RadioButton39_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If RadioButton39.Checked = True Then Pref.seasonall = "wide"
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub posterbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles posterbtn.CheckedChanged
-        If prefsload Then Exit Sub
-        If posterbtn.Checked = True Then Pref.postertype = "poster"
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub posterbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If posterbtn.Checked = True Then Pref.postertype = "poster"
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub bannerbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles bannerbtn.CheckedChanged
-        If prefsload Then Exit Sub
-        If bannerbtn.Checked = True Then Pref.postertype = "banner"
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub bannerbtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If bannerbtn.Checked = True Then Pref.postertype = "banner"
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cb_TvFolderJpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvFolderJpg.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.tvfolderjpg = cb_TvFolderJpg.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cb_TvFolderJpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.tvfolderjpg = cb_TvFolderJpg.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbSeasonFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbSeasonFolderjpg.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.seasonfolderjpg = cbSeasonFolderjpg.checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbSeasonFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.seasonfolderjpg = cbSeasonFolderjpg.checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
 'End Of - TvShow Auto Scrape Options
 
-    Private Sub cbTvQuickAddShow_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvQuickAddShow.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.tvshowautoquick =cbTvQuickAddShow.Checked 
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvQuickAddShow_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.tvshowautoquick =cbTvQuickAddShow.Checked 
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.enabletvhdtags =CheckBox20.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.enabletvhdtags =CheckBox20.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTvAutoScreenShot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvAutoScreenShot.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.autoepisodescreenshot = cbTvAutoScreenShot.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvAutoScreenShot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.autoepisodescreenshot = cbTvAutoScreenShot.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTvScrShtTVDBResize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvScrShtTVDBResize.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.tvscrnshtTVDBResize = cbTvScrShtTVDBResize.checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvScrShtTVDBResize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.tvscrnshtTVDBResize = cbTvScrShtTVDBResize.checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) Handles AutoScrnShtDelay.KeyPress
-            Try
-                If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-                    If AutoScrnShtDelay.Text <> "" Then
-                        e.Handled = True
-                    Else
-                        MsgBox("Please Enter at least 1")
-                        AutoScrnShtDelay.Text = "10"
-                    End If
-                End If
-                If AutoScrnShtDelay.Text = "" Then
-                    MsgBox("Please enter a numerical Value that is 1 or more")
-                    AutoScrnShtDelay.Text = "10"
-                    Exit Sub
-                End If
-                If Not IsNumeric(AutoScrnShtDelay.Text) Then
-                    MsgBox("Please enter a numerical Value that is 1 or more")
-                    AutoScrnShtDelay.Text = "10"
-                    Exit Sub
-                End If
-                'Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
+    'Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) 
+    '        Try
+    '            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+    '                If AutoScrnShtDelay.Text <> "" Then
+    '                    e.Handled = True
+    '                Else
+    '                    MsgBox("Please Enter at least 1")
+    '                    AutoScrnShtDelay.Text = "10"
+    '                End If
+    '            End If
+    '            If AutoScrnShtDelay.Text = "" Then
+    '                MsgBox("Please enter a numerical Value that is 1 or more")
+    '                AutoScrnShtDelay.Text = "10"
+    '                Exit Sub
+    '            End If
+    '            If Not IsNumeric(AutoScrnShtDelay.Text) Then
+    '                MsgBox("Please enter a numerical Value that is 1 or more")
+    '                AutoScrnShtDelay.Text = "10"
+    '                Exit Sub
+    '            End If
+    '            'Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
+    '        Catch ex As Exception
+    '            ExceptionHandler.LogError(ex)
+    '        End Try
 
-    End Sub
+    'End Sub
 
-    Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AutoScrnShtDelay.TextChanged
-        If prefsload Then Exit Sub
-        If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
-            Pref.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
-        Else
-            Pref.ScrShtDelay = 10
-            AutoScrnShtDelay.Text = "10"
-            MsgBox("Please enter a numerical Value that is 1 or more")
-        End If
-        If tvprefschanged = False Then
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        End If
-    End Sub
+    'Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
+    '        Pref.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
+    '    Else
+    '        Pref.ScrShtDelay = 10
+    '        AutoScrnShtDelay.Text = "10"
+    '        MsgBox("Please enter a numerical Value that is 1 or more")
+    '    End If
+    '    If tvprefschanged = False Then
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    End If
+    'End Sub
 
-    Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.disabletvlogs = CheckBox17.Checked
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.disabletvlogs = CheckBox17.Checked
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub ComboBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox8.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Try
-            Pref.TvdbActorScrape = ComboBox8.SelectedIndex.ToString
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ComboBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Try
+    '        Pref.TvdbActorScrape = ComboBox8.SelectedIndex.ToString
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
-        If prefsload Then Exit Sub
-        Try
-            If Renamer.setRenamePref(Pref.tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), Pref.tv_RegexScraper) Then
-                Pref.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
-                tvprefschanged = True
-                btnTVPrefSaveChanges.Enabled = True
-            Else
-                MsgBox("Format does not match scraper regex" & vbCrLf & "Please check")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Try
+    '        If Renamer.setRenamePref(Pref.tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), Pref.tv_RegexScraper) Then
+    '            Pref.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
+    '            tvprefschanged = True
+    '            btnTVPrefSaveChanges.Enabled = True
+    '        Else
+    '            MsgBox("Format does not match scraper regex" & vbCrLf & "Please check")
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub CheckBox_tv_EpisodeRenameAuto_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameAuto.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.autorenameepisodes = CheckBox_tv_EpisodeRenameAuto.Checked 
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub CheckBox_tv_EpisodeRenameAuto_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.autorenameepisodes = CheckBox_tv_EpisodeRenameAuto.Checked 
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub CheckBox_tv_EpisodeRenameCase_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameCase.CheckedChanged
-        If prefsload Then Exit Sub
-        Try
-            If CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked Then
-                Pref.eprenamelowercase = True
-            Else
-                Pref.eprenamelowercase = False
-            End If
-            Renamer.applySeasonEpisodeCase()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub CheckBox_tv_EpisodeRenameCase_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Try
+    '        If CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked Then
+    '            Pref.eprenamelowercase = True
+    '        Else
+    '            Pref.eprenamelowercase = False
+    '        End If
+    '        Renamer.applySeasonEpisodeCase()
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cb_TvMissingEpOffset_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_TvMissingEpOffset.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.TvMissingEpOffset = cb_TvMissingEpOffset.Checked 
-        tvprefschanged = True
-        btnTVPrefSaveChanges.Enabled = True
-    End Sub
+    'Private Sub cb_TvMissingEpOffset_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    If prefsload Then Exit Sub
+    '    Pref.TvMissingEpOffset = cb_TvMissingEpOffset.Checked 
+    '    tvprefschanged = True
+    '    btnTVPrefSaveChanges.Enabled = True
+    'End Sub
 
-    Private Sub cbTv_fixNFOid_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbTv_fixNFOid.CheckedChanged
-        Pref.fixnfoid =cbTv_fixNFOid.Checked 
-    End Sub
+    'Private Sub cbTv_fixNFOid_CheckedChanged(sender As System.Object, e As System.EventArgs) 
+    '    Pref.fixnfoid =cbTv_fixNFOid.Checked 
+    'End Sub
 
 #End Region   'TV Preferences -> General/Scraper Tab
 
 #Region "Regex Tab"
 
 'Scrape
-    Private Sub ListBox_tv_RegexScrape_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox_tv_RegexScrape.SelectedIndexChanged
-        Try
-            If ListBox_tv_RegexScrape.SelectedItem <> Nothing Then
-                TextBox_tv_RegexScrape_Edit.Text = ListBox_tv_RegexScrape.SelectedItem
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub ListBox_tv_RegexScrape_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If ListBox_tv_RegexScrape.SelectedItem <> Nothing Then
+'                TextBox_tv_RegexScrape_Edit.Text = ListBox_tv_RegexScrape.SelectedItem
+'            End If
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_MoveUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_MoveUp.Click
-        'up
-        Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox_tv_RegexScrape.SelectedIndex <> 0 Then
-                mSelectedIndex = Me.ListBox_tv_RegexScrape.SelectedIndex
-                mOtherIndex = mSelectedIndex - 1
-                ListBox_tv_RegexScrape.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexScrape.Items(mOtherIndex))
-                ListBox_tv_RegexScrape.Items.RemoveAt(mOtherIndex)
-            End If
-            Pref.tv_RegexScraper.Clear()
-            For Each item In ListBox_tv_RegexScrape.Items
-                Pref.tv_RegexScraper.Add(item)
-            Next
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexScrape_MoveUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        'up
+'        Try
+'            Dim mSelectedIndex, mOtherIndex As Integer
+'            If Me.ListBox_tv_RegexScrape.SelectedIndex <> 0 Then
+'                mSelectedIndex = Me.ListBox_tv_RegexScrape.SelectedIndex
+'                mOtherIndex = mSelectedIndex - 1
+'                ListBox_tv_RegexScrape.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexScrape.Items(mOtherIndex))
+'                ListBox_tv_RegexScrape.Items.RemoveAt(mOtherIndex)
+'            End If
+'            Pref.tv_RegexScraper.Clear()
+'            For Each item In ListBox_tv_RegexScrape.Items
+'                Pref.tv_RegexScraper.Add(item)
+'            Next
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_MoveDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_MoveDown.Click
-        'down
-        Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox_tv_RegexScrape.SelectedIndex <> Me.ListBox_tv_RegexScrape.Items.Count - 1 Then
-                mSelectedIndex = Me.ListBox_tv_RegexScrape.SelectedIndex
-                mOtherIndex = mSelectedIndex + 1
-                ListBox_tv_RegexScrape.Items.Insert(mSelectedIndex, ListBox_tv_RegexScrape.Items(mOtherIndex))
-                ListBox_tv_RegexScrape.Items.RemoveAt(mOtherIndex + 1)
-            End If
-            Pref.tv_RegexScraper.Clear()
-            For Each item In ListBox_tv_RegexScrape.Items
-                Pref.tv_RegexScraper.Add(item)
-            Next
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexScrape_MoveDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        'down
+'        Try
+'            Dim mSelectedIndex, mOtherIndex As Integer
+'            If Me.ListBox_tv_RegexScrape.SelectedIndex <> Me.ListBox_tv_RegexScrape.Items.Count - 1 Then
+'                mSelectedIndex = Me.ListBox_tv_RegexScrape.SelectedIndex
+'                mOtherIndex = mSelectedIndex + 1
+'                ListBox_tv_RegexScrape.Items.Insert(mSelectedIndex, ListBox_tv_RegexScrape.Items(mOtherIndex))
+'                ListBox_tv_RegexScrape.Items.RemoveAt(mOtherIndex + 1)
+'            End If
+'            Pref.tv_RegexScraper.Clear()
+'            For Each item In ListBox_tv_RegexScrape.Items
+'                Pref.tv_RegexScraper.Add(item)
+'            Next
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_Edit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Edit.Click
-        Try
-            If TextBox_tv_RegexScrape_Edit.Text = "" Then
-                MsgBox("No Text")
-                Exit Sub
-            End If
-            If Not util_RegexValidate(TextBox_tv_RegexScrape_Edit.Text) Then
-                MsgBox("Invalid Regex")
-                Exit Sub
-            End If
-            Dim tempint As Integer = ListBox_tv_RegexScrape.SelectedIndex
-            ListBox_tv_RegexScrape.Items.RemoveAt(tempint)
-            ListBox_tv_RegexScrape.Items.Insert(tempint, TextBox_tv_RegexScrape_Edit.Text)
-            ListBox_tv_RegexScrape.SelectedIndex = tempint
-            Pref.tv_RegexScraper.Clear()
-            For Each regexp In ListBox_tv_RegexScrape.Items
-                Pref.tv_RegexScraper.Add(regexp)
-            Next
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexScrape_Edit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If TextBox_tv_RegexScrape_Edit.Text = "" Then
+'                MsgBox("No Text")
+'                Exit Sub
+'            End If
+'            If Not util_RegexValidate(TextBox_tv_RegexScrape_Edit.Text) Then
+'                MsgBox("Invalid Regex")
+'                Exit Sub
+'            End If
+'            Dim tempint As Integer = ListBox_tv_RegexScrape.SelectedIndex
+'            ListBox_tv_RegexScrape.Items.RemoveAt(tempint)
+'            ListBox_tv_RegexScrape.Items.Insert(tempint, TextBox_tv_RegexScrape_Edit.Text)
+'            ListBox_tv_RegexScrape.SelectedIndex = tempint
+'            Pref.tv_RegexScraper.Clear()
+'            For Each regexp In ListBox_tv_RegexScrape.Items
+'                Pref.tv_RegexScraper.Add(regexp)
+'            Next
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_Add_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Add.Click
-        Try
-            'add textbox49
-            If Not util_RegexValidate(TextBox_tv_RegexScrape_New.Text) Then
-                MsgBox("Invalid Regex")
-                Exit Sub
-            End If
-            ListBox_tv_RegexScrape.Items.Add(TextBox_tv_RegexScrape_New.Text)
-            Pref.tv_RegexScraper.Add(TextBox_tv_RegexScrape_New.Text)
+'    Private Sub Button_tv_RegexScrape_Add_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'add textbox49
+'            If Not util_RegexValidate(TextBox_tv_RegexScrape_New.Text) Then
+'                MsgBox("Invalid Regex")
+'                Exit Sub
+'            End If
+'            ListBox_tv_RegexScrape.Items.Add(TextBox_tv_RegexScrape_New.Text)
+'            Pref.tv_RegexScraper.Add(TextBox_tv_RegexScrape_New.Text)
 
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_Remove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Remove.Click
-        Try
-            'remove selected
-            Dim tempstring = ListBox_tv_RegexScrape.SelectedItem
-            Try
-                ListBox_tv_RegexScrape.Items.Remove(ListBox_tv_RegexScrape.SelectedItem)
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-            For Each regexp In Pref.tv_RegexScraper
-                If regexp = tempstring Then
-                    Pref.tv_RegexScraper.Remove(regexp)
-                    Exit For
-                End If
-            Next
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexScrape_Remove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            'remove selected
+'            Dim tempstring = ListBox_tv_RegexScrape.SelectedItem
+'            Try
+'                ListBox_tv_RegexScrape.Items.Remove(ListBox_tv_RegexScrape.SelectedItem)
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+'            For Each regexp In Pref.tv_RegexScraper
+'                If regexp = tempstring Then
+'                    Pref.tv_RegexScraper.Remove(regexp)
+'                    Exit For
+'                End If
+'            Next
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_Test_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Test.Click
-        Try
-            If TextBox_tv_RegexScrape_TestString.Text = "" Then
-                MsgBox("Please Enter a filename or any string to test")
-                Exit Sub
-            End If
-            If ListBox_tv_RegexScrape.SelectedItem = Nothing Then
-                MsgBox("Please Select a Regex to test")
-                Exit Sub
-            End If
-            TextBox_tv_RegexScrape_TestResult.Text = ""
-            Dim tvseries As String
-            Dim tvepisode As String
-            Dim s As String
-            Dim tempstring As String = TextBox_tv_RegexScrape_TestString.Text
-            s = tempstring '.ToLower
-            Dim M As Match
+'    Private Sub Button_tv_RegexScrape_Test_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            If TextBox_tv_RegexScrape_TestString.Text = "" Then
+'                MsgBox("Please Enter a filename or any string to test")
+'                Exit Sub
+'            End If
+'            If ListBox_tv_RegexScrape.SelectedItem = Nothing Then
+'                MsgBox("Please Select a Regex to test")
+'                Exit Sub
+'            End If
+'            TextBox_tv_RegexScrape_TestResult.Text = ""
+'            Dim tvseries As String
+'            Dim tvepisode As String
+'            Dim s As String
+'            Dim tempstring As String = TextBox_tv_RegexScrape_TestString.Text
+'            s = tempstring '.ToLower
+'            Dim M As Match
 
 
-            M = Regex.Match(s, ListBox_tv_RegexScrape.SelectedItem)
-            If M.Success = True Then
-                Try
-                    tvseries = M.Groups(1).Value
-                    tvepisode = M.Groups(2).Value
-                Catch
-                    tvseries = "-1"
-                    tvepisode = "-1"
-                End Try
-                Try
-                    If tvseries <> "-1" Then
-                        TextBox_tv_RegexScrape_TestResult.Text = "Series No = " & tvseries & vbCrLf
-                    End If
-                    If tvepisode <> "-1" Then
-                        TextBox_tv_RegexScrape_TestResult.Text = TextBox_tv_RegexScrape_TestResult.Text & "Episode No = " & tvepisode
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-            Else
-                TextBox_tv_RegexScrape_TestResult.Text = "No Matches"
-            End If
+'            M = Regex.Match(s, ListBox_tv_RegexScrape.SelectedItem)
+'            If M.Success = True Then
+'                Try
+'                    tvseries = M.Groups(1).Value
+'                    tvepisode = M.Groups(2).Value
+'                Catch
+'                    tvseries = "-1"
+'                    tvepisode = "-1"
+'                End Try
+'                Try
+'                    If tvseries <> "-1" Then
+'                        TextBox_tv_RegexScrape_TestResult.Text = "Series No = " & tvseries & vbCrLf
+'                    End If
+'                    If tvepisode <> "-1" Then
+'                        TextBox_tv_RegexScrape_TestResult.Text = TextBox_tv_RegexScrape_TestResult.Text & "Episode No = " & tvepisode
+'                    End If
+'                Catch ex As Exception
+'#If SilentErrorScream Then
+'                    Throw ex
+'#End If
+'                End Try
+'            Else
+'                TextBox_tv_RegexScrape_TestResult.Text = "No Matches"
+'            End If
 
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexScrape_Restore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Restore.Click
-        Try
-            Pref.util_RegexSetDefaultScraper()
-            ListBox_tv_RegexScrape.Items.Clear()
-            For Each Regex In Pref.tv_RegexScraper
-                ListBox_tv_RegexScrape.Items.Add(Regex)
-            Next
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexScrape_Restore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+'        Try
+'            Pref.util_RegexSetDefaultScraper()
+'            ListBox_tv_RegexScrape.Items.Clear()
+'            For Each Regex In Pref.tv_RegexScraper
+'                ListBox_tv_RegexScrape.Items.Add(Regex)
+'            Next
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
 'Rename
-    Private Sub ListBox_tv_RegexRename_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox_tv_RegexRename.SelectedIndexChanged
-        Try
-            If ListBox_tv_RegexRename.SelectedItem <> Nothing Then
-                TextBox_tv_RegexRename_Edit.Text = ListBox_tv_RegexRename.SelectedItem
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub ListBox_tv_RegexRename_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            If ListBox_tv_RegexRename.SelectedItem <> Nothing Then
+'                TextBox_tv_RegexRename_Edit.Text = ListBox_tv_RegexRename.SelectedItem
+'            End If
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexRename_MoveDown_Click(sender As System.Object, e As System.EventArgs) Handles Button_tv_RegexRename_MoveDown.Click
-        Try
-            'down
-            Try
-                Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.ListBox_tv_RegexRename.SelectedIndex <> Me.ListBox_tv_RegexRename.Items.Count - 1 Then
-                    mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
-                    mOtherIndex = mSelectedIndex + 1
-                    ListBox_tv_RegexRename.Items.Insert(mSelectedIndex, ListBox_tv_RegexRename.Items(mOtherIndex))
-                    ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex + 1)
-                End If
-                Pref.tv_RegexRename.Clear()
-                For Each item In ListBox_tv_RegexRename.Items
-                    Pref.tv_RegexRename.Add(item)
-                Next
-                tvprefschanged = True
-                btnTVPrefSaveChanges.Enabled = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexRename_MoveDown_Click(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            'down
+'            Try
+'                Dim mSelectedIndex, mOtherIndex As Integer
+'                If Me.ListBox_tv_RegexRename.SelectedIndex <> Me.ListBox_tv_RegexRename.Items.Count - 1 Then
+'                    mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
+'                    mOtherIndex = mSelectedIndex + 1
+'                    ListBox_tv_RegexRename.Items.Insert(mSelectedIndex, ListBox_tv_RegexRename.Items(mOtherIndex))
+'                    ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex + 1)
+'                End If
+'                Pref.tv_RegexRename.Clear()
+'                For Each item In ListBox_tv_RegexRename.Items
+'                    Pref.tv_RegexRename.Add(item)
+'                Next
+'                tvprefschanged = True
+'                btnTVPrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexRename_MoveUp_Click(sender As System.Object, e As System.EventArgs) Handles Button_tv_RegexRename_MoveUp.Click
-        Try
-            'up
-            Try
-                Dim mSelectedIndex, mOtherIndex As Integer
-                If Me.ListBox_tv_RegexRename.SelectedIndex <> 0 Then
-                    mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
-                    mOtherIndex = mSelectedIndex - 1
-                    ListBox_tv_RegexRename.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexRename.Items(mOtherIndex))
-                    ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex)
-                End If
-                Pref.tv_RegexRename.Clear()
-                For Each item In ListBox_tv_RegexRename.Items
-                    Pref.tv_RegexRename.Add(item)
-                Next
-                tvprefschanged = True
-                btnTVPrefSaveChanges.Enabled = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexRename_MoveUp_Click(sender As System.Object, e As System.EventArgs) 
+'        Try
+'            'up
+'            Try
+'                Dim mSelectedIndex, mOtherIndex As Integer
+'                If Me.ListBox_tv_RegexRename.SelectedIndex <> 0 Then
+'                    mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
+'                    mOtherIndex = mSelectedIndex - 1
+'                    ListBox_tv_RegexRename.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexRename.Items(mOtherIndex))
+'                    ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex)
+'                End If
+'                Pref.tv_RegexRename.Clear()
+'                For Each item In ListBox_tv_RegexRename.Items
+'                    Pref.tv_RegexRename.Add(item)
+'                Next
+'                tvprefschanged = True
+'                btnTVPrefSaveChanges.Enabled = True
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexRename_Remove_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Remove.Click
-        Try
-            Dim strRegexSelected = ListBox_tv_RegexRename.SelectedItem
-            Dim idxRegexSelected = ListBox_tv_RegexRename.SelectedIndex
+'    Private Sub Button_tv_RegexRename_Remove_Click(sender As Object, e As System.EventArgs) 
+'        Try
+'            Dim strRegexSelected = ListBox_tv_RegexRename.SelectedItem
+'            Dim idxRegexSelected = ListBox_tv_RegexRename.SelectedIndex
 
-            Try
-                ListBox_tv_RegexRename.Items.RemoveAt(idxRegexSelected)
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
+'            Try
+'                ListBox_tv_RegexRename.Items.RemoveAt(idxRegexSelected)
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
 
-            For Each regexp In Pref.tv_RegexRename
-                If regexp = strRegexSelected Then
-                    Pref.tv_RegexRename.Remove(regexp)
-                    Exit For
-                End If
-            Next
+'            For Each regexp In Pref.tv_RegexRename
+'                If regexp = strRegexSelected Then
+'                    Pref.tv_RegexRename.Remove(regexp)
+'                    Exit For
+'                End If
+'            Next
 
-            TextBox_tv_RegexRename_Edit.Clear()
+'            TextBox_tv_RegexRename_Edit.Clear()
 
-            ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Pref.tv_RegexRename
-                ComboBox_tv_EpisodeRename.Items.Add(Regex)
-            Next
-            ComboBox_tv_EpisodeRename.SelectedIndex = If(Pref.tvrename >= idxRegexSelected, Pref.tvrename - 1, Pref.tvrename)
+'            ComboBox_tv_EpisodeRename.Items.Clear()
+'            For Each Regex In Pref.tv_RegexRename
+'                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+'            Next
+'            ComboBox_tv_EpisodeRename.SelectedIndex = If(Pref.tvrename >= idxRegexSelected, Pref.tvrename - 1, Pref.tvrename)
 
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexRename_Add_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Add.Click
-        Try
-            'add
-            ListBox_tv_RegexRename.Items.Add(TextBox_tv_RegexRename_New.Text)
-            Pref.tv_RegexRename.Add(TextBox_tv_RegexRename_New.Text)
-            TextBox_tv_RegexRename_New.Clear()
-            ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Pref.tv_RegexRename
-                ComboBox_tv_EpisodeRename.Items.Add(Regex)
-            Next
-            ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
+'    Private Sub Button_tv_RegexRename_Add_Click(sender As Object, e As System.EventArgs) 
+'        Try
+'            'add
+'            ListBox_tv_RegexRename.Items.Add(TextBox_tv_RegexRename_New.Text)
+'            Pref.tv_RegexRename.Add(TextBox_tv_RegexRename_New.Text)
+'            TextBox_tv_RegexRename_New.Clear()
+'            ComboBox_tv_EpisodeRename.Items.Clear()
+'            For Each Regex In Pref.tv_RegexRename
+'                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+'            Next
+'            ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
 
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexRename_Edit_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Edit.Click
-        Try
-            If TextBox_tv_RegexRename_Edit.Text = "" Then
-                MsgBox("No Text")
-                Exit Sub
-            End If
-            Dim tempint As Integer = ListBox_tv_RegexRename.SelectedIndex
-            ListBox_tv_RegexRename.Items.RemoveAt(tempint)
-            ListBox_tv_RegexRename.Items.Insert(tempint, TextBox_tv_RegexRename_Edit.Text)
-            ListBox_tv_RegexRename.SelectedIndex = tempint
-            Pref.tv_RegexRename.Clear()
-            For Each regexp In ListBox_tv_RegexRename.Items
-                Pref.tv_RegexRename.Add(regexp)
-            Next
-            TextBox_tv_RegexRename_Edit.Clear()
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+'    Private Sub Button_tv_RegexRename_Edit_Click(sender As Object, e As System.EventArgs) 
+'        Try
+'            If TextBox_tv_RegexRename_Edit.Text = "" Then
+'                MsgBox("No Text")
+'                Exit Sub
+'            End If
+'            Dim tempint As Integer = ListBox_tv_RegexRename.SelectedIndex
+'            ListBox_tv_RegexRename.Items.RemoveAt(tempint)
+'            ListBox_tv_RegexRename.Items.Insert(tempint, TextBox_tv_RegexRename_Edit.Text)
+'            ListBox_tv_RegexRename.SelectedIndex = tempint
+'            Pref.tv_RegexRename.Clear()
+'            For Each regexp In ListBox_tv_RegexRename.Items
+'                Pref.tv_RegexRename.Add(regexp)
+'            Next
+'            TextBox_tv_RegexRename_Edit.Clear()
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
+'    End Sub
 
-    Private Sub Button_tv_RegexRename_Restore_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Restore.Click
-        Try
-            Pref.util_RegexSetDefaultRename()
-            ListBox_tv_RegexRename.Items.Clear()
-            ComboBox_tv_EpisodeRename.Items.Clear()
-            For Each Regex In Pref.tv_RegexRename
-                ListBox_tv_RegexRename.Items.Add(Regex)
-                ComboBox_tv_EpisodeRename.Items.Add(Regex)
-            Next
-            ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
-            tvprefschanged = True
-            btnTVPrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+'    Private Sub Button_tv_RegexRename_Restore_Click(sender As Object, e As System.EventArgs) 
+'        Try
+'            Pref.util_RegexSetDefaultRename()
+'            ListBox_tv_RegexRename.Items.Clear()
+'            ComboBox_tv_EpisodeRename.Items.Clear()
+'            For Each Regex In Pref.tv_RegexRename
+'                ListBox_tv_RegexRename.Items.Add(Regex)
+'                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+'            Next
+'            ComboBox_tv_EpisodeRename.SelectedIndex = Pref.tvrename
+'            tvprefschanged = True
+'            btnTVPrefSaveChanges.Enabled = True
+'        Catch ex As Exception
+'            ExceptionHandler.LogError(ex)
+'        End Try
 
-    End Sub
+'    End Sub
 
 #End Region 'TV Preferences -> Regex Tab
 

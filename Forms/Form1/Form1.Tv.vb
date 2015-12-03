@@ -1151,7 +1151,7 @@ Partial Public Class Form1
         frmSplash2.Label1.Text = "Loading Cache..."
         Windows.Forms.Application.DoEvents()
         tv_CacheLoad()    'reload the cache file to update the treeview
-        If Pref.fixnfoid Then cbTv_fixNFOid.CheckState = CheckState.Unchecked
+        'If Pref.fixnfoid Then cbTv_fixNFOid.CheckState = CheckState.Unchecked
         Me.Enabled = True
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count

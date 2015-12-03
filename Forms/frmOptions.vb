@@ -2301,7 +2301,10 @@ Public Class frmOptions
             ListBox12.Items.Clear()
             Form1.languageList.Clear()
             Form1.util_LanguageListLoad()
-
+            For Each lan In Form1.languageList
+                ListBox12.Items.Add(lan.Language.Value)
+                'ListBox1.Items.Add(lan.Language.Value)
+            Next
             Try
                 ListBox12.SelectedItem = Pref.TvdbLanguage
             Catch ex As Exception
