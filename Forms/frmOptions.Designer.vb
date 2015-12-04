@@ -438,6 +438,7 @@ Partial Class frmOptions
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -2326,6 +2327,7 @@ Partial Class frmOptions
         '
         'GroupBox_MovieIMDBMirror
         '
+        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbMovImdbFirstRunTime)
         Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbImdbPrimaryPlot)
         Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.Label181)
         Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbImdbgetTMDBActor)
@@ -4585,7 +4587,7 @@ Partial Class frmOptions
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5239,6 +5241,16 @@ Partial Class frmOptions
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbMovImdbFirstRunTime
+        '
+        Me.cbMovImdbFirstRunTime.AutoSize = true
+        Me.cbMovImdbFirstRunTime.Location = New System.Drawing.Point(10, 225)
+        Me.cbMovImdbFirstRunTime.Name = "cbMovImdbFirstRunTime"
+        Me.cbMovImdbFirstRunTime.Size = New System.Drawing.Size(241, 19)
+        Me.cbMovImdbFirstRunTime.TabIndex = 6
+        Me.cbMovImdbFirstRunTime.Text = "Select only first found Runtime on IMDb"
+        Me.cbMovImdbFirstRunTime.UseVisualStyleBackColor = true
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -5811,4 +5823,5 @@ End Sub
     Friend WithEvents btn_tv_RegexScrape_Test As Button
     Friend WithEvents tb_tv_RegexScrape_TestString As TextBox
     Friend WithEvents Label118 As Label
+    Friend WithEvents cbMovImdbFirstRunTime As CheckBox
 End Class

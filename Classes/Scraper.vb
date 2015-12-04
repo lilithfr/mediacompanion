@@ -860,6 +860,7 @@ Public Class Classimdb
                     Dim s = Regex.Match(m.Value, MovieRegExs.REGEX_DURATION, RegexOptions.Singleline).Groups(1).Value.Trim
                     Dim p As Integer = s.ToInt
                     If p > i Then i = p
+                    If Pref.MovImdbFirstRunTime Then Exit For
                 Next
                 If i = 0 Then Return ""
                 Return i.ToString & " min"

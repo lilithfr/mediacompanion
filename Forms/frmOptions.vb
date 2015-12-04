@@ -272,6 +272,7 @@ Public Class frmOptions
         lb_IMDBMirrors                      .SelectedItem   = Pref.imdbmirror
         cbImdbgetTMDBActor                  .Checked        = Pref.TmdbActorsImdbScrape
         cbImdbPrimaryPlot                   .Checked        = Pref.ImdbPrimaryPlot
+        cbMovImdbFirstRunTime               .Checked        = Pref.MovImdbFirstRunTime
 
         'IndividualMovieFolders
         cbMovieUseFolderNames               .Checked        = Pref.usefoldernames
@@ -1216,6 +1217,12 @@ Public Class frmOptions
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cbMovImdbFirstRunTime_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovImdbFirstRunTime.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovImdbFirstRunTime = cbMovImdbFirstRunTime.Checked
+        Changes = True
     End Sub
 
 'End of "Choose Default Scraper"
@@ -3395,4 +3402,5 @@ Public Class frmOptions
         End If
     End Sub
 
+    
 End Class

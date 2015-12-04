@@ -1522,6 +1522,7 @@ Public Class Movie
             Try
                 actor.SaveActor(ActorPath)
                 actors2.Add(actor)
+                If Cancelled Then Exit For
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
             End Try
@@ -1546,6 +1547,7 @@ Public Class Movie
                     actor.SaveActor(ActorPath)
                     actors2.Add(actor)
                     count += 1
+                    If Cancelled Then Exit For
                 Catch ex As Exception
                     ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
                 End Try

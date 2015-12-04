@@ -243,6 +243,7 @@ Public Class Pref
     'Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared TmdbActorsImdbScrape As Boolean
     Public Shared ImdbPrimaryPlot As Boolean
+    Public Shared MovImdbFirstRunTime As Boolean
     Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
     Public Shared XbmcTmdbRenameMovie As Boolean
     Public Shared XbmcTmdbMissingFromImdb As Boolean
@@ -607,6 +608,7 @@ Public Class Pref
         TmdbActorsImdbScrape = False
         'TMDBPreferredCertCountry = "us"
         ImdbPrimaryPlot = False
+        MovImdbFirstRunTime = False
         XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
         XbmcTmdbMissingFromImdb = False
@@ -1076,7 +1078,8 @@ Public Class Pref
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
         root.AppendChild(doc, "TmdbActorsImdbScrape",               TmdbActorsImdbScrape)               'cbImdbgetTMDBActor 
         'root.AppendChild(doc, "TMDBPreferredCertCountry",           TMDBPreferredCertCountry)           'cmbxTMDBPreferredCertCountry
-        root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot  
+        root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot 
+        root.AppendChild(doc, "MovImdbFirstRunTime",                MovImdbFirstRunTime)                'cbMovImdbFirstRunTime 
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
         root.AppendChild(doc, "XbmcTmdbMissingFromImdb",            XbmcTmdbMissingFromImdb)            'cbXbmcTmdbMissingFromImdb
@@ -1375,6 +1378,7 @@ Public Class Pref
 
                     Case "TmdbActorsImdbScrape"                 : TmdbActorsImdbScrape = thisresult.InnerXml
                     Case "ImdbPrimaryPlot"                      : ImdbPrimaryPlot = thisresult.InnerXml 
+                    Case "MovImdbFirstRunTime"                  : MovImdbFirstRunTime = thisresult.InnerXml
                     'Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText    -  locked at "tmdb"
                     Case "XbmcTmdbRenameMovie"                  : XbmcTmdbRenameMovie = thisresult.InnerText 
                     Case "XbmcTmdbMissingFromImdb"              : XbmcTmdbMissingFromImdb = thisresult.InnerText
