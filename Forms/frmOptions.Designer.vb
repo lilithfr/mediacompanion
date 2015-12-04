@@ -187,6 +187,7 @@ Partial Class frmOptions
         Me.cmbxXbmcTmdbHDTrailer = New System.Windows.Forms.ComboBox()
         Me.Label153 = New System.Windows.Forms.Label()
         Me.GroupBox_MovieIMDBMirror = New System.Windows.Forms.GroupBox()
+        Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
         Me.cbImdbPrimaryPlot = New System.Windows.Forms.CheckBox()
         Me.Label181 = New System.Windows.Forms.Label()
         Me.cbImdbgetTMDBActor = New System.Windows.Forms.CheckBox()
@@ -438,7 +439,6 @@ Partial Class frmOptions
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -2338,10 +2338,20 @@ Partial Class frmOptions
         Me.GroupBox_MovieIMDBMirror.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox_MovieIMDBMirror.Name = "GroupBox_MovieIMDBMirror"
         Me.GroupBox_MovieIMDBMirror.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_MovieIMDBMirror.Size = New System.Drawing.Size(300, 272)
+        Me.GroupBox_MovieIMDBMirror.Size = New System.Drawing.Size(300, 303)
         Me.GroupBox_MovieIMDBMirror.TabIndex = 40
         Me.GroupBox_MovieIMDBMirror.TabStop = false
         Me.GroupBox_MovieIMDBMirror.Text = "MC's IMDB Scraper"
+        '
+        'cbMovImdbFirstRunTime
+        '
+        Me.cbMovImdbFirstRunTime.AutoSize = true
+        Me.cbMovImdbFirstRunTime.Location = New System.Drawing.Point(10, 225)
+        Me.cbMovImdbFirstRunTime.Name = "cbMovImdbFirstRunTime"
+        Me.cbMovImdbFirstRunTime.Size = New System.Drawing.Size(241, 19)
+        Me.cbMovImdbFirstRunTime.TabIndex = 6
+        Me.cbMovImdbFirstRunTime.Text = "Select only first found Runtime on IMDb"
+        Me.cbMovImdbFirstRunTime.UseVisualStyleBackColor = true
         '
         'cbImdbPrimaryPlot
         '
@@ -5240,16 +5250,6 @@ Partial Class frmOptions
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbMovImdbFirstRunTime
-        '
-        Me.cbMovImdbFirstRunTime.AutoSize = true
-        Me.cbMovImdbFirstRunTime.Location = New System.Drawing.Point(10, 225)
-        Me.cbMovImdbFirstRunTime.Name = "cbMovImdbFirstRunTime"
-        Me.cbMovImdbFirstRunTime.Size = New System.Drawing.Size(241, 19)
-        Me.cbMovImdbFirstRunTime.TabIndex = 6
-        Me.cbMovImdbFirstRunTime.Text = "Select only first found Runtime on IMDb"
-        Me.cbMovImdbFirstRunTime.UseVisualStyleBackColor = true
         '
         'frmOptions
         '
