@@ -48,15 +48,16 @@ Public Class frmOptions
             If Changes Then
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
-                    If Pref.videomode = 4 AndAlso Not IO.File.Exists(Pref.selectedvideoplayer) Then
-                        MsgBox("You Have Not Selected Your Preferred Media Player")
+                    'If Pref.videomode = 4 AndAlso Not IO.File.Exists(Pref.selectedvideoplayer) Then
+                    '    MsgBox("You Have Not Selected Your Preferred Media Player")
+                    '    e.Cancel = True
+                    '    Exit Sub
+                    'End If
+                    Dim aok As Boolean = SaveSettings()
+                    If Not aok Then
                         e.Cancel = True
                         Exit Sub
                     End If
-                    Form1.util_RegexSave()
-                    Pref.ConfigSave()
-                    If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
-                    If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
                 Else
                     Form1.util_ConfigLoad(True)
                     Form1.util_RegexLoad()
@@ -95,11 +96,12 @@ Public Class frmOptions
     End Sub
 
     Private Sub btn_SettingsApply_Click(sender As Object, e As EventArgs) Handles btn_SettingsApply.Click
-        If cleanfilenameprefchanged OrElse videosourceprefchanged Then
-            applyAdvancedLists()
-        End If
-        Pref.ConfigSave()
-        Changes = False
+        Dim aok As Boolean = SaveSettings
+        'If cleanfilenameprefchanged OrElse videosourceprefchanged Then
+        '    applyAdvancedLists()
+        'End If
+        'Pref.ConfigSave()
+        'Changes = False
     End Sub
 
     Private Sub btn_SettingsCancel_Click(sender As Object, e As EventArgs) Handles btn_SettingsCancel.Click
@@ -112,6 +114,29 @@ Public Class frmOptions
     End Sub
     
 #End Region 'Form Events
+
+    Private Function SaveSettings() As Boolean
+        If Pref.videomode = 4 AndAlso Not IO.File.Exists(Pref.selectedvideoplayer) Then
+            MsgBox("You Have Not Selected Your Preferred Media Player")
+            Return False
+        End If
+        Pref.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
+        
+        If cleanfilenameprefchanged OrElse videosourceprefchanged Then
+            applyAdvancedLists()
+        End If
+        Form1.util_RegexSave()
+        Pref.ConfigSave()
+
+        If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
+        If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
+        cleanfilenameprefchanged = False
+        videosourceprefchanged = False
+        XbmcTMDbScraperChanged = False
+        XbmcTvdbScraperChanged = False
+        Changes = False
+        Return True
+    End Function
 
     Private Sub PrefInit()
         'Initial
