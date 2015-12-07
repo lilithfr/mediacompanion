@@ -439,6 +439,8 @@ Partial Class frmOptions
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -519,6 +521,7 @@ Partial Class frmOptions
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
+        Me.GroupBox2.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -776,7 +779,7 @@ Partial Class frmOptions
         '
         Me.cmbx_MovMaxActors.FormattingEnabled = true
         Me.cmbx_MovMaxActors.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "110", "125", "150", "175", "200", "250"})
-        Me.cmbx_MovMaxActors.Location = New System.Drawing.Point(182, 134)
+        Me.cmbx_MovMaxActors.Location = New System.Drawing.Point(175, 51)
         Me.cmbx_MovMaxActors.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbx_MovMaxActors.MaxDropDownItems = 30
         Me.cmbx_MovMaxActors.Name = "cmbx_MovMaxActors"
@@ -788,7 +791,7 @@ Partial Class frmOptions
         'cbShowAllAudioTracks
         '
         Me.cbShowAllAudioTracks.AutoSize = true
-        Me.cbShowAllAudioTracks.Location = New System.Drawing.Point(7, 263)
+        Me.cbShowAllAudioTracks.Location = New System.Drawing.Point(12, 318)
         Me.cbShowAllAudioTracks.Name = "cbShowAllAudioTracks"
         Me.cbShowAllAudioTracks.Size = New System.Drawing.Size(239, 19)
         Me.cbShowAllAudioTracks.TabIndex = 98
@@ -800,7 +803,7 @@ Partial Class frmOptions
         'cbDisplayMediaInfoOverlay
         '
         Me.cbDisplayMediaInfoOverlay.AutoSize = true
-        Me.cbDisplayMediaInfoOverlay.Location = New System.Drawing.Point(7, 209)
+        Me.cbDisplayMediaInfoOverlay.Location = New System.Drawing.Point(12, 264)
         Me.cbDisplayMediaInfoOverlay.Name = "cbDisplayMediaInfoOverlay"
         Me.cbDisplayMediaInfoOverlay.Size = New System.Drawing.Size(229, 19)
         Me.cbDisplayMediaInfoOverlay.TabIndex = 96
@@ -812,7 +815,7 @@ Partial Class frmOptions
         'cbDisplayRatingOverlay
         '
         Me.cbDisplayRatingOverlay.AutoSize = true
-        Me.cbDisplayRatingOverlay.Location = New System.Drawing.Point(7, 182)
+        Me.cbDisplayRatingOverlay.Location = New System.Drawing.Point(12, 237)
         Me.cbDisplayRatingOverlay.Name = "cbDisplayRatingOverlay"
         Me.cbDisplayRatingOverlay.Size = New System.Drawing.Size(207, 19)
         Me.cbDisplayRatingOverlay.TabIndex = 95
@@ -824,7 +827,7 @@ Partial Class frmOptions
         'gbExcludeFolders
         '
         Me.gbExcludeFolders.Controls.Add(Me.tbExcludeFolders)
-        Me.gbExcludeFolders.Location = New System.Drawing.Point(259, 298)
+        Me.gbExcludeFolders.Location = New System.Drawing.Point(296, 291)
         Me.gbExcludeFolders.Name = "gbExcludeFolders"
         Me.gbExcludeFolders.Size = New System.Drawing.Size(277, 95)
         Me.gbExcludeFolders.TabIndex = 94
@@ -1464,7 +1467,7 @@ Partial Class frmOptions
         'Label185
         '
         Me.Label185.AutoSize = true
-        Me.Label185.Location = New System.Drawing.Point(50, 301)
+        Me.Label185.Location = New System.Drawing.Point(55, 356)
         Me.Label185.Name = "Label185"
         Me.Label185.Size = New System.Drawing.Size(127, 30)
         Me.Label185.TabIndex = 104
@@ -1472,7 +1475,7 @@ Partial Class frmOptions
         '
         'AutoScrnShtDelay
         '
-        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(7, 298)
+        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(12, 353)
         Me.AutoScrnShtDelay.Name = "AutoScrnShtDelay"
         Me.AutoScrnShtDelay.Size = New System.Drawing.Size(37, 21)
         Me.AutoScrnShtDelay.TabIndex = 103
@@ -1496,9 +1499,9 @@ Partial Class frmOptions
         Me.gbImageResizing.Controls.Add(Me.comboActorResolutions)
         Me.gbImageResizing.Controls.Add(Me.comboBackDropResolutions)
         Me.gbImageResizing.Controls.Add(Me.comboPosterResolutions)
-        Me.gbImageResizing.Location = New System.Drawing.Point(476, 6)
+        Me.gbImageResizing.Location = New System.Drawing.Point(296, 35)
         Me.gbImageResizing.Name = "gbImageResizing"
-        Me.gbImageResizing.Size = New System.Drawing.Size(307, 131)
+        Me.gbImageResizing.Size = New System.Drawing.Size(273, 131)
         Me.gbImageResizing.TabIndex = 101
         Me.gbImageResizing.TabStop = false
         Me.gbImageResizing.Text = " Image Resizing "
@@ -1507,17 +1510,17 @@ Partial Class frmOptions
         '
         Me.Label171.AutoSize = true
         Me.Label171.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label171.Location = New System.Drawing.Point(6, 88)
+        Me.Label171.Location = New System.Drawing.Point(10, 90)
         Me.Label171.Name = "Label171"
-        Me.Label171.Size = New System.Drawing.Size(112, 15)
+        Me.Label171.Size = New System.Drawing.Size(82, 15)
         Me.Label171.TabIndex = 54
-        Me.Label171.Text = "Fanart dimensions:"
+        Me.Label171.Text = "Fanart Sizing:"
         '
         'Label175
         '
         Me.Label175.AutoSize = true
         Me.Label175.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label175.Location = New System.Drawing.Point(6, 34)
+        Me.Label175.Location = New System.Drawing.Point(15, 32)
         Me.Label175.Name = "Label175"
         Me.Label175.Size = New System.Drawing.Size(77, 15)
         Me.Label175.TabIndex = 53
@@ -1527,7 +1530,7 @@ Partial Class frmOptions
         '
         Me.Label176.AutoSize = true
         Me.Label176.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label176.Location = New System.Drawing.Point(6, 61)
+        Me.Label176.Location = New System.Drawing.Point(7, 61)
         Me.Label176.Name = "Label176"
         Me.Label176.Size = New System.Drawing.Size(85, 15)
         Me.Label176.TabIndex = 52
@@ -1537,26 +1540,26 @@ Partial Class frmOptions
         '
         Me.comboActorResolutions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comboActorResolutions.FormattingEnabled = true
-        Me.comboActorResolutions.Location = New System.Drawing.Point(124, 31)
+        Me.comboActorResolutions.Location = New System.Drawing.Point(98, 29)
         Me.comboActorResolutions.Name = "comboActorResolutions"
-        Me.comboActorResolutions.Size = New System.Drawing.Size(170, 23)
+        Me.comboActorResolutions.Size = New System.Drawing.Size(160, 23)
         Me.comboActorResolutions.TabIndex = 51
         '
         'comboBackDropResolutions
         '
         Me.comboBackDropResolutions.FormattingEnabled = true
-        Me.comboBackDropResolutions.Location = New System.Drawing.Point(124, 85)
+        Me.comboBackDropResolutions.Location = New System.Drawing.Point(98, 87)
         Me.comboBackDropResolutions.Name = "comboBackDropResolutions"
-        Me.comboBackDropResolutions.Size = New System.Drawing.Size(170, 23)
+        Me.comboBackDropResolutions.Size = New System.Drawing.Size(160, 23)
         Me.comboBackDropResolutions.TabIndex = 50
         '
         'comboPosterResolutions
         '
         Me.comboPosterResolutions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comboPosterResolutions.FormattingEnabled = true
-        Me.comboPosterResolutions.Location = New System.Drawing.Point(124, 58)
+        Me.comboPosterResolutions.Location = New System.Drawing.Point(98, 58)
         Me.comboPosterResolutions.Name = "comboPosterResolutions"
-        Me.comboPosterResolutions.Size = New System.Drawing.Size(170, 23)
+        Me.comboPosterResolutions.Size = New System.Drawing.Size(160, 23)
         Me.comboPosterResolutions.TabIndex = 49
         '
         'grpCleanFilename
@@ -1565,9 +1568,9 @@ Partial Class frmOptions
         Me.grpCleanFilename.Controls.Add(Me.txtCleanFilenameAdd)
         Me.grpCleanFilename.Controls.Add(Me.btnCleanFilenameAdd)
         Me.grpCleanFilename.Controls.Add(Me.lbCleanFilename)
-        Me.grpCleanFilename.Location = New System.Drawing.Point(542, 146)
+        Me.grpCleanFilename.Location = New System.Drawing.Point(584, 6)
         Me.grpCleanFilename.Name = "grpCleanFilename"
-        Me.grpCleanFilename.Size = New System.Drawing.Size(241, 349)
+        Me.grpCleanFilename.Size = New System.Drawing.Size(199, 380)
         Me.grpCleanFilename.TabIndex = 100
         Me.grpCleanFilename.TabStop = false
         Me.grpCleanFilename.Text = "Clean Filename Settings"
@@ -1575,7 +1578,7 @@ Partial Class frmOptions
         'btnCleanFilenameRemove
         '
         Me.btnCleanFilenameRemove.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnCleanFilenameRemove.Location = New System.Drawing.Point(124, 289)
+        Me.btnCleanFilenameRemove.Location = New System.Drawing.Point(91, 318)
         Me.btnCleanFilenameRemove.Margin = New System.Windows.Forms.Padding(0)
         Me.btnCleanFilenameRemove.Name = "btnCleanFilenameRemove"
         Me.btnCleanFilenameRemove.Size = New System.Drawing.Size(100, 21)
@@ -1585,15 +1588,15 @@ Partial Class frmOptions
         '
         'txtCleanFilenameAdd
         '
-        Me.txtCleanFilenameAdd.Location = New System.Drawing.Point(6, 314)
+        Me.txtCleanFilenameAdd.Location = New System.Drawing.Point(6, 347)
         Me.txtCleanFilenameAdd.Name = "txtCleanFilenameAdd"
-        Me.txtCleanFilenameAdd.Size = New System.Drawing.Size(179, 21)
+        Me.txtCleanFilenameAdd.Size = New System.Drawing.Size(146, 21)
         Me.txtCleanFilenameAdd.TabIndex = 7
         '
         'btnCleanFilenameAdd
         '
         Me.btnCleanFilenameAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnCleanFilenameAdd.Location = New System.Drawing.Point(188, 313)
+        Me.btnCleanFilenameAdd.Location = New System.Drawing.Point(155, 347)
         Me.btnCleanFilenameAdd.Margin = New System.Windows.Forms.Padding(0)
         Me.btnCleanFilenameAdd.Name = "btnCleanFilenameAdd"
         Me.btnCleanFilenameAdd.Size = New System.Drawing.Size(36, 21)
@@ -1607,7 +1610,7 @@ Partial Class frmOptions
         Me.lbCleanFilename.ItemHeight = 15
         Me.lbCleanFilename.Location = New System.Drawing.Point(6, 20)
         Me.lbCleanFilename.Name = "lbCleanFilename"
-        Me.lbCleanFilename.Size = New System.Drawing.Size(218, 259)
+        Me.lbCleanFilename.Size = New System.Drawing.Size(185, 289)
         Me.lbCleanFilename.TabIndex = 0
         '
         'grpVideoSource
@@ -1616,9 +1619,9 @@ Partial Class frmOptions
         Me.grpVideoSource.Controls.Add(Me.txtVideoSourceAdd)
         Me.grpVideoSource.Controls.Add(Me.btnVideoSourceAdd)
         Me.grpVideoSource.Controls.Add(Me.lbVideoSource)
-        Me.grpVideoSource.Location = New System.Drawing.Point(789, 4)
+        Me.grpVideoSource.Location = New System.Drawing.Point(789, 6)
         Me.grpVideoSource.Name = "grpVideoSource"
-        Me.grpVideoSource.Size = New System.Drawing.Size(197, 491)
+        Me.grpVideoSource.Size = New System.Drawing.Size(197, 482)
         Me.grpVideoSource.TabIndex = 99
         Me.grpVideoSource.TabStop = false
         Me.grpVideoSource.Text = "Video Source"
@@ -1665,7 +1668,7 @@ Partial Class frmOptions
         'cbDisplayMediaInfoFolderSize
         '
         Me.cbDisplayMediaInfoFolderSize.AutoSize = true
-        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(7, 236)
+        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(12, 291)
         Me.cbDisplayMediaInfoFolderSize.Name = "cbDisplayMediaInfoFolderSize"
         Me.cbDisplayMediaInfoFolderSize.Size = New System.Drawing.Size(233, 19)
         Me.cbDisplayMediaInfoFolderSize.TabIndex = 97
@@ -1675,7 +1678,7 @@ Partial Class frmOptions
         'cb_IgnoreAn
         '
         Me.cb_IgnoreAn.AutoSize = true
-        Me.cb_IgnoreAn.Location = New System.Drawing.Point(7, 109)
+        Me.cb_IgnoreAn.Location = New System.Drawing.Point(296, 239)
         Me.cb_IgnoreAn.Name = "cb_IgnoreAn"
         Me.cb_IgnoreAn.Size = New System.Drawing.Size(195, 19)
         Me.cb_IgnoreAn.TabIndex = 93
@@ -1685,7 +1688,7 @@ Partial Class frmOptions
         'cb_SorttitleIgnoreArticles
         '
         Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 134)
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(296, 264)
         Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
         Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(244, 19)
         Me.cb_SorttitleIgnoreArticles.TabIndex = 92
@@ -1695,7 +1698,7 @@ Partial Class frmOptions
         'cb_IgnoreA
         '
         Me.cb_IgnoreA.AutoSize = true
-        Me.cb_IgnoreA.Location = New System.Drawing.Point(7, 84)
+        Me.cb_IgnoreA.Location = New System.Drawing.Point(296, 214)
         Me.cb_IgnoreA.Name = "cb_IgnoreA"
         Me.cb_IgnoreA.Size = New System.Drawing.Size(194, 19)
         Me.cb_IgnoreA.TabIndex = 91
@@ -1705,7 +1708,7 @@ Partial Class frmOptions
         'cbOverwriteArtwork
         '
         Me.cbOverwriteArtwork.AutoSize = true
-        Me.cbOverwriteArtwork.Location = New System.Drawing.Point(7, 159)
+        Me.cbOverwriteArtwork.Location = New System.Drawing.Point(12, 214)
         Me.cbOverwriteArtwork.Name = "cbOverwriteArtwork"
         Me.cbOverwriteArtwork.Size = New System.Drawing.Size(195, 19)
         Me.cbOverwriteArtwork.TabIndex = 90
@@ -1715,7 +1718,7 @@ Partial Class frmOptions
         'cb_IgnoreThe
         '
         Me.cb_IgnoreThe.AutoSize = true
-        Me.cb_IgnoreThe.Location = New System.Drawing.Point(7, 62)
+        Me.cb_IgnoreThe.Location = New System.Drawing.Point(296, 192)
         Me.cb_IgnoreThe.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_IgnoreThe.Name = "cb_IgnoreThe"
         Me.cb_IgnoreThe.Size = New System.Drawing.Size(205, 19)
@@ -1726,7 +1729,7 @@ Partial Class frmOptions
         'CheckBox38
         '
         Me.CheckBox38.AutoSize = true
-        Me.CheckBox38.Location = New System.Drawing.Point(7, 41)
+        Me.CheckBox38.Location = New System.Drawing.Point(12, 192)
         Me.CheckBox38.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox38.Name = "CheckBox38"
         Me.CheckBox38.Size = New System.Drawing.Size(235, 19)
@@ -1740,26 +1743,27 @@ Partial Class frmOptions
         Me.gbxXBMCversion.Controls.Add(Me.rbXBMCv_both)
         Me.gbxXBMCversion.Controls.Add(Me.rbXBMCv_post)
         Me.gbxXBMCversion.Controls.Add(Me.rbXBMCv_pre)
-        Me.gbxXBMCversion.Location = New System.Drawing.Point(259, 146)
+        Me.gbxXBMCversion.Location = New System.Drawing.Point(12, 35)
         Me.gbxXBMCversion.Name = "gbxXBMCversion"
-        Me.gbxXBMCversion.Size = New System.Drawing.Size(277, 146)
+        Me.gbxXBMCversion.Size = New System.Drawing.Size(278, 131)
         Me.gbxXBMCversion.TabIndex = 48
         Me.gbxXBMCversion.TabStop = false
         Me.gbxXBMCversion.Text = "Artwork Version"
         '
         'Label129
         '
+        Me.Label129.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label129.Location = New System.Drawing.Point(6, 17)
         Me.Label129.Name = "Label129"
-        Me.Label129.Size = New System.Drawing.Size(265, 58)
+        Me.Label129.Size = New System.Drawing.Size(266, 47)
         Me.Label129.TabIndex = 1
-        Me.Label129.Text = "With the introduction of XBMCs Frodo comes a new way of defining media artwork."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)& _ 
-    "Choose an option below which best defines your setup."
+        Me.Label129.Text = "From Version Frodo, Artwork is now saved as jpg, not tbn.  Choose an option below"& _ 
+    " which best defines your setup."
         '
         'rbXBMCv_both
         '
         Me.rbXBMCv_both.AutoSize = true
-        Me.rbXBMCv_both.Location = New System.Drawing.Point(9, 118)
+        Me.rbXBMCv_both.Location = New System.Drawing.Point(6, 107)
         Me.rbXBMCv_both.Name = "rbXBMCv_both"
         Me.rbXBMCv_both.Size = New System.Drawing.Size(50, 19)
         Me.rbXBMCv_both.TabIndex = 0
@@ -1771,7 +1775,7 @@ Partial Class frmOptions
         '
         Me.rbXBMCv_post.AutoSize = true
         Me.rbXBMCv_post.Checked = true
-        Me.rbXBMCv_post.Location = New System.Drawing.Point(9, 98)
+        Me.rbXBMCv_post.Location = New System.Drawing.Point(6, 87)
         Me.rbXBMCv_post.Name = "rbXBMCv_post"
         Me.rbXBMCv_post.Size = New System.Drawing.Size(179, 19)
         Me.rbXBMCv_post.TabIndex = 0
@@ -1782,7 +1786,7 @@ Partial Class frmOptions
         'rbXBMCv_pre
         '
         Me.rbXBMCv_pre.AutoSize = true
-        Me.rbXBMCv_pre.Location = New System.Drawing.Point(9, 78)
+        Me.rbXBMCv_pre.Location = New System.Drawing.Point(6, 67)
         Me.rbXBMCv_pre.Name = "rbXBMCv_pre"
         Me.rbXBMCv_pre.Size = New System.Drawing.Size(80, 19)
         Me.rbXBMCv_pre.TabIndex = 0
@@ -1791,8 +1795,7 @@ Partial Class frmOptions
         '
         'TPActors
         '
-        Me.TPActors.Controls.Add(Me.Label98)
-        Me.TPActors.Controls.Add(Me.cmbx_MovMaxActors)
+        Me.TPActors.Controls.Add(Me.GroupBox2)
         Me.TPActors.Controls.Add(Me.GroupBox12)
         Me.TPActors.Controls.Add(Me.GroupBox32)
         Me.TPActors.Location = New System.Drawing.Point(4, 24)
@@ -1807,7 +1810,7 @@ Partial Class frmOptions
         '
         Me.Label98.AutoSize = true
         Me.Label98.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label98.Location = New System.Drawing.Point(16, 139)
+        Me.Label98.Location = New System.Drawing.Point(9, 56)
         Me.Label98.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label98.Name = "Label98"
         Me.Label98.Size = New System.Drawing.Size(161, 15)
@@ -2703,7 +2706,7 @@ Partial Class frmOptions
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3012,7 +3015,7 @@ Partial Class frmOptions
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3713,7 +3716,7 @@ Partial Class frmOptions
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -5251,6 +5254,27 @@ Partial Class frmOptions
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Label6)
+        Me.GroupBox2.Controls.Add(Me.Label98)
+        Me.GroupBox2.Controls.Add(Me.cmbx_MovMaxActors)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 118)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(360, 92)
+        Me.GroupBox2.TabIndex = 65
+        Me.GroupBox2.TabStop = false
+        Me.GroupBox2.Text = "Quantity of Actor's Downloaded."
+        '
+        'Label6
+        '
+        Me.Label6.Location = New System.Drawing.Point(7, 17)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(342, 30)
+        Me.Label6.TabIndex = 39
+        Me.Label6.Text = "Select the Maximum numbers of Actors for Movies and TV Series."
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -5295,7 +5319,6 @@ Partial Class frmOptions
         Me.gbxXBMCversion.ResumeLayout(false)
         Me.gbxXBMCversion.PerformLayout
         Me.TPActors.ResumeLayout(false)
-        Me.TPActors.PerformLayout
         Me.GroupBox32.ResumeLayout(false)
         Me.GroupBox32.PerformLayout
         Me.TPGen.ResumeLayout(false)
@@ -5406,6 +5429,8 @@ Partial Class frmOptions
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
+        Me.GroupBox2.ResumeLayout(false)
+        Me.GroupBox2.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -5824,4 +5849,6 @@ End Sub
     Friend WithEvents tb_tv_RegexScrape_TestString As TextBox
     Friend WithEvents Label118 As Label
     Friend WithEvents cbMovImdbFirstRunTime As CheckBox
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Label6 As Label
 End Class

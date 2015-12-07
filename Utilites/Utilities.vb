@@ -569,14 +569,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim possiblemovies As New List(Of String)
             Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
             Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
+            If Not Directory.Exists(dirpath) Then Return "none"
             Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-            For Each videoextn In VideoExtensions
-                Dim pattern As String = "*" & videoextn
-                If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
+            Dim pattern As String = "*.*" 
+            If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*.*" ' & videoextn
+            Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
+            For Each vidextn In VideoExtensions
+                'Dim pattern As String = "*" & videoextn
+                'If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
                 Try
-                    Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
+                    'Dim fs_infos() As IO.FileInfo = dir_info.GetFiles("*.*")
                     For Each fs_info As IO.FileInfo In fs_infos
-                        If videoextn = ".rar" Then
+                        If fs_info.Extension <> vidextn Then Continue For
+                        If vidextn = ".rar" Then
                             If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
                         End If
                         tempstring = fs_info.FullName.ToLower
