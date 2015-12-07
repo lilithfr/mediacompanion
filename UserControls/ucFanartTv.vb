@@ -366,6 +366,7 @@ Public Class ucFanartTv
                 DisplayExistingArt()
             Catch
             End Try
+            Form1.MovPanel6Update()
             messbox.Close()
         End If
     End Sub
