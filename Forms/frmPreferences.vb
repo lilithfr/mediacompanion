@@ -79,6 +79,7 @@ Public Class frmPreferences
     Private Sub options_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             btn_SettingsClose2.Visible = False
+            Pref.ConfigLoad()
             prefsload = True
             PrefInit()
             CommonInit()
