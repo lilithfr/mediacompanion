@@ -682,6 +682,12 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
+    Private Sub cbShowAllAudioTracks_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbShowAllAudioTracks.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
+        Changes = True
+    End Sub
+
     Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) Handles AutoScrnShtDelay.KeyPress
         Try
             If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
