@@ -141,6 +141,8 @@ Partial Class frmOptions
         Me.rbXBMCv_post = New System.Windows.Forms.RadioButton()
         Me.rbXBMCv_pre = New System.Windows.Forms.RadioButton()
         Me.TPActors = New System.Windows.Forms.TabPage()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label98 = New System.Windows.Forms.Label()
         Me.GroupBox32 = New System.Windows.Forms.GroupBox()
         Me.Label137 = New System.Windows.Forms.Label()
@@ -439,8 +441,7 @@ Partial Class frmOptions
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Label6 = New System.Windows.Forms.Label()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -456,6 +457,7 @@ Partial Class frmOptions
         Me.grpVideoSource.SuspendLayout
         Me.gbxXBMCversion.SuspendLayout
         Me.TPActors.SuspendLayout
+        Me.GroupBox2.SuspendLayout
         Me.GroupBox32.SuspendLayout
         Me.TPGen.SuspendLayout
         Me.GroupBox45.SuspendLayout
@@ -521,7 +523,7 @@ Partial Class frmOptions
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.GroupBox2.SuspendLayout
+        Me.GroupBox4.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -1438,8 +1440,7 @@ Partial Class frmOptions
         '
         'TPCommonSettings
         '
-        Me.TPCommonSettings.Controls.Add(Me.Label185)
-        Me.TPCommonSettings.Controls.Add(Me.AutoScrnShtDelay)
+        Me.TPCommonSettings.Controls.Add(Me.GroupBox4)
         Me.TPCommonSettings.Controls.Add(Me.Label4)
         Me.TPCommonSettings.Controls.Add(Me.gbImageResizing)
         Me.TPCommonSettings.Controls.Add(Me.grpCleanFilename)
@@ -1467,15 +1468,15 @@ Partial Class frmOptions
         'Label185
         '
         Me.Label185.AutoSize = true
-        Me.Label185.Location = New System.Drawing.Point(55, 356)
+        Me.Label185.Location = New System.Drawing.Point(51, 29)
         Me.Label185.Name = "Label185"
-        Me.Label185.Size = New System.Drawing.Size(127, 30)
+        Me.Label185.Size = New System.Drawing.Size(211, 15)
         Me.Label185.TabIndex = 104
-        Me.Label185.Text = "AutoScreenShot delay"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"(in Seconds only)"
+        Me.Label185.Text = "AutoScreenShot delay (Seconds only)"
         '
         'AutoScrnShtDelay
         '
-        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(12, 353)
+        Me.AutoScrnShtDelay.Location = New System.Drawing.Point(8, 26)
         Me.AutoScrnShtDelay.Name = "AutoScrnShtDelay"
         Me.AutoScrnShtDelay.Size = New System.Drawing.Size(37, 21)
         Me.AutoScrnShtDelay.TabIndex = 103
@@ -1805,6 +1806,27 @@ Partial Class frmOptions
         Me.TPActors.TabIndex = 1
         Me.TPActors.Text = "Actor(s)"
         Me.TPActors.UseVisualStyleBackColor = true
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Label6)
+        Me.GroupBox2.Controls.Add(Me.Label98)
+        Me.GroupBox2.Controls.Add(Me.cmbx_MovMaxActors)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 118)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(360, 92)
+        Me.GroupBox2.TabIndex = 65
+        Me.GroupBox2.TabStop = false
+        Me.GroupBox2.Text = "Quantity of Actor's Downloaded."
+        '
+        'Label6
+        '
+        Me.Label6.Location = New System.Drawing.Point(7, 17)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(342, 30)
+        Me.Label6.TabIndex = 39
+        Me.Label6.Text = "Select the Maximum numbers of Actors for Movies and TV Series."
         '
         'Label98
         '
@@ -2706,7 +2728,7 @@ Partial Class frmOptions
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3015,7 +3037,7 @@ Partial Class frmOptions
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3716,7 +3738,7 @@ Partial Class frmOptions
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -5254,26 +5276,16 @@ Partial Class frmOptions
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'GroupBox2
+        'GroupBox4
         '
-        Me.GroupBox2.Controls.Add(Me.Label6)
-        Me.GroupBox2.Controls.Add(Me.Label98)
-        Me.GroupBox2.Controls.Add(Me.cmbx_MovMaxActors)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 118)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(360, 92)
-        Me.GroupBox2.TabIndex = 65
-        Me.GroupBox2.TabStop = false
-        Me.GroupBox2.Text = "Quantity of Actor's Downloaded."
-        '
-        'Label6
-        '
-        Me.Label6.Location = New System.Drawing.Point(7, 17)
-        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(342, 30)
-        Me.Label6.TabIndex = 39
-        Me.Label6.Text = "Select the Maximum numbers of Actors for Movies and TV Series."
+        Me.GroupBox4.Controls.Add(Me.Label185)
+        Me.GroupBox4.Controls.Add(Me.AutoScrnShtDelay)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 353)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(278, 64)
+        Me.GroupBox4.TabIndex = 105
+        Me.GroupBox4.TabStop = false
+        Me.GroupBox4.Text = "Screenshot Delay."
         '
         'frmOptions
         '
@@ -5319,6 +5331,8 @@ Partial Class frmOptions
         Me.gbxXBMCversion.ResumeLayout(false)
         Me.gbxXBMCversion.PerformLayout
         Me.TPActors.ResumeLayout(false)
+        Me.GroupBox2.ResumeLayout(false)
+        Me.GroupBox2.PerformLayout
         Me.GroupBox32.ResumeLayout(false)
         Me.GroupBox32.PerformLayout
         Me.TPGen.ResumeLayout(false)
@@ -5429,8 +5443,8 @@ Partial Class frmOptions
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.GroupBox2.ResumeLayout(false)
-        Me.GroupBox2.PerformLayout
+        Me.GroupBox4.ResumeLayout(false)
+        Me.GroupBox4.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -5851,4 +5865,5 @@ End Sub
     Friend WithEvents cbMovImdbFirstRunTime As CheckBox
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents Label6 As Label
+    Friend WithEvents GroupBox4 As GroupBox
 End Class
