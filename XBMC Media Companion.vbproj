@@ -405,10 +405,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Forms\frmOptions.Designer.vb">
-      <DependentUpon>frmOptions.vb</DependentUpon>
+    <Compile Include="Forms\frmPreferences.Designer.vb">
+      <DependentUpon>frmPreferences.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmOptions.vb">
+    <Compile Include="Forms\frmPreferences.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmSplashscreen.Designer.vb">
@@ -611,8 +611,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmOptions.resx">
-      <DependentUpon>frmOptions.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmPreferences.resx">
+      <DependentUpon>frmPreferences.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSplashscreen.resx">

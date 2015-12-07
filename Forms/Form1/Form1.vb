@@ -10167,21 +10167,11 @@ End Sub
 
     Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click
         OpenPreferences()
-        'Try
-        '    Dim t As New frmOptions
-        '    If Pref.MultiMonitoEnabled Then
-        '        t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-        '        t.StartPosition = FormStartPosition.Manual
-        '    End If
-        '    t.ShowDialog()
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
     End Sub
 
     Private Sub OpenPreferences(Optional ByVal TabRequired As Integer = 0)
         Try
-            Dim t As New frmOptions
+            Dim t As New frmPreferences
             t.SelectTab = TabRequired
             If Pref.MultiMonitoEnabled Then
                 t.Bounds = screen.AllScreens(CurrentScreen).Bounds

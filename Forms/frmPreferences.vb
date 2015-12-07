@@ -7,7 +7,7 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 
 
-Public Class frmOptions
+Public Class frmPreferences
     Public Const SetDefaults = True
     Private fb As New FolderBrowserDialog
     Public SelectTab As Integer = 0
