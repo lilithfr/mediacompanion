@@ -2505,6 +2505,9 @@ Partial Public Class Form1
                                             For Each audioStream In fileStreamDetails.filedetails_audio
                                                 singleepisode.Details.StreamDetails.Audio.Add(audioStream)
                                             Next
+                                            For Each substrm In fileStreamDetails.filedetails_subtitles
+                                                singleepisode.Details.StreamDetails.Subtitles.Add(substrm)
+                                            Next
                                             stage = "12b5f4"
                                             If Not String.IsNullOrEmpty(singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value) Then
                                                 tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
