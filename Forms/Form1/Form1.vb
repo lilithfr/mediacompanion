@@ -4017,9 +4017,11 @@ Public Class Form1
                 Dim IMDB As String = workingMovieDetails.fullmoviebody.imdbid
                 Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)
                 If (IMDB <> "" And IMDB <> "0") AndAlso TMDB <> "" Then
-                    Dim t As New frmMessageBox("Please Select","your preferred site","","2","1")
-                    t.ShowDialog()
-                    If Pref.WebSite = "tmdb" Then
+                    Dim tpi As Integer = TabPage7.ImageIndex
+                    'Dim t As New frmMessageBox("Please Select","your preferred site","","2","1")
+                    't.ShowDialog()
+                    'If Pref.WebSite = "tmdb" Then
+                    If tpi = 1 Then
                         weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                     Else
                         weburl = "http://www.imdb.com/title/" & IMDB & "/"
@@ -4036,12 +4038,10 @@ Public Class Form1
                     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
                     OpenUrl(weburl)
                 Else
-
                     Try
                         If IsNothing(WebBrowser2.Url) OrElse WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> weburl Then
                             WebBrowser2.Stop()
                             WebBrowser2.ScriptErrorsSuppressed = True
-
                             WebBrowser2.Navigate(weburl)
                             WebBrowser2.Refresh()
                             currentTabIndex = TabControl2.SelectedIndex
@@ -4049,7 +4049,6 @@ Public Class Form1
                     Catch
                         WebBrowser2.Stop()
                         WebBrowser2.ScriptErrorsSuppressed = True
-
                         WebBrowser2.Navigate(weburl)
                         WebBrowser2.Refresh()
                         currentTabIndex = TabControl2.SelectedIndex
@@ -4058,7 +4057,6 @@ Public Class Form1
             Else
                 MsgBox("No IMDB or TMDB ID is available for this movie")
             End If
-
         ElseIf tab = "Main Browser" Then
 
             'Need to update displayed movies list as user may have invalidated it by have a 'missing...' filter selected and assigning one or more missing items
@@ -4120,6 +4118,33 @@ Public Class Form1
         Catch
         End Try
         'e.Cancel = True
+    End Sub
+
+        Private Sub TabControl2_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl2.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            For index As Integer = 0 To TabControl2.TabCount - 1 Step 1
+                If TabControl2.GetTabRect(index).Contains(e.Location) Then
+                    If index = 8 Then
+                        Dim tpi As Integer = TabPage7.ImageIndex
+                        If tpi = 0 Then
+                            TabPage7.ImageIndex = 1
+                        Else
+                            TabPage7.ImageIndex = 0
+                        End If
+                        'Dim TabTitle As String = TabPage7.Text
+                        'If TabTitle.ToLower.Contains("imdb") Then
+                        '    TabTitle = "TMDb Browser"
+                        'Else
+                        '    TabTitle = "IMDb Browser"
+                        'End If
+                        'TabPage7.Text = TabTitle
+                        'TabPage7.Font = New Font(TabPage7.Font, FontStyle.Bold)  
+                        TabPage7.Refresh()
+                    End If
+                    Exit For
+                End If
+            Next index
+        End If
     End Sub
 
     Private Sub mov_ChangeMovieSetup(ByVal engine As String)
