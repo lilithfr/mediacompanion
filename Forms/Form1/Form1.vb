@@ -186,6 +186,8 @@ Public Class Form1
     Dim MovieSetMissingID As Boolean = False
     Dim MovFanartToggle As Boolean = False
     Dim MovPosterToggle As Boolean = False
+    Private keypresstimer As Timers.Timer = New Timers.Timer()
+    Private MovieKeyPress As String = ""
 
     Public cropMode As String = "movieposter"
 
@@ -790,6 +792,9 @@ Public Class Form1
             Ini_Timer(XBMC_Link_Check_Timer, 2000, True)
             'XBMC_Link_Check_Timer.Start
 
+            AddHandler keypresstimer.Elapsed, AddressOf keypresstimer_Elapsed
+            Ini_Timer(keypresstimer, 1000)
+
 
             AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
             AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
@@ -1153,6 +1158,10 @@ Public Class Form1
         'If XbmcControllerBufferQ.Count=0 Then
         SetcbBtnLink(XBMC_Link_Check_Timer)
         'End If
+    End Sub
+
+    Private Sub keypresstimer_Elapsed()
+        MovieKeyPress = ""
     End Sub
 
     Sub XbmcLink_UpdateArtwork()
@@ -3823,9 +3832,12 @@ Public Class Form1
     Private Sub DataGridViewMovies_KeyPress(sender As Object, e As KeyPressEventArgs) Handles DataGridViewMovies.Keypress
 	    If [Char].IsLetter(e.KeyChar) or [Char].IsDigit(e.KeyChar) Then
             Dim ekey As String = e.KeyChar.ToString.ToLower
+            keypresstimer.Stop()
+            MovieKeyPress &= ekey
+            keypresstimer.Start()
 		    For i As Integer = 0 To (DataGridViewMovies.Rows.Count) - 1
                 Dim rtitle As String = DataGridViewMovies.Rows(i).Cells("DisplayTitle").Value.ToString.ToLower
-			    If rtitle.StartsWith(ekey) Then
+			    If rtitle.StartsWith(MovieKeyPress) Then
                     Dim icell As Integer = DataGridViewMovies.CurrentCell.ColumnIndex 
                     DataGridViewMovies.CurrentCell = DataGridViewMovies.Rows(i).Cells(icell)
                     DisplayMovie()
