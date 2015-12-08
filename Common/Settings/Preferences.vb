@@ -397,7 +397,7 @@ Public Class Pref
     Public Shared XBMCTVDbPoster As Boolean
     Public Shared XBMCTVDbLanguage As String
     Public Shared XBMCTVDbLanguageLB As New List(Of String)
-    Public Shared XBMCTVDbRatings As String
+    Public Shared XBMCTVDbRatings As String = "IMDb"            'Assign a default to prevent frmPreferences crashing here: cbXBMCTvdbRatingImdb            .Checked    = If(Pref.XBMCTVDbRatings.ToLower = "imdb", True, False)
     Public Shared XBMCTVDbfallback As Boolean
 
     'Saved Music Video Prefs
@@ -1668,16 +1668,20 @@ Public Class Pref
         Return line
     End Function
 
+    '
+    ' The IIF statements below are required because Pref.sorttitleignorearticle is assigned from cb_SorttitleIgnoreArticles
+    ' which has it's text property set to "Move Ignored articles to end of Sort Title" i.e. the variable names are misleading
+    '
     Public Shared Function RemoveIgnoredArticles(ByVal s As String) As String
         If String.IsNullOrEmpty(s) Then Return s
         If ignorearticle AndAlso s.ToLower.IndexOf("the ") = 0 Then 
-            s = s.Substring(4, s.Length - 4) & ", The"
+            s = s.Substring(4, s.Length - 4) & IIf(Pref.sorttitleignorearticle,", The","")
         End If
         If ignoreAn AndAlso s.ToLower.IndexOf("an ") = 0 Then
-            s = s.Substring(3, s.Length - 3) & ", An"
+            s = s.Substring(3, s.Length - 3) & IIf(Pref.sorttitleignorearticle,", An","")
         End If
         If ignoreAarticle AndAlso s.ToLower.IndexOf("a ") = 0 Then
-            s = s.Substring(2, s.Length - 2) & ", A"
+            s = s.Substring(2, s.Length - 2) & IIf(Pref.sorttitleignorearticle,", A","")
         End If
         Return s
     End Function

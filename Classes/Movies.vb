@@ -751,9 +751,9 @@ Public Class Movies
                 Group By 
                     x.MovieSet Into NumFilms=Count
                 Where 
-                    SetsFilter_AlsoInclude.Contains(MovieSet.MovieSetName)
+                    SetsFilter_AlsoInclude.Contains(MovieSet.MovieSetDisplayName)
             
-            Return From x In q Select x.MovieSet.MovieSetName & " (" & x.NumFilms.ToString & ")"
+            Return From x In q Select x.MovieSet.MovieSetDisplayName & " (" & x.NumFilms.ToString & ")"
         End Get
     End Property    
 
@@ -770,17 +770,17 @@ Public Class Movies
         Get
             Dim q = From x In MovieCache 
                 Group By 
-                    x.MovieSet.MovieSetName Into NumFilms=Count
+                    x.MovieSet.MovieSetDisplayName Into NumFilms=Count
                 Where 
                     NumFilms>=Pref.SetsFilterMinFilms 
 
             If Pref.MovieFilters_Sets_Order=0 Then 
-                q = From x In q Order by x.NumFilms Descending, x.MovieSetName Ascending
+                q = From x In q Order by x.NumFilms Descending, x.MovieSetDisplayName Ascending
             Else
-                q = From x In q Order by x.MovieSetName.Replace("-None-","") Ascending , x.NumFilms Descending
+                q = From x In q Order by x.MovieSetDisplayName.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Return From x In q Select x.MovieSetName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxSetsInFilter 
+            Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxSetsInFilter 
         End Get
     End Property    
 
@@ -2321,6 +2321,15 @@ Public Class Movies
         Catch
         End Try
     End Sub
+
+    Public Sub UpdateMovieSetDisplayNames
+
+        For Each m In MovieCache 
+            m.MovieSet.UpdateMovieSetDisplayName
+        Next 
+
+    End Sub
+
 
 #Region "  Music Video Routines"
         

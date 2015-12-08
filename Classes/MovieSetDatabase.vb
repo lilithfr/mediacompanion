@@ -1,9 +1,30 @@
 
 Public Class MovieSetDatabase
 
-    Property MovieSetName   As String = ""
+    Private  _movieSetName        As String = ""
+    Private  _movieSetDisplayName As String = ""
+
     Property MovieSetId     As String = ""
     Property collection     As List(Of CollectionMovie)
+
+
+    Property MovieSetName   As String
+        Get
+            Return _movieSetName
+        End Get
+        Set
+            _movieSetName = Value
+            UpdateMovieSetDisplayName
+        End Set
+    End Property
+
+
+    Public ReadOnly Property MovieSetDisplayName As String
+        Get
+            Return _movieSetDisplayName
+        End Get
+    End Property
+
 
     Sub New
 
@@ -18,6 +39,10 @@ Public Class MovieSetDatabase
     Sub absorb(from As MovieSetDatabase)
         MovieSetName = From.MovieSetName
         MovieSetId = From.MovieSetId 
+    End Sub
+
+    Sub UpdateMovieSetDisplayName
+        _movieSetDisplayName = Pref.RemoveIgnoredArticles(MovieSetName)
     End Sub
 
 End Class

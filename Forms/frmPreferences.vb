@@ -129,6 +129,8 @@ Public Class frmPreferences
         Form1.util_RegexSave()
         Pref.ConfigSave()
 
+        Form1.UpdateMovieSetDisplayNames
+
         If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
         If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
         cleanfilenameprefchanged = False

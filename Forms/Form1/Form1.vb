@@ -2843,6 +2843,16 @@ Public Class Form1
         ProgState = ProgramState.Other
     End Sub
 
+
+    Public Sub UpdateMovieSetDisplayNames
+
+        oMovies.UpdateMovieSetDisplayNames
+        cbFilterSet.UpdateItems(oMovies.SetsFilter)
+
+    End Sub
+
+
+
     Sub UpdateMinMaxMovieFilters()
         '        cbFilterVotes         .Min = oMovies.MinVotes
         '        cbFilterVotes         .Max = oMovies.MaxVotes
