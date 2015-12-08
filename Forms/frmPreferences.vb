@@ -173,7 +173,6 @@ Public Class frmPreferences
         cb_IgnoreThe                .Checked    = Pref.ignorearticle
         cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
         cb_IgnoreAn                 .Checked    = Pref.ignoreAn
-        cb_SorttitleIgnoreArticles  .Checked    = Pref.sorttitleignorearticle
         cbOverwriteArtwork          .Checked    = Not Pref.overwritethumbs
         cbDisplayRatingOverlay      .Checked    = Pref.DisplayRatingOverlay
         cbDisplayMediaInfoOverlay   .Checked    = Pref.DisplayMediainfoOverlay 
@@ -427,6 +426,7 @@ Public Class frmPreferences
         cbMovieShowDateOnList               .Checked        = Pref.showsortdate
         cbMissingMovie                      .Checked        = Pref.incmissingmovies
         cbMovRootFolderCheck                .Checked        = Pref.movrootfoldercheck
+        cb_SorttitleIgnoreArticles          .Checked        = Pref.sorttitleignorearticle
 
         'Rename Movie Settings
         cbMovFolderRename                   .Checked        = Pref.MovFolderRename
@@ -655,13 +655,7 @@ Public Class frmPreferences
         Pref.ignoreAn = cb_IgnoreAn.Checked
         Changes = True
     End Sub
-
-    Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
-        Changes = True
-    End Sub
-
+    
     Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
         If prefsload Then Exit Sub
         Pref.overwritethumbs = Not cbOverwriteArtwork.Checked
@@ -1971,6 +1965,12 @@ Public Class frmPreferences
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As Object, ByVal e As EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMoviePartsIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMoviePartsIgnorePart.CheckedChanged 

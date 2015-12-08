@@ -18436,7 +18436,6 @@ End Sub
                 Next
                 If remove = True Then Pref.offlinefolders.RemoveAt(f)
             Next
-            Pref.ConfigSave()
         End If
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
             Application.DoEvents()
@@ -18468,7 +18467,7 @@ End Sub
                 End If
             Next
         Next
-        
+        Pref.ConfigSave()
         mov_RebuildMovieCaches()
         moviefolderschanged = False
         TabControl2.SelectedIndex = 0

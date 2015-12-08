@@ -108,6 +108,7 @@ Partial Class frmPreferences
         Me.TPCommon = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Label185 = New System.Windows.Forms.Label()
         Me.AutoScrnShtDelay = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -130,7 +131,6 @@ Partial Class frmPreferences
         Me.lbVideoSource = New System.Windows.Forms.ListBox()
         Me.cbDisplayMediaInfoFolderSize = New System.Windows.Forms.CheckBox()
         Me.cb_IgnoreAn = New System.Windows.Forms.CheckBox()
-        Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
         Me.cb_IgnoreA = New System.Windows.Forms.CheckBox()
         Me.cbOverwriteArtwork = New System.Windows.Forms.CheckBox()
         Me.cb_IgnoreThe = New System.Windows.Forms.CheckBox()
@@ -441,7 +441,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -452,6 +452,7 @@ Partial Class frmPreferences
         Me.TPCommon.SuspendLayout
         Me.TabControl4.SuspendLayout
         Me.TPCommonSettings.SuspendLayout
+        Me.GroupBox4.SuspendLayout
         Me.gbImageResizing.SuspendLayout
         Me.grpCleanFilename.SuspendLayout
         Me.grpVideoSource.SuspendLayout
@@ -523,7 +524,6 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.GroupBox4.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -1451,7 +1451,6 @@ Partial Class frmPreferences
         Me.TPCommonSettings.Controls.Add(Me.cbDisplayRatingOverlay)
         Me.TPCommonSettings.Controls.Add(Me.gbExcludeFolders)
         Me.TPCommonSettings.Controls.Add(Me.cb_IgnoreAn)
-        Me.TPCommonSettings.Controls.Add(Me.cb_SorttitleIgnoreArticles)
         Me.TPCommonSettings.Controls.Add(Me.cb_IgnoreA)
         Me.TPCommonSettings.Controls.Add(Me.cbOverwriteArtwork)
         Me.TPCommonSettings.Controls.Add(Me.cb_IgnoreThe)
@@ -1464,6 +1463,17 @@ Partial Class frmPreferences
         Me.TPCommonSettings.TabIndex = 0
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.Label185)
+        Me.GroupBox4.Controls.Add(Me.AutoScrnShtDelay)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 353)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(278, 64)
+        Me.GroupBox4.TabIndex = 105
+        Me.GroupBox4.TabStop = false
+        Me.GroupBox4.Text = "Screenshot Delay."
         '
         'Label185
         '
@@ -1685,16 +1695,6 @@ Partial Class frmPreferences
         Me.cb_IgnoreAn.TabIndex = 93
         Me.cb_IgnoreAn.Text = "Ignore article ""An"" when sorting"
         Me.cb_IgnoreAn.UseVisualStyleBackColor = true
-        '
-        'cb_SorttitleIgnoreArticles
-        '
-        Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(296, 264)
-        Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
-        Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(244, 19)
-        Me.cb_SorttitleIgnoreArticles.TabIndex = 92
-        Me.cb_SorttitleIgnoreArticles.Text = "Move Ignored articles to end of Sort Title"
-        Me.cb_SorttitleIgnoreArticles.UseVisualStyleBackColor = true
         '
         'cb_IgnoreA
         '
@@ -3037,7 +3037,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3479,6 +3479,7 @@ Partial Class frmPreferences
         '
         'GroupBox26
         '
+        Me.GroupBox26.Controls.Add(Me.cb_SorttitleIgnoreArticles)
         Me.GroupBox26.Controls.Add(Me.cbMovRootFolderCheck)
         Me.GroupBox26.Controls.Add(Me.cb_MovDurationAsRuntine)
         Me.GroupBox26.Controls.Add(Me.cbMissingMovie)
@@ -3498,7 +3499,7 @@ Partial Class frmPreferences
         Me.GroupBox26.Controls.Add(Me.cbMovieTrailerUrl)
         Me.GroupBox26.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox26.Name = "GroupBox26"
-        Me.GroupBox26.Size = New System.Drawing.Size(311, 429)
+        Me.GroupBox26.Size = New System.Drawing.Size(311, 472)
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
@@ -5276,18 +5277,17 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'GroupBox4
+        'cb_SorttitleIgnoreArticles
         '
-        Me.GroupBox4.Controls.Add(Me.Label185)
-        Me.GroupBox4.Controls.Add(Me.AutoScrnShtDelay)
-        Me.GroupBox4.Location = New System.Drawing.Point(12, 353)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(278, 64)
-        Me.GroupBox4.TabIndex = 105
-        Me.GroupBox4.TabStop = false
-        Me.GroupBox4.Text = "Screenshot Delay."
+        Me.cb_SorttitleIgnoreArticles.AutoSize = true
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 426)
+        Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
+        Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
+        Me.cb_SorttitleIgnoreArticles.TabIndex = 93
+        Me.cb_SorttitleIgnoreArticles.Text = "On Scrape, Ignored articles to end of Sort Title."
+        Me.cb_SorttitleIgnoreArticles.UseVisualStyleBackColor = true
         '
-        'frmOptions
+        'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -5304,7 +5304,7 @@ Partial Class frmPreferences
         Me.MaximumSize = New System.Drawing.Size(1016, 650)
         Me.MinimizeBox = false
         Me.MinimumSize = New System.Drawing.Size(1016, 650)
-        Me.Name = "frmOptions"
+        Me.Name = "frmPreferences"
         Me.Text = "Media Companion Preferences"
         Me.GroupBox36.ResumeLayout(false)
         Me.GroupBox36.PerformLayout
@@ -5322,6 +5322,8 @@ Partial Class frmPreferences
         Me.TabControl4.ResumeLayout(false)
         Me.TPCommonSettings.ResumeLayout(false)
         Me.TPCommonSettings.PerformLayout
+        Me.GroupBox4.ResumeLayout(false)
+        Me.GroupBox4.PerformLayout
         Me.gbImageResizing.ResumeLayout(false)
         Me.gbImageResizing.PerformLayout
         Me.grpCleanFilename.ResumeLayout(false)
@@ -5443,8 +5445,6 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.GroupBox4.ResumeLayout(false)
-        Me.GroupBox4.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -5552,7 +5552,6 @@ End Sub
     Friend WithEvents gbExcludeFolders As GroupBox
     Friend WithEvents tbExcludeFolders As TextBox
     Friend WithEvents cb_IgnoreAn As CheckBox
-    Friend WithEvents cb_SorttitleIgnoreArticles As CheckBox
     Friend WithEvents cb_IgnoreA As CheckBox
     Friend WithEvents cbOverwriteArtwork As CheckBox
     Friend WithEvents cb_IgnoreThe As CheckBox
@@ -5866,4 +5865,5 @@ End Sub
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents Label6 As Label
     Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents cb_SorttitleIgnoreArticles As CheckBox
 End Class

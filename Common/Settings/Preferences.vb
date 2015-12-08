@@ -1669,19 +1669,21 @@ Public Class Pref
     End Function
 
     '
-    ' The IIF statements below are required because Pref.sorttitleignorearticle is assigned from cb_SorttitleIgnoreArticles
-    ' which has it's text property set to "Move Ignored articles to end of Sort Title" i.e. the variable names are misleading
+    '' The IIF statements below are required because Pref.sorttitleignorearticle is assigned from cb_SorttitleIgnoreArticles
+    '' which has it's text property set to "Move Ignored articles to end of Sort Title" i.e. the variable names are misleading
+    '
+    'Above ammended as removed Ignored Articles and not appended from Movie Title unless Pref.sorttitleignorearticle as Also True.
     '
     Public Shared Function RemoveIgnoredArticles(ByVal s As String) As String
         If String.IsNullOrEmpty(s) Then Return s
         If ignorearticle AndAlso s.ToLower.IndexOf("the ") = 0 Then 
-            s = s.Substring(4, s.Length - 4) & IIf(Pref.sorttitleignorearticle,", The","")
+            s = s.Substring(4, s.Length - 4) & ", The" 'IIf(Pref.sorttitleignorearticle,", The","")
         End If
         If ignoreAn AndAlso s.ToLower.IndexOf("an ") = 0 Then
-            s = s.Substring(3, s.Length - 3) & IIf(Pref.sorttitleignorearticle,", An","")
+            s = s.Substring(3, s.Length - 3) & ", An" 'IIf(Pref.sorttitleignorearticle,", An","")
         End If
         If ignoreAarticle AndAlso s.ToLower.IndexOf("a ") = 0 Then
-            s = s.Substring(2, s.Length - 2) & IIf(Pref.sorttitleignorearticle,", A","")
+            s = s.Substring(2, s.Length - 2) & ", A" 'IIf(Pref.sorttitleignorearticle,", A","")
         End If
         Return s
     End Function
