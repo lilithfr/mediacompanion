@@ -4,7 +4,7 @@ Imports System.Linq
 
 Public Class Data_GridViewMovie
     Dim _fullpathandfilename As String
-    Dim _movieset As String
+    Dim _movieset As MovieSetDatabase
     Dim _filename As String
     Dim _foldername As String
     Dim _title As String
@@ -104,7 +104,7 @@ Public Class Data_GridViewMovie
     Public Function Export() As ComboList
         Dim convertedMovie As New ComboList
         convertedMovie.fullpathandfilename  = Me.fullpathandfilename
-        convertedMovie.MovieSet.MovieSetName = Me.movieset
+        convertedMovie.MovieSet             = Me.movieset
         convertedMovie.filename             = Me.filename
         convertedMovie.foldername           = Me.foldername
         convertedMovie.title                = Me.title
@@ -153,12 +153,12 @@ Public Class Data_GridViewMovie
     End Property
 
 
-    Public Property movieset
+    Public Property movieset As MovieSetDatabase
         Get
             Return _movieset
         End Get
-        Set(ByVal value)
-            _movieset = value.MovieSetName
+        Set
+            _movieset = value
         End Set
     End Property
 

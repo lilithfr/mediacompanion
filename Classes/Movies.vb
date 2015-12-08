@@ -2432,10 +2432,10 @@ Public Class Movies
         Dim fi As New FilteredItems(ccb)
        
         If fi.Include.Count>0 Then
-            recs = recs.Where( Function(x)     fi.Include.Contains(x.movieset) )
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.movieset.MovieSetDisplayName) )
         End If
         If fi.Exclude.Count>0 Then
-            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.movieset) )
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.movieset.MovieSetDisplayName) )
         End If
 
         Return recs

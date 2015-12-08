@@ -8672,9 +8672,9 @@ Public Class Form1
             childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
             childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
             childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
-            If movie.movieset <> Nothing Then
-                If movie.movieset <> "" Then
-                    childchild = doc.CreateElement("set") : childchild.InnerText = movie.movieset : child.AppendChild(childchild)
+            If Not movie.movieset is Nothing Then
+                If movie.movieset.MovieSetName <> "" Then
+                    childchild = doc.CreateElement("set") : childchild.InnerText = movie.movieset.MovieSetName : child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set") : childchild.InnerText = "-None-" : child.AppendChild(childchild)
                 End If
