@@ -596,6 +596,8 @@ Public Class frmPreferences
         For Each prof In Form1.profileStruct.ProfileList
             lb_ProfileList.Items.Add(prof.ProfileName)
         Next
+        Label18.Text = "Current Default Profile: " & Form1.profileStruct.DefaultProfile
+        Label3.Text = "Current Startup Profile: " & Form1.profileStruct.StartupProfile
     End Sub
 
 #Region "Common Tab"
