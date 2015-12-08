@@ -248,6 +248,13 @@ Public Class MediaInfoExport
 
                Case "imdb_num"
                     strNFOprop = If(movie.id <> Nothing, movie.id.Replace("tt", ""), "")
+               
+               Case "file_size"
+                    Try
+                        strNFOprop = Utilities.GetFileSize(movie.MoviePathAndFileName).ToString
+                    Catch
+                        strNFOprop = "0"
+                    End Try
 
                Case "folder_size"
                     fi = New System.IO.FileInfo(movie.fullpathandfilename)

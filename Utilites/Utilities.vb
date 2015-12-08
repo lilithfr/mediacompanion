@@ -487,6 +487,24 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return 0
     End Function
 
+    Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
+      Dim size As Long          = 0
+      Dim di   As DirectoryInfo = New DirectoryInfo(DirPath)
+      Try
+         For Each fi In di.GetFiles()
+            size += fi.Length
+         Next
+         If IncludeSubFolders then
+            For Each sub_di In di.GetDirectories()
+               size += GetFolderSize(sub_di.FullName)
+            Next
+         End if
+         Return size
+      Catch
+         Return -1
+      End Try
+    End Function
+
     Public Shared Function testForFileByName(ByVal targetMovieFile As String, ByVal fileType As String) As Boolean
         Dim aFileExists As Boolean = False
         Dim fileTypes As New ArrayList
@@ -2656,25 +2674,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Extn = NoDot(UBound(NoDot))
         Return Extn
     End Function
-
-    Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
-      Dim size As Long          = 0
-      Dim di   As DirectoryInfo = New DirectoryInfo(DirPath)
-      Try
-         For Each fi In di.GetFiles()
-            size += fi.Length
-         Next
-         If IncludeSubFolders then
-            For Each sub_di In di.GetDirectories()
-               size += GetFolderSize(sub_di.FullName)
-            Next
-         End if
-         Return size
-      Catch
-         Return -1
-      End Try
-    End Function
-
+    
     Public Shared Function GetTmdbLanguage(ByVal xbmctmdb As String) As List(Of String)
         Dim AvailableLanguages As XDocument = XDocument.Load(applicationPath & "\classes\tmdb_languages.xml")
         Dim q = From x In AvailableLanguages.Descendants("language")

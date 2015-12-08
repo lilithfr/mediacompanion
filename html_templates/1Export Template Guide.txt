@@ -30,6 +30,7 @@ MOVIE TAGS
 <<writer>>
 <<moviegenre>>
 <<releasedate>>
+<<file_size>>			Size of specific video file.  May cause issue if DVD/BluRay folder structure.
 <<folder_size>>			Size of the containing movie folder
 <<filename[:root][:path][:file][:ext]>>
 <<format[:container][:source][:resolution]>>
