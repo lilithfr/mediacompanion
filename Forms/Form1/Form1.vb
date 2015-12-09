@@ -11644,9 +11644,10 @@ End Sub
             While BckWrkScnMovies.IsBusy 
                 Application.DoEvents()
             End While
-            oMovies.SaveCaches
+            If Not Pref.MusicVidScrape Then oMovies.SaveCaches
+            'oMovies.SaveCaches
         Else
-            MsgBox("The Movie Scraper is Already Running")
+            MsgBox("The " & If(Pref.MusicVidScrape, "MusicVideo", "Movie") & " Scraper is Already Running")
         End If
     End Sub
 
@@ -11823,10 +11824,10 @@ End Sub
             sandq = sandq -2
             Exit Sub
         End If
-
-        LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
-        UpdateFilteredList()
-
+        If Not Pref.MusicVidScrape Then
+            LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
+            UpdateFilteredList()
+        End If
         ScraperStatusStrip.Visible = False
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
