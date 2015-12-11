@@ -82,11 +82,15 @@ Public Class ucMusicVideo
         '    rbMVFilename.Checked = True
         'End If
         clbxMvFolders.Items.Clear()
+        clbxMVConcertFolder.ClearSelected()
+        AuthorizeCheck = True
         For Each item In Pref.MVidFolders
-            AuthorizeCheck = True
             clbxMvFolders.Items.Add(item.rpath, item.selected)
-            AuthorizeCheck = False
         Next
+        For Each item In Pref.MVConcertFolders
+            clbxMVConcertFolder.Items.Add(item.rpath, item.selected)
+        Next
+        AuthorizeCheck = False
         If Pref.MVScraper = "wiki" Then
             rb_MvScr1.Checked = True
         ElseIf Pref.MVScraper = "imvdb" Then
@@ -101,6 +105,7 @@ Public Class ucMusicVideo
 
     Private Sub SearchForNewMV()
         Pref.MusicVidScrape = True
+        'Pref.MusicVidConcertScrape = True
         Form1.RunBackgroundMovieScrape("SearchForNewMusicVideo")
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
@@ -847,6 +852,13 @@ Public Class ucMusicVideo
             t.selected = (chkstate = CheckState.Checked)
             Pref.MVidFolders.Add(t)
         Next
+        For f = 0 to clbxMVConcertFolder.Items.Count-1
+            Dim t As New str_RootPaths 
+            t.rpath = clbxMVConcertFolder.Items(f).ToString
+            Dim chkstate As CheckState = clbxMVConcertFolder.GetItemCheckState(f)
+            t.selected = (chkstate = CheckState.Checked)
+            Pref.MVConcertFolders.Add(t)
+        Next
         If rb_MvScr1.Checked Then
             Pref.MVScraper = "wiki"
         ElseIf rb_MvScr2.Checked Then
@@ -909,7 +921,7 @@ Public Class ucMusicVideo
         MVPrefChanged = True
     End Sub
 
-#Region "Folders Buttons & Routines"
+#Region "Single MV Folders Buttons & Routines"
 
     Private Sub btnAddFolderPath_Click(sender As System.Object, e As System.EventArgs) Handles btnAddFolderPath.Click
         Try
@@ -1077,7 +1089,177 @@ Public Class ucMusicVideo
         End Try
     End Sub
 
-#End Region         'Folders Buttons & Routines
+#End Region         'Single MV Folders Buttons & Routines
+
+#Region "Concert MV Folders Buttons & Routines"
+
+    Private Sub btnAddConcertPath_Click(sender As System.Object, e As System.EventArgs) Handles btnAddConcertPath.Click
+        Try
+            If String.IsNullOrEmpty(tbFolderPath.Text) Then Exit Sub
+            Dim tempstring As String = tbFolderPath.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In clbxMVConcertFolder.items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    AuthorizeCheck = True
+                    clbxMVConcertFolder.Items.Add(tempstring, True)
+                    clbxMVConcertFolder.Refresh()
+                    MVPrefChanged = True
+                    AuthorizeCheck = False
+                    tbFolderPath.Text = ""
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        AuthorizeCheck = True
+                        clbxMVConcertFolder.Items.Add(tempstring, True)
+                        clbxMVConcertFolder.Refresh()
+                        MVPrefChanged = True
+                        AuthorizeCheck = False
+                        tbFolderPath.Text = ""
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnBrowseConcertFolders_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseConcertFolders.Click
+        Try
+            Dim allok As Boolean = True
+            Dim thefoldernames As String
+            fb.Description = "Please Select Folder to Add"
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Pref.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
+                Pref.lastpath = thefoldernames
+                If allok = True Then
+                    AuthorizeCheck = True
+                    clbxMVConcertFolder.Items.Add(thefoldernames, True)
+                    clbxMVConcertFolder.Refresh()
+                    MVPrefChanged = True
+                    AuthorizeCheck = False
+                Else
+                    MsgBox("        Folder Already Exists")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub clbxMVConcertFolder_DragDrop(sender As Object, e As DragEventArgs) Handles clbxMVConcertFolder.DragDrop
+        Dim folders() As String
+        Form1.droppedItems.Clear()
+        folders = e.Data.GetData(DataFormats.filedrop)
+        For f = 0 To UBound(folders)
+            Dim exists As Boolean = False
+            For Each rtpath In Pref.movieFolders
+                If rtpath.rpath = folders(f) Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists Then Continue For
+            If clbxMVConcertFolder.Items.Contains(folders(f)) Then Continue For
+		    Dim skip As Boolean = False
+		    For Each item In Form1.droppedItems
+			    If item = folders(f) Then
+				    skip = True
+				    Exit For
+			    End If
+		    Next
+		    If Not skip Then Form1.droppedItems.Add(folders(f))
+        Next
+        If Form1.droppedItems.Count < 1 Then Exit Sub
+        AuthorizeCheck = True
+        For Each item In Form1.droppedItems
+            clbxMVConcertFolder.Items.Add(item, True)
+            MVPrefChanged = True
+        Next
+        AuthorizeCheck = False
+        clbxMVConcertFolder.Refresh()
+    End Sub
+
+    Private Sub clbxMVConcertFolder_DragEnter(sender As Object, e As DragEventArgs) Handles clbxMVConcertFolder.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub clbxMVConcertFolder_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles clbxMVConcertFolder.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso clbxMVConcertFolder.SelectedItem <> Nothing
+            Call btnRemoveFolder.PerformClick()
+        ElseIf e.KeyCode = Keys.Space Then
+            AuthorizeCheck = True
+            Call clbxMVConcertFoldertoggle()
+            AuthorizeCheck = False
+        End If
+    End Sub
+
+    Private Sub clbxMVConcertFolder_MouseDown(sender As Object, e As MouseEventArgs) Handles clbxMVConcertFolder.MouseDown 
+        Dim loc As Point = Me.clbxMVConcertFolder.PointToClient(Cursor.Position)
+        For i As Integer = 0 To Me.clbxMVConcertFolder.Items.Count - 1
+	        Dim rec As Rectangle = Me.clbxMVConcertFolder.GetItemRectangle(i)
+	        rec.Width = 16
+	        'checkbox itself has a default width of about 16 pixels
+	        If rec.Contains(loc) Then
+		        AuthorizeCheck = True
+		        Dim newValue As Boolean = Not Me.clbxMVConcertFolder.GetItemChecked(i)
+		        Me.clbxMVConcertFolder.SetItemChecked(i, newValue)
+		        AuthorizeCheck = False
+		        Return
+	        End If
+        Next
+    End Sub
+
+    Private Sub clbxMVConcertFolder_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbxMVConcertFolder.ItemCheck
+        If Not AuthorizeCheck Then
+	        e.NewValue = e.CurrentValue
+            Exit Sub
+        End If
+        Static Updating As Boolean
+        If Updating Then Exit Sub
+        MVPrefChanged = True
+        Updating = False
+    End Sub
+
+    Private Sub clbxMVConcertFoldertoggle()
+        Dim i = clbxMVConcertFolder.SelectedIndex
+        clbxMVConcertFolder.SetItemCheckState(i, If(clbxMVConcertFolder.GetItemCheckState(i) = CheckState.Checked, CheckState.Unchecked, CheckState.Checked))
+    End Sub
+
+    Private Sub btnRemoveConcertFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveConcertFolder.Click
+        Try
+            While clbxMVConcertFolder.SelectedItems.Count > 0
+                clbxMVConcertFolder.Items.Remove(clbxMVConcertFolder.SelectedItems(0))
+                MVPrefChanged = True
+            End While
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region         'Concert MV Folders Buttons & Routines
 
 #End Region         'Preferences Tab
     

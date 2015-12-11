@@ -720,7 +720,7 @@ Public Class Movie
             Try
                 Dim filechck As StreamReader = File.OpenText(movieNfoFile)
                 Dim Searchstring As String = "<movie>"
-                If Pref.MusicVidScrape Then Searchstring = "<musicvideo>"
+                If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Searchstring = "<musicvideo>"
                 Dim tempstring As String
                 Do
                     tempstring = filechck.ReadLine
@@ -1119,7 +1119,7 @@ Public Class Movie
     End Sub
 
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
-        If Pref.MusicVidScrape Then
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then
             _scrapedMovie = WorkingWithNfoFiles.MVloadNfo(ActualNfoPathAndFilename)  'NfoPathPrefName
         Else
             _scrapedMovie = WorkingWithNfoFiles.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
@@ -1148,12 +1148,12 @@ Public Class Movie
     Shared Sub SaveNFO(Nfo As String, fmd As FullMovieDetails,Optional media As String=Nothing)
 
         'Dim MovieUpdated As Boolean = File.Exists(Nfo)
-        If Pref.MusicVidScrape Then
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then
             WorkingWithNfoFiles.MVsaveNfo(nfo, fmd)
         Else
             WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)    
         End If
-        If Pref.MusicVidScrape Then Exit Sub
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Exit Sub
 
         If Pref.XbmcLinkReady Then
 
@@ -1305,7 +1305,7 @@ Public Class Movie
     Sub AssignScrapedMovie(_scrapedMovie As FullMovieDetails)
         Dim thumbstring As New XmlDocument
         Dim xmltype As String = "movie"
-        If Pref.MusicVidScrape Then xmltype = "musicvideo"
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then xmltype = "musicvideo"
 
         thumbstring.LoadXml(ImdbBody)
         Dim thisresult As XmlElement = Nothing
@@ -1430,7 +1430,7 @@ Public Class Movie
             End Select
         Next
 
-        If Pref.MusicVidScrape Then Exit Sub     'If Music Video Scraping, finished at this point so exit
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Exit Sub     'If Music Video Scraping, finished at this point so exit
 
         If Pref.sorttitleignorearticle Then                              'add ignored articles to end of
             Dim titletext As String = _scrapedMovie.fullmoviebody.title         'sort title. Over-rides independent The or A settings.
@@ -2671,7 +2671,7 @@ Public Class Movie
     End Function
     
     Public Function fileRename(ByRef movieFileInfo As Movie) As String 'ByVal movieDetails As str_BasicMovieNFO, ByRef movieFileInfo As Movie) As String
-        If Pref.MusicVidScrape Then Return ""  ' Temporary till get music vid posters scraping.
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Return ""  ' Temporary till get music vid posters scraping.
         Dim log As String = ""
         Dim newpath As String = movieFileInfo.NfoPath
         Dim mediaFile As String = movieFileInfo.mediapathandfilename
@@ -2795,7 +2795,7 @@ Public Class Movie
     End Function
 
     Public Function folderRename(ByRef movieFileInfo As Movie) As String
-        If Pref.MusicVidScrape Then Return "" ' Temporary till get music vid posters scraping.
+        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Return "" ' Temporary till get music vid posters scraping.
         Dim Log As String = ""
         Dim NoDel As Boolean = False
         Dim FilePath As String = movieFileInfo.nfopath   'current path

@@ -48,6 +48,7 @@ Public Class Pref
     Public Shared WebSite As String = "tvdb"
     Public Shared DoneAMov As Boolean = False
     Public Shared MusicVidScrape As Boolean = False
+    Public Shared MusicVidConcertScrape As Boolean = False
     Public Shared DlMissingEpData As Boolean = False
     Public Shared googlecount As Integer = 0
     Public Shared engineno As Integer = 0
@@ -105,6 +106,7 @@ Public Class Pref
     Public Shared homemoviefolders  As New List(Of str_RootPaths)
     Public Shared ExcludeFolders    As New Excludes("Folders")
     Public Shared MVidFolders       As New List(Of str_RootPaths)
+    Public Shared MVConcertFolders  As New List(Of str_RootPaths)
 
     'Saved Form Prefs
     Public Shared backgroundcolour As String
@@ -810,6 +812,7 @@ Public Class Pref
         tvRootFolders.Clear()
         tvFolders.Clear()
         MVidFolders.Clear()
+        MVConcertFolders.Clear()
 
     End Sub
 
@@ -895,6 +898,11 @@ Public Class Pref
         For Each path In MVidFolders
             Dim t As String = path.rpath & "|" & path.selected
             root.AppendChild(doc, "MVidFolders", t)
+        Next
+
+        For Each path In MVConcertFolders
+            Dim t As String = path.rpath & "|" & path.selected
+            root.AppendChild(doc, "MVConcertFolders", t)
         Next
 
         root.AppendChild(ExcludeFolders.GetChild(doc))
@@ -1242,6 +1250,7 @@ Public Class Pref
         'MovSepLst.Clear()
         homemoviefolders.Clear() 
         MVidFolders.Clear()
+        MVConcertFolders.Clear()
         movie_filters.Reset()
         engineupdate()
         ExcludeFolders.Clear()
@@ -1337,6 +1346,13 @@ Public Class Pref
                         u.rpath = t(0)
                         If t.Count > 1 Then u.selected = t(1)
                         MVidFolders.Add(u)
+                    Case "MVConcertFolders"
+                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                        Dim t() As String = decodestring.Split("|")
+                        Dim u As New str_RootPaths
+                        u.rpath = t(0)
+                        If t.Count > 1 Then u.selected = t(1)
+                        MVConcertFolders.Add(u)
                     Case "ExcludeFolders"
                         ExcludeFolders.Load(thisresult)
                     Case "moviethumbpriority"

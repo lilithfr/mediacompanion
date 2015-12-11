@@ -11824,7 +11824,7 @@ End Sub
             sandq = sandq -2
             Exit Sub
         End If
-        If Not Pref.MusicVidScrape Then
+        If Not Pref.MusicVidScrape OrElse Not Pref.MusicVidConcertScrape Then
             LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
             UpdateFilteredList()
         End If
@@ -11836,6 +11836,7 @@ End Sub
         Dim Displayed As Boolean = DisplayLogFile()
         'If Not Pref.MusicVidScrape Then Displayed = DisplayLogFile()  ' no need to display log after music video scraping.
         Pref.MusicVidScrape = False  '  Reset to false only after scrapers complete
+        Pref.MusicVidConcertScrape = False
         If Not Displayed Then BlinkTaskBar()
     End Sub
 

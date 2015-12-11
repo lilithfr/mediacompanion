@@ -23,8 +23,9 @@ Partial Class ucMusicVideo
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ucMusicVideo))
         Me.TabControlMain = New System.Windows.Forms.TabControl()
         Me.tPMainMV = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -115,12 +116,13 @@ Partial Class ucMusicVideo
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
         Me.tPPref = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.btnAddFolderPath = New System.Windows.Forms.Button()
-        Me.Label9 = New System.Windows.Forms.Label()
+        Me.btnRemoveConcertFolder = New System.Windows.Forms.Button()
+        Me.btnBrowseConcertFolders = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.btnAddConcertPath = New System.Windows.Forms.Button()
+        Me.clbxMVConcertFolder = New System.Windows.Forms.CheckedListBox()
+        Me.Label26 = New System.Windows.Forms.Label()
         Me.clbxMvFolders = New System.Windows.Forms.CheckedListBox()
-        Me.btnRemoveFolder = New System.Windows.Forms.Button()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.btnBrowseFolders = New System.Windows.Forms.Button()
         Me.tbFolderPath = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label22 = New System.Windows.Forms.Label()
@@ -128,10 +130,17 @@ Partial Class ucMusicVideo
         Me.rb_MvScr2 = New System.Windows.Forms.RadioButton()
         Me.rb_MvScr1 = New System.Windows.Forms.RadioButton()
         Me.btnMVApply = New System.Windows.Forms.Button()
-        Me.tb_MVPrefScrnSht = New System.Windows.Forms.TextBox()
         Me.cb_MVPrefShowLog = New System.Windows.Forms.CheckBox()
+        Me.tb_MVPrefScrnSht = New System.Windows.Forms.TextBox()
         Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.btnAddFolderPath = New System.Windows.Forms.Button()
+        Me.btnBrowseFolders = New System.Windows.Forms.Button()
+        Me.btnRemoveFolder = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.Label27 = New System.Windows.Forms.Label()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
@@ -655,8 +664,8 @@ Partial Class ucMusicVideo
         Me.MVDgv1.AllowUserToAddRows = false
         Me.MVDgv1.AllowUserToDeleteRows = false
         Me.MVDgv1.AllowUserToResizeRows = false
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
-        Me.MVDgv1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
+        Me.MVDgv1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle3
         Me.MVDgv1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
             Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.MVDgv1.BackgroundColor = System.Drawing.Color.LightGray
@@ -666,14 +675,14 @@ Partial Class ucMusicVideo
         Me.MVDgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.TableLayoutPanel1.SetColumnSpan(Me.MVDgv1, 6)
         Me.MVDgv1.ContextMenuStrip = Me.CM1MVBrowser
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumSeaGreen
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.MVDgv1.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.MediumSeaGreen
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.MVDgv1.DefaultCellStyle = DataGridViewCellStyle4
         Me.MVDgv1.GridColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
         Me.MVDgv1.Location = New System.Drawing.Point(8, 143)
         Me.MVDgv1.Name = "MVDgv1"
@@ -1237,131 +1246,157 @@ Partial Class ucMusicVideo
         '
         'TableLayoutPanel2
         '
-        Me.TableLayoutPanel2.ColumnCount = 10
+        Me.TableLayoutPanel2.ColumnCount = 11
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 9!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 243!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 139!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 142!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel2.Controls.Add(Me.btnAddFolderPath, 5, 9)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label9, 5, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.clbxMvFolders, 5, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.btnRemoveFolder, 7, 11)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 5, 8)
-        Me.TableLayoutPanel2.Controls.Add(Me.btnBrowseFolders, 6, 11)
-        Me.TableLayoutPanel2.Controls.Add(Me.tbFolderPath, 6, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnRemoveConcertFolder, 8, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnBrowseConcertFolders, 7, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.TextBox1, 7, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnAddConcertPath, 6, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.clbxMVConcertFolder, 6, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label26, 6, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.clbxMvFolders, 1, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.tbFolderPath, 2, 9)
         Me.TableLayoutPanel2.Controls.Add(Me.GroupBox1, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.btnMVApply, 1, 11)
-        Me.TableLayoutPanel2.Controls.Add(Me.tb_MVPrefScrnSht, 1, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.cb_MVPrefShowLog, 1, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label25, 2, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.tb_MVPrefScrnSht, 3, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label25, 4, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label9, 1, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 1, 8)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnAddFolderPath, 1, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnBrowseFolders, 2, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnRemoveFolder, 3, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 5, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label27, 6, 1)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 13
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 106!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 118!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(961, 570)
         Me.TableLayoutPanel2.TabIndex = 8
         '
-        'btnAddFolderPath
+        'btnRemoveConcertFolder
         '
-        Me.btnAddFolderPath.Location = New System.Drawing.Point(454, 454)
-        Me.btnAddFolderPath.Name = "btnAddFolderPath"
-        Me.btnAddFolderPath.Size = New System.Drawing.Size(56, 35)
-        Me.btnAddFolderPath.TabIndex = 4
-        Me.btnAddFolderPath.Text = "Add"
-        Me.btnAddFolderPath.UseVisualStyleBackColor = true
+        Me.btnRemoveConcertFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.btnRemoveConcertFolder, 2)
+        Me.btnRemoveConcertFolder.Location = New System.Drawing.Point(639, 462)
+        Me.btnRemoveConcertFolder.Name = "btnRemoveConcertFolder"
+        Me.btnRemoveConcertFolder.Size = New System.Drawing.Size(122, 48)
+        Me.btnRemoveConcertFolder.TabIndex = 18
+        Me.btnRemoveConcertFolder.Text = "Remove Selected Folder"
+        Me.btnRemoveConcertFolder.UseVisualStyleBackColor = true
         '
-        'Label9
+        'btnBrowseConcertFolders
         '
-        Me.Label9.AutoSize = true
-        Me.Label9.Location = New System.Drawing.Point(454, 8)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(48, 15)
-        Me.Label9.TabIndex = 1
-        Me.Label9.Text = "Folders"
+        Me.btnBrowseConcertFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnBrowseConcertFolders.Location = New System.Drawing.Point(497, 462)
+        Me.btnBrowseConcertFolders.Name = "btnBrowseConcertFolders"
+        Me.btnBrowseConcertFolders.Size = New System.Drawing.Size(122, 48)
+        Me.btnBrowseConcertFolders.TabIndex = 17
+        Me.btnBrowseConcertFolders.Text = "Browse for Music Video Folders"
+        Me.btnBrowseConcertFolders.UseVisualStyleBackColor = true
+        '
+        'TextBox1
+        '
+        Me.TableLayoutPanel2.SetColumnSpan(Me.TextBox1, 2)
+        Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox1.Location = New System.Drawing.Point(497, 415)
+        Me.TextBox1.Margin = New System.Windows.Forms.Padding(3, 11, 3, 3)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(316, 21)
+        Me.TextBox1.TabIndex = 16
+        '
+        'btnAddConcertPath
+        '
+        Me.btnAddConcertPath.Location = New System.Drawing.Point(428, 407)
+        Me.btnAddConcertPath.Name = "btnAddConcertPath"
+        Me.btnAddConcertPath.Size = New System.Drawing.Size(56, 35)
+        Me.btnAddConcertPath.TabIndex = 15
+        Me.btnAddConcertPath.Text = "Add"
+        Me.btnAddConcertPath.UseVisualStyleBackColor = true
+        '
+        'clbxMVConcertFolder
+        '
+        Me.clbxMVConcertFolder.AllowDrop = true
+        Me.TableLayoutPanel2.SetColumnSpan(Me.clbxMVConcertFolder, 3)
+        Me.clbxMVConcertFolder.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.clbxMVConcertFolder.FormattingEnabled = true
+        Me.clbxMVConcertFolder.Location = New System.Drawing.Point(428, 174)
+        Me.clbxMVConcertFolder.Name = "clbxMVConcertFolder"
+        Me.TableLayoutPanel2.SetRowSpan(Me.clbxMVConcertFolder, 3)
+        Me.clbxMVConcertFolder.Size = New System.Drawing.Size(385, 207)
+        Me.clbxMVConcertFolder.TabIndex = 14
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = true
+        Me.Label26.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TableLayoutPanel2.SetColumnSpan(Me.Label26, 3)
+        Me.Label26.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label26.Location = New System.Drawing.Point(428, 152)
+        Me.Label26.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(385, 19)
+        Me.Label26.TabIndex = 13
+        Me.Label26.Text = "Concert Root Video Folder(s)"
+        Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'clbxMvFolders
         '
         Me.clbxMvFolders.AllowDrop = true
-        Me.TableLayoutPanel2.SetColumnSpan(Me.clbxMvFolders, 3)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.clbxMvFolders, 4)
         Me.clbxMvFolders.Dock = System.Windows.Forms.DockStyle.Fill
         Me.clbxMvFolders.FormattingEnabled = true
-        Me.clbxMvFolders.Location = New System.Drawing.Point(454, 30)
+        Me.clbxMvFolders.Location = New System.Drawing.Point(12, 174)
         Me.clbxMvFolders.Name = "clbxMvFolders"
-        Me.TableLayoutPanel2.SetRowSpan(Me.clbxMvFolders, 6)
-        Me.clbxMvFolders.Size = New System.Drawing.Size(339, 400)
+        Me.TableLayoutPanel2.SetRowSpan(Me.clbxMvFolders, 3)
+        Me.clbxMvFolders.Size = New System.Drawing.Size(393, 207)
         Me.clbxMvFolders.TabIndex = 7
-        '
-        'btnRemoveFolder
-        '
-        Me.btnRemoveFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnRemoveFolder.Location = New System.Drawing.Point(659, 511)
-        Me.btnRemoveFolder.Name = "btnRemoveFolder"
-        Me.btnRemoveFolder.Size = New System.Drawing.Size(122, 48)
-        Me.btnRemoveFolder.TabIndex = 5
-        Me.btnRemoveFolder.Text = "Remove Selected Folder"
-        Me.btnRemoveFolder.UseVisualStyleBackColor = true
-        '
-        'Label8
-        '
-        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoSize = true
-        Me.TableLayoutPanel2.SetColumnSpan(Me.Label8, 3)
-        Me.Label8.Location = New System.Drawing.Point(454, 436)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(226, 15)
-        Me.Label8.TabIndex = 6
-        Me.Label8.Text = "Manually add Path to Music Video folder"
-        '
-        'btnBrowseFolders
-        '
-        Me.btnBrowseFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnBrowseFolders.Location = New System.Drawing.Point(520, 511)
-        Me.btnBrowseFolders.Name = "btnBrowseFolders"
-        Me.btnBrowseFolders.Size = New System.Drawing.Size(122, 48)
-        Me.btnBrowseFolders.TabIndex = 2
-        Me.btnBrowseFolders.Text = "Browse for Music Video Folders"
-        Me.btnBrowseFolders.UseVisualStyleBackColor = true
         '
         'tbFolderPath
         '
-        Me.TableLayoutPanel2.SetColumnSpan(Me.tbFolderPath, 2)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.tbFolderPath, 3)
         Me.tbFolderPath.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbFolderPath.Location = New System.Drawing.Point(520, 462)
+        Me.tbFolderPath.Location = New System.Drawing.Point(77, 415)
         Me.tbFolderPath.Margin = New System.Windows.Forms.Padding(3, 11, 3, 3)
         Me.tbFolderPath.Name = "tbFolderPath"
-        Me.tbFolderPath.Size = New System.Drawing.Size(273, 21)
+        Me.tbFolderPath.Size = New System.Drawing.Size(328, 21)
         Me.tbFolderPath.TabIndex = 3
         '
         'GroupBox1
         '
-        Me.TableLayoutPanel2.SetColumnSpan(Me.GroupBox1, 3)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.GroupBox1, 4)
         Me.GroupBox1.Controls.Add(Me.Label22)
         Me.GroupBox1.Controls.Add(Me.rb_MvScr3)
         Me.GroupBox1.Controls.Add(Me.rb_MvScr2)
         Me.GroupBox1.Controls.Add(Me.rb_MvScr1)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 30)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(399, 100)
+        Me.GroupBox1.Size = New System.Drawing.Size(393, 100)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Scraper Select"
@@ -1413,7 +1448,7 @@ Partial Class ucMusicVideo
         'btnMVApply
         '
         Me.TableLayoutPanel2.SetColumnSpan(Me.btnMVApply, 2)
-        Me.btnMVApply.Location = New System.Drawing.Point(12, 512)
+        Me.btnMVApply.Location = New System.Drawing.Point(12, 519)
         Me.btnMVApply.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.btnMVApply.Name = "btnMVApply"
         Me.btnMVApply.Size = New System.Drawing.Size(114, 40)
@@ -1421,18 +1456,11 @@ Partial Class ucMusicVideo
         Me.btnMVApply.Text = "Apply Changes"
         Me.btnMVApply.UseVisualStyleBackColor = true
         '
-        'tb_MVPrefScrnSht
-        '
-        Me.tb_MVPrefScrnSht.Location = New System.Drawing.Point(12, 163)
-        Me.tb_MVPrefScrnSht.Name = "tb_MVPrefScrnSht"
-        Me.tb_MVPrefScrnSht.Size = New System.Drawing.Size(46, 21)
-        Me.tb_MVPrefScrnSht.TabIndex = 11
-        '
         'cb_MVPrefShowLog
         '
         Me.cb_MVPrefShowLog.AutoSize = true
         Me.TableLayoutPanel2.SetColumnSpan(Me.cb_MVPrefShowLog, 2)
-        Me.cb_MVPrefShowLog.Location = New System.Drawing.Point(17, 136)
+        Me.cb_MVPrefShowLog.Location = New System.Drawing.Point(17, 125)
         Me.cb_MVPrefShowLog.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
         Me.cb_MVPrefShowLog.Name = "cb_MVPrefShowLog"
         Me.cb_MVPrefShowLog.Size = New System.Drawing.Size(132, 19)
@@ -1440,15 +1468,100 @@ Partial Class ucMusicVideo
         Me.cb_MVPrefShowLog.Text = "Display Scrape Log"
         Me.cb_MVPrefShowLog.UseVisualStyleBackColor = true
         '
+        'tb_MVPrefScrnSht
+        '
+        Me.tb_MVPrefScrnSht.Location = New System.Drawing.Point(226, 125)
+        Me.tb_MVPrefScrnSht.Name = "tb_MVPrefScrnSht"
+        Me.tb_MVPrefScrnSht.Size = New System.Drawing.Size(46, 21)
+        Me.tb_MVPrefScrnSht.TabIndex = 11
+        '
         'Label25
         '
         Me.Label25.AutoSize = true
-        Me.Label25.Location = New System.Drawing.Point(64, 165)
+        Me.Label25.Location = New System.Drawing.Point(281, 127)
         Me.Label25.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(102, 15)
         Me.Label25.TabIndex = 12
         Me.Label25.Text = "ScreenShot Time"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = true
+        Me.Label9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TableLayoutPanel2.SetColumnSpan(Me.Label9, 4)
+        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label9.Location = New System.Drawing.Point(12, 152)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(393, 19)
+        Me.Label9.TabIndex = 1
+        Me.Label9.Text = "Single Music Video Root Folder(s)"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label8
+        '
+        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoSize = true
+        Me.TableLayoutPanel2.SetColumnSpan(Me.Label8, 3)
+        Me.Label8.Location = New System.Drawing.Point(12, 389)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(226, 15)
+        Me.Label8.TabIndex = 6
+        Me.Label8.Text = "Manually add Path to Music Video folder"
+        '
+        'btnAddFolderPath
+        '
+        Me.btnAddFolderPath.Location = New System.Drawing.Point(12, 407)
+        Me.btnAddFolderPath.Name = "btnAddFolderPath"
+        Me.btnAddFolderPath.Size = New System.Drawing.Size(56, 35)
+        Me.btnAddFolderPath.TabIndex = 4
+        Me.btnAddFolderPath.Text = "Add"
+        Me.btnAddFolderPath.UseVisualStyleBackColor = true
+        '
+        'btnBrowseFolders
+        '
+        Me.btnBrowseFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnBrowseFolders.Location = New System.Drawing.Point(77, 462)
+        Me.btnBrowseFolders.Name = "btnBrowseFolders"
+        Me.btnBrowseFolders.Size = New System.Drawing.Size(122, 48)
+        Me.btnBrowseFolders.TabIndex = 2
+        Me.btnBrowseFolders.Text = "Browse for Music Video Folders"
+        Me.btnBrowseFolders.UseVisualStyleBackColor = true
+        '
+        'btnRemoveFolder
+        '
+        Me.btnRemoveFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.btnRemoveFolder, 2)
+        Me.btnRemoveFolder.Location = New System.Drawing.Point(226, 462)
+        Me.btnRemoveFolder.Name = "btnRemoveFolder"
+        Me.btnRemoveFolder.Size = New System.Drawing.Size(122, 48)
+        Me.btnRemoveFolder.TabIndex = 5
+        Me.btnRemoveFolder.Text = "Remove Selected Folder"
+        Me.btnRemoveFolder.UseVisualStyleBackColor = true
+        '
+        'Button1
+        '
+        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button1.Enabled = false
+        Me.Button1.Location = New System.Drawing.Point(408, 0)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(0)
+        Me.Button1.Name = "Button1"
+        Me.TableLayoutPanel2.SetRowSpan(Me.Button1, 13)
+        Me.Button1.Size = New System.Drawing.Size(17, 570)
+        Me.Button1.TabIndex = 19
+        Me.Button1.UseVisualStyleBackColor = true
+        '
+        'Label27
+        '
+        Me.Label27.AutoSize = true
+        Me.TableLayoutPanel2.SetColumnSpan(Me.Label27, 3)
+        Me.Label27.Location = New System.Drawing.Point(428, 8)
+        Me.Label27.Name = "Label27"
+        Me.TableLayoutPanel2.SetRowSpan(Me.Label27, 2)
+        Me.Label27.Size = New System.Drawing.Size(366, 105)
+        Me.Label27.TabIndex = 20
+        Me.Label27.Text = resources.GetString("Label27.Text")
         '
         'ucMusicVideo
         '
@@ -1590,4 +1703,12 @@ End Sub
     Friend WithEvents tb_MVPrefScrnSht As TextBox
     Friend WithEvents cb_MVPrefShowLog As CheckBox
     Friend WithEvents Label25 As Label
+    Friend WithEvents btnRemoveConcertFolder As Button
+    Friend WithEvents btnBrowseConcertFolders As Button
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents btnAddConcertPath As Button
+    Friend WithEvents clbxMVConcertFolder As CheckedListBox
+    Friend WithEvents Label26 As Label
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Label27 As Label
 End Class
