@@ -19565,6 +19565,14 @@ End Sub
 
 #End Region
 
+#Region "TV Fanart.TV Form"
+
+    Private Sub tvtpfanarttv_Leave(sender As Object, e As EventArgs) Handles tvtpfanarttv.Leave
+        tv_ShowLoad(tv_ShowSelectedCurrently())
+    End Sub
+
+#End Region
+
 #Region "Tv Show Selector Form"
 
     Private Sub TextBox26_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox26.KeyDown
