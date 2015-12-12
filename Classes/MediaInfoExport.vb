@@ -649,11 +649,6 @@ Public Class MediaInfoExport
 
         For Each templPart In templateParts
 
-            If imagepath.Equals("!HEADER!") Then    'A hack to process the header
-                inclShow = True
-                imagepath = ""                      'No images allowed in header!
-            End If
-
             Dim blockShow As String = templPart
             Dim blockSeason As String = ""
             Dim blockEpisode As String = ""
@@ -726,6 +721,7 @@ Public Class MediaInfoExport
                     If blockSeason <> "" Then
                         blockSeason = blockSeason.Substring(blockSeason.IndexOf(">>") + 2, blockSeason.IndexOf("<</season>>") - blockSeason.IndexOf(">>") - 2)
                     End If
+
                     Dim strMediaDocSeason As String = ""
                     Dim strMediaDocEpisode As String = ""
                     Dim strTempEpisode As String = ""
@@ -793,10 +789,8 @@ Public Class MediaInfoExport
             If inclShow Then
                 templatePopulated.Add(getTagsTVShow(blockShow, tvShow, showCounter, counterSeason, imagepath))
             End If
-            'blockShow = getTagsTVShow(blockShow, tvShow, showCounter, counterSeason, imagepath)
-            'If Not inclShow Then blockShow = ""
         Next
-        insertIndex = templatePopulated(0).Length
+        insertIndex = If(templatePopulated.Count, templatePopulated(0).Length, 0)
 
         Return String.Join("", templatePopulated)
     End Function
@@ -900,15 +894,43 @@ Public Class MediaInfoExport
                     Try
                         Select Case tokenInstr(1)
                             Case "id"
-                                strNFOprop = fullTVShowDetails.ImdbId.Value
-                            Case "episodeguide"
-                                strNFOprop = fullTVShowDetails.EpisodeGuideUrl.Value
-                            Case "plot"
-                                strNFOprop = fullTVShowDetails.Plot.Value
+                                strNFOprop = fullTVShowDetails.TvdbId.Value
+                            Case "state"
+                                strNFOprop = fullTVShowDetails.State.value__
+                            Case "title"
+                                strNFOprop = fullTVShowDetails.Title.Value
                             Case "showtitle"
                                 strNFOprop = fullTVShowDetails.Title.Value
+                            Case "mpaa"
+                                strNFOprop = fullTVShowDetails.Mpaa.Value
+                            Case "plot"
+                                strNFOprop = fullTVShowDetails.Plot.Value
+                            Case "imdbid"
+                                strNFOprop = fullTVShowDetails.ImdbId.Value
+                            Case "status"
+                                strNFOprop = fullTVShowDetails.Status.Value
+                            Case "runtime"
+                                strNFOprop = fullTVShowDetails.Runtime.Value
+                            Case "rating"
+                                strNFOprop = fullTVShowDetails.Rating.Value
+                            Case "year"
+                                strNFOprop = fullTVShowDetails.Year.Value
+                            Case "premiered"
+                                strNFOprop = fullTVShowDetails.Premiered.Value
+                            Case "studio"
+                                strNFOprop = fullTVShowDetails.Studio.Value
+                            Case "genre"
+                                strNFOprop = fullTVShowDetails.Genre.Value
+                            Case "episodeguide"
+                                strNFOprop = fullTVShowDetails.EpisodeGuideUrl.Value
                             Case "sorttitle"
                                 strNFOprop = fullTVShowDetails.SortTitle.Value
+                            Case "episodeactorsource"
+                                strNFOprop = fullTVShowDetails.EpisodeActorSource.Value
+                            Case "tvshowactorsource"
+                                strNFOprop = fullTVShowDetails.TvShowActorSource.Value
+                            Case "sortorder"
+                                strNFOprop = fullTVShowDetails.SortOrder.Value
                             Case "actor"                                        ' No support for actor list
                                 strNFOprop = "No support"
                             Case "thumb"                                        ' No support for thumbnail list
@@ -1173,10 +1195,16 @@ Public Class MediaInfoExport
                                 strNFOprop = fullTVEpisodeDetails.Credits.Value
                             Case "rating"
                                 strNFOprop = fullTVEpisodeDetails.Rating.Value
+                            Case "displayseason"
+                                strNFOprop = fullTVEpisodeDetails.DisplaySeason.Value
+                            Case "displayepisode"
+                                strNFOprop = fullTVEpisodeDetails.DisplayEpisode.Value
                             Case "runtime"
                                 strNFOprop = fullTVEpisodeDetails.Runtime.Value
                             Case "showid"
                                 strNFOprop = fullTVEpisodeDetails.Id.Value
+                            Case "uniqueid"
+                                strNFOprop = fullTVEpisodeDetails.UniqueId.Value
                             Case "actor"                                        ' No support for actor list
                                 strNFOprop = "No support"
                             Case "thumb"                                        ' No support for thumbnail list
