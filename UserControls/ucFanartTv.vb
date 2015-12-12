@@ -308,6 +308,8 @@ Public Class ucFanartTv
         LoadPath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
         If MovSetToggle Then
             LoadPath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", "")
+        ElseIf Pref.MovFanartNaming Then 
+            LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
         End If
         'If isroot Then
         '    LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")

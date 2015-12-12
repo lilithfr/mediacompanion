@@ -2136,6 +2136,11 @@ Public Class Form1
         'mov_SplitContainerAutoPosition()
     End Sub
 
+    Private Sub Mov_PictureboxLoad()
+        util_ImageLoad(PbMoviePoster, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+        util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultPosterPath)
+    End Sub
+
     Public Function CheckforExtraArt() As Boolean
         Dim confirmedpresent As Boolean = False
         If File.Exists(workingMovieDetails.fileinfo.movsetposterpath) Then FanTvArtList.Items.Add("Set Poster") : confirmedpresent = True
@@ -17426,6 +17431,14 @@ End Sub
         messbox.Close()
         Return allok
     End Function
+
+#End Region
+
+#Region "Movie Fanart.TV Tab"
+
+    Private Sub tpFanartTv_Leave(sender As Object, e As EventArgs) Handles tpFanartTv.Leave
+        Mov_PictureboxLoad()
+    End Sub
 
 #End Region
 
