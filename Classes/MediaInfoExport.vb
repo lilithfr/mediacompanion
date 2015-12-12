@@ -41,7 +41,7 @@ Public Class MediaInfoExport
     'RegexOptions.IgnoreCase to make the regex case insensitive, and RegexOptions.Singleline causes the dot to match newlines
     Dim regexBlockOption As RegexOptions = RegexOptions.IgnoreCase Or RegexOptions.Singleline
 
-    Private Delegate Function getTagsDelegate(ByVal text As String, ByVal mediaCollection As Object, ByVal showCounter As Integer, ByVal imagepath As String, ByVal moviecount As Integer, ByVal filetype As String) As String
+    Private Delegate Function getTagsDelegate(ByVal text As String, ByVal mediaCollection As Object, ByVal showCounter As Integer, ByVal imagepath As String, ByVal moviecount As Integer, ByVal filetype As String, ByRef index As Integer) As String
 
     Public Sub addTemplates(Optional ByRef mediaDropdown As SortedList(Of String, String) = Nothing)
         Dim dir_info As New DirectoryInfo(templateFolder)
@@ -77,8 +77,8 @@ Public Class MediaInfoExport
 
                     M2 = Regex.Match(fileTemplateString, "<<textencoding>>(?<textencoding>.*?)<</textencoding>>", regexBlockOption)
                     If M2.Success Then
-                        If M2.Groups("textencoding").Value.Trim.ToUpper()="ASCII" then
-                            template.textencoding = Encoding.ASCII
+                        If M2.Groups("textencoding").Value.Trim.ToUpper() = "ASCII" Then
+                            template.TextEncoding = Encoding.ASCII
                         End If
                     End If
 
@@ -105,15 +105,16 @@ Public Class MediaInfoExport
             mediaCollection = TryCast(CObj(media), NotifyingList(Of TvShow)).GetSortedShow()
         End If
 
-        Dim tempstring As String = ""
+        Dim M As Match
         Dim counter As Integer = 1
         Dim limit As Integer = 0
-        Dim tempDoc As String = ""
-        Dim headerTagPresent As Boolean = False
-        Dim tempBody As String = ""
-        Dim bodyTagPresent As Boolean = False
-        Dim mediaTagpresent As Boolean = False
+        Dim mediaInsertIndex As Integer = 0
         Dim pathstring As String = ""
+        Dim populatedDoc As String = ""
+        Dim tempBody As String = ""
+        Dim mediaList As String = ""
+        Dim mediaTemplate As String = ""
+        Dim mediaTagpresent As Boolean = False
         Dim filetype As String = Path.GetExtension(savePath).TrimStart("."c)
         Dim displayLineTitle As String = "Exporting Media Info"
         Dim displayLineRemaining As String = ""
@@ -132,14 +133,8 @@ Public Class MediaInfoExport
             frmMediaInfoExport.Show()
         End If
 
-        Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
-        If M.Success Then
-            headerTagPresent = True
-            tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count, filetype)
-            tempDoc = String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
-        End If
-
-        If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
+        'Check to see if any images are to be created, and provide reference to image save directory - non-destructive
+        If Regex.IsMatch(templateBody, "<<(smallimage|createimage(:\w*?)*)>>") Then
             pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
             Dim fso As New IO.DirectoryInfo(pathstring)
             If fso.Exists = False Then
@@ -147,24 +142,47 @@ Public Class MediaInfoExport
             End If
         End If
 
-        M = Regex.Match(workingTemplate.body, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
-        If M.Success Then
-            bodyTagPresent = True
-            tempDoc &= "<body>"
-            tempstring = M.Groups("body").Value
-        Else
-            tempstring = workingTemplate.body
-        End If
-
-        M = Regex.Match(tempstring, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
+        'Check for media item tag
+        M = Regex.Match(templateBody, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
         If M.Success Then
             mediaTagpresent = True
-            tempDoc &= tempstring.Substring(0, M.Index).Trim
-            tempBody = tempstring.Substring(M.Index + M.Length)
-            tempstring = M.Groups("mediaitem").Value
+            mediaInsertIndex = M.Index
+            mediaTemplate = M.Groups("mediaitem").Value.Trim(vbCrLf)
+            templateBody = templateBody.Replace(M.Value, "")
             Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
         End If
 
+        'Check for body tag - this is mainly to support legacy templates that used <<body>> for the media collection template
+        M = Regex.Match(templateBody, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
+        If M.Success Then
+            If mediaTagpresent Then
+                mediaInsertIndex -= 2
+                tempBody = M.Groups("body").Value
+            Else
+                mediaInsertIndex = M.Index + 6
+                mediaTemplate = M.Groups("body").Value
+                tempBody = ""
+            End If
+            templateBody = templateBody.Replace(M.Value, String.Format("<body>{0}</body>", tempBody))
+        End If
+
+        'Check for header tag, and if present, create HTML document with header
+        M = Regex.Match(templateBody, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
+        If M.Success Then
+            templateBody = templateBody.Replace(M.Value, String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, M.Groups("header").Value)) & vbCrLf & "</html>"
+            mediaInsertIndex += 11
+        End If
+
+        'Check for footer tag, and if present, replace with footer tags and content
+        M = Regex.Match(templateBody, "<<footer>>(?<footer>.*?)<</footer>>", regexBlockOption)
+        If M.Success Then
+            templateBody = templateBody.Replace(M.Value, String.Format("<footer>{0}</footer>", M.Groups("footer").Value))
+        End If
+
+        'Populate document template
+        templateBody = getTags(templateBody, mediaCollection(0), counter, pathstring, mediaCollection.Count, filetype, mediaInsertIndex)
+
+        'Iterate over media collection using the appropriate template
         For Each mediaItem In mediaCollection
             If frmMediaInfoExport.IsDisposed OrElse (limit <> 0 And counter > limit) Then Exit For
             displayLineTitle = String.Format("Processing: {0}", If(isMovies, mediaItem.title, mediaItem.title.Value))
@@ -180,16 +198,17 @@ Public Class MediaInfoExport
                 frmMediaInfoExport.Label4.Refresh()
                 Application.DoEvents()
             End If
-            tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count, filetype)
+            mediaList &= getTags(mediaTemplate, mediaItem, counter, pathstring, mediaCollection.Count, filetype, 0)
             counter += 1
         Next
 
         If frmMediaInfoExport.IsDisposed Then
             MsgBox("Operation Canceled")
         Else
-            If mediaTagpresent Then tempDoc &= tempBody
-            If bodyTagPresent Then tempDoc &= "</body>"
-            If headerTagPresent Then tempDoc &= "</html>"
+            If mediaInsertIndex Then
+                populatedDoc = templateBody.Insert(mediaInsertIndex, mediaList)
+            End If
+
             Try
                 If workingTemplate.css IsNot String.Empty Then
                     Dim cssWriter As New System.IO.StreamWriter(IO.Path.GetDirectoryName(savePath) & Path.DirectorySeparatorChar & workingTemplate.cssfile, False, workingTemplate.TextEncoding)
@@ -197,7 +216,7 @@ Public Class MediaInfoExport
                     cssWriter.Dispose()
                 End If
                 Dim docWriter As New System.IO.StreamWriter(savePath, False, workingTemplate.TextEncoding)
-                docWriter.Write(tempDoc)
+                docWriter.Write(populatedDoc)
                 docWriter.Close()
             Catch ex As Exception
                 MsgBox(ex.ToString)
@@ -213,449 +232,449 @@ Public Class MediaInfoExport
         End If
     End Sub
 
-    Private Function getTagsMovies(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer, ByVal filetype As String)
-        Dim tokenCollection As MatchCollection
-        Dim tokenRegExp As New Regex("<<[\w_:]+>>")
-        tokenCollection = tokenRegExp.Matches(text)
-        Dim token As Match
-        Dim fi As System.IO.FileInfo 
+    Private Function getTagsMovies(ByVal templ As String, ByVal movie As ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer, ByVal filetype As String, Optional ByRef insertIndex As Integer = 0)
+        Dim templateParts As New List(Of String)
+        Dim templatePopulated As New List(Of String)
+        If insertIndex Then
+            templateParts.Add(templ.Substring(0, insertIndex))
+        End If
+        templateParts.Add(templ.Substring(insertIndex))
 
-        For Each token In tokenCollection
-            Dim strNFOprop As String = ""
-            Dim preEscapeNFOprop As String = ""
-            Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
-            Dim tokenInstr() As String = valToken.Split(":")
-            Select Case tokenInstr(0)
-                Case "smallimage", "createimage"
-                    If thumbpath IsNot String.Empty AndAlso Not thumbpath.Equals("!HEADER!") Then
-                        Dim origImage = Pref.GetPosterPath(movie.fullpathandfilename)
+        For Each templPart In templateParts
+            Dim tokenRegExp As New Regex("<<[\w_:]+>>")
+            Dim tokenCollection As MatchCollection = tokenRegExp.Matches(templPart)
+            Dim token As Match
+            Dim fi As IO.FileInfo
+
+            For Each token In tokenCollection
+                Dim strNFOprop As String = ""
+                Dim preEscapeNFOprop As String = ""
+                Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
+                Dim tokenInstr() As String = valToken.Split(":")
+                Select Case tokenInstr(0)
+                    Case "smallimage", "createimage"
+                        If thumbpath IsNot String.Empty AndAlso Not thumbpath.Equals("!HEADER!") Then
+                            Dim origImage = Pref.GetPosterPath(movie.fullpathandfilename)
+                            Try
+                                If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "images/"
+                                strNFOprop &= Utilities.createImage(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
+                            Catch ex As Exception
+                                MsgBox(ex.ToString)
+                            End Try
+                        End If
+
+                    Case "moviecount"
+                        strNFOprop = If(moviecount, moviecount.ToString, "0000")
+
+                    Case "counter"
+                        strNFOprop = counter.ToString
+
+                    Case "imdb_id"
+                        strNFOprop = If(movie.id <> Nothing, movie.id, "")
+
+                    Case "imdb_num"
+                        strNFOprop = If(movie.id <> Nothing, movie.id.Replace("tt", ""), "")
+
+                    Case "file_size"
                         Try
-                            If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "images/"
-                            strNFOprop &= Utilities.createImage(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
-                        Catch ex As Exception
-                            MsgBox(ex.ToString)
+                            strNFOprop = Utilities.GetFileSize(movie.MoviePathAndFileName).ToString
+                        Catch
+                            strNFOprop = "0"
                         End Try
-                    End If
 
-                Case "moviecount"
-                    strNFOprop = If(moviecount, moviecount.ToString, "0000")
+                    Case "folder_size"
+                        fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                        strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
 
-                Case "counter"
-                    strNFOprop = counter.ToString
+                    Case "folder"
+                        fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                        strNFOprop = fi.DirectoryName
 
-                Case "imdb_id"
-                    strNFOprop = If(movie.id <> Nothing, movie.id, "")
+                    Case "folder_no_drive"
+                        fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                        strNFOprop = Right(fi.DirectoryName, Len(fi.DirectoryName) - 2)
 
-               Case "imdb_num"
-                    strNFOprop = If(movie.id <> Nothing, movie.id.Replace("tt", ""), "")
-               
-               Case "file_size"
-                    Try
-                        strNFOprop = Utilities.GetFileSize(movie.MoviePathAndFileName).ToString
-                    Catch
-                        strNFOprop = "0"
-                    End Try
+                    Case "imdb_url"
+                        strNFOprop = If(movie.id <> Nothing, Pref.imdbmirror & "title/" & movie.id & "/", Pref.imdbmirror)
 
-               Case "folder_size"
-                    fi = New System.IO.FileInfo(movie.fullpathandfilename)
-                    strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
-
-               Case "folder"
-                    fi = New System.IO.FileInfo(movie.fullpathandfilename)
-                    strNFOprop = fi.DirectoryName
-
-               Case "folder_no_drive"
-                    fi = New System.IO.FileInfo(movie.fullpathandfilename)
-                    strNFOprop = Right(fi.DirectoryName,Len(fi.DirectoryName)-2)
-
-                Case "imdb_url"
-                    strNFOprop = If(movie.id <> Nothing, Pref.imdbmirror & "title/" & movie.id & "/", Pref.imdbmirror)
-
-                Case "title"
-                    strNFOprop = If(movie.title <> Nothing, movie.title, "")
-                    If Not String.IsNullOrEmpty(strNFOprop) And tokenInstr.Length > 1 Then
-                        Dim M As Match = Regex.Match(movie.title, "^(?<article>The )?(?<title>.*?)$")
-                        If M.Success Then
-                            strNFOprop = M.Groups("title").Value.Trim
-                            If tokenInstr(1).StartsWith("append") Then strNFOprop.AppendValue(M.Groups("article").Value.Trim)
-                            If tokenInstr(1).StartsWith("article") Then strNFOprop = M.Groups("article").Value.Trim
-                        End If
-                    End If
-
-                Case "movieyear"
-                    strNFOprop = If(movie.year <> Nothing, movie.year, "0000")
-
-                Case "movietitleandyear"
-                    strNFOprop = If(movie.title <> Nothing, movie.title, "") & " (" & If(movie.year <> Nothing, movie.year, "0000") & ")"
-
-                Case "rating"
-                    strNFOprop = If(movie.rating <> Nothing, movie.rating, "")
-
-                Case "runtime"
-                    strNFOprop = If(movie.runtime <> Nothing, movie.runtime, "")
-
-                Case "outline"
-                    strNFOprop = If(movie.outline <> Nothing, movie.outline, "")
-
-                Case "fullpathandfilename"
-                    strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
-
-                Case "filename"
-                    Dim tempFileAndPath As String = Utilities.GetFileName(movie.fullpathandfilename)
-                    Dim idxEndParam As Integer = tokenInstr.Length - 1
-                    If idxEndParam > 0 Then
-                        Dim arrlstFormat As New ArrayList
-                        Dim separator As String = ""
-                        Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
-                        Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
-                        For i = 0 To idxEndParam - 1
-                            Select Case tokenInstr(i + 1).ToLower
-                                Case "root"
-                                    arrlstFormat.Add(tempRoot)
-                                Case "path"
-                                    arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
-                                Case "file"
-                                    arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
-                                Case "ext"
-                                    arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
-                            End Select
-                        Next
-                        Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
-                        strNFOprop = String.Join(separator, arrFormat)
-                    Else
-                        strNFOprop = tempFileAndPath
-                    End If
-
-                    ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
-                Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "actors", "format", "filename", "nfo"
-                    Dim newplotdetails As New FullMovieDetails
-                    newplotdetails = WorkingWithNfoFiles.mov_NfoLoadFull(movie.fullpathandfilename)
-                    If Not IsNothing(newplotdetails) Then
-                        If tokenInstr(0) = "fullplot" Then
-                            strNFOprop = newplotdetails.fullmoviebody.plot
-                        End If
-                        If tokenInstr(0) = "director" Then
-                            strNFOprop = newplotdetails.fullmoviebody.director
-                        End If
-                        If tokenInstr(0) = "stars" Then
-                            strNFOprop = newplotdetails.fullmoviebody.stars
-                        End If
-                        If tokenInstr(0) = "writer" Then
-                            strNFOprop = newplotdetails.fullmoviebody.credits
-                        End If
-                        If tokenInstr(0) = "moviegenre" Then
-                            strNFOprop = newplotdetails.fullmoviebody.genre
-                        End If
-                        If tokenInstr(0) = "releasedate" Then
-                            strNFOprop = newplotdetails.fullmoviebody.premiered
-                        End If
-                        If tokenInstr(0) = "actors" Then
-                            Dim idxEndParam As Integer = tokenInstr.Length - 1
-                            Dim numActors As Integer = 9999
-                            If idxEndParam > 0 Then
-                                If IsNumeric(tokenInstr(idxEndParam)) Then
-                                    numActors = Int(tokenInstr(idxEndParam))
-                                    idxEndParam -= 1
-                                End If
-                                Dim count As Integer = 0
-                                For Each actor In newplotdetails.listactors
-                                    count += 1
-                                    If count > numActors Then Exit For
-                                    preEscapeNFOprop &= "<actor>"
-                                    For idx = 1 To idxEndParam
-                                        Select Case tokenInstr(idx).ToLower
-                                            Case "name"
-                                                preEscapeNFOprop &= String.Format("<name>{0}</name>", Security.SecurityElement.Escape(actor.actorname))
-                                            Case "role"
-                                                preEscapeNFOprop &= String.Format("<role>{0}</role>", Security.SecurityElement.Escape(actor.actorrole))
-                                            Case "thumb"
-                                                preEscapeNFOprop &= String.Format("<thumb>{0}</thumb>", Security.SecurityElement.Escape(actor.actorthumb))
-                                        End Select
-                                    Next
-                                    preEscapeNFOprop &= "</actor>"
-                                Next
-                            Else
-                                strNFOprop = newplotdetails.fullmoviebody.stars
+                    Case "title"
+                        strNFOprop = If(movie.title <> Nothing, movie.title, "")
+                        If Not String.IsNullOrEmpty(strNFOprop) And tokenInstr.Length > 1 Then
+                            Dim M As Match = Regex.Match(movie.title, "^(?<article>The )?(?<title>.*?)$")
+                            If M.Success Then
+                                strNFOprop = M.Groups("title").Value.Trim
+                                If tokenInstr(1).StartsWith("append") Then strNFOprop.AppendValue(M.Groups("article").Value.Trim)
+                                If tokenInstr(1).StartsWith("article") Then strNFOprop = M.Groups("article").Value.Trim
                             End If
                         End If
-                        If tokenInstr(0) = "format" Then
-                            Dim idxEndParam As Integer = tokenInstr.Length - 1
-                            If idxEndParam > 0 Then
-                                Dim arrlstFormat As New ArrayList
-                                Dim separator As String = " "
-                                For i = 0 To idxEndParam - 1
-                                    Select Case tokenInstr(i + 1).ToLower
-                                        Case "container"
-                                            Dim container As String = newplotdetails.filedetails.filedetails_video.Container.Value
-                                            If container <> Nothing And container <> "" Then
-                                                If tokenInstr(i + 1).ToLower <> tokenInstr(i + 1) Then container = container.ToUpper
-                                                arrlstFormat.Add(container.TrimStart("."))
+
+                    Case "movieyear"
+                        strNFOprop = If(movie.year <> Nothing, movie.year, "0000")
+
+                    Case "movietitleandyear"
+                        strNFOprop = If(movie.title <> Nothing, movie.title, "") & " (" & If(movie.year <> Nothing, movie.year, "0000") & ")"
+
+                    Case "rating"
+                        strNFOprop = If(movie.rating <> Nothing, movie.rating, "")
+
+                    Case "runtime"
+                        strNFOprop = If(movie.runtime <> Nothing, movie.runtime, "")
+
+                    Case "outline"
+                        strNFOprop = If(movie.outline <> Nothing, movie.outline, "")
+
+                    Case "fullpathandfilename"
+                        strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
+
+                    Case "filename"
+                        Dim tempFileAndPath As String = Utilities.GetFileName(movie.fullpathandfilename)
+                        Dim idxEndParam As Integer = tokenInstr.Length - 1
+                        If idxEndParam > 0 Then
+                            Dim arrlstFormat As New ArrayList
+                            Dim separator As String = ""
+                            Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
+                            Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
+                            For i = 0 To idxEndParam - 1
+                                Select Case tokenInstr(i + 1).ToLower
+                                    Case "root"
+                                        arrlstFormat.Add(tempRoot)
+                                    Case "path"
+                                        arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
+                                    Case "file"
+                                        arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
+                                    Case "ext"
+                                        arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
+                                End Select
+                            Next
+                            Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
+                            strNFOprop = String.Join(separator, arrFormat)
+                        Else
+                            strNFOprop = tempFileAndPath
+                        End If
+
+                    ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
+                    Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "actors", "format", "filename", "nfo"
+                        Dim newplotdetails As New FullMovieDetails
+                        newplotdetails = WorkingWithNfoFiles.mov_NfoLoadFull(movie.fullpathandfilename)
+                        If Not IsNothing(newplotdetails) Then
+                            If tokenInstr(0) = "fullplot" Then
+                                strNFOprop = newplotdetails.fullmoviebody.plot
+                            End If
+                            If tokenInstr(0) = "director" Then
+                                strNFOprop = newplotdetails.fullmoviebody.director
+                            End If
+                            If tokenInstr(0) = "stars" Then
+                                strNFOprop = newplotdetails.fullmoviebody.stars
+                            End If
+                            If tokenInstr(0) = "writer" Then
+                                strNFOprop = newplotdetails.fullmoviebody.credits
+                            End If
+                            If tokenInstr(0) = "moviegenre" Then
+                                strNFOprop = newplotdetails.fullmoviebody.genre
+                            End If
+                            If tokenInstr(0) = "releasedate" Then
+                                strNFOprop = newplotdetails.fullmoviebody.premiered
+                            End If
+                            If tokenInstr(0) = "actors" Then
+                                Dim idxEndParam As Integer = tokenInstr.Length - 1
+                                Dim numActors As Integer = 9999
+                                If idxEndParam > 0 Then
+                                    If IsNumeric(tokenInstr(idxEndParam)) Then
+                                        numActors = Int(tokenInstr(idxEndParam))
+                                        idxEndParam -= 1
+                                    End If
+                                    Dim count As Integer = 0
+                                    For Each actor In newplotdetails.listactors
+                                        count += 1
+                                        If count > numActors Then Exit For
+                                        preEscapeNFOprop &= "<actor>"
+                                        For idx = 1 To idxEndParam
+                                            Select Case tokenInstr(idx).ToLower
+                                                Case "name"
+                                                    preEscapeNFOprop &= String.Format("<name>{0}</name>", Security.SecurityElement.Escape(actor.actorname))
+                                                Case "role"
+                                                    preEscapeNFOprop &= String.Format("<role>{0}</role>", Security.SecurityElement.Escape(actor.actorrole))
+                                                Case "thumb"
+                                                    preEscapeNFOprop &= String.Format("<thumb>{0}</thumb>", Security.SecurityElement.Escape(actor.actorthumb))
+                                            End Select
+                                        Next
+                                        preEscapeNFOprop &= "</actor>"
+                                    Next
+                                Else
+                                    strNFOprop = newplotdetails.fullmoviebody.stars
+                                End If
+                            End If
+                            If tokenInstr(0) = "format" Then
+                                Dim idxEndParam As Integer = tokenInstr.Length - 1
+                                If idxEndParam > 0 Then
+                                    Dim arrlstFormat As New ArrayList
+                                    Dim separator As String = " "
+                                    For i = 0 To idxEndParam - 1
+                                        Select Case tokenInstr(i + 1).ToLower
+                                            Case "container"
+                                                Dim container As String = newplotdetails.filedetails.filedetails_video.Container.Value
+                                                If container <> Nothing And container <> "" Then
+                                                    If tokenInstr(i + 1).ToLower <> tokenInstr(i + 1) Then container = container.ToUpper
+                                                    arrlstFormat.Add(container.TrimStart("."))
+                                                End If
+                                            Case "source"
+                                                Dim source As String = newplotdetails.fullmoviebody.source
+                                                If source <> Nothing And source <> "" Then
+                                                    arrlstFormat.Add(source)
+                                                End If
+                                            Case "resolution"
+                                                Dim width, height As Integer
+                                                width = newplotdetails.filedetails.filedetails_video.Width.Value
+                                                height = newplotdetails.filedetails.filedetails_video.Height.Value
+                                                If width AndAlso height Then
+                                                    If (width <= 720 And height <= 480) Then
+                                                        arrlstFormat.Add("480")
+                                                    ElseIf (width <= 768 And height <= 576) Then
+                                                        arrlstFormat.Add("576")
+                                                    ElseIf (width <= 960 And height <= 544) Then
+                                                        arrlstFormat.Add("540")
+                                                    ElseIf (width <= 1280 And height <= 720) Then
+                                                        arrlstFormat.Add("720")
+                                                    ElseIf (width <= 1920 And height <= 1080) Then
+                                                        arrlstFormat.Add("1080")
+                                                    Else
+                                                        arrlstFormat.Add("2160")
+                                                    End If
+                                                End If
+                                        End Select
+                                    Next
+                                    Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
+                                    strNFOprop = String.Join(separator, arrFormat)
+                                Else
+                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+                                End If
+                            End If
+                            If tokenInstr(0) = "nfo" Then
+                                Try
+                                    Select Case tokenInstr(1)
+
+                                        Case "file"
+                                            Select Case tokenInstr(2)
+                                                Case "video"
+                                                    Select Case tokenInstr(3)
+                                                        Case "width"
+                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Width.Value
+                                                        Case "height"
+                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Height.Value
+                                                        Case "aspect"
+                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Aspect.Value
+                                                        Case "codec"
+                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Codec.Value
+                                                        Case "duration"
+                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.DurationInSeconds.Value
+                                                        Case "container"
+                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+                                                        Case Else
+                                                            strNFOprop = tokenInstr(3) & "not supported"
+                                                    End Select
+                                                'strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
+                                                Case "audio"
+                                                    Dim i As Integer = 1
+                                                    For Each audioStream In newplotdetails.filedetails.filedetails_audio
+                                                        Select Case tokenInstr(3)
+                                                            Case "language"
+                                                                strNFOprop &= audioStream.Language.Value
+                                                            Case "channels"
+                                                                strNFOprop &= audioStream.Channels.Value
+                                                            Case "bitrate"
+                                                                strNFOprop &= audioStream.Bitrate.Value
+                                                            Case "codec"
+                                                                strNFOprop &= audioStream.Codec.Value
+                                                        End Select
+                                                        'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
+                                                        If (newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count) Then
+                                                            strNFOprop = strNFOprop & " / "
+                                                        End If
+                                                        i += 1
+                                                    Next
+                                                Case "subtitles"
+                                                    Dim i As Integer = 1
+                                                    For Each subLang In newplotdetails.filedetails.filedetails_subtitles
+                                                        Select Case tokenInstr(3)
+                                                            Case "language"
+                                                                strNFOprop &= subLang.Language.Value
+                                                        End Select
+                                                        'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
+                                                        If (newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count) Then
+                                                            strNFOprop = strNFOprop & " / "
+                                                        End If
+                                                        i += 1
+                                                    Next
+                                                Case "filesize"
+                                                    strNFOprop = Utilities.GetFileSize(movie.MoviePathAndFileName)
+                                            End Select
+                                        Case "title"
+                                            strNFOprop = newplotdetails.fullmoviebody.title
+                                        Case "originaltitle"
+                                            strNFOprop = newplotdetails.fullmoviebody.originaltitle
+                                        Case "sorttitle"
+                                            strNFOprop = newplotdetails.fullmoviebody.sortorder
+                                        Case "year"
+                                            strNFOprop = newplotdetails.fullmoviebody.year
+                                        Case "set"
+                                            strNFOprop = If(newplotdetails.fullmoviebody.movieset.MovieSetName = "-None-", "", newplotdetails.fullmoviebody.movieset.MovieSetName)
+                                        Case "createdate", "premiered"
+                                            Dim newDate, localDatePattern As String
+                                            If tokenInstr(1) = "createdate" Then
+                                                newDate = newplotdetails.fileinfo.createdate
+                                                localDatePattern = Pref.datePattern
+                                            Else
+                                                newDate = newplotdetails.fullmoviebody.premiered
+                                                localDatePattern = Pref.nfoDatePattern
                                             End If
-                                        Case "source"
-                                            Dim source As String = newplotdetails.fullmoviebody.source
-                                            If source <> Nothing And source <> "" Then
-                                                arrlstFormat.Add(source)
-                                            End If
-                                        Case "resolution"
-                                            Dim width, height As Integer
-                                            width = newplotdetails.filedetails.filedetails_video.Width.Value
-                                            height = newplotdetails.filedetails.filedetails_video.Height.Value
-                                            If width AndAlso height Then
-                                                If (width <= 720 And height <= 480) Then
-                                                    arrlstFormat.Add("480")
-                                                ElseIf (width <= 768 And height <= 576) Then
-                                                    arrlstFormat.Add("576")
-                                                ElseIf (width <= 960 And height <= 544) Then
-                                                    arrlstFormat.Add("540")
-                                                ElseIf (width <= 1280 And height <= 720) Then
-                                                    arrlstFormat.Add("720")
-                                                ElseIf (width <= 1920 And height <= 1080) Then
-                                                    arrlstFormat.Add("1080")
+                                            Try
+                                                Dim result As Date
+                                                result = DateTime.ParseExact(newDate, localDatePattern, Nothing)
+                                                If tokenInstr.Length > 2 Then
+                                                    strNFOprop = Format(result, tokenInstr(2)).ToString
+                                                    If tokenInstr.Length > 3 Then
+                                                        Dim separator As String = "!"
+                                                        Select Case tokenInstr(3).ToLower
+                                                            Case "space"
+                                                                separator = " "
+                                                            Case "colon"
+                                                                separator = ":"
+                                                            Case "dash"
+                                                                separator = "-"
+                                                            Case "slash"
+                                                                separator = "/"
+                                                        End Select
+                                                        strNFOprop = strNFOprop.Replace("_", separator)
+                                                    End If
                                                 Else
-                                                    arrlstFormat.Add("2160")
+                                                    strNFOprop = Format(result, Pref.datePattern).ToString
+                                                End If
+                                            Catch ex As Exception
+                                                strNFOprop = "Error in date format"
+                                            End Try
+                                        Case "rating"
+                                            strNFOprop = newplotdetails.fullmoviebody.rating
+                                        Case "votes"
+                                            strNFOprop = newplotdetails.fullmoviebody.votes
+                                        Case "top250"
+                                            strNFOprop = newplotdetails.fullmoviebody.top250
+                                        Case "outline"
+                                            strNFOprop = newplotdetails.fullmoviebody.outline
+                                        Case "plot"
+                                            strNFOprop = newplotdetails.fullmoviebody.plot
+                                        Case "tagline"
+                                            strNFOprop = newplotdetails.fullmoviebody.tagline
+                                        Case "country"
+                                            strNFOprop = newplotdetails.fullmoviebody.country
+                                        Case "runtime"
+                                            Dim M As Match = Regex.Match(newplotdetails.fullmoviebody.runtime.Trim, "^(?<rt>\d{1,3}).*?")
+                                            strNFOprop = If(M.Success, M.Groups("rt").Value, "0")
+                                        Case "mpaa"
+                                            strNFOprop = newplotdetails.fullmoviebody.mpaa
+                                        Case "genre"
+                                            strNFOprop = newplotdetails.fullmoviebody.genre
+                                        Case "credits"
+                                            strNFOprop = newplotdetails.fullmoviebody.credits
+                                        Case "director"
+                                            strNFOprop = newplotdetails.fullmoviebody.director
+                                        Case "studio"
+                                            strNFOprop = newplotdetails.fullmoviebody.studio
+                                        Case "trailer"
+                                            strNFOprop = newplotdetails.fullmoviebody.trailer
+                                        Case "playcount"
+                                            strNFOprop = newplotdetails.fullmoviebody.playcount
+                                        Case "id"
+                                            strNFOprop = newplotdetails.fullmoviebody.imdbid
+                                        Case "stars"
+                                            strNFOprop = newplotdetails.fullmoviebody.stars
+                                        Case "source"
+                                            strNFOprop = newplotdetails.fullmoviebody.source
+                                        Case Else
+                                            strNFOprop = "No support for " & tokenInstr(1)
+                                    End Select
+
+                                    Select Case tokenInstr(1)
+                                        Case "file", "createdate", "premiered", "filename", "actors"
+                                            'Do nothing
+                                        Case Else
+                                            If tokenInstr.Length > 2 Then
+                                                Dim intCharLimit = CInt(tokenInstr(2))
+                                                If strNFOprop.Length > intCharLimit Then
+                                                    strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
                                                 End If
                                             End If
                                     End Select
-                                Next
-                                Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
-                                strNFOprop = String.Join(separator, arrFormat)
-                            Else
-                                strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+
+                                Catch
+                                    strNFOprop = "Error in token"
+                                End Try
                             End If
                         End If
-                        If tokenInstr(0) = "nfo" Then
-                            Try
-                                Select Case tokenInstr(1)
 
-                                    Case "file"
-                                        Select Case tokenInstr(2)
-                                            Case "video"
-                                                Select Case tokenInstr(3)
-                                                    Case "width"
-                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Width.Value
-                                                    Case "height"
-                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Height.Value
-                                                    Case "aspect"
-                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Aspect.Value
-                                                    Case "codec"
-                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Codec.Value
-                                                    Case "duration"
-                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.DurationInSeconds.Value
-                                                    Case "container"
-                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
-                                                    Case Else
-                                                        strNFOprop = tokenInstr(3) & "not supported"
-                                                End Select
-                                                'strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
-                                            Case "audio"
-                                                Dim i As Integer = 1
-                                                For Each audioStream In newplotdetails.filedetails.filedetails_audio
-                                                    Select Case tokenInstr(3)
-                                                        Case "language"
-                                                            strNFOprop &= audioStream.Language.Value
-                                                        Case "channels"
-                                                            strNFOprop &= audioStream.Channels.Value
-                                                        Case "bitrate"
-                                                            strNFOprop &= audioStream.Bitrate.Value
-                                                        Case "codec"
-                                                            strNFOprop &= audioStream.Codec.Value
-                                                    End Select
-                                                    'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
-                                                    If (newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count) Then
-                                                        strNFOprop = strNFOprop & " / "
-                                                    End If
-                                                    i += 1
-                                                Next
-                                            Case "subtitles"
-                                                Dim i As Integer = 1
-                                                For Each subLang In newplotdetails.filedetails.filedetails_subtitles
-                                                    Select Case tokenInstr(3)
-                                                        Case "language"
-                                                            strNFOprop &= subLang.Language.Value
-                                                    End Select
-                                                    'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
-                                                    If (newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count) Then
-                                                        strNFOprop = strNFOprop & " / "
-                                                    End If
-                                                    i += 1
-                                                Next
-                                            Case "filesize"
-                                                strNFOprop = Utilities.GetFileSize(movie.MoviePathAndFileName)
-                                        End Select
-                                    Case "title"
-                                        strNFOprop = newplotdetails.fullmoviebody.title
-                                    Case "originaltitle"
-                                        strNFOprop = newplotdetails.fullmoviebody.originaltitle
-                                    Case "sorttitle"
-                                        strNFOprop = newplotdetails.fullmoviebody.sortorder
-                                    Case "year"
-                                        strNFOprop = newplotdetails.fullmoviebody.year
-                                    Case "set"
-                                        strNFOprop = If(newplotdetails.fullmoviebody.movieset.MovieSetName = "-None-", "", newplotdetails.fullmoviebody.movieset.MovieSetName)
-                                    Case "createdate", "premiered"
-                                        Dim newDate, localDatePattern As String
-                                        If tokenInstr(1) = "createdate" Then
-                                            newDate = newplotdetails.fileinfo.createdate
-                                            localDatePattern = Pref.datePattern
-                                        Else
-                                            newDate = newplotdetails.fullmoviebody.premiered
-                                            localDatePattern = Pref.nfoDatePattern
-                                        End If
-                                        Try
-                                            Dim result As Date
-                                            result = DateTime.ParseExact(newDate, localDatePattern, Nothing)
-                                            If tokenInstr.Length > 2 Then
-                                                strNFOprop = Format(result, tokenInstr(2)).ToString
-                                                If tokenInstr.Length > 3 Then
-                                                    Dim separator As String = "!"
-                                                    Select Case tokenInstr(3).ToLower
-                                                        Case "space"
-                                                            separator = " "
-                                                        Case "colon"
-                                                            separator = ":"
-                                                        Case "dash"
-                                                            separator = "-"
-                                                        Case "slash"
-                                                            separator = "/"
-                                                    End Select
-                                                    strNFOprop = strNFOprop.Replace("_", separator)
-                                                End If
-                                            Else
-                                                strNFOprop = Format(result, Pref.datePattern).ToString
-                                            End If
-                                        Catch ex As Exception
-                                            strNFOprop = "Error in date format"
-                                        End Try
-                                    Case "rating"
-                                        strNFOprop = newplotdetails.fullmoviebody.rating
-                                    Case "votes"
-                                        strNFOprop = newplotdetails.fullmoviebody.votes
-                                    Case "top250"
-                                        strNFOprop = newplotdetails.fullmoviebody.top250
-                                    Case "outline"
-                                        strNFOprop = newplotdetails.fullmoviebody.outline
-                                    Case "plot"
-                                        strNFOprop = newplotdetails.fullmoviebody.plot
-                                    Case "tagline"
-                                        strNFOprop = newplotdetails.fullmoviebody.tagline
-                                    Case "country"
-                                        strNFOprop = newplotdetails.fullmoviebody.country
-                                    Case "runtime"
-                                        Dim M As Match = Regex.Match(newplotdetails.fullmoviebody.runtime.Trim, "^(?<rt>\d{1,3}).*?")
-                                        strNFOprop = If(M.Success, M.Groups("rt").Value, "0")
-                                    Case "mpaa"
-                                        strNFOprop = newplotdetails.fullmoviebody.mpaa
-                                    Case "genre"
-                                        strNFOprop = newplotdetails.fullmoviebody.genre
-                                    Case "credits"
-                                        strNFOprop = newplotdetails.fullmoviebody.credits
-                                    Case "director"
-                                        strNFOprop = newplotdetails.fullmoviebody.director
-                                    Case "studio"
-                                        strNFOprop = newplotdetails.fullmoviebody.studio
-                                    Case "trailer"
-                                        strNFOprop = newplotdetails.fullmoviebody.trailer
-                                    Case "playcount"
-                                        strNFOprop = newplotdetails.fullmoviebody.playcount
-                                    Case "id"
-                                        strNFOprop = newplotdetails.fullmoviebody.imdbid
-                                    Case "stars"
-                                        strNFOprop = newplotdetails.fullmoviebody.stars
-                                    Case "source"
-                                        strNFOprop = newplotdetails.fullmoviebody.source
-                                    Case Else
-                                        strNFOprop = "No support for " & tokenInstr(1)
-                                End Select
-
-                                Select Case tokenInstr(1)
-                                    Case "file", "createdate", "premiered", "filename", "actors"
-                                        'Do nothing
-                                    Case Else
-                                        If tokenInstr.Length > 2 Then
-                                            Dim intCharLimit = CInt(tokenInstr(2))
-                                            If strNFOprop.Length > intCharLimit Then
-                                                strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
-                                            End If
-                                        End If
-                                End Select
-
-                            Catch
-                                strNFOprop = "Error in token"
-                            End Try
-                        End If
-                    End If
-
-            End Select
-            Try
-               If IsNothing(strNFOprop) then strNFOprop = ""
-                Select Case filetype
-                    Case "xml"
-                        strNFOprop = Security.SecurityElement.Escape(strNFOprop)    'this may be applicable to HTML too? - Huey
-                        strNFOprop &= preEscapeNFOprop
-                    Case "csv"
-                        strNFOprop = strNFOprop.Replace(",", "")
-                        strNFOprop = strNFOprop.Replace(Chr(34), "'")
-                    Case Else
-                        strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
-                        strNFOprop &= preEscapeNFOprop
                 End Select
-                text = text.Replace(token.Value, strNFOprop)
-            Catch
-                text = text.Replace(token.Value, "")
-            End Try
+                Try
+                    If IsNothing(strNFOprop) Then strNFOprop = ""
+                    Select Case filetype
+                        Case "xml"
+                            strNFOprop = Security.SecurityElement.Escape(strNFOprop)    'this may be applicable to HTML too? - Huey
+                            strNFOprop &= preEscapeNFOprop
+                        Case "csv"
+                            strNFOprop = strNFOprop.Replace(",", "")
+                            strNFOprop = strNFOprop.Replace(Chr(34), "'")
+                        Case Else
+                            strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                            strNFOprop &= preEscapeNFOprop
+                    End Select
+                    templPart = templPart.Replace(token.Value, strNFOprop)
+                Catch
+                    templPart = templPart.Replace(token.Value, "")
+                End Try
+            Next
+            templatePopulated.Add(templPart)
         Next
+        insertIndex = templatePopulated(0).Length
 
-        Return text
+        Return String.Join("", templatePopulated)
     End Function
 
-    Private Function getTagsTV(ByVal text As String, ByVal tvShow As Media_Companion.TvShow, ByVal showCounter As Integer, ByVal imagepath As String, ByVal showcount As Integer, ByVal filetype As String)
+    Private Function getTagsTV(ByVal templ As String, ByVal tvShow As Media_Companion.TvShow, ByVal showCounter As Integer, ByVal imagepath As String, ByVal showcount As Integer, ByVal filetype As String, Optional ByRef insertIndex As Integer = 0)
         Dim inclShow As Boolean = False
-        If imagepath.Equals("!HEADER!") Then    'A hack to process the header
+        Dim templateParts As New List(Of String)
+        Dim templatePopulated As New List(Of String)
+        If insertIndex Then
             inclShow = True
-            imagepath = ""                      'No images allowed in header!
+            templateParts.Add(templ.Substring(0, insertIndex))
         End If
+        templateParts.Add(templ.Substring(insertIndex))
 
-        Dim blockShow As String = text
-        Dim blockSeason As String = ""
-        Dim blockEpisode As String = ""
-        Dim strMediaDoc As String = ""
-        Dim counterSeason = 0
-        If text.IndexOf("<<season") <> -1 And text.IndexOf("<</season>>") <> -1 Or text.IndexOf("<<episode") <> -1 And text.IndexOf("<</episode>>") <> -1 Then
-            Dim setTVshows = New SortedList(Of String, TvEpisode)(New SeasonEpisodeComparer)
-            Dim keySE As String
-            Dim arrSeasonPresent(0 To 0) As Boolean
-            Dim firstSeason As Integer = 99999
-            Dim inclSeason As Boolean = False
-            Dim inclEpisode As Boolean = False
-            Dim inclMissingSeason As Boolean = False
-            Dim inclMissingEpisode As Boolean = Pref.displayMissingEpisodes
-            If text.IndexOf("<<season>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
-                If text.IndexOf("<<season") <> -1 Then inclSeason = True
-                If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
-                For Each episode In tvShow.Episodes
-                    If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
-                        keySE = episode.Season.Value & "-" & episode.Episode.Value
-                        'episode.IsMissing = False
-                        If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
-                        If episode.Season.Value > UBound(arrSeasonPresent) Then
-                            ReDim Preserve arrSeasonPresent(episode.Season.Value)
-                            arrSeasonPresent(episode.Season.Value) = True
-                        End If
-                        If episode.Season.Value < firstSeason Then
-                            firstSeason = episode.Season.Value
-                            If episode.Season.Value = 0 Then arrSeasonPresent(0) = True
-                        End If
-                    End If
-                Next
+        For Each templPart In templateParts
+
+            If imagepath.Equals("!HEADER!") Then    'A hack to process the header
+                inclShow = True
+                imagepath = ""                      'No images allowed in header!
             End If
-            If text.IndexOf("<<season:missing>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode:missing>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
-                If tvShow.MissingEpisodes.Count > 0 Then
-                    If text.IndexOf("<<season") <> -1 Then inclMissingSeason = True
-                    If text.IndexOf("<<episode") <> -1 Then inclMissingEpisode = True
-                    For Each episode In tvShow.MissingEpisodes
+
+            Dim blockShow As String = templPart
+            Dim blockSeason As String = ""
+            Dim blockEpisode As String = ""
+            Dim strMediaDoc As String = ""
+            Dim counterSeason = 0
+            If templPart.IndexOf("<<season") <> -1 And templPart.IndexOf("<</season>>") <> -1 Or templPart.IndexOf("<<episode") <> -1 And templPart.IndexOf("<</episode>>") <> -1 Then
+                Dim setTVshows = New SortedList(Of String, TvEpisode)(New SeasonEpisodeComparer)
+                Dim keySE As String
+                Dim arrSeasonPresent(0 To 0) As Boolean
+                Dim firstSeason As Integer = 99999
+                Dim inclSeason As Boolean = False
+                Dim inclEpisode As Boolean = False
+                Dim inclMissingSeason As Boolean = False
+                Dim inclMissingEpisode As Boolean = Pref.displayMissingEpisodes
+                If templPart.IndexOf("<<season>>") <> -1 Or templPart.IndexOf("<<season:all>>") <> -1 Or templPart.IndexOf("<<episode>>") <> -1 Or templPart.IndexOf("<<episode:all>>") <> -1 Then
+                    If templPart.IndexOf("<<season") <> -1 Then inclSeason = True
+                    If templPart.IndexOf("<<episode") <> -1 Then inclEpisode = True
+                    For Each episode In tvShow.Episodes
                         If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
                             keySE = episode.Season.Value & "-" & episode.Episode.Value
-                            'episode.IsMissing = True
+                            'episode.IsMissing = False
                             If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                             If episode.Season.Value > UBound(arrSeasonPresent) Then
                                 ReDim Preserve arrSeasonPresent(episode.Season.Value)
@@ -668,93 +687,118 @@ Public Class MediaInfoExport
                         End If
                     Next
                 End If
-            End If
-            If setTVshows.Count Then
-                Dim separator As String = "<<|separator|>>"
-                If inclSeason Or inclMissingSeason Then
-                    blockSeason = text.Substring(text.IndexOf("<<season"), text.IndexOf("<</season>>") - text.IndexOf("<<season") + 11)
-                    blockShow = blockShow.Replace(blockSeason, separator)
-                End If
-                If inclEpisode Or inclMissingEpisode Then
-                    blockEpisode = text.Substring(text.IndexOf("<<episode"), text.IndexOf("<</episode>>") - text.IndexOf("<<episode") + 12)
-                    If blockSeason <> "" Then
-                        blockSeason = blockSeason.Replace(blockEpisode, separator)
-                    Else
-                        blockShow = blockShow.Replace(blockEpisode, separator)
-                    End If
-                    blockEpisode = blockEpisode.Substring(blockEpisode.IndexOf(">>") + 2, blockEpisode.IndexOf("<</episode>>") - blockEpisode.IndexOf(">>") - 2)
-                End If
-                If blockSeason <> "" Then
-                    blockSeason = blockSeason.Substring(blockSeason.IndexOf(">>") + 2, blockSeason.IndexOf("<</season>>") - blockSeason.IndexOf(">>") - 2)
-                End If
-                Dim strMediaDocSeason As String = ""
-                Dim strMediaDocEpisode As String = ""
-                Dim strTempEpisode As String = ""
-                Dim strMediaDocSeasonSpecials As String = ""
-                Dim currSeason As Integer = firstSeason
-                Dim counterSeasonEpisodes = 0
-                Dim counterSeasonMissingEpisodes = 0
-                Dim counterSeasonTotalEpisodes = 0
-                Dim lastEpisode As Boolean = False
-                'Build string
-                For Each episode In setTVshows
-                    If Not (episode.Value.IsMissing And Not inclMissingEpisode) Then
-                        strTempEpisode = If(inclEpisode Or inclMissingEpisode, getTagsTVEpisode(blockEpisode, episode.Value, showCounter, counterSeasonTotalEpisodes), "")
-                        inclShow = True
-                    End If
-                    If setTVshows.IndexOfKey(episode.Key) = setTVshows.Count - 1 Then   'This is the last episode
-                        If strTempEpisode <> "" Then
-                            strMediaDocEpisode = strMediaDocEpisode & strTempEpisode
-                            counterSeasonTotalEpisodes += 1
-                            If episode.Value.IsMissing Then
-                                counterSeasonMissingEpisodes += 1
-                            Else
-                                counterSeasonEpisodes += 1
+                If templPart.IndexOf("<<season:missing>>") <> -1 Or templPart.IndexOf("<<season:all>>") <> -1 Or templPart.IndexOf("<<episode:missing>>") <> -1 Or templPart.IndexOf("<<episode:all>>") <> -1 Then
+                    If tvShow.MissingEpisodes.Count > 0 Then
+                        If templPart.IndexOf("<<season") <> -1 Then inclMissingSeason = True
+                        If templPart.IndexOf("<<episode") <> -1 Then inclMissingEpisode = True
+                        For Each episode In tvShow.MissingEpisodes
+                            If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
+                                keySE = episode.Season.Value & "-" & episode.Episode.Value
+                                'episode.IsMissing = True
+                                If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
+                                If episode.Season.Value > UBound(arrSeasonPresent) Then
+                                    ReDim Preserve arrSeasonPresent(episode.Season.Value)
+                                    arrSeasonPresent(episode.Season.Value) = True
+                                End If
+                                If episode.Season.Value < firstSeason Then
+                                    firstSeason = episode.Season.Value
+                                    If episode.Season.Value = 0 Then arrSeasonPresent(0) = True
+                                End If
                             End If
-                        End If
-                        lastEpisode = True
+                        Next
                     End If
-                    ' If season changes or reach end of sorted list, aggregate season and episode document
-                    If lastEpisode Or episode.Value.Season.Value > currSeason Then
-                        If inclSeason Or inclMissingSeason Then
-                            strMediaDocSeason = getTagsTVSeason(blockSeason, tvShow, showCounter, currSeason, counterSeasonEpisodes, counterSeasonMissingEpisodes, _
-                                                            counterSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
-                            strMediaDocSeason = strMediaDocSeason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode, _
-                                                                                "", strMediaDocEpisode))
+                End If
+                If setTVshows.Count Then
+                    Dim separator As String = "<<|separator|>>"
+                    If inclSeason Or inclMissingSeason Then
+                        blockSeason = templPart.Substring(templPart.IndexOf("<<season"), templPart.IndexOf("<</season>>") - templPart.IndexOf("<<season") + 11)
+                        blockShow = blockShow.Replace(blockSeason, separator)
+                    End If
+                    If inclEpisode Or inclMissingEpisode Then
+                        blockEpisode = templPart.Substring(templPart.IndexOf("<<episode"), templPart.IndexOf("<</episode>>") - templPart.IndexOf("<<episode") + 12)
+                        If blockSeason <> "" Then
+                            blockSeason = blockSeason.Replace(blockEpisode, separator)
+                        Else
+                            blockShow = blockShow.Replace(blockEpisode, separator)
+                        End If
+                        blockEpisode = blockEpisode.Substring(blockEpisode.IndexOf(">>") + 2, blockEpisode.IndexOf("<</episode>>") - blockEpisode.IndexOf(">>") - 2)
+                    End If
+                    If blockSeason <> "" Then
+                        blockSeason = blockSeason.Substring(blockSeason.IndexOf(">>") + 2, blockSeason.IndexOf("<</season>>") - blockSeason.IndexOf(">>") - 2)
+                    End If
+                    Dim strMediaDocSeason As String = ""
+                    Dim strMediaDocEpisode As String = ""
+                    Dim strTempEpisode As String = ""
+                    Dim strMediaDocSeasonSpecials As String = ""
+                    Dim currSeason As Integer = firstSeason
+                    Dim counterSeasonEpisodes = 0
+                    Dim counterSeasonMissingEpisodes = 0
+                    Dim counterSeasonTotalEpisodes = 0
+                    Dim lastEpisode As Boolean = False
+                    'Build string
+                    For Each episode In setTVshows
+                        If Not (episode.Value.IsMissing And Not inclMissingEpisode) Then
+                            strTempEpisode = If(inclEpisode Or inclMissingEpisode, getTagsTVEpisode(blockEpisode, episode.Value, showCounter, counterSeasonTotalEpisodes), "")
                             inclShow = True
-                        Else
-                            strMediaDocSeason = strMediaDocEpisode
                         End If
-                        If currSeason = 0 Then
-                            strMediaDocSeasonSpecials = strMediaDocSeason
-                        Else
-                            strMediaDoc = strMediaDoc & strMediaDocSeason
+                        If setTVshows.IndexOfKey(episode.Key) = setTVshows.Count - 1 Then   'This is the last episode
+                            If strTempEpisode <> "" Then
+                                strMediaDocEpisode = strMediaDocEpisode & strTempEpisode
+                                counterSeasonTotalEpisodes += 1
+                                If episode.Value.IsMissing Then
+                                    counterSeasonMissingEpisodes += 1
+                                Else
+                                    counterSeasonEpisodes += 1
+                                End If
+                            End If
+                            lastEpisode = True
                         End If
-                        strMediaDocSeason = ""
-                        strMediaDocEpisode = ""
-                        currSeason = episode.Value.Season.Value
-                        counterSeason += 1
-                        counterSeasonEpisodes = 0
-                        counterSeasonMissingEpisodes = 0
-                        counterSeasonTotalEpisodes = 0
-                    End If
-                    If episode.Value.IsMissing Then
-                        counterSeasonMissingEpisodes += 1
-                    Else
-                        counterSeasonEpisodes += 1
-                    End If
-                    counterSeasonTotalEpisodes += 1
-                    strMediaDocEpisode = strMediaDocEpisode & strTempEpisode
-                Next
-                strMediaDoc = strMediaDoc & strMediaDocSeasonSpecials
-                blockShow = blockShow.Replace(separator, strMediaDoc)
+                        ' If season changes or reach end of sorted list, aggregate season and episode document
+                        If lastEpisode Or episode.Value.Season.Value > currSeason Then
+                            If inclSeason Or inclMissingSeason Then
+                                strMediaDocSeason = getTagsTVSeason(blockSeason, tvShow, showCounter, currSeason, counterSeasonEpisodes, counterSeasonMissingEpisodes,
+                                                                counterSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
+                                strMediaDocSeason = strMediaDocSeason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode,
+                                                                                    "", strMediaDocEpisode))
+                                inclShow = True
+                            Else
+                                strMediaDocSeason = strMediaDocEpisode
+                            End If
+                            If currSeason = 0 Then
+                                strMediaDocSeasonSpecials = strMediaDocSeason
+                            Else
+                                strMediaDoc = strMediaDoc & strMediaDocSeason
+                            End If
+                            strMediaDocSeason = ""
+                            strMediaDocEpisode = ""
+                            currSeason = episode.Value.Season.Value
+                            counterSeason += 1
+                            counterSeasonEpisodes = 0
+                            counterSeasonMissingEpisodes = 0
+                            counterSeasonTotalEpisodes = 0
+                        End If
+                        If episode.Value.IsMissing Then
+                            counterSeasonMissingEpisodes += 1
+                        Else
+                            counterSeasonEpisodes += 1
+                        End If
+                        counterSeasonTotalEpisodes += 1
+                        strMediaDocEpisode = strMediaDocEpisode & strTempEpisode
+                    Next
+                    strMediaDoc = strMediaDoc & strMediaDocSeasonSpecials
+                    blockShow = blockShow.Replace(separator, strMediaDoc)
+                End If
+
             End If
+            If inclShow Then
+                templatePopulated.Add(getTagsTVShow(blockShow, tvShow, showCounter, counterSeason, imagepath))
+            End If
+            'blockShow = getTagsTVShow(blockShow, tvShow, showCounter, counterSeason, imagepath)
+            'If Not inclShow Then blockShow = ""
+        Next
+        insertIndex = templatePopulated(0).Length
 
-        End If
-
-        blockShow = getTagsTVShow(blockShow, tvShow, showCounter, counterSeason, imagepath)
-        If Not inclShow Then blockShow = ""
-        Return blockShow
+        Return String.Join("", templatePopulated)
     End Function
     Private Function getTagsTVShow(ByRef text As String, ByVal tvShow As TvShow, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
         Dim tokenCol As MatchCollection
