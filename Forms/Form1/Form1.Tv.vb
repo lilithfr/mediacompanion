@@ -2136,7 +2136,12 @@ Partial Public Class Form1
                     stage = "1"
                     If Not String.IsNullOrEmpty(newepisode.ShowTitle.Value) Then S = S.Replace(newepisode.ShowTitle.Value, "")
                     stage = "2"
-                    If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then S = S.Replace(newepisode.ShowYear.Value, "")
+                    If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then 
+                        If S.Contains(newepisode.ShowYear.Value) AndAlso Not S.ToLower.Contains("s" & newepisode.ShowYear.Value) Then
+                            S = S.Replace(newepisode.ShowYear.Value, "")
+                        End If
+                    End If
+                    
                     stage = "3"
                     S = S.Replace("x265", "")
                     S = S.Replace("x264", "")
@@ -3512,7 +3517,7 @@ Partial Public Class Form1
         '(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
         Dim success As Boolean = False
         Try
-
+            Dim MaxSeasonNo As Integer = 1
             Dim tvdbstuff As New TVDBScraper
             Dim showlist As New XmlDocument
             Dim currentshowpath As String = currentshow.NfoFilePath.Replace("tvshow.nfo", "") 
@@ -3556,6 +3561,7 @@ Partial Public Class Form1
                                     individualposter.Language = results.InnerText
                                 Case "season"
                                     individualposter.Season = results.InnerText
+                                    If individualposter.Season.ToInt > MaxSeasonNo Then MaxSeasonNo = individualposter.Season.ToInt
                             End Select
                         Next
                         artlist.Add(individualposter)
@@ -3614,7 +3620,7 @@ Partial Public Class Form1
             'Dim shSeason As Boolean =True
             If shSeason Then
                 'SeasonXX Poster
-                For f = 0 To 1000
+                For f = 0 To MaxSeasonNo+1
                     If (isposter = "poster" Or frodo) And doSeason Then 'poster
                         Dim seasonXXposter As String = Nothing
                         For Each lang In Langlist 
