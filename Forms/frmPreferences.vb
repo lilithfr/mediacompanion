@@ -133,6 +133,7 @@ Public Class frmPreferences
 
         If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
         If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
+        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
         cleanfilenameprefchanged = False
         videosourceprefchanged = False
         XbmcTMDbScraperChanged = False
