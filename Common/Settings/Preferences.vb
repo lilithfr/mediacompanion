@@ -147,6 +147,7 @@ Public Class Pref
     Public Shared ignoreAarticle As Boolean
     Public Shared ignoreAn As Boolean 
     Public Shared sorttitleignorearticle As Boolean
+    Public Shared MovSetTitleIgnArticle As Boolean
     Public Shared intruntime As Boolean
     Public Shared XBMC_version As Byte
     Public Shared ShowMovieGridToolTip As Boolean = False
@@ -564,6 +565,7 @@ Public Class Pref
         ignoreAarticle = False
         ignoreAn = False
         sorttitleignorearticle = False
+        MovSetTitleIgnArticle = False
         externalbrowser = False
         selectedBrowser = ""
         altnfoeditor = ""
@@ -989,6 +991,7 @@ Public Class Pref
         root.AppendChild(doc, "ignoreAarticle",         ignoreAarticle)         'cb_IgnoreA
         root.AppendChild(doc, "ignoreAn",               ignoreAn)               'cb_IgnoreAn
         root.AppendChild(doc, "sorttitleignorearticle", sorttitleignorearticle) 'cb_SorttitleIgnoreArticles
+        root.AppendChild(doc, "MovSetTitleIgnArticle",  MovSetTitleIgnArticle)  'cb_MovSetTitleIgnArticle
         root.AppendChild(doc, "intruntime",             intruntime)             'CheckBox38
         root.AppendChild(doc, "xbmcartwork",            XBMC_version)           'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
         root.AppendChild(doc, "ShowMovieGridToolTip" ,  ShowMovieGridToolTip )  'cbShowMovieGridToolTip
@@ -1492,6 +1495,7 @@ Public Class Pref
                     Case "ignoreAarticle"                       : ignoreAarticle = thisresult.InnerXml
                     Case "ignoreAn"                             : ignoreAn = thisresult.InnerXml 
                     Case "sorttitleignorearticle"               : sorttitleignorearticle = thisresult.InnerXml
+                    Case "MovSetTitleIgnArticle"                : MovSetTitleIgnArticle = thisresult.InnerXml 
                     Case "TVShowUseXBMCScraper"                 : tvshow_useXBMC_Scraper = thisresult.InnerXml
                     Case "moviesUseXBMCScraper"                 : movies_useXBMC_Scraper = thisresult.InnerXml
                     Case "downloadtvposter"                     : tvdlposter = thisresult.InnerXml

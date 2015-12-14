@@ -42,7 +42,7 @@ Public Class MovieSetDatabase
     End Sub
 
     Sub UpdateMovieSetDisplayName
-        _movieSetDisplayName = Pref.RemoveIgnoredArticles(MovieSetName)
+        _movieSetDisplayName = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(MovieSetName), MovieSetName)
     End Sub
 
 End Class

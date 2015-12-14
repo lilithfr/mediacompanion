@@ -428,6 +428,7 @@ Public Class frmPreferences
         cbMissingMovie                      .Checked        = Pref.incmissingmovies
         cbMovRootFolderCheck                .Checked        = Pref.movrootfoldercheck
         cb_SorttitleIgnoreArticles          .Checked        = Pref.sorttitleignorearticle
+        cb_MovSetTitleIgnArticle            .Checked        = Pref.MovSetTitleIgnArticle
 
         'Rename Movie Settings
         cbMovFolderRename                   .Checked        = Pref.MovFolderRename
@@ -1971,6 +1972,12 @@ Public Class frmPreferences
     Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As Object, ByVal e As EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
         If prefsload Then Exit Sub
         Pref.sorttitleignorearticle = cb_SorttitleIgnoreArticles.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cb_MovSetTitleIgnArticle_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MovSetTitleIgnArticle.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovSetTitleIgnArticle = cb_MovSetTitleIgnArticle.Checked
         Changes = True
     End Sub
 

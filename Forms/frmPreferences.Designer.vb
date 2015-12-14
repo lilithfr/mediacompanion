@@ -290,6 +290,7 @@ Partial Class frmPreferences
         Me.Label77 = New System.Windows.Forms.Label()
         Me.TextBox_OfflineDVDTitle = New System.Windows.Forms.TextBox()
         Me.GroupBox26 = New System.Windows.Forms.GroupBox()
+        Me.cb_MovSetTitleIgnArticle = New System.Windows.Forms.CheckBox()
         Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
         Me.cb_MovDurationAsRuntine = New System.Windows.Forms.CheckBox()
         Me.cbMissingMovie = New System.Windows.Forms.CheckBox()
@@ -3037,7 +3038,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3479,6 +3480,7 @@ Partial Class frmPreferences
         '
         'GroupBox26
         '
+        Me.GroupBox26.Controls.Add(Me.cb_MovSetTitleIgnArticle)
         Me.GroupBox26.Controls.Add(Me.cb_SorttitleIgnoreArticles)
         Me.GroupBox26.Controls.Add(Me.cbMovRootFolderCheck)
         Me.GroupBox26.Controls.Add(Me.cb_MovDurationAsRuntine)
@@ -3499,10 +3501,20 @@ Partial Class frmPreferences
         Me.GroupBox26.Controls.Add(Me.cbMovieTrailerUrl)
         Me.GroupBox26.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox26.Name = "GroupBox26"
-        Me.GroupBox26.Size = New System.Drawing.Size(311, 472)
+        Me.GroupBox26.Size = New System.Drawing.Size(311, 492)
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
+        '
+        'cb_MovSetTitleIgnArticle
+        '
+        Me.cb_MovSetTitleIgnArticle.AutoSize = true
+        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 453)
+        Me.cb_MovSetTitleIgnArticle.Name = "cb_MovSetTitleIgnArticle"
+        Me.cb_MovSetTitleIgnArticle.Size = New System.Drawing.Size(236, 19)
+        Me.cb_MovSetTitleIgnArticle.TabIndex = 94
+        Me.cb_MovSetTitleIgnArticle.Text = "Enable Ignore Article for MovieSet Title"
+        Me.cb_MovSetTitleIgnArticle.UseVisualStyleBackColor = true
         '
         'cb_SorttitleIgnoreArticles
         '
@@ -5866,4 +5878,5 @@ End Sub
     Friend WithEvents Label6 As Label
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents cb_SorttitleIgnoreArticles As CheckBox
+    Friend WithEvents cb_MovSetTitleIgnArticle As CheckBox
 End Class

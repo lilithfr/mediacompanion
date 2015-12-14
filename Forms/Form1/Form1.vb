@@ -678,15 +678,15 @@ Public Class Form1
                     If cbMovieDisplay_MovieSet.Items.Count <> Pref.moviesets.Count Then
                         cbMovieDisplay_MovieSet.Items.Clear()
                         For Each mset In Pref.moviesets
-                            cbMovieDisplay_MovieSet.Items.Add(mset)
+                            cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                         Next
                     End If
                     If Not IsNothing(workingMovieDetails) AndAlso workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
                         For Each mset In Pref.moviesets
-                            cbMovieDisplay_MovieSet.Items.Add(mset)
+                            cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                         Next
                         For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                            If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
+                            If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset.MovieSetDisplayName Then
                                 cbMovieDisplay_MovieSet.SelectedIndex = te
                                 Exit For
                             End If
@@ -1572,7 +1572,7 @@ Public Class Form1
             End If
         Next
         For Each item In Pref.moviesets
-            cbMovieDisplay_MovieSet.Items.Add(item)
+            cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
         Next
     End Sub
 
@@ -2852,6 +2852,7 @@ Public Class Form1
     Public Sub UpdateMovieSetDisplayNames
 
         oMovies.UpdateMovieSetDisplayNames
+        pop_cbMovieDisplay_MovieSet
         cbFilterSet.UpdateItems(oMovies.SetsFilter)
 
     End Sub
@@ -8391,15 +8392,15 @@ Public Class Form1
             If cbMovieDisplay_MovieSet.Items.Count <> Pref.moviesets.Count Then
                 cbMovieDisplay_MovieSet.Items.Clear()
                 For Each mset In Pref.moviesets
-                    cbMovieDisplay_MovieSet.Items.Add(mset)
+                    cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                 Next
             End If
             If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
                 For Each mset In Pref.moviesets
-                    cbMovieDisplay_MovieSet.Items.Add(mset)
+                    cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                 Next
                 For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                    If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset.MovieSetName Then
+                    If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset.MovieSetDisplayName Then
                         cbMovieDisplay_MovieSet.SelectedIndex = te
                         Exit For
                     End If
@@ -12172,7 +12173,10 @@ End Sub
 
         cbMovieDisplay_MovieSet.Sorted = True
         cbMovieDisplay_MovieSet.Items.Clear
-        cbMovieDisplay_MovieSet.Items.AddRange( Pref.moviesets.ToArray )
+        For each item In Pref.moviesets
+            cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
+            'cbMovieDisplay_MovieSet.Items.AddRange( Pref.moviesets.ToArray )
+        Next
         cbMovieDisplay_MovieSet.Sorted = False
 
         If cbMovieDisplay_MovieSet.Items.Count = 0 Then
