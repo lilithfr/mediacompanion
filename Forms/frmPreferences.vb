@@ -3416,7 +3416,7 @@ Public Class frmPreferences
         UcGenPref_XbmcLink1.Pop()
     End Sub
 
-    Private Sub tpPrxy_Enter(sender As Object, e As EventArgs) 
+    Private Sub tpPrxy_Enter(sender As Object, e As EventArgs) Handles TPProxy.Enter
         UcGenPref_Proxy1.pop()
     End Sub
 

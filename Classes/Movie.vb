@@ -1396,6 +1396,11 @@ Public Class Movie
                             _scrapedMovie.fullmoviebody.tmdbid = thisid
                         End If
                     End If
+                Case "set"
+                    _scrapedMovie.fullmoviebody.movieset.MovieSetName = thisresult.InnerText
+                    '_scrapedMovie.fullmoviebody.movieset.MovieSetDisplayName = thisresult.InnerText
+                Case "setid"
+                    _scrapedMovie.fullmoviebody.movieset.MovieSetId = thisresult.InnerText
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
                 Case "actor"
@@ -1486,8 +1491,10 @@ Public Class Movie
                 _scrapedMovie.fullmoviebody.mpaa = If(Pref.ExcludeMpaaRated, "", "Rated ") & tmdb.Certification 
                 If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
             End If
-            _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
-            If Pref.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+            If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "" Then
+                _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-"
+            End If
+            If Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                 _scrapedMovie.fullmoviebody.movieset.MovieSetName = tmdb.Movie.belongs_to_collection.name
                 _scrapedMovie.fullmoviebody.movieset.MovieSetId = tmdb.Movie.belongs_to_collection.id 
             End If

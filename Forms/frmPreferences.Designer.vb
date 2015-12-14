@@ -290,6 +290,7 @@ Partial Class frmPreferences
         Me.Label77 = New System.Windows.Forms.Label()
         Me.TextBox_OfflineDVDTitle = New System.Windows.Forms.TextBox()
         Me.GroupBox26 = New System.Windows.Forms.GroupBox()
+        Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
         Me.cb_MovDurationAsRuntine = New System.Windows.Forms.CheckBox()
         Me.cbMissingMovie = New System.Windows.Forms.CheckBox()
         Me.cbMovThousSeparator = New System.Windows.Forms.CheckBox()
@@ -441,7 +442,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -3037,7 +3037,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3503,6 +3503,16 @@ Partial Class frmPreferences
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
+        '
+        'cb_SorttitleIgnoreArticles
+        '
+        Me.cb_SorttitleIgnoreArticles.AutoSize = true
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 426)
+        Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
+        Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
+        Me.cb_SorttitleIgnoreArticles.TabIndex = 93
+        Me.cb_SorttitleIgnoreArticles.Text = "On Scrape, Ignored articles to end of Sort Title."
+        Me.cb_SorttitleIgnoreArticles.UseVisualStyleBackColor = true
         '
         'cb_MovDurationAsRuntine
         '
@@ -5270,22 +5280,12 @@ Partial Class frmPreferences
         '
         'btn_SettingsClose2
         '
-        Me.btn_SettingsClose2.Location = New System.Drawing.Point(520, 585)
+        Me.btn_SettingsClose2.Location = New System.Drawing.Point(590, 585)
         Me.btn_SettingsClose2.Name = "btn_SettingsClose2"
         Me.btn_SettingsClose2.Size = New System.Drawing.Size(109, 23)
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cb_SorttitleIgnoreArticles
-        '
-        Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 426)
-        Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
-        Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
-        Me.cb_SorttitleIgnoreArticles.TabIndex = 93
-        Me.cb_SorttitleIgnoreArticles.Text = "On Scrape, Ignored articles to end of Sort Title."
-        Me.cb_SorttitleIgnoreArticles.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
