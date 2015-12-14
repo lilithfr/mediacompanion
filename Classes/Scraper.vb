@@ -870,6 +870,17 @@ Public Class Classimdb
         End Get
     End Property
 
+    Function RuntimefromTechSpecs(ByVal imdbid As String) As String
+        Dim tmpInfo As String = ""
+        Try
+            Dim tempstring As String= Pref.imdbmirror & "title/" & imdbid & "/technical?ref_=tt_dt_spec"
+            Dim TmpHtml As String = loadwebpage(Pref.proxysettings, tempstring, True)
+
+        Catch 
+        End Try
+        Return tmpInfo
+    End Function
+
     ReadOnly Property Countrys As String
         Get
             Try
@@ -1168,7 +1179,9 @@ Public Class Classimdb
                 totalinfo.AppendTag( "top250"    , Top250      )
                 totalinfo.AppendTag( "votes"     , Votes       )
                 totalinfo.AppendTag( "tagline"   , TagLine     )
-                totalinfo.AppendTag( "runtime"   , Duration    )
+                Dim DurationStr As String = Duration
+                If DurationStr = "" Then DurationStr = RuntimefromTechSpecs(imdbid)
+                totalinfo.AppendTag( "runtime"   , DurationStr )
                 totalinfo.AppendTag( "id"        , imdbid      )
                 totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "country"   , Countrys    )
