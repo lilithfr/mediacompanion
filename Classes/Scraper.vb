@@ -27,7 +27,7 @@ Public Class MovieRegExs
     Public Const REGEX_STUDIO               = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
     Public Const REGEX_CREDITS              = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
     Public Const REGEX_ORIGINAL_TITLE       = "<span class=""title-extra"" itemprop=""name"">(.*?)<i>\(original title\)</i>"
-    Public Const REGEX_OUTLINE              = "itemprop=""description"">(?<outline>.*?)</p>"
+    Public Const REGEX_OUTLINE              = "itemprop=""description"">(?<outline>.*?)</"
     Public Const REGEX_ACTORS_TABLE         = "<table class=""cast_list"">(.*?)</table>"
     Public Const REGEX_TR                   = "<tr.*?>(.*?)</tr>"
     Public Const REGEX_ACTOR_NO_IMAGE       = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
@@ -35,7 +35,7 @@ Public Class MovieRegExs
     Public Const REGEX_IMDB_KEYWORD         = "ttkw_kw_[0-9]*"">(?<keyword>.*?)<\/a"
     Public Const REGEX_IMDB_TRAILER         = "<h2><a href=""/video/imdb/vi(.*?)/"
     Public Const REGEX_TOP_250              = "=tt_awd""> Top Rated Movies #(.*?)</a>"    '"<strong>Top 250 Movies #(.*?)</strong></a>"
-    Public Const REGEX_VOTES                = "<span itemprop=""ratingCount"">([\d{1,3},.?\s]*[0-9]?)</span>"
+    Public Const REGEX_VOTES                = "itemprop=""ratingCount"">([\d{1,3},.?\s]*[0-9]?)</span>"
     Public Const REGEX_TAGLINE              = "<h4 class=""inline"">Tagline.*?:</h4>(.*?)<span class="
     Public Const REGEX_RUNTIME              = "<h4 class=""inline"">Runtime:</h4>(.*?)</div>"
     Public Const REGEX_DURATION             = "<time itemprop=""duration"" datetime="".*?"">(.*?) min</time>"
@@ -781,6 +781,7 @@ Public Class Classimdb
     End Function
 
     Property Html As String=""
+    Property Html2 As String = ""
 
     ReadOnly Property Stars As String
         Get
@@ -788,7 +789,7 @@ Public Class Classimdb
             Dim context As String = Regex.Match(Html,MovieRegExs.REGEX_STARS, RegexOptions.Singleline).ToString
 
             Dim lst = From M As Match In Regex.Matches(context, MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline) 
-                        Where Not M.Groups("name").ToString.ToLower.Contains("see full cast and crew") 
+                        Where Not (M.Groups("name").ToString.ToLower.Contains("see full cast and crew") Or M.Groups("name").ToString.ToLower.Contains("see full cast & crew"))
                         Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
 
             s.AppendList(lst)
@@ -1648,6 +1649,7 @@ Public Class Classimdb
             webpage = loadwebpage(Pref.proxysettings, IMDbUrl, False)
             Dim webPg As String = String.Join( "" , webpage.ToArray() )
             Html = webPg
+            Html2 = String.Join(vbcrlf, webpage.ToArray())
             Dim test As String = ""
             For Each wp In webpage
                 test += wp & vbcrlf
