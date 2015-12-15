@@ -336,7 +336,7 @@ Public Class ucMusicVideo
     End Function
 
     Private Sub TabControlMain_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControlMain.SelectedIndexChanged
-        If TabControlMain.SelectedTab.Text = "Manually find Correct Wiki Entry" Then
+        If TabControlMain.SelectedTab.Text.ToLower = "change by wiki entry" Then
             If Not Pref.MVScraper = "wiki" Then
                 MsgBox("Wiki scraper is not selected" & vbCrLf & "Unable to open this tab")
                 TabControlMain.SelectedIndex = PrevTab
