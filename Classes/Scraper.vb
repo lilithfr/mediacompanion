@@ -42,6 +42,8 @@ Public Class MovieRegExs
     Public Const REGEX_COUNTRYS             = "class=""inline"">Countr(.*?)</div>"
     Public Const REGEX_COUNTRY              = "itemprop='url'>(.*?)</a>"
     Public Const REGEX_RATING               = "<span itemprop=""ratingValue"">(.*?)</span>"
+    Public Const REGEX_RUNTIMETECH          = "class=""label""> Runtime <\/td>(.*?)<\/tr>"
+    Public Const REGEX_DURATIONTECH         = "\((.*?) min"
 End Class
 
 
@@ -875,7 +877,15 @@ Public Class Classimdb
         Try
             Dim tempstring As String= Pref.imdbmirror & "title/" & imdbid & "/technical?ref_=tt_dt_spec"
             Dim TmpHtml As String = loadwebpage(Pref.proxysettings, tempstring, True)
-
+            Dim t As String = Regex.Match(TmpHtml, MovieRegExs.REGEX_RUNTIMETECH, RegexOptions.Singleline).Groups(1).Value
+            Dim i As Integer=0
+            For Each m As Match In Regex.Matches(t, MovieRegExs.REGEX_DURATIONTECH, RegexOptions.Singleline)
+                Dim s = Regex.Match(m.Value, MovieRegExs.REGEX_DURATIONTECH, RegexOptions.Singleline).Groups(1).Value.Trim
+                Dim p As Integer = s.ToInt
+                If p > i Then i = p
+                tmpInfo = i.ToString
+                If Pref.MovImdbFirstRunTime Then Exit For
+            Next
         Catch 
         End Try
         Return tmpInfo
