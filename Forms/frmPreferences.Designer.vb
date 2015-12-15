@@ -443,6 +443,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cb_MovPosterTabTMDBSelect = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -2729,7 +2730,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3480,6 +3481,7 @@ Partial Class frmPreferences
         '
         'GroupBox26
         '
+        Me.GroupBox26.Controls.Add(Me.cb_MovPosterTabTMDBSelect)
         Me.GroupBox26.Controls.Add(Me.cb_MovSetTitleIgnArticle)
         Me.GroupBox26.Controls.Add(Me.cb_SorttitleIgnoreArticles)
         Me.GroupBox26.Controls.Add(Me.cbMovRootFolderCheck)
@@ -3501,7 +3503,7 @@ Partial Class frmPreferences
         Me.GroupBox26.Controls.Add(Me.cbMovieTrailerUrl)
         Me.GroupBox26.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox26.Name = "GroupBox26"
-        Me.GroupBox26.Size = New System.Drawing.Size(311, 492)
+        Me.GroupBox26.Size = New System.Drawing.Size(311, 511)
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
@@ -5299,6 +5301,18 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cb_MovPosterTabTMDBSelect
+        '
+        Me.cb_MovPosterTabTMDBSelect.AutoSize = true
+        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 478)
+        Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
+        Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
+        Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
+        Me.cb_MovPosterTabTMDBSelect.Text = "Poster Tab, Preselect loading from TMDB."
+        Me.ToolTip1.SetToolTip(Me.cb_MovPosterTabTMDBSelect, "If checked, on entering of Poster Tab, will"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"act as if TMDB button has been press"& _ 
+        "ed by user.")
+        Me.cb_MovPosterTabTMDBSelect.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -5879,4 +5893,5 @@ End Sub
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents cb_SorttitleIgnoreArticles As CheckBox
     Friend WithEvents cb_MovSetTitleIgnArticle As CheckBox
+    Friend WithEvents cb_MovPosterTabTMDBSelect As CheckBox
 End Class

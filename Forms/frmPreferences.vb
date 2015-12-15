@@ -429,6 +429,7 @@ Public Class frmPreferences
         cbMovRootFolderCheck                .Checked        = Pref.movrootfoldercheck
         cb_SorttitleIgnoreArticles          .Checked        = Pref.sorttitleignorearticle
         cb_MovSetTitleIgnArticle            .Checked        = Pref.MovSetTitleIgnArticle
+        cb_MovPosterTabTMDBSelect           .Checked        = Pref.MovPosterTabTMDBSelect
 
         'Rename Movie Settings
         cbMovFolderRename                   .Checked        = Pref.MovFolderRename
@@ -1978,6 +1979,12 @@ Public Class frmPreferences
     Private Sub cb_MovSetTitleIgnArticle_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MovSetTitleIgnArticle.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovSetTitleIgnArticle = cb_MovSetTitleIgnArticle.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cb_MovPosterTabTMDBSelecte_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MovPosterTabTMDBSelect.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovPosterTabTMDBSelect = cb_MovPosterTabTMDBSelect.Checked
         Changes = True
     End Sub
 

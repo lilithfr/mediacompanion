@@ -4118,6 +4118,7 @@ Public Class Form1
             gbMoviePostersAvailable.Refresh()
             btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
             UpdateMissingPosterNav()
+            If Pref.MovPosterTabTMDBSelect Then btn_TMDb_posters.PerformClick()
         ElseIf tab.ToLower = "change movie" Then
             Call mov_ChangeMovieSetup(MovieSearchEngine)
             currentTabIndex = TabControl2.SelectedIndex
