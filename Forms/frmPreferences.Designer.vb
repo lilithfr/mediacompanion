@@ -95,6 +95,7 @@ Partial Class frmPreferences
         Me.btn_tv_RegexRename_MoveUp = New System.Windows.Forms.Button()
         Me.btn_tv_RegexScrape_MoveDown = New System.Windows.Forms.Button()
         Me.btn_tv_RegexScrape_MoveUp = New System.Windows.Forms.Button()
+        Me.cb_MovPosterTabTMDBSelect = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -413,9 +414,7 @@ Partial Class frmPreferences
         Me.tb_tv_RegexScrape_TestString = New System.Windows.Forms.TextBox()
         Me.Label118 = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -443,7 +442,11 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cb_MovPosterTabTMDBSelect = New System.Windows.Forms.CheckBox()
+        Me.cb_TvRenameReplaceSpace = New System.Windows.Forms.CheckBox()
+        Me.rb_TvRenameReplaceSpaceDot = New System.Windows.Forms.RadioButton()
+        Me.rb_TvRenameReplaceSpaceUnderScore = New System.Windows.Forms.RadioButton()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1310,6 +1313,18 @@ Partial Class frmPreferences
         Me.btn_tv_RegexScrape_MoveUp.Text = "^"
         Me.ToolTip1.SetToolTip(Me.btn_tv_RegexScrape_MoveUp, "Alter Selected RegEx's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"           Priority")
         Me.btn_tv_RegexScrape_MoveUp.UseVisualStyleBackColor = true
+        '
+        'cb_MovPosterTabTMDBSelect
+        '
+        Me.cb_MovPosterTabTMDBSelect.AutoSize = true
+        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 478)
+        Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
+        Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
+        Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
+        Me.cb_MovPosterTabTMDBSelect.Text = "Poster Tab, Preselect loading from TMDB."
+        Me.ToolTip1.SetToolTip(Me.cb_MovPosterTabTMDBSelect, "If checked, on entering of Poster Tab, will"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"act as if TMDB button has been press"& _ 
+        "ed by user.")
+        Me.cb_MovPosterTabTMDBSelect.UseVisualStyleBackColor = true
         '
         'PictureBox1
         '
@@ -3763,7 +3778,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -4521,6 +4536,9 @@ Partial Class frmPreferences
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.rb_TvRenameReplaceSpaceUnderScore)
+        Me.GroupBox1.Controls.Add(Me.rb_TvRenameReplaceSpaceDot)
+        Me.GroupBox1.Controls.Add(Me.cb_TvRenameReplaceSpace)
         Me.GroupBox1.Controls.Add(Me.CheckBox_tv_EpisodeRenameCase)
         Me.GroupBox1.Controls.Add(Me.CheckBox_tv_EpisodeRenameAuto)
         Me.GroupBox1.Controls.Add(Me.Label140)
@@ -4538,7 +4556,7 @@ Partial Class frmPreferences
         '
         Me.CheckBox_tv_EpisodeRenameCase.AutoSize = true
         Me.CheckBox_tv_EpisodeRenameCase.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_tv_EpisodeRenameCase.Location = New System.Drawing.Point(15, 188)
+        Me.CheckBox_tv_EpisodeRenameCase.Location = New System.Drawing.Point(14, 147)
         Me.CheckBox_tv_EpisodeRenameCase.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_tv_EpisodeRenameCase.Name = "CheckBox_tv_EpisodeRenameCase"
         Me.CheckBox_tv_EpisodeRenameCase.Size = New System.Drawing.Size(170, 49)
@@ -4551,7 +4569,7 @@ Partial Class frmPreferences
         '
         Me.CheckBox_tv_EpisodeRenameAuto.AutoSize = true
         Me.CheckBox_tv_EpisodeRenameAuto.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_tv_EpisodeRenameAuto.Location = New System.Drawing.Point(15, 161)
+        Me.CheckBox_tv_EpisodeRenameAuto.Location = New System.Drawing.Point(14, 123)
         Me.CheckBox_tv_EpisodeRenameAuto.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_tv_EpisodeRenameAuto.Name = "CheckBox_tv_EpisodeRenameAuto"
         Me.CheckBox_tv_EpisodeRenameAuto.Size = New System.Drawing.Size(185, 19)
@@ -4565,9 +4583,10 @@ Partial Class frmPreferences
         Me.Label140.Location = New System.Drawing.Point(11, 59)
         Me.Label140.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label140.Name = "Label140"
-        Me.Label140.Size = New System.Drawing.Size(243, 90)
+        Me.Label140.Size = New System.Drawing.Size(235, 60)
         Me.Label140.TabIndex = 1
-        Me.Label140.Text = resources.GetString("Label140.Text")
+        Me.Label140.Text = "Rename episodes during scraping."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Only use this option if you are sure that the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)& _ 
+    "file is named according to supported"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"MC naming conventions."
         '
         'ComboBox_tv_EpisodeRename
         '
@@ -4647,7 +4666,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
+        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -4969,14 +4988,6 @@ Partial Class frmPreferences
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
-        'UcGenPref_Proxy1
-        '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_Proxy1.TabIndex = 0
-        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -4986,14 +4997,6 @@ Partial Class frmPreferences
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
-        '
-        'UcGenPref_XbmcLink1
-        '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -5301,17 +5304,55 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cb_MovPosterTabTMDBSelect
+        'cb_TvRenameReplaceSpace
         '
-        Me.cb_MovPosterTabTMDBSelect.AutoSize = true
-        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 478)
-        Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
-        Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
-        Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
-        Me.cb_MovPosterTabTMDBSelect.Text = "Poster Tab, Preselect loading from TMDB."
-        Me.ToolTip1.SetToolTip(Me.cb_MovPosterTabTMDBSelect, "If checked, on entering of Poster Tab, will"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"act as if TMDB button has been press"& _ 
-        "ed by user.")
-        Me.cb_MovPosterTabTMDBSelect.UseVisualStyleBackColor = true
+        Me.cb_TvRenameReplaceSpace.AutoSize = true
+        Me.cb_TvRenameReplaceSpace.Location = New System.Drawing.Point(14, 203)
+        Me.cb_TvRenameReplaceSpace.Name = "cb_TvRenameReplaceSpace"
+        Me.cb_TvRenameReplaceSpace.Size = New System.Drawing.Size(144, 19)
+        Me.cb_TvRenameReplaceSpace.TabIndex = 4
+        Me.cb_TvRenameReplaceSpace.Text = "Replace Spaces with:"
+        Me.cb_TvRenameReplaceSpace.UseVisualStyleBackColor = true
+        '
+        'rb_TvRenameReplaceSpaceDot
+        '
+        Me.rb_TvRenameReplaceSpaceDot.AutoSize = true
+        Me.rb_TvRenameReplaceSpaceDot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_TvRenameReplaceSpaceDot.Location = New System.Drawing.Point(58, 224)
+        Me.rb_TvRenameReplaceSpaceDot.Name = "rb_TvRenameReplaceSpaceDot"
+        Me.rb_TvRenameReplaceSpaceDot.Size = New System.Drawing.Size(39, 19)
+        Me.rb_TvRenameReplaceSpaceDot.TabIndex = 5
+        Me.rb_TvRenameReplaceSpaceDot.TabStop = true
+        Me.rb_TvRenameReplaceSpaceDot.Text = """."""
+        Me.rb_TvRenameReplaceSpaceDot.UseVisualStyleBackColor = true
+        '
+        'rb_TvRenameReplaceSpaceUnderScore
+        '
+        Me.rb_TvRenameReplaceSpaceUnderScore.AutoSize = true
+        Me.rb_TvRenameReplaceSpaceUnderScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_TvRenameReplaceSpaceUnderScore.Location = New System.Drawing.Point(154, 224)
+        Me.rb_TvRenameReplaceSpaceUnderScore.Name = "rb_TvRenameReplaceSpaceUnderScore"
+        Me.rb_TvRenameReplaceSpaceUnderScore.Size = New System.Drawing.Size(43, 19)
+        Me.rb_TvRenameReplaceSpaceUnderScore.TabIndex = 6
+        Me.rb_TvRenameReplaceSpaceUnderScore.TabStop = true
+        Me.rb_TvRenameReplaceSpaceUnderScore.Text = """_"""
+        Me.rb_TvRenameReplaceSpaceUnderScore.UseVisualStyleBackColor = true
+        '
+        'UcGenPref_Proxy1
+        '
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'frmPreferences
         '
@@ -5894,4 +5935,7 @@ End Sub
     Friend WithEvents cb_SorttitleIgnoreArticles As CheckBox
     Friend WithEvents cb_MovSetTitleIgnArticle As CheckBox
     Friend WithEvents cb_MovPosterTabTMDBSelect As CheckBox
+    Friend WithEvents cb_TvRenameReplaceSpace As CheckBox
+    Friend WithEvents rb_TvRenameReplaceSpaceUnderScore As RadioButton
+    Friend WithEvents rb_TvRenameReplaceSpaceDot As RadioButton
 End Class

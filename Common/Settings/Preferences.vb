@@ -384,12 +384,14 @@ Public Class Pref
     Public Shared seasonall As String
     Public Shared tvrename As Integer
     Public Shared ScrShtDelay As Integer
-    Public Shared eprenamelowercase As Boolean
     Public Shared tvshowrefreshlog As Boolean
     Public Shared autoepisodescreenshot As Boolean
     Public Shared tvscrnshtTVDBResize As Boolean
     Public Shared tvshow_useXBMC_Scraper As Boolean
     Public Shared autorenameepisodes As Boolean
+    Public Shared eprenamelowercase As Boolean
+    Public Shared TvRenameReplaceSpace As Boolean
+    Public Shared TvRenameReplaceSpaceDot As Boolean
     Public Shared TvdbLanguage As String = "English"
     Public Shared TvdbLanguageCode As String = "en"
     Public Shared lastrefreshmissingdate As String
@@ -677,6 +679,9 @@ Public Class Pref
         'TV
         tvshow_useXBMC_Scraper = False
         autorenameepisodes = False
+        eprenamelowercase = False
+        TvRenameReplaceSpace = False
+        TvRenameReplaceSpaceDot = False
         autoepisodescreenshot = False
         tvscrnshtTVDBResize = False
         tvshowautoquick = False
@@ -685,6 +690,7 @@ Public Class Pref
         tvshowrefreshlog = False
         seasonall = "none"
         tvrename = 0
+        
         tvdlfanart = True
         tvdlposter = True
         tvdlseasonthumbs = True
@@ -717,7 +723,6 @@ Public Class Pref
         MVPrefShowLog = True
 
         'Unknown - need to be sorted/named better
-        eprenamelowercase = False
         intruntime = False
         actorseasy = True
         startuptab = 0
@@ -1187,6 +1192,8 @@ Public Class Pref
         root.AppendChild(doc, "tvscrnshtTVDBResize",                tvscrnshtTVDBResize)        'cbTvScrnShtTVDBResize
         root.AppendChild(doc, "TVShowUseXBMCScraper",               tvshow_useXBMC_Scraper)     'CheckBox_Use_XBMC_TVDB_Scraper
         root.AppendChild(doc, "autorenameepisodes",                 autorenameepisodes)         'CheckBox_tv_EpisodeRenameAuto
+        root.AppendChild(doc, "TvRenameReplaceSpace",               TvRenameReplaceSpace)       'cb_TvRenameReplaceSpace
+        root.AppendChild(doc, "TvRenameReplaceSpaceDot",            TvRenameReplaceSpaceDot)    'rb_TvRenameReplaceSpaceDot, rb_TvRenameReplaceSpaceUnderScore
         root.AppendChild(doc, "ScrShtDelay",                        ScrShtDelay)                'AutoScrShtDelay
         root.AppendChild(doc, "lastrefreshmissingdate",             lastrefreshmissingdate)
         root.AppendChild(doc, "excludefromshowfoldername",          excludefromshowfoldername)
@@ -1557,8 +1564,10 @@ Public Class Pref
                     Case "tvrename"                             : tvrename = Convert.ToInt32(thisresult.InnerText)
                     Case "tvshowrefreshlog"                     : tvshowrefreshlog = thisresult.InnerXml
                     Case "autorenameepisodes"                   : autorenameepisodes = thisresult.InnerXml
-                    Case "ScrShtDelay"                          : ScrShtDelay = Convert.ToInt32(thisresult.InnerXml)
                     Case "eprenamelowercase"                    : eprenamelowercase = thisresult.InnerXml
+                    Case "TvRenameReplaceSpace"                 : TvRenameReplaceSpace = thisresult.InnerXml
+                    Case "TvRenameReplaceSpaceDot"              :TvRenameReplaceSpaceDot = thisresult.InnerXml
+                    Case "ScrShtDelay"                          : ScrShtDelay = Convert.ToInt32(thisresult.InnerXml)
                     Case "moviedefaultlist"                     : moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                     Case "startuptab"                           : startuptab = Convert.ToByte(thisresult.InnerText)
                     Case "offlinemovielabeltext"                : OfflineDVDTitle = thisresult.InnerText

@@ -1279,7 +1279,7 @@ Module Module1
                         eps.Add(ep.episodeno)
                     Next
                     Pref.tvScraperLog = String.Empty
-                    Dim tempspath As String = TVShows.episodeRename(path, alleps(0).seasonno, eps, show.title, alleps(0).title)
+                    Dim tempspath As String = TVShows.episodeRename(path, alleps(0).seasonno, eps, show.title, alleps(0).title, Pref.TvRenameReplaceSpace, Pref.TvRenameReplaceSpaceDot)
                     Console.Write(Pref.tvScraperLog.Replace("!!! ", ""))
                     If tempspath <> "false" Then
                         path = tempspath

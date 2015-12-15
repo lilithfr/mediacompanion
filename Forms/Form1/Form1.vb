@@ -4006,7 +4006,6 @@ Public Class Form1
     Private Sub TabControl2_Selecting(ByVal sender As Object, ByVal e As CancelEventArgs) Handles TabControl2.Selecting
         Dim tab As String = TabControl2.SelectedTab.Text
         If tab.ToLower = "movie preferences" Then
-            'Me.TabControl2.SelectedIndex = currentTabIndex
             e.Cancel = True
             OpenPreferences(2)
         End If
@@ -4035,7 +4034,6 @@ Public Class Form1
             End If
         Else
             currentTabIndex = Me.TabControl2.SelectedIndex
-            'If tab <> "Movie Preferences" Then currentTabIndex = Me.TabControl2.SelectedIndex
         End If
 
         If tab = "" Then
@@ -4046,9 +4044,6 @@ Public Class Form1
                 Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)
                 If (IMDB <> "" And IMDB <> "0") AndAlso TMDB <> "" Then
                     Dim tpi As Integer = TabPage7.ImageIndex
-                    'Dim t As New frmMessageBox("Please Select","your preferred site","","2","1")
-                    't.ShowDialog()
-                    'If Pref.WebSite = "tmdb" Then
                     If tpi = 1 Then
                         weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                     Else
@@ -4128,10 +4123,6 @@ Public Class Form1
             Call MovieSetsAndTagsSetup()
         ElseIf tab.ToLower = "fanart.tv"
             UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
-        'ElseIf tab.ToLower = "movie preferences" Then
-        '    Me.TabControl2.SelectedIndex = currentTabIndex
-        '    OpenPreferences(2)
-            'Call mov_PreferencesSetup()
         ElseIf tab.ToLower = "table" Then
             currentTabIndex = TabControl2.SelectedIndex
             Call mov_TableSetup()
@@ -4146,7 +4137,6 @@ Public Class Form1
             If Not IsNothing(messbox) AndAlso messbox.visible Then e.Cancel = True
         Catch
         End Try
-        'e.Cancel = True
     End Sub
 
         Private Sub TabControl2_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl2.MouseClick
@@ -4159,15 +4149,7 @@ Public Class Form1
                             TabPage7.ImageIndex = 1
                         Else
                             TabPage7.ImageIndex = 0
-                        End If
-                        'Dim TabTitle As String = TabPage7.Text
-                        'If TabTitle.ToLower.Contains("imdb") Then
-                        '    TabTitle = "TMDb Browser"
-                        'Else
-                        '    TabTitle = "IMDb Browser"
-                        'End If
-                        'TabPage7.Text = TabTitle
-                        'TabPage7.Font = New Font(TabPage7.Font, FontStyle.Bold)  
+                        End If 
                         TabPage7.Refresh()
                     End If
                     Exit For
@@ -5517,7 +5499,7 @@ Public Class Form1
             For Each ep In alleps
                 eps.Add(ep.Episode.Value)
             Next
-            Dim tempspath As String = TVShows.episodeRename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value)
+            Dim tempspath As String = TVShows.episodeRename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value, Pref.TvRenameReplaceSpace, Pref.TvRenameReplaceSpaceDot)
 
             If tempspath <> "false" Then
                 path = tempspath
@@ -6170,6 +6152,13 @@ Public Class Form1
                         newfilename = newfilename.Replace(":", "")
                         newfilename = newfilename.Replace("""", "")
                         newfilename = newfilename.Replace("*", "")
+                        If Pref.TvRenameReplaceSpace Then
+                            If Pref.TvRenameReplaceSpaceDot Then
+                                newfilename = newfilename.Replace(" ", ".")
+                            Else
+                                newfilename = newfilename.Replace(" ", "_")
+                            End If
+                        End If
                         Dim listtorename As New List(Of String)
                         listtorename.Clear()
                         listtorename.Add(renamefile)

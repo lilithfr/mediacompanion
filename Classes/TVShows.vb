@@ -29,7 +29,7 @@ End Class
 
 Public Class TVShows
 
-    Public Shared Function episodeRename(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
+    Public Shared Function episodeRename(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String, ByVal EpSpaces As Boolean, ByVal IsDot As Boolean)
         showtitle = Pref.RemoveIgnoredArticles(showtitle)
         Dim returnpath As String = "false"
 
@@ -59,6 +59,13 @@ Public Class TVShows
                 newfilename = newfilename.Replace("""", "")
                 newfilename = newfilename.Replace("*", "")
                 newfilename = newfilename.Replace("|", "-")
+                If EpSpaces Then
+                    If IsDot Then
+                        newfilename = newfilename.Replace(" ", ".")
+                    Else
+                        newfilename = newfilename.Replace(" ", "_")
+                    End If
+                End If
                 Dim listtorename As New List(Of String)
                 listtorename.Clear()
                 Dim done As String = ""

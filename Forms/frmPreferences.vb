@@ -561,9 +561,16 @@ Public Class frmPreferences
         ComboBox_tv_EpisodeRename.SelectedIndex     = If(Pref.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Pref.tvrename, 0)
         CheckBox_tv_EpisodeRenameAuto   .Checked    = Pref.autorenameepisodes
         CheckBox_tv_EpisodeRenameCase   .Checked    = Pref.eprenamelowercase
-        
+        cb_TvRenameReplaceSpace         .Checked    = Pref.TvRenameReplaceSpace
+        If Pref.TvRenameReplaceSpaceDot Then
+            rb_TvRenameReplaceSpaceDot.Checked = True
+        Else
+            rb_TvRenameReplaceSpaceUnderScore.Checked = True
+        End If
+
+
         'Missing Ep Options
-        cbTvMissingSpecials             .Checked    = Pref.ignoreMissingSpecials
+        cbTvMissingSpecials.Checked    = Pref.ignoreMissingSpecials
         cb_TvMissingEpOffset            .Checked    = Pref.TvMissingEpOffset
 
         'Options
@@ -2693,6 +2700,18 @@ Public Class frmPreferences
         End Try
     End Sub
 
+    Private Sub cb_TvRenameReplaceSpace_CheckedChanged(sender As Object, e As EventArgs) Handles cb_TvRenameReplaceSpace.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TvRenameReplaceSpace = cb_TvRenameReplaceSpace.Checked 
+        Changes = True
+    End Sub
+
+    Private Sub rb_TvRenameReplaceSpaceDot_CheckedChanged(sender As Object, e As EventArgs) Handles rb_TvRenameReplaceSpaceDot.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TvRenameReplaceSpaceDot = rb_TvRenameReplaceSpaceDot.Checked 
+        Changes = True
+    End Sub
+
     Private Sub cbTvMissingSpecials_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvMissingSpecials.CheckedChanged
         If prefsload Then Exit Sub
         Pref.ignoreMissingSpecials = cbTvMissingSpecials.Checked 
@@ -3453,5 +3472,4 @@ Public Class frmPreferences
         End If
     End Sub
 
-    
 End Class
