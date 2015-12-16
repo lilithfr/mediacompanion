@@ -4003,13 +4003,24 @@ Public Class Movie
             Dim keywords As New List(Of String)
             If Pref.movies_useXBMC_Scraper Then
                 If tmdbid <> "" Then
-                    keywords =  tmdb.Keywords  '_imdbScraper.GetTmdbkeywords(tmdbid , Pref.keywordlimit) 'if given by rescrape specific
+                    keywords =  tmdb.Keywords
                 Else
                     keywords = _imdbScraper.GetTmdbkeywords(_possibleImdb , Pref.keywordlimit) 'if during initial movie scrape
                 End If
                 
             Else
                 keywords = _imdbScraper.GetImdbKeyWords(Pref.keywordlimit, Pref.imdbmirror, _scrapedMovie.fullmoviebody.imdbid)
+            End If
+            If keywords.Count > 0 AndAlso Pref.MovTagBlacklist <> "" Then
+                Dim Blacklist() As String = Pref.MovTagBlacklist.Split(";")
+                For each listitem In Blacklist
+                    For each kword In keywords
+                        If kword.ToLower = listitem.ToLower Then
+                            keywords.Remove(kword)
+                            Exit For
+                        End If
+                    Next
+                Next
             End If
             If keywords.Count > 0 AndAlso keywords.Count > Pref.keywordlimit Then
                 _scrapedMovie.fullmoviebody.tag.Clear()

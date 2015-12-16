@@ -36,7 +36,7 @@ Public Class MovieRegExs
     Public Const REGEX_IMDB_TRAILER         = "<h2><a href=""/video/imdb/vi(.*?)/"
     Public Const REGEX_TOP_250              = "=tt_awd""> Top Rated Movies #(.*?)</a>"    '"<strong>Top 250 Movies #(.*?)</strong></a>"
     Public Const REGEX_VOTES                = "itemprop=""ratingCount"">([\d{1,3},.?\s]*[0-9]?)</span>"
-    Public Const REGEX_TAGLINE              = "<h4 class=""inline"">Tagline.*?:</h4>(.*?)<span class="
+    Public Const REGEX_TAGLINE              = "<h4 class=""inline"">Tagline.*?:</h4>(.*?)</div>"
     Public Const REGEX_RUNTIME              = "<h4 class=""inline"">Runtime:</h4>(.*?)</div>"
     Public Const REGEX_DURATION             = "<time itemprop=""duration"" datetime="".*?"">(.*?) min</time>"
     Public Const REGEX_COUNTRYS             = "class=""inline"">Countr(.*?)</div>"

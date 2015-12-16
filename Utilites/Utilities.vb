@@ -130,7 +130,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             DefaultActorPath            = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
             DefaultScreenShotPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
             CacheFolderPath             = IO.Path.Combine(_ApplicationPath, "cache\")
-            PosterCachePath             = IO.Path.Combine(_ApplicationPath, "settings\postercache\")
+            PosterCachePath             = IO.Path.Combine(_ApplicationPath, "Settings\postercache\")
             MissingPath                 = IO.Path.Combine(_ApplicationPath, "missing\")
             DownloadCache.CacheFolder   = CacheFolderPath
         End Set

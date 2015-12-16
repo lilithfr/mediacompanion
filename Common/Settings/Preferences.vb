@@ -194,6 +194,7 @@ Public Class Pref
     Public Shared maxactors As Integer
     Public Shared keywordasTag As Boolean
     Public Shared keywordlimit As Integer
+    Public Shared MovTagBlacklist As String
     Public Shared maxmoviegenre As Integer
     Public Shared enablehdtags As Boolean
     Public Shared MovDurationAsRuntine As Boolean
@@ -754,6 +755,7 @@ Public Class Pref
         maxactors = 9999
         keywordasTag = False
         keywordlimit = 5
+        MovTagBlacklist = ""
         createfolderjpg = False
         createfanartjpg = False
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
@@ -1041,6 +1043,7 @@ Public Class Pref
         root.AppendChild(doc, "maxactors",                          maxactors)                          'ComboBox7
         root.AppendChild(doc, "keywordasTag",                       keywordasTag)                       'cb_keywordasTag
         root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
+        root.AppendChild(doc, "MovTagBlacklist",                    MovTagBlacklist)                    'tb_MovTagBlacklist
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'ComboBox6
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
         root.AppendChild(doc, "MovDurationAsRuntine",               MovDurationAsRuntine)               'cb_MovDurationAsRuntine
@@ -1439,6 +1442,7 @@ Public Class Pref
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)
                     Case "keywordasTag"                         : keywordasTag = thisresult.InnerXml
                     Case "keywordlimit"                         : keywordlimit = Convert.ToInt32(thisresult.InnerXml)
+                    Case "MovTagBlacklist"                      : MovTagBlacklist = thisresult.InnerText
                     Case "maxmoviegenre"                        : maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
                     Case "enablehdtags"                         : enablehdtags = thisresult.InnerXml
                     Case "MovDurationAsRuntine"                 : MovDurationAsRuntine = thisresult.InnerXml 

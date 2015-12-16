@@ -270,6 +270,7 @@ Partial Class frmPreferences
         Me.GroupBox35 = New System.Windows.Forms.GroupBox()
         Me.cbMovieList_ShowColWatched = New System.Windows.Forms.CheckBox()
         Me.cbMovieList_ShowColPlot = New System.Windows.Forms.CheckBox()
+        Me.cbMovieShowDateOnList = New System.Windows.Forms.CheckBox()
         Me.GroupBox27 = New System.Windows.Forms.GroupBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.cbMovNewFolderInRootFolder = New System.Windows.Forms.CheckBox()
@@ -297,7 +298,6 @@ Partial Class frmPreferences
         Me.cbMissingMovie = New System.Windows.Forms.CheckBox()
         Me.cbMovThousSeparator = New System.Windows.Forms.CheckBox()
         Me.cbExcludeMpaaRated = New System.Windows.Forms.CheckBox()
-        Me.cbMovieShowDateOnList = New System.Windows.Forms.CheckBox()
         Me.cbXtraFrodoUrls = New System.Windows.Forms.CheckBox()
         Me.cbNoAltTitle = New System.Windows.Forms.CheckBox()
         Me.PanelDisplayRuntime = New System.Windows.Forms.Panel()
@@ -378,6 +378,9 @@ Partial Class frmPreferences
         Me.RadioButton41 = New System.Windows.Forms.RadioButton()
         Me.cbTvQuickAddShow = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.rb_TvRenameReplaceSpaceUnderScore = New System.Windows.Forms.RadioButton()
+        Me.rb_TvRenameReplaceSpaceDot = New System.Windows.Forms.RadioButton()
+        Me.cb_TvRenameReplaceSpace = New System.Windows.Forms.CheckBox()
         Me.CheckBox_tv_EpisodeRenameCase = New System.Windows.Forms.CheckBox()
         Me.CheckBox_tv_EpisodeRenameAuto = New System.Windows.Forms.CheckBox()
         Me.Label140 = New System.Windows.Forms.Label()
@@ -414,7 +417,9 @@ Partial Class frmPreferences
         Me.tb_tv_RegexScrape_TestString = New System.Windows.Forms.TextBox()
         Me.Label118 = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -442,11 +447,9 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cb_TvRenameReplaceSpace = New System.Windows.Forms.CheckBox()
-        Me.rb_TvRenameReplaceSpaceDot = New System.Windows.Forms.RadioButton()
-        Me.rb_TvRenameReplaceSpaceUnderScore = New System.Windows.Forms.RadioButton()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.tb_MovTagBlacklist = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -868,7 +871,7 @@ Partial Class frmPreferences
         '
         Me.cb_keywordlimit.FormattingEnabled = true
         Me.cb_keywordlimit.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "100", "125", "150", "175", "200", "250", "300", "400", "500"})
-        Me.cb_keywordlimit.Location = New System.Drawing.Point(200, 45)
+        Me.cb_keywordlimit.Location = New System.Drawing.Point(194, 36)
         Me.cb_keywordlimit.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_keywordlimit.MaxDropDownItems = 30
         Me.cb_keywordlimit.Name = "cb_keywordlimit"
@@ -1167,7 +1170,7 @@ Partial Class frmPreferences
         Me.GroupBox11.Controls.Add(Me.Button75)
         Me.GroupBox11.Controls.Add(Me.Label94)
         Me.GroupBox11.Controls.Add(Me.lb_IMDBCertPriority)
-        Me.GroupBox11.Location = New System.Drawing.Point(343, 107)
+        Me.GroupBox11.Location = New System.Drawing.Point(343, 211)
         Me.GroupBox11.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox11.Name = "GroupBox11"
         Me.GroupBox11.Padding = New System.Windows.Forms.Padding(4)
@@ -1257,7 +1260,7 @@ Partial Class frmPreferences
         'cbMovRootFolderCheck
         '
         Me.cbMovRootFolderCheck.AutoSize = true
-        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 401)
+        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 362)
         Me.cbMovRootFolderCheck.Name = "cbMovRootFolderCheck"
         Me.cbMovRootFolderCheck.Size = New System.Drawing.Size(158, 19)
         Me.cbMovRootFolderCheck.TabIndex = 82
@@ -1317,7 +1320,7 @@ Partial Class frmPreferences
         'cb_MovPosterTabTMDBSelect
         '
         Me.cb_MovPosterTabTMDBSelect.AutoSize = true
-        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 478)
+        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 439)
         Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
         Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
         Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
@@ -2469,19 +2472,22 @@ Partial Class frmPreferences
         Me.gpbxPrefScraperImages.Controls.Add(Me.GroupBox34)
         Me.gpbxPrefScraperImages.Location = New System.Drawing.Point(333, 6)
         Me.gpbxPrefScraperImages.Name = "gpbxPrefScraperImages"
-        Me.gpbxPrefScraperImages.Size = New System.Drawing.Size(655, 473)
+        Me.gpbxPrefScraperImages.Size = New System.Drawing.Size(655, 525)
         Me.gpbxPrefScraperImages.TabIndex = 77
         Me.gpbxPrefScraperImages.TabStop = false
         Me.gpbxPrefScraperImages.Text = "Scraping options"
         '
         'GroupBox44
         '
+        Me.GroupBox44.Controls.Add(Me.Label9)
+        Me.GroupBox44.Controls.Add(Me.tb_MovTagBlacklist)
+        Me.GroupBox44.Controls.Add(Me.Label8)
         Me.GroupBox44.Controls.Add(Me.Label69)
         Me.GroupBox44.Controls.Add(Me.cb_keywordlimit)
         Me.GroupBox44.Controls.Add(Me.cb_keywordasTag)
         Me.GroupBox44.Location = New System.Drawing.Point(343, 22)
         Me.GroupBox44.Name = "GroupBox44"
-        Me.GroupBox44.Size = New System.Drawing.Size(300, 78)
+        Me.GroupBox44.Size = New System.Drawing.Size(300, 190)
         Me.GroupBox44.TabIndex = 84
         Me.GroupBox44.TabStop = false
         Me.GroupBox44.Text = "Keywords As Tags"
@@ -2489,7 +2495,7 @@ Partial Class frmPreferences
         'Label69
         '
         Me.Label69.AutoSize = true
-        Me.Label69.Location = New System.Drawing.Point(17, 48)
+        Me.Label69.Location = New System.Drawing.Point(11, 39)
         Me.Label69.Name = "Label69"
         Me.Label69.Size = New System.Drawing.Size(176, 15)
         Me.Label69.TabIndex = 66
@@ -2498,7 +2504,7 @@ Partial Class frmPreferences
         'cb_keywordasTag
         '
         Me.cb_keywordasTag.AutoSize = true
-        Me.cb_keywordasTag.Location = New System.Drawing.Point(13, 23)
+        Me.cb_keywordasTag.Location = New System.Drawing.Point(12, 17)
         Me.cb_keywordasTag.Name = "cb_keywordasTag"
         Me.cb_keywordasTag.Size = New System.Drawing.Size(202, 19)
         Me.cb_keywordasTag.TabIndex = 0
@@ -2745,7 +2751,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3054,7 +3060,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3248,9 +3254,10 @@ Partial Class frmPreferences
         Me.GroupBox35.Controls.Add(Me.cbMovieList_ShowColPlot)
         Me.GroupBox35.Controls.Add(Me.tbDateFormat)
         Me.GroupBox35.Controls.Add(Me.Label179)
-        Me.GroupBox35.Location = New System.Drawing.Point(323, 395)
+        Me.GroupBox35.Controls.Add(Me.cbMovieShowDateOnList)
+        Me.GroupBox35.Location = New System.Drawing.Point(323, 393)
         Me.GroupBox35.Name = "GroupBox35"
-        Me.GroupBox35.Size = New System.Drawing.Size(311, 89)
+        Me.GroupBox35.Size = New System.Drawing.Size(311, 124)
         Me.GroupBox35.TabIndex = 80
         Me.GroupBox35.TabStop = false
         Me.GroupBox35.Text = " Movie List "
@@ -3274,6 +3281,19 @@ Partial Class frmPreferences
         Me.cbMovieList_ShowColPlot.TabIndex = 2
         Me.cbMovieList_ShowColPlot.Text = "Show column Plot"
         Me.cbMovieList_ShowColPlot.UseVisualStyleBackColor = true
+        '
+        'cbMovieShowDateOnList
+        '
+        Me.cbMovieShowDateOnList.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.cbMovieShowDateOnList.Enabled = false
+        Me.cbMovieShowDateOnList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(15, 85)
+        Me.cbMovieShowDateOnList.Name = "cbMovieShowDateOnList"
+        Me.cbMovieShowDateOnList.Size = New System.Drawing.Size(275, 20)
+        Me.cbMovieShowDateOnList.TabIndex = 72
+        Me.cbMovieShowDateOnList.Text = "Show Date for 'Modified' && 'Date Added'"
+        Me.cbMovieShowDateOnList.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.cbMovieShowDateOnList.UseVisualStyleBackColor = true
         '
         'GroupBox27
         '
@@ -3504,7 +3524,6 @@ Partial Class frmPreferences
         Me.GroupBox26.Controls.Add(Me.cbMissingMovie)
         Me.GroupBox26.Controls.Add(Me.cbMovThousSeparator)
         Me.GroupBox26.Controls.Add(Me.cbExcludeMpaaRated)
-        Me.GroupBox26.Controls.Add(Me.cbMovieShowDateOnList)
         Me.GroupBox26.Controls.Add(Me.cbMovTitleCase)
         Me.GroupBox26.Controls.Add(Me.cbXtraFrodoUrls)
         Me.GroupBox26.Controls.Add(Me.cbNoAltTitle)
@@ -3526,7 +3545,7 @@ Partial Class frmPreferences
         'cb_MovSetTitleIgnArticle
         '
         Me.cb_MovSetTitleIgnArticle.AutoSize = true
-        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 453)
+        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 414)
         Me.cb_MovSetTitleIgnArticle.Name = "cb_MovSetTitleIgnArticle"
         Me.cb_MovSetTitleIgnArticle.Size = New System.Drawing.Size(236, 19)
         Me.cb_MovSetTitleIgnArticle.TabIndex = 94
@@ -3536,7 +3555,7 @@ Partial Class frmPreferences
         'cb_SorttitleIgnoreArticles
         '
         Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 426)
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 387)
         Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
         Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
         Me.cb_SorttitleIgnoreArticles.TabIndex = 93
@@ -3556,7 +3575,7 @@ Partial Class frmPreferences
         'cbMissingMovie
         '
         Me.cbMissingMovie.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbMissingMovie.Location = New System.Drawing.Point(7, 359)
+        Me.cbMissingMovie.Location = New System.Drawing.Point(7, 320)
         Me.cbMissingMovie.Name = "cbMissingMovie"
         Me.cbMissingMovie.Size = New System.Drawing.Size(275, 36)
         Me.cbMissingMovie.TabIndex = 81
@@ -3584,19 +3603,6 @@ Partial Class frmPreferences
         Me.cbExcludeMpaaRated.TabIndex = 76
         Me.cbExcludeMpaaRated.Text = "Exclude ""Rated"" prefix on MPAA certificate"
         Me.cbExcludeMpaaRated.UseVisualStyleBackColor = true
-        '
-        'cbMovieShowDateOnList
-        '
-        Me.cbMovieShowDateOnList.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbMovieShowDateOnList.Enabled = false
-        Me.cbMovieShowDateOnList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(7, 319)
-        Me.cbMovieShowDateOnList.Name = "cbMovieShowDateOnList"
-        Me.cbMovieShowDateOnList.Size = New System.Drawing.Size(275, 37)
-        Me.cbMovieShowDateOnList.TabIndex = 72
-        Me.cbMovieShowDateOnList.Text = "Display Date on Movie Sort for 'Modified' && 'Date Added'"
-        Me.cbMovieShowDateOnList.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbMovieShowDateOnList.UseVisualStyleBackColor = true
         '
         'cbXtraFrodoUrls
         '
@@ -3778,7 +3784,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -4552,6 +4558,40 @@ Partial Class frmPreferences
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "TV Episode Renaming Settings"
         '
+        'rb_TvRenameReplaceSpaceUnderScore
+        '
+        Me.rb_TvRenameReplaceSpaceUnderScore.AutoSize = true
+        Me.rb_TvRenameReplaceSpaceUnderScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_TvRenameReplaceSpaceUnderScore.Location = New System.Drawing.Point(154, 224)
+        Me.rb_TvRenameReplaceSpaceUnderScore.Name = "rb_TvRenameReplaceSpaceUnderScore"
+        Me.rb_TvRenameReplaceSpaceUnderScore.Size = New System.Drawing.Size(43, 19)
+        Me.rb_TvRenameReplaceSpaceUnderScore.TabIndex = 6
+        Me.rb_TvRenameReplaceSpaceUnderScore.TabStop = true
+        Me.rb_TvRenameReplaceSpaceUnderScore.Text = """_"""
+        Me.rb_TvRenameReplaceSpaceUnderScore.UseVisualStyleBackColor = true
+        '
+        'rb_TvRenameReplaceSpaceDot
+        '
+        Me.rb_TvRenameReplaceSpaceDot.AutoSize = true
+        Me.rb_TvRenameReplaceSpaceDot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_TvRenameReplaceSpaceDot.Location = New System.Drawing.Point(58, 224)
+        Me.rb_TvRenameReplaceSpaceDot.Name = "rb_TvRenameReplaceSpaceDot"
+        Me.rb_TvRenameReplaceSpaceDot.Size = New System.Drawing.Size(39, 19)
+        Me.rb_TvRenameReplaceSpaceDot.TabIndex = 5
+        Me.rb_TvRenameReplaceSpaceDot.TabStop = true
+        Me.rb_TvRenameReplaceSpaceDot.Text = """."""
+        Me.rb_TvRenameReplaceSpaceDot.UseVisualStyleBackColor = true
+        '
+        'cb_TvRenameReplaceSpace
+        '
+        Me.cb_TvRenameReplaceSpace.AutoSize = true
+        Me.cb_TvRenameReplaceSpace.Location = New System.Drawing.Point(14, 203)
+        Me.cb_TvRenameReplaceSpace.Name = "cb_TvRenameReplaceSpace"
+        Me.cb_TvRenameReplaceSpace.Size = New System.Drawing.Size(144, 19)
+        Me.cb_TvRenameReplaceSpace.TabIndex = 4
+        Me.cb_TvRenameReplaceSpace.Text = "Replace Spaces with:"
+        Me.cb_TvRenameReplaceSpace.UseVisualStyleBackColor = true
+        '
         'CheckBox_tv_EpisodeRenameCase
         '
         Me.CheckBox_tv_EpisodeRenameCase.AutoSize = true
@@ -4666,7 +4706,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -4988,6 +5028,14 @@ Partial Class frmPreferences
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
+        'UcGenPref_Proxy1
+        '
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -4997,6 +5045,14 @@ Partial Class frmPreferences
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -5304,55 +5360,32 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cb_TvRenameReplaceSpace
+        'Label8
         '
-        Me.cb_TvRenameReplaceSpace.AutoSize = true
-        Me.cb_TvRenameReplaceSpace.Location = New System.Drawing.Point(14, 203)
-        Me.cb_TvRenameReplaceSpace.Name = "cb_TvRenameReplaceSpace"
-        Me.cb_TvRenameReplaceSpace.Size = New System.Drawing.Size(144, 19)
-        Me.cb_TvRenameReplaceSpace.TabIndex = 4
-        Me.cb_TvRenameReplaceSpace.Text = "Replace Spaces with:"
-        Me.cb_TvRenameReplaceSpace.UseVisualStyleBackColor = true
+        Me.Label8.AutoSize = true
+        Me.Label8.Location = New System.Drawing.Point(6, 67)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(251, 30)
+        Me.Label8.TabIndex = 67
+        Me.Label8.Text = "Keyword Blacklist - Separate with semi-colon"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"No Enter Key or New Line."
         '
-        'rb_TvRenameReplaceSpaceDot
+        'tb_MovTagBlacklist
         '
-        Me.rb_TvRenameReplaceSpaceDot.AutoSize = true
-        Me.rb_TvRenameReplaceSpaceDot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rb_TvRenameReplaceSpaceDot.Location = New System.Drawing.Point(58, 224)
-        Me.rb_TvRenameReplaceSpaceDot.Name = "rb_TvRenameReplaceSpaceDot"
-        Me.rb_TvRenameReplaceSpaceDot.Size = New System.Drawing.Size(39, 19)
-        Me.rb_TvRenameReplaceSpaceDot.TabIndex = 5
-        Me.rb_TvRenameReplaceSpaceDot.TabStop = true
-        Me.rb_TvRenameReplaceSpaceDot.Text = """."""
-        Me.rb_TvRenameReplaceSpaceDot.UseVisualStyleBackColor = true
+        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 103)
+        Me.tb_MovTagBlacklist.Multiline = true
+        Me.tb_MovTagBlacklist.Name = "tb_MovTagBlacklist"
+        Me.tb_MovTagBlacklist.Size = New System.Drawing.Size(277, 79)
+        Me.tb_MovTagBlacklist.TabIndex = 68
         '
-        'rb_TvRenameReplaceSpaceUnderScore
+        'Label9
         '
-        Me.rb_TvRenameReplaceSpaceUnderScore.AutoSize = true
-        Me.rb_TvRenameReplaceSpaceUnderScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rb_TvRenameReplaceSpaceUnderScore.Location = New System.Drawing.Point(154, 224)
-        Me.rb_TvRenameReplaceSpaceUnderScore.Name = "rb_TvRenameReplaceSpaceUnderScore"
-        Me.rb_TvRenameReplaceSpaceUnderScore.Size = New System.Drawing.Size(43, 19)
-        Me.rb_TvRenameReplaceSpaceUnderScore.TabIndex = 6
-        Me.rb_TvRenameReplaceSpaceUnderScore.TabStop = true
-        Me.rb_TvRenameReplaceSpaceUnderScore.Text = """_"""
-        Me.rb_TvRenameReplaceSpaceUnderScore.UseVisualStyleBackColor = true
-        '
-        'UcGenPref_Proxy1
-        '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_Proxy1.TabIndex = 0
-        '
-        'UcGenPref_XbmcLink1
-        '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
+        Me.Label9.AutoSize = true
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label9.Location = New System.Drawing.Point(260, 67)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(31, 18)
+        Me.Label9.TabIndex = 69
+        Me.Label9.Text = "' ; '"
         '
         'frmPreferences
         '
@@ -5938,4 +5971,7 @@ End Sub
     Friend WithEvents cb_TvRenameReplaceSpace As CheckBox
     Friend WithEvents rb_TvRenameReplaceSpaceUnderScore As RadioButton
     Friend WithEvents rb_TvRenameReplaceSpaceDot As RadioButton
+    Friend WithEvents Label9 As Label
+    Friend WithEvents tb_MovTagBlacklist As TextBox
+    Friend WithEvents Label8 As Label
 End Class

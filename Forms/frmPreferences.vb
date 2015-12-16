@@ -342,6 +342,7 @@ Public Class frmPreferences
             Case Else
                 cb_keywordlimit.SelectedItem = Pref.keywordlimit.ToString
         End Select
+        tb_MovTagBlacklist                  .Text       = Pref.MovTagBlacklist
 
         'IMDB Cert Priority
         lb_IMDBCertPriority.Items.Clear()
@@ -1465,6 +1466,18 @@ Public Class frmPreferences
         End Try
     End Sub
 
+    Private Sub tb_MovTagBlacklist_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tb_MovTagBlacklist.KeyDown
+    If e.KeyCode = Keys.Enter Then
+        e.SuppressKeyPress = True
+    End If
+End Sub
+
+    Private Sub tb_MovTagBlacklist_TextChanged(sender As Object, e As EventArgs) Handles tb_MovTagBlacklist.TextChanged
+        If prefsload Then Exit Sub
+        Pref.MovTagBlacklist = tb_MovTagBlacklist.Text
+        Changes = True
+    End Sub
+
 'IMDB Cert Priority
     Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
         Try
@@ -1792,57 +1805,45 @@ Public Class frmPreferences
     End Sub
 
     Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
+        If prefsload Then Exit Sub
         Pref.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
         Changes = True
-        
     End Sub
 
     Private Sub cbMovTitleCase_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleCase.CheckedChanged
+        If prefsload Then Exit Sub
         Pref.MovTitleCase = cbMovTitleCase.Checked
         Changes = True
-        
     End Sub
 
     Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
+        If prefsload Then Exit Sub
         Pref.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
         Changes = True
-        
     End Sub
 
     Private Sub cbMovThousSeparator_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovThousSeparator.CheckedChanged
+        If prefsload Then Exit Sub
         Pref.MovThousSeparator = cbMovThousSeparator.Checked
         Changes = True
-        
     End Sub
 
     Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbNoAltTitle.CheckedChanged
-        If cbNoAltTitle.CheckState = CheckState.Checked Then
-            Pref.NoAltTitle = True
-        Else
-            Pref.NoAltTitle = False
-        End If
+        If prefsload Then Exit Sub
+        Pref.NoAltTitle = cbNoAltTitle.Checked
         Changes = True
-        
     End Sub
 
     Private Sub cbXtraFrodoUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbXtraFrodoUrls.CheckedChanged
+        If prefsload Then Exit Sub
         Pref.XtraFrodoUrls = Not cbXtraFrodoUrls.Checked 
         Changes = True
-        
     End Sub
 
     Private Sub cb_MovDisplayLog_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_MovDisplayLog.CheckedChanged
-        Try
-            If cb_MovDisplayLog.CheckState = CheckState.Checked Then
-                Pref.disablelogfiles = False
-            Else
-                Pref.disablelogfiles = True
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.disablelogfiles = Not cb_MovDisplayLog.Checked
+        Changes = True
     End Sub
 
     Private Sub cb_EnableMediaTags_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_EnableMediaTags.CheckedChanged
@@ -1871,9 +1872,9 @@ Public Class frmPreferences
     End Sub
 
     Private Sub cb_MovDurationAsRuntine_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_MovDurationAsRuntine.CheckedChanged
+        If prefsload Then Exit Sub
         Pref.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
         Changes = True
-        
     End Sub
 
     Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeScraper.CheckedChanged
@@ -1897,64 +1898,40 @@ Public Class frmPreferences
     End Sub
 
     Private Sub cbMovieRuntimeFallbackToFile_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRuntimeFallbackToFile.CheckedChanged
+        If prefsload Then Exit Sub
         Pref.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
         Changes = True
-        
     End Sub
 
     Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
-        Try
-            Pref.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
+        Changes = True
     End Sub
 
     Private Sub tbDateFormat_TextChanged( sender As System.Object,  e As System.EventArgs) Handles tbDateFormat.TextChanged
-        If PrefsLoad Then
-            Try
-                Pref.DateFormat = tbDateFormat.Text
-                Changes = True
-                
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If prefsload Then Exit Sub
+        Pref.DateFormat = tbDateFormat.Text
+        Changes = True
     End Sub
 
     Private Sub cbMovieList_ShowColPlot_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColPlot.CheckedChanged
-        If PrefsLoad Then
-            Try
-                Pref.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
-                Changes = True
-                
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If prefsload Then Exit Sub
+        Pref.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Form1)
+        Changes = True
     End Sub
 
     Private Sub cbMovieList_ShowColWatched_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColWatched.CheckedChanged
-         If PrefsLoad Then
-            Try
-                Pref.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
-                Changes = True
-                
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+         If prefsload Then Exit Sub
+        Pref.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Form1)
+        Changes = True
     End Sub
 
     Private Sub cbMovieShowDateOnList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieShowDateOnList.CheckedChanged
         Try
-            If cbMovieShowDateOnList.Checked = True Then
-                Pref.showsortdate = True
-            Else
-                Pref.showsortdate = False
-            End If
+            Pref.showsortdate = cbMovieShowDateOnList.Checked
             Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Form1)
             Changes = True
             
@@ -1964,17 +1941,9 @@ Public Class frmPreferences
     End Sub
 
     Private Sub cbMissingMovie_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingMovie.CheckedChanged
-        Try
-            If cbMissingMovie.CheckState = CheckState.Checked Then
-                Pref.incmissingmovies = True 
-            Else
-                Pref.incmissingmovies = False 
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.incmissingmovies = cbMissingMovie.Checked
+        Changes = True
     End Sub
 
     Private Sub cb_SorttitleIgnoreArticles_CheckedChanged_1(ByVal sender As Object, ByVal e As EventArgs) Handles cb_SorttitleIgnoreArticles.CheckedChanged
@@ -1996,20 +1965,13 @@ Public Class frmPreferences
     End Sub
 
     Private Sub cbMoviePartsIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMoviePartsIgnorePart.CheckedChanged 
-        Try
-            If cbMoviePartsIgnorePart.Checked = True Then
-                Pref.movieignorepart = True
-            Else
-                Pref.movieignorepart = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.movieignorepart = cbMoviePartsIgnorePart.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMoviePartsNameMode_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMoviePartsNameMode.CheckedChanged
+        If prefsload Then Exit Sub
         If cbMoviePartsNameMode.Checked Then
             Pref.namemode = "1"
         Else
@@ -2022,66 +1984,33 @@ Public Class frmPreferences
 
 'Rename Movie Settings
     Private Sub tb_MovieRenameTemplate_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovieRenameTemplate.TextChanged
-        Try
-            Pref.MovieRenameTemplate = tb_MovieRenameTemplate.Text
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovieRenameTemplate = tb_MovieRenameTemplate.Text
+        Changes = True
     End Sub
 
     Private Sub tb_MovFolderRename_TextChanged(sender As System.Object, e As System.EventArgs) Handles tb_MovFolderRename.TextChanged
-        Try
-            Pref.MovFolderRenameTemplate = tb_MovFolderRename.Text
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovFolderRenameTemplate = tb_MovFolderRename.Text
+        Changes = True
     End Sub
 
     Private Sub cbMovieRenameEnable_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieRenameEnable.CheckedChanged
-        Try
-            If cbMovieRenameEnable.CheckState = CheckState.Checked Then
-                Pref.MovieRenameEnable = True
-            Else
-                Pref.MovieRenameEnable = False
-                'Preferences.XbmcTmdbRenameMovie = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovieRenameEnable = cbMovieRenameEnable.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMovFolderRename_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovFolderRename.CheckedChanged
-        Try
-            If cbMovFolderRename.CheckState = CheckState.Checked Then
-                Pref.MovFolderRename = True
-            Else
-                Pref.MovFolderRename = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovFolderRename = cbMovFolderRename.Checked
+        Changes = True
     End Sub
 
     Private Sub cbRenameUnderscore_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbRenameUnderscore.CheckedChanged
-        Try
-            If cbRenameUnderscore.CheckState = CheckState.Checked Then
-                Pref.MovRenameSpaceCharacter = True
-            Else
-                Pref.MovRenameSpaceCharacter = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovRenameSpaceCharacter = cbRenameUnderscore.Checked
+        Changes = True
     End Sub
 
     Private Sub rbRenameUnderscore_CheckedChanged( sender As Object,  e As EventArgs) Handles rbRenameUnderscore.CheckedChanged
@@ -2096,45 +2025,21 @@ Public Class frmPreferences
     End Sub
 
     Private Sub cbMovSetIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetIgnArticle.CheckedChanged
-        Try
-            If cbMovSetIgnArticle.CheckState = CheckState.Checked Then
-                Pref.MovSetIgnArticle = True
-            Else
-                Pref.MovSetIgnArticle = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovSetIgnArticle = cbMovSetIgnArticle.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMovTitleIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovTitleIgnArticle.CheckedChanged
-        Try
-            If cbMovTitleIgnArticle.CheckState = CheckState.Checked Then
-                Pref.MovTitleIgnArticle = True
-            Else
-                Pref.MovTitleIgnArticle = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovTitleIgnArticle = cbMovTitleIgnArticle.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMovSortIgnArticle_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSortIgnArticle.CheckedChanged
-        Try
-            If cbMovSortIgnArticle.CheckState = CheckState.Checked Then
-                Pref.MovSortIgnArticle = True
-            Else
-                Pref.MovSortIgnArticle = False
-            End If
-            Changes = True
-            
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If prefsload Then Exit Sub
+        Pref.MovSortIgnArticle = cbMovSortIgnArticle.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMovieManualRename_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieManualRename.CheckedChanged
@@ -2254,7 +2159,6 @@ Public Class frmPreferences
             End Try
         End If
     End Sub
-
 
 
 #End Region   'Movie Preferences - General Tab

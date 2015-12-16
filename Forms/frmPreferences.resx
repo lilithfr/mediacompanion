@@ -168,12 +168,6 @@ is still saved, as it should be.</value>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>621, 17</value>
   </metadata>
-  <data name="Label139.Text" xml:space="preserve">
-    <value>Enabling the 'Quick Add' option will speed up the
-scraping of TV Shows by not downloading available
-Art. All show art can be scraped at any time by using
-the TV context menu item to 'Download missing art'</value>
-  </data>
   <data name="Label196.Text" xml:space="preserve">
     <value>Notes:  - If Movie is in Root folder, new folder created
     - Separate folders with '\' character
@@ -223,6 +217,12 @@ actors thumb, if available, to the episodes actor
 folder, allowing the higher quality TVDB actor
 thumb to be used for the episode.</value>
   </data>
+  <data name="Label139.Text" xml:space="preserve">
+    <value>Enabling the 'Quick Add' option will speed up the
+scraping of TV Shows by not downloading available
+Art. All show art can be scraped at any time by using
+the TV context menu item to 'Download missing art'</value>
+  </data>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start
 an XBMC Update, or maybe just to launch an external program.
@@ -232,7 +232,7 @@ The commands will be listed by their title within the 'Tools' drop down menu
 Each Command must have a unique 'Title'</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>25</value>
+    <value>84</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

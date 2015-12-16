@@ -444,7 +444,7 @@ Public Class Form1
                 Pref.ConfigSave()
             End If
 
-            If Not IO.File.Exists(applicationPath & "\settings\profile.xml") Then
+            If Not IO.File.Exists(applicationPath & "\Settings\profile.xml") Then
                 profileStruct.WorkingProfileName = "Default"
                 profileStruct.DefaultProfile = "Default"
                 profileStruct.StartupProfile = "Default"
@@ -1578,7 +1578,7 @@ Public Class Form1
 
     Private Sub util_ProfilesLoad()
         profileStruct.ProfileList.Clear()
-        Dim profilepath As String = IO.Path.Combine(applicationPath, "settings")
+        Dim profilepath As String = IO.Path.Combine(applicationPath, "Settings")
         profilepath = IO.Path.Combine(profilepath, "profile.xml")
 
         Dim notportable As Boolean = False
@@ -1623,7 +1623,7 @@ Public Class Form1
                                         Case "genres"
                                             Dim s As String = ""
                                             If result.innertext = "" Then 
-                                                s = "\settings\genres.txt"  'incase missing from existing profile.xml
+                                                s = "\Settings\genres.txt"  'incase missing from existing profile.xml
                                             Else
                                                 s = result.innertext.ToString.Substring(t)
                                             End If
@@ -1678,7 +1678,7 @@ Public Class Form1
     End Sub
 
     Public Sub util_ProfileSave()
-        Dim profilepath As String = IO.Path.Combine(applicationPath, "settings")
+        Dim profilepath As String = IO.Path.Combine(applicationPath, "Settings")
         profilepath = IO.Path.Combine(profilepath, "profile.xml")
 
         Dim doc As New XmlDocument
@@ -3397,7 +3397,7 @@ Public Class Form1
     End Sub
 
     Public Sub LaunchPlayList(ByVal plist As List(Of String))
-        Dim tempstring = applicationPath & "\settings\temp.m3u"
+        Dim tempstring = applicationPath & "\Settings\temp.m3u"
         frmSplash2.Text = "Playing Movie..."
         frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
         frmSplash2.Label1.Visible = True
@@ -7517,7 +7517,7 @@ Public Class Form1
             If tempstring <> Nothing Then
                 Dim trailerpath As String = GetTrailerPath(tempstring)
                 If IO.File.Exists(trailerpath) Then
-                    Dim trailerstring = applicationPath & "\settings\temp.m3u"
+                    Dim trailerstring = applicationPath & "\Settings\temp.m3u"
                     Dim file = IO.File.CreateText(trailerstring)
                     file.WriteLine(trailerpath)
                     file.Close()
@@ -10658,7 +10658,8 @@ End Sub
         End Try
     End Sub
     
-    Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )
+    Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean = False)
+        Pref.SetUpPreferences()
         Pref.ConfigLoad()
         Pref.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
 
@@ -11502,17 +11503,17 @@ End Sub
             'Case "general preferences"
                 'Call General_PreferencesSetup()
             Case "config.xml"
-                RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\settings\config.xml"
+                RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\Settings\config.xml"
             Case "moviecache" 
-                RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml"
+                RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\Settings\moviecache.xml"
             Case = "tvcache" 
-                RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml"
+                RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\Settings\tvcache.xml"
             Case = "actorcache" 
-                RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml"
+                RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\Settings\actorcache.xml"
             Case = "profile" 
-                RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml") '  applicationPath & "\settings\profile.xml"
+                RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\Settings\profile.xml") '  applicationPath & "\Settings\profile.xml"
             Case = "regex" 
-                RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml"
+                RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\Settings\regex.xml"
             Case "export"
                 frm_ExportTabSetup()
             Case "movies"
@@ -16359,7 +16360,7 @@ End Sub
             _rescrapeList.FullPathAndFilenames.Add(workingMovieDetails.fileinfo.fullpathandfilename)
             RunBackgroundMovieScrape("RescrapeSpecific")
         Else
-            Dim tempstring = applicationPath & "\settings\temp.m3u"
+            Dim tempstring = applicationPath & "\Settings\temp.m3u"
             Dim file = IO.File.CreateText(tempstring)
             file.WriteLine(workingMovieDetails.fileinfo.trailerpath)
             file.Close()
@@ -18505,7 +18506,7 @@ End Sub
 
                         If IO.File.Exists(tempstring2) Then
                             exists = True
-                            tempstring = applicationPath & "\settings\temp.m3u"
+                            tempstring = applicationPath & "\Settings\temp.m3u"
                             Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
                             file.WriteLine(tempstring2)
                             file.Close()
