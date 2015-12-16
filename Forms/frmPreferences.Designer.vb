@@ -199,6 +199,9 @@ Partial Class frmPreferences
         Me.lb_IMDBMirrors = New System.Windows.Forms.ListBox()
         Me.gpbxPrefScraperImages = New System.Windows.Forms.GroupBox()
         Me.GroupBox44 = New System.Windows.Forms.GroupBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.tb_MovTagBlacklist = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label69 = New System.Windows.Forms.Label()
         Me.cb_keywordasTag = New System.Windows.Forms.CheckBox()
         Me.gbMovieBasicSave = New System.Windows.Forms.GroupBox()
@@ -447,9 +450,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.tb_MovTagBlacklist = New System.Windows.Forms.TextBox()
-        Me.Label9 = New System.Windows.Forms.Label()
+        Me.cbShowMovieGridToolTip = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -2492,6 +2493,33 @@ Partial Class frmPreferences
         Me.GroupBox44.TabStop = false
         Me.GroupBox44.Text = "Keywords As Tags"
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = true
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label9.Location = New System.Drawing.Point(260, 67)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(31, 18)
+        Me.Label9.TabIndex = 69
+        Me.Label9.Text = "' ; '"
+        '
+        'tb_MovTagBlacklist
+        '
+        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 103)
+        Me.tb_MovTagBlacklist.Multiline = true
+        Me.tb_MovTagBlacklist.Name = "tb_MovTagBlacklist"
+        Me.tb_MovTagBlacklist.Size = New System.Drawing.Size(277, 79)
+        Me.tb_MovTagBlacklist.TabIndex = 68
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = true
+        Me.Label8.Location = New System.Drawing.Point(6, 67)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(251, 30)
+        Me.Label8.TabIndex = 67
+        Me.Label8.Text = "Keyword Blacklist - Separate with semi-colon"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"No Enter Key or New Line."
+        '
         'Label69
         '
         Me.Label69.AutoSize = true
@@ -3060,7 +3088,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3516,6 +3544,7 @@ Partial Class frmPreferences
         '
         'GroupBox26
         '
+        Me.GroupBox26.Controls.Add(Me.cbShowMovieGridToolTip)
         Me.GroupBox26.Controls.Add(Me.cb_MovPosterTabTMDBSelect)
         Me.GroupBox26.Controls.Add(Me.cb_MovSetTitleIgnArticle)
         Me.GroupBox26.Controls.Add(Me.cb_SorttitleIgnoreArticles)
@@ -5360,32 +5389,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'Label8
+        'cbShowMovieGridToolTip
         '
-        Me.Label8.AutoSize = true
-        Me.Label8.Location = New System.Drawing.Point(6, 67)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(251, 30)
-        Me.Label8.TabIndex = 67
-        Me.Label8.Text = "Keyword Blacklist - Separate with semi-colon"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"No Enter Key or New Line."
-        '
-        'tb_MovTagBlacklist
-        '
-        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 103)
-        Me.tb_MovTagBlacklist.Multiline = true
-        Me.tb_MovTagBlacklist.Name = "tb_MovTagBlacklist"
-        Me.tb_MovTagBlacklist.Size = New System.Drawing.Size(277, 79)
-        Me.tb_MovTagBlacklist.TabIndex = 68
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = true
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label9.Location = New System.Drawing.Point(260, 67)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(31, 18)
-        Me.Label9.TabIndex = 69
-        Me.Label9.Text = "' ; '"
+        Me.cbShowMovieGridToolTip.AutoSize = true
+        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 465)
+        Me.cbShowMovieGridToolTip.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbShowMovieGridToolTip.Name = "cbShowMovieGridToolTip"
+        Me.cbShowMovieGridToolTip.Size = New System.Drawing.Size(162, 19)
+        Me.cbShowMovieGridToolTip.TabIndex = 96
+        Me.cbShowMovieGridToolTip.Text = "Show movie table tool tip"
+        Me.cbShowMovieGridToolTip.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -5974,4 +5987,5 @@ End Sub
     Friend WithEvents Label9 As Label
     Friend WithEvents tb_MovTagBlacklist As TextBox
     Friend WithEvents Label8 As Label
+    Friend WithEvents cbShowMovieGridToolTip As CheckBox
 End Class

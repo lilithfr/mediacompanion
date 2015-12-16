@@ -431,6 +431,7 @@ Public Class frmPreferences
         cb_SorttitleIgnoreArticles          .Checked        = Pref.sorttitleignorearticle
         cb_MovSetTitleIgnArticle            .Checked        = Pref.MovSetTitleIgnArticle
         cb_MovPosterTabTMDBSelect           .Checked        = Pref.MovPosterTabTMDBSelect
+        cbShowMovieGridToolTip              .Checked        = Pref.ShowMovieGridToolTip
 
         'Rename Movie Settings
         cbMovFolderRename                   .Checked        = Pref.MovFolderRename
@@ -1961,6 +1962,12 @@ End Sub
     Private Sub cb_MovPosterTabTMDBSelecte_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MovPosterTabTMDBSelect.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovPosterTabTMDBSelect = cb_MovPosterTabTMDBSelect.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
         Changes = True
     End Sub
 
