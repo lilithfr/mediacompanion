@@ -44,6 +44,7 @@ Public Class MovieRegExs
     Public Const REGEX_RATING               = "<span itemprop=""ratingValue"">(.*?)</span>"
     Public Const REGEX_RUNTIMETECH          = "class=""label""> Runtime <\/td>(.*?)<\/tr>"
     Public Const REGEX_DURATIONTECH         = "\((.*?) min"
+    Public Const REGEX_DURATIONTECH2        = "(\d*?) min"
 End Class
 
 
@@ -887,6 +888,15 @@ Public Class Classimdb
                 tmpInfo = i.ToString
                 If Pref.MovImdbFirstRunTime Then Exit For
             Next
+            If i = 0 Then
+                For each m As Match In Regex.Matches(t, MovieRegExs.REGEX_DURATIONTECH2, RegexOptions.Singleline)
+                    Dim s = Regex.Match(m.Value, MovieRegExs.REGEX_DURATIONTECH2, RegexOptions.Singleline).Groups(1).Value.Trim
+                    Dim p As Integer = s.ToInt
+                    If p > i Then i = p
+                    tmpInfo = i.ToString
+                    If Pref.MovImdbFirstRunTime Then Exit For
+                Next
+            End If
         Catch 
         End Try
         Return tmpInfo

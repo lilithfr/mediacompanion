@@ -12182,7 +12182,7 @@ End Sub
         If previouslySelected=Nothing Then
             If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> Nothing Then
                 If workingMovieDetails.fullmoviebody.movieset.MovieSetName.IndexOf(" / ") = -1 Then
-                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset.MovieSetName
+                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset.MovieSetDisplayName
                 End If
             End If
         Else
