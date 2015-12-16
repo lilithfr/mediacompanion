@@ -874,8 +874,13 @@ Public Class Movie
     End Sub
 
     Sub AppendScraperMusicVidSpecific
-        Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape MV Main Body"          ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape  , "Checking MV Main body scrape" ) )
+        If Pref.MusicVidConcertScrape Then
+            Actions.Items.Add( New ScrapeAction(AddressOf TmdbScraper_GetBody      , "Scrape TMDB Main Body"        ) )
+        Else
+            Actions.Items.Add( New ScrapeAction(AddressOf musicVid_GetBody         , "Scrape MV Main Body"          ) )
+        End If
+        
+        Actions.Items.Add( New ScrapeAction(AddressOf CheckMusicVidBodyScrape      , "Checking MV Main body scrape" ) )
     End Sub
 
     Sub Scrape(imdb As String)
@@ -1150,10 +1155,11 @@ Public Class Movie
         'Dim MovieUpdated As Boolean = File.Exists(Nfo)
         If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then
             WorkingWithNfoFiles.MVsaveNfo(nfo, fmd)
+            Exit Sub
         Else
             WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)    
         End If
-        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Exit Sub
+        'If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Exit Sub
 
         If Pref.XbmcLinkReady Then
 
@@ -1305,7 +1311,7 @@ Public Class Movie
     Sub AssignScrapedMovie(_scrapedMovie As FullMovieDetails)
         Dim thumbstring As New XmlDocument
         Dim xmltype As String = "movie"
-        If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then xmltype = "musicvideo"
+        If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then xmltype = "musicvideo"  'OrElse Pref.MusicVidConcertScrape 
 
         thumbstring.LoadXml(ImdbBody)
         Dim thisresult As XmlElement = Nothing

@@ -1127,8 +1127,18 @@ Public Class Movies
             i += 1
             PercentDone = CalcPercentDone(i,NewMovies.Count)
             ReportProgress( "Scraping " & i & " of " & NewMovies.Count )
-            
+            If Pref.MusicVidScrape AndAlso Pref.MVConcertFolders.Count > 0 Then
+                Pref.MusicVidConcertScrape = False
+                For each concertpath In Pref.MVConcertFolders
+                    If Not concertpath.selected Then Continue For
+                    If newMovie.NfoPath.ToLower.Contains(concertpath.rpath.ToLower & If(concertpath.rpath.Contains("\"), "\", "/")) Then
+                        Pref.MusicVidConcertScrape = True
+                        Exit For
+                    End If
+                Next
+            End If
             ScrapeMovie(newMovie)
+            Pref.MusicVidConcertScrape = False
             Pref.googlecount += 1
             Pref.engineno += 1
             If Pref.engineno = 3 Then Pref.engineno = 0
@@ -1545,6 +1555,11 @@ Public Class Movies
         tmpMVCache.Clear()
         Dim t As New List(Of String)
         For each item In Pref.MVidFolders
+            If item.selected Then
+                t.Add(item.rpath)
+            End If
+        Next
+        For each item In Pref.MVConcertFolders
             If item.selected Then
                 t.Add(item.rpath)
             End If
@@ -2339,7 +2354,8 @@ Public Class Movies
 
         Dim folders As New List(Of String)
 
-        AddOnlineFolders ( folders , Pref.MVidFolders )
+        AddOnlineFolders ( folders , Pref.MVidFolders       )
+        AddOnlineFolders ( folders , Pref.MVConcertFolders  )
         'AddOfflineFolders( folders )
 
         Dim i = 0
