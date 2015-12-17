@@ -37,6 +37,7 @@ Public Class ucMusicVideo
     Dim GridFieldToDisplay2 As String ="A-Z"
     Dim GridInvert As Boolean = False
     Dim MVPrefLoad As Boolean = False
+    Dim LastSelected As Integer = 0
 
     Private Property MVPrefChanged As Boolean
         Get
@@ -147,21 +148,22 @@ Public Class ucMusicVideo
         root = doc.CreateElement("music_video_cache")
         For Each item In MVCache
             child = doc.CreateElement("musicvideo")
-            childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = item.nfopathandfilename : child.AppendChild(childchild)
-			childchild = doc.CreateElement("filename") : childchild.InnerText = item.filename : child.AppendChild(childchild)
-			childchild = doc.CreateElement("foldername") : childchild.InnerText = item.foldername : child.AppendChild(childchild)
-			childchild = doc.CreateElement("title") : childchild.InnerText = item.title : child.AppendChild(childchild)
-			childchild = doc.CreateElement("artist") : childchild.InnerText = item.artist : child.AppendChild(childchild)
-			childchild = doc.CreateElement("year") : childchild.InnerText = item.year : child.AppendChild(childchild)
-			childchild = doc.CreateElement("filedate") : childchild.InnerText = item.filedate : child.AppendChild(childchild)
-			childchild = doc.CreateElement("createdate") : childchild.InnerText = item.createdate : child.AppendChild(childchild)
-			childchild = doc.CreateElement("genre") : childchild.InnerText = item.genre : child.AppendChild(childchild)
-            childchild = doc.CreateElement("plot") : childchild.InnerText = item.plot : child.AppendChild(childchild)
-			childchild = doc.CreateElement("playcount") : childchild.InnerText = item.playcount : child.AppendChild(childchild)
-			childchild = doc.CreateElement("runtime") : childchild.InnerText = item.runtime : child.AppendChild(childchild)
-			childchild = doc.CreateElement("Resolution") : childchild.InnerText = item.Resolution : child.AppendChild(childchild)
-			childchild = doc.CreateElement("FrodoPosterExists") : childchild.InnerText = item.FrodoPosterExists : child.AppendChild(childchild)
-			childchild = doc.CreateElement("PreFrodoPosterExists") : childchild.InnerText = item.PreFrodoPosterExists : child.AppendChild(childchild)
+            childchild = doc.CreateElement("fullpathandfilename")   : childchild.InnerText = item.nfopathandfilename : child.AppendChild(childchild)
+            childchild = doc.CreateElement("tmdbid")                : childchild.InnerText = item.tmdbid : child.AppendChild(childchild)
+			childchild = doc.CreateElement("filename")              : childchild.InnerText = item.filename : child.AppendChild(childchild)
+			childchild = doc.CreateElement("foldername")            : childchild.InnerText = item.foldername : child.AppendChild(childchild)
+			childchild = doc.CreateElement("title")                 : childchild.InnerText = item.title : child.AppendChild(childchild)
+			childchild = doc.CreateElement("artist")                : childchild.InnerText = item.artist : child.AppendChild(childchild)
+			childchild = doc.CreateElement("year")                  : childchild.InnerText = item.year : child.AppendChild(childchild)
+			childchild = doc.CreateElement("filedate")              : childchild.InnerText = item.filedate : child.AppendChild(childchild)
+			childchild = doc.CreateElement("createdate")            : childchild.InnerText = item.createdate : child.AppendChild(childchild)
+			childchild = doc.CreateElement("genre")                 : childchild.InnerText = item.genre : child.AppendChild(childchild)
+            childchild = doc.CreateElement("plot")                  : childchild.InnerText = item.plot : child.AppendChild(childchild)
+			childchild = doc.CreateElement("playcount")             : childchild.InnerText = item.playcount : child.AppendChild(childchild)
+			childchild = doc.CreateElement("runtime")               : childchild.InnerText = item.runtime : child.AppendChild(childchild)
+			childchild = doc.CreateElement("Resolution")            : childchild.InnerText = item.Resolution : child.AppendChild(childchild)
+			childchild = doc.CreateElement("FrodoPosterExists")     : childchild.InnerText = item.FrodoPosterExists : child.AppendChild(childchild)
+			childchild = doc.CreateElement("PreFrodoPosterExists")  : childchild.InnerText = item.PreFrodoPosterExists : child.AppendChild(childchild)
 		    For Each track In item.Audio  
                 child.AppendChild(track.GetChild(doc))
             Next
@@ -194,12 +196,13 @@ Public Class ucMusicVideo
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
-                            Case "fullpathandfilename"  : newMV.nfopathandfilename = detail.InnerText
-                            Case "filename"             : newMV.filename = detail.InnerText
-                            Case "foldername"           : newMV.foldername = detail.InnerText
-                            Case "title"                : newMV.title = detail.InnerText
-                            Case "artist"               : newMV.artist = detail.InnerText
-                            Case "year"                 : newMV.year = detail.InnerText
+                            Case "fullpathandfilename"  : newMV.nfopathandfilename      = detail.InnerText
+                            Case "tmdbid"               : newMV.tmdbid                  = detail.InnerText 
+                            Case "filename"             : newMV.filename                = detail.InnerText
+                            Case "foldername"           : newMV.foldername              = detail.InnerText
+                            Case "title"                : newMV.title                   = detail.InnerText
+                            Case "artist"               : newMV.artist                  = detail.InnerText
+                            Case "year"                 : newMV.year                    = detail.InnerText
                             Case "filedate"
                                 If detail.InnerText.Length <> 14 Then 'i.e. invalid date
                                         newMV.filedate = "18500101000000" '01/01/1850 00:00:00
@@ -212,21 +215,21 @@ Public Class ucMusicVideo
                                     Else
                                         newMV.CreateDate = detail.InnerText
                                     End If
-                            Case "genre"                : newMV.genre = detail.InnerText & newMV.genre
-                            Case "plot"                 : newMV.plot = detail.InnerText
-                            Case "playcount"            : newMV.playcount = detail.InnerText
-                            Case "runtime"              : newMV.runtime = detail.InnerText
-                            Case "Resolution"           : newMV.Resolution = detail.InnerText
-                            Case "FrodoPosterExists"    : newMV.FrodoPosterExists = detail.InnerText
-                            Case "PreFrodoPosterExists" : newMV.PreFrodoPosterExists = detail.InnerText
+                            Case "genre"                : newMV.genre                   = detail.InnerText & newMV.genre
+                            Case "plot"                 : newMV.plot                    = detail.InnerText
+                            Case "playcount"            : newMV.playcount               = detail.InnerText
+                            Case "runtime"              : newMV.runtime                 = detail.InnerText
+                            Case "Resolution"           : newMV.Resolution              = detail.InnerText
+                            Case "FrodoPosterExists"    : newMV.FrodoPosterExists       = detail.InnerText
+                            Case "PreFrodoPosterExists" : newMV.PreFrodoPosterExists    = detail.InnerText
                             Case "audio"
                                 Dim audio As New AudioDetails
                                 For Each audiodetails As XmlNode In detail.ChildNodes
                                     Select Case audiodetails.Name
-                                        Case "language" : audio.Language.Value = audiodetails.InnerText
-                                        Case "codec"    : audio.Codec.Value = audiodetails.InnerText
-                                        Case "channels" : audio.Channels.Value = audiodetails.InnerText
-                                        Case "bitrate"  : audio.Bitrate.Value = audiodetails.InnerText
+                                        Case "language" : audio.Language.Value          = audiodetails.InnerText
+                                        Case "codec"    : audio.Codec.Value             = audiodetails.InnerText
+                                        Case "channels" : audio.Channels.Value          = audiodetails.InnerText
+                                        Case "bitrate"  : audio.Bitrate.Value           = audiodetails.InnerText
                                     End Select
                                 Next
                                 newMV.Audio.Add(audio)
@@ -268,6 +271,7 @@ Public Class ucMusicVideo
         MVDgv1.DataSource = MVCache
         GridviewMovieDesign()
         mv_FiltersAndSortApply()
+        DisplayMV()
     End Sub
     
     Private Sub txtFilter_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFilter.KeyDown, txtFilter.ModifiedChanged
@@ -429,7 +433,7 @@ Public Class ucMusicVideo
     
     Private Sub DisplayMV()
         Try
-            DisplayMV(MVDgv1.SelectedCells, MVDgv1.SelectedRows)
+            DisplayMV(MVDgv1.SelectedCells, MVDgv1.selectedrows)
         Catch
             Return
         End Try
@@ -447,6 +451,12 @@ Public Class ucMusicVideo
             Return
         End Try
         If selectedRows.Count = 0 Then Exit Sub
+        'If MVDgv1.RowCount = 0 Then Exit Sub
+        'If LastSelected > MVDgv1.RowCount Then
+        '    LastSelected = MVDgv1.RowCount
+        'Else
+        '    LastSelected = MVDgv1.SelectedCells(0).RowIndex
+        'End If
         MVForm_Init()
         Dim query = From f In MVCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
         Dim queryList As List(Of MVComboList) = query.ToList()

@@ -3866,6 +3866,10 @@ Public Class WorkingWithNfoFiles
         child.AppendChild(anotherchild)
         root.AppendChild(child)
 
+        child = doc.CreateElement("tmdbid")
+        child.InnerText = movietosave.fullmoviebody.tmdbid
+        root.AppendChild(child)
+
         child = doc.CreateElement("title")
         child.InnerText = movietosave.fullmoviebody.title
         root.AppendChild(child)
@@ -3970,6 +3974,7 @@ Public Class WorkingWithNfoFiles
         For Each thisresult In document("musicvideo")
             Select Case thisresult.Name
                 Case "album"    : NewMusicVideo.fullmoviebody.album     = thisresult.InnerText
+                Case "tmdbid"   : NewMusicVideo.fullmoviebody.tmdbid    = thisresult.InnerText
                 Case "title"    : NewMusicVideo.fullmoviebody.title     = thisresult.InnerText
                 Case "year"     : NewMusicVideo.fullmoviebody.year      = thisresult.InnerText
                 Case "artist"   : NewMusicVideo.fullmoviebody.artist    = thisresult.InnerText

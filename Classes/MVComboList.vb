@@ -48,23 +48,24 @@ Public Class MVComboList
         End Get
     End Property
 
-    Private _artist               As String = ""
-    Property year                 As Integer= 0
-    Property filedate             As String = ""
-    Property genre                As String = ""
-    Property playcount            As String = ""
-    Property lastplayed           As String = ""
-    Property runtime              As String = ""
+    Private _artist                 As String = ""
+    Property year                   As Integer= 0
+    Property filedate               As String = ""
+    Property genre                  As String = ""
+    Property playcount              As String = ""
+    Property lastplayed             As String = ""
+    Property runtime                As String = ""
     'Public Property createdate           As String = ""
-    Property plot                 As String = ""
-    Property Resolution           As Integer= -1
-    Property Audio                As New List(Of AudioDetails)
-    Property track                As String = ""
-    Private _thumb                As String = ""
-    Property FrodoPosterExists    As Boolean
-    Property PreFrodoPosterExists As Boolean
-    Property filename             As String = ""
-    Property foldername           As String = ""
+    Property plot                   As String = ""
+    Property Resolution             As Integer= -1
+    Property Audio                  As New List(Of AudioDetails)
+    Property track                  As String = ""
+    Private _thumb                  As String = ""
+    Property FrodoPosterExists      As Boolean
+    Property PreFrodoPosterExists   As Boolean
+    Property filename               As String = ""
+    Property foldername             As String = ""
+    Property tmdbid                 As String = ""
     
     Public Property thumb As String
         Get
@@ -220,6 +221,7 @@ Public Class MVComboList
         nfopathandfilename      = From.nfopathandfilename
         filename                = From.filename
         foldername              = From.foldername
+        tmdbid                  = From.tmdbid 
         Title                   = From.Title
         Artist                  = From.Artist
         year                    = From.year
@@ -245,6 +247,7 @@ Public Class MVComboList
         nfopathandfilename      = From.fileinfo.fullpathandfilename
         filename                = Path.GetFileName(From.fileinfo.filename)
         foldername              = Utilities.GetLastFolder(From.fileinfo.fullpathandfilename)
+        tmdbid                  = From.fullmoviebody.tmdbid
         Title                   = From.fullmoviebody.title
         Artist                  = From.fullmoviebody.artist
         year                    = From.fullmoviebody.year.ToInt

@@ -3878,35 +3878,35 @@ Public Class Form1
             Dim objHitTestInfo As DataGridView.HitTestInfo = DataGridViewMovies.HitTest      (MousePos.X, MousePos.Y)
             Dim MouseRowIndex  As Integer                  = objHitTestInfo.RowIndex
  
-            TimerToolTip.Enabled = True
+            'TimerToolTip.Enabled = True
 
-            If MouseRowIndex > -1 Then
-                Dim Runtime       As String = ""
-                Dim RatingRuntime As String = ""
-                Dim movietitle    As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Title" ).Value.ToString
-                Dim movieYear     As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Year"  ).Value.ToString
-                Dim Rating        As String = "Rating: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("Rating").Value.ToString.FormatRating
+            'If MouseRowIndex > -1 Then
+            '    Dim Runtime       As String = ""
+            '    Dim RatingRuntime As String = ""
+            '    Dim movietitle    As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Title" ).Value.ToString
+            '    Dim movieYear     As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Year"  ).Value.ToString
+            '    Dim Rating        As String = "Rating: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("Rating").Value.ToString.FormatRating
 
-                If DataGridViewMovies.Rows(MouseRowIndex).Cells("Runtime").Value.ToString.Length > 3 Then
-                    Runtime = "Runtime: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("IntRuntime").Value.ToString
-                End If
+            '    If DataGridViewMovies.Rows(MouseRowIndex).Cells("Runtime").Value.ToString.Length > 3 Then
+            '        Runtime = "Runtime: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("IntRuntime").Value.ToString
+            '    End If
 
-                RatingRuntime = Rating & "     " & Runtime
+            '    RatingRuntime = Rating & "     " & Runtime
 
-                Dim Plot As String = DataGridViewMovies.Rows(MouseRowIndex).Cells("Plot").Value.ToString
+            '    Dim Plot As String = DataGridViewMovies.Rows(MouseRowIndex).Cells("Plot").Value.ToString
 
-                If objHitTestInfo.RowY > -1 Then
-                    TooltipGridViewMovies1.Visible = Pref.ShowMovieGridToolTip
+            '    If objHitTestInfo.RowY > -1 Then
+            '        TooltipGridViewMovies1.Visible = Pref.ShowMovieGridToolTip
 
-                    TooltipGridViewMovies1.Textinfo(Plot)
-                    TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
-                    TooltipGridViewMovies1.TextMovieName(movietitle)
-                    TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
+            '        TooltipGridViewMovies1.Textinfo(Plot)
+            '        TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
+            '        TooltipGridViewMovies1.TextMovieName(movietitle)
+            '        TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
 
-                    TooltipGridViewMovies1.Left = MousePos.X+10
-                    TooltipGridViewMovies1.Top  = MousePos.Y+TooltipGridViewMovies1.Height+30
-                End If
-            End If
+            '        TooltipGridViewMovies1.Left = MousePos.X+10
+            '        TooltipGridViewMovies1.Top  = MousePos.Y+TooltipGridViewMovies1.Height+30
+            '    End If
+            'End If
         Catch
         End Try
     End Sub
@@ -11821,7 +11821,7 @@ End Sub
             sandq = sandq -2
             Exit Sub
         End If
-        If Not Pref.MusicVidScrape OrElse Not Pref.MusicVidConcertScrape Then
+        If Not Pref.MusicVidScrape Then
             LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
             UpdateFilteredList()
         End If
@@ -12075,17 +12075,17 @@ End Sub
     End Sub
 
     Sub doRefresh
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
-        If CurrentTab = "movies" Then mov_RebuildMovieCaches()
-        If CurrentTab = "tv shows" Then tv_CacheRefresh()
-        If CurrentTab = "music vid's" Then ucMusicVideo1.btnRefresh.PerformClick()
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Name.ToLower
+        If CurrentTab = "tabpage1" Then mov_RebuildMovieCaches()
+        If CurrentTab = "tabpage2" Then tv_CacheRefresh()
+        If CurrentTab = "tabmv" Then ucMusicVideo1.btnRefresh.PerformClick()
     End Sub
 
     Sub doSearchNew
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
-        If CurrentTab = "movies" Then SearchForNew()
-        If CurrentTab = "tv shows" Then ep_Search()
-        If CurrentTab = "music vid's" Then ucMusicVideo1.btnSearchNew.PerformClick()
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Name.ToLower
+        If CurrentTab = "tabpage1" Then SearchForNew()
+        If CurrentTab = "tabpage2" Then ep_Search()
+        If CurrentTab = "tabmv" Then ucMusicVideo1.btnSearchNew.PerformClick()
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize

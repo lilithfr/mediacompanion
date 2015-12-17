@@ -844,6 +844,10 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"                  ) )
         'Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                          ) )
+        If Pref.MusicVidConcertScrape Then
+            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
+            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
+        End If
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache             , "Assigning music Video to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                        ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"                 ) )
@@ -1440,7 +1444,9 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.thumb = thisresult.InnerText 
             End Select
         Next
-
+        If Pref.MusicVidConcertScrape Then
+            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
+        End If
         If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Exit Sub     'If Music Video Scraping, finished at this point so exit
 
         If Pref.sorttitleignorearticle Then                              'add ignored articles to end of
@@ -1939,7 +1945,7 @@ Public Class Movie
     Property TrailerDownloaded As Boolean = False
 
     Private Sub DownloadPoster
-        If Not Pref.MusicVidScrape AndAlso Not Pref.scrapemovieposters then
+        If (Not Pref.MusicVidScrape Or Pref.MusicVidConcertScrape) AndAlso Not Pref.scrapemovieposters then
             Exit Sub
         End If
         If Pref.MovieChangeMovie AndAlso Pref.MovieChangeKeepExistingArt Then Exit Sub
@@ -1996,6 +2002,9 @@ Public Class Movie
                 Next
             Else
                 PosterUrl = _scrapedMovie.fullmoviebody.thumb
+                If Pref.MusicVidConcertScrape Then
+                    PosterUrl = "https://image.tmdb.org/t/p/" & PosterUrl
+                End If
                 validUrl = Utilities.UrlIsValid(PosterUrl)
             End If
         End If
@@ -2020,7 +2029,7 @@ Public Class Movie
         End If
         If Pref.MovieChangeMovie AndAlso Pref.MovieChangeKeepExistingArt Then Exit Sub
 
-        If Pref.MusicVidScrape Then
+        If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then
             Dim aok As Boolean = Utilities.CreateScreenShot(mediapathandfilename, NfoPathAndFilename.Replace(".nfo", "-fanart.jpg"), Pref.MVPrefScrnSht, True)
             ReportProgress(, "!!! Fanart Screenshot " & If(aok, "created", "- Failed!") & vbCrLf)
         Else
