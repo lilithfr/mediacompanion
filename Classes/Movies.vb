@@ -1163,7 +1163,18 @@ Public Class Movies
 
         movie.DeleteScrapedFiles(True)
 
-        If Not Pref.MusicVidScrape Then movie.ScrapedMovie.Init
+        If Not Pref.MusicVidScrape Then
+            movie.ScrapedMovie.Init
+        Else
+            Pref.MusicVidConcertScrape = False
+            For each concertpath In Pref.MVConcertFolders
+                If Not concertpath.selected Then Continue For
+                If movie.NfoPath.ToLower.Contains(concertpath.rpath.ToLower & If(concertpath.rpath.Contains("\"), "\", "/")) Then
+                    Pref.MusicVidConcertScrape = True
+                    Exit For
+                End If
+            Next
+        End If
 
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False

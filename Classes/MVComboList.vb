@@ -32,7 +32,7 @@ Public Class MVComboList
 
     Public ReadOnly Property ArtistTitle As String
         Get
-            Return artist & " - " & Title
+            Return If(artist <> "", artist & " - " & Title, Title)
         End Get
     End Property
 

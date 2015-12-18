@@ -11522,7 +11522,7 @@ End Sub
                     Pref.movie_filters.SetMovieFiltersVisibility
                     UpdateMovieFiltersPanel
                 End If
-            Case "music vid's"
+            Case "music videos"
                 UcMusicVideo1.mv_FiltersAndSortApply(True)
         End Select
 
@@ -11789,7 +11789,7 @@ End Sub
     End Sub
 
     Public Sub ChangeMusicVideo
-        oMovies.ChangeMovie(ucMusicVideo.changeMVList(0), "", ucMusicVideo.changeMVList(1))
+        oMovies.ChangeMovie(ucMusicVideo.changeMVList(0), ucMusicVideo.changeMVList(3), ucMusicVideo.changeMVList(1))
     End Sub
 
     Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged

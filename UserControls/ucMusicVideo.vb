@@ -340,14 +340,28 @@ Public Class ucMusicVideo
     End Function
 
     Private Sub TabControlMain_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControlMain.SelectedIndexChanged
-        If TabControlMain.SelectedTab.Text.ToLower = "change by wiki entry" Then
-            If Not Pref.MVScraper = "wiki" Then
+        If TabControlMain.SelectedTab.Name.ToLower = "tpmvchange" Then
+            Dim searchterm As String = ""
+            Dim searchurl As String = ""
+            If workingMusicVideo.fullmoviebody.tmdbid <> "" Then
+                Dim isroot As Boolean = Pref.GetRootFolderCheck(workingMusicVideo.fileinfo.fullpathandfilename)
+                Dim tempstring = ""
+                If Pref.usefoldernames = False OrElse isroot Then
+                    tempstring = Utilities.RemoveFilenameExtension(IO.Path.GetFileName(workingMusicVideo.fileinfo.fullpathandfilename))
+                Else
+                    tempstring = Utilities.GetLastFolder(workingMusicVideo.fileinfo.fullpathandfilename)
+                End If
+                searchurl = "http://www.themoviedb.org/search?query=" & Utilities.CleanFileName(tempstring)
+            ElseIf Pref.MVScraper = "wiki" Then
+                searchterm = getArtistAndTitle(workingMusicVideo.fileinfo.fullpathandfilename)
+                searchurl = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
+            Else
                 MsgBox("Wiki scraper is not selected" & vbCrLf & "Unable to open this tab")
                 TabControlMain.SelectedIndex = PrevTab
                 Exit Sub
             End If
-            Dim searchterm As String = getArtistAndTitle(workingMusicVideo.fileinfo.fullpathandfilename)
-            Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
+            'Dim searchterm As String = getArtistAndTitle(workingMusicVideo.fileinfo.fullpathandfilename)
+            'Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
             WebBrowser1.Stop()
             WebBrowser1.ScriptErrorsSuppressed = True
             WebBrowser1.Navigate(searchurl)
@@ -372,8 +386,23 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub ManualScrape()
-        If WebBrowser1.Url.ToString.ToLower.IndexOf("wikipedia.org") = -1 Or WebBrowser1.Url.ToString.ToLower.IndexOf("google") <> -1 Then
-            MsgBox("You Must Browse to a Wikipedia Page")
+        Dim Url As String =  WebBrowser1.Url.ToString.ToLower
+        Dim tmdbid As String = ""
+        If  Url.IndexOf("www.themoviedb.org/movie") <> -1 Then
+            Dim mat As String = Url
+            mat = mat.Substring(mat.LastIndexOf("/")+1, mat.Length - mat.LastIndexOf("/")-1)
+            Dim urlsplit As String()
+            urlsplit = Split(mat, "-")
+            If Integer.TryParse(urlsplit(0), Nothing) Then
+                tmdbid = urlsplit(0)
+            Else
+                MsgBox("Please Browse to a Movie page")
+                Exit Sub
+            End If
+        ElseIf Url.IndexOf("wikipedia.org") = -1 Or Url.IndexOf("google") <> -1 Then
+            Dim site As String = "Wikipedia"
+            If workingMusicVideo.fullmoviebody.tmdbid <> "" Then site = "TMDB"
+            MsgBox("You Must Browse to a " & site & " Page")
             Exit Sub
         End If
         changeMVList.Clear()
@@ -384,17 +413,19 @@ Public Class ucMusicVideo
         Else
             changefields = chkBxOverWriteArt.CheckState
             TabControlMain.SelectedIndex = 0
-            ChangeMV(WebBrowser1.Url.ToString, changefields)   ' For Testing through scraping routine.
+            ChangeMV(WebBrowser1.Url.ToString, changefields, tmdbid)   ' For Testing through scraping routine.
         End If
     End Sub
 
-    Private Sub ChangeMV(ByRef url As String, ByVal overwrite As Boolean)
+    Private Sub ChangeMV(ByRef url As String, ByVal overwrite As Boolean, ByVal tmdbid As String)
         Dim videopath As String = workingMusicVideo.fileinfo.fullpathandfilename
         MVCacheRemove(videopath)
+        loadMVDV1()
         changeMVList.Clear()
         changeMVList.Add(videopath)
         changeMVList.Add(url)
         changeMVList.Add(overwrite)
+        changeMVList.Add(tmdbid)
         Pref.MusicVidScrape = True
         Form1.RunBackgroundMovieScrape("ChangeMusicVideo")
         While Form1.BckWrkScnMovies.IsBusy
@@ -624,6 +655,7 @@ Public Class ucMusicVideo
         cmbxMVSort.SelectedIndex = 0
         txtFilter.Text = ""
         rbMVArtistAndTitle.Checked = True
+        mv_FiltersAndSortApply()
     End Sub
 
     Private Sub cmbxMVSort_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxMVSort.SelectedIndexChanged
