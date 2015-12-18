@@ -1097,12 +1097,30 @@ Public Class Movie
         End If
         _scrapedMovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(NfoPathAndFilename, _scrapedMovie.fullmoviebody.movieset.MovieSetName)
         _scrapedMovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(NfoPathAndFilename, _scrapedMovie.fullmoviebody.movieset.MovieSetName)
-        If Not Pref.ExcludeMpaaRated Then
+        If Pref.MovCertRemovePhrase Then
             Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
-            If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
+            If mpaa.Contains(" for") Then
+                mpaa = mpaa.Substring(0, mpaa.IndexOf(" for"))
+                _scrapedMovie.fullmoviebody.mpaa = mpaa
+            End If
+        End If
+        If Pref.ExcludeMpaaRated Then
+            Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
+            If mpaa <> "" And mpaa.ToLower.StartsWith("rated") Then
+                mpaa = mpaa.Substring(5, mpaa.Length-5).Trim()
+                _scrapedMovie.fullmoviebody.mpaa = mpaa
+            End If
+        Else
+            If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then
                 _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
             End If
         End If
+        'If Not Pref.ExcludeMpaaRated Then
+        '    Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
+        '    If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
+        '        _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
+        '    End If
+        'End If
         Try     'Set TMDB Id in _scrapedMovie if not already set.
             If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId
         Catch
@@ -1484,9 +1502,21 @@ Public Class Movie
             Next
             If done = True Then Exit For
         Next
-        If Not Pref.ExcludeMpaaRated Then
+        If Pref.MovCertRemovePhrase Then
             Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
-            If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
+            If mpaa.Contains(" for") Then
+                mpaa = mpaa.Substring(0, mpaa.IndexOf(" for"))
+                _scrapedMovie.fullmoviebody.mpaa = mpaa
+            End If
+        End If
+        If Pref.ExcludeMpaaRated Then
+            Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
+            If mpaa <> "" And mpaa.ToLower.StartsWith("rated") Then
+                mpaa = mpaa.Substring(5, mpaa.Length-5).Trim()
+                _scrapedMovie.fullmoviebody.mpaa = mpaa
+            End If
+        Else
+            If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then
                 _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
             End If
         End If

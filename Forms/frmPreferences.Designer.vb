@@ -295,6 +295,7 @@ Partial Class frmPreferences
         Me.Label77 = New System.Windows.Forms.Label()
         Me.TextBox_OfflineDVDTitle = New System.Windows.Forms.TextBox()
         Me.GroupBox26 = New System.Windows.Forms.GroupBox()
+        Me.cbShowMovieGridToolTip = New System.Windows.Forms.CheckBox()
         Me.cb_MovSetTitleIgnArticle = New System.Windows.Forms.CheckBox()
         Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
         Me.cb_MovDurationAsRuntine = New System.Windows.Forms.CheckBox()
@@ -450,7 +451,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbShowMovieGridToolTip = New System.Windows.Forms.CheckBox()
+        Me.cb_MovCertRemovePhrase = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1164,6 +1165,7 @@ Partial Class frmPreferences
         '
         'GroupBox11
         '
+        Me.GroupBox11.Controls.Add(Me.cb_MovCertRemovePhrase)
         Me.GroupBox11.Controls.Add(Me.ScrapeFullCertCheckBox)
         Me.GroupBox11.Controls.Add(Me.Label178)
         Me.GroupBox11.Controls.Add(Me.Label95)
@@ -1175,7 +1177,7 @@ Partial Class frmPreferences
         Me.GroupBox11.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox11.Name = "GroupBox11"
         Me.GroupBox11.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox11.Size = New System.Drawing.Size(300, 300)
+        Me.GroupBox11.Size = New System.Drawing.Size(300, 307)
         Me.GroupBox11.TabIndex = 85
         Me.GroupBox11.TabStop = false
         Me.GroupBox11.Text = "Select IMDB Certification Priorities"
@@ -1186,7 +1188,7 @@ Partial Class frmPreferences
         'ScrapeFullCertCheckBox
         '
         Me.ScrapeFullCertCheckBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(11, 265)
+        Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(12, 257)
         Me.ScrapeFullCertCheckBox.Name = "ScrapeFullCertCheckBox"
         Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(265, 24)
         Me.ScrapeFullCertCheckBox.TabIndex = 8
@@ -3088,7 +3090,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3570,6 +3572,17 @@ Partial Class frmPreferences
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
+        '
+        'cbShowMovieGridToolTip
+        '
+        Me.cbShowMovieGridToolTip.AutoSize = true
+        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 465)
+        Me.cbShowMovieGridToolTip.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbShowMovieGridToolTip.Name = "cbShowMovieGridToolTip"
+        Me.cbShowMovieGridToolTip.Size = New System.Drawing.Size(162, 19)
+        Me.cbShowMovieGridToolTip.TabIndex = 96
+        Me.cbShowMovieGridToolTip.Text = "Show movie table tool tip"
+        Me.cbShowMovieGridToolTip.UseVisualStyleBackColor = true
         '
         'cb_MovSetTitleIgnArticle
         '
@@ -5389,16 +5402,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbShowMovieGridToolTip
+        'cb_MovCertRemovePhrase
         '
-        Me.cbShowMovieGridToolTip.AutoSize = true
-        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 465)
-        Me.cbShowMovieGridToolTip.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbShowMovieGridToolTip.Name = "cbShowMovieGridToolTip"
-        Me.cbShowMovieGridToolTip.Size = New System.Drawing.Size(162, 19)
-        Me.cbShowMovieGridToolTip.TabIndex = 96
-        Me.cbShowMovieGridToolTip.Text = "Show movie table tool tip"
-        Me.cbShowMovieGridToolTip.UseVisualStyleBackColor = true
+        Me.cb_MovCertRemovePhrase.AutoSize = true
+        Me.cb_MovCertRemovePhrase.Location = New System.Drawing.Point(12, 281)
+        Me.cb_MovCertRemovePhrase.Name = "cb_MovCertRemovePhrase"
+        Me.cb_MovCertRemovePhrase.Size = New System.Drawing.Size(242, 19)
+        Me.cb_MovCertRemovePhrase.TabIndex = 9
+        Me.cb_MovCertRemovePhrase.Text = "Remove phrases after Rating Certificate"
+        Me.ToolTip1.SetToolTip(Me.cb_MovCertRemovePhrase, "ie: remove"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for sexual content, for violence and language...")
+        Me.cb_MovCertRemovePhrase.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -5988,4 +6001,5 @@ End Sub
     Friend WithEvents tb_MovTagBlacklist As TextBox
     Friend WithEvents Label8 As Label
     Friend WithEvents cbShowMovieGridToolTip As CheckBox
+    Friend WithEvents cb_MovCertRemovePhrase As CheckBox
 End Class

@@ -259,6 +259,7 @@ Public Class Pref
     Public Shared XbmcTmdbAkasFromImdb As Boolean
     Public Shared XbmcTmdbActorDL As Boolean
     Public Shared scrapefullcert As Boolean
+    Public Shared MovCertRemovePhrase As Boolean
     Public Shared OfflineDVDTitle As String
     Public Shared MovieManualRename As Boolean
     Public Shared MovieRenameEnable As Boolean
@@ -627,6 +628,8 @@ Public Class Pref
         XbmcTmdbStarsFromImdb = False
         XbmcTmdbAkasFromImdb = False
         XbmcTmdbActorDL = False
+        scrapefullcert = False
+        MovCertRemovePhrase = False
         moviedefaultlist = 0
         moviesortorder = 0
         'movieinvertorder = 0
@@ -1112,6 +1115,7 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbAkasFromImdb",               XbmcTmdbAkasFromImdb)               'cbXbmcTmdbAkasFromImdb
         root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
+        root.AppendChild(doc, "MovCertRemovePhrase",                MovCertRemovePhrase)                'cb_MovCertRemovePhrase
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
         root.AppendChild(doc, "moviemanualrename",                  MovieManualRename)                  'MovieManualRename
         root.AppendChild(doc, "MovieRenameEnable",                  MovieRenameEnable)                  'cbMovieRenameEnable
@@ -1590,6 +1594,7 @@ Public Class Pref
                     Case "MovThousSeparator"                    : MovThousSeparator = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml
+                    Case "MovCertRemovePhrase"                  : MovCertRemovePhrase = thisresult.InnerXml
                     Case "moviePreferredHDTrailerResolution"    : moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()
                     Case "MovieImdbGenreRegEx"                  : MovieImdbGenreRegEx = decxmlchars(thisresult.InnerXml)
                     Case "xbmcartwork"                          : XBMC_version = Convert.ToByte(thisresult.InnerText)

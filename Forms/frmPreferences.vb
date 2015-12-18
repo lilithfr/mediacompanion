@@ -350,6 +350,7 @@ Public Class frmPreferences
             lb_IMDBCertPriority.Items.Add(Pref.certificatepriority(f))
         Next
         ScrapeFullCertCheckBox              .Checked        = Pref.scrapefullcert
+        cb_MovCertRemovePhrase              .Checked        = Pref.MovCertRemovePhrase
 
     End Sub
 
@@ -1480,19 +1481,6 @@ End Sub
     End Sub
 
 'IMDB Cert Priority
-    Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
-        Try
-            If ScrapeFullCertCheckBox.Checked Then
-                Pref.scrapefullcert = True
-            Else
-                Pref.scrapefullcert = False
-            End If
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
     
     Private Sub Button75_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button75.Click
         Try
@@ -1526,6 +1514,18 @@ End Sub
             Changes = True
         Catch ex As Exception
         End Try
+    End Sub
+
+    Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.scrapefullcert = ScrapeFullCertCheckBox.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cb_MovCertRemovePhrase_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MovCertRemovePhrase.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovCertRemovePhrase = cb_MovCertRemovePhrase.Checked
+        Changes = True
     End Sub
 
 #End Region  'Movie Preferences -> Scraper Tab
@@ -3382,5 +3382,5 @@ End Sub
             End If
         End If
     End Sub
-
+    
 End Class

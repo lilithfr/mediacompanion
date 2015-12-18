@@ -9437,9 +9437,9 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
                 Dim checkmpaa = oCachedMovie.Certificate 
-                If Not Pref.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
-                    checkmpaa = "Rated " & checkmpaa
-                End If
+                'If Not Pref.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
+                '    checkmpaa = "Rated " & checkmpaa
+                'End If
                 oMovie.ScrapedMovie.fullmoviebody.mpaa = checkmpaa
                 oMovie.AssignMovieToCache
                 oMovie.SaveNFO
