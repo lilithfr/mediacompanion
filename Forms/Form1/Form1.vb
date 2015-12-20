@@ -12179,6 +12179,7 @@ End Sub
 
         cbMovieDisplay_MovieSet.SelectedIndex = 0
 
+        If IsNothing(workingMovieDetails) Then Exit Sub
         If previouslySelected=Nothing Then
             If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> Nothing Then
                 If workingMovieDetails.fullmoviebody.movieset.MovieSetName.IndexOf(" / ") = -1 Then

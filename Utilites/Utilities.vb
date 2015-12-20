@@ -398,7 +398,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 M = Regex.Match(stackName, "\.part([0]{0,3}[0-9]+)$")
             Else
                 'process a typical multi‑part, ending in digits or a single letter
-                M = Regex.Match(stackName, "(" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "]?)([0-9a-z]+)$")
+                M = Regex.Match(stackName, "[" & cleanSeparators & "](" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "]?)([0-9a-z]+)$")
                 If M.Success = False Then
                     'finally, process a multi‑part that may be designated by a single letter
                     M = Regex.Match(stackName, "([a-z])$")
