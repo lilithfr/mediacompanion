@@ -17927,7 +17927,7 @@ End Sub
             Dim MovSet As MovieSetDatabase = GetMovSetDetails()
             If MovSet.MovieSetId = "" Then Exit Sub
             For f = 0 To DataGridViewMovies.RowCount - 1
-                If DataGridViewMovies.Rows(f).Cells("movieset").Value = MovSet.MovieSetName Then
+                If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
                     DisplayMovie()
@@ -17945,7 +17945,7 @@ End Sub
             Dim MovSet As MovieSetDatabase = GetMovSetDetails()
             If MovSet.MovieSetId = "" Then Exit Sub
             For f = 0 To DataGridViewMovies.RowCount - 1
-                If DataGridViewMovies.Rows(f).Cells("movieset").Value = MovSet.MovieSetName Then
+                If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
                     DisplayMovie()
