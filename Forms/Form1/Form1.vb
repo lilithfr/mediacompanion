@@ -1919,7 +1919,11 @@ Public Class Form1
                 tagtxt.ReadOnly = Not Pref.AllowUserTags
 
                 If Pref.AllowUserTags Then
-                    
+                    tagtxt.BackColor = Nothing
+                    tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+                Else
+                    tagtxt.BackColor = System.Drawing.SystemColors.Control
+                    tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
                 End If
 
                 tagtxt.Text     = ""
@@ -3042,12 +3046,13 @@ Public Class Form1
                         wd = wd.Trim
                         If wd.Length = 0 Then Continue For
                         movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
-                        If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
 
                         If Not Pref.movietags.Contains(wd) Then
                             Pref.movietags.Add(wd)
                         End If
                         ConfigSave()
+
+                        If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
                     Next
 
                 End If
