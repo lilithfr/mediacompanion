@@ -332,6 +332,7 @@ Public Class Pref
     Public Shared movie_filters As MovieFilters = New MovieFilters
 
     Public Shared CheckForNewVersion As Boolean=False
+    Public Shared AllowUserTags As Boolean = True
 
     Public Shared Property movieignorepart As Boolean
         Get

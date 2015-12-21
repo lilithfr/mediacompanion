@@ -1915,6 +1915,13 @@ Public Class Form1
                 pathtxt.Text    = workingMovie.fullpathandfilename
                 ratingtxt.Text  = workingMovieDetails.fullmoviebody.rating.FormatRating
                 imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
+
+                tagtxt.ReadOnly = Not Pref.AllowUserTags
+
+                If Pref.AllowUserTags Then
+                    
+                End If
+
                 tagtxt.Text     = ""
                 If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
                     Dim first As Boolean = True
@@ -3024,6 +3031,28 @@ Public Class Form1
                     End If
                 Next
                 'movie.ScrapedMovie.fullmoviebody.tag = NewTagList
+
+            Else
+
+                If Pref.AllowUserTags Then
+
+                    movie.ScrapedMovie.fullmoviebody.tag.Clear()
+
+                    For Each wd In tagtxt.Text.Split(",")
+                        wd = wd.Trim
+                        If wd.Length = 0 Then Continue For
+                        movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
+                        If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
+
+                        If Not Pref.movietags.Contains(wd) Then
+                            Pref.movietags.Add(wd)
+                        End If
+                        ConfigSave()
+                    Next
+
+                End If
+
+
             End If
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
