@@ -343,7 +343,7 @@ Public Class ucMusicVideo
         If TabControlMain.SelectedTab.Name.ToLower = "tpmvchange" Then
             Dim searchterm As String = ""
             Dim searchurl As String = ""
-            If workingMusicVideo.fullmoviebody.tmdbid <> "" Then
+            If IsConcert Then   'workingMusicVideo.fullmoviebody.tmdbid <> "" Then
                 Dim isroot As Boolean = Pref.GetRootFolderCheck(workingMusicVideo.fileinfo.fullpathandfilename)
                 Dim tempstring = ""
                 If Pref.usefoldernames = False OrElse isroot Then
@@ -388,7 +388,7 @@ Public Class ucMusicVideo
     Private Sub ManualScrape()
         Dim Url As String =  WebBrowser1.Url.ToString.ToLower
         Dim tmdbid As String = ""
-        If  Url.IndexOf("www.themoviedb.org/movie") <> -1 Then
+        If  Url.IndexOf("www.themoviedb.org/") <> -1 Then
             Dim mat As String = Url
             mat = mat.Substring(mat.LastIndexOf("/")+1, mat.Length - mat.LastIndexOf("/")-1)
             Dim urlsplit As String()
@@ -593,6 +593,13 @@ Public Class ucMusicVideo
             End If
         End If
     End Sub
+
+    Private Function IsConcert() As Boolean
+        For each fold In Pref.MVConcertFolders
+            If workingMusicVideo.fileinfo.basepath.ToLower.Contains(fold.rpath.tolower & If(fold.rpath.contains("\"), "\", "/")) Then Return True
+        Next
+        Return False
+    End Function
 
 #End Region             'Common Routines
 
