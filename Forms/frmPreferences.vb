@@ -126,6 +126,9 @@ Public Class frmPreferences
         If cleanfilenameprefchanged OrElse videosourceprefchanged Then
             applyAdvancedLists()
         End If
+
+        Form1.SetTagTxtField
+
         Form1.util_RegexSave()
         Pref.ConfigSave()
 
@@ -334,6 +337,8 @@ Public Class frmPreferences
 
         'Keywords As Tags
         cb_keywordasTag                     .Checked    = Pref.keywordasTag
+        cbAllowUserTags                     .Checked    = Pref.AllowUserTags
+
         Select Case Pref.keywordlimit 
             Case 999
                 cb_keywordlimit.SelectedItem = "All Available"
@@ -3383,4 +3388,10 @@ End Sub
         End If
     End Sub
     
+    Private Sub cbAllowUserTags_CheckedChanged( sender As Object,  e As EventArgs) Handles cbAllowUserTags.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.AllowUserTags = cbAllowUserTags.Checked
+        Changes = True
+    End Sub
+
 End Class

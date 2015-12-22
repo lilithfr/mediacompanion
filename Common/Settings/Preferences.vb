@@ -1171,6 +1171,8 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbScraperLanguage",            XbmcTmdbScraperLanguage)            'cmbxXbmcTmdbTitleLanguage
         root.AppendChild(doc, "XbmcTmdbScraperRatings",             XbmcTmdbScraperRatings)             'cbXbmcTmdbIMDBRatings
         root.AppendChild(doc, "XbmcTmdbScraperCertCountry",         XbmcTmdbScraperCertCountry)         '
+        root.AppendChild(doc, "AllowUserTags",                      AllowUserTags)         '
+        
 
         root.AppendChild(movie_filters.GetChild(doc))
 
@@ -1624,6 +1626,7 @@ Public Class Pref
                     Case "XbmcTmdbScraperLanguage"              : XbmcTmdbScraperLanguage = thisresult.InnerText
                     Case "XbmcTmdbScraperRatings"               : XbmcTmdbScraperRatings = thisresult.InnerText
                     Case "XbmcTmdbScraperCertCountry"           : XbmcTmdbScraperCertCountry = thisresult.InnerText
+                    Case "AllowUserTags"                        : AllowUserTags = thisresult.InnerText
 
                     Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
                     Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml

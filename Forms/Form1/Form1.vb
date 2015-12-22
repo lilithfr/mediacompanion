@@ -1916,15 +1916,7 @@ Public Class Form1
                 ratingtxt.Text  = workingMovieDetails.fullmoviebody.rating.FormatRating
                 imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
 
-                tagtxt.ReadOnly = Not Pref.AllowUserTags
-
-                If Pref.AllowUserTags Then
-                    tagtxt.BackColor = Nothing
-                    tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-                Else
-                    tagtxt.BackColor = System.Drawing.SystemColors.Control
-                    tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-                End If
+                SetTagTxtField
 
                 tagtxt.Text     = ""
                 If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
@@ -21970,6 +21962,19 @@ End Sub
             Save_XBMC_TVDB_Scraper_Config("ratings", Pref.XBMCTVDbRatings)
             Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback)
         'End If
+    End Sub
+
+
+    Sub SetTagTxtField
+        tagtxt.ReadOnly = Not Pref.AllowUserTags
+
+        If Pref.AllowUserTags Then
+            tagtxt.BackColor = Nothing
+            tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Else
+            tagtxt.BackColor = System.Drawing.SystemColors.Control
+            tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        End If
     End Sub
 
 End Class

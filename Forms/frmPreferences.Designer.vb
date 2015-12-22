@@ -83,6 +83,7 @@ Partial Class frmPreferences
         Me.cbDlTrailerDuringScrape = New System.Windows.Forms.CheckBox()
         Me.cbMovieRuntimeFallbackToFile = New System.Windows.Forms.CheckBox()
         Me.GroupBox11 = New System.Windows.Forms.GroupBox()
+        Me.cb_MovCertRemovePhrase = New System.Windows.Forms.CheckBox()
         Me.ScrapeFullCertCheckBox = New System.Windows.Forms.CheckBox()
         Me.Label178 = New System.Windows.Forms.Label()
         Me.Label95 = New System.Windows.Forms.Label()
@@ -451,7 +452,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cb_MovCertRemovePhrase = New System.Windows.Forms.CheckBox()
+        Me.cbAllowUserTags = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -873,7 +874,7 @@ Partial Class frmPreferences
         '
         Me.cb_keywordlimit.FormattingEnabled = true
         Me.cb_keywordlimit.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "100", "125", "150", "175", "200", "250", "300", "400", "500"})
-        Me.cb_keywordlimit.Location = New System.Drawing.Point(194, 36)
+        Me.cb_keywordlimit.Location = New System.Drawing.Point(194, 70)
         Me.cb_keywordlimit.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_keywordlimit.MaxDropDownItems = 30
         Me.cb_keywordlimit.Name = "cb_keywordlimit"
@@ -1173,11 +1174,11 @@ Partial Class frmPreferences
         Me.GroupBox11.Controls.Add(Me.Button75)
         Me.GroupBox11.Controls.Add(Me.Label94)
         Me.GroupBox11.Controls.Add(Me.lb_IMDBCertPriority)
-        Me.GroupBox11.Location = New System.Drawing.Point(343, 211)
+        Me.GroupBox11.Location = New System.Drawing.Point(343, 245)
         Me.GroupBox11.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox11.Name = "GroupBox11"
         Me.GroupBox11.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox11.Size = New System.Drawing.Size(300, 307)
+        Me.GroupBox11.Size = New System.Drawing.Size(300, 273)
         Me.GroupBox11.TabIndex = 85
         Me.GroupBox11.TabStop = false
         Me.GroupBox11.Text = "Select IMDB Certification Priorities"
@@ -1185,10 +1186,21 @@ Partial Class frmPreferences
         "DB if you wish,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"The Rating will be scraped by the first available from the abov"& _ 
         "e list.")
         '
+        'cb_MovCertRemovePhrase
+        '
+        Me.cb_MovCertRemovePhrase.AutoSize = true
+        Me.cb_MovCertRemovePhrase.Location = New System.Drawing.Point(12, 243)
+        Me.cb_MovCertRemovePhrase.Name = "cb_MovCertRemovePhrase"
+        Me.cb_MovCertRemovePhrase.Size = New System.Drawing.Size(242, 19)
+        Me.cb_MovCertRemovePhrase.TabIndex = 9
+        Me.cb_MovCertRemovePhrase.Text = "Remove phrases after Rating Certificate"
+        Me.ToolTip1.SetToolTip(Me.cb_MovCertRemovePhrase, "ie: remove"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for sexual content, for violence and language...")
+        Me.cb_MovCertRemovePhrase.UseVisualStyleBackColor = true
+        '
         'ScrapeFullCertCheckBox
         '
         Me.ScrapeFullCertCheckBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(12, 257)
+        Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(12, 219)
         Me.ScrapeFullCertCheckBox.Name = "ScrapeFullCertCheckBox"
         Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(265, 24)
         Me.ScrapeFullCertCheckBox.TabIndex = 8
@@ -1218,7 +1230,7 @@ Partial Class frmPreferences
         'Button74
         '
         Me.Button74.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button74.Location = New System.Drawing.Point(242, 214)
+        Me.Button74.Location = New System.Drawing.Point(242, 176)
         Me.Button74.Margin = New System.Windows.Forms.Padding(4)
         Me.Button74.Name = "Button74"
         Me.Button74.Size = New System.Drawing.Size(34, 29)
@@ -1229,7 +1241,7 @@ Partial Class frmPreferences
         'Button75
         '
         Me.Button75.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button75.Location = New System.Drawing.Point(242, 136)
+        Me.Button75.Location = New System.Drawing.Point(242, 98)
         Me.Button75.Margin = New System.Windows.Forms.Padding(4)
         Me.Button75.Name = "Button75"
         Me.Button75.Size = New System.Drawing.Size(34, 29)
@@ -1241,7 +1253,7 @@ Partial Class frmPreferences
         '
         Me.Label94.AutoSize = true
         Me.Label94.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label94.Location = New System.Drawing.Point(223, 171)
+        Me.Label94.Location = New System.Drawing.Point(223, 133)
         Me.Label94.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label94.Name = "Label94"
         Me.Label94.Size = New System.Drawing.Size(68, 36)
@@ -1254,10 +1266,10 @@ Partial Class frmPreferences
         Me.lb_IMDBCertPriority.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lb_IMDBCertPriority.FormattingEnabled = true
         Me.lb_IMDBCertPriority.ItemHeight = 15
-        Me.lb_IMDBCertPriority.Location = New System.Drawing.Point(12, 74)
+        Me.lb_IMDBCertPriority.Location = New System.Drawing.Point(12, 81)
         Me.lb_IMDBCertPriority.Margin = New System.Windows.Forms.Padding(4)
         Me.lb_IMDBCertPriority.Name = "lb_IMDBCertPriority"
-        Me.lb_IMDBCertPriority.Size = New System.Drawing.Size(209, 184)
+        Me.lb_IMDBCertPriority.Size = New System.Drawing.Size(209, 139)
         Me.lb_IMDBCertPriority.TabIndex = 0
         '
         'cbMovRootFolderCheck
@@ -1436,7 +1448,7 @@ Partial Class frmPreferences
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1008, 623)
+        Me.TabControl1.Size = New System.Drawing.Size(1008, 622)
         Me.TabControl1.TabIndex = 15
         '
         'TPCommon
@@ -1445,7 +1457,7 @@ Partial Class frmPreferences
         Me.TPCommon.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.TPCommon.Location = New System.Drawing.Point(4, 24)
         Me.TPCommon.Name = "TPCommon"
-        Me.TPCommon.Size = New System.Drawing.Size(1000, 595)
+        Me.TPCommon.Size = New System.Drawing.Size(1000, 594)
         Me.TPCommon.TabIndex = 5
         Me.TPCommon.Text = "Common"
         Me.TPCommon.UseVisualStyleBackColor = true
@@ -1458,7 +1470,7 @@ Partial Class frmPreferences
         Me.TabControl4.Location = New System.Drawing.Point(0, 0)
         Me.TabControl4.Name = "TabControl4"
         Me.TabControl4.SelectedIndex = 0
-        Me.TabControl4.Size = New System.Drawing.Size(1000, 595)
+        Me.TabControl4.Size = New System.Drawing.Size(1000, 594)
         Me.TabControl4.TabIndex = 0
         '
         'TPCommonSettings
@@ -1482,7 +1494,7 @@ Partial Class frmPreferences
         Me.TPCommonSettings.Location = New System.Drawing.Point(4, 24)
         Me.TPCommonSettings.Name = "TPCommonSettings"
         Me.TPCommonSettings.Padding = New System.Windows.Forms.Padding(3)
-        Me.TPCommonSettings.Size = New System.Drawing.Size(992, 567)
+        Me.TPCommonSettings.Size = New System.Drawing.Size(992, 566)
         Me.TPCommonSettings.TabIndex = 0
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
@@ -1914,7 +1926,7 @@ Partial Class frmPreferences
         Me.TPGen.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.TPGen.Location = New System.Drawing.Point(4, 24)
         Me.TPGen.Name = "TPGen"
-        Me.TPGen.Size = New System.Drawing.Size(1000, 595)
+        Me.TPGen.Size = New System.Drawing.Size(1000, 594)
         Me.TPGen.TabIndex = 4
         Me.TPGen.Text = "General"
         Me.TPGen.UseVisualStyleBackColor = true
@@ -2112,7 +2124,7 @@ Partial Class frmPreferences
         Me.TPMovPref.Controls.Add(Me.tcMoviePreferences)
         Me.TPMovPref.Location = New System.Drawing.Point(4, 24)
         Me.TPMovPref.Name = "TPMovPref"
-        Me.TPMovPref.Size = New System.Drawing.Size(1000, 595)
+        Me.TPMovPref.Size = New System.Drawing.Size(1000, 594)
         Me.TPMovPref.TabIndex = 7
         Me.TPMovPref.Text = "Movie Preferences"
         Me.TPMovPref.UseVisualStyleBackColor = true
@@ -2128,7 +2140,7 @@ Partial Class frmPreferences
         Me.tcMoviePreferences.Margin = New System.Windows.Forms.Padding(4)
         Me.tcMoviePreferences.Name = "tcMoviePreferences"
         Me.tcMoviePreferences.SelectedIndex = 0
-        Me.tcMoviePreferences.Size = New System.Drawing.Size(1000, 595)
+        Me.tcMoviePreferences.Size = New System.Drawing.Size(1000, 594)
         Me.tcMoviePreferences.TabIndex = 51
         '
         'tpMoviePreferences_Scraper
@@ -2145,7 +2157,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Scraper.Name = "tpMoviePreferences_Scraper"
         Me.tpMoviePreferences_Scraper.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Scraper.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Scraper.Size = New System.Drawing.Size(992, 566)
         Me.tpMoviePreferences_Scraper.TabIndex = 0
         Me.tpMoviePreferences_Scraper.Text = "Scraper"
         '
@@ -2482,6 +2494,7 @@ Partial Class frmPreferences
         '
         'GroupBox44
         '
+        Me.GroupBox44.Controls.Add(Me.cbAllowUserTags)
         Me.GroupBox44.Controls.Add(Me.Label9)
         Me.GroupBox44.Controls.Add(Me.tb_MovTagBlacklist)
         Me.GroupBox44.Controls.Add(Me.Label8)
@@ -2490,7 +2503,7 @@ Partial Class frmPreferences
         Me.GroupBox44.Controls.Add(Me.cb_keywordasTag)
         Me.GroupBox44.Location = New System.Drawing.Point(343, 22)
         Me.GroupBox44.Name = "GroupBox44"
-        Me.GroupBox44.Size = New System.Drawing.Size(300, 190)
+        Me.GroupBox44.Size = New System.Drawing.Size(300, 222)
         Me.GroupBox44.TabIndex = 84
         Me.GroupBox44.TabStop = false
         Me.GroupBox44.Text = "Keywords As Tags"
@@ -2499,7 +2512,7 @@ Partial Class frmPreferences
         '
         Me.Label9.AutoSize = true
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label9.Location = New System.Drawing.Point(260, 67)
+        Me.Label9.Location = New System.Drawing.Point(260, 101)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(31, 18)
         Me.Label9.TabIndex = 69
@@ -2507,7 +2520,7 @@ Partial Class frmPreferences
         '
         'tb_MovTagBlacklist
         '
-        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 103)
+        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 137)
         Me.tb_MovTagBlacklist.Multiline = true
         Me.tb_MovTagBlacklist.Name = "tb_MovTagBlacklist"
         Me.tb_MovTagBlacklist.Size = New System.Drawing.Size(277, 79)
@@ -2516,7 +2529,7 @@ Partial Class frmPreferences
         'Label8
         '
         Me.Label8.AutoSize = true
-        Me.Label8.Location = New System.Drawing.Point(6, 67)
+        Me.Label8.Location = New System.Drawing.Point(6, 101)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(251, 30)
         Me.Label8.TabIndex = 67
@@ -2525,7 +2538,7 @@ Partial Class frmPreferences
         'Label69
         '
         Me.Label69.AutoSize = true
-        Me.Label69.Location = New System.Drawing.Point(11, 39)
+        Me.Label69.Location = New System.Drawing.Point(11, 73)
         Me.Label69.Name = "Label69"
         Me.Label69.Size = New System.Drawing.Size(176, 15)
         Me.Label69.TabIndex = 66
@@ -2534,7 +2547,7 @@ Partial Class frmPreferences
         'cb_keywordasTag
         '
         Me.cb_keywordasTag.AutoSize = true
-        Me.cb_keywordasTag.Location = New System.Drawing.Point(12, 17)
+        Me.cb_keywordasTag.Location = New System.Drawing.Point(12, 51)
         Me.cb_keywordasTag.Name = "cb_keywordasTag"
         Me.cb_keywordasTag.Size = New System.Drawing.Size(202, 19)
         Me.cb_keywordasTag.TabIndex = 0
@@ -2765,7 +2778,7 @@ Partial Class frmPreferences
         '
         Me.Button82.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button82.Location = New System.Drawing.Point(431, -1623)
+        Me.Button82.Location = New System.Drawing.Point(431, -1624)
         Me.Button82.Margin = New System.Windows.Forms.Padding(4)
         Me.Button82.Name = "Button82"
         Me.Button82.Size = New System.Drawing.Size(150, 30)
@@ -2781,7 +2794,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 566)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3090,7 +3103,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 566)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3826,7 +3839,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 566)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -3988,7 +4001,7 @@ Partial Class frmPreferences
         Me.TPTVPref.Controls.Add(Me.TabControl6)
         Me.TPTVPref.Location = New System.Drawing.Point(4, 24)
         Me.TPTVPref.Name = "TPTVPref"
-        Me.TPTVPref.Size = New System.Drawing.Size(1000, 595)
+        Me.TPTVPref.Size = New System.Drawing.Size(1000, 594)
         Me.TPTVPref.TabIndex = 8
         Me.TPTVPref.Text = "TV Preferences"
         Me.TPTVPref.UseVisualStyleBackColor = true
@@ -4002,7 +4015,7 @@ Partial Class frmPreferences
         Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
         Me.TabControl6.Name = "TabControl6"
         Me.TabControl6.SelectedIndex = 0
-        Me.TabControl6.Size = New System.Drawing.Size(1000, 595)
+        Me.TabControl6.Size = New System.Drawing.Size(1000, 594)
         Me.TabControl6.TabIndex = 16
         '
         'TabPage30
@@ -4013,7 +4026,7 @@ Partial Class frmPreferences
         Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage30.Name = "TabPage30"
         Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage30.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage30.Size = New System.Drawing.Size(992, 566)
         Me.TabPage30.TabIndex = 0
         Me.TabPage30.Text = "General / Scraper"
         Me.TabPage30.UseVisualStyleBackColor = true
@@ -4042,7 +4055,7 @@ Partial Class frmPreferences
         Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox17.Name = "GroupBox17"
         Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox17.Size = New System.Drawing.Size(984, 559)
+        Me.GroupBox17.Size = New System.Drawing.Size(984, 558)
         Me.GroupBox17.TabIndex = 22
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
@@ -5083,7 +5096,7 @@ Partial Class frmPreferences
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
         Me.TPXBMCLink.Location = New System.Drawing.Point(4, 24)
         Me.TPXBMCLink.Name = "TPXBMCLink"
-        Me.TPXBMCLink.Size = New System.Drawing.Size(1000, 595)
+        Me.TPXBMCLink.Size = New System.Drawing.Size(1000, 594)
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
@@ -5093,7 +5106,7 @@ Partial Class frmPreferences
         Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
         Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 594)
         Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
@@ -5101,7 +5114,7 @@ Partial Class frmPreferences
         Me.TPPRofCmd.Controls.Add(Me.TableLayoutPanel1)
         Me.TPPRofCmd.Location = New System.Drawing.Point(4, 24)
         Me.TPPRofCmd.Name = "TPPRofCmd"
-        Me.TPPRofCmd.Size = New System.Drawing.Size(1000, 595)
+        Me.TPPRofCmd.Size = New System.Drawing.Size(1000, 594)
         Me.TPPRofCmd.TabIndex = 6
         Me.TPPRofCmd.Text = "Profiles && Commands"
         Me.TPPRofCmd.UseVisualStyleBackColor = true
@@ -5142,7 +5155,7 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1000, 595)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1000, 594)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'GroupBox42
@@ -5402,22 +5415,22 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cb_MovCertRemovePhrase
+        'cbAllowUserTags
         '
-        Me.cb_MovCertRemovePhrase.AutoSize = true
-        Me.cb_MovCertRemovePhrase.Location = New System.Drawing.Point(12, 281)
-        Me.cb_MovCertRemovePhrase.Name = "cb_MovCertRemovePhrase"
-        Me.cb_MovCertRemovePhrase.Size = New System.Drawing.Size(242, 19)
-        Me.cb_MovCertRemovePhrase.TabIndex = 9
-        Me.cb_MovCertRemovePhrase.Text = "Remove phrases after Rating Certificate"
-        Me.ToolTip1.SetToolTip(Me.cb_MovCertRemovePhrase, "ie: remove"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for sexual content, for violence and language...")
-        Me.cb_MovCertRemovePhrase.UseVisualStyleBackColor = true
+        Me.cbAllowUserTags.AutoSize = true
+        Me.cbAllowUserTags.Location = New System.Drawing.Point(12, 26)
+        Me.cbAllowUserTags.Name = "cbAllowUserTags"
+        Me.cbAllowUserTags.Size = New System.Drawing.Size(108, 19)
+        Me.cbAllowUserTags.TabIndex = 70
+        Me.cbAllowUserTags.Text = "Allow user tags"
+        Me.ToolTip1.SetToolTip(Me.cbAllowUserTags, "When checked allows you to enter your own comma separated tags in the Tags field")
+        Me.cbAllowUserTags.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 623)
+        Me.ClientSize = New System.Drawing.Size(1008, 622)
         Me.Controls.Add(Me.btn_SettingsCancel)
         Me.Controls.Add(Me.btn_SettingsClose)
         Me.Controls.Add(Me.btn_SettingsClose2)
@@ -5427,7 +5440,7 @@ Partial Class frmPreferences
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.KeyPreview = true
         Me.MaximizeBox = false
-        Me.MaximumSize = New System.Drawing.Size(1016, 650)
+        Me.MaximumSize = New System.Drawing.Size(1050, 660)
         Me.MinimizeBox = false
         Me.MinimumSize = New System.Drawing.Size(1016, 650)
         Me.Name = "frmPreferences"
@@ -6002,4 +6015,5 @@ End Sub
     Friend WithEvents Label8 As Label
     Friend WithEvents cbShowMovieGridToolTip As CheckBox
     Friend WithEvents cb_MovCertRemovePhrase As CheckBox
+    Friend WithEvents cbAllowUserTags As System.Windows.Forms.CheckBox
 End Class

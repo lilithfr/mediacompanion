@@ -2135,8 +2135,7 @@ Partial Class Form1
         Me.tagtxt.ReadOnly = true
         Me.tagtxt.Size = New System.Drawing.Size(214, 20)
         Me.tagtxt.TabIndex = 228
-        Me.ToolTip2.SetToolTip(Me.tagtxt, "Displays and tags associated with the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"selected movie.  This field is not editabl"& _ 
-        "e"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from browser tab!")
+        Me.ToolTip2.SetToolTip(Me.tagtxt, "Tags associated with the selected movie.")
         '
         'MovieContextMenu
         '
