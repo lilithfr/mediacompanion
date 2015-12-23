@@ -3780,12 +3780,13 @@ Public Class Movie
     End Function
 
 
-    Public Function GetFolderSize(path As String,precision As Integer) As String
+    Public Function GetFolderSize(path As String,format As String) As String
 
             Dim fi As System.IO.FileInfo = New System.IO.FileInfo(path)
             Dim folderSize = Utilities.GetFolderSize(fi.DirectoryName)
 
-            Return (folderSize/(1024*1024*1024)).ToString("N" & precision.ToString)
+            '.ToString("00.00")
+            Return (folderSize/(1024*1024*1024)).ToString(format)
     End Function
 
 
@@ -3814,10 +3815,10 @@ Public Class Movie
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
 
-                    Dim m = Regex.Match(s,"%F(\d)")
+                    Dim m = Regex.Match(s,"%F\(([^)]+)\)")
                     If m.Success Then
-                        Dim pecision = Convert.ToInt32(m.Value.Replace("%F",""))
-                        s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,pecision)  )
+                        Dim format = m.Value.Replace("%F(","").Replace(")","")
+                        s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,format)  )
                     End If
 
                     s = Utilities.cleanFilenameIllegalChars(s)
@@ -3865,10 +3866,16 @@ Public Class Movie
                     s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
                     s = s.Replace("%S", _scrapedMovie.fullmoviebody.source) 
 
-                    Dim m = Regex.Match(s,"%F(\d)")
+                    'Dim m = Regex.Match(s,"%F(\d)")
+                    'If m.Success Then
+                    '    Dim pecision = Convert.ToInt32(m.Value.Replace("%F",""))
+                    '    s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,pecision)  )
+                    'End If
+
+                    Dim m = Regex.Match(s,"%F\(([^)]+)\)")
                     If m.Success Then
-                        Dim pecision = Convert.ToInt32(m.Value.Replace("%F",""))
-                        s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,pecision)  )
+                        Dim format = m.Value.Replace("%F(","").Replace(")","")
+                        s = s.Replace(  m.Value,GetFolderSize(NfoPathAndFilename,format)  )
                     End If
 
                     s = Utilities.cleanFoldernameIllegalChars(s)

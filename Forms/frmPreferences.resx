@@ -190,7 +190,8 @@ is still saved, as it should be.</value>
 %C - Video Codec
 %A - Audio Codec + Ch
 %O - Audio Channels
-%Fd - Folder size d=pecision</value>
+%F(format) - Folder size 
+    format e.g 00.00</value>
   </data>
   <data name="Label198.Text" xml:space="preserve">
     <value>Entries in this box, separate same movies.
