@@ -17960,6 +17960,7 @@ End Sub
                     DisplayMovie()
                     mov_FanartGet(True)
                     MovSetArtworkCheck()
+                    Exit For
                 End If
             Next
         Catch ex As Exception
@@ -17978,6 +17979,7 @@ End Sub
                     DisplayMovie()
                     mov_PosterGet("tmdb", True)
                     MovSetArtworkCheck()
+                    Exit For
                 End If
             Next
         Catch ex As Exception

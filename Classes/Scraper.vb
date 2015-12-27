@@ -27,7 +27,7 @@ Public Class MovieRegExs
     Public Const REGEX_STUDIO               = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
     Public Const REGEX_CREDITS              = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
     Public Const REGEX_ORIGINAL_TITLE       = "<span class=""title-extra"" itemprop=""name"">(.*?)<i>\(original title\)</i>"
-    Public Const REGEX_OUTLINE              = "itemprop=""description"">(?<outline>.*?)</"
+    Public Const REGEX_OUTLINE              = "itemprop=""description"">(?<outline>.*?)<div"
     Public Const REGEX_ACTORS_TABLE         = "<table class=""cast_list"">(.*?)</table>"
     Public Const REGEX_TR                   = "<tr.*?>(.*?)</tr>"
     Public Const REGEX_ACTOR_NO_IMAGE       = "<td.*?>.*?<a href=""/name/nm(?<actorid>.*?)/.*?title=""(?<actorname>.*?)"".*?=""character"".*?<div>(?<actorrole>.*?)</div>"
@@ -217,6 +217,12 @@ Module ModGlobals
         End If
         s = s.Replace(" /","")
         Return s
+    End Function
+
+    <Extension()> _
+    Function StripTags(ByRef s As String) As String
+	' Remove HTML tags.
+	Return Regex.Replace(s, "<.*?>", "")
     End Function
     
 End Module
@@ -803,13 +809,14 @@ Public Class Classimdb
         Get
             Dim s As String = Regex.Match(Html,MovieRegExs.REGEX_OUTLINE, RegexOptions.Singleline).Groups(1).Value.Trim
             If s.Contains("<a href=""/title") Then
-                Dim l = s.IndexOf("<a href=""/title")
-                s = s.Substring(0, l)
+                'Dim l = s.IndexOf("<a href=""/title")
+                's = s.Substring(0, l)
             End If
             Dim p As String = Regex.Match(s, MovieRegExs.REGEX_HREF_PATTERN).ToString
             If p <> "" Then
                 s = Regex.Replace(s, "</?a.*?>", String.Empty)
             End If
+            s = StripTags(s)
             'Return Utilities.CleanInvalidXmlChars(s.Trim())
             Return Utilities.cleanSpecChars(encodespecialchrs(s.Trim()))
         End Get
@@ -1183,6 +1190,7 @@ Public Class Classimdb
 
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
+                Html2 = String.Join(vbcrlf, webpage.ToArray())
                 Dim test As String = ""
                 For Each wp In webpage
                     test += wp & vbcrlf

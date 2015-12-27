@@ -198,7 +198,10 @@ Public Class DownloadCache
                             End If
                         End Using
                     End Using
-
+                    If (New IO.FileInfo(CachePath)).Length = 0 Then
+                        File.Delete(CachePath)
+                        returnCode = False
+                    End If
                 Catch ex As WebException
                     If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
                     Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
