@@ -271,6 +271,7 @@ Public Class clsGridViewMovie
                                                           Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
                                                           Select f
                                                           )
+                Case "Outline contains html"       : b = From f In b Where f.OutlineContainsHtml
             End Select
         End If
 

@@ -533,6 +533,12 @@ Public Class Data_GridViewMovie
         End Get
     End Property  
 
+    Public ReadOnly Property OutlineContainsHtml As Boolean
+        Get
+            Return outline.ToString.ContainsHtml
+        End Get
+    End Property  
+
     Public ReadOnly Property MissingOutline As Boolean
         Get
             Return outline.ToString.Trim=""

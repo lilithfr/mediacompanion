@@ -224,6 +224,11 @@ Module ModGlobals
 	' Remove HTML tags.
 	Return Regex.Replace(s, "<.*?>", "")
     End Function
+ 
+    <Extension()> _
+    Function ContainsHtml(ByRef s As String) As Boolean
+	    Return Regex.Match(s, "<\s*\w.*?>").Success
+    End Function
     
 End Module
 

@@ -176,6 +176,12 @@ Public Class ComboList
         End Get
     End Property  
 
+    Public ReadOnly Property OutlineContainsHtml As Boolean
+        Get
+            Return outline.ContainsHtml
+        End Get
+    End Property  
+
     Public ReadOnly Property MissingGenre As Boolean
         Get
             Return genre.ToString.Trim=""

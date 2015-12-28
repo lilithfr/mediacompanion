@@ -309,6 +309,7 @@ Public Class Movies
             If Not Pref.DisableNotMatchingRenamePattern Then
                 lst.Add( NotMatchingRenamePattern )
             End If
+            lst.Add( OutlineContainsHtml      )
             lst.Add( MissingCertificate       )
             lst.Add( MissingFanart            )
             lst.Add( MissingGenre             )
@@ -413,6 +414,12 @@ Public Class Movies
     Public ReadOnly Property MissingCertificate As String
         Get
             Return "Missing Certificate (" & (From x In MovieCache Where x.MissingCertificate).Count & ")" 
+        End Get
+    End Property 
+       
+    Public ReadOnly Property OutlineContainsHtml As String
+        Get
+            Return "Outline contains html (" & (From x In MovieCache Where x.OutlineContainsHtml).Count & ")" 
         End Get
     End Property    
 

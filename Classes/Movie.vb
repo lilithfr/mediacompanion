@@ -646,6 +646,14 @@ Public Class Movie
             Return _movieCache.fullpathandfilename.Replace(Path.GetFileName(_movieCache.fullpathandfilename), "tempoffline.ttt")
         End Get
     End Property
+
+    Public ReadOnly Property OutlineContainsHtml As Boolean
+        Get
+            Return _scrapedMovie.fullmoviebody.outline.ContainsHtml
+        End Get
+    End Property
+
+
     #End Region 'Read-only Properties
 
 
