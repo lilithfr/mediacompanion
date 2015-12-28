@@ -21714,7 +21714,8 @@ End Sub
     End Function
 
     Private Shared Function GetNumAudioTracks(AudCh)
-        Return If((AudCh = "" Or AudCh = "-1"), "0", AudCh.Substring(0, 1))
+       'Return If((AudCh = "" Or AudCh = "-1"), "0", AudCh.Substring(0, 1))
+        Return If((AudCh = "" Or AudCh = "-1"), "0", Regex.Match(AudCh, "\d+").Value)
     End Function
 
     Private Shared Function GetMasterCodec(strmdata As VideoDetails)
