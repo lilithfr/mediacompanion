@@ -30,11 +30,12 @@ Public Class CertificateMappings
 
     Public ReadOnly Property XDoc As XDocument
         Get
-            If Not File.Exists(MappingsFile) Then
-                File.Copy(DefaultMappingsFile,MappingsFile)
-            End If
+            'Ignore CertificateMappings, just use DefaultCertificateMappings.
+            'If Not File.Exists(MappingsFile) Then
+            '    File.Copy(DefaultMappingsFile,MappingsFile)
+            'End If
 
-            Return XDocument.Load(MappingsFile)
+            Return XDocument.Load(DefaultMappingsFile)
         End Get 
     End Property
 
