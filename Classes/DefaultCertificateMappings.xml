@@ -47,6 +47,7 @@
   <Certificate find="E" replace="12" />
   <Certificate find="Rated G" replace="12" />
   <Certificate find="R-13" replace="12" />
+  <Certificate find="N: Rated PG-13*" replace="12" />
   <Certificate find="Rated 12*" replace="12" />
   <Certificate find="Rated K-12" replace="12" />
   <Certificate find="Rated A*" replace="12" />
@@ -71,6 +72,7 @@
   <Certificate find="Rated NC-16" replace="15" />
   <Certificate find="Rated MA15+" replace="15" />
   <Certificate find="Rated M" replace="15" />
+  <Certificate find="Rated E" replace="15" />
   <Certificate find="Rated MA" replace="15" />
 
 
