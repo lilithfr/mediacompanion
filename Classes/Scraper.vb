@@ -817,6 +817,7 @@ Public Class Classimdb
                 s = Regex.Replace(s, "</?a.*?>", String.Empty)
             End If
             s = StripTags(s)
+            If s.ToLower.Contains("add a plot") Then Return ""
             'Return Utilities.CleanInvalidXmlChars(s.Trim())
             Return Utilities.cleanSpecChars(encodespecialchrs(s.Trim()))
         End Get
