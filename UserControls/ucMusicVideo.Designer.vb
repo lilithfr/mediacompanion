@@ -1349,6 +1349,7 @@ Partial Class ucMusicVideo
         Me.clbxMVConcertFolder.Name = "clbxMVConcertFolder"
         Me.TableLayoutPanel2.SetRowSpan(Me.clbxMVConcertFolder, 3)
         Me.clbxMVConcertFolder.Size = New System.Drawing.Size(385, 207)
+        Me.clbxMVConcertFolder.Sorted = true
         Me.clbxMVConcertFolder.TabIndex = 14
         '
         'Label26
@@ -1375,6 +1376,7 @@ Partial Class ucMusicVideo
         Me.clbxMvFolders.Name = "clbxMvFolders"
         Me.TableLayoutPanel2.SetRowSpan(Me.clbxMvFolders, 3)
         Me.clbxMvFolders.Size = New System.Drawing.Size(393, 207)
+        Me.clbxMvFolders.Sorted = true
         Me.clbxMvFolders.TabIndex = 7
         '
         'tbFolderPath

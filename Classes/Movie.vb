@@ -1103,6 +1103,10 @@ Public Class Movie
                 mpaa = mpaa.Substring(0, mpaa.IndexOf(" for"))
                 _scrapedMovie.fullmoviebody.mpaa = mpaa
             End If
+            If mpaa.Contains(" on appeal") Then
+                mpaa = mpaa.Substring(0, mpaa.IndexOf(" on appeal"))
+                _scrapedMovie.fullmoviebody.mpaa = mpaa
+            End If
         End If
         If Pref.ExcludeMpaaRated Then
             Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
@@ -1506,6 +1510,10 @@ Public Class Movie
             Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
             If mpaa.Contains(" for") Then
                 mpaa = mpaa.Substring(0, mpaa.IndexOf(" for"))
+                _scrapedMovie.fullmoviebody.mpaa = mpaa
+            End If
+            If mpaa.Contains(" on appeal") Then
+                mpaa = mpaa.Substring(0, mpaa.IndexOf(" on appeal"))
                 _scrapedMovie.fullmoviebody.mpaa = mpaa
             End If
         End If
