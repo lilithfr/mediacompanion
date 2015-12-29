@@ -1122,7 +1122,7 @@ Public Class Movie
                 mpaa = mpaa.Substring(5, mpaa.Length-5).Trim()
                 _scrapedMovie.fullmoviebody.mpaa = mpaa
             End If
-        Else
+        ElseIf Pref.IncludeMpaaRated Then
             If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then
                 _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
             End If
@@ -1531,7 +1531,7 @@ Public Class Movie
                 mpaa = mpaa.Substring(5, mpaa.Length-5).Trim()
                 _scrapedMovie.fullmoviebody.mpaa = mpaa
             End If
-        Else
+        ElseIf Pref.IncludeMpaaRated Then
             If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then
                 _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
             End If
@@ -1546,7 +1546,7 @@ Public Class Movie
             tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
             tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
             If Certificates.Count = 0 Then
-                _scrapedMovie.fullmoviebody.mpaa = If(Pref.ExcludeMpaaRated, "", "Rated ") & tmdb.Certification 
+                _scrapedMovie.fullmoviebody.mpaa = If(Pref.ExcludeMpaaRated, "", If(Pref.IncludeMpaaRated, "Rated ", "")) & tmdb.Certification 
                 If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
             End If
             If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "" Then

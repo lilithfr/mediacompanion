@@ -274,6 +274,7 @@ Public Class Pref
     Public Shared MovTitleIgnArticle As Boolean
     Public Shared MovTitleCase As Boolean
     Public Shared ExcludeMpaaRated As Boolean
+    Public Shared IncludeMpaaRated As Boolean
     Public Shared MovThousSeparator As Boolean
     Public Shared MovieImdbGenreRegEx As String
     Public Shared showsortdate As Boolean
@@ -675,6 +676,7 @@ Public Class Pref
         MovTitleIgnArticle = False
         MovTitleCase = False
         ExcludeMpaaRated = False
+        IncludeMpaaRated = False
         MovThousSeparator = False
         MovFolderRenameTemplate = "%N\%T (%Y)"
         MovNewFolderInRootFolder = False
@@ -1133,6 +1135,7 @@ Public Class Pref
         root.AppendChild(doc, "MovTitleIgnArticle",                 MovTitleIgnArticle)                 'cbMovTitleIgnArticle
         root.AppendChild(doc, "MovTitleCase",                       MovTitleCase)                       'cbMovTitleCase
         root.AppendChild(doc, "ExcludeMpaaRated",                   ExcludeMpaaRated)                   'cbExcludeMpaaRated
+        root.AppendChild(doc, "IncludeMpaaRated",                   IncludeMpaaRated)                   'cbIncludeMpaaRated
         root.AppendChild(doc, "MovThousSeparator",                  MovThousSeparator)                  'cbMovThousSeparator
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
         root.AppendChild(doc, "moviePreferredHDTrailerResolution",  moviePreferredTrailerResolution)    'cbPreferredTrailerResolution
@@ -1597,7 +1600,8 @@ Public Class Pref
                     Case "MovSortIgnArticle"                    : MovSortIgnArticle = thisresult.InnerXml 
                     Case "MovTitleIgnArticle"                   : MovTitleIgnArticle = thisresult.InnerXml
                     Case "MovTitleCase"                         : MovTitleCase = thisresult.InnerXml
-                    Case "ExcludeMpaaRated"                     : ExcludeMpaaRated = thisresult.InnerXml 
+                    Case "ExcludeMpaaRated"                     : ExcludeMpaaRated = thisresult.InnerXml
+                    Case "IncludeMpaaRated"                     : IncludeMpaaRated = thisresult.InnerXml 
                     Case "MovThousSeparator"                    : MovThousSeparator = thisresult.InnerXml 
                     Case "showsortdate"                         : showsortdate = thisresult.InnerText
                     Case "scrapefullcert"                       : scrapefullcert = thisresult.InnerXml

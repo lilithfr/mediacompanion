@@ -20,6 +20,7 @@ Public Class frmPreferences
     Dim prefsload As Boolean = False
     Dim videosourceprefchanged As Boolean = False
     Dim cleanfilenameprefchanged As Boolean = False
+    Dim toggle As Boolean = False
 
     Private Const WM_USER As Integer = &H400
     Private Const BFFM_SETEXPANDED As Integer = WM_USER + 106
@@ -357,7 +358,8 @@ Public Class frmPreferences
         Next
         ScrapeFullCertCheckBox              .Checked        = Pref.scrapefullcert
         cb_MovCertRemovePhrase              .Checked        = Pref.MovCertRemovePhrase
-
+        cbExcludeMpaaRated                  .Checked        = Pref.ExcludeMpaaRated
+        cbIncludeMpaaRated                  .Checked        = Pref.IncludeMpaaRated
     End Sub
 
     Private Sub MovArtInit()
@@ -414,7 +416,6 @@ Public Class frmPreferences
         cbNoAltTitle                        .Checked        = Pref.NoAltTitle
         cbXtraFrodoUrls                     .Checked        = Not Pref.XtraFrodoUrls
         cb_MovDisplayLog                    .Checked        = Not Pref.disablelogfiles
-        cbExcludeMpaaRated                  .Checked        = Pref.ExcludeMpaaRated
         cbMovThousSeparator                 .Checked        = Pref.MovThousSeparator
         If Pref.enablehdtags = True Then
             cb_EnableMediaTags.CheckState = CheckState.Checked
@@ -1540,6 +1541,30 @@ End Sub
         Changes = True
     End Sub
 
+    Private Sub cbExcludeMpaaRated_CheckedChanged(sender As Object, e As EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
+        If toggle Then Exit Sub
+        If Pref.ExcludeMpaaRated AndAlso cbIncludeMpaaRated.Checked Then
+            toggle = True
+            cbIncludeMpaaRated.Checked = False
+        End If
+        toggle = False
+        Changes = True
+    End Sub
+
+    Private Sub cbIncludeMpaaRated_CheckedChanged(sender As Object, e As EventArgs) Handles cbIncludeMpaaRated.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.IncludeMpaaRated = cbIncludeMpaaRated.Checked
+        If toggle Then Exit Sub
+        If Pref.IncludeMpaaRated AndAlso cbExcludeMpaaRated.Checked Then
+            toggle = True
+            cbExcludeMpaaRated.Checked = False
+        End If
+        toggle = False
+        Changes = True
+    End Sub
+
 #End Region  'Movie Preferences -> Scraper Tab
 
 #Region "Movie Preferences -> Artwork Tab"
@@ -1828,20 +1853,14 @@ End Sub
         Pref.MovTitleCase = cbMovTitleCase.Checked
         Changes = True
     End Sub
-
-    Private Sub cbExcludeMpaaRated_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbExcludeMpaaRated.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.ExcludeMpaaRated = cbExcludeMpaaRated.Checked
-        Changes = True
-    End Sub
-
-    Private Sub cbMovThousSeparator_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovThousSeparator.CheckedChanged
+    
+    Private Sub cbMovThousSeparator_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovThousSeparator.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovThousSeparator = cbMovThousSeparator.Checked
         Changes = True
     End Sub
 
-    Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbNoAltTitle.CheckedChanged
+    Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbNoAltTitle.CheckedChanged
         If prefsload Then Exit Sub
         Pref.NoAltTitle = cbNoAltTitle.Checked
         Changes = True
@@ -3400,5 +3419,5 @@ End Sub
         Pref.AllowUserTags = cbAllowUserTags.Checked
         Changes = True
     End Sub
-
+    
 End Class
