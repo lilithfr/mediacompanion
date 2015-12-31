@@ -23,17 +23,21 @@ End Class
 
 Public Class CertificateMappings
 
-    Public MappingsFile        = Pref.applicationPath & "\classes\CertificateMappings.xml"
+    Public UserMappingsFile    = Pref.applicationPath & "\classes\UserCertificateMappings.xml"
     Public DefaultMappingsFile = Pref.applicationPath & "\classes\DefaultCertificateMappings.xml"
 
     Public Property List As New List(Of CertificateMapping)
 
     Public ReadOnly Property XDoc As XDocument
         Get
-            'Ignore CertificateMappings, just use DefaultCertificateMappings.
-            'If Not File.Exists(MappingsFile) Then
-            '    File.Copy(DefaultMappingsFile,MappingsFile)
-            'End If
+            'Allow Users to use their own Certificate Mappings:
+            If File.Exists(UserMappingsFile) Then
+                Try
+                    Return XDocument.Load(UserMappingsFile)
+                Catch ex As Exception
+                    ExceptionHandler.LogError(ex,"error in UserCertificateMappings.xml, falling back to DefaultCertificateMappings.xml")
+                End Try
+            End If
 
             Return XDocument.Load(DefaultMappingsFile)
         End Get 
