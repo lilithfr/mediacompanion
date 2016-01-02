@@ -207,6 +207,8 @@ Public Class MediaInfoExport
         Else
             If mediaInsertIndex Then
                 populatedDoc = templateBody.Insert(mediaInsertIndex, mediaList)
+            Else
+                populatedDoc = mediaList
             End If
 
             Try
