@@ -2297,7 +2297,7 @@ Public Class Movie
         Try
             Dim fcount As Integer = 0
             If Not Pref.GetRootFolderCheck(ActualNfoPathAndFilename) Then
-                Dim fanartarray As New List(Of str_ListOfPosters)
+                Dim fanartarray As New List(Of McImage)
                 Dim xfanart As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrafanart\"
                 Dim xthumb As String = Strings.Left(FanartPath, FanartPath.LastIndexOf("\")) & "\extrathumbs\thumb"
                 Dim xf As Boolean = Pref.movxtrafanart
@@ -2308,7 +2308,7 @@ Public Class Movie
                 Dim tmpUrl As String = ""
                 Dim xtraart As New List(Of String)
                 fanartarray.Clear()
-                fanartarray.AddRange(tmdb.Fanart)
+                fanartarray.AddRange(tmdb.McFanart)
                 fcount = fanartarray.Count
                 If fcount > 1 Then
                     'Dim x As Integer = If(fcount > 4, 4, fcount)
@@ -2358,16 +2358,13 @@ Public Class Movie
     Sub DoDownloadMovieSetArtwork()
         If _scrapedMovie.fileinfo.movsetposterpath <> "" Then
             Dim _api As New TMDb
-            _api.Imdb = ""
-            _api.TmdbId = _scrapedMovie.fullmoviebody.movieset.MovieSetId
-            _api.CollectionSearch = True
-            Dim MsetFanart As New str_ListOfPosters
-            Dim MsetPoster As New str_ListOfPosters
-            If _api.Fanart.Count > 0 Then
-                MsetFanart = _api.Fanart(0)
+
+            _api.SetId = _scrapedMovie.fullmoviebody.movieset.MovieSetId
+
+            If _api.McSetFanart.Count > 0 Then
                 If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) OrElse Pref.overwritethumbs Then
                     Try
-                        SaveFanartImageToCacheAndPath(MsetFanart.hdUrl, _scrapedMovie.fileinfo.movsetfanartpath)
+                        SaveFanartImageToCacheAndPath(_api.McSetFanart(0).hdUrl, _scrapedMovie.fileinfo.movsetfanartpath)
                         ReportProgress(MSG_OK, "!!! MovieSet Fanart Downloaded OK" & vbCrLf)
                     Catch ex As Exception
                         ReportProgress(MSG_ERROR, "!!! Problem Saving MovieSet Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
@@ -2378,11 +2375,11 @@ Public Class Movie
             Else
                 ReportProgress(, "!!! No Fanart available for this MovieSet" & vbCrLf)
             End If
-            If _api.MC_Posters.Count > 0 Then
-                MsetPoster = _api.MC_Posters(0)
+
+            If _api.McSetPosters.Count > 0 Then
                 If Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Pref.overwritethumbs Then
                     Try
-                        SavePosterImageToCacheAndPath(MsetPoster.hdUrl, _scrapedMovie.fileinfo.movsetposterpath)
+                        SavePosterImageToCacheAndPath(_api.McSetPosters(0).hdUrl, _scrapedMovie.fileinfo.movsetposterpath)
                         ReportProgress(MSG_OK, "!!! MovieSet Poster Downloaded OK" & vbCrLf)
                     Catch ex As Exception
                         ReportProgress(MSG_ERROR, "!!! Problem Saving MovieSet Poster" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
@@ -2393,7 +2390,7 @@ Public Class Movie
             Else
                 ReportProgress(, "!!! No Poster available for this MovieSet" & vbCrLf)
             End If
-            _api = Nothing
+
         Else
             ReportProgress(, "MovieSet Artwork scraping Failed.  No Folder for saving Artwork" & vbCrLf)
         End If
@@ -2685,6 +2682,8 @@ Public Class Movie
 #End If
         End Try
     End Sub
+
+
     #End Region 'Subs
 
 

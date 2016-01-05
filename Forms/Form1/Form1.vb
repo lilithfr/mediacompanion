@@ -231,10 +231,10 @@ Public Class Form1
     Dim mouseDelta As Integer = 0
     Dim resLabels As Label
     Dim fanartUrls(1000, 1) As String
-    Dim fanartArray As New List(Of str_ListOfPosters)
+    Dim fanartArray As New List(Of McImage)
     Dim cropString As String
     Dim thumbedItsMade As Boolean = False
-    Dim posterArray As New List(Of str_ListOfPosters)
+    Dim posterArray As New List(Of McImage)
     Dim pageCount As Integer = 0
     Dim currentPage As Integer = 0
     Dim tab1 As Integer = 0
@@ -4290,16 +4290,11 @@ Public Class Form1
         If SetId = "" Then
             tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
             tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
-            tmdb.CollectionSearch = False
+            fanartArray.AddRange(tmdb.McFanart)
         Else
-            tmdb.Imdb = ""
-            tmdb.TmdbId = SetId
-            tmdb.CollectionSearch = True
+            tmdb.SetId = SetId
+            fanartArray.AddRange(tmdb.McSetFanart)
         End If
-        Try
-            fanartArray.AddRange(tmdb.Fanart)
-        Catch
-        End Try
 
         Try
             If fanartArray.Count > 0 Then
@@ -4861,7 +4856,7 @@ Public Class Form1
     End Sub
 
     Private Sub mov_PosterSelectionDisplay()
-        Dim names As New List(Of str_ListOfPosters)
+        Dim names As New List(Of McImage)
         messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
@@ -9894,16 +9889,19 @@ End Sub
         messbox = New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
         messbox.Show() : messbox.Refresh()
         Application.DoEvents()
-        Dim tmdb       As New TMDb
-        tmdb.Imdb = If(MovSet, "", If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, ""))
-        tmdb.TmdbId = If(MovSet, workingMovieDetails.fullmoviebody.movieset.MovieSetId, workingMovieDetails.fullmoviebody.tmdbid)
-        If MovSet Then tmdb.CollectionSearch = True
+
+        Dim tmdb As New TMDb
+
+        tmdb.Imdb   = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+        tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
+        tmdb.SetId  = workingMovieDetails.fullmoviebody.movieset.MovieSetId
+
         Try
             Dim FanartUrl As String = ""
             If Not MovSet Then
                 FanartUrl = tmdb.GetBackDropUrl()
             Else
-                FanartUrl = tmdb.Fanart(0).hdUrl
+                FanartUrl = tmdb.McSetFanart(0).hdUrl
             End If
             Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath="","",workingMovieDetails.fileinfo.videotspath+"fanart.jpg")
             If IsNothing(FanartUrl) then
@@ -10023,10 +10021,13 @@ End Sub
                 isvideotspath=workingMovieDetails.fileinfo.videotspath+"poster.jpg"
             End If
             Dim moviethumburl As String = ""
+
             Dim tmdb As New TMDb 
-            tmdb.Imdb = If(MovSet, "", If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, ""))
-            tmdb.TmdbId = If(MovSet, workingMovieDetails.fullmoviebody.movieset.MovieSetId, workingMovieDetails.fullmoviebody.tmdbid)
-            If MovSet Then tmdb.CollectionSearch = True
+
+            tmdb.Imdb   = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
+            tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
+            tmdb.SetId  = workingMovieDetails.fullmoviebody.movieset.MovieSetId
+            
             If tmdb.Imdb = "" AndAlso tmdb.TmdbId = "" Then Exit Sub
 
             If source = "impa" Then
@@ -10039,7 +10040,7 @@ End Sub
                         If Not MovSet Then 
                             moviethumburl = tmdb.FirstOriginalPosterUrl
                         Else
-                            moviethumburl = tmdb.MC_Posters(0).hdUrl
+                            moviethumburl = tmdb.McSetPosters(0).hdUrl
                         End If
                     Catch
                     End Try
@@ -16906,12 +16907,12 @@ End Sub
             For f = 0 To UBound(posters)
                 If posters(f, 0) <> Nothing Then
                     If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
-                    Dim newposters As New str_ListOfPosters(SetDefaults)
-                    newposters.hdUrl = posters(f, 1)
-                    newposters.ldUrl = posters(f, 0)
-                    posterArray.Add(newposters)
-                    newposters.ldUrl = Nothing
-                    newposters.hdUrl = Nothing
+                    Dim mcPoster As New McImage
+                    mcPoster.hdUrl = posters(f, 1)
+                    mcPoster.ldUrl = posters(f, 0)
+                    posterArray.Add(mcPoster)
+                    mcPoster.ldUrl = Nothing
+                    mcPoster.hdUrl = Nothing
                 End If
             Next
             messbox.Close()
@@ -17090,13 +17091,12 @@ End Sub
                 If Not MovPosterToggle Then
                     tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
                     tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
-                    tmdb.CollectionSearch = False
+                    posterArray.AddRange(tmdb.McPosters)
                 Else
-                    tmdb.Imdb = ""
-                    tmdb.TmdbId = workingMovieDetails.fullmoviebody.movieset.MovieSetId
-                    tmdb.CollectionSearch = True
+                    tmdb.SetId = workingMovieDetails.fullmoviebody.movieset.MovieSetId
+                    posterArray.AddRange(tmdb.McSetPosters)
                 End If
-                posterArray.AddRange(tmdb.MC_Posters)
+                
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -17142,7 +17142,7 @@ End Sub
                 For Each thisresult In thumbstring("totalthumbs")
                     Select Case thisresult.Name
                         Case "thumb"
-                            Dim newposters As New str_ListOfPosters(SetDefaults)
+                            Dim newposters As New McImage
                             newposters.hdUrl = thisresult.InnerText
                             newposters.ldUrl = thisresult.InnerText
                             posterArray.Add(newposters)
@@ -17177,12 +17177,12 @@ End Sub
                 For f = 0 To UBound(posters)
                     If posters(f, 0) <> Nothing Then
                         If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
-                        Dim newposters As New str_ListOfPosters(SetDefaults)
-                        newposters.hdUrl = posters(f, 0)
-                        newposters.ldUrl = posters(f, 1)
-                        posterArray.Add(newposters)
-                        newposters.ldUrl = Nothing
-                        newposters.hdUrl = Nothing
+                        Dim poster As New McImage
+                        poster.hdUrl = posters(f, 0)
+                        poster.ldUrl = posters(f, 1)
+                        posterArray.Add(poster)
+                        poster.ldUrl = Nothing
+                        poster.hdUrl = Nothing
                     End If
                 Next
             Catch ex As Exception
@@ -17896,9 +17896,11 @@ End Sub
                         Application.DoEvents()
                         Try
                             Dim api As New TMDb
-                            api.TmdbId = MovSet.MovieSetId
-                            api.CollectionSearch = True
+
+                            api.SetId = MovSet.MovieSetId
+
                             MovCollectionList = api.collection
+
                         Catch ex As Exception
                             If ex.Message.Contains("TMDB") Then
                                 messbox.Close()
@@ -21879,9 +21881,9 @@ End Sub
                 messbox.Refresh()
                 Dim api As New TMDb
                 api.urlcheck = False
-                api.TmdbId = item
+                api.SetId = item
                 Dim MovCollectionList As New List(Of MovieSetsList)
-                api.CollectionSearch = True
+
                 Try
                     MovCollectionList = api.Collection
                 Catch

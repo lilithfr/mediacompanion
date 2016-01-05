@@ -252,7 +252,7 @@ Public Class frmCoverArt
             Dim tmdb As New TMDb '(tmdbid)
             tmdb.Imdb = If(imdbid.Contains("tt"), imdbid, "")
             tmdb.TmdbId = tmdbid
-            For Each item In tmdb.MC_Posters
+            For Each item In tmdb.McPosters
                  posterurls(count, 0) = item.hdUrl   
                  posterurls(count, 1) = item.ldUrl 
                  count += 1

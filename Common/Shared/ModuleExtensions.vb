@@ -95,5 +95,14 @@ Public Module ModuleExtensions
     Public Function IfBlankMissing(value As String) As String
         Return If(value="",Missing,value)
     End Function
+
+    <Extension()> _
+    Public Sub AddIfNew(Of T)(source As List(Of T), item As Object)
+        If Not source.Contains(item) then
+            source.Add(item)
+        End if        
+    End Sub
+
+
 End Module
 
