@@ -18,14 +18,13 @@ Public Class TMDb
 
     #Region "Read-write Properties"
 
-    Property __Serialising  As Boolean=False
-
     Private _languages       As List(Of String) = New List(Of String)
     Private _lookupLanguages As List(Of String) = New List(Of String)
 
-    Public Property Imdb As String
+    Public Property Imdb   As String
     Public Property TmdbId As String
-    Public Property CollectionSearch As Boolean = False
+    Public Property SetId  As Integer
+
     Public Property urlcheck As Boolean = True
 
     Public Property Languages As List(Of String)
@@ -44,8 +43,12 @@ Public Class TMDb
     End Property
 
 
-    Public Property ValidBackDrops As New List(Of WatTmdb.V3.Backdrop)
-    Public Property ValidPosters   As New List(Of WatTmdb.V3.Poster  )
+    Public Property ValidBackDrops    As New List(Of WatTmdb.V3.Backdrop)
+    Public Property ValidSetBackDrops As New List(Of WatTmdb.V3.CollectionBackdrop)
+    
+    Public Property ValidPosters    As New List(Of WatTmdb.V3.Poster  )
+    Public Property ValidSetPosters As New List(Of WatTmdb.V3.CollectionPoster  )
+
     Public Property ValidKeyWords  As WatTmdb.V3.TmdbMovieKeywords
     Public Property MaxGenres      As Integer = Media_Companion.Pref.maxmoviegenre
 
@@ -64,8 +67,13 @@ Public Class TMDb
     Private _releases               As WatTmdb.V3.TmdbMovieReleases
     Private _genrelist              As WatTmdb.V3.TmdbGenre 
     
-    Private _mc_posters             As New List(Of str_ListOfPosters)
-    Private _mc_backdrops           As New List(Of str_ListOfPosters)
+    Private _mcPosters              As New List(Of McImage)
+    Private _mcFanart               As New List(Of McImage)
+
+    Private _mcSetPosters           As New List(Of McImage)
+    Private _mcSetFanart            As New List(Of McImage)
+
+
     Private _mc_collection          As New List(Of MovieSetsList)
     Private _thumbs                 As New List(Of String)
     Private _keywords               As New List(Of String)
@@ -77,6 +85,7 @@ Public Class TMDb
     Private _frodoFanartThumbs      As New FrodoFanartThumbs
 
     Private _fetched                As Boolean = False
+    Private _setFetched             As Boolean = False
 
  
     Shared Public ReadOnly Property LanguageCodes As List(Of String)
@@ -173,7 +182,7 @@ Public Class TMDb
 
     Public ReadOnly Property Collection As List(Of MovieSetsList) 
         Get
-            Fetch
+            FetchSet
             Return _mc_collection
         End Get 
     End Property
@@ -334,17 +343,31 @@ Public Class TMDb
         End Get 
     End Property
 
-    Public ReadOnly Property MC_Posters As List(Of str_ListOfPosters)
+    Public ReadOnly Property McPosters As List(Of McImage)
         Get
             Fetch
-            Return _mc_posters
+            Return _mcPosters
         End Get 
     End Property
 
-    Public ReadOnly Property Fanart As List(Of str_ListOfPosters) 
+    Public ReadOnly Property McSetPosters As List(Of McImage)
+        Get
+            FetchSet
+            Return _mcSetPosters
+        End Get 
+    End Property
+
+    Public ReadOnly Property McFanart As List(Of McImage) 
         Get
             Fetch
-            Return _mc_backdrops
+            Return _mcFanart
+        End Get 
+    End Property
+
+    Public ReadOnly Property McSetFanart As List(Of McImage) 
+        Get
+            FetchSet
+            Return _mcSetFanart
         End Get 
     End Property
 
@@ -488,23 +511,18 @@ Public Class TMDb
     End Function
 
     Function GetMovieByTmdbId As Boolean
-        If Not CollectionSearch Then
-            _movie = _api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
-            Return Not IsNothing(_movie)
-        Else
-            _collection = _api.GetCollectionInfo(TmdbId.ToInt, _lookupLanguages.Item(0))   '_api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
-         Return Not IsNothing(_collection)
-        End If
+        _movie = _api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
+        Return Not IsNothing(_movie)
     End Function
 
     Function GetMovieImages As Boolean
-        If Not CollectionSearch Then
-             _movieImages = _api.GetMovieImages  (_movie.id)
-            Return Not IsNothing(_movieImages)
-        Else
-            _collectionImages = _api.GetCollectionImages(TmdbId.ToInt)  ', _lookupLanguages.Item(0))  '_api.GetMovieImages  (_movie.id)
-            Return Not IsNothing(_collectionImages)
-        End If
+        _movieImages = _api.GetMovieImages  (_movie.id)
+        Return Not IsNothing(_movieImages)
+    End Function
+
+    Function GetMovieCollectionImages As Boolean
+        _collectionImages = _api.GetCollectionImages(SetId)  
+        Return Not IsNothing(_collectionImages)
     End Function
 
     Function GetMovieTrailers As Boolean
@@ -518,31 +536,28 @@ Public Class TMDb
     End Function
 
     Function GetMoviesInCollection As Boolean
-        _collection = _api.GetCollectionInfo(TmdbId.ToInt, _lookupLanguages.Item(0))   '_api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
+        _collection = _api.GetCollectionInfo(SetId, _lookupLanguages.Item(0))
         Return Not IsNothing(_collection)
     End Function
 
+
+
     Private Sub Fetch
         Try
-            If _movie.id = 0 And Not __Serialising And Not _fetched Then
+            If _movie.id = 0 And Not _fetched Then
+
+                If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
+                    Throw New Exception(TMDB_EXC_MSG)
+                End If
 
                 _fetched = True
 
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
 
-                If Not CollectionSearch Then
-                    rhs.Add(New RetryHandler(AddressOf GetMovieBy))
-                    rhs.Add(New RetryHandler(AddressOf GetMovieImages))
-                    rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
-                    rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
-                Else
-                    rhs.Add(New RetryHandler(AddressOf GetMoviesInCollection))
-                    rhs.Add(New RetryHandler(AddressOf GetMovieImages))
-                End If
-
-                If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
-                    Throw New Exception("TMDB is offline")
-                End If
+                rhs.Add(New RetryHandler(AddressOf GetMovieBy      ))
+                rhs.Add(New RetryHandler(AddressOf GetMovieImages  ))
+                rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
+                rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
 
                 For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
@@ -550,40 +565,67 @@ Public Class TMDb
 
                 'Set TMDB ID from scraped data
                 Try
-                If _movie.id > 1 AndAlso TmdbId = "" Then TmdbId = _movie.id.ToString
+                If _movie.id > 0 AndAlso TmdbId = "" Then TmdbId = _movie.id.ToString
                 Catch
                 End Try
 
                 'If movie isn't found -> Create empty child objects
-                If Not CollectionSearch Then
-                    If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
-                    If IsNothing(_movieImages.posters) Then _movieImages.posters = New List(Of WatTmdb.V3.Poster)
-                    If IsNothing(_trailers.youtube) Then _trailers.youtube = New List(Of WatTmdb.V3.Youtube)
-                    FixUpMovieImages()
+                If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
+                If IsNothing(_movieImages.posters  ) Then _movieImages.posters   = New List(Of WatTmdb.V3.Poster  )
+                If IsNothing(_trailers.youtube     ) Then _trailers.youtube      = New List(Of WatTmdb.V3.Youtube )
 
-                    AssignValidBackDrops()
-                    AssignValidPosters()
-                    AssignMC_Posters()
-                    AssignMC_Thumbs()
-                    AssignMC_Backdrops()
-                    AssignFrodoExtraPosterThumbs()
-                    AssignFrodoExtraFanartThumbs()
-                    AssignKeywords()
-                Else
-                    FixUpCollectionImages()
-                    AssignValidBackDrops()
-                    AssignValidPosters()
-                    AssignMC_Posters()
-                    'AssignMC_Thumbs()
-                    AssignMC_Backdrops()
-                    AssignMC_Collections()
-                End If
+                FixUpMovieImages()
+                AssignValidBackDrops()
+                AssignValidPosters()
+                AssignMcPosters()
+                AssignMcThumbs()
+                AssignMcFanart()
+                AssignFrodoExtraPosterThumbs()
+                AssignFrodoExtraFanartThumbs()
+                AssignKeywords()
             End If
         Catch ex As Exception
             Throw New Exception (ex.Message)
         End Try
 
     End Sub
+
+
+
+
+    Private Sub FetchSet
+        Try
+            If SetId>0 And Not _setFetched Then
+
+                _setFetched = True
+
+                If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
+                    Throw New Exception(TMDB_EXC_MSG)
+                End If
+
+                Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
+
+                rhs.Add(New RetryHandler(AddressOf GetMoviesInCollection   ))
+                rhs.Add(New RetryHandler(AddressOf GetMovieCollectionImages))
+
+                For Each rh In rhs
+                    If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
+                Next
+
+                FixUpCollectionImages()
+                AssignValidSetBackDrops()
+                AssignValidSetPosters()
+                AssignMcSetPosters()
+                AssignMcSetFanart()
+                AssignMcCollections()
+            End If
+        Catch ex As Exception
+            Throw New Exception (ex.Message)
+        End Try
+
+    End Sub
+
+
 
     Private Sub AssignFrodoExtraPosterThumbs
 
@@ -606,41 +648,17 @@ Public Class TMDb
     End Sub
 
     Private Sub FixUpMovieImages
-        FixUpMovieBackDrops
-        FixUpMoviePosters
-    End Sub
-
-    Private Sub FixUpMovieBackDrops
-        For Each item In _movieImages.backdrops
-            If IsNothing(item.iso_639_1) then
-                item.iso_639_1 = "?"
-            End If
-        Next
-    End Sub
-
-    Private Sub FixUpMoviePosters
-        For Each item In _movieImages.posters
-            If IsNothing(item.iso_639_1) then
-                item.iso_639_1 = "?"
-            End If
-        Next
+        FixUnassigned_iso_639_1(_movieImages.backdrops)
+        FixUnassigned_iso_639_1(_movieImages.posters)
     End Sub
 
     Private Sub FixUpCollectionImages
-        FixUpCollectionBackDrops
-        FixUpCollectionPosters
+        FixUnassigned_iso_639_1(_collectionImages.backdrops)
+        FixUnassigned_iso_639_1(_collectionImages.posters)
     End Sub
 
-    Private Sub FixUpCollectionBackDrops
-        For Each item In _collectionImages.backdrops
-            If IsNothing(item.iso_639_1) then
-                item.iso_639_1 = "?"
-            End If
-        Next
-    End Sub
-
-    Private Sub FixUpCollectionPosters
-        For Each item In _collectionImages.posters
+    Private Sub FixUnassigned_iso_639_1( images )
+        For Each item In images
             If IsNothing(item.iso_639_1) then
                 item.iso_639_1 = "?"
             End If
@@ -648,99 +666,81 @@ Public Class TMDb
     End Sub
 
     Private Sub AssignValidBackDrops
-        For Each language In _lookupLanguages                                                                                           '_lookupLanguages are already in preferred language order
-            Dim lang = language
-            If Not CollectionSearch Then
-                Dim q  = From b In _movieImages.backdrops Where b.iso_639_1.ToLower.IndexOf(lang) = 0 Order By b.vote_average Descending    'Filter out back drops in unwanted languages
-                                                                                                                                            'in practice though, no language gets assigned
-                For each item In q
-                    If Not ValidBackDrops.Contains(item) then
-                        ValidBackDrops.Add(item)
-                    End if
-                Next
-            Else
-                Dim q  = From b In _collectionImages.backdrops  Where b.iso_639_1.ToLower.IndexOf(lang) = 0 Order By b.height Descending    'Filter out back drops in unwanted languages
-                                                                                                                                            'in practice though, no language gets assigned
-                For each item In q
-                    Dim it As New WatTmdb.V3.Backdrop
-                    it.aspect_ratio = item.aspect_ratio
-                    it.file_path    = item.file_path
-                    it.height       = item.height
-                    it.iso_639_1    = item.iso_639_1
-                    it.width        = item.width 
-                    If Not ValidBackDrops.Contains(it) then
-                        ValidBackDrops.Add(it)
-                    End if
-                Next
-            End If
+        Dim q = From b In _movieImages.backdrops Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.vote_average Descending    
+                                                                                                                                        
+        For each item In q
+            ValidBackDrops.AddIfNew(item)
         Next
     End Sub
+
+
+    Private Sub AssignValidSetBackDrops
+        Dim q = From b In _collectionImages.backdrops Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.height Descending
+                                                                                                                         
+        For each item In q
+            ValidSetBackDrops.AddIfNew(item)
+        Next
+    End Sub
+
 
     Private Sub AssignValidPosters
-        For Each language In _lookupLanguages                                                         'Already in preferred language order
-            Dim lang = language
-            If Not CollectionSearch Then
-                Dim q    = From b In _movieImages.posters Where b.iso_639_1.ToLower.IndexOf(lang) = 0 Order By b.vote_average Descending    'Filter out back drops in unwanted languages
+        Dim q = From b In _movieImages.posters Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.vote_average Descending    
 
-                For each item In q
-                    If Not ValidPosters.Contains(item) then
-                        ValidPosters.Add(item)
-                    End if
-                Next
-            Else
-                Dim q    = From b In _collectionImages.posters Where b.iso_639_1.ToLower.IndexOf(lang) = 0 Order By b.Height Descending    'Filter out back drops in unwanted languages
-
-                For each item In q
-                    Dim it As New WatTmdb.V3.Poster
-                    it.aspect_ratio = item.aspect_ratio 
-                    it.file_path    = item.file_path
-                    it.height       = item.height
-                    it.iso_639_1    = item.iso_639_1
-                    it.width        = item.width
-                    If Not ValidPosters.Contains(it) then
-                        ValidPosters.Add(it)
-                    End if
-                Next
-            End If
+        For each item In q
+            ValidPosters.AddIfNew(item)
         Next
     End Sub
 
-    Private Sub AssignMC_Posters
-        For each item In ValidPosters
-            Dim mc_poster As New str_ListOfPosters(True)
 
-            mc_poster.hdUrl     = HdPath       + item.file_path
-            mc_poster.hdheight  = item.height
-            mc_poster.hdwidth   = item.width 
-            mc_poster.ldUrl     = LdPosterPath + item.file_path
+    Private Sub AssignValidSetPosters
+        Dim q = From b In _collectionImages.posters Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.Height Descending
 
-            _mc_posters.Add(mc_poster)
+        For each item In q
+            ValidSetPosters.AddIfNew(item)
         Next
     End Sub
 
-    Private Sub AssignMC_Backdrops
-        For Each item In ValidBackDrops
-            Dim mc_backdrop As New str_ListOfPosters(True)
 
-            mc_backdrop.hdUrl    = HdPath + item.file_path
-            mc_backdrop.hdwidth  = item.width .ToString
-            mc_backdrop.hdheight = item.height.ToString
+    Private Sub AssignMcPosters
+        AssignMcPosters(ValidPosters,_mcPosters)
+    End Sub
 
-            mc_backdrop.ldUrl    = LdBackDropPath + item.file_path
-            mc_backdrop.ldwidth  = "1280"
-            mc_backdrop.ldheight = "720"
+    Private Sub AssignMcSetPosters
+        AssignMcPosters(ValidSetPosters,_mcSetPosters)
+    End Sub
 
-            _mc_backdrops.Add(mc_backdrop)
+
+    Private Sub AssignMcFanart
+        AssignMcFanart(ValidBackDrops,_mcFanart)
+    End Sub
+ 
+
+    Private Sub AssignMcSetFanart
+        AssignMcFanart(ValidSetBackDrops,_mcSetFanart)
+    End Sub
+ 
+
+    Private Sub AssignMcPosters( tmDbImages As Object, mcImages As List(Of McImage))
+        For Each item In tmDbImages
+            mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdPosterPath) )
         Next
     End Sub
-    
-    Private Sub AssignMC_Thumbs   
+ 
+
+    Private Sub AssignMcFanart( tmDbImages As Object, mcImages As List(Of McImage))
+        For Each item In tmDbImages
+            mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdBackDropPath) )
+        Next
+    End Sub
+  
+
+    Private Sub AssignMcThumbs   
         For Each item In ValidBackDrops
             _thumbs.Add( HdPath + item.file_path )
         Next
     End Sub
 
-    Private Sub AssignMC_Collections
+    Private Sub AssignMcCollections
         For each item In _collection.parts
             Dim tmpitem As New MovieSetsList
             tmpitem.title = item.title

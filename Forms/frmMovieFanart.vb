@@ -13,7 +13,7 @@ Public Class frmMovieFanart
     Dim fanartpath As String = Form1.workingMovieDetails.fileinfo.fanartpath
     Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
     Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
-    Dim fanartList As New List(Of str_ListOfPosters)
+    Dim fanartList As New List(Of McImage)
     Dim mainfanart As PictureBox
     Dim resolutionlbl As Label
 
@@ -202,11 +202,12 @@ Public Class frmMovieFanart
 '#End If
 '            End Try
 
-            Dim tmdb As New TMDb '(Form1.workingmoviedetails.fullmoviebody.imdbid)
+            Dim tmdb As New TMDb 
+
             tmdb.Imdb = If(Form1.workingmoviedetails.fullmoviebody.imdbid.Contains("tt"), Form1.workingmoviedetails.fullmoviebody.imdbid, "")
             tmdb.TmdbId = Form1.workingmoviedetails.fullmoviebody.tmdbid 
 
-            fanartList.AddRange(tmdb.Fanart)
+            fanartList.AddRange(tmdb.McFanart)
 
 
             If fanartList.Count > 0 Then

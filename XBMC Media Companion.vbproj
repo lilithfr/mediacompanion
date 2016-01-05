@@ -356,7 +356,7 @@
     <Compile Include="Forms\frmDialog1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Structures\ListOfPosters.vb" />
+    <Compile Include="Classes\McImage.vb" />
     <Compile Include="Forms\frmMessageBox.Designer.vb">
       <DependentUpon>frmMessageBox.vb</DependentUpon>
     </Compile>
