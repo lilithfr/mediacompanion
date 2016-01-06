@@ -82,6 +82,7 @@ Partial Class frmPreferences
         Me.cbDlTrailerDuringScrape = New System.Windows.Forms.CheckBox()
         Me.cbMovieRuntimeFallbackToFile = New System.Windows.Forms.CheckBox()
         Me.GroupBox11 = New System.Windows.Forms.GroupBox()
+        Me.cbIncludeMpaaRated = New System.Windows.Forms.CheckBox()
         Me.cbExcludeMpaaRated = New System.Windows.Forms.CheckBox()
         Me.cb_MovCertRemovePhrase = New System.Windows.Forms.CheckBox()
         Me.ScrapeFullCertCheckBox = New System.Windows.Forms.CheckBox()
@@ -453,7 +454,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApply = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbIncludeMpaaRated = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1035,7 +1035,7 @@ Partial Class frmPreferences
         '
         'tbDateFormat
         '
-        Me.tbDateFormat.Location = New System.Drawing.Point(90, 18)
+        Me.tbDateFormat.Location = New System.Drawing.Point(89, 14)
         Me.tbDateFormat.Name = "tbDateFormat"
         Me.tbDateFormat.Size = New System.Drawing.Size(138, 21)
         Me.tbDateFormat.TabIndex = 1
@@ -1045,7 +1045,7 @@ Partial Class frmPreferences
         'Label179
         '
         Me.Label179.AutoSize = true
-        Me.Label179.Location = New System.Drawing.Point(12, 21)
+        Me.Label179.Location = New System.Drawing.Point(14, 17)
         Me.Label179.Name = "Label179"
         Me.Label179.Size = New System.Drawing.Size(71, 15)
         Me.Label179.TabIndex = 0
@@ -1057,7 +1057,7 @@ Partial Class frmPreferences
         Me.rbRenameFullStop.AutoSize = true
         Me.rbRenameFullStop.CheckAlign = System.Drawing.ContentAlignment.TopCenter
         Me.rbRenameFullStop.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbRenameFullStop.Location = New System.Drawing.Point(214, 257)
+        Me.rbRenameFullStop.Location = New System.Drawing.Point(89, 251)
         Me.rbRenameFullStop.Name = "rbRenameFullStop"
         Me.rbRenameFullStop.Size = New System.Drawing.Size(25, 32)
         Me.rbRenameFullStop.TabIndex = 85
@@ -1072,7 +1072,7 @@ Partial Class frmPreferences
         Me.rbRenameUnderscore.AutoSize = true
         Me.rbRenameUnderscore.CheckAlign = System.Drawing.ContentAlignment.TopCenter
         Me.rbRenameUnderscore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbRenameUnderscore.Location = New System.Drawing.Point(154, 257)
+        Me.rbRenameUnderscore.Location = New System.Drawing.Point(29, 251)
         Me.rbRenameUnderscore.Name = "rbRenameUnderscore"
         Me.rbRenameUnderscore.Size = New System.Drawing.Size(29, 32)
         Me.rbRenameUnderscore.TabIndex = 84
@@ -1177,6 +1177,16 @@ Partial Class frmPreferences
         "DB if you wish,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"The Rating will be scraped by the first available from the abov"& _ 
         "e list.")
         '
+        'cbIncludeMpaaRated
+        '
+        Me.cbIncludeMpaaRated.AutoSize = true
+        Me.cbIncludeMpaaRated.Location = New System.Drawing.Point(12, 263)
+        Me.cbIncludeMpaaRated.Name = "cbIncludeMpaaRated"
+        Me.cbIncludeMpaaRated.Size = New System.Drawing.Size(232, 19)
+        Me.cbIncludeMpaaRated.TabIndex = 78
+        Me.cbIncludeMpaaRated.Text = "Add ""Rated"" prefix on MPAA certificate"
+        Me.cbIncludeMpaaRated.UseVisualStyleBackColor = true
+        '
         'cbExcludeMpaaRated
         '
         Me.cbExcludeMpaaRated.AutoSize = true
@@ -1276,7 +1286,7 @@ Partial Class frmPreferences
         'cbMovRootFolderCheck
         '
         Me.cbMovRootFolderCheck.AutoSize = true
-        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 362)
+        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 348)
         Me.cbMovRootFolderCheck.Name = "cbMovRootFolderCheck"
         Me.cbMovRootFolderCheck.Size = New System.Drawing.Size(158, 19)
         Me.cbMovRootFolderCheck.TabIndex = 82
@@ -1336,7 +1346,7 @@ Partial Class frmPreferences
         'cb_MovPosterTabTMDBSelect
         '
         Me.cb_MovPosterTabTMDBSelect.AutoSize = true
-        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 439)
+        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 424)
         Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
         Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
         Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
@@ -3125,7 +3135,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3320,9 +3330,9 @@ Partial Class frmPreferences
         Me.GroupBox35.Controls.Add(Me.tbDateFormat)
         Me.GroupBox35.Controls.Add(Me.Label179)
         Me.GroupBox35.Controls.Add(Me.cbMovieShowDateOnList)
-        Me.GroupBox35.Location = New System.Drawing.Point(323, 393)
+        Me.GroupBox35.Location = New System.Drawing.Point(323, 405)
         Me.GroupBox35.Name = "GroupBox35"
-        Me.GroupBox35.Size = New System.Drawing.Size(311, 124)
+        Me.GroupBox35.Size = New System.Drawing.Size(352, 112)
         Me.GroupBox35.TabIndex = 80
         Me.GroupBox35.TabStop = false
         Me.GroupBox35.Text = " Movie List "
@@ -3330,7 +3340,7 @@ Partial Class frmPreferences
         'cbMovieList_ShowColWatched
         '
         Me.cbMovieList_ShowColWatched.AutoSize = true
-        Me.cbMovieList_ShowColWatched.Location = New System.Drawing.Point(15, 64)
+        Me.cbMovieList_ShowColWatched.Location = New System.Drawing.Point(17, 60)
         Me.cbMovieList_ShowColWatched.Name = "cbMovieList_ShowColWatched"
         Me.cbMovieList_ShowColWatched.Size = New System.Drawing.Size(152, 19)
         Me.cbMovieList_ShowColWatched.TabIndex = 3
@@ -3340,7 +3350,7 @@ Partial Class frmPreferences
         'cbMovieList_ShowColPlot
         '
         Me.cbMovieList_ShowColPlot.AutoSize = true
-        Me.cbMovieList_ShowColPlot.Location = New System.Drawing.Point(15, 41)
+        Me.cbMovieList_ShowColPlot.Location = New System.Drawing.Point(17, 39)
         Me.cbMovieList_ShowColPlot.Name = "cbMovieList_ShowColPlot"
         Me.cbMovieList_ShowColPlot.Size = New System.Drawing.Size(125, 19)
         Me.cbMovieList_ShowColPlot.TabIndex = 2
@@ -3352,7 +3362,7 @@ Partial Class frmPreferences
         Me.cbMovieShowDateOnList.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.cbMovieShowDateOnList.Enabled = false
         Me.cbMovieShowDateOnList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(15, 85)
+        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(17, 85)
         Me.cbMovieShowDateOnList.Name = "cbMovieShowDateOnList"
         Me.cbMovieShowDateOnList.Size = New System.Drawing.Size(275, 20)
         Me.cbMovieShowDateOnList.TabIndex = 72
@@ -3382,7 +3392,7 @@ Partial Class frmPreferences
         Me.GroupBox27.Controls.Add(Me.tb_MovieRenameTemplate)
         Me.GroupBox27.Location = New System.Drawing.Point(323, 6)
         Me.GroupBox27.Name = "GroupBox27"
-        Me.GroupBox27.Size = New System.Drawing.Size(352, 381)
+        Me.GroupBox27.Size = New System.Drawing.Size(352, 393)
         Me.GroupBox27.TabIndex = 74
         Me.GroupBox27.TabStop = false
         Me.GroupBox27.Text = "Rename Movie Settings"
@@ -3390,7 +3400,7 @@ Partial Class frmPreferences
         'Label13
         '
         Me.Label13.AutoSize = true
-        Me.Label13.Location = New System.Drawing.Point(188, 257)
+        Me.Label13.Location = New System.Drawing.Point(63, 251)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(20, 15)
         Me.Label13.TabIndex = 86
@@ -3400,7 +3410,7 @@ Partial Class frmPreferences
         '
         Me.cbMovNewFolderInRootFolder.AutoSize = true
         Me.cbMovNewFolderInRootFolder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovNewFolderInRootFolder.Location = New System.Drawing.Point(7, 150)
+        Me.cbMovNewFolderInRootFolder.Location = New System.Drawing.Point(7, 139)
         Me.cbMovNewFolderInRootFolder.Name = "cbMovNewFolderInRootFolder"
         Me.cbMovNewFolderInRootFolder.Size = New System.Drawing.Size(182, 30)
         Me.cbMovNewFolderInRootFolder.TabIndex = 83
@@ -3411,7 +3421,7 @@ Partial Class frmPreferences
         '
         Me.cbMovSortIgnArticle.AutoSize = true
         Me.cbMovSortIgnArticle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovSortIgnArticle.Location = New System.Drawing.Point(7, 228)
+        Me.cbMovSortIgnArticle.Location = New System.Drawing.Point(7, 209)
         Me.cbMovSortIgnArticle.Name = "cbMovSortIgnArticle"
         Me.cbMovSortIgnArticle.Size = New System.Drawing.Size(178, 17)
         Me.cbMovSortIgnArticle.TabIndex = 82
@@ -3422,7 +3432,7 @@ Partial Class frmPreferences
         '
         Me.cbMovTitleIgnArticle.AutoSize = true
         Me.cbMovTitleIgnArticle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovTitleIgnArticle.Location = New System.Drawing.Point(7, 184)
+        Me.cbMovTitleIgnArticle.Location = New System.Drawing.Point(7, 166)
         Me.cbMovTitleIgnArticle.Name = "cbMovTitleIgnArticle"
         Me.cbMovTitleIgnArticle.Size = New System.Drawing.Size(188, 17)
         Me.cbMovTitleIgnArticle.TabIndex = 81
@@ -3433,7 +3443,7 @@ Partial Class frmPreferences
         '
         Me.cbMovSetIgnArticle.AutoSize = true
         Me.cbMovSetIgnArticle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovSetIgnArticle.Location = New System.Drawing.Point(7, 206)
+        Me.cbMovSetIgnArticle.Location = New System.Drawing.Point(7, 186)
         Me.cbMovSetIgnArticle.Name = "cbMovSetIgnArticle"
         Me.cbMovSetIgnArticle.Size = New System.Drawing.Size(184, 17)
         Me.cbMovSetIgnArticle.TabIndex = 80
@@ -3453,17 +3463,18 @@ Partial Class frmPreferences
         'Label196
         '
         Me.Label196.AutoSize = true
+        Me.Label196.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label196.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label196.Location = New System.Drawing.Point(6, 318)
+        Me.Label196.Location = New System.Drawing.Point(7, 306)
         Me.Label196.Name = "Label196"
-        Me.Label196.Size = New System.Drawing.Size(263, 52)
+        Me.Label196.Size = New System.Drawing.Size(324, 80)
         Me.Label196.TabIndex = 78
         Me.Label196.Text = resources.GetString("Label196.Text")
         '
         'cbMovFolderRename
         '
         Me.cbMovFolderRename.AutoSize = true
-        Me.cbMovFolderRename.Location = New System.Drawing.Point(7, 20)
+        Me.cbMovFolderRename.Location = New System.Drawing.Point(7, 16)
         Me.cbMovFolderRename.Name = "cbMovFolderRename"
         Me.cbMovFolderRename.Size = New System.Drawing.Size(179, 19)
         Me.cbMovFolderRename.TabIndex = 77
@@ -3474,7 +3485,7 @@ Partial Class frmPreferences
         '
         Me.cbRenameUnderscore.AutoSize = true
         Me.cbRenameUnderscore.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbRenameUnderscore.Location = New System.Drawing.Point(7, 249)
+        Me.cbRenameUnderscore.Location = New System.Drawing.Point(7, 232)
         Me.cbRenameUnderscore.Name = "cbRenameUnderscore"
         Me.cbRenameUnderscore.Size = New System.Drawing.Size(144, 17)
         Me.cbRenameUnderscore.TabIndex = 76
@@ -3484,7 +3495,7 @@ Partial Class frmPreferences
         'lblFolderRename
         '
         Me.lblFolderRename.AutoSize = true
-        Me.lblFolderRename.Location = New System.Drawing.Point(6, 40)
+        Me.lblFolderRename.Location = New System.Drawing.Point(6, 34)
         Me.lblFolderRename.Name = "lblFolderRename"
         Me.lblFolderRename.Size = New System.Drawing.Size(79, 15)
         Me.lblFolderRename.TabIndex = 75
@@ -3492,7 +3503,7 @@ Partial Class frmPreferences
         '
         'tb_MovFolderRename
         '
-        Me.tb_MovFolderRename.Location = New System.Drawing.Point(6, 56)
+        Me.tb_MovFolderRename.Location = New System.Drawing.Point(7, 49)
         Me.tb_MovFolderRename.Name = "tb_MovFolderRename"
         Me.tb_MovFolderRename.Size = New System.Drawing.Size(189, 21)
         Me.tb_MovFolderRename.TabIndex = 74
@@ -3501,7 +3512,7 @@ Partial Class frmPreferences
         'LblFilename
         '
         Me.LblFilename.AutoSize = true
-        Me.LblFilename.Location = New System.Drawing.Point(6, 107)
+        Me.LblFilename.Location = New System.Drawing.Point(4, 95)
         Me.LblFilename.Name = "LblFilename"
         Me.LblFilename.Size = New System.Drawing.Size(67, 15)
         Me.LblFilename.TabIndex = 73
@@ -3511,7 +3522,7 @@ Partial Class frmPreferences
         '
         Me.cbMovieManualRename.AutoSize = true
         Me.cbMovieManualRename.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieManualRename.Location = New System.Drawing.Point(7, 299)
+        Me.cbMovieManualRename.Location = New System.Drawing.Point(7, 281)
         Me.cbMovieManualRename.Margin = New System.Windows.Forms.Padding(4)
         Me.cbMovieManualRename.Name = "cbMovieManualRename"
         Me.cbMovieManualRename.Size = New System.Drawing.Size(207, 19)
@@ -3523,7 +3534,7 @@ Partial Class frmPreferences
         '
         Me.cbMovieRenameEnable.AutoSize = true
         Me.cbMovieRenameEnable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieRenameEnable.Location = New System.Drawing.Point(7, 84)
+        Me.cbMovieRenameEnable.Location = New System.Drawing.Point(7, 77)
         Me.cbMovieRenameEnable.Margin = New System.Windows.Forms.Padding(4)
         Me.cbMovieRenameEnable.Name = "cbMovieRenameEnable"
         Me.cbMovieRenameEnable.Size = New System.Drawing.Size(163, 19)
@@ -3536,17 +3547,17 @@ Partial Class frmPreferences
         Me.Label100.AutoSize = true
         Me.Label100.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label100.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label100.Location = New System.Drawing.Point(201, 28)
+        Me.Label100.Location = New System.Drawing.Point(212, 27)
         Me.Label100.Name = "Label100"
-        Me.Label100.Size = New System.Drawing.Size(120, 223)
+        Me.Label100.Size = New System.Drawing.Size(125, 236)
         Me.Label100.TabIndex = 70
         Me.Label100.Text = resources.GetString("Label100.Text")
         '
         'tb_MovieRenameTemplate
         '
-        Me.tb_MovieRenameTemplate.Location = New System.Drawing.Point(7, 125)
+        Me.tb_MovieRenameTemplate.Location = New System.Drawing.Point(7, 112)
         Me.tb_MovieRenameTemplate.Name = "tb_MovieRenameTemplate"
-        Me.tb_MovieRenameTemplate.Size = New System.Drawing.Size(188, 21)
+        Me.tb_MovieRenameTemplate.Size = New System.Drawing.Size(189, 21)
         Me.tb_MovieRenameTemplate.TabIndex = 69
         Me.tb_MovieRenameTemplate.Text = "%T (%Y)"
         '
@@ -3610,7 +3621,7 @@ Partial Class frmPreferences
         'cbShowMovieGridToolTip
         '
         Me.cbShowMovieGridToolTip.AutoSize = true
-        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 465)
+        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 450)
         Me.cbShowMovieGridToolTip.Margin = New System.Windows.Forms.Padding(4)
         Me.cbShowMovieGridToolTip.Name = "cbShowMovieGridToolTip"
         Me.cbShowMovieGridToolTip.Size = New System.Drawing.Size(162, 19)
@@ -3621,7 +3632,7 @@ Partial Class frmPreferences
         'cb_MovSetTitleIgnArticle
         '
         Me.cb_MovSetTitleIgnArticle.AutoSize = true
-        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 414)
+        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 399)
         Me.cb_MovSetTitleIgnArticle.Name = "cb_MovSetTitleIgnArticle"
         Me.cb_MovSetTitleIgnArticle.Size = New System.Drawing.Size(236, 19)
         Me.cb_MovSetTitleIgnArticle.TabIndex = 94
@@ -3631,7 +3642,7 @@ Partial Class frmPreferences
         'cb_SorttitleIgnoreArticles
         '
         Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 387)
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 374)
         Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
         Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
         Me.cb_SorttitleIgnoreArticles.TabIndex = 93
@@ -3641,7 +3652,7 @@ Partial Class frmPreferences
         'cb_MovDurationAsRuntine
         '
         Me.cb_MovDurationAsRuntine.AutoSize = true
-        Me.cb_MovDurationAsRuntine.Location = New System.Drawing.Point(26, 237)
+        Me.cb_MovDurationAsRuntine.Location = New System.Drawing.Point(25, 230)
         Me.cb_MovDurationAsRuntine.Name = "cb_MovDurationAsRuntine"
         Me.cb_MovDurationAsRuntine.Size = New System.Drawing.Size(210, 19)
         Me.cb_MovDurationAsRuntine.TabIndex = 78
@@ -3651,7 +3662,7 @@ Partial Class frmPreferences
         'cbMissingMovie
         '
         Me.cbMissingMovie.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbMissingMovie.Location = New System.Drawing.Point(7, 320)
+        Me.cbMissingMovie.Location = New System.Drawing.Point(7, 306)
         Me.cbMissingMovie.Name = "cbMissingMovie"
         Me.cbMissingMovie.Size = New System.Drawing.Size(275, 36)
         Me.cbMissingMovie.TabIndex = 81
@@ -3663,7 +3674,7 @@ Partial Class frmPreferences
         'cbMovThousSeparator
         '
         Me.cbMovThousSeparator.AutoSize = true
-        Me.cbMovThousSeparator.Location = New System.Drawing.Point(7, 196)
+        Me.cbMovThousSeparator.Location = New System.Drawing.Point(7, 182)
         Me.cbMovThousSeparator.Name = "cbMovThousSeparator"
         Me.cbMovThousSeparator.Size = New System.Drawing.Size(299, 19)
         Me.cbMovThousSeparator.TabIndex = 77
@@ -3697,7 +3708,7 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.Controls.Add(Me.rbRuntimeFile)
         Me.PanelDisplayRuntime.Controls.Add(Me.rbRuntimeScraper)
         Me.PanelDisplayRuntime.Enabled = false
-        Me.PanelDisplayRuntime.Location = New System.Drawing.Point(7, 262)
+        Me.PanelDisplayRuntime.Location = New System.Drawing.Point(7, 251)
         Me.PanelDisplayRuntime.Name = "PanelDisplayRuntime"
         Me.PanelDisplayRuntime.Size = New System.Drawing.Size(268, 49)
         Me.PanelDisplayRuntime.TabIndex = 68
@@ -3752,7 +3763,7 @@ Partial Class frmPreferences
         '
         Me.cb_EnableMediaTags.AutoSize = true
         Me.cb_EnableMediaTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cb_EnableMediaTags.Location = New System.Drawing.Point(7, 217)
+        Me.cb_EnableMediaTags.Location = New System.Drawing.Point(7, 207)
         Me.cb_EnableMediaTags.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_EnableMediaTags.Name = "cb_EnableMediaTags"
         Me.cb_EnableMediaTags.Size = New System.Drawing.Size(251, 19)
@@ -5425,16 +5436,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbIncludeMpaaRated
-        '
-        Me.cbIncludeMpaaRated.AutoSize = true
-        Me.cbIncludeMpaaRated.Location = New System.Drawing.Point(12, 263)
-        Me.cbIncludeMpaaRated.Name = "cbIncludeMpaaRated"
-        Me.cbIncludeMpaaRated.Size = New System.Drawing.Size(232, 19)
-        Me.cbIncludeMpaaRated.TabIndex = 78
-        Me.cbIncludeMpaaRated.Text = "Add ""Rated"" prefix on MPAA certificate"
-        Me.cbIncludeMpaaRated.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '

@@ -1728,15 +1728,15 @@ Public Class Pref
     '
     'Above ammended as removed Ignored Articles and not appended from Movie Title unless Pref.sorttitleignorearticle as Also True.
     '
-    Public Shared Function RemoveIgnoredArticles(ByVal s As String) As String
+    Public Shared Function RemoveIgnoredArticles(ByVal s As String, Optional Force As Boolean = False) As String
         If String.IsNullOrEmpty(s) Then Return s
-        If ignorearticle AndAlso s.ToLower.IndexOf("the ") = 0 Then 
+        If (ignorearticle OrElse Force) AndAlso s.ToLower.IndexOf("the ") = 0 Then 
             s = s.Substring(4, s.Length - 4) & ", The" 'IIf(Pref.sorttitleignorearticle,", The","")
         End If
-        If ignoreAn AndAlso s.ToLower.IndexOf("an ") = 0 Then
+        If (ignoreAn OrElse Force) AndAlso s.ToLower.IndexOf("an ") = 0 Then
             s = s.Substring(3, s.Length - 3) & ", An" 'IIf(Pref.sorttitleignorearticle,", An","")
         End If
-        If ignoreAarticle AndAlso s.ToLower.IndexOf("a ") = 0 Then
+        If (ignoreAarticle OrElse Force) AndAlso s.ToLower.IndexOf("a ") = 0 Then
             s = s.Substring(2, s.Length - 2) & ", A" 'IIf(Pref.sorttitleignorearticle,", A","")
         End If
         Return s

@@ -169,15 +169,18 @@ is still saved, as it should be.</value>
     <value>621, 17</value>
   </metadata>
   <data name="Label196.Text" xml:space="preserve">
-    <value>Notes:  - If Movie is in Root folder, new folder created
-    - Separate folders with '\' character
-    - If %N (Movieset) is empty, folder for movieset is not
-        created, but MovieTitle folder is created.</value>
+    <value>NB:  - If Movie is in Root folder, new sub folder is created.
+- Separate folders with '\' character.
+- If %N (Movieset) is empty, folder for  movieset is not created, but
+MovieTitle folder is created.
+-  %1 - Creates first Alpha character folder directly under Root Movie
+folder.  ie:  \\RootFolder\A\Avatar\  - Articles are ignored.</value>
   </data>
   <data name="Label100.Text" xml:space="preserve">
     <value>%T - Movie Title
 %Z - Sort Title
 %Y - Year
+%1 - Create Alpha Folder
 %I - IMDbId
 %G - Genre (only first)
 %S - Movie Source 

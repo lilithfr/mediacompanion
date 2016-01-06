@@ -3959,6 +3959,15 @@ Public Class Movie
                     If Pref.MovRenameSpaceCharacter Then
                         s = Utilities.SpacesToCharacter(s, Pref.RenameSpaceCharacter)
                     End If
+                    If s.Contains("%1") Then
+                        Dim firstchar As String = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim, True).Substring(0,1)
+                        If IsNumeric(firstchar) Then
+                            firstchar = "#"
+                        Else
+                            firstchar = firstchar.ToUpper
+                        End If
+                        s = s.Replace("%1", firstchar)
+                    End If
                 End If
             Catch
             End Try
