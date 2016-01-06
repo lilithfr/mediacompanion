@@ -310,6 +310,7 @@ Public Class Movies
                 lst.Add( NotMatchingRenamePattern )
             End If
             lst.Add( OutlineContainsHtml      )
+            lst.Add( IncompleteMovieSetInfo   )
             lst.Add( MissingCertificate       )
             lst.Add( MissingFanart            )
             lst.Add( MissingGenre             )
@@ -787,22 +788,22 @@ Public Class Movies
                 q = From x In q Order by x.MovieSetDisplayName.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & " of " & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxSetsInFilter 
+            Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxSetsInFilter 
         End Get
     End Property    
 
     Function GetMovieSetCollectionCount(MovieSetDisplayName As String) As String
 
         If MovieSetDisplayName="-None-" Then
-            Return "N\A"
+            Return ""
         End If
 
         Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
-
-        If IsNothing(movieSet) Then
-            Return "unknown"
+ 
+        If IsNothing(movieSet) OrElse movieSet.Collection.Count=0 Then
+            Return " of unknown"
         Else
-            Return movieSet.Collection.Count
+            Return " of " & movieSet.Collection.Count
         End If
     End Function
 
@@ -826,7 +827,25 @@ Public Class Movies
             Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras) 
             Return r.ToList
         End Get
-    End Property    
+    End Property   
+
+    Public ReadOnly Property IncompleteMovieSetInfo As String
+        Get
+            Return "Incomplete movie set info (" & (From x In MovieCache Where x.IncompleteMovieSet).Count & ")" 
+        End Get
+    End Property  
+
+    Public ReadOnly Property IncompleteMovieSets As List(Of MovieSetInfo)
+        Get
+            Dim q = From x In MovieCache 
+                Where
+                    x.IncompleteMovieSet
+                Select
+                    x.MovieSet
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property 
  
     Public ReadOnly Property MoviesSetsIncNone As List(Of String)
         Get

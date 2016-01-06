@@ -584,6 +584,24 @@ Public Class Data_GridViewMovie
     End Property  
 
 
+    Public ReadOnly Property IncompleteMovieSet As Boolean
+        Get
+            'Try
+                Return InASet And (MovieSet.MovieSetId="" OrElse MovieSet.MovieSetId="0" OrElse IsNothing(MovieSet.Collection) OrElse MovieSet.Collection.Count=0)
+            'Catch ex As Exception
+            '    Dim d = ex
+            'End Try
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property InASet As Boolean
+        Get
+            If IsNothing(MovieSet) Then Return False
+            Return MovieSet.MovieSetDisplayName <> "-None-" 
+        End Get
+    End Property  
+
     Public ReadOnly Property Watched As Boolean
         Get
             Return playcount<>"0"

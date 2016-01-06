@@ -2384,12 +2384,7 @@ Public Class Movie
         If _scrapedMovie.fileinfo.movsetposterpath <> "" Then
             Dim _api As New TMDb
 
-            'If _scrapedMovie.fullmoviebody.MovieSet.MovieSetId="" And Not IsNothing(MovieSetByName) Then
-            '    _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = MovieSetByName.MovieSetId
-            'End If
-
             _api.SetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId
-
 
             _scrapedMovie.fullmoviebody.MovieSet = _api.MovieSet
 
