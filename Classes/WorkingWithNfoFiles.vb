@@ -2178,7 +2178,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.id = ""
                     newmovie.tmdbid = ""
                     newmovie.missingdata1 = 0
-                    newmovie.MovieSet = New MovieSetDatabase 
+                    newmovie.MovieSet = New MovieSetInfo 
                     newmovie.source = ""
                     newmovie.director = ""
                     newmovie.originaltitle = newmovie.title
@@ -2479,9 +2479,9 @@ Public Class WorkingWithNfoFiles
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
-                            newmovie.fullmoviebody.movieset.MovieSetName = thisresult.InnerText
+                            newmovie.fullmoviebody.MovieSet.MovieSetName = thisresult.InnerText
                         Case "setid"
-                            newmovie.fullmoviebody.movieset.MovieSetId = thisresult.InnerText 
+                            newmovie.fullmoviebody.MovieSet.MovieSetId = thisresult.InnerText 
                         Case "videosource"
                             newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
@@ -2740,8 +2740,8 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
                 newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
                 newmovie.fileinfo.fanartpath = Pref.GetFanartPath(path, newmovie.fileinfo.filename)
-                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(path, newmovie.fullmoviebody.movieset.MovieSetName)
-                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(path, newmovie.fullmoviebody.movieset.MovieSetName)
+                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(path, newmovie.fullmoviebody.MovieSet.MovieSetName)
+                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(path, newmovie.fullmoviebody.MovieSet.MovieSetName)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
@@ -2757,8 +2757,8 @@ Public Class WorkingWithNfoFiles
                 'Else
                 '    newmovie.fileinfo.basepath = newmovie.fileinfo.path
                 'End If
-                If newmovie.fullmoviebody.movieset.MovieSetName = "" Then
-                    newmovie.fullmoviebody.movieset.MovieSetName = "-None-"
+                If newmovie.fullmoviebody.MovieSet.MovieSetName = "" Then
+                    newmovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
                 End If
                 movie = Nothing
 
@@ -2962,12 +2962,12 @@ Public Class WorkingWithNfoFiles
                     Next
                 End If
                 
-                If movietosave.fullmoviebody.movieset.MovieSetName <> "-None-" Then
+                If movietosave.fullmoviebody.MovieSet.MovieSetName <> "-None-" Then
                     child = doc.CreateElement("set")
-                    child.InnerText = movietosave.fullmoviebody.movieset.MovieSetName
+                    child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetName
                     root.AppendChild(child)
                     child = doc.CreateElement("setid")
-                    child.InnerText = movietosave.fullmoviebody.movieset.MovieSetId
+                    child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetId
                     root.AppendChild(child)
                 End If
                 

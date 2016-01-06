@@ -681,12 +681,12 @@ Public Class Form1
                             cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                         Next
                     End If
-                    If Not IsNothing(workingMovieDetails) AndAlso workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
+                    If Not IsNothing(workingMovieDetails) AndAlso workingMovieDetails.fullmoviebody.MovieSet.MovieSetName <> "-None-" Then
                         For Each mset In Pref.moviesets
                             cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                         Next
                         For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                            If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset.MovieSetDisplayName Then
+                            If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.MovieSet.MovieSetDisplayName Then
                                 cbMovieDisplay_MovieSet.SelectedIndex = te
                                 Exit For
                             End If
@@ -2036,16 +2036,16 @@ Public Class Form1
 
                 If Yield(yieldIng) Then Return
 
-                If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" And workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "" Then
+                If workingMovieDetails.fullmoviebody.MovieSet.MovieSetName <> "-None-" And workingMovieDetails.fullmoviebody.MovieSet.MovieSetName <> "" Then
                     Dim add As Boolean = True
                     For Each item In Pref.moviesets
-                        If item = workingMovieDetails.fullmoviebody.movieset.MovieSetName Then
+                        If item = workingMovieDetails.fullmoviebody.MovieSet.MovieSetName Then
                             add = False
                             Exit For
                         End If
                     Next
                     If add Then
-                        Pref.moviesets.Add(workingMovieDetails.fullmoviebody.movieset.MovieSetName)
+                        Pref.moviesets.Add(workingMovieDetails.fullmoviebody.MovieSet.MovieSetName)
                     End If
                 End If
 
@@ -3008,9 +3008,9 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
             movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
-            If movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) Then
-                movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-                movie.ScrapedMovie.fullmoviebody.movieset.MovieSetId = oMovies.GetMSetId(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+            If movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) Then
+                movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+                movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
             End If
             movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
             If TabControl2.SelectedTab.Name = "TabPage9" Then
@@ -3091,8 +3091,8 @@ Public Class Form1
                     If votestxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
                     If top250txt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
                     If Not cbMovieDisplay_MovieSet.SelectedIndex = 0 Then 'cbMovieDisplay_MovieSet.SelectedItem = "-None-"
-                        movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-                        movie.ScrapedMovie.fullmoviebody.movieset.MovieSetId = oMovies.GetMSetId(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+                        movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+                        movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
                     End If
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
                     If TabControl2.SelectedTab.Name = "TabPage9" Then
@@ -4137,7 +4137,7 @@ Public Class Form1
         ElseIf tab.ToLower = "posters" Then
             currentTabIndex = TabControl2.SelectedIndex
             gbMoviePostersAvailable.Refresh()
-            btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
+            btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.MovieSet.MovieSetId <> ""
             UpdateMissingPosterNav()
             If Pref.MovPosterTabTMDBSelect Then btn_TMDb_posters.PerformClick()
         ElseIf tab.ToLower = "change movie" Then
@@ -4246,7 +4246,7 @@ Public Class Form1
     Private Sub mov_FanartLoad()
         rbMovFanart.Checked = True
         MovFanartToggle = False
-        btnMovFanartToggle.Visible = workingMovieDetails.fullmoviebody.movieset.MovieSetId <> ""
+        btnMovFanartToggle.Visible = workingMovieDetails.fullmoviebody.MovieSet.MovieSetId <> ""
         Dim isfanartpath As String = workingMovieDetails.fileinfo.fanartpath
         Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath = "", "", workingMovieDetails.fileinfo.videotspath + "fanart.jpg")
         Dim movfanartpath As String = Utilities.DefaultFanartPath
@@ -8406,12 +8406,12 @@ Public Class Form1
                     cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                 Next
             End If
-            If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> "-None-" Then
+            If workingMovieDetails.fullmoviebody.MovieSet.MovieSetName <> "-None-" Then
                 For Each mset In Pref.moviesets
                     cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(mset), mset))
                 Next
                 For te = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                    If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.movieset.MovieSetDisplayName Then
+                    If cbMovieDisplay_MovieSet.Items(te) = workingMovieDetails.fullmoviebody.MovieSet.MovieSetDisplayName Then
                         cbMovieDisplay_MovieSet.SelectedIndex = te
                         Exit For
                     End If
@@ -9452,8 +9452,8 @@ Public Class Form1
                 'oMovie.ScrapedMovie.fullmoviebody.plot = oCachedMovie.plot
                 oMovie.ScrapedMovie.fullmoviebody.rating = oCachedMovie.rating
                 oMovie.ScrapedMovie.fullmoviebody.source = oCachedMovie.source
-                oMovie.ScrapedMovie.fullmoviebody.movieset.MovieSetName = oCachedMovie.MovieSet.MovieSetName
-                oMovie.ScrapedMovie.fullmoviebody.movieset.MovieSetId = oCachedMovie.MovieSet.MovieSetId 
+                oMovie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = oCachedMovie.MovieSet.MovieSetName
+                oMovie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oCachedMovie.MovieSet.MovieSetId 
                 oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
@@ -9894,7 +9894,7 @@ End Sub
 
         tmdb.Imdb   = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
         tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
-        tmdb.SetId  = workingMovieDetails.fullmoviebody.movieset.MovieSetId
+        tmdb.SetId  = workingMovieDetails.fullmoviebody.MovieSet.MovieSetId
 
         Try
             Dim FanartUrl As String = ""
@@ -10026,7 +10026,7 @@ End Sub
 
             tmdb.Imdb   = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
             tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
-            tmdb.SetId  = workingMovieDetails.fullmoviebody.movieset.MovieSetId
+            tmdb.SetId  = workingMovieDetails.fullmoviebody.MovieSet.MovieSetId
             
             If tmdb.Imdb = "" AndAlso tmdb.TmdbId = "" Then Exit Sub
 
@@ -12208,9 +12208,9 @@ End Sub
 
         If IsNothing(workingMovieDetails) Then Exit Sub
         If previouslySelected=Nothing Then
-            If workingMovieDetails.fullmoviebody.movieset.MovieSetName <> Nothing Then
-                If workingMovieDetails.fullmoviebody.movieset.MovieSetName.IndexOf(" / ") = -1 Then
-                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset.MovieSetDisplayName
+            If workingMovieDetails.fullmoviebody.MovieSet.MovieSetName <> Nothing Then
+                If workingMovieDetails.fullmoviebody.MovieSet.MovieSetName.IndexOf(" / ") = -1 Then
+                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.MovieSet.MovieSetDisplayName
                 End If
             End If
         Else
@@ -16841,7 +16841,7 @@ End Sub
             btnMovFanartToggle.BackColor = System.Drawing.Color.Aqua
             MovFanartClear()
             util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.movsetfanartpath, Utilities.DefaultFanartPath)
-            MovFanartDisplay(workingMovieDetails.fullmoviebody.movieset.MovieSetId)
+            MovFanartDisplay(workingMovieDetails.fullmoviebody.MovieSet.MovieSetId)
         End If
         MovFanartToggle = Not MovFanartToggle 
     End Sub
@@ -17093,7 +17093,7 @@ End Sub
                     tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
                     posterArray.AddRange(tmdb.McPosters)
                 Else
-                    tmdb.SetId = workingMovieDetails.fullmoviebody.movieset.MovieSetId
+                    tmdb.SetId = workingMovieDetails.fullmoviebody.MovieSet.MovieSetId
                     posterArray.AddRange(tmdb.McSetPosters)
                 End If
                 
@@ -17636,7 +17636,7 @@ End Sub
 #Region "Movie Set Routines"    
 
     Private Sub MovSetDgvLoad()
-        Dim MsetCache As New List(Of MovieSetDatabase)
+        Dim MsetCache As New List(Of MovieSetInfo)
         oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
         MovieSetMissingID = False
         dgvmovset.Rows.Clear()
@@ -17768,7 +17768,7 @@ End Sub
                     Exit Sub
                 End If
                 Dim CurrentTMDbId As String = ""
-                Dim MsetCache As New List(Of MovieSetDatabase)
+                Dim MsetCache As New List(Of MovieSetInfo)
                 oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                 Dim q = From x In MsetCache Where x.MovieSetName = MsetName Select x.MovieSetId
                 If q.ToString <> Nothing AndAlso q.ToString <> "Enumeration yielded no results" Then
@@ -17784,7 +17784,7 @@ End Sub
                     Application.DoEvents()
                     oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                     Dim found As Boolean = False
-                    For Each s As MovieSetDatabase In MsetCache
+                    For Each s As MovieSetInfo In MsetCache
                         If s.MovieSetName = MsetName Then
                             If  s.MovieSetId <> NewTMDBID Then
                                 If s.MovieSetId <> "" Then
@@ -17802,7 +17802,7 @@ End Sub
                     Next
                     If Not Fail Then
                         If Not found then
-                            Dim newset As New MovieSetDatabase
+                            Dim newset As New MovieSetInfo
                             newset.MovieSetName = MsetName
                             newset.MovieSetId = NewTMDBID
                             MsetCache.Add(newset)
@@ -17817,7 +17817,7 @@ End Sub
                                     Dim filepath As String = Mov.fullpathandfilename 
                                     Dim fmd As New FullMovieDetails
                                     fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
-                                    fmd.fullmoviebody.movieset.MovieSetId = NewTMDBID
+                                    fmd.fullmoviebody.MovieSet.MovieSetId = NewTMDBID
                                     Movie.SaveNFO(filepath, fmd)
                                 End If
                             Next
@@ -17864,7 +17864,7 @@ End Sub
             Application.DoEvents()
             messbox = New frmMessageBox("Getting Collection data from TMDb.", "......", "Please Wait")
             Dim found As Boolean = False
-            Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+            Dim MovSet As MovieSetInfo = GetMovSetDetails()
             Dim matchedmovies As New List(Of FullMovieDetails)
             For Each Mov As Combolist In oMovies.MovieCache
                 If Mov.MovieSet.MovieSetId = MovSet.MovieSetId Then
@@ -17881,11 +17881,11 @@ End Sub
             Dim MovCollectionList As New List(Of MovieSetsList)
             For each mset In oMovies.MovieSetDB
                 If mset.MovieSetId = MovSet.MovieSetId Then
-                    If mset.collection.Count > 0 Then
-                        For each collect In mset.collection
+                    If mset.Collection.Count > 0 Then
+                        For each collect In mset.Collection
                             Dim ac As New MovieSetsList
                             ac.title = collect.MovieTitle
-                            ac.tmdbid = collect.MovieID
+                            ac.tmdbid = collect.TmdbMovieId
                             MovCollectionList.Add(ac)
                         Next
                         Exit For
@@ -17911,9 +17911,9 @@ End Sub
                         If MovCollectionList.Count > 0 Then
                             For each Mcol In MovCollectionList
                                 Dim coll As New CollectionMovie
-                                coll.MovieID = Mcol.tmdbid
+                                coll.TmdbMovieId = Mcol.tmdbid
                                 coll.MovieTitle = Mcol.title
-                                mset.collection.Add(coll)
+                                mset.Collection.Add(coll)
                             Next
                         End If
                         Exit For
@@ -17937,7 +17937,7 @@ End Sub
                 MsgBox(message)
                 Exit Sub
             End If
-            Dim Something As String = "stupid"
+
             If Not IsNothing(messbox) Then messbox.Close()
             Dim frm As New frmMovSets
             frm.CollectionTitle = MovSet.MovieSetName
@@ -17953,7 +17953,7 @@ End Sub
 
     Private Sub tsmiMovSetGetFanart_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetFanart.Click
         Try
-            Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+            Dim MovSet As MovieSetInfo = GetMovSetDetails()
             If MovSet.MovieSetId = "" Then Exit Sub
             For f = 0 To DataGridViewMovies.RowCount - 1
                 If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
@@ -17972,7 +17972,7 @@ End Sub
 
     Private Sub tsmiMovSetGetPoster_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetPoster.Click
         Try
-            Dim MovSet As MovieSetDatabase = GetMovSetDetails()
+            Dim MovSet As MovieSetInfo = GetMovSetDetails()
             If MovSet.MovieSetId = "" Then Exit Sub
             For f = 0 To DataGridViewMovies.RowCount - 1
                 If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
@@ -17989,8 +17989,8 @@ End Sub
         End Try
     End Sub
 
-    Private Function GetMovSetDetails() As MovieSetDatabase
-        Dim t As New MovieSetDatabase 
+    Private Function GetMovSetDetails() As MovieSetInfo
+        Dim t As New MovieSetInfo 
         For each p In oMovies.MovieSetDB
             If p.MovieSetName = tsmiMovSetName.Text Then t = p
         Next
@@ -21880,7 +21880,7 @@ End Sub
                 messbox.TextBox3.Text = currentset.ToString & " of " & totalsets.ToString 
                 messbox.Refresh()
                 Dim api As New TMDb
-                api.urlcheck = False
+                'api.urlcheck = False
                 api.SetId = item
                 Dim MovCollectionList As New List(Of MovieSetsList)
 
@@ -21891,12 +21891,12 @@ End Sub
                 End Try
                 For each mset In oMovies.MovieSetDB
                     If mset.MovieSetId = item Then
-                        mset.collection.Clear()
+                        mset.Collection.Clear()
                         For each movset In MovCollectionList
                             Dim ac As New CollectionMovie
-                            ac.MovieID = movset.tmdbid
+                            ac.TmdbMovieId = movset.tmdbid
                             ac.MovieTitle = movset.title
-                            mset.collection.Add(ac)
+                            mset.Collection.Add(ac)
                         Next
                     End If
                 Next 

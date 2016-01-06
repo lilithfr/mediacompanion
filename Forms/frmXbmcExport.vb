@@ -418,7 +418,7 @@ Public Class frmXbmcExport
             End If
             
             child = thismovie.CreateElement("set")
-            child.InnerText = If(mov.fullmoviebody.movieset.MovieSetName = "-None-", "", mov.fullmoviebody.movieset.MovieSetName)
+            child.InnerText = If(mov.fullmoviebody.MovieSet.MovieSetName = "-None-", "", mov.fullmoviebody.MovieSet.MovieSetName)
             root.AppendChild(child)
 
             If mov.fullmoviebody.tag.Count <> 0 Then

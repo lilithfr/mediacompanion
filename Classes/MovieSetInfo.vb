@@ -1,11 +1,11 @@
 
-Public Class MovieSetDatabase
+Public Class MovieSetInfo
 
     Private  _movieSetName        As String = ""
     Private  _movieSetDisplayName As String = ""
 
     Property MovieSetId     As String = ""
-    Property collection     As List(Of CollectionMovie)
+    Property Collection     As List(Of CollectionMovie)
 
 
     Property MovieSetName   As String
@@ -13,11 +13,12 @@ Public Class MovieSetDatabase
             Return _movieSetName
         End Get
         Set
-            _movieSetName = Value
-            UpdateMovieSetDisplayName
+            If _movieSetName <> Value Then
+                _movieSetName = Value
+                UpdateMovieSetDisplayName
+            End If
         End Set
     End Property
-
 
     Public ReadOnly Property MovieSetDisplayName As String
         Get
@@ -27,18 +28,19 @@ Public Class MovieSetDatabase
 
 
     Sub New
-
     End Sub
 
     Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie))
         MovieSetName    = _moviesetname
         MovieSetId      = _moviesetid
-        collection      = _collection
+        Collection      = _collection
     End Sub
 
-    Sub absorb(from As MovieSetDatabase)
-        MovieSetName = From.MovieSetName
-        MovieSetId = From.MovieSetId 
+
+    Sub Assign(from As MovieSetInfo)
+        MovieSetName = from.MovieSetName
+        MovieSetId   = from.MovieSetId
+        Collection   = from.Collection
     End Sub
 
     Sub UpdateMovieSetDisplayName
@@ -48,11 +50,14 @@ Public Class MovieSetDatabase
 End Class
 
 Public Class CollectionMovie
-    Property MovieTitle As String = ""
-    Property MovieID As String = ""
 
-    Sub New
+    Property MovieTitle  As String = ""
+    Property TmdbMovieId As String = ""
 
+
+    Sub New(Optional _MovieTitle As String = "", Optional _MovieID As String = "")
+        MovieTitle   = _MovieTitle
+        TmdbMovieId  = _MovieID
     End Sub
 
 End Class

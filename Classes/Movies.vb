@@ -29,8 +29,8 @@ Public Class Movies
     Public _tmpActorDb             As New List(Of ActorDatabase)
     Private _directorDb            As New List(Of DirectorDatabase)
     Public _tmpDirectorDb          As New List(Of DirectorDatabase)
-    Private _moviesetDb            As New List(Of MovieSetDatabase)
-    Public _tmpMoviesetDb          As New List(Of MovieSetDatabase)
+    Private _moviesetDb            As New List(Of MovieSetInfo)
+    Public _tmpMoviesetDb          As New List(Of MovieSetInfo)
     Public Shared movRebuildCaches As Boolean = False
 
     Public Property Bw            As BackgroundWorker = Nothing
@@ -760,7 +760,7 @@ Public Class Movies
                 Where 
                     SetsFilter_AlsoInclude.Contains(MovieSet.MovieSetDisplayName)
             
-            Return From x In q Select x.MovieSet.MovieSetDisplayName & " (" & x.NumFilms.ToString & ")"
+            Return From x In q Select x.MovieSet.MovieSetDisplayName & " (" & x.NumFilms.ToString  & " of " & GetMovieSetCollectionCount(x.MovieSet.MovieSetDisplayName) & ")"
         End Get
     End Property    
 
@@ -787,9 +787,39 @@ Public Class Movies
                 q = From x In q Order by x.MovieSetDisplayName.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxSetsInFilter 
+            Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & " of " & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxSetsInFilter 
         End Get
     End Property    
+
+    Function GetMovieSetCollectionCount(MovieSetDisplayName As String) As String
+
+        If MovieSetDisplayName="-None-" Then
+            Return "N\A"
+        End If
+
+        Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
+
+        If IsNothing(movieSet) Then
+            Return "unknown"
+        Else
+            Return movieSet.Collection.Count
+        End If
+    End Function
+
+
+    Function FindMovieSetInfoByName(MovieSetDisplayName As String) As MovieSetInfo
+        Return (From x In MovieSetDB Where x.MovieSetDisplayName=MovieSetDisplayName Select x).FirstOrDefault
+    End Function
+
+
+    Public ReadOnly Property TmDbMovieSetIds As List(Of Integer)
+        Get
+            Dim q = (From m In MovieCache Where IsNumeric(m.MovieSet.MovieSetId) Select Convert.ToInt32(m.MovieSet.MovieSetId) ).Distinct()
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property
+    
 
     Public ReadOnly Property SetsFilter As List(Of String)
         Get
@@ -849,20 +879,20 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property MovieSetDB As List(Of MovieSetDatabase)
+    Public ReadOnly Property MovieSetDB As List(Of MovieSetInfo)
         Get
             Return _moviesetDb
         End Get
     End Property
 
-    Public Function GetMSetId(mSetName As String) As String
+    Public Function GetMovieSetIdFromName(mSetName As String) As String
         For Each mset In MovieSetDB
             If mset.MovieSetName = mSetName Then
                 Return mset.MovieSetId 
             End If
         Next
         If Not mSetName.ToLower = "-none-" Then
-            Dim newmset As New MovieSetDatabase
+            Dim newmset As New MovieSetInfo
             newmset.MovieSetName = mSetName
             MovieSetDB.Add(newmset)
         End If
@@ -1840,8 +1870,8 @@ Public Class Movies
        
             movie.LoadNFO(False)
 
-            If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
-                Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+            If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName) Then
+                Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
             End If
             Cache.Add(movie.Cache)
         Next
@@ -1897,8 +1927,8 @@ Public Class Movies
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
-                If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName) Then
-                    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.movieset.MovieSetName)
+                If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName) Then
+                    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
                 End If
                 TmpMovieCache.Add(movie.Cache)
             Catch
@@ -2046,7 +2076,7 @@ Public Class Movies
         Next
     End Sub
 
-    Sub LoadMovieSetCache(setDb As List(Of MovieSetDatabase),typeName As String,  fileName As String)
+    Sub LoadMovieSetCache(setDb As List(Of MovieSetInfo),typeName As String,  fileName As String)
         setDb.Clear()
         If Not File.Exists(fileName) Then Exit Sub
         Dim moviesetcache As New XmlDocument
@@ -2074,13 +2104,13 @@ Public Class Movies
                                         Case "movietitle"
                                             ac.MovieTitle = detail2.InnerText
                                         Case "movieid"
-                                            ac.MovieID = detail2.InnerText
+                                            ac.TmdbMovieId = detail2.InnerText
                                     End Select
                                 Next
                                 movac.Add(ac)
                         End Select
                     Next
-                    setDb.Add(New MovieSetDatabase(movieset, moviesetId, movac))
+                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac))
             End Select
         Next
     End Sub
@@ -2171,7 +2201,7 @@ Public Class Movies
         output.Close()
     End Sub
 
-    Sub SaveMovieSetCache(setDb As List(Of MovieSetDatabase), typeName As String, fileName As String)
+    Sub SaveMovieSetCache(setDb As List(Of MovieSetInfo), typeName As String, fileName As String)
         Dim doc As New XmlDocument
 
         Dim thispref As XmlNode = Nothing
@@ -2197,13 +2227,13 @@ Public Class Movies
             childchild = doc.CreateElement("id")
             childchild.InnerText = movieset.MovieSetId 
             child.AppendChild(childchild)
-            For each item In movieset.collection
+            For each item In movieset.Collection
                 childchild = doc.CreateElement("collection")
                 childchildchild = doc.createElement("movietitle")
                 childchildchild.InnerText = item.MovieTitle
                 childchild.AppendChild(childchildchild)
                 childchildchild = doc.createElement("movieid")
-                childchildchild.InnerText = item.MovieID
+                childchildchild.InnerText = item.TmdbMovieId
                 childchild.AppendChild(childchildchild)
                 child.AppendChild(childchild)
             Next
@@ -2251,7 +2281,7 @@ Public Class Movies
 
     Public Sub RebuildMoviePeopleCaches()
         
-        Dim MovSetDbTmp As New List(Of MovieSetDatabase)
+        Dim MovSetDbTmp As New List(Of MovieSetInfo)
         MovSetDbTmp.AddRange(_moviesetDb)
         _actorDB      .Clear()
         _directorDb   .Clear()
@@ -2278,11 +2308,11 @@ Public Class Movies
             For Each mset In MovSetDbTmp
                 If movie.MovieSet.MovieSetId = "" Then Exit For
                 If movie.MovieSet.MovieSetId = mset.MovieSetId Then
-                    tmp2.AddRange(mset.collection)
+                    tmp2.AddRange(mset.Collection)
                     Exit For
                 End If
             Next
-            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(New MovieSetDatabase(movie.MovieSet.MovieSetName, movie.MovieSet.MovieSetId, tmp2))
+            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(New MovieSetInfo(movie.MovieSet.MovieSetName, movie.MovieSet.MovieSetId, tmp2))
             Dim directors() As String = movie.director.Split("/")
             For Each d In directors
                 _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))

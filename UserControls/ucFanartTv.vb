@@ -89,7 +89,7 @@ Public Class ucFanartTv
             If Not MovSetToggle Then
                 MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for movie:  " & workingMovDetails.fullmoviebody.title)
             Else
-                MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for MovieSet:  " & workingMovDetails.fullmoviebody.movieset.MovieSetName)
+                MsgBox("Sorry, there are no results from Fanart.Tv" & vbCrLf & "for MovieSet:  " & workingMovDetails.fullmoviebody.MovieSet.MovieSetName)
             End If
             Return False
         End If
@@ -410,7 +410,7 @@ Public Class ucFanartTv
     End Sub
 
     Private Sub btnMovArtToggle_Click( sender As Object,  e As EventArgs) Handles btnMovArtToggle.Click
-        If workingMovDetails.fullmoviebody.movieset.MovieSetId = "" Then Exit Sub
+        If workingMovDetails.fullmoviebody.MovieSet.MovieSetId = "" Then Exit Sub
         If MovSetToggle Then
             lblftvArtMode.Text = "Displaying Movie Artwork"
             btnMovArtToggle.BackColor = System.Drawing.Color.Lime
@@ -422,7 +422,7 @@ Public Class ucFanartTv
         End If
         MovSetToggle = Not MovSetToggle
         If MovSetToggle Then
-            resetloadedart(workingMovDetails.fullmoviebody.movieset.MovieSetId, workingMovDetails.fullmoviebody.movieset.MovieSetName)
+            resetloadedart(workingMovDetails.fullmoviebody.MovieSet.MovieSetId, workingMovDetails.fullmoviebody.MovieSet.MovieSetName)
         Else
             resetloadedart()
         End If

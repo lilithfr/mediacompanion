@@ -4,7 +4,7 @@ Imports System.Linq
 
 Public Class Data_GridViewMovie
     Dim _fullpathandfilename As String
-    Dim _movieset As MovieSetDatabase
+    Dim _movieset As MovieSetInfo
     Dim _filename As String
     Dim _foldername As String
     Dim _title As String
@@ -153,7 +153,7 @@ Public Class Data_GridViewMovie
     End Property
 
 
-    Public Property movieset As MovieSetDatabase
+    Public Property movieset As MovieSetInfo
         Get
             Return _movieset
         End Get

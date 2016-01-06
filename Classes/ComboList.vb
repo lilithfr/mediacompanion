@@ -69,7 +69,7 @@ Public Class ComboList
     Property Container            As String = ""
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
-    Property MovieSet             As New MovieSetDatabase 
+    Property MovieSet             As New MovieSetInfo 
     Property stars                As String = ""
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
@@ -393,7 +393,7 @@ Public Class ComboList
         Me.Container            = From.Container
         Me.VideoMissing         = From.VideoMissing
         AssignSubtitleLang(From.SubLang)
-        Me.MovieSet.Absorb(From.MovieSet)
+        Me.MovieSet.Assign(From.MovieSet)
         Me.stars                = From.stars
         Me.Actorlist            = From.Actorlist 
         Me.DirectorList         = From.DirectorList 

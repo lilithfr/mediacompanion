@@ -3,7 +3,7 @@ Public Structure str_BasicMovieNFO
     Dim title           As String
     Dim originaltitle   As String
     Dim sortorder       As String
-    Dim movieset        As MovieSetDatabase 
+    Dim MovieSet        As MovieSetInfo 
     Dim source          As String
     Dim year            As String
     Dim rating          As String
@@ -38,7 +38,7 @@ Public Structure str_BasicMovieNFO
         title           = ""
         originaltitle   = ""
         sortorder       = ""
-        movieset        = New MovieSetDatabase 
+        MovieSet        = New MovieSetInfo 
         source          = ""
         year            = ""
         rating          = ""

@@ -16,16 +16,59 @@ Public Class TMDb
         HD=1280
     End Enum
 
-    #Region "Read-write Properties"
+    #Region "Private Properties"
 
     Private _languages       As List(Of String) = New List(Of String)
     Private _lookupLanguages As List(Of String) = New List(Of String)
+    Private _setId           As Integer
+    Private _tmdbId          As String
+    Private _imdb            As String
 
-    Public Property Imdb   As String
+    #End Region
+
+    #Region "Read-write Properties"
+
+
+    Public Property Imdb As String
+        Get
+            Return _imdb 
+        End Get
+        Set(ByVal value As String)
+            If _imdb <> value Then
+                _imdb = value
+                _fetched = False
+            End If
+        End Set
+    End Property
+
+
     Public Property TmdbId As String
-    Public Property SetId  As Integer
+        Get
+            Return _tmdbId 
+        End Get
+        Set(ByVal value As String)
+            If _tmdbId <> value Then
+                _tmdbId = value
+                _fetched = False
+            End If
+        End Set
+    End Property
 
-    Public Property urlcheck As Boolean = True
+
+    Public Property SetId As Integer
+        Get
+            Return _setId 
+        End Get
+        Set(ByVal value As Integer)
+            If _setId <> value Then
+                _setId = value
+                _setFetched = False
+            End If
+        End Set
+    End Property
+
+
+    'Public Property urlcheck As Boolean = True
 
     Public Property Languages As List(Of String)
         Get
@@ -52,7 +95,6 @@ Public Class TMDb
     Public Property ValidKeyWords  As WatTmdb.V3.TmdbMovieKeywords
     Public Property MaxGenres      As Integer = Media_Companion.Pref.maxmoviegenre
 
-
     #End Region 'Read-write properties
 
     #Region "Read-only Properties"
@@ -60,7 +102,8 @@ Public Class TMDb
     Private _api                    As WatTmdb.V3.Tmdb
     Private _config_images_base_url As String
     Private _movie                  As New WatTmdb.V3.TmdbMovie
-    Private _collection             As New WatTmdb.V3.TmdbCollection 
+    Private _collection             As New WatTmdb.V3.TmdbCollection
+
     Private _movieImages            As WatTmdb.V3.TmdbMovieImages
     Private _collectionImages       As WatTmdb.V3.TmdbCollectionImages 
     Private _trailers               As WatTmdb.V3.TmdbMovieTrailers
@@ -186,6 +229,38 @@ Public Class TMDb
             Return _mc_collection
         End Get 
     End Property
+
+
+    Public ReadOnly Property TmdbCollection As WatTmdb.V3.TmdbCollection
+        Get
+            FetchSet
+            Return _collection
+        End Get
+    End Property
+
+
+    Public ReadOnly Property MovieSet As MovieSetInfo
+        Get
+            FetchSet
+
+            If IsNothing(_collection) Then
+                Return Nothing
+            End If
+
+            Return New MovieSetInfo(_collection.name, _collection.id, CollectionMovies )
+        End Get
+    End Property
+
+
+    Public ReadOnly Property CollectionMovies As List(Of CollectionMovie)
+        Get
+            Dim q = From m In _collection.Parts Select New CollectionMovie( m.title, m.id )
+
+            Return q.ToList
+        End Get
+
+    End Property
+
 
     Public ReadOnly Property releasedate As String
         Get
@@ -424,11 +499,11 @@ Public Class TMDb
 
     #End Region  'Read-only properties
 
-    Sub new( Optional imdb As String=Nothing )
+    Sub new( Optional __imdb As String=Nothing )
         _api         = New WatTmdb.V3.Tmdb(Key)
         AssignConfig_images_base_url
         Languages    = LanguageCodes
-        _imdb        = imdb
+        Imdb         = __imdb
     End Sub
 
     Public Shared Sub DeleteConfigFile
@@ -506,14 +581,25 @@ Public Class TMDb
     End Function
 
     Function GetMovieByIMDB As Boolean
-        _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
+        _movie  = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
+        _tmdbId = _movie.id.ToString
+        SafeAssignSetId
         Return Not IsNothing(_movie)
     End Function
 
     Function GetMovieByTmdbId As Boolean
-        _movie = _api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
+        _movie  = _api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
+        _imdb   = _movie.imdb_id
+        SafeAssignSetId
         Return Not IsNothing(_movie)
     End Function
+
+    Private Sub SafeAssignSetId
+        If Not IsNothing(_movie.belongs_to_collection) Then
+            SetId = _movie.belongs_to_collection.id
+        End If
+    End Sub
+
 
     Function GetMovieImages As Boolean
         _movieImages = _api.GetMovieImages  (_movie.id)
@@ -546,9 +632,10 @@ Public Class TMDb
         Try
             If _movie.id = 0 And Not _fetched Then
 
-                If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
-                    Throw New Exception(TMDB_EXC_MSG)
-                End If
+                'Is this really needed when it will get thrown anyway?
+                'If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
+                '    Throw New Exception(TMDB_EXC_MSG)
+                'End If
 
                 _fetched = True
 
@@ -563,11 +650,11 @@ Public Class TMDb
                     If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
                 Next
 
-                'Set TMDB ID from scraped data
-                Try
-                If _movie.id > 0 AndAlso TmdbId = "" Then TmdbId = _movie.id.ToString
-                Catch
-                End Try
+                ''Set TMDB ID from scraped data
+                'Try
+                '    If _movie.id > 0 AndAlso TmdbId = "" Then _tmdbId = _movie.id.ToString
+                'Catch
+                'End Try
 
                 'If movie isn't found -> Create empty child objects
                 If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
@@ -591,17 +678,15 @@ Public Class TMDb
     End Sub
 
 
-
-
     Private Sub FetchSet
         Try
             If SetId>0 And Not _setFetched Then
 
                 _setFetched = True
 
-                If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
-                    Throw New Exception(TMDB_EXC_MSG)
-                End If
+                'If urlcheck AndAlso Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
+                '    Throw New Exception(TMDB_EXC_MSG)
+                'End If
 
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
 

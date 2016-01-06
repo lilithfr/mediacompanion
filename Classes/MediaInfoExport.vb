@@ -519,7 +519,7 @@ Public Class MediaInfoExport
                                         Case "year"
                                             strNFOprop = newplotdetails.fullmoviebody.year
                                         Case "set"
-                                            strNFOprop = If(newplotdetails.fullmoviebody.movieset.MovieSetName = "-None-", "", newplotdetails.fullmoviebody.movieset.MovieSetName)
+                                            strNFOprop = If(newplotdetails.fullmoviebody.MovieSet.MovieSetName = "-None-", "", newplotdetails.fullmoviebody.MovieSet.MovieSetName)
                                         Case "createdate", "premiered"
                                             Dim newDate, localDatePattern As String
                                             If tokenInstr(1) = "createdate" Then
