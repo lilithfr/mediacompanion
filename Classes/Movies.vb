@@ -768,7 +768,7 @@ Public Class Movies
 
     Sub SetsFilter_AddIfMissing(name As String)
 
-        If Not SetsFilter.Contains(name) Then
+        If Not SetsFilter.Any(Function(x) x.StartsWith(name)) Then
             SetsFilter_AlsoInclude.Add(name)
         End If
     End Sub

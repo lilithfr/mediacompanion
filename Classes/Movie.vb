@@ -429,6 +429,17 @@ Public Class Movie
         End Get
     End Property
 
+    ReadOnly Property MovieSetByName As MovieSetInfo 
+        Get
+            Try
+                Dim res = _parent.MovieSetDB.Find(function(c) c.MovieSetName=_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+                Return res
+            Catch
+                Return Nothing
+            End Try
+        End Get
+    End Property
+
     Public ReadOnly Property McMovieSetInfo As MovieSetInfo
         Get
             If IsNothing(tmdb) Then 
@@ -2373,7 +2384,12 @@ Public Class Movie
         If _scrapedMovie.fileinfo.movsetposterpath <> "" Then
             Dim _api As New TMDb
 
+            'If _scrapedMovie.fullmoviebody.MovieSet.MovieSetId="" And Not IsNothing(MovieSetByName) Then
+            '    _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = MovieSetByName.MovieSetId
+            'End If
+
             _api.SetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId
+
 
             _scrapedMovie.fullmoviebody.MovieSet = _api.MovieSet
 
@@ -3119,7 +3135,7 @@ Public Class Movie
         If NeedTMDb(rl) OrElse (Pref.movies_useXBMC_Scraper AndAlso rl.premiered) Then
 
             IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
-            tmdb.Imdb = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, "")
+            'tmdb.Imdb = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, "")
             tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
             If rl.trailer Or rl.Download_Trailer Then
                 If TrailerExists Then
@@ -3183,27 +3199,34 @@ Public Class Movie
             If rl.ArtFromFanartTv Then DownloadFromFanartTv(True)
             If Cancelled() Then Exit Sub
 
+            If _scrapedMovie.fullmoviebody.MovieSet.MovieSetId="" And rl.missingmovsetart Then
+                rl.tmdb_set_name = True
+            End If
+
             If rl.tmdb_set_name OrElse rl.tmdb_set_id Then
                 Try
-                    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+                    '_rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                        If rl.tmdb_set_name Then
-                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
-                        Else
-                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName 
-                        End If
-                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id
-                    Else
-                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
-                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId 
+                        'If rl.tmdb_set_name Then
+                        '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                        'Else
+                        '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName 
+                        'End If
+                        '_rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id
+
+                        _scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
+
+                    'Else
+                    '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
+                    '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId 
                     End If
-                    UpdateProperty(_rescrapedMovie.fullmoviebody.MovieSet, _scrapedMovie.fullmoviebody.MovieSet, , rl.EmptyMainTags)
+'                   UpdateProperty(_rescrapedMovie.fullmoviebody.MovieSet, _scrapedMovie.fullmoviebody.MovieSet, , rl.EmptyMainTags)                   
                 Catch
                 End Try
             End If
             If Cancelled() Then Exit Sub
 
-            If rl.missingmovsetart AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetId <> "" Then DoDownloadMovieSetArtwork()
+            If rl.missingmovsetart And _scrapedMovie.fullmoviebody.MovieSet.MovieSetId<>"" Then DoDownloadMovieSetArtwork()
             If Cancelled() Then Exit Sub
 
             If rl.actors Then
