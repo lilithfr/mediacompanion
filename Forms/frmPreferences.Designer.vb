@@ -3135,7 +3135,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4353,7 +4353,7 @@ Partial Class frmPreferences
         '
         Me.cbTvAutoScreenShot.AutoSize = true
         Me.cbTvAutoScreenShot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(412, 455)
+        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(412, 458)
         Me.cbTvAutoScreenShot.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvAutoScreenShot.Name = "cbTvAutoScreenShot"
         Me.cbTvAutoScreenShot.Size = New System.Drawing.Size(296, 19)
@@ -4376,12 +4376,15 @@ Partial Class frmPreferences
         'Label139
         '
         Me.Label139.AutoSize = true
-        Me.Label139.Location = New System.Drawing.Point(409, 349)
+        Me.Label139.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label139.Location = New System.Drawing.Point(417, 368)
         Me.Label139.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label139.Name = "Label139"
-        Me.Label139.Size = New System.Drawing.Size(286, 60)
+        Me.Label139.Size = New System.Drawing.Size(245, 52)
         Me.Label139.TabIndex = 36
-        Me.Label139.Text = resources.GetString("Label139.Text")
+        Me.Label139.Text = "Selecting 'Quick Add' will speed up the scraping of"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"New Series, by not downloadi"& _ 
+    "ng Artwork."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"All Series art can be scraped by using the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"TV context menu item 'D"& _ 
+    "ownload missing art'."
         '
         'GroupBox20
         '
@@ -4402,7 +4405,7 @@ Partial Class frmPreferences
         Me.GroupBox20.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox20.Name = "GroupBox20"
         Me.GroupBox20.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox20.Size = New System.Drawing.Size(306, 325)
+        Me.GroupBox20.Size = New System.Drawing.Size(306, 320)
         Me.GroupBox20.TabIndex = 35
         Me.GroupBox20.TabStop = false
         Me.GroupBox20.Text = "TV Show Selector / Auto Scraper Default settings"
@@ -4431,7 +4434,7 @@ Partial Class frmPreferences
         'cbTvFanartTvFirst
         '
         Me.cbTvFanartTvFirst.AutoSize = true
-        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(190, 124)
+        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(189, 119)
         Me.cbTvFanartTvFirst.Name = "cbTvFanartTvFirst"
         Me.cbTvFanartTvFirst.Size = New System.Drawing.Size(110, 34)
         Me.cbTvFanartTvFirst.TabIndex = 73
@@ -4441,7 +4444,7 @@ Partial Class frmPreferences
         'cbTvDlFanartTvArt
         '
         Me.cbTvDlFanartTvArt.AutoSize = true
-        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 124)
+        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 127)
         Me.cbTvDlFanartTvArt.Name = "cbTvDlFanartTvArt"
         Me.cbTvDlFanartTvArt.Size = New System.Drawing.Size(155, 19)
         Me.cbTvDlFanartTvArt.TabIndex = 72
@@ -4451,7 +4454,7 @@ Partial Class frmPreferences
         'cbSeasonFolderjpg
         '
         Me.cbSeasonFolderjpg.AutoSize = true
-        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(10, 286)
+        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(10, 276)
         Me.cbSeasonFolderjpg.Name = "cbSeasonFolderjpg"
         Me.cbSeasonFolderjpg.Size = New System.Drawing.Size(237, 34)
         Me.cbSeasonFolderjpg.TabIndex = 71
@@ -4461,7 +4464,7 @@ Partial Class frmPreferences
         'cb_TvFolderJpg
         '
         Me.cb_TvFolderJpg.AutoSize = true
-        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(10, 261)
+        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(10, 256)
         Me.cb_TvFolderJpg.Name = "cb_TvFolderJpg"
         Me.cb_TvFolderJpg.Size = New System.Drawing.Size(221, 19)
         Me.cb_TvFolderJpg.TabIndex = 70
@@ -4483,7 +4486,7 @@ Partial Class frmPreferences
         Me.GroupBox18.Controls.Add(Me.posterbtn)
         Me.GroupBox18.Controls.Add(Me.bannerbtn)
         Me.GroupBox18.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox18.Location = New System.Drawing.Point(10, 210)
+        Me.GroupBox18.Location = New System.Drawing.Point(10, 205)
         Me.GroupBox18.Name = "GroupBox18"
         Me.GroupBox18.Size = New System.Drawing.Size(290, 45)
         Me.GroupBox18.TabIndex = 68
@@ -4557,7 +4560,7 @@ Partial Class frmPreferences
         Me.GroupBox19.Controls.Add(Me.RadioButton40)
         Me.GroupBox19.Controls.Add(Me.RadioButton41)
         Me.GroupBox19.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox19.Location = New System.Drawing.Point(10, 158)
+        Me.GroupBox19.Location = New System.Drawing.Point(10, 153)
         Me.GroupBox19.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox19.Name = "GroupBox19"
         Me.GroupBox19.Padding = New System.Windows.Forms.Padding(4)
@@ -4609,7 +4612,7 @@ Partial Class frmPreferences
         '
         Me.cbTvQuickAddShow.AutoSize = true
         Me.cbTvQuickAddShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 418)
+        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 348)
         Me.cbTvQuickAddShow.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvQuickAddShow.Name = "cbTvQuickAddShow"
         Me.cbTvQuickAddShow.Size = New System.Drawing.Size(181, 19)
