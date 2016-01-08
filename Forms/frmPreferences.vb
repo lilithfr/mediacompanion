@@ -2089,113 +2089,103 @@ End Sub
 
 'Movie Filters settings
     Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub nudMaxActorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxActorsInFilter.ValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.MaxActorsInFilter = nudMaxActorsInFilter.Value
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MaxActorsInFilter = nudMaxActorsInFilter.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub cbMovieFilters_Actors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Actors_Order.SelectedValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub nudDirectorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudDirectorsFilterMinFilms.ValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.DirectorsFilterMinFilms = nudDirectorsFilterMinFilms.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub nudMaxDirectorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxDirectorsInFilter.ValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub cbMovieFilters_Directors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Directors_Order.SelectedValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MovieFilters_Directors_Order = cbMovieFilters_Directors_Order.SelectedIndex
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub nudSetsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudSetsFilterMinFilms.ValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub nudMaxSetsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxSetsInFilter.ValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.MaxSetsInFilter = nudMaxSetsInFilter.Value
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MaxSetsInFilter = nudMaxSetsInFilter.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub cbMovieFilters_Sets_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Sets_Order.SelectedValueChanged
-        If PrefsLoad Then
-            Try
-                Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) Handles cbDisableNotMatchingRenamePattern.CheckedChanged
-        If PrefsLoad Then
-            Try
-                Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
-                Changes = True
-            Catch ex As Exception
-                ExceptionHandler.LogError(ex)
-            End Try
-        End If
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 

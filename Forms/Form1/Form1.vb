@@ -17771,7 +17771,7 @@ End Sub
                 Dim MsetCache As New List(Of MovieSetInfo)
                 oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                 Dim q = From x In MsetCache Where x.MovieSetName = MsetName Select x.MovieSetId
-                If q.ToString <> Nothing AndAlso q.ToString <> "Enumeration yielded no results" Then
+                If q.Count > 0 Then  'AndAlso q.ToString <> Nothing AndAlso q.ToString <> "Enumeration yielded no results"
                     CurrentTMDbId = q(0).ToString 
                 End If
                 Dim iboxmsg As String = "Enter TMDB Set ID:"
@@ -18681,52 +18681,14 @@ End Sub
     End Sub
 
     Private Sub tb_Sh_Ep_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Enter
-        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        'If Panel9.Visible = False Then
-        '    tb_Sh_Ep_Title.Text = WorkingTvShow.Title.Value
-        '    If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 Then
-        '        tb_Sh_Ep_Title.Text = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
-        '    End If
-        'Else
-        '    tb_Sh_Ep_Title.Text = WorkingEpisode.Title.Value
-        'End If
+        If Panel9.Visible Then
+            tb_Sh_Ep_Title.Text = ep_SelectedCurrently().Title.Value
+        Else
+            tb_Sh_Ep_Title.Text = tv_ShowSelectedCurrently().Title.Value
+        End If
     End Sub
-
-    Private Sub tb_Sh_Ep_Title_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Leave
-        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-
-        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        'On Error Resume Next
-        'If Panel9.Visible = False Then
-        '    '-------------- Aqui
-        '    'If Pref.ignorearticle = True Then
-        '    '    If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
-        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
-        '    '    End If
-        '    'End If
-        '    'If Pref.ignoreAarticle Then
-        '    '    If TextBox_Title.Text.ToLower.IndexOf("a ") = 0 Then
-        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(2, TextBox_Title.Text.Length - 2) & ", A"
-        '    '    End If
-        '    'End If
-        '    'If Pref.ignoreAn Then
-        '    '    If TextBox_Title.Text.ToLower.IndexOf("an ") = 0 Then
-        '    '        TextBox_Title.Text = TextBox_Title.Text.Substring(3, TextBox_Title.Text.Length - 3) & ", An"
-        '    '    End If
-        '    'End If
-        '    WorkingTvShow.Title.Value = Pref.RemoveIgnoredArticles(tb_Sh_Ep_Title.Text)
-        'Else
-        '    WorkingEpisode.Title.Value = tb_Sh_Ep_Title.Text
-        '    Dim trueseason As String = WorkingEpisode.Season.Value
-        '    Dim trueepisode As String = WorkingEpisode.Episode.Value
-        '    If trueseason.Length = 1 Then trueseason = "0" & trueseason
-        '    If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-        '    tb_Sh_Ep_Title.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
-        'End If
-    End Sub
-
-    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click  'save button
+    
+    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click
         Try
             Dim Show As Media_Companion.TvShow = Nothing
             Dim Season As Media_Companion.TvSeason = Nothing
@@ -18784,7 +18746,7 @@ End Sub
                 If TmpTitle <> Show.Title.Value Then
                     Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
                     If TryTitle = MsgBoxResult.No Then
-                        tb_Sh_Ep_Title.Text = Pref.RemoveIgnoredArticles(Show.Title.Value)
+                        tb_Sh_Ep_Title.Text = Show.Title.Value  'Pref.RemoveIgnoredArticles(Show.Title.Value)
                         Exit Sub
                     End If
                     Show.Title.Value = TmpTitle
@@ -18815,6 +18777,12 @@ End Sub
                 episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
                 For Each ep In episodelist
                     If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
+                        If tb_Sh_Ep_Title.Text.ToLower <> ep.Title.Value Then
+                            Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Episode's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
+                            If TryTitle = MsgBoxResult.Yes Then
+                                ep.Title.Value = tb_Sh_Ep_Title.Text
+                            End If
+                        End If
                         ep.Plot.Value = tb_EpPlot.Text
                         ep.Aired.Value = tb_EpAired.Text
                         ep.Rating.Value = tb_EpRating.Text
@@ -18830,12 +18798,10 @@ End Sub
                 WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
                 ep_Load(Episode.EpisodeNode.Parent.Tag, Episode, True)
             End If
-
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
-    End Sub
+    End Sub          'save button
 
     Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
         Try

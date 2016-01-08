@@ -747,6 +747,7 @@ Public Class TMDb
     End Sub
 
     Private Sub FixUnassigned_iso_639_1( images )
+        If IsNothing(images) Then Exit Sub
         For Each item In images
             If IsNothing(item.iso_639_1) then
                 item.iso_639_1 = "?"
@@ -764,6 +765,7 @@ Public Class TMDb
 
 
     Private Sub AssignValidSetBackDrops
+        If IsNothing(_collectionImages.backdrops) Then Exit Sub
         Dim q = From b In _collectionImages.backdrops Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.height Descending
                                                                                                                          
         For each item In q
@@ -782,6 +784,7 @@ Public Class TMDb
 
 
     Private Sub AssignValidSetPosters
+        If IsNothing(_collectionImages.posters) Then Exit Sub
         Dim q = From b In _collectionImages.posters Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.Height Descending
 
         For each item In q
@@ -830,6 +833,7 @@ Public Class TMDb
     End Sub
 
     Private Sub AssignMcCollections
+        If IsNothing(_collection.parts) Then Exit Sub
         For each item In _collection.parts
             Dim tmpitem As New MovieSetsList
             tmpitem.title = item.title

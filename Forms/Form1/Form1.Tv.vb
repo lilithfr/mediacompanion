@@ -2842,7 +2842,7 @@ Partial Public Class Form1
     End Function
 
     Public Function tv_ShowSelectedCurrently() As Media_Companion.TvShow
-        TvTreeview.Focus()
+        'TvTreeview.Focus()
         If TvTreeview.SelectedNode Is Nothing Then
             If TvTreeview.Nodes.Count = 0 Then Return Nothing
             TvTreeview.SelectedNode = TvTreeview.TopNode
