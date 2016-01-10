@@ -20,7 +20,7 @@ Public Class TMDb
 
     Private _languages       As List(Of String) = New List(Of String)
     Private _lookupLanguages As List(Of String) = New List(Of String)
-    Private _setId           As Integer
+    Private _setId           As String
     Private _tmdbId          As String
     Private _imdb            As String
 
@@ -55,11 +55,11 @@ Public Class TMDb
     End Property
 
 
-    Public Property SetId As Integer
+    Public Property SetId As String
         Get
             Return _setId 
         End Get
-        Set(ByVal value As Integer)
+        Set(ByVal value As String)
             If _setId <> value Then
                 _setId = value
                 _setFetched = False
@@ -600,7 +600,7 @@ Public Class TMDb
 
     Private Sub SafeAssignSetId
         If Not IsNothing(_movie.belongs_to_collection) Then
-            SetId = _movie.belongs_to_collection.id
+            SetId = _movie.belongs_to_collection.id.ToString
         End If
     End Sub
 
@@ -611,7 +611,7 @@ Public Class TMDb
     End Function
 
     Function GetMovieCollectionImages As Boolean
-        _collectionImages = _api.GetCollectionImages(SetId)  
+        _collectionImages = _api.GetCollectionImages(ToInt(SetId))  
         Return Not IsNothing(_collectionImages)
     End Function
 
@@ -626,7 +626,7 @@ Public Class TMDb
     End Function
 
     Function GetMoviesInCollection As Boolean
-        _collection = _api.GetCollectionInfo(SetId, _lookupLanguages.Item(0))
+        _collection = _api.GetCollectionInfo(ToInt(SetId), _lookupLanguages.Item(0))
         Return Not IsNothing(_collection)
     End Function
 
@@ -684,7 +684,7 @@ Public Class TMDb
 
     Private Sub FetchSet
         Try
-            If SetId>0 And Not _setFetched Then
+            If SetId <> "" And Not _setFetched Then
 
                 _setFetched = True
 
