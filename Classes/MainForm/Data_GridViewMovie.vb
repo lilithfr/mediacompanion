@@ -566,6 +566,12 @@ Public Class Data_GridViewMovie
             Return outline.ToString.Trim=""
         End Get
     End Property  
+    
+    Public ReadOnly Property PlotEqualsOutline As Boolean
+        Get
+            Return plot.ToString.Trim = outline.ToString.Trim
+        End Get
+    End Property  
 
     Public ReadOnly Property MissingTagline As Boolean
         Get

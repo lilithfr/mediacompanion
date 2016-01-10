@@ -265,8 +265,13 @@ Public Class ComboList
         Get
             Return plot.ToString.Trim="" Or plot.ToString.Trim="scraper error"
         End Get
-    End Property  
+    End Property
 
+    Public ReadOnly Property PlotEqualsOutline As Boolean
+        Get
+            Return plot.ToString.Trim = outline.trim
+        End Get
+    End Property
 
     Public ReadOnly Property IncompleteMovieSet As Boolean
         Get

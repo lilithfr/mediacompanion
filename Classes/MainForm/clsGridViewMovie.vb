@@ -250,6 +250,7 @@ Public Class clsGridViewMovie
                 Case "Missing Tagline"             : b = From f In b Where f.MissingTagline
                 Case "Missing Genre"               : b = From f In b Where f.MissingGenre
                 Case "Missing Outline"             : b = From f In b Where f.MissingOutline
+                Case "Plot same as Outline"        : b = From f In b Where f.PlotEqualsOutline
                 Case "Missing Rating"              : b = From f In b Where f.MissingRating
                 Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
                 Case "Missing Premier"             : b = From f In b Where f.MissingPremier

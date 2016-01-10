@@ -311,6 +311,7 @@ Public Class Movies
             lst.Add( MissingCertificate       )
             lst.Add( MissingPlot              )
             lst.Add( MissingOutline           )
+            lst.Add( PlotEqualsOutline        )
             lst.Add( OutlineContainsHtml      )
             lst.Add( MissingPremier           )
             lst.Add( MissingTagline           )
@@ -477,6 +478,12 @@ Public Class Movies
     Public ReadOnly Property MissingOutline As String
         Get
             Return "Missing Outline (" & (From x In MovieCache Where x.MissingOutline).Count & ")" 
+        End Get
+    End Property
+    
+    Public ReadOnly Property PlotEqualsOutline As String
+        Get
+            Return "Plot same as Outline (" & (From x In MovieCache Where x.PlotEqualsOutline).Count & ")" 
         End Get
     End Property
 
