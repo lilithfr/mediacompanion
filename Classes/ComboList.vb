@@ -57,6 +57,7 @@ Public Class ComboList
     Property plot                 As String = ""
     Property source               As String = ""
     Property director             As String = ""
+    Property credits              As String = ""
     Property Votes                As Integer= 0
     Property Resolution           As Integer= -1
     Property VideoCodec           As String = ""
@@ -168,7 +169,13 @@ Public Class ComboList
         Get
             Return rating=0     '.ToString.Trim=""
         End Get
-    End Property  
+    End Property
+    
+    Public ReadOnly Property MissingPremier As Boolean
+        Get
+            Return Premiered = ""     '.ToString.Trim=""
+        End Get
+    End Property 
 
     Public ReadOnly Property MissingCertificate As Boolean
         Get
@@ -215,6 +222,24 @@ Public Class ComboList
     Public ReadOnly Property MissingDirector As Boolean
         Get
             Return director = ""
+        End Get
+    End Property
+    
+    Public ReadOnly Property MissingCredits As Boolean
+        Get
+            Return credits = ""
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingStudios As Boolean
+        Get
+            Return studios = ""
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingCountry As Boolean
+        Get
+            Return countries = ""
         End Get
     End Property
 
@@ -401,7 +426,8 @@ Public Class ComboList
         Me.missingdata1         = From.missingdata1       
         Me.plot                 = From.plot               
         Me.source               = From.source
-        Me.director             = From.director     
+        Me.director             = From.director
+        Me.credits              = From.credits     
         Me.Votes                = From.Votes              
         Me.Resolution           = From.Resolution
         Me.VideoCodec           = From.VideoCodec

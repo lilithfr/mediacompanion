@@ -306,31 +306,33 @@ Public Class Movies
             lst.Add( Unwatched                )
             lst.Add( ScrapeError              )
             lst.Add( Duplicates               )
-            If Not Pref.DisableNotMatchingRenamePattern Then
-                lst.Add( NotMatchingRenamePattern )
-            End If
-            lst.Add( OutlineContainsHtml      )
+            If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
             lst.Add( IncompleteMovieSetInfo   )
             lst.Add( MissingCertificate       )
-            lst.Add( MissingFanart            )
-            lst.Add( MissingGenre             )
-            lst.Add( MissingLocalActors       )
-            lst.Add( MissingOutline           )
-            lst.Add( MissingTagline           )
             lst.Add( MissingPlot              )
+            lst.Add( MissingOutline           )
+            lst.Add( OutlineContainsHtml      )
+            lst.Add( MissingPremier           )
+            lst.Add( MissingTagline           )
+            lst.Add( MissingRating            )
+            lst.Add( MissingVotes             )
+            lst.Add( MissingGenre             )
+            lst.Add( MissingStars             )
+            lst.Add( MissingDirector          )
+            lst.Add( MissingCredits           )
+            lst.Add( MissingStudios           )
+            lst.Add( MissingCountry           )
+            lst.Add( MissingRuntime           )
+            lst.Add( MissingYear              )
+            lst.Add( MissingFanart            )
             lst.Add( MissingPoster            )
             lst.Add( PreFrodoPosterOnly       )
             lst.Add( FrodoPosterOnly          )
             lst.Add( FrodoAndPreFrodoPosters  )
-            lst.Add( MissingRating            )
-            lst.Add( MissingStars             )
-            lst.Add( MissingRuntime           )
+            lst.Add( MissingLocalActors       )
             lst.Add( MissingTrailer           )
-            lst.Add( MissingVotes             )
-            lst.Add( MissingYear              )
             lst.Add( MissingIMDBId            )
             lst.Add( MissingSource            )
-            lst.Add( MissingDirector          )
             If Pref.ShowExtraMovieFilters Then
                 lst.Add( "Imdb in folder name ("     &    ImdbInFolderName & ")")
                 lst.Add( "Imdb not in folder name (" & NotImdbInFolderName & ")")
@@ -460,6 +462,12 @@ Public Class Movies
         End Get
     End Property  
 
+    Public ReadOnly Property MissingPremier As String
+        Get
+            Return "Missing Premier (" & (From x In MovieCache Where x.MissingPremier).Count & ")" 
+        End Get
+    End Property
+
     Public ReadOnly Property MissingGenre As String
         Get
             Return "Missing Genre (" & (From x In MovieCache Where x.MissingGenre).Count & ")" 
@@ -505,6 +513,24 @@ Public Class Movies
     Public ReadOnly Property MissingDirector As String
         Get
             Return "Missing Director (" & (From x In MovieCache Where x.MissingDirector).Count & ")"
+        End Get
+    End Property
+    
+    Public ReadOnly Property MissingCredits As String
+        Get
+            Return "Missing Credits (" & (From x In MovieCache Where x.MissingCredits).Count & ")"
+        End Get
+    End Property
+    
+    Public ReadOnly Property MissingStudios As String
+        Get
+            Return "Missing Studios (" & (From x In MovieCache Where x.MissingStudios).Count & ")"
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingCountry As String
+        Get
+            Return "Missing Country (" & (From x In MovieCache Where x.MissingCountry).Count & ")"
         End Get
     End Property
 
@@ -1407,6 +1433,7 @@ Public Class Movies
                                 Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
                                 Case "source"               : newmovie.source = detail.InnerText
                                 Case "director"             : newmovie.director = detail.InnerText
+                                Case "credits"              : newmovie.credits = detail.InnerText
                                 Case "set"                  : newmovie.MovieSet.MovieSetName = detail.InnerText
                                 Case "setid"                : newmovie.MovieSet.MovieSetId = detail.InnerText
                                 Case "sortorder"            : newmovie.sortorder = detail.InnerText
@@ -1530,6 +1557,7 @@ Public Class Movies
             childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
             childchild = doc.CreateElement("source") :  : childchild.InnerText = If(movie.source = Nothing, "", movie.source) : child.AppendChild(childchild)
             childchild = doc.CreateElement("director") : childchild.InnerText = movie.director  : child.AppendChild(childchild)
+            childchild = doc.CreateElement("credits") : childchild.InnerText = movie.credits  : child.AppendChild(childchild)
 
             'If movie.MovieSet.MovieSetName <> Nothing Then
             If Not String.IsNullOrEmpty(movie.MovieSet.MovieSetName) AndAlso movie.MovieSet.MovieSetName <> "-None-" Then

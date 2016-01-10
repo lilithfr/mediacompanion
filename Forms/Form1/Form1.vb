@@ -9457,6 +9457,8 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
                 oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
+                oMovie.ScrapedMovie.fullmoviebody.credits = oCachedMovie.credits 
+
                 Dim checkmpaa = oCachedMovie.Certificate 
                 'If Not Pref.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
                 '    checkmpaa = "Rated " & checkmpaa

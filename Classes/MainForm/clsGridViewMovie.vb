@@ -252,6 +252,7 @@ Public Class clsGridViewMovie
                 Case "Missing Outline"             : b = From f In b Where f.MissingOutline
                 Case "Missing Rating"              : b = From f In b Where f.MissingRating
                 Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
+                Case "Missing Premier"             : b = From f In b Where f.MissingPremier
                 Case "Missing Stars"               : b = From f In b Where f.MissingStars 
                 Case "Missing Votes"               : b = From f In b Where f.MissingVotes
                 Case "Missing Year"                : b = From f In b Where f.MissingYear
@@ -259,6 +260,9 @@ Public Class clsGridViewMovie
                 Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
                 Case "Missing Source"              : b = From f In b Where f.MissingSource
                 Case "Missing Director"            : b = From f In b Where f.MissingDirector
+                Case "Missing Credit"              : b = From f In b Where f.MissingCredits
+                Case "Missing Studios"             : b = From f In b Where f.MissingStudios
+                Case "Missing Country"             : b = From f In b Where f.MissingCountry
                 Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
                 Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
                 Case "Different titles"            : b = b.Where( Function(x) Form1.oMovies.Xbmc_DifferentTitles.Contains(x.MoviePathAndFileName) )

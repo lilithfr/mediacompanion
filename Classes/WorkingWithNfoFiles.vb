@@ -2181,6 +2181,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.MovieSet = New MovieSetInfo 
                     newmovie.source = ""
                     newmovie.director = ""
+                    newmovie.credits = ""
                     newmovie.originaltitle = newmovie.title
                     newmovie.outline = ""
                     newmovie.tagline = ""
@@ -2231,7 +2232,9 @@ Public Class WorkingWithNfoFiles
                             Case "source"
                                 newmovie.source = thisresult.InnerText
                             Case "diretor"
-                                newmovie.director = thisresult.InnerText 
+                                newmovie.director = thisresult.InnerText
+                            Case "credits"
+                                newmovie.credits = thisresult.InnerText 
                             Case "year"
                                 Dim ayear As Integer = thisresult.InnerText.ToInt
                                 If ayear = 0 Then ayear = 1850
@@ -2384,6 +2387,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source = Nothing Then newmovie.source = ""
                 If newmovie.director = Nothing Then newmovie.director = ""
+                If newmovie.credits = Nothing Then newmovie.credits = ""
                 If newmovie.MovieSet.MovieSetName = "" Or newmovie.MovieSet.MovieSetName = Nothing Then newmovie.MovieSet.MovieSetName = "-None-"
                 'If newmovie.tag = Nothing Then newmovie.tag = ""
                 'if there is no entry for originaltitle, then use the current title. this should only come into use

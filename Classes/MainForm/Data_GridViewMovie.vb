@@ -77,6 +77,7 @@ Public Class Data_GridViewMovie
         plot = movie.plot.Trim
         source = movie.source
         director = movie.director 
+        credits = movie.credits
         Votes = movie.Votes
         TitleUcase = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
@@ -127,6 +128,7 @@ Public Class Data_GridViewMovie
         convertedMovie.plot                 = Me.plot.Trim
         convertedMovie.source               = Me.source
         convertedMovie.director             = Me.director
+        convertedMovie.credits              = Me.credits
         convertedMovie.Votes                = Me.Votes
         convertedMovie.Resolution           = Me.Resolution
         convertedMovie.VideoCodec           = Me.VideoCodec
@@ -257,6 +259,7 @@ Public Class Data_GridViewMovie
     End Property
 
     Public Property countries As String
+    Public Property credits As String
 
     Public ReadOnly Property countriesList As List(Of String)
         Get
@@ -379,7 +382,7 @@ Public Class Data_GridViewMovie
             _director = value
         End Set
     End Property
-
+    
     Public Property Votes As Integer
         Get
             Return _votes
@@ -526,6 +529,25 @@ Public Class Data_GridViewMovie
             Return director.ToString = ""
         End Get
     End Property
+    
+    Public ReadOnly Property MissingCredits As Boolean
+        Get
+            Return credits.ToString = ""
+        End Get
+    End Property
+    
+    Public ReadOnly Property MissingStudios As Boolean
+        Get
+            Return studios = ""
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingCountry As Boolean
+        Get
+            Return countries = ""
+        End Get
+    End Property
+
 
     Public ReadOnly Property MissingCertificate As Boolean
         Get
@@ -555,7 +577,14 @@ Public Class Data_GridViewMovie
         Get
             Return runtime=""
         End Get
-    End Property  
+    End Property
+    
+    Public ReadOnly Property MissingPremier As Boolean
+        Get
+            Return Premiered = ""
+        End Get
+    End Property
+     
 
     Public ReadOnly Property MissingStars As Boolean
         Get

@@ -1256,7 +1256,8 @@ Public Class Movie
         _actualNfoPathAndFilename       = NfoPathPrefName 
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.MovieSet
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
-        _movieCache.director            = _scrapedMovie.fullmoviebody.director 
+        _movieCache.director            = _scrapedMovie.fullmoviebody.director
+        _movieCache.credits             = _scrapedMovie.fullmoviebody.credits
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
 
         
