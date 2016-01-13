@@ -3361,14 +3361,16 @@ Public Class Form1
                 For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
                     Dim fullpath As String = row.Cells("fullpathandfilename").Value.ToString
                     If Not File.Exists(fullpath) Then Continue For
+                    If rescrapeList.EmptyMainTags AndAlso MovieHasEmptyMainTags(fullpath) Then Continue For
                     _rescrapeList.FullPathAndFilenames.Add(fullpath)
                 Next
             Else                                                 'Otherwise run batch wizard on all movies.
                 For Each row As DataGridViewRow In DataGridViewMovies.Rows
-
+                    
                     Dim m As Data_GridViewMovie = row.DataBoundItem
                     Dim fullpath As String = m.fullpathandfilename.ToString
                     If Not File.Exists(fullpath) Then Continue For
+                    If rescrapeList.EmptyMainTags AndAlso MovieHasEmptyMainTags(fullpath) Then Continue For
                     _rescrapeList.FullPathAndFilenames.Add(fullpath)
                 Next
             End If
@@ -3378,6 +3380,32 @@ Public Class Form1
         
     End Sub
 
+    Public Function MovieHasEmptyMainTags(ByVal checkmovie As String) As Boolean
+        If rescrapeList.AnyNonMainEnabled Then Return True
+        For each movie As ComboList In oMovies.MovieCache
+            If Not movie.fullpathandfilename = checkmovie Then Continue For
+            If rescrapeList.rating      AndAlso movie.rating        < 1  Then Return False
+            If rescrapeList.votes       AndAlso movie.Votes         = 0  Then Return False
+            If rescrapeList.mpaa        AndAlso movie.Certificate   = "" Then Return False
+            If rescrapeList.genre       AndAlso movie.genre         = "" Then Return False
+            If rescrapeList.year        AndAlso movie.year        < 1900 Then Return False
+            If rescrapeList.top250      AndAlso movie.top250        = "" Then Return False
+            If rescrapeList.outline     AndAlso movie.outline       = "" Then Return False
+            If rescrapeList.plot        AndAlso movie.plot          = "" Then Return False
+            If rescrapeList.tagline     AndAlso movie.tagline       = "" Then Return False
+            If rescrapeList.runtime     AndAlso movie.runtime       = "" Then Return False
+            If rescrapeList.director    AndAlso movie.director      = "" Then Return False
+            If rescrapeList.credits     AndAlso movie.credits       = "" Then Return False
+            If rescrapeList.title       AndAlso movie.title         = "" Then Return False
+            If rescrapeList.premiered   AndAlso movie.Premiered     = "" Then Return False
+            If rescrapeList.stars       AndAlso movie.stars         = "" Then Return False
+            If rescrapeList.studio      AndAlso movie.studios       = "" Then Return False
+            If rescrapeList.country     AndAlso movie.countries     = "" Then Return False
+            Exit For
+        Next
+        Return True
+    End Function
+    
     Public Function GetTrailerPath(ByVal s As String)
         Dim FileName As String = ""
 

@@ -1609,7 +1609,7 @@ Public Class Movies
             childchild = doc.CreateElement("outline") : childchild.InnerText = If(String.IsNullOrEmpty(movie.sortorder), movie.title, movie.outline)
             child.AppendChild(childchild)
 
-            childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100)
+            childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100) : child.AppendChild(childchild)
             childchild = doc.CreateElement("tagline") : childchild.InnerText = movie.tagline : child.AppendChild(childchild)
             'If movie.plot.Length() > 100 Then
             '    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
