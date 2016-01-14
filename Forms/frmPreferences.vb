@@ -1066,6 +1066,23 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
+    Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) Handles btnFindBrowser.Click
+        Try
+            Dim filebrowser As New OpenFileDialog
+            Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+            filebrowser.InitialDirectory = mstrProgramFilesPath
+            filebrowser.Filter = "Executable Files|*.exe"
+            filebrowser.Title = "Find Executable Of Preferred Browser"
+            If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                Pref.selectedBrowser = filebrowser.FileName
+            End If
+            If prefsload Then Exit Sub
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         If prefsload Then Exit Sub
         Pref.startupCache = Not chkbx_disablecache.Checked

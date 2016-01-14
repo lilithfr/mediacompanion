@@ -5,32 +5,8 @@ Public Class frmMessageBox
     Public Property btn1site As String
     Public Property IsActive As Boolean
 
-    Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "", Optional ByVal Btn1 As String = "", Optional ByVal Btn2 as String = "")
+    Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "")
         InitializeComponent()
-        If Btn1 = "" Then 
-            Button1.Visible = False
-        ElseIf Btn1 = "1" Then
-            btn1site = "tvdb"
-            Button1.Text = ""
-            Button1.BackgroundImageLayout = ImageLayout.Stretch
-            Button1.BackgroundImage = My.Resources.TVDB_sm  
-            Button1.Visible = True
-        ElseIf Btn1 = "2" Then
-            btn1site = "tmdb"
-            Button1.Text = ""
-            Button1.BackgroundImageLayout = ImageLayout.Stretch
-            Button1.BackgroundImage = My.Resources.TMDB_Icon
-            Button1.Visible = True
-        End If
-
-        If Btn2 = "" Then 
-            Button2.Visible = False
-        Else
-            Button2.Text = ""
-            Button2.BackgroundImageLayout = ImageLayout.Stretch
-            Button2.BackgroundImage = My.Resources.imdb1 
-            Button2.Visible = True
-        End If
 
         If line2 = "" And line3 = "" Then
             TextBox2.Text = line1
@@ -120,27 +96,7 @@ Public Class frmMessageBox
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-    Private Sub Button1_Click( sender As System.Object,  e As System.EventArgs) Handles Button1.Click
-        Try
-            Pref.WebSite = btn1site
-            Me.Close()
-        Catch ex As Exception
-
-        End Try
     
-    End Sub
-
-    Private Sub Button2_Click( sender As System.Object,  e As System.EventArgs) Handles Button2.Click
-        Try
-            Pref.WebSite = "imdb"
-            Me.Close()
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-
     Private Sub frmMessageBox_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
 
         If  e.KeyCode=Keys.Escape Then

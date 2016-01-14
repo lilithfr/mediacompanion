@@ -5177,6 +5177,7 @@ Public Class Form1
             OpenPreferences(3)
         End If
     End Sub
+
     Private Sub TabControl3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl3.SelectedIndexChanged
         
         Try
@@ -5204,11 +5205,6 @@ Public Class Form1
                         Exit Sub
                     End If
                 End If
-            'ElseIf tab = "TV Preferences" Then
-            '    TabControl3.SelectedIndex = tvCurrentTabIndex
-            '    OpenPreferences(3)
-            '    'Call tv_PreferencesSetup()
-            '    Exit Sub
             ElseIf tab.Tolower = "folders" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 TabControl3.SelectedIndex = tvCurrentTabIndex
@@ -5238,31 +5234,28 @@ Public Class Form1
             ElseIf tab = "Table View" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_TableView()
-            ElseIf tab = "TVDB/IMDB" Then
+            ElseIf tab = "" Then        'tpTvWeb tab
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
-                    If Pref.externalbrowser = True Then
-                        Me.TabControl3.SelectedIndex = tvCurrentTabIndex
-                        Dim t As New frmMessageBox("Please Select","your preferred site","","1","1")
-                        t.ShowDialog()
-                        If Pref.WebSite = "tvdb" Then
+                    Dim tpi As Integer = tpTvWeb.ImageIndex
+                    If tpi = 0 Then
                             tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                         Else
                             tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
                         End If
+                    If Pref.externalbrowser = True Then
+                        Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                         OpenUrl(tempstring)
                     Else
                         tvCurrentTabIndex = TabControl3.SelectedIndex
-                        Dim url As String
-                        url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                         Try
                             WebBrowser4.Stop()
                             WebBrowser4.ScriptErrorsSuppressed = True
-                            WebBrowser4.Navigate(url)
+                            WebBrowser4.Navigate(tempstring)
                         Catch
                             WebBrowser4.Stop()
                             WebBrowser4.ScriptErrorsSuppressed = True
-                            WebBrowser4.Navigate(url)
+                            WebBrowser4.Navigate(tempstring)
                         End Try
                     End If
                 ElseIf String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso String.IsNullOrEmpty(Show.ImdbId.Value) Then
@@ -5290,7 +5283,24 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
+    
+        Private Sub TabControl3_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl3.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            For index As Integer = 0 To TabControl3.TabCount - 2 Step 1
+                If TabControl3.GetTabRect(index).Contains(e.X,e.Y) AndAlso TabControl3.TabPages(index).Name.ToLower = "tptvweb" Then
+                    Dim tpi As Integer = tpTvWeb.ImageIndex
+                    If tpi = 0 Then
+                        tpTvWeb.ImageIndex = 1
+                    Else
+                        tpTvWeb.ImageIndex = 0
+                    End If 
+                    tpTvWeb.Refresh()
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+    
     Private Sub tv_TableView()
         Dim availableshows As New List(Of TvShow)
 
@@ -19013,7 +19023,7 @@ End Sub
 
     Private Sub SelNewFanartToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SelNewFanartToolStripMenuItem.Click
         Try
-            Me.TabPage12.Select()
+            Me.tpTvFanart.Select()
             TabControl3.SelectedIndex = 1
 
         Catch ex As Exception
@@ -19846,7 +19856,7 @@ End Sub
     '    tvfolderschanged = False
     'End Sub
 
-    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
+    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpTvFolders.Leave
         Try
             If tvfolderschanged Then
                 Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
@@ -21977,5 +21987,5 @@ End Sub
             tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         End If
     End Sub
-
+    
 End Class

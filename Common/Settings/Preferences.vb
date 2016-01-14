@@ -45,7 +45,6 @@ Public Class Pref
     Public Shared workingProfile As New ListOfProfiles
     Public Shared commandlist As New List(Of str_ListOfCommands)
     Public Shared configpath As String
-    Public Shared WebSite As String = "tvdb"
     Public Shared DoneAMov As Boolean = False
     Public Shared MusicVidScrape As Boolean = False
     Public Shared MusicVidConcertScrape As Boolean = False
