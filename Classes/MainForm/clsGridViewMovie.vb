@@ -127,6 +127,8 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
         IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"Resolution"       ,GridFieldToDisplay2="Resolution"  ,"Resolution"       ,"Res"     ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"Certificate"      ,GridFieldToDisplay2="Certificate" ,"Certificate"      ,"Cert"    ,    , DataGridViewContentAlignment.MiddleLeft  )
          
         dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
@@ -193,7 +195,9 @@ Public Class clsGridViewMovie
             If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
             If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
             If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
-            If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize" ).Width
+            If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize").Width
+            If GridFieldToDisplay2 = "Resolution" Then firstColWidth -= dgvMovies.Columns("Resolution"       ).Width
+            If GridFieldToDisplay2 = "Certificate"Then firstColWidth -= 80 'dgvMovies.Columns("Certificate"      ).Width
 
 
             If firstColWidth>0 Then
@@ -376,6 +380,18 @@ Public Class clsGridViewMovie
                     b = From f In b Order By f.Votes Ascending
                 Else
                     b = From f In b Order By f.Votes Descending
+                End If
+            Case "Resolution"
+                If GridSort = "Asc" Then
+                    b = From f In b Order By f.Resolution Ascending
+                Else
+                    b = From f In b Order By f.Resolution Descending
+                End If
+            Case "Certificate"
+                If GridSort = "Asc" Then
+                    b = From f In b Order By f.Certificate Ascending
+                Else
+                    b = From f In b Order By f.Certificate Descending
                 End If
         End Select
 

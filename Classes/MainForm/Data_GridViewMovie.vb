@@ -37,7 +37,7 @@ Public Class Data_GridViewMovie
     Dim _videomissing As Boolean
 
 
-    Property Resolution As Integer = -1
+    
     Property VideoCodec As String = ""
     Property Audio As New List(Of AudioDetails)
     Property Premiered As String
@@ -814,5 +814,7 @@ Public Class Data_GridViewMovie
             Return result
         End Get
     End Property
+
+    Property Resolution As Integer = -1
 
 End Class
