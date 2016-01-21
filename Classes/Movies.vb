@@ -833,7 +833,7 @@ Public Class Movies
 
         Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
  
-        If IsNothing(movieSet) OrElse movieSet.Collection.Count=0 Then
+        If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
             Return " of unknown"
         Else
             Return " of " & movieSet.Collection.Count

@@ -1464,10 +1464,10 @@ Public Class Movie
                         End If
                     End If
                 Case "set"
-                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = thisresult.InnerText
+                    If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = thisresult.InnerText
                     '_scrapedMovie.fullmoviebody.movieset.MovieSetDisplayName = thisresult.InnerText
                 Case "setid"
-                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = thisresult.InnerText
+                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = thisresult.InnerText
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
                 Case "actor"
@@ -3964,6 +3964,20 @@ Public Class Movie
             Try
                 If Pref.MovFolderRename or Pref.MovieManualRename Then
                     s = Pref.MovFolderRenameTemplate
+                    If s.Contains("%1") Then
+                        Dim firstchar As String = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim, True).Substring(0,1)
+                        If s.Contains("%N") Then
+                            If Not _scrapedMovie.fullmoviebody.MovieSet.MovieSetName.ToLower = "-none-" Then
+                                firstchar = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName.SafeTrim, True).Substring(0,1)
+                            End If
+                        End If
+                        If IsNumeric(firstchar) Then
+                            firstchar = "#"
+                        Else
+                            firstchar = firstchar.ToUpper
+                        End If
+                        s = s.Replace("%1", firstchar)
+                    End If
                     s = s.Replace("%T", If(Pref.MovTitleIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
                     s = s.Replace("%Z", If(Pref.MovSortIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
@@ -3995,15 +4009,6 @@ Public Class Movie
                     s = Utilities.cleanFoldernameIllegalChars(s)
                     If Pref.MovRenameSpaceCharacter Then
                         s = Utilities.SpacesToCharacter(s, Pref.RenameSpaceCharacter)
-                    End If
-                    If s.Contains("%1") Then
-                        Dim firstchar As String = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim, True).Substring(0,1)
-                        If IsNumeric(firstchar) Then
-                            firstchar = "#"
-                        Else
-                            firstchar = firstchar.ToUpper
-                        End If
-                        s = s.Replace("%1", firstchar)
                     End If
                 End If
             Catch
