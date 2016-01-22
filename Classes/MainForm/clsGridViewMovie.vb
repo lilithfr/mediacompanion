@@ -71,26 +71,20 @@ Public Class clsGridViewMovie
         Next
 
         dgv.Columns("Watched").Visible = Pref.MovieList_ShowColWatched
-        dgv.Columns("ImgPlot").Visible = Pref.MovieList_ShowColPlot   
-
+        dgv.Columns("ImgPlot").Visible = Pref.MovieList_ShowColPlot
 
         If dgv.Columns("Watched").Visible Then
             Dim x = Global.Media_Companion.My.Resources.Movie        'Performance tweak
-
-            'Watched icon
-            For Each row As DataGridViewRow In dgv.Rows
+            For Each row As DataGridViewRow In dgv.Rows              'Watched icon
                 If row.Cells("playcount").Value <> "0" Then
                     row.Cells("Watched").Value = x  
                 End If
             Next
         End If
-
-
+        
         If dgv.Columns("ImgPlot").Visible Then
             Dim x = Global.Media_Companion.My.Resources.Page        'Performance tweak
-
-            Try
-                'plot icon
+            Try     'plot icon
                 For Each row As DataGridViewRow In dgv.Rows
                     If row.Cells("plot").Value <> "" Then  
                         row.Cells("ImgPlot").Value = x 
@@ -100,9 +94,8 @@ Public Class clsGridViewMovie
                 Return
             End Try
         End If
-
-        'Highlight titles in datagridview with missing video files.
-        If Pref.incmissingmovies Then
+        
+        If Pref.incmissingmovies Then                               'Highlight titles with missing video files.
             For Each row As DataGridViewRow In dgv.Rows
                 If row.Cells("videomissing").Value = True Then
                     row.DefaultCellStyle.BackColor = Color.Red                
@@ -111,8 +104,7 @@ Public Class clsGridViewMovie
         End If
 
         dgv.RowHeadersVisible = False
-
-             
+ 
         If GridFieldToDisplay1="TitleAndYear" Then
             IniColumn(dgv,"DisplayTitle"       ,GridFieldToDisplay2= "Movie Year","Title"       )
             IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
@@ -187,7 +179,6 @@ Public Class clsGridViewMovie
 
             If Not IsNothing(dgvMovies.Columns("ImgPlot")) AndAlso dgvMovies.Columns("ImgPlot").Visible then firstColWidth -= dgvMovies.Columns("ImgPlot").Width
             If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
-
 
             If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
             If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
@@ -312,7 +303,8 @@ Public Class clsGridViewMovie
         If Form1.cbFilterDirector              .Visible Then b = Form1.oMovies.ApplyDirectorsFilter             ( b , Form1.cbFilterDirector              )
         If Form1.cbFilterSource                .Visible Then b = Form1.oMovies.ApplySourcesFilter               ( b , Form1.cbFilterSource                )
         If Form1.cbFilterTag                   .Visible Then b = Form1.oMovies.ApplyTagsFilter                  ( b , Form1.cbFilterTag                   )
-        If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )       
+        If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )     
+        
  
         Select Case Form1.cbSort.Text
             Case "A - Z"
@@ -335,9 +327,9 @@ Public Class clsGridViewMovie
                 End If
             Case "Movie Year"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.year Ascending
+                    b = From f In b Order By f.year Ascending, f.DisplayTitle 
                 Else
-                    b = From f In b Order By f.year Descending
+                    b = From f In b Order By f.year Descending, f.DisplayTitle 
                 End If
             Case "Modified"
                 If GridSort = "Asc" Then
@@ -347,9 +339,9 @@ Public Class clsGridViewMovie
                 End If
             Case "Runtime"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.IntRuntime Ascending        
+                    b = From f In b Order By f.IntRuntime Ascending, f.DisplayTitle 
                 Else
-                    b = From f In b Order By f.IntRuntime Descending
+                    b = From f In b Order By f.IntRuntime Descending, f.DisplayTitle 
                 End If
             Case "Rating"
                 If GridSort = "Asc" Then
@@ -383,15 +375,23 @@ Public Class clsGridViewMovie
                 End If
             Case "Resolution"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.Resolution Ascending
+                    b = From f In b Order By f.Resolution Ascending, f.DisplayTitle 
                 Else
-                    b = From f In b Order By f.Resolution Descending
+                    b = From f In b Order By f.Resolution Descending, f.DisplayTitle 
                 End If
             Case "Certificate"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.Certificate Ascending
+                    If Form1.DGVMoviesColName = "Certificate" Then
+                        b = From f In b Order By f.Certificate Ascending, f.DisplayTitle 
+                    Else
+                        b = From f In b Order By f.DisplayTitle Ascending
+                    End If
                 Else
-                    b = From f In b Order By f.Certificate Descending
+                    If Form1.DGVMoviesColName = "Certificate" Then
+                        b = From f In b Order By f.Certificate Descending, f.DisplayTitle 
+                    Else
+                        b = From f In b Order By f.DisplayTitle Descending
+                    End If
                 End If
         End Select
 

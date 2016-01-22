@@ -290,7 +290,7 @@ Public Class Form1
     Public singleshow As Boolean = False
     Public showslist As Object
     Public homemovietabindex As Integer = 0
-    
+    Public DGVMoviesColName As String = ""
 
     Dim MoviesFiltersResizeCalled As Boolean = False
 
@@ -3799,6 +3799,8 @@ Public Class Form1
     End Sub
 
     Private Sub DataGridViewMovies_ColumnHeaderMouseClick( sender As Object,  e As DataGridViewCellMouseEventArgs) Handles DataGridViewMovies.ColumnHeaderMouseClick
+        Dim col_index = e.ColumnIndex
+        DGVMoviesColName = DataGridViewMovies.Columns(col_index).Name
         btnreverse.Checked = Not btnreverse.Checked
         btnreverse_CheckedChanged(Nothing,Nothing)
     End Sub
