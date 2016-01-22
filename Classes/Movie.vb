@@ -3742,49 +3742,39 @@ Public Class Movie
             Else
                 Moviename = stackname   
             End If
-            For Each file As IO.FileInfo In fromPathInfo.GetFiles((Moviename & "*"))    'Move Matching Files to Moviename.
-                file.MoveTo(Path.Combine(checkfolder, file.Name))
+            For Each file As IO.FileInfo In fromPathInfo.GetFiles()   '((Moviename & "*"))    'Move Matching Files to Moviename.
+                If file.Name.Contains(Moviename) OrElse Utilities.fanarttvfiles.Contains(file.Name) Then
+                    file.MoveTo(Path.Combine(checkfolder, file.Name))
+                End If
             Next
             Dim OtherMoviesInFolder As Boolean = False
             For Each file As IO.FileInfo In fromPathInfo.GetFiles()
-                For each extn in Utilities.VideoExtensions
-                    If file.Extension = extn Then
-                        OtherMoviesInFolder = True
-                        Exit For
-                    End If
-                Next
-                If OtherMoviesInFolder Then Exit For
-            Next
-            For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
-                If dir.Name = ".actors" Then
-                    Dim actorsource As String= FilePath & ".actors\"
-                    If IO.Directory.Exists(actorsource) Then
-                        Dim NewActorFolder As String = checkfolder & "\.actors"
-                        If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
-                        NewActorFolder &= "\"
-                        For Each act In Actors
-                            Dim actorfilename As String = act.ActorName.Replace(" ","_") '& ".tbn"
-                            Dim sourceactor As String = actorsource & actorfilename
-                            If File.Exists(sourceactor & ".tbn") Then Utilities.SafeCopyFile(sourceactor & ".tbn", (NewActorFolder & actorfilename & ".tbn"), True)
-                            If File.Exists(sourceactor & ".jpg") Then Utilities.SafeCopyFile(sourceactor & ".jpg", (NewActorFolder & actorfilename & ".jpg"), True)
-                            'Dim Frodoactorsource As String = sourceactor.Replace(".tbn",".jpg")
-                            'actorfilename = actorfilename.Replace(".tbn",".jpg")
-                            'If File.Exists(Frodoactorsource)
-                            '    Utilities.SafeCopyFile(Frodoactorsource, (NewActorFolder & actorfilename), True)
-                            'End If
-                        Next
-                        log &= "Actors copied into new Movie's actor folder" & vbCrLf
-                    End If
+                If Utilities.VideoExtensions.Contains(file.Extension.ToLower) Then
+                    OtherMoviesInFolder = True
+                    Exit For
                 End If
             Next
             If Not OtherMoviesInFolder Then
-                Dim checkactorfolder As Boolean = False
+                For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()      ''move any sub directories
+                    dir.MoveTo(Path.Combine(checkfolder, dir.Name))
+                Next
+            Else
                 For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
                     If dir.Name = ".actors" Then
-                        dir.Delete(True)
-                        Exit For
+                        Dim actorsource As String= FilePath & ".actors\"
+                        If IO.Directory.Exists(actorsource) Then
+                            Dim NewActorFolder As String = checkfolder & "\.actors"
+                            If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
+                            NewActorFolder &= "\"
+                            For Each act In Actors
+                                Dim actorfilename As String = act.ActorName.Replace(" ","_") '& ".tbn"
+                                Dim sourceactor As String = actorsource & actorfilename
+                                If File.Exists(sourceactor & ".tbn") Then Utilities.SafeCopyFile(sourceactor & ".tbn", (NewActorFolder & actorfilename & ".tbn"), True)
+                                If File.Exists(sourceactor & ".jpg") Then Utilities.SafeCopyFile(sourceactor & ".jpg", (NewActorFolder & actorfilename & ".jpg"), True)
+                            Next
+                            log &= "Actors copied into new Movie's actor folder" & vbCrLf
+                        End If
                     End If
-                    'dir.MoveTo(Path.Combine(checkfolder, dir.Name))
                 Next
             End If
             If Not checkfolder.Contains(FilePath) AndAlso Utilities.IsDirectoryEmpty(FilePath) Then
