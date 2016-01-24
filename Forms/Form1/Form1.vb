@@ -2460,7 +2460,7 @@ Public Class Form1
                                         tempstring = filechck.ReadLine
                                         If tempstring = Nothing Then Exit Do
 
-                                        If tempstring.IndexOf("<movie>") <> -1 Then
+                                        If tempstring.IndexOf("<movie") <> -1 Then
                                             allok = True
                                             Exit Do
                                         End If
@@ -2502,7 +2502,7 @@ Public Class Form1
                     Dim filechck As IO.StreamReader = IO.File.OpenText(nfopaths(f))
                     tempstring = filechck.ReadToEnd
                     filechck.Close()
-                    If tempstring.IndexOf("<movie>") = -1 And tempstring.IndexOf("</movie>") = -1 Then
+                    If tempstring.IndexOf("<movie") = -1 And tempstring.IndexOf("</movie>") = -1 Then
                         If Pref.renamenfofiles = True Then
                             Dim fi As New IO.FileInfo(nfopaths(f))
                             Dim newpath As String = nfopaths(f).Replace(nfopaths(f).Substring(nfopaths(f).LastIndexOf("."), nfopaths(f).Length - nfopaths(f).LastIndexOf(".")), ".info")

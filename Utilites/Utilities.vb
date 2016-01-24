@@ -699,7 +699,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If tempstring = Nothing Then
             Return False
         End If
-        If tempstring.IndexOf("<movie>") <> -1 And tempstring.IndexOf("</movie>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
+        If tempstring.IndexOf("<movie") <> -1 And tempstring.IndexOf("</movie>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
             Return True
             Exit Function
         End If

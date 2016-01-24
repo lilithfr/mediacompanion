@@ -719,7 +719,7 @@ Public Class Movie
                         Do
                             tempstring = filechck.ReadLine
                             If tempstring = Nothing Then Exit Do
-                            If tempstring.IndexOf("<movie>") <> -1 Then
+                            If tempstring.IndexOf("<movie") <> -1 Then
                                 log &= " - valid MC .nfo found - scrape skipped!"
                                 Return False
                             End If
@@ -753,7 +753,7 @@ Public Class Movie
         If Utilities.findFileOfType(movieNfoFile, ".nfo",Pref.basicsavemode) Then
             Try
                 Dim filechck As StreamReader = File.OpenText(movieNfoFile)
-                Dim Searchstring As String = "<movie>"
+                Dim Searchstring As String = "<movie"
                 If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Searchstring = "<musicvideo>"
                 Dim tempstring As String
                 Do
@@ -4096,7 +4096,7 @@ Public Class Movie
 
                 If s = Nothing Then Exit Do
 
-                If s.IndexOf("<movie>") <> -1 Then
+                If s.IndexOf("<movie") <> -1 Then
                     Return True
                 End If
             Loop Until filechck.EndOfStream
