@@ -1274,7 +1274,9 @@ Public Class Movie
 
         _movieCache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
 
-        _movieCache.FolderSize = Utilities.GetFolderSize(NfoPath)
+        If Not Pref.GetRootFolderCheck(_scrapedMovie.fileinfo.fullpathandfilename) Then     'If in Root folder, do not get FolderSize.
+            _movieCache.FolderSize = Utilities.GetFolderSize(NfoPath)
+        End If
 
 
         _movieCache.title               = _scrapedMovie.fullmoviebody.title
