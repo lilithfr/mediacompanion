@@ -443,6 +443,7 @@ Public Class frmPreferences
         cb_MovSetTitleIgnArticle            .Checked        = Pref.MovSetTitleIgnArticle
         cb_MovPosterTabTMDBSelect           .Checked        = Pref.MovPosterTabTMDBSelect
         cbShowMovieGridToolTip              .Checked        = Pref.ShowMovieGridToolTip
+        cbEnableFolderSize                  .Checked        = Pref.EnableFolderSize
 
         'Rename Movie Settings
         cbMovFolderRename                   .Checked        = Pref.MovFolderRename
@@ -2025,6 +2026,12 @@ End Sub
     Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
         If prefsload Then Exit Sub
         Pref.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
+        Changes = True
+    End Sub
+    
+    Private Sub cbEnableFolderSize_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbEnableFolderSize.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.EnableFolderSize = cbEnableFolderSize.Checked
         Changes = True
     End Sub
 

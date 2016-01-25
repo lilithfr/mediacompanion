@@ -155,6 +155,7 @@ Public Class Pref
     Public Shared DisplayRatingOverlay As Boolean
     Public Shared DisplayMediainfoOverlay As Boolean
     Public Shared DisplayMediaInfoFolderSize As Boolean
+    Public Shared EnableFolderSize As Boolean
     Public Shared font As String
     Public Shared MultiMonitoEnabled As Boolean
     Public Shared ShowAllAudioTracks As Boolean
@@ -586,6 +587,7 @@ Public Class Pref
         DisplayRatingOverlay = True
         DisplayMediainfoOverlay = True
         DisplayMediaInfoFolderSize = False
+        EnableFolderSize = False
         ShowAllAudioTracks = True
         incmissingmovies = False
         startupCache = True
@@ -1091,6 +1093,7 @@ Public Class Pref
         root.AppendChild(doc, "DisplayRatingOverlay",               DisplayRatingOverlay)               'cbDisplayRatingOverlay
         root.AppendChild(doc, "DisplayMediainfoOverlay",            DisplayMediainfoOverlay)            'cbDisplayMediainfoOverlay
         root.AppendChild(doc, "DisplayMediaInfoFolderSize",         DisplayMediaInfoFolderSize)         'cbDisplayMediaInfoFolderSize
+        root.AppendChild(doc, "EnableFolderSize",                   EnableFolderSize)                   'cbEnableFolderSize
         root.AppendChild(doc, "incmissingmovies",                   incmissingmovies)                   'cbMissingMovie
         root.AppendChild(doc, "savefanart",                         savefanart)                         'cbMovFanartScrape
         root.AppendChild(doc, "movfanarttvscrape",                  MovFanartTvscrape)                  'cbMovFanartTvScrape
@@ -1555,6 +1558,7 @@ Public Class Pref
                     Case "DisplayRatingOverlay"                 : DisplayRatingOverlay = thisresult.InnerXml
                     Case "DisplayMediainfoOverlay"              : DisplayMediainfoOverlay = thisresult.InnerXml
                     Case "DisplayMediaInfoFolderSize"           : DisplayMediaInfoFolderSize = thisresult.InnerXml
+                    Case "EnableFolderSize"                     : EnableFolderSize = thisresult.InnerXml
                     Case "incmissingmovies"                     : incmissingmovies = thisresult.InnerText
                     Case "disabletvlogs"                        : disabletvlogs = thisresult.InnerXml
                     Case "folderjpg"                            : createfolderjpg = thisresult.InnerXml

@@ -455,6 +455,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbEnableFolderSize = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -3146,7 +3147,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3603,6 +3604,7 @@ Partial Class frmPreferences
         '
         'GroupBox26
         '
+        Me.GroupBox26.Controls.Add(Me.cbEnableFolderSize)
         Me.GroupBox26.Controls.Add(Me.cbShowMovieGridToolTip)
         Me.GroupBox26.Controls.Add(Me.cb_MovPosterTabTMDBSelect)
         Me.GroupBox26.Controls.Add(Me.cb_MovSetTitleIgnArticle)
@@ -5451,6 +5453,18 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbEnableFolderSize
+        '
+        Me.cbEnableFolderSize.AutoSize = true
+        Me.cbEnableFolderSize.Location = New System.Drawing.Point(7, 473)
+        Me.cbEnableFolderSize.Name = "cbEnableFolderSize"
+        Me.cbEnableFolderSize.Size = New System.Drawing.Size(174, 19)
+        Me.cbEnableFolderSize.TabIndex = 97
+        Me.cbEnableFolderSize.Text = "Get FolderSize for Movie(s)"
+        Me.ToolTip1.SetToolTip(Me.cbEnableFolderSize, "This feature can slow performance of MC"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"if there are multiple movies in Sub Fold"& _ 
+        "ers.")
+        Me.cbEnableFolderSize.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6043,4 +6057,5 @@ End Sub
     Friend WithEvents cbExcludeMpaaRated As CheckBox
     Friend WithEvents cbIncludeMpaaRated As CheckBox
     Friend WithEvents cbMcCloseMCForDLNewVersion As CheckBox
+    Friend WithEvents cbEnableFolderSize As CheckBox
 End Class

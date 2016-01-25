@@ -70,7 +70,7 @@ Public Class GraphicInfo
 
                         If item.Key.IndexOf("lang") > -1 Then
                             Dim sDisplayText As String = item.Value
-
+                            If sDisplayText.ToLower = "error" Then Continue For
                             Dim FontSize = 19
 
                             'create a font to write the values in the bitmap
