@@ -333,6 +333,7 @@ Public Class Pref
     Public Shared movie_filters As MovieFilters = New MovieFilters
 
     Public Shared CheckForNewVersion As Boolean=False
+    Public Shared CloseMCForDLNewVersion As Boolean = False
     Public Shared AllowUserTags As Boolean = True
 
     Public Shared Property movieignorepart As Boolean
@@ -1014,6 +1015,7 @@ Public Class Pref
         root.AppendChild(doc, "ShowMovieGridToolTip" ,  ShowMovieGridToolTip )  'cbShowMovieGridToolTip
         root.AppendChild(doc, "ShowLogOnError"       ,  ShowLogOnError       )  'cbShowLogOnError
         root.AppendChild(doc, "CheckForNewVersion"   ,  CheckForNewVersion   )
+        root.AppendChild(doc, "CloseMCForDLNewVersion", CloseMCForDLNewVersion) 'cbMcCloseMCForDLNewVersion
         root.AppendChild(doc, "MkvMergeGuiPath"      ,  MkvMergeGuiPath      )  'tbMkvMergeGuiPath
         root.AppendChild(doc, "prxyEnabled"          ,  prxyEnabled          )  'ucGenPref_Proxy.cb_prxyEnable
         root.AppendChild(doc, "prxyIp"               ,  prxyIp               )  'ucGenPref_Proxy.tb_prxyIp
@@ -1651,6 +1653,7 @@ Public Class Pref
                     Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
                     Case "movie_filters"                        : movie_filters.Load(thisresult)
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
+                    Case "CloseMCForDLNewVersion"               : CloseMCForDLNewVersion    = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml
 
                     Case "prxyEnabled"                          : prxyEnabled               = thisresult.InnerText.ToLower

@@ -291,6 +291,7 @@ Public Class Form1
     Public showslist As Object
     Public homemovietabindex As Integer = 0
     Public DGVMoviesColName As String = ""
+    Dim killMC As Boolean = False
 
     Dim MoviesFiltersResizeCalled As Boolean = False
 
@@ -772,7 +773,7 @@ Public Class Form1
             Common.Tasks.StartTaskEngine()
             ForegroundWorkTimer.Start()
 
-            If Pref.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
+            'If Pref.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
 
             BckWrkXbmcController.WorkerReportsProgress = True
             ' BckWrkXbmcController.WorkerSupportsCancellation = true
@@ -822,6 +823,7 @@ Public Class Form1
 #End If
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
+        If killMC Then Exit Sub
         Try
             Me.Dispose()
             Me.Finalize()
@@ -841,6 +843,8 @@ Public Class Form1
         While BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
+
+        If killMC Then Exit Sub
 
         Try
             oMovies.SaveCaches()
@@ -1567,6 +1571,19 @@ Public Class Form1
                 tempstring = prof.Config
                 If IO.File.Exists(tempstring) Then Pref.configpath = tempstring
                 Pref.configpath = tempstring
+                '
+                Pref.SetUpPreferences()
+                Pref.ConfigLoad()
+                If Pref.CheckForNewVersion Then
+                    BckWrkCheckNewVersion.RunWorkerAsync(False)
+                    Do Until Not BckWrkCheckNewVersion.IsBusy
+                        Application.DoEvents()
+                    Loop
+                    If killMC AndAlso Pref.CloseMCForDLNewVersion Then
+                        Me.Close()
+                        'Process.GetCurrentProcess.Kill()
+                    End If
+                End If
 
                 Me.util_ConfigLoad()
             End If
@@ -10733,28 +10750,7 @@ End Sub
         Pref.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
 
         DataGridViewMovies.DataSource = Nothing
-
-        'Me.GroupBox22.Visible = Not Pref.tvshow_useXBMC_Scraper
-        'Me.GroupBox22.SendToBack()
-        'Me.GroupBox_TVDB_Scraper_Preferences.Visible = Pref.tvshow_useXBMC_Scraper
-        'Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
-        'Me.CheckBoxRenameNFOtoINFO.Checked = Pref.renamenfofiles
-        'Me.ScrapeFullCertCheckBox.Checked = Pref.scrapefullcert
-        'Me.cbMovieRenameEnable.Checked = Pref.MovieRenameEnable
-        'Me.cbMovFolderRename.Checked = Pref.MovFolderRename
-        'Me.cbMovSetIgnArticle.Checked = Pref.MovSetIgnArticle 
-        'Me.cbMovTitleIgnArticle.Checked = Pref.MovTitleIgnArticle
-        'Me.cbRenameUnderscore.Checked = Pref.MovRenameSpaceCharacter
-        'Me.ManualRenameChkbox.Checked = Pref.MovieManualRename
-        'Me.TextBox_OfflineDVDTitle.Text = Pref.OfflineDVDTitle
-        'Me.tb_MovieRenameEnable.Text = Pref.MovieRenameTemplate
-        'Me.tb_MovFolderRename.Text = Pref.MovFolderRenameTemplate
-        'Me.TextBox35.Text = Pref.ScrShtDelay.ToString 
-        'Me.CheckBox_ShowDateOnMovieList.Checked = Pref.showsortdate
-        'Me.cbxCleanFilenameIgnorePart.Checked = Pref.movieignorepart
-        'Me.cbxNameMode.Checked = Pref.namemode
-        'lblNameMode.Text = createNameModeText()
-
+        
         Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Pref.displayMissingEpisodes
         Me.RefreshMissingEpisodesToolStripMenuItem.Enabled = Pref.displayMissingEpisodes
         If Pref.displayMissingEpisodes Then 
@@ -10766,15 +10762,6 @@ End Sub
         Renamer.setRenamePref(Pref.tv_RegexRename.Item(Pref.tvrename), Pref.tv_RegexScraper)
         XBMCTMDBConfigSave()
         XBMCTVDBConfigSave()
-        'If Not Pref.XbmcTmdbScraperRatings = Nothing Then
-        '    Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
-        '    Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
-        '    Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
-        '    Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
-        '    Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
-        'End If
-
-        'Read_XBMC_IMDB_Scraper_Config()
 
         '----------------------------------------------------------
 
@@ -21327,6 +21314,7 @@ End Sub
         Dim answer = MsgBox("Would you like to download the new version?", MsgBoxStyle.YesNo, "New version " & Results.NewVersion & " available")
 
         If answer = MsgBoxResult.Yes Then
+            killMC = True
             OpenUrl(HOME_PAGE)
         End If
     End Sub

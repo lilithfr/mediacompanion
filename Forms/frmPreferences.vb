@@ -67,6 +67,9 @@ Public Class frmPreferences
                 Changes = False
                 XbmcTvdbScraperChanged = False
                 XbmcTMDbScraperChanged = False
+            'Else
+            '    Form1.util_ConfigLoad(True)
+            '    Form1.util_RegexLoad()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -97,21 +100,20 @@ Public Class frmPreferences
 
     End Sub
 
-    Private Sub btn_SettingsApply_Click(sender As Object, e As EventArgs) Handles btn_SettingsApply.Click
-        Dim aok As Boolean = SaveSettings
-        'If cleanfilenameprefchanged OrElse videosourceprefchanged Then
-        '    applyAdvancedLists()
-        'End If
-        'Pref.ConfigSave()
-        'Changes = False
+    Private Sub btn_SettingsApplyClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsApplyClose.Click
+        If Changes Then
+            Dim aok As Boolean = SaveSettings
+        End If
+        Me.Close()
     End Sub
 
-    Private Sub btn_SettingsCancel_Click(sender As Object, e As EventArgs) Handles btn_SettingsCancel.Click
-        Changes = False
-        Pref.ConfigLoad()
+    Private Sub btn_SettingsApplyOnly_Click(sender As Object, e As EventArgs) Handles btn_SettingsApplyOnly.Click
+        Dim aok As Boolean = SaveSettings
     End Sub
 
     Private Sub btn_SettingsClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsClose.Click, btn_SettingsClose2.Click
+        Changes = False
+        Pref.ConfigLoad()
         Me.Close()
     End Sub
     
@@ -241,6 +243,7 @@ Public Class frmPreferences
         cbUseMultipleThreads        .Checked    = Pref.UseMultipleThreads
         cbShowLogOnError            .Checked    = Pref.ShowLogOnError
         cbCheckForNewVersion        .Checked    = Pref.CheckForNewVersion
+        cbMcCloseMCForDLNewVersion  .Checked    = Pref.CloseMCForDLNewVersion
         cbDisplayLocalActor         .Checked    = Pref.LocalActorImage
         cbRenameNFOtoINFO           .Checked    = Pref.renamenfofiles
         cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled
@@ -1107,6 +1110,12 @@ Public Class frmPreferences
         If prefsload Then Exit Sub
         Pref.CheckForNewVersion = cbCheckForNewVersion.Checked
         If prefsload Then Exit Sub
+        Changes = True
+    End Sub
+
+    Private Sub cbMcCloseMCForDLNewVersion_CheckedChanged(sender As Object, e As EventArgs) Handles cbMcCloseMCForDLNewVersion.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.CloseMCForDLNewVersion = cbMcCloseMCForDLNewVersion.Checked
         Changes = True
     End Sub
 
@@ -3382,13 +3391,13 @@ End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         If TabControl1.SelectedTab.Text.ToLower = "xbmc link" OrElse TabControl1.SelectedTab.Text.ToLower = "proxy" Then
-            btn_SettingsApply.Visible = False
-            btn_SettingsCancel.Visible = False
+            btn_SettingsApplyClose.Visible = False
+            btn_SettingsApplyOnly.Visible = False
             btn_SettingsClose.Visible = False
             btn_SettingsClose2.Visible = True
         Else
-            btn_SettingsApply.Visible = True
-            btn_SettingsCancel.Visible = True
+            btn_SettingsApplyClose.Visible = True
+            btn_SettingsApplyOnly.Visible = True
             btn_SettingsClose.Visible = True
             btn_SettingsClose2.Visible = False
         End If
@@ -3426,5 +3435,5 @@ End Sub
         Pref.AllowUserTags = cbAllowUserTags.Checked
         Changes = True
     End Sub
-    
+
 End Class

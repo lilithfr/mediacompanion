@@ -153,6 +153,7 @@ Partial Class frmPreferences
         Me.Label137 = New System.Windows.Forms.Label()
         Me.cb_actorseasy = New System.Windows.Forms.CheckBox()
         Me.TPGen = New System.Windows.Forms.TabPage()
+        Me.cbMcCloseMCForDLNewVersion = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.cbMultiMonitorEnable = New System.Windows.Forms.CheckBox()
         Me.cbRenameNFOtoINFO = New System.Windows.Forms.CheckBox()
@@ -450,9 +451,9 @@ Partial Class frmPreferences
         Me.lb_CommandTitle = New System.Windows.Forms.ListBox()
         Me.lb_CommandCommand = New System.Windows.Forms.ListBox()
         Me.btn_CommandAdd = New System.Windows.Forms.Button()
-        Me.btn_SettingsCancel = New System.Windows.Forms.Button()
+        Me.btn_SettingsApplyOnly = New System.Windows.Forms.Button()
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
-        Me.btn_SettingsApply = New System.Windows.Forms.Button()
+        Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
@@ -631,7 +632,7 @@ Partial Class frmPreferences
         'cbDisplayLocalActor
         '
         Me.cbDisplayLocalActor.AutoSize = true
-        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(349, 321)
+        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(349, 350)
         Me.cbDisplayLocalActor.Name = "cbDisplayLocalActor"
         Me.cbDisplayLocalActor.Size = New System.Drawing.Size(198, 19)
         Me.cbDisplayLocalActor.TabIndex = 97
@@ -1940,6 +1941,7 @@ Partial Class frmPreferences
         '
         'TPGen
         '
+        Me.TPGen.Controls.Add(Me.cbMcCloseMCForDLNewVersion)
         Me.TPGen.Controls.Add(Me.Label2)
         Me.TPGen.Controls.Add(Me.cbMultiMonitorEnable)
         Me.TPGen.Controls.Add(Me.cbDisplayLocalActor)
@@ -1963,6 +1965,15 @@ Partial Class frmPreferences
         Me.TPGen.Text = "General"
         Me.TPGen.UseVisualStyleBackColor = true
         '
+        'cbMcCloseMCForDLNewVersion
+        '
+        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(358, 311)
+        Me.cbMcCloseMCForDLNewVersion.Name = "cbMcCloseMCForDLNewVersion"
+        Me.cbMcCloseMCForDLNewVersion.Size = New System.Drawing.Size(219, 38)
+        Me.cbMcCloseMCForDLNewVersion.TabIndex = 100
+        Me.cbMcCloseMCForDLNewVersion.Text = "If accept download of new version, close Media Companion."
+        Me.cbMcCloseMCForDLNewVersion.UseVisualStyleBackColor = true
+        '
         'Label2
         '
         Me.Label2.AutoSize = true
@@ -1978,7 +1989,7 @@ Partial Class frmPreferences
         'cbMultiMonitorEnable
         '
         Me.cbMultiMonitorEnable.AutoSize = true
-        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(349, 370)
+        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(349, 399)
         Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
         Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
         Me.cbMultiMonitorEnable.TabIndex = 98
@@ -1988,7 +1999,7 @@ Partial Class frmPreferences
         'cbRenameNFOtoINFO
         '
         Me.cbRenameNFOtoINFO.AutoSize = true
-        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(349, 347)
+        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(349, 376)
         Me.cbRenameNFOtoINFO.Name = "cbRenameNFOtoINFO"
         Me.cbRenameNFOtoINFO.Size = New System.Drawing.Size(272, 19)
         Me.cbRenameNFOtoINFO.TabIndex = 95
@@ -5403,14 +5414,14 @@ Partial Class frmPreferences
         Me.btn_CommandAdd.Text = "Add"
         Me.btn_CommandAdd.UseVisualStyleBackColor = true
         '
-        'btn_SettingsCancel
+        'btn_SettingsApplyOnly
         '
-        Me.btn_SettingsCancel.Location = New System.Drawing.Point(140, 585)
-        Me.btn_SettingsCancel.Name = "btn_SettingsCancel"
-        Me.btn_SettingsCancel.Size = New System.Drawing.Size(109, 23)
-        Me.btn_SettingsCancel.TabIndex = 22
-        Me.btn_SettingsCancel.Text = "Cancel"
-        Me.btn_SettingsCancel.UseVisualStyleBackColor = true
+        Me.btn_SettingsApplyOnly.Location = New System.Drawing.Point(140, 585)
+        Me.btn_SettingsApplyOnly.Name = "btn_SettingsApplyOnly"
+        Me.btn_SettingsApplyOnly.Size = New System.Drawing.Size(109, 23)
+        Me.btn_SettingsApplyOnly.TabIndex = 22
+        Me.btn_SettingsApplyOnly.Text = "Apply"
+        Me.btn_SettingsApplyOnly.UseVisualStyleBackColor = true
         '
         'btn_SettingsClose
         '
@@ -5421,15 +5432,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose.Text = "Close"
         Me.btn_SettingsClose.UseVisualStyleBackColor = true
         '
-        'btn_SettingsApply
+        'btn_SettingsApplyClose
         '
-        Me.btn_SettingsApply.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btn_SettingsApply.Location = New System.Drawing.Point(20, 585)
-        Me.btn_SettingsApply.Name = "btn_SettingsApply"
-        Me.btn_SettingsApply.Size = New System.Drawing.Size(109, 23)
-        Me.btn_SettingsApply.TabIndex = 20
-        Me.btn_SettingsApply.Text = "Apply"
-        Me.btn_SettingsApply.UseVisualStyleBackColor = true
+        Me.btn_SettingsApplyClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btn_SettingsApplyClose.Location = New System.Drawing.Point(20, 585)
+        Me.btn_SettingsApplyClose.Name = "btn_SettingsApplyClose"
+        Me.btn_SettingsApplyClose.Size = New System.Drawing.Size(109, 23)
+        Me.btn_SettingsApplyClose.TabIndex = 20
+        Me.btn_SettingsApplyClose.Text = "Apply  &&  Close"
+        Me.btn_SettingsApplyClose.UseVisualStyleBackColor = true
         '
         'btn_SettingsClose2
         '
@@ -5445,10 +5456,10 @@ Partial Class frmPreferences
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 623)
-        Me.Controls.Add(Me.btn_SettingsCancel)
+        Me.Controls.Add(Me.btn_SettingsApplyOnly)
         Me.Controls.Add(Me.btn_SettingsClose)
         Me.Controls.Add(Me.btn_SettingsClose2)
-        Me.Controls.Add(Me.btn_SettingsApply)
+        Me.Controls.Add(Me.btn_SettingsApplyClose)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
@@ -5639,9 +5650,9 @@ End Sub
     Friend WithEvents btn_CommandRemove As System.Windows.Forms.Button
     Friend WithEvents lb_CommandTitle As System.Windows.Forms.ListBox
     Friend WithEvents lb_CommandCommand As System.Windows.Forms.ListBox
-    Friend WithEvents btn_SettingsCancel As System.Windows.Forms.Button
+    Friend WithEvents btn_SettingsApplyOnly As System.Windows.Forms.Button
     Friend WithEvents btn_SettingsClose As System.Windows.Forms.Button
-    Friend WithEvents btn_SettingsApply As System.Windows.Forms.Button
+    Friend WithEvents btn_SettingsApplyClose As System.Windows.Forms.Button
     Friend WithEvents TPCommon As TabPage
     Friend WithEvents TabControl4 As TabControl
     Friend WithEvents TPCommonSettings As TabPage
@@ -6031,4 +6042,5 @@ End Sub
     Friend WithEvents cbAllowUserTags As System.Windows.Forms.CheckBox
     Friend WithEvents cbExcludeMpaaRated As CheckBox
     Friend WithEvents cbIncludeMpaaRated As CheckBox
+    Friend WithEvents cbMcCloseMCForDLNewVersion As CheckBox
 End Class
