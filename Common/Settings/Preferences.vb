@@ -2382,7 +2382,12 @@ Public Class Pref
                         duration = MI.Get_(StreamKind.General, 0, "Duration")
                     End If
                     If Not String.IsNullOrEmpty(duration) Then
-                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)
+                        Dim Tempvar As Double = Nothing
+                        If Double.TryParse(duration, Tempvar) Then
+                            workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(Tempvar) / 1000)
+                        Else
+                            workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)
+                        End If
                     Else
                         workingfiledetails.filedetails_video.DurationInSeconds.Value = -1
                     End If
