@@ -842,7 +842,11 @@ Public Class Movies
 
 
     Function FindMovieSetInfoByName(MovieSetDisplayName As String) As MovieSetInfo
-        Return (From x In MovieSetDB Where x.MovieSetDisplayName=MovieSetDisplayName Select x).FirstOrDefault
+        'Try
+            Return (From x In MovieSetDB Where x.MovieSetDisplayName=MovieSetDisplayName Select x).FirstOrDefault
+        'Catch
+        '    Return Nothing
+        'End Try
     End Function
 
 
@@ -2281,16 +2285,18 @@ Public Class Movies
             childchild = doc.CreateElement("id")
             childchild.InnerText = movieset.MovieSetId 
             child.AppendChild(childchild)
-            For each item In movieset.Collection
-                childchild = doc.CreateElement("collection")
-                childchildchild = doc.createElement("movietitle")
-                childchildchild.InnerText = item.MovieTitle
-                childchild.AppendChild(childchildchild)
-                childchildchild = doc.createElement("movieid")
-                childchildchild.InnerText = item.TmdbMovieId
-                childchild.AppendChild(childchildchild)
-                child.AppendChild(childchild)
-            Next
+            If Not IsNothing(movieset.Collection) Then
+                For each item In movieset.Collection
+                    childchild = doc.CreateElement("collection")
+                    childchildchild = doc.createElement("movietitle")
+                    childchildchild.InnerText = item.MovieTitle
+                    childchild.AppendChild(childchildchild)
+                    childchildchild = doc.createElement("movieid")
+                    childchildchild.InnerText = item.TmdbMovieId
+                    childchild.AppendChild(childchildchild)
+                    child.AppendChild(childchild)
+                Next
+            End If
             root.AppendChild(child)
         Next
 
