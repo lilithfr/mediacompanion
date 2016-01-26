@@ -595,7 +595,7 @@ Public Class Movies
                 Group By 
                     x.ActorName Into NumFilms=Count 
                 Where 
-                    NumFilms>= Pref.ActorsFilterMinFilms
+                    NumFilms>= If(Pref.MaxActorsInFilter > 999, 2, Pref.ActorsFilterMinFilms)
             
             If Pref.MovieFilters_Actors_Order=0 Then 
                 q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
@@ -613,7 +613,7 @@ Public Class Movies
                 Group By 
                     x.ActorName Into NumFilms=Count 
                 Where 
-                    NumFilms>=Pref.DirectorsFilterMinFilms
+                    NumFilms>= If(Pref.MaxDirectorsInFilter > 999, 2, Pref.DirectorsFilterMinFilms)
                                 
             If Pref.MovieFilters_Directors_Order=0 Then 
                 q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending

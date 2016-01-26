@@ -99,6 +99,7 @@ Partial Class frmPreferences
         Me.btn_tv_RegexScrape_MoveUp = New System.Windows.Forms.Button()
         Me.cb_MovPosterTabTMDBSelect = New System.Windows.Forms.CheckBox()
         Me.cbAllowUserTags = New System.Windows.Forms.CheckBox()
+        Me.cbEnableFolderSize = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
@@ -455,7 +456,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbEnableFolderSize = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1102,7 +1102,7 @@ Partial Class frmPreferences
         Me.Label102.Location = New System.Drawing.Point(41, 67)
         Me.Label102.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label102.Name = "Label102"
-        Me.Label102.Size = New System.Drawing.Size(261, 31)
+        Me.Label102.Size = New System.Drawing.Size(221, 31)
         Me.Label102.TabIndex = 72
         Me.Label102.Text = "If selected resolution is unavailable then next resolution down is used."
         Me.ToolTip1.SetToolTip(Me.Label102, "* This option is dependent on 'Add Movie Trailer url to nfo file' being checked*")
@@ -1122,7 +1122,7 @@ Partial Class frmPreferences
         '
         Me.cbPreferredTrailerResolution.FormattingEnabled = true
         Me.cbPreferredTrailerResolution.Items.AddRange(New Object() {"SD", "480", "720", "1080"})
-        Me.cbPreferredTrailerResolution.Location = New System.Drawing.Point(228, 34)
+        Me.cbPreferredTrailerResolution.Location = New System.Drawing.Point(214, 32)
         Me.cbPreferredTrailerResolution.Name = "cbPreferredTrailerResolution"
         Me.cbPreferredTrailerResolution.Size = New System.Drawing.Size(74, 23)
         Me.cbPreferredTrailerResolution.TabIndex = 70
@@ -1367,6 +1367,18 @@ Partial Class frmPreferences
         Me.cbAllowUserTags.Text = "Allow user tags"
         Me.ToolTip1.SetToolTip(Me.cbAllowUserTags, "When checked allows you to enter your own comma separated tags in the Tags field")
         Me.cbAllowUserTags.UseVisualStyleBackColor = true
+        '
+        'cbEnableFolderSize
+        '
+        Me.cbEnableFolderSize.AutoSize = true
+        Me.cbEnableFolderSize.Location = New System.Drawing.Point(7, 473)
+        Me.cbEnableFolderSize.Name = "cbEnableFolderSize"
+        Me.cbEnableFolderSize.Size = New System.Drawing.Size(174, 19)
+        Me.cbEnableFolderSize.TabIndex = 97
+        Me.cbEnableFolderSize.Text = "Get FolderSize for Movie(s)"
+        Me.ToolTip1.SetToolTip(Me.cbEnableFolderSize, "This feature can slow performance of MC"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"if there are multiple movies in Sub Fold"& _ 
+        "ers.")
+        Me.cbEnableFolderSize.UseVisualStyleBackColor = true
         '
         'cbXbmcTmdbActorFromImdb
         '
@@ -3169,10 +3181,10 @@ Partial Class frmPreferences
         Me.gbMovieFilters.Controls.Add(Me.nudMaxActorsInFilter)
         Me.gbMovieFilters.Controls.Add(Me.nudActorsFilterMinFilms)
         Me.gbMovieFilters.Controls.Add(Me.Label165)
-        Me.gbMovieFilters.Location = New System.Drawing.Point(681, 172)
+        Me.gbMovieFilters.Location = New System.Drawing.Point(657, 172)
         Me.gbMovieFilters.Margin = New System.Windows.Forms.Padding(0)
         Me.gbMovieFilters.Name = "gbMovieFilters"
-        Me.gbMovieFilters.Size = New System.Drawing.Size(305, 211)
+        Me.gbMovieFilters.Size = New System.Drawing.Size(329, 211)
         Me.gbMovieFilters.TabIndex = 82
         Me.gbMovieFilters.TabStop = false
         Me.gbMovieFilters.Text = " Movie Filters "
@@ -3182,7 +3194,7 @@ Partial Class frmPreferences
         Me.cbMovieFilters_Sets_Order.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbMovieFilters_Sets_Order.FormattingEnabled = true
         Me.cbMovieFilters_Sets_Order.Items.AddRange(New Object() {"Num Movies desc", "A-Z asc"})
-        Me.cbMovieFilters_Sets_Order.Location = New System.Drawing.Point(168, 118)
+        Me.cbMovieFilters_Sets_Order.Location = New System.Drawing.Point(198, 118)
         Me.cbMovieFilters_Sets_Order.Name = "cbMovieFilters_Sets_Order"
         Me.cbMovieFilters_Sets_Order.Size = New System.Drawing.Size(125, 23)
         Me.cbMovieFilters_Sets_Order.TabIndex = 5
@@ -3202,28 +3214,28 @@ Partial Class frmPreferences
         Me.cbMovieFilters_Directors_Order.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbMovieFilters_Directors_Order.FormattingEnabled = true
         Me.cbMovieFilters_Directors_Order.Items.AddRange(New Object() {"Num Movies desc", "A-Z asc"})
-        Me.cbMovieFilters_Directors_Order.Location = New System.Drawing.Point(168, 87)
+        Me.cbMovieFilters_Directors_Order.Location = New System.Drawing.Point(198, 87)
         Me.cbMovieFilters_Directors_Order.Name = "cbMovieFilters_Directors_Order"
         Me.cbMovieFilters_Directors_Order.Size = New System.Drawing.Size(125, 23)
         Me.cbMovieFilters_Directors_Order.TabIndex = 11
         '
         'nudMaxDirectorsInFilter
         '
-        Me.nudMaxDirectorsInFilter.Location = New System.Drawing.Point(114, 87)
-        Me.nudMaxDirectorsInFilter.Maximum = New Decimal(New Integer() {5000, 0, 0, 0})
+        Me.nudMaxDirectorsInFilter.Location = New System.Drawing.Point(130, 87)
+        Me.nudMaxDirectorsInFilter.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
         Me.nudMaxDirectorsInFilter.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudMaxDirectorsInFilter.Name = "nudMaxDirectorsInFilter"
-        Me.nudMaxDirectorsInFilter.Size = New System.Drawing.Size(48, 21)
+        Me.nudMaxDirectorsInFilter.Size = New System.Drawing.Size(62, 21)
         Me.nudMaxDirectorsInFilter.TabIndex = 10
         Me.nudMaxDirectorsInFilter.Value = New Decimal(New Integer() {5000, 0, 0, 0})
         '
         'nudMaxSetsInFilter
         '
-        Me.nudMaxSetsInFilter.Location = New System.Drawing.Point(114, 118)
+        Me.nudMaxSetsInFilter.Location = New System.Drawing.Point(130, 118)
         Me.nudMaxSetsInFilter.Maximum = New Decimal(New Integer() {5000, 0, 0, 0})
         Me.nudMaxSetsInFilter.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudMaxSetsInFilter.Name = "nudMaxSetsInFilter"
-        Me.nudMaxSetsInFilter.Size = New System.Drawing.Size(48, 21)
+        Me.nudMaxSetsInFilter.Size = New System.Drawing.Size(62, 21)
         Me.nudMaxSetsInFilter.TabIndex = 3
         Me.nudMaxSetsInFilter.Value = New Decimal(New Integer() {5000, 0, 0, 0})
         '
@@ -3233,7 +3245,7 @@ Partial Class frmPreferences
         Me.nudDirectorsFilterMinFilms.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
         Me.nudDirectorsFilterMinFilms.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudDirectorsFilterMinFilms.Name = "nudDirectorsFilterMinFilms"
-        Me.nudDirectorsFilterMinFilms.Size = New System.Drawing.Size(37, 21)
+        Me.nudDirectorsFilterMinFilms.Size = New System.Drawing.Size(49, 21)
         Me.nudDirectorsFilterMinFilms.TabIndex = 9
         Me.nudDirectorsFilterMinFilms.Value = New Decimal(New Integer() {99, 0, 0, 0})
         '
@@ -3243,7 +3255,7 @@ Partial Class frmPreferences
         Me.nudSetsFilterMinFilms.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
         Me.nudSetsFilterMinFilms.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudSetsFilterMinFilms.Name = "nudSetsFilterMinFilms"
-        Me.nudSetsFilterMinFilms.Size = New System.Drawing.Size(37, 21)
+        Me.nudSetsFilterMinFilms.Size = New System.Drawing.Size(49, 21)
         Me.nudSetsFilterMinFilms.TabIndex = 1
         Me.nudSetsFilterMinFilms.Value = New Decimal(New Integer() {99, 0, 0, 0})
         '
@@ -3272,7 +3284,7 @@ Partial Class frmPreferences
         Me.cbMovieFilters_Actors_Order.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbMovieFilters_Actors_Order.FormattingEnabled = true
         Me.cbMovieFilters_Actors_Order.Items.AddRange(New Object() {"Num Movies desc", "A-Z asc"})
-        Me.cbMovieFilters_Actors_Order.Location = New System.Drawing.Point(168, 55)
+        Me.cbMovieFilters_Actors_Order.Location = New System.Drawing.Point(198, 55)
         Me.cbMovieFilters_Actors_Order.Name = "cbMovieFilters_Actors_Order"
         Me.cbMovieFilters_Actors_Order.Size = New System.Drawing.Size(125, 23)
         Me.cbMovieFilters_Actors_Order.TabIndex = 5
@@ -3290,7 +3302,7 @@ Partial Class frmPreferences
         '
         Me.Label180.AutoSize = true
         Me.Label180.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label180.Location = New System.Drawing.Point(195, 32)
+        Me.Label180.Location = New System.Drawing.Point(225, 32)
         Me.Label180.Name = "Label180"
         Me.Label180.Size = New System.Drawing.Size(43, 15)
         Me.Label180.TabIndex = 4
@@ -3308,11 +3320,11 @@ Partial Class frmPreferences
         '
         'nudMaxActorsInFilter
         '
-        Me.nudMaxActorsInFilter.Location = New System.Drawing.Point(114, 57)
-        Me.nudMaxActorsInFilter.Maximum = New Decimal(New Integer() {5000, 0, 0, 0})
+        Me.nudMaxActorsInFilter.Location = New System.Drawing.Point(130, 57)
+        Me.nudMaxActorsInFilter.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
         Me.nudMaxActorsInFilter.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudMaxActorsInFilter.Name = "nudMaxActorsInFilter"
-        Me.nudMaxActorsInFilter.Size = New System.Drawing.Size(48, 21)
+        Me.nudMaxActorsInFilter.Size = New System.Drawing.Size(62, 21)
         Me.nudMaxActorsInFilter.TabIndex = 3
         Me.nudMaxActorsInFilter.Value = New Decimal(New Integer() {5000, 0, 0, 0})
         '
@@ -3322,14 +3334,14 @@ Partial Class frmPreferences
         Me.nudActorsFilterMinFilms.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
         Me.nudActorsFilterMinFilms.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudActorsFilterMinFilms.Name = "nudActorsFilterMinFilms"
-        Me.nudActorsFilterMinFilms.Size = New System.Drawing.Size(37, 21)
+        Me.nudActorsFilterMinFilms.Size = New System.Drawing.Size(49, 21)
         Me.nudActorsFilterMinFilms.TabIndex = 1
         Me.nudActorsFilterMinFilms.Value = New Decimal(New Integer() {99, 0, 0, 0})
         '
         'Label165
         '
         Me.Label165.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label165.Location = New System.Drawing.Point(121, 20)
+        Me.Label165.Location = New System.Drawing.Point(137, 20)
         Me.Label165.Name = "Label165"
         Me.Label165.Size = New System.Drawing.Size(38, 33)
         Me.Label165.TabIndex = 2
@@ -3342,9 +3354,9 @@ Partial Class frmPreferences
         Me.GroupBox35.Controls.Add(Me.tbDateFormat)
         Me.GroupBox35.Controls.Add(Me.Label179)
         Me.GroupBox35.Controls.Add(Me.cbMovieShowDateOnList)
-        Me.GroupBox35.Location = New System.Drawing.Point(323, 405)
+        Me.GroupBox35.Location = New System.Drawing.Point(311, 405)
         Me.GroupBox35.Name = "GroupBox35"
-        Me.GroupBox35.Size = New System.Drawing.Size(352, 112)
+        Me.GroupBox35.Size = New System.Drawing.Size(340, 112)
         Me.GroupBox35.TabIndex = 80
         Me.GroupBox35.TabStop = false
         Me.GroupBox35.Text = " Movie List "
@@ -3402,9 +3414,9 @@ Partial Class frmPreferences
         Me.GroupBox27.Controls.Add(Me.cbMovieRenameEnable)
         Me.GroupBox27.Controls.Add(Me.Label100)
         Me.GroupBox27.Controls.Add(Me.tb_MovieRenameTemplate)
-        Me.GroupBox27.Location = New System.Drawing.Point(323, 6)
+        Me.GroupBox27.Location = New System.Drawing.Point(311, 6)
         Me.GroupBox27.Name = "GroupBox27"
-        Me.GroupBox27.Size = New System.Drawing.Size(352, 393)
+        Me.GroupBox27.Size = New System.Drawing.Size(340, 393)
         Me.GroupBox27.TabIndex = 74
         Me.GroupBox27.TabStop = false
         Me.GroupBox27.Text = "Rename Movie Settings"
@@ -3466,7 +3478,7 @@ Partial Class frmPreferences
         '
         Me.Label197.AutoSize = true
         Me.Label197.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline),System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label197.Location = New System.Drawing.Point(248, 12)
+        Me.Label197.Location = New System.Drawing.Point(238, 15)
         Me.Label197.Name = "Label197"
         Me.Label197.Size = New System.Drawing.Size(67, 15)
         Me.Label197.TabIndex = 79
@@ -3559,7 +3571,7 @@ Partial Class frmPreferences
         Me.Label100.AutoSize = true
         Me.Label100.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label100.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label100.Location = New System.Drawing.Point(212, 27)
+        Me.Label100.Location = New System.Drawing.Point(202, 30)
         Me.Label100.Name = "Label100"
         Me.Label100.Size = New System.Drawing.Size(125, 236)
         Me.Label100.TabIndex = 70
@@ -3577,9 +3589,9 @@ Partial Class frmPreferences
         '
         Me.GroupBox9.Controls.Add(Me.Label77)
         Me.GroupBox9.Controls.Add(Me.TextBox_OfflineDVDTitle)
-        Me.GroupBox9.Location = New System.Drawing.Point(681, 395)
+        Me.GroupBox9.Location = New System.Drawing.Point(657, 395)
         Me.GroupBox9.Name = "GroupBox9"
-        Me.GroupBox9.Size = New System.Drawing.Size(305, 61)
+        Me.GroupBox9.Size = New System.Drawing.Size(329, 61)
         Me.GroupBox9.TabIndex = 70
         Me.GroupBox9.TabStop = false
         Me.GroupBox9.Text = "Offline DVD Title Text"
@@ -3626,7 +3638,7 @@ Partial Class frmPreferences
         Me.GroupBox26.Controls.Add(Me.cbMovieTrailerUrl)
         Me.GroupBox26.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox26.Name = "GroupBox26"
-        Me.GroupBox26.Size = New System.Drawing.Size(311, 511)
+        Me.GroupBox26.Size = New System.Drawing.Size(299, 511)
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
@@ -3689,9 +3701,9 @@ Partial Class frmPreferences
         Me.cbMovThousSeparator.AutoSize = true
         Me.cbMovThousSeparator.Location = New System.Drawing.Point(7, 182)
         Me.cbMovThousSeparator.Name = "cbMovThousSeparator"
-        Me.cbMovThousSeparator.Size = New System.Drawing.Size(299, 19)
+        Me.cbMovThousSeparator.Size = New System.Drawing.Size(235, 19)
         Me.cbMovThousSeparator.TabIndex = 77
-        Me.cbMovThousSeparator.Text = "Set , as Thousands separator in Votes saved to nfo"
+        Me.cbMovThousSeparator.Text = "Set , as separator in Votes saved to nfo"
         Me.cbMovThousSeparator.UseVisualStyleBackColor = true
         '
         'cbXtraFrodoUrls
@@ -3803,9 +3815,9 @@ Partial Class frmPreferences
         Me.grpNameMode.Controls.Add(Me.cbMoviePartsIgnorePart)
         Me.grpNameMode.Controls.Add(Me.lblNameModeEg)
         Me.grpNameMode.Controls.Add(Me.cbMoviePartsNameMode)
-        Me.grpNameMode.Location = New System.Drawing.Point(681, 6)
+        Me.grpNameMode.Location = New System.Drawing.Point(657, 6)
         Me.grpNameMode.Name = "grpNameMode"
-        Me.grpNameMode.Size = New System.Drawing.Size(305, 152)
+        Me.grpNameMode.Size = New System.Drawing.Size(329, 152)
         Me.grpNameMode.TabIndex = 78
         Me.grpNameMode.TabStop = false
         Me.grpNameMode.Text = "Name Mode"
@@ -5452,18 +5464,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbEnableFolderSize
-        '
-        Me.cbEnableFolderSize.AutoSize = true
-        Me.cbEnableFolderSize.Location = New System.Drawing.Point(7, 473)
-        Me.cbEnableFolderSize.Name = "cbEnableFolderSize"
-        Me.cbEnableFolderSize.Size = New System.Drawing.Size(174, 19)
-        Me.cbEnableFolderSize.TabIndex = 97
-        Me.cbEnableFolderSize.Text = "Get FolderSize for Movie(s)"
-        Me.ToolTip1.SetToolTip(Me.cbEnableFolderSize, "This feature can slow performance of MC"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"if there are multiple movies in Sub Fold"& _ 
-        "ers.")
-        Me.cbEnableFolderSize.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
