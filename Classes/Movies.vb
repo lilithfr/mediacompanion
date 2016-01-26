@@ -1522,7 +1522,7 @@ Public Class Movies
                                     Catch
                                         newmovie.FolderSize = -1
                                     End Try                                
-
+                                Case "RootFolder"           : newmovie.rootfolder = detail.InnerText
                             End Select
                         Next
                         If newmovie.source = Nothing Then
@@ -1645,6 +1645,7 @@ Public Class Movies
             child.AppendChild(doc, "FrodoPosterExists", movie.FrodoPosterExists)
             child.AppendChild(doc, "PreFrodoPosterExists", movie.PreFrodoPosterExists)
             child.AppendChild(doc, "FolderSize", movie.FolderSize)
+            child.AppendChild(doc, "RootFolder", movie.rootfolder)
             root.AppendChild(child)
         Next
 
@@ -2757,6 +2758,20 @@ Public Class Movies
             Select ccb.GetItemCheckState(i)
                 Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.SubLang.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
                 Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.SubLang.Exists( Function(a) If(a.Language.Value="","Unknown",a.Language.Value)=value ))
+            End Select
+            i += 1
+        Next
+        Return recs
+    End Function
+
+    Function ApplyRootFolderFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim i As Integer = 0
+
+        For Each item As CCBoxItem In ccb.Items
+            Dim value As String = item.Name.RemoveAfterMatch
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = (From m In recs Where     m.rootfolder.Contains(value)).ToList
+                Case CheckState.Unchecked : recs = (From m In recs Where Not m.rootfolder.Contains(value)).ToList
             End Select
             i += 1
         Next

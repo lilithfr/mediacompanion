@@ -1259,6 +1259,7 @@ Public Class Movie
         _movieCache.director            = _scrapedMovie.fullmoviebody.director
         _movieCache.credits             = _scrapedMovie.fullmoviebody.credits
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
+        _movieCache.rootfolder          = Pref.GetRootFolder(NfoPathAndFilename)
 
         
         If movRebuildCaches Then 

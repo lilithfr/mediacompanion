@@ -3277,6 +3277,7 @@ Public Class Form1
                 newfullmovie2.lastplayed = workingMovieDetails.fullmoviebody.lastplayed 
                 newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating.ToRating
                 newfullmovie2.year = workingMovieDetails.fullmoviebody.year
+                newfullmovie2.rootfolder = workingMovieDetails.fileinfo.rootfolder 
                 filteredList.Add(newfullmovie2)
                 Exit For
             End If
@@ -3321,6 +3322,7 @@ Public Class Form1
                     movietoadd.foldername = movie.foldername
                     movietoadd.rating = movie.rating
                     movietoadd.top250 = movie.top250
+                    movietoadd.rootfolder = movie.rootfolder 
                     newlist.Add(movietoadd)
                 End If
             Next
@@ -3350,6 +3352,7 @@ Public Class Form1
                     movietoadd.foldername = movie.foldername
                     movietoadd.rating = movie.rating
                     movietoadd.top250 = movie.top250
+                    movietoadd.rootfolder = movie.rootfolder 
                     newlist.Add(movietoadd)
                 End If
             Next
@@ -3527,6 +3530,7 @@ Public Class Form1
         workingMovie.top250 = Nothing
         workingMovie.year = Nothing
         workingMovie.MovieSet = Nothing
+        workingMovie.rootfolder = Nothing
         titletxt.Text = ""
         TextBox3.Text = ""
         outlinetxt.Text = ""
@@ -3746,6 +3750,7 @@ Public Class Form1
                 workingMovie.top250 = queryList(0).top250
                 workingMovie.year = queryList(0).year
                 workingMovie.FolderSize = queryList(0).FolderSize
+                workingMovie.rootfolder = queryList(0).rootfolder 
                 mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
                 Call mov_FormPopulate(yielding)
             Else
@@ -16547,7 +16552,7 @@ End Sub
                 Call mov_ScrapeSpecific("stars")
             Case "Director"
                 Call mov_ScrapeSpecific("director")
-            Case "Credits"
+            Case "Credits", "Writers"
                 Call mov_ScrapeSpecific("credits")
             Case "Studio"
                 Call mov_ScrapeSpecific("studio")

@@ -75,6 +75,7 @@ Public Class ComboList
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
     Property FolderSize           As Long = -1
+    Property _rootfolder          As String = ""
 
 
     Public ReadOnly Property DisplayFolderSize As Double
@@ -401,7 +402,14 @@ Public Class ComboList
         End Set
     End Property    
 
-
+    Public Property rootfolder As String
+        Get
+            Return _rootfolder
+        End Get
+        Set(value As String)
+            _rootfolder = value
+        End Set
+    End Property
 
     Public Sub Assign(From As ComboList)
 
@@ -450,6 +458,7 @@ Public Class ComboList
         Me.Actorlist            = From.Actorlist 
         Me.DirectorList         = From.DirectorList 
         Me.FolderSize           = From.FolderSize
+        Me.rootfolder           = From.rootfolder
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

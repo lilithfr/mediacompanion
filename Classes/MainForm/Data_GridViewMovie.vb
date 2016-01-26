@@ -35,6 +35,7 @@ Public Class Data_GridViewMovie
     Dim _movietag As String
     Dim _container As String
     Dim _videomissing As Boolean
+    Dim _rootfolder             As String
 
 
     
@@ -95,6 +96,7 @@ Public Class Data_GridViewMovie
         AssignSubtitleLang(movie.SubLang)
         FolderSize = movie.FolderSize
         DefaultAudioTrack = movie.DefaultAudioTrack
+        rootfolder          = movie.rootfolder
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -141,6 +143,7 @@ Public Class Data_GridViewMovie
         convertedMovie.PreFrodoPosterExists = Me.PreFrodoPosterExists
         convertedMovie.FolderSize           = Me.FolderSize
         convertedMovie.DefaultAudioTrack    = Me.DefaultAudioTrack
+        convertedMovie.rootfolder           = Me.rootfolder
 
         Return convertedMovie
     End Function
@@ -816,5 +819,14 @@ Public Class Data_GridViewMovie
     End Property
 
     Property Resolution As Integer = -1
+
+    Public Property rootfolder As String
+        Get
+            Return _rootfolder
+        End Get
+        Set(value As String)
+            _rootfolder = value
+        End Set
+    End Property
 
 End Class

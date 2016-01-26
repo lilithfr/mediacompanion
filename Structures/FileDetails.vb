@@ -7,6 +7,7 @@ Public Structure str_FileDetails
     Dim filename As String
     Dim foldername As String
     Dim videotspath As String
+    Dim rootfolder As String
     Dim fanartpath As String
     Dim posterpath As String
     Dim trailerpath As String
@@ -21,6 +22,7 @@ Public Structure str_FileDetails
         filename = ""
         foldername = ""
         videotspath =""
+        rootfolder = ""
         fanartpath = ""
         posterpath = ""
         trailerpath = ""

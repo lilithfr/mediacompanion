@@ -2381,6 +2381,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.filename = IO.Path.GetFileName(path)
                 newmovie.foldername = Utilities.GetLastFolder(path)
                 newmovie.fullpathandfilename = path
+                newmovie.rootfolder = Pref.GetRootFolder(path) & "\"
                 If newmovie.genre = Nothing Then newmovie.genre = ""
                 If newmovie.id = Nothing Then newmovie.id = ""
                 If newmovie.tmdbid = Nothing Then newmovie.tmdbid = ""
@@ -2743,6 +2744,7 @@ Public Class WorkingWithNfoFiles
                 Else
                     newmovie.fileinfo.videotspath = ""
                 End If
+                newmovie.fileinfo.rootfolder = Pref.GetRootFolder(path) & "\"
                 newmovie.fileinfo.posterpath = Pref.GetPosterPath(path, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
@@ -3430,6 +3432,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(filepath)
                 newmovie.fileinfo.posterpath = Pref.GetPosterPath(filepath, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
+                newmovie.fileinfo.rootfolder = Pref.GetRootFolder(filepath) & "\"
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(filepath) & "\"
                 newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
                 newmovie.fileinfo.fanartpath = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
@@ -4083,6 +4086,7 @@ Public Class WorkingWithNfoFiles
         NewMusicVideo.fileinfo.foldername   = Utilities.GetLastFolder(filepath)
         NewMusicVideo.fileinfo.posterpath   = Pref.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
         NewMusicVideo.fileinfo.trailerpath  = ""
+        NewMusicVideo.fileinfo.rootfolder   = Pref.GetRootFolder(filePath) & "\"
         NewMusicVideo.fileinfo.path         = IO.Path.GetDirectoryName(filepath) & "\"
         NewMusicVideo.fileinfo.basepath     = Pref.GetMovBasePath(NewMusicVideo.fileinfo.path)
         NewMusicVideo.fileinfo.fanartpath   = Pref.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)

@@ -2187,6 +2187,16 @@ Public Class Pref
         Return isroot
     End Function
 
+    Public Shared Function GetRootFolder(ByVal Fullpath As String) As String
+        Try
+            For each movroot In Pref.movieFolders
+                If Fullpath.Contains(movroot.rpath & "\") Then Return movroot.rpath
+            Next
+        Catch 
+        End Try
+        Return ""
+    End Function
+
     Public Shared Function Get_HdTags(ByVal filename As String) As FullFileDetails
         Try
             If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
