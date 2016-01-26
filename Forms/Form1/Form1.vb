@@ -4192,7 +4192,7 @@ Public Class Form1
             currentTabIndex = TabControl2.SelectedIndex
         ElseIf tab.ToLower = "wall" Then
             Call mov_WallSetup()
-        ElseIf tab.ToLower = "movie & tag sets" Then
+        ElseIf tab.ToLower = "moviesets & tags" Then
             Call MovieSetsAndTagsSetup()
         ElseIf tab.ToLower = "fanart.tv"
             UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
