@@ -9456,12 +9456,22 @@ Public Class Form1
                         oCachedMovie.MovieSet.MovieSetName = ""
                         oCachedMovie.MovieSet.MovieSetId = ""
                     Else
+                        Dim aok As Boolean = False
                         For Each m In oMovies.MovieSetDB
                             If m.MovieSetName = NewSetName Then
                                 oCachedMovie.MovieSet.MovieSetName = m.MovieSetName
-                                oCachedMovie.MovieSet.MovieSetId = m.MovieSetId 
+                                oCachedMovie.MovieSet.MovieSetId = m.MovieSetId
+                                aok = True
                             End If
                         Next
+                        If Not aok Then
+                            For each m In Pref.moviesets
+                                If m = NewSetName Then
+                                    oCachedMovie.MovieSet.MovieSetName = m
+                                    Exit For
+                                End If
+                            Next
+                        End If
                     End If
                     'oCachedMovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
                 Catch ex As Exception
