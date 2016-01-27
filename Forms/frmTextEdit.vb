@@ -34,7 +34,7 @@ Public Class frmTextEdit
         If File.Exists(CustomPath) Then File.Delete(CustomPath)
         Using fs As IO.StreamWriter = IO.File.CreateText(CustomPath)
             Try
-                fs.Write(text)
+                fs.Write(tbText.Text)
             Catch ex As Exception
                 'fs.Close()
             End Try
