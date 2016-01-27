@@ -4358,6 +4358,8 @@ Public Class Form1
                 Dim location As Integer = 0
                 Dim itemcounter As Integer = 0
                 For Each item In fanartArray
+                    messbox.TextBox1.Text = itemcounter+1 & " of " & fanartArray.Count
+                    messbox.Refresh()
                     Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                     fanartBoxes() = New PictureBox()
                     With fanartBoxes
@@ -4978,6 +4980,8 @@ Public Class Form1
             Dim locationY As Integer = 0
 
             For Each item In names
+                messbox.TextBox2.Text = itemcounter+1 & " of 10"
+                messbox.Refresh()
                 Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                 Try
                     posterPicBoxes() = New PictureBox()
@@ -17015,6 +17019,8 @@ End Sub
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
             For Each item As String In names
+                messbox.TextBox2.Text = itemcounter+1 & " of 10"
+                messbox.Refresh()
                 Dim item2 As String = Utilities.Download2Cache(item)
                 Try
                     posterPicBoxes() = New PictureBox()
@@ -17098,6 +17104,8 @@ End Sub
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
             For Each item As String In names
+                messbox.TextBox2.Text = itemcounter+1 & " of 10"
+                messbox.Refresh()
                 Dim item2 As String = Utilities.Download2Cache(item)
                 posterPicBoxes() = New PictureBox()
                 With posterPicBoxes
