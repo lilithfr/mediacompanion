@@ -3908,8 +3908,8 @@ Public Class Movie
             Try
                 If Pref.MovieRenameEnable Or Pref.MovieManualRename Then
                     s = Pref.MovieRenameTemplate
-                    s = s.Replace("%T", If(Pref.MovTitleIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
-                    s = s.Replace("%Z", If(Pref.MovSortIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
+                    s = s.Replace("%T", If(Pref.MovTitleIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim, True), _scrapedMovie.fullmoviebody.title.SafeTrim))
+                    s = s.Replace("%Z", If(Pref.MovSortIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim, True), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
@@ -3971,15 +3971,15 @@ Public Class Movie
                         End If
                         s = s.Replace("%1", firstchar)
                     End If
-                    s = s.Replace("%T", If(Pref.MovTitleIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim), _scrapedMovie.fullmoviebody.title.SafeTrim))
-                    s = s.Replace("%Z", If(Pref.MovSortIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
+                    s = s.Replace("%T", If(Pref.MovTitleIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim, True), _scrapedMovie.fullmoviebody.title.SafeTrim))
+                    s = s.Replace("%Z", If(Pref.MovSortIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.sortorder.SafeTrim, True), _scrapedMovie.fullmoviebody.sortorder.SafeTrim))
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
                     s = s.Replace("%M", _scrapedMovie.fullmoviebody.mpaa)
                     s = s.Replace("%G", vgenre)
-                    s = s.Replace("%N", If(Pref.MovSetIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName), _scrapedMovie.fullmoviebody.MovieSet.MovieSetName))
+                    s = s.Replace("%N", If(Pref.MovSetIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName, True), _scrapedMovie.fullmoviebody.MovieSet.MovieSetName))
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
                     s = s.Replace("%O", ach)
