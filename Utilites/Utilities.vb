@@ -401,6 +401,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Else
                 'process a typical multi‑part, ending in digits or a single letter
                 M = Regex.Match(stackName, "[" & cleanSeparators & "](" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "]?)([0-9a-z]+)$")
+                'M = Regex.Match(stackName, "(" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "]?)([0-9a-z]+)$")
                 If M.Success = False Then
                     'finally, process a multi‑part that may be designated by a single letter
                     M = Regex.Match(stackName, "([a-z])$")
@@ -411,6 +412,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 '   ‑ either the first part '1' or 'a', or the next sequential part.
                 If ignoreParts AndAlso (M.Groups(1).Value = "part" Or M.Groups(1).Value = "pt") Then
                     'don't modify stack name
+                ElseIf M.Groups(3).Value.Length > 2 Then
+                    'not a stacked file
                 Else
                     Dim first As Boolean = False
                     Dim grpPartNo As Group = M.Groups(M.Groups.Count - 1)   'get the number or letter at the end of filename
