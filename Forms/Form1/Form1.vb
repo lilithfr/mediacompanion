@@ -4338,6 +4338,9 @@ Public Class Form1
   '     Application.DoEvents()
         fanartArray.Clear()
         noFanart = False
+        messbox = New frmMessageBox("", "Retrieving Fanart...", "Please wait...")
+        messbox.Show()
+        messbox.Refresh()
         Dim tmdb As New TMDb '(workingmoviedetails.fullmoviebody.imdbid)
         If SetId = "" Then
             tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
@@ -4347,12 +4350,15 @@ Public Class Form1
             tmdb.SetId = SetId
             fanartArray.AddRange(tmdb.McSetFanart)
         End If
-
+        Me.Panel2.Visible = False
+        messbox.TextBox2.Text = "Downloading Fanart preview images...."
+        messbox.Refresh()
         Try
             If fanartArray.Count > 0 Then
                 Dim location As Integer = 0
                 Dim itemcounter As Integer = 0
                 For Each item In fanartArray
+                    Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                     fanartBoxes() = New PictureBox()
                     With fanartBoxes
                         .Location = New Point(0, location)
@@ -4364,12 +4370,14 @@ Public Class Form1
                             .Height = 243
                         End If
                         .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = item.ldUrl
+                        '.ImageLocation = item.ldUrl
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
                         .Name = "moviefanart" & itemcounter.ToString
                         AddHandler fanartBoxes.DoubleClick, AddressOf util_ZoomImage2
                     End With
+                    util_ImageLoad(fanartBoxes, item2, "")
+                    Application.DoEvents()
                     If fanartArray.Count > 2 Then
                         fanartCheckBoxes() = New RadioButton()
                         With fanartCheckBoxes
@@ -4414,8 +4422,9 @@ Public Class Form1
                     Me.Panel2.Controls.Add(fanartBoxes())
                     Me.Panel2.Controls.Add(fanartCheckBoxes())
                     Me.Panel2.Controls.Add(resLabels)
+                    Me.Panel2.Refresh()
                     Me.Refresh()
-          '          Application.DoEvents()
+                    Application.DoEvents()
                 Next
 
                 EnableFanartScrolling()
@@ -4434,10 +4443,13 @@ Public Class Form1
 
                 Me.Panel2.Controls.Add(mainlabel2)
             End If
+            Me.Panel2.Visible = True
+            messbox.Close()
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
+            If Not IsNothing(messbox) Then messbox.Close()
         End Try
     End Sub
 
@@ -4909,6 +4921,7 @@ Public Class Form1
 
     Private Sub mov_PosterSelectionDisplay()
         Dim names As New List(Of McImage)
+        Me.panelAvailableMoviePosters.Visible = False
         messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
@@ -4971,8 +4984,8 @@ Public Class Form1
                     With posterPicBoxes
                         .WaitOnLoad = True
                         .Location = New Point(locationX, locationY)
-                        .Width = 123
-                        .Height = 168
+                        .Width = 126
+                        .Height = 189
                         .SizeMode = PictureBoxSizeMode.Zoom
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
@@ -4984,7 +4997,7 @@ Public Class Form1
 
                     posterCheckBoxes() = New RadioButton()
                     With posterCheckBoxes
-                        .Location = New Point(locationX + 18, locationY + 166) '179
+                        .Location = New Point(locationX + 18, locationY + 187) '179
                         .Width = 79
                         .Height = 32
                         .Name = "postercheckbox" & itemcounter.ToString
@@ -5006,9 +5019,9 @@ Public Class Form1
                     Me.Refresh()
                     Application.DoEvents()
                     If tempboolean = True Then
-                        locationY = (192 + 19)
+                        locationY = (213 + 19)
                     Else
-                        locationX += 120
+                        locationX += 126
                         locationY = 0
                     End If
                     tempboolean = Not tempboolean
@@ -5047,6 +5060,7 @@ Public Class Form1
             lblMovPosterPages.Text = "0 of 0 Images"
             Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
+        Me.panelAvailableMoviePosters.Visible = True
         messbox.Close()
     End Sub
     
@@ -16943,7 +16957,7 @@ End Sub
                 MsgBox("No IMDB ID" & vbCrLf & "Searching IMDB for Posters halted")
                 Exit Sub
             End If
-            messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
+            messbox = New frmMessageBox("Please wait,", "", "Retrieving Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -16972,6 +16986,7 @@ End Sub
 
     Private Sub btnMovPosterNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterNext.Click
         Try
+            Me.panelAvailableMoviePosters.Visible = False
             For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
                 panelAvailableMoviePosters.Controls.RemoveAt(i)
             Next
@@ -17043,6 +17058,7 @@ End Sub
 #End If
                 End Try
             Next
+            Me.panelAvailableMoviePosters.Visible = True
             messbox.Close()
             Me.Refresh()
             Application.DoEvents()
@@ -17053,6 +17069,7 @@ End Sub
 
     Private Sub btnMovPosterPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterPrev.Click
         Try
+            Me.panelAvailableMoviePosters.Visible = False
             For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
                 panelAvailableMoviePosters.Controls.RemoveAt(i)
             Next
@@ -17118,6 +17135,7 @@ End Sub
                 End If
                 tempboolean = Not tempboolean
             Next
+            Me.panelAvailableMoviePosters.Visible = True
             messbox.Close()
             Me.Refresh()
             Application.DoEvents()
@@ -17128,7 +17146,7 @@ End Sub
 
     Private Sub btn_TMDb_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TMDb_posters.Click
         Try
-            messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
+            messbox = New frmMessageBox("Please wait,", "", "Retrieving Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -17164,7 +17182,7 @@ End Sub
                 MsgBox("No IMDB ID" & vbCrLf & "Searching Movie Poster DB halted")
                 Exit Sub
             End If
-            messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
+            messbox = New frmMessageBox("Please wait,", "", "Retrieving Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -17212,7 +17230,7 @@ End Sub
     
     Private Sub btn_IMPA_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_IMPA_posters.Click
         Try
-            messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
+            messbox = New frmMessageBox("Please wait,", "", "Retrieving Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
