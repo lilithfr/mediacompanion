@@ -3315,7 +3315,11 @@ End Sub
 
 #End Region 'Profiles & Commands
 
-
+    Private Sub btnEditCustomGenreFile_Click(sender As Object, e As EventArgs) Handles btnEditCustomGenreFile.Click
+        Using frm As New frmTextEdit
+            frm.ShowDialog()
+        End Using
+    End Sub
 
     Private Sub applyAdvancedLists()
         If cleanfilenameprefchanged Then
@@ -3442,5 +3446,5 @@ End Sub
         Pref.AllowUserTags = cbAllowUserTags.Checked
         Changes = True
     End Sub
-
+    
 End Class

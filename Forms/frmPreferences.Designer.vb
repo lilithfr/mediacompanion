@@ -456,6 +456,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1521,6 +1522,7 @@ Partial Class frmPreferences
         '
         'TPCommonSettings
         '
+        Me.TPCommonSettings.Controls.Add(Me.btnEditCustomGenreFile)
         Me.TPCommonSettings.Controls.Add(Me.GroupBox4)
         Me.TPCommonSettings.Controls.Add(Me.Label4)
         Me.TPCommonSettings.Controls.Add(Me.gbImageResizing)
@@ -3159,7 +3161,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -5465,6 +5467,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'btnEditCustomGenreFile
+        '
+        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(12, 434)
+        Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
+        Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
+        Me.btnEditCustomGenreFile.TabIndex = 106
+        Me.btnEditCustomGenreFile.Text = "Create/Edit custom Genre file"
+        Me.btnEditCustomGenreFile.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6058,4 +6069,5 @@ End Sub
     Friend WithEvents cbIncludeMpaaRated As CheckBox
     Friend WithEvents cbMcCloseMCForDLNewVersion As CheckBox
     Friend WithEvents cbEnableFolderSize As CheckBox
+    Friend WithEvents btnEditCustomGenreFile As Button
 End Class
