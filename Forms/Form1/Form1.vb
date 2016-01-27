@@ -8597,6 +8597,7 @@ Public Class Form1
                     cbFilterResolution.Font = newFont
                     cbFilterVideoCodec.Font = newFont
                     cbFilterSubTitleLang.Font = newFont
+                    cbFilterRootFolder.Font = newfont
                     cbFilterAudioCodecs.Font = newFont
                     cbFilterAudioLanguages.Font = newFont
                     cbFilterAudioDefaultLanguages.Font = newFont
@@ -11619,7 +11620,8 @@ End Sub
                                                                                                     cbFilterAudioBitrates.TextChanged, cbFilterNumAudioTracks.TextChanged,
                                                                                                     cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged,
                                                                                                     cbFilterDirector.TextChanged, cbFilterVideoCodec.TextChanged, cbFilterSubTitleLang.TextChanged,
-                                                                                                    cbFilterAudioDefaultLanguages.TextChanged, cbFilterCountries.TextChanged, cbFilterStudios.TextChanged 
+                                                                                                    cbFilterAudioDefaultLanguages.TextChanged, cbFilterCountries.TextChanged, 
+                                                                                                    cbFilterStudios.TextChanged, cbFilterRootFolder.TextChanged 
 
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
@@ -11995,6 +11997,7 @@ End Sub
         If cbFilterActor                .Visible Then cbFilterActor                .UpdateItems( oMovies.ActorsFilter                )
         If cbFilterDirector             .Visible Then cbFilterDirector             .UpdateItems( oMovies.DirectorsFilter             )
         If cbFilterSubTitleLang         .Visible Then cbFilterSubTitleLang         .UpdateItems( oMovies.SubTitleLangFilter          )
+        If cbFilterRootFolder           .Visible Then cbFilterRootFolder           .UpdateItems( oMovies.RootFolderFilter            )
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -12029,7 +12032,8 @@ End Sub
                                                                                     cbFilterAudioLanguages.OnFormatItem, cbFilterActor.OnFormatItem,
                                                                                     cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem,
                                                                                     cbFilterDirector.OnFormatItem, cbFilterVideoCodec.OnFormatItem, cbFilterSubTitleLang.OnFormatItem,
-                                                                                    cbFilterAudioDefaultLanguages.OnFormatItem, cbFilterCountries.OnFormatItem, cbFilterStudios.OnFormatItem 
+                                                                                    cbFilterAudioDefaultLanguages.OnFormatItem, cbFilterCountries.OnFormatItem, 
+                                                                                    cbFilterStudios.OnFormatItem, cbFilterRootFolder.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -21632,7 +21636,7 @@ End Sub
                                                                         lblFilterActor.Click, lblFilterSource.Click, lblFilterTag.Click,
                                                                         lblFilterDirector.Click, lblFilterVideoCodec.Click, lblFilterSubTitleLang.Click,
                                                                         lblFilterFolderSizes.Click, lblFilterRuntime.Click, lblFilterAudioDefaultLanguages.Click,
-                                                                        lblFilterCountries.Click, lblFilterStudios.Click
+                                                                        lblFilterCountries.Click, lblFilterStudios.Click, lblFilterRootFolder.Click
                                                                         
                                                                         
 
@@ -21650,7 +21654,7 @@ End Sub
                                                                                        lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
                                                                                        lblFilterActorMode.Click, lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click,
                                                                                        lblFilterVideoCodecMode.Click, lblFilterSubTitleLangMode.Click, lblFilterAudioDefaultLanguagesMode.Click,
-                                                                                       lblFilterCountriesMode.Click, lblFilterStudiosMode.Click 
+                                                                                       lblFilterCountriesMode.Click, lblFilterStudiosMode.Click , lblFilterRootFolderMode.Click 
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)

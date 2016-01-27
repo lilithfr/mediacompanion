@@ -915,6 +915,18 @@ Public Class Movies
         End Get
     End Property
 
+    Public ReadOnly Property RootFolderFilter As List(Of String)
+        Get
+            Dim q = From x In MovieCache 
+                Group By x.rootfolder Into NumFilms=Count 
+                Order by rootfolder Ascending
+
+            Dim r = (From x In q Select x.rootfolder & " (" & x.NumFilms.ToString & ")").ToList
+
+            Return r
+        End Get
+    End Property
+
     Private Sub Rebuild_Data_GridViewMovieCache
         _data_GridViewMovieCache.Clear
 
