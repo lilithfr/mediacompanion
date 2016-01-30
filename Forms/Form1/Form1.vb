@@ -20460,6 +20460,13 @@ End Sub
 
 #Region "Home Movie routines"
 
+    Private Sub TabControl1_Selecting(sender As System.Object, e As CancelEventArgs) Handles TabControl1.Selecting
+        If TabControl1.SelectedTab.Text.ToLower = "homemovie preferences" Then
+            e.Cancel = True
+            OpenPreferences(4)
+        End If
+    End Sub
+
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
         'If Pref.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 5 Then
@@ -20477,9 +20484,11 @@ End Sub
             pbx_HmFanartSht.SizeMode = PictureBoxSizeMode.Zoom
 
             util_ImageLoad(pbx_HmFanartSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            If tb_HmFanartTime.Text = "" Then tb_HmFanartTime.Text = Pref.HmFanartTime.ToString
             homeTabIndex = TabControl1.SelectedIndex
         ElseIf tab = " poster " Then
             util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
+            If tb_HmPosterTime.Text = "" Then tb_HmPosterTime.Text = Pref.HmPosterTime.ToString
             homeTabIndex = TabControl1.SelectedIndex
         ElseIf tab = "folders" Then
             HomeFoldersUpdate()
@@ -21081,13 +21090,15 @@ End Sub
                 fulldetails.fullmoviebody.year = yearstring
 
                 'create fanart for home movie if it does not exist
-                Dim thumbpathandfilename As String = Pref.GetFanartPath(item.FullPathAndFilename)
-                If Not IO.File.Exists(thumbpathandfilename) Then
-                    Try
-                        Utilities.CreateScreenShot(item.FullPathAndFilename, thumbpathandfilename, 10)
-                    Catch ex As Exception
+                If Pref.HmFanartScrnShot Then
+                    Dim thumbpathandfilename As String = Pref.GetFanartPath(item.FullPathAndFilename)
+                    If Not IO.File.Exists(thumbpathandfilename) Then
+                        Try
+                            Utilities.CreateScreenShot(item.FullPathAndFilename, thumbpathandfilename, Pref.HmFanartTime)
+                        Catch ex As Exception
 
-                    End Try
+                        End Try
+                    End If
                 End If
                 Dim nfofilename As String = ""
                 Dim extension As String = ""

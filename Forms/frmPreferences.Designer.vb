@@ -114,6 +114,7 @@ Partial Class frmPreferences
         Me.TPCommon = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Label185 = New System.Windows.Forms.Label()
         Me.AutoScrnShtDelay = New System.Windows.Forms.TextBox()
@@ -425,6 +426,14 @@ Partial Class frmPreferences
         Me.btn_tv_RegexScrape_Test = New System.Windows.Forms.Button()
         Me.tb_tv_RegexScrape_TestString = New System.Windows.Forms.TextBox()
         Me.Label118 = New System.Windows.Forms.Label()
+        Me.TPHmPref = New System.Windows.Forms.TabPage()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.cb_HmFanartScrnShot = New System.Windows.Forms.CheckBox()
+        Me.tb_HmFanartTime = New System.Windows.Forms.TextBox()
+        Me.tb_HmPosterTime = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.lbl_HmHeader = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
         Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
@@ -456,7 +465,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -533,6 +541,8 @@ Partial Class frmPreferences
         Me.GroupBox_tv_RegexRename.SuspendLayout
         Me.GroupBox_tv_RegexScrape.SuspendLayout
         Me.GroupBox_tv_RegexScrape_Test.SuspendLayout
+        Me.TPHmPref.SuspendLayout
+        Me.GroupBox5.SuspendLayout
         Me.TPProxy.SuspendLayout
         Me.TPXBMCLink.SuspendLayout
         Me.TPPRofCmd.SuspendLayout
@@ -1487,6 +1497,7 @@ Partial Class frmPreferences
         Me.TabControl1.Controls.Add(Me.TPGen)
         Me.TabControl1.Controls.Add(Me.TPMovPref)
         Me.TabControl1.Controls.Add(Me.TPTVPref)
+        Me.TabControl1.Controls.Add(Me.TPHmPref)
         Me.TabControl1.Controls.Add(Me.TPProxy)
         Me.TabControl1.Controls.Add(Me.TPXBMCLink)
         Me.TabControl1.Controls.Add(Me.TPPRofCmd)
@@ -1546,6 +1557,15 @@ Partial Class frmPreferences
         Me.TPCommonSettings.TabIndex = 0
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
+        '
+        'btnEditCustomGenreFile
+        '
+        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(12, 434)
+        Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
+        Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
+        Me.btnEditCustomGenreFile.TabIndex = 106
+        Me.btnEditCustomGenreFile.Text = "Create/Edit custom Genre file"
+        Me.btnEditCustomGenreFile.UseVisualStyleBackColor = true
         '
         'GroupBox4
         '
@@ -5125,6 +5145,83 @@ Partial Class frmPreferences
         Me.Label118.TabIndex = 0
         Me.Label118.Text = "Test String"
         '
+        'TPHmPref
+        '
+        Me.TPHmPref.Controls.Add(Me.GroupBox5)
+        Me.TPHmPref.Controls.Add(Me.lbl_HmHeader)
+        Me.TPHmPref.Location = New System.Drawing.Point(4, 24)
+        Me.TPHmPref.Name = "TPHmPref"
+        Me.TPHmPref.Size = New System.Drawing.Size(1000, 595)
+        Me.TPHmPref.TabIndex = 11
+        Me.TPHmPref.Text = "HomeMovie Pref's"
+        Me.TPHmPref.UseVisualStyleBackColor = true
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.cb_HmFanartScrnShot)
+        Me.GroupBox5.Controls.Add(Me.tb_HmFanartTime)
+        Me.GroupBox5.Controls.Add(Me.tb_HmPosterTime)
+        Me.GroupBox5.Controls.Add(Me.Label15)
+        Me.GroupBox5.Controls.Add(Me.Label14)
+        Me.GroupBox5.Location = New System.Drawing.Point(32, 85)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(358, 123)
+        Me.GroupBox5.TabIndex = 5
+        Me.GroupBox5.TabStop = false
+        Me.GroupBox5.Text = "ScreenShot Options."
+        '
+        'cb_HmFanartScrnShot
+        '
+        Me.cb_HmFanartScrnShot.AutoSize = true
+        Me.cb_HmFanartScrnShot.Location = New System.Drawing.Point(15, 20)
+        Me.cb_HmFanartScrnShot.Name = "cb_HmFanartScrnShot"
+        Me.cb_HmFanartScrnShot.Size = New System.Drawing.Size(324, 19)
+        Me.cb_HmFanartScrnShot.TabIndex = 4
+        Me.cb_HmFanartScrnShot.Text = "Enable AutoScreenShot of Fanart (During Scrape Only)"
+        Me.cb_HmFanartScrnShot.UseVisualStyleBackColor = true
+        '
+        'tb_HmFanartTime
+        '
+        Me.tb_HmFanartTime.Location = New System.Drawing.Point(15, 49)
+        Me.tb_HmFanartTime.Name = "tb_HmFanartTime"
+        Me.tb_HmFanartTime.Size = New System.Drawing.Size(100, 21)
+        Me.tb_HmFanartTime.TabIndex = 0
+        '
+        'tb_HmPosterTime
+        '
+        Me.tb_HmPosterTime.Location = New System.Drawing.Point(15, 84)
+        Me.tb_HmPosterTime.Name = "tb_HmPosterTime"
+        Me.tb_HmPosterTime.Size = New System.Drawing.Size(100, 21)
+        Me.tb_HmPosterTime.TabIndex = 1
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = true
+        Me.Label15.Location = New System.Drawing.Point(121, 87)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(196, 15)
+        Me.Label15.TabIndex = 3
+        Me.Label15.Text = "ScreenShot delay for Poster Image"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = true
+        Me.Label14.Location = New System.Drawing.Point(121, 52)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(196, 15)
+        Me.Label14.TabIndex = 2
+        Me.Label14.Text = "ScreenShot delay for Fanart Image"
+        '
+        'lbl_HmHeader
+        '
+        Me.lbl_HmHeader.AutoSize = true
+        Me.lbl_HmHeader.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_HmHeader.Location = New System.Drawing.Point(28, 21)
+        Me.lbl_HmHeader.Name = "lbl_HmHeader"
+        Me.lbl_HmHeader.Size = New System.Drawing.Size(368, 24)
+        Me.lbl_HmHeader.TabIndex = 4
+        Me.lbl_HmHeader.Text = "Only a few preferences here currently."
+        '
         'TPProxy
         '
         Me.TPProxy.Controls.Add(Me.UcGenPref_Proxy1)
@@ -5467,15 +5564,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'btnEditCustomGenreFile
-        '
-        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(12, 434)
-        Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
-        Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
-        Me.btnEditCustomGenreFile.TabIndex = 106
-        Me.btnEditCustomGenreFile.Text = "Create/Edit custom Genre file"
-        Me.btnEditCustomGenreFile.UseVisualStyleBackColor = true
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -5625,6 +5713,10 @@ Partial Class frmPreferences
         Me.GroupBox_tv_RegexScrape.PerformLayout
         Me.GroupBox_tv_RegexScrape_Test.ResumeLayout(false)
         Me.GroupBox_tv_RegexScrape_Test.PerformLayout
+        Me.TPHmPref.ResumeLayout(false)
+        Me.TPHmPref.PerformLayout
+        Me.GroupBox5.ResumeLayout(false)
+        Me.GroupBox5.PerformLayout
         Me.TPProxy.ResumeLayout(false)
         Me.TPXBMCLink.ResumeLayout(false)
         Me.TPPRofCmd.ResumeLayout(false)
@@ -6070,4 +6162,12 @@ End Sub
     Friend WithEvents cbMcCloseMCForDLNewVersion As CheckBox
     Friend WithEvents cbEnableFolderSize As CheckBox
     Friend WithEvents btnEditCustomGenreFile As Button
+    Friend WithEvents TPHmPref As TabPage
+    Friend WithEvents GroupBox5 As GroupBox
+    Friend WithEvents tb_HmFanartTime As TextBox
+    Friend WithEvents tb_HmPosterTime As TextBox
+    Friend WithEvents Label15 As Label
+    Friend WithEvents Label14 As Label
+    Friend WithEvents lbl_HmHeader As Label
+    Friend WithEvents cb_HmFanartScrnShot As CheckBox
 End Class

@@ -412,6 +412,11 @@ Public Class Pref
     Public Shared XBMCTVDbRatings As String = "IMDb"            'Assign a default to prevent frmPreferences crashing here: cbXBMCTvdbRatingImdb            .Checked    = If(Pref.XBMCTVDbRatings.ToLower = "imdb", True, False)
     Public Shared XBMCTVDbfallback As Boolean
 
+    'Saved Home Movie Prefs
+    Public Shared HmFanartScrnShot As Boolean
+    Public Shared HmFanartTime As Integer
+    Public Shared HmPosterTime As Integer
+
     'Saved Music Video Prefs
     Public Shared MVScraper As String
     Public Shared MVsortorder As Integer
@@ -725,6 +730,11 @@ Public Class Pref
         TvMissingEpOffset = False
         ScrShtDelay = 10
         excludefromshowfoldername = "[ended]"
+
+        'Home Movie
+        HmFanartScrnShot = True
+        HmFanartTime = 10
+        HmPosterTime = 10
 
         'Music Video
         MVScraper = "wiki"
@@ -1225,6 +1235,10 @@ Public Class Pref
         root.AppendChild(doc, "XBMCTVDbRatings",                    XBMCTVDbRatings)             'cbXBMCTvdbRatingImdb
         root.AppendChild(doc, "XBMCTVDbfallback",                   XBMCTVDbfallback)            'cbXBMCTvdbRatingFallback
 
+        root.AppendChild(doc, "HmFanartScrnShot",                   HmFanartScrnShot)            'cb_HmFanartScrnShot
+        root.AppendChild(doc, "HmFanartTime",                       HmFanartTime)                'cbHmFanartTime
+        root.AppendChild(doc, "HmPosterTime",                       HmPosterTime)                'cbHmPosterTime
+
         root.AppendChild(doc, "MVScraper",              MVScraper)              'ucMusicVideo.rbscraper
         root.AppendChild(doc, "MVsortorder",            MVsortorder)  
         root.AppendChild(doc, "MVdefaultlist",          MVdefaultlist)  
@@ -1543,6 +1557,10 @@ Public Class Pref
                     Case "XBMCTVDbLanguage"                     : XBMCTVDbLanguage = thisresult.InnerText
                     Case "XBMCTVDbRatings"                      : XBMCTVDbRatings = thisresult.InnerText
                     Case "XBMCTVDbfallback"                     : XBMCTVDbfallback = thisresult.InnerXml
+
+                    Case "HmFanartScrnShote"                    : HmFanartScrnShot = thisresult.InnerXml
+                    Case "HmFanartTime"                         : HmFanartTime = thisresult.InnerText
+                    Case "HmPosterTime"                         : HmPosterTime = thisresult.InnerText
 
                     Case "MVScraper"                            : MVScraper = thisresult.InnerText
                     Case "MVsortorder"                          : MVsortorder = thisresult.InnerXml 

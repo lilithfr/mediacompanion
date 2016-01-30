@@ -90,6 +90,7 @@ Public Class frmPreferences
             GeneralInit()
             MovieInit()
             TVInit()
+            HmInit()
             CmdsNProfilesInit()
             prefsload = False
             Changes = False
@@ -610,6 +611,13 @@ Public Class frmPreferences
         Next
     End Sub
 
+    Private Sub HmInit()
+
+        cb_HmFanartScrnShot     .Checked    = Pref.HmFanartScrnShot
+        tb_HmFanartTime         .Text       = Pref.HmFanartTime.ToString
+        tb_HmPosterTime         .Text       = Pref.HmPosterTime.ToString
+
+    End Sub
     Private Sub CmdsNProfilesInit()
         'Commands
         lb_CommandTitle.Items.Clear()
@@ -3001,6 +3009,90 @@ End Sub
 #End Region  'TV Regex
     
 #End Region 'TV Preferences
+
+#Region "Home Movies"
+
+    Private Sub cb_HmFanartScrnShot_CheckedChanged(sender As Object, e As EventArgs) Handles cb_HmFanartScrnShot.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.HmFanartScrnShot = cb_HmFanartScrnShot.Checked
+        Changes = True
+    End Sub
+    
+    Private Sub tb_HmFanartTime_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tb_HmFanartTime.KeyPress
+        Try
+            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+                If tb_HmFanartTime.Text <> "" Then
+                    e.Handled = True
+                Else
+                    MsgBox("Please Enter at least 1")
+                    tb_HmFanartTime.Text = "10"
+                End If
+            End If
+            If tb_HmFanartTime.Text = "" Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                tb_HmFanartTime.Text = "10"
+                Exit Sub
+            End If
+            If Not IsNumeric(tb_HmFanartTime.Text) Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                tb_HmFanartTime.Text = "10"
+                Exit Sub 
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tb_HmFanartTime_TextChanged(sender As Object, e As EventArgs) Handles tb_HmFanartTime.TextChanged
+        If prefsload Then Exit Sub
+        If IsNumeric(tb_HmFanartTime.Text) AndAlso Convert.ToInt32(tb_HmFanartTime.Text)>0 Then
+            Pref.HmFanartTime = Convert.ToInt32(tb_HmFanartTime.Text)
+        Else
+            Pref.HmFanartTime = 10
+            tb_HmFanartTime.Text = "10"
+            MsgBox("Please enter a numerical Value that is 1 or more")
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub tb_HmPosterTime_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tb_HmPosterTime.KeyPress
+        Try
+            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+                If tb_HmPosterTime.Text <> "" Then
+                    e.Handled = True
+                Else
+                    MsgBox("Please Enter at least 1")
+                    tb_HmPosterTime.Text = "10"
+                End If
+            End If
+            If tb_HmPosterTime.Text = "" Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                tb_HmPosterTime.Text = "10"
+                Exit Sub
+            End If
+            If Not IsNumeric(tb_HmPosterTime.Text) Then
+                MsgBox("Please enter a numerical Value that is 1 or more")
+                tb_HmPosterTime.Text = "10"
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tb_HmPosterTime_TextChanged(sender As Object, e As EventArgs) Handles tb_HmPosterTime.TextChanged
+        If prefsload Then Exit Sub
+        If IsNumeric(tb_HmPosterTime.Text) AndAlso Convert.ToInt32(tb_HmPosterTime.Text)>0 Then
+            Pref.HmPosterTime = Convert.ToInt32(tb_HmPosterTime.Text)
+        Else
+            Pref.HmPosterTime = 10
+            tb_HmPosterTime.Text = "10"
+            MsgBox("Please enter a numerical Value that is 1 or more")
+        End If
+        Changes = True
+    End Sub
+
+#End Region     'Home Movie
 
 #Region "Proxy"
     'Handled by user control ucGenPref_Proxy
