@@ -2776,17 +2776,30 @@ Public Class Movies
         Return recs
     End Function
 
-    Function ApplyRootFolderFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
-        Dim i As Integer = 0
+    'Function ApplyRootFolderFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    '    Dim i As Integer = 0
 
-        For Each item As CCBoxItem In ccb.Items
-            Dim value As String = item.Name.RemoveAfterMatch
-            Select ccb.GetItemCheckState(i)
-                Case CheckState.Checked   : recs = (From m In recs Where     m.rootfolder.Contains(value)).ToList
-                Case CheckState.Unchecked : recs = (From m In recs Where Not m.rootfolder.Contains(value)).ToList
-            End Select
-            i += 1
-        Next
+    '    For Each item As CCBoxItem In ccb.Items
+    '        Dim value As String = item.Name.RemoveAfterMatch
+    '        Select ccb.GetItemCheckState(i)
+    '            Case CheckState.Checked   : recs = (From m In recs Where     m.rootfolder.Contains(value)).ToList
+    '            Case CheckState.Unchecked : recs = (From m In recs Where Not m.rootfolder.Contains(value)).ToList
+    '        End Select
+    '        i += 1
+    '    Next
+    '    Return recs
+    'End Function
+
+    Function ApplyRootFolderFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb)
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.rootfolder) )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.rootfolder) )
+        End If
+
         Return recs
     End Function
 
