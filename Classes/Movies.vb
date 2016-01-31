@@ -525,7 +525,7 @@ Public Class Movies
     
     Public ReadOnly Property MissingCredits As String
         Get
-            Return "Missing Credits (" & (From x In MovieCache Where x.MissingCredits).Count & ")"
+            Return "Missing Writer (" & (From x In MovieCache Where x.MissingCredits).Count & ")"
         End Get
     End Property
     
@@ -1423,7 +1423,7 @@ Public Class Movies
     Public Sub LoadCaches
         LoadMovieCache
         LoadPeopleCaches
-        LoadMovieSetCaches
+        LoadMovieSetCache()
     End Sub
 
     Public Sub SaveCaches
@@ -2085,7 +2085,7 @@ Public Class Movies
         LoadDirectorCache()
     End Sub
 
-    Sub LoadMovieSetCaches()
+    Sub LoadMovieSetCache()
         LoadMovieSetCache(_moviesetDb, "movieset", Pref.workingProfile.moviesetcache)
     End Sub
 
@@ -2379,7 +2379,7 @@ Public Class Movies
             Next
             Dim tmp2 As New List(Of CollectionMovie)
             For Each mset In MovSetDbTmp
-                If movie.MovieSet.MovieSetId = "" Then Exit For
+                'If movie.MovieSet.MovieSetId = "" Then Exit For
                 If movie.MovieSet.MovieSetId = mset.MovieSetId Then
                     tmp2.AddRange(mset.Collection)
                     Exit For

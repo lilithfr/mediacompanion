@@ -8674,7 +8674,7 @@ Public Class Form1
 
 'tabpage events
     Private Sub tpMoviesTable_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Enter
-        MovSetsRepopulate()
+        'MovSetsRepopulate()
         'mov_TableSetup()
     End Sub
 
@@ -17785,6 +17785,7 @@ End Sub
         Pref.moviesets.Clear()
         Pref.moviesets.Add("-None-")
         Pref.moviesets.AddRange(oMovies.MoviesSetsExNone)
+        oMovies.SaveMovieSetCache()
     End Sub
 
     Private Sub MovSetArtworkCheck()

@@ -421,7 +421,8 @@ Public Class Movie
             Try
                 'If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" Then Return Nothing
                 'Return New MovieSetInfo(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId, New List(Of CollectionMovie))
-                Return _parent.MovieSetDB.Find(function(c) c.MovieSetId=_scrapedMovie.fullmoviebody.MovieSet.MovieSetId)
+                'Return _parent.MovieSetDB.Find(function(c) c.MovieSetId=_scrapedMovie.fullmoviebody.MovieSet.MovieSetId)
+                Return _parent.MovieSetDB.Find(function(c) c.MovieSetName =_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
                 'Return _scrapedMovie.fullmoviebody.movieset
             Catch
                 Return Nothing
@@ -1267,7 +1268,6 @@ Public Class Movie
             UpdateDirectorCacheFromEmpty
             UpdateMovieSetCacheFromEmpty 
         End If
-        
 
         If Not Pref.usefoldernames Then
             If _movieCache.filename <> Nothing Then _movieCache.filename = _movieCache.filename.Replace(".nfo", "")

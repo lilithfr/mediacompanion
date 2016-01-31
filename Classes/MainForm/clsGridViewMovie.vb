@@ -256,7 +256,7 @@ Public Class clsGridViewMovie
                 Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
                 Case "Missing Source"              : b = From f In b Where f.MissingSource
                 Case "Missing Director"            : b = From f In b Where f.MissingDirector
-                Case "Missing Credits"             : b = From f In b Where f.MissingCredits
+                Case "Missing Writer"              : b = From f In b Where f.MissingCredits
                 Case "Missing Studios"             : b = From f In b Where f.MissingStudios
                 Case "Missing Country"             : b = From f In b Where f.MissingCountry
                 Case "Missing from XBMC"           : b = b.Where( Function(x) Form1.MC_Only_Movies_Nfos.Contains(x.fullpathandfilename) )
