@@ -823,6 +823,7 @@ Public Class Classimdb
             End If
             s = StripTags(s)
             If s.ToLower.Contains("add a plot") Then Return ""
+            s = s.Replace("&quot;", """")
             'Return Utilities.CleanInvalidXmlChars(s.Trim())
             Return Utilities.cleanSpecChars(encodespecialchrs(s.Trim()))
         End Get
@@ -860,6 +861,7 @@ Public Class Classimdb
                 If s.Contains("</div>") Then
                     s = s.Substring(0, s.IndexOf("</div>"))
                 End If
+                s = s.Replace("&quot;", """")
                 Return Utilities.cleanSpecChars(encodespecialchrs(s))
             Catch ex As Exception
                 Return ""
