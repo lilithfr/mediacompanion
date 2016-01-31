@@ -4980,7 +4980,7 @@ Public Class Form1
             Dim locationY As Integer = 0
 
             For Each item In names
-                messbox.TextBox2.Text = itemcounter+1 & " of 10"
+                messbox.TextBox2.Text = itemcounter+1 & " of " & If(posterArray.Count >= 10, "10", posterArray.Count.ToString)
                 messbox.Refresh()
                 Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                 Try
@@ -17019,7 +17019,7 @@ End Sub
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
             For Each item As String In names
-                messbox.TextBox2.Text = itemcounter+1 & " of 10"
+                messbox.TextBox2.Text = ((tempint-1)+itemcounter+1).ToString & " of " & tempint2.ToString
                 messbox.Refresh()
                 Dim item2 As String = Utilities.Download2Cache(item)
                 Try
@@ -17104,7 +17104,7 @@ End Sub
             Dim itemcounter As Integer = 0
             Dim tempboolean As Boolean = True
             For Each item As String In names
-                messbox.TextBox2.Text = itemcounter+1 & " of 10"
+                messbox.TextBox2.Text = ((tempint-1)+itemcounter+1).ToString & " of " & tempint2.ToString
                 messbox.Refresh()
                 Dim item2 As String = Utilities.Download2Cache(item)
                 posterPicBoxes() = New PictureBox()
