@@ -336,6 +336,7 @@ Public Class Pref
     Public Shared CheckForNewVersion As Boolean=False
     Public Shared CloseMCForDLNewVersion As Boolean = False
     Public Shared AllowUserTags As Boolean = True
+    Public Shared GenreCustomBefore As Boolean
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -744,6 +745,7 @@ Public Class Pref
         MVPrefShowLog = True
 
         'Unknown - need to be sorted/named better
+        GenreCustomBefore = False
         intruntime = False
         actorseasy = True
         startuptab = 0
@@ -1035,6 +1037,7 @@ Public Class Pref
         root.AppendChild(doc, "prxyUsername"         ,  prxyUsername         )  'ucGenPref_Proxy.prxyUsername
         root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'ucGenPref_Proxy.prxyPassword
         root.AppendChild(doc, "ShowAllAudioTracks"   ,  ShowAllAudioTracks   )  'cbShowAllAudioTracks
+        root.AppendChild(doc, "GenreCustomBefore"    ,  GenreCustomBefore    )  'cbGenreCustomBefore
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1191,7 +1194,8 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbScraperLanguage",            XbmcTmdbScraperLanguage)            'cmbxXbmcTmdbTitleLanguage
         root.AppendChild(doc, "XbmcTmdbScraperRatings",             XbmcTmdbScraperRatings)             'cbXbmcTmdbIMDBRatings
         root.AppendChild(doc, "XbmcTmdbScraperCertCountry",         XbmcTmdbScraperCertCountry)         '
-        root.AppendChild(doc, "AllowUserTags",                      AllowUserTags)         '
+        root.AppendChild(doc, "AllowUserTags",                      AllowUserTags)                      '
+        
         
 
         root.AppendChild(movie_filters.GetChild(doc))
@@ -1467,7 +1471,8 @@ Public Class Pref
                     Case "DownloadTrailerDuringScrape"          : DownloadTrailerDuringScrape = thisresult.InnerXml
                     Case "tvshowautoquick"                      : tvshowautoquick = thisresult.InnerXml
                     Case "intruntime"                           : intruntime = thisresult.InnerXml
-                    Case "startupcache" : startupCache = thisresult.InnerXml
+                    Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml
+                    Case "startupcache"                         : startupCache = thisresult.InnerXml
                     Case "ignoretrailers"                       : ignoretrailers = thisresult.InnerXml
                     Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml

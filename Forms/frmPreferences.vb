@@ -187,6 +187,7 @@ Public Class frmPreferences
         cbDisplayMediaInfoFolderSize.Checked    = Pref.DisplayMediaInfoFolderSize
         cbShowAllAudioTracks        .Checked    = Pref.ShowAllAudioTracks
         AutoScrnShtDelay            .Text       = Pref.ScrShtDelay
+        cbGenreCustomBefore         .Checked    = Pref.GenreCustomBefore
         Pref.ExcludeFolders.PopTextBox(tbExcludeFolders)
 
         Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Pref.BackDropResolutionSI) 'SI = Selected Index
@@ -202,6 +203,7 @@ Public Class frmPreferences
             Next
         End If
 
+        
         'Common - Actors Section
         cb_actorseasy               .Checked    = Pref.actorseasy 
         Select Case Pref.maxactors
@@ -342,9 +344,9 @@ Public Class frmPreferences
         cbMovieBasicSave                    .Checked    = Pref.basicsavemode
 
         'Keywords As Tags
-        cb_keywordasTag                     .Checked    = Pref.keywordasTag
         cbAllowUserTags                     .Checked    = Pref.AllowUserTags
-
+        cb_keywordasTag                     .Checked    = Pref.keywordasTag
+        
         Select Case Pref.keywordlimit 
             Case 999
                 cb_keywordlimit.SelectedItem = "All Available"
@@ -1485,6 +1487,13 @@ Public Class frmPreferences
     End Sub
 
 'Keywords As Tags
+
+    Private Sub cbAllowUserTags_CheckedChanged( sender As Object,  e As EventArgs) Handles cbAllowUserTags.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.AllowUserTags = cbAllowUserTags.Checked
+        Changes = True
+    End Sub
+
     Private Sub cb_keywordasTag_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_keywordasTag.CheckedChanged
         Try
             If cb_keywordasTag.CheckState = CheckState.Checked Then
@@ -3407,10 +3416,17 @@ End Sub
 
 #End Region 'Profiles & Commands
 
+    Private Sub cbGenreCustomBefore_CheckedChanged(sender As Object, e As EventArgs) Handles cbGenreCustomBefore.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.GenreCustomBefore = cbGenreCustomBefore.Checked
+        Changes = True
+    End Sub
+
     Private Sub btnEditCustomGenreFile_Click(sender As Object, e As EventArgs) Handles btnEditCustomGenreFile.Click
         Using frm As New frmTextEdit
             frm.ShowDialog()
         End Using
+        Media_Companion.Form1.RefreshGenreListboxToolStripMenuItem.PerformClick()
     End Sub
 
     Private Sub applyAdvancedLists()
@@ -3531,12 +3547,6 @@ End Sub
                 Tmr.Stop()
             End If
         End If
-    End Sub
-    
-    Private Sub cbAllowUserTags_CheckedChanged( sender As Object,  e As EventArgs) Handles cbAllowUserTags.CheckedChanged
-        If prefsload Then Exit Sub
-        Pref.AllowUserTags = cbAllowUserTags.Checked
-        Changes = True
     End Sub
     
 End Class

@@ -1522,43 +1522,38 @@ Public Class Form1
     End Sub
 
     Private Sub util_GenreLoad()
-        If File.Exists(workingProfile.Genres) Or Not Pref.startupCache Then
-            Dim line As String = String.Empty
-            Dim listof As New List(Of String)
-            listof.Clear()
-            Try
-                Dim userConfig As StreamReader = File.OpenText(workingProfile.Genres)
-                Do
-                    Try
-                        line = userConfig.ReadLine
-                        If line <> Nothing Then
-                            Dim regexMatch As Match
-                            regexMatch = Regex.Match(line, "<([\d]{2,3})>")
-                            If regexMatch.Success = False Then
-                                listof.Add(line.trim)
-                            End If
-                        End If
-                    Catch ex As Exception
-                        MessageBox.Show(ex.Message)
-                    End Try
-                Loop Until line = Nothing
-                userConfig.Close()
-                userConfig = Nothing
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-            End Try
-            If listof.Count > 0 Then
-                Dim add As Boolean
-                For Each i In listof
-                    add = True
-                    For Each it In genrelist
-                        If it.ToLower = i.ToLower Then
-                            add = False
-                            Exit For
-                        End If
-                    Next
-                    If add then genrelist.Add(i)
-                Next
+        If Not File.Exists(workingProfile.Genres) Then Exit Sub
+        Dim line As String = String.Empty
+        Dim listof As New List(Of String)
+        listof.Clear()
+        genrelist.Sort()
+        Try
+            Dim userConfig As StreamReader = File.OpenText(workingProfile.Genres)
+            Do
+                Try
+                    line = userConfig.ReadLine
+                    If line = Nothing Then Continue Do
+                    Dim regexMatch As Match
+                    regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+                    If regexMatch.Success = False AndAlso (genrelist.FindIndex(Function(x) x.Equals(line.trim, StringComparison.OrdinalIgnoreCase) ) = -1) Then
+                        listof.Add(line.trim)
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message)
+                End Try
+            Loop Until line = Nothing
+            userConfig.Close()
+            userConfig = Nothing
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+        If listof.Count > 0 Then
+            If Pref.GenreCustomBefore Then
+                listof.Sort()
+                genrelist.Sort()
+                genrelist.InsertRange(0, listof)
+            Else
+                genrelist.AddRange(listof)
                 genrelist.Sort()
             End If
         End If

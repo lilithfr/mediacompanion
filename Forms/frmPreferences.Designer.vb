@@ -465,6 +465,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbGenreCustomBefore = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1533,6 +1534,7 @@ Partial Class frmPreferences
         '
         'TPCommonSettings
         '
+        Me.TPCommonSettings.Controls.Add(Me.cbGenreCustomBefore)
         Me.TPCommonSettings.Controls.Add(Me.btnEditCustomGenreFile)
         Me.TPCommonSettings.Controls.Add(Me.GroupBox4)
         Me.TPCommonSettings.Controls.Add(Me.Label4)
@@ -1560,7 +1562,7 @@ Partial Class frmPreferences
         '
         'btnEditCustomGenreFile
         '
-        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(12, 434)
+        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(9, 456)
         Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
         Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
         Me.btnEditCustomGenreFile.TabIndex = 106
@@ -5564,6 +5566,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbGenreCustomBefore
+        '
+        Me.cbGenreCustomBefore.AutoSize = true
+        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 431)
+        Me.cbGenreCustomBefore.Name = "cbGenreCustomBefore"
+        Me.cbGenreCustomBefore.Size = New System.Drawing.Size(276, 19)
+        Me.cbGenreCustomBefore.TabIndex = 107
+        Me.cbGenreCustomBefore.Text = "Show Custom Genre's at top of Genre Listbox."
+        Me.cbGenreCustomBefore.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6170,4 +6182,5 @@ End Sub
     Friend WithEvents Label14 As Label
     Friend WithEvents lbl_HmHeader As Label
     Friend WithEvents cb_HmFanartScrnShot As CheckBox
+    Friend WithEvents cbGenreCustomBefore As CheckBox
 End Class
