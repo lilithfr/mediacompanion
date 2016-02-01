@@ -1683,10 +1683,11 @@ Public Class Classimdb
                 test += wp & vbcrlf
             Next
             If Pref.XbmcTmdbAkasFromImdb     Then results = results & AKAS(IMDbId)
-            If Pref.XbmcTmdbStarsFromImdb    Then results.AppendTagText( "stars"     , Stars)
-            If Pref.XbmcTmdbMissingFromImdb  Then results.AppendTagText( "outline"   , Outline)
-            If Pref.XbmcTmdbTop250FromImdb   Then results.AppendTag( "top250"    , Top250)
-            If Pref.XbmcTmdbVotesFromImdb    Then results.AppendTag( "votes"     , Votes)
+            If Pref.XbmcTmdbStarsFromImdb    Then results.AppendTagText ( "stars"       , Stars   )
+            If Pref.XbmcTmdbMissingFromImdb  Then results.AppendTagText ( "outline"     , Outline )
+            If Pref.XbmcTmdbTop250FromImdb   Then results.AppendTag     ( "top250"      , Top250  )
+            If Pref.XbmcTmdbVotesFromImdb    Then results.AppendTag     ( "votes"       , Votes   )
+            If Pref.XbmcTmdbGenreFromImdb    Then results.AppendTag     ( "imdbgenre"   , Genres  )
             If Pref.XbmcTmdbCertFromImdb Then
                 For f = 0 To 33
                     If mpaaresults(f, 1) <> Nothing Then

@@ -1402,7 +1402,8 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.director = thisresult.InnerText
                 Case "stars"
                     _scrapedMovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
-                Case "genre"
+                Case "genre", "imdbgenre"
+                    If thisresult.Name = "genre" AndAlso (Pref.movies_useXBMC_Scraper And Pref.XbmcTmdbGenreFromImdb) Then Exit Select 
                     Dim strarr() As String
                     strarr = thisresult.InnerText.Split("/")
                     If strarr.Length <= Pref.maxmoviegenre Then

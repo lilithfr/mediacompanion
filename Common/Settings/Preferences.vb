@@ -259,6 +259,7 @@ Public Class Pref
     Public Shared XbmcTmdbAkasFromImdb As Boolean
     Public Shared XbmcTmdbActorDL As Boolean
     Public Shared XbmcTmdbActorFromImdb As Boolean
+    Public Shared XbmcTmdbGenreFromImdb As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared MovCertRemovePhrase As Boolean
     Public Shared OfflineDVDTitle As String
@@ -640,6 +641,7 @@ Public Class Pref
         XbmcTmdbAkasFromImdb = False
         XbmcTmdbActorDL = False
         XbmcTmdbActorFromImdb = False
+        XbmcTmdbGenreFromImdb = False
         scrapefullcert = False
         MovCertRemovePhrase = False
         moviedefaultlist = 0
@@ -1137,6 +1139,7 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbAkasFromImdb",               XbmcTmdbAkasFromImdb)               'cbXbmcTmdbAkasFromImdb
         root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL - To Delete after 01-03-2016
         root.AppendChild(doc, "XbmcTmdbActorFromImdb",              XbmcTmdbActorFromImdb)              'cbXbmcTmdbActorFromImdb
+        root.AppendChild(doc, "XbmcTmdbGenreFromImdb",              XbmcTmdbGenreFromImdb)              'cbXbmcTmdbGenreFromImdb
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "MovCertRemovePhrase",                MovCertRemovePhrase)                'cb_MovCertRemovePhrase
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
@@ -1456,6 +1459,7 @@ Public Class Pref
                     Case "XbmcTmdbAkasFromImdb"                 : XbmcTmdbAkasFromImdb = thisresult.InnerText
                     Case "XbmcTmdbActorDL"                      : XbmcTmdbActorDL = thisresult.InnerText
                     Case "XbmcTmdbActorFromImdb"                : XbmcTmdbActorFromImdb = thisresult.InnerText
+                    Case "XbmcTmdbGenreFromImdb"                : XbmcTmdbGenreFromImdb = thisresult.InnerXml
                     Case "seasonall"                            : seasonall = thisresult.InnerText
                     Case "splitcontainer1"                      : splt1 = Convert.ToInt32(thisresult.InnerText)
                     Case "splitcontainer2"                      : splt2 = Convert.ToInt32(thisresult.InnerText)

@@ -114,6 +114,7 @@ Partial Class frmPreferences
         Me.TPCommon = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.cbGenreCustomBefore = New System.Windows.Forms.CheckBox()
         Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Label185 = New System.Windows.Forms.Label()
@@ -183,6 +184,7 @@ Partial Class frmPreferences
         Me.cmbxTMDBPreferredCertCountry = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.GroupBox46 = New System.Windows.Forms.GroupBox()
+        Me.cbXbmcTmdbGenreFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbAkasFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbCertFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbVotesFromImdb = New System.Windows.Forms.CheckBox()
@@ -465,7 +467,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbGenreCustomBefore = New System.Windows.Forms.CheckBox()
         Me.GroupBox36.SuspendLayout
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
@@ -1560,6 +1561,16 @@ Partial Class frmPreferences
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
         '
+        'cbGenreCustomBefore
+        '
+        Me.cbGenreCustomBefore.AutoSize = true
+        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 431)
+        Me.cbGenreCustomBefore.Name = "cbGenreCustomBefore"
+        Me.cbGenreCustomBefore.Size = New System.Drawing.Size(276, 19)
+        Me.cbGenreCustomBefore.TabIndex = 107
+        Me.cbGenreCustomBefore.Text = "Show Custom Genre's at top of Genre Listbox."
+        Me.cbGenreCustomBefore.UseVisualStyleBackColor = true
+        '
         'btnEditCustomGenreFile
         '
         Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(9, 456)
@@ -2305,6 +2316,7 @@ Partial Class frmPreferences
         '
         'GroupBox46
         '
+        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbGenreFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAkasFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbCertFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbVotesFromImdb)
@@ -2319,6 +2331,17 @@ Partial Class frmPreferences
         Me.GroupBox46.TabIndex = 82
         Me.GroupBox46.TabStop = false
         Me.GroupBox46.Text = "Scrape the following from IMDB"
+        '
+        'cbXbmcTmdbGenreFromImdb
+        '
+        Me.cbXbmcTmdbGenreFromImdb.AutoSize = true
+        Me.cbXbmcTmdbGenreFromImdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbXbmcTmdbGenreFromImdb.Location = New System.Drawing.Point(117, 82)
+        Me.cbXbmcTmdbGenreFromImdb.Name = "cbXbmcTmdbGenreFromImdb"
+        Me.cbXbmcTmdbGenreFromImdb.Size = New System.Drawing.Size(66, 19)
+        Me.cbXbmcTmdbGenreFromImdb.TabIndex = 85
+        Me.cbXbmcTmdbGenreFromImdb.Text = "Genres"
+        Me.cbXbmcTmdbGenreFromImdb.UseVisualStyleBackColor = true
         '
         'cbXbmcTmdbAkasFromImdb
         '
@@ -5566,16 +5589,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbGenreCustomBefore
-        '
-        Me.cbGenreCustomBefore.AutoSize = true
-        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 431)
-        Me.cbGenreCustomBefore.Name = "cbGenreCustomBefore"
-        Me.cbGenreCustomBefore.Size = New System.Drawing.Size(276, 19)
-        Me.cbGenreCustomBefore.TabIndex = 107
-        Me.cbGenreCustomBefore.Text = "Show Custom Genre's at top of Genre Listbox."
-        Me.cbGenreCustomBefore.UseVisualStyleBackColor = true
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6183,4 +6196,5 @@ End Sub
     Friend WithEvents lbl_HmHeader As Label
     Friend WithEvents cb_HmFanartScrnShot As CheckBox
     Friend WithEvents cbGenreCustomBefore As CheckBox
+    Friend WithEvents cbXbmcTmdbGenreFromImdb As CheckBox
 End Class

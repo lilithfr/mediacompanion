@@ -285,6 +285,7 @@ Public Class frmPreferences
         cbXbmcTmdbStarsFromImdb             .Checked        = Pref.XbmcTmdbStarsFromImdb
         cbXbmcTmdbCertFromImdb              .Checked        = Pref.XbmcTmdbCertFromImdb
         cbXbmcTmdbVotesFromImdb             .Checked        = Pref.XbmcTmdbVotesFromImdb
+        cbXbmcTmdbGenreFromImdb             .Checked        = Pref.XbmcTmdbGenreFromImdb
         'TMDB Trailer
         cmbxXbmcTmdbHDTrailer.Items.Clear() 
         For each tra In Pref.XbmcTmdbScraperTrailerQLB
@@ -1232,6 +1233,12 @@ Public Class frmPreferences
     Private Sub cbXbmcTmdbCertFromImdb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbCertFromImdb.CheckedChanged
         If prefsload Then Exit Sub
         Pref.XbmcTmdbCertFromImdb = cbXbmcTmdbCertFromImdb.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbXbmcTmdbGenreFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbGenreFromImdb.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.XbmcTmdbGenreFromImdb = cbXbmcTmdbGenreFromImdb.Checked
         Changes = True
     End Sub
 
@@ -3419,6 +3426,7 @@ End Sub
     Private Sub cbGenreCustomBefore_CheckedChanged(sender As Object, e As EventArgs) Handles cbGenreCustomBefore.CheckedChanged
         If prefsload Then Exit Sub
         Pref.GenreCustomBefore = cbGenreCustomBefore.Checked
+        Media_Companion.Form1.RefreshGenreListboxToolStripMenuItem.PerformClick()
         Changes = True
     End Sub
 
