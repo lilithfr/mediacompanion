@@ -204,11 +204,20 @@ Public Class WikipediaMusivVideoScraper
 
                 'Poster
                 For p = 0 To webpage.Count-1
-                    If webpage(p).Contains("class=""image""><img") AndAlso webpage(p).Contains("data-file-width=") Then
-                        Dim tempstring As String = webpage(p).Substring(webpage(p).LastIndexOf("//upload"), webpage(p).LastIndexOf("2x") - webpage(p).LastIndexOf("//upload") + 3)
-                        tempstring = tempstring.Substring(0, tempstring.IndexOf(" "))
+                    If webpage(p).Contains("class=""image""><img") AndAlso webpage(p).Contains("data-file-width=") AndAlso Not webpage(p).Contains("Question_book-new") Then
+                        Dim tempstring As String = webpage(p).Substring(webpage(p).LastIndexOf("//upload"))
+                        Dim jpgimg As Boolean = tempstring.Contains(".jpg")
+                        If tempstring.Contains("/thumb/") AndAlso Not tempstring.Contains("440p") Then Continue For
+                        If jpgimg Then
+                            Dim ImgType As String = If(tempstring.Contains(" 2x"""), ".jpg ", ".jpg")
+                            tempstring = tempstring.Substring(0, tempstring.IndexOf(ImgType)+4)
+                        Else
+                            Dim ImgType As String = If(tempstring.Contains(" 2x"""), ".png ", ".png")
+                            tempstring = tempstring.Substring(0, tempstring.IndexOf(ImgType)+4)
+                        End If
                         tempstring = "http:" & tempstring
                         totalinfo.AppendTag("thumb", tempstring)
+                        If Utilities.UrlIsValid(tempstring) Then Exit For
                     End If
                 Next
             Catch
