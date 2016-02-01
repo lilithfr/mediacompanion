@@ -24,7 +24,7 @@ Public Class WikipediaMusivVideoScraper
             strarr = filenameWithoutExtension.Split("-"c)
             Artist = strarr(0).Trim
             Title = strarr(1).Trim
-            searchterm = s.searchurltitle(filenameWithoutExtension)
+            searchterm = Utilities.searchurltitle(filenameWithoutExtension)
         ElseIf searchterm <> "" And wikipediaURL = "" Then
             Dim strarr() As String
             strarr = searchterm.Split("-"c)
@@ -37,7 +37,7 @@ Public Class WikipediaMusivVideoScraper
             Title = strarr(1).Trim
             searchterm = fullpathandfilename
         End If
-
+        searchterm = Utilities.searchurltitle(searchterm)
         Dim searchurl As String = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
 
         If wikipediaURL = "" Then
@@ -84,10 +84,12 @@ Public Class WikipediaMusivVideoScraper
 
                     'get director before stripping tags
                     Try
-                        Dim director As String = tempstring.Substring(tempstring.ToLower.IndexOf("directed by"), tempstring.Length - tempstring.ToLower.IndexOf("directed by"))
-                        director = director.Substring(0, director.IndexOf("</a>"))
-                        director = director.Substring(director.LastIndexOf(">") + 1, director.Length - director.LastIndexOf(">") - 1)
-                        totalinfo.AppendTag("director", director)
+                        If tempstring.IndexOf("directed by") <> -1 Then
+                            Dim director As String = tempstring.Substring(tempstring.ToLower.IndexOf("directed by"), tempstring.Length - tempstring.ToLower.IndexOf("directed by"))
+                            director = director.Substring(0, director.IndexOf("</a>"))
+                            director = director.Substring(director.LastIndexOf(">") + 1, director.Length - director.LastIndexOf(">") - 1)
+                            totalinfo.AppendTag("director", director)
+                        End If
                     Catch
                     End Try
 
@@ -101,7 +103,7 @@ Public Class WikipediaMusivVideoScraper
                     tempstring = tempstring.Replace("<edit>", "")
                     tempstring = tempstring.Replace("Synopsis", vbCrLf & "Synopsis" & vbCrLf)
                     tempstring = tempstring.Replace("Background", vbCrLf & "Background" & vbCrLf)
-                    totalinfo.AppendTag("plot", tempstring)
+                    totalinfo.AppendTag("plot", tempstring.DeCodeSpecialChrs)
                 End If
 
                 'get year
@@ -151,20 +153,20 @@ Public Class WikipediaMusivVideoScraper
                     End Try
                 End If
 
-                If fullwebpage.IndexOf("class=""image"">") <> -1 Then
-                    Try
-                        Dim tempstring As String = fullwebpage.Substring(fullwebpage.IndexOf("class=""image"">"), fullwebpage.Length - fullwebpage.IndexOf("class=""image"">"))
-                        tempstring = tempstring.Substring(0, tempstring.IndexOf("</td>"))
-                        If tempstring.IndexOf(".jpg") <> -1 Then
-                            tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".jpg") - tempstring.LastIndexOf("//upload") + 4)
-                        ElseIf tempstring.IndexOf(".png") <> -1 Then
-                            tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".png") - tempstring.LastIndexOf("//upload") + 4)
-                        End If
-                        tempstring = "http:" & tempstring
-                        totalinfo.AppendTag("thumb", tempstring)
-                    Catch
-                    End Try
-                End If
+                'If fullwebpage.IndexOf("class=""image"">") <> -1 Then
+                '    Try
+                '        Dim tempstring As String = fullwebpage.Substring(fullwebpage.LastIndexOf("class=""image"">"), fullwebpage.Length - fullwebpage.LastIndexOf("class=""image"">"))
+                '        tempstring = tempstring.Substring(0, tempstring.IndexOf("</td>"))
+                '        If tempstring.IndexOf(".jpg") <> -1 Then
+                '            tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".jpg") - tempstring.LastIndexOf("//upload") + 4)
+                '        ElseIf tempstring.IndexOf(".png") <> -1 Then
+                '            tempstring = tempstring.Substring(tempstring.LastIndexOf("//upload"), tempstring.LastIndexOf(".png") - tempstring.LastIndexOf("//upload") + 4)
+                '        End If
+                '        tempstring = "http:" & tempstring
+                '        totalinfo.AppendTag("thumb", tempstring)
+                '    Catch
+                '    End Try
+                'End If
 
                 'If wikipediaURL = wikiurlpassed Then  '  If change music video, get new title and artist.
 
@@ -175,8 +177,9 @@ Public Class WikipediaMusivVideoScraper
                             tempstring = tempstring.Replace(""">Single</a>", "")
                             tempstring = tempstring.Substring((tempstring.IndexOf(""">")+2), (tempstring.IndexOf("</a></th>") - tempstring.IndexOf(""">"))-2)
                             tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                            totalinfo.AppendTag("artist", tempstring)
+                            totalinfo.AppendTag("artist", tempstring.DeCodeSpecialChrs)
                         Catch
+                        totalinfo.AppendTag("artist", Artist.DeCodeSpecialChrs)
                         End Try
                     End If
 
@@ -189,14 +192,25 @@ Public Class WikipediaMusivVideoScraper
                                 If Not D <= 0 And Not W <= 0 Then
                                     Dim tempstring As String = webpage(f).Substring(d, w - d)
                                     tempstring = Regex.Replace(tempstring, "<.*?>", "")
-                                    totalinfo.AppendTag("title", tempstring)
+                                    totalinfo.AppendTag("title", tempstring.DeCodeSpecialChrs)
                                 End If
                                 Exit For
                             Catch
+                                totalinfo.AppendTag("title", Title.DeCodeSpecialChrs)
                             End Try
                         End If
                     Next
                 'End If
+
+                'Poster
+                For p = 0 To webpage.Count-1
+                    If webpage(p).Contains("class=""image""><img") AndAlso webpage(p).Contains("data-file-width=") Then
+                        Dim tempstring As String = webpage(p).Substring(webpage(p).LastIndexOf("//upload"), webpage(p).LastIndexOf("2x") - webpage(p).LastIndexOf("//upload") + 3)
+                        tempstring = tempstring.Substring(0, tempstring.IndexOf(" "))
+                        tempstring = "http:" & tempstring
+                        totalinfo.AppendTag("thumb", tempstring)
+                    End If
+                Next
             Catch
             End Try
         End If

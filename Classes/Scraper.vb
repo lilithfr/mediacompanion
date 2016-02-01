@@ -195,6 +195,7 @@ Module ModGlobals
     Function DeCodeSpecialChrs(ByRef s As String) As String
         s = s.Replace("&amp;", "&")
         s = s.Replace("&apos;", "'")
+        s = s.Replace("&quot;", """")
         Return s
     End Function
 
@@ -287,7 +288,7 @@ Public Class Classimdb
             Dim popularreturn As String = ""
             Dim exactreturn As String = ""
             Dim M As Match
-            Dim titlesearch As String = searchurltitle(title)
+            Dim titlesearch As String = Utilities.searchurltitle(title)
             If movieyear <> "" Then
                 Dim yr As Integer = movieyear.ToInt
                 searchyear = "release_date=" & (yr-1.ToString) & "," & (yr+1.ToString) & "&"
@@ -549,7 +550,7 @@ Public Class Classimdb
         Monitor.Enter(Me)
         Dim GOT_IMDBID As String = ""
         Try
-            Dim titlesearch As String = searchurltitle(title)
+            Dim titlesearch As String = Utilities.searchurltitle(title)
             titlesearch = imdbmirror & "find?q=" & titlesearch & "&s=tt&exact=true&ref_=fn_tt_ex"
             Dim urllinecount As Integer
             Dim allok As Boolean = False
@@ -681,7 +682,7 @@ Public Class Classimdb
             'Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
             'Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
             Dim url As String = Pref.enginefront(engine)
-            Dim titlesearch As String = searchurltitle(title)
+            Dim titlesearch As String = Utilities.searchurltitle(title)
             If goodyear = True Then
                 titlesearch = titlesearch & "+%28" & year & "%29"
             End If

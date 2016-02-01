@@ -353,7 +353,7 @@ Public Class ucMusicVideo
                 End If
                 searchurl = "http://www.themoviedb.org/search?query=" & Utilities.CleanFileName(tempstring)
             ElseIf Pref.MVScraper = "wiki" Then
-                searchterm = getArtistAndTitle(workingMusicVideo.fileinfo.fullpathandfilename)
+                searchterm = Utilities.searchurltitle(getArtistAndTitle(workingMusicVideo.fileinfo.fullpathandfilename))
                 searchurl = "http://www.google.co.uk/search?hl=en-US&as_q=" & searchterm & "%20song&as_sitesearch=http://en.wikipedia.org/"
             Else
                 MsgBox("Wiki scraper is not selected" & vbCrLf & "Unable to open this tab")
@@ -894,6 +894,7 @@ Public Class ucMusicVideo
 
     Private Sub btnMVApply_Click(sender As System.Object, e As System.EventArgs) Handles btnMVApply.Click
         Pref.MVidFolders.Clear()
+        Pref.MVConcertFolders.Clear()
         For f = 0 to clbxMvFolders.Items.Count-1
             Dim t As New str_RootPaths 
             t.rpath = clbxMvFolders.Items(f).ToString

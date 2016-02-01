@@ -2718,6 +2718,87 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return Genrelist
     End Function
 
+    Public Shared Function searchurltitle(ByVal title As String) As String
+        Dim urltitle As String = title
+        Try
+
+            urltitle = urltitle.Replace(".", "+")
+            urltitle = urltitle.Replace(" ", "+")
+            urltitle = urltitle.Replace("_", "+")
+            urltitle = urltitle.Replace("À", "%c0")
+            urltitle = urltitle.Replace("Á", "%c1")
+            urltitle = urltitle.Replace("Â", "%c2")
+            urltitle = urltitle.Replace("Ã", "%c3")
+            urltitle = urltitle.Replace("Ä", "%c4")
+            urltitle = urltitle.Replace("Å", "%c5")
+            urltitle = urltitle.Replace("Æ", "%c6")
+            urltitle = urltitle.Replace("Ç", "%c7")
+            urltitle = urltitle.Replace("È", "%c8")
+            urltitle = urltitle.Replace("É", "%c9")
+            urltitle = urltitle.Replace("Ê", "%ca")
+            urltitle = urltitle.Replace("Ë", "%cb")
+            urltitle = urltitle.Replace("Ì", "%cc")
+            urltitle = urltitle.Replace("Í", "%cd")
+            urltitle = urltitle.Replace("Î", "%ce")
+            urltitle = urltitle.Replace("Ï", "%cf")
+            urltitle = urltitle.Replace("Ð", "%d0")
+            urltitle = urltitle.Replace("Ñ", "%d1")
+            urltitle = urltitle.Replace("Ò", "%d2")
+            urltitle = urltitle.Replace("Ó", "%d3")
+            urltitle = urltitle.Replace("Ô", "%d4")
+            urltitle = urltitle.Replace("Õ", "%d5")
+            urltitle = urltitle.Replace("Ö", "%d6")
+            urltitle = urltitle.Replace("Ø", "%d8")
+            urltitle = urltitle.Replace("Ù", "%d9")
+            urltitle = urltitle.Replace("Ú", "%da")
+            urltitle = urltitle.Replace("Û", "%db")
+            urltitle = urltitle.Replace("Ü", "%dc")
+            urltitle = urltitle.Replace("Ý", "%dd")
+            urltitle = urltitle.Replace("Þ", "%de")
+            urltitle = urltitle.Replace("ß", "%df")
+            urltitle = urltitle.Replace("à", "%e0")
+            urltitle = urltitle.Replace("á", "%e1")
+            urltitle = urltitle.Replace("â", "%e2")
+            urltitle = urltitle.Replace("ã", "%e3")
+            urltitle = urltitle.Replace("ä", "%e4")
+            urltitle = urltitle.Replace("å", "%e5")
+            urltitle = urltitle.Replace("æ", "%e6")
+            urltitle = urltitle.Replace("ç", "%e7")
+            urltitle = urltitle.Replace("è", "%e8")
+            urltitle = urltitle.Replace("é", "%e9")
+            urltitle = urltitle.Replace("ê", "%ea")
+            urltitle = urltitle.Replace("ë", "%eb")
+            urltitle = urltitle.Replace("ì", "%ec")
+            urltitle = urltitle.Replace("í", "%ed")
+            urltitle = urltitle.Replace("î", "%ee")
+            urltitle = urltitle.Replace("ï", "%ef")
+            urltitle = urltitle.Replace("ð", "%f0")
+            urltitle = urltitle.Replace("ñ", "%f1")
+            urltitle = urltitle.Replace("ò", "%f2")
+            urltitle = urltitle.Replace("ó", "%f3")
+            urltitle = urltitle.Replace("ô", "%f4")
+            urltitle = urltitle.Replace("õ", "%f5")
+            urltitle = urltitle.Replace("ö", "%f6")
+            urltitle = urltitle.Replace("÷", "%f7")
+            urltitle = urltitle.Replace("ø", "%f8")
+            urltitle = urltitle.Replace("ù", "%f9")
+            urltitle = urltitle.Replace("ú", "%fa")
+            urltitle = urltitle.Replace("û", "%fb")
+            urltitle = urltitle.Replace("ü", "%fc")
+            urltitle = urltitle.Replace("ý", "%fd")
+            urltitle = urltitle.Replace("þ", "%fe")
+            urltitle = urltitle.Replace("ÿ", "%ff")
+            urltitle = urltitle.Replace("'","%27")
+            urltitle = urltitle.Replace("!", "%21")
+            urltitle = urltitle.Replace("&", "%26")
+            urltitle = urltitle.Replace(",", "")
+            urltitle = urltitle.Replace("++", "+")
+            Return urltitle
+        Catch
+            Return urltitle
+        End Try
+    End Function
+
 End Class
 
 Public Class langlib
