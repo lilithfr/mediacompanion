@@ -2159,6 +2159,7 @@ End Sub
         If PrefsLoad Then Exit Sub
         Try
             Pref.MaxActorsInFilter = nudMaxActorsInFilter.Value
+            If Pref.MaxActorsInFilter > 999 AndAlso Pref.ActorsFilterMinFilms < 2 Then nudActorsFilterMinFilms.Value = 2
             Changes = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -2189,6 +2190,7 @@ End Sub
         If PrefsLoad Then Exit Sub
         Try
             Pref.MaxDirectorsInFilter = nudMaxDirectorsInFilter.Value
+            If Pref.MaxDirectorsInFilter > 999 AndAlso Pref.DirectorsFilterMinFilms < 2 Then nudDirectorsFilterMinFilms.Value = 2
             Changes = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
