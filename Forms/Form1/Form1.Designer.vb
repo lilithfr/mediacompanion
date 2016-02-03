@@ -330,7 +330,6 @@ Partial Class Form1
         Me.lbl_movDirector = New System.Windows.Forms.Label()
         Me.lbl_movActors = New System.Windows.Forms.Label()
         Me.btnMovieDisplay_SetFilter = New System.Windows.Forms.Button()
-        Me.imdbtxt = New System.Windows.Forms.TextBox()
         Me.votestxt = New System.Windows.Forms.TextBox()
         Me.lbl_movImdbid = New System.Windows.Forms.Label()
         Me.lbl_movVotes = New System.Windows.Forms.Label()
@@ -350,6 +349,7 @@ Partial Class Form1
         Me.TableLayoutPanel31 = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_movPlot = New System.Windows.Forms.Label()
         Me.btnMovSelectPlot = New System.Windows.Forms.Button()
+        Me.cbUsrRated = New System.Windows.Forms.ComboBox()
         Me.TabPageMovieFanart = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel10 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -2134,11 +2134,11 @@ Partial Class Form1
         Me.tlpMovies.SetColumnSpan(Me.tagtxt, 4)
         Me.tagtxt.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tagtxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tagtxt.Location = New System.Drawing.Point(366, 565)
+        Me.tagtxt.Location = New System.Drawing.Point(369, 565)
         Me.tagtxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 4)
         Me.tagtxt.Name = "tagtxt"
         Me.tagtxt.ReadOnly = true
-        Me.tagtxt.Size = New System.Drawing.Size(214, 20)
+        Me.tagtxt.Size = New System.Drawing.Size(211, 20)
         Me.tagtxt.TabIndex = 228
         Me.ToolTip2.SetToolTip(Me.tagtxt, "Tags associated with the selected movie.")
         '
@@ -2707,7 +2707,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(327, 624)
-        Me.SplitContainer5.SplitterDistance = 364
+        Me.SplitContainer5.SplitterDistance = 362
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -2782,7 +2782,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 266)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 264)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -2817,7 +2817,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 344)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 342)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -2949,7 +2949,7 @@ Partial Class Form1
         Me.cbFilterSubTitleLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterSubTitleLang.FormattingEnabled = true
         Me.cbFilterSubTitleLang.IntegralHeight = false
-        Me.cbFilterSubTitleLang.Location = New System.Drawing.Point(147, 31638)
+        Me.cbFilterSubTitleLang.Location = New System.Drawing.Point(147, 31933)
         Me.cbFilterSubTitleLang.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterSubTitleLang.Name = "cbFilterSubTitleLang"
         Me.cbFilterSubTitleLang.QuickSelect = false
@@ -2970,7 +2970,7 @@ Partial Class Form1
         Me.cbFilterRootFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterRootFolder.FormattingEnabled = true
         Me.cbFilterRootFolder.IntegralHeight = false
-        Me.cbFilterRootFolder.Location = New System.Drawing.Point(147, 31638)
+        Me.cbFilterRootFolder.Location = New System.Drawing.Point(147, 31933)
         Me.cbFilterRootFolder.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterRootFolder.Name = "cbFilterRootFolder"
         Me.cbFilterRootFolder.QuickSelect = false
@@ -2985,7 +2985,7 @@ Partial Class Form1
         Me.lblFilterSubTitleLangMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterSubTitleLangMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterSubTitleLangMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterSubTitleLangMode.Location = New System.Drawing.Point(129, 31639)
+        Me.lblFilterSubTitleLangMode.Location = New System.Drawing.Point(129, 31934)
         Me.lblFilterSubTitleLangMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterSubTitleLangMode.Name = "lblFilterSubTitleLangMode"
         Me.lblFilterSubTitleLangMode.Size = New System.Drawing.Size(17, 21)
@@ -2999,7 +2999,7 @@ Partial Class Form1
         Me.lblFilterRootFolderMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterRootFolderMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterRootFolderMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterRootFolderMode.Location = New System.Drawing.Point(129, 31639)
+        Me.lblFilterRootFolderMode.Location = New System.Drawing.Point(129, 31934)
         Me.lblFilterRootFolderMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterRootFolderMode.Name = "lblFilterRootFolderMode"
         Me.lblFilterRootFolderMode.Size = New System.Drawing.Size(17, 21)
@@ -3013,7 +3013,7 @@ Partial Class Form1
         Me.lblFilterSubTitleLang.BackColor = System.Drawing.Color.Gray
         Me.lblFilterSubTitleLang.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterSubTitleLang.ForeColor = System.Drawing.Color.White
-        Me.lblFilterSubTitleLang.Location = New System.Drawing.Point(4, 31639)
+        Me.lblFilterSubTitleLang.Location = New System.Drawing.Point(4, 31934)
         Me.lblFilterSubTitleLang.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterSubTitleLang.Name = "lblFilterSubTitleLang"
         Me.lblFilterSubTitleLang.Size = New System.Drawing.Size(124, 21)
@@ -3027,7 +3027,7 @@ Partial Class Form1
         Me.lblFilterRootFolder.BackColor = System.Drawing.Color.Gray
         Me.lblFilterRootFolder.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterRootFolder.ForeColor = System.Drawing.Color.White
-        Me.lblFilterRootFolder.Location = New System.Drawing.Point(4, 31639)
+        Me.lblFilterRootFolder.Location = New System.Drawing.Point(4, 31934)
         Me.lblFilterRootFolder.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterRootFolder.Name = "lblFilterRootFolder"
         Me.lblFilterRootFolder.Size = New System.Drawing.Size(124, 21)
@@ -3041,7 +3041,7 @@ Partial Class Form1
         Me.lblFilterVideoCodec.BackColor = System.Drawing.Color.Gray
         Me.lblFilterVideoCodec.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterVideoCodec.ForeColor = System.Drawing.Color.White
-        Me.lblFilterVideoCodec.Location = New System.Drawing.Point(4, 31639)
+        Me.lblFilterVideoCodec.Location = New System.Drawing.Point(4, 31934)
         Me.lblFilterVideoCodec.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterVideoCodec.Name = "lblFilterVideoCodec"
         Me.lblFilterVideoCodec.Size = New System.Drawing.Size(124, 21)
@@ -3055,7 +3055,7 @@ Partial Class Form1
         Me.lblFilterVideoCodecMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterVideoCodecMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterVideoCodecMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterVideoCodecMode.Location = New System.Drawing.Point(129, 31639)
+        Me.lblFilterVideoCodecMode.Location = New System.Drawing.Point(129, 31934)
         Me.lblFilterVideoCodecMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterVideoCodecMode.Name = "lblFilterVideoCodecMode"
         Me.lblFilterVideoCodecMode.Size = New System.Drawing.Size(17, 21)
@@ -3075,7 +3075,7 @@ Partial Class Form1
         Me.cbFilterVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterVideoCodec.FormattingEnabled = true
         Me.cbFilterVideoCodec.IntegralHeight = false
-        Me.cbFilterVideoCodec.Location = New System.Drawing.Point(147, 31638)
+        Me.cbFilterVideoCodec.Location = New System.Drawing.Point(147, 31933)
         Me.cbFilterVideoCodec.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterVideoCodec.Name = "cbFilterVideoCodec"
         Me.cbFilterVideoCodec.QuickSelect = false
@@ -3677,7 +3677,7 @@ Partial Class Form1
         Me.cbFilterStudios.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterStudios.FormattingEnabled = true
         Me.cbFilterStudios.IntegralHeight = false
-        Me.cbFilterStudios.Location = New System.Drawing.Point(147, 32119)
+        Me.cbFilterStudios.Location = New System.Drawing.Point(147, 32414)
         Me.cbFilterStudios.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Normal
         Me.cbFilterStudios.Name = "cbFilterStudios"
         Me.cbFilterStudios.QuickSelect = false
@@ -4081,7 +4081,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(224, 224)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(222, 224)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4091,7 +4091,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(116, 80)
+        Me.Label128.Location = New System.Drawing.Point(114, 80)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -4146,14 +4146,14 @@ Partial Class Form1
         '
         Me.tlpMovies.ColumnCount = 11
         Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70!))
-        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.15385!))
+        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.03851!))
+        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70!))
+        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.80231!))
         Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.61539!))
         Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.78306!))
         Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.76923!))
-        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.37612!))
         Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24!))
         Me.tlpMovies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 118!))
         Me.tlpMovies.Controls.Add(Me.lbl_movCountry, 5, 8)
@@ -4191,7 +4191,6 @@ Partial Class Form1
         Me.tlpMovies.Controls.Add(Me.lbl_movDirector, 5, 5)
         Me.tlpMovies.Controls.Add(Me.lbl_movActors, 5, 4)
         Me.tlpMovies.Controls.Add(Me.btnMovieDisplay_SetFilter, 4, 9)
-        Me.tlpMovies.Controls.Add(Me.imdbtxt, 3, 8)
         Me.tlpMovies.Controls.Add(Me.votestxt, 3, 7)
         Me.tlpMovies.Controls.Add(Me.lbl_movImdbid, 2, 8)
         Me.tlpMovies.Controls.Add(Me.lbl_movVotes, 2, 7)
@@ -4207,6 +4206,7 @@ Partial Class Form1
         Me.tlpMovies.Controls.Add(Me.countrytxt, 6, 8)
         Me.tlpMovies.Controls.Add(Me.tlpMovieButtons, 5, 10)
         Me.tlpMovies.Controls.Add(Me.TableLayoutPanel31, 0, 2)
+        Me.tlpMovies.Controls.Add(Me.cbUsrRated, 3, 8)
         Me.tlpMovies.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tlpMovies.Location = New System.Drawing.Point(0, 0)
         Me.tlpMovies.Margin = New System.Windows.Forms.Padding(0)
@@ -4223,7 +4223,6 @@ Partial Class Form1
         Me.tlpMovies.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26!))
         Me.tlpMovies.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26!))
         Me.tlpMovies.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33!))
-        Me.tlpMovies.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.tlpMovies.Size = New System.Drawing.Size(701, 620)
         Me.tlpMovies.TabIndex = 174
         '
@@ -4234,7 +4233,7 @@ Partial Class Form1
         Me.lbl_movCountry.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movCountry.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movCountry.ForeColor = System.Drawing.Color.White
-        Me.lbl_movCountry.Location = New System.Drawing.Point(306, 539)
+        Me.lbl_movCountry.Location = New System.Drawing.Point(309, 539)
         Me.lbl_movCountry.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movCountry.Name = "lbl_movCountry"
         Me.lbl_movCountry.Size = New System.Drawing.Size(60, 20)
@@ -4254,7 +4253,7 @@ Partial Class Form1
         Me.premiertxt.Location = New System.Drawing.Point(70, 461)
         Me.premiertxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.premiertxt.Name = "premiertxt"
-        Me.premiertxt.Size = New System.Drawing.Size(80, 20)
+        Me.premiertxt.Size = New System.Drawing.Size(75, 20)
         Me.premiertxt.TabIndex = 231
         '
         'lbl_movPremiered
@@ -4308,7 +4307,7 @@ Partial Class Form1
         Me.lbl_movTags.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movTags.ForeColor = System.Drawing.Color.White
-        Me.lbl_movTags.Location = New System.Drawing.Point(306, 565)
+        Me.lbl_movTags.Location = New System.Drawing.Point(309, 565)
         Me.lbl_movTags.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movTags.Name = "lbl_movTags"
         Me.lbl_movTags.Size = New System.Drawing.Size(60, 21)
@@ -4323,10 +4322,10 @@ Partial Class Form1
         Me.lbl_movTop250.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movTop250.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movTop250.ForeColor = System.Drawing.Color.White
-        Me.lbl_movTop250.Location = New System.Drawing.Point(155, 487)
+        Me.lbl_movTop250.Location = New System.Drawing.Point(150, 487)
         Me.lbl_movTop250.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movTop250.Name = "lbl_movTop250"
-        Me.lbl_movTop250.Size = New System.Drawing.Size(60, 20)
+        Me.lbl_movTop250.Size = New System.Drawing.Size(66, 20)
         Me.lbl_movTop250.TabIndex = 225
         Me.lbl_movTop250.Text = "Top 250"
         Me.lbl_movTop250.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -4498,7 +4497,7 @@ Partial Class Form1
         Me.taglinetxt.Location = New System.Drawing.Point(70, 409)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.taglinetxt.Name = "taglinetxt"
-        Me.taglinetxt.Size = New System.Drawing.Size(323, 20)
+        Me.taglinetxt.Size = New System.Drawing.Size(325, 20)
         Me.taglinetxt.TabIndex = 220
         '
         'lbl_movTagline
@@ -4642,7 +4641,7 @@ Partial Class Form1
         Me.lbl_movStars.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movStars.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movStars.ForeColor = System.Drawing.Color.White
-        Me.lbl_movStars.Location = New System.Drawing.Point(398, 409)
+        Me.lbl_movStars.Location = New System.Drawing.Point(400, 409)
         Me.lbl_movStars.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movStars.Name = "lbl_movStars"
         Me.lbl_movStars.Size = New System.Drawing.Size(72, 20)
@@ -4672,11 +4671,11 @@ Partial Class Form1
         Me.cbMovieDisplay_Actor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbMovieDisplay_Actor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.cbMovieDisplay_Actor.FormattingEnabled = true
-        Me.cbMovieDisplay_Actor.Location = New System.Drawing.Point(366, 436)
+        Me.cbMovieDisplay_Actor.Location = New System.Drawing.Point(369, 436)
         Me.cbMovieDisplay_Actor.Margin = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.cbMovieDisplay_Actor.MaxDropDownItems = 25
         Me.cbMovieDisplay_Actor.Name = "cbMovieDisplay_Actor"
-        Me.cbMovieDisplay_Actor.Size = New System.Drawing.Size(191, 21)
+        Me.cbMovieDisplay_Actor.Size = New System.Drawing.Size(188, 21)
         Me.cbMovieDisplay_Actor.TabIndex = 206
         '
         'directortxt
@@ -4684,10 +4683,10 @@ Partial Class Form1
         Me.tlpMovies.SetColumnSpan(Me.directortxt, 3)
         Me.directortxt.Dock = System.Windows.Forms.DockStyle.Fill
         Me.directortxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.directortxt.Location = New System.Drawing.Point(366, 461)
+        Me.directortxt.Location = New System.Drawing.Point(369, 461)
         Me.directortxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.directortxt.Name = "directortxt"
-        Me.directortxt.Size = New System.Drawing.Size(190, 20)
+        Me.directortxt.Size = New System.Drawing.Size(187, 20)
         Me.directortxt.TabIndex = 205
         '
         'creditstxt
@@ -4695,10 +4694,10 @@ Partial Class Form1
         Me.tlpMovies.SetColumnSpan(Me.creditstxt, 4)
         Me.creditstxt.Dock = System.Windows.Forms.DockStyle.Fill
         Me.creditstxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.creditstxt.Location = New System.Drawing.Point(366, 487)
+        Me.creditstxt.Location = New System.Drawing.Point(369, 487)
         Me.creditstxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.creditstxt.Name = "creditstxt"
-        Me.creditstxt.Size = New System.Drawing.Size(214, 20)
+        Me.creditstxt.Size = New System.Drawing.Size(211, 20)
         Me.creditstxt.TabIndex = 204
         '
         'studiotxt
@@ -4706,10 +4705,10 @@ Partial Class Form1
         Me.tlpMovies.SetColumnSpan(Me.studiotxt, 4)
         Me.studiotxt.Dock = System.Windows.Forms.DockStyle.Fill
         Me.studiotxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.studiotxt.Location = New System.Drawing.Point(366, 513)
+        Me.studiotxt.Location = New System.Drawing.Point(369, 513)
         Me.studiotxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 4)
         Me.studiotxt.Name = "studiotxt"
-        Me.studiotxt.Size = New System.Drawing.Size(214, 20)
+        Me.studiotxt.Size = New System.Drawing.Size(211, 20)
         Me.studiotxt.TabIndex = 203
         '
         'cbMovieDisplay_Source
@@ -4719,11 +4718,11 @@ Partial Class Form1
         Me.cbMovieDisplay_Source.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbMovieDisplay_Source.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.cbMovieDisplay_Source.FormattingEnabled = true
-        Me.cbMovieDisplay_Source.Location = New System.Drawing.Point(215, 461)
+        Me.cbMovieDisplay_Source.Location = New System.Drawing.Point(216, 461)
         Me.cbMovieDisplay_Source.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.cbMovieDisplay_Source.MaxDropDownItems = 25
         Me.cbMovieDisplay_Source.Name = "cbMovieDisplay_Source"
-        Me.cbMovieDisplay_Source.Size = New System.Drawing.Size(86, 21)
+        Me.cbMovieDisplay_Source.Size = New System.Drawing.Size(88, 21)
         Me.cbMovieDisplay_Source.Sorted = true
         Me.cbMovieDisplay_Source.TabIndex = 202
         Me.ToolTip2.SetToolTip(Me.cbMovieDisplay_Source, "Source")
@@ -4734,10 +4733,10 @@ Partial Class Form1
         Me.lbl_movSource.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movSource.ForeColor = System.Drawing.Color.White
-        Me.lbl_movSource.Location = New System.Drawing.Point(155, 461)
+        Me.lbl_movSource.Location = New System.Drawing.Point(150, 461)
         Me.lbl_movSource.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movSource.Name = "lbl_movSource"
-        Me.lbl_movSource.Size = New System.Drawing.Size(60, 21)
+        Me.lbl_movSource.Size = New System.Drawing.Size(66, 21)
         Me.lbl_movSource.TabIndex = 198
         Me.lbl_movSource.Text = "Source"
         Me.lbl_movSource.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4749,7 +4748,7 @@ Partial Class Form1
         Me.lbl_movStudio.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movStudio.ForeColor = System.Drawing.Color.White
-        Me.lbl_movStudio.Location = New System.Drawing.Point(306, 513)
+        Me.lbl_movStudio.Location = New System.Drawing.Point(309, 513)
         Me.lbl_movStudio.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movStudio.Name = "lbl_movStudio"
         Me.lbl_movStudio.Size = New System.Drawing.Size(60, 20)
@@ -4764,7 +4763,7 @@ Partial Class Form1
         Me.lbl_movCredits.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movCredits.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movCredits.ForeColor = System.Drawing.Color.White
-        Me.lbl_movCredits.Location = New System.Drawing.Point(306, 487)
+        Me.lbl_movCredits.Location = New System.Drawing.Point(309, 487)
         Me.lbl_movCredits.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movCredits.Name = "lbl_movCredits"
         Me.lbl_movCredits.Size = New System.Drawing.Size(60, 20)
@@ -4779,7 +4778,7 @@ Partial Class Form1
         Me.lbl_movDirector.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movDirector.ForeColor = System.Drawing.Color.White
-        Me.lbl_movDirector.Location = New System.Drawing.Point(306, 461)
+        Me.lbl_movDirector.Location = New System.Drawing.Point(309, 461)
         Me.lbl_movDirector.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movDirector.Name = "lbl_movDirector"
         Me.lbl_movDirector.Size = New System.Drawing.Size(60, 20)
@@ -4794,7 +4793,7 @@ Partial Class Form1
         Me.lbl_movActors.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movActors.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
         Me.lbl_movActors.ForeColor = System.Drawing.Color.White
-        Me.lbl_movActors.Location = New System.Drawing.Point(306, 436)
+        Me.lbl_movActors.Location = New System.Drawing.Point(309, 436)
         Me.lbl_movActors.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movActors.Name = "lbl_movActors"
         Me.lbl_movActors.Size = New System.Drawing.Size(60, 21)
@@ -4807,7 +4806,7 @@ Partial Class Form1
         Me.btnMovieDisplay_SetFilter.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.btnMovieDisplay_SetFilter.BackgroundImage = CType(resources.GetObject("btnMovieDisplay_SetFilter.BackgroundImage"),System.Drawing.Image)
         Me.btnMovieDisplay_SetFilter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnMovieDisplay_SetFilter.Location = New System.Drawing.Point(279, 564)
+        Me.btnMovieDisplay_SetFilter.Location = New System.Drawing.Point(282, 564)
         Me.btnMovieDisplay_SetFilter.Margin = New System.Windows.Forms.Padding(0, 3, 0, 0)
         Me.btnMovieDisplay_SetFilter.Name = "btnMovieDisplay_SetFilter"
         Me.btnMovieDisplay_SetFilter.Size = New System.Drawing.Size(23, 23)
@@ -4815,28 +4814,15 @@ Partial Class Form1
         Me.ToolTip2.SetToolTip(Me.btnMovieDisplay_SetFilter, "List all the movies belonging to this Set")
         Me.btnMovieDisplay_SetFilter.UseVisualStyleBackColor = false
         '
-        'imdbtxt
-        '
-        Me.imdbtxt.BackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
-        Me.tlpMovies.SetColumnSpan(Me.imdbtxt, 2)
-        Me.imdbtxt.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.imdbtxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.imdbtxt.Location = New System.Drawing.Point(215, 539)
-        Me.imdbtxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
-        Me.imdbtxt.Name = "imdbtxt"
-        Me.imdbtxt.ReadOnly = true
-        Me.imdbtxt.Size = New System.Drawing.Size(86, 20)
-        Me.imdbtxt.TabIndex = 192
-        '
         'votestxt
         '
         Me.tlpMovies.SetColumnSpan(Me.votestxt, 2)
         Me.votestxt.Dock = System.Windows.Forms.DockStyle.Fill
         Me.votestxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.votestxt.Location = New System.Drawing.Point(215, 513)
+        Me.votestxt.Location = New System.Drawing.Point(216, 513)
         Me.votestxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.votestxt.Name = "votestxt"
-        Me.votestxt.Size = New System.Drawing.Size(86, 20)
+        Me.votestxt.Size = New System.Drawing.Size(88, 20)
         Me.votestxt.TabIndex = 191
         '
         'lbl_movImdbid
@@ -4845,12 +4831,12 @@ Partial Class Form1
         Me.lbl_movImdbid.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movImdbid.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movImdbid.ForeColor = System.Drawing.Color.White
-        Me.lbl_movImdbid.Location = New System.Drawing.Point(155, 539)
+        Me.lbl_movImdbid.Location = New System.Drawing.Point(150, 539)
         Me.lbl_movImdbid.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movImdbid.Name = "lbl_movImdbid"
-        Me.lbl_movImdbid.Size = New System.Drawing.Size(60, 20)
+        Me.lbl_movImdbid.Size = New System.Drawing.Size(66, 20)
         Me.lbl_movImdbid.TabIndex = 190
-        Me.lbl_movImdbid.Text = "IMDB id"
+        Me.lbl_movImdbid.Text = "Usr Rate"
         Me.lbl_movImdbid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_movVotes
@@ -4860,10 +4846,10 @@ Partial Class Form1
         Me.lbl_movVotes.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_movVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movVotes.ForeColor = System.Drawing.Color.White
-        Me.lbl_movVotes.Location = New System.Drawing.Point(155, 513)
+        Me.lbl_movVotes.Location = New System.Drawing.Point(150, 513)
         Me.lbl_movVotes.Margin = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.lbl_movVotes.Name = "lbl_movVotes"
-        Me.lbl_movVotes.Size = New System.Drawing.Size(60, 20)
+        Me.lbl_movVotes.Size = New System.Drawing.Size(66, 20)
         Me.lbl_movVotes.TabIndex = 189
         Me.lbl_movVotes.Text = "Votes"
         Me.lbl_movVotes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -4878,7 +4864,7 @@ Partial Class Form1
         Me.pathtxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.pathtxt.Name = "pathtxt"
         Me.pathtxt.ReadOnly = true
-        Me.pathtxt.Size = New System.Drawing.Size(231, 20)
+        Me.pathtxt.Size = New System.Drawing.Size(234, 20)
         Me.pathtxt.TabIndex = 188
         '
         'cbMovieDisplay_MovieSet
@@ -4894,7 +4880,7 @@ Partial Class Form1
         Me.cbMovieDisplay_MovieSet.Margin = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.cbMovieDisplay_MovieSet.MaxDropDownItems = 25
         Me.cbMovieDisplay_MovieSet.Name = "cbMovieDisplay_MovieSet"
-        Me.cbMovieDisplay_MovieSet.Size = New System.Drawing.Size(209, 21)
+        Me.cbMovieDisplay_MovieSet.Size = New System.Drawing.Size(212, 21)
         Me.cbMovieDisplay_MovieSet.TabIndex = 187
         '
         'runtimetxt
@@ -4904,7 +4890,7 @@ Partial Class Form1
         Me.runtimetxt.Location = New System.Drawing.Point(70, 539)
         Me.runtimetxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.runtimetxt.Name = "runtimetxt"
-        Me.runtimetxt.Size = New System.Drawing.Size(80, 20)
+        Me.runtimetxt.Size = New System.Drawing.Size(75, 20)
         Me.runtimetxt.TabIndex = 173
         '
         'ratingtxt
@@ -4914,7 +4900,7 @@ Partial Class Form1
         Me.ratingtxt.Location = New System.Drawing.Point(70, 513)
         Me.ratingtxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.ratingtxt.Name = "ratingtxt"
-        Me.ratingtxt.Size = New System.Drawing.Size(80, 20)
+        Me.ratingtxt.Size = New System.Drawing.Size(75, 20)
         Me.ratingtxt.TabIndex = 172
         '
         'certtxt
@@ -4924,7 +4910,7 @@ Partial Class Form1
         Me.certtxt.Location = New System.Drawing.Point(70, 487)
         Me.certtxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.certtxt.Name = "certtxt"
-        Me.certtxt.Size = New System.Drawing.Size(80, 20)
+        Me.certtxt.Size = New System.Drawing.Size(75, 20)
         Me.certtxt.TabIndex = 171
         '
         'genretxt
@@ -4935,7 +4921,7 @@ Partial Class Form1
         Me.genretxt.Location = New System.Drawing.Point(70, 436)
         Me.genretxt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.genretxt.Name = "genretxt"
-        Me.genretxt.Size = New System.Drawing.Size(231, 20)
+        Me.genretxt.Size = New System.Drawing.Size(234, 20)
         Me.genretxt.TabIndex = 170
         '
         'txtStars
@@ -4943,29 +4929,29 @@ Partial Class Form1
         Me.tlpMovies.SetColumnSpan(Me.txtStars, 3)
         Me.txtStars.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtStars.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtStars.Location = New System.Drawing.Point(470, 409)
+        Me.txtStars.Location = New System.Drawing.Point(472, 409)
         Me.txtStars.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.txtStars.Name = "txtStars"
-        Me.txtStars.Size = New System.Drawing.Size(230, 20)
+        Me.txtStars.Size = New System.Drawing.Size(228, 20)
         Me.txtStars.TabIndex = 168
         '
         'top250txt
         '
         Me.tlpMovies.SetColumnSpan(Me.top250txt, 2)
         Me.top250txt.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.top250txt.Location = New System.Drawing.Point(215, 487)
+        Me.top250txt.Location = New System.Drawing.Point(216, 487)
         Me.top250txt.Margin = New System.Windows.Forms.Padding(0, 4, 1, 0)
         Me.top250txt.Name = "top250txt"
-        Me.top250txt.Size = New System.Drawing.Size(86, 20)
+        Me.top250txt.Size = New System.Drawing.Size(88, 20)
         Me.top250txt.TabIndex = 226
         '
         'countrytxt
         '
         Me.tlpMovies.SetColumnSpan(Me.countrytxt, 3)
         Me.countrytxt.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.countrytxt.Location = New System.Drawing.Point(369, 538)
+        Me.countrytxt.Location = New System.Drawing.Point(372, 538)
         Me.countrytxt.Name = "countrytxt"
-        Me.countrytxt.Size = New System.Drawing.Size(185, 20)
+        Me.countrytxt.Size = New System.Drawing.Size(182, 20)
         Me.countrytxt.TabIndex = 233
         '
         'tlpMovieButtons
@@ -4981,12 +4967,12 @@ Partial Class Form1
         Me.tlpMovieButtons.Controls.Add(Me.btnPlayMovie, 2, 0)
         Me.tlpMovieButtons.Controls.Add(Me.btnMovWatched, 4, 0)
         Me.tlpMovieButtons.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tlpMovieButtons.Location = New System.Drawing.Point(303, 588)
+        Me.tlpMovieButtons.Location = New System.Drawing.Point(306, 588)
         Me.tlpMovieButtons.Margin = New System.Windows.Forms.Padding(1)
         Me.tlpMovieButtons.Name = "tlpMovieButtons"
         Me.tlpMovieButtons.RowCount = 1
         Me.tlpMovieButtons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.tlpMovieButtons.Size = New System.Drawing.Size(277, 31)
+        Me.tlpMovieButtons.Size = New System.Drawing.Size(274, 31)
         Me.tlpMovieButtons.TabIndex = 234
         '
         'ButtonTrailer
@@ -5008,7 +4994,7 @@ Partial Class Form1
         Me.btnPlayMovie.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btnPlayMovie.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnPlayMovie.Image = Global.Media_Companion.My.Resources.Resources.Movie
-        Me.btnPlayMovie.Location = New System.Drawing.Point(130, 0)
+        Me.btnPlayMovie.Location = New System.Drawing.Point(128, 0)
         Me.btnPlayMovie.Margin = New System.Windows.Forms.Padding(0)
         Me.btnPlayMovie.Name = "btnPlayMovie"
         Me.btnPlayMovie.Size = New System.Drawing.Size(72, 31)
@@ -5024,7 +5010,7 @@ Partial Class Form1
         Me.btnMovWatched.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnMovWatched.Dock = System.Windows.Forms.DockStyle.Right
         Me.btnMovWatched.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnMovWatched.Location = New System.Drawing.Point(205, 0)
+        Me.btnMovWatched.Location = New System.Drawing.Point(202, 0)
         Me.btnMovWatched.Margin = New System.Windows.Forms.Padding(0)
         Me.btnMovWatched.Name = "btnMovWatched"
         Me.btnMovWatched.Size = New System.Drawing.Size(72, 31)
@@ -5072,6 +5058,16 @@ Partial Class Form1
         Me.btnMovSelectPlot.Text = "Select"
         Me.ToolTip2.SetToolTip(Me.btnMovSelectPlot, "Choose from a list of plots found"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"on IMDB and TMDB")
         Me.btnMovSelectPlot.UseVisualStyleBackColor = true
+        '
+        'cbUsrRated
+        '
+        Me.tlpMovies.SetColumnSpan(Me.cbUsrRated, 2)
+        Me.cbUsrRated.FormattingEnabled = true
+        Me.cbUsrRated.Items.AddRange(New Object() {"None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+        Me.cbUsrRated.Location = New System.Drawing.Point(219, 538)
+        Me.cbUsrRated.Name = "cbUsrRated"
+        Me.cbUsrRated.Size = New System.Drawing.Size(83, 21)
+        Me.cbUsrRated.TabIndex = 236
         '
         'TabPageMovieFanart
         '
@@ -7656,7 +7652,7 @@ Partial Class Form1
         '
         Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel8.Controls.Add(Me.TableLayoutPanel30)
-        Me.Panel8.Location = New System.Drawing.Point(528, 354)
+        Me.Panel8.Location = New System.Drawing.Point(526, 354)
         Me.Panel8.MaximumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.MinimumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.Name = "Panel8"
@@ -8099,7 +8095,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(289, 198)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(287, 198)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -13398,7 +13394,6 @@ End Sub
     Friend WithEvents lbl_movDirector As System.Windows.Forms.Label
     Friend WithEvents lbl_movActors As System.Windows.Forms.Label
     Friend WithEvents btnMovieDisplay_SetFilter As System.Windows.Forms.Button
-    Friend WithEvents imdbtxt As System.Windows.Forms.TextBox
     Friend WithEvents votestxt As System.Windows.Forms.TextBox
     Friend WithEvents lbl_movImdbid As System.Windows.Forms.Label
     Friend WithEvents lbl_movVotes As System.Windows.Forms.Label
@@ -13646,4 +13641,5 @@ End Sub
     Friend WithEvents lblFilterRootFolderMode As Label
     Friend WithEvents lblFilterRootFolder As Label
     Friend WithEvents tp_HmPref As TabPage
+    Friend WithEvents cbUsrRated As ComboBox
 End Class

@@ -76,6 +76,7 @@ Public Class ComboList
     Property DirectorList         As New List(Of DirectorDatabase)
     Property FolderSize           As Long = -1
     Property _rootfolder          As String = ""
+    Property _usrrated            As Integer = 0
 
 
     Public ReadOnly Property DisplayFolderSize As Double
@@ -411,6 +412,15 @@ Public Class ComboList
         End Set
     End Property
 
+    Public Property usrrated As Integer
+        Get
+            Return _usrrated
+        End Get
+        Set(value As Integer)
+            _usrrated = Value
+        End Set
+    End Property
+
     Public Sub Assign(From As ComboList)
 
         Me.fullpathandfilename  = From.fullpathandfilename
@@ -459,6 +469,7 @@ Public Class ComboList
         Me.DirectorList         = From.DirectorList 
         Me.FolderSize           = From.FolderSize
         Me.rootfolder           = From.rootfolder
+        Me.usrrated             = From.usrrated
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

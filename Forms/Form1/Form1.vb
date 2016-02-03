@@ -1926,7 +1926,8 @@ Public Class Form1
                 countrytxt.Text = workingMovieDetails.fullmoviebody.country 
                 pathtxt.Text    = workingMovie.fullpathandfilename
                 ratingtxt.Text  = workingMovieDetails.fullmoviebody.rating.FormatRating
-                imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
+                cbUsrRated.Text = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
+                'imdbtxt.Text    = workingMovieDetails.fullmoviebody.imdbid
 
                 SetTagTxtField
 
@@ -2109,7 +2110,8 @@ Public Class Form1
             studiotxt.Text = ""
             countrytxt.Text = ""
             pathtxt.Text = ""
-            imdbtxt.Text = ""
+            cbUsrRated.SelectedIndex = -1
+            'imdbtxt.Text = ""
             'actorarray.Clear()
 
             ratingtxt.Text = ""
@@ -3013,6 +3015,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
             movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
             movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
+            movie.ScrapedMovie.fullmoviebody.usrrated = If(cbUsrRated.Text = "None", "0", cbUsrRated.Text)
             movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
             movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
             movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
@@ -8597,7 +8600,8 @@ Public Class Form1
                     ratingtxt.Font = newFont
                     votestxt.Font = newFont
                     top250txt.Font = newFont
-                    imdbtxt.Font = newFont
+                    'imdbtxt.Font = newFont
+                    cbUsrRated.Font = newFont
                     cbFilterGeneral.Font = newFont
                     cbFilterGenre.Font = newFont
                     cbFilterCountries.Font = newFont

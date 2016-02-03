@@ -1481,6 +1481,7 @@ Public Class Movies
                                 Case "tmdbid"               : newmovie.tmdbid = detail.InnerText
                                 Case "playcount"            : newmovie.playcount = detail.InnerText
                                 Case "rating"               : newmovie.rating = detail.InnerText.ToString.ToRating
+                                Case "usrrated"             : newmovie.usrrated = detail.InnerText.toInt
                                 Case "title"                : newmovie.title = detail.InnerText
                                 Case "originaltitle"        : newmovie.originaltitle = detail.InnerText
                                 Case "top250"               : newmovie.top250 = detail.InnerText
@@ -1626,23 +1627,24 @@ Public Class Movies
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100) : child.AppendChild(childchild)
-            childchild = doc.CreateElement("tagline") : childchild.InnerText = movie.tagline : child.AppendChild(childchild)
+            child.AppendChild(doc, "tagline",       movie.tagline)
             'If movie.plot.Length() > 100 Then
             '    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
             'Else
             '    childchild.InnerText = movie.plot
             'End If
-            child.AppendChild(childchild)
+            'child.AppendChild(childchild)
 
-            childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.sortorder : child.AppendChild(childchild)
-            childchild = doc.CreateElement("stars")     : childchild.InnerText = movie.stars : child.AppendChild(childchild)
-            childchild = doc.CreateElement("runtime")   : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
-            childchild = doc.CreateElement("top250")    : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
-            childchild = doc.CreateElement("year")      : childchild.InnerText = movie.year : child.AppendChild(childchild)
-            child.AppendChild(doc, "votes", movie.Votes)
-            child.AppendChild(doc, "Resolution", movie.Resolution)
-            child.AppendChild(doc, "VideoCodec", movie.VideoCodec)
-            child.AppendChild(doc, "Container", movie.Container)
+            child.AppendChild(doc, "sortorder",     movie.sortorder)
+            child.AppendChild(doc, "stars",         movie.stars)
+            child.AppendChild(doc, "runtime",       movie.runtime)
+            child.AppendChild(doc, "top250",        movie.top250)
+            child.AppendChild(doc, "year",          movie.year)
+            child.AppendChild(doc, "votes",         movie.Votes)
+            child.AppendChild(doc, "usrrated",      movie.usrrated)
+            child.AppendChild(doc, "Resolution",    movie.Resolution)
+            child.AppendChild(doc, "VideoCodec",    movie.VideoCodec)
+            child.AppendChild(doc, "Container",     movie.Container)
 
             For Each item In movie.Audio
                 child.AppendChild(item.GetChild(doc))

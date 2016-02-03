@@ -2196,6 +2196,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.top250 = "0"
                     newmovie.year = "1850"
                     newmovie.stars = ""
+                    newmovie.usrrated = 0
 
                     Return newmovie
                 End Try
@@ -2278,6 +2279,8 @@ Public Class WorkingWithNfoFiles
                                 'If tempStr.IndexOf(" "  ) <> -1 Then tempStr.Replace(" "  , "")
                                 'newmovie.rating = tempStr.ToRating
                                 newmovie.rating = thisresult.InnerText.ToRating
+                            Case "userrating"
+                                newmovie.usrrated = thisresult.InnerText.ToInt 
                             Case "top250"
                                 newmovie.top250 = thisresult.InnerText
                             Case "sortorder"
@@ -2399,6 +2402,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.plot = Nothing Then newmovie.plot = ""
                 If newmovie.rating = Nothing Then newmovie.rating = 0
                 If newmovie.runtime = Nothing Then newmovie.runtime = ""
+                If newmovie.usrrated = Nothing Then newmovie.usrrated = 0
                 If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
                 'If newmovie.title <> Nothing And newmovie.year <> Nothing Then
                 '    newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
@@ -2467,6 +2471,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.plot = errorstring
                     newmovie.fullmoviebody.premiered = ""
                     newmovie.fullmoviebody.rating = ""
+                    newmovie.fullmoviebody.usrrated = "0"
                     newmovie.fullmoviebody.runtime = ""
                     newmovie.fullmoviebody.studio = ""
                     newmovie.fullmoviebody.tagline = "Rescraping the movie might fix the problem"
@@ -2607,6 +2612,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString ' ("0.00", MyCulture)
                             'If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
                             'If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
+                        Case "userrating"
+                            newmovie.fullmoviebody.usrrated = thisresult.InnerText
                         Case "top250"
                             newmovie.fullmoviebody.top250 = thisresult.InnerText
                         Case "createdate"
@@ -2770,6 +2777,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.fullmoviebody.MovieSet.MovieSetName = "" Then
                     newmovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
                 End If
+                If newmovie.fullmoviebody.usrrated = "" Then newmovie.fullmoviebody.usrrated = "0"
                 movie = Nothing
 
                 Return newmovie
@@ -2997,6 +3005,9 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
                 child = doc.CreateElement("rating")
                 child.InnerText = movietosave.fullmoviebody.rating.ToRating.ToString("0.0", Form1.MyCulture)
+                root.AppendChild(child)
+                child = doc.CreateElement("userrating")
+                child.InnerText = If(movietosave.fullmoviebody.usrrated = "", "0", movietosave.fullmoviebody.usrrated)
                 root.AppendChild(child)
                 stage = 28
                 child = doc.CreateElement("votes")

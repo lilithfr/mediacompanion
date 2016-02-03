@@ -1321,6 +1321,7 @@ Public Class Movie
         _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         _movieCache.movietag    = _scrapedMovie.fullmoviebody.tag
+        _movieCache.usrrated    = If(_scrapedMovie.fullmoviebody.usrrated = "", 0, _scrapedMovie.fullmoviebody.usrrated.ToInt)
         _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value
         _movieCache.Actorlist   = _scrapedMovie.listactors 
         If Pref.incmissingmovies Then
