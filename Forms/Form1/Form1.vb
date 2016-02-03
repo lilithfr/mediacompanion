@@ -8725,13 +8725,14 @@ Public Class Form1
         Pref.tableview.Add("missingdata1|115|15|false")
         Pref.tableview.Add("fullpathandfilename|300|16|false")
         Pref.tableview.Add("createdate|104|17|false")
+        Pref.tableview.Add("userrated|100|18|false")
     End Sub
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
         If Pref.tablesortorder = Nothing Then Pref.tablesortorder = "Title|Ascending"
         If Pref.tablesortorder = "" Then Pref.tablesortorder = "Title|Ascending"
-        If Pref.tableview.Count < 18 Then    'Counter. Increase if adding new tableview column else new columns won't be added to config.xml.
+        If Pref.tableview.Count < 19 Then    'Counter. Increase if adding new tableview column else new columns won't be added to config.xml.
             Call mov_TableViewSetup()
         End If
         tableSets.Clear()
@@ -8802,6 +8803,7 @@ Public Class Form1
             childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
             childchild = doc.CreateElement("year") : childchild.InnerText = movie.year : child.AppendChild(childchild)
             childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
+            childchild = doc.CreateElement("usrrated") : childchild.InnerText = movie.usrrated : child.AppendChild(childchild)
             root.AppendChild(child)
         Next
 
@@ -9081,6 +9083,18 @@ Public Class Form1
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
+        Dim usrratedcolumn As New DataGridViewColumn()
+        With usrratedcolumn
+            Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
+            .CellTemplate = oCell
+            .DefaultCellStyle.Format = "N0"
+            .HeaderText = "UserRating"
+            .DataPropertyName = "usrrated"
+            .Name = "usrrated"
+            .SortMode = DataGridViewColumnSortMode.Automatic
+            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter
+        End With
+
         For f = 0 To tableview.Count -1
             For Each col In tableSets
                 If col.index = f Then
@@ -9174,6 +9188,10 @@ Public Class Form1
                             createdatecolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, createdatecolumn)
                             Exit For
+                        Case "userrated"
+                            usrratedcolumn.Width = col.width
+                            usrratedcolumn.Visible = col.visible
+                            DataGridView1.Columns.Insert(f, usrratedcolumn)
                     End Select
                 End If
             Next
