@@ -2011,7 +2011,7 @@ End Sub
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Form1)
         Changes = True
     End Sub
-
+    
     Private Sub cbMovieShowDateOnList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieShowDateOnList.CheckedChanged
         Try
             Pref.showsortdate = cbMovieShowDateOnList.Checked

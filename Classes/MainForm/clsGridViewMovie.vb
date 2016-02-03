@@ -24,19 +24,6 @@ Public Class clsGridViewMovie
         End While
 
 
-        If IsNothing(dgv.Columns("Watched")) Then
-            Dim imgWatched As New DataGridViewImageColumn
-
-            imgWatched.Image       = Global.Media_Companion.My.Resources.Resources.DotGray
-            imgWatched.Name        = "Watched"
-            imgWatched.ToolTipText = "Watched Status"
-            imgWatched.HeaderText  = "W"
-
-            dgv.Columns.Add(imgWatched) 
-            SetColWidth(dgv.Columns("Watched"))
-        End If
-
-
         If IsNothing(dgv.Columns("ImgPlot")) Then
             Dim imgPlot As New DataGridViewImageColumn
 
@@ -48,8 +35,7 @@ Public Class clsGridViewMovie
             dgv.Columns.Add(imgPlot)
             SetColWidth(dgv.Columns("ImgPlot"))
         End If
-
-
+        
         Dim header_style As New DataGridViewCellStyle
 
         header_style.ForeColor = Color.White
@@ -70,8 +56,8 @@ Public Class clsGridViewMovie
             column.Visible   = False
         Next
 
-        dgv.Columns("Watched").Visible = Pref.MovieList_ShowColWatched
-        dgv.Columns("ImgPlot").Visible = Pref.MovieList_ShowColPlot
+        dgv.Columns("Watched").Visible  = Pref.MovieList_ShowColWatched
+        dgv.Columns("ImgPlot").Visible  = Pref.MovieList_ShowColPlot
 
         If dgv.Columns("Watched").Visible Then
             Dim x = Global.Media_Companion.My.Resources.Movie        'Performance tweak
@@ -110,17 +96,18 @@ Public Class clsGridViewMovie
             IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
         End If
 
-        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                   )
-        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                 )
-        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"    , -20                                           )
-        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                )
-        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
-        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                   )
-        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,          ,    , DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"    , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"Resolution"       ,GridFieldToDisplay2="Resolution"  ,"Resolution"       ,"Res"     ,    , DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"Certificate"      ,GridFieldToDisplay2="Certificate" ,"Certificate"      ,"Cert"    ,    , DataGridViewContentAlignment.MiddleLeft  )
+        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                        )
+        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                      )
+        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"         , -20                                           )
+        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                     )
+        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"       , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"usrrated"         ,GridFieldToDisplay2="User Rated"  ,"User Rated"       ,"UserRated"    , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,               , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                        )
+        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,               ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"         , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"Resolution"       ,GridFieldToDisplay2="Resolution"  ,"Resolution"       ,"Res"          ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"Certificate"      ,GridFieldToDisplay2="Certificate" ,"Certificate"      ,"Cert"         ,    , DataGridViewContentAlignment.MiddleLeft  )
          
         dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
@@ -179,10 +166,12 @@ Public Class clsGridViewMovie
 
             If Not IsNothing(dgvMovies.Columns("ImgPlot")) AndAlso dgvMovies.Columns("ImgPlot").Visible then firstColWidth -= dgvMovies.Columns("ImgPlot").Width
             If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
+            
 
             If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
             If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
             If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
+            If GridFieldToDisplay2 = "User Rated" Then firstColWidth -= dgvMovies.Columns("usrrated"         ).Width
             If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
             If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
             If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
@@ -389,6 +378,40 @@ Public Class clsGridViewMovie
                 Else
                     If Form1.DGVMoviesColName = "Certificate" Then
                         b = From f In b Order By f.Certificate Descending, f.DisplayTitle 
+                    Else
+                        b = From f In b Order By f.DisplayTitle Descending
+                    End If
+                End If
+            Case "User Rated"
+                If GridSort = "Asc" Then
+                    If Form1.DGVMoviesColName = "usrrated" Then
+                        If GridFieldToDisplay1="FileName" Then
+                            b = From f In b Order By f.usrrated Ascending, f.filename Ascending
+                        ElseIf GridFieldToDisplay1="Folder" Then
+                            b = From f In b Order By f.usrrated Ascending, f.foldername Ascending
+                        Else
+                            b = From f In b Order By f.usrrated Ascending, f.DisplayTitle Ascending
+                        End If
+                    ElseIf GridFieldToDisplay1="FileName" Then
+                        b = From f In b Order By f.filename Ascending
+                    ElseIf GridFieldToDisplay1="Folder" Then
+                        b = From f In b Order By f.foldername Ascending
+                    Else
+                        b = From f In b Order By f.DisplayTitle Ascending
+                    End If
+                Else
+                    If Form1.DGVMoviesColName = "usrrated" Then
+                        If GridFieldToDisplay1="FileName" Then
+                            b = From f In b Order By f.usrrated Descending, f.filename Ascending
+                        ElseIf GridFieldToDisplay1="Folder" Then
+                            b = From f In b Order By f.usrrated Descending, f.foldername Ascending
+                        Else
+                            b = From f In b Order By f.usrrated Descending, f.DisplayTitle Ascending
+                        End If
+                    ElseIf GridFieldToDisplay1="FileName" Then
+                        b = From f In b Order By f.filename Descending
+                    ElseIf GridFieldToDisplay1="Folder" Then
+                        b = From f In b Order By f.foldername Descending
                     Else
                         b = From f In b Order By f.DisplayTitle Descending
                     End If

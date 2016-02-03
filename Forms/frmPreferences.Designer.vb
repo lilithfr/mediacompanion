@@ -3206,7 +3206,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3411,7 +3411,7 @@ Partial Class frmPreferences
         'cbMovieList_ShowColWatched
         '
         Me.cbMovieList_ShowColWatched.AutoSize = true
-        Me.cbMovieList_ShowColWatched.Location = New System.Drawing.Point(17, 60)
+        Me.cbMovieList_ShowColWatched.Location = New System.Drawing.Point(7, 60)
         Me.cbMovieList_ShowColWatched.Name = "cbMovieList_ShowColWatched"
         Me.cbMovieList_ShowColWatched.Size = New System.Drawing.Size(152, 19)
         Me.cbMovieList_ShowColWatched.TabIndex = 3
@@ -3421,7 +3421,7 @@ Partial Class frmPreferences
         'cbMovieList_ShowColPlot
         '
         Me.cbMovieList_ShowColPlot.AutoSize = true
-        Me.cbMovieList_ShowColPlot.Location = New System.Drawing.Point(17, 39)
+        Me.cbMovieList_ShowColPlot.Location = New System.Drawing.Point(7, 39)
         Me.cbMovieList_ShowColPlot.Name = "cbMovieList_ShowColPlot"
         Me.cbMovieList_ShowColPlot.Size = New System.Drawing.Size(125, 19)
         Me.cbMovieList_ShowColPlot.TabIndex = 2
@@ -3433,7 +3433,7 @@ Partial Class frmPreferences
         Me.cbMovieShowDateOnList.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.cbMovieShowDateOnList.Enabled = false
         Me.cbMovieShowDateOnList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(17, 85)
+        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(7, 85)
         Me.cbMovieShowDateOnList.Name = "cbMovieShowDateOnList"
         Me.cbMovieShowDateOnList.Size = New System.Drawing.Size(275, 20)
         Me.cbMovieShowDateOnList.TabIndex = 72

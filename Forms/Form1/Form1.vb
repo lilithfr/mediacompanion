@@ -3109,6 +3109,7 @@ Public Class Form1
                         movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                         movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
                     End If
+                    If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.text
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
                     If TabControl2.SelectedTab.Name = "TabPage9" Then
                         For Each t In NewTagList
@@ -3772,6 +3773,7 @@ Public Class Form1
             Label128.Visible = True
             cbMovieDisplay_MovieSet.Items.Insert(0, "")
             cbMovieDisplay_MovieSet.SelectedIndex = 0
+            cbUsrRated.SelectedIndex = -1
             Dim add As Boolean = True
             Dim watched As String = ""
             For Each sRow As DataGridViewRow In selectedRows
