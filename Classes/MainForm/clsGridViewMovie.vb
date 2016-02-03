@@ -294,6 +294,7 @@ Public Class clsGridViewMovie
         If Form1.cbFilterTag                   .Visible Then b = Form1.oMovies.ApplyTagsFilter                  ( b , Form1.cbFilterTag                   )
         If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )     
         If Form1.cbFilterRootFolder            .Visible Then b = Form1.oMovies.ApplyRootFolderFilter            ( b , Form1.cbFilterRootFolder            )
+        If Form1.cbFilterUserRated             .Visible Then b = Form1.oMovies.ApplyUserRatedFilter             ( b , Form1.cbFilterUserRated             )
  
         Select Case Form1.cbSort.Text
             Case "A - Z"

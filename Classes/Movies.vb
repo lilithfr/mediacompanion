@@ -717,7 +717,19 @@ Public Class Movies
 
             Return r
         End Get
-    End Property    
+    End Property
+
+    Public ReadOnly Property UsrRated As List(Of String)
+        Get
+            Dim q = From m In MovieCache 
+                Group By NumTracks=m.usrrated Into NumFilms=Count 
+                Order By NumTracks
+
+            Dim r = (From x In q Select x.NumTracks & " (" & x.NumFilms.ToString & ")").ToList
+
+            Return r
+        End Get
+    End Property 
 
     Public ReadOnly Property AudioLanguagesFilter As List(Of String)
         Get
@@ -2800,6 +2812,19 @@ Public Class Movies
         End If
         If fi.Exclude.Count>0 Then
             recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.rootfolder) )
+        End If
+
+        Return recs
+    End Function
+    
+    Function ApplyUserRatedFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb)
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.usrrated) )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.usrrated) )
         End If
 
         Return recs
