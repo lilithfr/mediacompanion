@@ -8768,49 +8768,44 @@ Public Class Form1
         For Each row As DataGridViewRow In DataGridViewMovies.Rows
             Dim movie As Data_GridViewMovie = row.DataBoundItem
             child = doc.CreateElement("movie")
-            childchild = doc.CreateElement("filedate") : childchild.InnerText = movie.filedate : child.AppendChild(childchild)
-            childchild = doc.CreateElement("missingdata1") : childchild.InnerText = movie.missingdata1.ToString : child.AppendChild(childchild)
-            childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
-            childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
-            childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
-            If Not movie.movieset is Nothing Then
-                If movie.movieset.MovieSetName <> "" Then
-                    childchild = doc.CreateElement("set") : childchild.InnerText = movie.movieset.MovieSetName : child.AppendChild(childchild)
-                Else
-                    childchild = doc.CreateElement("set") : childchild.InnerText = "-None-" : child.AppendChild(childchild)
-                End If
-            Else
-                childchild = doc.CreateElement("set") : childchild.InnerText = "-None-" : child.AppendChild(childchild)
-            End If
-            If movie.source <> Nothing And movie.source <> "" Then
-                childchild = doc.CreateElement("source") : childchild.InnerText = movie.source : child.AppendChild(childchild)
-            Else
-                childchild = doc.CreateElement("source") : childchild.InnerText = "" : child.AppendChild(childchild)
-            End If
-            childchild = doc.CreateElement("genre") : childchild.InnerText = movie.genre : child.AppendChild(childchild)
-            childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
-            childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
-            childchild = doc.CreateElement("rating") : childchild.InnerText = movie.Rating : child.AppendChild(childchild)
-            childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
-            childchild = doc.CreateElement("certificate") : childchild.InnerText = movie.Certificate : child.AppendChild(childchild)
-            If String.IsNullOrEmpty(movie.SortOrder) Then movie.SortOrder = movie.DisplayTitle
-            childchild = doc.CreateElement("outline") : childchild.InnerText = movie.outline : child.AppendChild(childchild)
-            childchild = doc.CreateElement("plot") : childchild.InnerText = movie.plot : child.AppendChild(childchild)
-            childchild = doc.CreateElement("stars") : childchild.InnerText = movie.stars : child.AppendChild(childchild)
-            childchild = doc.CreateElement("sortorder") : childchild.InnerText = movie.SortOrder : child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("runtime") : childchild.InnerText = movie.runtime : child.AppendChild(childchild)
-            childchild = doc.CreateElement("top250") : childchild.InnerText = movie.top250 : child.AppendChild(childchild)
-            childchild = doc.CreateElement("year") : childchild.InnerText = movie.year : child.AppendChild(childchild)
-            childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
-            childchild = doc.CreateElement("usrrated") : childchild.InnerText = movie.usrrated : child.AppendChild(childchild)
+            childchild = doc.CreateElement("filedate")              : childchild.InnerText = movie.filedate                 : child.AppendChild(childchild)
+            childchild = doc.CreateElement("missingdata1")          : childchild.InnerText = movie.missingdata1.ToString    : child.AppendChild(childchild)
+            childchild = doc.CreateElement("filename")              : childchild.InnerText = movie.filename                 : child.AppendChild(childchild)
+            childchild = doc.CreateElement("foldername")            : childchild.InnerText = movie.foldername               : child.AppendChild(childchild)
+            childchild = doc.CreateElement("fullpathandfilename")   : childchild.InnerText = movie.fullpathandfilename      : child.AppendChild(childchild)
+            'If Not movie.movieset is Nothing Then
+            '    If movie.movieset.MovieSetName <> "" Then
+            '        childchild = doc.CreateElement("set")   : childchild.InnerText = movie.movieset.MovieSetName    : child.AppendChild(childchild)
+            '    Else
+            '        childchild = doc.CreateElement("set")   : childchild.InnerText = "-None-"                       : child.AppendChild(childchild)
+            '    End If
+            'Else
+            '    childchild = doc.CreateElement("set")       : childchild.InnerText = "-None-"                       : child.AppendChild(childchild)
+            'End If
+            childchild = doc.CreateElement("set")                   : childchild.InnerText = movie.movieset.MovieSetName    : child.AppendChild(childchild)
+            childchild = doc.CreateElement("source")                : childchild.InnerText = movie.source                   : child.AppendChild(childchild)
+            childchild = doc.CreateElement("genre")                 : childchild.InnerText = movie.genre                    : child.AppendChild(childchild)
+            childchild = doc.CreateElement("id")                    : childchild.InnerText = movie.id                       : child.AppendChild(childchild)
+            childchild = doc.CreateElement("playcount")             : childchild.InnerText = movie.playcount                : child.AppendChild(childchild)
+            childchild = doc.CreateElement("rating")                : childchild.InnerText = movie.Rating                   : child.AppendChild(childchild)
+            childchild = doc.CreateElement("title")                 : childchild.InnerText = movie.title                    : child.AppendChild(childchild)
+            childchild = doc.CreateElement("certificate")           : childchild.InnerText = movie.Certificate              : child.AppendChild(childchild)
+            'If String.IsNullOrEmpty(movie.SortOrder) Then movie.SortOrder = movie.DisplayTitle
+            childchild = doc.CreateElement("outline")               : childchild.InnerText = movie.outline                  : child.AppendChild(childchild)
+            childchild = doc.CreateElement("plot")                  : childchild.InnerText = movie.plot                     : child.AppendChild(childchild)
+            childchild = doc.CreateElement("stars")                 : childchild.InnerText = movie.stars                    : child.AppendChild(childchild)
+            childchild = doc.CreateElement("sortorder")             : childchild.InnerText = movie.SortOrder                : child.AppendChild(childchild)
+            childchild = doc.CreateElement("runtime")               : childchild.InnerText = movie.runtime                  : child.AppendChild(childchild)
+            childchild = doc.CreateElement("top250")                : childchild.InnerText = movie.top250                   : child.AppendChild(childchild)
+            childchild = doc.CreateElement("year")                  : childchild.InnerText = movie.year                     : child.AppendChild(childchild)
+            childchild = doc.CreateElement("createdate")            : childchild.InnerText = movie.createdate               : child.AppendChild(childchild)
+            childchild = doc.CreateElement("usrrated")              : childchild.InnerText = movie.usrrated                 : child.AppendChild(childchild)
             root.AppendChild(child)
         Next
 
         doc.AppendChild(root)
 
         For Each thisresult In doc("movie_cache")
-            'Try
             Select Case thisresult.Name
                 Case "movie"
                     Dim chi As XmlElement
@@ -8883,9 +8878,7 @@ Public Class Form1
             DataGridView1.DataSource = newDS.Tables(0)
         Catch
         End Try
-
-'        DataGridView1.DataSource = DataGridViewMovies.DataSource       TO DO: Replace with this
-
+        
         DataGridView1.AllowUserToOrderColumns = True
         DataGridView1.RowHeadersVisible = True
         DataGridView1.RowHeadersWidth = 25
@@ -9022,6 +9015,7 @@ Public Class Form1
         For Each src In Pref.releaseformat
             sourcecolumn.Items.Add(src)
         Next
+        sourcecolumn.Items.Insert(0, "")
         With sourcecolumn
             .HeaderText = "Source"
             .Name = "source"
@@ -9083,16 +9077,16 @@ Public Class Form1
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
-        Dim usrratedcolumn As New DataGridViewColumn()
+        Dim usrratedcolumn As New DataGridViewComboBoxColumn()
+        For each t In cbUsrRated.Items
+            usrratedcolumn.Items.Add(t)
+        Next
+        usrratedcolumn.Items.Item(0) = "0"
         With usrratedcolumn
-            Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
-            .CellTemplate = oCell
-            .DefaultCellStyle.Format = "N0"
-            .HeaderText = "UserRating"
+            .HeaderText = "User Rating"
             .DataPropertyName = "usrrated"
-            .Name = "usrrated"
+            .Name = "userrated"
             .SortMode = DataGridViewColumnSortMode.Automatic
-            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter
         End With
 
         For f = 0 To tableview.Count -1
@@ -9192,6 +9186,7 @@ Public Class Form1
                             usrratedcolumn.Width = col.width
                             usrratedcolumn.Visible = col.visible
                             DataGridView1.Columns.Insert(f, usrratedcolumn)
+                            Exit For
                     End Select
                 End If
             Next
@@ -9217,7 +9212,6 @@ Public Class Form1
         For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
             For Each tempCell As Windows.Forms.DataGridViewCell In tempRow.Cells
                 If tempCell.Value = "Fanart" Or tempCell.Value = "Poster" Or tempCell.Value = "Poster & Fanart" Then
-                'If TypeName(tempCell.Value) = "Byte" AndAlso tempCell.Value > 0 then
                     tempCell.Style.BackColor = Color.Red
                 End If
             Next
@@ -9228,8 +9222,6 @@ Public Class Form1
             For f = 0 To DataGridView1.Rows.Count-1
                 If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
                     DataGridView1.ClearSelection()
-                    'DataGridView1.CurrentCell = DataGridView1.Rows(f).Cells(NFO_INDEX)
-                    'DataGridView1.Rows(f).Selected = True
                     DataGridView1.FirstDisplayedScrollingRowIndex = f
                     Exit For
                 End If
@@ -9245,7 +9237,7 @@ Public Class Form1
         mov_TableEditDGV.Columns.Clear()
         mov_TableEditDGV.AutoGenerateColumns = False
         mov_TableEditDGV.DataSource = Nothing
-        For Each dgvCol As DataGridViewColumn In DataGridView1.columns
+        For Each dgvCol As DataGridViewColumn In DataGridView1.Columns
 
             Dim dgvNewCol As New DataGridViewColumn
             dgvNewCol = DirectCast(dgvCol.Clone(), DataGridViewColumn)
@@ -9258,12 +9250,14 @@ Public Class Form1
         Next
 
         'add "Unchanged"
-        Dim src_add As DataGridViewComboBoxColumn = DirectCast(Me.mov_TableEditDGV.Columns("source"), DataGridViewComboBoxColumn)
+        Dim src_add As DataGridViewComboBoxColumn       = DirectCast(Me.mov_TableEditDGV.Columns("source"),     DataGridViewComboBoxColumn)
         src_add.Items.Insert(0, "UnChanged")
-        Dim set_add As DataGridViewComboBoxColumn = DirectCast(Me.mov_TableEditDGV.Columns("set"), DataGridViewComboBoxColumn)
+        Dim set_add As DataGridViewComboBoxColumn       = DirectCast(Me.mov_TableEditDGV.Columns("set"),        DataGridViewComboBoxColumn)
         set_add.Items.Insert(0, "UnChanged")
-        Dim play_add As DataGridViewComboBoxColumn = DirectCast(Me.mov_TableEditDGV.Columns("playcount"), DataGridViewComboBoxColumn)
+        Dim play_add As DataGridViewComboBoxColumn      = DirectCast(Me.mov_TableEditDGV.Columns("playcount"),  DataGridViewComboBoxColumn)
         play_add.Items.Insert(0, "UnChanged")
+        Dim usrrated_add As DataGridViewComboBoxColumn  = DirectCast(Me.mov_TableEditDGV.Columns("userrated"),  DataGridViewComboBoxColumn)
+        usrrated_add.Items.Insert(0, "UnChanged")
 
         mov_TableEditDGV.RowHeadersWidth = DataGridView1.RowHeadersWidth
         mov_TableEditDGV.ClearSelection 
@@ -9309,83 +9303,46 @@ Public Class Form1
 
             Try
                 If oCachedMovie.title <> gridrow.Cells("Title").Value Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
                 If oCachedMovie.outline <> gridrow.Cells("Outline").Value Then  changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
                 If oCachedMovie.genre <> gridrow.Cells("genre").Value Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
                 If oCachedMovie.rating <> gridrow.Cells("rating").Value Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
-                'If gridrow.Cells("playcount").Value = True Then
                 Dim playstatus As String = gridrow.Cells("playcount").EditedFormattedValue
                 Dim plycnt As Integer = 0
                 If playstatus.tolower = "watched" Then plycnt = 1
                 If oCachedMovie.playcount <> plycnt Then Changed = True
-                'If gridrow.Cells("playcount").EditedFormattedValue = "Watched" Then
-                '    If oCachedMovie.playcount <= 0 Then
-                '        changed = True
-                '    End If
-                'Else
-                '    If oCachedMovie.playcount > 0 Then
-                '        changed = True
-                '    End If
-                'End If
             Catch
-#If SilentErrorScream Then
-                Throw ex
-#End If
             End Try
             Try
                 If oCachedMovie.sortorder <> gridrow.Cells("sorttitle").Value Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
                 If oCachedMovie.year <> gridrow.Cells("year").Value Then
                     If IsNumeric(gridrow.Cells("year").Value) Then changed = True
                 End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
                 If Convert.ToInt32(oCachedMovie.top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
                     If IsNumeric(gridrow.Cells("top250").Value) Then changed = True
                 End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Try
                 If oCachedMovie.Certificate <> gridrow.Cells("certificate").Value Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
             Dim runtime        As String=""
             Dim intRunTime     As Integer
@@ -9401,99 +9358,40 @@ Public Class Form1
                     newRunTime = intRunTime.ToString & " min"
                     If oCachedMovie.runtime <> newRunTime Then changed = True : runTimeChanged = True
                 End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
+            Catch
             End Try
-            Try
-                If oCachedMovie.source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-            Try
-                If oCachedMovie.MovieSet.MovieSetName <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-
+            If oCachedMovie.source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then changed = True
+            If oCachedMovie.MovieSet.MovieSetName <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
+            If oCachedMovie.usrrated <> gridrow.Cells("userrated").Value Then changed = True
             If changed And IO.File.Exists(oCachedMovie.fullpathandfilename) Then
 
                 Dim oMovie As Movie = oMovies.LoadMovie(oCachedMovie.fullpathandfilename)
-
                 If IsNothing(oMovie) Then Continue For
-
-
+                
                 Try
                     oCachedMovie.genre = gridrow.Cells("genre").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
                 Try
                     oCachedMovie.title = gridrow.Cells("title").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
                 Try
                     oCachedMovie.year = gridrow.Cells("year").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
                 Try
                     oCachedMovie.sortorder = gridrow.Cells("sorttitle").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
                 Try
                     oCachedMovie.rating = gridrow.Cells("rating").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
-'                Try
-'                    oCachedMovie.outline = gridrow.Cells("outline").Value
-'                Catch ex As Exception
-'#If SilentErrorScream Then
-'                    Throw ex
-'#End If
-'                End Try
-                ' Because plot is truncated to 100 chars to save moviecache.xml length, we don't want the user to overwrite the real plot
-                '                            Try
-                '                                oCachedMovie.plot = gridrow.Cells("plot").Value
-                '                            Catch ex As Exception
-                '#If SilentErrorScream Then
-                '                                Throw ex
-                '#End If
-                '                            End Try
                 Try
                     oCachedMovie.source = If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value)
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
-
-                Try
-                    'oCachedMovie.director = gridrow.Cells("director").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-
                 Try
                     Dim NewSetName As String = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
                     If NewSetName = "" Then
@@ -9517,63 +9415,41 @@ Public Class Form1
                             Next
                         End If
                     End If
-                    'oCachedMovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
                 End Try
-                Try
-                    oCachedMovie.top250 = Convert.ToInt32(gridrow.Cells("top250").Value).ToString
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-                Try
-                    If gridrow.Cells("playcount").EditedFormattedValue = "Watched" Then
-                        'If Convert.ToInt32(oCachedMovie.playcount) > 0 Then
-                        'Else
-                            oCachedMovie.playcount = "1"
-                        'End If
-                    Else
-                        oCachedMovie.playcount = "0"
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
+                oCachedMovie.top250 = Convert.ToInt32(gridrow.Cells("top250").Value).ToString
+                If gridrow.Cells("playcount").EditedFormattedValue = "Watched" Then
+                    oCachedMovie.playcount = "1"
+                Else
+                    oCachedMovie.playcount = "0"
+                End If
                 Try
                     oCachedMovie.Certificate = gridrow.Cells("certificate").Value
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
+                Catch
+                End Try
+                Try
+                    oCachedMovie.usrrated = gridrow.Cells("userrated").Value
+                Catch
                 End Try
 
                 If runTimeChanged Then
-                    oMovie.ScrapedMovie.fullmoviebody.runtime = newRunTime
+                    oMovie.ScrapedMovie.fullmoviebody.runtime           = newRunTime
                 End If
-                oMovie.ScrapedMovie.fullmoviebody.title = oCachedMovie.title
-                oMovie.ScrapedMovie.fullmoviebody.year = oCachedMovie.year
-                oMovie.ScrapedMovie.fullmoviebody.playcount = oCachedMovie.playcount
-                oMovie.ScrapedMovie.fullmoviebody.genre = oCachedMovie.genre
-                'oMovie.ScrapedMovie.fullmoviebody.outline = oCachedMovie.outline
-                'oMovie.ScrapedMovie.fullmoviebody.plot = oCachedMovie.plot
-                oMovie.ScrapedMovie.fullmoviebody.rating = oCachedMovie.rating
-                oMovie.ScrapedMovie.fullmoviebody.source = oCachedMovie.source
+                oMovie.ScrapedMovie.fullmoviebody.title                 = oCachedMovie.title
+                oMovie.ScrapedMovie.fullmoviebody.year                  = oCachedMovie.year
+                oMovie.ScrapedMovie.fullmoviebody.playcount             = oCachedMovie.playcount
+                oMovie.ScrapedMovie.fullmoviebody.genre                 = oCachedMovie.genre
+                oMovie.ScrapedMovie.fullmoviebody.rating                = oCachedMovie.rating
+                oMovie.ScrapedMovie.fullmoviebody.source                = oCachedMovie.source
                 oMovie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = oCachedMovie.MovieSet.MovieSetName
-                oMovie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oCachedMovie.MovieSet.MovieSetId 
-                oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
-                oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
-                oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director 
-                oMovie.ScrapedMovie.fullmoviebody.credits = oCachedMovie.credits 
+                oMovie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId   = oCachedMovie.MovieSet.MovieSetId 
+                oMovie.ScrapedMovie.fullmoviebody.sortorder             = oCachedMovie.sortorder
+                oMovie.ScrapedMovie.fullmoviebody.top250                = oCachedMovie.top250
+                oMovie.ScrapedMovie.fullmoviebody.director              = oCachedMovie.director 
+                oMovie.ScrapedMovie.fullmoviebody.credits               = oCachedMovie.credits 
+                oMovie.ScrapedMovie.fullmoviebody.usrrated              = oCachedMovie.usrrated.ToString
 
-                Dim checkmpaa = oCachedMovie.Certificate 
-                'If Not Pref.ExcludeMpaaRated AndAlso checkmpaa <> "" AndAlso Not checkmpaa.ToLower.Contains("rated") Then
-                '    checkmpaa = "Rated " & checkmpaa
-                'End If
+                Dim checkmpaa = oCachedMovie.Certificate
                 oMovie.ScrapedMovie.fullmoviebody.mpaa = checkmpaa
                 oMovie.AssignMovieToCache
                 oMovie.SaveNFO
@@ -9582,9 +9458,7 @@ Public Class Form1
         Next
 
         oMovies.SaveMovieCache
-        
         UpdateFilteredList
-
         frmSplash2.Hide
 
         Application.DoEvents
@@ -9640,6 +9514,9 @@ Public Class Form1
             If mov_TableEditDGV.Columns("set").Visible AndAlso (IsDBNull(mov_TableEditDGV.Rows(0).Cells("set").Value) OrElse mov_TableEditDGV.Rows(0).Cells("set").Value <> "UnChanged") Then
                 row.cells("set").value = If(IsDBNull(mov_TableEditDGV.Rows(0).Cells("set").Value), Nothing, mov_TableEditDGV.Rows(0).Cells("set").Value) : changed = True
             End If
+            If mov_TableEditDGV.Columns("userrated").Visible AndAlso mov_TableEditDGV.ROws(0).Cells("userrated").Value <> "UnChanged" Then
+                row.cells("userrated").Value = mov_TableEditDGV.Rows(0).Cells("userrated").Value : changed = True
+            End If
         Next
         DataDirty = changed
         btn_movTableSave.Enabled = changed
@@ -9657,28 +9534,29 @@ Public Class Form1
         root = doc.CreateElement("movie_cache")
         Dim childchild As XmlElement
         child = doc.CreateElement("movie")
-        childchild = doc.CreateElement("filedate") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("missingdata1") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("filename") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("foldername") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("set") : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("source") : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("genre") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("id") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("playcount") : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("rating") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("title") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("certificate") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("outline") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("plot") : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("sortorder") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("filedate")              : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("missingdata1")          : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("filename")              : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("foldername")            : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("fullpathandfilename")   : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("set")                   : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("source")                : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("genre")                 : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("id")                    : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("playcount")             : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("rating")                : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("title")                 : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("certificate")           : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("outline")               : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("plot")                  : childchild.InnerText = "Not Editable in TableView" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("sortorder")             : childchild.InnerText = "" : child.AppendChild(childchild)
 
         'childchild = doc.CreateElement("titleandyear") : childchild.InnerText = movie.titleandyear : child.AppendChild(childchild)
 
-        childchild = doc.CreateElement("runtime") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("top250") : childchild.InnerText = "" : child.AppendChild(childchild)
-        childchild = doc.CreateElement("year") : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("runtime")               : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("top250")                : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("year")                  : childchild.InnerText = "" : child.AppendChild(childchild)
+        childchild = doc.CreateElement("usrrated")              : childchild.InnerText = "UnChanged" : child.AppendChild(childchild)
         root.AppendChild(child)
         doc.AppendChild(root)
         Return doc
