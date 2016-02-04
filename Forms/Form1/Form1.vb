@@ -21531,7 +21531,7 @@ End Sub
     Private Sub ResizeBottomLHSPanel(height As Integer, Optional ByVal MaxHeight As Integer = 0)
         ProgState = ProgramState.ResizingSplitterPanel
 
-        SplitContainer5.SplitterDistance = SplitContainer5.Height - height
+        SplitContainer5.SplitterDistance = If((SplitContainer5.Height - height) < 0, 0, SplitContainer5.Height - height)
 
         DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 140
 
