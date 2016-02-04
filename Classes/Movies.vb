@@ -864,7 +864,7 @@ Public Class Movies
 
     Public ReadOnly Property IncompleteMovieSetInfo As String
         Get
-            Return "Incomplete movie set info (" & (From x In MovieCache Where x.IncompleteMovieSet).Count & ")" 
+            Return "Incomplete set info (" & (From x In MovieCache Where x.IncompleteMovieSet).Count & ")" 
         End Get
     End Property  
 

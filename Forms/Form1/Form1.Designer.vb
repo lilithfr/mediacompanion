@@ -13194,6 +13194,7 @@ End Sub
     Friend WithEvents tv_PictureBoxLeft As System.Windows.Forms.PictureBox
     Friend WithEvents tv_PictureBoxRight As System.Windows.Forms.PictureBox
     Friend WithEvents tsmiTMDbSetName As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiTMDbMovieSetInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RenameFilesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnMovieSetsRepopulateFromUsed As System.Windows.Forms.Button
     Friend WithEvents btnMovRefreshAll As System.Windows.Forms.Button

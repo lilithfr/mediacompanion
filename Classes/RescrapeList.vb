@@ -43,6 +43,7 @@ Public Class RescrapeList
     Property ArtFromFanartTv        As Boolean
     Property FromTMDB               As Boolean
     Property rebuildnfo             As Boolean
+    Property Movie_Set_Info         As Boolean
 
     Sub New
     End Sub

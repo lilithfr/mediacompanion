@@ -12326,9 +12326,17 @@ End Sub
     Private Sub tsmiRescrapeKeyWords_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeKeyWords.Click
         Call mov_ScrapeSpecific("TagsFromKeywords")
     End Sub    'TagsFromKeywords
+
     Private Sub tsmiTMDbSetName_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbSetName.Click
         Call mov_ScrapeSpecific("tmdb_set_name")
-    End Sub                         'tmdb set name
+    End Sub               
+
+
+    Private Sub tsmiTMDbMovieSetInfo_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbMovieSetInfo.Click
+        Call mov_ScrapeSpecific("Movie_Set_Info")
+    End Sub               
+
+
     Private Sub tsmiSetWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiSetWatched.Click
         Call mov_ScrapeSpecific("SetWatched")
     End Sub                           'set watched
@@ -21865,6 +21873,9 @@ End Sub
             rescrapeList.tmdb_set_id = True
             RunBackgroundMovieScrape("BatchRescrape")
         End If
+
+        'DE-DUP before calling! 
+
         If MovieSetIds.Count > 0 Then RebuildMovieSetCollectionList(MovieSetIds)
     End Sub
 

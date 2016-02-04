@@ -227,7 +227,7 @@ Module ModGlobals
  
     <Extension()> _
     Function ContainsHtml(ByRef s As String) As Boolean
-	    Return Regex.Match(s, "<\s*\w.*?>").Success
+	    Return Html.ContainsHtml(s)
     End Function
     
 End Module

@@ -241,14 +241,29 @@ Public Class TMDb
 
     Public ReadOnly Property MovieSet As MovieSetInfo
         Get
-            FetchSet
-
             If IsNothing(_collection) Then
-                Return Nothing
+                Return New MovieSetInfo
             End If
 
             If _collection.id=0 Then
-                Return Nothing
+                Return New MovieSetInfo
+            End If
+
+            Return New MovieSetInfo(_collection.name, _collection.id, New List(Of CollectionMovie) )
+        End Get
+    End Property
+
+
+    Public ReadOnly Property MovieSetDeep As MovieSetInfo
+        Get
+            FetchSet
+
+            If IsNothing(_collection) Then
+                Return New MovieSetInfo
+            End If
+
+            If _collection.id=0 Then
+                Return New MovieSetInfo
             End If
 
             Return New MovieSetInfo(_collection.name, _collection.id, CollectionMovies )
@@ -575,7 +590,7 @@ Public Class TMDb
         End Try
     End Sub
     
-    Function GetMovieBy As Boolean
+    Function GetMovieById As Boolean
         If Imdb <> "" Then
             Return GetMovieByIMDB
         ElseIf TmdbId <> "" Then
@@ -627,6 +642,7 @@ Public Class TMDb
 
     Function GetMoviesInCollection As Boolean
         _collection = _api.GetCollectionInfo(ToInt(SetId), _lookupLanguages.Item(0))
+
         Return Not IsNothing(_collection)
     End Function
 
@@ -645,7 +661,7 @@ Public Class TMDb
 
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
 
-                rhs.Add(New RetryHandler(AddressOf GetMovieBy      ))
+                rhs.Add(New RetryHandler(AddressOf GetMovieById      ))
                 rhs.Add(New RetryHandler(AddressOf GetMovieImages  ))
                 rhs.Add(New RetryHandler(AddressOf GetMovieTrailers))
                 rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
