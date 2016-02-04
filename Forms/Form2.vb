@@ -20,27 +20,28 @@ Public Class Form2
     
     Private Sub setupdisplay()
         actorcb.Items.Clear()
-        If workingmovieedit.fullmoviebody.title <> Nothing Then titletxt.Text = workingmovieedit.fullmoviebody.title
+        If workingmovieedit.fullmoviebody.title         <> Nothing Then titletxt.Text = workingmovieedit.fullmoviebody.title
         If workingmovieedit.fullmoviebody.originaltitle <> Nothing Then originaltxt.Text = workingmovieedit.fullmoviebody.originaltitle
-        If workingmovieedit.fullmoviebody.sortorder <> Nothing Then sorttxt.Text = workingmovieedit.fullmoviebody.sortorder 
-        If workingmovieedit.fullmoviebody.director <> Nothing Then directortxt.Text = workingmovieedit.fullmoviebody.director
-        If workingmovieedit.fullmoviebody.stars <> Nothing Then starstxt.Text = workingmovieedit.fullmoviebody.stars
-        If workingmovieedit.fullmoviebody.runtime <> Nothing Then runtimetxt.Text = workingmovieedit.fullmoviebody.runtime
-        If workingmovieedit.fullmoviebody.credits <> Nothing Then creditstxt.Text = workingmovieedit.fullmoviebody.credits
-        If workingmovieedit.fullmoviebody.mpaa <> Nothing Then mpaatxt.Text = workingmovieedit.fullmoviebody.mpaa
-        If workingmovieedit.fullmoviebody.studio <> Nothing Then studiotxt.Text = workingmovieedit.fullmoviebody.studio
-        If workingmovieedit.fullmoviebody.country <> Nothing Then countrytxt.Text = workingmovieedit.fullmoviebody.country 
-        If workingmovieedit.fullmoviebody.genre <> Nothing Then genretxt.Text = workingmovieedit.fullmoviebody.genre
-        If workingmovieedit.fullmoviebody.year <> Nothing Then yeartxt.Text = workingmovieedit.fullmoviebody.year
-        If workingmovieedit.fullmoviebody.rating <> Nothing Then ratingtxt.Text = workingmovieedit.fullmoviebody.rating
-        If workingmovieedit.fullmoviebody.imdbid <> Nothing Then idtxt.Text = workingmovieedit.fullmoviebody.imdbid
-        If workingmovieedit.fullmoviebody.votes <> Nothing Then votestxt.Text = workingmovieedit.fullmoviebody.votes
-        If workingmovieedit.fullmoviebody.outline <> Nothing Then outlinetxt.Text = workingmovieedit.fullmoviebody.outline
-        If workingmovieedit.fullmoviebody.plot <> Nothing Then plottxt.Text = workingmovieedit.fullmoviebody.plot
-        If workingmovieedit.fullmoviebody.tagline <> Nothing Then taglinetxt.Text = workingmovieedit.fullmoviebody.tagline
-        If workingmovieedit.fullmoviebody.top250 <> Nothing Then top250txt.Text = workingmovieedit.fullmoviebody.top250 
-        If workingmovieedit.fullmoviebody.trailer <> Nothing Then tb_TrailerURL.Text = workingmovieedit.fullmoviebody.trailer
-        If workingmovieedit.fullmoviebody.showlink <> Nothing Then tb_SeriesLnk.Text = workingmovieedit.fullmoviebody.showlink 
+        If workingmovieedit.fullmoviebody.sortorder     <> Nothing Then sorttxt.Text = workingmovieedit.fullmoviebody.sortorder 
+        If workingmovieedit.fullmoviebody.director      <> Nothing Then directortxt.Text = workingmovieedit.fullmoviebody.director
+        If workingmovieedit.fullmoviebody.stars         <> Nothing Then starstxt.Text = workingmovieedit.fullmoviebody.stars
+        If workingmovieedit.fullmoviebody.runtime       <> Nothing Then runtimetxt.Text = workingmovieedit.fullmoviebody.runtime
+        If workingmovieedit.fullmoviebody.credits       <> Nothing Then creditstxt.Text = workingmovieedit.fullmoviebody.credits
+        If workingmovieedit.fullmoviebody.mpaa          <> Nothing Then mpaatxt.Text = workingmovieedit.fullmoviebody.mpaa
+        If workingmovieedit.fullmoviebody.studio        <> Nothing Then studiotxt.Text = workingmovieedit.fullmoviebody.studio
+        If workingmovieedit.fullmoviebody.country       <> Nothing Then countrytxt.Text = workingmovieedit.fullmoviebody.country 
+        If workingmovieedit.fullmoviebody.genre         <> Nothing Then genretxt.Text = workingmovieedit.fullmoviebody.genre
+        If workingmovieedit.fullmoviebody.year          <> Nothing Then yeartxt.Text = workingmovieedit.fullmoviebody.year
+        If workingmovieedit.fullmoviebody.rating        <> Nothing Then ratingtxt.Text = workingmovieedit.fullmoviebody.rating
+        If workingmovieedit.fullmoviebody.imdbid        <> Nothing Then idtxt.Text = workingmovieedit.fullmoviebody.imdbid
+        If workingmovieedit.fullmoviebody.votes         <> Nothing Then votestxt.Text = workingmovieedit.fullmoviebody.votes
+        If workingmovieedit.fullmoviebody.outline       <> Nothing Then outlinetxt.Text = workingmovieedit.fullmoviebody.outline
+        If workingmovieedit.fullmoviebody.plot          <> Nothing Then plottxt.Text = workingmovieedit.fullmoviebody.plot
+        If workingmovieedit.fullmoviebody.tagline       <> Nothing Then taglinetxt.Text = workingmovieedit.fullmoviebody.tagline
+        If workingmovieedit.fullmoviebody.top250        <> Nothing Then top250txt.Text = workingmovieedit.fullmoviebody.top250 
+        If workingmovieedit.fullmoviebody.trailer       <> Nothing Then tb_TrailerURL.Text = workingmovieedit.fullmoviebody.trailer
+        If workingmovieedit.fullmoviebody.showlink      <> Nothing Then tb_SeriesLnk.Text = workingmovieedit.fullmoviebody.showlink 
+        If workingmovieedit.fullmoviebody.usrrated      <> Nothing Then cbUsrRating.Text = If(workingmovieedit.fullmoviebody.usrrated = "0", "None", workingmovieedit.fullmoviebody.usrrated)
         Try
             If workingmovieedit.fileinfo.createdate <> Nothing Then 
                 Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Pref.datePattern, Nothing)
@@ -120,11 +121,14 @@ Public Class Form2
             Call setupdisplay()
 
             textBoxList = New List(Of TextBox)
-
+            Dim cboxlist As New List(Of ComboBox)
             'Loop through every control on the form and add every textbox to the list
             For Each c As Control In Me.Controls
                 If TypeOf c Is TextBox Then
                     textBoxList.Add(DirectCast(c, TextBox))
+                End If
+                If TypeOf c Is ComboBox Then
+                    cboxlist.Add(DirectCast(c, ComboBox))
                 End If
             Next
 
@@ -133,6 +137,9 @@ Public Class Form2
                 AddHandler txt.TextChanged, AddressOf AnyTextBox_TextChanged
             Next
             RemoveHandler roletxt.TextChanged, AddressOf AnyTextBox_TextChanged
+            For each cbox As ComboBox In cboxlist
+                AddHandler cbox.SelectedIndexChanged, AddressOf AnyCbox_SelectedIndexChanged
+            Next
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -455,6 +462,7 @@ Public Class Form2
             workingmovieedit.fullmoviebody.outline = outlinetxt.Text
             workingmovieedit.fullmoviebody.tagline = taglinetxt.Text
             workingmovieedit.fullmoviebody.showlink = tb_SeriesLnk.Text
+            workingmovieedit.fullmoviebody.usrrated = If(cbUsrRating.Text = "None", "0", cbUsrRating.Text)
             Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
             Form1.workingMovieDetails.listactors = workingmovieedit.listactors
             Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
@@ -625,6 +633,10 @@ Public Class Form2
         'Cast the 'sender' object into a TextBox (we are sure it is a textbox!)
         'Dim txt As TextBox = DirectCast(sender, TextBox)
         'MessageBox.Show(txt.Name)
+        editsmade = True
+    End Sub
+    
+    Private Sub AnyCbox_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs)
         editsmade = True
     End Sub
 

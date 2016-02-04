@@ -72,6 +72,7 @@ Partial Class Form2
         Me.btnAltPosterBrowser = New System.Windows.Forms.Button()
         Me.btn_BlankNfo = New System.Windows.Forms.Button()
         Me.btn_SeriesLnkSearch = New System.Windows.Forms.Button()
+        Me.btn_SeriesList = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.btncropleft = New System.Windows.Forms.Button()
         Me.btncropright = New System.Windows.Forms.Button()
@@ -113,7 +114,8 @@ Partial Class Form2
         Me.btnSelectAPlot = New System.Windows.Forms.Button()
         Me.tb_SeriesLnk = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.btn_SeriesList = New System.Windows.Forms.Button()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.cbUsrRating = New System.Windows.Forms.ComboBox()
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).BeginInit
@@ -599,13 +601,23 @@ Partial Class Form2
         '
         'btn_SeriesLnkSearch
         '
-        Me.btn_SeriesLnkSearch.Location = New System.Drawing.Point(468, 209)
+        Me.btn_SeriesLnkSearch.Location = New System.Drawing.Point(619, 208)
         Me.btn_SeriesLnkSearch.Name = "btn_SeriesLnkSearch"
         Me.btn_SeriesLnkSearch.Size = New System.Drawing.Size(134, 23)
         Me.btn_SeriesLnkSearch.TabIndex = 137
         Me.btn_SeriesLnkSearch.Text = "Browse for Series to Link"
         Me.ToolTip1.SetToolTip(Me.btn_SeriesLnkSearch, "Search for a Series.  Must have a valid"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"tvshow.nfo to read Series Title!")
         Me.btn_SeriesLnkSearch.UseVisualStyleBackColor = true
+        '
+        'btn_SeriesList
+        '
+        Me.btn_SeriesList.Location = New System.Drawing.Point(495, 209)
+        Me.btn_SeriesList.Name = "btn_SeriesList"
+        Me.btn_SeriesList.Size = New System.Drawing.Size(118, 23)
+        Me.btn_SeriesList.TabIndex = 138
+        Me.btn_SeriesList.Text = "List of Cached Series"
+        Me.ToolTip1.SetToolTip(Me.btn_SeriesList, "Displays a list to select a Series that is"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"already loaded into MC TV database.")
+        Me.btn_SeriesList.UseVisualStyleBackColor = true
         '
         'Label1
         '
@@ -985,7 +997,7 @@ Partial Class Form2
         '
         'tb_SeriesLnk
         '
-        Me.tb_SeriesLnk.Location = New System.Drawing.Point(127, 210)
+        Me.tb_SeriesLnk.Location = New System.Drawing.Point(294, 210)
         Me.tb_SeriesLnk.Name = "tb_SeriesLnk"
         Me.tb_SeriesLnk.Size = New System.Drawing.Size(195, 20)
         Me.tb_SeriesLnk.TabIndex = 135
@@ -994,26 +1006,38 @@ Partial Class Form2
         '
         Me.Label8.AutoSize = true
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label8.Location = New System.Drawing.Point(21, 212)
+        Me.Label8.Location = New System.Drawing.Point(211, 212)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(83, 16)
+        Me.Label8.Size = New System.Drawing.Size(80, 16)
         Me.Label8.TabIndex = 136
-        Me.Label8.Text = "Series Link : "
+        Me.Label8.Text = "Series Link :"
         '
-        'btn_SeriesList
+        'Label10
         '
-        Me.btn_SeriesList.Location = New System.Drawing.Point(337, 210)
-        Me.btn_SeriesList.Name = "btn_SeriesList"
-        Me.btn_SeriesList.Size = New System.Drawing.Size(125, 23)
-        Me.btn_SeriesList.TabIndex = 138
-        Me.btn_SeriesList.Text = "List of Cached Series"
-        Me.ToolTip1.SetToolTip(Me.btn_SeriesList, "Displays a list to select a Series that is"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"already loaded into MC TV database.")
-        Me.btn_SeriesList.UseVisualStyleBackColor = true
+        Me.Label10.AutoSize = true
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label10.Location = New System.Drawing.Point(22, 212)
+        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(88, 16)
+        Me.Label10.TabIndex = 139
+        Me.Label10.Text = "User Rating : "
+        '
+        'cbUsrRating
+        '
+        Me.cbUsrRating.FormattingEnabled = true
+        Me.cbUsrRating.Items.AddRange(New Object() {"None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+        Me.cbUsrRating.Location = New System.Drawing.Point(127, 210)
+        Me.cbUsrRating.Name = "cbUsrRating"
+        Me.cbUsrRating.Size = New System.Drawing.Size(77, 21)
+        Me.cbUsrRating.TabIndex = 140
         '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.cbUsrRating)
+        Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.btn_SeriesList)
         Me.Controls.Add(Me.btn_SeriesLnkSearch)
         Me.Controls.Add(Me.Label8)
@@ -1202,4 +1226,6 @@ End Sub
     Friend WithEvents Label8 As Label
     Friend WithEvents btn_SeriesLnkSearch As Button
     Friend WithEvents btn_SeriesList As Button
+    Friend WithEvents Label10 As Label
+    Friend WithEvents cbUsrRating As ComboBox
 End Class
