@@ -319,6 +319,9 @@ Public Class MediaInfoExport
                     Case "rating"
                         strNFOprop = If(movie.rating <> Nothing, movie.rating, "")
 
+                    Case "userrating"
+                        strNFOprop = movie.usrrated.ToString
+
                     Case "runtime"
                         strNFOprop = If(movie.runtime <> Nothing, movie.runtime, "")
 
@@ -556,6 +559,8 @@ Public Class MediaInfoExport
                                             End Try
                                         Case "rating"
                                             strNFOprop = newplotdetails.fullmoviebody.rating
+                                        Case "userrating"
+                                            strNFOprop = newplotdetails.fullmoviebody.usrrated
                                         Case "votes"
                                             strNFOprop = newplotdetails.fullmoviebody.votes
                                         Case "top250"
