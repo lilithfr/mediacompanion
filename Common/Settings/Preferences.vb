@@ -447,6 +447,7 @@ Public Class Pref
     Public Shared XBMC_Delete_Cached_Images   As Boolean = True
     
     Public Shared ShowExtraMovieFilters       As Boolean = False
+    Public Shared ExportXBMCPath              As String = ""
     
     ReadOnly Shared Property AppPath As String
         Get 
@@ -790,6 +791,8 @@ Public Class Pref
         DownloadTrailerDuringScrape = False
         NoAltTitle = False
         XtraFrodoUrls = True
+        ExportXBMCPath = ""
+
         ReDim certificatepriority(33)
         certificatepriority(0) = "MPAA"
         certificatepriority(1) = "UK"
@@ -1258,7 +1261,7 @@ Public Class Pref
         root.AppendChild(doc, "XBMC_Active", XBMC_Active)
         root.AppendChild( doc, "XBMC_Link"                   , XBMC_Link                 )
         root.AppendChild( doc, "XBMC_Address"                , XBMC_Address              )
-        root.AppendChild(doc, "XBMC_Port", XBMC_Port) 'cbXBMC_Active
+        root.AppendChild(   doc, "XBMC_Port"                 , XBMC_Port                 ) 'cbXBMC_Active
         root.AppendChild( doc, "XBMC_Username"               , XBMC_Username             )
         root.AppendChild( doc, "XBMC_Password"               , XBMC_Password             )
         root.AppendChild( doc, "XBMC_UserdataFolder"         , XBMC_UserdataFolder       )
@@ -1267,6 +1270,7 @@ Public Class Pref
         root.AppendChild( doc, "XBMC_Delete_Cached_Images"   , XBMC_Delete_Cached_Images )
         
         root.AppendChild( doc, "ShowExtraMovieFilters"       , ShowExtraMovieFilters     )
+        root.AppendChild( doc, "ExportXBMCPath"              , ExportXBMCPath            )
         
         root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
         root.AppendChild(XBMC_MC_CompareFields      .GetChild(doc))
@@ -1708,7 +1712,8 @@ Public Class Pref
                     Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
 
                     Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters = thisresult.InnerXml 
-                    Case "ShowAllAudioTracks"                   : ShowAllAudioTracks    = thisresult.InnerXml 
+                    Case "ShowAllAudioTracks"                   : ShowAllAudioTracks    = thisresult.InnerXml
+                    Case "ExportXBMCPath"                       : ExportXBMCPath        = thisresult.InnerText
 
                     Case Else : Dim x = thisresult
                 End Select

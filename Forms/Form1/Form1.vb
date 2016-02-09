@@ -3023,11 +3023,11 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
             movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
-            If movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) Then
+            If movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) AndAlso cbMovieDisplay_MovieSet.SelectedIndex <> -1 Then
                 movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                 movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
             End If
-            movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
+            movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
             If TabControl2.SelectedTab.Name = "TabPage9" Then
                 For Each t In NewTagList
                     Dim remtag As String = t.Replace("- ","").Replace("+ ","")
@@ -3105,12 +3105,12 @@ Public Class Form1
                     If ratingtxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
                     If votestxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
                     If top250txt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
-                    If Not cbMovieDisplay_MovieSet.SelectedIndex = 0 Then 'cbMovieDisplay_MovieSet.SelectedItem = "-None-"
+                    If Not cbMovieDisplay_MovieSet.SelectedIndex < 1 Then 'cbMovieDisplay_MovieSet.SelectedItem = "-None-"
                         movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                         movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
                     End If
-                    If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.text
-                    movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
+                    If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString'text
+                    movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
                     If TabControl2.SelectedTab.Name = "TabPage9" Then
                         For Each t In NewTagList
                             Dim remtag As String = t.Replace("- ","").Replace("+ ","")

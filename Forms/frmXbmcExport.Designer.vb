@@ -248,7 +248,7 @@ Partial Class frmXbmcExport
         Me.btn_Cancel.Name = "btn_Cancel"
         Me.btn_Cancel.Size = New System.Drawing.Size(83, 23)
         Me.btn_Cancel.TabIndex = 12
-        Me.btn_Cancel.Text = "Cancel"
+        Me.btn_Cancel.Text = "Close"
         Me.btn_Cancel.UseVisualStyleBackColor = true
         '
         'btn_Validate

@@ -19,9 +19,21 @@ Public Class frmXbmcExport
     Private opTvshows As String = Nothing
     Private opMusicvideos As String = Nothing
     Private _outputfolderchecked As Boolean = False
+    Private _cancelled As Boolean = False
     Private epcount As Integer = 0
     Public Property Bw  As BackgroundWorker = Nothing
     Public nfoFunction As New WorkingWithNfoFiles
+
+    Dim loading As Boolean = True
+
+    Property Cancelled As Boolean
+        Get
+            Return _cancelled
+        End Get
+        Set(value As Boolean)
+            _cancelled = Value
+        End Set
+    End Property
 
     Property outputfolderchecked As Boolean
       Get
@@ -31,8 +43,8 @@ Public Class frmXbmcExport
         If value <> _outputfolderchecked Then
             _outputfolderchecked = value
             pbCheck.Image = If(_outputfolderchecked, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect)
-            btn_Start.Enabled = value
         End If
+        btn_Start.Enabled = value
       End Set
     End Property
 
@@ -40,8 +52,9 @@ Public Class frmXbmcExport
         GetTally()
         UpdateMediaTally()
         ShowMCPaths()
-        TextBox1.Text = "E:\_test publish"
+        TextBox1.Text = Pref.ExportXBMCPath
         btn_Validate.PerformClick()
+        loading = False
     End Sub
 
     Private Sub GetTally()
@@ -99,6 +112,7 @@ Public Class frmXbmcExport
     End Sub
 
     Public Sub RunExport()
+        btn_Start.Enabled = False
         ProgressBar1.Value = 0
         ProgressBar1.Maximum = MovieList.Count + TVSeries.Count + epcount
         ProgressBar1.BackColor = Color.red
@@ -119,6 +133,8 @@ Public Class frmXbmcExport
         
         ''Run Movie Output
         For Each Moviefound In MovieList
+            Application.DoEvents()
+            If Cancelled Then Exit Sub
             Me.ProgressBar1.Value +=1
             If Not File.Exists(Moviefound.fileinfo.fullpathandfilename) Then Continue For
             Dim mov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(Moviefound.fileinfo.fullpathandfilename)
@@ -126,7 +142,11 @@ Public Class frmXbmcExport
             currentmovie = Transposemovie(mov)
             Dim oDoc As XMLNode = root.OwnerDocument.ImportNode(currentmovie.DocumentElement, True)
             root.AppendChild(oDoc)
+            Application.DoEvents()
+            If Cancelled Then Exit Sub
             TransMovArtWork(mov)
+            Application.DoEvents()
+            If Cancelled Then Exit Sub
             TransActorImages(mov)
             Me.ProgressBar1.Refresh()
         Next
@@ -143,22 +163,34 @@ Public Class frmXbmcExport
 
         ''Run Tv Output
         For Each sh In TVSeries
+            Application.DoEvents()
+            If Cancelled Then Exit Sub
             Me.ProgressBar1.Value +=1
             If Not File.Exists(sh.series.Filenameandpath) Then Continue For
             Dim tvsh As TvShow = nfoFunction.tv_NfoLoadFull(sh.series.Filenameandpath)
             Dim CurrentSh As New XmlDocument
             CurrentSh = TransposetvShows(tvsh, sh.episodes.count, sh.series.Season)
+            Application.DoEvents()
+            If Cancelled Then Exit Sub
             TransTvActorImages(tvsh.ListActors, sh.series.Filenameandpath)
+            Application.DoEvents()
+            If Cancelled Then Exit Sub
             For Each ep In sh.episodes
+                Application.DoEvents()
+                If Cancelled Then Exit Sub
                 If Not File.Exists(ep.Filenameandpath) Then Continue For
                 Dim tvep As List(Of TvEpisode) = WorkingWithNfoFiles.ep_NfoLoad(ep.Filenameandpath)
                 For each subep In tvep
+                    Application.DoEvents()
+                    If Cancelled Then Exit Sub
                     If Not ep.Episode = subep.Episode.Value Then Continue For
                     Dim CurrentEp As New XmlDocument
                     CurrentEp = TransposeTvEp(subep, tvsh)
                     Dim oDoc2 As XMLNode = CurrentSh.ImportNode(CurrentEp.DocumentElement, True)
                     CurrentSh.DocumentElement.AppendChild(oDoc2)
                 Next
+                Application.DoEvents()
+                If Cancelled Then Exit Sub
                 Me.ProgressBar1.Value +=1
                 Me.ProgressBar1.Refresh()
             Next
@@ -201,12 +233,14 @@ Public Class frmXbmcExport
             ProgressBar1.ForeColor = Color.Green
             ProgressBar1.BackColor = Color.Green
             btn_Cancel.Text = "Finished"
+            btn_Cancel.Refresh()
         End If
+        btn_Start.Enabled = True
     End Sub
 
     Private Sub TransMovArtWork(ByVal mov As FullMovieDetails)
         Dim filenm As String = Utilities.SpacesToCharacter(Utilities.cleanFilenameIllegalChars(mov.fullmoviebody.title, " ") & " " & mov.fullmoviebody.year, "_")
-        filenm = filenm.Replace(":", "_")
+        filenm = FormatText(filenm)
         If File.Exists(mov.fileinfo.fanartpath) Then
             File.Copy(mov.fileinfo.fanartpath, opMovies & filenm & "-fanart.jpg", True)
         End If
@@ -218,6 +252,7 @@ Public Class frmXbmcExport
     Private Sub TransActorImages(ByVal mov As FullMovieDetails)
         Try
             For Each actr In mov.listactors
+                If Cancelled Then Exit Sub
                 Dim temppath = Pref.GetActorPath(mov.fileinfo.fullpathandfilename, actr.actorname, actr.actorid)
                 If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
                     Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
@@ -232,6 +267,7 @@ Public Class frmXbmcExport
     Private Sub TransTvActorImages(ByVal TvActor As ActorList, ByVal nfopath As String)
         Try
             For Each actr In TvActor
+                If Cancelled Then Exit Sub
                 Dim temppath = Pref.GetActorPath(nfopath, actr.actorname, actr.actorid)
                 If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
                     Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
@@ -675,22 +711,22 @@ Public Class frmXbmcExport
             root.AppendChild(child)
 
             child = ThisTvShow.CreateElement("art")
-            Dim titlepath As String = opTvshows & tvsh.Title.Value.Replace(" ", "_") & "\"
+            Dim titlepath As String = opTvshows & FormatText(tvsh.Title.Value) & "\"
             If Not Directory.Exists(titlepath) Then Directory.CreateDirectory(titlepath)
             If File.Exists(tvsh.ImageBanner.Path) Then
-                File.Copy(tvsh.ImageBanner.Path, titlepath & tvsh.ImageBanner.FileName.ToLower)
+                File.Copy(tvsh.ImageBanner.Path, titlepath & tvsh.ImageBanner.FileName.ToLower, True)
                 childchild = ThisTvShow.CreateElement("banner")
                 childchild.InnerText = TransposePath(tvsh.ImageBanner.Path)
                 child.AppendChild(childchild)
             End If
             If File.Exists(tvsh.ImageFanart.Path) Then
-                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageFanart.FileName.ToLower)
+                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageFanart.FileName.ToLower, True)
                 childchild = ThisTvShow.CreateElement("fanart")
                 childchild.InnerText = TransposePath(tvsh.ImageFanart.Path)
                 child.AppendChild(childchild)
             End If
             If File.Exists(tvsh.ImagePoster.Path) Then
-                File.Copy(tvsh.ImagePoster.Path, titlepath & tvsh.ImagePoster.FileName.ToLower)
+                File.Copy(tvsh.ImagePoster.Path, titlepath & tvsh.ImagePoster.FileName.ToLower, True)
                 childchild = ThisTvShow.CreateElement("poster")
                 childchild.InnerText = TransposePath(tvsh.ImagePoster.Path)
                 child.AppendChild(childchild)
@@ -701,19 +737,19 @@ Public Class frmXbmcExport
             Attr.Value = tempppp
             childchild.Attributes.Append(Attr)
             If File.Exists(tvsh.ImageAllSeasons.Path.Replace("-poster", "-banner")) Then
-                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageAllSeasons.FileName.Replace("-poster", "-banner").ToLower)
+                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageAllSeasons.FileName.Replace("-poster", "-banner").ToLower, True)
                 childchildchild = ThisTvShow.CreateElement("banner")
                 childchildchild.InnerText = TransposePath(tvsh.ImageAllSeasons.Path.Replace("-poster", "-banner"))
                 childchild.AppendChild(childchildchild)
             End If
             If File.Exists(tvsh.ImageAllSeasons.Path.Replace("-poster", "-fanart")) Then
-                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageAllSeasons.FileName.Replace("-poster", "-fanart").ToLower)
+                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageAllSeasons.FileName.Replace("-poster", "-fanart").ToLower, True)
                 childchildchild = ThisTvShow.CreateElement("fanart")
                 childchildchild.InnerText = TransposePath(tvsh.ImageAllSeasons.Path.Replace("-poster", "-fanart"))
                 childchild.AppendChild(childchildchild)
             End If
             If File.Exists(tvsh.ImageAllSeasons.Path) Then
-                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageAllSeasons.Filename.ToLower)
+                File.Copy(tvsh.ImageFanart.Path, titlepath & tvsh.ImageAllSeasons.Filename.ToLower, True)
                 childchildchild = ThisTvShow.CreateElement("poster")
                 childchildchild.InnerText = TransposePath(tvsh.ImageAllSeasons.Path)
                 childchild.AppendChild(childchildchild)
@@ -725,13 +761,13 @@ Public Class frmXbmcExport
             Attr.Value = tempppp
             childchild.Attributes.Append(Attr)
             If File.Exists(tvsh.FolderPath & "season-specials-banner.jpg") Then
-                File.Copy(tvsh.FolderPath & "season-specials-banner.jpg", titlepath & "season-specials-banner.jpg")
+                File.Copy(tvsh.FolderPath & "season-specials-banner.jpg", titlepath & "season-specials-banner.jpg", True)
                 childchildchild = ThisTvShow.CreateElement("banner")
                 childchildchild.InnerText = TransposePath(tvsh.FolderPath) & "season-specials-banner.jpg"
                 childchild.AppendChild(childchildchild)
             End If
             If File.Exists(tvsh.FolderPath & "season-specials-poster.jpg") Then
-                File.Copy(tvsh.FolderPath & "season-specials-poster.jpg", titlepath & "season-specials-poster.jpg")
+                File.Copy(tvsh.FolderPath & "season-specials-poster.jpg", titlepath & "season-specials-poster.jpg", True)
                 childchildchild = ThisTvShow.CreateElement("poster")
                 childchildchild.InnerText = TransposePath(tvsh.FolderPath) & "season-specials-poster.jpg"
                 childchild.AppendChild(childchildchild)
@@ -748,14 +784,14 @@ Public Class frmXbmcExport
                     childchild.Attributes.Append(Attr)
                     Dim SeasonArt As String = "season" & s & "-banner.jpg"
                     If File.Exists(tvsh.FolderPath & SeasonArt) Then
-                        File.Copy(tvsh.FolderPath & SeasonArt, titlepath & SeasonArt)
+                        File.Copy(tvsh.FolderPath & SeasonArt, titlepath & SeasonArt, True)
                         childchildchild = ThisTvShow.CreateElement("banner")
                         childchildchild.InnerText = TransposePath(tvsh.FolderPath) & SeasonArt
                         childchild.AppendChild(childchildchild)
                     End If
                     SeasonArt = "season" & s & "-poster.jpg"
                     If File.Exists(tvsh.FolderPath & SeasonArt) Then
-                        File.Copy(tvsh.FolderPath & SeasonArt, titlepath & SeasonArt)
+                        File.Copy(tvsh.FolderPath & SeasonArt, titlepath & SeasonArt, True)
                         childchildchild = ThisTvShow.CreateElement("poster")
                         childchildchild.InnerText = TransposePath(tvsh.FolderPath) & SeasonArt
                         childchild.AppendChild(childchildchild)
@@ -926,11 +962,11 @@ Public Class frmXbmcExport
 
             child = ThisTvEp.CreateElement("art")
             childchild = ThisTvEp.CreateElement("thumb")
-            Dim titlepath As String = opTvshows & sh.Title.Value.Replace(" ", "_") & "\"
+            Dim titlepath As String = opTvshows & FormatText(sh.Title.Value) & "\"
             'If Not Directory.Exists(titlepath) Then Directory.CreateDirectory(titlepath)
             If File.Exists(tvep.Thumbnail.Path) Then
                 Dim epimg As String = "s" & If(tvep.Season.Value.Length = 1, "0", "") & tvep.Season.Value & "e" & If(tvep.Episode.Value.Length = 1, "0", "") & tvep.Episode.Value & "-thumb.jpg"
-                File.Copy(tvep.Thumbnail.Path, titlepath & epimg)
+                File.Copy(tvep.Thumbnail.Path, titlepath & epimg, True)
                 childchild.InnerText = TransposePath(tvep.Thumbnail.Path)
             End If
             child.AppendChild(childchild)
@@ -1010,17 +1046,43 @@ Public Class frmXbmcExport
         Next
         Return checkpath 
     End Function
+
+    Private Function FormatText(ByVal s As String) As String
+        s = s.Replace(" ", "_")
+        s = s.Replace(":", "_")
+        Return s
+    End Function
     
     Private Sub frmXbmcExport_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If e.KeyCode = Keys.Escape Then Me.Close()
+        If e.KeyCode = Keys.Escape Then
+            If btn_Cancel.Text = "Cancel" Then
+                Cancelled = True
+                Application.DoEvents()
+            Else
+                Me.Close()
+            End If
+        End If
+            
     End Sub
 
     Private Sub btn_Start_Click( sender As Object,  e As EventArgs) Handles btn_Start.Click
         btn_Cancel.Text = "Cancel"
+        btn_Cancel.Refresh()
         RunExport()
+        If Cancelled Then
+            Cancelled = False
+            btn_Cancel.Text = "Close"
+            btn_Cancel.Refresh()
+            btn_Start.Enabled = True
+        End If
     End Sub
 
     Private Sub btn_Cancel_Click( sender As Object,  e As EventArgs) Handles btn_Cancel.Click
+        If btn_Cancel.Text = "Cancel" Then 
+            Cancelled = True
+            Application.DoEvents()
+            Exit Sub
+        End If
         Me.Close()
     End Sub
 
@@ -1050,11 +1112,13 @@ Public Class frmXbmcExport
             Exit Sub
         End If
         OutputFolder = Validatefolder(TextBox1.Text)
+        Pref.ExportXBMCPath = OutputFolder 
         outputfolderchecked = If(IsNothing(OutputFolder), False, True)
         TextBox1.Text = OutputFolder
     End Sub
 
     Private Sub TextBox1_TextChanged( sender As Object,  e As EventArgs) Handles TextBox1.TextChanged
+        If loading Then Exit Sub
         If outputfolderchecked Then Exit Sub
 
     End Sub
