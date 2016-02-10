@@ -8,13 +8,38 @@ Imports XBMC.JsonRpc
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
-    Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String)
+    Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String, Optional alt As String = "")
 
         Dim child As XmlElement = doc.CreateElement(name)
 
+        If String.IsNullOrEmpty(value) Then value = alt
         child.InnerText = value
         root.AppendChild(child)
     End Sub
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value As String, Optional splitter As String = "/")
+        If String.IsNullOrEmpty(value) Then
+            root.AppendChild( doc, name, value )
+            Exit Sub
+        End If
+        Dim splt() As String = value.Split(splitter)
+        For each sp In splt
+            root.AppendChild( doc, name, value.Trim)
+        Next
+    End Sub
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value As List(Of String))
+        If value.Count < 1 Then
+            root.AppendChild( doc, name, "" )
+            Exit Sub
+        End If
+        For each sp In value
+            root.AppendChild( doc, name, sp.Trim)
+        Next
+    End Sub
+
 End Module
 
 Public Class Movies

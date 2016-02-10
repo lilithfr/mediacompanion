@@ -103,6 +103,46 @@ Public Module ModuleExtensions
         End if        
     End Sub
 
+    <Extension()> _
+    Public Function ToVotes(input As String, thou As Boolean) As String
+        If Not String.IsNullOrEmpty(input) then
+            If Not thou Then
+                input = input.Replace(",", "")
+            Else
+                If Not input.Contains(",") Then
+                    If input.Length > 3 Then
+                        input = input.Insert(input.Length-3, ",")
+                    End If
+                    If input.Length > 7 Then
+                        input = input.Insert(input.Length-7, ",")
+                    End If
+                End If
+            End If
+        End If
+        Return input
+    End Function
+
+    <Extension()> _
+    Public Function ToMin(input As String) As String
+        If Not String.IsNullOrEmpty(input) Then
+            'Dim minutes As String = mov.fullmoviebody.runtime
+            input = input.Replace("minutes", "")
+            input = input.Replace("mins", "")
+            input = input.Replace("min", "")
+            input = input.Replace(" ", "")
+        Else
+            input = "0"
+        End If
+        Return input
+    End Function
+
+    <Extension()> _
+    Public Function Pad(input As String) As String
+        If Not String.IsNullOrEmpty(input) Then
+            input = input & "0000"
+        End If
+        Return input
+    End Function
 
 End Module
 
