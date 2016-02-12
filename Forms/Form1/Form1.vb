@@ -21846,7 +21846,7 @@ End Sub
                 End Try
                 For each mset In oMovies.MovieSetDB
                     If mset.MovieSetId = item Then
-                        mset.Collection.Clear()
+                        If Not IsNothing(mset.Collection) Then mset.Collection.Clear()
                         For each movset In MovCollectionList
                             Dim ac As New CollectionMovie
                             ac.TmdbMovieId = movset.tmdbid

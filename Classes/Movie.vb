@@ -3366,8 +3366,17 @@ Public Class Movie
 
     Sub UpdateMovieSetCacheFromEmpty
         If IsNothing(MovieSet) Then Exit Sub
-        '_parent._tmpMoviesetDb.Clear()
-        _parent._tmpMoviesetDb.Add(MovieSet)
+        Dim key = _movieCache.MovieSet.MovieSetName
+        Dim c As MovieSetInfo = Nothing
+
+        Try
+            c = _parent.FindCachedMovieSet(key)
+        Catch ex As Exception
+        End Try
+
+        If Not IsNothing(c) Then Return
+        'RemoveMovieSetFromCache 
+        _parent._tmpMoviesetDb.Add(_movieCache.MovieSet)
     End Sub
 
     Sub UpdateMovieCache

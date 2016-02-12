@@ -1058,6 +1058,22 @@ Public Class Movies
         Return q.Single
     End Function
 
+    Public Function FindCachedMovieSet(MovieSetName As String) As MovieSetInfo
+        Dim q = From m In _tmpMoviesetDb Where m.MovieSetName = MovieSetName
+        If q.Count = 0 Then Return Nothing
+        If q.Count > 1 Then Return q(0)
+        Try
+            Return q.single
+        Catch ex As Exception
+            If ex.Message = "Sequence contains more than one element" Then
+                Return q(0)
+            End If
+            Dim Something As String = Nothing
+        End Try
+        Return Nothing
+        'Return q.single
+    End Function
+
     Public Function FindData_GridViewCachedMovie(fullpathandfilename As String) As Data_GridViewMovie
         Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename=fullpathandfilename
         Return q.Single        
@@ -2400,7 +2416,7 @@ Public Class Movies
         _moviesetDb   .Clear()
         _tmpActorDb   .Clear()
         _tmpDirectorDb.Clear()
-        _tmpMoviesetDb.Clear()
+        '_tmpMoviesetDb.Clear()
         Dim i = 0
 
         For Each movie In MovieCache
@@ -2416,15 +2432,24 @@ Public Class Movies
             For Each act In movie.Actorlist
                 _actorDb.Add(New ActorDatabase(act.actorname, movie.id))
             Next
-            Dim tmp2 As New List(Of CollectionMovie)
-            For Each mset In MovSetDbTmp
-                'If movie.MovieSet.MovieSetId = "" Then Exit For
-                If movie.MovieSet.MovieSetId = mset.MovieSetId Then
-                    tmp2.AddRange(mset.Collection)
-                    Exit For
+            If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
+                If _tmpMoviesetDb.Count = 0 Then
+                    _tmpMoviesetDb.Add(movie.MovieSet)
+                Else
+                    'For each mset In _tmpMoviesetDb
+                    Dim q = From item In _tmpMoviesetDb Where item.MovieSetName = movie.MovieSet.MovieSetName
+                    If q.Count = 0 Then _tmpMoviesetDb.Add(movie.MovieSet)
                 End If
-            Next
-            If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(New MovieSetInfo(movie.MovieSet.MovieSetName, movie.MovieSet.MovieSetId, tmp2))
+            End If
+            'Dim tmp2 As New List(Of CollectionMovie)
+            'For Each mset In MovSetDbTmp
+            '    'If movie.MovieSet.MovieSetId = "" Then Exit For
+            '    If movie.MovieSet.MovieSetId = mset.MovieSetId Then
+            '        tmp2.AddRange(mset.Collection)
+            '        Exit For
+            '    End If
+            'Next
+            'If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(New MovieSetInfo(movie.MovieSet.MovieSetName, movie.MovieSet.MovieSetId, tmp2))
             Dim directors() As String = movie.director.Split("/")
             For Each d In directors
                 _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))
@@ -2449,7 +2474,17 @@ Public Class Movies
         'For Each item In q3.Distinct()
         '    _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
         'Next
-        
+        If Not _tmpMoviesetDb.Count = 0 AndAlso _tmpMoviesetDb(0).MovieSetName.ToLower = "-none-" Then _tmpMoviesetDb.RemoveAt(0)
+        For each mset As MovieSetInfo In _tmpMoviesetDb
+            Dim q = From item In MovSetDbTmp Where item.MovieSetName = mset.MovieSetName
+            If q.Count = 0 Then Continue For
+            Dim ac As New MovieSetInfo
+            ac = q.Single
+            mset.Collection = ac.Collection
+
+        Next
+
+        _moviesetDb.AddRange(_tmpMoviesetDb)
         SaveActorCache()
         SaveDirectorCache()
         SaveMovieSetCache()

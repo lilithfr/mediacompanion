@@ -5,7 +5,7 @@ Public Class MovieSetInfo
     Private  _movieSetDisplayName As String = ""
 
     Property MovieSetId     As String = ""
-    Property Collection     As List(Of CollectionMovie)
+    Property Collection     As New List(Of CollectionMovie)
 
 
     Property MovieSetName   As String
