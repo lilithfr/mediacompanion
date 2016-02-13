@@ -1941,6 +1941,7 @@ Public Class Movies
         'Add sub-folders
         Try
             For Each subfolder In Utilities.EnumerateFolders(moviePaths(0))
+                If Pref.ExcludeFolders.Match(subfolder) Then Continue For
                 moviePaths.Add(subfolder)
             Next
         Catch ex As Exception
@@ -2021,6 +2022,7 @@ Public Class Movies
         For f = 0 To tempint - 1
             Try
                 For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
+                    If Pref.ExcludeFolders.Match(subfolder) Then Continue For
                     moviePaths.Add(subfolder)
                 Next
             Catch ex As Exception
