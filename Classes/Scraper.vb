@@ -1568,10 +1568,10 @@ Public Class Classimdb
                 Next
             Else
                 If tmdbid.Substring(0, 2) <> "tt" Then
-                    ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", tmdbid, TMDb.LanguageCodes(0))
+                    ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key={2}&language={1}", tmdbid, TMDb.LanguageCodes(0), Utilities.TMDBAPI)
                     ParametersForScraper(1) = tmdbid
                 ElseIf tmdbid.Substring(0, 2) = "tt"
-                    Dim url = String.Format("http://api.themoviedb.org/3/find/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}&external_source=imdb_id", tmdbid, TMDb.LanguageCodes(0))
+                    Dim url = String.Format("http://api.themoviedb.org/3/find/{0}?api_key={2}&language={1}&external_source=imdb_id", tmdbid, TMDb.LanguageCodes(0), Utilities.TMDBAPI)
                     Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
                     request.Method = "GET"
                     request.Proxy = Utilities.MyProxy
@@ -1588,7 +1588,7 @@ Public Class Classimdb
                     Dim m As Match = Regex.Match(responseContent, RegExPattern)
                     If m.Success then
                         tmdbid = m.Groups(1).ToString
-                        ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", tmdbid, TMDb.LanguageCodes(0))
+                        ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key={2}&language={1}", tmdbid, TMDb.LanguageCodes(0), Utilities.TMDBAPI)
                         ParametersForScraper(1) = tmdbid
                     Else
                         Return "error"
@@ -2004,7 +2004,7 @@ Public Class Classimdb
     Public Function GetTmdbkeywords(ByVal ID As String, ByVal keylimit As Integer) As List(Of String)
         Dim keywd As New List(Of String)
         Try
-            Dim url As String = String.Format("http://api.themoviedb.org/3/movie/{0}/keywords?api_key=57983e31fb435df4df77afb854740ea9&language={1}", Id, TMDb.LanguageCodes(0))
+            Dim url As String = String.Format("http://api.themoviedb.org/3/movie/{0}/keywords?api_key={2}&language={1}", Id, TMDb.LanguageCodes(0), Utilities.TMDBAPI)
             Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
             request.Method = "GET"
             request.Proxy = Utilities.MyProxy

@@ -85,6 +85,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
     Public Shared Property RARsize As Integer
+    Public Const TMDBAPI As String = "3f026194412846e530a208cf8a39e9cb"
 
     Private Shared _ApplicationPath As String
     Private Shared _LanguageLibrary As New List(Of langlib)
